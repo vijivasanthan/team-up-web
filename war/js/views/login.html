@@ -1,0 +1,54 @@
+<div id="welcome">
+
+	<!-- loginForm -->
+	<div id="login" class="boxed">
+
+		<form ng-submit="login()">
+
+		  <h4 class="form-signin-heading">Welcome back</h4>
+
+		  <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register an account</a></p>
+
+      <!-- alert login -->
+      <div class="alert {{alert.login.type}}" ng-show="alert.login.display">
+        <button class="close" type="button" ng-click="alert.login=false">×</button>
+        {{alert.login.message}}
+      </div>
+      <!-- end login password -->
+
+		  <input 
+		    class="" 
+		    type="text" 
+		    ng-model="logindata.username"
+		    placeholder="Mobile number" 
+		    autofocus>
+
+		  <input 
+		      class="" 
+		      type="password" 
+		      ng-model="logindata.password"
+		      placeholder="Password">
+
+		  <label class="checkbox span3">
+		    <input 
+		      type="checkbox" 
+		      ng-model="logindata.remember">Remember me
+		  </label>
+
+		  <button class="btn btn-large btn-primary" type="submit">{{ui.login.button_login}}</button>
+
+		  <p>
+		  	<small>
+		  		<a href="#forgotpass">{{ui.login.forgot_password}}</a>
+		  	</small>
+		  </p>
+
+		  <span class="version"><a href="version.html" target="_blank">v{{config.version}}</a></span>
+
+		</form>
+	</div>
+	<!-- end loginForm -->
+	
+	<!-- end change pass -->
+</div>
+
