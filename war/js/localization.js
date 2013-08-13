@@ -284,6 +284,16 @@ var ui = {
         groups:     'groups',
         profile:    'profile',
         settings:   'settings'
+      },
+      teamup: {
+         teams: 'teams',
+         clients: 'clients',
+         manage: 'manage',
+         chooseTeam: 'choose a team',
+         newTeam: 'new team',
+         newMember: 'new member',
+         editTeam: 'edit',
+         team: 'team'
       }
     },
     nl: {
@@ -564,6 +574,11 @@ var ui = {
         groups:     'groepen',
         profile:    'profiel',
         settings:   'instellingen'
+      },
+      teamup: {
+          teams: 'teams',
+          clients: 'clients',
+          manage: 'manage',
       }
     }
 };

@@ -11,7 +11,7 @@ angular.module('WebPaige')
 .value(
   '$config',
   {
-    title:    'OneLine',
+    title:    'TeamUp',
     version:  '0.1.0',
     lang:     'en',
 

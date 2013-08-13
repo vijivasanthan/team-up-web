@@ -655,21 +655,21 @@ angular.module('WebPaige.Filters', ['ngResource'])
  * TODO
  * Unknown filter
  */
-// .filter('i18n_spec',
-// [
-// 	'$rootScope', 
-// 	function ($rootScope)
-// 	{
-// 		return function (string, type)
-// 		{
-// 			var types = type.split("."),
-// 					ret 	= $rootScope.ui[types[0]][types[1]],
-// 					ret 	= ret.replace('$v',string);
+ .filter('i18n_spec',
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 		return function (string, type)
+ 		{
+ 			var types = type.split("."),
+ 					ret 	= $rootScope.ui[types[0]][types[1]],
+ 					ret 	= ret.replace('$v',string);
 			
-// 			return ret;
-// 		}
-// 	}
-// ])
+ 			return ret;
+ 		}
+ 	}
+ ])
 
 
 

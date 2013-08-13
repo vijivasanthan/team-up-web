@@ -56,24 +56,39 @@ angular.module('WebPaige')
     /**
      * Dashboard router
      */
-    // .when('/dashboard',
-    // {
-    //   templateUrl: 'dist/views/dashboard.html',
-    //   controller: 'dashboard'
-    // })
+     .when('/team',
+     {
+       templateUrl: 'dist/views/teams.html',
+       controller: 'teams',
+       resolve: {
+           data: [
+             'Teams',
+             function (Teams)
+             {
+//               return Teams.query();
+             }
+           ]
+       },
+     })
 
 
     /**
      * Core router
      */
-    .when('/core',
+    .when('/client',
     {
-      templateUrl:    'dist/views/core.html',
-      controller:     'core',
+      templateUrl:    'dist/views/clients.html',
+      controller:     'client',
       reloadOnSearch: false
     })
-
-
+    
+    .when('/manage',
+    {
+      templateUrl:    'dist/views/manage.html',
+      controller:     'manage',
+      reloadOnSearch: false
+    })
+    
     /**
      * Profile router
      */
@@ -137,21 +152,21 @@ angular.module('WebPaige')
     /**
      * Messages router
      */
-    // .when('/messages',
-    // {
-    //   templateUrl: 'dist/views/messages.html',
-    //   controller: 'messages',
-    //   resolve: {
-    //     data: [
-    //       '$route', 'Messages',
-    //       function ($route, Messages)
-    //       {
-    //         return Messages.query();
-    //       }
-    //     ]
-    //   },
-    //   reloadOnSearch: false
-    // })
+     .when('/messages',
+     {
+       templateUrl: 'dist/views/messages.html',
+       controller: 'messages',
+//       resolve: {
+//         data: [
+//           '$route', 'Messages',
+//           function ($route, Messages)
+//           {
+//             return Messages.query();
+//           }
+//         ]
+//       },
+       reloadOnSearch: false
+     })
 
 
     /**

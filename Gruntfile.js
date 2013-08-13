@@ -1,7 +1,5 @@
 /*jslint node: true */
 'use strict';
-
-
 /**
  * Main compiler for app
  */
@@ -30,6 +28,7 @@ module.exports = function (grunt)
             // 'war/js/modals/user.js',
             // 'war/js/modals/dashboard.js',
             'war/js/modals/core.js',
+            'war/js/modals/teams.js',
             // 'war/js/modals/profile.js',
             // 'war/js/modals/settings.js',
             // directives
@@ -59,7 +58,11 @@ module.exports = function (grunt)
             'war/js/controllers/core.js',
             // 'war/js/controllers/profile.js',
             // 'war/js/controllers/settings.js',
-            // 'war/js/controllers/help.js'
+            // 'war/js/controllers/help.js',
+            'war/js/controllers/teams.js',
+            'war/js/controllers/clients.js',
+            'war/js/controllers/manage.js',
+            'war/js/controllers/messages.js',
           ],
           'war/src/plugins.js': [
             'war/js/plugins/console.js',
@@ -132,7 +135,11 @@ module.exports = function (grunt)
           'war/dist/views/core.html':         'war/js/views/core.html',
           // 'war/dist/views/profile.html':   'war/js/views/profile.html',
           // 'war/dist/views/settings.html':  'war/js/views/settings.html',
-          // 'war/dist/views/help.html':      'war/js/views/help.html'
+          // 'war/dist/views/help.html':      'war/js/views/help.html',
+          'war/dist/views/teams.html':      'war/js/views/teams.html',
+          'war/dist/views/clients.html':      'war/js/views/clients.html',
+          'war/dist/views/manage.html':      'war/js/views/manage.html',
+          'war/dist/views/messages.html':      'war/js/views/messages.html'
         }
       }
     },
