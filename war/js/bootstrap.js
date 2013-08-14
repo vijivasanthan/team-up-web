@@ -12,9 +12,10 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window',
-  function ($rootScope, $location, $timeout, Storage, $config, $window)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window','Teams',
+  function ($rootScope, $location, $timeout, Storage, $config, $window,Teams)
   {
+      console.log(Teams);
     /**
      * Pass config and init dynamic config values
      */

@@ -3,13 +3,14 @@
  */
 var profile = {
 
-  meta: 'oneline',
+  meta: 'teamup',
 
-  title: 'OneLine',
+  title: 'TeamUp',
 
   host: function ()
   {
-    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://3rc2.ask-services.appspot.com/ns_knrmtest';
+      return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
+//    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://teamup.asc-services.appspot.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.246\\:9000/ns_knrm';
   },
 

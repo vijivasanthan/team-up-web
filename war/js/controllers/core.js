@@ -11,12 +11,13 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators',
-	function ($rootScope, $scope, $location, Generators)
+	'$rootScope', '$scope', '$location', 'Generators','Team',
+	function ($rootScope, $scope, $location, Generators,Team)
 	{
 		/**
 		 * Fix styles
 		 */
+	    console.log(Team);
 		$rootScope.fixStyles();
 
 

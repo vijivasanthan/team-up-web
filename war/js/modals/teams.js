@@ -5,7 +5,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
 
 /**
- * Groups modal
+ * Teams modal
  */
 .factory('Teams', 
 [
@@ -13,7 +13,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope) 
     {
       var Teams = $resource(
-        $config.host + '/teams/:action/:id',
+        $config.host + 'teamup/teams/:action/:id',
         {
         },
         {
@@ -37,12 +37,12 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           remove: {
             method: 'DELETE',
             params: {id:''}
-          },
-          search: {
-            method: 'POST',
-            params: {id:'', action:'searchPaigeUser'},
-            isArray: true
           }
+//          search: {
+//            method: 'POST',
+//            params: {id:'', action:'searchPaigeUser'},
+//            isArray: true
+//          }
         }
       );
 
@@ -104,12 +104,24 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           }
         }
       );
-
+      
+      var TeamStatus = $resource(
+          $config.host + '/teamup/team/status/:teamId',{
+          },{
+              query : {
+                  method: 'GET',
+                  params: {id: ''},
+                  isArray: true
+              }
+          }
+              
+      );
+      
 
 //      /**
-//       * Get parent group data
+//       * Get parent team data
 //       */
-//      Groups.prototype.parents = function (all) 
+//      Teams.prototype.parents = function (all) 
 //      {   
 //        var deferred = $q.defer();
 //
@@ -147,11 +159,11 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //      /**
 //       * TODO
-//       * Extract only the groups which are in the local list
+//       * Extract only the Teams which are in the local list
 //       * 
-//       * Get container (parent) group data
+//       * Get container (parent) team data
 //       */
-//      Groups.prototype.containers = function (id) 
+//      Teams.prototype.containers = function (id) 
 //      {   
 //        var deferred  = $q.defer(),
 //            cons      = [];
@@ -161,7 +173,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //          function (result) 
 //          {
 //            /**
-//             * Group save call returns only uuid and that is parsed as json
+//             * team save call returns only uuid and that is parsed as json
 //             * by angular, this is a fix for converting returned object to plain string
 //             */
 //            angular.forEach(result, function (_r, _i)
@@ -186,15 +198,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Add Member to a group
+//       * Add Member to a team
 //       */
-//      Groups.prototype.addMember = function (candidate)
+//      Teams.prototype.addMember = function (candidate)
 //      {
 //        var deferred = $q.defer();
 //
 //        Members.add(
 //          { 
-//            id: candidate.group.uuid, 
+//            id: candidate.team.uuid, 
 //            mid: candidate.id 
 //          }, 
 //          {}, 
@@ -213,15 +225,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Remove member from group
+//       * Remove member from team
 //       */
-//      Groups.prototype.removeMember = function (memberId, groupId)
+//      Teams.prototype.removeMember = function (memberId, teamId)
 //      {
 //        var deferred = $q.defer();
 //
 //        Members.remove(
 //          { 
-//            id: groupId, 
+//            id: teamId, 
 //            mid: memberId 
 //          }, 
 //          function (result) 
@@ -239,16 +251,16 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Remove members from a group (bulk action)
+//       * Remove members from a team (bulk action)
 //       */
-//      Groups.prototype.removeMembers = function (selection, group)
+//      Teams.prototype.removeMembers = function (selection, team)
 //      {
 //        var deferred = $q.defer(),
 //            calls = [];
 //
 //        angular.forEach(selection, function (value, id)
 //        {
-//          if (id) calls.push(Groups.prototype.removeMember(id, group.uuid));
+//          if (id) calls.push(Teams.prototype.removeMember(id, team.uuid));
 //        });
 //
 //        $q.all(calls)
@@ -261,7 +273,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
-//      Groups.prototype.wish = function (id)
+//      Teams.prototype.wish = function (id)
 //      {
 //        var deferred  = $q.defer(),
 //            count     = 0;
@@ -287,122 +299,138 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * General query function from groups and their members
+//       * General query function from Teams and their members
 //       */
-//      Groups.prototype.query = function (only)
-//      {
-//        var deferred = $q.defer();
-//
-//        Groups.query(
-//          function (groups) 
-//          {
-//            Storage.add('groups', angular.toJson(groups));
-//
-//            if (!only)
-//            {
-//              var calls = [];
-//
-//              angular.forEach(groups, function (group, index)
-//              {
-//                calls.push(Groups.prototype.get(group.uuid));
-//              });
-//
-//              $q.all(calls)
-//              .then(function (results)
-//              {
-//                Groups.prototype.uniqueMembers();
-//
-//                var data = {};
-//
-//                data.members = {};
-//
-//                angular.forEach(groups, function (group, gindex)
-//                {
-//                  data.groups = groups;
-//
-//                  data.members[group.uuid] = [];
-//
-//                  angular.forEach(results, function (result, mindex)
-//                  {
-//                    if (result.id == group.uuid) data.members[group.uuid] = result.data;
-//                  });
-//                });
-//
-//                deferred.resolve(data);
-//              });
-//            }
-//            else
-//            {
-//              deferred.resolve(groups);
-//            };
-//          },
-//          function (error)
-//          {
-//            deferred.resolve({error: error});
-//          }
-//        );
-//
-//        return deferred.promise;
-//      };
-//
-//
-//      /**
-//       * Get group data
-//       */
-//      Groups.prototype.get = function (id) 
-//      {   
-//        var deferred = $q.defer();
-//
-//        Members.query(
-//          {id: id}, 
-//          function (result) 
-//          {
-//            /**
-//             * DIRTY CHECK!
-//             * 
-//             * Check for 'null' return from back-end
-//             * if group is empty
-//             */
-//            var returned;
-//
-//            if (result.length == 4 && 
-//                result[0][0] == 'n' && 
-//                result[1][0] == 'u')
-//            {
-//              returned = [];
-//            }
-//            else
-//            {
-//              returned = result;
-//            };
-//
-//            Storage.add(id, angular.toJson(returned));
-//
-//            deferred.resolve({
-//              id: id,
-//              data: returned
-//            });
-//          },
-//          function (error)
-//          {
-//            deferred.resolve({error: error});
-//          }
-//        );
-//
-//        return deferred.promise;
-//      };
+      Teams.prototype.query = function (only)
+      {
+        var deferred = $q.defer();
+
+        Teams.query(
+          function (Teams) 
+          {
+            Storage.add('Teams', angular.toJson(Teams));
+
+            if (!only)
+            {
+              var calls = [];
+
+              angular.forEach(Teams, function (team, index)
+              {
+                calls.push(Teams.prototype.get(team.uuid));
+              });
+
+              $q.all(calls)
+              .then(function (results)
+              {
+                Teams.prototype.uniqueMembers();
+
+                var data = {};
+
+                data.members = {};
+
+                angular.forEach(Teams, function (team, gindex)
+                {
+                  data.Teams = Teams;
+
+                  data.members[team.uuid] = [];
+
+                  angular.forEach(results, function (result, mindex)
+                  {
+                    if (result.id == team.uuid) data.members[team.uuid] = result.data;
+                  });
+                });
+
+                deferred.resolve(data);
+              });
+            }
+            else
+            {
+              deferred.resolve(Teams);
+            };
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      };
+      
+      /**
+       * get members of the team
+       */
+      Teams.prototype.queryStatus = function( teamId){
+          var deferred = $q.defer();
+          TeamStatus.query({
+          },function(result){
+              deferred.resolve({
+                  id: id,
+                  data: returned
+              });
+          },function(error){
+              deferred.resolve({error: error});
+          });
+          
+      }
+      
+      /**
+       * Get team data
+       */
+      Teams.prototype.get = function (id) 
+      {   
+        var deferred = $q.defer();
+
+        Teams.queryStatus(
+          {id: id}, 
+          function (result) 
+          {
+            /**
+             * DIRTY CHECK!
+             * 
+             * Check for 'null' return from back-end
+             * if team is empty
+             */
+            var returned;
+
+            if (result.length == 4 && 
+                result[0][0] == 'n' && 
+                result[1][0] == 'u')
+            {
+              returned = [];
+            }
+            else
+            {
+              returned = result;
+            };
+
+            Storage.add(id, angular.toJson(returned));
+
+            deferred.resolve({
+              id: id,
+              data: returned
+            });
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      };
 //
 //
 //      /**
 //       * Make an inuque list of members
 //       */
-//      Groups.prototype.uniqueMembers = function ()
+//      Teams.prototype.uniqueMembers = function ()
 //      {
-//        angular.forEach(angular.fromJson(Storage.get('groups')), function (group, index)
+//        angular.forEach(angular.fromJson(Storage.get('Teams')), function (team, index)
 //        {
 //          var members = angular.fromJson(Storage.get('members')) || {};
 //
-//          angular.forEach(angular.fromJson(Storage.get(group.uuid)), function (member, index)
+//          angular.forEach(angular.fromJson(Storage.get(team.uuid)), function (member, index)
 //          {
 //            members[member.uuid] = member;
 //          });
@@ -413,32 +441,32 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Save group
+//       * Save team
 //       */
-//      Groups.prototype.save = function (group) 
+//      Teams.prototype.save = function (team) 
 //      {
 //        var deferred = $q.defer();
 //
 //        /**
-//         * Check if group id supplied
+//         * Check if team id supplied
 //         * if save submitted from add / edit form
 //         */
-//        if (group.id)
+//        if (team.id)
 //        {
-//          Groups.edit({id: group.id}, {name: group.name}, function (result) 
+//          Teams.edit({id: team.id}, {name: team.name}, function (result) 
 //          {
-//            deferred.resolve(group.id);
+//            deferred.resolve(team.id);
 //          });
 //        }
 //        else
 //        {
-//          Groups.save(
+//          Teams.save(
 //            { id: $rootScope.app.resources.uuid }, 
-//            group, 
+//            team, 
 //            function (result) 
 //            {
 //              /**
-//               * Group save call returns only uuid and that is parsed as json
+//               * team save call returns only uuid and that is parsed as json
 //               * by angular, this is a fix for converting returned object to plain string
 //               */
 //              var returned = '';
@@ -462,13 +490,13 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Delete group
+//       * Delete team
 //       */
-//      Groups.prototype.remove = function (id) 
+//      Teams.prototype.remove = function (id) 
 //      {
 //        var deferred = $q.defer();
 //
-//        Groups.remove(
+//        Teams.remove(
 //          {id: id}, 
 //          function (result) 
 //          {
@@ -487,11 +515,11 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      /**
 //       * Search candidate mambers
 //       */
-//      Groups.prototype.search = function (query) 
+//      Teams.prototype.search = function (query) 
 //      {
 //        var deferred = $q.defer();
 //
-//        Groups.search(
+//        Teams.search(
 //          null, 
 //          {key: query}, 
 //          function (results) 
@@ -503,7 +531,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //              processed.push({
 //                id: result.id,
 //                name: result.name,
-//                groups: Groups.prototype.getMemberGroups(result.id)
+//                Teams: Teams.prototype.getMemberTeams(result.id)
 //              });
 //            });
 //
@@ -520,31 +548,31 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //
 //
 //      /**
-//       * Get groups of given member
+//       * Get Teams of given member
 //       */
-//      Groups.prototype.getMemberGroups = function (id)
+//      Teams.prototype.getMemberTeams = function (id)
 //      {
-//        var groups = angular.fromJson(Storage.get('groups')),
-//            memberGroups = [];
+//        var Teams = angular.fromJson(Storage.get('Teams')),
+//            memberTeams = [];
 //
-//        angular.forEach(groups, function (group, index)
+//        angular.forEach(Teams, function (team, index)
 //        {
-//          var localGroup = angular.fromJson(Storage.get(group.uuid));
+//          var localteam = angular.fromJson(Storage.get(team.uuid));
 //
-//          angular.forEach(localGroup, function (member, index)
+//          angular.forEach(localteam, function (member, index)
 //          {
 //            if (member.uuid === id)
-//              memberGroups.push({
-//                uuid: group.uuid,
-//                name: group.name
+//              memberTeams.push({
+//                uuid: team.uuid,
+//                name: team.name
 //              });
 //          });
 //        });
 //
-//        return memberGroups;
+//        return memberTeams;
 //      };
 //
 //
-//      return new Groups;
+      return new Teams;
     }
 ]);

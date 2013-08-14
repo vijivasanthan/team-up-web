@@ -289,11 +289,23 @@ var ui = {
          teams: 'teams',
          clients: 'clients',
          manage: 'manage',
-         chooseTeam: 'choose a team',
-         newTeam: 'new team',
-         newMember: 'new member',
-         editTeam: 'edit',
-         team: 'team'
+         chooseTeam: 'choose a team',         
+         edit: 'edit',
+         editTeam: 'edit team',
+         team: 'team',
+         del: 'delete',
+         noMembers: 'No members in this team.',
+         newTeam: 'New Team',
+         teamName: 'Team name',
+         createTeam: 'Create New Team',
+         newMember: 'New Member',
+         name: "name",
+         role: "role",
+         phone: "phone",
+         street: "street",
+         postCode: "post",
+         city: "city",
+         saveMember: "Save"
       }
     },
     nl: {

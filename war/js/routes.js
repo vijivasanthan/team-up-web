@@ -59,13 +59,13 @@ angular.module('WebPaige')
      .when('/team',
      {
        templateUrl: 'dist/views/teams.html',
-       controller: 'teams',
+       controller: 'teamCtrl',
        resolve: {
            data: [
              'Teams',
              function (Teams)
              {
-//               return Teams.query();
+               return Teams.query();
              }
            ]
        },
