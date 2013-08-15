@@ -18,6 +18,7 @@ $grayLighter:           #eee !default;
 $white:                 #fff !default;
 
 
+
 // Accent colors
 // -------------------------
 $blue:                  #35a8c9 !default; //
@@ -25,17 +26,18 @@ $blueDark:              #7772b5 !default; //
 $green:                 #6f9a6d !default; //
 $red:                   #ba5855 !default; //
 $yellow:                #ffc40d !default;
-$orange:                #e6a02f !default; //
+$orange:                #f5a962 !default; //
 $pink:                  #c3325f !default;
+$offwhite:              #fffaf0 !default;
 
 $purple:                #7772b5 !default; //
 
-$brown:									#433c2d !default;
+$brown:				    #833c11 !default;
 
 
 // Scaffolding
 // -------------------------
-$bodyBackground:        #f5f4ee !default; // $white !default;
+$bodyBackground:        #1dc8b6 !default; // $white !default;
 $textColor:             #433c2d !default; // $grayDark !default;
 
 
@@ -94,7 +96,7 @@ $btnBackground:                     $white !default;
 $btnBackgroundHighlight:            darken($white, 10%) !default;
 $btnBorder:                         #bbb !default;
 
-$btnPrimaryBackground:              $linkColor !default; //
+$btnPrimaryBackground:              #f5a962 !default; //
 $btnPrimaryBackgroundHighlight:     darken($btnPrimaryBackground, 5%) !default; //
 
 $btnInfoBackground:                 #35a8c9 !default; //
