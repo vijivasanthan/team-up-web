@@ -17,55 +17,114 @@ angular.module('WebPaige.Controllers.Teams', [])
          * Fix styles
          */
         $rootScope.fixStyles();
-        /*
-         * dummy data 
-         */
-//        var members = {
-//            "uuid": "member_b@ask-cs.com",
-//            "userName": "member_b@ask-cs.com",
-//            "password": null,
-//            "firstName": null,
-//            "lastName": null,
-//            "phone": null,
-//            "states": [
-//                {
-//                    "uuid": 0,
-//                    "name": "emotion",
-//                    "value": "happy",
-//                    "share": false
-//                },
-//                {
-//                    "uuid": 0,
-//                    "name": "availability",
-//                    "value": "false",
-//                    "share": false
-//                },
-//                {
-//                    "uuid": 0,
-//                    "name": "location",
-//                    "value": "home",
-//                    "share": false
-//                },
-//                {
-//                    "uuid": 0,
-//                    "name": "activity",
-//                    "value": "",
-//                    "share": false
-//                },
-//                {
-//                    "uuid": 0,
-//                    "name": "reachability",
-//                    "value": "no",
-//                    "share": false
-//                }
-//            ],
-//            "avatarUuid": null,
-//            "teamUuids": null,
-//            "role": null
-//        };
         
         $scope.team = data.team;
         $scope.members = data.members;
+        $scope.teams = data.teams;
+        
+        /*
+         * dummy data 
+         */
+        var members = {"1" : [{
+                "uuid": "member_b@ask-cs.com",
+                "userName": "member_b@ask-cs.com",
+                "password": null,
+                "firstName": "B",
+                "lastName": "Member",
+                "phone": null,
+                "states": [
+                    {
+                        "uuid": 0,
+                        "name": "emotion",
+                        "value": "happy",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "availability",
+                        "value": "false",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "location",
+                        "value": "home",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "activity",
+                        "value": "exciting",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "reachability",
+                        "value": "no",
+                        "share": true
+                    }
+                ],
+                "avatarUuid": null,
+                "imgURL": null,
+                "teamUuids": '1',
+                "role": null
+            },
+            {
+                "uuid": "member_c@ask-cs.com",
+                "userName": "member_c@ask-cs.com",
+                "password": null,
+                "firstName": "C",
+                "lastName": "Member",
+                "phone": null,
+                "states": [
+                    {
+                        "uuid": 0,
+                        "name": "emotion",
+                        "value": "happy",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "availability",
+                        "value": "false",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "location",
+                        "value": "home",
+                        "share": false
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "activity",
+                        "value": "exciting",
+                        "share": true
+                    },
+                    {
+                        "uuid": 0,
+                        "name": "reachability",
+                        "value": "no",
+                        "share": false
+                    }
+                ],
+                "avatarUuid": null,
+                "imgURL": null,
+                "teamUuids": '1',
+                "role": null
+            }]
+        };
+        
+        var team = {name : 'team 1', uuid : '1'};
+        
+        var teams = [{name : 'team 1', uuid : '1'},
+                     {name : 'team 2', uuid : '2'},
+                     {name : 'team 3', uuid : '3'}];
+        
+        $scope.team = team;
+        $scope.members = members;
+        $scope.teams = teams;
+        data.members = members;        
         
         /**
          * Self this

@@ -653,8 +653,8 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 /**
  * TODO
- * Unknown filter
- */
+ * Internationalization 
+ */ 
  .filter('i18n_spec',
  [
  	'$rootScope', 
@@ -672,7 +672,33 @@ angular.module('WebPaige.Filters', ['ngResource'])
  ])
 
 
-
+.filter('stateIcon',
+[
+     '$rootScope',
+     function ($rootScope){
+         return function(state){    
+             switch(state){
+                 case 'emotion':
+                     return "icon-face";
+                 break;
+                 case 'availability':
+                     return "icon-avail";
+                 break;
+                 case 'location':
+                     return "icon-location";
+                 break;
+                 case 'activity':
+                     return "icon-activity";
+                 break;
+                 case 'reachability':
+                     return "icon-reach";
+                 break;
+                 default:
+                     return "icon-info-sign";
+             }
+         }
+     }
+])
 
 
 

@@ -299,13 +299,15 @@ var ui = {
          teamName: 'Team name',
          createTeam: 'Create New Team',
          newMember: 'New Member',
-         name: "name",
+         name: "Name",
          role: "role",
          phone: "phone",
          street: "street",
          postCode: "post",
          city: "city",
-         saveMember: "Save"
+         saveMember: "Save",
+         state: "state",
+         states: "States"
       }
     },
     nl: {
