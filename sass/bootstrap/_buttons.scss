@@ -19,7 +19,7 @@
   vertical-align: middle;
   cursor: pointer;
 
-  @include buttonBackground($btnBackground, $btnBackgroundHighlight, $grayDark, 0 1px 1px rgba(255,255,255,.85));
+/*  @include buttonBackground($btnBackground, $grayDark, 0 1px 1px rgba(255,255,255,.85));   //$btnBackgroundHighlight is demolished*/
 
   border: 1px solid $btnBorder;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
@@ -153,9 +153,10 @@ input[type="button"] {
 // Set the backgrounds
 // -------------------------
 .btn-primary {
-  @include buttonBackground($btnPrimaryBackground, $btnPrimaryBackgroundHighlight);
+  background-color: $orange;
+  color:$brown;
 }
-// Warning appears are orange
+/*// Warning appears are orange
 .btn-warning {
   @include buttonBackground($btnWarningBackground, $btnWarningBackgroundHighlight);
 }
@@ -174,7 +175,7 @@ input[type="button"] {
 // Inverse appears as dark gray
 .btn-inverse {
   @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
-}
+}*/
 
 
 // Cross-browser Jank

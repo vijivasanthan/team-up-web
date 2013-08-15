@@ -1,3 +1,5 @@
+<div id="welcomeLogo"></div>
+<div id="welcomeArrow"></div>
 <div id="welcome">
 
 	<!-- loginForm -->
@@ -5,9 +7,8 @@
 
 		<form ng-submit="login()">
 
-		  <h4 class="form-signin-heading">Welcome back</h4>
+<!--		  <h4 class="form-signin-heading">Welcome back</h4>-->
 
-		  <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register an account</a></p>
 
       <!-- alert login -->
       <div class="alert {{alert.login.type}}" ng-show="alert.login.display">
@@ -42,6 +43,8 @@
 		  		<a href="#forgotpass">{{ui.login.forgot_password}}</a>
 		  	</small>
 		  </p>
+
+          <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register</a></p>
 
 		  <span class="version"><a href="version.html" target="_blank">v{{config.version}}</a></span>
 

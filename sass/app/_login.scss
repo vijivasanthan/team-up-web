@@ -1,14 +1,30 @@
 /**
  * Welcoming page styles
  */
+#welcomeLogo {
+  background-image: url("../img/logo.png");
+  margin: 0 auto 40px;
+  height: 82px;
+  width: 160px;
+}
+
+#welcomeArrow {
+  width: 0;
+  height: 0;
+  border-left: 32px solid transparent;
+  border-right: 32px solid transparent;
+  border-bottom: 15px solid $offwhite;
+  position:absolute;
+  left: 50%;
+  margin: -15px 0 0 -80px;
+}
+
 #welcome {
-  margin: 30px auto 20px auto;
+  margin: 0 auto 20px auto;
   padding: 35px 29px 19px 29px;
   max-width: 300px;
-  border: 1px solid #d0cec1;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(103,97,83,.05);
+  border-radius: 20px;
+  background-color: $offwhite;
   text-align: center;
 
   h2 {
@@ -42,9 +58,9 @@
 
   form {
     input[type=text], input[type=password] {
-      margin-bottom: 15px;
+      margin-bottom: 2px;
       padding: 7px 9px;
-      width: 90%;
+      width: 93%;
       height: auto;
     }
 
@@ -52,6 +68,7 @@
       display: block;
       margin: 0 auto;
       margin-top: 15px;
+      width: 100%;
     }
 
     .checkbox {
