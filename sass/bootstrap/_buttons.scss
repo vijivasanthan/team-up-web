@@ -15,13 +15,12 @@
   font-size: $baseFontSize;
   line-height: $baseLineHeight;
   text-align: center;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.95);
   vertical-align: middle;
   cursor: pointer;
 
 /*  @include buttonBackground($btnBackground, $grayDark, 0 1px 1px rgba(255,255,255,.85));   //$btnBackgroundHighlight is demolished*/
 
-  border: 1px solid $btnBorder;
+  border: none;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
   border-bottom-color: darken($btnBorder, 10%);
   @include border-radius($baseBorderRadius);

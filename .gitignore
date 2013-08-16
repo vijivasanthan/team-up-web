@@ -19,3 +19,5 @@ todos/
 .idea/
 
 war/dist/
+war/css/
+war/src/app.js
