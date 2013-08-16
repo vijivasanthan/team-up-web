@@ -8,8 +8,8 @@ angular.module('WebPaige.Controllers.Login', [])
  * Login controller
  */
 .controller('login',
-[ '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Groups', 'Messages', 'Storage', '$routeParams', 'Settings', 'Profile', 'MD5', 
-        function($rootScope, $location, $q, $scope, Session, User, Groups, Messages, Storage, $routeParams, Settings, Profile, MD5) {
+[ '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Messages', 'Storage', '$routeParams', 'Settings', 'Profile', 'MD5', 
+        function($rootScope, $location, $q, $scope, Session, User, Teams, Messages, Storage, $routeParams, Settings, Profile, MD5) {
             var self = this;
 
             /**

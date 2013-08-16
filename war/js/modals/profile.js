@@ -9,8 +9,8 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
  */
 .factory('Profile', 
 [
-	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Groups', 'Slots', 'MD5',
-	function ($rootScope, $config, $resource, $q, Storage, Groups, Slots, MD5) 
+	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Teams',  'MD5',
+	function ($rootScope, $config, $resource, $q, Storage, Teams,  MD5) 
 	{
 	  var Profile = $resource(
 	    $config.host + '/node/:id/:section',
