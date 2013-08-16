@@ -10,7 +10,7 @@
 angular.module('WebPaige',[
   'ngResource',
   // modals
-  // 'WebPaige.Modals.User',
+   'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
   'WebPaige.Modals.Core',
   'WebPaige.Modals.Teams',

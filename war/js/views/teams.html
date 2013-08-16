@@ -81,34 +81,33 @@
         </div>
         <hr>
         <!-- team status -->
-       	 <p ng-hide="(data.members[group.uuid]|filter:filtered).length > 0">
+       	  <p ng-hide="(data.members[team.uuid]).length > 0">
 	        {{ui.teamup.noMembers}}
 	      </p>
-	      <div ng-show="(data.members[group.uuid]|filter:filtered).length > 0">
+	      <div ng-show="(data.members[team.uuid]).length > 0">
 	        <table class="table table-striped">
 	          <thead>
 	            <tr>
-	              <th>
-	                <input type="checkbox"
-	                        ng-model="selectionMaster"
-	                        ng-click="toggleSelection(group, selectionMaster)">
-	              </th>
-	              <th><a ng-click="sorter='name'">{{ui.groups.name}}</a></th>
-	              <th><a ng-click="sorter='resources.role'">{{ui.groups.role}}</a></th>
-	              <th><a ng-click="sorter='resources.phoneAddress'">{{ui.groups.tel}}</a></th>
+	              <th></th>
+	              <th><a ng-click="sorter='name'">{{ui.teamup.name}}</a></th>
+	              <th><a >{{ui.teamup.states}}</a></th>
 	              <th></th>
 	            </tr>
 	          </thead>
 	          <tbody>
-	            <tr ng-repeat="member in data.members[group.uuid]|filter:filtered|orderBy:sorter:true">
+	            <tr ng-repeat="member in data.members[team.uuid]|orderBy:lastName">
 	              <td>
-	                <input type="checkbox"
-	                        ng-model="selection[member.uuid]"
-	                        ng-checked="selectionMaster">
+	                <img ng-src="{{member.imgURL}}">
 	              </td>
-	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.name}}</a></td>
+	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
 	<!--               <td>{{member.resources.PhoneAddress}}</td> -->
+				  <td>
+				  	<span ng-repeat="state in member.states | filter:share=true ">
+				  		<i class="{{state.name|stateIcon}} icon-yellow" ></i>
+			  			{{state.value}}			  			
+				  	</span>
+				  </td>
 	              <td>
 	                <div class="pull-right">
 	                  <a href="#/profile/{{member.uuid}}#edit" 
@@ -121,12 +120,14 @@
 	            </tr>
 	          </tbody>
 	        </table>
-	        <button type="button" 
+	        
+	        <!-- <button type="button" 
 	                ng-click="removeMembers(selection, group)" 
 	                class="btn btn-small btn-danger pull-left">
-	                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button>
+	                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button> -->
+	                
 	        <span class="muted pull-right">
-	          <small><i>{{(data.members[group.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small>
+	          <small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small>
 	        </span>
 	      </div>
 	    </div>      	

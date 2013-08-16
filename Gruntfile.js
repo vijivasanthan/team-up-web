@@ -25,7 +25,7 @@ module.exports = function (grunt)
             'war/js/routes.js',
             'war/js/bootstrap.js',
             // modals
-            // 'war/js/modals/user.js',
+             'war/js/modals/user.js',
             // 'war/js/modals/dashboard.js',
             'war/js/modals/core.js',
             'war/js/modals/teams.js',
