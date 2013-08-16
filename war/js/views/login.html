@@ -2,13 +2,23 @@
 <div id="welcomeArrow"></div>
 <div id="welcome">
 
+	<!-- preloader -->
+	<div id="preloader">
+		<img ng-src="{{config.profile.logos.login}}" alt="{{config.profile.title}}" />
+	  <h4>{{ui.login.setting_up_app}}</h4>
+	  <div class="progress progress-striped active" class="span3">
+	    <div class="bar"></div>
+	  </div>
+	  <span class="muted"></span>
+	</div>
+	<!-- end preloader -->
+	
 	<!-- loginForm -->
 	<div id="login" class="boxed">
 
 		<form ng-submit="login()">
 
 <!--		  <h4 class="form-signin-heading">Welcome back</h4>-->
-
 
       <!-- alert login -->
       <div class="alert {{alert.login.type}}" ng-show="alert.login.display">
