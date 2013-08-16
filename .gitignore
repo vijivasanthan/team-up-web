@@ -17,3 +17,5 @@ sass/.sass-cache/
 todos/
 
 .idea/
+
+war/dist/
