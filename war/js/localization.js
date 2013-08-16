@@ -31,7 +31,7 @@ var ui = {
         alert_wrongUserPass: 'Wrong username or password!',
         loading_User: 'Loading user information...',
         loading_Message: 'Loading messages...',
-        loading_Group:'Loading groups...',
+        loading_Teams:'Loading Teams...',
         loading_Members: 'Loading members...',
         loading_everything: 'Everything loaded!',
         logout: 'Logout',

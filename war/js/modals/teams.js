@@ -13,7 +13,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope) 
     {
       var Teams = $resource(
-        $config.host + 'teamup/teams/:action/:id',
+        $config.host + 'teamup/team/',
         {
         },
         {
@@ -106,17 +106,26 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       );
       
       var TeamStatus = $resource(
-          $config.host + '/teamup/team/status/:teamId',{
+          $config.host + '/teamup/team/status/:teamId/',{
           },{
               query : {
                   method: 'GET',
-                  params: {id: ''},
+                  params: {},
                   isArray: true
               }
           }
               
       );
       
+      var OwnTeams = $resource(
+              $config.host + '/teamup/team/',{},{
+                  query : {
+                      method: 'GET',
+                      params: {id: ''},
+                      isArray: true
+                  }
+              }
+          ); 
 
 //      /**
 //       * Get parent team data
@@ -304,17 +313,18 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       Teams.prototype.query = function (only)
       {
         var deferred = $q.defer();
-
-        Teams.query(
-          function (Teams) 
+        
+//        Teams.query(
+        OwnTeams.query(
+          function (teams) 
           {
-            Storage.add('Teams', angular.toJson(Teams));
-
+            Storage.add('Teams', angular.toJson(teams));
+            
             if (!only)
             {
               var calls = [];
 
-              angular.forEach(Teams, function (team, index)
+              angular.forEach(teams, function (team, index)
               {
                 calls.push(Teams.prototype.get(team.uuid));
               });
@@ -322,15 +332,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               $q.all(calls)
               .then(function (results)
               {
-                Teams.prototype.uniqueMembers();
+//                Teams.prototype.uniqueMembers();
 
                 var data = {};
 
                 data.members = {};
 
-                angular.forEach(Teams, function (team, gindex)
+                angular.forEach(teams, function (team, gindex)
                 {
-                  data.Teams = Teams;
+                  data.teams = teams;
 
                   data.members[team.uuid] = [];
 
@@ -345,11 +355,13 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
             }
             else
             {
-              deferred.resolve(Teams);
-            };
+              deferred.resolve(teams);
+            }
+            
           },
           function (error)
           {
+            console.log("Error" + error);
             deferred.resolve({error: error});
           }
         );
@@ -381,8 +393,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       {   
         var deferred = $q.defer();
 
-        Teams.queryStatus(
-          {id: id}, 
+        TeamStatus.query(
+          {teamId : id}, 
           function (result) 
           {
             /**

@@ -151,5 +151,96 @@ angular.module('WebPaige.Controllers.Login', [])
             };
             
             
+            /**
+             * TODO
+             * What happens if preloader stucks?
+             * Optimize preloader and messages
+             * 
+             * Initialize preloader
+             */
+            self.preloader = function()
+            {
+              $('#login').hide();
+              $('#download').hide();
+              $('#preloader').show();
+
+              self.progress(30, $rootScope.ui.login.loading_User);
+
+              User.memberInfo()
+              .then(function (resources)
+              {
+                if (resources.error)
+                {
+                  console.warn('error ->', resources);
+                }
+                else
+                {
+                  $rootScope.app.resources = resources;
+
+                  self.progress(70, $rootScope.ui.login.loading_Teams);
+
+                  Teams.query(true)
+                  .then(function (teams)
+                  {
+                    console.log("in query teams ");
+                    if (teams.error)
+                    {
+                      console.warn('error ->', teams);
+                    }
+                    
+                    finalize();
+                  },function (error){
+                      deferred.resolve({error: error});
+                  });
+                }
+              });
+            };
+            
+            /**
+             * Finalize the preloading
+             */
+            function finalize ()
+            {
+              // console.warn( 'settings ->',
+              //               'user ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).user,
+              //               'widgets ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.widgets,
+              //               'group ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.group);
+
+              self.progress(100, $rootScope.ui.login.loading_everything);
+
+              self.redirectToTeamPage();
+
+//              self.getMessages();
+
+//              self.getMembers();    
+            }
+            
+            /**
+             * Redirect to dashboard
+             */
+            self.redirectToTeamPage = function ()
+            {
+              $location.path('/team');
+
+              setTimeout(function ()
+              {
+                $('body').css({ 'background': 'none' });
+                $('.navbar').show();
+                // $('#mobile-status-bar').show();
+                // $('#notification').show();
+                if (!$rootScope.browser.mobile) $('#footer').show();
+                $('#watermark').show();
+                $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
+              }, 100);
+            };
+            
+            /**
+             * Progress bar
+             */
+            self.progress = function (ratio, message)
+            {
+              $('#preloader .progress .bar').css({ width: ratio + '%' }); 
+              $('#preloader span').text(message);    
+            };
         } 
 ]);

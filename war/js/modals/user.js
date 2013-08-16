@@ -25,7 +25,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	    {
 	      process: {
 	        method: 'GET',
-	        params: {uuid:'', pass:''}
+	        params: {username:'', password:''}
 	      }
 	    }
 	  );
@@ -44,8 +44,8 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  );
 
 
-	  var Resources = $resource(
-	    $config.host + '/resources',
+	  var MemberInfo = $resource(
+	    $config.host + '/teamup/team/member',
 	    {
 	    },
 	    {
@@ -118,7 +118,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-	    Login.process({uuid: uuid, pass: pass}, 
+	    Login.process({username: uuid, password: pass}, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 
@@ -191,11 +191,11 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  /**
 	   * Get user resources
 	   */
-	  User.prototype.resources = function () 
+	  User.prototype.memberInfo = function () 
 	  {    
 	    var deferred = $q.defer();
 
-	    Resources.get(null, 
+	    MemberInfo.get(null, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 
