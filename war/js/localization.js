@@ -17,7 +17,7 @@ var ui = {
         label_rememberMe: "Remember Me",
         button_login: "Login",
         button_loggingIn: "Logging...",
-        forgot_password: "forgot your password?",
+        forgot_password: "Forgot password?",
         forgetPassword: "Forgot password",
         emailAddress: "Email address",
         resetPassword: "Reset Password",
@@ -590,7 +590,7 @@ var ui = {
       teamup: {
           teams: 'teams',
           clients: 'clients',
-          manage: 'manage',
+          manage: 'manage'
       }
     }
 };
