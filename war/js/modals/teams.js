@@ -121,7 +121,6 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               $config.host + '/teamup/team/',{},{
                   query : {
                       method: 'GET',
-                      params: {id: ''},
                       isArray: true
                   }
               }

@@ -12,10 +12,9 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window','Teams',
-  function ($rootScope, $location, $timeout, Storage, $config, $window,Teams)
+  '$rootScope', '$location', '$timeout', 'Session','Storage', '$config', '$window','Teams',
+  function ($rootScope, $location, $timeout, Session, Storage, $config, $window,Teams)
   {
-      console.log(Teams);
     /**
      * Pass config and init dynamic config values
      */
@@ -282,41 +281,47 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeStart', function (event, next, current)
     {
-      // function resetLoaders ()
-      // {
-      //   $rootScope.loaderIcons = {
-      //     general:    false,
-      //     dashboard:  false,
-      //     planboard:  false,
-      //     messages:   false,
-      //     groups:     false,
-      //     profile:    false,
-      //     settings:   false
-      //   };
-      // }
+       function resetLoaders ()
+       {
+         $rootScope.loaderIcons = {
+           general:    false,
+           teams:  false,
+           clients:  false,
+           messages:   false,
+           manage:     false,
+           profile:    false,
+           settings:   false
+         };
+       }
 
-      // resetLoaders();
+       resetLoaders();
 
-      // switch ($location.path())
-      // {
-      //   case '/dashboard':
-      //     $rootScope.loaderIcons.dashboard = true;
+       switch ($location.path())
+       {
+         case '/team':
+           $rootScope.loaderIcons.team = true;
 
-      //     $rootScope.location = 'dashboard';
-      //   break;
+           $rootScope.location = 'team';
+         break;
 
-      //   case '/planboard':
-      //     $rootScope.loaderIcons.planboard = true;
+         case '/client':
+           $rootScope.loaderIcons.client = true;
 
-      //     $rootScope.location = 'planboard';
-      //   break;
+           $rootScope.location = 'cilent';
+         break;
 
-      //   case '/messages':
-      //     $rootScope.loaderIcons.messages = true;
+         case '/messages':
+           $rootScope.loaderIcons.messages = true;
 
-      //     $rootScope.location = 'messages';
-      //   break;
+           $rootScope.location = 'messages';
+         break;
+         
+         case '/manage':
+             $rootScope.loaderIcons.messages = true;
 
+             $rootScope.location = 'manage';
+         break;
+         
       //   case '/groups':
       //     $rootScope.loaderIcons.groups = true;
 
@@ -329,22 +334,22 @@ angular.module('WebPaige')
       //     $rootScope.location = 'settings';
       //   break;
 
-      //   default:
-      //     if ($location.path().match(/profile/))
-      //     {
-      //       $rootScope.loaderIcons.profile = true;
+         default:
+           if ($location.path().match(/profile/))
+           {
+             $rootScope.loaderIcons.profile = true;
 
-      //       $rootScope.location = 'profile';
-      //     }
-      //     else
-      //     {
-      //       $rootScope.loaderIcons.general = true;
-      //     }
-      // }
+             $rootScope.location = 'profile';
+           }
+           else
+           {
+             $rootScope.loaderIcons.general = true;
+           }
+       }
 
-      // if (!Session.check()) $location.path("/login");
+      if (!Session.check()) $location.path("/login");
 
-      // $rootScope.loadingBig = true;
+      $rootScope.loadingBig = true;
 
       $rootScope.statusBar.display('Loading..');
 
@@ -352,34 +357,34 @@ angular.module('WebPaige')
 
 
 
-      // switch ($location.path())
-      // {
-      //   case '/dashboard':
-      //     $rootScope.location = 'dashboard';
-      //   break;
+       switch ($location.path())
+       {
+         case '/team':
+           $rootScope.location = 'team';
+         break;
 
-      //   case '/planboard':
-      //     $rootScope.location = 'planboard';
-      //   break;
+         case '/client':
+           $rootScope.location = 'client';
+         break;
 
-      //   case '/messages':
-      //     $rootScope.location = 'messages';
-      //   break;
+         case '/messages':
+           $rootScope.location = 'messages';
+         break;
 
-      //   case '/groups':
-      //     $rootScope.location = 'groups';
-      //   break;
+         case '/manage':
+           $rootScope.location = 'manage';
+         break;
 
-      //   case '/settings':
-      //     $rootScope.location = 'settings';
-      //   break;
+         case '/settings':
+           $rootScope.location = 'settings';
+         break;
 
-      //   default:
-      //     if ($location.path().match(/profile/))
-      //     {
-      //       $rootScope.location = 'profile';
-      //     }
-      // }
+         default:
+           if ($location.path().match(/profile/))
+           {
+             $rootScope.location = 'profile';
+           }
+       }
 
 
       $rootScope.location = $location.path().substring(1);

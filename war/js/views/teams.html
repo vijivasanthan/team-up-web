@@ -18,8 +18,10 @@
 
 <div class="page-header">
 	<span  class="nullable">
-        <select ng-model="teams" ng-options="t.name for t in teams">
-          <option value="">-- {{ui.teamup.chooseTeam}} --</option>
+        <select ng-model="current" 
+        		ng-options="t.uuid as t.name for t in teams"
+        		ng-selected="current"
+        		ng-change="requestTeam(current)" >
         </select>
     </span
 
@@ -33,7 +35,7 @@
     <!-- add group tab link -->
     <li class="{{(views.team==true) && 'active'}}">
       <a href="#viewTeamTab" 
-          ng-click="setTeamView('team')" 
+          ng-click="setView('team')" 
           data-toggle="tab">
         <span class="entypo">&#9998;</span>
         {{ui.teamup.teams}}
@@ -43,7 +45,7 @@
     <!-- edit group tab link -->
     <li class="{{(views.newTeam==true) && 'active'}}">
       <a href="#newTeamTab" 
-          ng-click="setTeamView('newTeam')" 
+          ng-click="setView('newTeam')" 
           data-toggle="tab">
         <span class="entypo">&#9998;</span>
         {{ui.teamup.newTeam}}
@@ -53,7 +55,7 @@
     <!-- new member tab link -->
     <li class="{{(views.newMember==true) && 'active'}}">
       <a href="#newMemberTab" 
-          ng-click="setTeamView('newMember')" 
+          ng-click="setView('newMember')" 
           data-toggle="tab">
         <span class="entypo">&#59136;</span>
         {{ui.teamup.newMember}}
@@ -97,7 +99,7 @@
 	          <tbody>
 	            <tr ng-repeat="member in data.members[team.uuid]|orderBy:lastName">
 	              <td>
-	                <img ng-src="{{member.imgURL}}">
+	                <img ng-src="{{imgHost}}/teamup/team/member/{{member.uuid}}/photo">
 	              </td>
 	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->

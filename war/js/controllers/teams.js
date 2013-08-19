@@ -8,131 +8,25 @@ angular.module('WebPaige.Controllers.Teams', [])
 /**
  * Groups controller
  */
-.controller('teamCtrl',
-[
+.controller('teamCtrl',[
     '$rootScope', '$scope', '$location', 'Teams','data', '$route', '$routeParams', 'Storage',
-    function ($rootScope, $scope, $location, Teams,data, $route, $routeParams, Storage)
-    {
+    function ($rootScope, $scope, $location, Teams,data, $route, $routeParams, Storage){
         /**
          * Fix styles
          */
         $rootScope.fixStyles();
         
-        $scope.team = data.team;
         $scope.members = data.members;
         $scope.teams = data.teams;
-        
-        /*
-         * dummy data 
-         */
-        var members = {"1" : [{
-                "uuid": "member_b@ask-cs.com",
-                "userName": "member_b@ask-cs.com",
-                "password": null,
-                "firstName": "B",
-                "lastName": "Member",
-                "phone": null,
-                "states": [
-                    {
-                        "uuid": 0,
-                        "name": "emotion",
-                        "value": "happy",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "availability",
-                        "value": "false",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "location",
-                        "value": "home",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "activity",
-                        "value": "exciting",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "reachability",
-                        "value": "no",
-                        "share": true
-                    }
-                ],
-                "avatarUuid": null,
-                "imgURL": null,
-                "teamUuids": '1',
-                "role": null
-            },
-            {
-                "uuid": "member_c@ask-cs.com",
-                "userName": "member_c@ask-cs.com",
-                "password": null,
-                "firstName": "C",
-                "lastName": "Member",
-                "phone": null,
-                "states": [
-                    {
-                        "uuid": 0,
-                        "name": "emotion",
-                        "value": "happy",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "availability",
-                        "value": "false",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "location",
-                        "value": "home",
-                        "share": false
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "activity",
-                        "value": "exciting",
-                        "share": true
-                    },
-                    {
-                        "uuid": 0,
-                        "name": "reachability",
-                        "value": "no",
-                        "share": false
-                    }
-                ],
-                "avatarUuid": null,
-                "imgURL": null,
-                "teamUuids": '1',
-                "role": null
-            }]
-        };
-        
-        var team = {name : 'team 1', uuid : '1'};
-        
-        var teams = [{name : 'team 1', uuid : '1'},
-                     {name : 'team 2', uuid : '2'},
-                     {name : 'team 3', uuid : '3'}];
-        
-        $scope.team = team;
-        $scope.members = members;
-        $scope.teams = teams;
-        data.members = members;        
         
         /**
          * Self this
          */
         var self = this,
         params = $location.search();
-
-
+        
+        $scope.imgHost = profile.host();
+        
         /**
          * Init search query
          */
@@ -165,19 +59,30 @@ angular.module('WebPaige.Controllers.Teams', [])
         /**
          * If no params or hashes given in url
          */
-//        if (!params.uuid && !$location.hash())
-//        {
-//            uuid = data.groups[0].uuid;
-//            view = 'view';
-//  
-//            $location.search({uuid: data.groups[0].uuid}).hash('view');
-//        }
-//        else
-//        {
-//            uuid = params.uuid;
-//            view = $location.hash();
-//        }
+        if (!params.uuid && !$location.hash())
+        {
+            uuid = data.teams[0].uuid;
+            view = 'team';
+  
+            $location.search({uuid: data.teams[0].uuid}).hash('team');
+        }
+        else
+        {
+            uuid = params.uuid;
+            view = $location.hash();
+        }
+        
+        
+        /**
+         * Set group
+         */
+        setTeamView(uuid);
 
+
+        /**
+         * Set view
+         */
+        setView(view);
 
         /**
          * Set Team View
@@ -190,42 +95,56 @@ angular.module('WebPaige.Controllers.Teams', [])
           
 
         /**
-         * Set view
-         */
-//        setView(view);
-        
-
-        /**
          * Set given group for view
          */
-        $scope.setTeamView = function (id)
-        {
+        function setTeamView(id){
             
-            
-              
-//            switch(id){
-//                case 'team':
-//                    $scope.views.team = true;
-//                    break;
-//                case 'newTeam':
-//                    $scope.views.newTeam = true;
-//                    break;
-//                case 'newMember':
-//                    $scope.views.newMember = true;
-//                    break;
-//            }
-//            angular.forEach(data.groups, function (group, index)
-//            {
-//                if (group.uuid == id) $scope.group = group;
-//            });
-//
-//            $scope.members = data.members[id];
-//
-//            $scope.current = id;
-//
+            angular.forEach(data.teams, function (team, index)
+            {
+                if (team.uuid == id) $scope.team = team;
+            });
+
+            $scope.members = data.members[id];
+
+            $scope.current = id;
+
 //            wisher(id);
         }
 
+      /**
+       * Request for a group
+       */
+      $scope.requestTeam= function (current, switched)
+      {
+          setTeamView(current);
+
+          $scope.$watch($location.search(), function ()
+          {
+              $location.search({uuid: current});
+          });
+
+          if (switched)
+          {
+              if ($location.hash() != 'team') $location.hash('team');
+
+              setView('team');
+          }
+      };
+         
+      /**
+       * View setter
+       */
+      function setView (hash)
+      {
+          $scope.views = {
+              team:   false,
+              newTeam:    false,
+              newmember:   false
+          };
+
+          $scope.views[hash] = true;
+      }
+      
         /**
          * Selection toggler
          */
@@ -239,6 +158,7 @@ angular.module('WebPaige.Controllers.Teams', [])
                 $scope.selection[member.uuid] = flag;
             });
         };
+        
 
     }
 ]);
