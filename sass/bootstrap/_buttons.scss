@@ -155,26 +155,27 @@ input[type="button"] {
   background-color: $orange;
   color:$brown;
 }
-/*// Warning appears are orange
+/*// Warning appears are orange   */
 .btn-warning {
   @include buttonBackground($btnWarningBackground, $btnWarningBackgroundHighlight);
 }
 // Danger and error appear as red
 .btn-danger {
-  @include buttonBackground($btnDangerBackground, $btnDangerBackgroundHighlight);
+  background-color:$red;
 }
 // Success appears as green
 .btn-success {
-  @include buttonBackground($btnSuccessBackground, $btnSuccessBackgroundHighlight);
+  background-color:$turq;
+  color:$offwhite;
 }
 // Info appears as a neutral blue
 .btn-info {
-  @include buttonBackground($btnInfoBackground, $btnInfoBackgroundHighlight);
+  background-color:$brown;
 }
 // Inverse appears as dark gray
 .btn-inverse {
   @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
-}*/
+}
 
 
 // Cross-browser Jank

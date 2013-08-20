@@ -62,8 +62,7 @@ angular.module('WebPaige.Controllers.Login', [])
             $('#footer').hide();
             $('#watermark').hide();
             $('body').css({
-              'background': 'url(../' + $rootScope.config.profile.background + ') no-repeat center center fixed',
-              'backgroundSize': 'cover'
+              'backgroundColor': '#1dc8b6'
             });
 
             /**
