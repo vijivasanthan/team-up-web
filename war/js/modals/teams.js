@@ -74,39 +74,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
         }
       );
 
-
-      var Members = $resource(
-        $config.host + '/network/:id/members/:mid',
-        {
-        },
-        {
-          query: {
-            method: 'GET',
-            // params: {id:'', fields: '[role, latlong, latlong_final, settingsWebPaige]'},
-            params: {id:'', fields: '[role, settingsWebPaige]'},
-            isArray: true
-          },
-          get: {
-            method: 'GET',
-            params: {id:''}
-          },
-          save: {
-            method: 'POST',
-            params: {}
-          },
-          add: {
-            method: 'POST',
-            params: {id:'', mid:''} 
-          },
-          remove: {
-            method: 'DELETE',
-            params: {id:'', mid:''} 
-          }
-        }
-      );
-      
       var TeamStatus = $resource(
-          $config.host + '/teamup/team/status/:teamId/',{
+          $config.host + 'teamup/team/status/:teamId/',{
           },{
               query : {
                   method: 'GET',
@@ -117,15 +86,6 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               
       );
       
-      var OwnTeams = $resource(
-              $config.host + '/teamup/team/',{},{
-                  query : {
-                      method: 'GET',
-                      isArray: true
-                  }
-              }
-          ); 
-
 //      /**
 //       * Get parent team data
 //       */
@@ -313,8 +273,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       {
         var deferred = $q.defer();
         
-//        Teams.query(
-        OwnTeams.query(
+        Teams.query(
           function (teams) 
           {
             Storage.add('Teams', angular.toJson(teams));

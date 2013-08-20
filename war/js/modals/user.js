@@ -19,7 +19,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var Login = $resource(
-	    $config.host + '/login',
+	    $config.host + 'login',
 	    {
 	    },
 	    {
@@ -32,7 +32,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var Logout = $resource(
-	    $config.host + '/logout',
+	    $config.host + 'logout',
 	    {
 	    },
 	    {
@@ -45,7 +45,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var MemberInfo = $resource(
-	    $config.host + '/teamup/team/member',
+	    $config.host + 'teamup/team/member',
 	    {
 	    },
 	    {

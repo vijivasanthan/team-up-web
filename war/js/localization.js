@@ -254,7 +254,10 @@ var ui = {
         passwrong: 'Given current password is wrong! Please try it again.',
         newTimeslotAdded: 'New timeslot added successfully.',
         changingTimeslot: 'Changing a timeslot..',
-        timeslotChanged: 'Timeslot is succesfully changed.'
+        timeslotChanged: 'Timeslot is succesfully changed.',
+        firstName: 'first name',
+        lastName: 'last name',
+        editProfileImg : 'Edit profile image'
       },
       settings: {
         settings: 'Settings',

@@ -12,18 +12,16 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Teams',  'MD5',
 	function ($rootScope, $config, $resource, $q, Storage, Teams,  MD5) 
 	{
+	  
+	  
 	  var Profile = $resource(
-	    $config.host + '/node/:id/:section',
-	    {
-	    },
-	    {
+	    $config.host + 'teamup/team/member/:memberId/',{},{
 	      get: {
 	        method: 'GET',
-	        params: {id: '', section: 'resource'}
+	        params: {id: ''}
 	      },
 	      save: {
-	        method: 'PUT',
-	        params: {section: 'resource'}
+	        method: 'PUT',	        
 	      },
 	      role: {
 	        method: 'PUT',
@@ -31,8 +29,15 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	      }
 	    }
 	  );
-
-
+	  
+	  var ProfileSave = $resource(
+	    $config.host + 'teamup/team/:teamId/member/:memberId/',{},{
+          save: {
+            method: 'PUT',          
+          }
+        }
+      ); 
+	  
 	  var Register = $resource(
 	    $config.host + '/register',
 	    {
@@ -186,13 +191,15 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-	    Profile.get({id: id}, function (result) 
+	    Profile.get({memberId: id}, function (result) 
 	    {
 	      if (id == $rootScope.app.resources.uuid) $rootScope.app.resources = result;
 
 	      if (localize) Storage.add('resources', angular.toJson(result));
 
 	      deferred.resolve({resources: result});
+	    }, function(error){
+	        console.log(error);
 	    });
 
 	    return deferred.promise;
@@ -272,9 +279,9 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  Profile.prototype.save = function (id, resources) 
 	  {
 	    var deferred = $q.defer();
-
-	    Profile.save(
-	      {id: id}, 
+	    
+	    ProfileSave.save(
+	      {memberId: id , teamId : resources.teamUuids[0]}, 
 	      resources, 
 	      function (result) 
 	      {

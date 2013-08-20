@@ -1,0 +1,257 @@
+<section id="profile">
+
+
+
+<div class="page-header">
+  <h2>{{data.resources.name}}</h2>
+</div>
+
+
+
+<!-- profile -->
+<div class="row-fluid">
+  <div class="tabbable tabs-left">
+
+
+    
+    <!-- tabs -->
+    <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
+      <li class="{{(views.profile==true) && 'active'}}">
+        <a href="#profileTab" 
+            data-toggle="tab"
+            ng-click="fixTabHeight('profileTab'); setViewTo('profile')">
+          <span class="entypo">&#128100;</span> {{ui.profile.profile}}
+        </a>
+      </li>
+      <!-- <li class="{{(views.edit==true) && 'active'}}">
+        <a href="#editTab" 
+            data-toggle="tab"
+            ng-click="fixTabHeight('editTab'); setViewTo('edit')">
+          <span class="entypo">&#9998;</span> {{ui.profile.edit}}
+        </a>
+      </li> -->
+      <!-- <li class="{{(views.password==true) && 'active'}}" ng-show="views.user">
+        <a href="#passwordTab" 
+            data-toggle="tab"
+            ng-click="fixTabHeight('passwordTab'); setViewTo('password')">
+          <span class="entypo">&#128274;</span> {{ui.profile.password}}
+        </a>
+      </li> -->
+      <!-- <li class="{{(views.timeline==true) && 'active'}}" ng-hide="views.user">
+        <a href="#userTimelineTab" 
+            data-toggle="tab"
+            ng-click="fixTabHeight('userTimelineTab'); setViewTo('timeline'); redraw()">
+          <span class="entypo">&#128340;</span> {{ui.profile.timeline}}
+        </a>
+      </li> -->
+    </ul>
+    <!-- end tabs -->
+
+
+
+    <!-- tabs content -->
+    <div class="tab-content">
+
+
+
+      <!-- profileTab -->
+      <div class="tab-pane {{(views.profile==true) && 'active'}}" id="profileTab">
+
+
+        <!-- tab header -->
+        <div class="tab-header">
+          <h3 class="pull-left">{{data.resources.firstName}} {{data.resources.lastName}}</h3>
+          
+          <button type="button" 
+                  ng-click="deleteProfile()" 
+                  class="btn pull-right">{{ui.teamup.del}}</button>
+          <button type="button" 
+                  ng-click="editProfile()" 
+                  class="btn pull-right">{{ui.profile.edit}}</button>
+        </div>
+        <!-- end tab header -->
+
+        <hr>
+        
+		<div class="row-fluid">
+			
+			<div class="widget {{(!browser.mobile) && 'span7' || 'span12'}}">
+				 
+		        <!-- profile info -->
+		        <dl>
+		          <dt>{{ui.teamup.teams}}</dt>
+		            <dd>
+		              <span ng-repeat="team in teams">
+		                <span ng-hide="app.resources.role > 1"><a href="#/team?uuid={{team.uuid}}#view">{{team.name}}</a>,</span>
+		                <span ng-show="app.resources.role > 1">{{team.name}}, </span>
+		              </span>
+		          </dd>
+		          <dt>{{ui.teamup.role}}</dt>
+		            <dd>{{data.resources.role|translateRole}}</dd>
+		          <!-- <dt>{{ui.profile.email}}</dt>
+		            <dd>{{data.resources.EmailAddress}}</dd> -->
+		          <dt>{{ui.profile.phone}}</dt>
+		            <dd>{{data.resources.phone}}</dd>
+		            
+		        </dl>
+		        <!-- end profile info -->
+	        
+	        </div>
+	        
+	        <div class="widget {{(!browser.mobile) && 'span5' || 'span12'}}" >
+	        	<!-- profile image -->
+	        	<div ><img ng-src="{{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo"></div>
+	        	<div >
+	        		<a href="#/profile/{{data.resources.uuid}}#editImg" ng-click="setViewTo('editImg')"
+	                    class="btn btn-mini"><i class="icon-edit"></i></a>&nbsp;
+	                  <button type="submit" 
+	                          ng-click="removeImg(data.resources.uuid)" 
+	                          class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button>
+	        	</div>
+	        	<!-- end profile image -->
+	        </div>	
+		</div>
+
+      </div>
+      <!-- end profileTab -->
+
+
+
+      <!-- editTab -->
+      <div class="tab-pane {{(views.edit==true) && 'active'}}" id="editTab">
+
+
+        <!-- tab header -->
+        <div style="overflow: hidden; height: 35px">
+          <h3 style="margin-top: 0;" class="pull-left">{{ui.profile.editProfile}}</h3>
+        </div>
+        <!-- end tab header -->
+
+
+        <hr>
+
+
+        <!-- edit profile form -->
+        <form class="form-vertical">
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.firstName}}</label>
+            <div class="controls">
+              <input  type="text" 
+                      class="span4" 
+                      ng-model="profilemeta.firstName"
+                      value="{{data.resources.firstName}}">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.lastName}}</label>
+            <div class="controls">
+              <input  type="text" 
+                      class="span4" 
+                      ng-model="profilemeta.lastName"
+                      value="{{data.resources.lastName}}">
+            </div>
+          </div>
+          <!-- <div class="control-group">
+            <label class="control-label">{{ui.profile.email}}</label>
+            <div class="controls">
+              <input  type="text" 
+                      class="span4" 
+                      ng-model="profilemeta.EmailAddress"
+                      value="{{data.resources.EmailAddress}}">
+            </div>
+          </div> -->
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.phone}}</label>
+            <div class="controls">
+              <input  type="text" 
+                      class="span3" 
+                      ng-model="profilemeta.phone"
+                      value="{{data.resources.phone}}">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button   type="submit" 
+                      class="btn btn-success"
+                      ng-click="save(profilemeta)">{{ui.profile.saveProfile}}</button>
+          </div>
+        </form>
+        <!-- end edit profile form -->
+
+
+      </div>
+      <!-- end editTab -->
+
+	  <!-- edit image tab-->
+	  <div class="tab-pane {{(views.editImg==true) && 'active'}}" id="editImgTab">
+	  	<!-- tab header -->
+        <div style="overflow: hidden; height: 35px">
+          <h3 style="margin-top: 0;" class="pull-left">{{ui.profile.editProfileImg}} : {{data.resources.firstName}} {{data.resources.lastName}}</h3>
+        </div>
+        <!-- end tab header -->
+
+        <hr>
+		        
+        
+	  </div>
+	  
+	  <!-- end edit image tab-->
+
+      <!-- passwordTab -->
+      <div class="tab-pane {{(views.password==true) && 'active'}}" id="passwordTab" ng-show="views.user">
+
+
+        <!-- tab header -->
+        <div style="overflow: hidden; height: 35px">
+          <h3 style="margin-top: 0;" class="pull-left">{{ui.profile.passChange}}</h3>
+        </div>
+        <!-- end tab header -->
+
+
+        <hr>
+
+
+        <!-- password form -->
+        <form class="form-vertical">
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.currentPass}}</label>
+            <div class="controls">
+              <input  type="password" 
+                      class="span3" 
+                      ng-model="passwords.current">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.newPass}}</label>
+            <div class="controls">
+              <input  type="password" 
+                      class="span3" 
+                      ng-model="passwords.new1">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">{{ui.profile.newPassRepeat}}</label>
+            <div class="controls">
+              <input  type="password" 
+                      class="span3" 
+                      ng-model="passwords.new2">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button   type="submit" 
+                      class="btn btn-success"
+                      ng-click="change(passwords)">{{ui.profile.changePass}}</button>
+          </div>
+        </form>
+        <!-- end password form -->
+
+
+      </div>
+      <!-- end passwordTab -->
+      
+    </div>
+    <!-- end tabs content -->
+
+  </div>
+</div>
+</section>
+<!-- end profile -->

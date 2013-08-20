@@ -9,42 +9,41 @@ angular.module('WebPaige.Controllers.Profile', [])
 /**
  * Profile controller
  */
-.controller('profile', 
+.controller('profileCtrl', 
 [
-	'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Groups', 'Dater', 'MD5', 
-	function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Groups, Dater, MD5) 
+	'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5', 
+	function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5) 
 	{
 	  /**
 	   * Fix styles
 	   */
 	  $rootScope.fixStyles();
 
-
 	  /**
 	   * Pass the self
 	   */
-		$scope.self = this;
-
-
-		console.warn('data ->', data);
-
-
+	  $scope.self = this;
+		
 	  /**
 	   * Pass periods
 	   */
 	  $scope.periods = Dater.getPeriods();
 
-
+	  /**
+	   * apply the host to img url
+	   */
+	  $scope.imgHost = profile.host();
+	  
 	  /**
 	   * Pass current
 	   */
-	  $scope.current = {
+	$scope.current = {
       day:    Date.today().getDayOfYear() + 1,
       week:   new Date().getWeek(),
       month:  new Date().getMonth() + 1
     };
 
-
+	  
 	  /**
 	   * Set data for view
 	   */
@@ -57,7 +56,6 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   */
 	  $scope.data = data;
 
-
 	  /**
 	   * Pass profile information
 	   */
@@ -65,11 +63,20 @@ angular.module('WebPaige.Controllers.Profile', [])
 
 
 	  /**
-	   * Get groups of user
+	   * Get teams of user
 	   */
-	  $scope.groups = Groups.getMemberGroups($route.current.params.userId);
+	  var teams = [];
+	  var storage_teams = angular.fromJson(Storage.get("Teams"));
+	  angular.forEach($scope.profilemeta.teamUuids,function(teamId,index){
+	      angular.forEach(storage_teams,function(team,index){
+	         if(team.uuid == teamId){
+	             teams.add(team);
+	         } 
+	      });
+	  });
 
-
+	  $scope.teams = teams;
+	  
 	  /**
 	   * Default values for passwords
 	   */
@@ -156,6 +163,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    $scope.views = {
 	      profile:  false,
 	      edit:     false,
+	      editImg:     false,
 	      password: false,
 	      timeline: false
 	    };
@@ -288,10 +296,10 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * Render timeline if hash is timeline
 	   */
 	  // if ($location.hash() == 'timeline')
-	  if ($rootScope.app.resources.uuid != $route.current.params.userId)
-	  {
-	  	timelinebooter();
-	  };
+//	  if ($rootScope.app.resources.uuid != $route.current.params.userId)
+//	  {
+//	  	timelinebooter();
+//	  };
 
 
 
@@ -357,5 +365,14 @@ angular.module('WebPaige.Controllers.Profile', [])
       $('#timeline').append('<div id="userTimeline"></div>');
 	  };
 
+	  /**
+	   * show edit member profile TabView  
+	   */
+	  
+	  $scope.editProfile = function(){
+	      setView('edit');
+	  }
+	  
+	  
 	}
 ]);
