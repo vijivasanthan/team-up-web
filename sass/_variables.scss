@@ -24,26 +24,28 @@ $white:                 #fff !default;
 $blue:                  #35a8c9 !default; //
 $blueDark:              #7772b5 !default; //
 $green:                 #6f9a6d !default; //
-$red:                   #ba5855 !default; //
 $yellow:                #ffc40d !default;
-$orange:                #f5a962 !default; //
 $pink:                  #c3325f !default;
-$offwhite:              #fffaf0 !default;
-
 $purple:                #7772b5 !default; //
-$turq:                   #1dc8b6 !default; //
-$brown:				    #833c11 !default;
+
+$turq:                  #1dc8b6 !default; // teamup
+$orange:                #f5a962 !default; //  teamup
+$brown:				    #833c11 !default; // teamup
+$beige:                 #f5e6d8 !default; // teamup
+$graytu:                #c8c8b4 !default; //  teamup
+$red:                   #c85a3c !default; //  teamup
+$offwhite:              #fffaf0 !default; // teamup
 
 
 // Scaffolding
 // -------------------------
-$bodyBackground:        #1dc8b6 !default; // $white !default;
-$textColor:             #433c2d !default; // $grayDark !default;
+$bodyBackground:        #fffaf0 !default; // $white !default;
+$textColor:             $brown !default; // $grayDark !default;
 
 
 // Links
 // -------------------------
-$linkColor:             #7772b5 !default; //
+$linkColor:             $turq !default; //
 $linkColorHover:        darken($linkColor, 15%) !default; //
 
 
@@ -220,7 +222,7 @@ $navbarInverseBorder:                    #3f382a !default; // #252525 !default;
 
 $navbarInverseText:                      #f7f5eb !default; // $grayLight !default;
 $navbarInverseLinkColor:                 $white !default; // $grayLight !default;
-$navbarInverseLinkColorHover:            $white !default;
+$navbarInverseLinkColorHover:            $orange !default;
 $navbarInverseLinkColorActive:           $navbarInverseLinkColorHover !default;
 $navbarInverseLinkBackgroundHover:       transparent !default;
 $navbarInverseLinkBackgroundActive:      #2d281d !default; // $navbarInverseBackground !default;
