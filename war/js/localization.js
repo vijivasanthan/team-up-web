@@ -257,7 +257,9 @@ var ui = {
         timeslotChanged: 'Timeslot is succesfully changed.',
         firstName: 'first name',
         lastName: 'last name',
-        editProfileImg : 'Edit profile image'
+        editProfileImg : 'Edit profile image',
+        loadUploadURL : 'Loading image upload URL ',
+        click2upload : 'click here to upload'
       },
       settings: {
         settings: 'Settings',

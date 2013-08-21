@@ -373,6 +373,28 @@ angular.module('WebPaige.Controllers.Profile', [])
 	      setView('edit');
 	  }
 	  
+	  /**
+	   * load the dynamic upload URL for GAE 
+	   */
+	  $scope.editImg = function(){
+	      $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
+	      Profile.loadUploadURL($route.current.params.userId)
+	        .then(function (result)
+	        {
+	          if (result.error){
+	            $rootScope.notifier.error('Error with loading upload URL.');
+	            console.warn('error ->', result);
+	          }else{
+	              
+	            $rootScope.statusBar.off();
+	            $scope.uploadURL = result.url;
+	            
+	            $scope.setViewTo('editImg');
+	          };
+	      });
+	      
+	      
+	  }
 	  
 	}
 ]);

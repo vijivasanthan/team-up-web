@@ -38,6 +38,15 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
         }
       ); 
 	  
+	  var ProfileImg = $resource(
+          $config.host + 'teamup/team/member/:memberId/photourl',{},{
+            getURL: {
+              method: 'GET',
+              isArray: false              
+            }
+          }
+        ); 
+	  
 	  var Register = $resource(
 	    $config.host + '/register',
 	    {
@@ -295,8 +304,25 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 
 	    return deferred.promise;
 	  };
-
-
+	  
+	  /**
+	   * get the upload URL
+	   */
+	  Profile.prototype.loadUploadURL = function(id){
+	      var deferred = $q.defer();
+	      
+	      ProfileImg.getURL(
+              {memberId : id},
+              function(result){
+                  deferred.resolve(result);
+              },
+              function(error){
+                  deferred.resolve({error: error});	                  
+              }
+	      );
+	      return deferred.promise;
+	  } 
+	  
 	  /**
 	   * Create settings resources for user if it is missing
 	   */
