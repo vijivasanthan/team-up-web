@@ -132,24 +132,24 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Translate roles
  */
-// .filter('translateRole', 
-// [
-// 	'$config', 
-// 	function ($config)
-// 	{
-// 		return function (role)
-// 		{
-// 			var urole;
+ .filter('translateRole', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (role)
+ 		{
+ 			var urole;
 
-// 			angular.forEach($config.roles, function (prole, index)
-// 			{
-// 				if (prole.id == role) urole = prole.label;
-// 			});
+ 			angular.forEach($config.roles, function (prole, index)
+ 			{
+ 				if (prole.id == role) urole = prole.label;
+ 			});
 
-// 			return urole;
-// 		}
-// 	}
-// ])
+ 			return urole;
+ 		}
+ 	}
+ ])
 
 
 

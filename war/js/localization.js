@@ -31,7 +31,7 @@ var ui = {
         alert_wrongUserPass: 'Wrong username or password!',
         loading_User: 'Loading user information...',
         loading_Message: 'Loading messages...',
-        loading_Group:'Loading groups...',
+        loading_Teams:'Loading Teams...',
         loading_Members: 'Loading members...',
         loading_everything: 'Everything loaded!',
         logout: 'Logout',
@@ -254,7 +254,12 @@ var ui = {
         passwrong: 'Given current password is wrong! Please try it again.',
         newTimeslotAdded: 'New timeslot added successfully.',
         changingTimeslot: 'Changing a timeslot..',
-        timeslotChanged: 'Timeslot is succesfully changed.'
+        timeslotChanged: 'Timeslot is succesfully changed.',
+        firstName: 'first name',
+        lastName: 'last name',
+        editProfileImg : 'Edit profile image',
+        loadUploadURL : 'Loading image upload URL ',
+        click2upload : 'click here to upload'
       },
       settings: {
         settings: 'Settings',
