@@ -74,10 +74,10 @@
           <h3 class="pull-left">{{team.name}}</h3>
           <button type="button" 
                   ng-click="editTeam()" 
-                  class="btn pull-right">{{ui.teamup.edit}}</button>
+                  class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
           <button type="button" 
-                  ng-click="deleteTeam()" 
-                  class="btn pull-right">{{ui.teamup.del}}</button>
+                  ng-click="deleteTeam()"
+                  class="btn pull-right btn-info">{{ui.teamup.del}}</button>
         </div>
         <hr>
         <!-- team status -->
@@ -97,24 +97,27 @@
 	          <tbody>
 	            <tr ng-repeat="member in data.members[team.uuid]|orderBy:lastName">
 	              <td>
-	                <img ng-src="{{member.imgURL}}">
+                      <div class="roundedPicSmall memberStateAvailalbe"></div>
+<!--                      <img ng-src="{{member.imgURL}}">-->
 	              </td>
 	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
 	<!--               <td>{{member.resources.PhoneAddress}}</td> -->
 				  <td>
-				  	<span ng-repeat="state in member.states | filter:share=true ">
-				  		<i class="{{state.name|stateIcon}} icon-yellow" ></i>
+				  	<span ng-repeat="state in member.states | filter:share=true " class="states">
+                        <span data-icon="U+25cc" aria-hidden="true" class="icomoon icomoon-cart-4"></span>
+				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>
 			  			{{state.value}}			  			
 				  	</span>
 				  </td>
 	              <td>
 	                <div class="pull-right">
-	                  <a href="#/profile/{{member.uuid}}#edit" 
-	                    class="btn btn-mini"><i class="icon-edit"></i></a>&nbsp;
-	                  <button type="submit" 
+	                 <button onclick="#/profile/{{member.uuid}}#edit" class="btn-primary btn-mini">
+<i class="icon-edit icon-white"></i>&nbsp;</button>
+
+                      <button type="submit"
 	                          ng-click="removeMember(member.uuid, group.uuid)" 
-	                          class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button>
+	                          class="btn-primary btn-mini"><i class="icon-trash icon-white"></i></button>
 	                </div>
 	              </td>
 	            </tr>
@@ -143,13 +146,17 @@
         </div>
         <hr>
         <!-- group form -->
-        <form>
+        <form class="form">
+            <div class="control-group">
     	 <input type="text" 
-                class="span12 search-query "
+                class="input-xlarge search-query controls"
                 placeholder="{{ui.teamup.teamName}}" >
-         <button type="button" 
+            </div>
+            <div class="control-group">
+         <button type="button"
                   ng-click="createNewTeam()" 
-                  class="btn">{{ui.teamup.createTeam}}</button>
+                  class="btn btn-success confirmButton controls">{{ui.teamup.createTeam}}</button>
+            </div>
         </form>
         <!-- end group form -->
     </div>
