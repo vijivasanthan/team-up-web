@@ -1,0 +1,26 @@
+//
+// Avatars
+// --------------------------------------------------
+
+.roundedPicSmall {
+  width: 46px;
+  height: 46px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  background: url(../img/avatar03.png) no-repeat center;
+  background-size: cover;
+
+}
+
+.memberStateAvailalbe {
+  border: 2px solid $turq;
+}
+
+.memberStateBusy {
+  border: 2px solid $red;
+}
+
+.memberStateOffline {
+  border: 2px solid $graytu;
+}

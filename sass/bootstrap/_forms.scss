@@ -9,6 +9,10 @@
 // Make all forms have space below them
 form {
   margin: 0 0 $baseLineHeight;
+
+  .confirmButton {
+    margin-top: 20px;
+  }
 }
 
 fieldset {
