@@ -74,17 +74,18 @@
           id="viewTeamTab" >
         <div class="tab-header">
           <h3 class="pull-left">{{team.name}}</h3>
-          
-          <button type="button" 
+
+          <button type="button"
                   ng-click="deleteTeam()"
-                  class="btn pull-right">{{ui.teamup.del}}</button>
-          <button type="button" 
-                  ng-click="editTeam()" 
-                  class="btn pull-right">{{ui.teamup.edit}}</button>
+                  class="btn pull-right btn-info">{{ui.teamup.del}}</button>
+          <button type="button"
+                  ng-click="editTeam()"
+                  class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+
         </div>
-        
+
         <hr>
-        
+
         <!-- team status -->
        	  <p ng-hide="(data.members[team.uuid]).length > 0">
 	        {{ui.teamup.noMembers}}
@@ -102,59 +103,65 @@
 	          <tbody>
 	            <tr ng-repeat="member in data.members[team.uuid]|orderBy:lastName">
 	              <td>
-	                <img ng-src="{{imgHost}}/teamup/team/member/{{member.uuid}}/photo">
+                      <div class="roundedPicSmall memberStateAvailalbe" style="background-image: url({{imgHost}}/teamup/team/member/{{member.uuid}}/photo);" ></div>
 	              </td>
 	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
 	<!--               <td>{{member.resources.PhoneAddress}}</td> -->
 				  <td>
-				  	<span ng-repeat="state in member.states | filter:share=true ">
-				  		<i class="{{state.name|stateIcon}} icon-yellow" ></i>
-			  			{{state.value}}			  			
+				  	<span ng-repeat="state in member.states | filter:share=true " class="states">
+                        <span data-icon="U+25cc" aria-hidden="true" class="icomoon icomoon-cart-4"></span>
+				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>
+			  			{{state.value}}
 				  	</span>
 				  </td>
 	              <td>
 	                <div class="pull-right">
-	                  <a href="#/profile/{{member.uuid}}#edit" 
-	                    class="btn btn-mini"><i class="icon-edit"></i></a>&nbsp;
-	                  <button type="submit" 
-	                          ng-click="removeMember(member.uuid, group.uuid)" 
-	                          class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button>
+	                 <button onclick="#/profile/{{member.uuid}}#edit" class="btn-primary btn-mini">
+<i class="icon-edit icon-white"></i>&nbsp;</button>
+
+                      <button type="submit"
+	                          ng-click="removeMember(member.uuid, group.uuid)"
+	                          class="btn-primary btn-mini"><i class="icon-trash icon-white"></i></button>
 	                </div>
 	              </td>
 	            </tr>
 	          </tbody>
 	        </table>
-	        
-	        <!-- <button type="button" 
-	                ng-click="removeMembers(selection, group)" 
+
+	        <!-- <button type="button"
+	                ng-click="removeMembers(selection, group)"
 	                class="btn btn-small btn-danger pull-left">
 	                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button> -->
-	                
+
 	        <span class="muted pull-right">
 	          <small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small>
 	        </span>
 	      </div>
-	    </div>      	
+	    </div>
         <!-- end team status -->
-    
+
     <!-- end add group tab -->
 
     <!-- edit group tab -->
-    <div class="tab-pane {{(views.newTeam==true) && 'active'}}" 
+    <div class="tab-pane {{(views.newTeam==true) && 'active'}}"
     	  id="newTeamTab" >
         <div class="tab-header">
-          <h3 class="pull-left">{{ui.teamup.newTeam}}</h3>          
+          <h3 class="pull-left">{{ui.teamup.newTeam}}</h3>
         </div>
         <hr>
         <!-- group form -->
-        <form>
-    	 <input type="text" 
-                class="span12 search-query "
+        <form class="form">
+            <div class="control-group">
+    	 <input type="text"
+                class="input-xlarge search-query controls"
                 placeholder="{{ui.teamup.teamName}}" >
-         <button type="button" 
-                  ng-click="createNewTeam()" 
-                  class="btn">{{ui.teamup.createTeam}}</button>
+            </div>
+            <div class="control-group">
+         <button type="button"
+                  ng-click="createNewTeam()"
+                  class="btn btn-success confirmButton controls">{{ui.teamup.createTeam}}</button>
+            </div>
         </form>
         <!-- end group form -->
     </div>
