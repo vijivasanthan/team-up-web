@@ -98,23 +98,23 @@ $btnBackground:                     $white !default;
 $btnBackgroundHighlight:            darken($white, 10%) !default;
 $btnBorder:                         #bbb !default;
 
-$btnPrimaryBackground:              #f5a962 !default; //
-$btnPrimaryBackgroundHighlight:     darken($btnPrimaryBackground, 5%) !default; //
+$btnPrimaryBackground:              $orange !default; //
+$btnPrimaryBackgroundHighlight:     lighten($btnPrimaryBackground, 10%) !default; //
 
-$btnInfoBackground:                 #35a8c9 !default; //
-$btnInfoBackgroundHighlight:        #2f96b4 !default; //
+$btnInfoBackground:                 $brown !default; //
+$btnInfoBackgroundHighlight:        lighten($btnInfoBackground, 10%) !default; //
 
-$btnSuccessBackground:              #6f9a6d !default; //
-$btnSuccessBackgroundHighlight:     #4d834d !default; //
+$btnSuccessBackground:              $turq !default; //
+$btnSuccessBackgroundHighlight:     lighten($btnSuccessBackground, 10%) !default; //
 
-$btnWarningBackground:              lighten($orange, 15%) !default;
-$btnWarningBackgroundHighlight:     $orange !default;
+$btnWarningBackground:              $orange;
+$btnWarningBackgroundHighlight:     lighten($btnWarningBackground, 10%) !default; //
 
-$btnDangerBackground:               #ba5855 !default; //
-$btnDangerBackgroundHighlight:      #ab312f !default; //
+$btnDangerBackground:               $red !default; //
+$btnDangerBackgroundHighlight:      lighten($btnDangerBackground, 10%) !default; //
 
 $btnInverseBackground:              #444 !default;
-$btnInverseBackgroundHighlight:     $grayDarker !default;
+$btnInverseBackgroundHighlight:     lighten($btnInverseBackground, 10%) !default; //
 
 
 

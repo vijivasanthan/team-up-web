@@ -64,10 +64,10 @@
           
           <button type="button" 
                   ng-click="deleteProfile()" 
-                  class="btn pull-right">{{ui.teamup.del}}</button>
+                  class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
           <button type="button" 
                   ng-click="editProfile()" 
-                  class="btn pull-right">{{ui.profile.edit}}</button>
+                  class="btn pull-right btn-info">{{ui.profile.edit}}</button>
         </div>
         <!-- end tab header -->
 
@@ -75,7 +75,7 @@
         
 		<div class="row-fluid">
 			
-			<div class="widget {{(!browser.mobile) && 'span7' || 'span12'}}">
+			<div class="widget {{(!browser.mobile) && 'span9' || 'span12'}}">
 				 
 		        <!-- profile info -->
 		        <dl>
@@ -98,15 +98,18 @@
 	        
 	        </div>
 	        
-	        <div class="widget {{(!browser.mobile) && 'span5' || 'span12'}}" >
+	        <div class="widget profilePic {{(!browser.mobile) && 'span3' || 'span12'}}" >
 	        	<!-- profile image -->
-	        	<div ><img ng-src="{{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo"></div>
-	        	<div >
-	        		<a href="#/profile/{{data.resources.uuid}}#editImg" ng-click="editImg()"
-	                    class="btn btn-mini"><i class="icon-edit"></i></a>&nbsp;
+	        	<div class="roundedPicLarge memberStateBusy" style= "background-image: url({{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo)"></div>
+	        	<div>
+	        		<a href="#/profile/{{data.resources.uuid}}#editImg">
+                        <button class="btn btn-mini btn-primary" ng-click="editImg()"> <i class="icon-edit"></i>&nbsp;
+                        </button>
+                    </a>
+
 	                  <button type="submit" 
 	                          ng-click="removeImg(data.resources.uuid)" 
-	                          class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></button>
+	                          class="btn btn-mini btn-primary"><i class="icon-trash"></i></button>
 	        	</div>
 	        	<!-- end profile image -->
 	        </div>	
