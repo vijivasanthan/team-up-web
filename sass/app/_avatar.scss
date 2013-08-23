@@ -10,17 +10,34 @@
   -moz-border-radius: 25px;
   background: no-repeat center;
   background-size: cover;
+  border-width: 2px;
 
+}
+
+.roundedPicLarge {
+  width: 192px;
+  height: 192px;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  background: no-repeat center;
+  background-size: cover;
+  border-width: 4px;
+  margin: 0 auto;
+  margin-bottom:10px;
 }
 
 .memberStateAvailalbe {
-  border: 2px solid $turq;
+  border-style: solid;
+  border-color: $turq;
 }
 
 .memberStateBusy {
-  border: 2px solid $red;
+  border-style: solid;
+  border-color: $red;
 }
 
 .memberStateOffline {
-  border: 2px solid $graytu;
+  border-style: solid;
+  border-color: $graytu;
 }
