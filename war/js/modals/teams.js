@@ -86,6 +86,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               
       );
       
+      var Team = $resource(
+          $config.host + 'teamup/team/:teamId/',{
+          },{
+              edit : {
+                  method: 'PUT',
+              }
+          }
+              
+      ); 
 //      /**
 //       * Get parent team data
 //       */
@@ -410,54 +419,31 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
-//      /**
-//       * Save team
-//       */
-//      Teams.prototype.save = function (team) 
-//      {
-//        var deferred = $q.defer();
-//
-//        /**
-//         * Check if team id supplied
-//         * if save submitted from add / edit form
-//         */
-//        if (team.id)
-//        {
-//          Teams.edit({id: team.id}, {name: team.name}, function (result) 
-//          {
-//            deferred.resolve(team.id);
-//          });
-//        }
-//        else
-//        {
-//          Teams.save(
-//            { id: $rootScope.app.resources.uuid }, 
-//            team, 
-//            function (result) 
-//            {
-//              /**
-//               * team save call returns only uuid and that is parsed as json
-//               * by angular, this is a fix for converting returned object to plain string
-//               */
-//              var returned = '';
-//
-//              angular.forEach(result, function (chr, i)
-//              {
-//                returned += chr;
-//              });
-//
-//              deferred.resolve(returned);
-//            },
-//            function (error)
-//            {
-//              deferred.resolve({error: error});
-//            }
-//          ); 
-//        };
-//
-//        return deferred.promise;
-//      };
-//
+      /**
+       * Save team
+       */
+      Teams.prototype.save = function (team) 
+      {
+          var deferred = $q.defer();
+
+       
+          Teams.save(
+            { id: $rootScope.app.resources.uuid }, 
+            team, 
+            function (result) 
+            {
+              deferred.resolve(result.uuid);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          ); 
+        
+
+          return deferred.promise;
+      };
+
 //
 //      /**
 //       * Delete team
@@ -543,6 +529,53 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
+    /**
+    * Save team
+    */
+   Teams.prototype.edit = function (team) 
+   {
+     var deferred = $q.defer();
+
+     /**
+      * Check if team id supplied
+      * if save submitted from add / edit form
+      */
+     if (team.uuid){
+       Team.edit({teamId: team.uuid}, team, function (result) 
+       {
+         deferred.resolve(result);
+       });
+     }
+     else
+     {
+//       Teams.save(
+//         { id: $rootScope.app.resources.uuid }, 
+//         team, 
+//         function (result) 
+//         {
+//           /**
+//            * team save call returns only uuid and that is parsed as json
+//            * by angular, this is a fix for converting returned object to plain string
+//            */
+//           var returned = '';
+//
+//           angular.forEach(result, function (chr, i)
+//           {
+//             returned += chr;
+//           });
+//
+//           deferred.resolve(returned);
+//         },
+//         function (error)
+//         {
+//           deferred.resolve({error: error});
+//         }
+//       ); 
+     };
+
+     return deferred.promise;
+   };
+      
       return new Teams;
     }
 ]);

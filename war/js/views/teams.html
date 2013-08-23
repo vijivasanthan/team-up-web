@@ -34,9 +34,7 @@
   <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
     <!-- add group tab link -->
     <li class="{{(views.team==true) && 'active'}}">
-      <a href="#viewTeamTab" 
-          ng-click="setView('team')" 
-          data-toggle="tab">
+      <a href="#viewTeamTab" data-toggle="tab">
         <span class="entypo">&#9998;</span>
         {{ui.teamup.teams}}
       </a>
@@ -44,9 +42,7 @@
     <!-- end add group tab link -->
     <!-- edit group tab link -->
     <li class="{{(views.newTeam==true) && 'active'}}">
-      <a href="#newTeamTab" 
-          ng-click="setView('newTeam')" 
-          data-toggle="tab">
+      <a href="#newTeamTab" data-toggle="tab" > 
         <span class="entypo">&#9998;</span>
         {{ui.teamup.newTeam}}
       </a>
@@ -54,9 +50,7 @@
     <!-- end edit group tab link -->
     <!-- new member tab link -->
     <li class="{{(views.newMember==true) && 'active'}}">
-      <a href="#newMemberTab" 
-          ng-click="setView('newMember')" 
-          data-toggle="tab">
+      <a href="#newMemberTab" data-toggle="tab">
         <span class="entypo">&#59136;</span>
         {{ui.teamup.newMember}}
       </a>
@@ -72,18 +66,27 @@
     <!-- Team view -->
     <div class="tab-pane {{(views.team==true) && 'active'}}" 
           id="viewTeamTab" >
-        <div class="tab-header">
+        <div class="tab-header" ng-hide="views.editTeam">
           <h3 class="pull-left">{{team.name}}</h3>
-
+		  
           <button type="button"
                   ng-click="deleteTeam()"
                   class="btn pull-right btn-info">{{ui.teamup.del}}</button>
           <button type="button"
-                  ng-click="editTeam()"
-                  class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
-
+                  ng-click="editTeam(team)"
+                  class="btn pull-right btn-info">{{ui.teamup.edit}}</button>		  
         </div>
-
+		
+		<div class="tab-header" ng-show="views.editTeam">
+			<input type="text" class="pull-left" ng-model="teamEditForm.name"></input> 
+			
+			<button type="reset"
+                  ng-click="cancelTeamEdit(team)"
+                  class="btn pull-right btn-info">{{ui.teamup.cancel}}</button>
+			<button type="button"
+                  ng-click="changeTeam(teamEditForm)"
+                  class="btn pull-right btn-info">{{ui.teamup.save}}</button>
+		</div>
         <hr>
 
         <!-- team status -->
@@ -155,11 +158,11 @@
             <div class="control-group">
     	 <input type="text"
                 class="input-xlarge search-query controls"
-                placeholder="{{ui.teamup.teamName}}" >
+                placeholder="{{ui.teamup.teamName}}" ng-model="teamForm.name">
             </div>
             <div class="control-group">
          <button type="button"
-                  ng-click="createNewTeam()"
+                  ng-click="teamSubmit(teamForm)"
                   class="btn btn-success confirmButton controls">{{ui.teamup.createTeam}}</button>
             </div>
         </form>
@@ -180,8 +183,8 @@
             <div class="control-group">
               <label class="control-label">{{ui.teamup.teams}}</label>
               <div class="controls">
-                <select ng-model="teams"
-                        ng-options="team.name for team in teams">
+                <select ng-model="memberForm.team"
+                        ng-options="t.uuid as t.name for t in teams">
                   <option value="">{{ui.teamup.chooseTeam}}</option>
                 </select>
               </div>
@@ -235,7 +238,9 @@
                         ng-model="memberForm.PostCity">
               </div>
             </div>
+            
             <hr>
+            
             
             
             <div class="form-actions">
