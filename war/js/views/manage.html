@@ -1,0 +1,76 @@
+<div class="page-header">
+	Teams - Clienten
+
+</div>
+
+<!-- Client groups and clients -->
+
+<div class="tabbable tabs-left">
+	<!-- tabs links -->
+  	<ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
+	    <!-- add client tab link -->
+	    <li class="{{(views.teamClients==true) && 'active'}}">
+	      <a href="#viewTeamClientTab" data-toggle="tab">
+	        <span class="entypo">&#9998;</span>
+	        {{ui.teamup.TeamClients}}
+	      </a>
+	    </li>
+	    <!-- end add client tab link -->
+	    <!-- edit client group tab link -->
+	    <li class="{{(views.teams==true) && 'active'}}">
+	      <a href="#viewTeamsTab" data-toggle="tab" > 
+	        <span class="entypo">&#9998;</span>
+	        {{ui.teamup.teams}}
+	      </a>
+	    </li>
+	    <!-- end edit client group tab link -->
+	    <!-- new client tab link -->
+	    <li class="{{(views.clients==true) && 'active'}}">
+	      <a href="#viewClientsTab" data-toggle="tab">
+	        <span class="entypo">&#59136;</span>
+	        {{ui.teamup.clients}}
+	      </a>
+	    </li>
+    	<!-- end new client -->
+    	
+  	</ul>
+  	<!-- end tabs links -->
+
+	<!-- tabs content -->
+	<div class="tab-content">
+		<!-- Client view -->
+	    <div class="tab-pane {{(views.client==true) && 'active'}}" 
+	          id="viewTeamClientTab" >
+	       Teams - Clients
+		</div>
+	        <!-- end team status -->
+		<!-- end Team view -->
+		
+		<!-- new Client Group-->
+		<div class="tab-pane {{(views.newClientGroup==true) && 'active'}}" 
+	          id="viewTeamsTab" >
+	          Teams
+	    </div>
+		<!-- end new Client Group-->
+		
+		<!-- new Client -->
+		<div class="tab-pane {{(views.newClient==true) && 'active'}}" 
+	          id="viewClientsTab" >
+	          Clients
+	    </div>
+		<!-- end new Client -->
+		
+		<!-- Reports -->
+		<div class="tab-pane {{(views.reports==true) && 'active'}}" 
+	          id="reprotsTab" >
+	          reports
+	    </div>
+		<!-- end Reports-->
+		
+	</div>	
+	<!-- end tabs content -->
+	
+</div>	
+
+
+<!-- end Client groups and clients -->

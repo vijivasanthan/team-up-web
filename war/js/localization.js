@@ -332,6 +332,8 @@ var ui = {
          newClient: 'New Client',
          reports: 'Reports',
          noClients: 'There is no clients in this group',
+         TeamClients: 'TEAMS-CLIENTS',
+         
       }
     },
     nl: {

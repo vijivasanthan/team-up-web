@@ -28,7 +28,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Core',
   'WebPaige.Controllers.Teams',
   'WebPaige.Controllers.Clients',
-//  'WebPaige.Controllers.Manage',
+  'WebPaige.Controllers.Manage',
   'WebPaige.Controllers.Profile',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',

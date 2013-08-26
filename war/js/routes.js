@@ -120,6 +120,15 @@ angular.module('WebPaige')
     {
       templateUrl:    'dist/views/manage.html',
       controller:     'manageCtrl',
+      resolve: {
+          data: [
+            'Clients','Teams',
+            function (ClientGroups,Teams)
+            {
+              return "";
+            }
+          ]
+      },
       reloadOnSearch: false
     })
     
