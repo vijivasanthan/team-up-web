@@ -29,6 +29,7 @@ module.exports = function (grunt)
             'war/js/modals/profile.js',
             'war/js/modals/core.js',
             'war/js/modals/teams.js',            
+            'war/js/modals/clients.js',
             'war/js/modals/settings.js',
             'war/js/modals/messages.js',            
             // directives

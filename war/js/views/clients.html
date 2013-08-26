@@ -1,0 +1,170 @@
+<div class="page-header">
+	<span  class="nullable">
+        <select ng-model="current" 
+        		ng-options="c.id as c.name for c in clientGroups"
+        		ng-selected="current"
+        		ng-change="requestClientGroup(current)" >
+        </select>
+    </span>
+
+</div>
+
+<!-- Client groups and clients -->
+
+<div class="tabbable tabs-left">
+	<!-- tabs links -->
+  	<ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
+	    <!-- add client tab link -->
+	    <li class="{{(views.client==true) && 'active'}}">
+	      <a href="#viewClientTab" data-toggle="tab">
+	        <span class="entypo">&#9998;</span>
+	        {{ui.teamup.clients}}
+	      </a>
+	    </li>
+	    <!-- end add client tab link -->
+	    <!-- edit client group tab link -->
+	    <li class="{{(views.newClientGroup==true) && 'active'}}">
+	      <a href="#newClientGroupTab" data-toggle="tab" > 
+	        <span class="entypo">&#9998;</span>
+	        {{ui.teamup.newClientGroup}}
+	      </a>
+	    </li>
+	    <!-- end edit client group tab link -->
+	    <!-- new client tab link -->
+	    <li class="{{(views.newClient==true) && 'active'}}">
+	      <a href="#newClientTab" data-toggle="tab">
+	        <span class="entypo">&#59136;</span>
+	        {{ui.teamup.newClient}}
+	      </a>
+	    </li>
+    	<!-- end new client -->
+    	<li class="{{(views.reports==true) && 'active'}}">
+	      <a href="#reprotsTab" data-toggle="tab">
+	        <span class="entypo">&#59136;</span>
+	        {{ui.teamup.reports}}
+	      </a>
+	    </li>
+    	
+  	</ul>
+  	<!-- end tabs links -->
+
+	<!-- tabs content -->
+	<div class="tab-content">
+		<!-- Client view -->
+	    <div class="tab-pane {{(views.client==true) && 'active'}}" 
+	          id="viewClientTab" >
+	        <div class="tab-header" ng-hide="views.editClientGroup">
+	          <h3 class="pull-left">{{clientGroup.name}}</h3>
+			  
+	          <button type="button"
+	                  ng-click="deleteClientGroup()"
+	                  class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+	          <button type="button"
+	                  ng-click="editClientGroup(clientGroup)"
+	                  class="btn pull-right btn-info">{{ui.teamup.edit}}</button>		  
+	        </div>
+			
+			<div class="tab-header" ng-show="views.editClientGroup">
+				<input type="text" class="pull-left" ng-model="clientGroupEditForm.name"></input> 
+				
+				<button type="reset"
+	                  ng-click="cancelClientGroupEdit(clientGroup)"
+	                  class="btn pull-right btn-info">{{ui.teamup.cancel}}</button>
+				<button type="button"
+	                  ng-click="changeTeam(clientGroupEditForm)"
+	                  class="btn pull-right btn-info">{{ui.teamup.save}}</button>
+			</div>
+	        <hr>
+	
+	        <!-- team status -->
+	       	  <p ng-hide="(data.clients[clientGroup.id]).length > 0">
+		        {{ui.teamup.noClients}}
+		      </p>
+		      <div ng-show="(data.clients[clientGroup.id]).length > 0">
+		        <table class="table table-striped">
+		          <thead>
+		            <tr>
+		              <th></th>
+		              <th><a ng-click="sorter='name'">{{ui.teamup.name}}</a></th>
+		              <th><a >{{ui.teamup.states}}</a></th>
+		              <th></th>
+		            </tr>
+		          </thead>
+		          <tbody>
+		            <tr ng-repeat="client in data.clients[clientGroup.id]|orderBy:lastName">
+		              <td>
+	                      <div class="roundedPicSmall memberStateAvailalbe" style="background-image: url({{imgHost}}/teamup/client/client/{{client.uuid}}/photo);" ></div>
+		              </td>
+		              <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.lastName}} {{client.firstName}}</a></td>
+		<!--               <td>{{member.resources.role|translateRole}}</td> -->
+		<!--               <td>{{member.resources.PhoneAddress}}</td> -->
+					  <td>{{client.street}} {{client.no}} {{client.city}} {{client.country}}</td>
+		              <td>
+		                <div class="pull-right">
+		                 <a href="#/clientProfile/{{client.uuid}}#edit"><button class="btn-primary btn-mini">
+	<i class="icon-edit"></i>&nbsp;</button></a>
+	
+	                      <button type="submit"
+		                          ng-click="removeClient(client.uuid, group.uuid)"
+		                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+		                </div>
+		              </td>
+		            </tr>
+		          </tbody>
+		        </table>
+	
+		        <!-- <button type="button"
+		                ng-click="removeMembers(selection, group)"
+		                class="btn btn-small btn-danger pull-left">
+		                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button> -->
+	
+		        <span class="muted pull-right">
+		          <small><i>{{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small>
+		        </span>
+		      </div>
+		    </div>
+	        <!-- end team status -->
+		<!-- end Team view -->
+		
+		<!-- new Client Group-->
+		<div class="tab-pane {{(views.newClientGroup==true) && 'active'}}" 
+	          id="newClientGroupTab" >
+	          new client group {{clientGroups}} {{clients}}
+	    </div>
+		<!-- end new Client Group-->
+		
+		<!-- new Client -->
+		<div class="tab-pane {{(views.newClient==true) && 'active'}}" 
+	          id="newClientTab" >
+	          new client
+	    </div>
+		<!-- end new Client -->
+		
+		<!-- Reports -->
+		<div class="tab-pane {{(views.reports==true) && 'active'}}" 
+	          id="reprotsTab" >
+	          reports
+	    </div>
+		<!-- end Reports-->
+		
+		<!-- view Client profile -->
+		<div class="tab-pane {{(views.viewClient==true) && 'active'}}" 
+	          id="viewClientTab" ng-show="views.viewClient" >
+	          view client {{client}}
+	    </div>
+		<!-- end view Client profile -->
+		
+		<!-- edit Client profile -->
+		<div class="tab-pane {{(views.editClient==true) && 'active'}}" 
+	          id="viewClientTab" ng-show="views.editClient" >
+	          edit client 
+	    </div>
+		<!-- end edit Client profile -->
+		
+	</div>	
+	<!-- end tabs content -->
+	
+</div>	
+
+
+<!-- end Client groups and clients -->

@@ -118,7 +118,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-	    Login.process({username: uuid, password: pass}, 
+	    Login.process({username: uuid, passwordHash: pass}, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 

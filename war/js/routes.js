@@ -54,7 +54,7 @@ angular.module('WebPaige')
 
 
     /**
-     * Dashboard router
+     * Teams router
      */
      .when('/team',
      {
@@ -74,19 +74,61 @@ angular.module('WebPaige')
 
 
     /**
-     * Core router
+     * Client router
      */
     .when('/client',
     {
       templateUrl:    'dist/views/clients.html',
-      controller:     'client',
+      controller:     'clientCtrl',
+      resolve: {
+          data: [
+            'Clients',
+            function (ClientGroups)
+            {
+              return ClientGroups.query();
+            }
+          ]
+      },
       reloadOnSearch: false
     })
     
+    /**
+     * Client Profile router
+     */
+    .when('/clientProfile/:clientId',
+    {
+      templateUrl:    'dist/views/clients.html',
+      controller:     'clientCtrl',
+      resolve: {
+          data: [
+            '$rootScope', '$route', '$location', 'Clients', 
+            function ($rootScope, $route, $location, Clients)
+            {
+                var data = {clientId : $route.current.params.clientId};
+                return data;
+//                return Clients.getReports($route.current.params.clientId, false);
+            }
+          ]
+      },
+      reloadOnSearch: false
+    })
+    
+    /**
+     * Client Group - Team , Management 
+     */
     .when('/manage',
     {
       templateUrl:    'dist/views/manage.html',
-      controller:     'manage',
+      controller:     'manageCtrl',
+      resolve: {
+          data: [
+            'Clients','Teams',
+            function (ClientGroups,Teams)
+            {
+              return "";
+            }
+          ]
+      },
       reloadOnSearch: false
     })
     
@@ -193,21 +235,7 @@ angular.module('WebPaige')
            '$rootScope', 'Profile', '$route', '$location', 'Dater',
            function ($rootScope, Profile, $route, $location, Dater)
            {
-//             if ($route.current.params.userId != $rootScope.app.resources.uuid)
-//             {
-//               var periods = Dater.getPeriods(),
-//                   current = Dater.current.week(),
-//                   ranges  = {
-//                     start:  periods.weeks[current].first.timeStamp / 1000,
-//                     end:    periods.weeks[current].last.timeStamp / 1000
-//                   };
-//
-//               return Profile.getWithSlots($route.current.params.userId, false, ranges);
-//             }
-//             else
-//             {
                return Profile.get($route.current.params.userId, false);
-//             }
            }
          ]
        },

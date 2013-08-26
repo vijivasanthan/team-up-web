@@ -51,7 +51,7 @@ angular.module('WebPaige.Controllers.Teams', [])
          * Grab and set roles for view
          */
         $scope.roles = $rootScope.config.roles;
-
+        $scope.mfuncs = $rootScope.config.mfunctions;
         
 
         var uuid, view;
@@ -79,10 +79,7 @@ angular.module('WebPaige.Controllers.Teams', [])
         setTeamView(uuid);
 
 
-        /**
-         * Set view
-         */
-        setView(view);
+        
 
         /**
          * Set Team View
@@ -90,12 +87,13 @@ angular.module('WebPaige.Controllers.Teams', [])
           $scope.views = { 
               team : true,
               newTeam : false,
-              newMember : false
+              newMember : false,
+              editTeam : false,
           }
           
 
         /**
-         * Set given group for view
+         * Set given team for view
          */
         function setTeamView(id){
             
@@ -112,7 +110,7 @@ angular.module('WebPaige.Controllers.Teams', [])
         }
 
       /**
-       * Request for a group
+       * Request for a team
        */
       $scope.requestTeam= function (current, switched)
       {
@@ -127,23 +125,29 @@ angular.module('WebPaige.Controllers.Teams', [])
           {
               if ($location.hash() != 'team') $location.hash('team');
 
-              setView('team');
+              $scope.setView('team');
           }
       };
          
       /**
        * View setter
        */
-      function setView (hash)
+      $scope.setView = function(hash)
       {
           $scope.views = {
               team:   false,
               newTeam:    false,
-              newmember:   false
+              newmember:   false,
+              editTeam: false
           };
 
           $scope.views[hash] = true;
       }
+      
+      /**
+       * Set view
+       */
+      $scope.setView(view);
       
         /**
          * Selection toggler
@@ -152,13 +156,127 @@ angular.module('WebPaige.Controllers.Teams', [])
         {
             var flag = (master) ? true : false,
                     members = angular.fromJson(Storage.get(group.uuid));
-
+        
             angular.forEach(members, function (member, index)
             {
                 $scope.selection[member.uuid] = flag;
             });
         };
         
+        /**
+         * show edit mode of the Team
+         */
+        $scope.editTeam = function(team){
+           $scope.teamEditForm = {name : team.name , uuid : team.uuid };
+           $scope.views.editTeam = true;
+        }
+        
+        $scope.cancelTeamEdit = function(team){
+           $scope.teamEditForm = {name : team.name , uuid : team.uuid };
+           $scope.views.editTeam = false;
+        }
+        /**
+         * save the changes on the team
+         */
+        $scope.changeTeam = function(team){
+             
+            if($.trim(team.name) == ''){
+                $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+                return;
+            }
+            
+            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
+            
+            Teams.edit(team)
+            .then(function(result){
+                if(result.error){
+                    $rootScope.notifier.error("Error with saving team info");
+                }else{
+                    $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                    
+                    Teams.query(false)
+                    .then(function(result){
+                        $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                        $rootScope.statusBar.off();
+                        
+                        $scope.team.name = team.name;
+                        $scope.views.editTeam = false;
+                    });
+                }
+            });
+        }
+        
+        
+        /**
+         * create new Team 
+         */
+        $scope.teamSubmit = function(team){
+            
+            if(typeof team == 'undefined' || $.trim(team.name) == ''){
+                $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+                return;
+            }
+            
+            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
+            
+            Teams.save(team)
+            .then(function(result){
+                if(result.error){
+                    $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError);
+                }else{
+                    $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                    
+                    Teams.query(false)
+                    .then(function(queryRs){
+                        if (queryRs.error){
+                            $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
+                            console.warn('error ->', queryRs);
+                        }else{
+                            $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                            $scope.closeTabs();
 
+                            $scope.data = queryRs;
+                            
+                            angular.forEach(queryRs.teams, function (t_obj){
+                                if (t_obj.uuid == result){
+                                  $scope.teams = queryRs.teams;
+        
+                                  angular.forEach(queryRs.teams, function (t){
+                                    if (t.uuid == t_obj.uuid){
+                                      $scope.team = t;
+                                    }
+                                  });
+        
+                                  $scope.members = data.members[t_obj.uuid];
+        
+                                  $scope.current = t_obj.uuid;
+        
+                                  $scope.$watch($location.search(), function (){
+                                    $location.search({uuid: t_obj.uuid});
+                                  });
+                                }
+                            });
+                        }
+                        
+                        $rootScope.statusBar.off();
+                        
+                    });
+                }
+            });
+        }
+        
+        
+        /**
+         * Close inline form
+         */
+        $scope.closeTabs = function ()
+        {
+            $scope.teamForm = {};
+
+            $scope.memberForm = {};
+
+            $scope.setView('team');
+        };
+        
     }
 ]);
