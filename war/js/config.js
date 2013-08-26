@@ -87,7 +87,9 @@ angular.module('WebPaige')
     },
 
     roles: profile.roles,
-
+    
+    mfunctions: profile.mfunctions,
+    
     timeline: {
       options: {
         axisOnTop:        true,

@@ -51,7 +51,7 @@ angular.module('WebPaige.Controllers.Teams', [])
          * Grab and set roles for view
          */
         $scope.roles = $rootScope.config.roles;
-
+        $scope.mfuncs = $rootScope.config.mfunctions;
         
 
         var uuid, view;

@@ -259,7 +259,11 @@ var ui = {
         lastName: 'last name',
         editProfileImg : 'Edit profile image',
         loadUploadURL : 'Loading image upload URL ',
-        click2upload : 'click here to upload'
+        click2upload : 'click here to upload',
+        birthday: 'Birthday',        
+        username: 'username',
+        retypePassword: 'retype password'
+        
       },
       settings: {
         settings: 'Settings',
@@ -320,7 +324,14 @@ var ui = {
          teamSubmitError: 'Errors in creating the team',
          queryTeamError: 'Errors in quering the teams',
          teamNamePrompt1: 'Team name can not be empty',
-         cancel: 'Cancel'
+         cancel: 'Cancel',
+         chooseRole : 'Choose a role',
+         func: 'function',
+         chooseFunction: 'Choose a function',
+         newClientGroup: 'New Group',
+         newClient: 'New Client',
+         reports: 'Reports',
+         noClients: 'There is no clients in this group',
       }
     },
     nl: {
