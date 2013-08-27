@@ -1,6 +1,5 @@
 <div class="page-header">
 	Teams - Clienten
-
 </div>
 
 <!-- Teams & Clients Organizer -->
@@ -14,7 +13,7 @@
     <li class="{{(views.teamClients==true) && 'active'}}">
       <a href="#viewTeamClientTab"
          data-toggle="tab"
-          ng-click="setViewTo('teamClients')">
+         ng-click="setViewTo('teamClients')">
         <span class="entypo">&#9998;</span>
         {{ui.teamup.TeamClients}}
       </a>
@@ -52,8 +51,21 @@
 		<!-- Teams & Clients organizer -->
 	  <div class="tab-pane {{(views.teamClients==true) && 'active'}}"
 	       id="viewTeamClientTab" >
-	    Teams - Clients
-		</div>
+
+      <table id="main">
+        <tr>
+          <th>Client groepen</th>
+          <th>Teams</th>
+        </tr>
+        <tr>
+          <td id="files"></td>
+          <td id="folders"></td>
+        </tr>
+      </table>
+
+
+
+    </div>
 		<!-- end Teams & Clients organizer -->
 
     <!-- Teams organizer -->
