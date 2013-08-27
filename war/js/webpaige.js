@@ -29,6 +29,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Teams',
   'WebPaige.Controllers.Clients',
   'WebPaige.Controllers.Manage',
+  'WebPaige.Controllers.TreeGrid',
   'WebPaige.Controllers.Profile',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
