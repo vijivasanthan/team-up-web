@@ -63,6 +63,7 @@ module.exports = function (grunt)
             'war/js/controllers/teams.js',
             'war/js/controllers/clients.js',
             'war/js/controllers/manage.js',
+            'war/js/controllers/treegrid.js',
             'war/js/controllers/messages.js',
           ],
           'war/src/plugins.js': [

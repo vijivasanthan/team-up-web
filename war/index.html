@@ -236,12 +236,12 @@
           <!-- end ask & version -->
 
           <!-- download mobile app -->
-          <div id="download-footer" ng-show="config.profile.mobileApp.status">
-            <!-- <a href="#myModal" role="button" class="btn" data-toggle="modal"> -->
-            <button href="#myModal" data-toggle="modal" class="btn btn-success btn-large" type="button" ng-click="downloadMobileApp()">
-              Business account
-            </button>
-          </div>
+          <!--<div id="download-footer" ng-show="config.profile.mobileApp.status">-->
+            <!--&lt;!&ndash; <a href="#myModal" role="button" class="btn" data-toggle="modal"> &ndash;&gt;-->
+            <!--<button href="#myModal" data-toggle="modal" class="btn btn-success btn-large" type="button" ng-click="downloadMobileApp()">-->
+              <!--Business account-->
+            <!--</button>-->
+          <!--</div>-->
           <!-- end download mobile app -->
         </div>
         <!-- end copyrights -->
@@ -255,38 +255,6 @@
       </div>
     </div>
     <!-- end footer -->
-
-
-    <!-- convert to business account modal -->
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ãƒâ€”</button>
-        <h3 id="myModalLabel">Oneline Business</h3>
-      </div>
-      <div class="modal-body">
-
-        <div class="row">
-          <div class="span4">
-            <p>You can create user centered communication at your business that;</p>
-            <ul>
-              <li>Creates shortcuts for departments</li>
-              <li>Increases the response rate</li>
-              <li>Measures customer satisfaction</li>
-            </ul>
-          </div>
-          <div class="span1">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-user-block-2" style="font-size: 8em; line-height: 1.2em;"></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary">Yes, I want it!</button>
-      </div>
-    </div>
-    <!-- end convert to business account modal -->
 
 
     <!--[if gt IE 7]><!-->
@@ -309,8 +277,8 @@
       /**
        * Livereload only on localhost
        */
-      // if (location.host.split(':')[0] == 'localhost')
-        // document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
+      if (location.host.split(':')[0] == 'localhost')
+        document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
     </script>
     
     

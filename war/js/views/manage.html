@@ -52,16 +52,22 @@
 	  <div class="tab-pane {{(views.teamClients==true) && 'active'}}"
 	       id="viewTeamClientTab" >
 
-      <table id="main">
-        <tr>
-          <th>Client groepen</th>
-          <th>Teams</th>
-        </tr>
-        <tr>
-          <td id="files"></td>
-          <td id="folders"></td>
-        </tr>
-      </table>
+      <div class="row-fluid"
+          ng-controller="treegrid">
+        <div class="span6">
+          <h3>Client groepen</h3>
+          <hr>
+          <div id="files"></div>
+        </div>
+        <div class="span6">
+          <h3>Teams</h3>
+          <hr>
+          <div id="folders"></div>
+        </div>
+      </div>
+
+      <hr>
+      <button class="btn btn-primary">Opslaan</button>
 
 
 
