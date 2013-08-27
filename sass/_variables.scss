@@ -107,7 +107,7 @@ $btnInfoBackgroundHighlight:        lighten($btnInfoBackground, 10%) !default; /
 $btnSuccessBackground:              $turq !default; //
 $btnSuccessBackgroundHighlight:     lighten($btnSuccessBackground, 10%) !default; //
 
-$btnWarningBackground:              $orange;
+$btnWarningBackground:              $orange !default;
 $btnWarningBackgroundHighlight:     lighten($btnWarningBackground, 10%) !default; //
 
 $btnDangerBackground:               $red !default; //
@@ -139,7 +139,7 @@ $dropdownBorder:                rgba(0,0,0,.2) !default;
 $dropdownDividerTop:            #e5e5e5 !default;
 $dropdownDividerBottom:         $white !default;
 
-$dropdownLinkColor:             $grayDark !default;
+$dropdownLinkColor:             $brown !default;
 $dropdownLinkColorHover:        $white !default;
 $dropdownLinkColorActive:       $dropdownLinkColor !default;
 
@@ -263,20 +263,20 @@ $heroUnitLeadColor:               inherit !default;
 
 // Form states and alerts
 // -------------------------
-$warningText:             #c09853 !default;
-$warningBackground:       #e6e4da !default; // #fcf8e3 !default;
+$warningText:             $orange !default;
+$warningBackground:       $orange !default; // #fcf8e3 !default;
 $warningBorder:           darken(adjust-hue($warningBackground, -10), 3%) !default;
 
-$errorText:               #ba5855 !default; // #b94a48 !default;
-$errorBackground:         #ba5855 !default; // #f2dede !default;
+$errorText:               $red !default; // #b94a48 !default;
+$errorBackground:         $red !default; // #f2dede !default;
 $errorBorder:             darken(adjust-hue($errorBackground, -10), 3%) !default;
 
-$successText:             #6f9a6d !default; // #468847 !default;
-$successBackground:       #6f9a6d !default; // #dff0d8 !default;
+$successText:             $turq !default; // #468847 !default;
+$successBackground:       $turq !default; // #dff0d8 !default;
 $successBorder:           darken(adjust-hue($successBackground, -10), 5%) !default;
 
-$infoText:                #35a8c9 !default; // #3a87ad !default;
-$infoBackground:          #57a9bf !default; // #d9edf7 !default;
+$infoText:                $brown !default; // #3a87ad !default;
+$infoBackground:          $brown !default; // #d9edf7 !default;
 $infoBorder:              darken(adjust-hue($infoBackground, -10), 7%) !default;
 
 
