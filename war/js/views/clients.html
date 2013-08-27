@@ -15,7 +15,7 @@
 	<!-- tabs links -->
   	<ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
 	    <!-- add client tab link -->
-	    <li class="{{(views.client==true) && 'active'}}">
+	    <li class="{{(views.client==true || views.viewClient==true) && 'active'}}">
 	      <a href="#viewClientTab" data-toggle="tab">
 	        <span class="entypo">&#9998;</span>
 	        {{ui.teamup.clients}}
@@ -39,7 +39,7 @@
 	    </li>
     	<!-- end new client -->
     	<li class="{{(views.reports==true) && 'active'}}">
-	      <a href="#reprotsTab" data-toggle="tab">
+	      <a href="#reportsTab" data-toggle="tab">
 	        <span class="entypo">&#59136;</span>
 	        {{ui.teamup.reports}}
 	      </a>
@@ -98,7 +98,7 @@
 		              <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.lastName}} {{client.firstName}}</a></td>
 		<!--               <td>{{member.resources.role|translateRole}}</td> -->
 		<!--               <td>{{member.resources.PhoneAddress}}</td> -->
-					  <td>{{client.street}} {{client.no}} {{client.city}} {{client.country}}</td>
+					  <td>{{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}</td>
 		              <td>
 		                <div class="pull-right">
 		                 <a href="#/clientProfile/{{client.uuid}}#edit"><button class="btn-primary btn-mini">
@@ -129,28 +129,278 @@
 		<!-- new Client Group-->
 		<div class="tab-pane {{(views.newClientGroup==true) && 'active'}}" 
 	          id="newClientGroupTab" >
-	          new client group {{clientGroups}} {{clients}}
+	        <div class="tab-header">
+	          <h3 class="pull-left">{{ui.teamup.newClientGroup}}</h3>
+	        </div>
+	        <hr>
+	        <!-- group form -->
+	        <form class="form">
+	            <div class="control-group">
+	    	 <input type="text"
+	                class="input-xlarge search-query controls"
+	                placeholder="{{ui.teamup.cGroupName}}" ng-model="cGroupForm.name">
+	            </div>
+	            <div class="control-group">
+	         <button type="button"
+	                  ng-click="cGroupSubmit(cGroupForm)"
+	                  class="btn btn-success confirmButton controls">{{ui.teamup.createClientGroup}}</button>
+	            </div>
+	        </form> 
 	    </div>
 		<!-- end new Client Group-->
 		
 		<!-- new Client -->
 		<div class="tab-pane {{(views.newClient==true) && 'active'}}" 
 	          id="newClientTab" >
-	          new client
+			<div class="tab-header">
+			  <h3 class="pull-left">{{ui.teamup.newClient}}</h3>
+			</div>
+			<hr>
+			
+			<!-- client form -->
+			<form>
+          	<fieldset>
+				<div class="control-group">
+				  <label class="control-label">{{ui.profile.firstName}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.firstName">
+				  </div>
+				</div>
+          		
+          		<div class="control-group">
+				  <label class="control-label">{{ui.profile.lastName}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.lastName">
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label">{{ui.profile.birthday}}</label>
+				  <div class="controls">
+					<div class="control-group dater" style="">
+		              	<input name="date-start" type="text" ng-model="clientForm.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" class="ng-pristine ng-valid" data-toggle="datepicker">
+		              	<i class="icon-calendar"></i></div>
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label">{{ui.teamup.phone}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.phone">
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label">{{ui.teamup.street}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.street">
+				  </div>
+				  <label class="control-label">{{ui.teamup.Number}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.number">
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label">{{ui.teamup.postCode}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.postCode">
+				  </div>
+				  
+				  <label class="control-label">{{ui.teamup.city}}</label>
+				  <div class="controls ">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.city">
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label">{{ui.teamup.clientProfileUrl}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="clientForm.profileURL">
+				  </div>
+				</div>
+				
+          	</fieldset>	
+          						
+			<!-- end client form -->
+			
+			<hr>
+            
+            <div class="form-actions">
+              <button type="submit" 
+                  ng-click="clientSubmit(clientForm)" 
+                  class="btn btn-success">{{ui.teamup.saveClient}}</button>
+            </div>
+	        
+	       </form>   
 	    </div>
 		<!-- end new Client -->
 		
 		<!-- Reports -->
 		<div class="tab-pane {{(views.reports==true) && 'active'}}" 
-	          id="reprotsTab" >
+	          id="reportsTab" >
 	          reports
+	        
 	    </div>
 		<!-- end Reports-->
 		
 		<!-- view Client profile -->
 		<div class="tab-pane {{(views.viewClient==true) && 'active'}}" 
 	          id="viewClientTab" ng-show="views.viewClient" >
-	          view client {{client}}
+	          
+	          <!-- client contact list -->
+				<div class="tab-header">
+				  <h3 class="pull-left">{{client.firstName}} {{client.lastName}}</h3>
+				  <button type="button" 
+	                  ng-click="deleteClientProfile()" 
+	                  class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+          		  <button type="button" 
+	                  ng-click="editClientProfile()" 
+	                  class="btn pull-right btn-info">{{ui.profile.edit}}</button>
+				</div>
+				
+				<hr>
+				
+				<div class="row-fluid">
+				
+					<div class="widget {{(!browser.mobile) && 'span9' || 'span12'}}">
+						
+						<!-- Cilent info -->
+						<dl>
+				          <dt>{{ui.teamup.group}}</dt>
+				            <dd>
+				            	<span ng-hide="app.resources.role > 1"><a href="#/client?uuid={{clientGroup.uuid}}#view">{{clientGroup.name}}</a></span>
+				          </dd>
+				          <dt>{{ui.profile.birthday}}</dt>
+				            <dd>{{client.birthday}}</dd>
+				          <dt>{{ui.teamup.phone}}</dt>
+				            <dd>{{client.phone}}</dd>
+				          <dt>{{ui.profile.address}}</dt>
+				            <dd>{{client.address.street}} {{client.address.no}} {{client.address.zip}} , {{client.address.city}} {{client.address.land}}</dd>
+				          <dt>{{ui.teamup.clientProfileUrl}}</dt>
+				          	<dd>{{client.clientProfileUrl}}</dd>
+				          <dt>{{ui.teamup.role}}</dt>
+				            <dd>{{data.resources.role|translateRole}}</dd>
+				        </dl>
+						<!-- end Cilent info -->						
+					</div>
+					
+					<div class="widget profilePic {{(!browser.mobile) && 'span3' || 'span12'}}" >
+						<!-- profile image -->
+			        	<div class="roundedPicLarge memberStateBusy" style= "background-image: url({{imgHost}}/teamup/client/{{data.resources.uuid}}/photo)"></div>
+			        	<div>
+			        		<a href="#/clientProfile/{{client.uuid}}#editImg">
+		                        <button class="btn btn-mini btn-primary" ng-click="editImg()"> <i class="icon-edit"></i>&nbsp;
+		                        </button>
+		                    </a>
+		
+			                <button type="submit" 
+			                        ng-click="removeImg(data.resources.uuid)" 
+			                        class="btn btn-mini btn-primary"><i class="icon-trash"></i></button>
+			        	</div>
+			        	<!-- end profile image -->
+					</div>	
+				</div>		
+				
+				
+				<div class="tab-header">
+				  <h3 class="pull-left">{{ui.teamup.contacts}}</h3>
+				</div>
+				<hr>
+				<div class="control-group">
+				  <label class="control-label">{{ui.profile.firstName}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="contactForm.firstName">
+				  </div>
+				  
+				  <label class="control-label">{{ui.profile.lastName}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="contactForm.lastName">
+				  </div>
+				  
+				  <label class="control-label">{{ui.teamup.func}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="contactForm.func">
+				  </div>
+				  
+				  <label class="control-label">{{ui.profile.phone}}</label>
+				  <div class="controls">
+					<input  type="text" 
+				        class="span4" 
+				        ng-model="contactForm.phone">
+				  </div>
+				  
+				  <button type="reset"
+	                  ng-click="addContacts()"
+	                  class="btn pull-right btn-info">{{ui.teamup.addContact}}</button>
+				</div>
+				
+				<p ng-hide="contacts.length > 0">
+		        	{{ui.teamup.noContacts}}
+		      	</p>
+			      <div ng-show="contacts.length > 0">
+			        <table class="table table-striped">
+			          <thead>
+			            <tr>
+			              <th>{{ui.teamup.name}}</th>
+			              <th>{{ui.teamup.func}}</a></th>
+			              <th>{{ui.teamup.phone}}</th>
+			              <th></th>
+			            </tr>
+			          </thead>
+			          <tbody>
+			            <tr ng-repeat="contact in contacts|orderBy:lastName">
+			              <td>{{contact.lastName}} {{contact.firstName}}</td>
+			              <td>{{contact.func}}</td>
+			              <td>{{contact.phone}}</td>
+			              <td>
+			                <div class="pull-right">
+			                	<button ng-click="callContact(contact.phone)"
+			                          class="btn-primary btn-mini"><i class="icon-call"></i></button>
+			                 	<a><button class="btn-primary btn-mini">
+									<i class="icon-edit"></i>&nbsp;</button></a>
+		                      <button ng-click="removeContact(contact)"
+			                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+			                </div>
+			              </td>
+			            </tr>
+			          </tbody>
+			        </table>
+		
+			        <!-- <button type="button"
+			                ng-click="removeMembers(selection, group)"
+			                class="btn btn-small btn-danger pull-left">
+			                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button> -->
+		
+			        <span class="muted pull-right">
+			          <small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small>
+			        </span>
+			      </div>		
+				
+				<!-- end client contact list -->
+		        
 	    </div>
 		<!-- end view Client profile -->
 		
@@ -163,8 +413,6 @@
 		
 	</div>	
 	<!-- end tabs content -->
-	
-</div>	
 
-
+</div>
 <!-- end Client groups and clients -->

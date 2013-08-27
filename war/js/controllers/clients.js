@@ -24,21 +24,21 @@ angular.module('WebPaige.Controllers.Clients', [])
                 var clients = angular.fromJson(Storage.get(cGroup.id));
                 
                 var key = cGroup.id;
-                data.clients = {key : clients};
+                data.clients[cGroup.id] = clients;
                 
-                angular.forEach(data.clients, function (client, index){
+                angular.forEach(clients, function (client, index){
                     if(client.uuid == data.clientId){
                         $scope.client = client;
+                        $scope.contacts = client.contacts;
                     }
                 });
                 
             });
             
-        }else{
-            $scope.clients= data.clients;
-            $scope.clientGroups= data.clientGroups;   
         }
         
+        $scope.clients= data.clients;
+        $scope.clientGroups= data.clientGroups;   
         
         /**
          * Self this
@@ -82,6 +82,9 @@ angular.module('WebPaige.Controllers.Clients', [])
         else
         {
             uuid = params.uuid;
+            if(typeof uuid == 'undefined'){
+                uuid = $scope.client.clientGroupUuid;
+            }
             view = $location.hash();
         }
         
@@ -127,7 +130,7 @@ angular.module('WebPaige.Controllers.Clients', [])
        */
       $scope.requestClientGroup = function (current, switched)
       {
-          setClientsView(current);
+          setClientView(current);
 
           $scope.$watch($location.search(), function ()
           {
@@ -284,12 +287,35 @@ angular.module('WebPaige.Controllers.Clients', [])
          */
         $scope.closeTabs = function ()
         {
-            $scope.teamForm = {};
+            $scope.clientGroupForm = {};
 
-            $scope.memberForm = {};
+            $scope.clientForm = {};
 
-            $scope.setView('team');
+            $scope.setView('client');
         };
+        
+        /**
+         *  add contact to client locally.
+         */
+        $scope.addContacts = function(){
+            if(typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == ''){
+                $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt2);
+                return;
+            }
+            
+            var contactPerson = {firstName : '',lastName : '',func : '',phone: ''};
+            contactPerson.firstName = $scope.contactForm.firstName;
+            contactPerson.lastName = $scope.contactForm.lastName;
+            contactPerson.func = $scope.contactForm.func;
+            contactPerson.phone = $scope.contactForm.phone;
+            
+            if(typeof $scope.contacts == 'undefined'){
+                $scope.contacts = [];
+            }
+             
+            $scope.contacts.push(contactPerson);
+        }
+        
         
     }
 ]);
