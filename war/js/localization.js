@@ -324,6 +324,7 @@ var ui = {
          teamSubmitError: 'Errors in creating the team',
          queryTeamError: 'Errors in quering the teams',
          teamNamePrompt1: 'Team name can not be empty',
+         teamNamePrompt2: 'Please fill the conatct data',
          cancel: 'Cancel',
          chooseRole : 'Choose a role',
          func: 'function',
@@ -333,7 +334,15 @@ var ui = {
          reports: 'Reports',
          noClients: 'There is no clients in this group',
          TeamClients: 'TEAMS-CLIENTS',
-         
+         createClientGroup: 'Create new client group',
+         contacts: 'Contacts',
+         Number: 'No',
+         clientProfileUrl: 'Client profile URL',
+         addContact: 'add contact',
+         saveClient: 'Save',
+         group: 'Group',
+         noContacts: 'There is no contact person.',
+         contactCount:  'There are $v contact(s)',
       }
     },
     nl: {
