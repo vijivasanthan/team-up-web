@@ -87,6 +87,44 @@ angular.module('WebPaige.Controllers.Manage', [])
       $scope.folders.push({name: 'File Y', _id: 'Y'});
       $scope.folders.push({name: 'File Z', _id: 'Z'});
 
+
+
+      $scope.treegrid = {
+        data: {
+
+          /**
+           * Left column
+           */
+          left: {
+            content: $scope.files,
+            options: {
+              columns: [
+                {name: 'name', text: 'Name', title: 'Name of the files'},
+                {name: 'size', text: 'Size', title: 'Size of the files in kB (kilo bytes)'},
+                {name: 'date', text: 'Date', title: 'Date the file is last updated'}
+              ],
+              dataTransfer: {
+                allowedEffect: 	'move',
+                dropEffect: 		'none'
+              }
+            }
+          },
+
+          /**
+           * Right column
+           */
+          right: {
+            content: $scope.folders,
+            options: {
+              dataTransfer : {
+                allowedEffect: 	'move',
+                dropEffect: 		'move'
+              }
+            }
+          }
+        }
+      }
+
         
     }
     

@@ -17,6 +17,11 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
         $scope.treegrid = {
 
           /**
+           * Data being passed to TreeGrid
+           */
+          data: $scope.treegrid.data,
+
+          /**
            * Options
            */
           options: {
@@ -60,29 +65,14 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             this.build(
               this.options.parts.left,
-              $scope.files,
-              {
-                columns: [
-                  {name: 'name', text: 'Name', title: 'Name of the files'},
-                  {name: 'size', text: 'Size', title: 'Size of the files in kB (kilo bytes)'},
-                  {name: 'date', text: 'Date', title: 'Date the file is last updated'}
-                ],
-                dataTransfer: {
-                  allowedEffect: 	'move',
-                  dropEffect: 		'none'
-                }
-              }
+              this.data.left.content,
+              this.data.left.options
             );
 
             this.build(
               this.options.parts.right,
-              $scope.folders,
-              {
-                dataTransfer : {
-                  allowedEffect: 	'move',
-                  dropEffect: 		'move'
-                }
-              }
+              this.data.right.content,
+              this.data.right.options
             );
           }
 
