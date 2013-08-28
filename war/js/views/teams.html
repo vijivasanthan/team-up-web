@@ -197,11 +197,19 @@
             	<tr>
             		<td>
             		 <div class="control-group">
-		              	  <label class="control-label">{{ui.teamup.name}}</label>
+		              	  <label class="control-label">{{ui.profile.firstName}}</label>
 			              <div class="controls">
 			                <input  type="text" 
 			                        class="span4" 
-			                        ng-model="memberForm.name">
+			                        ng-model="memberForm.firstName">
+			              </div>
+		             </div>
+		             <div class="control-group">
+		              	  <label class="control-label">{{ui.profile.lastName}}</label>
+			              <div class="controls">
+			                <input  type="text" 
+			                        class="span4" 
+			                        ng-model="memberForm.lastName">
 			              </div>
 		             </div>
 		            <div class="control-group">
@@ -217,7 +225,7 @@
 		              <div class="controls">
 		                <input  type="text" 
 		                        class="span3" 
-		                        ng-model="memberForm.PhoneAddress">
+		                        ng-model="memberForm.phone">
 		              </div>
 		            </div>
 		            <div class="control-group">

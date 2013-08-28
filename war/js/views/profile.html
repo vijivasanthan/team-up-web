@@ -150,24 +150,42 @@
                       value="{{data.resources.lastName}}">
             </div>
           </div>
-          <!-- <div class="control-group">
-            <label class="control-label">{{ui.profile.email}}</label>
-            <div class="controls">
-              <input  type="text" 
-                      class="span4" 
-                      ng-model="profilemeta.EmailAddress"
-                      value="{{data.resources.EmailAddress}}">
-            </div>
-          </div> -->
-          <div class="control-group">
-            <label class="control-label">{{ui.profile.phone}}</label>
-            <div class="controls">
-              <input  type="text" 
-                      class="span3" 
-                      ng-model="profilemeta.phone"
-                      value="{{data.resources.phone}}">
-            </div>
+          
+		<div class="control-group">
+		  <label class="control-label">{{ui.teamup.role}}</label>
+		  <div class="controls">
+		    <select ng-model="profilemeta.role"
+		            ng-options="r.id as r.label for r in roles">
+		      <option value="{{data.resources.role}}">{{data.resources.role}}</option>
+		  </div>
+		</div>
+          
+	      <div class="control-group">
+	        <label class="control-label">{{ui.profile.phone}}</label>
+	        <div class="controls">
+	          <input  type="text" 
+	                  class="span3" 
+	                  ng-model="profilemeta.phone"
+	                  value="{{data.resources.phone}}">
+	        </div>
+	      </div>
+	      
+	        <div class="control-group">
+		      <label class="control-label">{{ui.teamup.func}}</label>
+		      <div class="controls">
+		      	<select ng-model="profilemeta.function"
+		                ng-options="f.id as f.label for f in mfuncs">
+		        <option value="{{data.resources.func}}">{{data.resources.func}}</option>
+		      </div>
+		    </div>
+	      
+	      <div class="control-group">
+              <label class="control-label">{{ui.profile.birthday}}</label>
+              <div class="control-group dater" style="">
+              	<input name="date-start" type="text" ng-model="profilemeta.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" class="ng-pristine ng-valid" data-toggle="datepicker">
+              	<i class="icon-calendar"></i></div>
           </div>
+	      
           <div class="form-actions">
             <button   type="submit" 
                       class="btn btn-success"
