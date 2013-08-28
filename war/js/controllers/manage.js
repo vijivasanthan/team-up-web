@@ -59,6 +59,8 @@ angular.module('WebPaige.Controllers.Manage', [])
         });
       }
 
+
+
       $scope.folders = [];
 
       var chars 	= 'ABCDE';

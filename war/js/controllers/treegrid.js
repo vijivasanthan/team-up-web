@@ -20,8 +20,26 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            * Options
            */
           options: {
-            width: 'auto',
-            height: $('#wrap').height() - (270 + 200) + 'px'
+            grid: {
+              width: 'auto',
+              height: null,
+              items: {
+                // defaultHeight: 46,
+                minHeight: 32
+              }
+            },
+            parts: {
+              left: document.getElementById('left'),
+              right: document.getElementById('right')
+            }
+          },
+
+          /**
+           * Calculate height of available area
+           */
+          calcHeight: function ()
+          {
+            this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px'
           },
 
           /**
@@ -29,8 +47,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           build: function (id, data, options)
           {
-            new links.TreeGrid(id, this.options)
-              .draw(new links.DataTable(data, options));
+            this.self = new links.TreeGrid(id, this.options.grid);
+            this.self.draw(new links.DataTable(data, options));
           },
 
           /**
@@ -38,8 +56,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           init: function ()
           {
+            this.calcHeight();
+
             this.build(
-              document.getElementById('left'),
+              this.options.parts.left,
               $scope.files,
               {
                 columns: [
@@ -55,7 +75,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             );
 
             this.build(
-              document.getElementById('right'),
+              this.options.parts.right,
               $scope.folders,
               {
                 dataTransfer : {
@@ -70,7 +90,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
         /**
-         * Draw treegrid
+         * Draw TreeGrid
          */
         setTimeout(function ()
         {
