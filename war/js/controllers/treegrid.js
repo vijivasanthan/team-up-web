@@ -30,7 +30,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               height: null,
               items: {
                 // defaultHeight: 46,
-                minHeight: 32
+                minHeight: 40
               }
             },
             parts: {
