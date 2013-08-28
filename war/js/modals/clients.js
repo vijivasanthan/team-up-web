@@ -54,6 +54,29 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
          );
         
+        var ClientGroup = $resource(
+        	$config.host + 'teamup/clientGroup/:clientGroupId',
+        	{},
+        	{
+        		save: {
+        			method : 'POST',        		
+        		},
+        		edit: {
+        			method : 'PUT',
+        		}
+        	}
+        );
+        
+        var Client = $resource(
+        	$config.host + 'teamup/client/',
+        	{},
+        	{
+        		save:{
+        		method : 'POST',        		
+        		}
+        	}
+        );
+        
         /**
          * get the client groups and the clients 
          */
@@ -163,6 +186,65 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
           return deferred.promise;
         };
         
+        /**
+         * add new client group
+         */
+        ClientGroups.prototype.saveGroup = function(group){
+        	var deferred = $q.defer();
+        	
+        	ClientGroup.save(
+        		group,
+        		function(result){
+        			Storage.add(result.id, angular.toJson(result));
+        			
+        			deferred.resolve(result);
+        		},function(error){
+        			deferred.resolve({error: error});
+        		}
+        	);
+        	
+        	return deferred.promise;
+        };
+        
+        /**
+         * add new client 
+         */
+        ClientGroups.prototype.save = function(client){
+        	var deferred = $q.defer();
+        	
+        	Client.save(
+        		client,
+        		function(result){
+        			Storage.add(result.id, angular.toJson(result));
+        			
+        			deferred.resolve(result);
+        		},function(error){
+        			deferred.resolve({error: error});
+        		}
+        	);
+        	
+        	return deferred.promise;
+        };
+        
+        /**
+         * update client group
+         */
+        ClientGroups.prototype.edit = function(clientGroup){
+        	var deferred = $q.defer();
+		
+		     /**
+		      * Check if team id supplied
+		      * if save submitted from add / edit form
+		      */
+		     if (clientGroup.id){
+		       ClientGroup.edit({clientGroupId: clientGroup.id}, clientGroup, function (result) 
+		       {
+		         deferred.resolve(result);
+		       });
+		     }
+		     
+		     return deferred.promise;
+        };
         
         return new ClientGroups; 
     }

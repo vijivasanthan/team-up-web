@@ -187,7 +187,7 @@ angular.module('WebPaige.Controllers.Clients', [])
            $scope.views.editClientGroup= true;
         }
         
-        $scope.cancelClientGroupEdit = function(team){
+        $scope.cancelClientGroupEdit = function(clientGroup){
            $scope.cGroupEditForm = {name : clientGroup.name , id : clientGroup.id };
            $scope.views.editClientGroup= false;
         }
@@ -203,14 +203,14 @@ angular.module('WebPaige.Controllers.Clients', [])
             
             $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
             
-            Teams.edit(cGroup)
+            Clients.edit(cGroup)
             .then(function(result){
                 if(result.error){
                     $rootScope.notifier.error("Error with saving client Group info");
                 }else{
                     $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
                     
-                    Clients.queryGroup(false)
+                    Clients.query(false)
                     .then(function(result){
                         $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                         $rootScope.statusBar.off();
@@ -223,8 +223,46 @@ angular.module('WebPaige.Controllers.Clients', [])
         }
         
         
+        var reloadGroup = function(result){
+        	Clients.query(false)
+            .then(function(queryRs){
+                if (queryRs.error){
+                    $rootScope.notifier.error($rootScope.ui.teamup.queryCGroupError);
+                    console.warn('error ->', queryRs);
+                }else{
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    $scope.closeTabs();
+
+                    $scope.data = queryRs;
+                    
+                    angular.forEach(queryRs.cGroups, function (cg_obj){
+                        if (cg_obj.id == result){
+                            $scope.clientGroups = queryRs.clientGroups;
+
+                            angular.forEach(queryRs.clientGroups, function (cg){
+                                if (cg.id == cg_obj.id){
+                                    $scope.clientGroup = cg;
+                                }
+                            });
+
+                            $scope.clients = data.clients[cg_obj.id];
+
+                            $scope.current = cg_obj.id;
+
+                            $scope.$watch($location.search(), function (){
+                                $location.search({id : cg_obj.id});
+                            });
+                        }
+                    });
+                }
+                
+                $rootScope.statusBar.off();
+                
+            });
+        }
+        
         /**
-         * create new Team 
+         * create new client group 
          */
         $scope.cGroupSubmit = function(cGroup){
             
@@ -235,48 +273,14 @@ angular.module('WebPaige.Controllers.Clients', [])
             
             $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
             
-            Clients.save(clientGroup)
+            Clients.saveGroup(cGroup)
             .then(function(result){
                 if(result.error){
                     $rootScope.notifier.error($rootScope.ui.teamup.cGroupSubmitError);
                 }else{
                     $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
                     
-                    Clients.queryGroup(false)
-                    .then(function(queryRs){
-                        if (queryRs.error){
-                            $rootScope.notifier.error($rootScope.ui.teamup.queryCGroupError);
-                            console.warn('error ->', queryRs);
-                        }else{
-                            $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                            $scope.closeTabs();
-
-                            $scope.data = queryRs;
-                            
-                            angular.forEach(queryRs.cGroups, function (cg_obj){
-                                if (cg_obj.id == result){
-                                    $scope.clientGroups = queryRs.clientGroups;
-        
-                                    angular.forEach(queryRs.clientGroups, function (cg){
-                                        if (cg.id == cg_obj.id){
-                                            $scope.clientGroup = cg;
-                                        }
-                                    });
-        
-                                    $scope.clients = data.clients[cg_obj.id];
-        
-                                    $scope.current = cg_obj.id;
-        
-                                    $scope.$watch($location.search(), function (){
-                                        $location.search({id : cg_obj.id});
-                                    });
-                                }
-                            });
-                        }
-                        
-                        $rootScope.statusBar.off();
-                        
-                    });
+                    reloadGroup(result);
                 }
             });
         }
@@ -316,6 +320,29 @@ angular.module('WebPaige.Controllers.Clients', [])
             $scope.contacts.push(contactPerson);
         }
         
+        /**
+         * add new client 
+         */
+        $scope.clientSubmit = function(client){
+        	if(typeof client == 'undefined' || !client.firstName || !client.lastName || !client.phone){
+        		$rootScope.notifier.error($rootScope.ui.teamup.clinetInfoFill);
+        		return;
+        	}
+        	
+        	$rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
+        	
+        	// might need to convert the client to client obj
+        	
+        	Clients.save(client)
+        	.then(function(result){
+        		if(result.error){
+        			$rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
+        		}else{
+        			reloadGroup(result);
+        		}
+        	});
+        	
+        }
         
     }
 ]);
