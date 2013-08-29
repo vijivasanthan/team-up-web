@@ -17,7 +17,9 @@
   p {
     padding-top: 65px;
     text-align: center;
-    color: #a19781;
+    color: $brown;
+    opacity: 0.4;
+    filter:alpha(opacity=40); /* For IE8 and earlier */
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
     font-size: 18px; 
   }
@@ -25,7 +27,9 @@
   span.entypo {
     display: block;
     /*height: 160px;*/
-    color: #a19781;
+    color: $brown;
+    opacity: 0.4;
+    filter:alpha(opacity=40); /* For IE8 and earlier */
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
     font-size: 20em;
   }
