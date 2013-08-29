@@ -43,9 +43,6 @@ angular.module('WebPaige.Controllers.Manage', [])
 
       $scope.setViewTo('teamClients');
 
-
-
-
       /**
        * Define data sources
        * These sources should be populated from modals
@@ -124,6 +121,15 @@ angular.module('WebPaige.Controllers.Manage', [])
         ]
       };
 
+      
+      // start to populate data from storage 
+      if(typeof data.teams == 'undefined'){
+          
+      }
+    
+      if(typeof data.clientGroups == 'undefined'){
+          
+      }
 
       /**
        * Processed

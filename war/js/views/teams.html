@@ -19,7 +19,7 @@
 <div class="page-header">
 	<span  class="nullable">
         <select ng-model="current" 
-        		ng-options="t.uuid as t.name for t in teams"
+        		ng-options="t.uuid as t.name for t in teams | orderBy:'name'"
         		ng-selected="current"
         		ng-change="requestTeam(current)" >
         </select>
@@ -34,7 +34,7 @@
   <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
     <!-- add group tab link -->
     <li class="{{(views.team==true) && 'active'}}">
-      <a href="#viewTeamTab" data-toggle="tab">
+      <a href="#viewTeamTab" data-toggle="tab" ng-click="setViewTo('team')">
         <span class="entypo">&#9998;</span>
         {{ui.teamup.teams}}
       </a>
@@ -42,7 +42,7 @@
     <!-- end add group tab link -->
     <!-- edit group tab link -->
     <li class="{{(views.newTeam==true) && 'active'}}">
-      <a href="#newTeamTab" data-toggle="tab" > 
+      <a href="#newTeamTab" data-toggle="tab" ng-click="setViewTo('newTeam')"> 
         <span class="entypo">&#9998;</span>
         {{ui.teamup.newTeam}}
       </a>
@@ -50,7 +50,7 @@
     <!-- end edit group tab link -->
     <!-- new member tab link -->
     <li class="{{(views.newMember==true) && 'active'}}">
-      <a href="#newMemberTab" data-toggle="tab">
+      <a href="#newMemberTab" data-toggle="tab" ng-click="setViewTo('newMember')">
         <span class="entypo">&#59136;</span>
         {{ui.teamup.newMember}}
       </a>
@@ -185,7 +185,7 @@
               <label class="control-label">{{ui.teamup.teams}}</label>
               <div class="controls">
                 <select ng-model="memberForm.team"
-                        ng-options="t.uuid as t.name for t in teams">
+                        ng-options="t.uuid as t.name for t in teams | orderBy:'name'">
                   <option value="">{{ui.teamup.chooseTeam}}</option>
                 </select>
               </div>
@@ -239,7 +239,7 @@
 		            <div class="control-group">
 		              <label class="control-label">{{ui.profile.birthday}}</label>
 		              <div class="control-group dater" style="">
-		              	<input name="date-start" type="text" ng-model="memberForm.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" class="ng-pristine ng-valid" data-toggle="datepicker">
+		              	<input name="date-start" type="text" ng-model="memberForm.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" class="ng-pristine ng-valid" data-toggle="datepicker">
 		              	<i class="icon-calendar"></i></div>
 		            </div>
             		</td>
