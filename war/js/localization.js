@@ -343,6 +343,14 @@ var ui = {
          group: 'Group',
          noContacts: 'There is no contact person.',
          contactCount:  'There are $v contact(s)',
+         accountInfoFill: 'Please fill your account info.',
+         passNotSame: 'Passwrods are not same.',
+         savingMember: 'Saving member',
+         selectTeam: 'Please select a team',
+         clinetInfoFill: 'Please fill the basic client info : name and phone',
+         savingClient: 'Saving client',
+         clientSubmitError: 'Errors when creating new client',
+         
       }
     },
     nl: {

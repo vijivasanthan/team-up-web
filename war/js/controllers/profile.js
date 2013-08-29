@@ -37,13 +37,19 @@ angular.module('WebPaige.Controllers.Profile', [])
 	  /**
 	   * Pass current
 	   */
-	$scope.current = {
-      day:    Date.today().getDayOfYear() + 1,
-      week:   new Date().getWeek(),
-      month:  new Date().getMonth() + 1
-    };
-
-	  
+		$scope.current = {
+	      day:    Date.today().getDayOfYear() + 1,
+	      week:   new Date().getWeek(),
+	      month:  new Date().getMonth() + 1
+	    };
+	
+		/**
+	     * Grab and set roles for view
+	     */
+	    $scope.roles = $rootScope.config.roles;
+	    $scope.mfuncs = $rootScope.config.mfunctions;  
+	
+	
 	  /**
 	   * Set data for view
 	   */

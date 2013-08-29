@@ -95,6 +95,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           }
               
       ); 
+      
+      var Member = $resource(
+      		$config.host + 'teamup/team/member',{
+      		},{
+      			save : {
+      				method: 'POST',
+      			}
+      		}
+      );
 //      /**
 //       * Get parent team data
 //       */
@@ -351,7 +360,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               deferred.resolve({error: error});
           });
           
-      }
+      };
       
       /**
        * Get team data
@@ -444,6 +453,19 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           return deferred.promise;
       };
 
+      Teams.prototype.saveMember = function (member){
+    	  var deferred = $q.defer();
+    	  Member.save({},
+			  member,
+			  function(result){
+				  deferred.resolve(result.uuid);
+			  },function(error){
+				  deferred.resolve({error: error});
+			  }
+    	  );
+    	  
+    	  return deferred.promise;
+      };
 //
 //      /**
 //       * Delete team
@@ -548,29 +570,6 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
      }
      else
      {
-//       Teams.save(
-//         { id: $rootScope.app.resources.uuid }, 
-//         team, 
-//         function (result) 
-//         {
-//           /**
-//            * team save call returns only uuid and that is parsed as json
-//            * by angular, this is a fix for converting returned object to plain string
-//            */
-//           var returned = '';
-//
-//           angular.forEach(result, function (chr, i)
-//           {
-//             returned += chr;
-//           });
-//
-//           deferred.resolve(returned);
-//         },
-//         function (error)
-//         {
-//           deferred.resolve({error: error});
-//         }
-//       ); 
      };
 
      return deferred.promise;
