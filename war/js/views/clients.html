@@ -65,18 +65,18 @@
 	        </div>
 			
 			<div class="tab-header" ng-show="views.editClientGroup">
-				<input type="text" class="pull-left" ng-model="clientGroupEditForm.name"></input> 
+				<input type="text" class="pull-left" ng-model="cGroupEditForm.name"></input> 
 				
 				<button type="reset"
 	                  ng-click="cancelClientGroupEdit(clientGroup)"
 	                  class="btn pull-right btn-info">{{ui.teamup.cancel}}</button>
 				<button type="button"
-	                  ng-click="changeTeam(clientGroupEditForm)"
+	                  ng-click="changeClientGroup(cGroupEditForm)"
 	                  class="btn pull-right btn-info">{{ui.teamup.save}}</button>
 			</div>
 	        <hr>
 	
-	        <!-- team status -->
+	        <!-- client status -->
 	       	  <p ng-hide="(data.clients[clientGroup.id]).length > 0">
 		        {{ui.teamup.noClients}}
 		      </p>
@@ -123,7 +123,7 @@
 		        </span>
 		      </div>
 		    </div>
-	        <!-- end team status -->
+	        <!-- end client status -->
 		<!-- end Team view -->
 		
 		<!-- new Client Group-->
@@ -201,13 +201,13 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.street">
+				        ng-model="clientForm.address.street">
 				  </div>
 				  <label class="control-label">{{ui.teamup.Number}}</label>
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.number">
+				        ng-model="clientForm.address.number">
 				  </div>
 				</div>
 				
@@ -216,14 +216,14 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.postCode">
+				        ng-model="clientForm.address.postCode">
 				  </div>
 				  
 				  <label class="control-label">{{ui.teamup.city}}</label>
 				  <div class="controls ">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.city">
+				        ng-model="clientForm.address.city">
 				  </div>
 				</div>
 				

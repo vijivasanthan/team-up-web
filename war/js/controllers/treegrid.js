@@ -17,11 +17,34 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
         $scope.treegrid = {
 
           /**
+           * Data being passed to TreeGrid
+           */
+          data: $scope.treegrid.data,
+
+          /**
            * Options
            */
           options: {
-            width: 'auto',
-            height: $('#wrap').height() - (270 + 200) + 'px'
+            grid: {
+              width: 'auto',
+              height: null,
+              items: {
+                // defaultHeight: 46,
+                minHeight: 40
+              }
+            },
+            parts: {
+              left: document.getElementById('left'),
+              right: document.getElementById('right')
+            }
+          },
+
+          /**
+           * Calculate height of available area
+           */
+          calcHeight: function ()
+          {
+            this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px'
           },
 
           /**
@@ -29,8 +52,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           build: function (id, data, options)
           {
-            new links.TreeGrid(id, this.options)
-              .draw(new links.DataTable(data, options));
+            this.self = new links.TreeGrid(id, this.options.grid);
+            this.self.draw(new links.DataTable(data, options));
           },
 
           /**
@@ -38,31 +61,18 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           init: function ()
           {
+            this.calcHeight();
+
             this.build(
-              document.getElementById('left'),
-              $scope.files,
-              {
-                columns: [
-                  {name: 'name', text: 'Name', title: 'Name of the files'},
-                  {name: 'size', text: 'Size', title: 'Size of the files in kB (kilo bytes)'},
-                  {name: 'date', text: 'Date', title: 'Date the file is last updated'}
-                ],
-                dataTransfer: {
-                  allowedEffect: 	'move',
-                  dropEffect: 		'none'
-                }
-              }
+              this.options.parts.left,
+              this.data.left.content,
+              this.data.left.options
             );
 
             this.build(
-              document.getElementById('right'),
-              $scope.folders,
-              {
-                dataTransfer : {
-                  allowedEffect: 	'move',
-                  dropEffect: 		'move'
-                }
-              }
+              this.options.parts.right,
+              this.data.right.content,
+              this.data.right.options
             );
           }
 
@@ -70,7 +80,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
         /**
-         * Draw treegrid
+         * Draw TreeGrid
          */
         setTimeout(function ()
         {

@@ -44,46 +44,169 @@ angular.module('WebPaige.Controllers.Manage', [])
       $scope.setViewTo('teamClients');
 
 
+
+
       /**
-       * Populate sample data for treegrid
+       * Define data sources
+       * These sources should be populated from modals
        */
-      $scope.files = [];
+      var data = {
 
-      for (var i=0; i<50; i++)
+        /**
+         * Members
+         */
+        members: [
+          {
+            id:   1,
+            name: 'Cengiz Ulusoy'
+          },
+          {
+            id:   2,
+            name: 'Leonie van Dinten'
+          },
+          {
+            id:   3,
+            name: 'Michael Jan Kun'
+          }
+        ],
+
+        /**
+         * Teams
+         */
+        teams: [
+          {
+            id:   1,
+            name: 'Verpleegkundigen Rotterdam'
+          },
+          {
+            id:   2,
+            name: 'Thuiszorgers'
+          },
+          {
+            id:   3,
+            name: 'Groep Schiedam'
+          }],
+
+        /**
+         * Clients
+         */
+        clients: [
+          {
+            id:   1,
+            name: 'Gerda Bloom'
+          },
+          {
+            id:   2,
+            name: 'Arjan Smit'
+          },
+          {
+            id:   3,
+            name: 'Johan Pieters'
+          }
+        ],
+
+        /**
+         * Groups
+         */
+        groups: [
+          {
+            id:   1,
+            name: 'Erasmus Ziekenhuis'
+          },
+          {
+            id:   2,
+            name: 'Delfshaven Bejaardenhuis'
+          },
+          {
+            id:   3,
+            name: 'Schiedam Senioren'
+          }
+        ]
+      };
+
+
+      /**
+       * Processed
+       */
+      var processed = {
+        left:  [],
+        right: []
+      };
+
+
+      /**
+       * Populate clients
+       */
+      angular.forEach(data.clients, function (client)
       {
-        $scope.files.push({
-          name: 'File ' + i,
-          size: (Math.round(Math.random() * 50) * 10 + 100) + ' kB',
-          date: (new Date()).toDateString(),
-          _id: 	i
+        processed.left.push({
+          name: client.name,
+          _id:  client._id,
+          _actions: [
+            /*
+            {
+              'event': 'edit'
+            }
+            */
+          ]
         });
-      }
+      });
 
-      $scope.folders = [];
 
-      var chars 	= 'ABCDE';
-
-      for (var i in chars)
+      /**
+       * Populate groups
+       */
+      angular.forEach(data.groups, function (group)
       {
-        var c = chars[i],
-          options = {
+        processed.right.push({
+          name: 	group.name,
+          clients: 	new links.DataTable([], {
             dataTransfer : {
               allowedEffect: 	'move',
               dropEffect: 		'move'
             }
-          },
-          dataConnector = new links.DataTable([], options),
-          item = {
-            name: 	'Folder ' + c,
-            files: 	dataConnector,
-            _id: 		c
-          };
-        $scope.folders.push(item);
-      }
+          }),
+          _id: group.id
+        });
+      });
 
-      $scope.folders.push({name: 'File X', _id: 'X'});
-      $scope.folders.push({name: 'File Y', _id: 'Y'});
-      $scope.folders.push({name: 'File Z', _id: 'Z'});
+
+      /**
+       * TreeGrid data constructor
+       */
+      $scope.treegrid = {
+        data: {
+          /**
+           * Left column
+           */
+          left: {
+            content: processed.left,
+            options: {
+              columns: [
+                {
+                  name: 'name', text: 'Name', title: 'Name'
+                }
+              ],
+              dataTransfer: {
+                allowedEffect: 	'move',
+                dropEffect: 		'move'
+              }
+            }
+          },
+          /**
+           * Right column
+           */
+          right: {
+            content: processed.right,
+            options: {
+              dataTransfer : {
+                allowedEffect: 	'move',
+                dropEffect: 		'move'
+              }
+            }
+          }
+        }
+      }
 
         
     }
