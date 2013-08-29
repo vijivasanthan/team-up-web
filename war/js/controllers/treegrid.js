@@ -18,53 +18,16 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
         $scope.treegrid = {
 
           /**
-           * Populate data
+           * Options
            */
-          populate: function ()
-          {
-
-            /**
-             * Processed
-             */
-            $scope.processed = {
-              left:  [],
-              right: []
-            };
-
-            /**
-             * Populate left side
-             */
-            angular.forEach($scope.data.left, function (client)
-            {
-              $scope.processed.left.push({
-                name: client.name,
-                _id:  client._id,
-                _actions: [
-                  {
-                    'event': 'remove'
-                  }
-                ]
-              });
-            });
-
-
-            /**
-             * Populate right side
-             */
-            angular.forEach($scope.data.right, function (group)
-            {
-              $scope.processed.right.push({
-                name: 	  group.name,
-                clients: 	new links.DataTable([], {
-                  dataTransfer : {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
-                  }
-
-                }),
-                _id: group.id
-              });
-            });
+          options: {
+            grid: {
+              width: 'auto',
+              height: null,
+              items: {
+                minHeight: 40
+              }
+            }
           },
 
           /**
@@ -93,20 +56,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           /**
            * Build TreeGrid
            */
-          build: function (id, data)
+          build: function (id, data, options)
           {
-            /**
-             * TreeGrid options
-             */
-            var options = {
-              grid: {
-                width: 'auto',
-                height: null,
-                items: {
-                  minHeight: 40
-                }
-              }
-            };
 
             /**
              * Initializers
