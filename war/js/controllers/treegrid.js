@@ -11,32 +11,60 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
       '$rootScope', '$scope', '$window',
       function ($rootScope, $scope, $window)
       {
+
         /**
          * TreeGrid
          */
         $scope.treegrid = {
 
           /**
-           * Data being passed to TreeGrid
+           * Populate data
            */
-          data: $scope.treegrid.data,
+          populate: function ()
+          {
 
-          /**
-           * Options
-           */
-          options: {
-            grid: {
-              width: 'auto',
-              height: null,
-              items: {
-                // defaultHeight: 46,
-                minHeight: 40
-              }
-            },
-            parts: {
-              left: document.getElementById('left'),
-              right: document.getElementById('right')
-            }
+            /**
+             * Processed
+             */
+            $scope.processed = {
+              left:  [],
+              right: []
+            };
+
+            /**
+             * Populate left side
+             */
+            angular.forEach($scope.data.left, function (client)
+            {
+              $scope.processed.left.push({
+                name: client.name,
+                _id:  client._id,
+                _actions: [
+                  {
+                    'event': 'remove'
+                  }
+                ]
+              });
+            });
+
+
+            /**
+             * Populate right side
+             */
+            angular.forEach($scope.data.right, function (group)
+            {
+              $scope.processed.right.push({
+                name: 	  group.name,
+                clients: 	new links.DataTable([], {
+                  dataTransfer : {
+                    allowedEffect: 	'move',
+                    dropEffect: 		'move'
+                  }
+
+                }),
+                _id: group.id
+              });
+            });
           },
 
           /**
@@ -47,32 +75,168 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px'
           },
 
+
+          /**
+           * Remove trigger
+           */
+          onRemove: function (params)
+          {
+            var item = (params && params.items) ? params.items[0] : undefined;
+
+            if (item)
+            {
+              console.log('params ->', item._description);
+            }
+          },
+
+
           /**
            * Build TreeGrid
            */
-          build: function (id, data, options)
+          build: function (id, data)
           {
-            this.self = new links.TreeGrid(id, this.options.grid);
-            this.self.draw(new links.DataTable(data, options));
+            /**
+             * TreeGrid options
+             */
+            var options = {
+              grid: {
+                width: 'auto',
+                height: null,
+                items: {
+                  minHeight: 40
+                }
+              }
+            };
+
+            /**
+             * Initializers
+             */
+            var TreeGrid  = new links.TreeGrid(id, this.options.grid),
+                DataTable = new links.DataTable(data, options);
+
+            /**
+             * Draw TreeGrid
+             */
+            TreeGrid.draw(DataTable);
+
+            /**
+             * Add some listeners
+             */
+            links.events.addListener(DataTable, 'remove', function (params)
+            {
+              alert('params ->', params);
+            });
+
+            links.events.addListener(DataTable, 'change', function ()
+            {
+              console.log('changed stuff --->', DataTable);
+            });
+
           },
 
           /**
            * Init TreeGrid
            */
-          init: function ()
+          init: function (grid)
           {
+            /**
+             * Calculate the height
+             */
             this.calcHeight();
 
+            /**
+             * Processed
+             */
+            $scope.processed = {
+              left:  [],
+              right: []
+            };
+
+            /**
+             * Populate left side
+             */
+            angular.forEach($scope.data.left, function (left)
+            {
+              $scope.processed.left.push({
+                name: left.name,
+                _id:  left._id,
+                _actions: [
+                  {
+                    'event': 'remove'
+                  }
+                ]
+              });
+            });
+
+            /**
+             * Populate right side
+             */
+            angular.forEach($scope.data.right, function (right)
+            {
+              $scope.processed.right.push({
+                name: 	  right.name,
+                clients: 	new links.DataTable([], {
+                  dataTransfer : {
+                    allowedEffect: 	'move',
+                    dropEffect: 		'move'
+                  }
+
+                }),
+                _id: right.id
+              });
+            });
+
+
+
+            var data = {
+              /**
+               * Left column
+               */
+              left: {
+                content: $scope.processed.left,
+                options: {
+                  columns: [
+                    {
+                      name: 'name', text: 'Name', title: 'Name'
+                    }
+                  ],
+                  dataTransfer: {
+                    allowedEffect: 	'move',
+                    dropEffect: 		'move'
+                  }
+                }
+              },
+              /**
+               * Right column
+               */
+              right: {
+                content: $scope.processed.right,
+                options: {
+                  dataTransfer : {
+                    allowedEffect: 	'move',
+                    dropEffect: 		'move'
+                  }
+                }
+              }
+            };
+
+
+            /**
+             * Build left part of TreeGrid
+             */
             this.build(
-              this.options.parts.left,
-              this.data.left.content,
-              this.data.left.options
+              document.getElementById(grid + '-left'),
+              data.left.content,
+              data.left.options
             );
 
+            /**
+             * Build right part of TreeGrid
+             */
             this.build(
-              this.options.parts.right,
-              this.data.right.content,
-              this.data.right.options
+              document.getElementById(grid + '-right'),
+              data.right.content,
+              data.right.options
             );
           }
 
@@ -80,12 +244,20 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
         /**
-         * Draw TreeGrid
+         * TreeGrid manager listener
          */
-        setTimeout(function ()
+        $rootScope.$on('manager', function ()
         {
-          $scope.treegrid.init();
-        }, 100);
+          var grid  = arguments[1];
+
+          /**
+           * Draw TreeGrid
+           */
+          setTimeout(function ()
+          {
+            $scope.treegrid.init(grid);
+          }, 1);
+        });
 
 
         /**

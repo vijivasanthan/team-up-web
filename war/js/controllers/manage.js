@@ -9,39 +9,9 @@ angular.module('WebPaige.Controllers.Manage', [])
  * Groups controller
  */
 .controller('manageCtrl',[
-    '$rootScope', '$scope', '$location', 'Clients','data', '$route', '$routeParams', 'Storage', 'Teams', '$window',
-    function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage , Teams, $window){
+    '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window',
+    function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
 
-
-      /**
-       * View setter
-       */
-      function setView (hash)
-      {
-        $scope.views = {
-          teamClients:  false,
-          teams:        false,
-          clients:      false
-        };
-
-        $scope.views[hash] = true;
-      }
-
-
-      /**
-       * Switch between the views and set hash accordingly
-       */
-      $scope.setViewTo = function (hash)
-      {
-        $scope.$watch(hash, function ()
-        {
-          $location.hash(hash);
-
-          setView(hash);
-        });
-      };
-
-      $scope.setViewTo('teamClients');
 
 
 
@@ -125,90 +95,87 @@ angular.module('WebPaige.Controllers.Manage', [])
       };
 
 
-      /**
-       * Processed
-       */
-      var processed = {
-        left:  [],
+
+
+
+      $scope.data = {
+        left: [],
         right: []
       };
 
 
+
+
+
+
       /**
-       * Populate clients
+       * View setter
        */
-      angular.forEach(data.clients, function (client)
+      function setView (hash)
       {
-        processed.left.push({
-          name: client.name,
-          _id:  client._id,
-          _actions: [
-            /*
-            {
-              'event': 'edit'
-            }
-            */
-          ]
-        });
-      });
+        $scope.views = {
+          teamClients:  false,
+          teams:        false,
+          clients:      false
+        };
 
-
-      /**
-       * Populate groups
-       */
-      angular.forEach(data.groups, function (group)
-      {
-        processed.right.push({
-          name: 	group.name,
-          clients: 	new links.DataTable([], {
-            dataTransfer : {
-              allowedEffect: 	'move',
-              dropEffect: 		'move'
-            }
-          }),
-          _id: group.id
-        });
-      });
-
-
-      /**
-       * TreeGrid data constructor
-       */
-      $scope.treegrid = {
-        data: {
-          /**
-           * Left column
-           */
-          left: {
-            content: processed.left,
-            options: {
-              columns: [
-                {
-                  name: 'name', text: 'Name', title: 'Name'
-                }
-              ],
-              dataTransfer: {
-                allowedEffect: 	'move',
-                dropEffect: 		'move'
-              }
-            }
-          },
-          /**
-           * Right column
-           */
-          right: {
-            content: processed.right,
-            options: {
-              dataTransfer : {
-                allowedEffect: 	'move',
-                dropEffect: 		'move'
-              }
-            }
-          }
-        }
+        $scope.views[hash] = true;
       }
 
-        
+
+      /**
+       * Switch between the views and set hash accordingly
+       */
+      $scope.setViewTo = function (hash)
+      {
+        $scope.$watch(hash, function ()
+        {
+          $location.hash(hash);
+
+          setView(hash);
+
+          $scope.manage(hash);
+
+        });
+      };
+
+      $scope.setViewTo('teamClients');
+
+
+
+
+      $scope.manage = function (grid)
+      {
+        switch (grid)
+        {
+          case 'teamClients':
+            $scope.data = {
+              left: data.groups,
+              right: data.teams
+            };
+            break;
+
+          case 'teams':
+            $scope.data = {
+              left: data.members,
+              right: data.teams
+            };
+            break;
+
+          case 'clients':
+            $scope.data = {
+              left: data.clients,
+              right: data.groups
+            };
+            break;
+        }
+
+
+        $rootScope.$broadcast('manager', grid);
+
+
+      };
+
     }
     
 ]);
