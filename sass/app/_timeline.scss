@@ -1455,15 +1455,15 @@ div.timeline-event-range {
 }
 
 .datepicker td.active,.datepicker td.active:hover {
-  background-color: #006dcc;
+  background-color: $turq;
   background-image: 0;
   background-image: 0;
   // background-image: 0 to(#0044cc));
   background-image: 0;
   background-image: 0;
-  background-image: linear-gradient(top,#0088cc,#0044cc);
+  background-image: linear-gradient(top,#0088cc,red);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='#0044cc',
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088cc',endColorstr='red',
   GradientType=0);
   border-color: #04c #04c #002a80;
   border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
@@ -1477,12 +1477,12 @@ div.timeline-event-range {
 .datepicker td.active:hover.active,.datepicker td.active.disabled,
 .datepicker td.active:hover.disabled,.datepicker td.active[disabled],
 .datepicker td.active:hover[disabled] {
-  background-color: #04c;
+  background-color: $turq;
 }
 
 .datepicker td.active:active,.datepicker td.active:hover:active,.datepicker td.active.active,
 .datepicker td.active:hover.active {
-  background-color: #039 \9;
+  background-color: $turq;
 }
 
 .datepicker td span {
@@ -1503,7 +1503,7 @@ div.timeline-event-range {
 }
 
 .datepicker td span.active {
-  background-color: #006dcc;
+  background-color: $turq;
   background-image: 0;
   background-image: 0;
   //background-image: 0 to(#0044cc));
@@ -1522,11 +1522,11 @@ div.timeline-event-range {
 
 .datepicker td span.active:hover,.datepicker td span.active:active,.datepicker td span.active.active,
 .datepicker td span.active.disabled,.datepicker td span.active[disabled] {
-  background-color: #04c;
+  background-color: $turq;
 }
 
 .datepicker td span.active:active,.datepicker td span.active.active {
-  background-color: #039 \9;
+  background-color: $turq \9;
 }
 
 .datepicker td span.old {

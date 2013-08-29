@@ -28,9 +28,9 @@ em      { font-style: italic; }
 cite    { font-style: normal; }
 
 // Utility classes
-.muted               { color: $grayLight; }
+.muted               { color: $offwhite; }
 a.muted:hover,
-a.muted:focus        { color: darken($grayLight, 10%); }
+a.muted:focus        { color: darken($offwhite, 10%); }
 
 .text-warning        { color: $warningText; }
 a.text-warning:hover,
