@@ -515,19 +515,19 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Convert timeStamps to dates
  */
-// .filter('nicelyDate', 
-// [
-// 	'$rootScope', 
-// 	function ($rootScope)
-// 	{
-// 	 	return function (date)
-// 	 	{
-// 	 		if (typeof date == 'string') date = Number(date);
+ .filter('nicelyDate', 
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 	 	return function (date)
+ 	 	{
+ 	 		if (typeof date == 'string') date = Number(date);
 
-// 	 		return new Date(date).toString($rootScope.config.formats.datetime);
-// 	 	};
-// 	}
-// ])
+ 	 		return new Date(date).toString($rootScope.config.formats.date);
+ 	 	};
+ 	}
+ ])
 
 
 

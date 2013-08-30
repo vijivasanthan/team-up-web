@@ -350,7 +350,9 @@ var ui = {
          clinetInfoFill: 'Please fill the basic client info : name and phone',
          savingClient: 'Saving client',
          clientSubmitError: 'Errors when creating new client',
-         
+         clientGroups: 'Client groups',
+         teams_Cap: 'Teams',
+         editClient: 'Edit client',
       }
     },
     nl: {

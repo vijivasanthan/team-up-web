@@ -13,8 +13,35 @@ angular.module('WebPaige.Controllers.Manage', [])
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
 
 
+      /**
+       * View setter
+       */
+      function setView (hash)
+      {
+        $scope.views = {
+          teamClients:  false,
+          teams:        false,
+          clients:      false
+        };
+
+        $scope.views[hash] = true;
+      }
 
 
+      /**
+       * Switch between the views and set hash accordingly
+       */
+      $scope.setViewTo = function (hash)
+      {
+        $scope.$watch(hash, function ()
+        {
+          $location.hash(hash);
+
+          setView(hash);
+        });
+      };
+
+      $scope.setViewTo('teamClients');
 
       /**
        * Define data sources
@@ -94,6 +121,15 @@ angular.module('WebPaige.Controllers.Manage', [])
         ]
       };
 
+      
+      // start to populate data from storage 
+      if(typeof data.teams == 'undefined'){
+          
+      }
+    
+      if(typeof data.clientGroups == 'undefined'){
+          
+      }
 
 
 

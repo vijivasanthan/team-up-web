@@ -68,11 +68,14 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
         );
         
         var Client = $resource(
-        	$config.host + 'teamup/client/',
+        	$config.host + 'teamup/client/:clientId',
         	{},
         	{
         		save:{
-        		method : 'POST',        		
+        		    method : 'POST',        		
+        		},
+        		edit: {
+        		    method: 'PUT',
         		}
         	}
         );
@@ -244,6 +247,25 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		     }
 		     
 		     return deferred.promise;
+        };
+        
+        /**
+         * update client 
+         */
+        ClientGroups.prototype.updateClient = function(client){
+        	var deferred = $q.defer();
+        	
+        	Client.save(
+        		{clientId: client.uuid },
+        		client,
+        		function(result){
+        			deferred.resolve(result);
+        		},function(error){
+        			deferred.resolve({error: error});
+        		}
+        	);
+        	
+        	var deferred = $q.defer();
         };
         
         return new ClientGroups; 
