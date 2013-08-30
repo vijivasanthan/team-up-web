@@ -104,6 +104,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       			}
       		}
       );
+      
+      
 //      /**
 //       * Get parent team data
 //       */
@@ -551,30 +553,50 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
-    /**
-    * Save team
-    */
-   Teams.prototype.edit = function (team) 
-   {
-     var deferred = $q.defer();
-
-     /**
-      * Check if team id supplied
-      * if save submitted from add / edit form
-      */
-     if (team.uuid){
-       Team.edit({teamId: team.uuid}, team, function (result) 
+        /**
+        * Save team
+        */
+       Teams.prototype.edit = function (team) 
        {
-         deferred.resolve(result);
-       });
-     }
-     else
-     {
-     };
-
-     return deferred.promise;
-   };
+         var deferred = $q.defer();
+    
+         /**
+          * Check if team id supplied
+          * if save submitted from add / edit form
+          */
+         if (team.uuid){
+           Team.edit({teamId: team.uuid}, team, function (result) 
+           {
+             deferred.resolve(result);
+           });
+         }
+         else
+         {
+         };
+    
+         return deferred.promise;
+       };
       
+       Teams.prototype.loadImg = function(imgURL){
+          
+          var LoadImg = $resource(
+               imgURL,{
+               },{
+                   get : {
+                       method: 'GET',
+                   }
+               }
+         );
+          
+         var deferred = $q.defer();
+          
+         LoadImg.get(function(result){
+             deferred.resolve(result); 
+         }); 
+         
+         return deferred.promise;
+       }
+       
       return new Teams;
     }
 ]);

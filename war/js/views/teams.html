@@ -107,6 +107,7 @@
 	            <tr ng-repeat="member in data.members[team.uuid]|orderBy:lastName">
 	              <td>
                       <div class="roundedPicSmall memberStateAvailalbe" style="background-image: url({{imgHost}}/teamup/team/member/{{member.uuid}}/photo);" ></div>
+<!--                       <loadimg url="{{imgHost}}/teamup/team/member/{{member.uuid}}/photo"> </loadimg> -->
 	              </td>
 	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
