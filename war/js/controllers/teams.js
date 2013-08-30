@@ -99,7 +99,12 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				//console.log(result);
 			});
 		});
-		//            wisher(id);
+		
+		$scope.team.phone = $rootScope.ui.teamup.loadingNumber;
+		Teams.loadTeamCallinNumber($scope.team.uuid).then(function(result){
+			$scope.team.phone = result.phone;
+		});
+		
 	}
 
 	/**

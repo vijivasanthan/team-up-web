@@ -577,6 +577,9 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
          return deferred.promise;
        };
       
+       /**
+        * try  to preload the image from here, that ng-src can use the cache.
+        */
        Teams.prototype.loadImg = function(imgURL){
           
           var LoadImg = $resource(
@@ -595,6 +598,35 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
          }); 
          
          return deferred.promise;
+       }
+       
+       
+       /**
+        * 
+        */
+       Teams.prototype.loadTeamCallinNumber = function(teamUuid){
+           var TeamNumber = $resource(
+               $config.host + 'teamup/team/:teamId/phone',{
+               },{
+                   get : {
+                       method: 'GET',
+                   }
+               }
+           );
+           
+           var deferred = $q.defer();
+           
+           TeamNumber.get(
+               {teamId : teamUuid},
+               function (result){
+                   deferred.resolve(result);
+               },
+               function (error){
+                   deferred.resolve({error: error});
+               }
+           );
+           
+           return deferred.promise;
        }
        
       return new Teams;

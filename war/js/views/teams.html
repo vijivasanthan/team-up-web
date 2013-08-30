@@ -68,7 +68,7 @@
           id="viewTeamTab" >
         <div class="tab-header" ng-hide="views.editTeam">
           <h3 class="pull-left">{{team.name}}</h3>
-		  
+		  <h4 ng-show="(team.phone != '' && team.phone != null)">({{team.phone}})</h4>
           <button type="button"
                   ng-click="deleteTeam()"
                   class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
