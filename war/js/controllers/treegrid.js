@@ -30,7 +30,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
           data:     {},
           processed:{},
+          grids:    {},
           stores:   {},
+          triggers: {},
 
           /**
            * TODO (Check this later on)
@@ -46,8 +48,39 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           build: function (id, data)
           {
-            new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '-' + id), this.options.grid)
-              .draw(this.store(id, data));
+            var key = $scope.treeGrid.grid + '-' + id;
+
+            this.grids[key] = new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '-' + id), this.options.grid);
+
+            this.grids[key].draw(this.store(id, data));
+
+            links.events.addListener(this.grids[key], 'expand',
+              function (properties)
+              {
+                console.log('expanding ->',key, properties);
+              }
+            );
+
+            links.events.addListener(this.grids[key], 'collapse',
+              function (properties)
+              {
+                console.log('collapsing ->',key, properties);
+              }
+            );
+
+            links.events.addListener(this.grids[key], 'select',
+              function (properties)
+              {
+                console.log('selecting ->',key, properties);
+              }
+            );
+
+            links.events.addListener(this.grids[key], 'ready',
+              function (properties)
+              {
+                console.log('READY ->',key, properties);
+              }
+            );
           },
 
           /**
@@ -58,6 +91,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             var key = $scope.treeGrid.grid + '-' + id;
 
             this.stores[key] = new links.DataTable(this.process(id, data), this.configure(id));
+
+            var _this = this;
 
             switch (this.type)
             {
@@ -110,8 +145,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                   this.update();
                 };
 
-                var _this = this;
-
                 links.events.addListener(this.stores[key], 'remove',
                   function (event)
                   {
@@ -128,13 +161,31 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
               case '1:n':
+                if (id != 'left' && id != 'right')
+                {
+                  // console.log('this is a sub ->', id);
 
+                  links.events.addListener(this.stores[key], 'unlinkMe', function ()
+                    {
+                      console.log('unlink me?');
+                    }
+                  );
+                }
                 break;
             }
+
+            links.events.addListener(this.stores[key], 'change', function ()
+              {
+                console.log('key ->', key, 'changed ->', _this.stores[key]);
+              }
+            );
 
             return this.stores[key];
           },
 
+          /**
+           * Process data
+           */
           process: function (id, data)
           {
             var key = $scope.treeGrid.grid + '-' + id;
@@ -152,8 +203,36 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
               if (_this.type == '1:n' && id == 'right')
               {
-                record.nodes = _this.store($scope.treeGrid.grid + '-' + id + '-' + node.id, []);
+                record.nodes = _this.store(
+                  id + '-' + node.id,
+                  [
+//                    {
+//                      id: 6,
+//                      name: "Samantha Fox"
+//                    }
+                  ]
+                );
               }
+
+              if (_this.type == '1:n' && id != 'right')
+              {
+                record._actions = [
+                  {
+                    event: 'unlinkMe', text: 'remove'
+                  }
+                ];
+
+                _this.triggers[key] = function ()
+                {
+                  console.log('remove triggered for =>', id, key);
+                }
+              }
+
+//              if (_this.type == '1:n' && id == 'left')
+//              {
+//                console.log('left item ->', record);
+//                delete record._actions;
+//              }
 
               _this.processed[key].push(record);
             });
@@ -161,6 +240,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             return this.processed[key];
           },
 
+          /**
+           * Configure TreeGrids
+           */
           configure: function (id)
           {
             var options = {
@@ -185,6 +267,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                     break;
                 }
                 break;
+
               case '1:n':
                 options.dataTransfer = {
                   allowedEffect: 	'copy',
