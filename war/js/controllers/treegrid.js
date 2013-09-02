@@ -25,7 +25,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               width: 'auto',
               height: null,
               items: {
-                minHeight: 40
+                minHeight: 50
               }
             }
           },
@@ -127,9 +127,11 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               $scope.processed.right.push({
                 name: 	  right.name,
                 clients: 	new links.DataTable([], {
+
+                    showHeader: false,
                   dataTransfer : {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
+                    allowedEffect: 	'copy',
+                    dropEffect: 		'copy'
                   }
 
                 }),
@@ -151,9 +153,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                       name: 'name', text: 'Name', title: 'Name'
                     }
                   ],
+                  showHeader: false,
                   dataTransfer: {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
+                    allowedEffect: 	'copy',
+                    dropEffect: 		'copy'
                   }
                 }
               },
@@ -163,6 +166,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               right: {
                 content: $scope.processed.right,
                 options: {
+                    showHeader: false,
                   dataTransfer : {
                     allowedEffect: 	'move',
                     dropEffect: 		'move'

@@ -1,3 +1,13 @@
+.treegrid-container {
+  .row-fluid {
+    hr {margin:20px 0 0;}
+  }
+  hr {
+    margin: 0 0 20px;}
+}
+
+
+
 
 .treegrid-frame {
   color: #1A1A1A;
@@ -17,22 +27,19 @@
 }
 
 .treegrid-item {
-  border-top: 1px solid $tableBorder;
+  //border-top: 1px solid $tableBorder;
   // padding: 5px 0 5px 0;
   // height: 38px;
-  /*border-bottom: 1px solid lightgray;*/
+  border-bottom: 1px solid lightgray;
   // border-width: 1px;
   // border-style: solid;
   // border-color: white;
 }
 
-// .treegrid-item:nth-child(even) {
-//   background-color: red;
-// }
-
-.treegrid-item:nth-child(odd) {
-  // background-color: $tableBackgroundAccent;
+.treegrid-item:nth-child(even) {
+   //background-color: $tableBackgroundAccent;
 }
+
 
 
 .treegrid-header, .treegrid-item {
@@ -46,6 +53,17 @@
 
 .treegrid-item:hover {
   cursor: pointer;
+}
+
+#teamClients-left, #teams-left, #clients-left {
+  .treegrid-item{
+    background-image: url("../img/dragIcon.png");
+    background-repeat: no-repeat;
+    background-position: 10px;
+    &:hover{
+      cursor: move;
+    }
+  }
 }
 
 
@@ -78,17 +96,19 @@
 
 .treegrid-drag-image {
   padding: 5px;
-  background-color: #FFFF80;
-  border: 1px solid #FFD500;
+  background-color: $dragImageBackground;
+  border: 1px solid darken($dragImageBackground, 10%);
   font-weight: bold;
   border-radius: 3px;
-
+  color: $white;
   z-index: 99999;
   position: relative;
 }
 
 .treegrid-item-field {
-  padding: 4px;
+  padding: 16px;
+  color: $brown;
+  font-weight: bold;
   /*border-right: 1px solid lightgray;*/
 }
 
