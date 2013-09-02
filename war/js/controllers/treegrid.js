@@ -11,15 +11,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
       '$rootScope', '$scope', '$window',
       function ($rootScope, $scope, $window)
       {
-
         /**
          * TreeGrid
          */
-        $scope.treegrid = {
-
-          /**
-           * Options
-           */
+        $scope.treeGrid = {
           options: {
             grid: {
               width: 'auto',
@@ -27,197 +22,204 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               items: {
                 minHeight: 40
               }
+            },
+            // TODO (Still needed?)
+            parts: {
+              left:   {},
+              right:  {}
             }
           },
 
+          type: null,
+          grid: null,
+
+          data:     {},
+          processed:{},
+          stores:   {},
+          grids: {
+            left:   {},
+            right:  {}
+          },
+
           /**
+           * TODO (Check this later on)
            * Calculate height of available area
            */
-          calcHeight: function ()
+          areas: function ()
           {
             this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px'
           },
 
-
-          /**
-           * Remove trigger
-           */
-          onRemove: function (params)
-          {
-            var item = (params && params.items) ? params.items[0] : undefined;
-
-            if (item)
-            {
-              console.log('params ->', item._description);
-            }
-          },
-
-
           /**
            * Build TreeGrid
            */
-          build: function (id, data, options)
+          build: function (id, data)
           {
+            new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '-' + id), this.options.grid)
+              .draw(this.store(id, data));
+          },
 
-            /**
-             * Initializers
-             */
-            var TreeGrid  = new links.TreeGrid(id, this.options.grid),
-                DataTable = new links.DataTable(data, options);
+          /**
+           * Initialize a DataTable
+           */
+          store: function (id, data)
+          {
+            var key = $scope.treeGrid.grid + '-' + id;
 
-            /**
-             * Draw TreeGrid
-             */
-            TreeGrid.draw(DataTable);
+            this.stores[key] = new links.DataTable(this.process(id, data), this.configure(id));
 
-            /**
-             * Add some listeners
-             */
-            links.events.addListener(DataTable, 'remove', function (params)
+            switch (this.type)
             {
-              alert('params ->', params);
+              case '1:1':
+
+                this.stores[key].linkItems = function (sourceItems, targetItem, callback, errback)
+                {
+                  var index = this.data.indexOf(targetItem);
+
+                  if (index == -1)
+                  {
+                    errback('Error: targetItem not found in data');
+                    return;
+                  }
+
+                  var names = [];
+
+                  for (var i = 0; i < sourceItems.length; i++)
+                  {
+                    names.push(sourceItems[i].name);
+                  }
+
+                  this.data[index] = {
+                    'name': targetItem.name,
+                    'links': names.join(', '),
+                    '_actions': [{'event': 'remove', 'text': 'remove'}]
+                  };
+
+                  callback({
+                    'items': [targetItem],
+                    'totalItems': this.data.length
+                  });
+
+                  this.update();
+                };
+
+                this.stores[key].removeLink = function (item)
+                {
+                  var index = this.data.indexOf(item);
+
+                  if (index == -1)
+                  {
+                    throw Error('item not found in data');
+                  }
+
+                  this.data[index] = {
+                    'name': item.name
+                  };
+
+                  this.update();
+                };
+
+                var _this = this;
+
+                links.events.addListener(this.stores[key], 'remove',
+                  function (event)
+                  {
+                    var items = event.items;
+
+                    for (var i = 0; i < items.length; i++)
+                    {
+                      _this.stores[key].removeLink(items[i]);
+                    }
+                  }
+                );
+
+                break;
+              case '1:n':
+                break;
+            }
+
+            return this.stores[key];
+          },
+
+          process: function (id, data)
+          {
+            var key = $scope.treeGrid.grid + '-' + id;
+
+            this.processed[key] = [];
+
+            var _this = this;
+
+            angular.forEach(data, function (node)
+            {
+              _this.processed[key].push({
+                name: node.name,
+                _id:  node._id
+              });
             });
 
-            links.events.addListener(DataTable, 'change', function ()
-            {
-              console.log('changed stuff --->', DataTable);
-            });
+            return this.processed[key];
+          },
 
+          configure: function (id)
+          {
+            var options = {};
+
+            switch (id)
+            {
+              case 'left':
+                options = {
+                  showHeader: false,
+                    dataTransfer: {
+                    allowedEffect: 	'link'
+                  }
+                };
+                break;
+              case 'right':
+                options = {
+                  showHeader: false,
+                  dataTransfer: {
+                    dropEffect: 	'link'
+                  }
+                };
+                break;
+            }
+
+            return options;
           },
 
           /**
            * Init TreeGrid
            */
-          init: function (grid)
+          init: function ()
           {
-            /**
-             * Calculate the height
-             */
-            this.calcHeight();
+            this.areas();
 
-            /**
-             * Processed
-             */
-            $scope.processed = {
-              left:  [],
-              right: []
-            };
-
-            /**
-             * Populate left side
-             */
-            angular.forEach($scope.data.left, function (left)
-            {
-              $scope.processed.left.push({
-                name: left.name,
-                _id:  left._id,
-                _actions: [
-                  {
-                    'event': 'remove'
-                  }
-                ]
-              });
-            });
-
-            /**
-             * Populate right side
-             */
-            angular.forEach($scope.data.right, function (right)
-            {
-              $scope.processed.right.push({
-                name: 	  right.name,
-                clients: 	new links.DataTable([], {
-                  dataTransfer : {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
-                  }
-
-                }),
-                _id: right.id
-              });
-            });
-
-
-
-            var data = {
-              /**
-               * Left column
-               */
-              left: {
-                content: $scope.processed.left,
-                options: {
-                  columns: [
-                    {
-                      name: 'name', text: 'Name', title: 'Name'
-                    }
-                  ],
-                  dataTransfer: {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
-                  }
-                }
-              },
-              /**
-               * Right column
-               */
-              right: {
-                content: $scope.processed.right,
-                options: {
-                  dataTransfer : {
-                    allowedEffect: 	'move',
-                    dropEffect: 		'move'
-                  }
-                }
-              }
-            };
-
-
-            /**
-             * Build left part of TreeGrid
-             */
-            this.build(
-              document.getElementById(grid + '-left'),
-              data.left.content,
-              data.left.options
-            );
-
-            /**
-             * Build right part of TreeGrid
-             */
-            this.build(
-              document.getElementById(grid + '-right'),
-              data.right.content,
-              data.right.options
-            );
+            this.build('left',  this.data.left);
+            this.build('right', this.data.right);
           }
-
         };
-
 
         /**
          * TreeGrid manager listener
          */
-        $rootScope.$on('manager', function ()
+        $rootScope.$on('TreeGridManager', function ()
         {
-          var grid  = arguments[1];
+          $scope.treeGrid.grid = arguments[1];
+          $scope.treeGrid.type = arguments[2];
+          $scope.treeGrid.data = arguments[3];
 
-          /**
-           * Draw TreeGrid
-           */
           setTimeout(function ()
           {
-            $scope.treegrid.init(grid);
-          }, 1);
+            $scope.treeGrid.init();
+          }, 100);
         });
-
 
         /**
          * Attach listener for window resizing
          */
         $window.onresize = function ()
         {
-          $scope.treegrid.init();
+          $scope.treeGrid.init();
         };
-
       }
     ]);

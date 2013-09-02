@@ -23,15 +23,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         members: [
           {
-            id:   1,
+            _id:   1,
             name: 'Cengiz Ulusoy'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Leonie van Dinten'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Michael Jan Kun'
           }
         ],
@@ -41,15 +41,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         teams: [
           {
-            id:   1,
+            _id:   1,
             name: 'Verpleegkundigen Rotterdam'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Thuiszorgers'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Groep Schiedam'
           }],
 
@@ -58,15 +58,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         clients: [
           {
-            id:   1,
+            _id:   1,
             name: 'Gerda Bloom'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Arjan Smit'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Johan Pieters'
           }
         ],
@@ -76,41 +76,28 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         groups: [
           {
-            id:   1,
+            _id:   1,
             name: 'Erasmus Ziekenhuis'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Delfshaven Bejaardenhuis'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Schiedam Senioren'
           }
         ]
       };
 
-      
-      // start to populate data from storage 
-      if(typeof data.teams == 'undefined'){
-          
-      }
-    
-      if(typeof data.clientGroups == 'undefined'){
-          
-      }
 
-
-
-
+      /**
+       * Make empty data cells
+       */
       $scope.data = {
         left: [],
         right: []
       };
-
-
-
-
 
 
       /**
@@ -140,10 +127,13 @@ angular.module('WebPaige.Controllers.Manage', [])
           setView(hash);
 
           $scope.manage(hash);
-
         });
       };
 
+
+      /**
+       * Default startup
+       */
       $scope.setViewTo('teamClients');
 
 
@@ -178,5 +168,4 @@ angular.module('WebPaige.Controllers.Manage', [])
       };
 
     }
-    
 ]);
