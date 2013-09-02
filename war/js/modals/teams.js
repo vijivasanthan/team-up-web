@@ -458,7 +458,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
     	  Member.save({},
 			  member,
 			  function(result){
-				  deferred.resolve(result.uuid);
+				  deferred.resolve(result);
 			  },function(error){
 				  deferred.resolve({error: error});
 			  }

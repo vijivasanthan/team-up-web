@@ -9,8 +9,8 @@ var profile = {
 
   host: function ()
   {
-//      return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
-    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://teamup.acs-services.appspot.com/';
+      return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
+//    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://teamup.acs-services.appspot.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.246\\:9000/ns_knrm';
   },
 
@@ -50,18 +50,27 @@ var profile = {
   roles: [
     {
       id: 1,
-      label: 'Planner'
+      label: 'coordinator'
     }, 
     {
       id: 2,
-      label: 'Schipper'
+      label: 'team_member'
     }, 
     {
       id: 3,
-      label: 'Opstapper'
+      label: 'client'
     }
   ],
-
+  mfunctions: [
+     {
+         id: 1,
+         label: 'Doctor'
+     },
+     {
+         id: 2,
+         label: 'Nurse'
+     }
+  ],
   p2000: {
     status: true,
     url:    'http://knrm.myask.me/rpc/client/p2000.php',

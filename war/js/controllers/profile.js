@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Profile', [])
  */
 .controller('profileCtrl', 
 [
-	'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5', 
-	function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5) 
+	'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5','$filter', 
+	function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5,$filter) 
 	{
 	  /**
 	   * Fix styles
@@ -66,7 +66,8 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * Pass profile information
 	   */
 	  $scope.profilemeta = data.resources;
-
+	  // deal with date 
+	  $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
 
 	  /**
 	   * Get teams of user

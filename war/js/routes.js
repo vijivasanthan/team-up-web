@@ -122,10 +122,19 @@ angular.module('WebPaige')
       controller:     'manageCtrl',
       resolve: {
           data: [
-            'Clients','Teams',
-            function (ClientGroups,Teams)
+            'Clients','Teams','$location',
+            function (ClientGroups,Teams,$location)
             {
-              return "";
+                  var ret = {};
+                  
+                  if($location.hash() && $location.hash() == 'reload'){
+                      var teams = Teams.query();
+                      var cGroups = ClientGroups.query();
+                      ret = { t : teams , cg : cGroups};
+                      // ret = Teams.getAll();
+                  }
+              
+                  return ret;
             }
           ]
       },

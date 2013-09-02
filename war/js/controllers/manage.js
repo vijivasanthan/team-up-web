@@ -121,6 +121,15 @@ angular.module('WebPaige.Controllers.Manage', [])
         ]
       };
 
+      
+      // start to populate data from storage 
+      if(typeof data.teams == 'undefined'){
+          
+      }
+    
+      if(typeof data.clientGroups == 'undefined'){
+          
+      }
 
       // start to populate data from storage 
       if(typeof data.teams == 'undefined'){
