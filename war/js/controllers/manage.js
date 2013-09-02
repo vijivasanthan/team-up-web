@@ -75,18 +75,210 @@ angular.module('WebPaige.Controllers.Manage', [])
          * Groups
          */
         groups: [
-          {
-            id:   1,
-            name: 'Erasmus Ziekenhuis'
-          },
-          {
-            id:   2,
-            name: 'Delfshaven Bejaardenhuis'
-          },
-          {
-            id:   3,
-            name: 'Schiedam Senioren'
-          }
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
+            {
+                id:   1,
+                name: 'Erasmus Ziekenhuis'
+            },
+            {
+                id:   2,
+                name: 'Delfshaven Bejaardenhuis'
+            },
+            {
+                id:   3,
+                name: 'Schiedam Senioren'
+            },
         ]
       };
 
