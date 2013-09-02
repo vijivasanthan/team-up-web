@@ -25,12 +25,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               width: 'auto',
               height: null,
               items: {
-                minHeight: 50
+                minHeight: 40
               }
             }
           },
-
-          stores: {},
 
           /**
            * Calculate height of available area
@@ -42,22 +40,49 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
           /**
+           * Remove trigger
+           */
+          onRemove: function (params)
+          {
+            var item = (params && params.items) ? params.items[0] : undefined;
+
+            if (item)
+            {
+              console.log('params ->', item._description);
+            }
+          },
+
+
+          /**
            * Build TreeGrid
            */
           build: function (id, data, options)
           {
-            var TreeGrid  = new links.TreeGrid(id, this.options.grid);
 
-            TreeGrid.draw(this.store(id, data, options));
-          },
+            /**
+             * Initializers
+             */
+            var TreeGrid  = new links.TreeGrid(id, this.options.grid),
+                DataTable = new links.DataTable(data, options);
 
-          store: function (id, data, options)
-          {
-            this.stores[id] = new links.DataTable(data, options);
+            /**
+             * Draw TreeGrid
+             */
+            TreeGrid.draw(DataTable);
 
-            // Implement event triggers
+            /**
+             * Add some listeners
+             */
+            links.events.addListener(DataTable, 'remove', function (params)
+            {
+              alert('params ->', params);
+            });
 
-            return this.stores[id];
+            links.events.addListener(DataTable, 'change', function ()
+            {
+              console.log('changed stuff --->', DataTable);
+            });
+
           },
 
           /**
@@ -102,7 +127,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               $scope.processed.right.push({
                 name: 	  right.name,
                 clients: 	new links.DataTable([], {
-                  showHeader: false,
                   dataTransfer : {
                     allowedEffect: 	'move',
                     dropEffect: 		'move'
@@ -111,7 +135,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 }),
                 _id: right.id
               });
-           });
+            });
 
 
 
@@ -127,7 +151,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                       name: 'name', text: 'Name', title: 'Name'
                     }
                   ],
-                  showHeader: false,
                   dataTransfer: {
                     allowedEffect: 	'move',
                     dropEffect: 		'move'
@@ -140,7 +163,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               right: {
                 content: $scope.processed.right,
                 options: {
-                  showHeader: false,
                   dataTransfer : {
                     allowedEffect: 	'move',
                     dropEffect: 		'move'
