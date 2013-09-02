@@ -16,7 +16,7 @@
     
     <!-- tabs -->
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
-      <li class="{{(views.profile==true) && 'active'}}">
+      <li class="{{(views.profile==true || views.edit==true) && 'active'}}">
         <a href="#profileTab" 
             data-toggle="tab"
             ng-click="fixTabHeight('profileTab'); setViewTo('profile')">
@@ -82,7 +82,7 @@
 		          <dt>{{ui.teamup.teams}}</dt>
 		            <dd>
 		              <span ng-repeat="team in teams">
-		                <span ng-hide="app.resources.role > 1"><a href="#/team?uuid={{team.uuid}}#view">{{team.name}}</a>,</span>
+		                <span ng-hide="app.resources.role > 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}}</a>,</span>
 		                <span ng-show="app.resources.role > 1">{{team.name}}, </span>
 		              </span>
 		          </dd>
@@ -134,6 +134,17 @@
         <hr>
         <!-- edit profile form -->
         <form class="form-vertical">
+        	
+			<!-- <div class="control-group">
+			  <label class="control-label">{{ui.teamup.teams}}</label>
+			  <div class="controls">
+			    <select ng-model="profilemeta.teamUuids[0]" ng-selected="data.resources.teamUuids[0]"
+			            ng-options="t.uuid as t.name for t in selectTeams | orderBy:'name'">
+			      <option value="">{{ui.teamup.chooseTeam}}</option>
+			    </select>
+			  </div>
+			</div> -->
+        	
           <div class="control-group">
             <label class="control-label">{{ui.profile.firstName}}</label>
             <div class="controls">
@@ -157,7 +168,7 @@
 		  <label class="control-label">{{ui.teamup.role}}</label>
 		  <div class="controls">
 		    <select ng-model="profilemeta.role"
-		            ng-options="r.id as r.label for r in roles">
+		            ng-options="r.id as r.label for r in roles" ng-selected="data.resources.role">
 		      <option value="{{data.resources.role}}">{{data.resources.role}}</option>
 		  </div>
 		</div>
@@ -176,7 +187,7 @@
 		      <label class="control-label">{{ui.teamup.func}}</label>
 		      <div class="controls">
 		      	<select ng-model="profilemeta.function"
-		                ng-options="f.id as f.label for f in mfuncs">
+		                ng-options="f.id as f.label for f in mfuncs" ng-selected="func">
 		        <option value="{{data.resources.func}}">{{data.resources.func}}</option>
 		      </div>
 		    </div>

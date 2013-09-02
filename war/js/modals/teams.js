@@ -104,6 +104,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       			}
       		}
       );
+      
+      
 //      /**
 //       * Get parent team data
 //       */
@@ -287,7 +289,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      /**
 //       * General query function from Teams and their members
 //       */
-      Teams.prototype.query = function (only)
+      Teams.prototype.query = function (only,routePara)
       {
         var deferred = $q.defer();
         
@@ -302,7 +304,13 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
               angular.forEach(teams, function (team, index)
               {
-                calls.push(Teams.prototype.get(team.uuid));
+                if(routePara.uuid){
+                    if(routePara.uuid == team.uuid){
+                        calls.push(Teams.prototype.get(team.uuid));
+                    }
+                }else{
+                    calls.push(Teams.prototype.get(team.uuid));
+                }
               });
 
               $q.all(calls)
@@ -322,7 +330,18 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
                   angular.forEach(results, function (result, mindex)
                   {
-                    if (result.id == team.uuid) data.members[team.uuid] = result.data;
+                      if(routePara.uuid){
+                          if (result.id == team.uuid && routePara.uuid == team.uuid){
+                              data.members[team.uuid] = result.data;
+                          }else{
+                              data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
+                          }
+                      }else{
+                          if (result.id == team.uuid){
+                              data.members[team.uuid] = result.data;
+                          }
+                      }
+                        
                   });
                 });
 
@@ -551,30 +570,82 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
-    /**
-    * Save team
-    */
-   Teams.prototype.edit = function (team) 
-   {
-     var deferred = $q.defer();
-
-     /**
-      * Check if team id supplied
-      * if save submitted from add / edit form
-      */
-     if (team.uuid){
-       Team.edit({teamId: team.uuid}, team, function (result) 
+        /**
+        * Save team
+        */
+       Teams.prototype.edit = function (team) 
        {
-         deferred.resolve(result);
-       });
-     }
-     else
-     {
-     };
-
-     return deferred.promise;
-   };
+         var deferred = $q.defer();
+    
+         /**
+          * Check if team id supplied
+          * if save submitted from add / edit form
+          */
+         if (team.uuid){
+           Team.edit({teamId: team.uuid}, team, function (result) 
+           {
+             deferred.resolve(result);
+           });
+         }
+         else
+         {
+         };
+    
+         return deferred.promise;
+       };
       
+       /**
+        * try  to preload the image from here, that ng-src can use the cache.
+        */
+       Teams.prototype.loadImg = function(imgURL){
+          
+          var LoadImg = $resource(
+               imgURL,{
+               },{
+                   get : {
+                       method: 'GET',
+                   }
+               }
+         );
+          
+         var deferred = $q.defer();
+          
+         LoadImg.get(function(result){
+             deferred.resolve(result); 
+         }); 
+         
+         return deferred.promise;
+       }
+       
+       
+       /**
+        * 
+        */
+       Teams.prototype.loadTeamCallinNumber = function(teamUuid){
+           var TeamNumber = $resource(
+               $config.host + 'teamup/team/:teamId/phone',{
+               },{
+                   get : {
+                       method: 'GET',
+                   }
+               }
+           );
+           
+           var deferred = $q.defer();
+           
+           TeamNumber.get(
+               {teamId : teamUuid},
+               function (result){
+                   deferred.resolve(result);
+               },
+               function (error){
+                   deferred.resolve({error: error});
+               }
+           );
+           
+           return deferred.promise;
+       }
+       
       return new Teams;
     }
 ]);

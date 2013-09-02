@@ -83,7 +83,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
         /**
          * get the client groups and the clients 
          */
-        ClientGroups.prototype.query = function(only){
+        ClientGroups.prototype.query = function(only,routePara){
             var deferred = $q.defer();
             
             ClientGroups.query(
@@ -96,7 +96,14 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
                       angular.forEach(cGroups, function (clientGroup, index)
                       {
-                        calls.push(ClientGroups.prototype.get(clientGroup.id));
+                      	if(routePara.uuid){
+                      		if(routePara.uuid == clientGroup.id){
+                      			calls.push(ClientGroups.prototype.get(clientGroup.id));
+                      		}
+                      	}else{
+                      		calls.push(ClientGroups.prototype.get(clientGroup.id));
+                      	}
+                        
                       });
 
                       $q.all(calls)
@@ -116,7 +123,18 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
                           angular.forEach(results, function (result, mindex)
                           {
-                            if (result.id == cGroup.id) data.clients[cGroup.id] = result.data;
+                          	if(routePara.uuid){
+                          		if (result.id == cGroup.id && routePara.uuid == cGroup.id) {
+                          			data.clients[cGroup.id] = result.data;
+                          		}else{
+                          			data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
+                          		}
+                          	}else{
+                          		if (result.id == cGroup.id ) {
+                          			data.clients[cGroup.id] = result.data;
+                          		}
+                          	}
+                            
                           });
                         });
 

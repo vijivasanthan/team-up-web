@@ -83,6 +83,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	  });
 
 	  $scope.teams = teams;
+	  $scope.selectTeams = storage_teams;
 	  
 	  /**
 	   * Default values for passwords
@@ -201,7 +202,19 @@ angular.module('WebPaige.Controllers.Profile', [])
 	  $scope.save = function (resources)
 	  {
 	    $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
-
+	    
+	    if(resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined'){
+	        resources.teamUuids = [];
+	        if($scope.teams.length == 0 ){
+	            resources.teamUuids.push($scope.selectTeams[0].uuid); 
+	        }else{
+	            resources.teamUuids.push($scope.teams[0].uuid);
+	        }
+	            
+	    }
+	    // deal with birthday 
+	    delete resources.birthday;
+	    
 	    Profile.save($route.current.params.userId, resources)
 	    .then(function (result)
 	    {
