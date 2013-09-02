@@ -22,11 +22,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               items: {
                 minHeight: 40
               }
-            },
-            // TODO (Still needed?)
-            parts: {
-              left:   {},
-              right:  {}
             }
           },
 
@@ -36,10 +31,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           data:     {},
           processed:{},
           stores:   {},
-          grids: {
-            left:   {},
-            right:  {}
-          },
 
           /**
            * TODO (Check this later on)
@@ -90,13 +81,13 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                   }
 
                   this.data[index] = {
-                    'name': targetItem.name,
-                    'links': names.join(', '),
+                    'name':     targetItem.name,
+                    'links':    names.join(', '),
                     '_actions': [{'event': 'remove', 'text': 'remove'}]
                   };
 
                   callback({
-                    'items': [targetItem],
+                    'items':      [targetItem],
                     'totalItems': this.data.length
                   });
 
@@ -134,7 +125,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 );
 
                 break;
+
+
               case '1:n':
+
                 break;
             }
 
@@ -151,10 +145,17 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             angular.forEach(data, function (node)
             {
-              _this.processed[key].push({
+              var record = {
                 name: node.name,
-                _id:  node._id
-              });
+                _id:  node.id
+              };
+
+              if (_this.type == '1:n' && id == 'right')
+              {
+                record.nodes = _this.store($scope.treeGrid.grid + '-' + id + '-' + node.id, []);
+              }
+
+              _this.processed[key].push(record);
             });
 
             return this.processed[key];
@@ -162,24 +163,32 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
           configure: function (id)
           {
-            var options = {};
+            var options = {
+              showHeader:   false,
+              dataTransfer: {}
+            };
 
-            switch (id)
+            switch (this.type)
             {
-              case 'left':
-                options = {
-                  showHeader: false,
-                    dataTransfer: {
-                    allowedEffect: 	'link'
-                  }
-                };
+              case '1:1':
+                switch (id)
+                {
+                  case 'left':
+                    options.dataTransfer = {
+                      allowedEffect: 	'link'
+                    };
+                    break;
+                  case 'right':
+                    options.dataTransfer = {
+                      dropEffect: 	'link'
+                    };
+                    break;
+                }
                 break;
-              case 'right':
-                options = {
-                  showHeader: false,
-                  dataTransfer: {
-                    dropEffect: 	'link'
-                  }
+              case '1:n':
+                options.dataTransfer = {
+                  allowedEffect: 	'copy',
+                  dropEffect: 		'copy'
                 };
                 break;
             }
