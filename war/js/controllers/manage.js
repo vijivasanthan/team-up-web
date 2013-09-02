@@ -12,37 +12,6 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
 
-
-      /**
-       * View setter
-       */
-      function setView (hash)
-      {
-        $scope.views = {
-          teamClients:  false,
-          teams:        false,
-          clients:      false
-        };
-
-        $scope.views[hash] = true;
-      }
-
-
-      /**
-       * Switch between the views and set hash accordingly
-       */
-      $scope.setViewTo = function (hash)
-      {
-        $scope.$watch(hash, function ()
-        {
-          $location.hash(hash);
-
-          setView(hash);
-        });
-      };
-
-      $scope.setViewTo('teamClients');
-
       /**
        * Define data sources
        * These sources should be populated from modals
@@ -370,58 +339,36 @@ angular.module('WebPaige.Controllers.Manage', [])
       $scope.setViewTo('teamClients');
 
 
-
-
+      /**
+       * Manage TreeGrids
+       */
       $scope.manage = function (grid)
       {
         switch (grid)
         {
           case 'teamClients':
-            $scope.data = {
-              left: data.groups,
-              right: data.teams
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:1', {
+              left:   data.groups,
+              right:  data.teams
+            });
             break;
 
           case 'teams':
-            $scope.data = {
-              left: data.members,
-              right: data.teams
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
+              left:   data.members,
+              right:  data.teams
+            });
             break;
 
           case 'clients':
-            $scope.data = {
-              left: data.clients,
-              right: data.groups
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
+              left:   data.clients,
+              right:  data.groups
+            });
             break;
         }
-
-
-        $rootScope.$broadcast('manager', grid);
-
-
       };
 
     }
     
 ]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
