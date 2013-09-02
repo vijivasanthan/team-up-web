@@ -8,40 +8,9 @@ angular.module('WebPaige.Controllers.Manage', [])
 /**
  * Groups controller
  */
-  .controller('manageCtrl',[
+.controller('manageCtrl',[
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
-
-
-      /**
-       * View setter
-       */
-      function setView (hash)
-      {
-        $scope.views = {
-          teamClients:  false,
-          teams:        false,
-          clients:      false
-        };
-
-        $scope.views[hash] = true;
-      }
-
-
-      /**
-       * Switch between the views and set hash accordingly
-       */
-      $scope.setViewTo = function (hash)
-      {
-        $scope.$watch(hash, function ()
-        {
-          $location.hash(hash);
-
-          setView(hash);
-        });
-      };
-
-      $scope.setViewTo('teamClients');
 
       /**
        * Define data sources
@@ -54,15 +23,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         members: [
           {
-            id:   1,
+            _id:   1,
             name: 'Cengiz Ulusoy'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Leonie van Dinten'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Michael Jan Kun'
           }
         ],
@@ -72,15 +41,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         teams: [
           {
-            id:   1,
+            _id:   1,
             name: 'Verpleegkundigen Rotterdam'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Thuiszorgers'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Groep Schiedam'
           }],
 
@@ -89,15 +58,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         clients: [
           {
-            id:   1,
+            _id:   1,
             name: 'Gerda Bloom'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Arjan Smit'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Johan Pieters'
           }
         ],
@@ -107,41 +76,28 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         groups: [
           {
-            id:   1,
+            _id:   1,
             name: 'Erasmus Ziekenhuis'
           },
           {
-            id:   2,
+            _id:   2,
             name: 'Delfshaven Bejaardenhuis'
           },
           {
-            id:   3,
+            _id:   3,
             name: 'Schiedam Senioren'
           }
         ]
       };
 
 
-      // start to populate data from storage 
-      if(typeof data.teams == 'undefined'){
-
-      }
-
-      if(typeof data.clientGroups == 'undefined'){
-
-      }
-
-
-
-
+      /**
+       * Make empty data cells
+       */
       $scope.data = {
         left: [],
         right: []
       };
-
-
-
-
 
 
       /**
@@ -171,65 +127,45 @@ angular.module('WebPaige.Controllers.Manage', [])
           setView(hash);
 
           $scope.manage(hash);
-
         });
       };
 
+
+      /**
+       * Default startup
+       */
       $scope.setViewTo('teamClients');
 
 
-
-
+      /**
+       * Manage TreeGrids
+       */
       $scope.manage = function (grid)
       {
         switch (grid)
         {
           case 'teamClients':
-            $scope.data = {
-              left: data.groups,
-              right: data.teams
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:1', {
+              left:   data.groups,
+              right:  data.teams
+            });
             break;
 
           case 'teams':
-            $scope.data = {
-              left: data.members,
-              right: data.teams
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
+              left:   data.members,
+              right:  data.teams
+            });
             break;
 
           case 'clients':
-            $scope.data = {
-              left: data.clients,
-              right: data.groups
-            };
+            $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
+              left:   data.clients,
+              right:  data.groups
+            });
             break;
         }
-
-
-        $rootScope.$broadcast('manager', grid);
-
-
       };
 
     }
-
-  ]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+]);
