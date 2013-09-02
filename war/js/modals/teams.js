@@ -289,7 +289,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      /**
 //       * General query function from Teams and their members
 //       */
-      Teams.prototype.query = function (only)
+      Teams.prototype.query = function (only,routePara)
       {
         var deferred = $q.defer();
         
@@ -304,7 +304,13 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
               angular.forEach(teams, function (team, index)
               {
-                calls.push(Teams.prototype.get(team.uuid));
+                if(routePara.uuid){
+                    if(routePara.uuid == team.uuid){
+                        calls.push(Teams.prototype.get(team.uuid));
+                    }
+                }else{
+                    calls.push(Teams.prototype.get(team.uuid));
+                }
               });
 
               $q.all(calls)
@@ -324,7 +330,18 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
                   angular.forEach(results, function (result, mindex)
                   {
-                    if (result.id == team.uuid) data.members[team.uuid] = result.data;
+                      if(routePara.uuid){
+                          if (result.id == team.uuid && routePara.uuid == team.uuid){
+                              data.members[team.uuid] = result.data;
+                          }else{
+                              data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
+                          }
+                      }else{
+                          if (result.id == team.uuid){
+                              data.members[team.uuid] = result.data;
+                          }
+                      }
+                        
                   });
                 });
 
