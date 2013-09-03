@@ -105,7 +105,16 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       		}
       );
       
-      
+      var cGroup = $resource(
+          $config.host + 'teamup/team/:teamId/clientGroups',{
+          },{
+              query : {
+                  method: 'GET',
+                  params: {},
+                  isArray: true
+              }
+          }
+      ); 
 //      /**
 //       * Get parent team data
 //       */
@@ -619,7 +628,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
        
        
        /**
-        * 
+        *  load the callin number for the team 
         */
        Teams.prototype.loadTeamCallinNumber = function(teamUuid){
            var TeamNumber = $resource(
@@ -645,6 +654,93 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
            
            return deferred.promise;
        }
+       
+       
+       /**
+        * load the client groups belong to all the teams 
+        */
+       Teams.prototype.queryClientGroups = function(teams){
+       	  var deferred = $q.defer();
+       		
+       	  var calls = [];
+		  angular.forEach(teams, function (team, index){
+		     calls.push(Teams.prototype.getGroup(team.uuid));
+		  });
+		  
+		  $q.all(calls)
+          .then(function (results)
+          {
+//                Teams.prototype.uniqueMembers();
+
+            var data = {};
+
+            data.groups = {};
+
+            angular.forEach(teams, function (team, gindex)
+            {
+              data.teams = teams;
+
+              data.groups[team.uuid] = [];
+
+              angular.forEach(results, function (result, mindex){
+                  data.groups[team.uuid] = result.data;
+              });
+            });
+
+            deferred.resolve(data);
+          });
+          
+          return deferred.promise;
+       }
+       
+      /**
+       * get  the client group for specific team
+       */
+       /**
+       * Get team data
+       */
+      Teams.prototype.getGroup = function (id) 
+      {   
+        var deferred = $q.defer();
+
+        cGroup.query(
+          {teamId : id}, 
+          function (result) 
+          {
+            /**
+             * DIRTY CHECK!
+             * 
+             * Check for 'null' return from back-end
+             * if team is empty
+             */
+            var returned;
+
+            if (result.length == 4 && 
+                result[0][0] == 'n' && 
+                result[1][0] == 'u')
+            {
+              returned = [];
+            }
+            else
+            {
+              returned = result;
+            };
+
+            Storage.add("teamGroup_"+id, angular.toJson(returned));
+
+            deferred.resolve({
+              id: id,
+              data: returned
+            });
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      };
        
       return new Teams;
     }

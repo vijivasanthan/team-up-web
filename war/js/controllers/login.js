@@ -164,7 +164,8 @@ angular.module('WebPaige.Controllers.Login', [])
               $('#preloader').show();
 
               self.progress(30, $rootScope.ui.login.loading_User);
-
+              
+              // preload the user's info 
               User.memberInfo()
               .then(function (resources)
               {
@@ -176,18 +177,33 @@ angular.module('WebPaige.Controllers.Login', [])
                 {
                   $rootScope.app.resources = resources;
 
-                  self.progress(70, $rootScope.ui.login.loading_Teams);
-
+                  self.progress(60, $rootScope.ui.login.loading_Teams);
+                  
+                  // preload the teams 
                   Teams.query(true)
                   .then(function (teams)
                   {
-                    console.log("in query teams ");
+                    console.log("got teams ");
+                    
                     if (teams.error)
                     {
                       console.warn('error ->', teams);
                     }
                     
-                    finalize();
+                    console.log("start to query team-clientgroup relation async ");
+                    
+                    self.progress(90, $rootScope.ui.login.loading_clientGroups);
+                    // preload the clientGroups for each team
+                    Teams.queryClientGroups(teams)
+                    .then(function(){
+                        console.log("got clientGroups belong to the teams ");
+                        
+                        finalize();
+                    },function(error){
+                        deferred.resolve({error: error});
+                    });
+                    
+                    
                   },function (error){
                       deferred.resolve({error: error});
                   });

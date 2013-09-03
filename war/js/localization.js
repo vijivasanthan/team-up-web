@@ -35,7 +35,8 @@ var ui = {
         loading_Members: 'Loading members...',
         loading_everything: 'Everything loaded!',
         logout: 'Logout',
-        loading: 'Loading..'
+        loading: 'Loading..',
+        loading_clientGroups: 'Loading client groups...',
       },
       dashboard: {
         thisWeek: 'This Week',

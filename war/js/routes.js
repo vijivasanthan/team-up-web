@@ -132,6 +132,8 @@ angular.module('WebPaige')
                       var cGroups = ClientGroups.query();
                       ret = { t : teams , cg : cGroups};
                       // ret = Teams.getAll();
+                  }else{
+                      ret.local = true;
                   }
               
                   return ret;
