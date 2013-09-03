@@ -227,7 +227,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-				Teams.query(false).then(function(queryRs) {
+				Teams.query(false,result).then(function(queryRs) {
 					if(queryRs.error) {
 						$rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
 						console.warn('error ->', queryRs);

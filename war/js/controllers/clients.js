@@ -227,7 +227,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	}
 	
 	var reloadGroup = function(result) {
-		Clients.query(false).then(function(queryRs) {
+		Clients.query(false,result).then(function(queryRs) {
 			if(queryRs.error) {
 				$rootScope.notifier.error($rootScope.ui.teamup.queryCGroupError);
 				console.warn('error ->', queryRs);
