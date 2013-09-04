@@ -273,7 +273,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
         ClientGroups.prototype.updateClient = function(client){
         	var deferred = $q.defer();
         	
-        	Client.save(
+        	Client.edit(
         		{clientId: client.uuid },
         		client,
         		function(result){
@@ -283,7 +283,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
         		}
         	);
         	
-        	var deferred = $q.defer();
+        	return deferred.promise;
         };
         
         return new ClientGroups; 

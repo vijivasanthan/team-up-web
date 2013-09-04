@@ -355,6 +355,7 @@ var ui = {
          teams_Cap: 'Teams',
          editClient: 'Edit client',
          loadingNumber: 'loading call-in number of this team',
+         birthdayError: 'Birthday error',
       }
     },
     nl: {

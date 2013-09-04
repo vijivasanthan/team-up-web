@@ -167,9 +167,10 @@
 		<div class="control-group">
 		  <label class="control-label">{{ui.teamup.role}}</label>
 		  <div class="controls">
-		    <select ng-model="profilemeta.role"
-		            ng-options="r.id as r.label for r in roles" ng-selected="data.resources.role">
-		      <option value="{{data.resources.role}}">{{data.resources.role}}</option>
+		    <select ng-model="currentRole"
+		            ng-options="r.id as r.label for r in roles" 
+		            ng-selected="currentRole" >
+			</select>
 		  </div>
 		</div>
           
@@ -187,8 +188,7 @@
 		      <label class="control-label">{{ui.teamup.func}}</label>
 		      <div class="controls">
 		      	<select ng-model="profilemeta.function"
-		                ng-options="f.id as f.label for f in mfuncs" ng-selected="func">
-		        <option value="{{data.resources.func}}">{{data.resources.func}}</option>
+		                ng-options="f.id as f.label for f in mfuncs" ng-selected="profilemeta.function">
 		      </div>
 		    </div>
 	      

@@ -1,22 +1,5 @@
 
-      
-    <!-- <h1>TreeGrid Demo - drag and drop</h1>
-    <p>Assign files to folders by dragging them to a folder.
-    Keep Ctrl down to select multiple files, 
-    or Shift to select a range of files.</p>
-    <table id="main">
-      <tr>
-        <th>Uncategorized files</th>
-        <th>Folders</th>
-      </tr>      
-      <tr>
-        <td id="files"></td>
-        <td id="folders"></td>
-      </tr>
-    </table> -->
-
-
-<div class="page-header">
+<div class="page-header" ng-hide="views.newTeam || views.newMember">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="t.uuid as t.name for t in teams | orderBy:'name'"
