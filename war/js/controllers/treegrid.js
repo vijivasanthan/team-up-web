@@ -11,9 +11,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
       '$rootScope', '$scope', '$window',
       function ($rootScope, $scope, $window)
       {
-        /**
-         * TreeGrid
-         */
         $scope.treeGrid = {
           options: {
             grid: {
@@ -34,6 +31,12 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           stores:   {},
           triggers: {},
 
+          caches:   {},
+
+          expanded: [],
+
+          connections: {},
+
           /**
            * TODO (Check this later on)
            * Calculate height of available area
@@ -52,33 +55,81 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             this.grids[key] = new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '-' + id), this.options.grid);
 
+//            this.grids[key].Grid.expandedItems.push(this.grids['TeamClients-right']);
+
+//            var _this = this;
+//
+//            if (this.expanded.length > 0)
+//            {
+//              angular.forEach(this.expanded, function (exid)
+//              {
+//                _this.grids[key].__proto__.constructor.Grid.expandedItems.push(_this.grids[exid]);
+//              });
+//            }
+//
+//            console.log('GRID -->', this.grids[key].__proto__.constructor.Grid.expandedItems);
+//
+//            console.warn('treeGrid ->', $scope.treeGrid);
+
             this.grids[key].draw(this.store(id, data));
+
+            var _this = this;
 
             links.events.addListener(this.grids[key], 'expand',
               function (properties)
               {
-                console.log('expanding ->',key, properties);
+                _this.expanded.push(key + '-' + properties.items[0]._id);
               }
             );
 
             links.events.addListener(this.grids[key], 'collapse',
               function (properties)
               {
-                console.log('collapsing ->',key, properties);
+                var expandeds = [],
+                    collapsed = key + '-' + properties.items[0]._id;
+
+                angular.forEach($scope.treeGrid.expanded, function (expanded)
+                {
+                  if (expanded != collapsed)
+                  {
+                    expandeds.push(expanded);
+                  }
+                });
+
+                $scope.treeGrid.expanded = expandeds;
               }
             );
 
             links.events.addListener(this.grids[key], 'select',
               function (properties)
               {
-                console.log('selecting ->',key, properties);
+//                console.log('selecting ->',key, properties);
               }
             );
 
             links.events.addListener(this.grids[key], 'ready',
               function (properties)
               {
-                console.log('READY ->',key, properties);
+//                console.log('READY ->',key, properties);
+              }
+            );
+
+            links.events.addListener(this.grids[key], 'remove',
+              function (event)
+              {
+                alert('id -> ' + id +
+                      '\n\n' +
+                      ' key ->' + key +
+                      '\n\n' +
+                      ' event ->' + angular.toJson(event)
+                );
+
+                var items = event.items;
+
+                for (var i = 0; i < items.length; i++)
+                {
+                  _this.stores[key].removeLink(items[i]);
+                }
               }
             );
           },
@@ -90,93 +141,151 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           {
             var key = $scope.treeGrid.grid + '-' + id;
 
-            this.stores[key] = new links.DataTable(this.process(id, data), this.configure(id));
-
             var _this = this;
 
-            switch (this.type)
+            this.stores[key] = new links.DataTable(this.process(id, data), this.configure(id));
+
+//            this.stores[key].appendItems = function (items, callback, errback)
+//            {
+//              console.log('appending items ->', items, callback, errback);
+//            };
+
+            this.stores[key].linkItems = function (sourceItems, targetItem, callback, errback)
             {
-              case '1:1':
+//              console.log('sourceItems ->', sourceItems,
+//                          'targetItem ->', targetItem,
+//                          'callback ->', callback,
+//                          'errback ->', errback);
 
-                this.stores[key].linkItems = function (sourceItems, targetItem, callback, errback)
+              var index = this.data.indexOf(targetItem);
+
+//              console.log('data ->', this.data);
+
+              if (index == -1)
+              {
+                errback('Error: targetItem not found in data');
+                return;
+              }
+
+              var names = [],
+                  ids   = [];
+
+              for (var i = 0; i < sourceItems.length; i++)
+              {
+                names.push(sourceItems[i].name);
+                ids.push(sourceItems[i]._id);
+              }
+
+              this.data[index] = {
+                '_id':      targetItem._id,
+                'name':     targetItem.name,
+                'links':    names.join(', '),
+                '_ids':      ids.join(', '),
+                '_actions': [{'event': 'unlink', 'text': 'unlink'}]
+              };
+
+              callback({
+                'items':      [targetItem],
+                'totalItems': this.data.length
+              });
+
+              this.update();
+            };
+
+            /**
+             * Add teamClients connections if they exist
+             */
+            if ($scope.treeGrid.grid == 'teamClients' && id == 'right')
+            {
+              if (this.connections.teamClients.length > 0)
+              {
+                angular.forEach(this.connections.teamClients, function (connection)
                 {
-                  var index = this.data.indexOf(targetItem);
+                  var index;
 
-                  if (index == -1)
+                  angular.forEach(_this.stores['teamClients-right'].data, function (data, ind)
                   {
-                    errback('Error: targetItem not found in data');
-                    return;
-                  }
+                    if (connection.targetItem.id == data._id)
+                    {
+                      index = ind;
 
-                  var names = [];
+                      var names = [],
+                          ids   = [];
 
-                  for (var i = 0; i < sourceItems.length; i++)
-                  {
-                    names.push(sourceItems[i].name);
-                  }
+                      for (var i = 0; i < connection.sourceItems.length; i++)
+                      {
+                        names.push(connection.sourceItems[i].name);
+                        ids.push(connection.sourceItems[i].id);
+                      }
 
-                  this.data[index] = {
-                    'name':     targetItem.name,
-                    'links':    names.join(', '),
-                    '_actions': [{'event': 'remove', 'text': 'remove'}]
-                  };
+                      _this.stores['teamClients-right'].data[index] = {
+                        '_id':      connection.targetItem.id,
+                        'name':     connection.targetItem.name,
+                        'links':    names.join(', '),
+                        '_ids':      ids.join(', '),
+                        '_actions': [{'event': 'unlink', 'text': 'unlink'}]
+                      };
 
-                  callback({
-                    'items':      [targetItem],
-                    'totalItems': this.data.length
+                      _this.stores['teamClients-right'].update();
+                    }
                   });
 
-                  this.update();
-                };
+                });
 
-                this.stores[key].removeLink = function (item)
-                {
-                  var index = this.data.indexOf(item);
-
-                  if (index == -1)
-                  {
-                    throw Error('item not found in data');
-                  }
-
-                  this.data[index] = {
-                    'name': item.name
-                  };
-
-                  this.update();
-                };
-
-                links.events.addListener(this.stores[key], 'remove',
-                  function (event)
-                  {
-                    var items = event.items;
-
-                    for (var i = 0; i < items.length; i++)
-                    {
-                      _this.stores[key].removeLink(items[i]);
-                    }
-                  }
-                );
-
-                break;
-
-
-              case '1:n':
-                if (id != 'left' && id != 'right')
-                {
-                  // console.log('this is a sub ->', id);
-
-                  links.events.addListener(this.stores[key], 'unlinkMe', function ()
-                    {
-                      console.log('unlink me?');
-                    }
-                  );
-                }
-                break;
+              }
             }
 
-            links.events.addListener(this.stores[key], 'change', function ()
+            links.events.addListener(this.stores[key], 'unlink',
+              function (event)
               {
-                console.log('key ->', key, 'changed ->', _this.stores[key]);
+                var items = event.items;
+
+                for (var i = 0; i < items.length; i++)
+                {
+                  _this.stores[key].unlink(items[i]);
+                }
+              }
+            );
+
+            this.stores[key].unlink = function (item)
+            {
+              var index = this.data.indexOf(item);
+
+              if (index == -1)
+              {
+                throw Error('item not found in data');
+              }
+
+              this.data[index] = {
+                'name': item.name
+              };
+
+              this.update();
+            };
+
+            this.stores[key].removeLink = function (item)
+            {
+              var index = _this.stores[item._parent].data.indexOf(item);
+
+              if (index == -1)
+              {
+                throw Error('item not found in data');
+              }
+
+              delete _this.stores[item._parent].data[index];
+
+              _this.build('right', _this.data.right);
+            };
+
+            links.events.addListener(this.stores[key], 'change',
+              function ()
+              {
+                angular.forEach(_this.stores[key].data, function (data)
+                {
+                  data._parent = key;
+                });
+
+                _this.caches[key] = _this.stores[key].data;
               }
             );
 
@@ -197,35 +306,43 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             angular.forEach(data, function (node)
             {
               var record = {
-                name: node.name,
-                _id:  node.id
+                name:     node.name,
+                _id:      node.id,
+                _parent:  id
               };
+
+//              if (id != 'left' && id != 'right')
+//              {
+//                record._parent = id;
+//              }
 
               if (_this.type == '1:n' && id == 'right')
               {
+                var fid  = _this.grid + '-' + id + '-' + node.id;
+
+                var data = (_this.caches[fid]) ? _this.caches[fid] : [];
+
                 record.nodes = _this.store(
                   id + '-' + node.id,
-                  [
-//                    {
-//                      id: 6,
-//                      name: "Samantha Fox"
-//                    }
-                  ]
+                  data
                 );
+
+//                if (_this.caches[fid])
+//                {
+//                  console.log('there is a cache for ->', id, _this.caches[fid]);
+//
+//                  // record.name += ' (' + data.length + ')';
+//                }
               }
 
               if (_this.type == '1:n' && id != 'right')
               {
                 record._actions = [
                   {
-                    event: 'unlinkMe', text: 'remove'
+                    event:  'remove',
+                    text:   'remove'
                   }
                 ];
-
-                _this.triggers[key] = function ()
-                {
-                  console.log('remove triggered for =>', id, key);
-                }
               }
 
 //              if (_this.type == '1:n' && id == 'left')
@@ -288,8 +405,14 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             this.build('left',  this.data.left);
             this.build('right', this.data.right);
+
+//            setTimeout(function ()
+//            {
+//              console.log('treeGrid ->', $scope.treeGrid);
+//            }, 1000);
           }
         };
+
 
         /**
          * TreeGrid manager listener
@@ -299,12 +422,14 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           $scope.treeGrid.grid = arguments[1];
           $scope.treeGrid.type = arguments[2];
           $scope.treeGrid.data = arguments[3];
+          $scope.treeGrid.connections = arguments[4];
 
           setTimeout(function ()
           {
             $scope.treeGrid.init();
           }, 100);
         });
+
 
         /**
          * Attach listener for window resizing
@@ -313,5 +438,40 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
         {
           $scope.treeGrid.init();
         };
+
+
+
+        $scope.save = {
+          teamClients: function ()
+          {
+            var data        = $scope.treeGrid.stores['teamClients-right'].data,
+                connections = {};
+
+            angular.forEach(data, function (node)
+            {
+              if (node._ids || node.links)
+              {
+                connections[node._id] = node._ids;
+              }
+            });
+
+            console.log('connections to save for teamClients ->', connections);
+          }
+        };
+
+
+
+        /**
+         * Save treeGrid
+         */
+//        $rootScope.$on('save', function ()
+//        {
+//          switch (arguments[1])
+//          {
+//            case 'teamClients':
+//
+//              break;
+//          }
+//        });
       }
     ]);

@@ -23,15 +23,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         members: [
           {
-            id:   1,
+            id:   'm1',
             name: 'Cengiz Ulusoy'
           },
           {
-            id:   2,
+            id:   'm2',
             name: 'Leonie van Dinten'
           },
           {
-            id:   3,
+            id:   'm3',
             name: 'Michael Jan Kun'
           }
         ],
@@ -41,15 +41,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         teams: [
           {
-            id:   1,
+            id:   't1',
             name: 'Verpleegkundigen Rotterdam'
           },
           {
-            id:   2,
+            id:   't2',
             name: 'Thuiszorgers'
           },
           {
-            id:   3,
+            id:   't3',
             name: 'Groep Schiedam'
           }],
 
@@ -58,15 +58,15 @@ angular.module('WebPaige.Controllers.Manage', [])
          */
         clients: [
           {
-            id:   1,
+            id:   'c1',
             name: 'Gerda Bloom'
           },
           {
-            id:   2,
+            id:   'c2',
             name: 'Arjan Smit'
           },
           {
-            id:   3,
+            id:   'c3',
             name: 'Johan Pieters'
           }
         ],
@@ -75,234 +75,39 @@ angular.module('WebPaige.Controllers.Manage', [])
          * Groups
          */
         groups: [
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-            {
-                id:   1,
-                name: 'Erasmus Ziekenhuis'
-            },
-            {
-                id:   2,
-                name: 'Delfshaven Bejaardenhuis'
-            },
-            {
-                id:   3,
-                name: 'Schiedam Senioren'
-            },
-        ]
+          {
+            id:   'g1',
+            name: 'Erasmus Ziekenhuis'
+          },
+          {
+            id:   'g2',
+            name: 'Delfshaven Bejaardenhuis'
+          },
+          {
+            id:   'g3',
+            name: 'Schiedam Senioren'
+          }
+        ],
+
+        /**
+         * Connections
+         */
+        connections: {
+          teamClients: {
+            t1: 'g1',
+//            t2: 'g2',
+//            t3: 'g3'
+          },
+          teams: {},
+          clients: {}
+        }
       };
-
-      
-      // start to populate data from storage 
-      if(typeof data.teams == 'undefined'){
-          
-      }
-    
-      if(typeof data.clientGroups == 'undefined'){
-          
-      }
-
-
 
 
       $scope.data = {
         left: [],
         right: []
       };
-
-
-
-
 
 
       /**
@@ -336,7 +141,57 @@ angular.module('WebPaige.Controllers.Manage', [])
         });
       };
 
+
       $scope.setViewTo('teamClients');
+
+
+      $scope.connector = {
+
+        connections: {
+          teamClients:  [],
+          teams:        [],
+          clients:      []
+        },
+
+        teamClients: function ()
+        {
+          this.connections.teamClients = [];
+
+          var _this = this;
+
+          angular.forEach(data.connections.teamClients, function (gid, tid)
+          {
+            var connection = {
+              sourceItems:  [],
+              targetItem:   {}
+            };
+
+            angular.forEach(data.teams, function (team)
+            {
+              if (team.id == tid)
+              {
+                connection.targetItem = team;
+              }
+            });
+
+            var _group;
+
+            for (var i = 0; i < data.groups.length; i++)
+            {
+              if (data.groups[i].id == gid)
+              {
+                _group = data.groups[i];
+
+                connection.sourceItems.push(_group);
+              }
+            }
+
+            _this.connections.teamClients.push(connection);
+          });
+
+          return this.connections;
+        }
+      };
 
 
       /**
@@ -350,21 +205,24 @@ angular.module('WebPaige.Controllers.Manage', [])
             $rootScope.$broadcast('TreeGridManager', grid, '1:1', {
               left:   data.groups,
               right:  data.teams
-            });
+            },
+            $scope.connector.teamClients());
             break;
 
           case 'teams':
             $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
               left:   data.members,
               right:  data.teams
-            });
+            },
+            data.connections);
             break;
 
           case 'clients':
             $rootScope.$broadcast('TreeGridManager', grid, '1:n', {
               left:   data.clients,
               right:  data.groups
-            });
+            },
+            data.connections);
             break;
         }
       };
