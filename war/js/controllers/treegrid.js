@@ -137,20 +137,10 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'remove',
               function (event)
               {
-                alert('id -> ' + id +
-                      '\n\n' +
-                      ' key -> ' + key +
-                      '\n\n' +
-                      ' event -> ' + angular.toJson(event)
-                );
-
                 var items = event.items;
 
                 for (var i = 0; i < items.length; i++)
-                {
                   _this.stores[key].removeLink(items[i]);
-                  // _this.stores[key].removeItems(items[i]);
-                }
               }
             );
           },
@@ -171,7 +161,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             /**
              * Append items
              */
-            this.stores[key].appendItems = function (items, callback, errback)
+            this.stores[key].appendItems = function (items, callback)
             {
               var num = items.length;
 
@@ -581,6 +571,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
          */
         $scope.save = {
 
+          /**
+           * Teams & Clients
+           */
           teamClients: function ()
           {
             var data        = $scope.treeGrid.stores['teamClients-right'].data,
@@ -597,6 +590,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             $rootScope.$broadcast('save:teamClients', connections);
           },
 
+          /**
+           * Extract data
+           */
           extract: function (sources)
           {
             var connections = {};
@@ -619,11 +615,17 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             return connections;
           },
 
+          /**
+           * Teams
+           */
           teams: function ()
           {
             $rootScope.$broadcast('save:teams', this.extract($scope.treeGrid.stores['teams-right'].data));
           },
 
+          /**
+           * Clients
+           */
           clients: function ()
           {
             $rootScope.$broadcast('save:clients', this.extract($scope.treeGrid.stores['clients-right'].data));
