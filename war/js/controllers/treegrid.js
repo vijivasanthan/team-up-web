@@ -139,9 +139,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               {
                 alert('id -> ' + id +
                       '\n\n' +
-                      ' key ->' + key +
+                      ' key -> ' + key +
                       '\n\n' +
-                      ' event ->' + angular.toJson(event)
+                      ' event -> ' + angular.toJson(event)
                 );
 
                 var items = event.items;
