@@ -621,6 +621,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           
          LoadImg.get(function(result){
              deferred.resolve(result); 
+         },function(error){
+         	deferred.resolve(error);
          }); 
          
          return deferred.promise;

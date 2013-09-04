@@ -27,9 +27,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 					$scope.contacts = client.contacts;
 					
 					// deal with the date thing for editing
-					client.birthday = $filter('nicelyDate')(client.birthDate)
+					client.birthDate = $filter('nicelyDate')(client.birthDate)
 					$scope.clientmeta = client;
-					
 				}
 			});
 		});
@@ -160,7 +159,12 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 */
 	$scope.setViewTo = function(hash) {
 		$scope.$watch(hash, function() {
-			$location.hash(hash);
+			if(($location.hash() == "viewClient" || $location.hash() == "editClient") && hash == "client"){
+                $location.path("/client").search({uuid : $scope.clientGroup.id});
+            }
+            $location.hash(hash);
+			
+			setView(hash);
 			setView(hash);
 		});
 	};
@@ -281,8 +285,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 				$rootScope.notifier.error($rootScope.ui.teamup.cGroupSubmitError);
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-				reloadGroup(result);
+				var routePara = {'uuid' : result.id};
+				reloadGroup(routePara);
 			}
 		});
 	}
@@ -334,13 +338,22 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
 		// might need to convert the client to client obj
-		client.birthDate = Dater.convert.absolute(client.birthday, 0); 
+		try{
+			client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+		}catch(error){
+			console.log(error);
+			$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+			return;
+		}
+		
+		client.clientGroupUuid = $scope.clientGroup.id; 
 		
 		Clients.save(client).then(function(result) {
 			if(result.error) {
 				$rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
 			} else {
-				reloadGroup(result);
+				var routePara = {'uuid' : result.clientGroupUuid};
+				reloadGroup(routePara);
 			}
 		});
 	}
@@ -349,11 +362,22 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 * edit client profile 
 	 */
 	$scope.clientChange = function(client){
-		Clients.updateClient().then(function(result){
+		
+		try{
+			client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+		}catch(error){
+			console.log(error);
+			$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+			return;
+		}
+		
+		Clients.updateClient(client).then(function(result){
 			if(result.error){
 				$rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
 			}else{
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+				var routePara = {'uuid' : result.clientGroupUuid}; 
+				reloadGroup(routePara);
 			}
 		});
 	}

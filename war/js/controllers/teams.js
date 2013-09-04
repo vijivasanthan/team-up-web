@@ -92,11 +92,15 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 
 		$scope.current = id;
 		
-		// load img 
+		// load image 
 		angular.forEach($scope.members, function(member, index) {
 			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
 			Teams.loadImg(imgURL).then(function(result){
-				//console.log(result);
+				console.log("loading pic " + imgURL);
+				var imgId = member.uuid.replace(".","").replace("@","");
+				$('#img_'+imgId).css('background-image','url('+imgURL+')');
+			},function(error){
+				console.log("error when load pic " + error);
 			});
 		});
 		

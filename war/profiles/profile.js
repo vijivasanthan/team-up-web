@@ -49,25 +49,25 @@ var profile = {
 
   roles: [
     {
-      id: 1,
+      id: "1",
       label: 'coordinator'
     }, 
     {
-      id: 2,
+      id: "2",
       label: 'team_member'
     }, 
     {
-      id: 3,
+      id: "3",
       label: 'client'
     }
   ],
   mfunctions: [
      {
-         id: 1,
+         id: "1",
          label: 'Doctor'
      },
      {
-         id: 2,
+         id: "2",
          label: 'Nurse'
      }
   ],
