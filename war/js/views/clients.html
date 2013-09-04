@@ -1,4 +1,4 @@
-<div class="page-header">
+<div class="page-header" ng-hide="views.viewClient || views.editClient">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="c.id as c.name for c in clientGroups"
@@ -101,7 +101,7 @@
 					  <td>{{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}</td>
 		              <td>
 		                <div class="pull-right">
-		                 <a href="#/clientProfile/{{client.uuid}}#edit"><button class="btn-primary btn-mini">
+		                 <a href="#/clientProfile/{{client.uuid}}#editClient"><button class="btn-primary btn-mini">
 	<i class="icon-edit"></i>&nbsp;</button></a>
 	
 	                      <button type="submit"
@@ -207,7 +207,7 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.address.number">
+				        ng-model="clientForm.address.no">
 				  </div>
 				</div>
 				
@@ -216,7 +216,7 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.address.postCode">
+				        ng-model="clientForm.address.zip">
 				  </div>
 				  
 				  <label class="control-label">{{ui.teamup.city}}</label>
@@ -232,7 +232,7 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="clientForm.profileURL">
+				        ng-model="clientForm.clientProfileUrl">
 				  </div>
 				</div>
 				
@@ -288,15 +288,13 @@
 				            	<span ng-hide="app.resources.role > 1"><a href="#/client?uuid={{clientGroup.id}}#client">{{clientGroup.name}}</a></span>
 				          </dd>
 				          <dt>{{ui.profile.birthday}}</dt>
-				            <dd>{{client.birthDate|nicelyDate}}</dd>
+				            <dd>{{client.birthDate}}</dd>
 				          <dt>{{ui.teamup.phone}}</dt>
 				            <dd>{{client.phone}}</dd>
 				          <dt>{{ui.profile.address}}</dt>
 				            <dd>{{client.address.street}} {{client.address.no}} {{client.address.zip}} , {{client.address.city}} {{client.address.land}}</dd>
 				          <dt>{{ui.teamup.clientProfileUrl}}</dt>
 				          	<dd>{{client.clientProfileUrl}}</dd>
-				          <dt>{{ui.teamup.role}}</dt>
-				            <dd>{{client.role|translateRole}}</dd>
 				        </dl>
 						<!-- end Cilent info -->						
 					</div>
@@ -437,7 +435,7 @@
 	          <div class="control-group">
 	              <label class="control-label">{{ui.profile.birthday}}</label>
 	              <div class="control-group dater" style="">
-	              	<input name="date-start" type="text" ng-model="clientmeta.birthday" data-date-format="dd-mm-yyyy" 
+	              	<input name="date-start" type="text" ng-model="clientmeta.birthDate" data-date-format="dd-mm-yyyy" 
 	              		bs-datepicker="" class="ng-pristine ng-valid" data-toggle="datepicker" />
 	              	<i class="icon-calendar"></i></div>
 	          </div>
@@ -470,8 +468,8 @@
 				  <label class="control-label">{{ui.teamup.Number}}</label>
 				  <div class="controls">
 					<input  type="text" 
-				        class="span4" value="{{client.address.number}}"
-				        ng-model="clientmeta.address.number">
+				        class="span4" value="{{client.address.no}}"
+				        ng-model="clientmeta.address.no">
 				  </div>
 				</div>
 				
@@ -479,8 +477,8 @@
 				  <label class="control-label">{{ui.teamup.postCode}}</label>
 				  <div class="controls">
 					<input  type="text" 
-				        class="span4" value="{{client.address.postCode}}"
-				        ng-model="clientmeta.address.postCode">
+				        class="span4" value="{{client.address.zip}}"
+				        ng-model="clientmeta.address.zip">
 				  </div>
 				  
 				  <label class="control-label">{{ui.teamup.city}}</label>
@@ -495,8 +493,8 @@
 				  <label class="control-label">{{ui.teamup.clientProfileUrl}}</label>
 				  <div class="controls">
 					<input  type="text" 
-				        class="span4" value="{{client.profileURL}}"
-				        ng-model="clientmeta.profileURL">
+				        class="span4" value="{{client.clientProfileUrl}}"
+				        ng-model="clientmeta.clientProfileUrl">
 				  </div>
 				</div> 
 		      

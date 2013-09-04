@@ -700,7 +700,23 @@ angular.module('WebPaige.Filters', ['ngResource'])
      }
 ])
 
-
+/**
+ * TODO
+ * Internationalization 
+ */ 
+ .filter('escape',
+ [
+    '$rootScope', 
+    function ($rootScope)
+    {
+        return function (string)
+        {
+            var ret = string.replace(".","").replace("@","")
+            
+            return ret;
+        }
+    }
+ ])
 
 
 /**

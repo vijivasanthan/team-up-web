@@ -48,7 +48,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	     */
 	    $scope.roles = $rootScope.config.roles;
 	    $scope.mfuncs = $rootScope.config.mfunctions;  
-	
+	     
 	
 	  /**
 	   * Set data for view
@@ -67,8 +67,9 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   */
 	  $scope.profilemeta = data.resources;
 	  // deal with date 
-	  $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
-
+	  $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);	  
+	  
+	  $scope.currentRole = $scope.profilemeta.role; 
 	  /**
 	   * Get teams of user
 	   */
@@ -244,6 +245,8 @@ angular.module('WebPaige.Controllers.Profile', [])
 	            $scope.data = data;
 
 	            $rootScope.statusBar.off();
+	            
+	            $scope.setViewTo("profile");
 	          };
 	        });
 	      };
