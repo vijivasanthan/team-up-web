@@ -1,4 +1,4 @@
-<div class="page-header" ng-hide="views.viewClient || views.editClient">
+<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup || views.reports">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="c.id as c.name for c in clientGroups"

@@ -90,6 +90,10 @@ angular.module('WebPaige')
     
     mfunctions: profile.mfunctions,
     
+    stateIcons : profile.stateIcons,
+    
+    stateColors : profile.stateColors,
+    
     timeline: {
       options: {
         axisOnTop:        true,
