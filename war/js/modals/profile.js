@@ -290,7 +290,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	    var deferred = $q.defer();
 	    
 	    ProfileSave.save(
-	      {memberId: id , teamId : resources.teamUuids[0]}, 
+	      {teamId : resources.teamUuids[0] , memberId: id  }, 
 	      resources, 
 	      function (result) 
 	      {

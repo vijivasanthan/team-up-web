@@ -62,10 +62,10 @@ angular.module('WebPaige')
        controller: 'teamCtrl',
        resolve: {
            data: [
-             'Teams',
-             function (Teams)
+             'Teams','$route',
+             function (Teams,$route)
              {
-               return Teams.query();
+               return Teams.query(false,$route.current.params);
              }
            ]
        },
@@ -82,10 +82,10 @@ angular.module('WebPaige')
       controller:     'clientCtrl',
       resolve: {
           data: [
-            'Clients',
-            function (ClientGroups)
+            'Clients','$route',
+            function (ClientGroups,$route)
             {
-              return ClientGroups.query();
+              return ClientGroups.query(false,$route.current.params);
             }
           ]
       },
@@ -132,6 +132,8 @@ angular.module('WebPaige')
                       var cGroups = ClientGroups.query();
                       ret = { t : teams , cg : cGroups};
                       // ret = Teams.getAll();
+                  }else{
+                      ret.local = true;
                   }
               
                   return ret;

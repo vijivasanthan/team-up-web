@@ -91,8 +91,20 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		$scope.members = data.members[id];
 
 		$scope.current = id;
-
-		//            wisher(id);
+		
+		// load img 
+		angular.forEach($scope.members, function(member, index) {
+			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
+			Teams.loadImg(imgURL).then(function(result){
+				//console.log(result);
+			});
+		});
+		
+		$scope.team.phone = $rootScope.ui.teamup.loadingNumber;
+		Teams.loadTeamCallinNumber($scope.team.uuid).then(function(result){
+			$scope.team.phone = result.phone;
+		});
+		
 	}
 
 	/**
@@ -215,7 +227,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-				Teams.query(false).then(function(queryRs) {
+				Teams.query(false,result).then(function(queryRs) {
 					if(queryRs.error) {
 						$rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
 						console.warn('error ->', queryRs);

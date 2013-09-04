@@ -35,7 +35,8 @@ var ui = {
         loading_Members: 'Loading members...',
         loading_everything: 'Everything loaded!',
         logout: 'Logout',
-        loading: 'Loading..'
+        loading: 'Loading..',
+        loading_clientGroups: 'Loading client groups...',
       },
       dashboard: {
         thisWeek: 'This Week',
@@ -353,6 +354,7 @@ var ui = {
          clientGroups: 'Client groups',
          teams_Cap: 'Teams',
          editClient: 'Edit client',
+         loadingNumber: 'loading call-in number of this team',
       }
     },
     nl: {

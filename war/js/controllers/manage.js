@@ -12,6 +12,54 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
 
+
+      /*
+      if(data.local){
+        // data from local storage
+        var teams = angular.fromJson(Storage.get("Teams"));
+        data.teams = teams;
+        var groups = angular.fromJson(Storage.get("ClientGroups"));
+        data.groups = groups;
+
+        var members = [];
+        var memberKeys = [];
+        angular.forEach(teams,function(team,index){
+          var mems = angular.fromJson(Storage.get(team.uuid));
+          angular.forEach(mems,function(mem,index){
+            if(memberKeys.indexOf(mem.uuid) == -1){
+              memberKeys.push(mem.uuid);
+              members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
+            }
+          });
+        });
+
+        data.members = members;
+
+        var clients = [];
+        angular.forEach(groups,function(group,index){
+          var cts = angular.fromJson(Storage.get(group.id));
+          angular.forEach(cts,function(client,index){
+            clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
+          });
+        });
+
+        data.clients = clients;
+      }else{
+        // data from the server
+      }
+
+      // start to populate data from storage
+      if(typeof data.teams == 'undefined'){
+
+      }
+
+      if(typeof data.clientGroups == 'undefined'){
+
+      }
+      */
+
+
+
       /**
        * Define data sources
        * These sources should be populated from modals
@@ -227,6 +275,11 @@ angular.module('WebPaige.Controllers.Manage', [])
         }
       };
 
+      
+      $scope.confirm = function(){
+          
+      }
+      
     }
     
 ]);
