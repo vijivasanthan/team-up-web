@@ -38,6 +38,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
           connections: {},
 
+
           /**
            * TODO (Check this later on)
            * Calculate height of available area
@@ -46,6 +47,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           {
             this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px'
           },
+
 
           /**
            * Build TreeGrid
@@ -152,8 +154,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 }
               }
             );
-
           },
+
 
           /**
            * Initialize a DataTable
@@ -223,7 +225,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 '_id':      targetItem._id,
                 'name':     targetItem.name,
                 'links':    names.join(', '),
-                '_ids':      ids.join(', '),
+                '_ids':     ids.join(', '),
                 '_actions': [{'event': 'unlink', 'text': 'unlink'}]
               };
 
@@ -369,7 +371,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                       index = ind;
 
                       var names = [],
-                        ids   = [];
+                          ids   = [];
 
                       for (var i = 0; i < connection.sourceItems.length; i++)
                       {
@@ -396,6 +398,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             return this.stores[key];
           },
+
 
           /**
            * Process data
@@ -425,7 +428,23 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               {
                 var fid  = _this.grid + '-' + id + '-' + node.id;
 
-                var data = (_this.caches[fid]) ? _this.caches[fid] : [];
+                var cons = [];
+
+                if (_this.grid == 'teams' &&
+                  _this.connections.teams[node.id] &&
+                  _this.connections.teams[node.id].length > 0)
+                {
+                  cons = _this.connections.teams[node.id];
+                }
+
+                if (_this.grid == 'clients' &&
+                  _this.connections.clients[node.id] &&
+                  _this.connections.clients[node.id].length > 0)
+                {
+                  cons = _this.connections.clients[node.id];
+                }
+
+                var data = (_this.caches[fid]) ? _this.caches[fid] : cons;
 
                 record.nodes = _this.store(
                   id + '-' + node.id,
@@ -461,6 +480,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             return this.processed[key];
           },
+
 
           /**
            * Configure TreeGrids
@@ -501,11 +521,14 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             return options;
           },
 
+
           /**
            * Init TreeGrid
            */
           init: function ()
           {
+            console.log('connections passed ->', this.connections);
+
             this.areas();
 
             this.build('left',  this.data.left);

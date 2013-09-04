@@ -89,23 +89,38 @@ angular.module('WebPaige.Controllers.Manage', [])
             id:   'g3',
             name: 'Schiedam Senioren'
           }
-        ],
-
-        /**
-         * Connections
-         */
-        connections: {
-          teamClients: {
-//            t1: 'g1',
-//            t2: 'g2',
-//            t3: 'g3'
-          },
-          teams: {},
-          clients: {}
-        }
+        ]
       };
 
 
+      /**
+       * Connections
+       */
+      var connections = {
+        teamClients: {
+          t1: 'g1',
+//          t2: 'g2',
+//          t3: 'g3'
+        },
+        teams: {
+          t1: [
+            'm1',
+            'm2'
+          ],
+          t2: [
+            'm3'
+          ]
+        },
+        clients: {
+          g1: [
+            'c1',
+            'c2'
+          ],
+          g2: [
+            'c3'
+          ]
+        }
+      };
 
 
 //      //if(data.local){
@@ -154,11 +169,6 @@ angular.module('WebPaige.Controllers.Manage', [])
 //
 //      }
 
-
-
-
-
-
       $scope.data = {
         left: [],
         right: []
@@ -197,15 +207,17 @@ angular.module('WebPaige.Controllers.Manage', [])
       };
 
 
-      $scope.setViewTo('clients');
+      $scope.setViewTo('teams');
 
 
       $scope.connector = {
 
+        data: connections,
+
         connections: {
           teamClients:  [],
-          teams:        [],
-          clients:      []
+          teams:        {},
+          clients:      {}
         },
 
         teamClients: function ()
@@ -214,7 +226,7 @@ angular.module('WebPaige.Controllers.Manage', [])
 
           var _this = this;
 
-          angular.forEach(data.connections.teamClients, function (gid, tid)
+          angular.forEach(this.data.teamClients, function (gid, tid)
           {
             var connection = {
               sourceItems:  [],
@@ -245,6 +257,63 @@ angular.module('WebPaige.Controllers.Manage', [])
           });
 
           return this.connections;
+        },
+
+
+        teams: function ()
+        {
+          this.connections.teams = {};
+
+          var connections = {};
+
+          angular.forEach(this.data.teams, function (members, tid)
+          {
+            connections[tid] = [];
+
+            angular.forEach(members, function (mid)
+            {
+              angular.forEach(data.members, function (member)
+              {
+                if (member.id == mid)
+                {
+                  connections[tid].push(member);
+                }
+              })
+            });
+          });
+
+          this.connections.teams = connections;
+
+          return this.connections;
+        },
+
+
+        clients: function ()
+        {
+          this.connections.clients = {};
+
+          var connections = {};
+
+          angular.forEach(this.data.clients, function (clients, gid)
+          {
+            connections[gid] = [];
+
+            angular.forEach(clients, function (cid)
+            {
+              angular.forEach(data.clients, function (client)
+              {
+                if (client.id == cid)
+                {
+                  connections[gid].push(client);
+                }
+              })
+            });
+          });
+
+          this.connections.clients = connections;
+
+          return this.connections;
+
         }
       };
 
@@ -269,7 +338,7 @@ angular.module('WebPaige.Controllers.Manage', [])
               left:   data.members,
               right:  data.teams
             },
-            data.connections);
+            $scope.connector.teams());
             break;
 
           case 'clients':
@@ -277,15 +346,10 @@ angular.module('WebPaige.Controllers.Manage', [])
               left:   data.clients,
               right:  data.groups
             },
-            data.connections);
+            $scope.connector.clients());
             break;
         }
       };
-
-      
-      $scope.confirm = function(){
-          
-      }
       
     }
     
