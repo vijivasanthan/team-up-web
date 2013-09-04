@@ -30,7 +30,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           processed:{},
           grids:    {},
           stores:   {},
-          triggers: {},
 
           caches:   {},
 
@@ -261,9 +260,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             /**
              * Remove items
              */
-            this.stores[key].removeItems = function (items, callback, errback) {
-
-              console.log('removing stuff');
+            this.stores[key].removeItems = function (items, callback, errback)
+            {
+              console.log('removing stuff ->');
 
               var num = items.length;
 
@@ -282,7 +281,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 }
               }
 
-              // perform filtering and sorting again if there is a filter set
               this.updateFilters();
 
               if (callback)
@@ -302,6 +300,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
              */
             this.stores[key].removeLink = function (item)
             {
+              console.log('removing for ->', item);
+
               var index = _this.stores[item._parent].data.indexOf(item);
 
               if (index == -1)
@@ -383,7 +383,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                         '_id':      connection.targetItem.id,
                         'name':     connection.targetItem.name,
                         'links':    names.join(', '),
-                        '_ids':      ids.join(', '),
+                        '_ids':     ids.join(', '),
                         '_actions': [{'event': 'unlink', 'text': 'unlink'}]
                       };
 
@@ -426,37 +426,47 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
               if (_this.type == '1:n' && id == 'right')
               {
-                var fid  = _this.grid + '-' + id + '-' + node.id;
+                var fid = _this.grid + '-' + id + '-' + node.id;
 
-                var cons = [];
+                var connections = [],
+                    cons        = [];
 
                 if (_this.grid == 'teams' &&
-                  _this.connections.teams[node.id] &&
-                  _this.connections.teams[node.id].length > 0)
+                    _this.connections.teams[node.id] &&
+                    _this.connections.teams[node.id].length > 0)
                 {
-                  cons = _this.connections.teams[node.id];
+                  angular.forEach(_this.connections.teams[node.id], function (con)
+                  {
+                    con._parent = 'teams-' + id + '-' + node.id;
+
+                    cons.push(con);
+                  });
+
+                  connections = cons;
                 }
 
                 if (_this.grid == 'clients' &&
-                  _this.connections.clients[node.id] &&
-                  _this.connections.clients[node.id].length > 0)
+                    _this.connections.clients[node.id] &&
+                    _this.connections.clients[node.id].length > 0)
                 {
-                  cons = _this.connections.clients[node.id];
+                  angular.forEach(_this.connections.clients[node.id], function (con)
+                  {
+                    con._parent = 'clients-' + id + '-' + node.id;
+
+                    cons.push(con);
+                  });
+
+                  connections = cons;
                 }
 
-                var data = (_this.caches[fid]) ? _this.caches[fid] : cons;
+                var data = (_this.caches[fid]) ? _this.caches[fid] : connections;
 
                 record.nodes = _this.store(
                   id + '-' + node.id,
                   data
                 );
 
-//                if (_this.caches[fid])
-//                {
-//                  console.log('there is a cache for ->', id, _this.caches[fid]);
-//
-//                  // record.name += ' (' + data.length + ')';
-//                }
+                record.name += ' (' + data.length + ')';
               }
 
               if (_this.type == '1:n' && id != 'right')
@@ -527,8 +537,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           init: function ()
           {
-            console.log('connections passed ->', this.connections);
-
             this.areas();
 
             this.build('left',  this.data.left);
@@ -572,6 +580,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
          * Save treeGrid
          */
         $scope.save = {
+
           teamClients: function ()
           {
             var data        = $scope.treeGrid.stores['teamClients-right'].data,
@@ -585,44 +594,41 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               }
             });
 
-            console.log('connections to save for teamClients ->', connections);
+            $rootScope.$broadcast('save:teamClients', connections);
           },
 
           extract: function (sources)
           {
+            var connections = {};
+
             angular.forEach(sources, function (source)
             {
-              var nodes = [];
-
-              angular.forEach(source.nodes.data, function (node)
+              if (source.nodes.data.length > 0)
               {
-                nodes.push(node._id);
-              });
+                var nodes = [];
 
-              console.log('connections to save ->', source._id, ' nodes -> ', nodes);
+                angular.forEach(source.nodes.data, function (node)
+                {
+                  nodes.push(node._id);
+                });
+
+                connections[source._id] = nodes;
+              }
             });
+
+            return connections;
           },
 
           teams: function ()
           {
-            this.extract($scope.treeGrid.stores['teams-right'].data);
+            $rootScope.$broadcast('save:teams', this.extract($scope.treeGrid.stores['teams-right'].data));
           },
 
           clients: function ()
           {
-            this.extract($scope.treeGrid.stores['clients-right'].data);
+            $rootScope.$broadcast('save:clients', this.extract($scope.treeGrid.stores['clients-right'].data));
           }
+
         };
-
-
-//        $rootScope.$on('save', function ()
-//        {
-//          switch (arguments[1])
-//          {
-//            case 'teamClients':
-//
-//              break;
-//          }
-//        });
       }
     ]);

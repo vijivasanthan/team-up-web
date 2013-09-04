@@ -12,8 +12,6 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window){
 
-
-
       /**
        * Define data sources
        * These sources should be populated from modals
@@ -53,7 +51,8 @@ angular.module('WebPaige.Controllers.Manage', [])
           {
             id:   't3',
             name: 'Groep Schiedam'
-          }],
+          }
+        ],
 
         /**
          * Clients
@@ -99,8 +98,7 @@ angular.module('WebPaige.Controllers.Manage', [])
       var connections = {
         teamClients: {
           t1: 'g1',
-//          t2: 'g2',
-//          t3: 'g3'
+          t2: 'g2'
         },
         teams: {
           t1: [
@@ -169,6 +167,10 @@ angular.module('WebPaige.Controllers.Manage', [])
 //
 //      }
 
+
+      /**
+       * Introduce and reset data containers
+       */
       $scope.data = {
         left: [],
         right: []
@@ -202,24 +204,38 @@ angular.module('WebPaige.Controllers.Manage', [])
           setView(hash);
 
           $scope.manage(hash);
-
         });
       };
 
 
-      $scope.setViewTo('teams');
+      /**
+       * Default view
+       */
+      $scope.setViewTo('clients');
 
 
+      /**
+       * Prepare connections
+       */
       $scope.connector = {
 
+        /**
+         * Cache connections
+         */
         data: connections,
 
+        /**
+         * Containers
+         */
         connections: {
           teamClients:  [],
           teams:        {},
           clients:      {}
         },
 
+        /**
+         * Team & Clients connections
+         */
         teamClients: function ()
         {
           this.connections.teamClients = [];
@@ -259,61 +275,54 @@ angular.module('WebPaige.Controllers.Manage', [])
           return this.connections;
         },
 
+        /**
+         * Populate connections
+         */
+        populate: function (connections, data)
+        {
+          var population = {};
 
+          angular.forEach(connections, function (nodes, key)
+          {
+            population[key] = [];
+
+            angular.forEach(nodes, function (kid)
+            {
+              angular.forEach(data, function (node)
+              {
+                if (node.id == kid)
+                {
+                  population[key].push(node);
+                }
+              })
+            });
+          });
+
+          return population;
+        },
+
+        /**
+         * Teams connections
+         */
         teams: function ()
         {
           this.connections.teams = {};
 
-          var connections = {};
-
-          angular.forEach(this.data.teams, function (members, tid)
-          {
-            connections[tid] = [];
-
-            angular.forEach(members, function (mid)
-            {
-              angular.forEach(data.members, function (member)
-              {
-                if (member.id == mid)
-                {
-                  connections[tid].push(member);
-                }
-              })
-            });
-          });
-
-          this.connections.teams = connections;
+          this.connections.teams = this.populate(this.data.teams, data.members);
 
           return this.connections;
         },
 
-
+        /**
+         * Clients connections
+         */
         clients: function ()
         {
           this.connections.clients = {};
 
-          var connections = {};
-
-          angular.forEach(this.data.clients, function (clients, gid)
-          {
-            connections[gid] = [];
-
-            angular.forEach(clients, function (cid)
-            {
-              angular.forEach(data.clients, function (client)
-              {
-                if (client.id == cid)
-                {
-                  connections[gid].push(client);
-                }
-              })
-            });
-          });
-
-          this.connections.clients = connections;
+          this.connections.clients = this.populate(this.data.clients, data.clients);
 
           return this.connections;
-
         }
       };
 
@@ -350,6 +359,25 @@ angular.module('WebPaige.Controllers.Manage', [])
             break;
         }
       };
+
+
+      /**
+       * Save function listeners
+       */
+      $rootScope.$on('save:teamClients', function ()
+      {
+        console.log('saving team clients ->', arguments[1]);
+      });
+
+      $rootScope.$on('save:teams', function ()
+      {
+        console.log('saving teams ->', arguments[1]);
+      });
+
+      $rootScope.$on('save:clients', function ()
+      {
+        console.log('saving clients ->', arguments[1]);
+      });
       
     }
     
