@@ -66,14 +66,15 @@
       </div>
 
       <hr>
-      <button class="btn btn-success">Opslaan</button>
+      <button class="btn btn-success"
+              ng-click="save.teamClients()">Opslaan</button>
 
     </div>
 		<!-- end Teams & Clients organizer -->
 
     <!-- Teams organizer -->
     <div class="tab-pane {{(views.teams==true) && 'active'}}"
-         id="viewClientsTab" >
+         id="viewTeamsTab" >
 
       <div class="row-fluid">
         <div class="span6">
@@ -89,14 +90,15 @@
       </div>
 
       <hr>
-      <button class="btn btn-success">Opslaan</button>
+      <button class="btn btn-success"
+              ng-click="save.teams()">Opslaan</button>
 
     </div>
     <!-- end Teams organizer -->
 		
 		<!-- Clients organizer -->
 		<div class="tab-pane {{(views.clients==true) && 'active'}}"
-	       id="viewTeamsTab" >
+	       id="viewClientsTab" >
 
       <div class="row-fluid">
         <div class="span6">
@@ -112,7 +114,8 @@
       </div>
 
       <hr>
-      <button class="btn btn-success" ng-click="confirm()">Opslaan</button>
+      <button class="btn btn-success"
+              ng-click="save.clients()">Opslaan</button>
 
 	  </div>
 		<!-- end Clients organizer -->
