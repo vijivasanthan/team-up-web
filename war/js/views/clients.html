@@ -95,7 +95,7 @@
 		              <td>
 	                      <div class="roundedPicSmall memberStateAvailalbe" style="background-image: url({{imgHost}}/teamup/client/client/{{client.uuid}}/photo);" ></div>
 		              </td>
-		              <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.lastName}} {{client.firstName}}</a></td>
+		              <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.firstName}} {{client.lastName}}</a></td>
 		<!--               <td>{{member.resources.role|translateRole}}</td> -->
 		<!--               <td>{{member.resources.PhoneAddress}}</td> -->
 					  <td>{{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}</td>
@@ -320,6 +320,7 @@
 				<div class="tab-header">
 				  <h3 class="pull-left">{{ui.teamup.contacts}}</h3>
 				</div>
+
 				<hr>
 				<div class="control-group">
 				  <label class="control-label">{{ui.profile.firstName}}</label>
@@ -370,13 +371,13 @@
 			          </thead>
 			          <tbody>
 			            <tr ng-repeat="contact in contacts|orderBy:lastName">
-			              <td>{{contact.lastName}} {{contact.firstName}}</td>
+			              <td>{{contact.firstName}} {{contact.lastName}} </td>
 			              <td>{{contact.func}}</td>
 			              <td>{{contact.phone}}</td>
 			              <td>
 			                <div class="pull-right">
 			                	<button ng-click="callContact(contact.phone)"
-			                          class="btn-primary btn-mini"><i class="icon-call"></i></button>
+			                          class="btn-primary btn-mini"><i class="icon-phone3"></i></button>
 			                 	<a><button class="btn-primary btn-mini">
 									<i class="icon-edit"></i>&nbsp;</button></a>
 		                      <button ng-click="removeContact(contact)"

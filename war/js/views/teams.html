@@ -92,14 +92,14 @@
 	              <td>
                       <div class="roundedPicSmall memberStateAvailalbe"  id="img_{{member.uuid|escape}}"></div>
 	              </td>
-	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.lastName}} {{member.firstName}}</a></td>
+	              <td><a href="#/profile/{{member.uuid}}#profile">{{member.firstName}} {{member.lastName}}</a></td>
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
 	<!--               <td>{{member.resources.PhoneAddress}}</td> -->
 				  <td>
 				  	<span ng-repeat="state in member.states | filter:share=true " class="states">
-                        <span data-icon="U+25cc" aria-hidden="true" class="icomoon icomoon-cart-4"></span>
-				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>
-			  			{{state.value}}
+                        <span data-icon="&#xe014;" aria-hidden="true" class="stateIcon icon-smiley2"></span>
+<!--				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>-->
+			  			<span class="stateValue">{{state.value}}</span>
 				  	</span>
 				  </td>
 	              <td>
