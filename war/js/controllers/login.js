@@ -8,8 +8,8 @@ angular.module('WebPaige.Controllers.Login', [])
  * Login controller
  */
 .controller('login',
-[ '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Messages', 'Storage', '$routeParams', 'Settings', 'Profile', 'MD5', 
-        function($rootScope, $location, $q, $scope, Session, User, Teams, Messages, Storage, $routeParams, Settings, Profile, MD5) {
+[ '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Clients', 'Storage', '$routeParams', 'Settings', 'Profile', 'MD5', 
+        function($rootScope, $location, $q, $scope, Session, User, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5) {
             var self = this;
 
             /**
@@ -163,7 +163,7 @@ angular.module('WebPaige.Controllers.Login', [])
               $('#download').hide();
               $('#preloader').show();
 
-              self.progress(30, $rootScope.ui.login.loading_User);
+              self.progress(20, $rootScope.ui.login.loading_User);
               
               // preload the user's info 
               User.memberInfo()
@@ -177,7 +177,7 @@ angular.module('WebPaige.Controllers.Login', [])
                 {
                   $rootScope.app.resources = resources;
 
-                  self.progress(60, $rootScope.ui.login.loading_Teams);
+                  self.progress(40, $rootScope.ui.login.loading_Teams);
                   
                   // preload the teams 
                   Teams.query(true)
@@ -192,13 +192,24 @@ angular.module('WebPaige.Controllers.Login', [])
                     
                     console.log("start to query team-clientgroup relation async ");
                     
-                    self.progress(90, $rootScope.ui.login.loading_clientGroups);
+                    self.progress(60, $rootScope.ui.login.loading_clientGroups);
                     // preload the clientGroups for each team
                     Teams.queryClientGroups(teams)
                     .then(function(){
                         console.log("got clientGroups belong to the teams ");
                         
-                        finalize();
+                        self.progress(80, $rootScope.ui.login.loading_clientGroups);
+                        
+                        Clients.queryAll()
+                        .then(function(){
+                            console.log("got all clients in or not in the client groups ");
+                            
+                            finalize();
+                        },function(error){
+                            deferred.resolve({error: error});
+                        });
+                        
+                        
                     },function(error){
                         deferred.resolve({error: error});
                     });

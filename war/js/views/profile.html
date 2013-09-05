@@ -102,7 +102,7 @@
 	        
 	        <div class="widget profilePic {{(!browser.mobile) && 'span3' || 'span12'}}" >
 	        	<!-- profile image -->
-	        	<div class="roundedPicLarge memberStateBusy" style= "background-image: url({{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo)"></div>
+	        	<div class="roundedPicLarge {{data.resources.states|stateColor}}" style= "background-image: url({{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo)"></div>
 	        	<div>
 	        		<a href="#/profile/{{data.resources.uuid}}#editImg">
                         <button class="btn btn-mini btn-primary" ng-click="editImg()"> <i class="icon-edit"></i>&nbsp;

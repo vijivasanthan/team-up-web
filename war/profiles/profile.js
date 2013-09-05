@@ -71,6 +71,39 @@ var profile = {
          label: 'Nurse'
      }
   ],
+  stateIcons: [
+     {
+         name: "Availability",
+         data_icon: "&#xe04d;",
+         class_name: "icon-user-block"
+     },
+     {
+         name: "Location",
+         data_icon: "&#xe21a;",
+         class_name: "icon-location4"
+     },
+     {
+         name: "Emotion",
+         data_icon: "&#xe0f2;",
+         class_name: "icon-smiley"
+     },
+     {
+         name: "Activity",
+         data_icon: "&#xe4f2;",
+         class_name: "icon-accessibility"
+     },
+     {
+         name: "Reachability",
+         data_icon: "&#xe169;",
+         class_name: "icon-podcast2"
+     }
+  ],
+  stateColors : {
+     availalbe : "memberStateAvailalbe" ,        
+     busy : "memberStateBusy" ,
+     offline : "memberStateOffline" ,
+     none : "memberStateNone" 
+  },
   p2000: {
     status: true,
     url:    'http://knrm.myask.me/rpc/client/p2000.php',

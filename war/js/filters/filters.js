@@ -111,24 +111,6 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Translate roles
  */
@@ -152,9 +134,62 @@ angular.module('WebPaige.Filters', ['ngResource'])
  ])
 
 
+/**
+ * Translate state value to icon
+ */
+ .filter('stateDataIcon', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (name,type){
+            var ret;
 
+            angular.forEach($config.stateIcons, function (stateIcon, index)
+            {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
+                  if(type == "data_icon"){
+                      ret = stateIcon.data_icon;
+                  }else if(type == "class_name"){
+                      ret = stateIcon.class_name;
+                  }  
+                } 
+            });
 
+            return ret;
+        }
+    }
+ ])
 
+ 
+/**
+ * Translate state circle color 
+ */
+ .filter('stateColor', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (states)
+        {
+            var ret = $config.stateColors.none;
+            
+            angular.forEach(states, function (state, index){
+                if(angular.lowercase(state.name) == "availability" && state.share){
+                    if(angular.lowercase(state.value) == "availalbe"){
+                        ret = $config.stateColors.availalbe; 
+                    }else if(angular.lowercase(state.value) == "busy"){
+                        ret = $config.stateColors.busy;
+                    }else if(angular.lowercase(state.value) == "offline"){
+                        ret = $config.stateColors.offline;
+                    }
+                }
+            });
+
+            return ret;
+        }
+    }
+ ])
 
 
 

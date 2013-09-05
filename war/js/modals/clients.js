@@ -12,154 +12,155 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
     '$resource', '$config', '$q', 'Storage', '$rootScope', 
     function ($resource, $config, $q, Storage, $rootScope)
     {
-        var ClientGroups =  $resource(
-            $config.host + 'teamup/clientGroups/',
-            {
-            },
-            {
-              query: {
-                method: 'GET',
-                params: {},
-                isArray: true
-              },
-              get: {
-                method: 'GET',
-                params: {id:''}
-              },
-              save: {
-                method: 'POST',
-                params: {id:''}
-              },
-              edit: {
-                method: 'PUT',
-                params: {id:''}
-              },
-              remove: {
-                method: 'DELETE',
-                params: {id:''}
-              }
-            }
-         );
+        
+		var ClientGroups = $resource($config.host + 'teamup/clientGroups/', {
+		}, {
+			query : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			},
+			get : {
+				method : 'GET',
+				params : {
+					id : ''
+				}
+			},
+			save : {
+				method : 'POST',
+				params : {
+					id : ''
+				}
+			},
+			edit : {
+				method : 'PUT',
+				params : {
+					id : ''
+				}
+			},
+			remove : {
+				method : 'DELETE',
+				params : {
+					id : ''
+				}
+			}
+		});
+	
+		var Clients_ByGroupId = $resource($config.host + 'teamup/clientGroup/:clientGroupId/clients/', {}, {
+			get : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			},
+			save : {
+				method : 'POST',
+			},
+			remove : {
+				method : 'DELETE',
+			}
+		});
+	
+		var ClientGroup = $resource($config.host + 'teamup/clientGroup/:clientGroupId', {}, {
+			save : {
+				method : 'POST',
+			},
+			edit : {
+				method : 'PUT',
+			}
+		});
+	
+		var Client = $resource($config.host + 'teamup/client/:clientId', {}, {
+			save : {
+				method : 'POST',
+			},
+			edit : {
+				method : 'PUT',
+			}
+		});
+
+
         
         
-        var Clients_ByGroupId = $resource(
-            $config.host + 'teamup/clientGroup/:clientGroupId/clients/',
-            {},
-            {
-              get: {
-                method: 'GET',
-                params: {},
-                isArray: true
-              }
-            }
-         );
-        
-        var ClientGroup = $resource(
-        	$config.host + 'teamup/clientGroup/:clientGroupId',
-        	{},
-        	{
-        		save: {
-        			method : 'POST',        		
-        		},
-        		edit: {
-        			method : 'PUT',
-        		}
-        	}
-        );
-        
-        var Client = $resource(
-        	$config.host + 'teamup/client/:clientId',
-        	{},
-        	{
-        		save:{
-        		    method : 'POST',        		
-        		},
-        		edit: {
-        		    method: 'PUT',
-        		}
-        	}
-        );
-        
-        /**
-         * get the client groups and the clients 
-         */
-        ClientGroups.prototype.query = function(only,routePara){
-            var deferred = $q.defer();
-            
-            ClientGroups.query(
-                function(cGroups){
-                    Storage.add('ClientGroups', angular.toJson(cGroups));
-                    
-                    if (!only)
-                    {
-                      var calls = [];
+		var Clients = $resource($config.host + 'teamup/clients', {}, {
+			query : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			}
+		});
 
-                      angular.forEach(cGroups, function (clientGroup, index)
-                      {
-                      	if(routePara.uuid){
-                      		if(routePara.uuid == clientGroup.id){
-                      			calls.push(ClientGroups.prototype.get(clientGroup.id));
-                      		}
-                      	}else{
-                      		calls.push(ClientGroups.prototype.get(clientGroup.id));
-                      	}
-                        
-                      });
 
-                      $q.all(calls)
-                      .then(function (results)
-                      {
-//                        Teams.prototype.uniqueMembers();
+    
+		/**
+		 * get the client groups and the clients
+		 */
+		ClientGroups.prototype.query = function(only, routePara) {
+			var deferred = $q.defer();
 
-                        var data = {};
+			ClientGroups.query(function(cGroups) {
+				Storage.add('ClientGroups', angular.toJson(cGroups));
 
-                        data.clients = {};
+				if(!only) {
+					var calls = [];
 
-                        angular.forEach(cGroups, function (cGroup, gindex)
-                        {
-                          data.clientGroups = cGroups;
+					angular.forEach(cGroups, function(clientGroup, index) {
+						if(routePara.uuid) {
+							if(routePara.uuid == clientGroup.id) {
+								calls.push(ClientGroups.prototype.get(clientGroup.id));
+							}
+						} else {
+							calls.push(ClientGroups.prototype.get(clientGroup.id));
+						}
 
-                          data.clients[cGroup.id] = [];
+					});
 
-                          angular.forEach(results, function (result, mindex)
-                          {
-                          	if(routePara.uuid){
-                          		if (result.id == cGroup.id && routePara.uuid == cGroup.id) {
-                          			data.clients[cGroup.id] = result.data;
-                          		}else{
-                          			data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
-                          		}
-                          	}else{
-                          		if (result.id == cGroup.id ) {
-                          			data.clients[cGroup.id] = result.data;
-                          		}
-                          	}
-                            
-                          });
-                        });
+					$q.all(calls).then(function(results) {
+						//                        Teams.prototype.uniqueMembers();
 
-                        if(typeof data.clientGroups == 'undefined'){
-                            data.clientGroups = {};  
-                        }
-                        
-                        deferred.resolve(data);
-                      });
-                    }
-                    else
-                    {
-                      deferred.resolve(cGroups);
-                    }
-                    
-                },
-                function (error)
-                {
-                  console.log("Error" + error);
-                  deferred.resolve({error: error});
-                }
-            );
-            
-            return deferred.promise;
-        };
+						var data = {};
+
+						data.clients = {};
+
+						angular.forEach(cGroups, function(cGroup, gindex) {
+							data.clientGroups = cGroups;
+
+							data.clients[cGroup.id] = [];
+
+							angular.forEach(results, function(result, mindex) {
+								if(routePara.uuid) {
+									if(result.id == cGroup.id && routePara.uuid == cGroup.id) {
+										data.clients[cGroup.id] = result.data;
+									} else {
+										data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
+									}
+								} else {
+									if(result.id == cGroup.id) {
+										data.clients[cGroup.id] = result.data;
+									}
+								}
+
+							});
+						});
+						if( typeof data.clientGroups == 'undefined') {
+							data.clientGroups = {};
+						}
+
+						deferred.resolve(data);
+					});
+				} else {
+					deferred.resolve(cGroups);
+				}
+
+			}, function(error) {
+				console.log("Error" + error);
+				deferred.resolve({
+					error : error
+				});
+			});
+			return deferred.promise;
+		};
+
+
         
         /**
          * Get team data ( clients in the group)
@@ -286,6 +287,110 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
         	return deferred.promise;
         };
         
+        
+          
+		/**
+		 * Add Member to a team
+		 */
+		ClientGroups.prototype.addClient = function(id, memberIds) {
+			var deferred = $q.defer();
+			Clients_ByGroupId.save({
+				clientGroupId : id
+			}, memberIds, function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+			return deferred.promise;
+		};
+
+
+		
+		    
+		/**
+		 * Remove member from team
+		 */
+		ClientGroups.prototype.delClient = function(id, memberIds) {
+			var deferred = $q.defer();
+	
+			Clients_ByGroupId.remove({
+				clientGroupId : id
+			}, memberIds, function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+			return deferred.promise;
+		};
+
+
+		
+		/**
+		 * add or remove the clientfrom the client group
+		 */
+		ClientGroups.prototype.manage = function(changes) {
+			var deferred = $q.defer();
+	
+			var calls = [];
+	
+			angular.forEach(changes, function(change, clientGroupId) {
+				if(change.a.length > 0) {
+					calls.push(ClientGroups.prototype.addClient(clientGroupId, {
+						ids : change.a
+					}));
+				}
+				if(change.r.length > 0) {
+					calls.push(ClientGroups.prototype.delClient(clientGroupId, {
+						ids : change.r
+					}));
+				}
+			});
+	
+			$q.all(calls).then(function(results) {
+				//                Teams.prototype.uniqueMembers();
+	
+				var data = {};
+	
+				// data.groups = {};
+				//
+				// angular.forEach(teams, function (team, gindex)
+				// {
+				// data.teams = teams;
+				//
+				// data.groups[team.uuid] = [];
+				//
+				// angular.forEach(results, function (result, mindex){
+				// data.groups[team.uuid] = result.data;
+				// });
+				// });
+	
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+
+		  
+		/**
+		 * get all the clients , in or not in the client gourps
+		 */
+		ClientGroups.prototype.queryAll = function(changes) {
+			var deferred = $q.defer();
+			
+			Clients.query(function(clients){
+			    Storage.add('clients', angular.toJson(clients));
+			    deferred.resolve(clients);
+			},function(error){
+			    deferred.resolve({error: error});
+			});
+			
+			return deferred.promise;
+		}
+
+	       
         return new ClientGroups; 
     }
     
