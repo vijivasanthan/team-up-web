@@ -14,7 +14,7 @@
       <a href="#viewTeamClientTab"
          data-toggle="tab"
          ng-click="setViewTo('teamClients')">
-        <span class="entypo">&#9998;</span>
+        <span class="icomoon" span data-icon="&#xe229;" aria-hidden="true"></span>
         {{ui.teamup.TeamClients}}
       </a>
     </li>
@@ -25,7 +25,7 @@
       <a href="#viewTeamsTab"
          data-toggle="tab"
          ng-click="setViewTo('teams')">
-        <span class="entypo">&#9998;</span>
+         <span class="icomoon" span data-icon="&#xe043;" aria-hidden="true"></span>
         {{ui.teamup.teams}}
       </a>
     </li>
@@ -36,7 +36,7 @@
       <a href="#viewClientsTab"
          data-toggle="tab"
          ng-click="setViewTo('clients')">
-        <span class="entypo">&#59136;</span>
+          <span class="icomoon" span data-icon="&#xe27f;" aria-hidden="true"></span>
         {{ui.teamup.clients}}
       </a>
     </li>
@@ -52,18 +52,18 @@
 	  <div class="tab-pane {{(views.teamClients==true) && 'active'}}"
 	       id="viewTeamClientTab" >
 
-      <div class="row-fluid">
-        <div class="span6">
-          <h3>{{ui.teamup.clientGroups}}</h3>
-          <hr>
-          <div id="teamClients-left"></div>
-        </div>
-        <div class="span6">
-          <h3>{{ui.teamup.teams_Cap}}</h3>
-          <hr>
-          <div id="teamClients-right"></div>
-        </div>
-      </div>
+          <div class="row-fluid">
+            <div class="span6">
+              <h3><span class="titleIcon icon-heart7"></span>{{ui.teamup.clientGroups}}</h3>
+              <hr>
+              <div id="teamClients-left"></div>
+            </div>
+            <div class="span6">
+              <h3><span class="titleIcon icon-users"></span>{{ui.teamup.teams_Cap}}</h3>
+              <hr>
+              <div id="teamClients-right"></div>
+            </div>
+          </div>
 
       <hr>
       <button class="btn btn-success"
@@ -78,12 +78,12 @@
 
       <div class="row-fluid">
         <div class="span6">
-          <h3>Members</h3>
+          <h3><span class="titleIcon icon-user0"></span>Members</h3>
           <hr>
           <div id="teams-left"></div>
         </div>
         <div class="span6">
-          <h3>Teams</h3>
+          <h3><span class="titleIcon icon-users"></span>Teams</h3>
           <hr>
           <div id="teams-right"></div>
         </div>
@@ -102,12 +102,12 @@
 
       <div class="row-fluid">
         <div class="span6">
-          <h3>Clients</h3>
+          <h3><span class="titleIcon icon-heart7"></span>Clients</h3>
           <hr>
           <div id="clients-left"></div>
         </div>
         <div class="span6">
-          <h3>Groups</h3>
+          <h3><span class="titleIcon icon-users"></span>Groups</h3>
           <hr>
           <div id="clients-right"></div>
         </div>
