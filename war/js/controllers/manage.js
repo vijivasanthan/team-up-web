@@ -160,14 +160,6 @@ angular.module('WebPaige.Controllers.Manage', [])
             
             connections.teams[team.uuid] = memIds;
             
-            /*
-             * push team group connection data
-             */
-            
-            var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
-            if(typeof grps[0] != 'undefined'){
-                connections.teamClients[team.uuid] = grps[0].id;
-            }
             
           });
     
@@ -177,6 +169,7 @@ angular.module('WebPaige.Controllers.Manage', [])
            * clients , group-client connection data
            */
           var groups = angular.fromJson(Storage.get("ClientGroups"));
+          var groupIds = [];
           data.groups = groups;
           
           var clients = [];
@@ -190,9 +183,29 @@ angular.module('WebPaige.Controllers.Manage', [])
             });
             
             connections.clients[group.id] = ctIds;
+            
+            groupIds.push(group.id);
           });
     
           data.clients = clients;
+          
+          angular.forEach(teams_local,function(team,index){
+              /*
+               * push team group connection data
+               */
+              var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
+              var kp = true;
+              angular.forEach(grps,function(grp,i){
+                  if(groupIds.indexOf(grp.id) != -1 && kp){
+                      connections.teamClients[team.uuid] = grp.id;
+                      kp = false;
+                  }
+              });
+              
+          });
+          
+          // keep the original connections into the scope
+          $scope.connections = connections;
       }else{
         // data from the server
       }
@@ -389,23 +402,100 @@ angular.module('WebPaige.Controllers.Manage', [])
         }
       };
 
+      
 
       /**
        * Save function listeners
        */
       $rootScope.$on('save:teamClients', function ()
       {
+        console.log("before changing ->",connections.teamClients);
         console.log('saving team clients ->', arguments[1]);
       });
-
+      
       $rootScope.$on('save:teams', function ()
       {
+        console.log("before teams -> ", $scope.connections.teams);  
         console.log('saving teams ->', arguments[1]);
+        
+        var preTeams = $scope.connections.teams;
+        var afterTeams = arguments[1];
+        var changes = {};
+        
+        angular.forEach(preTeams,function(pMembers,tId){
+            var notChanged = [];
+            var afterMembers = afterTeams[tId]
+            // find the unchanged items
+            angular.forEach(pMembers,function(p_mem,t_i){
+                angular.forEach(afterMembers,function(at,t_j){
+                    if(p_mem == at){
+                        notChanged.push(p_mem);
+                    }
+                });
+            });
+            console.log(tId,"-->",notChanged);
+            
+            /*
+             * try to remove the unchanged items from both list
+             * 
+             * then for items in the previous list are the items need to be removed
+             *  
+             *          items in the changed list are the items need to be added
+             */ 
+            
+            angular.forEach(notChanged,function(nc){
+                pMembers.splice(pMembers.indexOf(nc),1);
+                afterMembers.splice(afterMembers.indexOf(nc),1);
+            });
+            
+            console.log("need to remove : " + pMembers); 
+            console.log("need to add : " + afterMembers);
+            console.log("----------------------");
+            
+            var addMembers = [];
+            var removeMembers = [];
+            
+            angular.copy(pMembers, removeMembers);
+            angular.copy(afterMembers, addMembers);
+            
+            if(addMembers.length > 0 || addMembers.length > 0 ){
+                changes[tId] = {a : addMembers, 
+                                r : removeMembers};
+            }
+            
+            // add the nonChanged item back 
+            angular.forEach(notChanged,function(nc){
+                pMembers.push(nc);
+                afterMembers.push(nc);
+            });
+            
+        });
+        
+        
+        // get all the changes  
+        if(angular.equals({},changes)){
+            console.log("empty ! ");
+        }else{
+            console.log(changes);
+            
+            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+            
+            Teams.manage(changes).then(function(result){
+                
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                
+            });
+        }
+        
+        
       });
 
       $rootScope.$on('save:clients', function ()
       {
+        console.log("before teams -> ", $scope.connections.clients);
         console.log('saving clients ->', arguments[1]);
+        
       });
       
     }
