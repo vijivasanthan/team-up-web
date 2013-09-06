@@ -12,86 +12,192 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window','data',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window,data){
 
-//      /**
-//       * Define data sources
-//       * These sources should be populated from modals
-//       */
-//      var data = {
+      /**
+       * Define data sources
+       * These sources should be populated from modals
+       */
+      var data = {
+
+        /**
+         * Members
+         */
+        members: [
+          {
+            id:   'm1',
+            name: 'Cengiz Ulusoy'
+          },
+          {
+            id:   'm2',
+            name: 'Leonie van Dinten'
+          },
+          {
+            id:   'm3',
+            name: 'Michael Jan Kun'
+          }
+        ],
+
+        /**
+         * Teams
+         */
+        teams: [
+          {
+            id:   't1',
+            name: 'Verpleegkundigen Rotterdam'
+          },
+          {
+            id:   't2',
+            name: 'Thuiszorgers'
+          },
+          {
+            id:   't3',
+            name: 'Groep Schiedam'
+          }
+        ],
+
+        /**
+         * Clients
+         */
+        clients: [
+          {
+            id:   'c1',
+            name: 'Gerda Bloom'
+          },
+          {
+            id:   'c2',
+            name: 'Arjan Smit'
+          },
+          {
+            id:   'c3',
+            name: 'Johan Pieters'
+          }
+        ],
+
+        /**
+         * Groups
+         */
+        groups: [
+          {
+            id:   'g1',
+            name: 'Erasmus Ziekenhuis'
+          },
+          {
+            id:   'g2',
+            name: 'Delfshaven Bejaardenhuis'
+          },
+          {
+            id:   'g3',
+            name: 'Schiedam Senioren'
+          }
+        ]
+      };
+
+
+      /**
+       * Connections
+       */
+      var connections = {
+        teamClients: {
+          t1: 'g1',
+          t2: 'g2'
+        },
+        teams: {
+          t1: [
+            'm1',
+            'm2'
+          ],
+          t2: [
+            'm3'
+          ]
+        },
+        clients: {
+          g1: [
+            'c1',
+            'c2'
+          ],
+          g2: [
+            'c3'
+          ]
+        }
+      };
+
+
+//      if (data.local)
+//      {
+//          /**
+//           * Data from local storage
+//           * Teams, team-member, team-group connection data
+//           */
+//          var teams_local = angular.fromJson(Storage.get("Teams")),
+//              connections = {
+//                teamClients:{},
+//                teams:      {},
+//                clients:    {}
+//              },
+//              members    = [],
+//              memberKeys = [];
 //
-//        /**
-//         * Members
-//         */
-//        members: [
-//          {
-//            id:   'm1',
-//            name: 'Cengiz Ulusoy'
-//          },
-//          {
-//            id:   'm2',
-//            name: 'Leonie van Dinten'
-//          },
-//          {
-//            id:   'm3',
-//            name: 'Michael Jan Kun'
-//          }
-//        ],
+//          data.teams = [];
 //
-//        /**
-//         * Teams
-//         */
-//        teams: [
+//          angular.forEach(teams_local, function(team)
 //          {
-//            id:   't1',
-//            name: 'Verpleegkundigen Rotterdam'
-//          },
-//          {
-//            id:   't2',
-//            name: 'Thuiszorgers'
-//          },
-//          {
-//            id:   't3',
-//            name: 'Groep Schiedam'
-//          }
-//        ],
 //
-//        /**
-//         * Clients
-//         */
-//        clients: [
-//          {
-//            id:   'c1',
-//            name: 'Gerda Bloom'
-//          },
-//          {
-//            id:   'c2',
-//            name: 'Arjan Smit'
-//          },
-//          {
-//            id:   'c3',
-//            name: 'Johan Pieters'
-//          }
-//        ],
+//            /*
+//             * push team data
+//             */
+//            data.teams.push({"id" : team.uuid , "name" : team.name});
 //
-//        /**
-//         * Groups
-//         */
-//        groups: [
-//          {
-//            id:   'g1',
-//            name: 'Erasmus Ziekenhuis'
-//          },
-//          {
-//            id:   'g2',
-//            name: 'Delfshaven Bejaardenhuis'
-//          },
-//          {
-//            id:   'g3',
-//            name: 'Schiedam Senioren'
-//          }
-//        ]
-//      };
+//            var mems = angular.fromJson(Storage.get(team.uuid));
+//            var memIds = [];
+//            angular.forEach(mems,function(mem,index){
+//              if(memberKeys.indexOf(mem.uuid) == -1){
+//                memberKeys.push(mem.uuid);
+//                members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
+//                memIds.push(mem.uuid);
+//              }
+//            });
+//
+//            connections.teams[team.uuid] = memIds;
+//
+// <<<<<<< HEAD
+//            /*
+//             * push team group connection data
+//             */
+//
+//            var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
+//            if(typeof grps[0] != 'undefined'){
+//                connections.teamClients[team.uuid] = grps[0].id;
+//            }
+//
+//          });
 //
 //
+//
+//          data.members = members;
+//
+//          /**
+//           * clients , group-client connection data
+//           */
+//          var groups = angular.fromJson(Storage.get("ClientGroups"));
+//          data.groups = groups;
+//
+//          var clients = [];
+//
+//          angular.forEach(groups,function(group,index){
+//            var cts = angular.fromJson(Storage.get(group.id));
+//            var ctIds = [];
+//            angular.forEach(cts,function(client,index){
+//              clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
+//              ctIds.push(client.uuid);
+//            });
+//
+//            connections.clients[group.id] = ctIds;
+//          });
+//
+//          data.clients = clients;
+//      }else{
+//        // data from the server
+//      }
+// =======
 //      /**
 //       * Connections
 //       */
@@ -121,109 +227,110 @@ angular.module('WebPaige.Controllers.Manage', [])
 //      };
 
 
-      if(data.local){
-          /*
-           * data from local storage
-           */ 
-          
-          /**
-           * teams , team-member , team-group connection data 
-           */
-          var teams_local = angular.fromJson(Storage.get("Teams"));
-    
-          console.log('teams ->', teams_local);
-          
-          var connections = {teamClients: {} , teams: {} ,clients: {} };
-          
-          
-    
-          var members = [];
-          data.teams = [];
-          
-          angular.forEach(teams_local,function(team,index){
-             
-            /*
-             * push team data 
-             */  
-            data.teams.push({"id" : team.uuid , "name" : team.name});
-            
-            var mems = angular.fromJson(Storage.get(team.uuid));
-            var memIds = [];
-            angular.forEach(mems,function(mem,index){
-                members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
-                memIds.push(mem.uuid);
-            });
-            
-            console.log(team.name+"("+team.uuid+")","==>",memIds);
-            
-            connections.teams[team.uuid] = memIds;
-            
-          });
-    
-          data.members = members;
-    
-          /**
-           * clients , group-client connection data
-           */
-          var groups = angular.fromJson(Storage.get("ClientGroups"));
-          var groupIds = [];
-          data.groups = groups;
-          
-          var clients = [];
-          var clientIds = [];
-          
-          angular.forEach(groups,function(group,index){
-            var cts = angular.fromJson(Storage.get(group.id));
-            var ctIds = [];
-            angular.forEach(cts,function(client,index){
-              clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
-              ctIds.push(client.uuid);
-              
-              // add to global client ids
-              if(clientIds.indexOf(client.uuid) == -1){
-                  clientIds.push(client.uuid);
-              }
-            });
-            
-            connections.clients[group.id] = ctIds;
-            
-            groupIds.push(group.id);
-          });
-          
-          /*
-           * get the clients not in the client group
-           */
-          var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
-          
-          angular.forEach(clients_Not_In_Group,function(client,index){
-              if(clientIds.indexOf(client.uuid) == -1){
-                  clientIds.push(client.uuid);
-                  clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
-              }
-          });
-          
-          data.clients = clients;
-          
-          angular.forEach(teams_local,function(team,index){
-              /*
-               * push team group connection data
-               */
-              var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
-              var kp = true;
-              angular.forEach(grps,function(grp,i){
-                  if(groupIds.indexOf(grp.id) != -1 && kp){
-                      connections.teamClients[team.uuid] = grp.id;
-                      kp = false;
-                  }
-              });
-              
-          });
-          
-          // keep the original connections into the scope
-          $scope.connections = connections;
-      }else{
-        // data from the server
-      }
+//      if(data.local){
+//          /*
+//           * data from local storage
+//           */
+//
+//          /**
+//           * teams , team-member , team-group connection data
+//           */
+//          var teams_local = angular.fromJson(Storage.get("Teams"));
+//
+//          console.log('teams ->', teams_local);
+//
+//          var connections = {teamClients: {} , teams: {} ,clients: {} };
+//
+//
+//
+//          var members = [];
+//          data.teams = [];
+//
+//          angular.forEach(teams_local,function(team,index){
+//
+//            /*
+//             * push team data
+//             */
+//            data.teams.push({"id" : team.uuid , "name" : team.name});
+//
+//            var mems = angular.fromJson(Storage.get(team.uuid));
+//            var memIds = [];
+//            angular.forEach(mems,function(mem,index){
+//                members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
+//                memIds.push(mem.uuid);
+//            });
+//
+//            console.log(team.name+"("+team.uuid+")","==>",memIds);
+//
+//            connections.teams[team.uuid] = memIds;
+//
+//          });
+//
+//          data.members = members;
+//
+//          /**
+//           * clients , group-client connection data
+//           */
+//          var groups = angular.fromJson(Storage.get("ClientGroups"));
+//          var groupIds = [];
+//          data.groups = groups;
+//
+//          var clients = [];
+//          var clientIds = [];
+//
+//          angular.forEach(groups,function(group,index){
+//            var cts = angular.fromJson(Storage.get(group.id));
+//            var ctIds = [];
+//            angular.forEach(cts,function(client,index){
+//              clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
+//              ctIds.push(client.uuid);
+//
+//              // add to global client ids
+//              if(clientIds.indexOf(client.uuid) == -1){
+//                  clientIds.push(client.uuid);
+//              }
+//            });
+//
+//            connections.clients[group.id] = ctIds;
+//
+//            groupIds.push(group.id);
+//          });
+//
+//          /*
+//           * get the clients not in the client group
+//           */
+//          var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
+//
+//          angular.forEach(clients_Not_In_Group,function(client,index){
+//              if(clientIds.indexOf(client.uuid) == -1){
+//                  clientIds.push(client.uuid);
+//                  clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
+//              }
+//          });
+//
+//          data.clients = clients;
+//
+//          angular.forEach(teams_local,function(team,index){
+//              /*
+//               * push team group connection data
+//               */
+//              var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
+//              var kp = true;
+//              angular.forEach(grps,function(grp,i){
+//                  if(groupIds.indexOf(grp.id) != -1 && kp){
+//                      connections.teamClients[team.uuid] = grp.id;
+//                      kp = false;
+//                  }
+//              });
+//
+//          });
+//
+//          // keep the original connections into the scope
+//          $scope.connections = connections;
+//      }else{
+//        // data from the server
+//      }
+//>>>>>>> 349776e07db6b8c05b5466a98daed16519c78b5e
 
       /**
        * Introduce and reset data containers
@@ -268,7 +375,7 @@ angular.module('WebPaige.Controllers.Manage', [])
       /**
        * Default view
        */
-      $scope.setViewTo('teamClients');
+      $scope.setViewTo('teams');
 
 
       /**
@@ -349,11 +456,16 @@ angular.module('WebPaige.Controllers.Manage', [])
               {
                 if (node.id == kid)
                 {
-                  population[key].push(node);
+                  population[key].push({
+                    _id:  node.id,
+                    name: node.name
+                  });
                 }
               })
             });
           });
+
+          // console.log('population ->', population);
 
           return population;
         },
