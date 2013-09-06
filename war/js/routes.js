@@ -142,16 +142,27 @@ angular.module('WebPaige')
       },
       reloadOnSearch: false
     })
-    
+
+
+    /**
+     * Agenda router
+     */
+      .when('/planboard',
+      {
+         templateUrl: 'dist/views/planboard.html',
+         controller: 'planboard',
+         reloadOnSearch: false
+      })
+
 
     /**
      * Settings router
      */
-    // .when('/settings',
-    // {
-    //   templateUrl: 'dist/views/settings.html',
-    //   controller: 'settings'
-    // })
+      // .when('/settings',
+      // {
+      //   templateUrl: 'dist/views/settings.html',
+      //   controller: 'settings'
+      // })
 
 
     /**

@@ -778,6 +778,49 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
 
+//            /**
+//             * Remove items
+//             */
+//            this.stores[key].removeItems = function (items, callback, errback)
+//            {
+//              console.log('removeItems stuff ->', items);
+//
+//              var num = items.length;
+//
+//              for (var i = 0; i < num; i++)
+//              {
+//                var index = this.data.indexOf(items[i]);
+//
+//                if (index != -1)
+//                {
+//                  this.data.splice(index, 1);
+//                }
+//                else
+//                {
+//                  errback("Cannot find item"); // TODO: better error
+//                  return;
+//                }
+//              }
+//
+//              this.updateFilters();
+//
+//              if (callback)
+//              {
+//                callback({
+//                  'totalItems': this.filteredData.length,
+//                  'items': items
+//                });
+//              }
+//
+//              this.trigger('change', undefined);
+//            };
+
+
+
+
+
+
+
 
 
 

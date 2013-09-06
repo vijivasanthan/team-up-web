@@ -134,10 +134,10 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
           else
           {
             nextMonday = new Date(nweeks[i-1]).addWeeks(1);
-          };
+          }
 
           nweeks.push(new Date(nextMonday));
-        };
+        }
 
         nweeks.unshift(firstMonday);
 
@@ -155,7 +155,7 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
               timeStamp: new Date(nweeks[i+1]).getTime()
             }
           }
-        };
+        }
 
         /**
          * Remove unneccessary periods
@@ -185,10 +185,10 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
           else
           {
             nextDay = new Date(ndays[i-1]).addDays(1);
-          };
+          }
 
           ndays.push(new Date(nextDay));
-        };
+        }
 
         for (var i = 0; i < 366; i++)
         {
@@ -202,7 +202,7 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
               timeStamp: new Date(ndays[i+1]).getTime()
             }
           };
-        };
+        }
 
         /**
          * Remove not existing date
@@ -216,7 +216,7 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
         else
         {
           days.total = 366;
-        };
+        }
 
         return days;
       },

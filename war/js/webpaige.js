@@ -30,6 +30,9 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Clients',
   'WebPaige.Controllers.Manage',
   'WebPaige.Controllers.TreeGrid',
+  'WebPaige.Controllers.Planboard',
+  'WebPaige.Controllers.Timeline',
+  'WebPaige.Controllers.Timeline.Navigation',
   'WebPaige.Controllers.Profile',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
@@ -43,7 +46,7 @@ angular.module('WebPaige',[
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
   'WebPaige.Services.Generators',
-  // 'WebPaige.Services.Sloter',
+  'WebPaige.Services.Sloter',
   // 'WebPaige.Services.Stats',
   // 'WebPaige.Services.Offsetter',
   // directives

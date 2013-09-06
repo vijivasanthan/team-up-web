@@ -45,7 +45,7 @@ module.exports = function (grunt)
             'war/js/services/storage.js',
             'war/js/services/strings.js',
             'war/js/services/generators.js',
-            // 'war/js/services/sloter.js',
+            'war/js/services/sloter.js',
             // 'war/js/services/stats.js',
             // 'war/js/services/offsetter.js',
             // filters
@@ -64,6 +64,9 @@ module.exports = function (grunt)
             'war/js/controllers/clients.js',
             'war/js/controllers/manage.js',
             'war/js/controllers/treegrid.js',
+            'war/js/controllers/planboard.js',
+            'war/js/controllers/timeline.js',
+            'war/js/controllers/timeline-navigation.js',
             'war/js/controllers/messages.js',
           ],
           'war/src/plugins.js': [
@@ -135,13 +138,14 @@ module.exports = function (grunt)
           // 'war/dist/views/logout.html':    'war/js/views/logout.html',
           // 'war/dist/views/dashboard.html': 'war/js/views/dashboard.html',
           'war/dist/views/core.html':         'war/js/views/core.html',
-           'war/dist/views/profile.html':   'war/js/views/profile.html',
+           'war/dist/views/profile.html':     'war/js/views/profile.html',
           // 'war/dist/views/settings.html':  'war/js/views/settings.html',
           // 'war/dist/views/help.html':      'war/js/views/help.html',
-          'war/dist/views/teams.html':      'war/js/views/teams.html',
+          'war/dist/views/teams.html':        'war/js/views/teams.html',
           'war/dist/views/clients.html':      'war/js/views/clients.html',
-          'war/dist/views/manage.html':      'war/js/views/manage.html',
-          'war/dist/views/messages.html':      'war/js/views/messages.html'
+          'war/dist/views/manage.html':       'war/js/views/manage.html',
+          'war/dist/views/planboard.html':    'war/js/views/planboard.html',
+          'war/dist/views/messages.html':     'war/js/views/messages.html'
         }
       }
     },

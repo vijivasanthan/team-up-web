@@ -1,0 +1,149 @@
+<section id="planboard" ng-controller="timeline">
+
+<div class="page-header">
+  Agenda
+</div>
+
+
+
+
+
+<!-- timeline controls -->
+<div class="row-fluid" id="timeline-controls" ng-controller="timeline-navigation">
+
+  <!-- range indicator -->
+  <div class="pull-right" style="text-align: right">
+    <h4 style="font-weight: normal">
+      {{timeline.range | rangeMainFilter}}<br>
+      <!-- timeline scope info -->
+      <div style="font-size: 15px; font-weight: lighter">
+        <span>{{timeline | rangeInfoFilter}}</span>
+      </div>
+      <!-- end timeline scope info -->
+    </h4>
+  </div>
+  <!-- end range indicator -->
+
+</div>
+<!-- end timeline controls -->
+
+<div class="tabbable tabs-left">
+
+  <!-- tabs links -->
+  <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0;">
+
+    <!-- teams organizer tab link -->
+    <li class="{{(views.teams==true) && 'active'}}">
+      <a href="#viewTeamsTab"
+         data-toggle="tab"
+         ng-click="setViewTo('teams')">
+        <span class="entypo">&#9998;</span>
+        {{ui.teamup.teams}}
+      </a>
+    </li>
+    <!-- end teams organizer tab link -->
+
+    <!-- clients organizer tab link -->
+    <li class="{{(views.clients==true) && 'active'}}">
+      <a href="#viewClientsTab"
+         data-toggle="tab"
+         ng-click="setViewTo('clients')">
+        <span class="entypo">&#59136;</span>
+        {{ui.teamup.clients}}
+      </a>
+    </li>
+    <!-- end clients organizer -->
+
+  </ul>
+  <!-- end tabs links -->
+
+
+
+
+
+
+
+
+
+  <!-- tabs content -->
+  <div class="tab-content treegrid-container" ng-controller="treegrid">
+
+    <!-- Teams organizer -->
+    <div class="tab-pane {{(views.teams==true || views.clients==true) && 'active'}}"
+         id="viewTeamsTab" >
+
+
+
+
+      <!-- timeline -->
+      <div id="timeline">
+
+        <!-- timeline-toolbar -->
+        <div id="timeline-toolbar">
+
+          <!-- groups members controls -->
+          <div class="pull-left">
+
+            <select name="" id="">
+              <option value="">Verzorgers 1</option>
+            </select>
+
+          </div>
+          <!--end groups members controls -->
+
+        </div>
+        <!-- end timeline-toolbar -->
+
+        <br>
+
+        <hr>
+
+        <!-- user timeline -->
+        <div id="mainTimeline"></div>
+        <!-- end user timeline -->
+
+      </div>
+      <!-- end timeline -->
+
+      <hr>
+
+      <!-- planboard footer -->
+      <p>
+        <small class="pull-left">
+          <span class="text-warning">{{ui.planboard.lastSyncTime}}</span>&nbsp;
+          <span class="text-warning">{{data.synced | nicelyDate}}</span>
+        </small>
+        <small class="pull-right">
+          <span class="text-warning">{{ui.planboard.dataRangeStart}}</span>
+          <span class="text-warning">{{data.periods.start | nicelyDate}}</span>
+          &nbsp;|&nbsp;
+          <span class="text-warning">{{ui.planboard.dataRangeEnd}}</span>
+          <span class="text-warning">{{data.periods.end | nicelyDate}}</span>
+        </small>
+      </p>
+      <!-- end planboard footer -->
+
+
+
+
+    </div>
+    <!-- end Teams organizer -->
+
+  </div>
+  <!-- end tabs content -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</section>

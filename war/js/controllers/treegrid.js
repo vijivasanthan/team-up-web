@@ -39,7 +39,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
 
           /**
-           * TODO (Check this later on)
            * Calculate height of available area
            */
           areas: function ()
@@ -55,23 +54,28 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           {
             var _this = this;
 
-            var key = $scope.treeGrid.grid + '-' + id;
+            var key = $scope.treeGrid.grid + '_' + id;
 
-            this.grids[key] = new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '-' + id), this.options.grid);
+            this.grids[key] = new links.TreeGrid(document.getElementById($scope.treeGrid.grid + '_' + id), this.options.grid);
 
-//            this.grids[key].Grid.expandedItems.push(this.grids['TeamClients-right']);
-//
-//            if (this.expanded.length > 0)
-//            {
-//              angular.forEach(this.expanded, function (exid)
-//              {
-//                _this.grids[key].__proto__.constructor.Grid.expandedItems.push(_this.grids[exid]);
-//              });
-//            }
-//
-//            console.log('GRID -->', this.grids[key].__proto__.constructor.Grid.expandedItems);
-//
-//            console.warn('treeGrid ->', $scope.treeGrid);
+            // var toRender = (reRender) ? this.caches[key] : data;
+
+            angular.forEach(this.stores,  function (store)
+            {
+              var filtered = [];
+
+              angular.forEach(store.data, function (node)
+              {
+                if (node._id)
+                {
+                  filtered.push(node);
+                }
+              });
+
+              store.data = filtered;
+
+              store.filteredData = filtered;
+            });
 
             this.grids[key].draw(this.store(id, data));
 
@@ -94,7 +98,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               function (properties)
               {
                 var expandeds = [],
-                    collapsed = key + '-' + properties.items[0]._id;
+                    collapsed = key + '_' + properties.items[0]._id;
 
                 angular.forEach($scope.treeGrid.expanded, function (expanded)
                 {
@@ -115,12 +119,13 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'select',
               function (properties)
               {
-                console.log('selecting ->', key, properties);
+                // console.log('selecting ->', key, properties);
               }
             );
 
 
             /**
+             * TODO (Is it functional?)
              * Ready listener
              */
             links.events.addListener(this.grids[key], 'ready',
@@ -137,10 +142,24 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'remove',
               function (event)
               {
+//                console.log('id -> ' + id +
+//                  '\n\n' +
+//                  ' key ->' + key +
+//                  '\n\n' +
+//                  ' event ->' + angular.toJson(event)
+//                );
+
                 var items = event.items;
 
                 for (var i = 0; i < items.length; i++)
+                {
                   _this.stores[key].removeLink(items[i]);
+                }
+
+                setTimeout(function()
+                {
+                  console.log('=> data manipulated ->', _this.stores[key].data);
+                }, 1000);
               }
             );
           },
@@ -151,34 +170,55 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           store: function (id, data)
           {
-            var key = $scope.treeGrid.grid + '-' + id;
+            var key = $scope.treeGrid.grid + '_' + id;
 
             var _this = this;
 
+            // console.log('data to be stored ->', id, data);
+
             this.stores[key] = new links.DataTable(this.process(id, data), this.configure(id));
 
+            this.stores[key].totalItems = this.stores[key].data.length;
 
             /**
              * Append items
              */
             this.stores[key].appendItems = function (items, callback)
             {
-              var num = items.length;
 
-              for (var i = 0; i < num; i++)
+              for (var i = 0; i < items.length; i++)
               {
+                items[i]._actions = [
+                {
+                  event:  'remove',
+                  text:   'remove'
+                }];
+
                 this.data.push(items[i]);
               }
 
               this.updateFilters();
 
-              callback({
-                'totalItems': this.filteredData.length,
-                'items': items
-              });
+              if (callback)
+              {
+                callback({
+                  'totalItems': this.filteredData.length,
+                  'items':      items
+                });
+              }
 
               this.trigger('change', undefined);
             };
+
+
+//            console.log('id ->', id);
+//
+//            if (this.grid == 'teams' &&
+//                this.connections.teams[id] &&
+//                this.connections.teams[id].length > 0)
+//            {
+//              this.stores['teams-' + id].appendItems(this.connections.teams[id]);
+//            }
 
 
             /**
@@ -247,68 +287,57 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             };
 
 
-            /**
-             * Remove items
-             */
-            this.stores[key].removeItems = function (items, callback, errback)
-            {
-              console.log('removing stuff ->');
-
-              var num = items.length;
-
-              for (var i = 0; i < num; i++)
-              {
-                var index = this.data.indexOf(items[i]);
-
-                if (index != -1)
-                {
-                  this.data.splice(index, 1);
-                }
-                else
-                {
-                  errback("Cannot find item"); // TODO: better error
-                  return;
-                }
-              }
-
-              this.updateFilters();
-
-              if (callback)
-              {
-                callback({
-                  'totalItems': this.filteredData.length,
-                  'items': items
-                });
-              }
-
-              this.trigger('change', undefined);
-            };
-
 
             /**
              * (Custom) remove links
              */
             this.stores[key].removeLink = function (item)
             {
-              console.log('removing for ->', item);
+              var filtered = [];
 
-              var index = _this.stores[item._parent].data.indexOf(item);
-
-              if (index == -1)
+              angular.forEach(_this.stores[item._parent].data, function (data)
               {
-                throw Error('item not found in data');
-              }
+                console.log('data ->', data);
 
-              delete _this.stores[item._parent].data[index];
+                if (data._id != item._id)
+                {
+                  filtered.push(data);
+                }
+              });
 
-              // this.updateFilters();
+              _this.stores[item._parent].data = filtered;
 
-              // this.trigger('change', undefined);
+              _this.stores[item._parent].filteredData = filtered;
 
-              // this.update();
+              this.updateFilters();
 
-              _this.build('right', _this.data.right);
+              this.trigger('change', undefined);
+
+              var processed = [],
+                  pieces    = item._parent.split('_'),
+                  section   = pieces[0],
+                  last      = pieces[pieces.length - 1];
+
+              angular.forEach(_this.connections[section][last], function (connection)
+              {
+                if (connection._id != item._id)
+                {
+                  connection._actions = [{
+                    event:  'remove',
+                    text:   'remove'
+                  }];
+
+                  processed.push(connection);
+                }
+              });
+
+              _this.connections[section][last] = processed;
+
+              _this.caches[item._parent] = processed;
+
+              this.update();
             };
+
 
 
             /**
@@ -354,7 +383,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                 {
                   var index;
 
-                  angular.forEach(_this.stores['teamClients-right'].data, function (data, ind)
+                  angular.forEach(_this.stores['teamClients_right'].data, function (data, ind)
                   {
                     if (connection.targetItem.id == data._id)
                     {
@@ -369,7 +398,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                         ids.push(connection.sourceItems[i].id);
                       }
 
-                      _this.stores['teamClients-right'].data[index] = {
+                      _this.stores['teamClients_right'].data[index] = {
                         '_id':      connection.targetItem.id,
                         'name':     connection.targetItem.name,
                         'links':    names.join(', '),
@@ -377,7 +406,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
                         '_actions': [{'event': 'unlink', 'text': 'unlink'}]
                       };
 
-                      _this.stores['teamClients-right'].update();
+                      _this.stores['teamClients_right'].update();
                     }
                   });
 
@@ -395,7 +424,11 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           process: function (id, data)
           {
-            var key = $scope.treeGrid.grid + '-' + id;
+            var key = $scope.treeGrid.grid + '_' + id;
+
+
+            console.log('data to be processed ->', id, data);
+
 
             this.processed[key] = [];
 
@@ -403,77 +436,68 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             angular.forEach(data, function (node)
             {
+              // console.log('node ->', node);
+
               var record = {
                 name:     node.name,
                 _id:      node.id,
                 _parent:  id
               };
 
-//              if (id != 'left' && id != 'right')
-//              {
-//                record._parent = id;
-//              }
 
               if (_this.type == '1:n' && id == 'right')
               {
-                var fid = _this.grid + '-' + id + '-' + node.id;
+                var fid = _this.grid + '_' + id + '_' + node.id;
 
-                var connections = [],
-                    cons        = [];
 
                 if (_this.grid == 'teams' &&
-                    _this.connections.teams[node.id] &&
-                    _this.connections.teams[node.id].length > 0)
+                  _this.connections.teams[node.id] &&
+                  _this.connections.teams[node.id].length > 0)
                 {
-                  angular.forEach(_this.connections.teams[node.id], function (con)
+
+                  setTimeout(function ()
                   {
-                    con._parent = 'teams-' + id + '-' + node.id;
+                    // console.log('data ->', _this.stores[fid]);
 
-                    cons.push(con);
-                  });
-
-                  connections = cons;
+                    _this.stores[fid].appendItems(
+                      _this.connections.teams[node.id],
+                      function (results)
+                      {
+                        _this.stores[fid].totalItems = results.totalItems;
+                      }
+                    );
+                  }, 100);
                 }
+
 
                 if (_this.grid == 'clients' &&
-                    _this.connections.clients[node.id] &&
-                    _this.connections.clients[node.id].length > 0)
+                  _this.connections.clients[node.id] &&
+                  _this.connections.clients[node.id].length > 0)
                 {
-                  angular.forEach(_this.connections.clients[node.id], function (con)
+                  setTimeout(function ()
                   {
-                    con._parent = 'clients-' + id + '-' + node.id;
-
-                    cons.push(con);
-                  });
-
-                  connections = cons;
+                    _this.stores[fid].appendItems(
+                      _this.connections.clients[node.id],
+                      function (results)
+                      {
+                        _this.stores[fid].totalItems = results.totalItems;
+                      }
+                    );
+                  }, 100);
                 }
 
-                var data = (_this.caches[fid]) ? _this.caches[fid] : connections;
+
+                var data = (_this.caches[fid]) ? _this.caches[fid] : [];
+
+                // console.log('RENDERED ->', data);
 
                 record.nodes = _this.store(
-                  id + '-' + node.id,
+                  id + '_' + node.id,
                   data
                 );
 
-                record.name += ' (' + data.length + ')';
+                // record.name += ' (' + _this.stores[fid].totalItems + ')';
               }
-
-              if (_this.type == '1:n' && id != 'right')
-              {
-                record._actions = [
-                  {
-                    event:  'remove',
-                    text:   'remove'
-                  }
-                ];
-              }
-
-//              if (_this.type == '1:n' && id == 'left')
-//              {
-//                console.log('left item ->', record);
-//                delete record._actions;
-//              }
 
               _this.processed[key].push(record);
             });
@@ -535,7 +559,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             setTimeout(function ()
             {
               console.log('treeGrid ->', $scope.treeGrid);
-            }, 1000);
+            }, 500);
           }
         };
 
@@ -550,10 +574,13 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           $scope.treeGrid.data = arguments[3];
           $scope.treeGrid.connections = arguments[4];
 
-          setTimeout(function ()
+          (function ($scope)
           {
-            $scope.treeGrid.init();
-          }, 100);
+            setTimeout(function ()
+            {
+              $scope.treeGrid.init();
+            }, 100)
+          })($scope);
         });
 
 
