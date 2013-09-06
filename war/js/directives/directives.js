@@ -346,6 +346,39 @@ angular.module('WebPaige.Directives', ['ngResource'])
 //     };
 //   }
 // ])
+
+/**
+ * show the member's profile
+ */
+.directive('profile', [function() {
+
+    return {
+        restrict: 'E',
+        scope: {
+            memberId: '@'
+            // scope
+            // define a new isolate scope
+
+        },
+        controller: ['$scope','$rootScope', 'Storage' ,function ($scope,$rootScope,Storage) {
+            console.log($scope.memberId );
+            
+            $scope.loadMember = function(el){
+                
+            }
+            
+        }],
+        link: function(scope, elem, attrs, ctrl) {
+            // link function 
+            console.log(attrs.memberId );
+        },
+        replace: false,    
+        templateUrl: 'js/views/profileTemplate.html'
+    };
+
+}])
+
+
 ;
 
 

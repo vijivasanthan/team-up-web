@@ -89,7 +89,13 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 
-
+		var ClientReports = $resource($config.host + 'teamup/client/:clientId/reports', {}, {
+            query : {
+                method : 'GET',
+                params : {},
+                isArray : true
+            }
+        }); 
     
 		/**
 		 * get the client groups and the clients
@@ -387,6 +393,23 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			    deferred.resolve({error: error});
 			});
 			
+			return deferred.promise;
+		}
+		
+		
+		/**
+		 * get reports by the client id
+		 */
+		ClientGroups.prototype.queryReports = function(cId) {
+			var deferred = $q.defer();
+
+			ClientReports.query({clientId : cId}, 
+			   function(reports) {
+				Storage.add('reports_'+cId, angular.toJson(reports));
+				deferred.resolve(reports);	
+			}, function(error) {
+				deferred.resolve({error: error});
+			});
 			return deferred.promise;
 		}
 

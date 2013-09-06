@@ -356,6 +356,11 @@ var ui = {
          editClient: 'Edit client',
          loadingNumber: 'loading call-in number of this team',
          birthdayError: 'Birthday error',
+         map: 'map',
+         saveContacts: 'Save contacts',
+         loadingReports: 'Loading reports',
+         datetime: 'Date & time',
+         writenBy: 'write by',
       }
     },
     nl: {

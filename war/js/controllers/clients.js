@@ -135,6 +135,19 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			setView('client');
 		}
 	};
+	
+
+    var loadReports = function(){
+        $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+        Clients.queryReports($scope.client.uuid).then(function(reports){
+            $rootScope.statusBar.off();
+            $scope.reports = reports;
+            
+        },function(error){
+           console.log(error); 
+        });
+    }
+	
 	/**
 	 * View setter
 	 */
@@ -146,7 +159,13 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			reports : false
 		};
 
+		//load the reports on this view 
+        if(hash == "viewClient"){
+            loadReports();
+        }
+		
 		$scope.views[hash] = true;
+        
 	}
 	
 	/**
@@ -165,9 +184,9 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             $location.hash(hash);
 			
 			setView(hash);
-			setView(hash);
 		});
 	};
+	
 	
 	/**
 	 * Selection toggler
@@ -324,7 +343,11 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			$scope.contacts = [];
 		}
 
+		if($scope.contacts == null){
+			$scope.contacts = [];
+		}
 		$scope.contacts.push(contactPerson);
+		
 	}
 	/**
 	 * add new client
@@ -381,5 +404,16 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			}
 		});
 	}
+	
+	/**
+	 * save the contacts for the client
+	 */
+	$scope.saveContacts = function(contacts){
+		console.log("client id " , $scope.client.uuid ); 
+		console.log("contacts " , contacts);
+		
+		
+	}
+	
 	
 }]);
