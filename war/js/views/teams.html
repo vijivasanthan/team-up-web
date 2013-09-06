@@ -99,7 +99,7 @@
 				  	<span ng-repeat="state in member.states | filter:share=true " class="states">
                         <span data-icon="{{state.name|stateDataIcon:'data_icon'}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span>
 <!--				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>-->
-			  			<span class="stateValue">{{state.value}}</span>
+			  			<span class="stateValue">{{state|stateValue}} <a ng-show="(state.name == 'Location')" href="http://maps.google.com/?q={{state|stateValue:'data'}}">{{ui.teamup.map}}</a></span>
 				  	</span>
 				  </td>
 	              <td>

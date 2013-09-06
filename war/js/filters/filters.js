@@ -175,10 +175,17 @@ angular.module('WebPaige.Filters', ['ngResource'])
             var ret = $config.stateColors.none;
             
             angular.forEach(states, function (state, index){
+                /**
+                 *    WORKING
+                 *    OFFLINE
+                 *    AVAILABLE
+                 *    UNAVAILABLE
+                 *    UNKNOWN
+                 */
                 if(angular.lowercase(state.name) == "availability" && state.share){
-                    if(angular.lowercase(state.value) == "availalbe"){
+                    if(angular.lowercase(state.value) == "availalbe" || angular.lowercase(state.value) == "working" ){
                         ret = $config.stateColors.availalbe; 
-                    }else if(angular.lowercase(state.value) == "busy"){
+                    }else if(angular.lowercase(state.value) == "unavailable"){
                         ret = $config.stateColors.busy;
                     }else if(angular.lowercase(state.value) == "offline"){
                         ret = $config.stateColors.offline;
@@ -191,7 +198,35 @@ angular.module('WebPaige.Filters', ['ngResource'])
     }
  ])
 
-
+ 
+ /**
+ * Translate state circle color 
+ */
+ .filter('stateValue', 
+ [
+    '$config', 
+    function ($config){
+        return function (state,type){
+            if(angular.lowercase(state.name) == "location"){
+                var value = state.value;
+                var match = value.match(/\((.*?)\)/);
+                if(match == null){
+                    return value;
+                }else{
+                    var ll = match[1];
+                    value = value.replace(match[0],"");
+                    if(type == "data"){
+                        return ll;
+                    }else{
+                        return value;
+                    }
+                }
+            }else{
+                return state.value;
+            }
+        }
+    }
+])
 
 /**
  * Main range filter
