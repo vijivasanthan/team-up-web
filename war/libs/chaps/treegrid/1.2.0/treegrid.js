@@ -1235,7 +1235,8 @@ links.TreeGrid.Grid.prototype._repaintEmpty = function() {
             domEmpty = document.createElement('div');
             domEmpty.className = 'treegrid-loading';
             domEmpty.style.position = 'absolute';
-            domEmpty.appendChild(document.createTextNode('(empty)'));
+          // domEmpty.appendChild(document.createTextNode('(empty)'));
+          domEmpty.appendChild(document.createTextNode('(leeg)'));
             this.getContainer().appendChild(domEmpty);
             dom.empty = domEmpty;
 

@@ -503,10 +503,12 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             this.build('left',  this.data.left);
             this.build('right', this.data.right);
 
-            setTimeout(function ()
-            {
-              console.log('treeGrid ->', $scope.treeGrid);
-            }, 500);
+            /*
+             setTimeout(function ()
+             {
+             console.log('treeGrid ->', $scope.treeGrid);
+             }, 500);
+             */
           }
         };
 
