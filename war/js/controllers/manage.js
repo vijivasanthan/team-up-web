@@ -338,7 +338,7 @@ angular.module('WebPaige.Controllers.Manage', [])
       /**
        * Default view
        */
-      $scope.setViewTo('teams');
+      $scope.setViewTo('teamClients');
 
 
       /**
