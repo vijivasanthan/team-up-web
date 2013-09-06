@@ -246,7 +246,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               }
 
               this.data[index] = {
-                'name': item.name
+                _id:  item._id,
+                name: item.name
               };
 
               this.update();
