@@ -50,7 +50,7 @@
   // border-top: 1px solid $tableBorder;
 }
 
-#teamClients-right{
+#teamClients_right{
   .treegrid-item{
     div:nth-child(2) {
       color:$orange;
@@ -75,7 +75,7 @@
   }
 }
 
-#teams-right, #clients-right{
+#teams_right, #clients_right{
   .treegrid-item {
     .treegrid-actions {    //copied from .btn-primary and .btn-mini
       margin-top: 7px;
@@ -101,7 +101,7 @@
   cursor: pointer;
 }
 
-#teamClients-left, #teams-left, #clients-left {
+#teamClients_left, #teams_left, #clients_left {
   .treegrid-item{
     background-image: url("../img/dragIcon.png");
     background-repeat: no-repeat;
@@ -112,7 +112,7 @@
   }
 }
 
-#teams-right, #clients-right {
+#teams_right, #clients_right {
   .treegrid-item{
     .treegrid-fold, .treegrid-unfold {
       background-repeat: no-repeat;
