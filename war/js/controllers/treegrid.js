@@ -66,19 +66,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               store.data = store.filteredData = filtered;
             });
 
-
-
-
-
-
-            console.log('data ->', angular.toJson(data));
-
-
-
-
-
-
-
             this.grids[key].draw(this.store(id, data));
 
 
@@ -155,6 +142,8 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               function isUnique (item, data)
               {
                 var ret = true;
+
+                // console.warn('_id =>', item._id);
 
                 for (var i = 0; i < data.length; i++)
                 {
@@ -393,19 +382,11 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             var _this = this,
                 key   = $scope.treeGrid.grid + '_' + id;
 
-            var uniques   = {},
-                filtered  = [];
+            var filtered = [];
 
             angular.forEach(data, function (node)
             {
-              uniques[node.id] = node;
-            });
-
-            angular.forEach(uniques, function (unique)
-            {
-              console.log('unique ->', unique);
-
-              filtered.push(unique);
+              (node.id) && filtered.push(node);
             });
 
             this.processed[key] = [];
@@ -568,7 +549,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           teamClients: function ()
           {
-            var data        = $scope.treeGrid.stores['teamClients-right'].data,
+            var data        = $scope.treeGrid.stores['teamClients_right'].data,
                 connections = {};
 
             angular.forEach(data, function (node)
@@ -612,7 +593,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           teams: function ()
           {
-            $rootScope.$broadcast('save:teams', this.extract($scope.treeGrid.stores['teams-right'].data));
+            $rootScope.$broadcast('save:teams',
+              this.extract($scope.treeGrid.stores['teams_right'].data)
+            );
           },
 
           /**
@@ -620,7 +603,9 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
            */
           clients: function ()
           {
-            $rootScope.$broadcast('save:clients', this.extract($scope.treeGrid.stores['clients-right'].data));
+            $rootScope.$broadcast('save:clients',
+              this.extract($scope.treeGrid.stores['clients_right'].data)
+            );
           }
 
         };
