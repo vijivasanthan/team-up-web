@@ -1,4 +1,4 @@
-<div class="page-header" ng-hide="views.viewClient || views.editClient">
+<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup || views.reports">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="c.id as c.name for c in clientGroups"
@@ -17,31 +17,31 @@
 	    <!-- add client tab link -->
 	    <li class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}">
 	      <a href="#viewClientTab" data-toggle="tab" ng-click="setViewTo('client')">
-	        <span class="entypo">&#9998;</span>
+              <span class="icomoon" span data-icon="&#xe27f;" aria-hidden="true"></span>
 	        {{ui.teamup.clients}}
 	      </a>
 	    </li>
 	    <!-- end add client tab link -->
 	    <!-- edit client group tab link -->
 	    <li class="{{(views.newClientGroup==true) && 'active'}}">
-	      <a href="#newClientGroupTab" data-toggle="tab" ng-click="setViewTo('newClientGroup')"> 
-	        <span class="entypo">&#9998;</span>
-	        {{ui.teamup.newClientGroup}}
+	      <a href="#newClientGroupTab" data-toggle="tab" ng-click="setViewTo('newClientGroup')">
+              <span class="icomoon" span data-icon="&#xe16b;" aria-hidden="true"></span>
+              {{ui.teamup.newClientGroup}}
 	      </a>
 	    </li>
 	    <!-- end edit client group tab link -->
 	    <!-- new client tab link -->
 	    <li class="{{(views.newClient==true) && 'active'}}">
 	      <a href="#newClientTab" data-toggle="tab" ng-click="setViewTo('newClient')">
-	        <span class="entypo">&#59136;</span>
-	        {{ui.teamup.newClient}}
+              <span class="icomoon" span data-icon="&#xe16b;" aria-hidden="true"></span>
+              {{ui.teamup.newClient}}
 	      </a>
 	    </li>
     	<!-- end new client -->
     	<li class="{{(views.reports==true) && 'active'}}">
 	      <a href="#reportsTab" data-toggle="tab" ng-click="setViewTo('reports')">
-	        <span class="entypo">&#59136;</span>
-	        {{ui.teamup.reports}}
+              <span class="icomoon" span data-icon="&#xe0cd;" aria-hidden="true"></span>
+              {{ui.teamup.reports}}
 	      </a>
 	    </li>
     	

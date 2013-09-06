@@ -96,12 +96,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               
       ); 
       
-      var Member = $resource(
-      		$config.host + 'teamup/team/member',{
+      var Members = $resource(
+      		$config.host + 'teamup/team/:teamId/member',{
       		},{
       			save : {
       				method: 'POST',
-      			}
+      			},
+      			remove : {
+                    method: 'DELETE',
+                }
       		}
       );
       
@@ -194,57 +197,51 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //      };
 //
 //
-//      /**
-//       * Add Member to a team
-//       */
-//      Teams.prototype.addMember = function (candidate)
-//      {
-//        var deferred = $q.defer();
-//
-//        Members.add(
-//          { 
-//            id: candidate.team.uuid, 
-//            mid: candidate.id 
-//          }, 
-//          {}, 
-//          function (result) 
-//          {
-//            deferred.resolve(result);
-//          },
-//          function (error)
-//          {
-//            deferred.resolve({error: error});
-//          }
-//        );
-//
-//        return deferred.promise;    
-//      };
-//
-//
-//      /**
-//       * Remove member from team
-//       */
-//      Teams.prototype.removeMember = function (memberId, teamId)
-//      {
-//        var deferred = $q.defer();
-//
-//        Members.remove(
-//          { 
-//            id: teamId, 
-//            mid: memberId 
-//          }, 
-//          function (result) 
-//          {
-//            deferred.resolve(result);
-//          },
-//          function (error)
-//          {
-//            deferred.resolve({error: error});
-//          }
-//        );
-//
-//        return deferred.promise;    
-//      };
+      /**
+       * Add Member to a team
+       */
+      Teams.prototype.addMember = function (id , memberIds)
+      {
+        var deferred = $q.defer();
+        Members.save({teamId: id },memberIds, 
+          function (result) 
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;    
+      };
+
+
+      /**
+       * Remove member from team
+       */
+      Teams.prototype.delMember = function (teamId,memberIds)
+      {
+        var deferred = $q.defer();
+
+        Members.remove(
+          { 
+            id: teamId, 
+            mid: memberId 
+          }, 
+          function (result) 
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;    
+      };
 //
 //
 //      /**
@@ -743,6 +740,52 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
         return deferred.promise;
       };
+       
+       
+        /**
+        * add or remove the members from the teams 
+        */
+       Teams.prototype.manage = function(changes){
+       	  var deferred = $q.defer();
+       		
+       	  var calls = [];
+       	  
+		  angular.forEach(changes, function (change, teamId){
+		  	 if(change.a.length > 0){
+		  	 	calls.push(Teams.prototype.addMember(teamId,{ids : change.a}));
+		  	 }
+		     if(change.r.length > 0){
+		     	calls.push(Teams.prototype.delMember(teamId,{ids : change.r}));
+		     }
+		  });
+		  
+		  $q.all(calls)
+          .then(function (results)
+          {
+//                Teams.prototype.uniqueMembers();
+
+            var data = {};
+
+            // data.groups = {};
+// 
+            // angular.forEach(teams, function (team, gindex)
+            // {
+              // data.teams = teams;
+// 
+              // data.groups[team.uuid] = [];
+// 
+              // angular.forEach(results, function (result, mindex){
+                  // data.groups[team.uuid] = result.data;
+              // });
+            // });
+
+            deferred.resolve(data);
+          });
+          
+          return deferred.promise;
+       }
+       
+       
        
       return new Teams;
     }

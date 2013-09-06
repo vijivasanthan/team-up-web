@@ -18,7 +18,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.packages, function (pack, index)
+				angular.forEach($config.packages, function (pack)
 				{
 					if (pack.id == selected) gem = pack;
 				});
@@ -44,7 +44,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.countries, function (country, index)
+				angular.forEach($config.countries, function (country)
 				{
 					if (country.id == selected) gem = country;
 				});
@@ -70,7 +70,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.regions[country], function (region, index)
+				angular.forEach($config.regions[country], function (region)
 				{
 					if (region.id == selected) gem = region;
 				});
@@ -97,7 +97,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.virtuals, function (virtual, index)
+				angular.forEach($config.virtuals, function (virtual)
 				{
 					if (virtual.id == selected) gem = virtual;
 				});
@@ -107,24 +107,6 @@ angular.module('WebPaige.Filters', ['ngResource'])
 		}
 	}
 ])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -141,7 +123,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
  		{
  			var urole;
 
- 			angular.forEach($config.roles, function (prole, index)
+ 			angular.forEach($config.roles, function (prole)
  			{
  				if (prole.id == role) urole = prole.label;
  			});
@@ -152,9 +134,62 @@ angular.module('WebPaige.Filters', ['ngResource'])
  ])
 
 
+/**
+ * Translate state value to icon
+ */
+ .filter('stateDataIcon', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (name,type){
+            var ret;
 
+            angular.forEach($config.stateIcons, function (stateIcon, index)
+            {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
+                  if(type == "data_icon"){
+                      ret = stateIcon.data_icon;
+                  }else if(type == "class_name"){
+                      ret = stateIcon.class_name;
+                  }  
+                } 
+            });
 
+            return ret;
+        }
+    }
+ ])
 
+ 
+/**
+ * Translate state circle color 
+ */
+ .filter('stateColor', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (states)
+        {
+            var ret = $config.stateColors.none;
+            
+            angular.forEach(states, function (state, index){
+                if(angular.lowercase(state.name) == "availability" && state.share){
+                    if(angular.lowercase(state.value) == "availalbe"){
+                        ret = $config.stateColors.availalbe; 
+                    }else if(angular.lowercase(state.value) == "busy"){
+                        ret = $config.stateColors.busy;
+                    }else if(angular.lowercase(state.value) == "offline"){
+                        ret = $config.stateColors.offline;
+                    }
+                }
+            });
+
+            return ret;
+        }
+    }
+ ])
 
 
 
@@ -206,7 +241,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 								dates.end.real +
 								', ' +
 								Dater.getThisYear();
-			};
+			}
 
 		}
 	}
@@ -243,7 +278,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 								dates.end +
 								', ' +
 								Dater.getThisYear();
-			};
+			}
 		}
 	}
 ])
@@ -303,8 +338,8 @@ angular.module('WebPaige.Filters', ['ngResource'])
 									timeline.current.month +
 									', Total days: ' +
 									periods.months[timeline.current.month].totalDays;
-				};
-			};
+				}
+			}
 		};
 	}
 ])
