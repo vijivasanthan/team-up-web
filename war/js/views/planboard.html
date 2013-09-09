@@ -4,7 +4,6 @@
 
 	<span class="nullable pull-left">
 
-    <br>
     <select ng-model="current"
             ng-options="t.uuid as t.name for t in teams | orderBy:'name'"
             ng-change="requestTeam(current)">
@@ -15,19 +14,20 @@
 
 
   <!-- timeline controls -->
-  <div id="timeline-controls" ng-controller="timeline-navigation">
+  <div id="timeline-controls"
+       ng-controller="timeline-navigation"
+       class="pull-right"
+       style="text-align: right; float: right;">
 
     <!-- range indicator -->
-    <div class="pull-right" style="text-align: right;">
-      <h4 style="font-weight: normal">
-        {{timeline.range | rangeMainFilter}}<br>
-        <!-- timeline scope info -->
-        <div style="font-size: 15px; font-weight: lighter">
-          <span>{{timeline | rangeInfoFilter}}</span>
-        </div>
-        <!-- end timeline scope info -->
-      </h4>
-    </div>
+    <h4 style="font-weight: normal">
+      {{timeline.range | rangeMainFilter}}<br>
+      <!-- timeline scope info -->
+      <div style="font-size: 15px; font-weight: lighter">
+        <span>{{timeline | rangeInfoFilter}}</span>
+      </div>
+      <!-- end timeline scope info -->
+    </h4>
     <!-- end range indicator -->
 
   </div>
