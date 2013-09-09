@@ -345,12 +345,12 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		var contactPerson = {
 			firstName : '',
 			lastName : '',
-			func : '',
+			function : '',
 			phone : ''
 		};
 		contactPerson.firstName = $scope.contactForm.firstName;
 		contactPerson.lastName = $scope.contactForm.lastName;
-		contactPerson.func = $scope.contactForm.func;
+		contactPerson.function = $scope.contactForm.function;
 		contactPerson.phone = $scope.contactForm.phone;
 
 		if( typeof $scope.contacts == 'undefined') {
@@ -399,7 +399,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 * edit client profile 
 	 */
 	$scope.clientChange = function(client){
-		
+	    $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
+	    
 		try{
 			client.birthDate = Dater.convert.absolute(client.birthDate, 0);
 		}catch(error){
@@ -412,6 +413,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			if(result.error){
 				$rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
 			}else{
+			    $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+			    
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 				var routePara = {'uuid' : result.clientGroupUuid}; 
 				reloadGroup(routePara);
@@ -425,8 +428,31 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	$scope.saveContacts = function(contacts){
 		console.log("client id " , $scope.client.uuid ); 
 		console.log("contacts " , contacts);
+        
+		var client = $scope.client;
 		
+		try{
+            client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+        }catch(error){
+            console.log(error);
+            $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+            return;
+        }
 		
+		client.contacts = contacts;
+		
+		$rootScope.statusBar.display($rootScope.ui.teamup.savingContacts);
+		
+        Clients.updateClient(client).then(function(result){
+            if(result.error){
+                $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
+            }else{
+                $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                
+            }
+        });
 	}
 	
 	

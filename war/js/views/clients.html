@@ -341,7 +341,7 @@
 				  <div class="controls">
 					<input  type="text" 
 				        class="span4" 
-				        ng-model="contactForm.func">
+				        ng-model="contactForm.function">
 				  </div>
 				  
 				  <label class="control-label">{{ui.profile.phone}}</label>
@@ -372,7 +372,7 @@
 			          <tbody>
 			            <tr ng-repeat="contact in contacts|orderBy:lastName">
 			              <td>{{contact.firstName}} {{contact.lastName}} </td>
-			              <td>{{contact.func}}</td>
+			              <td>{{contact.function}}</td>
 			              <td>{{contact.phone}}</td>
 			              <td>
 			                <div class="pull-right">

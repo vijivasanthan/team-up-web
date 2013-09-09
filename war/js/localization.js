@@ -362,6 +362,7 @@ var ui = {
          datetime: 'Date & time',
          writenBy: 'write by',
          noSharedStates: 'No shared states',
+         savingContacts: 'Saving the contacts',
       }
     },
     nl: {
