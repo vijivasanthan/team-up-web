@@ -147,12 +147,12 @@ angular.module('WebPaige')
     /**
      * Agenda router
      */
-      .when('/planboard',
-      {
-         templateUrl: 'dist/views/planboard.html',
-         controller: 'planboard',
-         reloadOnSearch: false
-      })
+    .when('/planboard',
+    {
+       templateUrl: 'dist/views/planboard.html',
+       controller: 'planboard',
+       reloadOnSearch: false
+    })
 
 
     /**

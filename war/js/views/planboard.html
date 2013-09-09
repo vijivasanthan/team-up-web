@@ -1,18 +1,25 @@
 <section id="planboard" ng-controller="timeline">
 
 <div class="page-header">
-  Agenda
-</div>
+
+	<span class="nullable pull-left">
+
+    <select ng-model="current"
+            ng-options="t.uuid as t.name for t in teams | orderBy:'name'"
+            ng-change="requestTeam(current)">
+    </select>
+
+  </span>
 
 
 
+  <!-- timeline controls -->
+  <div id="timeline-controls"
+       ng-controller="timeline-navigation"
+       class="pull-right"
+       style="text-align: right; float: right;">
 
-
-<!-- timeline controls -->
-<div class="row-fluid" id="timeline-controls" ng-controller="timeline-navigation">
-
-  <!-- range indicator -->
-  <div class="pull-right" style="text-align: right">
+    <!-- range indicator -->
     <h4 style="font-weight: normal">
       {{timeline.range | rangeMainFilter}}<br>
       <!-- timeline scope info -->
@@ -21,11 +28,16 @@
       </div>
       <!-- end timeline scope info -->
     </h4>
+    <!-- end range indicator -->
+
   </div>
-  <!-- end range indicator -->
+  <!-- end timeline controls -->
 
 </div>
-<!-- end timeline controls -->
+
+
+
+
 
 <div class="tabbable tabs-left">
 
@@ -73,30 +85,17 @@
          id="viewTeamsTab" >
 
 
+      <div class="tab-header">
+        <h3 class="pull-left">Team title</h3>
+      </div>
+      <br>
+      <hr>
+
+
 
 
       <!-- timeline -->
       <div id="timeline">
-
-        <!-- timeline-toolbar -->
-        <div id="timeline-toolbar">
-
-          <!-- groups members controls -->
-          <div class="pull-left">
-
-            <select name="" id="">
-              <option value="">Verzorgers 1</option>
-            </select>
-
-          </div>
-          <!--end groups members controls -->
-
-        </div>
-        <!-- end timeline-toolbar -->
-
-        <br>
-
-        <hr>
 
         <!-- user timeline -->
         <div id="mainTimeline"></div>

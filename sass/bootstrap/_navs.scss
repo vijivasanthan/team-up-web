@@ -287,7 +287,9 @@
 
 // Clear any floats
 .tabbable {
-  @include clearfix();
+  //@include clearfix();
+  margin-top: 100px;
+  position: relative;
 }
 .tab-content {
   background-color: $white;
