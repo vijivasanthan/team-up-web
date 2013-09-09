@@ -1,26 +1,25 @@
-<section id="planboard" ng-controller="timeline">
+<section id="planboard">
 
-<div class="page-header">
+<div class="page-header row-fluid">
 
 	<span class="nullable pull-left">
-
     <select ng-model="current"
-            ng-options="t.uuid as t.name for t in teams | orderBy:'name'"
-            ng-change="requestTeam(current)">
+            ng-options="t.uuid as t.name for t in list | orderBy:'name'"
+            ng-change="changeCurrent()">
     </select>
-
   </span>
 
 
 
   <!-- timeline controls -->
+
   <div id="timeline-controls"
        ng-controller="timeline-navigation"
        class="pull-right"
-       style="text-align: right; float: right;">
+       style="text-align: right">
 
     <!-- range indicator -->
-    <h4 style="font-weight: normal">
+    <h4 style="font-weight: normal; padding-right: 40px;">
       {{timeline.range | rangeMainFilter}}<br>
       <!-- timeline scope info -->
       <div style="font-size: 15px; font-weight: lighter">
@@ -39,7 +38,7 @@
 
 
 
-<div class="tabbable tabs-left">
+<div class="tabbable tabs-left" ng-controller="timeline">
 
   <!-- tabs links -->
   <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0;">
@@ -86,7 +85,7 @@
 
 
       <div class="tab-header">
-        <h3 class="pull-left">Team title</h3>
+        <h3 class="pull-left">{{ currentName }}</h3>
       </div>
       <br>
       <hr>

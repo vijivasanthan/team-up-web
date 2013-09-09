@@ -14,9 +14,126 @@ angular.module('WebPaige.Controllers.Planboard', [])
     {
 
 
-      console.log('clients ->', angular.fromJson(Storage.get('ClientGroups')));
 
-      $scope.teams = angular.fromJson(Storage.get('Teams'));
+      var teams   = angular.fromJson(Storage.get('Teams')),
+          clients = angular.fromJson(Storage.get('ClientGroups'));
+
+      $scope.data = {
+        teams: {
+          list:    [],
+          members: {}
+        },
+        clients: {
+          list:    [],
+          members: {}
+        },
+        user: [
+          {
+            "count": 0,
+            "end": 1378681200,
+            "recursive": true,
+            "start": 1378504800,
+            "text": "com.ask-cs.State.Available",
+            "type": "availability",
+            "wish": 0
+          },
+          {
+            "count": 0,
+            "end": 1378850400,
+            "recursive": true,
+            "start": 1378720800,
+            "text": "com.ask-cs.State.Available",
+            "type": "availability",
+            "wish": 0
+          }
+        ],
+        members: [],
+        synced: Number(Date.today()),
+        periods: {
+          start: Number(Date.today()),
+          end:   Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
+        }
+      };
+
+      angular.forEach(teams, function (team)
+      {
+        var members = angular.fromJson(Storage.get(team.uuid));
+
+        if (members.length > 0)
+        {
+          $scope.data.teams.list.push({
+            uuid: team.uuid,
+            name: team.name
+          });
+
+          $scope.data.teams.members[team.uuid] = [];
+
+          angular.forEach(members, function (member)
+          {
+            $scope.data.teams.members[team.uuid].push(member.firstName + ' ' + member.lastName);
+          });
+        }
+      });
+
+      angular.forEach(clients, function (client)
+      {
+        var members = angular.fromJson(Storage.get(client.id));
+
+        if (members.length > 0)
+        {
+          $scope.data.clients.list.push({
+            uuid: client.id,
+            name: client.name
+          });
+
+          $scope.data.clients.members[client.id] = [];
+
+          angular.forEach(members, function (member)
+          {
+            $scope.data.clients.members[client.id].push(member.firstName + ' ' + member.lastName);
+          });
+        }
+      });
+
+
+      function switchData ()
+      {
+        switch ($scope.section)
+        {
+          case 'teams':
+            $scope.list     = $scope.data.teams.list;
+            $scope.current  = $scope.data.teams.list[0].uuid;
+            break;
+          case 'clients':
+            $scope.list     = $scope.data.clients.list;
+            $scope.current  = $scope.data.clients.list[0].uuid;
+            break;
+        }
+
+        $scope.changeCurrent($scope.current);
+      }
+
+      $scope.changeCurrent = function ()
+      {
+        angular.forEach($scope.data[$scope.section].list, function (node)
+        {
+          if (node.uuid == $scope.current)
+          {
+            $scope.currentName = node.name;
+          }
+        });
+
+        $scope.data.members = $scope.data[$scope.section].members[$scope.current];
+
+        $rootScope.$broadcast('timeliner', {
+          start: Number(Date.today()),
+          end:   Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
+        });
+
+        console.log('$scope.data ->', $scope.data.members);
+      };
+
+
 
 
       /**
@@ -42,6 +159,10 @@ angular.module('WebPaige.Controllers.Planboard', [])
         {
           $location.hash(hash);
 
+          $scope.section = hash;
+
+          switchData();
+
           setView(hash);
         });
       };
@@ -52,6 +173,9 @@ angular.module('WebPaige.Controllers.Planboard', [])
        */
       $scope.setViewTo('teams');
 
+
+
+      /*
       var data = {
         "user": [
           {
@@ -73,16 +197,17 @@ angular.module('WebPaige.Controllers.Planboard', [])
             "wish": 0
           }
         ],
-        "synced": 1378384322609,
+        "synced": Number(Date.today()),
         "periods": {
-          "start": 1378332000000,
-          "end": 1378936800000
+          "start": Number(Date.today()),
+          "end":   Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
         }
       };
 
       // console.log('data ->', angular.toJson(data));
 
       console.log('this week ->', Number(Date.today()));
+      */
 
 
       /**
@@ -94,7 +219,7 @@ angular.module('WebPaige.Controllers.Planboard', [])
       /**
        * Pass time slots data
        */
-      $scope.data = data;
+      // $scope.data = data;
 
 
       /**

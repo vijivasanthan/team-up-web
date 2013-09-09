@@ -433,67 +433,81 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
        */
       members: function (data, timedata, config, privilage)
       {
-        var _this   = this,
-            members = this.get.members();          
+        var _this   = this;
+            // members = this.get.members();
 
-        angular.forEach(data.members, function (member, index)
+        console.log('data ->', data);
+
+        setTimeout(function ()
         {
-          var link = (privilage == 1) ? 
-                        _this.wrapper('d') + 
-                        '<a href="#/profile/' + 
-                        member.id + 
-                        '#timeline">' + 
-                        members[member.id] + 
-                        '</a>' :
-                        _this.wrapper('d') + 
-                        members[member.id];
 
-          angular.forEach(member.data, function (slot, i)
+
+          angular.forEach(data.members, function (member, index)
           {
-            angular.forEach(config.legenda, function (value, legenda)
+
+            console.log('-- > ', member, index);
+
+
+            var link = (privilage == 1) ?
+              _this.wrapper('d') +
+                '<a href="#/profile/' +
+                member +
+                '#timeline">' +
+                member +
+                '</a>' :
+              _this.wrapper('d') +
+                members[member];
+
+            console.log('-- > ', member);
+
+            angular.forEach(member.data, function (slot, i)
             {
-              if (slot.text == legenda && value)
+              angular.forEach(config.legenda, function (value, legenda)
               {
-                timedata.push({
-                  start:  Math.round(slot.start * 1000),
-                  end:    Math.round(slot.end * 1000),
-                  group:  link,
-                  content: _this.secret(angular.toJson({ 
-                    type: 'member',
-                    id:   slot.id, 
-                    mid:  member.id,
-                    recursive: slot.recursive, 
-                    state: slot.text 
+                if (slot.text == legenda && value)
+                {
+                  timedata.push({
+                    start:  Math.round(slot.start * 1000),
+                    end:    Math.round(slot.end * 1000),
+                    group:  link,
+                    content: _this.secret(angular.toJson({
+                      type: 'member',
+                      id:   slot.id,
+                      mid:  member.id,
+                      recursive: slot.recursive,
+                      state: slot.text
                     })),
-                  className:  config.states[slot.text].className,
-                  editable:   false
-                });
-              };
+                    className:  config.states[slot.text].className,
+                    editable:   false
+                  });
+                };
+              });
+            });
+
+            timedata.push({
+              start:    0,
+              end:      0,
+              group:    link,
+              content:  null,
+              className:null,
+              editable: false
+            });
+
+            timedata = _this.addLoading(data, timedata, [ link ]);
+
+            /**
+             * TODO
+             * Good place to host this here?
+             */
+            angular.forEach(member.stats, function (stat, index)
+            {
+              var state = stat.state.split('.');
+              state.reverse();
+              stat.state = 'bar-' + state[0];
             });
           });
 
-          timedata.push({
-            start:    0,
-            end:      0,
-            group:    link,
-            content:  null,
-            className:null,
-            editable: false
-          });
-
-          timedata = _this.addLoading(data, timedata, [ link ]);
-
-          /**
-           * TODO
-           * Good place to host this here?
-           */
-          angular.forEach(member.stats, function (stat, index)
-          {
-            var state = stat.state.split('.');
-            state.reverse();
-            stat.state = 'bar-' + state[0];
-          });
-        });
+        }, 100);
 
         return timedata;
       },
@@ -545,8 +559,9 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         var _this     = this,
             timedata  = [];
 
-        if (data.user) timedata = _this.user(data, timedata, config);
+        // if (data.user) timedata = _this.user(data, timedata, config);
 
+        /*
         if (data.aggs)
         {
           var name = _this.namer(data, divisions, privilage);
@@ -562,10 +577,13 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         };
 
         if (config.wishes) timedata = _this.wishes(data, timedata, name);
+        */
 
         if (data.members) timedata = _this.members(data, timedata, config, privilage);
 
+        /*
         if (data.aggs && data.aggs.ratios) _this.pies(data);
+        */
 
         return timedata;
       }
