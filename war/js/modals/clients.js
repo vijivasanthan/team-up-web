@@ -96,7 +96,12 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
                 isArray : true
             }
         }); 
-    
+		
+		var ClientsRemove = $resource($config.host + 'teamup/clientGroup/:clientGroupId/removeClients/', {}, {
+            remove : {
+                method : 'PUT',
+            }
+        });
 		/**
 		 * get the client groups and the clients
 		 */
@@ -321,7 +326,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		ClientGroups.prototype.delClient = function(id, memberIds) {
 			var deferred = $q.defer();
 	
-			Clients_ByGroupId.remove({
+			ClientsRemove.remove({
 				clientGroupId : id
 			}, memberIds, function(result) {
 				deferred.resolve(result);

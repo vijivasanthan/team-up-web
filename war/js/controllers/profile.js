@@ -207,7 +207,8 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    if(resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined'){
 	        resources.teamUuids = [];
 	        if($scope.teams.length == 0 ){
-	            resources.teamUuids.push($scope.selectTeams[0].uuid); 
+	            //resources.teamUuids.push($scope.selectTeams[0].uuid);
+	            resources.teamUuids.push(sessionStorage.getItem(resources.uuid+"_team"));
 	        }else{
 	            resources.teamUuids.push($scope.teams[0].uuid);
 	        }

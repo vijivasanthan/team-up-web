@@ -207,11 +207,10 @@ angular.module('WebPaige.Controllers.Manage', [])
 
           var connections = {teamClients: {} , teams: {} ,clients: {} };
 
-
-
           var members = [];
           data.teams = [];
-
+          var memGlobalIds = [];
+          
           angular.forEach(teams_local,function(team,index){
 
             /*
@@ -221,13 +220,16 @@ angular.module('WebPaige.Controllers.Manage', [])
 
             var mems = angular.fromJson(Storage.get(team.uuid));
             var memIds = [];
+            
             angular.forEach(mems,function(mem,index){
-                members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
                 memIds.push(mem.uuid);
+                if(memGlobalIds.indexOf(mem.uuid) == -1 ){
+                    members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
+                    memGlobalIds.push(mem.uuid);
+                }
             });
 
             console.log(team.name+"("+team.uuid+")","==>",memIds);
-
             connections.teams[team.uuid] = memIds;
 
           });
@@ -293,6 +295,8 @@ angular.module('WebPaige.Controllers.Manage', [])
 
           // keep the original connections into the scope
           $scope.connections = connections;
+          
+          console.log("Members : " , data.members);
       }else{
         // data from the server
       }
@@ -536,7 +540,7 @@ angular.module('WebPaige.Controllers.Manage', [])
               angular.copy(pMembers, removeMembers);
               angular.copy(afterMembers, addMembers);
               
-              if(addMembers.length > 0 || addMembers.length > 0 ){
+              if(addMembers.length > 0 || addMembers.length > 0 || removeMembers.length > 0 || removeMembers.length > 0 ){
                   changes[tId] = {a : addMembers, 
                                   r : removeMembers};
               }

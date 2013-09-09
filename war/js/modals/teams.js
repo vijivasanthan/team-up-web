@@ -101,11 +101,17 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       		},{
       			save : {
       				method: 'POST',
-      			},
-      			remove : {
-                    method: 'DELETE',
-                }
+      			}
       		}
+      );
+      
+      var RemoveMembers = $resource(
+          $config.host + 'teamup/team/:teamId/removeMember',{
+          },{
+              remove : {
+                  method: 'PUT',
+              }
+          }
       );
       
       var cGroup = $resource(
@@ -118,6 +124,15 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
               }
           }
       ); 
+      
+      var Member = $resource(
+              $config.host + 'teamup/team/member',{
+              },{
+                  save : {
+                      method: 'POST',
+                  }
+              }
+        );
 //      /**
 //       * Get parent team data
 //       */
@@ -221,15 +236,11 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       /**
        * Remove member from team
        */
-      Teams.prototype.delMember = function (teamId,memberIds)
+      Teams.prototype.delMember = function (tId,memberIds)
       {
         var deferred = $q.defer();
 
-        Members.remove(
-          { 
-            id: teamId, 
-            mid: memberId 
-          }, 
+        RemoveMembers.remove({teamId: tId},  memberIds,
           function (result) 
           {
             deferred.resolve(result);
@@ -466,7 +477,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
             team, 
             function (result) 
             {
-              deferred.resolve(result.uuid);
+              deferred.resolve(result);
             },
             function (error)
             {

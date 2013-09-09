@@ -259,18 +259,14 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 				$scope.closeTabs();
 
 				$scope.data = queryRs;
-
-				angular.forEach(queryRs.cGroups, function(cg_obj) {
-					if(cg_obj.id == result) {
-						$scope.clientGroups = queryRs.clientGroups;
-
-						angular.forEach(queryRs.clientGroups, function(cg) {
-							if(cg.id == cg_obj.id) {
-								$scope.clientGroup = cg;
-							}
-						});
-
-						$scope.clients = data.clients[cg_obj.id];
+				
+				$scope.clientGroups = queryRs.clientGroups;
+				$scope.clients = queryRs.clients;
+				
+				angular.forEach(queryRs.clientGroups, function(cg_obj) {
+					if(cg_obj.id == result.uuid) {
+						
+					    $scope.clientGroup = cg_obj;
 
 						$scope.current = cg_obj.id;
 

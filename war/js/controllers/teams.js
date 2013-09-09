@@ -202,8 +202,8 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				$rootScope.notifier.error("Error with saving team info : " + result.error);
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-				Teams.query(false).then(function(result) {
+				
+				Teams.query(false,result).then(function(result) {
 					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 					$rootScope.statusBar.off();
 
@@ -242,7 +242,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 						$scope.data = queryRs;
 
 						angular.forEach(queryRs.teams, function(t_obj) {
-							if(t_obj.uuid == result) {
+							if(t_obj.uuid == result.uuid) {
 								$scope.teams = queryRs.teams;
 
 								angular.forEach(queryRs.teams, function(t) {
@@ -309,8 +309,10 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				$rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + " : " + result.error);
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-				Teams.query(false).then(function(queryRs) {
+				
+				var routePara = {'uuid' : result.teamId};
+				
+				Teams.query(false,routePara).then(function(queryRs) {
 					if(queryRs.error) {
 						$rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
 						console.warn('error ->', queryRs);
@@ -321,7 +323,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 						$scope.data = queryRs;
 
 						angular.forEach(queryRs.teams, function(t_obj) {
-							if(t_obj.uuid == result) {
+							if(t_obj.uuid == routePara.uuid) {
 								$scope.teams = queryRs.teams;
 
 								angular.forEach(queryRs.teams, function(t) {
@@ -349,6 +351,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			}
 		});
 	};
+	
 	/**
 	 * Close inline form
 	 */
@@ -359,4 +362,13 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 
 		$scope.setViewTo('team');
 	};
+	
+	/**
+	 * edit the profile function 
+	 * only for set the team Id in sessionStorage , for later saving
+	 */
+	$scope.editProfile = function(memberId, teamId){
+		sessionStorage.setItem(memberId+"_team", teamId);
+	}
+	
 }]);
