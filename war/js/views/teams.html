@@ -96,6 +96,7 @@
 	<!--               <td>{{member.resources.role|translateRole}}</td> -->
 	<!--               <td>{{member.resources.PhoneAddress}}</td> -->
 				  <td>
+				  	<span ng-show="noSharedStates(member.states)" class="states"> {{ui.teamup.noSharedStates}} </span>
 				  	<span ng-repeat="state in member.states | filter:share=true " class="states">
                         <span data-icon="{{state.name|stateDataIcon:'data_icon'}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span>
 <!--				  		<i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>-->

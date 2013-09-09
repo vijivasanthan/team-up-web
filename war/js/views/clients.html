@@ -93,7 +93,7 @@
 		          <tbody>
 		            <tr ng-repeat="client in data.clients[clientGroup.id]|orderBy:lastName">
 		              <td>
-	                      <div class="roundedPicSmall memberStateAvailalbe" style="background-image: url({{imgHost}}/teamup/client/client/{{client.uuid}}/photo);" ></div>
+	                      <div class="roundedPicSmall memberStateBusy" id="img_{{client.uuid|escape}}" ></div>
 		              </td>
 		              <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.firstName}} {{client.lastName}}</a></td>
 		<!--               <td>{{member.resources.role|translateRole}}</td> -->

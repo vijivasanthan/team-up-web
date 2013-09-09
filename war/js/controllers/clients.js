@@ -44,7 +44,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
-
+	$scope.noImgURL = $rootScope.config.noImgURL;
 	/**
 	 * Init search query
 	 */
@@ -114,7 +114,25 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 
 		$scope.current = id;
 
-		//            wisher(id);
+		// load image 
+        angular.forEach($scope.clients, function(client, index) {
+            var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
+            Clients.loadImg(imgURL).then(function(result){
+                // console.log("loading pic " + imgURL);
+//                console.log("loading pic " ,result);
+                
+                var imgId = client.uuid.replace(".","").replace("@","");
+                if(result.status == 200){
+                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
+                }else{
+                    $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+                }
+                
+            },function(error){
+                console.log("error when load pic " + error);
+            });
+        });
+        
 	}
 
 	/**

@@ -45,7 +45,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	 */
 	$scope.roles = $rootScope.config.roles;
 	$scope.mfuncs = $rootScope.config.mfunctions;
-
+	$scope.noImgURL = $rootScope.config.noImgURL;
 	var uuid, view;
 
 	/**
@@ -96,9 +96,16 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		angular.forEach($scope.members, function(member, index) {
 			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
 			Teams.loadImg(imgURL).then(function(result){
-				console.log("loading pic " + imgURL);
+				// console.log("loading pic " + imgURL);
+				console.log("loading pic " ,result);
+				
 				var imgId = member.uuid.replace(".","").replace("@","");
-				$('#img_'+imgId).css('background-image','url('+imgURL+')');
+				if(result.status == 200){
+					$('#img_'+imgId).css('background-image','url('+imgURL+')');
+				}else{
+					$('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+				}
+				
 			},function(error){
 				console.log("error when load pic " + error);
 			});
@@ -369,6 +376,21 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	 */
 	$scope.editProfile = function(memberId, teamId){
 		sessionStorage.setItem(memberId+"_team", teamId);
+	}
+	
+	/**
+	 * show the String "no shared states" if there is no shared states 
+	 */
+	$scope.noSharedStates = function(states){
+		var flag = true;
+		var ret = true;
+		angular.forEach(states, function(state){
+			if(state.share && flag){
+				ret = false;
+				flag = false;
+			}
+		});
+		return ret;
 	}
 	
 }]);

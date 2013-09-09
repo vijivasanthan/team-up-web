@@ -417,8 +417,30 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			});
 			return deferred.promise;
 		}
+		
+	      
+		/**
+		 * try  to preload the image from here, that ng-src can use the cache.
+		 */
+		ClientGroups.prototype.loadImg = function(imgURL) {
+	
+			var LoadImg = $resource(imgURL, {
+			}, {
+				get : {
+					method : 'GET',
+				}
+			});
+	
+			var deferred = $q.defer();
+	
+			LoadImg.get(function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve(error);
+			});
+			return deferred.promise;
+		}
 
-	       
         return new ClientGroups; 
     }
     

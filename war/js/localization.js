@@ -361,6 +361,7 @@ var ui = {
          loadingReports: 'Loading reports',
          datetime: 'Date & time',
          writenBy: 'write by',
+         noSharedStates: 'No shared states',
       }
     },
     nl: {
