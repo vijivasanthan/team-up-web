@@ -143,8 +143,6 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
               {
                 var ret = true;
 
-                // console.warn('_id =>', item._id);
-
                 for (var i = 0; i < data.length; i++)
                 {
                   if (item._id == data[i]._id)
@@ -394,16 +392,16 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
 
             angular.forEach(filtered, function (node)
             {
+              var fid = _this.grid + '_' + id + '_' + node.id;
+
               var record = {
                 name:     node.name,
                 _id:      node.id,
-                _parent:  id
+                _parent:  fid
               };
 
               if (_this.type == '1:n' && id == 'right')
               {
-                var fid = _this.grid + '_' + id + '_' + node.id;
-
                 if (_this.grid == 'teams' &&
                   _this.connections.teams[node.id] &&
                   _this.connections.teams[node.id].length > 0)

@@ -191,6 +191,8 @@ angular.module('WebPaige.Controllers.Manage', [])
 //      };
 
 
+
+
       if(data.local){
           /*
            * data from local storage
@@ -294,6 +296,10 @@ angular.module('WebPaige.Controllers.Manage', [])
       }else{
         // data from the server
       }
+
+
+
+
 
       /**
        * Introduce and reset data containers
@@ -405,7 +411,7 @@ angular.module('WebPaige.Controllers.Manage', [])
         /**
          * Populate connections
          */
-        populate: function (connections, data)
+        populate: function (connections, data, section)
         {
           var population = {};
 
@@ -420,15 +426,14 @@ angular.module('WebPaige.Controllers.Manage', [])
                 if (node.id == kid)
                 {
                   population[key].push({
-                    _id:  node.id,
-                    name: node.name
+                    _id:     node.id,
+                    name:    node.name,
+                    _parent: section + key
                   });
                 }
               })
             });
           });
-
-          // console.log('population ->', population);
 
           return population;
         },
@@ -440,7 +445,7 @@ angular.module('WebPaige.Controllers.Manage', [])
         {
           this.connections.teams = {};
 
-          this.connections.teams = this.populate(this.data.teams, data.members);
+          this.connections.teams = this.populate(this.data.teams, data.members, 'teams_right_');
 
           return this.connections;
         },
@@ -452,7 +457,7 @@ angular.module('WebPaige.Controllers.Manage', [])
         {
           this.connections.clients = {};
 
-          this.connections.clients = this.populate(this.data.clients, data.clients);
+          this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_');
 
           return this.connections;
         }
