@@ -96,8 +96,8 @@
             <!-- desktop version -->
             <ul class="nav pull-right" ng-hide="browser.mobile">
 
-              <li>
-                <a href="#profile"><i class="icon-search icon-white"></i> </a>
+              <li class="navbar-btn">
+                <a href="#profile"><i class="icon-search"></i> </a>
               </li>
 
               <li class="dropdown">
@@ -114,10 +114,11 @@
                     <a href="#settings"><i class="icon-question-sign"></i> Help</a>
                   </li>
                   <li class="divider"></li>
-                  <li>
-                    <a href="#logout"><i class="icon-off"></i> Logout</a>
-                  </li>
                 </ul>
+              </li>
+
+              <li class="navbar-btn">
+                <a href="#logout"><i class="icon-off"></i></a>
               </li>
 
               <!-- <li id="fullscreener" ng-show="config.fullscreen && browser.webkit">
@@ -251,7 +252,7 @@
 
         <!-- general preloader -->
         <p class="muted" ng-show="loading.status">
-          <img src="img/ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}% </span>{{loading.message}}</small>
+          <small><span ng-show="app.preloader.status">{{app.preloader.count}}% </span>{{loading.message}}</small>
         </p>
         <!-- end general preloader -->
 
