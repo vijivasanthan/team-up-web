@@ -71,10 +71,10 @@
 			 <!-- main nav -->
             <ul class="nav">
               <li data-match-route="/team">
-                <a href="#team">{{ui.teamup.teams}}</a>
+                <a href="#team?local=true">{{ui.teamup.teams}}</a>
               </li>
               <li data-match-route="/client">
-                <a href="#client">{{ui.teamup.clients}}</a>
+                <a href="#client?local=true">{{ui.teamup.clients}}</a>
               </li>
               <li data-match-route="/manage" ng-hide="app.resources.role > 1">
                 <a href="#manage">{{ui.teamup.manage}}</a>

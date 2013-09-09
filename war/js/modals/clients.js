@@ -96,7 +96,12 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
                 isArray : true
             }
         }); 
-    
+		
+		var ClientsRemove = $resource($config.host + 'teamup/clientGroup/:clientGroupId/removeClients/', {}, {
+            remove : {
+                method : 'PUT',
+            }
+        });
 		/**
 		 * get the client groups and the clients
 		 */
@@ -321,7 +326,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		ClientGroups.prototype.delClient = function(id, memberIds) {
 			var deferred = $q.defer();
 	
-			Clients_ByGroupId.remove({
+			ClientsRemove.remove({
 				clientGroupId : id
 			}, memberIds, function(result) {
 				deferred.resolve(result);
@@ -412,8 +417,53 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			});
 			return deferred.promise;
 		}
-
-	       
+		
+	      
+		/**
+		 * try  to preload the image from here, that ng-src can use the cache.
+		 */
+		ClientGroups.prototype.loadImg = function(imgURL) {
+	
+			var LoadImg = $resource(imgURL, {
+			}, {
+				get : {
+					method : 'GET',
+				}
+			});
+	
+			var deferred = $q.defer();
+	
+			LoadImg.get(function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve(error);
+			});
+			return deferred.promise;
+		}
+		
+		/**
+	       * get client groups and clients from local storage
+	       */
+		ClientGroups.prototype.queryLocal = function ()
+          {
+            var deferred = $q.defer();
+            
+            var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
+            
+            var data = {};
+            data.clientGroups = clientGroups_local;
+            
+            data.clients = {};
+            angular.forEach(clientGroups_local, function (clientGroup, i){
+                var clients = angular.fromJson(Storage.get(clientGroup.id));
+                data.clients[clientGroup.id] = clients; 
+            });
+            
+            deferred.resolve(data);
+            
+            return deferred.promise;
+          };
+		
         return new ClientGroups; 
     }
     

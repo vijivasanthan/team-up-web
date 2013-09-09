@@ -355,8 +355,6 @@ angular.module('WebPaige')
 
 
 
-
-
        switch ($location.path())
        {
          case '/team':

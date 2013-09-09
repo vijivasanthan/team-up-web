@@ -94,6 +94,8 @@ angular.module('WebPaige')
     
     stateColors : profile.stateColors,
     
+    noImgURL : profile.noImgURL,
+    
     timeline: {
       options: {
         axisOnTop:        true,

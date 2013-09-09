@@ -45,7 +45,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	 */
 	$scope.roles = $rootScope.config.roles;
 	$scope.mfuncs = $rootScope.config.mfunctions;
-
+	$scope.noImgURL = $rootScope.config.noImgURL;
 	var uuid, view;
 
 	/**
@@ -96,9 +96,16 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		angular.forEach($scope.members, function(member, index) {
 			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
 			Teams.loadImg(imgURL).then(function(result){
-				console.log("loading pic " + imgURL);
+				// console.log("loading pic " + imgURL);
+				
 				var imgId = member.uuid.replace(".","").replace("@","");
-				$('#img_'+imgId).css('background-image','url('+imgURL+')');
+				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+					console.log("loading pic " ,result);
+					$('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+				}else{
+					$('#img_'+imgId).css('background-image','url('+imgURL+')');
+				}
+				
 			},function(error){
 				console.log("error when load pic " + error);
 			});
@@ -202,8 +209,8 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				$rootScope.notifier.error("Error with saving team info : " + result.error);
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-				Teams.query(false).then(function(result) {
+				
+				Teams.query(false,result).then(function(result) {
 					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 					$rootScope.statusBar.off();
 
@@ -242,7 +249,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 						$scope.data = queryRs;
 
 						angular.forEach(queryRs.teams, function(t_obj) {
-							if(t_obj.uuid == result) {
+							if(t_obj.uuid == result.uuid) {
 								$scope.teams = queryRs.teams;
 
 								angular.forEach(queryRs.teams, function(t) {
@@ -309,8 +316,10 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				$rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + " : " + result.error);
 			} else {
 				$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-				Teams.query(false).then(function(queryRs) {
+				
+				var routePara = {'uuid' : result.teamId};
+				
+				Teams.query(false,routePara).then(function(queryRs) {
 					if(queryRs.error) {
 						$rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
 						console.warn('error ->', queryRs);
@@ -321,7 +330,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 						$scope.data = queryRs;
 
 						angular.forEach(queryRs.teams, function(t_obj) {
-							if(t_obj.uuid == result) {
+							if(t_obj.uuid == routePara.uuid) {
 								$scope.teams = queryRs.teams;
 
 								angular.forEach(queryRs.teams, function(t) {
@@ -349,6 +358,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			}
 		});
 	};
+	
 	/**
 	 * Close inline form
 	 */
@@ -359,4 +369,28 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 
 		$scope.setViewTo('team');
 	};
+	
+	/**
+	 * edit the profile function 
+	 * only for set the team Id in sessionStorage , for later saving
+	 */
+	$scope.editProfile = function(memberId, teamId){
+		sessionStorage.setItem(memberId+"_team", teamId);
+	}
+	
+	/**
+	 * show the String "no shared states" if there is no shared states 
+	 */
+	$scope.noSharedStates = function(states){
+		var flag = true;
+		var ret = true;
+		angular.forEach(states, function(state){
+			if(state.share && flag){
+				ret = false;
+				flag = false;
+			}
+		});
+		return ret;
+	}
+	
 }]);

@@ -44,7 +44,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
-
+	$scope.noImgURL = $rootScope.config.noImgURL;
 	/**
 	 * Init search query
 	 */
@@ -114,7 +114,25 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 
 		$scope.current = id;
 
-		//            wisher(id);
+		// load image 
+        angular.forEach($scope.clients, function(client, index) {
+            var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
+            Clients.loadImg(imgURL).then(function(result){
+                // console.log("loading pic " + imgURL);
+                
+                var imgId = client.uuid.replace(".","").replace("@","");
+                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+                    console.log("loading pic " ,result);
+                    $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+                }else{
+                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
+                }
+                
+            },function(error){
+                console.log("error when load pic " + error);
+            });
+        });
+        
 	}
 
 	/**
@@ -259,18 +277,14 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 				$scope.closeTabs();
 
 				$scope.data = queryRs;
-
-				angular.forEach(queryRs.cGroups, function(cg_obj) {
-					if(cg_obj.id == result) {
-						$scope.clientGroups = queryRs.clientGroups;
-
-						angular.forEach(queryRs.clientGroups, function(cg) {
-							if(cg.id == cg_obj.id) {
-								$scope.clientGroup = cg;
-							}
-						});
-
-						$scope.clients = data.clients[cg_obj.id];
+				
+				$scope.clientGroups = queryRs.clientGroups;
+				$scope.clients = queryRs.clients;
+				
+				angular.forEach(queryRs.clientGroups, function(cg_obj) {
+					if(cg_obj.id == result.uuid) {
+						
+					    $scope.clientGroup = cg_obj;
 
 						$scope.current = cg_obj.id;
 
@@ -331,12 +345,12 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		var contactPerson = {
 			firstName : '',
 			lastName : '',
-			func : '',
+			function : '',
 			phone : ''
 		};
 		contactPerson.firstName = $scope.contactForm.firstName;
 		contactPerson.lastName = $scope.contactForm.lastName;
-		contactPerson.func = $scope.contactForm.func;
+		contactPerson.function = $scope.contactForm.function;
 		contactPerson.phone = $scope.contactForm.phone;
 
 		if( typeof $scope.contacts == 'undefined') {
@@ -385,7 +399,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 * edit client profile 
 	 */
 	$scope.clientChange = function(client){
-		
+	    $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
+	    
 		try{
 			client.birthDate = Dater.convert.absolute(client.birthDate, 0);
 		}catch(error){
@@ -398,6 +413,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			if(result.error){
 				$rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
 			}else{
+			    $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+			    
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 				var routePara = {'uuid' : result.clientGroupUuid}; 
 				reloadGroup(routePara);
@@ -411,8 +428,30 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	$scope.saveContacts = function(contacts){
 		console.log("client id " , $scope.client.uuid ); 
 		console.log("contacts " , contacts);
+        
+		var client = $scope.client;
 		
+		try{
+            client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+        }catch(error){
+            console.log(error);
+            $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+            return;
+        }
 		
+		client.contacts = contacts;
+		
+		$rootScope.statusBar.display($rootScope.ui.teamup.savingContacts);
+		
+        Clients.updateClient(client).then(function(result){
+            if(result.error){
+                $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
+            }else{
+                
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+            }
+        });
 	}
 	
 	

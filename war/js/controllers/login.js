@@ -124,7 +124,7 @@ angular.module('WebPaige.Controllers.Login', [])
               User.login(uuid.toLowerCase(), pass)
               .then(function (result)
                 {
-                if (result.status == 400)
+                if (result.status == 400 || result.status == 403)
                 {
                   $scope.alert = {
                     login: {
@@ -179,8 +179,8 @@ angular.module('WebPaige.Controllers.Login', [])
 
                   self.progress(40, $rootScope.ui.login.loading_Teams);
                   
-                  // preload the teams 
-                  Teams.query(true)
+                  // preload the teams and members
+                  Teams.query(true,{})
                   .then(function (teams)
                   {
                     console.log("got teams ");
@@ -204,7 +204,16 @@ angular.module('WebPaige.Controllers.Login', [])
                         .then(function(){
                             console.log("got all clients in or not in the client groups ");
                             
-                            finalize();
+                            Clients.query(false,{})
+                            .then(function(){
+                                console.log("got all grous and the clients in the groups ");
+                                
+                                finalize();
+                            },function(error){
+                                deferred.resolve({error: error});
+                            })
+                            
+                            
                         },function(error){
                             deferred.resolve({error: error});
                         });
