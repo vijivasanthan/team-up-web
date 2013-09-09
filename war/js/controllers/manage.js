@@ -515,7 +515,7 @@ angular.module('WebPaige.Controllers.Manage', [])
                       }
                   });
               });
-              console.log(tId,"-->",notChanged);
+//              console.log(tId,"-->",notChanged);
               
               /*
                * try to remove the unchanged items from both list
@@ -530,9 +530,9 @@ angular.module('WebPaige.Controllers.Manage', [])
                   afterMembers.splice(afterMembers.indexOf(nc),1);
               });
               
-              console.log("need to remove : " + pMembers); 
-              console.log("need to add : " + afterMembers);
-              console.log("----------------------");
+//              console.log("need to remove : " + pMembers); 
+//              console.log("need to add : " + afterMembers);
+//              console.log("----------------------");
               
               var addMembers = [];
               var removeMembers = [];
@@ -561,8 +561,44 @@ angular.module('WebPaige.Controllers.Manage', [])
        */
       $rootScope.$on('save:teamClients', function ()
       {
-        console.log("before changing ->",connections.teamClients);
+        console.log("before changing ->",$scope.connections.teamClients);
         console.log('saving team clients ->', arguments[1]);
+        
+        var preTc = $scope.connections.teamClients;
+        var afterTc = arguments[1];
+        
+        var addGroups = {};
+        var removeGroups = {};
+        
+        var teamIds = [];
+        
+        angular.forEach(preTc,function(preG,teamId_i){
+            if(teamIds.indexOf(teamId_i) == -1){
+                teamIds.push(teamId_i);
+            }
+            angular.forEach(afterTc,function(afterG,teamId_j){
+                if(teamIds.indexOf(teamId_j) == -1){
+                    teamIds.push(teamId_j);
+                }
+            });
+        });
+        
+        angular.forEach(teamIds,function(tId){
+            if(typeof preTc[tId] == 'undefined' &&  afterTc[tId] ){
+                addGroups[tId] = afterTc[tId];
+            }else if(typeof afterTc[tId] == 'undefined' &&  preTc[tId] ){
+                removeGroups[tId] = preTc[tId];
+            }else if(preTc[tId] && afterTc[tId] && preTc[tId] != preTc[tId]){
+                addGroups[tId] = afterTc[tId];
+                removeGroups[tId] = preTc[tId];
+            }
+            
+        });
+        
+        console.log("added ones :  " , addGroups);
+        console.log("removed ones :  " , removeGroups);
+//        console.log(changes);
+        
       });
       
       $rootScope.$on('save:teams', function ()
