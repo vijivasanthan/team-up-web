@@ -97,13 +97,13 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
 			Teams.loadImg(imgURL).then(function(result){
 				// console.log("loading pic " + imgURL);
-				console.log("loading pic " ,result);
 				
 				var imgId = member.uuid.replace(".","").replace("@","");
-				if(result.status == 200){
-					$('#img_'+imgId).css('background-image','url('+imgURL+')');
-				}else{
+				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+					console.log("loading pic " ,result);
 					$('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+				}else{
+					$('#img_'+imgId).css('background-image','url('+imgURL+')');
 				}
 				
 			},function(error){

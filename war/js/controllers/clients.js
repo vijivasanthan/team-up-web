@@ -119,13 +119,13 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
             Clients.loadImg(imgURL).then(function(result){
                 // console.log("loading pic " + imgURL);
-//                console.log("loading pic " ,result);
                 
                 var imgId = client.uuid.replace(".","").replace("@","");
-                if(result.status == 200){
-                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
-                }else{
+                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+                    console.log("loading pic " ,result);
                     $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+                }else{
+                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
                 }
                 
             },function(error){
@@ -447,10 +447,9 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             if(result.error){
                 $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
             }else{
-                $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
                 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                
+                $rootScope.statusBar.off();
             }
         });
 	}
