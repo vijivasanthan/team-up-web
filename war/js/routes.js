@@ -65,7 +65,11 @@ angular.module('WebPaige')
              'Teams','$route',
              function (Teams,$route)
              {
-               return Teams.query(false,$route.current.params);
+               if($route.current.params.local && $route.current.params.local == "true"){
+                   return Teams.queryLocal();
+               }else{
+                   return Teams.query(false,$route.current.params); 
+               }
              }
            ]
        },
@@ -85,7 +89,11 @@ angular.module('WebPaige')
             'Clients','$route',
             function (ClientGroups,$route)
             {
-              return ClientGroups.query(false,$route.current.params);
+                if($route.current.params.local && $route.current.params.local == "true"){
+                    return ClientGroups.queryLocal();
+                }else{
+                    return ClientGroups.query(false,$route.current.params);
+                }
             }
           ]
       },

@@ -440,7 +440,30 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			});
 			return deferred.promise;
 		}
-
+		
+		/**
+	       * get client groups and clients from local storage
+	       */
+		ClientGroups.prototype.queryLocal = function ()
+          {
+            var deferred = $q.defer();
+            
+            var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
+            
+            var data = {};
+            data.clientGroups = clientGroups_local;
+            
+            data.clients = {};
+            angular.forEach(clientGroups_local, function (clientGroup, i){
+                var clients = angular.fromJson(Storage.get(clientGroup.id));
+                data.clients[clientGroup.id] = clients; 
+            });
+            
+            deferred.resolve(data);
+            
+            return deferred.promise;
+          };
+		
         return new ClientGroups; 
     }
     
