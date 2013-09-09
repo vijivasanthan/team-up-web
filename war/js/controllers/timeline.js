@@ -271,10 +271,17 @@ angular.module('WebPaige.Controllers.Timeline', [])
           /**
            * Grab new timeline data from backend and render timeline again
            */
-//          load: function (stamps, remember)
-//          {
-//            var _this = this;
-//
+          load: function (stamps, remember)
+          {
+            var _this = this;
+
+                    // $scope.data = data;
+
+                    // _this.render(stamps, remember);
+
+
+
+
 //            $rootScope.statusBar.display($rootScope.ui.planboard.refreshTimeline);
 //
 //            if ($scope.timeline.main)
@@ -330,8 +337,8 @@ angular.module('WebPaige.Controllers.Timeline', [])
 //                  }
 //                });
 //            }
-//
-//          },
+
+          },
 
           /**
            * Refresh timeline as it is
