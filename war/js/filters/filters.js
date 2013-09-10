@@ -228,6 +228,9 @@ angular.module('WebPaige.Filters', ['ngResource'])
     }
 ])
 
+
+
+
 /**
  * Main range filter
  */
@@ -240,6 +243,8 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 		return function (dates)
 		{
+      // console.log('dates ->', dates);
+
 			if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
 				dates.start = new Date(dates.end).addDays(-1);
 

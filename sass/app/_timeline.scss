@@ -639,7 +639,7 @@ div.timeline-navigation-move-right {
 
 /*.availableS {
   margin:0;*/
-/*   background-color: #69b369; 
+/*   background-color: #69b369;
   background-color: #4f824f;
   text-indent: -9999px;
   border-top: 10px solid #e08a0c;
@@ -647,7 +647,7 @@ div.timeline-navigation-move-right {
 
 /*.availableN {
   margin:0;*/
-  /* background-color: #3e673e; 
+  /* background-color: #3e673e;
   background-color: #4f824f;
   border-top: 10px solid black;
   text-indent: -9999px;
@@ -671,7 +671,7 @@ div.timeline-navigation-move-right {
 
 /*.unavailable {
   margin: 0;
-  background-color: #a93232;  
+  background-color: #a93232;
   border-top: 10px solid #a93232;
   text-indent: -9999px;
 }
@@ -686,6 +686,8 @@ div.timeline-event.state-available {
     margin:0;
     background-color: #4f824f;
     text-indent: -9999px;
+
+    height: 50px;
 }
 
 div.timeline-event.state-available-south {
@@ -722,8 +724,12 @@ div.timeline-event.state-unavailable {
 
 
 
-div.timeline-event div.timeline-event-content span.secret {
-  font-size: 1px;
+div.timeline-event div.timeline-event-content {
+  font-size: 12px;
+
+  top: 0;
+  left: 0;
+  color: red;
 }
 
 
@@ -964,7 +970,7 @@ div.requirement {
     opacity: 0.5;
 }
 */
-    
+
 
 
 

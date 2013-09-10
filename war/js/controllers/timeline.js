@@ -275,9 +275,17 @@ angular.module('WebPaige.Controllers.Timeline', [])
           {
             var _this = this;
 
+//            $scope.self.timeline.draw(
+//              Sloter.profile(
+//                $scope.data.slots.data,
+//                $scope.timeline.config
+//              ), $scope.timeline.options);
+
                     // $scope.data = data;
 
-                    // _this.render(stamps, remember);
+            console.log('render data ->', angular.toJson($scope.data.members));
+
+                    _this.render(stamps, remember);
 
 
 
@@ -405,6 +413,8 @@ angular.module('WebPaige.Controllers.Timeline', [])
          */
         $rootScope.$on('timeliner', function ()
         {
+          console.log('data members ->', angular.toJson($scope.data.members));
+
           $scope.timeliner.load({
             start:  new Date(arguments[1].start).getTime(),
             end:    new Date(arguments[1].end).getTime()

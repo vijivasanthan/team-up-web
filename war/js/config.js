@@ -104,7 +104,7 @@ angular.module('WebPaige')
         selectable:       true,
         editable:         true,
         style:            'box',
-        groupsWidth:      '150px',
+        groupsWidth:      '200px',
         eventMarginAxis:  0,
         showCustomTime:   true,
         groupsChangeable: false,

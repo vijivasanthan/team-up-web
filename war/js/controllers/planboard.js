@@ -70,7 +70,13 @@ angular.module('WebPaige.Controllers.Planboard', [])
 
           angular.forEach(members, function (member)
           {
-            $scope.data.teams.members[team.uuid].push(member.firstName + ' ' + member.lastName);
+            var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+              'id="img_willemnales" ' +
+              'style="float: left; background-image: url(http://teamup.acs-services.appspot.com//teamup/team/member/willemnales/photo);"></div>';
+
+            var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+
+            $scope.data.teams.members[team.uuid].push( name );
           });
         }
       });
@@ -90,7 +96,13 @@ angular.module('WebPaige.Controllers.Planboard', [])
 
           angular.forEach(members, function (member)
           {
-            $scope.data.clients.members[client.id].push(member.firstName + ' ' + member.lastName);
+            var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+              'id="img_willemnales" ' +
+              'style="float: left; background-image: url(http://teamup.acs-services.appspot.com//teamup/team/member/willemnales/photo);"></div>';
+
+            var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+
+            $scope.data.clients.members[client.id].push( name );
           });
         }
       });
