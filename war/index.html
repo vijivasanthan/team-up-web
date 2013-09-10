@@ -219,6 +219,28 @@
     <!-- end wrap -->
 
 
+
+
+    <!-- chat screen -->
+    <div id="chat">
+
+      <div id="chat-btn">
+        <a ng-click="toggleChat = !toggleChat">Chat</a>
+      </div>
+
+      <div id="chat-content-outer" ng-hide="toggleChat">
+        <div id="chat-content-inner">
+          Some text content
+        </div>
+      </div>
+
+    </div>
+    <!-- end chat screen -->
+
+
+
+
+
     <!-- mobile status bar -->
     <div id="mobile-status-bar" ng-show="loading.status && browser.mobile" class="ng-cloak">
       <img src="img/ajax-loader.gif"><small>{{loading.message}}</small>
