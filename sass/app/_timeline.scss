@@ -366,15 +366,6 @@ div.bar span {
 
 
 
-
-
-
-
-
-
-
-
-
 div.timeline-frame {
     border: 1px solid #ddd;
     background-color: #fff;
@@ -397,14 +388,23 @@ div.timeline-axis-grid {
 }
 div.timeline-axis-grid-minor {
   border-color: #e5e5e5;
+  background-color: #e5e5e5;
 }
-/*div.timeline-axis-grid-minor:nth-child(odd) {
-    border-top: 70px solid $offwhite ;
-  border-bottom: 1px solid black;
+
+
+
+/*striped background*/
+div.timeline-axis-grid-minor:nth-child(odd) {
+    border-bottom: 70px solid $offwhite ;
 }
-div.timeline-axis-grid-minor:nth-child(even) {
-  border-bottom: 1px solid black;
-}*/
+div.timeline-groups-axis {
+  div.timeline-axis-grid-minor:nth-child(4n) {
+    border-bottom: 70px solid $offwhite ;
+  }
+}
+/*end striped background*/
+
+
 div.timeline-axis-grid-major {
     border-color: #bfbfbf;
 }
