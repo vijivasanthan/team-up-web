@@ -413,7 +413,7 @@ angular.module('WebPaige.Controllers.Timeline', [])
          */
         $rootScope.$on('timeliner', function ()
         {
-          console.log('data members ->', angular.toJson($scope.data.members));
+          // console.log('data ->', $scope.data);
 
           $scope.timeliner.load({
             start:  new Date(arguments[1].start).getTime(),

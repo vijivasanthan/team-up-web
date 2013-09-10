@@ -436,76 +436,131 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         var _this   = this;
             // members = this.get.members();
 
-        console.log('members from sloter ->', data);
+//        console.log('members from sloter ->', data);
 
 //        setTimeout(function ()
 //        {
+
+        var offset = Number(Date.today()),
+          day    = 24 * 60 * 60 * 1000;
+
+        var combinations = {
+          1: [
+            {
+              start: offset / 1000,
+              end:   (offset + day) / 1000
+            },
+            {
+              start: (offset + (day * 2)) / 1000,
+              end:   (offset + (day * 3)) / 1000
+            },
+            {
+              start: (offset + (day * 5)) / 1000,
+              end:   (offset + (day * 6)) / 1000
+            }
+          ],
+          2: [
+            {
+              start: (offset + (day * 4)) / 1000,
+              end:   (offset + (day * 5)) / 1000
+            },
+            {
+              start: (offset + (day * 6)) / 1000,
+              end:   (offset + (day * 7)) / 1000
+            },
+          ],
+          3: [
+            {
+              start: offset / 1000,
+              end:   (offset + day) / 1000
+            },
+            {
+              start: (offset + (day * 2)) / 1000,
+              end:   (offset + (day * 3)) / 1000
+            },
+            {
+              start: (offset + (day * 4)) / 1000,
+              end:   (offset + (day * 5)) / 1000
+            },
+            {
+              start: (offset + (day * 6)) / 1000,
+              end:   (offset + (day * 7)) / 1000
+            }
+          ],
+          4: [
+            {
+              start: (offset + (day * 3)) / 1000,
+              end:   (offset + (day * 4)) / 1000
+            },
+            {
+              start: (offset + (day * 2)) / 1000,
+              end:   (offset + (day * 3)) / 1000
+            },
+          ]
+        }
+
+        function getRandomInt (min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        var persons = {
+          teams: [
+//                'Client 1',
+//                'Client 2',
+//                'Client 3',
+//                'Client 4',
+//                'Client 5',
+//                'Client 6',
+//                'Client 7',
+//                'Client 8',
+//                'Client 9',
+//                'Client 10',
+//                'Client 11',
+//                'Client 12'
+          ],
+
+          clients: [
+//                'Team 1',
+//                'Team 2',
+//                'Team 3',
+//                'Team 4',
+//                'Team 5',
+//                'Team 6',
+//                'Team 7',
+//                'Team 8',
+//                'Team 9',
+//                'Team 10',
+//                'Team 11',
+//                'Team 12',
+          ],
+
+          max: {
+            teams: null,
+            clients: null
+          }
+        }
+
+        angular.forEach(data.clients.list, function (client)
+        {
+          persons.teams.push(client.name);
+        });
+
+        persons.max.teams = data.clients.list.length - 1;
+
+        angular.forEach(data.teams.list, function (team)
+        {
+          persons.clients.push(team.name);
+        });
+
+        persons.max.clients = data.teams.list.length - 1;
 
 
           angular.forEach(data.members, function (member, index)
           {
 
-            var offset = Number(Date.today()),
-                day    = 24 * 60 * 60 * 1000;
 
-            var combinations = {
-              1: [
-                {
-                  start: offset / 1000,
-                  end:   (offset + day) / 1000
-                },
-                {
-                  start: (offset + (day * 2)) / 1000,
-                  end:   (offset + (day * 3)) / 1000
-                },
-                {
-                  start: (offset + (day * 5)) / 1000,
-                  end:   (offset + (day * 6)) / 1000
-                }
-              ],
-              2: [
-                {
-                  start: (offset + (day * 4)) / 1000,
-                  end:   (offset + (day * 5)) / 1000
-                },
-                {
-                  start: (offset + (day * 6)) / 1000,
-                  end:   (offset + (day * 7)) / 1000
-                },
-              ],
-              3: [
-                {
-                  start: offset / 1000,
-                  end:   (offset + day) / 1000
-                },
-                {
-                  start: (offset + (day * 2)) / 1000,
-                  end:   (offset + (day * 3)) / 1000
-                },
-                {
-                  start: (offset + (day * 4)) / 1000,
-                  end:   (offset + (day * 5)) / 1000
-                },
-                {
-                  start: (offset + (day * 6)) / 1000,
-                  end:   (offset + (day * 7)) / 1000
-                }
-              ],
-              4: [
-                {
-                  start: (offset + (day * 3)) / 1000,
-                  end:   (offset + (day * 4)) / 1000
-                },
-                {
-                  start: (offset + (day * 2)) / 1000,
-                  end:   (offset + (day * 3)) / 1000
-                },
-              ]
-            }
 
-            function getRandomInt (min, max) {
-              return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
+
 //
 //            console.log('random member ->', member, getRandomInt(1, 7));
 
@@ -515,11 +570,11 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 
             angular.forEach(combinations[getRandomInt(1, 4)], function (combi)
             {
-              console.log('combi ->', new Date(combi.start * 1000).toString(), new Date(combi.end * 1000).toString() );
+              // console.log('combi ->', new Date(combi.start * 1000).toString(), new Date(combi.end * 1000).toString() );
 
               mdata.push({
                 start: combi.start,
-                end: combi.end,
+                end:   combi.end,
                 text: 'com.ask-cs.State.Available',
                 type: 'availability'
               })
@@ -559,7 +614,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
                       state: slot.text
                     })),
                     */
-                    content: 'some text',
+                    content: persons[data.section][getRandomInt(0, persons.max[data.section])],
                     // className:  config.states[slot.text].className,
                     className:  'state-available',
                     editable:   false
@@ -593,7 +648,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 
 //        }, 100);
 
-        console.log('timedata ->', timedata);
+//        console.log('timedata ->', timedata);
 
         return timedata;
       },

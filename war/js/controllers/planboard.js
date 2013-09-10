@@ -135,6 +135,8 @@ angular.module('WebPaige.Controllers.Planboard', [])
           }
         });
 
+        $scope.data.section = $scope.section;
+
         $scope.data.members = $scope.data[$scope.section].members[$scope.current];
 
         $rootScope.$broadcast('timeliner', {
@@ -142,7 +144,7 @@ angular.module('WebPaige.Controllers.Planboard', [])
           end:   Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
         });
 
-        console.log('$scope.data ->', $scope.data.members);
+        // console.log('$scope.data ->', $scope.data.members);
       };
 
 
