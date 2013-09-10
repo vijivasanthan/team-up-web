@@ -380,10 +380,12 @@ div.timeline-frame {
     background-color: #fff;
     overflow: hidden;
     margin-bottom: 30px;
+    div {
+    }
 }
 
 div.timeline-axis {
-    background-color: #676153;
+    background-color: $brown;
     color: #fff;
     border-color: #ddd;
     border-width: 1px;
@@ -394,8 +396,15 @@ div.timeline-axis-grid {
     border-width: 1px;
 }
 div.timeline-axis-grid-minor {
-    border-color: #e5e5e5;
+  border-color: #e5e5e5;
 }
+/*div.timeline-axis-grid-minor:nth-child(odd) {
+    border-top: 70px solid $offwhite ;
+  border-bottom: 1px solid black;
+}
+div.timeline-axis-grid-minor:nth-child(even) {
+  border-bottom: 1px solid black;
+}*/
 div.timeline-axis-grid-major {
     border-color: #bfbfbf;
 }
@@ -414,14 +423,11 @@ div.timeline-axis-text-major {
 }
 
 div.timeline-event {
-    /*color: #1A1A1A;*/
-    /*border-color: #ddd;*/
-    /*background-color: #D5DDF6;*/
     display: inline-block;
-
-    /*padding: 0;*/
-
-    background-color: #ddd;
+    padding: 10px 0;
+    height:20px;
+    background-color: $orange;
+    margin-top: 12px !important;
 }
 
 div.timeline-event-selected {
@@ -479,11 +485,11 @@ div.timeline-event-line {
 }
 
 div.timeline-event-content {
-/*    margin: 5px;
+    margin-left: 10px;
     white-space: nowrap;
-    overflow: hidden;*/
-
-    /*background-color: #ddd*/
+    overflow: hidden;
+    color: $white;
+    font-weight: 800;
 }
 
 div.timeline-groups-axis {
@@ -491,10 +497,16 @@ div.timeline-groups-axis {
     border-width: 1px;
 }
 div.timeline-groups-text {
-    color: #4D4D4D;
+    color: $brown;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 11px;
+    div {
+      font-size: 12px !important;
+      margin: 6px 0 !important;
+    }
+    div:nth-child(2) {
+      margin: 22px 0 0 10px !important;
+    }
 }
 
 div.timeline-currenttime {
@@ -684,40 +696,32 @@ div.timeline-navigation-move-right {
 
 div.timeline-event.state-available {
     margin:0;
-    background-color: #4f824f;
-    text-indent: -9999px;
-
-    height: 50px;
+    background-color: $orange;
 }
 
 div.timeline-event.state-available-south {
     margin:0;
     background-color: #e08a0c;
-    text-indent: -9999px;
 }
 
 div.timeline-event.state-available-north {
     margin:0;
     background-color: black;
-    text-indent: -9999px;
 }
 
 div.timeline-event.state-schipper-service {
     margin:0;
     background-color: #e0c100;
-    text-indent: -9999px;
 }
 
 div.timeline-event.state-unreached {
     margin:0;
     background-color: #65619b;
-    text-indent: -9999px;
 }
 
 div.timeline-event.state-unavailable {
     margin:0;
     background-color: #a93232;
-    text-indent: -9999px;
 }
 
 
@@ -726,10 +730,8 @@ div.timeline-event.state-unavailable {
 
 div.timeline-event div.timeline-event-content {
   font-size: 12px;
-
   top: 0;
   left: 0;
-  color: red;
 }
 
 
@@ -1714,4 +1716,9 @@ div.timeline-event-range {
     display: block;
     height: 16px;
     width: 16px;
+}
+
+
+.timeline-footer-text {
+    font-style: italic;
 }
