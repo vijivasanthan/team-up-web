@@ -2,6 +2,21 @@
 // Avatars
 // --------------------------------------------------
 
+.roundedPicxSmall {
+  width: 36px;
+  height: 36px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  background: no-repeat center;
+  background-size: cover;
+  border-width: 2px;
+  float:left;
+  #profile {
+    padding: 0;
+  }
+}
+
 .roundedPicSmall {
   width: 46px;
   height: 46px;
@@ -11,7 +26,6 @@
   background: no-repeat center;
   background-size: cover;
   border-width: 2px;
-
 }
 
 .roundedPicLarge {
