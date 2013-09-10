@@ -283,7 +283,7 @@ angular.module('WebPaige.Controllers.Timeline', [])
 
                     // $scope.data = data;
 
-            console.log('render data ->', angular.toJson($scope.data.members));
+            // console.log('render data ->', angular.toJson($scope.data.members));
 
                     _this.render(stamps, remember);
 

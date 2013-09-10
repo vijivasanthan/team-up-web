@@ -445,27 +445,97 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
           angular.forEach(data.members, function (member, index)
           {
 
+            var offset = Number(Date.today()),
+                day    = 24 * 60 * 60 * 1000;
 
-            var mdata = [
-              {
-                "count": 0,
-                "end": 1378681200,
-                "recursive": true,
-                "start": 1378504800,
-                "text": "com.ask-cs.State.Available",
-                "type": "availability",
-                "wish": 0
-              },
-              {
-                "count": 0,
-                "end": 1378850400,
-                "recursive": true,
-                "start": 1378720800,
-                "text": "com.ask-cs.State.Available",
-                "type": "availability",
-                "wish": 0
-              }
-            ];
+            var combinations = {
+              1: [
+                {
+                  start: offset / 1000,
+                  end:   (offset + day) / 1000
+                },
+                {
+                  start: (offset + (day * 2)) / 1000,
+                  end:   (offset + (day * 3)) / 1000
+                },
+                {
+                  start: (offset + (day * 5)) / 1000,
+                  end:   (offset + (day * 6)) / 1000
+                }
+              ],
+              2: [
+                {
+                  start: (offset + (day * 4)) / 1000,
+                  end:   (offset + (day * 5)) / 1000
+                },
+                {
+                  start: (offset + (day * 6)) / 1000,
+                  end:   (offset + (day * 7)) / 1000
+                },
+              ],
+              3: [
+                {
+                  start: offset / 1000,
+                  end:   (offset + day) / 1000
+                },
+                {
+                  start: (offset + (day * 2)) / 1000,
+                  end:   (offset + (day * 3)) / 1000
+                },
+                {
+                  start: (offset + (day * 4)) / 1000,
+                  end:   (offset + (day * 5)) / 1000
+                },
+                {
+                  start: (offset + (day * 6)) / 1000,
+                  end:   (offset + (day * 7)) / 1000
+                }
+              ],
+              4: [
+                {
+                  start: (offset + (day * 3)) / 1000,
+                  end:   (offset + (day * 4)) / 1000
+                },
+                {
+                  start: (offset + (day * 2)) / 1000,
+                  end:   (offset + (day * 3)) / 1000
+                },
+              ]
+            }
+
+            function getRandomInt (min, max) {
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+//
+//            console.log('random member ->', member, getRandomInt(1, 7));
+
+            // console.log('combination ->', combinations[1]);
+
+            var mdata = [];
+
+            angular.forEach(combinations[getRandomInt(1, 4)], function (combi)
+            {
+              console.log('combi ->', new Date(combi.start * 1000).toString(), new Date(combi.end * 1000).toString() );
+
+              mdata.push({
+                start: combi.start,
+                end: combi.end,
+                text: 'com.ask-cs.State.Available',
+                type: 'availability'
+              })
+            });
+
+//            var mdata = [
+//              {
+//                "count": 0,
+//                "end": combinations[1].end,
+//                "recursive": true,
+//                "start": combinations[1].start,
+//                "text": "com.ask-cs.State.Available",
+//                "type": "availability",
+//                "wish": 0
+//              }
+//            ];
 
             angular.forEach(mdata, function (slot, i)
             {
