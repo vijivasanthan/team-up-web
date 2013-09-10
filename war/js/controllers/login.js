@@ -12,6 +12,17 @@ angular.module('WebPaige.Controllers.Login', [])
         function($rootScope, $location, $q, $scope, Session, User, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5) {
             var self = this;
 
+
+          // console.log('location ->', $location.path());
+
+          if ($location.path() == '/logout')
+          {
+            $('body').css({
+              'backgroundColor': '#1dc8b6',
+              'backgroundImage': 'none'
+            });
+          }
+
             /**
              * Set default views
              */

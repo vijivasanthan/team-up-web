@@ -46,11 +46,11 @@ angular.module('WebPaige')
     /**
      * Logout router
      */
-    // .when('/logout',
-    // {
-    //   templateUrl: 'dist/views/logout.html',
-    //   controller: 'logout'
-    // })
+    .when('/logout',
+    {
+      templateUrl: 'dist/views/login.html',
+      controller: 'login'
+    })
 
 
     /**
