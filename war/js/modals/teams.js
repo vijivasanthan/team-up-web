@@ -776,48 +776,45 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       };
        
        
-        /**
-        * add or remove the members from the teams 
-        */
-       Teams.prototype.manage = function(changes){
-       	  var deferred = $q.defer();
-       		
-       	  var calls = [];
-       	  
-		  angular.forEach(changes, function (change, teamId){
-		  	 if(change.a.length > 0){
-		  	 	calls.push(Teams.prototype.addMember(teamId,{ids : change.a}));
-		  	 }
-		     if(change.r.length > 0){
-		     	calls.push(Teams.prototype.delMember(teamId,{ids : change.r}));
-		     }
-		  });
-		  
-		  $q.all(calls)
-          .then(function (results)
-          {
-//                Teams.prototype.uniqueMembers();
+      
+	/**
+	 * add or remove the members from the teams
+	 */
+	Teams.prototype.manage = function(changes) {
+		var deferred = $q.defer();
 
-            var data = {};
+		var calls = [];
 
-            // data.groups = {};
-// 
-            // angular.forEach(teams, function (team, gindex)
-            // {
-              // data.teams = teams;
-// 
-              // data.groups[team.uuid] = [];
-// 
-              // angular.forEach(results, function (result, mindex){
-                  // data.groups[team.uuid] = result.data;
-              // });
-            // });
+		angular.forEach(changes, function(change, teamId) {
+			if(change.a.length > 0) {
+				calls.push(Teams.prototype.addMember(teamId, {
+					ids : change.a
+				}));
+			}
+			if(change.r.length > 0) {
+				calls.push(Teams.prototype.delMember(teamId, {
+					ids : change.r
+				}));
+			}
+		});
 
-            deferred.resolve(data);
-          });
-          
-          return deferred.promise;
-       }
+		$q.all(calls).then(function(results) {
+			//                Teams.prototype.uniqueMembers();
+			var queryCalls = [];
+
+			var data = {};
+
+			angular.forEach(changes, function(change, teamId) {
+				queryCalls.push(Teams.prototype.get(teamId));
+			});
+
+			$q.all(queryCalls).then(function(results) {
+				deferred.resolve(data);
+			});
+		});
+		return deferred.promise;
+	}
+
        
        
        

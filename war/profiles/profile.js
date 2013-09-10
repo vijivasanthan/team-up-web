@@ -9,11 +9,11 @@ var profile = {
 
   host: function ()
   {
-      // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
+//       return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
     return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://teamup.acs-services.appspot.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.246\\:9000/ns_knrm';
   },
-
+  noImgURL : '/img/defaultAvatar.png', 
   states: [
     'com.ask-cs.State.Available',
     'com.ask-cs.State.KNRM.BeschikbaarNoord',
