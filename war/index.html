@@ -222,15 +222,23 @@
 
 
     <!-- chat screen -->
-    <div id="chat">
+    <div id="chat"
+         ng-hide="(location=='login' || location=='forgotpass' || location=='register')">
 
-      <div id="chat-btn">
-        <a ng-click="toggleChat = !toggleChat">Chat</a>
+      <div id="chat-btn" ng-click="toggleChat = !toggleChat">
+        <span>CHAT</span>
       </div>
 
       <div id="chat-content-outer" ng-show="toggleChat">
         <div id="chat-content-inner">
-          Some text content
+
+          <img src="img/chat.png" alt="chat"/>
+
+          <!--<div class="chat-seperator">-->
+            <!--<span>11 sep 2013</span>-->
+            <!--<hr>-->
+          <!--</div>-->
+
         </div>
       </div>
 
