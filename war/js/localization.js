@@ -333,7 +333,7 @@ var ui = {
          newClientGroup: 'New Group',
          newClient: 'New Client',
          reports: 'Reports',
-         noClients: 'There is no clients in this group',
+         noClients: 'There are no clients in this group',
          TeamClients: 'TEAMS-CLIENTS',
          createClientGroup: 'Create new client group',
          contacts: 'Contacts',

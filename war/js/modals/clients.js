@@ -340,14 +340,15 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
 
 		
+		
 		/**
 		 * add or remove the clientfrom the client group
 		 */
 		ClientGroups.prototype.manage = function(changes) {
 			var deferred = $q.defer();
-	
+		
 			var calls = [];
-	
+		
 			angular.forEach(changes, function(change, clientGroupId) {
 				if(change.a.length > 0) {
 					calls.push(ClientGroups.prototype.addClient(clientGroupId, {
@@ -360,29 +361,26 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 					}));
 				}
 			});
-	
+		
 			$q.all(calls).then(function(results) {
 				//                Teams.prototype.uniqueMembers();
-	
+				var queryCalls = [];
+		
 				var data = {};
-	
-				// data.groups = {};
-				//
-				// angular.forEach(teams, function (team, gindex)
-				// {
-				// data.teams = teams;
-				//
-				// data.groups[team.uuid] = [];
-				//
-				// angular.forEach(results, function (result, mindex){
-				// data.groups[team.uuid] = result.data;
-				// });
-				// });
-	
+		
+				angular.forEach(changes, function(change, clientGroupId) {
+					queryCalls.push(ClientGroups.prototype.get(clientGroupId));
+				});
+		
+				$q.all(queryCalls).then(function(results) {
+					deferred.resolve(data);
+				});
+		
 				deferred.resolve(data);
 			});
 			return deferred.promise;
 		}
+
 
 		  
 		/**
