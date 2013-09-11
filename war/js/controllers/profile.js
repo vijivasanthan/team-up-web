@@ -61,7 +61,8 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * PAss data container
 	   */
 	  $scope.data = data;
-
+	  $scope.noImgURL = $rootScope.config.noImgURL;
+	  
 	  /**
 	   * Pass profile information
 	   */
@@ -180,6 +181,24 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    $scope.views[hash] = true;
 
 	    $scope.views.user = ($rootScope.app.resources.uuid == $route.current.params.userId) ? true : false;
+	    
+	    // load the avatar by ajax way
+	    var memberId = $route.current.params.userId;
+	    var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
+        Teams.loadImg(imgURL).then(function(result){
+            // console.log("loading pic " + imgURL);
+            
+            var imgId = memberId.replace(".","").replace("@","");
+            if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+                console.log("loading pic " ,result);
+                $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+            }else{
+                $('#img_'+imgId).css('background-image','url('+imgURL+')');
+            }
+            
+        },function(error){
+            console.log("error when load pic " + error);
+        });
 	  };
 
 
