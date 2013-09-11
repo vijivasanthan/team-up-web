@@ -9,14 +9,23 @@ angular.module('WebPaige.Controllers.Planboard', [])
  * Planboard controller
  */
   .controller('planboard',[
-    '$rootScope', '$scope', '$location', 'Dater', 'Storage',
-    function ($rootScope, $scope, $location, Dater, Storage)
+    '$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams',
+    function ($rootScope, $scope, $location, Dater, Storage, Teams)
     {
 
-
+      $scope.imgHost = profile.host();
 
       var teams   = angular.fromJson(Storage.get('Teams')),
           clients = angular.fromJson(Storage.get('ClientGroups'));
+
+
+
+
+
+      function getRandomInt (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
 
       $scope.data = {
         teams: {
@@ -68,11 +77,11 @@ angular.module('WebPaige.Controllers.Planboard', [])
 
           $scope.data.teams.members[team.uuid] = [];
 
+
           angular.forEach(members, function (member)
           {
             var avatar = '<div class="roundedPicSmall memberStateNone" ' +
-              'id="img_willemnales" ' +
-              'style="float: left; background-image: url(http://teamup.acs-services.appspot.com//teamup/team/member/willemnales/photo);"></div>';
+              'style="float: left; background-image: url(img/teams-' +  getRandomInt(1,4) + '.jpg);"></div>';
 
             var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
 
@@ -97,8 +106,7 @@ angular.module('WebPaige.Controllers.Planboard', [])
           angular.forEach(members, function (member)
           {
             var avatar = '<div class="roundedPicSmall memberStateNone" ' +
-              'id="img_willemnales" ' +
-              'style="float: left; background-image: url(http://teamup.acs-services.appspot.com//teamup/team/member/willemnales/photo);"></div>';
+              'style="float: left; background-image: url(img/clients-' +  getRandomInt(1,4) + '.jpg);"></div>';
 
             var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
 
@@ -145,6 +153,40 @@ angular.module('WebPaige.Controllers.Planboard', [])
         });
 
         // console.log('$scope.data ->', $scope.data.members);
+
+
+//        // load image
+//        angular.forEach($scope.list, function (member)
+//        {
+//          console.log('memebr ->', member);
+//
+//          var imgURL = $scope.imgHost + "teamup/team/member/" + member.uuid + "/photo";
+//
+//          Teams.loadImg(imgURL)
+//            .then(function (result)
+//            {
+//              var imgId = member.uuid.replace(".","").replace("@","");
+//
+//              if (result.status && (result.status == 404 || result.status == 403 || result.status == 500) )
+//              {
+//                console.log("loading pic " ,result);
+//
+//                $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+//              }
+//              else
+//              {
+//                $('#img_'+imgId).css('background-image','url('+imgURL+')');
+//              }
+//
+//            }, function (error)
+//            {
+//              console.log("error when load pic " + error);
+//            }
+//          );
+//
+//        });
+
+
       };
 
 
