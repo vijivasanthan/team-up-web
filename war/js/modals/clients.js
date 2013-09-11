@@ -375,8 +375,6 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				$q.all(queryCalls).then(function(results) {
 					deferred.resolve(data);
 				});
-		
-				deferred.resolve(data);
 			});
 			return deferred.promise;
 		}

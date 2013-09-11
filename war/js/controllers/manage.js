@@ -344,7 +344,11 @@ angular.module('WebPaige.Controllers.Manage', [])
         };
 
         $scope.views[hash] = true;
-        $scope.loadData();
+        
+        var localdata = $scope.loadData(data);
+        data = localdata.data;
+        connections = localdata.con;
+        
       }
 
 
