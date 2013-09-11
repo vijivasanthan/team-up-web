@@ -79,15 +79,6 @@
               <li data-match-route="/manage" ng-hide="app.resources.role > 1">
                 <a href="#manage">{{ui.teamup.manage}}</a>
               </li>
-              <li data-match-route="/messages">
-                <a href="#messages">{{ui.message.messages}}
-                  <!-- unread messages -->
-                  <span ng-show="(app.unreadMessages > 0)" class="badge badge-success">
-                    {{app.unreadMessages}}
-                  </span>
-                  <!-- end unread messages -->
-                </a>
-              </li>
               <li data-match-route="/planboard" ng-hide="app.resources.role > 1">
                 <a href="#planboard">Agenda</a>
               </li>
