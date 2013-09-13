@@ -301,7 +301,7 @@
 					
 					<div class="widget profilePic {{(!browser.mobile) && 'span3' || 'span12'}}" >
 						<!-- profile image -->
-			        	<div class="roundedPicLarge memberStateBusy" style= "background-image: url({{imgHost}}/teamup/client/{{client.uuid}}/photo)"></div>
+			        	<div class="roundedPicLarge memberStateBusy" id="img_{{client.uuid|escape}}"></div>
 			        	<div>
 			        		<a href="#/clientProfile/{{client.uuid}}#editImg">
 		                        <button class="btn btn-mini btn-primary" ng-click="editImg()"> <i class="icon-edit"></i>&nbsp;
@@ -428,8 +428,6 @@
 			              <td>{{report.creationTime|nicelyDate}}</td>
 			              <td>
 			                <div class="pull-right">
-			                	<button ng-click="callContact(contact.phone)"
-			                          class="btn-primary btn-mini"><i class="icon-phone3"></i></button>
 			                 	<a><button class="btn-primary btn-mini">
 									<i class="icon-edit"></i>&nbsp;</button></a>
 		                      <button ng-click="removeContact(contact)"

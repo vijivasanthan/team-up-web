@@ -12,186 +12,6 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window','data',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window,data){
 
-//      /**
-//       * Define data sources
-//       * These sources should be populated from modals
-//       */
-//      var data = {
-//
-//        /**
-//         * Members
-//         */
-//        members: [
-//          {
-//            id:   'm1',
-//            name: 'Cengiz Ulusoy'
-//          },
-//          {
-//            id:   'm2',
-//            name: 'Leonie van Dinten'
-//          },
-//          {
-//            id:   'm3',
-//            name: 'Michael Jan Kun'
-//          }
-//        ],
-//
-//        /**
-//         * Teams
-//         */
-//        teams: [
-//          {
-//            id:   't1',
-//            name: 'Verpleegkundigen Rotterdam'
-//          },
-//          {
-//            id:   't2',
-//            name: 'Thuiszorgers'
-//          },
-//          {
-//            id:   't3',
-//            name: 'Groep Schiedam'
-//          }
-//        ],
-//
-//        /**
-//         * Clients
-//         */
-//        clients: [
-//          {
-//            id:   'c1',
-//            name: 'Gerda Bloom'
-//          },
-//          {
-//            id:   'c2',
-//            name: 'Arjan Smit'
-//          },
-//          {
-//            id:   'c3',
-//            name: 'Johan Pieters'
-//          }
-//        ],
-//
-//        /**
-//         * Groups
-//         */
-//        groups: [
-//          {
-//            id:   'g1',
-//            name: 'Erasmus Ziekenhuis'
-//          },
-//          {
-//            id:   'g2',
-//            name: 'Delfshaven Bejaardenhuis'
-//          },
-//          {
-//            id:   'g3',
-//            name: 'Schiedam Senioren'
-//          }
-//        ]
-//      };
-//
-//
-//      /**
-//       * Connections
-//       */
-//      var connections = {
-//        teamClients: {
-//          t1: 'g1',
-//          t2: 'g2'
-//        },
-//        teams: {
-//          t1: [
-//            'm1',
-//            'm2'
-//          ],
-//          t2: [
-//            'm3'
-//          ]
-//        },
-//        clients: {
-//          g1: [
-//            'c1',
-//            'c2'
-//          ],
-//          g2: [
-//            'c3'
-//          ]
-//        }
-//      };
-
-
-
-// <<<<<<< HEAD
-//            /*
-//             * push team group connection data
-//             */
-//
-//            var grps = angular.fromJson(Storage.get("teamGroup_"+team.uuid));
-//            if(typeof grps[0] != 'undefined'){
-//                connections.teamClients[team.uuid] = grps[0].id;
-//            }
-//
-//          });
-//
-//
-//
-//          data.members = members;
-//
-//          /**
-//           * clients , group-client connection data
-//           */
-//          var groups = angular.fromJson(Storage.get("ClientGroups"));
-//          data.groups = groups;
-//
-//          var clients = [];
-//
-//          angular.forEach(groups,function(group,index){
-//            var cts = angular.fromJson(Storage.get(group.id));
-//            var ctIds = [];
-//            angular.forEach(cts,function(client,index){
-//              clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
-//              ctIds.push(client.uuid);
-//            });
-//
-//            connections.clients[group.id] = ctIds;
-//          });
-//
-//          data.clients = clients;
-//      }else{
-//        // data from the server
-//      }
-// =======
-//      /**
-//       * Connections
-//       */
-//      var connections = {
-//        teamClients: {
-//          t1: 'g1',
-//          t2: 'g2'
-//        },
-//        teams: {
-//          t1: [
-//            'm1',
-//            'm2'
-//          ],
-//          t2: [
-//            'm3'
-//          ]
-//        },
-//        clients: {
-//          g1: [
-//            'c1',
-//            'c2'
-//          ],
-//          g2: [
-//            'c3'
-//          ]
-//        }
-//      };
-
-
-
 
       $scope.loadData = function(data){
           
@@ -608,8 +428,8 @@ angular.module('WebPaige.Controllers.Manage', [])
         var preTc = $scope.connections.teamClients;
         var afterTc = arguments[1];
         
-        var addGroups = {};
-        var removeGroups = {};
+//        var addGroups = {};
+//        var removeGroups = {};
         
         var teamIds = [];
         
@@ -624,21 +444,48 @@ angular.module('WebPaige.Controllers.Manage', [])
             });
         });
         
+        var changes = {};
+        
         angular.forEach(teamIds,function(tId){
             if(typeof preTc[tId] == 'undefined' &&  afterTc[tId] ){
-                addGroups[tId] = afterTc[tId];
+//                addGroups[tId] = afterTc[tId];
+                changes[tId] = {a : [afterTc[tId]], r : []};
             }else if(typeof afterTc[tId] == 'undefined' &&  preTc[tId] ){
-                removeGroups[tId] = preTc[tId];
+//                removeGroups[tId] = preTc[tId];
+                changes[tId] = {r : [preTc[tId]] , a : []};
             }else if(preTc[tId] && afterTc[tId] && preTc[tId] != preTc[tId]){
-                addGroups[tId] = afterTc[tId];
-                removeGroups[tId] = preTc[tId];
+            	changes[tId] = {a : [afterTc[tId]] , r : [preTc[tId]]};
+//                addGroups[tId] = afterTc[tId];
+//                removeGroups[tId] = preTc[tId];
             }
             
         });
         
-        console.log("added ones :  " , addGroups);
-        console.log("removed ones :  " , removeGroups);
-//        console.log(changes);
+//        console.log("added ones :  " , addGroups);
+//        console.log("removed ones :  " , removeGroups);
+        
+        
+//        if(!angular.equals({},addGroups) || !angular.equals({},removeGroups) ){
+//            changes = {a : addGroups , r : removeGroups};
+//        }
+        
+        console.log(changes);
+        
+        if(angular.equals({},changes)){
+            console.log("no changes ! ");
+        }else{
+            console.log("Team Groups changes : " ,changes);
+            
+            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+            
+            Teams.manageGroups(changes).then(function(result){
+                
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                
+            });
+        }
+        
         
       });
       

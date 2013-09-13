@@ -47,92 +47,83 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       );
 
 
-      var Containers = $resource(
-        $config.host + '/node/:id/container',
-        {
-        },
-        {
-          get: {
-            method: 'GET',
-            params: {id:''},
-            isArray: true
-          }
-        }
-      );
+	
+		var Containers = $resource($config.host + '/node/:id/container', {
+		}, {
+			get : {
+				method : 'GET',
+				params : {
+					id : ''
+				},
+				isArray : true
+			}
+		});
+	
+		var Parents = $resource($config.host + '/parent', {
+		}, {
+			get : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			}
+		});
+	
+		var TeamStatus = $resource($config.host + 'teamup/team/status/:teamId/', {
+		}, {
+			query : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			}
+		});
+	
+		var Team = $resource($config.host + 'teamup/team/:teamId/', {
+		}, {
+			edit : {
+				method : 'PUT',
+			}
+		});
+	
+		var Members = $resource($config.host + 'teamup/team/:teamId/member', {
+		}, {
+			save : {
+				method : 'POST',
+			}
+		});
+	
+		var RemoveMembers = $resource($config.host + 'teamup/team/:teamId/removeMember', {
+		}, {
+			remove : {
+				method : 'PUT',
+			}
+		});
+	
+		var cGroup = $resource($config.host + 'teamup/team/:teamId/clientGroups', {
+		}, {
+			query : {
+				method : 'GET',
+				params : {},
+				isArray : true
+			},
+			add : {
+				method : 'POST'
+			}
+		});
+		
+		var unAssignGroups = $resource($config.host + 'teamup/team/:teamId/unAssignClientGroups', {
+		}, {
+			unssign : {
+				method : 'PUT',
+			}
+		});
+		 
+		var Member = $resource($config.host + 'teamup/team/member', {
+		}, {
+			save : {
+				method : 'POST',
+			}
+		}); 
 
-
-      var Parents = $resource(
-        $config.host + '/parent',
-        {
-        },
-        {
-          get: {
-            method: 'GET',
-            params: {},
-            isArray: true
-          }
-        }
-      );
-
-      var TeamStatus = $resource(
-          $config.host + 'teamup/team/status/:teamId/',{
-          },{
-              query : {
-                  method: 'GET',
-                  params: {},
-                  isArray: true
-              }
-          }
-              
-      );
-      
-      var Team = $resource(
-          $config.host + 'teamup/team/:teamId/',{
-          },{
-              edit : {
-                  method: 'PUT',
-              }
-          }
-              
-      ); 
-      
-      var Members = $resource(
-      		$config.host + 'teamup/team/:teamId/member',{
-      		},{
-      			save : {
-      				method: 'POST',
-      			}
-      		}
-      );
-      
-      var RemoveMembers = $resource(
-          $config.host + 'teamup/team/:teamId/removeMember',{
-          },{
-              remove : {
-                  method: 'PUT',
-              }
-          }
-      );
-      
-      var cGroup = $resource(
-          $config.host + 'teamup/team/:teamId/clientGroups',{
-          },{
-              query : {
-                  method: 'GET',
-                  params: {},
-                  isArray: true
-              }
-          }
-      ); 
-      
-      var Member = $resource(
-              $config.host + 'teamup/team/member',{
-              },{
-                  save : {
-                      method: 'POST',
-                  }
-              }
-        );
 //      /**
 //       * Get parent team data
 //       */
@@ -253,56 +244,48 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
         return deferred.promise;    
       };
-//
-//
-//      /**
-//       * Remove members from a team (bulk action)
-//       */
-//      Teams.prototype.removeMembers = function (selection, team)
-//      {
-//        var deferred = $q.defer(),
-//            calls = [];
-//
-//        angular.forEach(selection, function (value, id)
-//        {
-//          if (id) calls.push(Teams.prototype.removeMember(id, team.uuid));
-//        });
-//
-//        $q.all(calls)
-//        .then(function (result)
-//        {
-//          deferred.resolve(result);
-//        });
-//
-//        return deferred.promise; 
-//      };
-//
-//
-//      Teams.prototype.wish = function (id)
-//      {
-//        var deferred  = $q.defer(),
-//            count     = 0;
-//
-//        Slots.wishes({
-//          id: id,
-//          start:  255600,
-//          end:    860400
-//        }).then(function (results)
-//        {
-//          angular.forEach(results, function (slot, index)
-//          {
-//            if (slot.start == 255600 && slot.end == 860400 && slot.count != null) count = slot.count;
-//          });
-//
-//          deferred.resolve({
-//            count: count
-//          });
-//        });
-//
-//        return deferred.promise; 
-//      }
-//
-//
+      
+      /**
+       * Add client groups to a team 
+       */
+      Teams.prototype.addGroup = function (id , groupIds)
+      {
+        var deferred = $q.defer();
+        cGroup.add({teamId: id },groupIds, 
+          function (result) 
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;    
+      };
+      
+      /**
+       * Remove client group from a team
+       */
+      Teams.prototype.delGroup = function (tId,groupIds)
+      {
+        var deferred = $q.defer();
+
+        unAssignGroups.unssign({teamId: tId},  groupIds,
+          function (result) 
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;    
+      };
+
       /**
        * General query function from Teams and their members
        */
@@ -421,51 +404,46 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
           
       };
       
-      /**
-       * Get team data
-       */
-      Teams.prototype.get = function (id) 
-      {   
-        var deferred = $q.defer();
+	     
+		/**
+		 * Get team data
+		 */
+	
+		Teams.prototype.get = function(id) {
+			var deferred = $q.defer();
+	
+			TeamStatus.query({
+				teamId : id
+			}, function(result) {
+				/**
+				 * DIRTY CHECK!
+				 *
+				 * Check for 'null' return from back-end
+				 * if team is empty
+				 */
+				var returned;
+	
+				if (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') {
+					returned = [];
+				} else {
+					returned = result;
+				};
+	
+				Storage.add(id, angular.toJson(returned));
+	
+				deferred.resolve({
+					id : id,
+					data : returned
+				});
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+	
+			return deferred.promise;
+		};
 
-        TeamStatus.query(
-          {teamId : id}, 
-          function (result) 
-          {
-            /**
-             * DIRTY CHECK!
-             * 
-             * Check for 'null' return from back-end
-             * if team is empty
-             */
-            var returned;
-
-            if (result.length == 4 && 
-                result[0][0] == 'n' && 
-                result[1][0] == 'u')
-            {
-              returned = [];
-            }
-            else
-            {
-              returned = result;
-            };
-
-            Storage.add(id, angular.toJson(returned));
-
-            deferred.resolve({
-              id: id,
-              data: returned
-            });
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
-
-        return deferred.promise;
-      };
 //
 //
 //      /**
@@ -657,167 +635,189 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
          }); 
          
          return deferred.promise;
-       }
+       };
        
        
-       /**
-        *  load the callin number for the team 
-        */
-       Teams.prototype.loadTeamCallinNumber = function(teamUuid){
-           var TeamNumber = $resource(
-               $config.host + 'teamup/team/:teamId/phone',{
-               },{
-                   get : {
-                       method: 'GET',
-                   }
-               }
-           );
-           
-           var deferred = $q.defer();
-           
-           TeamNumber.get(
-               {teamId : teamUuid},
-               function (result){
-                   deferred.resolve(result);
-               },
-               function (error){
-                   deferred.resolve({error: error});
-               }
-           );
-           
-           return deferred.promise;
-       }
        
-       
-       /**
-        * load the client groups belong to all the teams 
-        */
-       Teams.prototype.queryClientGroups = function(teams){
-       	  var deferred = $q.defer();
-       		
-       	  var calls = [];
-		  angular.forEach(teams, function (team, index){
-		     calls.push(Teams.prototype.getGroup(team.uuid));
-		  });
-		  
-		  $q.all(calls)
-          .then(function (results)
-          {
-//                Teams.prototype.uniqueMembers();
-
-            var data = {};
-
-            data.groups = {};
-
-            angular.forEach(teams, function (team, gindex)
-            {
-              data.teams = teams;
-
-              data.groups[team.uuid] = [];
-
-              angular.forEach(results, function (result, mindex){
-                  data.groups[team.uuid] = result.data;
-              });
-            });
-
-            deferred.resolve(data);
-          });
-          
-          return deferred.promise;
-       }
-       
-      /**
-       * get  the client group for specific team
-       */
-       /**
-       * Get team data
-       */
-      Teams.prototype.getGroup = function (id) 
-      {   
-        var deferred = $q.defer();
-
-        cGroup.query(
-          {teamId : id}, 
-          function (result) 
-          {
-            /**
-             * DIRTY CHECK!
-             * 
-             * Check for 'null' return from back-end
-             * if team is empty
-             */
-            var returned;
-
-            if (result.length == 4 && 
-                result[0][0] == 'n' && 
-                result[1][0] == 'u')
-            {
-              returned = [];
-            }
-            else
-            {
-              returned = result;
-            };
-
-            Storage.add("teamGroup_"+id, angular.toJson(returned));
-
-            deferred.resolve({
-              id: id,
-              data: returned
-            });
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
-
-        return deferred.promise;
-      };
-       
-       
-      
-	/**
-	 * add or remove the members from the teams
-	 */
-	Teams.prototype.manage = function(changes) {
-		var deferred = $q.defer();
-
-		var calls = [];
-
-		angular.forEach(changes, function(change, teamId) {
-			if(change.a.length > 0) {
-				calls.push(Teams.prototype.addMember(teamId, {
-					ids : change.a
-				}));
-			}
-			if(change.r.length > 0) {
-				calls.push(Teams.prototype.delMember(teamId, {
-					ids : change.r
-				}));
-			}
-		});
-
-		$q.all(calls).then(function(results) {
-			//                Teams.prototype.uniqueMembers();
-			var queryCalls = [];
-
-			var data = {};
-
-			angular.forEach(changes, function(change, teamId) {
-				queryCalls.push(Teams.prototype.get(teamId));
+		/**
+		 *  load the callin number for the team
+		 */
+		Teams.prototype.loadTeamCallinNumber = function(teamUuid) {
+			var TeamNumber = $resource($config.host + 'teamup/team/:teamId/phone', {
+			}, {
+				get : {
+					method : 'GET',
+				}
 			});
 
-			$q.all(queryCalls).then(function(results) {
+			var deferred = $q.defer();
+
+			TeamNumber.get({
+				teamId : teamUuid
+			}, function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+
+			return deferred.promise;
+		}; 
+
+       
+		/**
+		 * load the client groups belong to all the teams
+		 */
+		Teams.prototype.queryClientGroups = function(teams) {
+			var deferred = $q.defer();
+
+			var calls = [];
+			angular.forEach(teams, function(team, index) {
+				calls.push(Teams.prototype.getGroup(team.uuid));
+			});
+
+			$q.all(calls).then(function(results) {
+				//                Teams.prototype.uniqueMembers();
+
+				var data = {};
+
+				data.groups = {};
+
+				angular.forEach(teams, function(team, gindex) {
+					data.teams = teams;
+
+					data.groups[team.uuid] = [];
+
+					angular.forEach(results, function(result, mindex) {
+						data.groups[team.uuid] = result.data;
+					});
+				});
+
 				deferred.resolve(data);
 			});
-		});
-		return deferred.promise;
-	}
+
+			return deferred.promise;
+		}; 
+
+
+		/**
+		 * get  the client group for specific team
+		 */
+		Teams.prototype.getGroup = function(id) {
+			var deferred = $q.defer();
+	
+			cGroup.query({
+				teamId : id
+			}, function(result) {
+				/**
+				 * DIRTY CHECK!
+				 *
+				 * Check for 'null' return from back-end
+				 * if team is empty
+				 */
+				var returned;
+	
+				if (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') {
+					returned = [];
+				} else {
+					returned = result;
+				};
+	
+				Storage.add("teamGroup_" + id, angular.toJson(returned));
+	
+				deferred.resolve({
+					id : id,
+					data : returned
+				});
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+	
+			return deferred.promise;
+		};
 
        
-       
-       
+      
+		/**
+		 * add or remove the members from the teams
+		 */
+		Teams.prototype.manage = function(changes) {
+			var deferred = $q.defer();
+	
+			var calls = [];
+	
+			angular.forEach(changes, function(change, teamId) {
+				if(change.a.length > 0) {
+					calls.push(Teams.prototype.addMember(teamId, {
+						ids : change.a
+					}));
+				}
+				if(change.r.length > 0) {
+					calls.push(Teams.prototype.delMember(teamId, {
+						ids : change.r
+					}));
+				}
+			});
+	
+			$q.all(calls).then(function(results) {
+				//                Teams.prototype.uniqueMembers();
+				var queryCalls = [];
+	
+				var data = {};
+	
+				angular.forEach(changes, function(change, teamId) {
+					queryCalls.push(Teams.prototype.get(teamId));
+				});
+	
+				$q.all(queryCalls).then(function(results) {
+					deferred.resolve(data);
+				});
+			});
+			return deferred.promise;
+		};
+
+       	/**
+       	 * add or remove the client group from the teams 
+       	 */
+    	Teams.prototype.manageGroups = function(changes) {
+			var deferred = $q.defer();
+	
+			var calls = [];
+	
+			angular.forEach(changes, function(change, teamId) {
+				if(change.a.length > 0) {
+					calls.push(Teams.prototype.addGroup(teamId, {
+						ids : change.a
+					}));
+				}
+				if(change.r.length > 0) {
+					calls.push(Teams.prototype.delGroup(teamId, {
+						ids : change.r
+					}));
+				}
+			}); 
+	
+			$q.all(calls).then(function(results) {
+				//Teams.prototype.uniqueMembers();
+				var queryCalls = [];
+	
+				var data = {};
+	
+				angular.forEach(changes, function(change, teamId) {
+					queryCalls.push(Teams.prototype.getGroup(teamId));
+				});
+	
+				$q.all(queryCalls).then(function(results) {
+					deferred.resolve(data);
+				});
+			});
+			
+			return deferred.promise;
+		};   
+	       
       return new Teams;
     }
 ]);

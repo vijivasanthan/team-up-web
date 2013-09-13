@@ -44,8 +44,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	 * Grab and set roles for view
 	 */
 	$scope.roles = $rootScope.config.roles;
-	$scope.mfuncs = $rootScope.config.mfunctions;
-	$scope.noImgURL = $rootScope.config.noImgURL;
+	$scope.mfuncs = $rootScope.config.mfunctions;	
 	var uuid, view;
 
 	/**
@@ -100,8 +99,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				
 				var imgId = member.uuid.replace(".","").replace("@","");
 				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-					console.log("loading pic " ,result);
-					$('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+					console.log("no pics " ,result);
 				}else{
 					$('#img_'+imgId).css('background-image','url('+imgURL+')');
 				}

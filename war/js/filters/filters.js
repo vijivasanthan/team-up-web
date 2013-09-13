@@ -786,6 +786,9 @@ angular.module('WebPaige.Filters', ['ngResource'])
     {
         return function (string)
         {
+        	if(!string || string.indexOf(".") == -1){
+        		return string;
+        	}
             var ret = string.replace(".","").replace("@","")
             
             return ret;

@@ -44,7 +44,6 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
-	$scope.noImgURL = $rootScope.config.noImgURL;
 	/**
 	 * Init search query
 	 */
@@ -123,7 +122,6 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
                 var imgId = client.uuid.replace(".","").replace("@","");
                 if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
                     console.log("loading pic " ,result);
-                    $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
                 }else{
                     $('#img_'+imgId).css('background-image','url('+imgURL+')');
                 }
