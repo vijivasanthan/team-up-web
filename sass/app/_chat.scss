@@ -2,15 +2,18 @@
 #chat {
   position: fixed;
   right: 0;
-  top: 100px;
+  top: 10%;
   z-index: 1000;
+  height: 80%;
+  min-height: 300px;
 
   #chat-btn {
     position: absolute;
-    top: 240px;
-    left: -43px;
+    top: 50%;
+    margin-top:-50px;
+    left: -45px;
 
-    z-index: 1010;
+    z-index: 2001;
     display: block;
     width: 40px;
     height: 100px;
@@ -40,8 +43,8 @@
 
       font-size: 16px;
       font-weight: bold;
-      margin-left: 4px;
-      margin-top: 44px;
+      margin-left: 6px;
+      margin-top: 46px;
     }
 
   }
@@ -49,22 +52,23 @@
   #chat-content {
     z-index: 2000;
     width: 400px;
-    height: 620px;
-    margin-right: -11px; //size of border + inner-shadow
-    padding: 8px;
-    border: 3px solid #833c11;
+    height: 97%;
+    margin-right: -8px; //size of border
+    border: 8px solid $turq;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     background-color: $chatBg;
-    -moz-box-shadow:    inset 0 0 0 8px $turq;
-    -webkit-box-shadow: inset 0 0 0 8px $turq;
-    box-shadow:         inset 0 0 0 8px $turq;
+    -moz-box-shadow:    0 0 0 3px $brown;
+    -webkit-box-shadow: 0 0 0 3px $brown;
+    box-shadow:         0 0 0 3px $brown;
     overflow-y: scroll;
     overflow-x: hidden;
     position: relative;
 
 
-    .chat-seperator {
+    .chat-separator {
+      //display: table-caption;
+      clear: both;
       span {
         text-align: center;
         background-color: $chatBg;
@@ -82,6 +86,8 @@
         border: none;
         border-bottom: 1px solid #833c11;
         position: relative;
+        width: 334px;
+        clear: both;
       }
     }
 
@@ -167,6 +173,8 @@
         width: 10px;
         background-color: $white;
         transform: matrix(1, -1, 1, 1, -7, 0);
+        -ms-transform: matrix(1, -1, 1, 1, -7, 0); /* IE 9 */
+        -webkit-transform: matrix(1, -1, 1, 1, -7, 0); /* Safari and Chrome */
       }
 
 
