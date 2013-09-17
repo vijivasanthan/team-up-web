@@ -25,7 +25,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	    {
 	      process: {
 	        method: 'GET',
-	        params: {username:'', password:''}
+	        params: {username:'', passwordHash:''}
 	      }
 	    }
 	  );
