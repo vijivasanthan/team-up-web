@@ -33,7 +33,7 @@
   // Hover/focus state
   &:hover,
   &:focus {
-    color: $orange;
+    color: $brown;
     text-decoration: none;
     background-position: 0 -15px;
 
@@ -159,29 +159,55 @@ input[type="button"] {
 .btn-primary {
   background-color: $orange;
   color:$brown;
+  &:hover,
+  &:focus {
+    color: $offwhite;
+  }
 }
 /*// Warning appears are orange   */
 .btn-warning {
-  @include buttonBackground($btnWarningBackground, $btnWarningBackgroundHighlight);
+  background-color:$red;
+  &:hover,
+  &:focus {
+    color: $offwhite;
+  }
 }
 // Danger and error appear as red
 .btn-danger {
   background-color:$red;
+  &:hover,
+  &:focus {
+    color: $offwhite;
+  }
 }
 // Success appears as green
 .btn-success {
   background-color:$turq;
   color:$offwhite;
+  &:hover,
+  &:focus {
+    color: $brown;
+  }
 }
 // Info appears as a neutral blue
 .btn-info {
   background-color:$brown;
   color:$offwhite;
+  &:hover,
+  &:focus {
+    color: $orange;
+  }
+
+
 }
 // Inverse appears as dark gray
 .btn-inverse {
   @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
 }
+
+
+
+
 
 
 // Cross-browser Jank

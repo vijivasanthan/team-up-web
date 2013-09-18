@@ -12,23 +12,19 @@
     top: 50%;
     margin-top:-50px;
     left: -45px;
-
+    color: $offwhite;
     z-index: 2001;
     display: block;
     width: 40px;
     height: 100px;
-
     border: 3px solid #833c11;
-
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
-
     background-color: #1dc8b6;
-
     border-right: 3px solid #1dc8b6;
-
     &:hover {
       cursor: pointer;
+      color: $brown;
     }
 
     span {
@@ -38,9 +34,6 @@
       -ms-transform: rotate(-90deg);
       -o-transform: rotate(-90deg);
       transform: rotate(-90deg);
-
-      color: white;
-
       font-size: 16px;
       font-weight: bold;
       margin-left: 6px;

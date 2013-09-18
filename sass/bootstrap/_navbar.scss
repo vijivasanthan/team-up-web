@@ -246,6 +246,9 @@
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     margin-top: 5px;
+    &:hover {
+      background-color: $orange;
+    }
     a {
       padding: 11px 13px;
     }
