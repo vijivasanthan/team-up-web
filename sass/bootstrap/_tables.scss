@@ -244,3 +244,12 @@ table th[class*="span"],
     background-color: darken($infoBackground, 5%);
   }
 }
+
+
+
+//Description list
+dl {
+  dt {
+    text-transform: capitalize;
+  }
+}

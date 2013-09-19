@@ -18,9 +18,11 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-114-precomposed.png">
       <link rel="apple-touch-icon-precomposed" sizes="72x72" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-72-precomposed.png">
       <link rel="apple-touch-icon-precomposed" sizes="57x57" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" ng-href="profiles/{{config.profile.meta}}/img/ico/favicon.ico">
+      <link rel="shortcut icon" ng-href="/favicon.ico">
+      <link rel="icon" ng-href="favicon.ico">
 
-    <!-- styles -->
+
+      <!-- styles -->
     <link rel="stylesheet" href="dist/bootstrap.css">
     <link rel="stylesheet" href="dist/responsive.css">
     <link rel="stylesheet" href="dist/app.css">
@@ -220,17 +222,83 @@
         <span>CHAT</span>
       </div>
 
-      <div id="chat-content-outer" ng-show="toggleChat">
-        <div id="chat-content-inner">
+      <div id="chat-content" ng-show="toggleChat">
 
-          <img src="img/chat.png" alt="chat"/>
+         <!-- <img src="img/chat.png" alt="chat"/>-->
 
-          <!--<div class="chat-seperator">-->
-            <!--<span>11 sep 2013</span>-->
-            <!--<hr>-->
-          <!--</div>-->
+          <div class="chat-separator">
+            <span>11 sep 2013</span>
+            <hr>
+          </div>
+          <div class="message messageOther">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Renate Dekkers</h5>
+                  <h5 class="time">10.34</h5>
+                  <div><p>Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen!</p></div>
+              </div>
+          </div>
+          <div class="message messageOther">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Renate Dekkers</h5>
+                  <h5 class="time">10.34</h5>
+                  <p>Hallo</p>
+              </div>
+          </div>
+          <div class="message messageOwn">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Freek de Vries</h5>
+                  <h5 class="time">10.34</h5>
+                  <div><p>Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen!</p></div>
+              </div>
+              <div class="arrow"></div>
+          </div>
+          <div class="chat-separator">
+              <span>10 sep 2013</span>
+              <hr>
+          </div>
+          <div class="message messageOwn">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Freek de Vries</h5>
+                  <h5 class="time">10.34</h5>
+                  <p>Hallo</p>
+              </div>
+          </div>
+          <div class="message messageOther">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Renate Dekkers</h5>
+                  <h5 class="time">10.34</h5>
+                  <p>Hallo</p>
+              </div>
+          </div>
+          <div class="message messageOwn">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Freek de Vries</h5>
+                  <h5 class="time">10.34</h5>
+                  <p>Hallo</p>
+              </div>
+          </div>
+          <div class="message messageOwn">
+              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
+              <div class="arrow"></div>
+              <div class="chatCloud">
+                  <h5 class="name">Freek de Vries</h5>
+                  <h5 class="time">10.34</h5>
+                  <p>Hallo</p>
+              </div>
+          </div>
 
-        </div>
+
       </div>
 
     </div>
