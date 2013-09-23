@@ -1,4 +1,4 @@
-<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup || views.reports">
+<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="c.id as c.name for c in clientGroups"
@@ -424,7 +424,7 @@
 			          <tbody>
 			            <tr ng-repeat="report in reports|orderBy:creationTime">
 			              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
-			              <td><profile memberId="{{report.authorUuid}}"></profile></td>
+			              <td>{{report.authorUuid}}</td>
 			              <td>{{report.creationTime|nicelyDate}}</td>
 			              <td>
 			                <div class="pull-right">

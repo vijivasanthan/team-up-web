@@ -82,11 +82,6 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	}
 
 	/**
-	 * Set group
-	 */
-	setClientView(uuid);
-
-	/**
 	 * Set Team View
 	 */
 	$scope.views = {
@@ -100,10 +95,15 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	}
 
 	/**
+	 * Set group
+	 */
+	setClientView(uuid);
+	
+	/**
 	 * Set given team for view
 	 */
 	function setClientView(id) {
-
+		
 		angular.forEach(data.clientGroups, function(cGroup, index) {
 			if(cGroup.id == id)
 				$scope.clientGroup = cGroup;
@@ -112,24 +112,32 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$scope.clients = data.clients[id];
 
 		$scope.current = id;
+		
+		// show reports of this groups 
+		if($scope.views.reports){
+			loadGroupReports();
+		}
 
 		// load image 
-        angular.forEach($scope.clients, function(client, index) {
-            var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
-            Clients.loadImg(imgURL).then(function(result){
-                // console.log("loading pic " + imgURL);
-                
-                var imgId = client.uuid.replace(".","").replace("@","");
-                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-                    console.log("loading pic " ,result);
-                }else{
-                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
-                }
-                
-            },function(error){
-                console.log("error when load pic " + error);
-            });
-        });
+		if($scope.views.client){
+			angular.forEach($scope.clients, function(client, index) {
+	            var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
+	            Clients.loadImg(imgURL).then(function(result){
+	                // console.log("loading pic " + imgURL);
+	                
+	                var imgId = client.uuid.replace(".","").replace("@","");
+	                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+	                    console.log("loading pic " ,result);
+	                }else{
+	                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
+	                }
+	                
+	            },function(error){
+	                console.log("error when load pic " + error);
+	            });
+	        });
+		}
+        
         
 	}
 
@@ -137,6 +145,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 * Request for a client group
 	 */
 	$scope.requestClientGroup = function(current, switched) {
+		
 		setClientView(current);
 
 		$scope.$watch($location.search(), function() {
@@ -152,7 +161,9 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		}
 	};
 	
-
+	/**
+	 * load the reports by the client ID
+	 */
     var loadReports = function(){
         $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
         Clients.queryReports($scope.client.uuid).then(function(reports){
@@ -163,7 +174,23 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
            console.log(error); 
         });
     }
-	
+    
+	/**
+	 *  load the reports by the client group ID
+	 */
+    var loadGroupReports = function(){
+    	$rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+    	
+    	Clients.queryGroupReports($scope.clientGroup.uuid).then(function(reports){
+            $rootScope.statusBar.off();
+            $scope.groupReports = reports;
+            
+        },function(error){
+           console.log(error); 
+        });
+    	
+    }
+    
 	/**
 	 * View setter
 	 */
