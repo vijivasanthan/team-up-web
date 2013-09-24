@@ -181,7 +181,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
     var loadGroupReports = function(){
     	$rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
     	
-    	Clients.queryGroupReports($scope.clientGroup.uuid).then(function(reports){
+    	Clients.queryGroupReports($scope.clientGroup.id).then(function(reports){
             $rootScope.statusBar.off();
             $scope.groupReports = reports;
             
@@ -207,6 +207,10 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             loadReports();
         }
 		
+        if(hash == "reports"){
+        	loadGroupReports();
+        }
+        
 		$scope.views[hash] = true;
         
 	}
