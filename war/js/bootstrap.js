@@ -515,7 +515,7 @@ angular.module('WebPaige')
 
 
 
-
+    
 
     // if (!$config.profile.mobileApp.status) $('#copyrights span.muted').css({right: 0});
 
@@ -532,7 +532,53 @@ angular.module('WebPaige')
     //   })
     // }
     
+	$rootScope.getTeamMemberById = function(memberId) {
+		var teams_local = angular.fromJson(Storage.get("Teams"));
+		var member;
+		angular.forEach(teams_local, function(team, index) {
 
+			var mems = angular.fromJson(Storage.get(team.uuid));
+			angular.forEach(mems, function(mem, index) {
+				if (mem.uuid == memberId) {
+					member = mem;
+					return;
+				}
+			});
+		});
+
+		return member;
+	};
+
+	$rootScope.getClientByID = function(clientId) {
+		var ret;
+		var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
+
+		angular.forEach(clients_Not_In_Group, function(client, index) {
+			if (clientId == client.uuid) {
+				ret = client;
+				return;
+			}
+		});
+
+		if (ret == null) {
+			var groups = angular.fromJson(Storage.get("ClientGroups"));
+			angular.forEach(groups, function(group, index) {
+				var cts = angular.fromJson(Storage.get(group.id));
+
+				angular.forEach(cts, function(client, index) {
+					if (client.uuid = clientId) {
+						ret = client;
+						return;
+					}
+				});
+
+			});
+		}
+
+		return ret;
+	}; 
+
+    
   }
 ]);
 

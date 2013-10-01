@@ -72,12 +72,13 @@ angular.module('WebPaige.Controllers.Manage', [])
                 var cts = angular.fromJson(Storage.get(group.id));
                 var ctIds = [];
                 angular.forEach(cts,function(client,index){
-                  clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
+                  
                   ctIds.push(client.uuid);
 
                   // add to global client ids
                   if(clientIds.indexOf(client.uuid) == -1){
                       clientIds.push(client.uuid);
+                      clients.push({"name" : client.firstName+" "+client.lastName , "id" : client.uuid});
                   }
                 });
 

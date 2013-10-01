@@ -3,7 +3,7 @@ package com.askcs.webpaigebase.servlet;
 public class Pipe extends javax.servlet.http.HttpServlet
 {
 	private static final long serialVersionUID = -5775479483142835835L;
-	String destination_host = "http://3rc2.ask-services.appspot.com";
+	String destination_host = "http://teamup.acs-services.appspot.com/";
 
 		
 	public void service(

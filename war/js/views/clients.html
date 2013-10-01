@@ -1,4 +1,4 @@
-<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup || views.reports">
+<div class="page-header" ng-hide="views.viewClient || views.editClient || views.newClientGroup">
 	<span  class="nullable">
         <select ng-model="current" 
         		ng-options="c.id as c.name for c in clientGroups"
@@ -255,7 +255,50 @@
 		<!-- Reports -->
 		<div class="tab-pane {{(views.reports==true) && 'active'}}" 
 	          id="reportsTab" >
-	          reports
+	          
+	           <!-- client group reports-->
+		        <div class="tab-header">
+				  <h3 class="pull-left">{{ui.teamup.reports}}</h3>
+				</div>
+		        <hr>
+		        
+	          <div ng-show="groupReports.length > 0">
+		        <table class="table table-striped">
+		          <thead>
+		            <tr>
+		              <th>{{ui.teamup.name}}</th>
+		              <th>{{ui.teamup.writenBy}}</a></th>
+		              <th>{{ui.teamup.datetime}}</th>
+		              <th></th>
+		            </tr>
+		          </thead>
+		          <tbody>
+		            <tr ng-repeat="report in groupReports|orderBy:creationTime">
+		              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
+		              <td>{{report.authorUuid}}</td>
+		              <td>{{report.creationTime|nicelyDate}}</td>
+		              <td>
+		                <div class="pull-right">
+		                 	<a><button class="btn-primary btn-mini">
+								<i class="icon-edit"></i>&nbsp;</button></a>
+	                      <button ng-click="removeContact(contact)"
+		                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+		                </div>
+		              </td>
+		            </tr>
+		          </tbody>
+		        </table>
+	
+		        <!-- <button type="button"
+		                ng-click="removeMembers(selection, group)"
+		                class="btn btn-small btn-danger pull-left">
+		                <i class="icon-trash icon-white"></i>&nbsp;{{ui.groups.removeSelectedMembers}}</button> -->
+	
+		        <span class="muted pull-right">
+		          <small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small>
+		        </span>
+		      </div>
+	        <!-- end client group reports-->
 	        
 	    </div>
 		<!-- end Reports-->
@@ -424,7 +467,7 @@
 			          <tbody>
 			            <tr ng-repeat="report in reports|orderBy:creationTime">
 			              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
-			              <td><profile memberId="{{report.authorUuid}}"></profile></td>
+			              <td>{{report.authorUuid}}</td>
 			              <td>{{report.creationTime|nicelyDate}}</td>
 			              <td>
 			                <div class="pull-right">
