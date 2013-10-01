@@ -123,7 +123,18 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				method : 'POST',
 			}
 		}); 
-
+		
+		var TeamTasks = $resource($config.host + 'teamup/team/:teamId/tasks', {
+		}, {
+			query : {
+				method : 'GET',
+				params : {
+					from : '',
+					to: ''
+				}
+			}
+		});
+		
 //      /**
 //       * Get parent team data
 //       */
@@ -817,7 +828,27 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			
 			return deferred.promise;
 		};   
-	       
+	     
+		/**
+		 * get  the client group for specific team
+		 */
+		Teams.prototype.getTeamTasks = function(id,start,end) {
+			var deferred = $q.defer();
+	
+			TeamTasks.query({
+				teamId : id , from : start, to : end 
+			}, function(result) {
+				
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+	
+			return deferred.promise;
+		};
+		
       return new Teams;
     }
 ]);

@@ -434,205 +434,72 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       members: function (data, timedata, config, privilage)
       {
         var _this   = this;
-            // members = this.get.members();
-
-//        console.log('members from sloter ->', data);
-
-//        setTimeout(function ()
-//        {
-
-        var offset = Number(Date.today()),
-          day    = 24 * 60 * 60 * 1000;
-
-        var combinations = {
-          1: [
-            {
-              start: offset / 1000,
-              end:   (offset + day) / 1000
-            },
-            {
-              start: (offset + (day * 2)) / 1000,
-              end:   (offset + (day * 3)) / 1000
-            },
-            {
-              start: (offset + (day * 5)) / 1000,
-              end:   (offset + (day * 6)) / 1000
-            }
-          ],
-          2: [
-            {
-              start: (offset + (day * 4)) / 1000,
-              end:   (offset + (day * 5)) / 1000
-            },
-            {
-              start: (offset + (day * 6)) / 1000,
-              end:   (offset + (day * 7)) / 1000
-            },
-          ],
-          3: [
-            {
-              start: offset / 1000,
-              end:   (offset + day) / 1000
-            },
-            {
-              start: (offset + (day * 2)) / 1000,
-              end:   (offset + (day * 3)) / 1000
-            },
-            {
-              start: (offset + (day * 4)) / 1000,
-              end:   (offset + (day * 5)) / 1000
-            },
-            {
-              start: (offset + (day * 6)) / 1000,
-              end:   (offset + (day * 7)) / 1000
-            }
-          ],
-          4: [
-            {
-              start: (offset + (day * 3)) / 1000,
-              end:   (offset + (day * 4)) / 1000
-            },
-            {
-              start: (offset + (day * 2)) / 1000,
-              end:   (offset + (day * 3)) / 1000
-            },
-          ]
-        }
-
-        function getRandomInt (min, max) {
-          return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        var persons = {
-          teams: [
-//                'Client 1',
-//                'Client 2',
-//                'Client 3',
-//                'Client 4',
-//                'Client 5',
-//                'Client 6',
-//                'Client 7',
-//                'Client 8',
-//                'Client 9',
-//                'Client 10',
-//                'Client 11',
-//                'Client 12'
-          ],
-
-          clients: [
-//                'Team 1',
-//                'Team 2',
-//                'Team 3',
-//                'Team 4',
-//                'Team 5',
-//                'Team 6',
-//                'Team 7',
-//                'Team 8',
-//                'Team 9',
-//                'Team 10',
-//                'Team 11',
-//                'Team 12',
-          ],
-
-          max: {
-            teams: null,
-            clients: null
-          }
-        }
-
-        angular.forEach(data.clients.list, function (client)
-        {
-          persons.teams.push(client.name);
-        });
-
-        persons.max.teams = data.clients.list.length - 1;
-
-        angular.forEach(data.teams.list, function (team)
-        {
-          persons.clients.push(team.name);
-        });
-
-        persons.max.clients = data.teams.list.length - 1;
-
-
           angular.forEach(data.members, function (member, index)
           {
 
 
-
-
-//
-//            console.log('random member ->', member, getRandomInt(1, 7));
-
-            // console.log('combination ->', combinations[1]);
-
+        	var tasks = [];
+        	if(data.section == "teams"){
+        		console.log("data.teams.tasks " , data.teams.tasks);
+        		if(data.teams.tasks[member.memId] != null){
+        			tasks.add(data.teams.tasks[member.memId]);	
+        		}        		
+        	}else if(data.section == "clients"){
+        		console.log("data.clients.tasks " , data.clients.tasks);
+        		if(data.clients.tasks[member.memId] != null){
+        			tasks.add(data.clients.tasks[member.memId]);	
+        		}  
+        	}
+        	
+        	
             var mdata = [];
 
-            angular.forEach(combinations[getRandomInt(1, 4)], function (combi)
+            angular.forEach(tasks, function (task)
             {
-              // console.log('combi ->', new Date(combi.start * 1000).toString(), new Date(combi.end * 1000).toString() );
 
               mdata.push({
-                start: combi.start,
-                end:   combi.end,
+                start: task.startTime,
+                end:   task.endTime,
                 text: 'com.ask-cs.State.Available',
                 type: 'availability'
-              })
+              });
+
+              var relatedUser = "";
+              if(data.section == "teams"){
+            	  // should get the name from team members ;
+            	  
+            	  relatedUser = $rootScope.getClientByID(task.relatedUserId);
+              }else if(data.section == "clients"){
+            	// should get the name from clients;
+            	  
+            	  relatedUser = $rootScope.getTeamMemberById(task.relatedUserId);
+              }
+//              
+              timedata.push({
+	              start:  Math.round(task.startTime * 1000),
+	              end:    Math.round(task.endTime * 1000),
+	              // group:  link,
+	              group: member.head,
+	              /*
+	              content: _this.secret(angular.toJson({
+	                type: 'member',
+	                id:   slot.id,
+	                mid:  member.id,
+	                recursive: slot.recursive,
+	                state: slot.text
+	              })),
+	              */
+	              content: relatedUser.firstName + " " + relatedUser.lastName  ,
+	              // className:  config.states[slot.text].className,
+	              className:  'state-available',
+	              editable:   false
+	          });
+              
             });
 
-//            var mdata = [
-//              {
-//                "count": 0,
-//                "end": combinations[1].end,
-//                "recursive": true,
-//                "start": combinations[1].start,
-//                "text": "com.ask-cs.State.Available",
-//                "type": "availability",
-//                "wish": 0
-//              }
-//            ];
 
-            angular.forEach(mdata, function (slot, i)
-            {
-              // console.log('slot ->', slot);
 
-//              angular.forEach(config.legenda, function (value, legenda)
-//              {
-//                if (slot.text == legenda && value)
-//                {
-                  timedata.push({
-                    start:  Math.round(slot.start * 1000),
-                    end:    Math.round(slot.end * 1000),
-                    // group:  link,
-                    group: member,
-                    /*
-                    content: _this.secret(angular.toJson({
-                      type: 'member',
-                      id:   slot.id,
-                      mid:  member.id,
-                      recursive: slot.recursive,
-                      state: slot.text
-                    })),
-                    */
-                    content: persons[data.section][getRandomInt(0, persons.max[data.section])],
-                    // className:  config.states[slot.text].className,
-                    className:  'state-available',
-                    editable:   false
-                  });
-//                };
-//              });
-            });
-
-            timedata.push({
-              start:    0,
-              end:      0,
-              group:    member,
-              content:  null,
-              className:null,
-              editable: false
-            });
-
-            timedata = _this.addLoading(data, timedata, [ member ]);
+//            timedata = _this.addLoading(data, timedata, [ member.head ]);
 
             /**
              * TODO
@@ -646,9 +513,6 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             });
           });
 
-//        }, 100);
-
-//        console.log('timedata ->', timedata);
 
         return timedata;
       },

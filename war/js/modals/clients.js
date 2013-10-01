@@ -13,7 +13,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope)
     {
         
-		var ClientGroups = $resource($config.host + 'teamup/clientGroups/', {
+		var ClientGroups = $resource($config.host + 'teamup/client/clientGroups/', {
 		}, {
 			query : {
 				method : 'GET',
@@ -46,7 +46,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var Clients_ByGroupId = $resource($config.host + 'teamup/clientGroup/:clientGroupId/clients/', {}, {
+		var Clients_ByGroupId = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/clients/', {}, {
 			get : {
 				method : 'GET',
 				params : {},
@@ -60,7 +60,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var ClientGroup = $resource($config.host + 'teamup/clientGroup/:clientGroupId', {}, {
+		var ClientGroup = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId', {}, {
 			save : {
 				method : 'POST',
 			},
@@ -81,7 +81,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
         
         
-		var Clients = $resource($config.host + 'teamup/clients', {}, {
+		var Clients = $resource($config.host + 'teamup/client/clients', {}, {
 			query : {
 				method : 'GET',
 				params : {},
@@ -97,11 +97,30 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
         }); 
 		
-		var ClientsRemove = $resource($config.host + 'teamup/clientGroup/:clientGroupId/removeClients/', {}, {
+		var ClientsRemove = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/removeClients/', {}, {
             remove : {
                 method : 'PUT',
             }
         });
+		
+		var ClientGroupReports = $resource($config.host + 'teamup/clientGroup/:clientGroupId/reports', {}, {
+            query : {
+                method : 'GET',
+                params : {},
+                isArray : true
+            }
+        });
+        
+        var GroupTasks = $resource($config.host + 'teamup/clientGroup/:clientGroupId/tasks', {
+		}, {
+			query : {
+				method : 'GET',
+				params : {
+					from : '',
+					to: ''
+				}
+			}
+		});
 		/**
 		 * get the client groups and the clients
 		 */
@@ -338,8 +357,21 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			return deferred.promise;
 		};
 
-
 		
+		// private function 
+		var getClientFromLocal = function(clientId){
+			var ret;
+			var cGrps = angular.fromJson(Storage.get("ClientGroups"));
+			angular.forEach(cGrps,function(cGrp,i){
+				var clients = angular.fromJson(Storage.get(cGrp.id));
+				angular.forEach(clients,function(client,j){
+					if(client.uuid == clientId){
+						ret = client;
+					}
+				});
+			});
+			return ret;
+		};
 		
 		/**
 		 * add or remove the clientfrom the client group
@@ -368,7 +400,20 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		
 				var data = {};
 		
+				var refreshGroups = [];
 				angular.forEach(changes, function(change, clientGroupId) {
+					// refresh the groups that used to have the client inside. 
+					refreshGroups.add(clientGroupId);
+					if(change.a.length > 0){
+						angular.forEach(change.a,function(clientId){
+							var client = getClientFromLocal(clientId);
+							if(typeof client != 'undefined' && refreshGroups.indexOf(client.clientGroupUuid) == -1){
+								refreshGroups.add(client.clientGroupUuid);
+								queryCalls.push(ClientGroups.prototype.get(client.clientGroupUuid));
+							}
+						});
+					}
+					
 					queryCalls.push(ClientGroups.prototype.get(clientGroupId));
 				});
 		
@@ -377,88 +422,142 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				});
 			});
 			return deferred.promise;
-		}
+		};
 
 
-		  
+				
 		/**
 		 * get all the clients , in or not in the client gourps
 		 */
 		ClientGroups.prototype.queryAll = function(changes) {
 			var deferred = $q.defer();
-			
-			Clients.query(function(clients){
-			    Storage.add('clients', angular.toJson(clients));
-			    deferred.resolve(clients);
-			},function(error){
-			    deferred.resolve({error: error});
+	
+			Clients.query(function(clients) {
+				Storage.add('clients', angular.toJson(clients));
+				deferred.resolve(clients);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
 			});
-			
+	
 			return deferred.promise;
-		}
-		
-		
+		};
+
+	
+	
 		/**
 		 * get reports by the client id
 		 */
 		ClientGroups.prototype.queryReports = function(cId) {
 			var deferred = $q.defer();
 
-			ClientReports.query({clientId : cId}, 
-			   function(reports) {
-				Storage.add('reports_'+cId, angular.toJson(reports));
-				deferred.resolve(reports);	
+			ClientReports.query({
+				clientId : cId
+			}, function(reports) {
+				Storage.add('reports_' + cId, angular.toJson(reports));
+				deferred.resolve(reports);
 			}, function(error) {
-				deferred.resolve({error: error});
+				deferred.resolve({
+					error : error
+				});
 			});
 			return deferred.promise;
-		}
-		
-	      
+		}; 
+
+	
+      
+	
 		/**
 		 * try  to preload the image from here, that ng-src can use the cache.
 		 */
 		ClientGroups.prototype.loadImg = function(imgURL) {
-	
+
 			var LoadImg = $resource(imgURL, {
 			}, {
 				get : {
 					method : 'GET',
 				}
 			});
-	
+
 			var deferred = $q.defer();
-	
+
 			LoadImg.get(function(result) {
 				deferred.resolve(result);
 			}, function(error) {
 				deferred.resolve(error);
 			});
 			return deferred.promise;
-		}
-		
+		}; 
+
+	
+	
 		/**
-	       * get client groups and clients from local storage
-	       */
-		ClientGroups.prototype.queryLocal = function ()
-          {
-            var deferred = $q.defer();
-            
-            var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
-            
-            var data = {};
-            data.clientGroups = clientGroups_local;
-            
-            data.clients = {};
-            angular.forEach(clientGroups_local, function (clientGroup, i){
-                var clients = angular.fromJson(Storage.get(clientGroup.id));
-                data.clients[clientGroup.id] = clients; 
-            });
-            
-            deferred.resolve(data);
-            
-            return deferred.promise;
-          };
+		 * get client groups and clients from local storage
+		 */
+		ClientGroups.prototype.queryLocal = function() {
+			var deferred = $q.defer();
+
+			var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
+
+			var data = {};
+			data.clientGroups = clientGroups_local;
+
+			data.clients = {};
+			angular.forEach(clientGroups_local, function(clientGroup, i) {
+				var clients = angular.fromJson(Storage.get(clientGroup.id));
+				data.clients[clientGroup.id] = clients;
+			});
+
+			deferred.resolve(data);
+
+			return deferred.promise;
+		}; 
+
+		/**
+		 * get reports by the client group Id
+		 */
+		ClientGroups.prototype.queryGroupReports = function(cId) {
+			var deferred = $q.defer();
+			
+			ClientGroupReports.query({
+				clientGroupId : cId
+			}, function(reports) {
+//				Storage.add('reports_' + cId, angular.toJson(reports));
+				
+				deferred.resolve(reports);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+			
+			return deferred.promise;
+		};
+		
+	
+		/**
+		 * get  the client group for specific team
+		 */
+		ClientGroups.prototype.getClientTasks = function(id, start, end) {
+			var deferred = $q.defer();
+
+			GroupTasks.query({
+				clientGroupId : id,
+				from : start,
+				to : end
+			}, function(result) {
+
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+
+			return deferred.promise;
+		}; 
+
 		
         return new ClientGroups; 
     }
