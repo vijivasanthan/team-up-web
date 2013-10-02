@@ -55,7 +55,14 @@ angular.module('WebPaige.Controllers.Manage', [])
                 connections.teams[team.uuid] = memIds;
 
               });
-
+              
+              var members_Not_In_team = angular.fromJson(Storage.get("members"));
+              angular.forEach(members_Not_In_team,function(mem,index){
+            	  if(memGlobalIds.indexOf(mem.uuid) == -1 ){
+            		  members.push({"name" : mem.firstName+" "+mem.lastName , "id" : mem.uuid });
+            	  }
+              });
+              
               data.members = members;
 
               /**

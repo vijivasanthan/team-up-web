@@ -48,25 +48,25 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
 
 	
-		var Containers = $resource($config.host + '/node/:id/container', {
-		}, {
-			get : {
-				method : 'GET',
-				params : {
-					id : ''
-				},
-				isArray : true
-			}
-		});
-	
-		var Parents = $resource($config.host + '/parent', {
-		}, {
-			get : {
-				method : 'GET',
-				params : {},
-				isArray : true
-			}
-		});
+//		var Containers = $resource($config.host + '/node/:id/container', {
+//		}, {
+//			get : {
+//				method : 'GET',
+//				params : {
+//					id : ''
+//				},
+//				isArray : true
+//			}
+//		});
+//	
+//		var Parents = $resource($config.host + '/parent', {
+//		}, {
+//			get : {
+//				method : 'GET',
+//				params : {},
+//				isArray : true
+//			}
+//		});
 	
 		var TeamStatus = $resource($config.host + 'teamup/team/status/:teamId/', {
 		}, {
@@ -135,6 +135,13 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 		
+		var MembersNotInTeam = $resource($config.host + 'teamup/team/members', {
+		}, {
+			query : {
+				method : 'GET',
+				isArray : true
+			}
+		}); 
 //      /**
 //       * Get parent team data
 //       */
@@ -687,7 +694,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			angular.forEach(teams, function(team, index) {
 				calls.push(Teams.prototype.getGroup(team.uuid));
 			});
-
+			
 			$q.all(calls).then(function(results) {
 				//                Teams.prototype.uniqueMembers();
 
@@ -849,6 +856,25 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			return deferred.promise;
 		};
 		
+		/**
+		 * get  the members that not belong to any teams 
+		 */
+		Teams.prototype.queryMembersNotInTeams = function() {
+			var deferred = $q.defer();
+	
+			MembersNotInTeam.query({}, function(result) {
+				
+				Storage.add("members", angular.toJson(result));
+				
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+	
+			return deferred.promise;
+		};
       return new Teams;
     }
 ]);

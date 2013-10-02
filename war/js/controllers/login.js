@@ -196,6 +196,14 @@ angular.module('WebPaige.Controllers.Login', [])
                   {
                     console.log("got teams ");
                     
+                    // try to get the members not in the teams Aync 
+                    console.log("got members not in any teams");
+                    Teams.queryMembersNotInTeams().then(function(result){
+                    	console.log("members not in any teams loaded ");
+                    },function(error){
+                    	
+                    });
+                    
                     if (teams.error)
                     {
                       console.warn('error ->', teams);
