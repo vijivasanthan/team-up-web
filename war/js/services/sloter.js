@@ -434,6 +434,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       members: function (data, timedata, config, privilage)
       {
         var _this   = this;
+        var offset = Number(Date.now());
+        
           angular.forEach(data.members, function (member, index)
           {
 
@@ -456,25 +458,21 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 
             angular.forEach(tasks, function (task)
             {
-
-              mdata.push({
-                start: task.startTime,
-                end:   task.endTime,
-                text: 'com.ask-cs.State.Available',
-                type: 'availability'
-              });
-
               var relatedUser = "";
               if(data.section == "teams"){
             	  // should get the name from team members ;
             	  
             	  relatedUser = $rootScope.getClientByID(task.relatedUserId);
               }else if(data.section == "clients"){
-            	// should get the name from clients;
+            	  // should get the name from clients;
             	  
             	  relatedUser = $rootScope.getTeamMemberById(task.relatedUserId);
               }
-//              
+              
+              // deal with the unfinished task 
+              if(task.endTime == 0){
+            	  task.endTime = offset/1000;
+              }
               timedata.push({
 	              start:  Math.round(task.startTime * 1000),
 	              end:    Math.round(task.endTime * 1000),

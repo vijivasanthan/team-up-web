@@ -57,7 +57,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	angular.forEach(teams, function(team) {
 		var members = angular.fromJson(Storage.get(team.uuid));
 
-		if (members.length > 0) {
+		if (members && members.length > 0) {
 			$scope.data.teams.list.push({
 				uuid : team.uuid,
 				name : team.name
@@ -79,7 +79,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	angular.forEach(clients, function(client) {
 		var members = angular.fromJson(Storage.get(client.id));
 
-		if (members.length > 0) {
+		if (members && members.length > 0) {
 			$scope.data.clients.list.push({
 				uuid : client.id,
 				name : client.name
