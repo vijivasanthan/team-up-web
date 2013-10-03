@@ -91,7 +91,7 @@
 		          <dt>{{ui.profile.phone}}</dt>
 		            <dd>{{data.resources.phone}}</dd>
 		          <dt>{{ui.teamup.func}}</dt>
-		            <dd>{{data.resources.function}}</dd>
+		            <dd>{{data.resources.function|translateFunc}}</dd>
 		          <dt>{{ui.profile.birthday}}</dt>
 		            <dd>{{data.resources.birthDate|nicelyDate}}</dd>
 		              
@@ -168,7 +168,7 @@
 		<div class="control-group">
 		  <label class="control-label">{{ui.teamup.role}}</label>
 		  <div class="controls">
-		    <select ng-model="currentRole"
+		    <select ng-model="profilemeta.role"
 		            ng-options="r.id as r.label for r in roles" 
 		            ng-selected="currentRole" >
 			</select>

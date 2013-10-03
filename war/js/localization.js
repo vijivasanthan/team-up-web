@@ -363,6 +363,9 @@ var ui = {
          writenBy: 'write by',
          noSharedStates: 'No shared states',
          savingContacts: 'Saving the contacts',
+         delClientGroupConfirm: 'Are you sure you want to delet this client group ? It might take a while.',
+         delTeamConfirm: 'Are you sure you want to delet this team ? It might take a while.',
+         deletingClientGroup: "Deleting group ... "
       }
     },
     nl: {

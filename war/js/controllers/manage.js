@@ -455,16 +455,13 @@ angular.module('WebPaige.Controllers.Manage', [])
         var changes = {};
         
         angular.forEach(teamIds,function(tId){
+        	
             if(typeof preTc[tId] == 'undefined' &&  afterTc[tId] ){
-//                addGroups[tId] = afterTc[tId];
                 changes[tId] = {a : [afterTc[tId]], r : []};
             }else if(typeof afterTc[tId] == 'undefined' &&  preTc[tId] ){
-//                removeGroups[tId] = preTc[tId];
                 changes[tId] = {r : [preTc[tId]] , a : []};
-            }else if(preTc[tId] && afterTc[tId] && preTc[tId] != preTc[tId]){
+            }else if(preTc[tId] && afterTc[tId] && preTc[tId] != afterTc[tId]){
             	changes[tId] = {a : [afterTc[tId]] , r : [preTc[tId]]};
-//                addGroups[tId] = afterTc[tId];
-//                removeGroups[tId] = preTc[tId];
             }
             
         });
@@ -486,9 +483,21 @@ angular.module('WebPaige.Controllers.Manage', [])
             
             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
             
-            Teams.manageGroups(changes).then(function(result){
+            Teams.manageGroups(changes).then(function(results){
+                var error = "";
+            	angular.forEach(results,function(res,i){
+            		if(res.error){
+            			error += res.error.data.error;
+            		}
+            	});
+            	
+            	if(error == ""){
+            		$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            		$route.reload();
+            	}else{
+            		$rootScope.notifier.error(error);
+            	}
                 
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
                 
             });
@@ -519,6 +528,7 @@ angular.module('WebPaige.Controllers.Manage', [])
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
                 
+                $route.reload();
             });
         }
         
@@ -546,7 +556,7 @@ angular.module('WebPaige.Controllers.Manage', [])
                 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
-                
+                $route.reload();
             });
         }
         

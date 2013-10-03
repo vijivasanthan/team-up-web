@@ -17,8 +17,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  var Profile = $resource(
 	    $config.host + 'teamup/team/member/:memberId/',{},{
 	      get: {
-	        method: 'GET',
-	        params: {id: ''}
+	        method: 'GET'
 	      },
 	      save: {
 	        method: 'PUT',	        

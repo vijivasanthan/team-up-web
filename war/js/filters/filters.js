@@ -134,6 +134,29 @@ angular.module('WebPaige.Filters', ['ngResource'])
  ])
 
 
+ /**
+ * Translate roles
+ */
+ .filter('translateFunc', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (func)
+ 		{
+ 			var ufunc;
+
+ 			angular.forEach($config.mfunctions, function (pfunc)
+ 			{
+ 				if (pfunc.id == func) ufunc = pfunc.label;
+ 			});
+
+ 			return ufunc;
+ 		}
+ 	}
+ ])
+ 
+
 /**
  * Translate state value to icon
  */

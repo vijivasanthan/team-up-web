@@ -234,6 +234,13 @@ angular.module('WebPaige.Controllers.Profile', [])
 	            
 	    }
 	    // deal with birthday 
+	    try{
+	    	resources.birthDate = Dater.convert.absolute(resources.birthday, 0);
+		}catch(error){
+			console.log(error);
+			$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+			return;
+		}
 	    delete resources.birthday;
 	    
 	    Profile.save($route.current.params.userId, resources)

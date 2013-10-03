@@ -483,5 +483,34 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
         });
 	}
 	
+	/**
+	 * delete the client group  
+	 */
+	$scope.deleteClientGroup = function(){
+		if(window.confirm($rootScope.ui.teamup.delClientGroupConfirm)){
+			
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingClientGroup);
+			
+			Clients.deleteClientGroup($scope.current).then(function(result){
+				if(result.id){
+					var newCurrent = "";
+					angular.forEach($scope.clientGroups,function(cg,i){
+						if(cg.id != result.id){
+							newCurrent = cg.id; 
+						}
+					});
+					
+					$scope.requestClientGroup(newCurrent);
+				}
+				
+				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                
+                $route.reload();
+			},function(error){
+				console.log(error);
+			});
+		}
+	}
 	
 }]);

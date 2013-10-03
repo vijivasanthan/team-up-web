@@ -60,12 +60,15 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var ClientGroup = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId', {}, {
+		var ClientGroup = $resource($config.host + 'teamup/clientGroup/:clientGroupId', {}, {
 			save : {
 				method : 'POST',
 			},
 			edit : {
 				method : 'PUT',
+			},
+			del : {
+				method : 'DELETE',
 			}
 		});
 	
@@ -557,7 +560,26 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
 			return deferred.promise;
 		}; 
+		
+		/**
+		 * delete the client group 
+		 */
+		ClientGroups.prototype.deleteClientGroup = function(id){
+			var deferred = $q.defer();
 
+			ClientGroup.del({
+				clientGroupId : id				
+			}, function(result) {
+				var rs = angular.fromJson(result)
+				deferred.resolve(rs);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+
+			return deferred.promise;
+		}
 		
         return new ClientGroups; 
     }

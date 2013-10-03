@@ -116,7 +116,16 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				method : 'PUT',
 			}
 		});
-		 
+		
+		var updateGroups = $resource($config.host + 'teamup/team/:teamId/updateClientGroups', {
+		}, {
+			update : {
+				method : 'PUT',
+			}
+		});
+		
+		
+		
 		var Member = $resource($config.host + 'teamup/team/member', {
 		}, {
 			save : {
@@ -303,7 +312,28 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
         return deferred.promise;    
       };
+      
+      /**
+       * Remove client group from a team
+       */
+      Teams.prototype.updateGroup = function (tId,changes)
+      {
+        var deferred = $q.defer();
 
+        updateGroups.update({teamId: tId},  changes , 
+          function (result) 
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;    
+      };
+      
       /**
        * General query function from Teams and their members
        */
@@ -806,24 +836,32 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			var calls = [];
 	
 			angular.forEach(changes, function(change, teamId) {
-				if(change.a.length > 0) {
+				if(change.a.length > 0 && change.r.length == 0) {
 					calls.push(Teams.prototype.addGroup(teamId, {
 						ids : change.a
 					}));
 				}
-				if(change.r.length > 0) {
+				if(change.r.length > 0 && change.a.length == 0) {
 					calls.push(Teams.prototype.delGroup(teamId, {
 						ids : change.r
 					}));
 				}
+				if(change.a.length > 0 && change.r.length > 0){
+					// to prevent the race condition when do "removing and adding " on a team at same time
+					// so just create new REST call to do it backend
+					calls.push(Teams.prototype.updateGroup(teamId, {
+						remove : change.r,
+						add : change.a
+					}));
+
+				}
 			}); 
 	
-			$q.all(calls).then(function(results) {
-				//Teams.prototype.uniqueMembers();
-				var queryCalls = [];
-	
-				var data = {};
-	
+			$q.all(calls).then(function(changeResults) {
+				
+				var data = changeResults;
+					
+				var queryCalls = [];	
 				angular.forEach(changes, function(change, teamId) {
 					queryCalls.push(Teams.prototype.getGroup(teamId));
 				});
@@ -831,6 +869,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				$q.all(queryCalls).then(function(results) {
 					deferred.resolve(data);
 				});
+	
 			});
 			
 			return deferred.promise;
