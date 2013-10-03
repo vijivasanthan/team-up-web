@@ -225,11 +225,15 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 */
 	$scope.setViewTo = function(hash) {
 		$scope.$watch(hash, function() {
+			if(!$scope.clientGroup){
+				$scope.clientGroup = $scope.clientGroups[0]
+			}
 			if(($location.hash() == "viewClient" || $location.hash() == "editClient") && hash == "client"){
-                $location.path("/client").search({uuid : $scope.clientGroup.id});
-            }
-            $location.hash(hash);
-			
+				$location.path("/client").search({uuid : $scope.clientGroup.id});
+			}
+		
+			$location.hash(hash);
+		
 			setView(hash);
 		});
 	};
