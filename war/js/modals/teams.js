@@ -81,6 +81,9 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 		}, {
 			edit : {
 				method : 'PUT',
+			},
+			del : {
+				method : 'DELETE'
 			}
 		});
 	
@@ -914,6 +917,26 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 	
 			return deferred.promise;
 		};
+		
+		/**
+		 * Delete a team
+		 */
+		Teams.prototype.deleteTeam = function(id){
+			var deferred = $q.defer();
+			
+			Team.delete({
+				teamId : id  
+			}, function(result) {
+				deferred.resolve(result.result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+	
+			return deferred.promise;
+		}
+		
       return new Teams;
     }
 ]);

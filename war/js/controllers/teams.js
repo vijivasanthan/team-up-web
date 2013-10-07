@@ -391,4 +391,30 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		return ret;
 	}
 	
+	$scope.deleteTeam = function(){
+		console.log($scope.current);
+		if(window.confirm($rootScope.ui.teamup.delTeamConfirm)){
+			Teams.deleteTeam($scope.current).then(function(result){
+				
+				if(result){
+					var newCurrent = "";
+					angular.forEach($scope.teams,function(team,i){
+						if(team.uuid != result){
+							newCurrent = team.uuid; 
+						}
+					});
+					
+					$scope.requestTeam(newCurrent);
+				}
+				
+				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                
+//                $route.reload();
+			},function(error){
+				console.log(error);
+			});
+		}
+	}
+	
 }]);
