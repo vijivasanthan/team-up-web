@@ -83,7 +83,15 @@ angular.module('WebPaige.Controllers.Profile', [])
 	         } 
 	      });
 	  });
-
+	  
+	  if(teams.length == 0){
+		  angular.forEach(storage_teams,function(team,index){
+	         if(team.uuid == sessionStorage.getItem(data.resources.uuid+"_team")){
+	             teams.add(team);
+	         } 
+	      });
+	  }
+	  
 	  $scope.teams = teams;
 	  $scope.selectTeams = storage_teams;
 	  
@@ -274,6 +282,16 @@ angular.module('WebPaige.Controllers.Profile', [])
 	            $rootScope.statusBar.off();
 	            
 	            $scope.setViewTo("profile");
+	            
+	            // refresh the teams in the background
+	            angular.forEach(resources.teamUuids, function(teamId){
+	            	var routePara = {uuid : teamId};
+	            	$rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
+		            Teams.query(false,routePara).then(function(){
+		            	$rootScope.statusBar.off();
+		            }); 
+	            });
+	            
 	          };
 	        });
 	      };

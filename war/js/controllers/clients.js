@@ -497,20 +497,22 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			
 			Clients.deleteClientGroup($scope.current).then(function(result){
 				if(result.id){
-					var newCurrent = "";
-					angular.forEach($scope.clientGroups,function(cg,i){
-						if(cg.id != result.id){
-							newCurrent = cg.id; 
-						}
+					Clients.query(true,{}).then(function(clientGroups){
+						$scope.requestClientGroup(clientGroups[0].id);
+						
+						angular.forEach($scope.clientGroups,function(cg,i){
+							if(cg.id == result.id){
+								$scope.clientGroups.splice(i,1); 
+							}
+						});
+					},function(error){
+						console.log(error);
 					});
 					
-					$scope.requestClientGroup(newCurrent);
 				}
 				
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
-                
-                $route.reload();
 			},function(error){
 				console.log(error);
 			});

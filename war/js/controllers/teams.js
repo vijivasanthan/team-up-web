@@ -397,20 +397,24 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			Teams.deleteTeam($scope.current).then(function(result){
 				
 				if(result){
-					var newCurrent = "";
-					angular.forEach($scope.teams,function(team,i){
-						if(team.uuid != result){
-							newCurrent = team.uuid; 
-						}
-					});
+					Teams.query(true,{}).then(function(teams){
+						$scope.requestTeam(teams[0].uuid);
+						
+						// locally refresh
+						angular.forEach($scope.teams,function(team,i){
+							if(team.uuid == result){
+								$scope.teams.splice(i,1);
+							}
+						});
+					},function(error){
+						console.log(error);
+					})
 					
-					$scope.requestTeam(newCurrent);
 				}
 				
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
                 
-//                $route.reload();
 			},function(error){
 				console.log(error);
 			});
