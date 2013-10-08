@@ -391,9 +391,14 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		return ret;
 	}
 	
+	/*
+	 * delete the team 
+	 */
 	$scope.deleteTeam = function(){
 		console.log($scope.current);
 		if(window.confirm($rootScope.ui.teamup.delTeamConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
+			
 			Teams.deleteTeam($scope.current).then(function(result){
 				
 				if(result){
@@ -408,13 +413,61 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 						});
 					},function(error){
 						console.log(error);
-					})
+					});
 					
 				}
 				
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
                 
+			},function(error){
+				console.log(error);
+			});
+		}
+	}
+	
+	/**
+	 * delete the team member
+	 */
+	$scope.deleteMember = function(memberId){
+		
+		if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+			Teams.deleteMember(memberId).then(function(result){
+				if(result.uuid){
+					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+	                
+	                // refresh the teams that contains  this user
+	                angular.forEach($scope.members,function(mem,i){
+	        			if(mem.uuid == memberId){
+	        				angular.forEach(mem.teamUuids,function(teamId,i){
+	        					$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+	        					
+	        					var routePara = {'uuid' : teamId};
+	        					Teams.query(false,routePara).then(function(queryRs) {
+	        						$rootScope.statusBar.off();
+	        					});
+	        					
+	        					angular.forEach(data.members[teamId],function(mem,j){
+		        					if(mem.uuid == memberId){
+		        						data.members[teamId].splice(j,1);
+		        					}
+		        				});
+	        					
+	        				});
+	        				
+	        			}
+	        		});
+	             // 	try to get the members not in the teams Aync 
+                    Teams.queryMembersNotInTeams().then(function(result){
+                    	console.log("members not in any teams loaded ");
+                    	$rootScope.statusBar.off();
+                    },function(error){
+                    	console.log(error);
+                    });
+	                
+				}
+								
 			},function(error){
 				console.log(error);
 			});

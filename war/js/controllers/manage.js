@@ -527,9 +527,16 @@ angular.module('WebPaige.Controllers.Manage', [])
             Teams.manage(changes).then(function(result){
                 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                $rootScope.statusBar.off();
                 
-                $route.reload();
+//             	try to get the members not in the teams Aync 
+                Teams.queryMembersNotInTeams().then(function(result){
+                	console.log("members not in any teams loaded ");
+                	$rootScope.statusBar.off();
+                	$route.reload();
+                },function(error){
+                	console.log(error);
+                });
+                
             });
         }
         
