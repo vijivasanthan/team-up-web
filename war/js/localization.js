@@ -368,7 +368,8 @@ var ui = {
          deletingClientGroup: "Deleting group ... ",
          deleteConfirm: "Please OK to process.",
          deletingTeam: "Deleting team ...",
-         deletingMember: "Deleting member ..."
+         deletingMember: "Deleting member ...",
+         deletingClient: "Deleting client ...",
       }
     },
     nl: {
