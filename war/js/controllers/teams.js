@@ -101,7 +101,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 					console.log("no pics " ,result);
 				}else{
-					$('#img_'+imgId).css('background-image','url('+imgURL+')');
+					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
 				}
 				
 			},function(error){
@@ -411,6 +411,14 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 								$scope.teams.splice(i,1);
 							}
 						});
+						
+						// 	try to get the members not in the teams Aync 
+	                    Teams.queryMembersNotInTeams().then(function(result){
+	                    	console.log("members not in any teams loaded ");
+	                    	$rootScope.statusBar.off();
+	                    },function(error){
+	                    	console.log(error);
+	                    });
 					},function(error){
 						console.log(error);
 					});
@@ -473,5 +481,24 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			});
 		}
 	}
+	
+	
+	// brefoe I know there is a good place to put this code 
+    // load the login user's avatar
+	
+	var imgURL = profile.host() + "/teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
+	Teams.loadImg(imgURL).then(function(result) {
+		// console.log("loading pic " + imgURL);
+		var mId = $rootScope.app.resources.uuid;
+		var imgId = mId.replace(".", "").replace("@", "");
+		if (result.status && (result.status == 404 || result.status == 403 || result.status == 500)) {
+			console.log("no pics ", result);
+		} else {
+			$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + imgURL + ')');
+		}
+
+	}, function(error) {
+		console.log("error when load pic " + error);
+	}); 
 	
 }]);

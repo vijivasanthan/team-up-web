@@ -370,6 +370,7 @@ var ui = {
          deletingTeam: "Deleting team ...",
          deletingMember: "Deleting member ...",
          deletingClient: "Deleting client ...",
+         noMessages: "There are no messages",
       }
     },
     nl: {
