@@ -365,7 +365,12 @@ var ui = {
          savingContacts: 'Saving the contacts',
          delClientGroupConfirm: 'Are you sure you want to delet this client group ? It might take a while.',
          delTeamConfirm: 'Are you sure you want to delet this team ? It might take a while.',
-         deletingClientGroup: "Deleting group ... "
+         deletingClientGroup: "Deleting group ... ",
+         deleteConfirm: "Please OK to process.",
+         deletingTeam: "Deleting team ...",
+         deletingMember: "Deleting member ...",
+         deletingClient: "Deleting client ...",
+         noMessages: "There are no messages",
       }
     },
     nl: {

@@ -34,6 +34,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Timeline',
   'WebPaige.Controllers.Timeline.Navigation',
   'WebPaige.Controllers.Profile',
+  'WebPaige.Controllers.Messages',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
   // services

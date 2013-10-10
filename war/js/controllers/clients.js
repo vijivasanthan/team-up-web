@@ -497,24 +497,65 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			
 			Clients.deleteClientGroup($scope.current).then(function(result){
 				if(result.id){
-					var newCurrent = "";
-					angular.forEach($scope.clientGroups,function(cg,i){
-						if(cg.id != result.id){
-							newCurrent = cg.id; 
-						}
+					Clients.query(true,{}).then(function(clientGroups){
+						$scope.requestClientGroup(clientGroups[0].id);
+						
+						angular.forEach($scope.clientGroups,function(cg,i){
+							if(cg.id == result.id){
+								$scope.clientGroups.splice(i,1); 
+							}
+						});
+					},function(error){
+						console.log(error);
 					});
 					
-					$scope.requestClientGroup(newCurrent);
 				}
 				
 				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
-                
-                $route.reload();
 			},function(error){
 				console.log(error);
 			});
 		}
 	}
 	
+	/**
+	 *  delete the client 
+	 */
+	$scope.deleteClient = function(clientId){
+		if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
+			
+			// client lost the client group ID, remove this client from the group first
+			angular.forEach($scope.clients, function(clt,i){
+				if(clt.uuid == clientId){
+					var clientGroupId = clt.clientGroupUuid; 
+					if(clientGroupId == null || clientGroupId == ""){
+						clientGroupId = $scope.clientGroup.id;
+					}
+					
+					var changes = {};
+					var clientIds = [];
+					var emptyAddIds = []; 
+					clientIds.add(clientId);
+					changes[clientGroupId] = {a : emptyAddIds, r : clientIds};
+					if(clientGroupId != null && clientGroupId != "" && clientGroupId != $scope.clientGroup.id){
+						changes[$scope.clientGroup.id] = {a : emptyAddIds, r : clientIds};
+					}
+					Clients.manage(changes).then(function(result){
+						// delete the client 
+						Clients.deleteClient(clientId).then(function(){
+							Clients.queryAll().then(function(){
+								$route.reload();
+							});
+						},function(error){
+							console.log(error);
+						});
+					});
+					
+				}
+			});
+
+		}
+	}
 }]);

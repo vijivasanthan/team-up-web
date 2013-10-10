@@ -94,7 +94,7 @@
               </li>
 
                 <li class="">
-                    <a href="#profile" id="account"><div class="roundedPicxSmall memberStateAvailalbe" style="background-image: url(../img/freek.jpg)"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a>
+                    <a href="#profile" id="account"><div class="roundedPicxSmall {{app.resources.states|stateColor}}" id="img_{{app.resources.uuid|escape}}"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a>
                 </li>
 
 <!--              <li class="dropdown">
@@ -216,96 +216,40 @@
 
     <!-- chat screen -->
     <div id="chat"
-         ng-hide="(location=='login' || location=='forgotpass' || location=='register' || location=='logout')">
+         ng-hide="(location=='login' || location=='forgotpass' || location=='register' || location=='logout')" ng-controller="messagesCtrl">
 
-      <div id="chat-btn" ng-click="toggleChat = !toggleChat">
+      <div id="chat-btn" ng-click="openChat()">
         <span>CHAT</span>
       </div>
 
       <div id="chat-content" ng-show="toggleChat">
-
+		
+		 <p ng-hide="messages.length > 0">
+	        {{ui.teamup.noMessages}}
+	     </p>
          <!-- <img src="img/chat.png" alt="chat"/>-->
-
-          <div class="chat-separator">
-            <span>11 sep 2013</span>
-            <hr>
-          </div>
-          <div class="message messageOther">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
+		 <div ng-repeat="message in messages" >
+		 <!-- <div> -->
+		 	
+            <div class="chat-separator" ng-show="(message.date != '')">
+                <span>{{message.date}}</span>
+            	<hr>
+			</div>
+			<div class="message {{message.msgRole}}">
+              <div class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}" id="img_{{message.member.uuid|escape}}"></div>
+              <div class="arrow" ng-show="(message.role == 'other')"></div>
               <div class="chatCloud">
-                  <h5 class="name">Renate Dekkers</h5>
-                  <h5 class="time">10.34</h5>
-                  <div><p>Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen!</p></div>
+                  <h5 class="name">{{message.senderName}}</h5>
+                  <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
+                  <div><p>{{message.body}}</p></div>
               </div>
-          </div>
-          <div class="message messageOther">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Renate Dekkers</h5>
-                  <h5 class="time">10.34</h5>
-                  <p>Hallo</p>
-              </div>
-          </div>
-          <div class="message messageOwn">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Freek de Vries</h5>
-                  <h5 class="time">10.34</h5>
-                  <div><p>Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen! Hallo iedereen!</p></div>
-              </div>
-              <div class="arrow"></div>
-          </div>
-          <div class="chat-separator">
-              <span>10 sep 2013</span>
-              <hr>
-          </div>
-          <div class="message messageOwn">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Freek de Vries</h5>
-                  <h5 class="time">10.34</h5>
-                  <p>Hallo</p>
-              </div>
-          </div>
-          <div class="message messageOther">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Renate Dekkers</h5>
-                  <h5 class="time">10.34</h5>
-                  <p>Hallo</p>
-              </div>
-          </div>
-          <div class="message messageOwn">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Freek de Vries</h5>
-                  <h5 class="time">10.34</h5>
-                  <p>Hallo</p>
-              </div>
-          </div>
-          <div class="message messageOwn">
-              <div class="chatAvatar roundedPicSmall memberStateAvailalbe"></div>
-              <div class="arrow"></div>
-              <div class="chatCloud">
-                  <h5 class="name">Freek de Vries</h5>
-                  <h5 class="time">10.34</h5>
-                  <p>Hallo</p>
-              </div>
-          </div>
-
-
+              <div class="arrow" ng-hide="(message.role == 'other')"></div>
+          	</div>
+		 </div>
       </div>
 
     </div>
     <!-- end chat screen -->
-
-
-
 
 
     <!-- mobile status bar -->
@@ -336,7 +280,6 @@
           <!--<div id="download-footer" ng-show="config.profile.mobileApp.status">-->
             <!--&lt;!&ndash; <a href="#myModal" role="button" class="btn" data-toggle="modal"> &ndash;&gt;-->
             <!--<button href="#myModal" data-toggle="modal" class="btn btn-success btn-large" type="button" ng-click="downloadMobileApp()">-->
-              <!--Business account-->
             <!--</button>-->
           <!--</div>-->
           <!-- end download mobile app -->

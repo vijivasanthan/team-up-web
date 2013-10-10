@@ -445,11 +445,12 @@ angular.module('WebPaige.Controllers.Manage', [])
             if(teamIds.indexOf(teamId_i) == -1){
                 teamIds.push(teamId_i);
             }
-            angular.forEach(afterTc,function(afterG,teamId_j){
-                if(teamIds.indexOf(teamId_j) == -1){
-                    teamIds.push(teamId_j);
-                }
-            });
+        });
+        
+        angular.forEach(afterTc,function(afterG,teamId_j){
+            if(teamIds.indexOf(teamId_j) == -1){
+                teamIds.push(teamId_j);
+            }
         });
         
         var changes = {};
@@ -474,7 +475,7 @@ angular.module('WebPaige.Controllers.Manage', [])
 //            changes = {a : addGroups , r : removeGroups};
 //        }
         
-        console.log(changes);
+//        console.log(changes);
         
         if(angular.equals({},changes)){
             console.log("no changes ! ");
@@ -526,9 +527,16 @@ angular.module('WebPaige.Controllers.Manage', [])
             Teams.manage(changes).then(function(result){
                 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                $rootScope.statusBar.off();
                 
-                $route.reload();
+//             	try to get the members not in the teams Aync 
+                Teams.queryMembersNotInTeams().then(function(result){
+                	console.log("members not in any teams loaded ");
+                	$rootScope.statusBar.off();
+                	$route.reload();
+                },function(error){
+                	console.log(error);
+                });
+                
             });
         }
         

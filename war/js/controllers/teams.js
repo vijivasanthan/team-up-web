@@ -101,7 +101,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 					console.log("no pics " ,result);
 				}else{
-					$('#img_'+imgId).css('background-image','url('+imgURL+')');
+					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
 				}
 				
 			},function(error){
@@ -390,5 +390,115 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		});
 		return ret;
 	}
+	
+	/*
+	 * delete the team 
+	 */
+	$scope.deleteTeam = function(){
+		console.log($scope.current);
+		if(window.confirm($rootScope.ui.teamup.delTeamConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
+			
+			Teams.deleteTeam($scope.current).then(function(result){
+				
+				if(result){
+					Teams.query(true,{}).then(function(teams){
+						$scope.requestTeam(teams[0].uuid);
+						
+						// locally refresh
+						angular.forEach($scope.teams,function(team,i){
+							if(team.uuid == result){
+								$scope.teams.splice(i,1);
+							}
+						});
+						
+						// 	try to get the members not in the teams Aync 
+	                    Teams.queryMembersNotInTeams().then(function(result){
+	                    	console.log("members not in any teams loaded ");
+	                    	$rootScope.statusBar.off();
+	                    },function(error){
+	                    	console.log(error);
+	                    });
+					},function(error){
+						console.log(error);
+					});
+					
+				}
+				
+				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                
+			},function(error){
+				console.log(error);
+			});
+		}
+	}
+	
+	/**
+	 * delete the team member
+	 */
+	$scope.deleteMember = function(memberId){
+		
+		if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+			Teams.deleteMember(memberId).then(function(result){
+				if(result.uuid){
+					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+	                
+	                // refresh the teams that contains  this user
+	                angular.forEach($scope.members,function(mem,i){
+	        			if(mem.uuid == memberId){
+	        				angular.forEach(mem.teamUuids,function(teamId,i){
+	        					$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+	        					
+	        					var routePara = {'uuid' : teamId};
+	        					Teams.query(false,routePara).then(function(queryRs) {
+	        						$rootScope.statusBar.off();
+	        					});
+	        					
+	        					angular.forEach(data.members[teamId],function(mem,j){
+		        					if(mem.uuid == memberId){
+		        						data.members[teamId].splice(j,1);
+		        					}
+		        				});
+	        					
+	        				});
+	        				
+	        			}
+	        		});
+	             // 	try to get the members not in the teams Aync 
+                    Teams.queryMembersNotInTeams().then(function(result){
+                    	console.log("members not in any teams loaded ");
+                    	$rootScope.statusBar.off();
+                    },function(error){
+                    	console.log(error);
+                    });
+	                
+				}
+								
+			},function(error){
+				console.log(error);
+			});
+		}
+	}
+	
+	
+	// brefoe I know there is a good place to put this code 
+    // load the login user's avatar
+	
+	var imgURL = profile.host() + "/teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
+	Teams.loadImg(imgURL).then(function(result) {
+		// console.log("loading pic " + imgURL);
+		var mId = $rootScope.app.resources.uuid;
+		var imgId = mId.replace(".", "").replace("@", "");
+		if (result.status && (result.status == 404 || result.status == 403 || result.status == 500)) {
+			console.log("no pics ", result);
+		} else {
+			$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + imgURL + ')');
+		}
+
+	}, function(error) {
+		console.log("error when load pic " + error);
+	}); 
 	
 }]);

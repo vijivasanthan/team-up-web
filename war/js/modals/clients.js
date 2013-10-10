@@ -78,7 +78,10 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			},
 			edit : {
 				method : 'PUT',
-			}
+			},
+			del : {
+				method : 'DELETE'
+			},
 		});
 
 
@@ -569,6 +572,23 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
 			ClientGroup.del({
 				clientGroupId : id				
+			}, function(result) {
+				var rs = angular.fromJson(result)
+				deferred.resolve(rs);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+
+			return deferred.promise;
+		}
+		
+		ClientGroups.prototype.deleteClient = function(id){
+			var deferred = $q.defer();
+
+			Client.del({
+				clientId : id				
 			}, function(result) {
 				var rs = angular.fromJson(result)
 				deferred.resolve(rs);
