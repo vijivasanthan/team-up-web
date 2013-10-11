@@ -127,7 +127,12 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 		
-		
+		var updateMembers = $resource($config.host + 'teamup/team/:teamId/updateMembers', {
+		}, {
+			update : {
+				method : 'PUT',
+			}
+		}); 
 		
 		var Member = $resource($config.host + 'teamup/team/member', {
 		}, {
@@ -325,7 +330,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
       };
       
       /**
-       * Remove client group from a team
+       * update client groups from a team (add and remove)
        */
       Teams.prototype.updateGroup = function (tId,changes)
       {
@@ -344,6 +349,27 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 
         return deferred.promise;    
       };
+      
+      /** 
+       * update the members in the Team. add and remove members from the Team
+       * prevent  a concurrent issue. 
+       */
+      Teams.prototype.updateMemberRelation = function(tId,changes){
+    	  var deferred = $q.defer();
+    	  
+    	  updateMembers.update({teamId: tId},  changes ,
+			  function (result) 
+	          {
+	            deferred.resolve(result);
+	          },
+	          function (error)
+	          {
+	            deferred.resolve({error: error});
+	          }	  
+    	  );
+    	  
+    	  return deferred.promise;
+      }
       
       /**
        * General query function from Teams and their members
@@ -809,14 +835,20 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			var calls = [];
 	
 			angular.forEach(changes, function(change, teamId) {
-				if(change.a.length > 0) {
+				if(change.a.length > 0 && change.r.length == 0) {
 					calls.push(Teams.prototype.addMember(teamId, {
 						ids : change.a
 					}));
 				}
-				if(change.r.length > 0) {
+				if(change.r.length > 0 && change.a.length == 0) {
 					calls.push(Teams.prototype.delMember(teamId, {
 						ids : change.r
+					}));
+				}
+				if(change.a.length > 0 && change.r.length > 0){
+					calls.push(Teams.prototype.updateMemberRelation(teamId, {
+						remove : change.r,
+						add : change.a
 					}));
 				}
 			});
