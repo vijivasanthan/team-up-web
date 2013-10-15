@@ -464,5 +464,45 @@ angular.module('WebPaige.Controllers.Profile', [])
 	      
 	  }
 	  
+	  /**
+	   * delete the team member 
+	   */
+	  $scope.deleteProfile = function(){
+		  if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+			
+			Teams.deleteMember($scope.profilemeta.uuid).then(function(result){
+				if(result.uuid){
+					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+	                
+	                // refresh the teams that contains  this user
+	                
+    				angular.forEach($scope.profilemeta.teamUuids,function(teamId,i){
+    					$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+    					
+    					var routePara = {'uuid' : teamId};
+    					Teams.query(false,routePara).then(function(queryRs) {
+    						$rootScope.statusBar.off();
+    					});
+    					
+    			   });
+	        			
+	             // try to get the members not in the teams Aync 
+                    Teams.queryMembersNotInTeams().then(function(result){
+                    	console.log("members not in any teams loaded ");
+                    	$rootScope.statusBar.off();
+                    },function(error){
+                    	console.log(error);
+                    });
+	                
+				}
+								
+			},function(error){
+				console.log(error);
+			});
+		}
+	  }
+	  
+	  
 	}
 ]);

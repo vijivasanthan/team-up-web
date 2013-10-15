@@ -274,8 +274,6 @@ angular.module('WebPaige')
 
 
 
-
-
     /**
      * Detect route change start
      */
@@ -320,6 +318,23 @@ angular.module('WebPaige')
              $rootScope.loaderIcons.messages = true;
 
              $rootScope.location = 'manage';
+         break;
+         
+		 case '/logout':
+		   
+           $rootScope.location = 'logout';
+           var logindata = angular.fromJson(Storage.get('logindata'));
+           
+           Storage.clearAll();
+           
+           if(logindata.remember){
+			  Storage.add('logindata', angular.toJson({
+                username: logindata.username,
+                password: logindata.password,
+                remember: logindata.remember
+              }));           	
+           }   
+           
          break;
          
       //   case '/groups':
@@ -376,7 +391,7 @@ angular.module('WebPaige')
          case '/settings':
            $rootScope.location = 'settings';
          break;
-
+         
          default:
            if ($location.path().match(/profile/))
            {
