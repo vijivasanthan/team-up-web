@@ -258,8 +258,29 @@
 	          
 	           <!-- client group reports-->
 		        <div class="tab-header">
-				  <h3 class="pull-left">{{ui.teamup.reports}}</h3>
+				 {{ui.teamup.clients}} :
+				 <!--  ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients" -->
+				  	<select ng-init="currentCLient=0" 
+				  			ng-model="currentCLient" 
+			        		ng-selected="currentCLient"
+			        		ng-change="requestReportsByClient(currentCLient)" >
+			        		<option value=0>{{ui.teamup.selectClient}}</option>
+			        		<option ng-repeat="client in clients" value="{{client.uuid}}">{{client.firstName}} {{client.lastName}}</option>
+			        </select>	
+			        				   
+				 {{ui.planboard.month}} :
+				 	<select ng-init="currentMonth=0"
+				 			ng-model="currentMonth" 
+			        		ng-selected="currentMonth"
+			        		ng-change="requestReportsByMonth(currentMonth)" >
+			        		<option ng-repeat="month in Months|orderBy:number" value="{{month.number}}">{{month.name}}</option>
+			        </select>
+			        
+			         <button type="button"
+	                  ng-click="newReport()"
+	                  class="btn pull-right btn-info marginLeftTen">{{ui.teamup.newReport}}</button> 
 				</div>
+				 
 		        <hr>
 		        
 	          <div ng-show="groupReports.length > 0">
@@ -267,15 +288,19 @@
 		          <thead>
 		            <tr>
 		              <th>{{ui.teamup.name}}</th>
-		              <th>{{ui.teamup.writenBy}}</a></th>
+		              <th>{{ui.teamup.writenBy}}</th>
 		              <th>{{ui.teamup.datetime}}</th>
 		              <th></th>
 		            </tr>
 		          </thead>
 		          <tbody>
-		            <tr ng-repeat="report in groupReports|orderBy:creationTime">
-		              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
-		              <td>{{report.authorUuid}}</td>
+		            <tr ng-repeat="report in groupReports | filter:{filtered:'false'} | orderBy:creationTime ">
+		              
+		              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a></td>
+		              <td>	
+		              	<div class="roundedPicSmall {{report.author.states|stateColor}}"  id="img_{{report.author.uuid|escape}}"></div>
+			            {{report.author.firstName}} {{report.author.lastName}}
+			          </td>
 		              <td>{{report.creationTime|nicelyDate}}</td>
 		              <td>
 		                <div class="pull-right">
@@ -419,10 +444,10 @@
 			              <td>{{contact.phone}}</td>
 			              <td>
 			                <div class="pull-right">
-			                	<button ng-click="callContact(contact.phone)"
-			                          class="btn-primary btn-mini"><i class="icon-phone3"></i></button>
-			                 	<a><button class="btn-primary btn-mini">
-									<i class="icon-edit"></i>&nbsp;</button></a>
+			                <!--	<button ng-click="callContact(contact.phone)"
+			                          class="btn-primary btn-mini"><i class="icon-phone3"></i></button> -->
+			                 <!--  	<a><button class="btn-primary btn-mini" ng-click="editContact(contact)">
+									<i class="icon-edit"></i>&nbsp;</button></a> -->
 		                      <button ng-click="removeContact(contact)"
 			                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
 			                </div>
@@ -467,7 +492,10 @@
 			          <tbody>
 			            <tr ng-repeat="report in reports|orderBy:creationTime">
 			              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
-			              <td>{{report.authorUuid}}</td>
+			              <td>
+			              	<div class="roundedPicSmall {{report.author.states|stateColor}}"  id="img_{{report.author.uuid|escape}}"></div>
+			              	{{report.author.firstName}} {{report.author.lastName}}
+			              </td>
 			              <td>{{report.creationTime|nicelyDate}}</td>
 			              <td>
 			                <div class="pull-right">

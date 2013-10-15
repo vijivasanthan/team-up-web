@@ -37,6 +37,18 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	$scope.clients = data.clients;
 	$scope.clientGroups = data.clientGroups;
 	
+	// process month dropdown list
+	var Months = Dater.getMonthTimeStamps();
+	$scope.Months = [];
+	angular.forEach(Months,function(mon,i){
+		var newMon = {number : i,
+				name : i,
+				start : mon.first.timeStamp,
+				end : 	mon.last.timeStamp};
+		$scope.Months[i] = newMon;
+	});
+	
+	$scope.Months[0] = {number: 0 , name : $rootScope.ui.teamup.selectMonth};
 	
 	/**
 	 * Self this
@@ -161,6 +173,22 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		}
 	};
 	
+	$scope.processReports = function(reports){
+		var rpts = [];
+		angular.forEach(reports,function(report,i){
+			var newReport = {uuid : report.uuid, 
+				title : report.title,
+				creationTime : report.creationTime*1000,
+				clientUuid : report.clientUuid,
+				body : report.body,
+				author: $scope.$root.getTeamMemberById(report.authorUuid),
+				filtered: "false"};
+			
+			rpts.add(newReport);
+		});
+		return rpts;
+	}
+	
 	/**
 	 * load the reports by the client ID
 	 */
@@ -168,7 +196,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
         $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
         Clients.queryReports($scope.client.uuid).then(function(reports){
             $rootScope.statusBar.off();
-            $scope.reports = reports;
+            $scope.reports = $scope.processReports(reports);
             
         },function(error){
            console.log(error); 
@@ -183,7 +211,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
     	
     	Clients.queryGroupReports($scope.clientGroup.id).then(function(reports){
             $rootScope.statusBar.off();
-            $scope.groupReports = reports;
+            $scope.groupReports = $scope.processReports(reports);
             
         },function(error){
            console.log(error); 
@@ -483,8 +511,24 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
                 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
+//                
+                var routePara = {'uuid' : result.clientGroupUuid};
+                Clients.query(false,routePara).then(function(queryRs) {});
+                
             }
+            $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
         });
+	}
+	
+	/**
+	 * remove this line of contact info
+	 */
+	$scope.removeContact = function(contact){
+		angular.forEach($scope.contacts,function(ctc,i){
+			if(contact.name == ctc.name && contact.func == ctc.func && contact.phone == ctc.phone){
+				$scope.contacts.splice(i,1);
+			}
+		});
 	}
 	
 	/**
@@ -558,4 +602,30 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 
 		}
 	}
+	
+	$scope.requestReportsByClient = function(clientId){
+		console.log(clientId);
+		angular.forEach($scope.groupReports,function(report,i){
+			if(report.clientUuid != clientId && clientId != "0"){
+				report.filtered = "true";
+			}else{
+				report.filtered = "false";
+			}
+		});
+	}
+	
+	$scope.requestReportsByMonth = function(month){
+		console.log(month);
+		
+		angular.forEach($scope.groupReports,function(report,i){
+			var monthRange = $scope.Months[month];
+			if( ( report.creationTime < monthRange.start ||  report.creationTime > monthRange.end ) && month != "0"){
+				report.filtered = "true";
+			}else{
+				report.filtered = "false";
+			}
+		});
+	}
+	
+	
 }]);

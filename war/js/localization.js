@@ -371,6 +371,9 @@ var ui = {
          deletingMember: "Deleting member ...",
          deletingClient: "Deleting client ...",
          noMessages: "There are no messages",
+         newReport: "New Report",
+         selectClient: "Select a client",
+         selectMonth: "Select a month",
       }
     },
     nl: {
