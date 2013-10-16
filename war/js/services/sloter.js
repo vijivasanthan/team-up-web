@@ -468,7 +468,10 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             	  
             	  relatedUser = $rootScope.getTeamMemberById(task.relatedUserId);
               }
-              
+              var slotContent = "";
+              if(typeof relatedUser != 'undefined'){
+            	  slotContent = relatedUser.firstName + " " + relatedUser.lastName; 
+              }
               // deal with the unfinished task 
               if(task.endTime == 0){
             	  task.endTime = offset/1000;
@@ -487,7 +490,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 	                state: slot.text
 	              })),
 	              */
-	              content: relatedUser.firstName + " " + relatedUser.lastName  ,
+	              content: slotContent ,
 	              // className:  config.states[slot.text].className,
 	              className:  'state-available',
 	              editable:   false

@@ -590,7 +590,11 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 						// delete the client 
 						Clients.deleteClient(clientId).then(function(){
 							Clients.queryAll().then(function(){
-								$route.reload();
+								if($scope.views.viewClient == true){
+									$scope.setViewTo("client");
+								}else{
+									$route.reload();
+								}
 							});
 						},function(error){
 							console.log(error);
@@ -627,5 +631,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		});
 	}
 	
+	$scope.deleteClientProfile = function(){
+		
+	}
 	
 }]);
