@@ -298,6 +298,7 @@ var ui = {
       teamup: {
          teams: 'teams',
          clients: 'clients',
+         client: 'client',
          manage: 'manage',
          chooseTeam: 'choose a team',         
          edit: 'edit',
@@ -333,6 +334,7 @@ var ui = {
          newClientGroup: 'New Group',
          newClient: 'New Client',
          reports: 'Reports',
+         report: 'Report',
          noClients: 'There are no clients in this group',
          TeamClients: 'TEAMS-CLIENTS',
          createClientGroup: 'Create new client group',
@@ -360,7 +362,7 @@ var ui = {
          saveContacts: 'Save contacts',
          loadingReports: 'Loading reports',
          datetime: 'Date & time',
-         writenBy: 'write by',
+         writenBy: 'written by',
          noSharedStates: 'No shared states',
          savingContacts: 'Saving the contacts',
          delClientGroupConfirm: 'Are you sure you want to delet this client group ? It might take a while.',
@@ -374,6 +376,8 @@ var ui = {
          newReport: "New Report",
          selectClient: "Select a client",
          selectMonth: "Select a month",
+         saveReport: "Save report",
+         reportTitle: "Title"
       }
     },
     nl: {
