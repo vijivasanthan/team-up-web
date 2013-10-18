@@ -561,6 +561,12 @@ angular.module('WebPaige')
 			});
 		});
 
+		if(typeof member == "undefined"){
+			member = {uuid : memberId ,
+					 firstName : memberId,
+					 lastName : '',					
+					};
+		}
 		return member;
 	};
 
