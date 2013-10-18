@@ -5,8 +5,8 @@ angular.module('WebPaige.Controllers.Clients', [])
 
 /**
  * Groups controller
- */.controller('clientCtrl', ['$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Storage','Dater','$filter',
-function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage,Dater,$filter) {
+ */.controller('clientCtrl', ['$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Storage','Dater','$filter','$modal','Teams',
+function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage,Dater,$filter,$modal, Teams) {
 	/**
 	 * Fix styles
 	 */
@@ -127,6 +127,10 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		
 		// show reports of this groups 
 		if($scope.views.reports){
+			//reset the filter 
+			$scope.currentCLient = '0';
+			$scope.currentMonth = '0';
+			
 			loadGroupReports();
 		}
 
@@ -150,6 +154,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	        });
 		}
         
+		
         
 	}
 
@@ -182,6 +187,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 				clientUuid : report.clientUuid,
 				body : report.body,
 				author: $scope.$root.getTeamMemberById(report.authorUuid),
+				client: $scope.$root.getClientByID(report.clientUuid),
 				filtered: "false"};
 			
 			rpts.add(newReport);
@@ -203,6 +209,33 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
         });
     }
     
+   $scope.loadMembersImg = function(){
+	// load the team members image
+		
+		var memberIds = [];
+		angular.forEach($scope.groupReports, function(rept,i){
+			if(memberIds.indexOf(rept.author.uuid) == -1){
+				memberIds.add(rept.author.uuid);
+			}
+		});
+		angular.forEach(memberIds , function(memberId,j){
+			var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
+			Teams.loadImg(imgURL).then(function(result){
+				// console.log("loading pic " + imgURL);
+				
+				var imgId = memberId.replace(".","").replace("@","");
+				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+					console.log("no pics " ,result);
+				}else{
+					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
+				}
+				
+			},function(error){
+				console.log("error when load pic " + error);
+			});
+		});
+   }
+    
 	/**
 	 *  load the reports by the client group ID
 	 */
@@ -213,6 +246,14 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             $rootScope.statusBar.off();
             $scope.groupReports = $scope.processReports(reports);
             
+            if($scope.currentCLient != 0){
+            	$scope.requestReportsByFilter();
+            }
+            
+            $scope.$watch($scope.groupReports,function(rs){
+            	console.log("watcher found ... " , rs);
+            	$scope.loadMembersImg();
+            });
         },function(error){
            console.log(error); 
         });
@@ -263,6 +304,8 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			$location.hash(hash);
 		
 			setView(hash);
+			
+			
 		});
 	};
 	
@@ -607,32 +650,143 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		}
 	}
 	
-	$scope.requestReportsByClient = function(clientId){
-		console.log(clientId);
+	$scope.requestReportsByFilter = function(){
+		
 		angular.forEach($scope.groupReports,function(report,i){
-			if(report.clientUuid != clientId && clientId != "0"){
+			// filter need to be checked 
+			// client Id, month
+			if(report.clientUuid != $scope.currentCLient && $scope.currentCLient != "0"){
 				report.filtered = "true";
 			}else{
 				report.filtered = "false";
 			}
-		});
-	}
-	
-	$scope.requestReportsByMonth = function(month){
-		console.log(month);
-		
-		angular.forEach($scope.groupReports,function(report,i){
-			var monthRange = $scope.Months[month];
-			if( ( report.creationTime < monthRange.start ||  report.creationTime > monthRange.end ) && month != "0"){
+			
+			var reportMonth = new Date(report.creationTime).getMonth() + 1; 
+			
+			if( ( reportMonth != $scope.currentMonth && $scope.currentMonth != "0") 
+					|| report.filtered == "true"){
 				report.filtered = "true";
 			}else{
 				report.filtered = "false";
 			}
+			
+		});
+		
+		$scope.loadMembersImg();
+	}
+	
+	
+	var ModalInstanceCtrl = function($scope, $modalInstance, report) {
+		
+		$scope.report = report;
+		
+		$scope.view = {
+			editReport : (report.editMode)? true : false,
+			viewReport : (report.editMode || typeof report.uuid == 'undefined')? false : true,
+			newReport : (typeof report.uuid == 'undefined')? true : false ,
+		};
+		
+		$scope.close = function() {
+			$modalInstance.dismiss();
+		};
+	
+		$scope.saveReport = function(report) {
+			console.log("save report");
+			console.log(Clients);
+			var paraObj = {uuid : report.uuid,
+					title : report.title,
+					body : report.body,
+					creationTime : report.creationTime/1000
+					};
+			
+			Clients.saveReport(report.clientUuid,paraObj).then(function(result){								
+				$modalInstance.close(report);
+				$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+			});
+		};
+	};
+	
+	$scope.openReport = function(report) {
+		$scope.report = report;
+		$scope.report.editMode = false;
+		
+		var modalInstance = $modal.open({
+			templateUrl : '../js/views/reportTemplate.html',
+			controller : ModalInstanceCtrl,
+			resolve : {
+				report : function() {
+					return $scope.report;
+				}
+			}
+		});
+
+	};
+	
+	$scope.newReport = function(){
+		if($scope.currentCLient == 0){
+			$rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+			return;
+		}
+		
+		var newReport = { 
+				title : $rootScope.ui.teamupnewReport,
+				creationTime : new Date().getTime(),
+				clientUuid : $scope.currentCLient,
+				body : null,
+				author: $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
+				client: $scope.$root.getClientByID($scope.currentCLient),
+				editMode: false};
+		
+		$scope.report = newReport;
+		
+		var modalInstance = $modal.open({
+			templateUrl : '../js/views/reportTemplate.html',
+			controller : ModalInstanceCtrl,
+			resolve : {
+				report : function() {
+					return $scope.report;
+				},
+				editMode : false
+			}
+		});
+		
+		modalInstance.result.then(function(report) {
+			console.log('Modal close at: ' + new Date());
+			loadGroupReports();
+		}, function() {
+			console.log('Modal dismissed at: ' + new Date());
 		});
 	}
 	
-	$scope.deleteClientProfile = function(){
-		
+	$scope.editReport = function(report){
+		$scope.report = report;
+		$scope.report.editMode = true;
+		var modalInstance = $modal.open({
+			templateUrl : '../js/views/reportTemplate.html',
+			controller : ModalInstanceCtrl,
+			resolve : {
+				report : function() {
+					return $scope.report;
+				}
+			}
+		});
+	}
+	
+	$scope.removeReport = function(report){
+		if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
+			$rootScope.statusBar.display($rootScope.ui.teamup.loading);
+			Clients.removeReport(report.clientUuid,report.uuid).then(function(rs){
+				console.log(rs);
+				if(rs.result == "ok"){
+					$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+					loadGroupReports();
+				}else{
+					$rootScope.notifier.error(rs.error);
+				}
+			},function(error){
+				console.log(error);
+			});
+		}
 	}
 	
 }]);

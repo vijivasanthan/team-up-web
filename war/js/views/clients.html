@@ -263,7 +263,7 @@
 				  	<select ng-init="currentCLient=0" 
 				  			ng-model="currentCLient" 
 			        		ng-selected="currentCLient"
-			        		ng-change="requestReportsByClient(currentCLient)" >
+			        		ng-change="requestReportsByFilter()" >
 			        		<option value=0>{{ui.teamup.selectClient}}</option>
 			        		<option ng-repeat="client in clients" value="{{client.uuid}}">{{client.firstName}} {{client.lastName}}</option>
 			        </select>	
@@ -272,7 +272,7 @@
 				 	<select ng-init="currentMonth=0"
 				 			ng-model="currentMonth" 
 			        		ng-selected="currentMonth"
-			        		ng-change="requestReportsByMonth(currentMonth)" >
+			        		ng-change="requestReportsByFilter()" >
 			        		<option ng-repeat="month in Months|orderBy:number" value="{{month.number}}">{{month.name}}</option>
 			        </select>
 			        
@@ -296,7 +296,7 @@
 		          <tbody>
 		            <tr ng-repeat="report in groupReports | filter:{filtered:'false'} | orderBy:creationTime ">
 		              
-		              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a></td>
+		              <td><a ng-click="openReport(report)">{{report.title}}</a></td>
 		              <td>	
 		              	<div class="roundedPicSmall {{report.author.states|stateColor}}"  id="img_{{report.author.uuid|escape}}"></div>
 			            {{report.author.firstName}} {{report.author.lastName}}
@@ -304,10 +304,9 @@
 		              <td>{{report.creationTime|nicelyDate}}</td>
 		              <td>
 		                <div class="pull-right">
-		                 	<a><button class="btn-primary btn-mini">
+		                 	<a><button class="btn-primary btn-mini" ng-click="editReport(report)">
 								<i class="icon-edit"></i>&nbsp;</button></a>
-	                      <button ng-click="removeContact(contact)"
-		                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+	                      <button ng-click="removeReport(report)" class="btn-primary btn-mini" ><i class="icon-trash"></i></button>
 		                </div>
 		              </td>
 		            </tr>
@@ -491,7 +490,7 @@
 			          </thead>
 			          <tbody>
 			            <tr ng-repeat="report in reports|orderBy:creationTime">
-			              <td><a href="#/report/{{report.uuid}}#profile">{{report.title}}</a> </td>
+			              <td><a ng-click="openReport(report)">{{report.title}}</a> </td>
 			              <td>
 			              	<div class="roundedPicSmall {{report.author.states|stateColor}}"  id="img_{{report.author.uuid|escape}}"></div>
 			              	{{report.author.firstName}} {{report.author.lastName}}
@@ -499,9 +498,9 @@
 			              <td>{{report.creationTime|nicelyDate}}</td>
 			              <td>
 			                <div class="pull-right">
-			                 	<a><button class="btn-primary btn-mini">
+			                 	<a><button class="btn-primary btn-mini" ng-click="editReport(report)">
 									<i class="icon-edit"></i>&nbsp;</button></a>
-		                      <button ng-click="removeContact(contact)"
+		                      <button ng-click="removeReport(report)"
 			                          class="btn-primary btn-mini"><i class="icon-trash"></i></button>
 			                </div>
 			              </td>

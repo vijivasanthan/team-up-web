@@ -35,6 +35,9 @@ module.exports = function (grunt)
             // directives
             'war/js/directives/directives.js',
             'war/libs/angular-strap/0.7.0/angular-strap.min.js',
+//            'war/libs/angular-ui/0.4.0/angular-ui.js',
+            'war/libs/bootstrap-custom/ui-bootstrap-custom-0.6.0.js',
+            'war/libs/bootstrap-custom/ui-bootstrap-custom-tpls-0.6.0.js',
             // services
             // 'war/js/services/timer.js',
              'war/js/services/session.js',

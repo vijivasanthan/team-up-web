@@ -19,6 +19,7 @@ angular.module('WebPaige',[
   'WebPaige.Modals.Settings',
   // 'WebPaige.Modals.Help',
   'WebPaige.Modals.Messages',
+  
   // controller
   'WebPaige.Controllers.Login',
   'WebPaige.Controllers.Forgotpass',
@@ -37,6 +38,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Messages',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
+  
   // services
   // 'WebPaige.Services.Timer',
   'WebPaige.Services.Session',
@@ -50,11 +52,16 @@ angular.module('WebPaige',[
   'WebPaige.Services.Sloter',
   // 'WebPaige.Services.Stats',
   // 'WebPaige.Services.Offsetter',
+  
   // directives
   'WebPaige.Directives',
   '$strap.directives',
+  
   // filters
-  'WebPaige.Filters'
+  'WebPaige.Filters',
+  
+  // libs 
+  'ui.bootstrap.modal'
 ]);
 
 

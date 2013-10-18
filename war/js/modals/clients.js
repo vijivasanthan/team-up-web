@@ -127,6 +127,17 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				}
 			}
 		});
+        
+        var ClientReport = $resource($config.host + 'teamup/client/:clientId/report', {
+		}, {
+			save : {
+				method : 'POST',
+			},
+			remove : {
+				method : 'DELETE',
+				params : {reportId : ''}
+			}
+		}); 
 		/**
 		 * get the client groups and the clients
 		 */
@@ -598,6 +609,42 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				});
 			});
 
+			return deferred.promise;
+		};
+		
+		// add or edit report
+		ClientGroups.prototype.saveReport = function(id,report){
+			var deferred = $q.defer();
+
+			ClientReport.save({
+				clientId : id				
+			}, report,function(result) {
+				var rs = angular.fromJson(result)
+				deferred.resolve(rs);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+
+			return deferred.promise;
+		};
+		
+		// remove the report
+		ClientGroups.prototype.removeReport = function(cId,rId){
+			var deferred = $q.defer();
+			ClientReport.remove({
+				clientId : cId,
+				reportId : rId
+			},function(result){
+				var rs = angular.fromJson(result)
+				deferred.resolve(rs);
+			},function(error){
+				deferred.resolve({
+					error : error
+				});
+			});
+			
 			return deferred.promise;
 		}
 		
