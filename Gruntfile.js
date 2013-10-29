@@ -31,7 +31,8 @@ module.exports = function (grunt)
             'war/js/modals/teams.js',            
             'war/js/modals/clients.js',
             'war/js/modals/settings.js',
-            'war/js/modals/messages.js',            
+            'war/js/modals/messages.js',
+            'war/js/modals/slots.js',
             // directives
             'war/js/directives/directives.js',
             'war/libs/angular-strap/0.7.0/angular-strap.min.js',

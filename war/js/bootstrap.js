@@ -598,7 +598,63 @@ angular.module('WebPaige')
 
 		return ret;
 	}; 
+	
+	/**
+	 * Here we need to find the clients for this team member, 
+	 * 1> get the team,
+	 * 2> find the groups belong to this team,
+	 * 3> get all the clients under the group
+	 */
+	$rootScope.getClientsByTeam = function(teamIds) {
+		var clients = [];
+		var clientIds = [];
+		angular.forEach(teamIds, function(teamId) {
+			var teamGroups = angular.fromJson(Storage.get('teamGroup_' + teamId));
+			angular.forEach(teamGroups, function(teamGrp) {
+				var gMembers = angular.fromJson(Storage.get(teamGrp.id));
+				angular.forEach(gMembers, function(mem) {
+					if(clientIds.indexOf(mem.uuid) == -1){
+						clientIds.add(mem.uuid);
+						
+						var clt = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
+						clients.add(clt);
+					}
+					
+				});
+			});
+		});
+		
+		return clients;
+	}; 
 
+	/**
+	 * Here we need to find the team members that can actually take this client
+	 * 1> get the team link to this client group ,
+	 * 2> get the members in the team. 
+	 */
+	$rootScope.getMembersByClient = function(clientGroup){
+		var members = [];
+		var memberIds = [];
+		var teams = angular.fromJson(Storage.get('Teams'));
+		angular.forEach(teams,function(team){
+			var teamGroups = angular.fromJson(Storage.get('teamGroup_' + team.uuid));
+			angular.forEach(teamGroups, function(teamGrp) {
+				if(clientGroup == teamGrp.id){
+					var mebrs = angular.fromJson(Storage.get(team.uuid));
+					angular.forEach(mebrs,function(mem){
+						if(memberIds.indexOf(mem.uuid) == -1){
+							memberIds.add(mem.uuid);
+							
+							var tm = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
+							members.add(tm);
+						}
+					});
+				}
+			});
+		});
+		
+		return members;
+	};
     
   }
 ]);

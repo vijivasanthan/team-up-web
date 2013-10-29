@@ -9,17 +9,14 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
  */
 .factory('Slots', 
 [
-	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Dater', 'Sloter', 'Stats',
-	function ($rootScope, $config, $resource, $q, Storage, Dater, Sloter, Stats) 
+	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Dater', 'Sloter', 
+	function ($rootScope, $config, $resource, $q, Storage, Dater, Sloter) 
 	{
 	  /**
 	   * Define Slot Resource from back-end
 	   */
 	  var Slots = $resource(
-	    $config.host + '/askatars/:user/slots',
-	    {
-	      user: ''
-	    },
+	    $config.host + 'teamup/team/member/tasks/:member',{},
 	    {
 	      query: {
 	        method: 'GET',
@@ -28,15 +25,13 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	      },
 	      change: {
 	        method: 'PUT',
-	        params: {start:'', end:'', text:'', recursive:''}        
 	      },
 	      save: {
 	        method: 'POST',
-	        params: {}
 	      },
 	      remove: {
 	        method: 'DELETE',
-	        params: {}
+	        params: {taskId: ''}
 	      }
 	    }
 	  );
@@ -548,7 +543,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  {
 	    var deferred = $q.defer();
 
-	    Slots.save({user: user}, slot,
+	    Slots.save({member: user}, slot,
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -574,11 +569,11 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	   * 
 	   * Slot changing process
 	   */
-	  Slots.prototype.change = function (original, changed, user) 
+	  Slots.prototype.change = function (changed, user) 
 	  {
 	    var deferred = $q.defer();
 
-	    Slots.change(angular.extend(naturalize(changed), {user: user}), naturalize(original), 
+	    Slots.change(angular.extend(naturalize(changed), {member: user}),  
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -596,11 +591,11 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  /**
 	   * Slot delete process
 	   */
-	  Slots.prototype.remove = function (slot, user) 
+	  Slots.prototype.remove = function (tId, mId) 
 	  {
 	    var deferred = $q.defer();
 
-	    Slots.remove(angular.extend(naturalize(slot), {user: user}), 
+	    Slots.remove({taskId : tId, member: mId}, {}, 
 	      function (result) 
 	      {
 	        deferred.resolve(result);

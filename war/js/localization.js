@@ -375,9 +375,11 @@ var ui = {
          noMessages: "There are no messages",
          newReport: "New Report",
          selectClient: "Select a client",
+         selectMember: "Select a member",
          selectMonth: "Select a month",
          saveReport: "Save report",
-         reportTitle: "Title"
+         reportTitle: "Title",
+         selectSlot: "Please select a slot",
       }
     },
     nl: {

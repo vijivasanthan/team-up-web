@@ -490,17 +490,25 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 	                state: slot.text
 	              })),
 	              */
-	              content: slotContent ,
+	              content: "<span>"+slotContent +"</span>" + 
+	              "<input type=hidden value='"+ angular.toJson({
+		                type: 'slot',
+		                id:   task.uuid,
+		                mid:  task.authorId,
+//		                recursive: slot.recursive,
+		                state: task.description,
+		                relatedUser : task.relatedUserId,
+		              }) +"'>",
 	              // className:  config.states[slot.text].className,
 	              className:  'state-available',
-	              editable:   false
+	              editable:   false,	              
 	          });
               
             });
 
 
 
-//            timedata = _this.addLoading(data, timedata, [ member.head ]);
+            timedata = _this.addLoading(data, timedata, [ member.head ]);
 
             /**
              * TODO
