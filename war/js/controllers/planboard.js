@@ -9,14 +9,10 @@ angular.module('WebPaige.Controllers.Planboard', [])
 .controller('planboard', ['$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams','Clients',
 function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
+	var self = this, params = $location.search();
 	$scope.imgHost = profile.host();
 
 	var teams = angular.fromJson(Storage.get('Teams')), clients = angular.fromJson(Storage.get('ClientGroups'));
-
-	function getRandomInt(min, max) {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
-	}
-
 
 	$scope.data = {
 		teams : {
@@ -49,7 +45,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		members : [],
 		synced : Number(Date.today()),
 		periods : {
-			start : Number(Date.today()),
+			start : Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
 			end : Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
 		}
 	};
@@ -67,7 +63,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 			angular.forEach(members, function(member) {
 				var imgURL = $scope.imgHost + "/teamup/team/member/" + member.uuid + "/photo";
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
 				var obj = {"head" : name , "memId" : member.uuid};
@@ -89,7 +85,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 			angular.forEach(members, function(member) {
 				var imgURL = $scope.imgHost + "/teamup/client/" + member.uuid + "/photo";
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
 				var obj = {"head" : name , "memId" : member.uuid};
@@ -102,28 +98,52 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		switch ($scope.section) {
 			case 'teams':
 				$scope.list = $scope.data.teams.list;
-				$scope.current = $scope.data.teams.list[0].uuid;
+				if(typeof $scope.currentTeam == "undefined"){
+					$scope.currentTeam = $scope.data.teams.list[0].uuid;
+				}
+				$scope.changeCurrent($scope.currentTeam);
 				break;
 			case 'clients':
 				$scope.list = $scope.data.clients.list;
-				$scope.current = $scope.data.clients.list[0].uuid;
+				if(typeof $scope.currentClientGroup == "undefined"){
+					$scope.currentClientGroup = $scope.data.clients.list[0].uuid;
+				}
+				$scope.changeCurrent($scope.currentClientGroup);
 				break;
 		}
 
-		$scope.changeCurrent($scope.current);
+		
 	}
 
 
-	$scope.changeCurrent = function() {
+	$scope.changeCurrent = function(current) {
+
 		angular.forEach($scope.data[$scope.section].list, function(node) {
-			if (node.uuid == $scope.current) {
+			if (node.uuid == current) {
 				$scope.currentName = node.name;
 			}
 		});
-
+		
+		// change the tab
+//		if(typeof $scope.data.section != "undefined" && $scope.data.section != $scope.section){
+//			if($scope.section == "teams"){
+//				$scope.current = $scope.data.teams.list[0].uuid;
+//				
+//			}else if($scope.section == "clients"){
+//				$scope.current = $scope.data.clients.list[0].uuid;
+//				
+//			}
+//		}
+		if($scope.section == "teams"){
+			$scope.currentTeam = current;
+			$scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+		}else if($scope.section == "clients"){
+			$scope.currentClientGroup = current;
+			$scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+		}
 		$scope.data.section = $scope.section;
 
-		$scope.data.members = $scope.data[$scope.section].members[$scope.current];
+		
 		
 		// try to loading the slots from here
 		var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000);
@@ -145,71 +165,55 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		
 		if($scope.data.section == "teams"){
 			
-			Teams.getTeamTasks($scope.current,startTime/1000,endTime/1000).then(function(tasks){
+			$location.search({
+				uuid : $scope.currentTeam
+			}).hash('teams');
+			
+			Teams.getTeamTasks($scope.currentTeam,startTime/1000,endTime/1000).then(function(tasks){
 				// process the tasks data
 				storeTask(tasks,startTime,endTime);
 			},function(error){
 				console.log("error happend when getting the tasks for the team members " + error);
 			});
 		}else if($scope.data.section == "clients"){
-			Clients.getClientTasks($scope.current,startTime/1000,endTime/1000).then(function(tasks){
+			
+			$location.search({
+				uuid : $scope.currentClientGroup
+			}).hash('clients');
+			
+			Clients.getClientTasks($scope.currentClientGroup,startTime/1000,endTime/1000).then(function(tasks){
 				storeTask(tasks,startTime,endTime);
 			},function(error){
 				console.log("error happend when getting the tasks for the team members " + error);
 			});
-		}
+		}	
 		
-		// console.log('$scope.data ->', $scope.data.members);
-
-		//        // load image
-		//        angular.forEach($scope.list, function (member)
-		//        {
-		//          console.log('memebr ->', member);
-		//
-		//          var imgURL = $scope.imgHost + "teamup/team/member/" + member.uuid + "/photo";
-		//
-		//          Teams.loadImg(imgURL)
-		//            .then(function (result)
-		//            {
-		//              var imgId = member.uuid.replace(".","").replace("@","");
-		//
-		//              if (result.status && (result.status == 404 || result.status == 403 || result.status == 500) )
-		//              {
-		//                console.log("loading pic " ,result);
-		//
-		//                $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
-		//              }
-		//              else
-		//              {
-		//                $('#img_'+imgId).css('background-image','url('+imgURL+')');
-		//              }
-		//
-		//            }, function (error)
-		//            {
-		//              console.log("error when load pic " + error);
-		//            }
-		//          );
-		//
-		//        });
-
 	};
 
+
+    
+    
 	/**
 	 * View setter
 	 */
 	function setView(hash) {
 		$scope.views = {
 			teams : false,
-			clients : false
+			clients : false,
+			member : false,
+			slot: {
+	          add:  false,
+	          edit: false
+		    }
 		};
 
 		$scope.views[hash] = true;
 	}
-
+	
 	/**
 	 * Switch between the views and set hash accordingly
 	 */
-	$scope.setViewTo = function(hash) {
+	$scope.setViewTo = function(uuid,hash) {
 		$scope.$watch(hash, function() {
 			$location.hash(hash);
 
@@ -220,11 +224,45 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			setView(hash);
 		});
 	};
+	
+	
+	$scope.resetViews = function ()
+    {
+      $scope.views.slot = {
+              add:  false,
+              edit: false
+      };
+        
+    };
+    
+	/**
+     * Reset planboard views
+     */
+    $rootScope.$on('resetPlanboardViews', function (){
+    	$scope.resetViews();    	
+    });
 
+	
+    var uuid, view;
+    /**
+	 * If no params or hashes given in url
+	 */
+	if(!params.uuid && !$location.hash()) {
+		uuid = $scope.data.teams.list[0].uuid;
+		view = 'teams';
+
+		$location.search({
+			uuid : $scope.data.teams.list[0].uuid
+		}).hash('teams');
+	} else {
+		uuid = params.uuid;
+		view = $location.hash();
+	}
+	
 	/**
 	 * Default view
 	 */
-	$scope.setViewTo('teams');
+	$scope.setViewTo(uuid,view);
 
 	/*
 	var data = {
@@ -323,13 +361,13 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		 * Initial start up is next 7 days
 		 */
 		options : {
-			start : $scope.periods.days[Dater.current.today()].last.day,
+			start : $scope.periods.days[Dater.current.today() - 7].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day,
-			min : $scope.periods.days[Dater.current.today()].last.day,
+			min : $scope.periods.days[Dater.current.today() - 7].last.day,
 			max : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		range : {
-			start : $scope.periods.days[Dater.current.today()].last.day,
+			start : $scope.periods.days[Dater.current.today() - 7].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		scope : {
@@ -354,9 +392,9 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	 */
 	if ($.browser.msie && $.browser.version == '8.0') {
 		$scope.timeline.options = {
-			start : $scope.periods.days[Dater.current.today()].last.timeStamp,
+			start : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
 			end : $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-			min : $scope.periods.days[Dater.current.today()].last.timeStamp,
+			min : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
 			max : $scope.periods.days[Dater.current.today() + 7].last.timeStamp
 		};
 	}
@@ -381,5 +419,49 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	 * Prepare timeline range for date ranger widget
 	 */
 	$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' + Dater.readable.date($scope.timeline.range.end);
+	
+	/**
+	 * find the related users in the slot (could be a team member or a client) 
+	 */
+	$scope.processRelatedUsers = function(selectedSlot){
+		
+		var relatedUsers = [];
+		var memberId = $(selectedSlot.group).attr("memberId");
+		
+		if($scope.views.teams){
+			
+			$scope.relatedUserLabel = $rootScope.ui.teamup.clients;
+			var member = $rootScope.getTeamMemberById(memberId);
+			if(typeof member.teamUuids != "undefined" && member.teamUuids.length > 0){
+				relatedUsers = $rootScope.getClientsByTeam(member.teamUuids);
+			}
+		}else if($scope.views.clients){
+			$scope.relatedUserLabel = $rootScope.ui.planboard.members;
+			var client = $rootScope.getClientByID(memberId);
+			if(typeof client.clientGroupUuid != "undefined" && client.clientGroupUuid != ""){
+				relatedUsers = $rootScope.getMembersByClient(client.clientGroupUuid);
+			}
+		}
+		
+		return relatedUsers; 
+	}
+	
+	/**
+     * Reset inline forms
+     */
+    $scope.resetInlineForms = function ()
+    {
+      $scope.slot = {};
 
+      $scope.original = {};
+
+      $scope.resetViews();    
+      
+      if($scope.section == "teams"){
+    	  $scope.changeCurrent($scope.currentTeam);
+      }else if($scope.section == "clients"){
+    	  $scope.changeCurrent($scope.currentClientGroup);
+      }
+      
+    };
 }]);

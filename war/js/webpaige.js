@@ -19,6 +19,7 @@ angular.module('WebPaige',[
   'WebPaige.Modals.Settings',
   // 'WebPaige.Modals.Help',
   'WebPaige.Modals.Messages',
+  'WebPaige.Modals.Slots',
   
   // controller
   'WebPaige.Controllers.Login',
