@@ -12,8 +12,8 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Session','Storage', '$config', '$window','Teams',
-  function ($rootScope, $location, $timeout, Session, Storage, $config, $window,Teams)
+  '$rootScope', '$location', '$timeout', 'Session','Storage', '$config', '$window','Teams','Dater',
+  function ($rootScope, $location, $timeout, Session, Storage, $config, $window,Teams,Dater)
   {
     /**
      * Pass config and init dynamic config values
@@ -86,7 +86,7 @@ angular.module('WebPaige')
     /**
      * If periods are not present calculate them
      */
-    // if (!Storage.get('periods')) Dater.registerPeriods();
+     if (!Storage.get('periods')) Dater.registerPeriods();
 
 
 
