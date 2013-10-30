@@ -803,7 +803,6 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	};
 
 	$scope.redrawSlot = function(slot) {
-		console.log(slot);
 
 		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time);
 		var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time);
