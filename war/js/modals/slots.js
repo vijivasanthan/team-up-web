@@ -16,7 +16,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	   * Define Slot Resource from back-end
 	   */
 	  var Slots = $resource(
-	    $config.host + 'teamup/team/member/tasks/:member',{},
+	    $config.host + 'teamup/team/member/tasks/:member/',{},
 	    {
 	      query: {
 	        method: 'GET',
@@ -35,8 +35,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	      }
 	    }
 	  );
-
-
+	  
 	  /**
 	   * Group aggs resource
 	   */
@@ -594,8 +593,8 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  Slots.prototype.remove = function (tId, mId) 
 	  {
 	    var deferred = $q.defer();
-
-	    Slots.remove({taskId : tId, member: mId}, {}, 
+//
+	    Slots.remove({ taskId : tId , member: mId},  
 	      function (result) 
 	      {
 	        deferred.resolve(result);
