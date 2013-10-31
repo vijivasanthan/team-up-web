@@ -379,6 +379,20 @@ angular.module('WebPaige.Directives', ['ngResource'])
 }])
 
 
+.directive('ngenter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngenter);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+});
+
+
 ;
 
 

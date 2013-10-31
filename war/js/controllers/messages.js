@@ -91,6 +91,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     			// scroll to the bottom of the chat window
     			setTimeout(function () {
 			        $('#chat-content #messageField').focus();
+			        $('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
 			    }, 100);
     		},function(error){
     			console.log(error);
@@ -100,13 +101,22 @@ angular.module('WebPaige.Controllers.Messages', [])
     	$scope.openChat = function(){
     		$scope.toggleChat = !$scope.toggleChat;
     		
-    		
     		var teamIds = $scope.$root.app.resources.teamUuids;
     		if(teamIds && $scope.toggleChat){
     			var teamId = teamIds[0];
     			$scope.renderMessage(teamId);
     			$scope.chatTeamId = teamId;
+    			
+    			// start auto check chat mesage
+    			$scope.autoCheckMonitorId =  setInterval(function(teamId){
+    				$scope.renderMessage(teamId);
+    		    },5000);
+    			
+    		}else{
+    			// stop auto check chat mesage
+    			clearInterval($scope.autoCheckMonitorId);
     		}
+    		
     		
     	}
     	
@@ -123,9 +133,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     				sendTime : current.getTime()};
     		console.log(message);
     		Messages.sendTeamMessage(message).then(function(result){
-    			
     			$scope.renderMessage($scope.chatTeamId);
-    			
     			$rootScope.statusBar.off();
     			$scope.newMessage = "";    			
     			
