@@ -29,7 +29,8 @@ angular.module('WebPaige.Controllers.Messages', [])
     			var msgDates = {};
     			var chatMembers = [];
     			// sort the messages by sendTime
-    			messages = $filter('orderBy')(messages,'sendTime','reverse');
+//    			messages = $filter('orderBy')(messages,'sendTime','reverse');
+    			messages = $filter('orderBy')(messages,'sendTime');
     			
     			angular.forEach(messages,function(message, i){
     				
@@ -86,6 +87,11 @@ angular.module('WebPaige.Controllers.Messages', [])
     					console.log("error when load pic " + error);
     				});
     			});
+    			
+    			// scroll to the bottom of the chat window
+    			setTimeout(function () {
+			        $('#chat-content #messageField').focus();
+			    }, 100);
     		},function(error){
     			console.log(error);
     		});
@@ -121,7 +127,8 @@ angular.module('WebPaige.Controllers.Messages', [])
     			$scope.renderMessage($scope.chatTeamId);
     			
     			$rootScope.statusBar.off();
-    			$scope.newMessage = "";
+    			$scope.newMessage = "";    			
+    			
     		},function(error){
     			$rootScope.notifier.error(error);
     			$rootScope.statusBar.off();
