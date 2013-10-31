@@ -19,13 +19,23 @@ angular.module('WebPaige.Controllers.Messages', [])
     	$scope.imgHost = profile.host();
     	
     	$scope.renderMessage = function(teamId){
-    		$scope.messages = [];
+    		
     		
     		Messages.queryTeamMessage(teamId).then(function(messages){
+    			
     			if(messages.error){
     				$rootScope.notifier.error(messages.error.data);
     				return;
     			}
+    			
+    			console.log(messages.length,$scope.messages.length);
+    			if($scope.messages.length == messages.length){
+    				console.log("No new messages.");
+    				return;
+    			}
+    			
+    			$scope.messages = [];
+    			
     			var msgDates = {};
     			var chatMembers = [];
     			// sort the messages by sendTime
