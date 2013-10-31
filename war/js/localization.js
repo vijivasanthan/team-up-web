@@ -168,7 +168,8 @@ var ui = {
         typeSubject: 'Type a subject',
         // messages: 'Messages',
         ph_filterMessage: 'Filter messages..',
-        noReceivers: 'Please select a receiver.'
+        noReceivers: 'Please select a receiver.',
+        emptyMessageBody: 'Please write a message',
       },
       groups: {
         groups: 'Groups',

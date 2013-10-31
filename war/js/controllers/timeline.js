@@ -757,7 +757,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() / 1000 : Dater.convert.absolute(slot.start.date, slot.start.time, true),
 				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() / 1000 : Dater.convert.absolute(slot.end.date, slot.end.time, true),
 				//				recursive : (slot.recursive) ? true : false,
-				description : slot.state,
+				description : (typeof slot.state == "undefined")? "": slot.state,
 				relatedUserId : slot.relatedUser,
 			};
 

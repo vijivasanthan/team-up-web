@@ -33,8 +33,8 @@ angular.module('WebPaige.Controllers.Messages', [])
     			
     			angular.forEach(messages,function(message, i){
     				
-    				var minDate = $filter('nicelyDate')(parseInt(message.sendTime)*1000);
-    				if(i > 0 && minDate == $filter('nicelyDate')(parseInt(messages[i-1].sendTime)*1000)){
+    				var minDate = $filter('nicelyDate')(parseInt(message.sendTime));
+    				if(i > 0 && minDate == $filter('nicelyDate')(parseInt(messages[i-1].sendTime))){
     					minDate = '';
     				}
     					
@@ -42,7 +42,7 @@ angular.module('WebPaige.Controllers.Messages', [])
 						role : "",
 						member : {},
 						senderName : "",
-						sendTime: parseInt(message.sendTime)*1000,
+						sendTime: parseInt(message.sendTime),
 						body: message.body,
 						msgRole : "",
 						senderUuid : message.senderUuid
@@ -99,7 +99,33 @@ angular.module('WebPaige.Controllers.Messages', [])
     		if(teamIds && $scope.toggleChat){
     			var teamId = teamIds[0];
     			$scope.renderMessage(teamId);
+    			$scope.chatTeamId = teamId;
     		}
+    		
+    	}
+    	
+    	$scope.sendMessage = function(newMessage){
+    		if(typeof newMessage == "undefined" || newMessage == ""){
+    			$rootScope.notifier.error($rootScope.ui.message.emptyMessageBody);
+    			return;
+    		}
+    		$rootScope.statusBar.display($rootScope.ui.message.sending);
+    		
+    		var current = new Date();
+    		var message = {title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
+    				body: newMessage,
+    				sendTime : current.getTime()};
+    		console.log(message);
+    		Messages.sendTeamMessage(message).then(function(result){
+    			
+    			$scope.renderMessage($scope.chatTeamId);
+    			
+    			$rootScope.statusBar.off();
+    			$scope.newMessage = "";
+    		},function(error){
+    			$rootScope.notifier.error(error);
+    			$rootScope.statusBar.off();
+    		});
     		
     	}
     	

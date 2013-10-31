@@ -8,7 +8,7 @@ angular.module('WebPaige.Modals.Messages', ['ngResource'])
  */
 .factory('Messages', ['$rootScope', '$config', '$resource', '$q', 'Storage', '$http',
 function($rootScope, $config, $resource, $q, Storage, $http) {
-	var Messages = $resource($config.host + '/question/:action', {
+	var Messages = $resource($config.host + 'teamup/team/teamMessage/', {
 	}, {
 		query : {
 			method : 'GET',
@@ -27,10 +27,7 @@ function($rootScope, $config, $resource, $q, Storage, $http) {
 			params : {}
 		},
 		send : {
-			method : 'POST',
-			params : {
-				action : 'sendDirectMessage'
-			}
+			method : 'POST',			
 		},
 		save : {
 			method : 'POST',
@@ -74,7 +71,21 @@ function($rootScope, $config, $resource, $q, Storage, $http) {
 		});
 		
 		return deferred.promise;
-	}
+	};
 
+	Messages.prototype.sendTeamMessage = function(messageObj){
+		var deferred = $q.defer();
+		
+		Messages.send(messageObj,function(result){
+			deferred.resolve(result);
+		},function(error){
+			deferred.resolve({
+				error : error
+			});
+		});
+		
+		return deferred.promise;
+	};
+	
 	return new Messages;
 }]); 
