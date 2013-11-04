@@ -104,8 +104,77 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		editClientGroup : false,
 		editClient : false,
 		viewClient : false,
+		editImg : false,
 	}
+	
+	/**
+	 * View setter
+	 */
+	var setView = function(hash) {
+		$scope.views = {
+			client : false,
+			newClientGroup : false,
+			newClient : false,
+			reports : false,
+			editImg:  false,
+		};
 
+		//load the reports on this view 
+        if(hash == "viewClient"){
+            loadReports();
+        }
+		
+        if(hash == "reports"){
+        	loadGroupReports();
+        }
+        
+		$scope.views[hash] = true;
+        
+	}
+	
+	/**
+	 * load the reports by the client ID
+	 */
+    var loadReports = function(){
+        $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+        Clients.queryReports($scope.client.uuid).then(function(reports){
+            $rootScope.statusBar.off();
+            $scope.reports = $scope.processReports(reports);
+            
+        },function(error){
+           console.log(error); 
+        });
+    }
+    
+    /**
+	 *  load the reports by the client group ID
+	 */
+    var loadGroupReports = function(){
+    	$rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+    	
+    	Clients.queryGroupReports($scope.clientGroup.id).then(function(reports){
+            $rootScope.statusBar.off();
+            $scope.groupReports = $scope.processReports(reports);
+            
+            if($scope.currentCLient != 0){
+            	$scope.requestReportsByFilter();
+            }
+            
+            $scope.$watch($scope.groupReports,function(rs){
+            	console.log("watcher found ... " , rs);
+            	$scope.loadMembersImg();
+            });
+        },function(error){
+           console.log(error); 
+        });
+    	
+    }
+	
+	/**
+	 * Set view
+	 */
+	setView(view);
+	
 	/**
 	 * Set group
 	 */
@@ -137,7 +206,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		// load image 
 		if($scope.views.client){
 			angular.forEach($scope.clients, function(client, index) {
-	            var imgURL = $scope.imgHost+"/teamup/team/client/"+client.uuid+"/photo";
+	            var imgURL = $scope.imgHost+"teamup/client/"+client.uuid+"/photo";
 	            Clients.loadImg(imgURL).then(function(result){
 	                // console.log("loading pic " + imgURL);
 	                
@@ -154,7 +223,23 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	        });
 		}
         
-		
+		// load the image in the client profile page 
+		if($scope.views.viewClient){
+			var imgURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			Clients.loadImg(imgURL).then(function(result){
+                // console.log("loading pic " + imgURL);
+                
+                var imgId = $scope.client.uuid.replace(".","").replace("@","");
+                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+                    console.log("loading pic " ,result);
+                }else{
+                    $('#viewClientTab #img_'+imgId).css('background-image','url('+imgURL+')');
+                }
+                
+            },function(error){
+                console.log("error when load pic " + error);
+            });
+		}
         
 	}
 
@@ -194,20 +279,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		});
 		return rpts;
 	}
-	
-	/**
-	 * load the reports by the client ID
-	 */
-    var loadReports = function(){
-        $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
-        Clients.queryReports($scope.client.uuid).then(function(reports){
-            $rootScope.statusBar.off();
-            $scope.reports = $scope.processReports(reports);
-            
-        },function(error){
-           console.log(error); 
-        });
-    }
+		
     
    $scope.loadMembersImg = function(){
 	// load the team members image
@@ -236,58 +308,9 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		});
    }
     
-	/**
-	 *  load the reports by the client group ID
-	 */
-    var loadGroupReports = function(){
-    	$rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
-    	
-    	Clients.queryGroupReports($scope.clientGroup.id).then(function(reports){
-            $rootScope.statusBar.off();
-            $scope.groupReports = $scope.processReports(reports);
-            
-            if($scope.currentCLient != 0){
-            	$scope.requestReportsByFilter();
-            }
-            
-            $scope.$watch($scope.groupReports,function(rs){
-            	console.log("watcher found ... " , rs);
-            	$scope.loadMembersImg();
-            });
-        },function(error){
-           console.log(error); 
-        });
-    	
-    }
-    
-	/**
-	 * View setter
-	 */
-	var setView = function(hash) {
-		$scope.views = {
-			client : false,
-			newClientGroup : false,
-			newClient : false,
-			reports : false
-		};
-
-		//load the reports on this view 
-        if(hash == "viewClient"){
-            loadReports();
-        }
-		
-        if(hash == "reports"){
-        	loadGroupReports();
-        }
-        
-		$scope.views[hash] = true;
-        
-	}
 	
-	/**
-	 * Set view
-	 */
-	setView(view);
+    
+	
 
 	/**
 	 * Switch between the views and set hash accordingly
@@ -297,7 +320,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			if(!$scope.clientGroup){
 				$scope.clientGroup = $scope.clientGroups[0]
 			}
-			if(($location.hash() == "viewClient" || $location.hash() == "editClient") && hash == "client"){
+			if(($location.hash() == "viewClient" || $location.hash() == "editClient" || $location.hash() == "editImg") && hash == "client"){
 				$location.path("/client").search({uuid : $scope.clientGroup.id});
 			}
 		
@@ -788,5 +811,28 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			});
 		}
 	}
+		
+	/**
+	 * load the dynamic upload URL for GAE
+	 */
+	$scope.editImg = function() {
+		$rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
+		
+		Clients.loadUploadURL($scope.client.uuid).then(function(result) {
+			if (result.error) {
+				$rootScope.notifier.error('Error with loading upload URL.');
+				console.warn('error ->', result);
+			} else {
+	
+				$rootScope.statusBar.off();
+				$scope.uploadURL = result.url;
+	
+				$scope.setViewTo('editImg');
+			};
+		});
+	
+	}
+
+	  
 	
 }]);

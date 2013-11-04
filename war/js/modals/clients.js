@@ -138,6 +138,16 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				params : {reportId : ''}
 			}
 		}); 
+        
+  	  	var ClientImg = $resource(
+          $config.host + 'teamup/client/:clientId/photourl',{},{
+            getURL: {
+              method: 'GET',
+              isArray: false              
+            }
+          }
+        ); 
+        
 		/**
 		 * get the client groups and the clients
 		 */
@@ -646,8 +656,28 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			});
 			
 			return deferred.promise;
-		}
+		};
 		
+
+		/**
+		 * get the upload URL
+		 */
+		ClientGroups.prototype.loadUploadURL = function(id) {
+			var deferred = $q.defer();
+
+			ClientImg.getURL({
+				clientId : id
+			}, function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deferred.resolve({
+					error : error
+				});
+			});
+			return deferred.promise;
+		};
+	
+
         return new ClientGroups; 
     }
     

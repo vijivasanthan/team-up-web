@@ -320,7 +320,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
               }
 	      );
 	      return deferred.promise;
-	  } 
+	  };
 	  
 	  /**
 	   * Create settings resources for user if it is missing

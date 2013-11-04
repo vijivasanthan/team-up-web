@@ -381,6 +381,7 @@ var ui = {
          saveReport: "Save report",
          reportTitle: "Title",
          selectSlot: "Please select a slot",
+         editClientImg: "Edit client image"
       }
     },
     nl: {

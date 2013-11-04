@@ -630,6 +630,27 @@
 	   </div>
 		<!-- end edit Client profile -->
 		
+		  <!-- edit image tab-->
+	  <div class="tab-pane {{(views.editImg==true) && 'active'}}" id="editImgTab">
+	  	<!-- tab header -->
+        <div style="overflow: hidden; height: 35px">
+          <h3 style="margin-top: 0;" class="pull-left">{{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}</h3>
+        </div>
+        <!-- end tab header -->
+        <hr>
+        <div ><img ng-src="{{imgHost}}/teamup/client/{{client.uuid}}/photo"></div>
+        
+		<div id="uploadImgModule" >
+			<form class="form-vertical"  enctype="multipart/form-data" >
+				<uploader action="{{uploadURL}}"></uploader>
+				<!-- <input type="file" name="file" />
+				<button type="submit" class="btn btn-mini">upload</button> -->
+			</form>
+		</div>
+	  </div>
+	  
+	  <!-- end edit image tab-->
+		
 	</div>	
 	<!-- end tabs content -->
 
