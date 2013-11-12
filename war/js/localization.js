@@ -170,6 +170,7 @@ var ui = {
         ph_filterMessage: 'Filter messages..',
         noReceivers: 'Please select a receiver.',
         emptyMessageBody: 'Please write a message',
+        send: 'Send'
       },
       groups: {
         groups: 'Groups',

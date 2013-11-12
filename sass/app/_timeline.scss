@@ -394,8 +394,10 @@ div.timeline-axis-grid-minor {
 
 
 /*striped background*/
-div.timeline-axis-grid-minor:nth-child(odd) {
-    border-bottom: 70px solid $offwhite ;
+div.timeline-frame div:nth-child(1) {
+  div.timeline-axis-grid-minor:nth-child(2n) {
+      border-bottom: 70px solid $offwhite ;
+  }
 }
 div.timeline-groups-axis {
   div.timeline-axis-grid-minor:nth-child(4n) {
