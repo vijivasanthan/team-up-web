@@ -175,9 +175,10 @@ input[type="button"] {
 // Danger and error appear as red
 .btn-danger {
   background-color:$red;
+  color:$offwhite;
   &:hover,
   &:focus {
-    color: $offwhite;
+    color: $brown;
   }
 }
 // Success appears as green

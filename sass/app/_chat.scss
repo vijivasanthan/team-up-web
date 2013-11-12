@@ -176,7 +176,23 @@
       }
 
     }
+    .input-area{
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding-top: 10px;
+      background-color: $offwhite;
+      /*border-top: 1px solid $brown;*/
+      #messageField{
+        margin-left: 10px;
+        float: left;
+        width: 277px;
+      }
+      button{
+        margin: 0 0 0 10px;
 
+      }
+    }
 
 
 

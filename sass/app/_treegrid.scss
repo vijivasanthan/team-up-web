@@ -29,7 +29,6 @@
 .treegrid-item {
   //border-top: 1px solid $tableBorder;
   // padding: 5px 0 5px 0;
-  // height: 38px;
   border-bottom: 1px solid lightgray;
   // border-width: 1px;
   // border-style: solid;
@@ -57,7 +56,7 @@
       font-size: 12px;
     }
     .treegrid-actions {    //copied from .btn-primary and .btn-mini
-      margin-top: 7px;
+      margin-top: 3px;
       a {
         background: $orange url("../img/unlink.png") no-repeat center;
         color: $brown;
@@ -78,7 +77,7 @@
 #teams_right, #clients_right{
   .treegrid-item {
     .treegrid-actions {    //copied from .btn-primary and .btn-mini
-      margin-top: 7px;
+      margin-top: 4px;
       a {
         background: $orange url("../img/unlink.png") no-repeat center;
         color: $brown;
@@ -116,7 +115,7 @@
   .treegrid-item{
     .treegrid-fold, .treegrid-unfold {
       background-repeat: no-repeat;
-      margin-top: 14px;
+      margin-top: 10px;
       margin-left:8px;
     }
   }
@@ -162,7 +161,7 @@
 }
 
 .treegrid-item-field {
-  padding: 16px;
+  padding: 12px 16px;
   color: $brown;
   font-weight: bold;
   /*border-right: 1px solid lightgray;*/

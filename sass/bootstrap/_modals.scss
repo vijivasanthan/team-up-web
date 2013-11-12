@@ -42,17 +42,26 @@
     @include transition(opacity .3s linear, top .3s ease-out);
     top: -25%;
   }
-  &.fade.in { top: 10%; }
+  &.fade.in {
+    top: 10%;
+    padding:20px;}
+  hr {
+    clear: both;
+  }
 }
 .modal-header {
-  padding: 9px 15px;
-  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
   // Close icon
   .close { margin-top: 2px; }
   // Heading
   h3 {
     margin: 0;
     line-height: 30px;
+  }
+  h4 {
+    float: left;
+    margin: 6px 0 20px;
+    color: $turq;
   }
 }
 
@@ -61,7 +70,13 @@
   position: relative;
   overflow-y: auto;
   max-height: 400px;
-  padding: 15px;
+  padding-bottom: 20px;
+  table {
+    width: 100%;
+    th, tr {
+      text-align:left;
+    }
+  }
 }
 // Remove bottom margin if need be
 .modal-form {
