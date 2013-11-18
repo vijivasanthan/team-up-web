@@ -382,7 +382,9 @@ var ui = {
          saveReport: "Save report",
          reportTitle: "Title",
          selectSlot: "Please select a slot",
-         editClientImg: "Edit client image"
+         editClientImg: "Edit client image",
+         newTask: "New Task",
+         updateTask: "Update Task"
       }
     },
     nl: {

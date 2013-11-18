@@ -461,9 +461,9 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				content : content,
 			};
 
-			if ($scope.timeline.main) {
+			if ($scope.timeline.main && values.content != "New") {
 				$rootScope.$broadcast('resetPlanboardViews');
-			} else {
+			} else if(values.content != "New"){
 				/**
 				 * TODO (Convert to resetview?)
 				 */
@@ -472,12 +472,22 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 					edit : true
 				};
 			}
-
+			
+			if(values.content == "New" ){
+				content = {type : "slot"};
+			}else if(content.relatedUser && typeof content.id == "undefined"){
+				content = $.extend(content,{type : "slot"});
+			}
+			
 			if (content.type) {
 				if ($scope.timeline.main) {
 					switch (content.type) {
 						case 'slot':
-							$scope.views.slot.edit = true;
+							if(values.content == "New" || (content.relatedUser && typeof content.id == "undefined")){
+								$scope.views.slot.add = true;
+							}else{
+								$scope.views.slot.edit = true;
+							}
 							break;
 						case 'group':
 							$scope.views.group = true;
@@ -534,6 +544,10 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			}
 
 			return values;
+		}
+		else{
+//			$scope.resetInlineForms();
+			console.log("click the timeline , but not a slot");
 		}
 	};
 
@@ -840,12 +854,16 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		} else {
 			content_obj = {
 				relatedUser : $scope.slot.relatedUser
-			};
+			};			
 		}
 
 		var content = "<span>" + relateUserName + "</span>" + "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
+		if(typeof $scope.slot.relatedUser == 'undefined'){
+			content = "New";
+		}
 		return content;
-	}
+	};
+	
 	/**
 	 * Timeline on change
 	 */
