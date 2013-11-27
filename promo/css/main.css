@@ -249,16 +249,19 @@ td {
 .invisible {
   visibility: hidden; }
 
+/*@import "modules/navbar";*/
 html, body {
   height: 100%; }
 
 body {
   font-family: "Helvetica", Arial, sans-serif;
-  background-color: #1dc8b6; }
+  background-color: #1dc8b6;
+  font-family: myriad pro; }
 
 h2 {
   text-align: left;
-  color: #833c11; }
+  color: #1dc8b6;
+  font-style: italic; }
 
 p {
   color: #833c11;
@@ -270,12 +273,42 @@ p {
   margin: 0 auto;
   max-width: 800px; }
 
+.navbar-inverse .navbar-inner {
+  /*    @include gradient-vertical($navbarInverseBackgroundHighlight, $navbarInverseBackground);*/
+  background-color: #833c11;
+  background-image: none;
+  border: none; }
+
+.navbar .brand {
+  background-image: url("../img/logoHeader.png");
+  width: 126px;
+  height: 50px;
+  float: left;
+  display: block;
+  font-size: 20px;
+  font-weight: 200;
+  color: #f5a962;
+  text-shadow: 0 1px 0 #833c11;
+  padding: 0;
+  margin-left: 0; }
+
+.loginBtn {
+  float: right !important;
+  width: 140px;
+  /*  margin-right: -20px;*/ }
+  .loginBtn a {
+    text-decoration: none; }
+  .loginBtn button {
+    padding: auto 10px;
+    margin-top: 4px !important; }
+
 #intro {
   /*  background: url("../img/photo01.jpg") no-repeat top center;
     background-size: cover;*/ }
 
 .hero-unit {
-  background-color: transparent; }
+  background-color: transparent;
+  margin-top: 60px; }
   .hero-unit #heroLogo {
     background-image: url("../img/logo.png");
     width: 160px;
@@ -299,16 +332,16 @@ p {
     -moz-border-radius: 20px;
     border-radius: 20px; }
     .hero-unit #welcome p {
-      font-size: 20px;
+      font-size: 22px;
       font-style: italic;
-      line-height: 24px;
+      line-height: 26px;
       text-align: center; }
       .hero-unit #welcome p span {
         color: #f5a962;
         font-size: 16px;
         font-weight: bold;
         font-style: normal;
-        line-height: 34px; }
+        line-height: 20px; }
 
 #topArrow {
   border-bottom: 15px solid #FFFAF0;
@@ -493,7 +526,21 @@ p {
     font-size: 5em;
     margin-bottom: 100px; }
   #contact .contactInfo p {
-    color: floralwhite; }
+    color: #ffffff;
+    margin-bottom: 20px; }
+  #contact .contactInfo .contactIcon {
+    font-size: 16px;
+    margin-right: 10px; }
+  #contact .contactInfo a {
+    color: #ffffff; }
+  #contact .contactInfo .skypeBtn {
+    /*      height: 30px;*/ }
+    #contact .contactInfo .skypeBtn img {
+      margin: 6px 20px 10px 0 !important;
+      height: 21px;
+      width: auto;
+      padding: 0 !important;
+      float: left; }
   #contact .contactInput {
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
@@ -511,6 +558,12 @@ p {
   #contact .sendButton {
     clear: both;
     margin-left: 0; }
+
+footer p {
+  text-align: center;
+  color: floralwhite; }
+  footer p span {
+    margin-right: 20px; }
 
 .btn-primary {
   background-color: #f5a962;

@@ -14,9 +14,22 @@
 
         <link rel="stylesheet" href="promo/css/bootstrap.min.css">
         <link rel="stylesheet" href="promo/css/bootstrap-responsive.min.css">
+
         <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/promo/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="war/css/bootstrap.css">
+        <link rel="stylesheet" href="war/css/responsive.css">
+        <link rel="stylesheet" href="war/css/app.css">
         <link rel="stylesheet" href="promo/css/main.css">
+        <link rel="stylesheet" href="promo/css/ie.css">
         <!--<script src="promo/js/vendor/modernizr-2.6.2.min.js"></script>-->
+
+        <!-- favicons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" ng-href="war/profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" ng-href="war/profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" ng-href="war/profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" ng-href="war/profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" ng-href="/war/favicon.ico">
+        <link rel="icon" ng-href="/war/favicon.ico">
 
         </head>
     <body>
@@ -24,6 +37,27 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
+
+
+        <!-- navbar -->
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="navbar-inner">
+<!--                    <div class="container-narrow">-->
+                        <div class="container-fluid">
+                            <a class="brand" href="#dashboard"></a>
+                            <div class="row-fluid">
+                                <div class="loginBtn">
+                                    <a href="war/index.html">
+                                        <button class="btn btn-large btn-block btn-primary ng-binding" type="submit">Inloggen</button>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- end nav-collapse -->
+                        </div>
+<!--                    </div>-->
+                </div>
+            </div>
+        <!-- end navbar -->
 
 
 
@@ -156,7 +190,7 @@
                         <img src="promo/img/mobile02.png">
                         <div class="bub3 mobileBubble"><p>Meer<br> arbeidsvreug-<br>de, lager verzuim</p></div>
                         <div class="bub4 mobileBubble"><p>Minder registreren, meer zorg leveren</p></div>
-                        <div class="bub5 mobileBubble"><p>Uw<br> medewerkers<br> zijn altijd en overal goed geïnformeerd</p></div>
+                        <div class="bub5 mobileBubble"><p>Uw<br> medewerkers<br> zijn altijd en<br>overal goed geïnformeerd</p></div>
                     </div><!--/span-->
                     <div class="span4">
                         <img src="promo/img/mobile04.png">
@@ -177,7 +211,32 @@
                 <h1>Contact</h1>
                 <div class="row-fluid">
                 <div class="span4 contactInfo">
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec sed odio dui.</p>
+                    <p><span class="icon-phone contactIcon"></span>+31 (0)646 342 630</p>
+                    <p><i class="icon-envelop contactIcon"></i><a href="mailto:pkradolfer@ask-cs.com">pkradolfer@ask-cs.com</a></p>
+                    <script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
+                    <div id="SkypeButton_Call_teamup-adviseur_1" class="skypeBtn">
+                        <script type="text/javascript">
+                            Skype.ui({
+                                "name": "call",
+                                "element": "SkypeButton_Call_teamup-adviseur_1",
+                                "participants": ["teamup-adviseur"],
+                                "imageColor": "white",
+                                "imageSize": 24
+                            });
+                        </script>
+                    </div>
+                    <script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
+                    <div id="SkypeButton_Chat_teamup-adviseur_1" class="skypeBtn">
+                        <script type="text/javascript">
+                            Skype.ui({
+                                "name": "chat",
+                                "element": "SkypeButton_Chat_teamup-adviseur_1",
+                                "participants": ["teamup-adviseur"],
+                                "imageColor": "white",
+                                "imageSize": 24
+                            });
+                        </script>
+                    </div>
                 </div>
                 <div class="span8">
                     <form>
@@ -200,7 +259,7 @@
 
 
             <footer>
-                <p>&copy; ASK Community Systems</p>
+                <p><span>&copy; ASK Community Systems</span> Coolhaven 236 | 3024 AN Rotterdam | Nederland | 010 225 0130 | info@ask-cs.com</p>
             </footer>
 
 
