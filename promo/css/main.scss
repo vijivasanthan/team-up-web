@@ -19,7 +19,7 @@ html, body { height:100%; }
 body {
     @include typeface;
     background-color: $turq;
-    font-family: myriad pro;
+    font-family: "Myriad Pro", 'PT Sans', arial, helvetica, sans-serif;
 }
 
 
@@ -358,6 +358,14 @@ p {
       color: #ffffff;
       margin-bottom: 20px;
     }
+    .contactText {
+      text-align: left;
+      font-style: italic;
+      span {
+        font-weight: bold;
+        font-style: normal;
+      }
+    }
     .contactIcon {
       font-size: 16px;
       margin-right: 10px;
@@ -402,6 +410,9 @@ footer {
     color: $offwhite;
     span {
       margin-right: 20px;
+    }
+    a, a:hover, a:focus, a:active {
+      color: $offwhite;
     }
   }
 }
