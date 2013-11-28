@@ -224,7 +224,7 @@
                     <script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
                     <div id="SkypeButton_Call_teamup-adviseur_1" class="skypeBtn">
                         <script type="text/javascript">
-                            /**
+                            
 							Skype.ui({
                                 "name": "call",
                                 "element": "SkypeButton_Call_teamup-adviseur_1",
@@ -232,13 +232,13 @@
                                 "imageColor": "white",
                                 "imageSize": 24
                             });
-							*/
+							
                         </script>
                     </div>
                     <script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
                     <div id="SkypeButton_Chat_teamup-adviseur_1" class="skypeBtn">
                         <script type="text/javascript">
-						/**
+						
                             Skype.ui({
                                 "name": "chat",
                                 "element": "SkypeButton_Chat_teamup-adviseur_1",
@@ -246,24 +246,66 @@
                                 "imageColor": "white",
                                 "imageSize": 24
                             });
-							*/
+						
                         </script>
                     </div>
                 </div>
                 <div class="span8">
                 	<script>
+						function IsEmail(email) {
+						  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+						  return regex.test(email);
+						}	
 						
 						function sendMail(){
-							var contactName = $("#contactName").val();
-							var contactEmail = $("#contactEmail").val();
-							var contactSubject = $("#contactSubject").val();
-							var message = $("#message").val();
+							var contactName = $.trim($("#contactName").val());
+							var contactEmail = $.trim($("#contactEmail").val());
+							var contactSubject = $.trim($("#contactSubject").val());
+							var message = $.trim($("#message").val());
+							
+							var errorColor = "red";
+							var rightColor = "white";
 							
 							var sendMailURL = "http://ask70.ask-cs.nl/~ask/demo_110907/rpc/sendMail.php";
 							sendMailURL += "?contactName="+contactName +
 										  "&contactEmail="+contactEmail+										  
 										  "&contactSubject="+contactSubject+
 										  "&message="+message ;
+							if(contactName == '' ){
+								alert("Please fill the contact name");
+								$("#contactName").css("background-color" ,errorColor);
+								return ; 
+							}else{
+								$("#contactName").css("background-color" ,rightColor);
+							}
+							if(contactEmail == '' ){
+								alert("Please fill the contact email");
+								$("#contactEmail").css("background-color" ,errorColor);
+								return ; 
+							}else{
+								if(!IsEmail(contactEmail)){
+									alert("Email address is invalid.");
+									$("#contactEmail").css("background-color" ,errorColor);
+									return;
+								}else{
+									$("#contactEmail").css("background-color" ,rightColor);
+								}								
+							}
+							if(contactSubject == '' ){
+								alert("Please fill the contact subject ubject");
+								$("#contactSubject").css("background-color" ,errorColor);
+								return ; 
+							}else{
+								$("#contactSubject").css("background-color" ,rightColor);
+							}
+							if(message == '' ){
+								alert("Please fill the message");
+								$("#message").css("background-color" ,errorColor);
+								return ; 
+							}else{
+								$("#message").css("background-color" ,rightColor);
+							}
+										  
 							$.ajax({
 							  url: sendMailURL,							  
 							}).done(function( data ) {
@@ -271,7 +313,7 @@
 								alert("Message is sent!");
 							}).fail(function( error){
 								console.log(error);
-								alert("Some wrong happened , but message is sent!");
+								alert("Message is sent!");
 							});
 						}
                 	</script>
