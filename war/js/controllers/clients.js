@@ -268,7 +268,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		angular.forEach(reports,function(report,i){
 			var newReport = {uuid : report.uuid, 
 				title : report.title,
-				creationTime : report.creationTime*1000,
+				creationTime : report.creationTime,
 				clientUuid : report.clientUuid,
 				body : report.body,
 				author: $scope.$root.getTeamMemberById(report.authorUuid),
