@@ -13,15 +13,17 @@
 @import "partials/ie";
 
 
-html, body { height:100%; }
 
+
+/*GENERAL*/
+
+html, body { height:100%; }
 
 body {
     @include typeface;
     background-color: $turq;
     font-family: "Myriad Pro", 'PT Sans', arial, helvetica, sans-serif;
 }
-
 
 h2{
   text-align: left;
@@ -41,10 +43,13 @@ p {
 }
 
 
+
+
+/*NAVBAR*/
+
 .navbar-inverse {
 
   .navbar-inner {
-    /*    @include gradient-vertical($navbarInverseBackgroundHighlight, $navbarInverseBackground);*/
     background-color: $brown;
     background-image: none;
     border: none;
@@ -52,15 +57,11 @@ p {
 }
 
 .navbar .brand {
-  background-image: url("../img/logoHeader.png");
+/*  background-image: url("../img/logoHeader.png");
   width: 126px;
   height: 50px;
   float: left;
-  display: block;
-  font-size: 20px;
-  font-weight: 200;
-  color: $orange;
-  text-shadow: 0 1px 0 $brown;
+  display: block;*/
   padding: 0;
   margin-left: 0;
 }
@@ -68,7 +69,6 @@ p {
 .loginBtn {
   float: right !important;
   width: 140px;
-/*  margin-right: -20px;*/
   a {
     text-decoration: none;
   }
@@ -79,63 +79,60 @@ p {
 }
 
 
+
+
+/*INTRO*/
+
 #intro{
 /*  background: url("../img/photo01.jpg") no-repeat top center;
   background-size: cover;*/
-}
 
-.hero-unit {
-  background-color: transparent;
-  margin-top:60px;
-  #heroLogo{
-    background-image: url("../img/logo.png");
-    width: 160px;
-    height: 82px;
-    margin: 0 auto 40px;
-  }
-  #welcomeArrow {
-    border-bottom: 15px solid #FFFAF0;
-    border-left: 32px solid rgba(0, 0, 0, 0);
-    border-right: 32px solid rgba(0, 0, 0, 0);
-    height: 0;
-    left: 50%;
-    margin: -15px 0 0 -80px;
-    position: absolute;
-    width: 0;
-  }
-  #welcome {
-    background-color: #FFFAF0;
-    margin: 0 auto 280px;
-    max-width: 300px;
-    padding: 22px 22px 6px;
-    @include border-radius(20px);
-    p {
-      font-size: 22px;
-      font-style: italic;
-      line-height: 26px;
-      text-align: center;
-      span{
-        color: $orange;
-        font-size: 16px;
-        font-weight: bold;
-        font-style: normal;
-        line-height: 20px;
+  .hero-unit {
+    background-color: transparent;
+    margin-top:60px;
+    #heroLogo{
+      background-image: url("../img/logo.png");
+      width: 160px;
+      height: 82px;
+      margin: 0 auto 40px;
+    }
+    #welcomeArrow {
+      border-bottom: 15px solid #FFFAF0;
+      border-left: 32px solid rgba(0, 0, 0, 0);
+      border-right: 32px solid rgba(0, 0, 0, 0);
+      height: 0;
+      left: 50%;
+      margin: -15px 0 0 -80px;
+      position: absolute;
+      width: 0;
+    }
+    #welcome {
+      background-color: #FFFAF0;
+      margin: 0 auto 280px;
+      max-width: 300px;
+      padding: 22px 22px 6px;
+      @include border-radius(20px);
+      p {
+        font-size: 22px;
+        font-style: italic;
+        line-height: 26px;
+        text-align: center;
+        span{
+          color: $orange;
+          font-size: 16px;
+          font-weight: bold;
+          font-style: normal;
+          line-height: 20px;
+        }
       }
     }
   }
 }
 
 
-#topArrow {
-  border-bottom: 15px solid #FFFAF0;
-  border-left: 32px solid rgba(0, 0, 0, 0);
-  border-right: 32px solid rgba(0, 0, 0, 0);
-  height: 0;
-  margin: -15px 0 0 40px;
-  position: absolute;
-  width: 0;
-}
 
+
+/*DEVICE AREA 1*/
 
 #deviceArea1 {
   background-color: $beige;
@@ -151,6 +148,10 @@ p {
 }
 
 
+
+
+/*DEVICE AREA 2*/
+
 #deviceArea2 {
   width: 100%;
   margin: 100px 0 0;
@@ -163,9 +164,7 @@ p {
     float: right;
     width: 0;
   }
-  .deviceInfo {
-  }
-  .device{
+  .tuGirl{
     background: url("../img/teamupgirl01.png") no-repeat top center;
     background-size: auto 413px;
     height: 413px;
@@ -173,14 +172,55 @@ p {
   }
 }
 
-.talkCloud {
-  background-color: $offwhite;
-  padding:20px;
-  @include border-radius(20px);
-  margin-right: 15px;
-  margin-bottom: 100px;
+
+
+
+/*PHOTO AREA 1*/
+
+#photoArea1 {
+  background: url("../img/photo01.jpg") no-repeat top center;
+  background-size: cover;
+  width: 100%;
+  height: auto;
+  .bgImage {
+    width: 100%;
+    height: auto;
+  }
+  .photoBub {
+    width: 320px !important;
+    height: 320px;
+    background: $orange;
+    -moz-border-radius: 200px;
+    -webkit-border-radius: 200px;
+    border-radius: 200px;
+    display: table-cell;
+    vertical-align: middle;
+    float: right;
+    margin-top: 300px;
+    p {
+      text-align: center;
+      margin-top: 28px;
+    }
+  }
+  .cloudContainer {
+    margin-top: 20px;
+    z-index: -1;
+    #topArrow {
+      border-bottom: 15px solid #FFFAF0;
+      border-left: 32px solid rgba(0, 0, 0, 0);
+      border-right: 32px solid rgba(0, 0, 0, 0);
+      height: 0;
+      margin: -15px 0 0 40px;
+      position: absolute;
+      width: 0;
+    }
+  }
 }
 
+
+
+
+/*DEVICE AREA 3*/
 
 #deviceArea3 {
   background-color: $beige;
@@ -191,7 +231,6 @@ p {
     position: relative;
     img {
       margin: 100px 0 0px;
-/*      max-width: 300px;*/
       height: auto;
     }
     .mobileBubble{
@@ -199,7 +238,6 @@ p {
       left:0px;
       top:0px;
       z-index:1;
-      display: table-cell;
       text-align: center;
       vertical-align: middle;
       float: left;
@@ -290,59 +328,13 @@ p {
         color: $offwhite !important;
       }
     }
-
-  }
-  h2 {
-    /*    text-align: center;*/
-    line-height: 36px;
   }
 }
 
-#photoArea1 {
-  background: url("../img/photo01.jpg") no-repeat top center;
-  background-size: cover;
-  width: 100%;
-  height: auto;
-  .bgImage {
-    width: 100%;
-    height: auto;
-  }
-  .container-narrow {
-  }
-}
 
-#photoArea2 {
-  background: url("../img/photo01.jpg") no-repeat top center;
-  background-size: cover;
-  width: 100%;
-  height: auto;
-  .bgImage {
-    width: 100%;
-    height: auto;
-  }
-  .container-narrow {
-  }
-  .photoBub {
-    width: 320px !important;
-    height: 320px;
-    background: $orange;
-    -moz-border-radius: 200px;
-    -webkit-border-radius: 200px;
-    border-radius: 200px;
-    display: table-cell;
-    vertical-align: middle;
-    float: right;
-    margin-top: 300px;
-    p {
-      text-align: center;
-      margin-top: 28px;
-    }
-  }
-  .cloudContainer {
-    margin-top: 20px;
-    z-index: -1;
-  }
-}
+
+
+/*CONTACT*/
 
 #contact {
   margin: 100px 0;
@@ -374,9 +366,6 @@ p {
       color: #ffffff;
     }
     .skypeBtn {
-/*      height: 30px;*/
-      a {
-      }
       img {
         margin: 6px 20px 10px 0 !important;
         height: 21px;
@@ -404,6 +393,11 @@ p {
   }
 }
 
+
+
+
+/*FOOTER*/
+
 footer {
   p {
     text-align: center;
@@ -416,6 +410,11 @@ footer {
     }
   }
 }
+
+
+
+
+/*GENERAL SPECIFIC*/
 
 .btn-primary {
   background-color: $orange;
@@ -433,7 +432,17 @@ footer {
   }
 }
 
-.circle{
+
+.talkCloud {
+  background-color: $offwhite;
+  padding:20px;
+  @include border-radius(20px);
+  margin-right: 15px;
+  margin-bottom: 100px;
+}
+
+
+/*.circle{
   width: 200px !important;
   height: 200px;
   background: red;
@@ -446,9 +455,9 @@ footer {
   display: block;
   float: left;
   margin-bottom: 5%;
-}
+}*/
 
-.pos1{
+/*.pos1{
   margin-top: 80%;
   margin-left: 5%;
 }
@@ -460,9 +469,9 @@ footer {
   margin-top: 60%;
   margin-right: 5%;
   float: right;
-}
+}*/
 
-div {
+/*div {
   .bgBrown{
     background-color: $brown;
     p {
@@ -478,5 +487,4 @@ div {
   .bgBeige{
     background-color: $beige;
   }
-}
-
+}*/
