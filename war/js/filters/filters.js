@@ -627,10 +627,10 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
       if (String(date).length == 10)
       {
-        date *= 1000;
+        date *= 1000
       }
 
-      return new Date(date).toString($rootScope.config.formats.date);
+ 	 		return new Date(date).toString($rootScope.config.formats.date);
  	 	};
  	}
  ])
