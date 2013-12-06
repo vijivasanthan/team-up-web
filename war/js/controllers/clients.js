@@ -734,7 +734,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$scope.report.editMode = false;
 		
 		var modalInstance = $modal.open({
-			templateUrl : '../js/views/reportTemplate.html',
+			templateUrl : './js/views/reportTemplate.html',
 			controller : ModalInstanceCtrl,
 			resolve : {
 				report : function() {
@@ -763,7 +763,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$scope.report = newReport;
 		
 		var modalInstance = $modal.open({
-			templateUrl : '../js/views/reportTemplate.html',
+			templateUrl : './js/views/reportTemplate.html',
 			controller : ModalInstanceCtrl,
 			resolve : {
 				report : function() {
@@ -785,7 +785,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$scope.report = report;
 		$scope.report.editMode = true;
 		var modalInstance = $modal.open({
-			templateUrl : '../js/views/reportTemplate.html',
+			templateUrl : './js/views/reportTemplate.html',
 			controller : ModalInstanceCtrl,
 			resolve : {
 				report : function() {
