@@ -620,9 +620,17 @@ angular.module('WebPaige.Filters', ['ngResource'])
  	{
  	 	return function (date)
  	 	{
- 	 		if (typeof date == 'string') date = Number(date);
+      if (typeof date == 'string')
+      {
+        date = Number(date);
+      }
 
- 	 		return new Date(date).toString($rootScope.config.formats.date);
+      if (String(date).length == 10)
+      {
+        date *= 1000;
+      }
+
+      return new Date(date).toString($rootScope.config.formats.date);
  	 	};
  	}
  ])
