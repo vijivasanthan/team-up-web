@@ -625,6 +625,8 @@ angular.module('WebPaige.Filters', ['ngResource'])
         date = Number(date);
       }
 
+
+
       if (String(date).length == 10)
       {
         date *= 1000

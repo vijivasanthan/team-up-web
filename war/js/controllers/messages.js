@@ -126,8 +126,6 @@ angular.module('WebPaige.Controllers.Messages', [])
     			// stop auto check chat mesage
     			clearInterval($scope.autoCheckMonitorId);
     		}
-    		
-    		
     	}
     	
     	$scope.sendMessage = function(newMessage){
