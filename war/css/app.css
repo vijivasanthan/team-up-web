@@ -6428,7 +6428,7 @@ ul.nav-tabs-app li span.icomoon {
   border-bottom: 8px solid transparent;
   border-top: 8px solid transparent;*/
   position: absolute;
-  margin: 20px 0 0 282px;
+  margin: 20px 0 0 278px;
   -moz-box-shadow: 2px 2px 1px -1px #833c11;
   -webkit-box-shadow: 2px 2px 1px -1px #833c11;
   box-shadow: 2px 2px 1px -1px #833c11;
@@ -6446,7 +6446,7 @@ ul.nav-tabs-app li span.icomoon {
 }
 #chat .input-area {
   position: absolute;
-  bottom: 13px;
+  bottom: 11px;
   left: 8px;
   width: 100%;
   padding-top: 10px;
