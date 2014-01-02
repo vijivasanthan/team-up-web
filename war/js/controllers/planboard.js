@@ -349,6 +349,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	/**
 	 * Set defaults for timeline
 	 */
+	var index_start = ((Dater.current.today() - 7) < 1 ) ? 1 : (Dater.current.today() - 7);
 	$scope.timeline = {
 		id : 'mainTimeline',
 		main : true,
@@ -361,13 +362,13 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		 * Initial start up is next 7 days
 		 */
 		options : {
-			start : $scope.periods.days[Dater.current.today() - 7].last.day,
+			start : $scope.periods.days[index_start].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day,
-			min : $scope.periods.days[Dater.current.today() - 7].last.day,
+			min : $scope.periods.days[index_start].last.day,
 			max : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		range : {
-			start : $scope.periods.days[Dater.current.today() - 7].last.day,
+			start : $scope.periods.days[index_start].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		scope : {
