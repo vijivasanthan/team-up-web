@@ -64,6 +64,7 @@ p {
   display: block;*/
   padding: 0;
   margin-left: 0;
+  background-position: top;
 }
 
 .loginBtn {
@@ -137,7 +138,7 @@ p {
 #deviceArea1 {
   background-color: $beige;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
   img {
     margin: -260px 0 0px;
   }
@@ -203,7 +204,7 @@ p {
     }
   }
   .cloudContainer {
-    margin-top: 20px;
+    margin-top: 40px;
     z-index: -1;
     #topArrow {
       border-bottom: 15px solid #FFFAF0;
@@ -344,8 +345,10 @@ p {
     text-align: center;
     font-size: 5em;
     margin-bottom: 100px;
+    line-height: 60px;
   }
   .contactInfo {
+    margin-bottom: 100px;
     p {
       color: #ffffff;
       margin-bottom: 20px;
@@ -399,6 +402,7 @@ p {
 /*FOOTER*/
 
 footer {
+  padding: 0 20px;
   p {
     text-align: center;
     color: $offwhite;
@@ -488,3 +492,144 @@ footer {
     background-color: $beige;
   }
 }*/
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 979px) {
+  body {padding: 0;}
+
+  .container-narrow {
+    padding: 0 20px;
+  }
+
+  .navbar-inner {
+    padding: 0 10px !important;
+  }
+
+
+}
+
+
+
+@media (min-width: 768px) and (max-width: 979px) {
+}
+
+
+
+@media (max-width: 767px) {
+
+  #intro {
+    .hero-unit {
+      #welcome {
+        margin: 0 auto 200px;
+      }
+    }
+  }
+
+  #deviceArea1 {
+    img {
+      margin: -200px 0 0;
+    }
+    .row-fluid {
+      p {
+        margin-bottom: 40px;
+      }
+    }
+  }
+
+  #deviceArea2 {
+    #deviceArrow{
+      display: none;
+    }
+  }
+
+  #deviceArea3 {
+    .container-narrow{
+      .span4:not(:first-child) {
+        img {
+          margin: 20px 0 0;
+        }
+      }
+      .bub1 {
+        margin-top: 50%;
+        margin-left: 0;
+      }
+      .bub5 {
+        margin-top: 160%;
+      }
+      .bub7 {
+        margin-left: 0;
+      }
+    }
+
+  }
+
+  #photoArea1{
+    background-size: contain;
+    #topArrow {
+      display: none;
+    }
+  }
+
+}
+
+
+
+@media (min-width: 481px) and (max-width: 767px){
+  #deviceArea3 {
+    .container-narrow{
+      padding: 0 100px;
+    }
+
+  }
+}
+
+
+
+@media (max-width: 480px) {
+
+  #intro {
+    .hero-unit {
+      #welcome {
+        margin: 0 auto 100px;
+      }
+    }
+  }
+
+  .talkCloud{
+    margin: 0 20px 100px 20px;
+  }
+
+  #deviceArea1 {
+    img {
+      margin: -100px 0 0;
+    }
+  }
+
+  #deviceArea3 {
+    .container-narrow{
+      .span4 {
+        padding: 0 20px;
+      }
+      .bub5 {
+        margin-top: 140%;
+      }
+    }
+  }
+
+
+
+  #photoArea1{
+    background-size: 180%;
+  }
+}
+
+
+

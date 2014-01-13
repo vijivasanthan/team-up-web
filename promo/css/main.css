@@ -287,7 +287,8 @@ p {
     float: left;
     display: block;*/
   padding: 0;
-  margin-left: 0; }
+  margin-left: 0;
+  background-position: top; }
 
 .loginBtn {
   float: right !important;
@@ -343,7 +344,7 @@ p {
 #deviceArea1 {
   background-color: #f5e6d8;
   width: 100%;
-  padding-bottom: 100px; }
+  padding-bottom: 80px; }
   #deviceArea1 img {
     margin: -260px 0 0px; }
   #deviceArea1 h2 {
@@ -392,7 +393,7 @@ p {
       text-align: center;
       margin-top: 28px; }
   #photoArea1 .cloudContainer {
-    margin-top: 20px;
+    margin-top: 40px;
     z-index: -1; }
     #photoArea1 .cloudContainer #topArrow {
       border-bottom: 15px solid #FFFAF0;
@@ -501,27 +502,30 @@ p {
     text-transform: uppercase;
     text-align: center;
     font-size: 5em;
+    margin-bottom: 100px;
+    line-height: 60px; }
+  #contact .contactInfo {
     margin-bottom: 100px; }
-  #contact .contactInfo p {
-    color: #ffffff;
-    margin-bottom: 20px; }
-  #contact .contactInfo .contactText {
-    text-align: left;
-    font-style: italic; }
-    #contact .contactInfo .contactText span {
-      font-weight: bold;
-      font-style: normal; }
-  #contact .contactInfo .contactIcon {
-    font-size: 16px;
-    margin-right: 10px; }
-  #contact .contactInfo a {
-    color: #ffffff; }
-  #contact .contactInfo .skypeBtn img {
-    margin: 6px 20px 10px 0 !important;
-    height: 21px;
-    width: auto;
-    padding: 0 !important;
-    float: left; }
+    #contact .contactInfo p {
+      color: #ffffff;
+      margin-bottom: 20px; }
+    #contact .contactInfo .contactText {
+      text-align: left;
+      font-style: italic; }
+      #contact .contactInfo .contactText span {
+        font-weight: bold;
+        font-style: normal; }
+    #contact .contactInfo .contactIcon {
+      font-size: 16px;
+      margin-right: 10px; }
+    #contact .contactInfo a {
+      color: #ffffff; }
+    #contact .contactInfo .skypeBtn img {
+      margin: 6px 20px 10px 0 !important;
+      height: 21px;
+      width: auto;
+      padding: 0 !important;
+      float: left; }
   #contact .contactInput {
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
@@ -541,13 +545,15 @@ p {
     margin-left: 0; }
 
 /*FOOTER*/
-footer p {
-  text-align: center;
-  color: floralwhite; }
-  footer p span {
-    margin-right: 20px; }
-  footer p a, footer p a:hover, footer p a:focus, footer p a:active {
+footer {
+  padding: 0 20px; }
+  footer p {
+    text-align: center;
     color: floralwhite; }
+    footer p span {
+      margin-right: 20px; }
+    footer p a, footer p a:hover, footer p a:focus, footer p a:active {
+      color: floralwhite; }
 
 /*GENERAL SPECIFIC*/
 .btn-primary {
@@ -618,3 +624,58 @@ footer p {
     background-color: $beige;
   }
 }*/
+@media (max-width: 979px) {
+  body {
+    padding: 0; }
+
+  .container-narrow {
+    padding: 0 20px; }
+
+  .navbar-inner {
+    padding: 0 10px !important; } }
+@media (max-width: 767px) {
+  #intro .hero-unit #welcome {
+    margin: 0 auto 200px; }
+
+  #deviceArea1 img {
+    margin: -200px 0 0; }
+  #deviceArea1 .row-fluid p {
+    margin-bottom: 40px; }
+
+  #deviceArea2 #deviceArrow {
+    display: none; }
+
+  #deviceArea3 .container-narrow .span4:not(:first-child) img {
+    margin: 20px 0 0; }
+  #deviceArea3 .container-narrow .bub1 {
+    margin-top: 50%;
+    margin-left: 0; }
+  #deviceArea3 .container-narrow .bub5 {
+    margin-top: 160%; }
+  #deviceArea3 .container-narrow .bub7 {
+    margin-left: 0; }
+
+  #photoArea1 {
+    background-size: contain; }
+    #photoArea1 #topArrow {
+      display: none; } }
+@media (min-width: 481px) and (max-width: 767px) {
+  #deviceArea3 .container-narrow {
+    padding: 0 100px; } }
+@media (max-width: 480px) {
+  #intro .hero-unit #welcome {
+    margin: 0 auto 100px; }
+
+  .talkCloud {
+    margin: 0 20px 100px 20px; }
+
+  #deviceArea1 img {
+    margin: -100px 0 0; }
+
+  #deviceArea3 .container-narrow .span4 {
+    padding: 0 20px; }
+  #deviceArea3 .container-narrow .bub5 {
+    margin-top: 140%; }
+
+  #photoArea1 {
+    background-size: 180%; } }
