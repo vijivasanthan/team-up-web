@@ -29,6 +29,7 @@ var ui = {
         ph_retypePass: "retype password",
         alert_fillfiled: 'Please fill all fields!',
         alert_wrongUserPass: 'Wrong username or password!',
+        alert_network: 'Network error',
         loading_User: 'Loading user information...',
         loading_Message: 'Loading messages...',
         loading_Teams:'Loading Teams...',

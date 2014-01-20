@@ -135,7 +135,7 @@ angular.module('WebPaige.Controllers.Login', [])
               User.login(uuid.toLowerCase(), pass)
               .then(function (result)
                 {
-                if (result.status == 400 || result.status == 403)
+                if (result.status == 400 || result.status == 403 || result.status == 404)
                 {
                   $scope.alert = {
                     login: {
@@ -144,6 +144,20 @@ angular.module('WebPaige.Controllers.Login', [])
                       message: $rootScope.ui.login.alert_wrongUserPass
                     }
                   };
+
+                  $('#login button[type=submit]')
+                    .text($rootScope.ui.login.button_loggingIn)
+                    .removeAttr('disabled');
+
+                  return false;
+                }else if (result.status == 0 ){
+                    $scope.alert = {
+                            login: {
+                              display: true,
+                              type: 'alert-error',
+                              message: $rootScope.ui.login.alert_network
+                            }
+                          };
 
                   $('#login button[type=submit]')
                     .text($rootScope.ui.login.button_loggingIn)
