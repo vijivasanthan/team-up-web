@@ -13,7 +13,7 @@ angular.module('WebPaige')
   {
     title:    'TeamUp',
     version:  '0.1.0',
-    lang:     'en',
+    lang:     'nl',
 
     fullscreen: true,
 
