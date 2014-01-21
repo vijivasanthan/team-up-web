@@ -93,7 +93,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		
 		// load image 
 		angular.forEach($scope.members, function(member, index) {
-			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
+			var imgURL = $scope.imgHost+"teamup/team/member/"+member.uuid+"/photo";
 			Teams.loadImg(imgURL).then(function(result){
 				// console.log("loading pic " + imgURL);
 				
@@ -101,7 +101,8 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 					console.log("no pics " ,result);
 				}else{
-					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
+					var realImgURL = $scope.imgHost + result.path; 
+					$('.tab-content #img_'+imgId).css('background-image','url('+realImgURL+')');
 				}
 				
 			},function(error){
@@ -486,7 +487,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	// brefoe I know there is a good place to put this code 
     // load the login user's avatar
 	
-	var imgURL = profile.host() + "/teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
+	var imgURL = profile.host() + "teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
 	Teams.loadImg(imgURL).then(function(result) {
 		// console.log("loading pic " + imgURL);
 		var mId = $rootScope.app.resources.uuid;
@@ -494,7 +495,11 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		if (result.status && (result.status == 404 || result.status == 403 || result.status == 500)) {
 			console.log("no pics ", result);
 		} else {
-			$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + imgURL + ')');
+			if(result.path){
+				var realImgURL = profile.host() + result.path; 
+				$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + realImgURL + ')');
+			}
+			
 		}
 
 	}, function(error) {
