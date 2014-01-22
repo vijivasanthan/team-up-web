@@ -62,7 +62,8 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.teams.members[team.uuid] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/team/member/" + member.uuid + "/photo";
+//				var imgURL = $scope.imgHost + "/teamup/team/member/" + member.uuid + "/photo";
+				var imgURL = $scope.imgHost + Storage.avatar.geturl(member.uuid);
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
@@ -84,7 +85,8 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.clients.members[client.id] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/client/" + member.uuid + "/photo";
+//				var imgURL = $scope.imgHost + "/teamup/client/" + member.uuid + "/photo";
+				var imgURL = $scope.imgHost + Storage.avatar.geturl(member.uuid);
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';

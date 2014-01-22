@@ -487,6 +487,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	// brefoe I know there is a good place to put this code 
     // load the login user's avatar
 	
+	
 	var imgURL = profile.host() + "teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
 	Teams.loadImg(imgURL).then(function(result) {
 		// console.log("loading pic " + imgURL);
@@ -496,8 +497,8 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 			console.log("no pics ", result);
 		} else {
 			if(result.path){
-				var realImgURL = profile.host() + result.path; 
-				$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + realImgURL + ')');
+				var realImgURL = profile.host().replace("\\:",":") + result.path; 
+				$('.navbar-inner #img_'+imgId).css('background-image', 'url("' + realImgURL + '")');
 			}
 			
 		}

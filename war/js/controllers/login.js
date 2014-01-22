@@ -174,6 +174,34 @@ angular.module('WebPaige.Controllers.Login', [])
                 });
             };
             
+            var initAvatarUrls = function(members,type){
+            	 if(type == "team"){
+            		  angular.forEach(members,function(mem){
+		              	// load the avatr URL and store them into the local storage
+		              	var getAvatarUrl = $rootScope.config.host + "teamup/team/member/" + mem.uuid + "/photo"; 
+		              	Teams.loadImg(getAvatarUrl).then(function(res){
+		              		if(res.path){
+		              			Storage.avatar.addurl(mem.uuid,res.path);
+		              			console.log("Avatar path for " + mem.uuid + " - " +res.path);
+		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+		              		}
+		              	});
+		              });
+            	 }else if(type == "client"){
+            		 angular.forEach(members,function(mem){
+ 		              	// load the avatr URL and store them into the local storage
+ 		              	var getAvatarUrl = $rootScope.config.host + "teamup/client/" + mem.uuid + "/photo"; 
+ 		              	Clients.loadImg(getAvatarUrl).then(function(res){
+ 		              		if(res.path){
+ 		              			Storage.avatar.addurl(mem.uuid,res.path);
+ 		              			console.log("Avatar path for " + mem.uuid + " - " +res.path);
+ 		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+ 		              		}
+ 		              	});
+ 		              });
+            	 }
+            	 
+            }
             
             /**
              * TODO
@@ -208,12 +236,13 @@ angular.module('WebPaige.Controllers.Login', [])
                   Teams.query(true,{})
                   .then(function (teams)
                   {
-                    console.log("got teams ");
+                    console.log("got teams ", teams);
                     
                     // try to get the members not in the teams Aync 
                     console.log("got members not in any teams");
                     Teams.queryMembersNotInTeams().then(function(result){
-                    	console.log("members not in any teams loaded ");
+                    	console.log("all members loaded (include the members not in any teams)" , result);
+	                    initAvatarUrls(result,"team");
                     },function(error){
                     	
                     });
@@ -234,8 +263,9 @@ angular.module('WebPaige.Controllers.Login', [])
                         self.progress(80, $rootScope.ui.login.loading_clientGroups);
                         
                         Clients.queryAll()
-                        .then(function(){
-                            console.log("got all clients in or not in the client groups ");
+                        .then(function(res_clients){
+                            console.log("got all clients in or not in the client groups ",res_clients);
+                            initAvatarUrls(res_clients,"client");
                             
                             Clients.query(false,{})
                             .then(function(){
@@ -309,6 +339,6 @@ angular.module('WebPaige.Controllers.Login', [])
             {
               $('#preloader .progress .bar').css({ width: ratio + '%' }); 
               $('#preloader span').text(message);    
-            };
+            };            
         } 
 ]);

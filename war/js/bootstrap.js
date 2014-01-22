@@ -656,6 +656,17 @@ angular.module('WebPaige')
 		return members;
 	};
     
+	$rootScope.getAvatarURL = function(userId,type){
+		var avatarURLs = angular.fromJson(Storage.get("avatarUrls"));
+		var ret = '';
+		angular.forEach(avatarURLs,function(avatar){
+			if(avatar.userId == userId){
+				ret = avatar.url; 
+			}
+		});
+		return ret;
+	};
+	
   }
 ]);
 

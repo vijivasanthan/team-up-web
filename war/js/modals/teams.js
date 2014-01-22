@@ -515,7 +515,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				};
 	
 				Storage.add(id, angular.toJson(returned));
-	
+				
 				deferred.resolve({
 					id : id,
 					data : returned

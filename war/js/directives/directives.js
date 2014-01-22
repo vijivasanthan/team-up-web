@@ -116,7 +116,7 @@ angular.module('WebPaige.Directives', ['ngResource'])
                     },
                 });
 
-            }
+            };
         }],
         link: function(scope, elem, attrs, ctrl) {
             

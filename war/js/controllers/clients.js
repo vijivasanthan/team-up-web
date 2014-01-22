@@ -141,6 +141,11 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             $rootScope.statusBar.off();
             $scope.reports = $scope.processReports(reports);
             
+            $scope.$watch($scope.reports,function(rs){
+            	console.log("watcher found ... " , rs);
+            	$scope.loadMembersImg();
+            });
+            
         },function(error){
            console.log(error); 
         });
@@ -170,6 +175,41 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
     	
     }
 	
+    $scope.loadMembersImg = function(){
+		// load the team members image
+			
+			var memberIds = [];
+			angular.forEach($scope.groupReports, function(rept,i){
+				if(memberIds.indexOf(rept.author.uuid) == -1){
+					memberIds.add(rept.author.uuid);
+				}
+			});
+			angular.forEach($scope.reports, function(rept,i){
+				if(memberIds.indexOf(rept.author.uuid) == -1){
+					memberIds.add(rept.author.uuid);
+				}
+			});
+			angular.forEach(memberIds , function(memberId,j){
+				var imgURL = $scope.imgHost+"teamup/team/member/"+memberId+"/photo";
+				Teams.loadImg(imgURL).then(function(result){
+					// console.log("loading pic " + imgURL);
+					
+					var imgId = memberId.replace(".","").replace("@","");
+					if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+						console.log("no pics " ,result);
+					}else{
+						if(result.path){
+							var avatarURL = $scope.imgHost + result.path; 
+							$('.tab-content #img_'+imgId).css('background-image','url('+avatarURL+')');
+						}
+					}
+					
+				},function(error){
+					console.log("error when load pic " + error);
+				});
+			});
+	   }
+    
 	/**
 	 * Set view
 	 */
@@ -207,14 +247,18 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		if($scope.views.client){
 			angular.forEach($scope.clients, function(client, index) {
 	            var imgURL = $scope.imgHost+"teamup/client/"+client.uuid+"/photo";
+	            
 	            Clients.loadImg(imgURL).then(function(result){
 	                // console.log("loading pic " + imgURL);
-	                
 	                var imgId = client.uuid.replace(".","").replace("@","");
 	                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 	                    console.log("loading pic " ,result);
 	                }else{
-	                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
+	                	//imgURL = imgURL.replace("\\:",":");
+	                	if(result.path){
+	                		var avatarURL = $scope.imgHost + result.path; 
+	                		$('#img_'+imgId).css('background-image','url('+avatarURL+')');
+	                	}
 	                }
 	                
 	            },function(error){
@@ -226,19 +270,23 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		// load the image in the client profile page 
 		if($scope.views.viewClient){
 			var imgURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			
 			Clients.loadImg(imgURL).then(function(result){
                 // console.log("loading pic " + imgURL);
-                
                 var imgId = $scope.client.uuid.replace(".","").replace("@","");
                 if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
                     console.log("loading pic " ,result);
                 }else{
-                    $('#viewClientTab #img_'+imgId).css('background-image','url('+imgURL+')');
+                	// imgURL = imgURL.replace("\\:",":");
+                	if(result.path){
+                		var avatarURL = $scope.imgHost + result.path;
+                		$('#viewClientTab #img_'+imgId).css('background-image','url('+avatarURL+')');
+                	}
                 }
                 
             },function(error){
                 console.log("error when load pic " + error);
-            });
+            });			
 		}
         
 	}
@@ -280,38 +328,6 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		return rpts;
 	}
 		
-    
-   $scope.loadMembersImg = function(){
-	// load the team members image
-		
-		var memberIds = [];
-		angular.forEach($scope.groupReports, function(rept,i){
-			if(memberIds.indexOf(rept.author.uuid) == -1){
-				memberIds.add(rept.author.uuid);
-			}
-		});
-		angular.forEach(memberIds , function(memberId,j){
-			var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
-			Teams.loadImg(imgURL).then(function(result){
-				// console.log("loading pic " + imgURL);
-				
-				var imgId = memberId.replace(".","").replace("@","");
-				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-					console.log("no pics " ,result);
-				}else{
-					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
-				}
-				
-			},function(error){
-				console.log("error when load pic " + error);
-			});
-		});
-   }
-    
-	
-    
-	
-
 	/**
 	 * Switch between the views and set hash accordingly
 	 */
@@ -817,19 +833,17 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 */
 	$scope.editImg = function() {
 		$rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-		
-		Clients.loadUploadURL($scope.client.uuid).then(function(result) {
-			if (result.error) {
-				$rootScope.notifier.error('Error with loading upload URL.');
-				console.warn('error ->', result);
-			} else {
-	
-				$rootScope.statusBar.off();
-				$scope.uploadURL = result.url;
-	
-				$scope.setViewTo('editImg');
-			};
-		});
+		  $scope.uploadURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+		  Clients.loadImg($scope.uploadURL).then(function(result){
+			  $rootScope.statusBar.off();
+			  
+			  var imgHost = $scope.imgHost.replace("\\:",":");
+			  if(result.path){
+				  $scope.avatarURL = imgHost+result.path;
+			  }
+			  $scope.uploadURL = imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			  $scope.setViewTo('editImg');
+		  });
 	
 	}
 
