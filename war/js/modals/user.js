@@ -19,7 +19,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var Login = $resource(
-	    $config.host + 'teamup/login',
+	    $config.host + $config.namespace+'/login',
 	    {
 	    },
 	    {
@@ -46,7 +46,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var MemberInfo = $resource(
-	    $config.host + 'teamup/team/member',
+	    $config.host + $config.namespace + '/team/member',
 	    {
 	    },
 	    {

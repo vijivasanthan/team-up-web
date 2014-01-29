@@ -15,7 +15,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  
 	  
 	  var Profile = $resource(
-	    $config.host + 'teamup/team/member/:memberId/',{},{
+	    $config.host + $config.namespace + '/team/member/:memberId/',{},{
 	      get: {
 	        method: 'GET'
 	      },
@@ -30,7 +30,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  );
 	  
 	  var ProfileSave = $resource(
-	    $config.host + 'teamup/team/:teamId/member/:memberId/',{},{
+	    $config.host + $config.namespace + '/team/:teamId/member/:memberId/',{},{
           save: {
             method: 'PUT',          
           }
@@ -38,7 +38,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
       ); 
 	  
 	  var ProfileImg = $resource(
-          $config.host + 'teamup/team/member/:memberId/photourl',{},{
+          $config.host + $config.namespace + '/team/member/:memberId/photourl',{},{
             getURL: {
               method: 'GET',
               isArray: false              

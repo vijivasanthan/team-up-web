@@ -33,6 +33,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * apply the host to img url
 	   */
 	  $scope.imgHost = profile.host();
+	  $scope.ns = profile.ns();
 	  
 	  /**
 	   * Pass current
@@ -192,7 +193,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    
 	    // load the avatar by ajax way
 	    var memberId = $route.current.params.userId;
-	    var imgURL = $scope.imgHost+"teamup/team/member/"+memberId+"/photo";
+	    var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
         Teams.loadImg(imgURL).then(function(result){
             // console.log("loading pic " + imgURL);
              
@@ -446,13 +447,13 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * load the dynamic upload URL for GAE 
 	   */
 	  $scope.editImg = function(){
-		  $scope.uploadURL = $scope.imgHost+"teamup/team/member/"+$route.current.params.userId+"/photo";
+		  $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photourl";
 		  Teams.loadImg($scope.uploadURL).then(function(result){
 			  var imgHost = $scope.imgHost.replace("\\","");
 			  if(result.path){
 				  $scope.avatarURL = imgHost+result.path;
-				  $scope.uploadURL = imgHost+"teamup/team/member/"+$route.current.params.userId+"/photo";
 			  }
+			  $scope.uploadURL = imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";
 			  $scope.setViewTo('editImg');
 		  });		  
 	  };

@@ -56,6 +56,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
+	$scope.ns = profile.ns();
 	/**
 	 * Init search query
 	 */
@@ -190,7 +191,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 				}
 			});
 			angular.forEach(memberIds , function(memberId,j){
-				var imgURL = $scope.imgHost+"teamup/team/member/"+memberId+"/photo";
+				var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
 				Teams.loadImg(imgURL).then(function(result){
 					// console.log("loading pic " + imgURL);
 					
@@ -246,7 +247,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		// load image 
 		if($scope.views.client){
 			angular.forEach($scope.clients, function(client, index) {
-	            var imgURL = $scope.imgHost+"teamup/client/"+client.uuid+"/photo";
+	            var imgURL = $scope.imgHost+$scope.ns+"/client/"+client.uuid+"/photourl";
 	            
 	            Clients.loadImg(imgURL).then(function(result){
 	                // console.log("loading pic " + imgURL);
@@ -269,7 +270,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
         
 		// load the image in the client profile page 
 		if($scope.views.viewClient){
-			var imgURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			var imgURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
 			
 			Clients.loadImg(imgURL).then(function(result){
                 // console.log("loading pic " + imgURL);
@@ -833,7 +834,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 */
 	$scope.editImg = function() {
 		$rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-		  $scope.uploadURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+		  $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
 		  Clients.loadImg($scope.uploadURL).then(function(result){
 			  $rootScope.statusBar.off();
 			  
@@ -841,7 +842,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			  if(result.path){
 				  $scope.avatarURL = imgHost+result.path;
 			  }
-			  $scope.uploadURL = imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			  $scope.uploadURL = imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";
 			  $scope.setViewTo('editImg');
 		  });
 	

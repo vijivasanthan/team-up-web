@@ -13,7 +13,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope)
     {
         
-		var ClientGroups = $resource($config.host + 'teamup/client/clientGroups/', {
+		var ClientGroups = $resource($config.host + $config.namespace + '/client/clientGroups/', {
 		}, {
 			query : {
 				method : 'GET',
@@ -46,7 +46,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var Clients_ByGroupId = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/clients/', {}, {
+		var Clients_ByGroupId = $resource($config.host + $config.namespace + '/client/clientGroup/:clientGroupId/clients/', {}, {
 			get : {
 				method : 'GET',
 				params : {},
@@ -60,7 +60,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var ClientGroup = $resource($config.host + 'teamup/clientGroup/:clientGroupId', {}, {
+		var ClientGroup = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId', {}, {
 			save : {
 				method : 'POST',
 			},
@@ -72,7 +72,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var Client = $resource($config.host + 'teamup/client/:clientId', {}, {
+		var Client = $resource($config.host + $config.namespace + '/client/:clientId', {}, {
 			save : {
 				method : 'POST',
 			},
@@ -87,7 +87,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
         
         
-		var Clients = $resource($config.host + 'teamup/client/clients', {}, {
+		var Clients = $resource($config.host + $config.namespace + '/client/clients', {}, {
 			query : {
 				method : 'GET',
 				params : {},
@@ -95,7 +95,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 
-		var ClientReports = $resource($config.host + 'teamup/client/:clientId/reports', {}, {
+		var ClientReports = $resource($config.host + $config.namespace + '/client/:clientId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -103,13 +103,13 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
         }); 
 		
-		var ClientsRemove = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/removeClients/', {}, {
+		var ClientsRemove = $resource($config.host + $config.namespace + '/client/clientGroup/:clientGroupId/removeClients/', {}, {
             remove : {
                 method : 'PUT',
             }
         });
 		
-		var ClientGroupReports = $resource($config.host + 'teamup/clientGroup/:clientGroupId/reports', {}, {
+		var ClientGroupReports = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -117,7 +117,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
         });
         
-        var GroupTasks = $resource($config.host + 'teamup/clientGroup/:clientGroupId/tasks', {
+        var GroupTasks = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId/tasks', {
 		}, {
 			query : {
 				method : 'GET',
@@ -128,7 +128,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
         
-        var ClientReport = $resource($config.host + 'teamup/client/:clientId/report', {
+        var ClientReport = $resource($config.host + $config.namespace + '/client/:clientId/report', {
 		}, {
 			save : {
 				method : 'POST',
@@ -140,7 +140,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		}); 
         
   	  	var ClientImg = $resource(
-          $config.host + 'teamup/client/:clientId/photourl',{},{
+          $config.host + $config.namespace + '/client/:clientId/photourl',{},{
             getURL: {
               method: 'GET',
               isArray: false              

@@ -13,7 +13,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope) 
     {
       var Teams = $resource(
-        $config.host + 'teamup/team/',
+        $config.host + $config.namespace + '/team/',
         {
         },
         {
@@ -68,7 +68,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //			}
 //		});
 	
-		var TeamStatus = $resource($config.host + 'teamup/team/status/:teamId/', {
+		var TeamStatus = $resource($config.host + $config.namespace + '/team/status/:teamId/', {
 		}, {
 			query : {
 				method : 'GET',
@@ -77,7 +77,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 	
-		var Team = $resource($config.host + 'teamup/team/:teamId/', {
+		var Team = $resource($config.host + $config.namespace + '/team/:teamId/', {
 		}, {
 			edit : {
 				method : 'PUT',
@@ -87,21 +87,21 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 	
-		var Members = $resource($config.host + 'teamup/team/:teamId/member', {
+		var Members = $resource($config.host + $config.namespace + '/team/:teamId/member', {
 		}, {
 			save : {
 				method : 'POST',
 			}
 		});
 	
-		var RemoveMembers = $resource($config.host + 'teamup/team/:teamId/removeMember', {
+		var RemoveMembers = $resource($config.host + $config.namespace + '/team/:teamId/removeMember', {
 		}, {
 			remove : {
 				method : 'PUT',
 			}
 		});
 	
-		var cGroup = $resource($config.host + 'teamup/team/:teamId/clientGroups', {
+		var cGroup = $resource($config.host + $config.namespace + '/team/:teamId/clientGroups', {
 		}, {
 			query : {
 				method : 'GET',
@@ -113,35 +113,35 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 		
-		var unAssignGroups = $resource($config.host + 'teamup/team/:teamId/unAssignClientGroups', {
+		var unAssignGroups = $resource($config.host + $config.namespace + '/team/:teamId/unAssignClientGroups', {
 		}, {
 			unssign : {
 				method : 'PUT',
 			}
 		});
 		
-		var updateGroups = $resource($config.host + 'teamup/team/:teamId/updateClientGroups', {
+		var updateGroups = $resource($config.host + $config.namespace + '/team/:teamId/updateClientGroups', {
 		}, {
 			update : {
 				method : 'PUT',
 			}
 		});
 		
-		var updateMembers = $resource($config.host + 'teamup/team/:teamId/updateMembers', {
+		var updateMembers = $resource($config.host + $config.namespace + '/team/:teamId/updateMembers', {
 		}, {
 			update : {
 				method : 'PUT',
 			}
 		}); 
 		
-		var Member = $resource($config.host + 'teamup/team/member', {
+		var Member = $resource($config.host + $config.namespace + '/team/member', {
 		}, {
 			save : {
 				method : 'POST',
 			}
 		}); 
 		
-		var TeamTasks = $resource($config.host + 'teamup/team/:teamId/tasks', {
+		var TeamTasks = $resource($config.host + $config.namespace + '/team/:teamId/tasks', {
 		}, {
 			query : {
 				method : 'GET',
@@ -152,7 +152,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 		
-		var MembersNotInTeam = $resource($config.host + 'teamup/team/members', {
+		var MembersNotInTeam = $resource($config.host + $config.namespace + '/team/members', {
 		}, {
 			query : {
 				method : 'GET',
@@ -160,7 +160,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		}); 
 		
-		var RemoveMember = $resource($config.host + 'teamup/team/member/:memberId', {
+		var RemoveMember = $resource($config.host + $config.namespace + '/team/member/:memberId', {
 		}, {
 			remove : {
 				method : 'DELETE',
@@ -728,7 +728,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 		 *  load the callin number for the team
 		 */
 		Teams.prototype.loadTeamCallinNumber = function(teamUuid) {
-			var TeamNumber = $resource($config.host + 'teamup/team/:teamId/phone', {
+			var TeamNumber = $resource($config.host + $config.namespace + '/team/:teamId/phone', {
 			}, {
 				get : {
 					method : 'GET',

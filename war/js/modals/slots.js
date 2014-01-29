@@ -16,7 +16,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	   * Define Slot Resource from back-end
 	   */
 	  var Slots = $resource(
-	    $config.host + 'teamup/team/member/tasks/:member/',{},
+	    $config.host + $config.namespace + '/team/member/tasks/:member/',{},
 	    {
 	      query: {
 	        method: 'GET',

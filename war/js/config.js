@@ -78,6 +78,7 @@ angular.module('WebPaige')
     },
 
     host: profile.host(),
+    namespace : profile.ns(),
 
     formats: {
       date:         'dd-MM-yyyy',

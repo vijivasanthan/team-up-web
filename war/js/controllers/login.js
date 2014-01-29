@@ -178,11 +178,11 @@ angular.module('WebPaige.Controllers.Login', [])
             	 if(type == "team"){
             		  angular.forEach(members,function(mem){
 		              	// load the avatr URL and store them into the local storage
-		              	var getAvatarUrl = $rootScope.config.host + "teamup/team/member/" + mem.uuid + "/photo"; 
+		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/team/member/" + mem.uuid + "/photourl"; 
 		              	Teams.loadImg(getAvatarUrl).then(function(res){
 		              		if(res.path){
 		              			Storage.avatar.addurl(mem.uuid,res.path);
-		              			console.log("Avatar path for " + mem.uuid + " - " +res.path);
+		              			console.log("Member Avatar path for " + mem.uuid + " - " +res.path);
 		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
 		              		}
 		              	});
@@ -190,11 +190,11 @@ angular.module('WebPaige.Controllers.Login', [])
             	 }else if(type == "client"){
             		 angular.forEach(members,function(mem){
  		              	// load the avatr URL and store them into the local storage
- 		              	var getAvatarUrl = $rootScope.config.host + "teamup/client/" + mem.uuid + "/photo"; 
+ 		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/client/" + mem.uuid + "/photourl"; 
  		              	Clients.loadImg(getAvatarUrl).then(function(res){
  		              		if(res.path){
  		              			Storage.avatar.addurl(mem.uuid,res.path);
- 		              			console.log("Avatar path for " + mem.uuid + " - " +res.path);
+ 		              			console.log("Client Avatar path for " + mem.uuid + " - " +res.path);
  		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
  		              		}
  		              	});
