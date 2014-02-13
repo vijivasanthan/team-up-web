@@ -29,6 +29,7 @@ var ui = {
         ph_retypePass: "retype password",
         alert_fillfiled: 'Please fill all fields!',
         alert_wrongUserPass: 'Wrong username or password!',
+        alert_network: 'Network error',
         loading_User: 'Loading user information...',
         loading_Message: 'Loading messages...',
         loading_Teams:'Loading Teams...',
@@ -849,6 +850,7 @@ angular.module('WebPaige')
     },
 
     host: profile.host(),
+    namespace : profile.ns(),
 
     formats: {
       date:         'dd-MM-yyyy',
@@ -1591,7 +1593,7 @@ angular.module('WebPaige')
     /**
      * If periods are not present calculate them
      */
-     if (!Storage.get('periods')) Dater.registerPeriods();
+     if (!Storage.get('periods') || Storage.get('periods') == null) Dater.registerPeriods();
 
 
 
@@ -2161,6 +2163,17 @@ angular.module('WebPaige')
 		return members;
 	};
     
+	$rootScope.getAvatarURL = function(userId,type){
+		var avatarURLs = angular.fromJson(Storage.get("avatarUrls"));
+		var ret = '';
+		angular.forEach(avatarURLs,function(avatar){
+			if(avatar.userId == userId){
+				ret = avatar.url; 
+			}
+		});
+		return ret;
+	};
+	
   }
 ]);
 
@@ -2189,13 +2202,14 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var Login = $resource(
-	    $config.host + 'login',
+	    $config.host + $config.namespace+'/login',
 	    {
 	    },
 	    {
 	      process: {
 	        method: 'GET',
-	        params: {username:'', passwordHash:''}
+//	        params: {username:'', passwordHash:''}
+	        params: {uuid:'', pass:''}
 	      }
 	    }
 	  );
@@ -2215,7 +2229,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var MemberInfo = $resource(
-	    $config.host + 'teamup/team/member',
+	    $config.host + $config.namespace + '/team/member',
 	    {
 	    },
 	    {
@@ -2284,11 +2298,11 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  /**
 	   * User login
 	   */
-	  User.prototype.login = function (uuid, pass) 
+	  User.prototype.login = function (username, passwordHash) 
 	  {    
 	    var deferred = $q.defer();
 
-	    Login.process({username: uuid, passwordHash: pass}, 
+	    Login.process({uuid : username , pass : passwordHash }, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 
@@ -2407,7 +2421,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  
 	  
 	  var Profile = $resource(
-	    $config.host + 'teamup/team/member/:memberId/',{},{
+	    $config.host + $config.namespace + '/team/member/:memberId/',{},{
 	      get: {
 	        method: 'GET'
 	      },
@@ -2422,7 +2436,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  );
 	  
 	  var ProfileSave = $resource(
-	    $config.host + 'teamup/team/:teamId/member/:memberId/',{},{
+	    $config.host + $config.namespace + '/team/:teamId/member/:memberId/',{},{
           save: {
             method: 'PUT',          
           }
@@ -2430,7 +2444,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
       ); 
 	  
 	  var ProfileImg = $resource(
-          $config.host + 'teamup/team/member/:memberId/photourl',{},{
+          $config.host + $config.namespace + '/team/member/:memberId/photourl',{},{
             getURL: {
               method: 'GET',
               isArray: false              
@@ -2792,7 +2806,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope) 
     {
       var Teams = $resource(
-        $config.host + 'teamup/team/',
+        $config.host + $config.namespace + '/team/',
         {
         },
         {
@@ -2847,7 +2861,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 //			}
 //		});
 	
-		var TeamStatus = $resource($config.host + 'teamup/team/status/:teamId/', {
+		var TeamStatus = $resource($config.host + $config.namespace + '/team/status/:teamId/', {
 		}, {
 			query : {
 				method : 'GET',
@@ -2856,7 +2870,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 	
-		var Team = $resource($config.host + 'teamup/team/:teamId/', {
+		var Team = $resource($config.host + $config.namespace + '/team/:teamId/', {
 		}, {
 			edit : {
 				method : 'PUT',
@@ -2866,21 +2880,21 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 	
-		var Members = $resource($config.host + 'teamup/team/:teamId/member', {
+		var Members = $resource($config.host + $config.namespace + '/team/:teamId/member', {
 		}, {
 			save : {
 				method : 'POST',
 			}
 		});
 	
-		var RemoveMembers = $resource($config.host + 'teamup/team/:teamId/removeMember', {
+		var RemoveMembers = $resource($config.host + $config.namespace + '/team/:teamId/removeMember', {
 		}, {
 			remove : {
 				method : 'PUT',
 			}
 		});
 	
-		var cGroup = $resource($config.host + 'teamup/team/:teamId/clientGroups', {
+		var cGroup = $resource($config.host + $config.namespace + '/team/:teamId/clientGroups', {
 		}, {
 			query : {
 				method : 'GET',
@@ -2892,46 +2906,47 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		});
 		
-		var unAssignGroups = $resource($config.host + 'teamup/team/:teamId/unAssignClientGroups', {
+		var unAssignGroups = $resource($config.host + $config.namespace + '/team/:teamId/unAssignClientGroups', {
 		}, {
 			unssign : {
 				method : 'PUT',
 			}
 		});
 		
-		var updateGroups = $resource($config.host + 'teamup/team/:teamId/updateClientGroups', {
+		var updateGroups = $resource($config.host + $config.namespace + '/team/:teamId/updateClientGroups', {
 		}, {
 			update : {
 				method : 'PUT',
 			}
 		});
 		
-		var updateMembers = $resource($config.host + 'teamup/team/:teamId/updateMembers', {
+		var updateMembers = $resource($config.host + $config.namespace + '/team/:teamId/updateMembers', {
 		}, {
 			update : {
 				method : 'PUT',
 			}
 		}); 
 		
-		var Member = $resource($config.host + 'teamup/team/member', {
+		var Member = $resource($config.host + $config.namespace + '/team/member', {
 		}, {
 			save : {
 				method : 'POST',
 			}
 		}); 
 		
-		var TeamTasks = $resource($config.host + 'teamup/team/:teamId/tasks', {
+		var TeamTasks = $resource($config.host + $config.namespace + '/team/:teamId/tasks', {
 		}, {
 			query : {
 				method : 'GET',
 				params : {
 					from : '',
 					to: ''
-				}
+				},
+				isArray : true
 			}
 		});
 		
-		var MembersNotInTeam = $resource($config.host + 'teamup/team/members', {
+		var MembersNotInTeam = $resource($config.host + $config.namespace + '/team/members', {
 		}, {
 			query : {
 				method : 'GET',
@@ -2939,7 +2954,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 			}
 		}); 
 		
-		var RemoveMember = $resource($config.host + 'teamup/team/member/:memberId', {
+		var RemoveMember = $resource($config.host + $config.namespace + '/team/member/:memberId', {
 		}, {
 			remove : {
 				method : 'DELETE',
@@ -3294,7 +3309,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				};
 	
 				Storage.add(id, angular.toJson(returned));
-	
+				
 				deferred.resolve({
 					id : id,
 					data : returned
@@ -3507,7 +3522,7 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 		 *  load the callin number for the team
 		 */
 		Teams.prototype.loadTeamCallinNumber = function(teamUuid) {
-			var TeamNumber = $resource($config.host + 'teamup/team/:teamId/phone', {
+			var TeamNumber = $resource($config.host + $config.namespace + '/team/:teamId/phone', {
 			}, {
 				get : {
 					method : 'GET',
@@ -3792,7 +3807,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
     function ($resource, $config, $q, Storage, $rootScope)
     {
         
-		var ClientGroups = $resource($config.host + 'teamup/client/clientGroups/', {
+		var ClientGroups = $resource($config.host + $config.namespace + '/client/clientGroups/', {
 		}, {
 			query : {
 				method : 'GET',
@@ -3825,7 +3840,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var Clients_ByGroupId = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/clients/', {}, {
+		var Clients_ByGroupId = $resource($config.host + $config.namespace + '/client/clientGroup/:clientGroupId/clients/', {}, {
 			get : {
 				method : 'GET',
 				params : {},
@@ -3839,7 +3854,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var ClientGroup = $resource($config.host + 'teamup/clientGroup/:clientGroupId', {}, {
+		var ClientGroup = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId', {}, {
 			save : {
 				method : 'POST',
 			},
@@ -3851,7 +3866,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 	
-		var Client = $resource($config.host + 'teamup/client/:clientId', {}, {
+		var Client = $resource($config.host + $config.namespace + '/client/:clientId', {}, {
 			save : {
 				method : 'POST',
 			},
@@ -3866,7 +3881,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 
         
         
-		var Clients = $resource($config.host + 'teamup/client/clients', {}, {
+		var Clients = $resource($config.host + $config.namespace + '/client/clients', {}, {
 			query : {
 				method : 'GET',
 				params : {},
@@ -3874,7 +3889,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 
-		var ClientReports = $resource($config.host + 'teamup/client/:clientId/reports', {}, {
+		var ClientReports = $resource($config.host + $config.namespace + '/client/:clientId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -3882,13 +3897,13 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
         }); 
 		
-		var ClientsRemove = $resource($config.host + 'teamup/client/clientGroup/:clientGroupId/removeClients/', {}, {
+		var ClientsRemove = $resource($config.host + $config.namespace + '/client/clientGroup/:clientGroupId/removeClients/', {}, {
             remove : {
                 method : 'PUT',
             }
         });
 		
-		var ClientGroupReports = $resource($config.host + 'teamup/clientGroup/:clientGroupId/reports', {}, {
+		var ClientGroupReports = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -3896,18 +3911,19 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
             }
         });
         
-        var GroupTasks = $resource($config.host + 'teamup/clientGroup/:clientGroupId/tasks', {
+        var GroupTasks = $resource($config.host + $config.namespace + '/clientGroup/:clientGroupId/tasks', {
 		}, {
 			query : {
 				method : 'GET',
 				params : {
 					from : '',
 					to: ''
-				}
+				},
+				isArray : true
 			}
 		});
         
-        var ClientReport = $resource($config.host + 'teamup/client/:clientId/report', {
+        var ClientReport = $resource($config.host + $config.namespace + '/client/:clientId/report', {
 		}, {
 			save : {
 				method : 'POST',
@@ -3919,7 +3935,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 		}); 
         
   	  	var ClientImg = $resource(
-          $config.host + 'teamup/client/:clientId/photourl',{},{
+          $config.host + $config.namespace + '/client/:clientId/photourl',{},{
             getURL: {
               method: 'GET',
               isArray: false              
@@ -4528,7 +4544,7 @@ angular.module('WebPaige.Modals.Messages', ['ngResource'])
  */
 .factory('Messages', ['$rootScope', '$config', '$resource', '$q', 'Storage', '$http',
 function($rootScope, $config, $resource, $q, Storage, $http) {
-	var Messages = $resource($config.host + 'teamup/team/teamMessage/', {
+	var Messages = $resource($config.host + $config.namespace + '/team/teamMessage/', {
 	}, {
 		query : {
 			method : 'GET',
@@ -4569,7 +4585,7 @@ function($rootScope, $config, $resource, $q, Storage, $http) {
 
 	
 
-	var TeamMessage = $resource($config.host + 'teamup/team/teamMessage/:teamId', {}, {
+	var TeamMessage = $resource($config.host + $config.namespace + '/team/teamMessage/:teamId', {}, {
 		query : {
 			method : 'GET',
 			params : {},
@@ -4626,7 +4642,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	   * Define Slot Resource from back-end
 	   */
 	  var Slots = $resource(
-	    $config.host + 'teamup/team/member/tasks/:member/',{},
+	    $config.host + $config.namespace + '/tasks/:taskId',{},
 	    {
 	      query: {
 	        method: 'GET',
@@ -4640,8 +4656,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	        method: 'POST',
 	      },
 	      remove: {
-	        method: 'DELETE',
-	        params: {taskId: ''}
+	        method: 'DELETE',	        
 	      }
 	    }
 	  );
@@ -4682,7 +4697,6 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	      },
 	    }
 	  );
-
 
 	  /**
 	   * Get group wishes
@@ -5148,11 +5162,11 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  /**
 	   * Slot adding process
 	   */
-	  Slots.prototype.add = function (slot, user) 
+	  Slots.prototype.add = function (slot) 
 	  {
 	    var deferred = $q.defer();
 
-	    Slots.save({member: user}, slot,
+	    Slots.save(slot,
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -5166,7 +5180,27 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	    return deferred.promise;
 	  };
 
+	  /**
+	   * Slot adding process
+	   */
+	  Slots.prototype.update = function (slot) 
+	  {
+	    var deferred = $q.defer();
 
+	    Slots.change({taskId: slot.uuid},slot,
+	      function (result) 
+	      {
+	        deferred.resolve(result);
+	      },
+	      function (error)
+	      {
+	        deferred.resolve({error: error});
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+	  
 	  /**
 	   * TODO
 	   * Add back-end
@@ -5204,7 +5238,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  {
 	    var deferred = $q.defer();
 //
-	    Slots.remove({ taskId : tId , member: mId},  
+	    Slots.remove({ taskId : tId },  
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -5389,7 +5423,7 @@ angular.module('WebPaige.Directives', ['ngResource'])
                     },
                 });
 
-            }
+            };
         }],
         link: function(scope, elem, attrs, ctrl) {
             
@@ -5404,78 +5438,6 @@ angular.module('WebPaige.Directives', ['ngResource'])
     };
 
 }])
-
-/**
- * uploader (file upload)
- */
-.directive('loadimg', [function() {
-
-    return {
-        restrict: 'E',
-        scope: {
-            url: '@'
-            // scope
-            // define a new isolate scope
-
-        },
-        controller: ['$scope','$rootScope', 'Storage' ,function ($scope,$rootScope,Storage,$element) {
-
-            // controller:
-            // here you should define properties and methods
-            // used in the directive's scope
-            
-            
-            
-            var session = angular.fromJson(Storage.cookie.get('session'));
-            if(session){
-                $scope.sessionId = session.id;
-            }else{
-                $rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
-                return false;
-            }
-//            console.log('scope',$scope);
-//            console.log('url',$scope.url);
-//            console.log('session',$scope.sessionId);
-//            $scope.url = "http://192.168.128.205:8888//teamup/team/member/richard@ask-cs.com/photo";
-            $scope.loadImg = function(el){
-                $.ajax({ 
-                    url: $scope.url,
-                    type:"GET", 
-                    headers: {'X-SESSION_ID' : $scope.sessionId},
-                    success: function(data)
-                    {
-//                        console.log($element);
-                        console.log(el);
-                        
-                        //var f = $element.attr("src", data); // use self instead of this
-                        //console.log(f);
-                    },
-                    error: function(jqXHR, textStatus, errorThrow)
-                    {
-                        debugger;
-                    }
-               });  
-            }
-            
-            
-        }],
-        link: function(scope, elem, attrs, ctrl) {
-            
-            // link function 
-            // here you should register listeners
-//            elem.find('.fake-uploader').click(function() {
-//                elem.find('input[type="file"]').click();
-//            });
-//            console.log('elem',elem);
-//            console.log('scope',scope);
-            console.log('url',scope.url);
-        },
-        replace: true    ,
-        template : '<div onReady="angular.element(this).scope().loadImg(this);">click</div>'
-    };
-
-}])
-
 /**
  * Notification item
  */
@@ -7306,7 +7268,36 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
 
     return (!settings.settingsWebPaige) ? $rootScope.config.defaults.settingsWebPaige : angular.fromJson(settings.settingsWebPaige);
   };
-
+  
+  var addAvatarURLtoStorage = function(id, avatarUrl){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  if(avatarUrls){
+		angular.forEach(avatarUrls,function(item){
+			if(item.id == id){
+				item.url = avatarUrl;
+			}else{
+				var newItem = {'id' : id, 'url' : avatarUrl };
+				avatarUrls.add(newItem);
+			}
+		});
+	  }else{
+		  avatarUrls = [{'id' : id, 'url' : avatarUrl }];
+	  }
+	  addToLocalStorage('avatarUrls',angular.toJson(avatarUrls));
+  }
+  
+  var getAvatarURLFromStorage = function(id){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  var ret;
+	  if(avatarUrls){
+		  angular.forEach(avatarUrls,function(item){
+			  if(item.id == id){
+				  ret = item.url; 
+			  }
+		  });
+	  }
+	  return ret;
+  }
 
   return {
     isSupported: browserSupportsLocalStorage,
@@ -7332,6 +7323,10 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
       groups:   getGroups,
       members:  getMembers,
       settings: getSettings
+    },
+    avatar: {
+    	addurl: addAvatarURLtoStorage,
+    	geturl: getAvatarURLFromStorage
     }
   }
 
@@ -7893,23 +7888,23 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
               if(data.section == "teams"){
             	  // should get the name from team members ;
             	  
-            	  relatedUser = $rootScope.getClientByID(task.relatedUserId);
+            	  relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
               }else if(data.section == "clients"){
             	  // should get the name from clients;
             	  
-            	  relatedUser = $rootScope.getTeamMemberById(task.relatedUserId);
+            	  relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
               }
               var slotContent = "";
               if(typeof relatedUser != 'undefined'){
             	  slotContent = relatedUser.firstName + " " + relatedUser.lastName; 
               }
               // deal with the unfinished task 
-              if(task.endTime == 0){
-            	  task.endTime = offset/1000;
+              if(task.plannedEndVisitTime == 0){
+            	  task.plannedEndVisitTime = offset/1000;
               }
               timedata.push({
-	              start:  Math.round(task.startTime * 1000),
-	              end:    Math.round(task.endTime * 1000),
+	              start:  Math.round(task.plannedStartVisitTime * 1000),
+	              end:    Math.round(task.plannedEndVisitTime * 1000),
 	              // group:  link,
 	              group: member.head,
 	              /*
@@ -7925,10 +7920,11 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
 	              "<input type=hidden value='"+ angular.toJson({
 		                type: 'slot',
 		                id:   task.uuid,
-		                mid:  task.authorId,
+		                mid:  task.authorUuid,
 //		                recursive: slot.recursive,
 		                state: task.description,
-		                relatedUser : task.relatedUserId,
+		                clientUuid : task.relatedClientUuid,
+		                memberId : task.assignedTeamMemberUuid
 		              }) +"'>",
 	              // className:  config.states[slot.text].className,
 	              className:  'state-available',
@@ -9173,7 +9169,7 @@ angular.module('WebPaige.Controllers.Login', [])
               User.login(uuid.toLowerCase(), pass)
               .then(function (result)
                 {
-                if (result.status == 400 || result.status == 403)
+                if (result.status == 400 || result.status == 403 || result.status == 404)
                 {
                   $scope.alert = {
                     login: {
@@ -9182,6 +9178,20 @@ angular.module('WebPaige.Controllers.Login', [])
                       message: $rootScope.ui.login.alert_wrongUserPass
                     }
                   };
+
+                  $('#login button[type=submit]')
+                    .text($rootScope.ui.login.button_loggingIn)
+                    .removeAttr('disabled');
+
+                  return false;
+                }else if (result.status == 0 ){
+                    $scope.alert = {
+                            login: {
+                              display: true,
+                              type: 'alert-error',
+                              message: $rootScope.ui.login.alert_network
+                            }
+                          };
 
                   $('#login button[type=submit]')
                     .text($rootScope.ui.login.button_loggingIn)
@@ -9198,6 +9208,34 @@ angular.module('WebPaige.Controllers.Login', [])
                 });
             };
             
+            var initAvatarUrls = function(members,type){
+            	 if(type == "team"){
+            		  angular.forEach(members,function(mem){
+		              	// load the avatr URL and store them into the local storage
+		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/team/member/" + mem.uuid + "/photourl"; 
+		              	Teams.loadImg(getAvatarUrl).then(function(res){
+		              		if(res.path){
+		              			Storage.avatar.addurl(mem.uuid,res.path);
+		              			console.log("Member Avatar path for " + mem.uuid + " - " +res.path);
+		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+		              		}
+		              	});
+		              });
+            	 }else if(type == "client"){
+            		 angular.forEach(members,function(mem){
+ 		              	// load the avatr URL and store them into the local storage
+ 		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/client/" + mem.uuid + "/photourl"; 
+ 		              	Clients.loadImg(getAvatarUrl).then(function(res){
+ 		              		if(res.path){
+ 		              			Storage.avatar.addurl(mem.uuid,res.path);
+ 		              			console.log("Client Avatar path for " + mem.uuid + " - " +res.path);
+ 		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+ 		              		}
+ 		              	});
+ 		              });
+            	 }
+            	 
+            }
             
             /**
              * TODO
@@ -9232,12 +9270,13 @@ angular.module('WebPaige.Controllers.Login', [])
                   Teams.query(true,{})
                   .then(function (teams)
                   {
-                    console.log("got teams ");
+                    console.log("got teams ", teams);
                     
                     // try to get the members not in the teams Aync 
                     console.log("got members not in any teams");
                     Teams.queryMembersNotInTeams().then(function(result){
-                    	console.log("members not in any teams loaded ");
+                    	console.log("all members loaded (include the members not in any teams)" , result);
+	                    initAvatarUrls(result,"team");
                     },function(error){
                     	
                     });
@@ -9258,8 +9297,9 @@ angular.module('WebPaige.Controllers.Login', [])
                         self.progress(80, $rootScope.ui.login.loading_clientGroups);
                         
                         Clients.queryAll()
-                        .then(function(){
-                            console.log("got all clients in or not in the client groups ");
+                        .then(function(res_clients){
+                            console.log("got all clients in or not in the client groups ",res_clients);
+                            initAvatarUrls(res_clients,"client");
                             
                             Clients.query(false,{})
                             .then(function(){
@@ -9333,7 +9373,7 @@ angular.module('WebPaige.Controllers.Login', [])
             {
               $('#preloader .progress .bar').css({ width: ratio + '%' }); 
               $('#preloader span').text(message);    
-            };
+            };            
         } 
 ]);;/*jslint node: true */
 /*global angular */
@@ -9646,6 +9686,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * apply the host to img url
 	   */
 	  $scope.imgHost = profile.host();
+	  $scope.ns = profile.ns();
 	  
 	  /**
 	   * Pass current
@@ -9805,16 +9846,17 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    
 	    // load the avatar by ajax way
 	    var memberId = $route.current.params.userId;
-	    var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
+	    var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
         Teams.loadImg(imgURL).then(function(result){
             // console.log("loading pic " + imgURL);
-            
+             
             var imgId = memberId.replace(".","").replace("@","");
             if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
                 console.log("loading pic " ,result);
-                $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+                $('#profile #img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
             }else{
-                $('#img_'+imgId).css('background-image','url('+imgURL+')');
+            	var realImgURL = $scope.imgHost.replace("\\:",":") + result.path;  
+                $('#profile #img_'+imgId).css('background-image','url('+realImgURL+')');
             }
             
         },function(error){
@@ -10052,30 +10094,22 @@ angular.module('WebPaige.Controllers.Profile', [])
 	  
 	  $scope.editProfile = function(){
 	      setView('edit');
-	  }
+	  };	 
 	  
 	  /**
 	   * load the dynamic upload URL for GAE 
 	   */
 	  $scope.editImg = function(){
-	      $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-	      Profile.loadUploadURL($route.current.params.userId)
-	        .then(function (result)
-	        {
-	          if (result.error){
-	            $rootScope.notifier.error('Error with loading upload URL.');
-	            console.warn('error ->', result);
-	          }else{
-	              
-	            $rootScope.statusBar.off();
-	            $scope.uploadURL = result.url;
-	            
-	            $scope.setViewTo('editImg');
-	          };
-	      });
-	      
-	      
-	  }
+		  $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photourl";
+		  Teams.loadImg($scope.uploadURL).then(function(result){
+			  var imgHost = $scope.imgHost.replace("\\","");
+			  if(result.path){
+				  $scope.avatarURL = imgHost+result.path;
+			  }
+			  $scope.uploadURL = imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";
+			  $scope.setViewTo('editImg');
+		  });		  
+	  };
 	  
 	  /**
 	   * delete the team member 
@@ -10114,7 +10148,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 				console.log(error);
 			});
 		}
-	  }
+	  };
 	  
 	  
 	}
@@ -10142,7 +10176,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
-
+	$scope.ns = profile.ns();
 	/**
 	 * Init search query
 	 */
@@ -10213,7 +10247,7 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		
 		// load image 
 		angular.forEach($scope.members, function(member, index) {
-			var imgURL = $scope.imgHost+"/teamup/team/member/"+member.uuid+"/photo";
+			var imgURL = $scope.imgHost+ $scope.ns +"/team/member/"+member.uuid+"/photourl";
 			Teams.loadImg(imgURL).then(function(result){
 				// console.log("loading pic " + imgURL);
 				
@@ -10221,12 +10255,20 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 					console.log("no pics " ,result);
 				}else{
-					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
+					var realImgURL = $scope.imgHost + result.path; 
+					$('.tab-content #img_'+imgId).css('background-image','url('+realImgURL+')');
 				}
+				
 				
 			},function(error){
 				console.log("error when load pic " + error);
 			});
+			
+//			var tempURL = $scope.imgHost+ $scope.ns +"/team/member/"+member.uuid+"/photourl";
+//			$scope.photoURL = tempURL; 
+//			Teams.loadImg(tempURL).then(function(result){
+//				console.log(result);
+//			});
 		});
 		
 		$scope.team.phone = $rootScope.ui.teamup.loadingNumber;
@@ -10606,7 +10648,8 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 	// brefoe I know there is a good place to put this code 
     // load the login user's avatar
 	
-	var imgURL = profile.host() + "/teamup/team/member/" + $rootScope.app.resources.uuid + "/photo";
+	
+	var imgURL = profile.host() + profile.ns() +"/team/member/" + $rootScope.app.resources.uuid + "/photourl";
 	Teams.loadImg(imgURL).then(function(result) {
 		// console.log("loading pic " + imgURL);
 		var mId = $rootScope.app.resources.uuid;
@@ -10614,7 +10657,11 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		if (result.status && (result.status == 404 || result.status == 403 || result.status == 500)) {
 			console.log("no pics ", result);
 		} else {
-			$('.navbar-inner #img_'+imgId).css('background-image', 'url(' + imgURL + ')');
+			if(result.path){
+				var realImgURL = profile.host().replace("\\:",":") + result.path; 
+				$('.navbar-inner #img_'+imgId).css('background-image', 'url("' + realImgURL + '")');
+			}
+			
 		}
 
 	}, function(error) {
@@ -10680,6 +10727,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	var self = this, params = $location.search();
 
 	$scope.imgHost = profile.host();
+	$scope.ns = profile.ns();
 	/**
 	 * Init search query
 	 */
@@ -10765,6 +10813,11 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
             $rootScope.statusBar.off();
             $scope.reports = $scope.processReports(reports);
             
+            $scope.$watch($scope.reports,function(rs){
+            	console.log("watcher found ... " , rs);
+            	$scope.loadMembersImg();
+            });
+            
         },function(error){
            console.log(error); 
         });
@@ -10794,6 +10847,41 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
     	
     }
 	
+    $scope.loadMembersImg = function(){
+		// load the team members image
+			
+			var memberIds = [];
+			angular.forEach($scope.groupReports, function(rept,i){
+				if(memberIds.indexOf(rept.author.uuid) == -1){
+					memberIds.add(rept.author.uuid);
+				}
+			});
+			angular.forEach($scope.reports, function(rept,i){
+				if(memberIds.indexOf(rept.author.uuid) == -1){
+					memberIds.add(rept.author.uuid);
+				}
+			});
+			angular.forEach(memberIds , function(memberId,j){
+				var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
+				Teams.loadImg(imgURL).then(function(result){
+					// console.log("loading pic " + imgURL);
+					
+					var imgId = memberId.replace(".","").replace("@","");
+					if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+						console.log("no pics " ,result);
+					}else{
+						if(result.path){
+							var avatarURL = $scope.imgHost + result.path; 
+							$('.tab-content #img_'+imgId).css('background-image','url('+avatarURL+')');
+						}
+					}
+					
+				},function(error){
+					console.log("error when load pic " + error);
+				});
+			});
+	   }
+    
 	/**
 	 * Set view
 	 */
@@ -10830,15 +10918,19 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		// load image 
 		if($scope.views.client){
 			angular.forEach($scope.clients, function(client, index) {
-	            var imgURL = $scope.imgHost+"teamup/client/"+client.uuid+"/photo";
+	            var imgURL = $scope.imgHost+$scope.ns+"/client/"+client.uuid+"/photourl";
+	            
 	            Clients.loadImg(imgURL).then(function(result){
 	                // console.log("loading pic " + imgURL);
-	                
 	                var imgId = client.uuid.replace(".","").replace("@","");
 	                if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
 	                    console.log("loading pic " ,result);
 	                }else{
-	                    $('#img_'+imgId).css('background-image','url('+imgURL+')');
+	                	//imgURL = imgURL.replace("\\:",":");
+	                	if(result.path){
+	                		var avatarURL = $scope.imgHost + result.path; 
+	                		$('#img_'+imgId).css('background-image','url('+avatarURL+')');
+	                	}
 	                }
 	                
 	            },function(error){
@@ -10849,20 +10941,24 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
         
 		// load the image in the client profile page 
 		if($scope.views.viewClient){
-			var imgURL = $scope.imgHost+"teamup/client/"+$scope.client.uuid+"/photo";
+			var imgURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
+			
 			Clients.loadImg(imgURL).then(function(result){
                 // console.log("loading pic " + imgURL);
-                
                 var imgId = $scope.client.uuid.replace(".","").replace("@","");
                 if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
                     console.log("loading pic " ,result);
                 }else{
-                    $('#viewClientTab #img_'+imgId).css('background-image','url('+imgURL+')');
+                	// imgURL = imgURL.replace("\\:",":");
+                	if(result.path){
+                		var avatarURL = $scope.imgHost + result.path;
+                		$('#viewClientTab #img_'+imgId).css('background-image','url('+avatarURL+')');
+                	}
                 }
                 
             },function(error){
                 console.log("error when load pic " + error);
-            });
+            });			
 		}
         
 	}
@@ -10904,38 +11000,6 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		return rpts;
 	}
 		
-    
-   $scope.loadMembersImg = function(){
-	// load the team members image
-		
-		var memberIds = [];
-		angular.forEach($scope.groupReports, function(rept,i){
-			if(memberIds.indexOf(rept.author.uuid) == -1){
-				memberIds.add(rept.author.uuid);
-			}
-		});
-		angular.forEach(memberIds , function(memberId,j){
-			var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
-			Teams.loadImg(imgURL).then(function(result){
-				// console.log("loading pic " + imgURL);
-				
-				var imgId = memberId.replace(".","").replace("@","");
-				if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-					console.log("no pics " ,result);
-				}else{
-					$('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
-				}
-				
-			},function(error){
-				console.log("error when load pic " + error);
-			});
-		});
-   }
-    
-	
-    
-	
-
 	/**
 	 * Switch between the views and set hash accordingly
 	 */
@@ -11441,19 +11505,17 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 	 */
 	$scope.editImg = function() {
 		$rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-		
-		Clients.loadUploadURL($scope.client.uuid).then(function(result) {
-			if (result.error) {
-				$rootScope.notifier.error('Error with loading upload URL.');
-				console.warn('error ->', result);
-			} else {
-	
-				$rootScope.statusBar.off();
-				$scope.uploadURL = result.url;
-	
-				$scope.setViewTo('editImg');
-			};
-		});
+		  $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
+		  Clients.loadImg($scope.uploadURL).then(function(result){
+			  $rootScope.statusBar.off();
+			  
+			  var imgHost = $scope.imgHost.replace("\\:",":");
+			  if(result.path){
+				  $scope.avatarURL = imgHost+result.path;
+			  }
+			  $scope.uploadURL = imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";
+			  $scope.setViewTo('editImg');
+		  });
 	
 	}
 
@@ -12663,6 +12725,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 	var self = this, params = $location.search();
 	$scope.imgHost = profile.host();
+	$scope.ns = profile.ns();
 
 	var teams = angular.fromJson(Storage.get('Teams')), clients = angular.fromJson(Storage.get('ClientGroups'));
 
@@ -12714,7 +12777,11 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.teams.members[team.uuid] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/team/member/" + member.uuid + "/photo";
+				var imgfile = Storage.avatar.geturl(member.uuid);
+				var imgURL = $scope.imgHost + imgfile;
+				if(typeof imgfile == "undefined"){
+					imgURL = profile.noImgURL;
+				}
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
@@ -12736,7 +12803,11 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.clients.members[client.id] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/client/" + member.uuid + "/photo";
+				var imgfile = Storage.avatar.geturl(member.uuid);
+				var imgURL = $scope.imgHost + imgfile;
+				if(typeof imgfile == "undefined"){
+					imgURL = profile.noImgURL;
+				}
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
@@ -12802,10 +12873,21 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		var endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 		
 		var storeTask = function(tasks,startTime,endTime){
-			console.log("tasks " , tasks);
-			angular.forEach(tasks, function(task,memberId) {
+			// clear the array to keep tasks sync with sever side after changing
+			$scope.data[$scope.section].tasks = [];
+			angular.forEach(tasks, function(task,i) {
 				if(task != null){
-					$scope.data[$scope.section].tasks[memberId] = task;
+					var memberId = "";
+					if($scope.section == "teams"){
+						memberId = task.assignedTeamMemberUuid;
+					}if($scope.section == "clients"){
+						memberId = task.relatedClientUuid;
+					}
+					
+					if(typeof $scope.data[$scope.section].tasks[memberId] == "undefined"){
+						$scope.data[$scope.section].tasks[memberId] = new Array();
+					}
+					$scope.data[$scope.section].tasks[memberId].push(task);
 				}
 			});
 			
@@ -13001,6 +13083,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	/**
 	 * Set defaults for timeline
 	 */
+	var index_start = ((Dater.current.today() - 7) < 1 ) ? 1 : (Dater.current.today() - 7);
 	$scope.timeline = {
 		id : 'mainTimeline',
 		main : true,
@@ -13013,13 +13096,13 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		 * Initial start up is next 7 days
 		 */
 		options : {
-			start : $scope.periods.days[Dater.current.today() - 7].last.day,
+			start : $scope.periods.days[index_start].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day,
-			min : $scope.periods.days[Dater.current.today() - 7].last.day,
+			min : $scope.periods.days[index_start].last.day,
 			max : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		range : {
-			start : $scope.periods.days[Dater.current.today() - 7].last.day,
+			start : $scope.periods.days[index_start].last.day,
 			end : $scope.periods.days[Dater.current.today() + 7].last.day
 		},
 		scope : {
@@ -13570,7 +13653,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 
 		if ( selection = $scope.self.timeline.getSelection()[0]) {
 			//var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
-			var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson($($(values.content)[1]).val());
+			var values = $scope.self.timeline.getItem(selection.row);
+			var content = $scope.getSlotContentJSON(values.content) ;
 
 			$scope.relatedUsers = $scope.processRelatedUsers(values);
 
@@ -13594,7 +13678,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			
 			if(values.content == "New" ){
 				content = {type : "slot"};
-			}else if(content.relatedUser && typeof content.id == "undefined"){
+			}else if(content.clientUuid && typeof content.id == "undefined"){
 				content = $.extend(content,{type : "slot"});
 			}
 			
@@ -13619,7 +13703,13 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 							break;
 					}
 				}
-
+				
+				var relatedUserId ; 	
+				if($scope.views.teams){
+					relatedUserId = content.clientUuid;
+				}else if($scope.views.clients){
+					relatedUserId = content.memberId;
+				}
 				$scope.slot = {
 					start : {
 						date : new Date(values.start).toString($rootScope.config.formats.date),
@@ -13634,7 +13724,10 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 					state : content.state,
 					recursive : content.recursive,
 					id : content.id,
-					relatedUser : content.relatedUser,
+					memberId : content.memberId,
+					mid : content.mid,
+					clientUuid : content.clientUuid,
+					relatedUser : relatedUserId
 				};
 
 				/**
@@ -13911,13 +14004,16 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			}
 
 			$rootScope.statusBar.display($rootScope.ui.planboard.addTimeSlot);
-
-			Slots.add(values, memberId).then(function(result) {
+			
+			// convert the value to the new Task json object
+			values = $.extend(values,{'memberId': memberId});
+			values = $scope.convertTaskJsonObject(values);
+			Slots.add(values).then(function(result) {
 				$rootScope.$broadcast('resetPlanboardViews');
 
 				if (result.error) {
-					//					$rootScope.notifier.error($rootScope.ui.errors.timeline.add);
-					console.warn('error ->', result);
+					$rootScope.notifier.error(result.error.data.result);
+					console.warn('error ->', result.error.data.result);
 				} else {
 					$rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
 					if($scope.section == "teams"){
@@ -13935,6 +14031,37 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		}
 	};
 
+	/**
+	 * convert the raw slot data to json that can be processed     
+	 */
+	$scope.convertTaskJsonObject = function(rawSlot){
+		var teamMemberId,clientId,team;
+		
+		if($scope.views.teams){
+			teamMemberId = rawSlot.memberId;
+			clientId = rawSlot.relatedUserId;
+			team = $scope.currentTeam;
+		}else if($scope.views.clients){
+			teamMemberId = rawSlot.relatedUserId;
+			clientId = rawSlot.memberId;
+			var member = $rootScope.getTeamMemberById(teamMemberId);
+			team = member.teamUuids[0];
+		}
+		
+		var newSlot = {
+			  uuid: rawSlot.uuid,
+			  status: 1,
+			  plannedStartVisitTime: rawSlot.startTime,
+			  plannedEndVisitTime: rawSlot.endTime,
+			  relatedClientUuid: clientId,
+			  assignedTeamUuid: team,
+			  description : rawSlot.description,
+			  assignedTeamMemberUuid : teamMemberId 
+			};
+		
+		return newSlot;
+	}
+	
 	$scope.redrawSlot = function(slot) {
 
 		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time);
@@ -13961,24 +14088,31 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 
 		var relateUserName = "";
 		angular.forEach($scope.relatedUsers, function(ru) {
-			if ($scope.slot.relatedUser == ru.uuid) {
+			// client might not allowed to changed here 
+			if (ru.uuid == $scope.slot.relatedUser) {
 				relateUserName = ru.name;
 			}
 		});
 
 		var content_obj = item.content;
 		if (content_obj != "New") {
-			content_obj = angular.fromJson($($(item.content)[1]).val());
-			content_obj.relatedUser = $scope.slot.relatedUser;
+			content_obj = $scope.getSlotContentJSON(item.content);
+			content_obj.clientUuid = $scope.slot.clientUuid;
+			content_obj.memberId = $scope.slot.memberId;
 		} else {
+			
 			content_obj = {
-				relatedUser : $scope.slot.relatedUser
+				clientUuid : $scope.slot.clientUuid,
+				memberId: $scope.slot.memberId
 			};			
 		}
 
 		var content = "<span>" + relateUserName + "</span>" + "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
-		if(typeof $scope.slot.relatedUser == 'undefined'){
-			content = "New";
+		if((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) || 
+			(typeof $scope.slot.memberId == 'undefined' && $scope.views.clients)){
+			if(typeof $scope.slot.relatedUser == "undefined" || $scope.slot.relatedUser == ""){
+				content = "New";
+			}
 		}
 		return content;
 	};
@@ -13996,10 +14130,11 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			//              content:  angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
 			content : values.content
 		};
-
-		var content_obj = angular.fromJson($($(values.content)[1]).val());
+		
+		var content_obj = $scope.getSlotContentJSON(values.content);
 
 		$scope.$apply(function() {
+			
 			$scope.slot = {
 				start : {
 					date : new Date(values.start).toString($rootScope.config.formats.date),
@@ -14014,7 +14149,13 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				//	              state:      options.content.state,
 				//	              recursive:  options.content.recursive,
 				//	              id:         options.content.id
-				relatedUser : ( typeof content_obj == "undefined") ? "" : content_obj.relatedUser,
+				state : content_obj.state,
+				
+				id : content_obj.id,
+				memberId : content_obj.memberId,
+				mid : content_obj.mid,
+				clientUuid : content_obj.clientUuid,
+				relatedUser : $scope.slot.relatedUser
 			};
 		});
 
@@ -14056,7 +14197,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		$rootScope.planboardSync.clear();
 
 		var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-		var content = angular.fromJson($($(selected.content)[1]).val())
+		var content = $scope.getSlotContentJSON(selected.content);
+		
 		var memberId = $(selected.group).attr("memberId");
 		
 		if (!direct) {
@@ -14069,6 +14211,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				description : "",
 				relatedUserId:  slot.relatedUser,
 				uuid : content.id,
+				memberId : memberId,
 			};
 		} else {
 			/**
@@ -14080,6 +14223,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				description : "",
 				relatedUserId: slot.relatedUser ,  
 				uuid : content.id,
+				memberId : memberId
 			};
 		}
 
@@ -14099,12 +14243,12 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		};
 
 		
-		
-		Slots.add(options, memberId).then(function(result) {
+		var values = $scope.convertTaskJsonObject(options);
+		Slots.update(values).then(function(result) {
 			$rootScope.$broadcast('resetPlanboardViews');
 
 			if (result.error) {
-				//					$rootScope.notifier.error($rootScope.ui.errors.timeline.add);
+				$rootScope.notifier.error(result.error.data.result);
 				console.warn('error ->', result);
 			} else {
 				$rootScope.notifier.success($rootScope.ui.planboard.slotChanged);
@@ -14144,13 +14288,18 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				return;
 			}
 			
+			if(typeof content.id == "undefined"){
+				console.log("Nothing to delete");
+				return;
+			}
+			
 			$rootScope.statusBar.display($rootScope.ui.planboard.deletingTimeslot);
 			
 			Slots.remove(content.id, memberId).then(function(result) {
 				$rootScope.$broadcast('resetPlanboardViews');
 
 				if (result.error) {
-					$rootScope.notifier.error($rootScope.ui.errors.timeline.remove);
+					$rootScope.notifier.error(result.error.data.result);
 					console.warn('error ->', result);
 				} else {
 					$rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
@@ -14279,6 +14428,11 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	 * Start planboard sync
 	 */
 	$rootScope.planboardSync.start();
+	
+	$scope.getSlotContentJSON = function(content){
+		var jsonStr =  content.substring(content.indexOf("value=")+7,content.length-2);
+		return angular.fromJson(jsonStr);
+	}
 }]);
 ;/*jslint node: true */
 /*global angular */
@@ -14554,6 +14708,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     	$scope.messages = [];
     	
     	$scope.imgHost = profile.host();
+    	$scope.ns = profile.ns();
     	
     	$scope.renderMessage = function(teamId){
     		
@@ -14619,7 +14774,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     			// load the avatar img
     			angular.forEach(chatMembers, function(mId,i){
     				console.log(mId);
-    				var imgURL = $scope.imgHost+"/teamup/team/member/"+mId+"/photo";
+    				var imgURL = $scope.imgHost+$scope.ns+"/teamup/team/member/"+mId+"/photo";
     				Teams.loadImg(imgURL).then(function(result){
     					// console.log("loading pic " + imgURL);
     					
