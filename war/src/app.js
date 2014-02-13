@@ -14804,10 +14804,10 @@ angular.module('WebPaige.Controllers.Messages', [])
     	$scope.imgHost = profile.host();
     	$scope.ns = profile.ns();
     	
-    	$scope.renderMessage = function(teamId){
+    	$scope.renderMessage = function(){
     		
     		
-    		Messages.queryTeamMessage(teamId).then(function(messages){
+    		Messages.queryTeamMessage($scope.chatTeamId).then(function(messages){
     			
     			if(messages.error){
     				$rootScope.notifier.error(messages.error.data);
@@ -14868,7 +14868,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     			// load the avatar img
     			angular.forEach(chatMembers, function(mId,i){
     				console.log(mId);
-    				var imgURL = $scope.imgHost+$scope.ns+"/teamup/team/member/"+mId+"/photo";
+    				var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+mId+"/photourl";
     				Teams.loadImg(imgURL).then(function(result){
     					// console.log("loading pic " + imgURL);
     					
@@ -14876,7 +14876,8 @@ angular.module('WebPaige.Controllers.Messages', [])
     					if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
     						console.log("no pics " ,result);
     					}else{
-    						$('#chat-content #img_'+imgId).css('background-image','url('+imgURL+')');
+    						var realImgURL = $scope.imgHost + result.path;
+    						$('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
     					}
     					
     				},function(error){
@@ -14900,13 +14901,11 @@ angular.module('WebPaige.Controllers.Messages', [])
     		var teamIds = $scope.$root.app.resources.teamUuids;
     		if(teamIds && $scope.toggleChat){
     			var teamId = teamIds[0];
-    			$scope.renderMessage(teamId);
     			$scope.chatTeamId = teamId;
+    			$scope.renderMessage();
     			
     			// start auto check chat mesage
-    			$scope.autoCheckMonitorId =  setInterval(function(teamId){
-    				$scope.renderMessage(teamId);
-    		    },5000);
+    			$scope.autoCheckMonitorId =  setInterval($scope.renderMessage,5000);
     			
     		}else{
     			// stop auto check chat mesage
@@ -14927,7 +14926,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     				sendTime : current.getTime()};
     		console.log(message);
     		Messages.sendTeamMessage(message).then(function(result){
-    			$scope.renderMessage($scope.chatTeamId);
+    			$scope.renderMessage();
     			$rootScope.statusBar.off();
     			$scope.newMessage = "";    			
     			
