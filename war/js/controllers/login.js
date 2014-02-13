@@ -135,7 +135,7 @@ angular.module('WebPaige.Controllers.Login', [])
               User.login(uuid.toLowerCase(), pass)
               .then(function (result)
                 {
-                if (result.status == 400 || result.status == 403)
+                if (result.status == 400 || result.status == 403 || result.status == 404)
                 {
                   $scope.alert = {
                     login: {
@@ -144,6 +144,20 @@ angular.module('WebPaige.Controllers.Login', [])
                       message: $rootScope.ui.login.alert_wrongUserPass
                     }
                   };
+
+                  $('#login button[type=submit]')
+                    .text($rootScope.ui.login.button_loggingIn)
+                    .removeAttr('disabled');
+
+                  return false;
+                }else if (result.status == 0 ){
+                    $scope.alert = {
+                            login: {
+                              display: true,
+                              type: 'alert-error',
+                              message: $rootScope.ui.login.alert_network
+                            }
+                          };
 
                   $('#login button[type=submit]')
                     .text($rootScope.ui.login.button_loggingIn)
@@ -160,6 +174,34 @@ angular.module('WebPaige.Controllers.Login', [])
                 });
             };
             
+            var initAvatarUrls = function(members,type){
+            	 if(type == "team"){
+            		  angular.forEach(members,function(mem){
+		              	// load the avatr URL and store them into the local storage
+		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/team/member/" + mem.uuid + "/photourl"; 
+		              	Teams.loadImg(getAvatarUrl).then(function(res){
+		              		if(res.path){
+		              			Storage.avatar.addurl(mem.uuid,res.path);
+		              			console.log("Member Avatar path for " + mem.uuid + " - " +res.path);
+		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+		              		}
+		              	});
+		              });
+            	 }else if(type == "client"){
+            		 angular.forEach(members,function(mem){
+ 		              	// load the avatr URL and store them into the local storage
+ 		              	var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/client/" + mem.uuid + "/photourl"; 
+ 		              	Clients.loadImg(getAvatarUrl).then(function(res){
+ 		              		if(res.path){
+ 		              			Storage.avatar.addurl(mem.uuid,res.path);
+ 		              			console.log("Client Avatar path for " + mem.uuid + " - " +res.path);
+ 		              			console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+ 		              		}
+ 		              	});
+ 		              });
+            	 }
+            	 
+            }
             
             /**
              * TODO
@@ -194,12 +236,13 @@ angular.module('WebPaige.Controllers.Login', [])
                   Teams.query(true,{})
                   .then(function (teams)
                   {
-                    console.log("got teams ");
+                    console.log("got teams ", teams);
                     
                     // try to get the members not in the teams Aync 
                     console.log("got members not in any teams");
                     Teams.queryMembersNotInTeams().then(function(result){
-                    	console.log("members not in any teams loaded ");
+                    	console.log("all members loaded (include the members not in any teams)" , result);
+	                    initAvatarUrls(result,"team");
                     },function(error){
                     	
                     });
@@ -220,8 +263,9 @@ angular.module('WebPaige.Controllers.Login', [])
                         self.progress(80, $rootScope.ui.login.loading_clientGroups);
                         
                         Clients.queryAll()
-                        .then(function(){
-                            console.log("got all clients in or not in the client groups ");
+                        .then(function(res_clients){
+                            console.log("got all clients in or not in the client groups ",res_clients);
+                            initAvatarUrls(res_clients,"client");
                             
                             Clients.query(false,{})
                             .then(function(){
@@ -295,6 +339,6 @@ angular.module('WebPaige.Controllers.Login', [])
             {
               $('#preloader .progress .bar').css({ width: ratio + '%' }); 
               $('#preloader span').text(message);    
-            };
+            };            
         } 
 ]);

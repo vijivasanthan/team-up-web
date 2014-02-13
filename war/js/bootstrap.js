@@ -86,7 +86,7 @@ angular.module('WebPaige')
     /**
      * If periods are not present calculate them
      */
-     if (!Storage.get('periods')) Dater.registerPeriods();
+     if (!Storage.get('periods') || Storage.get('periods') == null) Dater.registerPeriods();
 
 
 
@@ -656,6 +656,17 @@ angular.module('WebPaige')
 		return members;
 	};
     
+	$rootScope.getAvatarURL = function(userId,type){
+		var avatarURLs = angular.fromJson(Storage.get("avatarUrls"));
+		var ret = '';
+		angular.forEach(avatarURLs,function(avatar){
+			if(avatar.userId == userId){
+				ret = avatar.url; 
+			}
+		});
+		return ret;
+	};
+	
   }
 ]);
 

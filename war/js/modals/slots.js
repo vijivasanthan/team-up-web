@@ -16,7 +16,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	   * Define Slot Resource from back-end
 	   */
 	  var Slots = $resource(
-	    $config.host + 'teamup/team/member/tasks/:member/',{},
+	    $config.host + $config.namespace + '/tasks/:taskId',{},
 	    {
 	      query: {
 	        method: 'GET',
@@ -30,8 +30,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	        method: 'POST',
 	      },
 	      remove: {
-	        method: 'DELETE',
-	        params: {taskId: ''}
+	        method: 'DELETE',	        
 	      }
 	    }
 	  );
@@ -72,7 +71,6 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	      },
 	    }
 	  );
-
 
 	  /**
 	   * Get group wishes
@@ -538,11 +536,11 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  /**
 	   * Slot adding process
 	   */
-	  Slots.prototype.add = function (slot, user) 
+	  Slots.prototype.add = function (slot) 
 	  {
 	    var deferred = $q.defer();
 
-	    Slots.save({member: user}, slot,
+	    Slots.save(slot,
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -556,7 +554,27 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	    return deferred.promise;
 	  };
 
+	  /**
+	   * Slot adding process
+	   */
+	  Slots.prototype.update = function (slot) 
+	  {
+	    var deferred = $q.defer();
 
+	    Slots.change({taskId: slot.uuid},slot,
+	      function (result) 
+	      {
+	        deferred.resolve(result);
+	      },
+	      function (error)
+	      {
+	        deferred.resolve({error: error});
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+	  
 	  /**
 	   * TODO
 	   * Add back-end
@@ -594,7 +612,7 @@ angular.module('WebPaige.Modals.Slots', ['ngResource'])
 	  {
 	    var deferred = $q.defer();
 //
-	    Slots.remove({ taskId : tId , member: mId},  
+	    Slots.remove({ taskId : tId },  
 	      function (result) 
 	      {
 	        deferred.resolve(result);

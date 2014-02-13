@@ -8,7 +8,7 @@ angular.module('WebPaige.Modals.Messages', ['ngResource'])
  */
 .factory('Messages', ['$rootScope', '$config', '$resource', '$q', 'Storage', '$http',
 function($rootScope, $config, $resource, $q, Storage, $http) {
-	var Messages = $resource($config.host + 'teamup/team/teamMessage/', {
+	var Messages = $resource($config.host + $config.namespace + '/team/teamMessage/', {
 	}, {
 		query : {
 			method : 'GET',
@@ -49,7 +49,7 @@ function($rootScope, $config, $resource, $q, Storage, $http) {
 
 	
 
-	var TeamMessage = $resource($config.host + 'teamup/team/teamMessage/:teamId', {}, {
+	var TeamMessage = $resource($config.host + $config.namespace + '/team/teamMessage/:teamId', {}, {
 		query : {
 			method : 'GET',
 			params : {},

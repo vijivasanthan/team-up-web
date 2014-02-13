@@ -11,6 +11,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 	var self = this, params = $location.search();
 	$scope.imgHost = profile.host();
+	$scope.ns = profile.ns();
 
 	var teams = angular.fromJson(Storage.get('Teams')), clients = angular.fromJson(Storage.get('ClientGroups'));
 
@@ -62,7 +63,11 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.teams.members[team.uuid] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/team/member/" + member.uuid + "/photo";
+				var imgfile = Storage.avatar.geturl(member.uuid);
+				var imgURL = $scope.imgHost + imgfile;
+				if(typeof imgfile == "undefined"){
+					imgURL = profile.noImgURL;
+				}
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
@@ -84,7 +89,11 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 			$scope.data.clients.members[client.id] = [];
 
 			angular.forEach(members, function(member) {
-				var imgURL = $scope.imgHost + "/teamup/client/" + member.uuid + "/photo";
+				var imgfile = Storage.avatar.geturl(member.uuid);
+				var imgURL = $scope.imgHost + imgfile;
+				if(typeof imgfile == "undefined"){
+					imgURL = profile.noImgURL;
+				}
 				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
 
 				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
@@ -150,10 +159,21 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		var endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 		
 		var storeTask = function(tasks,startTime,endTime){
-			console.log("tasks " , tasks);
-			angular.forEach(tasks, function(task,memberId) {
+			// clear the array to keep tasks sync with sever side after changing
+			$scope.data[$scope.section].tasks = [];
+			angular.forEach(tasks, function(task,i) {
 				if(task != null){
-					$scope.data[$scope.section].tasks[memberId] = task;
+					var memberId = "";
+					if($scope.section == "teams"){
+						memberId = task.assignedTeamMemberUuid;
+					}if($scope.section == "clients"){
+						memberId = task.relatedClientUuid;
+					}
+					
+					if(typeof $scope.data[$scope.section].tasks[memberId] == "undefined"){
+						$scope.data[$scope.section].tasks[memberId] = new Array();
+					}
+					$scope.data[$scope.section].tasks[memberId].push(task);
 				}
 			});
 			

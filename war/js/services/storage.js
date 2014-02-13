@@ -343,7 +343,36 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
 
     return (!settings.settingsWebPaige) ? $rootScope.config.defaults.settingsWebPaige : angular.fromJson(settings.settingsWebPaige);
   };
-
+  
+  var addAvatarURLtoStorage = function(id, avatarUrl){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  if(avatarUrls){
+		angular.forEach(avatarUrls,function(item){
+			if(item.id == id){
+				item.url = avatarUrl;
+			}else{
+				var newItem = {'id' : id, 'url' : avatarUrl };
+				avatarUrls.add(newItem);
+			}
+		});
+	  }else{
+		  avatarUrls = [{'id' : id, 'url' : avatarUrl }];
+	  }
+	  addToLocalStorage('avatarUrls',angular.toJson(avatarUrls));
+  }
+  
+  var getAvatarURLFromStorage = function(id){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  var ret;
+	  if(avatarUrls){
+		  angular.forEach(avatarUrls,function(item){
+			  if(item.id == id){
+				  ret = item.url; 
+			  }
+		  });
+	  }
+	  return ret;
+  }
 
   return {
     isSupported: browserSupportsLocalStorage,
@@ -369,6 +398,10 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
       groups:   getGroups,
       members:  getMembers,
       settings: getSettings
+    },
+    avatar: {
+    	addurl: addAvatarURLtoStorage,
+    	geturl: getAvatarURLFromStorage
     }
   }
 

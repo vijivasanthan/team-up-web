@@ -33,6 +33,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 	   * apply the host to img url
 	   */
 	  $scope.imgHost = profile.host();
+	  $scope.ns = profile.ns();
 	  
 	  /**
 	   * Pass current
@@ -192,16 +193,17 @@ angular.module('WebPaige.Controllers.Profile', [])
 	    
 	    // load the avatar by ajax way
 	    var memberId = $route.current.params.userId;
-	    var imgURL = $scope.imgHost+"/teamup/team/member/"+memberId+"/photo";
+	    var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
         Teams.loadImg(imgURL).then(function(result){
             // console.log("loading pic " + imgURL);
-            
+             
             var imgId = memberId.replace(".","").replace("@","");
             if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
                 console.log("loading pic " ,result);
-                $('#img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
+                $('#profile #img_'+imgId).css('background-image','url('+$scope.noImgURL+')');
             }else{
-                $('#img_'+imgId).css('background-image','url('+imgURL+')');
+            	var realImgURL = $scope.imgHost.replace("\\:",":") + result.path;  
+                $('#profile #img_'+imgId).css('background-image','url('+realImgURL+')');
             }
             
         },function(error){
@@ -439,30 +441,22 @@ angular.module('WebPaige.Controllers.Profile', [])
 	  
 	  $scope.editProfile = function(){
 	      setView('edit');
-	  }
+	  };	 
 	  
 	  /**
 	   * load the dynamic upload URL for GAE 
 	   */
 	  $scope.editImg = function(){
-	      $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-	      Profile.loadUploadURL($route.current.params.userId)
-	        .then(function (result)
-	        {
-	          if (result.error){
-	            $rootScope.notifier.error('Error with loading upload URL.');
-	            console.warn('error ->', result);
-	          }else{
-	              
-	            $rootScope.statusBar.off();
-	            $scope.uploadURL = result.url;
-	            
-	            $scope.setViewTo('editImg');
-	          };
-	      });
-	      
-	      
-	  }
+		  $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photourl";
+		  Teams.loadImg($scope.uploadURL).then(function(result){
+			  var imgHost = $scope.imgHost.replace("\\","");
+			  if(result.path){
+				  $scope.avatarURL = imgHost+result.path;
+			  }
+			  $scope.uploadURL = imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";
+			  $scope.setViewTo('editImg');
+		  });		  
+	  };
 	  
 	  /**
 	   * delete the team member 
@@ -501,7 +495,7 @@ angular.module('WebPaige.Controllers.Profile', [])
 				console.log(error);
 			});
 		}
-	  }
+	  };
 	  
 	  
 	}

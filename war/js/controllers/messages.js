@@ -17,6 +17,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     	$scope.messages = [];
     	
     	$scope.imgHost = profile.host();
+    	$scope.ns = profile.ns();
     	
     	$scope.renderMessage = function(teamId){
     		
@@ -82,7 +83,7 @@ angular.module('WebPaige.Controllers.Messages', [])
     			// load the avatar img
     			angular.forEach(chatMembers, function(mId,i){
     				console.log(mId);
-    				var imgURL = $scope.imgHost+"/teamup/team/member/"+mId+"/photo";
+    				var imgURL = $scope.imgHost+$scope.ns+"/teamup/team/member/"+mId+"/photo";
     				Teams.loadImg(imgURL).then(function(result){
     					// console.log("loading pic " + imgURL);
     					
