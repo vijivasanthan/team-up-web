@@ -148,7 +148,8 @@ angular.module('WebPaige.Modals.Teams', ['ngResource'])
 				params : {
 					from : '',
 					to: ''
-				}
+				},
+				isArray : true
 			}
 		});
 		

@@ -451,7 +451,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 
 		if ( selection = $scope.self.timeline.getSelection()[0]) {
 			//var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
-			var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson($($(values.content)[1]).val());
+			var values = $scope.self.timeline.getItem(selection.row);
+			var content = $scope.getSlotContentJSON(values.content) ;
 
 			$scope.relatedUsers = $scope.processRelatedUsers(values);
 
@@ -475,7 +476,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			
 			if(values.content == "New" ){
 				content = {type : "slot"};
-			}else if(content.relatedUser && typeof content.id == "undefined"){
+			}else if(content.clientUuid && typeof content.id == "undefined"){
 				content = $.extend(content,{type : "slot"});
 			}
 			
@@ -500,7 +501,13 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 							break;
 					}
 				}
-
+				
+				var relatedUserId ; 	
+				if($scope.views.teams){
+					relatedUserId = content.clientUuid;
+				}else if($scope.views.clients){
+					relatedUserId = content.memberId;
+				}
 				$scope.slot = {
 					start : {
 						date : new Date(values.start).toString($rootScope.config.formats.date),
@@ -515,7 +522,10 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 					state : content.state,
 					recursive : content.recursive,
 					id : content.id,
-					relatedUser : content.relatedUser,
+					memberId : content.memberId,
+					mid : content.mid,
+					clientUuid : content.clientUuid,
+					relatedUser : relatedUserId
 				};
 
 				/**
@@ -792,13 +802,16 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			}
 
 			$rootScope.statusBar.display($rootScope.ui.planboard.addTimeSlot);
-
-			Slots.add(values, memberId).then(function(result) {
+			
+			// convert the value to the new Task json object
+			values = $.extend(values,{'memberId': memberId});
+			values = $scope.convertTaskJsonObject(values);
+			Slots.add(values).then(function(result) {
 				$rootScope.$broadcast('resetPlanboardViews');
 
 				if (result.error) {
-					//					$rootScope.notifier.error($rootScope.ui.errors.timeline.add);
-					console.warn('error ->', result);
+					$rootScope.notifier.error(result.error.data.result);
+					console.warn('error ->', result.error.data.result);
 				} else {
 					$rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
 					if($scope.section == "teams"){
@@ -816,6 +829,37 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		}
 	};
 
+	/**
+	 * convert the raw slot data to json that can be processed     
+	 */
+	$scope.convertTaskJsonObject = function(rawSlot){
+		var teamMemberId,clientId,team;
+		
+		if($scope.views.teams){
+			teamMemberId = rawSlot.memberId;
+			clientId = rawSlot.relatedUserId;
+			team = $scope.currentTeam;
+		}else if($scope.views.clients){
+			teamMemberId = rawSlot.relatedUserId;
+			clientId = rawSlot.memberId;
+			var member = $rootScope.getTeamMemberById(teamMemberId);
+			team = member.teamUuids[0];
+		}
+		
+		var newSlot = {
+			  uuid: rawSlot.uuid,
+			  status: 1,
+			  plannedStartVisitTime: rawSlot.startTime,
+			  plannedEndVisitTime: rawSlot.endTime,
+			  relatedClientUuid: clientId,
+			  assignedTeamUuid: team,
+			  description : rawSlot.description,
+			  assignedTeamMemberUuid : teamMemberId 
+			};
+		
+		return newSlot;
+	}
+	
 	$scope.redrawSlot = function(slot) {
 
 		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time);
@@ -842,24 +886,31 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 
 		var relateUserName = "";
 		angular.forEach($scope.relatedUsers, function(ru) {
-			if ($scope.slot.relatedUser == ru.uuid) {
+			// client might not allowed to changed here 
+			if (ru.uuid == $scope.slot.relatedUser) {
 				relateUserName = ru.name;
 			}
 		});
 
 		var content_obj = item.content;
 		if (content_obj != "New") {
-			content_obj = angular.fromJson($($(item.content)[1]).val());
-			content_obj.relatedUser = $scope.slot.relatedUser;
+			content_obj = $scope.getSlotContentJSON(item.content);
+			content_obj.clientUuid = $scope.slot.clientUuid;
+			content_obj.memberId = $scope.slot.memberId;
 		} else {
+			
 			content_obj = {
-				relatedUser : $scope.slot.relatedUser
+				clientUuid : $scope.slot.clientUuid,
+				memberId: $scope.slot.memberId
 			};			
 		}
 
 		var content = "<span>" + relateUserName + "</span>" + "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
-		if(typeof $scope.slot.relatedUser == 'undefined'){
-			content = "New";
+		if((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) || 
+			(typeof $scope.slot.memberId == 'undefined' && $scope.views.clients)){
+			if(typeof $scope.slot.relatedUser == "undefined" || $scope.slot.relatedUser == ""){
+				content = "New";
+			}
 		}
 		return content;
 	};
@@ -877,10 +928,11 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			//              content:  angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
 			content : values.content
 		};
-
-		var content_obj = angular.fromJson($($(values.content)[1]).val());
+		
+		var content_obj = $scope.getSlotContentJSON(values.content);
 
 		$scope.$apply(function() {
+			
 			$scope.slot = {
 				start : {
 					date : new Date(values.start).toString($rootScope.config.formats.date),
@@ -895,7 +947,13 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				//	              state:      options.content.state,
 				//	              recursive:  options.content.recursive,
 				//	              id:         options.content.id
-				relatedUser : ( typeof content_obj == "undefined") ? "" : content_obj.relatedUser,
+				state : content_obj.state,
+				
+				id : content_obj.id,
+				memberId : content_obj.memberId,
+				mid : content_obj.mid,
+				clientUuid : content_obj.clientUuid,
+				relatedUser : $scope.slot.relatedUser
 			};
 		});
 
@@ -937,7 +995,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		$rootScope.planboardSync.clear();
 
 		var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-		var content = angular.fromJson($($(selected.content)[1]).val())
+		var content = $scope.getSlotContentJSON(selected.content);
+		
 		var memberId = $(selected.group).attr("memberId");
 		
 		if (!direct) {
@@ -950,6 +1009,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				description : "",
 				relatedUserId:  slot.relatedUser,
 				uuid : content.id,
+				memberId : memberId,
 			};
 		} else {
 			/**
@@ -961,6 +1021,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				description : "",
 				relatedUserId: slot.relatedUser ,  
 				uuid : content.id,
+				memberId : memberId
 			};
 		}
 
@@ -980,12 +1041,12 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		};
 
 		
-		
-		Slots.add(options, memberId).then(function(result) {
+		var values = $scope.convertTaskJsonObject(options);
+		Slots.update(values).then(function(result) {
 			$rootScope.$broadcast('resetPlanboardViews');
 
 			if (result.error) {
-				//					$rootScope.notifier.error($rootScope.ui.errors.timeline.add);
+				$rootScope.notifier.error(result.error.data.result);
 				console.warn('error ->', result);
 			} else {
 				$rootScope.notifier.success($rootScope.ui.planboard.slotChanged);
@@ -1025,13 +1086,18 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				return;
 			}
 			
+			if(typeof content.id == "undefined"){
+				console.log("Nothing to delete");
+				return;
+			}
+			
 			$rootScope.statusBar.display($rootScope.ui.planboard.deletingTimeslot);
 			
 			Slots.remove(content.id, memberId).then(function(result) {
 				$rootScope.$broadcast('resetPlanboardViews');
 
 				if (result.error) {
-					$rootScope.notifier.error($rootScope.ui.errors.timeline.remove);
+					$rootScope.notifier.error(result.error.data.result);
 					console.warn('error ->', result);
 				} else {
 					$rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
@@ -1160,4 +1226,9 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	 * Start planboard sync
 	 */
 	$rootScope.planboardSync.start();
+	
+	$scope.getSlotContentJSON = function(content){
+		var jsonStr =  content.substring(content.indexOf("value=")+7,content.length-2);
+		return angular.fromJson(jsonStr);
+	}
 }]);

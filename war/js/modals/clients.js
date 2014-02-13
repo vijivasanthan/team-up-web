@@ -124,7 +124,8 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 				params : {
 					from : '',
 					to: ''
-				}
+				},
+				isArray : true
 			}
 		});
         

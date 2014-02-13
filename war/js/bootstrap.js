@@ -86,7 +86,7 @@ angular.module('WebPaige')
     /**
      * If periods are not present calculate them
      */
-     if (!Storage.get('periods')) Dater.registerPeriods();
+     if (!Storage.get('periods') || Storage.get('periods') == null) Dater.registerPeriods();
 
 
 
