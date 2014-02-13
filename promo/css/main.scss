@@ -1,0 +1,635 @@
+// CSS normalize.css reset
+// @import "modules/normalize";
+
+// See modules/_base.scss
+@import "modules/base";
+@import "modules/mixins";
+@import "modules/normalize";
+@import "modules/variables";
+/*@import "modules/navbar";*/
+
+@import "partials/header";
+@import "partials/footer";
+@import "partials/ie";
+
+
+
+
+/*GENERAL*/
+
+html, body { height:100%; }
+
+body {
+    @include typeface;
+    background-color: $turq;
+    font-family: "Myriad Pro", 'PT Sans', arial, helvetica, sans-serif;
+}
+
+h2{
+  text-align: left;
+  color: $turq;
+  font-style: italic;
+}
+p {
+  color: $brown;
+  line-height: 22px;
+  font-size: 16px;
+  text-align: justify;
+}
+
+.container-narrow {
+  margin: 0 auto;
+  max-width: 800px ;
+}
+
+
+
+
+/*NAVBAR*/
+
+.navbar-inverse {
+
+  .navbar-inner {
+    background-color: $brown;
+    background-image: none;
+    border: none;
+  }
+}
+
+.navbar .brand {
+/*  background-image: url("../img/logoHeader.png");
+  width: 126px;
+  height: 50px;
+  float: left;
+  display: block;*/
+  padding: 0;
+  margin-left: 0;
+  background-position: top;
+}
+
+.loginBtn {
+  float: right !important;
+  width: 140px;
+  a {
+    text-decoration: none;
+  }
+  button {
+    padding: auto 10px;
+    margin-top: 4px !important;
+  }
+}
+
+
+
+
+/*INTRO*/
+
+#intro{
+/*  background: url("../img/photo01.jpg") no-repeat top center;
+  background-size: cover;*/
+
+  .hero-unit {
+    background-color: transparent;
+    margin-top:60px;
+    #heroLogo{
+      background-image: url("../img/logo.png");
+      width: 160px;
+      height: 82px;
+      margin: 0 auto 40px;
+    }
+    #welcomeArrow {
+      border-bottom: 15px solid #FFFAF0;
+      border-left: 32px solid rgba(0, 0, 0, 0);
+      border-right: 32px solid rgba(0, 0, 0, 0);
+      height: 0;
+      left: 50%;
+      margin: -15px 0 0 -80px;
+      position: absolute;
+      width: 0;
+    }
+    #welcome {
+      background-color: #FFFAF0;
+      margin: 0 auto 280px;
+      max-width: 300px;
+      padding: 22px 22px 6px;
+      @include border-radius(20px);
+      p {
+        font-size: 22px;
+        font-style: italic;
+        line-height: 26px;
+        text-align: center;
+        span{
+          color: $orange;
+          font-size: 16px;
+          font-weight: bold;
+          font-style: normal;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+/*DEVICE AREA 1*/
+
+#deviceArea1 {
+  background-color: $beige;
+  width: 100%;
+  padding-bottom: 80px;
+  img {
+    margin: -260px 0 0px;
+  }
+  h2 {
+/*    text-align: center;*/
+    line-height: 36px;
+  }
+}
+
+
+
+
+/*DEVICE AREA 2*/
+
+#deviceArea2 {
+  width: 100%;
+  margin: 100px 0 0;
+  #deviceArrow {
+    border-bottom: 32px solid transparent;
+    border-left: 15px solid $offwhite;
+    border-top: 32px solid transparent;
+    margin-top:40px;
+    height: 0;
+    float: right;
+    width: 0;
+  }
+  .tuGirl{
+    background: url("../img/teamupgirl01.png") no-repeat top center;
+    background-size: auto 413px;
+    height: 413px;
+    margin-top: 30px;
+  }
+}
+
+
+
+
+/*PHOTO AREA 1*/
+
+#photoArea1 {
+  background: url("../img/photo01.jpg") no-repeat top center;
+  background-size: cover;
+  width: 100%;
+  height: auto;
+  .bgImage {
+    width: 100%;
+    height: auto;
+  }
+  .photoBub {
+    width: 320px !important;
+    height: 320px;
+    background: $orange;
+    -moz-border-radius: 200px;
+    -webkit-border-radius: 200px;
+    border-radius: 200px;
+    display: table-cell;
+    vertical-align: middle;
+    float: right;
+    margin-top: 300px;
+    p {
+      text-align: center;
+      margin-top: 28px;
+    }
+  }
+  .cloudContainer {
+    margin-top: 40px;
+    z-index: -1;
+    #topArrow {
+      border-bottom: 15px solid #FFFAF0;
+      border-left: 32px solid rgba(0, 0, 0, 0);
+      border-right: 32px solid rgba(0, 0, 0, 0);
+      height: 0;
+      margin: -15px 0 0 40px;
+      position: absolute;
+      width: 0;
+    }
+  }
+}
+
+
+
+
+/*DEVICE AREA 3*/
+
+#deviceArea3 {
+  background-color: $beige;
+  width: 100%;
+  padding-bottom: 100px;
+
+  .span4 {
+    position: relative;
+    img {
+      margin: 100px 0 0px;
+      height: auto;
+    }
+    .mobileBubble{
+      position:absolute;
+      left:0px;
+      top:0px;
+      z-index:1;
+      text-align: center;
+      vertical-align: middle;
+      float: left;
+      margin-bottom: 5%;
+      word-wrap: break-word;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      hyphens: auto;
+      padding: 10px;
+      -moz-border-radius: 200px;
+      -webkit-border-radius: 200px;
+      border-radius: 200px;
+      p {
+        text-align: center;
+      }
+    }
+    .bub1{
+      margin-top: 70%;
+      margin-left: -20%;
+      background-color: $orange;
+      width: 80px !important;
+      height: 80px;
+      p {
+        margin-top: 16px;
+      }
+    }
+    .bub2{
+      margin-top: 160%;
+      margin-left: 54%;
+      background-color: $turq;
+      width: 60px !important;
+      height: 60px;
+      p {
+        margin-top: 8px;
+        color: $offwhite !important;
+      }
+    }
+    .bub3{
+      margin-top: 80%;
+      margin-left: -10%;
+      background-color: $brown;
+      width: 100px !important;
+      height: 100px;
+      p {
+        margin-top: 6px;
+        color: $offwhite !important;
+      }
+    }
+    .bub4{
+      margin-top: 24%;
+      margin-left: 70%;
+      background-color: $turq;
+      width: 100px !important;
+      height: 100px;
+      p {
+        margin-top: 6px;
+        color: $offwhite !important;
+      }
+    }
+    .bub5{
+      margin-top: 180%;
+      margin-left: 50%;
+      background-color: $orange;
+      width: 130px !important;
+      height: 130px;
+      p {
+        margin-top: 6px;
+      }
+    }
+    .bub6{
+      margin-top: 60%;
+      margin-left: 70%;
+      background-color: $orange;
+      width: 90px !important;
+      height: 90px;
+      p {
+        margin-top: 14px;
+      }
+    }
+    .bub7{
+      margin-top: 130%;
+      margin-left: 80%;
+      background-color: $brown;
+      width: 80px !important;
+      height: 80px;
+      p {
+        margin-top: 18px;
+        color: $offwhite !important;
+      }
+    }
+  }
+}
+
+
+
+
+/*CONTACT*/
+
+#contact {
+  margin: 100px 0;
+  h1 {
+    color: $offwhite;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 5em;
+    margin-bottom: 100px;
+    line-height: 60px;
+  }
+  .contactInfo {
+    margin-bottom: 100px;
+    p {
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+    .contactText {
+      text-align: left;
+      font-style: italic;
+      span {
+        font-weight: bold;
+        font-style: normal;
+      }
+    }
+    .contactIcon {
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    a {
+      color: #ffffff;
+    }
+    .skypeBtn {
+      img {
+        margin: 6px 20px 10px 0 !important;
+        height: 21px;
+        width: auto;
+        padding: 0 !important;
+        float:left;
+      }
+    }
+  }
+  .contactInput {
+    @include border-radius(20px);
+    margin-bottom: 20px;
+    height: 40px;
+    padding: 0 10px;
+  }
+  .contactTextarea {
+    @include border-radius(20px);
+    margin-bottom: 20px;
+    padding: 10px;
+    height: 160px;
+  }
+  .sendButton{
+    clear: both;
+    margin-left: 0;
+  }
+}
+
+
+
+
+/*FOOTER*/
+
+footer {
+  padding: 0 20px;
+  p {
+    text-align: center;
+    color: $offwhite;
+    span {
+      margin-right: 20px;
+    }
+    a, a:hover, a:focus, a:active {
+      color: $offwhite;
+    }
+  }
+}
+
+
+
+
+/*GENERAL SPECIFIC*/
+
+.btn-primary {
+  background-color: $orange;
+  background-image: none;
+  color:$brown;
+  text-shadow: none;
+  box-shadow: none;
+  border: none;
+  @include border-radius(20px);
+  &:hover,
+  &:focus {
+    background-color: $orange;
+    background-image: none;
+    color: $offwhite;
+  }
+}
+
+
+.talkCloud {
+  background-color: $offwhite;
+  padding:20px;
+  @include border-radius(20px);
+  margin-right: 15px;
+  margin-bottom: 100px;
+}
+
+
+/*.circle{
+  width: 200px !important;
+  height: 200px;
+  background: red;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  display: block;
+  float: left;
+  margin-bottom: 5%;
+}*/
+
+/*.pos1{
+  margin-top: 80%;
+  margin-left: 5%;
+}
+.pos2{
+  margin-top: 10%;
+  margin-left: 5%;
+}
+.pos3{
+  margin-top: 60%;
+  margin-right: 5%;
+  float: right;
+}*/
+
+/*div {
+  .bgBrown{
+    background-color: $brown;
+    p {
+      color: $offwhite !important;
+    }
+  }
+  .bgTurq{
+    background-color: $turq;
+    p {
+      color: $offwhite !important;
+    }
+  }
+  .bgBeige{
+    background-color: $beige;
+  }
+}*/
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 979px) {
+  body {padding: 0;}
+
+  .container-narrow {
+    padding: 0 20px;
+  }
+
+  .navbar-inner {
+    padding: 0 10px !important;
+  }
+
+
+}
+
+
+
+@media (min-width: 768px) and (max-width: 979px) {
+}
+
+
+
+@media (max-width: 767px) {
+
+  #intro {
+    .hero-unit {
+      #welcome {
+        margin: 0 auto 200px;
+      }
+    }
+  }
+
+  #deviceArea1 {
+    img {
+      margin: -200px 0 0;
+    }
+    .row-fluid {
+      p {
+        margin-bottom: 40px;
+      }
+    }
+  }
+
+  #deviceArea2 {
+    #deviceArrow{
+      display: none;
+    }
+  }
+
+  #deviceArea3 {
+    .container-narrow{
+      .span4:not(:first-child) {
+        img {
+          margin: 20px 0 0;
+        }
+      }
+      .bub1 {
+        margin-top: 50%;
+        margin-left: 0;
+      }
+      .bub5 {
+        margin-top: 160%;
+      }
+      .bub7 {
+        margin-left: 0;
+      }
+    }
+
+  }
+
+  #photoArea1{
+    background-size: contain;
+    #topArrow {
+      display: none;
+    }
+  }
+
+}
+
+
+
+@media (min-width: 481px) and (max-width: 767px){
+  #deviceArea3 {
+    .container-narrow{
+      padding: 0 100px;
+    }
+
+  }
+}
+
+
+
+@media (max-width: 480px) {
+
+  #intro {
+    .hero-unit {
+      #welcome {
+        margin: 0 auto 100px;
+      }
+    }
+  }
+
+  .talkCloud{
+    margin: 0 20px 100px 20px;
+  }
+
+  #deviceArea1 {
+    img {
+      margin: -100px 0 0;
+    }
+  }
+
+  #deviceArea3 {
+    .container-narrow{
+      .span4 {
+        padding: 0 20px;
+      }
+      .bub5 {
+        margin-top: 140%;
+      }
+    }
+  }
+
+
+
+  #photoArea1{
+    background-size: 180%;
+  }
+}
+
+
+

@@ -10,12 +10,17 @@
 angular.module('WebPaige',[
   'ngResource',
   // modals
-  // 'WebPaige.Modals.User',
+   'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
   'WebPaige.Modals.Core',
-  // 'WebPaige.Modals.Profile',
-  // 'WebPaige.Modals.Settings',
+  'WebPaige.Modals.Teams',
+  'WebPaige.Modals.Clients',
+  'WebPaige.Modals.Profile',
+  'WebPaige.Modals.Settings',
   // 'WebPaige.Modals.Help',
+  'WebPaige.Modals.Messages',
+  'WebPaige.Modals.Slots',
+  
   // controller
   'WebPaige.Controllers.Login',
   'WebPaige.Controllers.Forgotpass',
@@ -23,27 +28,41 @@ angular.module('WebPaige',[
   // 'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',
-  // 'WebPaige.Controllers.Profile',
+  'WebPaige.Controllers.Teams',
+  'WebPaige.Controllers.Clients',
+  'WebPaige.Controllers.Manage',
+  'WebPaige.Controllers.TreeGrid',
+  'WebPaige.Controllers.Planboard',
+  'WebPaige.Controllers.Timeline',
+  'WebPaige.Controllers.Timeline.Navigation',
+  'WebPaige.Controllers.Profile',
+  'WebPaige.Controllers.Messages',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
+  
   // services
   // 'WebPaige.Services.Timer',
-  // 'WebPaige.Services.Session',
-  // 'WebPaige.Services.Dater',
+  'WebPaige.Services.Session',
+  'WebPaige.Services.Dater',
   // 'WebPaige.Services.EventBus',
   // 'WebPaige.Services.Interceptor',
-  // 'WebPaige.Services.MD5',
+  'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
   'WebPaige.Services.Generators',
-  // 'WebPaige.Services.Sloter',
+  'WebPaige.Services.Sloter',
   // 'WebPaige.Services.Stats',
   // 'WebPaige.Services.Offsetter',
+  
   // directives
   'WebPaige.Directives',
   '$strap.directives',
+  
   // filters
-  'WebPaige.Filters'
+  'WebPaige.Filters',
+  
+  // libs 
+  'ui.bootstrap.modal'
 ]);
 
 

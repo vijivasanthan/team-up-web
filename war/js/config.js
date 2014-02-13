@@ -11,9 +11,9 @@ angular.module('WebPaige')
 .value(
   '$config',
   {
-    title:    'OneLine',
+    title:    'TeamUp',
     version:  '0.1.0',
-    lang:     'en',
+    lang:     'nl',
 
     fullscreen: true,
 
@@ -87,7 +87,15 @@ angular.module('WebPaige')
     },
 
     roles: profile.roles,
-
+    
+    mfunctions: profile.mfunctions,
+    
+    stateIcons : profile.stateIcons,
+    
+    stateColors : profile.stateColors,
+    
+    noImgURL : profile.noImgURL,
+    
     timeline: {
       options: {
         axisOnTop:        true,
@@ -96,7 +104,7 @@ angular.module('WebPaige')
         selectable:       true,
         editable:         true,
         style:            'box',
-        groupsWidth:      '150px',
+        groupsWidth:      '200px',
         eventMarginAxis:  0,
         showCustomTime:   true,
         groupsChangeable: false,

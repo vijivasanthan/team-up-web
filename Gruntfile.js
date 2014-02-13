@@ -1,7 +1,5 @@
 /*jslint node: true */
 'use strict';
-
-
 /**
  * Main compiler for app
  */
@@ -27,25 +25,31 @@ module.exports = function (grunt)
             'war/js/routes.js',
             'war/js/bootstrap.js',
             // modals
-            // 'war/js/modals/user.js',
-            // 'war/js/modals/dashboard.js',
+            'war/js/modals/user.js',
+            'war/js/modals/profile.js',
             'war/js/modals/core.js',
-            // 'war/js/modals/profile.js',
-            // 'war/js/modals/settings.js',
+            'war/js/modals/teams.js',            
+            'war/js/modals/clients.js',
+            'war/js/modals/settings.js',
+            'war/js/modals/messages.js',
+            'war/js/modals/slots.js',
             // directives
             'war/js/directives/directives.js',
             'war/libs/angular-strap/0.7.0/angular-strap.min.js',
+//            'war/libs/angular-ui/0.4.0/angular-ui.js',
+            'war/libs/bootstrap-custom/ui-bootstrap-custom-0.6.0.js',
+            'war/libs/bootstrap-custom/ui-bootstrap-custom-tpls-0.6.0.js',
             // services
             // 'war/js/services/timer.js',
-            // 'war/js/services/session.js',
-            // 'war/js/services/dater.js',
+             'war/js/services/session.js',
+             'war/js/services/dater.js',
             // 'war/js/services/eventbus.js',
             // 'war/js/services/interceptor.js',
-            // 'war/js/services/md5.js',
+            'war/js/services/md5.js',
             'war/js/services/storage.js',
             'war/js/services/strings.js',
             'war/js/services/generators.js',
-            // 'war/js/services/sloter.js',
+            'war/js/services/sloter.js',
             // 'war/js/services/stats.js',
             // 'war/js/services/offsetter.js',
             // filters
@@ -55,11 +59,19 @@ module.exports = function (grunt)
             'war/js/controllers/forgotpass.js',
             'war/js/controllers/register.js',
             // 'war/js/controllers/logout.js',
-            // 'war/js/controllers/dashboard.js',
+            'war/js/controllers/dashboard.js',
             'war/js/controllers/core.js',
-            // 'war/js/controllers/profile.js',
+            'war/js/controllers/profile.js',
             // 'war/js/controllers/settings.js',
-            // 'war/js/controllers/help.js'
+            // 'war/js/controllers/help.js',
+            'war/js/controllers/teams.js',
+            'war/js/controllers/clients.js',
+            'war/js/controllers/manage.js',
+            'war/js/controllers/treegrid.js',
+            'war/js/controllers/planboard.js',
+            'war/js/controllers/timeline.js',
+            'war/js/controllers/timeline-navigation.js',
+            'war/js/controllers/messages.js',
           ],
           'war/src/plugins.js': [
             'war/js/plugins/console.js',
@@ -130,9 +142,14 @@ module.exports = function (grunt)
           // 'war/dist/views/logout.html':    'war/js/views/logout.html',
           // 'war/dist/views/dashboard.html': 'war/js/views/dashboard.html',
           'war/dist/views/core.html':         'war/js/views/core.html',
-          // 'war/dist/views/profile.html':   'war/js/views/profile.html',
+           'war/dist/views/profile.html':     'war/js/views/profile.html',
           // 'war/dist/views/settings.html':  'war/js/views/settings.html',
-          // 'war/dist/views/help.html':      'war/js/views/help.html'
+          // 'war/dist/views/help.html':      'war/js/views/help.html',
+          'war/dist/views/teams.html':        'war/js/views/teams.html',
+          'war/dist/views/clients.html':      'war/js/views/clients.html',
+          'war/dist/views/manage.html':       'war/js/views/manage.html',
+          'war/dist/views/planboard.html':    'war/js/views/planboard.html',
+          'war/dist/views/messages.html':     'war/js/views/messages.html'
         }
       }
     },

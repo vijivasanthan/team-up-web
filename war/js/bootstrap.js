@@ -12,8 +12,8 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window',
-  function ($rootScope, $location, $timeout, Storage, $config, $window)
+  '$rootScope', '$location', '$timeout', 'Session','Storage', '$config', '$window','Teams','Dater',
+  function ($rootScope, $location, $timeout, Session, Storage, $config, $window,Teams,Dater)
   {
     /**
      * Pass config and init dynamic config values
@@ -86,7 +86,7 @@ angular.module('WebPaige')
     /**
      * If periods are not present calculate them
      */
-    // if (!Storage.get('periods')) Dater.registerPeriods();
+     if (!Storage.get('periods')) Dater.registerPeriods();
 
 
 
@@ -94,7 +94,7 @@ angular.module('WebPaige')
     /**
      * Set important info back if refreshed
      */
-    // $rootScope.app = $rootScope.app || {};
+     $rootScope.app = $rootScope.app || {};
 
 
 
@@ -102,7 +102,7 @@ angular.module('WebPaige')
     /**
      * Set up resources
      */
-    // $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
+     $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
 
 
 
@@ -274,48 +274,69 @@ angular.module('WebPaige')
 
 
 
-
-
     /**
      * Detect route change start
      */
     $rootScope.$on('$routeChangeStart', function (event, next, current)
     {
-      // function resetLoaders ()
-      // {
-      //   $rootScope.loaderIcons = {
-      //     general:    false,
-      //     dashboard:  false,
-      //     planboard:  false,
-      //     messages:   false,
-      //     groups:     false,
-      //     profile:    false,
-      //     settings:   false
-      //   };
-      // }
+       function resetLoaders ()
+       {
+         $rootScope.loaderIcons = {
+           general:    false,
+           teams:  false,
+           clients:  false,
+           messages:   false,
+           manage:     false,
+           profile:    false,
+           settings:   false
+         };
+       }
 
-      // resetLoaders();
+       resetLoaders();
 
-      // switch ($location.path())
-      // {
-      //   case '/dashboard':
-      //     $rootScope.loaderIcons.dashboard = true;
+       switch ($location.path())
+       {
+         case '/team':
+           $rootScope.loaderIcons.team = true;
 
-      //     $rootScope.location = 'dashboard';
-      //   break;
+           $rootScope.location = 'team';
+         break;
 
-      //   case '/planboard':
-      //     $rootScope.loaderIcons.planboard = true;
+         case '/client':
+           $rootScope.loaderIcons.client = true;
 
-      //     $rootScope.location = 'planboard';
-      //   break;
+           $rootScope.location = 'cilent';
+         break;
 
-      //   case '/messages':
-      //     $rootScope.loaderIcons.messages = true;
+         case '/messages':
+           $rootScope.loaderIcons.messages = true;
 
-      //     $rootScope.location = 'messages';
-      //   break;
+           $rootScope.location = 'messages';
+         break;
+         
+         case '/manage':
+             $rootScope.loaderIcons.messages = true;
 
+             $rootScope.location = 'manage';
+         break;
+         
+		 case '/logout':
+		   
+           $rootScope.location = 'logout';
+           var logindata = angular.fromJson(Storage.get('logindata'));
+           
+           Storage.clearAll();
+           
+           if(logindata.remember){
+			  Storage.add('logindata', angular.toJson({
+                username: logindata.username,
+                password: logindata.password,
+                remember: logindata.remember
+              }));           	
+           }   
+           
+         break;
+         
       //   case '/groups':
       //     $rootScope.loaderIcons.groups = true;
 
@@ -328,57 +349,55 @@ angular.module('WebPaige')
       //     $rootScope.location = 'settings';
       //   break;
 
-      //   default:
-      //     if ($location.path().match(/profile/))
-      //     {
-      //       $rootScope.loaderIcons.profile = true;
+         default:
+           if ($location.path().match(/profile/))
+           {
+             $rootScope.loaderIcons.profile = true;
 
-      //       $rootScope.location = 'profile';
-      //     }
-      //     else
-      //     {
-      //       $rootScope.loaderIcons.general = true;
-      //     }
-      // }
+             $rootScope.location = 'profile';
+           }
+           else
+           {
+             $rootScope.loaderIcons.general = true;
+           }
+       }
 
-      // if (!Session.check()) $location.path("/login");
+      if (!Session.check()) $location.path("/login");
 
-      // $rootScope.loadingBig = true;
+      $rootScope.loadingBig = true;
 
       $rootScope.statusBar.display('Loading..');
 
 
 
+       switch ($location.path())
+       {
+         case '/team':
+           $rootScope.location = 'team';
+         break;
 
+         case '/client':
+           $rootScope.location = 'client';
+         break;
 
-      // switch ($location.path())
-      // {
-      //   case '/dashboard':
-      //     $rootScope.location = 'dashboard';
-      //   break;
+         case '/messages':
+           $rootScope.location = 'messages';
+         break;
 
-      //   case '/planboard':
-      //     $rootScope.location = 'planboard';
-      //   break;
+         case '/manage':
+           $rootScope.location = 'manage';
+         break;
 
-      //   case '/messages':
-      //     $rootScope.location = 'messages';
-      //   break;
-
-      //   case '/groups':
-      //     $rootScope.location = 'groups';
-      //   break;
-
-      //   case '/settings':
-      //     $rootScope.location = 'settings';
-      //   break;
-
-      //   default:
-      //     if ($location.path().match(/profile/))
-      //     {
-      //       $rootScope.location = 'profile';
-      //     }
-      // }
+         case '/settings':
+           $rootScope.location = 'settings';
+         break;
+         
+         default:
+           if ($location.path().match(/profile/))
+           {
+             $rootScope.location = 'profile';
+           }
+       }
 
 
       $rootScope.location = $location.path().substring(1);
@@ -511,7 +530,7 @@ angular.module('WebPaige')
 
 
 
-
+    
 
     // if (!$config.profile.mobileApp.status) $('#copyrights span.muted').css({right: 0});
 
@@ -528,7 +547,115 @@ angular.module('WebPaige')
     //   })
     // }
     
+	$rootScope.getTeamMemberById = function(memberId) {
+		var teams_local = angular.fromJson(Storage.get("Teams"));
+		var member;
+		angular.forEach(teams_local, function(team, index) {
 
+			var mems = angular.fromJson(Storage.get(team.uuid));
+			angular.forEach(mems, function(mem, index) {
+				if (mem.uuid == memberId) {
+					member = mem;
+					return;
+				}
+			});
+		});
+
+		if(typeof member == "undefined"){
+			member = {uuid : memberId ,
+					 firstName : memberId,
+					 lastName : '',					
+					};
+		}
+		return member;
+	};
+
+	$rootScope.getClientByID = function(clientId) {
+		var ret;
+		var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
+
+		angular.forEach(clients_Not_In_Group, function(client, index) {
+			if (clientId == client.uuid) {
+				ret = client;
+				return;
+			}
+		});
+
+		if (ret == null) {
+			var groups = angular.fromJson(Storage.get("ClientGroups"));
+			angular.forEach(groups, function(group, index) {
+				var cts = angular.fromJson(Storage.get(group.id));
+
+				angular.forEach(cts, function(client, index) {
+					if (client.uuid = clientId) {
+						ret = client;
+						return;
+					}
+				});
+
+			});
+		}
+
+		return ret;
+	}; 
+	
+	/**
+	 * Here we need to find the clients for this team member, 
+	 * 1> get the team,
+	 * 2> find the groups belong to this team,
+	 * 3> get all the clients under the group
+	 */
+	$rootScope.getClientsByTeam = function(teamIds) {
+		var clients = [];
+		var clientIds = [];
+		angular.forEach(teamIds, function(teamId) {
+			var teamGroups = angular.fromJson(Storage.get('teamGroup_' + teamId));
+			angular.forEach(teamGroups, function(teamGrp) {
+				var gMembers = angular.fromJson(Storage.get(teamGrp.id));
+				angular.forEach(gMembers, function(mem) {
+					if(clientIds.indexOf(mem.uuid) == -1){
+						clientIds.add(mem.uuid);
+						
+						var clt = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
+						clients.add(clt);
+					}
+					
+				});
+			});
+		});
+		
+		return clients;
+	}; 
+
+	/**
+	 * Here we need to find the team members that can actually take this client
+	 * 1> get the team link to this client group ,
+	 * 2> get the members in the team. 
+	 */
+	$rootScope.getMembersByClient = function(clientGroup){
+		var members = [];
+		var memberIds = [];
+		var teams = angular.fromJson(Storage.get('Teams'));
+		angular.forEach(teams,function(team){
+			var teamGroups = angular.fromJson(Storage.get('teamGroup_' + team.uuid));
+			angular.forEach(teamGroups, function(teamGrp) {
+				if(clientGroup == teamGrp.id){
+					var mebrs = angular.fromJson(Storage.get(team.uuid));
+					angular.forEach(mebrs,function(mem){
+						if(memberIds.indexOf(mem.uuid) == -1){
+							memberIds.add(mem.uuid);
+							
+							var tm = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
+							members.add(tm);
+						}
+					});
+				}
+			});
+		});
+		
+		return members;
+	};
+    
   }
 ]);
 

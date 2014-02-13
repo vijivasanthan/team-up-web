@@ -18,7 +18,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.packages, function (pack, index)
+				angular.forEach($config.packages, function (pack)
 				{
 					if (pack.id == selected) gem = pack;
 				});
@@ -44,7 +44,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.countries, function (country, index)
+				angular.forEach($config.countries, function (country)
 				{
 					if (country.id == selected) gem = country;
 				});
@@ -70,7 +70,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.regions[country], function (region, index)
+				angular.forEach($config.regions[country], function (region)
 				{
 					if (region.id == selected) gem = region;
 				});
@@ -97,7 +97,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
 			{
 				var gem;
 
-				angular.forEach($config.virtuals, function (virtual, index)
+				angular.forEach($config.virtuals, function (virtual)
 				{
 					if (virtual.id == selected) gem = virtual;
 				});
@@ -111,49 +111,145 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Translate roles
  */
-// .filter('translateRole', 
-// [
-// 	'$config', 
-// 	function ($config)
-// 	{
-// 		return function (role)
-// 		{
-// 			var urole;
+ .filter('translateRole', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (role)
+ 		{
+ 			var urole;
 
-// 			angular.forEach($config.roles, function (prole, index)
-// 			{
-// 				if (prole.id == role) urole = prole.label;
-// 			});
+ 			angular.forEach($config.roles, function (prole)
+ 			{
+ 				if (prole.id == role) urole = prole.label;
+ 			});
 
-// 			return urole;
-// 		}
-// 	}
-// ])
-
-
+ 			return urole;
+ 		}
+ 	}
+ ])
 
 
+ /**
+ * Translate roles
+ */
+ .filter('translateFunc', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (func)
+ 		{
+ 			var ufunc;
+
+ 			angular.forEach($config.mfunctions, function (pfunc)
+ 			{
+ 				if (pfunc.id == func) ufunc = pfunc.label;
+ 			});
+
+ 			return ufunc;
+ 		}
+ 	}
+ ])
+ 
+
+/**
+ * Translate state value to icon
+ */
+ .filter('stateDataIcon', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (name,type){
+            var ret;
+
+            angular.forEach($config.stateIcons, function (stateIcon, index)
+            {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
+                  if(type == "data_icon"){
+                      ret = stateIcon.data_icon;
+                  }else if(type == "class_name"){
+                      ret = stateIcon.class_name;
+                  }  
+                } 
+            });
+
+            return ret;
+        }
+    }
+ ])
+
+ 
+/**
+ * Translate state circle color 
+ */
+ .filter('stateColor', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (states)
+        {
+            var ret = $config.stateColors.none;
+            
+            angular.forEach(states, function (state, index){
+                /**
+                 *    WORKING
+                 *    OFFLINE
+                 *    AVAILABLE
+                 *    UNAVAILABLE
+                 *    UNKNOWN
+                 */
+                if(angular.lowercase(state.name) == "availability" && state.share){
+                    if(angular.lowercase(state.value) == "availalbe" || angular.lowercase(state.value) == "working" ){
+                        ret = $config.stateColors.availalbe; 
+                    }else if(angular.lowercase(state.value) == "unavailable"){
+                        ret = $config.stateColors.busy;
+                    }else if(angular.lowercase(state.value) == "offline"){
+                        ret = $config.stateColors.offline;
+                    }
+                }
+            });
+
+            return ret;
+        }
+    }
+ ])
+
+ 
+ /**
+ * Translate state circle color 
+ */
+ .filter('stateValue', 
+ [
+    '$config', 
+    function ($config){
+        return function (state,type){
+            if(angular.lowercase(state.name) == "location"){
+                var value = state.value;
+                var match = value.match(/\((.*?)\)/);
+                if(match == null){
+                    return value;
+                }else{
+                    var ll = match[1];
+                    value = value.replace(match[0],"");
+                    if(type == "data"){
+                        return ll;
+                    }else{
+                        return value;
+                    }
+                }
+            }else{
+                return state.value;
+            }
+        }
+    }
+])
 
 
 
@@ -161,56 +257,58 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Main range filter
  */
-// .filter('rangeMainFilter', 
-// [
-// 	'Dater', 'Storage', 
-// 	function (Dater, Storage)
-// 	{
-// 		var periods = Dater.getPeriods();
+.filter('rangeMainFilter',
+[
+	'Dater', 'Storage',
+	function (Dater, Storage)
+	{
+		var periods = Dater.getPeriods();
 
-// 		return function (dates)
-// 		{
-// 			if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
-// 				dates.start = new Date(dates.end).addDays(-1);
+		return function (dates)
+		{
+      // console.log('dates ->', dates);
 
-// 			var dates = {
-// 						start: {
-// 							real: 	new Date(dates.start).toString('dddd, MMMM d'),
-// 							month: 	new Date(dates.start).toString('MMMM'),
-// 							day: 		new Date(dates.start).toString('d')
-// 						},
-// 						end: {
-// 							real: 	new Date(dates.end).toString('dddd, MMMM d'),
-// 							month: 	new Date(dates.end).toString('MMMM'),
-// 							day: 		new Date(dates.end).toString('d')
-// 						}
-// 					},
-// 					monthNumber = Date.getMonthNumberFromName(dates.start.month);
+			if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
+				dates.start = new Date(dates.end).addDays(-1);
 
-// 			if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
-// 			{
-// 				return 	dates.start.real + 
-// 								', ' + 
-// 								Dater.getThisYear();
-// 			}
-// 			else if(dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
-// 			{
-// 				return 	dates.start.month + 
-// 								', ' + 
-// 								Dater.getThisYear();
-// 			}
-// 			else
-// 			{
-// 				return 	dates.start.real + 
-// 								' / ' + 
-// 								dates.end.real + 
-// 								', ' + 
-// 								Dater.getThisYear();
-// 			};
+			var dates = {
+						start: {
+							real: 	new Date(dates.start).toString('dddd, MMMM d'),
+							month: 	new Date(dates.start).toString('MMMM'),
+							day: 		new Date(dates.start).toString('d')
+						},
+						end: {
+							real: 	new Date(dates.end).toString('dddd, MMMM d'),
+							month: 	new Date(dates.end).toString('MMMM'),
+							day: 		new Date(dates.end).toString('d')
+						}
+					},
+					monthNumber = Date.getMonthNumberFromName(dates.start.month);
 
-// 		}
-// 	}
-// ])
+			if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
+			{
+				return 	dates.start.real +
+								', ' +
+								Dater.getThisYear();
+			}
+			else if(dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
+			{
+				return 	dates.start.month +
+								', ' +
+								Dater.getThisYear();
+			}
+			else
+			{
+				return 	dates.start.real +
+								' / ' +
+								dates.end.real +
+								', ' +
+								Dater.getThisYear();
+			}
+
+		}
+	}
+])
 
 
 
@@ -222,31 +320,31 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Main range week filter
  */
-// .filter('rangeMainWeekFilter', 
-// [
-// 	'Dater', 'Storage', 
-// 	function (Dater, Storage)
-// 	{
-// 		var periods = Dater.getPeriods();
+.filter('rangeMainWeekFilter',
+[
+	'Dater', 'Storage',
+	function (Dater, Storage)
+	{
+		var periods = Dater.getPeriods();
 
-// 		return function (dates)
-// 		{
-// 			if (dates)
-// 			{
-// 				var dates = {
-// 					start: 	new Date(dates.start).toString('dddd, MMMM d'),
-// 					end: 		new Date(dates.end).toString('dddd, MMMM d')
-// 				};
+		return function (dates)
+		{
+			if (dates)
+			{
+				var dates = {
+					start: 	new Date(dates.start).toString('dddd, MMMM d'),
+					end: 		new Date(dates.end).toString('dddd, MMMM d')
+				};
 
-// 				return 	dates.start + 
-// 								' / ' + 
-// 								dates.end + 
-// 								', ' + 
-// 								Dater.getThisYear();
-// 			};
-// 		}
-// 	}
-// ])
+				return 	dates.start +
+								' / ' +
+								dates.end +
+								', ' +
+								Dater.getThisYear();
+			}
+		}
+	}
+])
 
 
 
@@ -258,56 +356,56 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Range info filter
  */
-// .filter('rangeInfoFilter', 
-// [
-// 	'Dater', 'Storage', 
-// 	function (Dater, Storage)
-// 	{
-// 		var periods = Dater.getPeriods();
+.filter('rangeInfoFilter',
+[
+	'Dater', 'Storage',
+	function (Dater, Storage)
+	{
+		var periods = Dater.getPeriods();
 
-// 		return function (timeline)
-// 		{
-// 			var diff = new Date(timeline.range.end).getTime() - new Date(timeline.range.start).getTime();
+		return function (timeline)
+		{
+			var diff = new Date(timeline.range.end).getTime() - new Date(timeline.range.start).getTime();
 
-// 			if (diff > (2419200000 + 259200000))
-// 			{
-// 				return 'Total selected days: ' + Math.round(diff / 86400000);
-// 			}
-// 			else
-// 			{
-// 				if (timeline.scope.day)
-// 				{
-// 					var hours = {
-// 						start: new Date(timeline.range.start).toString('HH:mm'),
-// 						end: new Date(timeline.range.end).toString('HH:mm')
-// 					};
+			if (diff > (2419200000 + 259200000))
+			{
+				return 'Total selected days: ' + Math.round(diff / 86400000);
+			}
+			else
+			{
+				if (timeline.scope.day)
+				{
+					var hours = {
+						start: new Date(timeline.range.start).toString('HH:mm'),
+						end: new Date(timeline.range.end).toString('HH:mm')
+					};
 
-// 					/**
-// 					 *  00:00 fix => 24:00
-// 					 */
-// 					if (hours.end == '00:00') hours.end = '24:00';
+					/**
+					 *  00:00 fix => 24:00
+					 */
+					if (hours.end == '00:00') hours.end = '24:00';
 
-// 					return 	'Time: ' + 
-// 									hours.start + 
-// 									' / ' + 
-// 									hours.end;
-// 				}
-// 				else if (timeline.scope.week)
-// 				{
-// 					return 	'Week number: ' + 
-// 									timeline.current.week;
-// 				}
-// 				else if (timeline.scope.month)
-// 				{
-// 					return 	'Month number: ' + 
-// 									timeline.current.month + 
-// 									', Total days: ' + 
-// 									periods.months[timeline.current.month].totalDays;
-// 				};
-// 			};
-// 		};
-// 	}
-// ])
+					return 	'Time: ' +
+									hours.start +
+									' / ' +
+									hours.end;
+				}
+				else if (timeline.scope.week)
+				{
+					return 	'Week number: ' +
+									timeline.current.week;
+				}
+				else if (timeline.scope.month)
+				{
+					return 	'Month number: ' +
+									timeline.current.month +
+									', Total days: ' +
+									periods.months[timeline.current.month].totalDays;
+				}
+			}
+		};
+	}
+])
 
 
 
@@ -318,19 +416,19 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Range info week filter
  */
-// .filter('rangeInfoWeekFilter', 
-// [
-// 	'Dater', 'Storage', 
-// 	function (Dater, Storage)
-// 	{
-// 		var periods = Dater.getPeriods();
+.filter('rangeInfoWeekFilter',
+[
+	'Dater', 'Storage',
+	function (Dater, Storage)
+	{
+		var periods = Dater.getPeriods();
 
-// 		return function (timeline)
-// 		{
-// 			if (timeline) return 'Week number: ' + timeline.current.week;
-// 		};
-// 	}
-// ])
+		return function (timeline)
+		{
+			if (timeline) return 'Week number: ' + timeline.current.week;
+		};
+	}
+])
 
 
 
@@ -515,22 +613,47 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Convert timeStamps to dates
  */
-// .filter('nicelyDate', 
-// [
-// 	'$rootScope', 
-// 	function ($rootScope)
-// 	{
-// 	 	return function (date)
-// 	 	{
-// 	 		if (typeof date == 'string') date = Number(date);
-
-// 	 		return new Date(date).toString($rootScope.config.formats.datetime);
-// 	 	};
-// 	}
-// ])
+ .filter('nicelyDate', 
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 	 	return function (date)
+ 	 	{
+      if (typeof date == 'string')
+      {
+        date = Number(date);
+      }
 
 
 
+      if (String(date).length == 10)
+      {
+        date *= 1000
+      }
+
+ 	 		return new Date(date).toString($rootScope.config.formats.date);
+ 	 	};
+ 	}
+ ])
+
+
+/**
+ * Convert timeStamps to dates
+ */
+ .filter('nicelyTime', 
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 	 	return function (date)
+ 	 	{
+ 	 		if (typeof date == 'string') date = Number(date);
+
+ 	 		return new Date(date).toString($rootScope.config.formats.time);
+ 	 	};
+ 	}
+ ])
 
 
 
@@ -653,28 +776,73 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 /**
  * TODO
- * Unknown filter
- */
-// .filter('i18n_spec',
-// [
-// 	'$rootScope', 
-// 	function ($rootScope)
-// 	{
-// 		return function (string, type)
-// 		{
-// 			var types = type.split("."),
-// 					ret 	= $rootScope.ui[types[0]][types[1]],
-// 					ret 	= ret.replace('$v',string);
+ * Internationalization 
+ */ 
+ .filter('i18n_spec',
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 		return function (string, type)
+ 		{
+ 			var types = type.split("."),
+ 					ret 	= $rootScope.ui[types[0]][types[1]],
+ 					ret 	= ret.replace('$v',string);
 			
-// 			return ret;
-// 		}
-// 	}
-// ])
+ 			return ret;
+ 		}
+ 	}
+ ])
 
 
+.filter('stateIcon',
+[
+     '$rootScope',
+     function ($rootScope){
+         return function(state){    
+             switch(state){
+                 case 'emotion':
+                     return "icon-face";
+                 break;
+                 case 'availability':
+                     return "icon-avail";
+                 break;
+                 case 'location':
+                     return "icon-location";
+                 break;
+                 case 'activity':
+                     return "icon-activity";
+                 break;
+                 case 'reachability':
+                     return "icon-reach";
+                 break;
+                 default:
+                     return "icon-info-sign";
+             }
+         }
+     }
+])
 
-
-
+/**
+ * TODO
+ * Internationalization 
+ */ 
+ .filter('escape',
+ [
+    '$rootScope', 
+    function ($rootScope)
+    {
+        return function (string)
+        {
+        	if(!string || string.indexOf(".") == -1){
+        		return string;
+        	}
+            var ret = string.replace(".","").replace("@","")
+            
+            return ret;
+        }
+    }
+ ])
 
 
 /**

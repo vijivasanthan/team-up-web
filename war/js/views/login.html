@@ -2,13 +2,22 @@
 <div id="welcomeArrow"></div>
 <div id="welcome">
 
+	<!-- preloader -->
+	<div id="preloader">
+	  <h4>{{ui.login.setting_up_app}}</h4>
+	  <div class="progress progress-striped active" class="span3">
+	    <div class="bar"></div>
+	  </div>
+	  <span class="muted"></span>
+	</div>
+	<!-- end preloader -->
+	
 	<!-- loginForm -->
 	<div id="login" class="boxed">
 
 		<form ng-submit="login()">
 
 <!--		  <h4 class="form-signin-heading">Welcome back</h4>-->
-
 
       <!-- alert login -->
       <div class="alert {{alert.login.type}}" ng-show="alert.login.display">
@@ -21,9 +30,9 @@
 		    class="" 
 		    type="text" 
 		    ng-model="logindata.username"
-		    placeholder="Mobile number" 
+		    placeholder="{{ui.login.ph_username}}" 
 		    autofocus>
-
+	
 		  <input 
 		      class="" 
 		      type="password" 
@@ -36,15 +45,15 @@
 		      ng-model="logindata.remember">Remember me
 		  </label>
 
-		  <button class="btn btn-large btn-primary" type="submit">{{ui.login.button_login}}</button>
+		  <button class="btn btn-large btn-block btn-primary" type="submit">{{ui.login.button_login}}</button>
 
-		  <p>
+          <p  class="loginp" style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register</a></p>
+          <p class="loginp" id="separator">|</p>
+		  <p class="loginp">
 		  	<small>
 		  		<a href="#forgotpass">{{ui.login.forgot_password}}</a>
 		  	</small>
 		  </p>
-
-          <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register</a></p>
 
 		  <span class="version"><a href="version.html" target="_blank">v{{config.version}}</a></span>
 

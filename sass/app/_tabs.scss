@@ -36,7 +36,7 @@ ul.nav-tabs-app {
     span.icomoon {
       display: block;
       line-height: 40px;
-      font-size: 30px;
+      font-size: 28px;
     }
   }
 }
@@ -49,11 +49,15 @@ ul.nav-tabs-app {
     margin-top: 0;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
   }
+  h4 {
+    margin-left:10px;
+  }
 }
 
 .tabs-left {
   .tab-content {
     border-left: 1px solid #ddd;
+    min-height: 300px;
   }
 }
 

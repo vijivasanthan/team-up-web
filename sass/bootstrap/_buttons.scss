@@ -15,16 +15,17 @@
   font-size: $baseFontSize;
   line-height: $baseLineHeight;
   text-align: center;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.95);
+  text-transform: capitalize;
+  font-weight: 600;
   vertical-align: middle;
   cursor: pointer;
 
 /*  @include buttonBackground($btnBackground, $grayDark, 0 1px 1px rgba(255,255,255,.85));   //$btnBackgroundHighlight is demolished*/
 
-  border: 1px solid $btnBorder;
+  border: none;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
   border-bottom-color: darken($btnBorder, 10%);
-  @include border-radius($baseBorderRadius);
+  @include border-radius($borderRadiusLarge);
   @include ie7-restore-left-whitespace(); // Give IE7 some love
   
   @include box-shadow(inset 0 1px 0 rgba(255,255,255,.05), 0 1px 2px rgba(0,0,0,.05));
@@ -32,7 +33,7 @@
   // Hover/focus state
   &:hover,
   &:focus {
-    color: $grayDark;
+    color: $brown;
     text-decoration: none;
     background-position: 0 -15px;
 
@@ -98,9 +99,12 @@
 
 // Mini
 .btn-mini {
-  padding: $paddingMini;
   font-size: $fontSizeMini;
-  @include border-radius($borderRadiusSmall);
+  @include border-radius($borderRadiusLarge);
+  height:30px;
+  width: 30px;
+  padding: 0;
+  border:none;
 }
 
 // Badges in buttons
@@ -155,27 +159,56 @@ input[type="button"] {
 .btn-primary {
   background-color: $orange;
   color:$brown;
+  &:hover,
+  &:focus {
+    color: $offwhite;
+  }
 }
-/*// Warning appears are orange
+/*// Warning appears are orange   */
 .btn-warning {
-  @include buttonBackground($btnWarningBackground, $btnWarningBackgroundHighlight);
+  background-color:$red;
+  &:hover,
+  &:focus {
+    color: $offwhite;
+  }
 }
 // Danger and error appear as red
 .btn-danger {
-  @include buttonBackground($btnDangerBackground, $btnDangerBackgroundHighlight);
+  background-color:$red;
+  color:$offwhite;
+  &:hover,
+  &:focus {
+    color: $brown;
+  }
 }
 // Success appears as green
 .btn-success {
-  @include buttonBackground($btnSuccessBackground, $btnSuccessBackgroundHighlight);
+  background-color:$turq;
+  color:$offwhite;
+  &:hover,
+  &:focus {
+    color: $brown;
+  }
 }
 // Info appears as a neutral blue
 .btn-info {
-  @include buttonBackground($btnInfoBackground, $btnInfoBackgroundHighlight);
+  background-color:$brown;
+  color:$offwhite;
+  &:hover,
+  &:focus {
+    color: $orange;
+  }
+
+
 }
 // Inverse appears as dark gray
 .btn-inverse {
   @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
-}*/
+}
+
+
+
+
 
 
 // Cross-browser Jank
@@ -202,7 +235,7 @@ input[type="submit"].btn {
     *padding-top: 3px;
     *padding-bottom: 3px;
   }
-  &.btn-mini {
+  &.btn-warning {
     *padding-top: 1px;
     *padding-bottom: 1px;
   }
@@ -236,4 +269,10 @@ input[type="submit"].btn {
 .btn-link[disabled]:focus {
   color: $grayDark;
   text-decoration: none;
+}
+
+
+//Others
+.marginLeftTen {
+  margin-left: 10px;
 }

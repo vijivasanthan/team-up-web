@@ -12,21 +12,29 @@
     
     <meta name="description" content="WebPaige v2.0.0">
     <meta name="viewport" content="width=device-width">
+
+    <meta property="og:title" content="TeamUp" />
+    <meta property="og:type" content="image" />
+    <meta property="og:url" content="https://teamup.ask-cs.nl/" />
+    <meta property="og:image" content="https://teamup.ask-cs.nl/war/img/logoTeamUp02.png" />
     
     <!-- favicons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-114-precomposed.png">
       <link rel="apple-touch-icon-precomposed" sizes="72x72" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-72-precomposed.png">
       <link rel="apple-touch-icon-precomposed" sizes="57x57" ng-href="profiles/{{config.profile.meta}}/img/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" ng-href="profiles/{{config.profile.meta}}/img/ico/favicon.ico">
+      <link rel="shortcut icon" ng-href="/favicon.ico">
+      <link rel="icon" ng-href="favicon.ico">
 
-    <!-- styles -->
+
+      <!-- styles -->
     <link rel="stylesheet" href="dist/bootstrap.css">
     <link rel="stylesheet" href="dist/responsive.css">
     <link rel="stylesheet" href="dist/app.css">
 
     <!-- jquery -->
     <script src="libs/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+    <script src="libs/jquery/1.9.1/jquery.form.min.js"></script>
     <script src="libs/rsvp/1.0.0/rsvp.min.js"></script>
     <script src="dist/plugins.min.js"></script>
 
@@ -41,16 +49,7 @@
     <!-- compability tests and css fixers -->
     <script src="libs/modernizr/2.6.2/modernizr-2.6.2.min.js"></script>
 
-    
-    <script type="text/javascript">
-      $(document).ready(function ()
-      {
-        $(".chzn-select").chosen();
-        $(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
-        $('#basket').affix();
-      });
-    </script>
+    <script type="text/javascript" src="libs/chaps/treegrid/1.2.0/treegrid.js"></script>
     
   </head>
   <body>
@@ -66,21 +65,41 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar">{{ui.message.messages}}</span>
           </a>
-          <a class="brand" href="#dashboard">{{config.profile.title}}</a>
+          <a class="brand" href="#team"></a>
           <!-- nav-collapse -->
           <div class="nav-collapse collapse">
 
             <!-- user menu -->
-
+			 <!-- main nav -->
+            <ul class="nav">
+              <li data-match-route="/team">
+                <a href="#team?local=true">{{ui.teamup.teams}}</a>
+              </li>
+              <li data-match-route="/client">
+                <a href="#client?local=true">{{ui.teamup.clients}}</a>
+              </li>
+              <li data-match-route="/manage" ng-hide="app.resources.role > 1">
+                <a href="#manage">{{ui.teamup.manage}}</a>
+              </li>
+              <li data-match-route="/planboard" ng-hide="app.resources.role > 1">
+                <a href="#planboard">Agenda</a>
+              </li>
+            </ul>
+            
             <!-- desktop version -->
             <ul class="nav pull-right" ng-hide="browser.mobile">
 
-              <li>
-                <a href="#profile"><i class="icon-shopping-cart icon-white"></i> Credits: 10 EUR</a>
+              <li class="navbar-btn">
+                <a href="#profile"><i class="icon-search"></i> </a>
               </li>
 
-              <li class="dropdown">
+                <li class="">
+                    <a href="#profile" id="account"><div class="roundedPicxSmall {{app.resources.states|stateColor}}" id="img_{{app.resources.uuid|escape}}"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a>
+                </li>
+
+<!--              <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="icon-user icon-white"></i> Account Name <b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -94,10 +113,11 @@
                     <a href="#settings"><i class="icon-question-sign"></i> Help</a>
                   </li>
                   <li class="divider"></li>
-                  <li>
-                    <a href="#logout"><i class="icon-off"></i> Logout</a>
-                  </li>
                 </ul>
+              </li>-->
+
+              <li class="navbar-btn">
+                <a href="#logout"><i class="icon-off"></i></a>
               </li>
 
               <!-- <li id="fullscreener" ng-show="config.fullscreen && browser.webkit">
@@ -194,6 +214,61 @@
     <!-- end wrap -->
 
 
+
+
+    <!-- chat screen -->
+    <div id="chat"
+         ng-hide="(location=='login' || location=='forgotpass' || location=='register' || location=='logout')"
+         ng-controller="messagesCtrl">
+
+      <div id="chat-btn" ng-click="openChat()">
+        <span>CHAT</span>
+      </div>
+
+      <div id="chat-content" ng-show="toggleChat">
+		
+        <p ng-hide="messages.length > 0">{{ui.teamup.noMessages}}</p>
+
+        <div ng-repeat="message in messages" >
+
+          <div class="chat-separator" ng-show="(message.date != '')">
+            <span>{{message.date}}</span>
+            <hr>
+          </div>
+
+          <div class="message {{message.msgRole}}">
+
+            <div class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"
+                 id="img_{{message.member.uuid|escape}}"></div>
+
+            <div class="arrow"
+                 ng-show="(message.role == 'other')"></div>
+
+            <div class="chatCloud">
+                <h5 class="name">{{message.senderName}}</h5>
+                <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
+                <div><p>{{message.body}}</p></div>
+            </div>
+            <div class="arrow" ng-hide="(message.role == 'other')"></div>
+          </div>
+        </div>
+
+        <div id="pusher">&nbsp;</div>
+		 
+      </div>
+
+      <div class="input-area">
+        <input type="text"
+               ng-model="newMessage"
+               id="messageField"
+               ngenter="sendMessage(newMessage)" />
+        <button class="btn btn-success" ng-click="sendMessage(newMessage)">{{ui.message.send}}</button>
+      </div>
+
+    </div>
+    <!-- end chat screen -->
+
+
     <!-- mobile status bar -->
     <div id="mobile-status-bar" ng-show="loading.status && browser.mobile" class="ng-cloak">
       <img src="img/ajax-loader.gif"><small>{{loading.message}}</small>
@@ -213,63 +288,30 @@
           <!-- ask & version -->
           <span class="muted" ng-style="(!config.profile.mobileApp.status) && 'right:0'">
             <small>
-              Ask Community Systems, 2013<br><i>OneLine <a href="version.html" target="_blank">v{{config.version}}</a></i>
+              Ask Community Systems, 2013<br><i>TeamUp <a href="version.html" target="_blank">v{{config.version}}</a></i>
             </small>
           </span>
           <!-- end ask & version -->
 
           <!-- download mobile app -->
-          <div id="download-footer" ng-show="config.profile.mobileApp.status">
-            <!-- <a href="#myModal" role="button" class="btn" data-toggle="modal"> -->
-            <button href="#myModal" data-toggle="modal" class="btn btn-success btn-large" type="button" ng-click="downloadMobileApp()">
-              Business account
-            </button>
-          </div>
+          <!--<div id="download-footer" ng-show="config.profile.mobileApp.status">-->
+            <!--&lt;!&ndash; <a href="#myModal" role="button" class="btn" data-toggle="modal"> &ndash;&gt;-->
+            <!--<button href="#myModal" data-toggle="modal" class="btn btn-success btn-large" type="button" ng-click="downloadMobileApp()">-->
+            <!--</button>-->
+          <!--</div>-->
           <!-- end download mobile app -->
         </div>
         <!-- end copyrights -->
 
         <!-- general preloader -->
         <p class="muted" ng-show="loading.status">
-          <img src="img/ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}% </span>{{loading.message}}</small>
+            <img src="img/ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}% </span>{{loading.message}}</small>
         </p>
         <!-- end general preloader -->
 
       </div>
     </div>
     <!-- end footer -->
-
-
-    <!-- convert to business account modal -->
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Oneline Business</h3>
-      </div>
-      <div class="modal-body">
-
-        <div class="row">
-          <div class="span4">
-            <p>You can create user centered communication at your business that;</p>
-            <ul>
-              <li>Creates shortcuts for departments</li>
-              <li>Increases the response rate</li>
-              <li>Measures customer satisfaction</li>
-            </ul>
-          </div>
-          <div class="span1">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-user-block-2" style="font-size: 8em; line-height: 1.2em;"></span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary">Yes, I want it!</button>
-      </div>
-    </div>
-    <!-- end convert to business account modal -->
 
 
     <!--[if gt IE 7]><!-->
@@ -287,7 +329,7 @@
       /**
        * Profile based analytics
        */
-      if (window.profile.analytics.status) window.profile.analytics.code();
+      // if (window.profile.analytics.status) window.profile.analytics.code();
 
       /**
        * Livereload only on localhost

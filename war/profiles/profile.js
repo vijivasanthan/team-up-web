@@ -3,16 +3,17 @@
  */
 var profile = {
 
-  meta: 'oneline',
+  meta: 'teamup',
 
-  title: 'OneLine',
+  title: 'TeamUp',
 
   host: function ()
   {
-    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://3rc2.ask-services.appspot.com/ns_knrmtest';
+//       return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:8886/';
+    return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://teamup.acs-services.appspot.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.246\\:9000/ns_knrm';
   },
-
+  noImgURL : '/img/defaultAvatar.png', 
   states: [
     'com.ask-cs.State.Available',
     'com.ask-cs.State.KNRM.BeschikbaarNoord',
@@ -48,19 +49,61 @@ var profile = {
 
   roles: [
     {
-      id: 1,
-      label: 'Planner'
+      id: "1",
+      label: 'coordinator'
     }, 
     {
-      id: 2,
-      label: 'Schipper'
+      id: "2",
+      label: 'team_member'
     }, 
     {
-      id: 3,
-      label: 'Opstapper'
+      id: "3",
+      label: 'client'
     }
   ],
-
+  mfunctions: [
+     {
+         id: "1",
+         label: 'Doctor'
+     },
+     {
+         id: "2",
+         label: 'Nurse'
+     }
+  ],
+  stateIcons: [
+     {
+         name: "Availability",
+         data_icon: "&#xe04d;",
+         class_name: "icon-user-block"
+     },
+     {
+         name: "Location",
+         data_icon: "&#xe21a;",
+         class_name: "icon-location4"
+     },
+     {
+         name: "Emotion",
+         data_icon: "&#xe0f2;",
+         class_name: "icon-smiley"
+     },
+     {
+         name: "Activity",
+         data_icon: "&#xe4f2;",
+         class_name: "icon-accessibility"
+     },
+     {
+         name: "Reachability",
+         data_icon: "&#xe169;",
+         class_name: "icon-podcast2"
+     }
+  ],
+  stateColors : {
+     availalbe : "memberStateAvailalbe" ,        
+     busy : "memberStateBusy" ,
+     offline : "memberStateOffline" ,
+     none : "memberStateNone" 
+  },
   p2000: {
     status: true,
     url:    'http://knrm.myask.me/rpc/client/p2000.php',
