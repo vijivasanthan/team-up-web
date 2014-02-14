@@ -7616,8 +7616,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content:  _this.secret(angular.toJson({
@@ -7659,8 +7659,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content: _this.secret(angular.toJson({
@@ -7820,8 +7820,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
                 (slot.diff < 0  && config.legenda.groups.less) )
           {
             timedata.push({
-              start:    Math.round(slot.start * 1000),
-              end:      Math.round(slot.end * 1000),
+              start:    Math.round(slot.start ),
+              end:      Math.round(slot.end ),
               group:    _this.wrapper('c') + name,
               content:  requirement + 
                         actual +
@@ -7881,8 +7881,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
                 (slot.diff < 0  && config.legenda.groups.less) )
           {
             timedata.push({
-              start:  Math.round(slot.start * 1000),
-              end:    Math.round(slot.end * 1000),
+              start:  Math.round(slot.start ),
+              end:    Math.round(slot.end ),
               group: _this.wrapper('c') + name,
               content:  cn +
                         _this.secret(angular.toJson({
@@ -7926,8 +7926,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
           };
 
           timedata.push({
-            start:  Math.round(wish.start * 1000),
-            end:    Math.round(wish.end * 1000),
+            start:  Math.round(wish.start ),
+            end:    Math.round(wish.end ),
             group:  _this.wrapper('c') + name + ' (Wishes)',
             content: '<span class="badge badge-inverse">' + wish.count + '</span>' + 
                       _this.secret(angular.toJson({
@@ -7994,11 +7994,11 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
               }
               // deal with the unfinished task 
               if(task.plannedEndVisitTime == 0){
-            	  task.plannedEndVisitTime = offset/1000;
+            	  task.plannedEndVisitTime = offset;
               }
               timedata.push({
-	              start:  Math.round(task.plannedStartVisitTime * 1000),
-	              end:    Math.round(task.plannedEndVisitTime * 1000),
+	              start:  Math.round(task.plannedStartVisitTime ),
+	              end:    Math.round(task.plannedEndVisitTime ),
 	              // group:  link,
 	              group: member.head,
 	              /*
@@ -12997,7 +12997,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				uuid : $scope.currentTeam
 			}).hash('teams');
 			
-			Teams.getTeamTasks($scope.currentTeam,startTime/1000,endTime/1000).then(function(tasks){
+			Teams.getTeamTasks($scope.currentTeam,startTime,endTime).then(function(tasks){
 				// process the tasks data
 				storeTask(tasks,startTime,endTime);
 			},function(error){
@@ -13009,7 +13009,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				uuid : $scope.currentClientGroup
 			}).hash('clients');
 			
-			Clients.getClientTasks($scope.currentClientGroup,startTime/1000,endTime/1000).then(function(tasks){
+			Clients.getClientTasks($scope.currentClientGroup,startTime,endTime).then(function(tasks){
 				storeTask(tasks,startTime,endTime);
 			},function(error){
 				console.log("error happend when getting the tasks for the team members " + error);
@@ -14074,8 +14074,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		 */
 		else {
 			var now = Date.now().getTime(), values = {
-				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() / 1000 : Dater.convert.absolute(slot.start.date, slot.start.time, true),
-				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() / 1000 : Dater.convert.absolute(slot.end.date, slot.end.time, true),
+				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime()  : Dater.convert.absolute(slot.start.date, slot.start.time, false),
+				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime()  : Dater.convert.absolute(slot.end.date, slot.end.time, false),
 				//				recursive : (slot.recursive) ? true : false,
 				description : (typeof slot.state == "undefined")? "": slot.state,
 				relatedUserId : slot.relatedUser,
@@ -14158,8 +14158,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	
 	$scope.redrawSlot = function(slot) {
 
-		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time);
-		var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time);
+		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time,false);
+		var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time,false);
 
 		var selectedSlot = $scope.self.timeline.getSelection()[0];
 
@@ -14300,8 +14300,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			 * Through timeline
 			 */
 			var options = {
-				startTime : selected.start/1000,
-				endTime : selected.end/1000,
+				startTime : selected.start,
+				endTime : selected.end,
 				description : "",
 				relatedUserId:  slot.relatedUser,
 				uuid : content.id,
@@ -14312,8 +14312,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			 * Through form
 			 */
 			var options = {
-				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, true),
-				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, true),
+				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, false),
+				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, false),
 				description : "",
 				relatedUserId: slot.relatedUser ,  
 				uuid : content.id,
@@ -14374,7 +14374,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		} else {
 			
 			var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-			var content = angular.fromJson($($(selected.content)[1]).val())
+			var content = $scope.getSlotContentJSON(selected.content);
 			var memberId = $(selected.group).attr("memberId");
 
 			if(typeof content == "undefined"){
