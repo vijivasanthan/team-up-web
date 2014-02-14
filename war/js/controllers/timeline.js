@@ -1078,7 +1078,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		} else {
 			
 			var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-			var content = angular.fromJson($($(selected.content)[1]).val())
+			var content = $scope.getSlotContentJSON(selected.content);
 			var memberId = $(selected.group).attr("memberId");
 
 			if(typeof content == "undefined"){
