@@ -778,8 +778,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		 */
 		else {
 			var now = Date.now().getTime(), values = {
-				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() / 1000 : Dater.convert.absolute(slot.start.date, slot.start.time, true),
-				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() / 1000 : Dater.convert.absolute(slot.end.date, slot.end.time, true),
+				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime()  : Dater.convert.absolute(slot.start.date, slot.start.time, false),
+				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime()  : Dater.convert.absolute(slot.end.date, slot.end.time, false),
 				//				recursive : (slot.recursive) ? true : false,
 				description : (typeof slot.state == "undefined")? "": slot.state,
 				relatedUserId : slot.relatedUser,
@@ -862,8 +862,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	
 	$scope.redrawSlot = function(slot) {
 
-		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time);
-		var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time);
+		var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time,false);
+		var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time,false);
 
 		var selectedSlot = $scope.self.timeline.getSelection()[0];
 
@@ -1004,8 +1004,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			 * Through timeline
 			 */
 			var options = {
-				startTime : selected.start/1000,
-				endTime : selected.end/1000,
+				startTime : selected.start,
+				endTime : selected.end,
 				description : "",
 				relatedUserId:  slot.relatedUser,
 				uuid : content.id,
@@ -1016,8 +1016,8 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			 * Through form
 			 */
 			var options = {
-				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, true),
-				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, true),
+				startTime : ($rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, false),
+				endTime : ($rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, false),
 				description : "",
 				relatedUserId: slot.relatedUser ,  
 				uuid : content.id,

@@ -96,8 +96,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content:  _this.secret(angular.toJson({
@@ -139,8 +139,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content: _this.secret(angular.toJson({
@@ -300,8 +300,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
                 (slot.diff < 0  && config.legenda.groups.less) )
           {
             timedata.push({
-              start:    Math.round(slot.start * 1000),
-              end:      Math.round(slot.end * 1000),
+              start:    Math.round(slot.start ),
+              end:      Math.round(slot.end ),
               group:    _this.wrapper('c') + name,
               content:  requirement + 
                         actual +
@@ -361,8 +361,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
                 (slot.diff < 0  && config.legenda.groups.less) )
           {
             timedata.push({
-              start:  Math.round(slot.start * 1000),
-              end:    Math.round(slot.end * 1000),
+              start:  Math.round(slot.start ),
+              end:    Math.round(slot.end ),
               group: _this.wrapper('c') + name,
               content:  cn +
                         _this.secret(angular.toJson({
@@ -406,8 +406,8 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
           };
 
           timedata.push({
-            start:  Math.round(wish.start * 1000),
-            end:    Math.round(wish.end * 1000),
+            start:  Math.round(wish.start ),
+            end:    Math.round(wish.end ),
             group:  _this.wrapper('c') + name + ' (Wishes)',
             content: '<span class="badge badge-inverse">' + wish.count + '</span>' + 
                       _this.secret(angular.toJson({
@@ -474,11 +474,11 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
               }
               // deal with the unfinished task 
               if(task.plannedEndVisitTime == 0){
-            	  task.plannedEndVisitTime = offset/1000;
+            	  task.plannedEndVisitTime = offset;
               }
               timedata.push({
-	              start:  Math.round(task.plannedStartVisitTime * 1000),
-	              end:    Math.round(task.plannedEndVisitTime * 1000),
+	              start:  Math.round(task.plannedStartVisitTime ),
+	              end:    Math.round(task.plannedEndVisitTime ),
 	              // group:  link,
 	              group: member.head,
 	              /*

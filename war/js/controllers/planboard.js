@@ -189,7 +189,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				uuid : $scope.currentTeam
 			}).hash('teams');
 			
-			Teams.getTeamTasks($scope.currentTeam,startTime/1000,endTime/1000).then(function(tasks){
+			Teams.getTeamTasks($scope.currentTeam,startTime,endTime).then(function(tasks){
 				// process the tasks data
 				storeTask(tasks,startTime,endTime);
 			},function(error){
@@ -201,7 +201,7 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				uuid : $scope.currentClientGroup
 			}).hash('clients');
 			
-			Clients.getClientTasks($scope.currentClientGroup,startTime/1000,endTime/1000).then(function(tasks){
+			Clients.getClientTasks($scope.currentClientGroup,startTime,endTime).then(function(tasks){
 				storeTask(tasks,startTime,endTime);
 			},function(error){
 				console.log("error happend when getting the tasks for the team members " + error);
