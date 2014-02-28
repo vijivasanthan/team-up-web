@@ -362,7 +362,7 @@ var ui = {
          writenBy: 'written by',
          noSharedStates: 'No shared states',
          savingContacts: 'Saving the contacts',
-         delClientGroupConfirm: 'Are you sure you want to delet this client group ? It might take a while.',
+         delClientGroupConfirm: 'Are you sure you want to delete this client group ? It might take a while.',
          delTeamConfirm: 'Are you sure you want to delet this team ? It might take a while.',
          deletingClientGroup: "Deleting group ... ",
          deleteConfirm: "Please OK to process.",
@@ -379,7 +379,8 @@ var ui = {
          selectSlot: "Please select a slot",
          editClientImg: "Edit client image",
          newTask: "New Task",
-         updateTask: "Update Task"
+         updateTask: "Update Task",
+         managePanelchangePrompt: "You did some changes , save it ?"
       }
     },
     nl: {
@@ -758,7 +759,8 @@ var ui = {
          selectSlot: "Selecteer een tijdsslot a.u.b.",
          editClientImg: "Wijzig foto van de cliënt",
          newTask: "Nieuwe Taak",
-         updateTask: "Wijzig Taak"
+         updateTask: "Wijzig Taak",
+         managePanelchangePrompt: "You did some changes , go back to save it ?"
       }
     }
 };
