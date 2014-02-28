@@ -368,7 +368,7 @@ var ui = {
          writenBy: 'written by',
          noSharedStates: 'No shared states',
          savingContacts: 'Saving the contacts',
-         delClientGroupConfirm: 'Are you sure you want to delet this client group ? It might take a while.',
+         delClientGroupConfirm: 'Are you sure you want to delete this client group ? It might take a while.',
          delTeamConfirm: 'Are you sure you want to delet this team ? It might take a while.',
          deletingClientGroup: "Deleting group ... ",
          deleteConfirm: "Please OK to process.",
@@ -385,7 +385,8 @@ var ui = {
          selectSlot: "Please select a slot",
          editClientImg: "Edit client image",
          newTask: "New Task",
-         updateTask: "Update Task"
+         updateTask: "Update Task",
+         managePanelchangePrompt: "You did some changes , save it ?"
       }
     },
     nl: {
@@ -764,7 +765,8 @@ var ui = {
          selectSlot: "Please select a slot",
          editClientImg: "Edit client image",
          newTask: "New Task",
-         updateTask: "Update Task"
+         updateTask: "Update Task",
+         managePanelchangePrompt: "You did some changes , go back to save it ?"
       }
     }
 };;/*jslint node: true */
@@ -1880,6 +1882,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeStart', function (event, next, current)
     {
+       
        function resetLoaders ()
        {
          $rootScope.loaderIcons = {
@@ -1892,7 +1895,16 @@ angular.module('WebPaige')
            settings:   false
          };
        }
-
+       
+//       if(current.$route.controller == "manageCtrl"){
+//    	   // check if there are some changes in the panel
+//    	   
+//    	   if(window.confirm($rootScope.ui.teamup.managePanelchangePrompt)){
+//    		   console.log("Yes go back");    		   
+//    		   return;
+//    	   }
+//       }
+       
        resetLoaders();
 
        switch ($location.path())
@@ -2017,6 +2029,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous)
     {
+    	
       $rootScope.newLocation = $location.path();
 
       $rootScope.loadingBig = false;
@@ -3983,7 +3996,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 
-		var ClientReports = $resource($config.host + $config.namespace + '/client/:clientId/reports', {}, {
+		var ClientReports = $resource($config.host + $config.namespace + '/clients/:clientId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -4017,7 +4030,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
         
-        var ClientReport = $resource($config.host + $config.namespace + '/client/:clientId/report', {
+        var ClientReport = $resource($config.host + $config.namespace + '/clients/:clientId/reports', {
 		}, {
 			save : {
 				method : 'POST',
@@ -8333,7 +8346,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
                  *    UNKNOWN
                  */
                 if(angular.lowercase(state.name) == "availability" && state.share){
-                    if(angular.lowercase(state.value) == "availalbe" || angular.lowercase(state.value) == "working" ){
+                    if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
                         ret = $config.stateColors.availalbe; 
                     }else if(angular.lowercase(state.value) == "unavailable"){
                         ret = $config.stateColors.busy;
@@ -11501,7 +11514,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			var paraObj = {uuid : report.uuid,
 					title : report.title,
 					body : report.body,
-					creationTime : report.creationTime/1000
+					creationTime : report.creationTime
 					};
 			
 			Clients.saveReport(report.clientUuid,paraObj).then(function(result){								
@@ -11630,7 +11643,7 @@ angular.module('WebPaige.Controllers.Manage', [])
     '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window','data',
     function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage , Teams, $window,data){
 
-
+      
       $scope.loadData = function(data){
           
           if(data && data.local){
@@ -12189,7 +12202,6 @@ angular.module('WebPaige.Controllers.Manage', [])
       });
       
       
-      
     }
     
 ]);
@@ -12270,7 +12282,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'expand',
               function (properties)
               {
-                // console.log('expanding ->', key, properties);
+                 console.log('expanding ->', key, properties);
               }
             );
 
@@ -12281,7 +12293,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'collapse',
               function (properties)
               {
-                // console.log('collapsing ->', key, properties);
+                 console.log('collapsing ->', key, properties);
               }
             );
 
@@ -12292,7 +12304,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'select',
               function (properties)
               {
-                // console.log('selecting ->', key, properties);
+                 console.log('selecting ->', key, properties);
               }
             );
 

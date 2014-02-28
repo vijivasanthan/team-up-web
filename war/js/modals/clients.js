@@ -95,7 +95,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
 
-		var ClientReports = $resource($config.host + $config.namespace + '/client/:clientId/reports', {}, {
+		var ClientReports = $resource($config.host + $config.namespace + '/clients/:clientId/reports', {}, {
             query : {
                 method : 'GET',
                 params : {},
@@ -129,7 +129,7 @@ angular.module('WebPaige.Modals.Clients', ['ngResource'])
 			}
 		});
         
-        var ClientReport = $resource($config.host + $config.namespace + '/client/:clientId/report', {
+        var ClientReport = $resource($config.host + $config.namespace + '/clients/:clientId/reports', {
 		}, {
 			save : {
 				method : 'POST',

@@ -736,7 +736,7 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 			var paraObj = {uuid : report.uuid,
 					title : report.title,
 					body : report.body,
-					creationTime : report.creationTime/1000
+					creationTime : report.creationTime
 					};
 			
 			Clients.saveReport(report.clientUuid,paraObj).then(function(result){								

@@ -206,7 +206,7 @@ angular.module('WebPaige.Filters', ['ngResource'])
                  *    UNKNOWN
                  */
                 if(angular.lowercase(state.name) == "availability" && state.share){
-                    if(angular.lowercase(state.value) == "availalbe" || angular.lowercase(state.value) == "working" ){
+                    if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
                         ret = $config.stateColors.availalbe; 
                     }else if(angular.lowercase(state.value) == "unavailable"){
                         ret = $config.stateColors.busy;
