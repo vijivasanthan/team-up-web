@@ -252,7 +252,10 @@ td {
 /*@import "modules/navbar";*/
 /*GENERAL*/
 html, body {
-  height: 100%; }
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 
 body {
   font-family: "Helvetica", Arial, sans-serif;
@@ -469,7 +472,7 @@ p {
         margin-top: 6px;
         color: floralwhite !important; }
     #deviceArea3 .span4 .bub5 {
-      margin-top: 180%;
+      margin-top: 120%;
       margin-left: 50%;
       background-color: #f5a962;
       width: 130px !important;
@@ -477,15 +480,15 @@ p {
       #deviceArea3 .span4 .bub5 p {
         margin-top: 6px; }
     #deviceArea3 .span4 .bub6 {
-      margin-top: 60%;
-      margin-left: 70%;
+      margin-top: 80%;
+      margin-left: 20%;
       background-color: #f5a962;
       width: 90px !important;
       height: 90px; }
       #deviceArea3 .span4 .bub6 p {
         margin-top: 14px; }
     #deviceArea3 .span4 .bub7 {
-      margin-top: 130%;
+      margin-top: 60%;
       margin-left: 80%;
       background-color: #833c11;
       width: 80px !important;
