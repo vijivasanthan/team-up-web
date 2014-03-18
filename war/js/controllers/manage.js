@@ -143,7 +143,7 @@ angular.module('WebPaige.Controllers.Manage', [])
               return {'data' : {}, 'con' : {}};
           }
           
-      }
+      };
 
 
       var localdata = $scope.loadData(data);
@@ -286,7 +286,7 @@ angular.module('WebPaige.Controllers.Manage', [])
                     _parent: section + key
                   });
                 }
-              })
+              });
             });
           });
 
@@ -405,7 +405,7 @@ angular.module('WebPaige.Controllers.Manage', [])
           });
           
           return changes; 
-      }
+      };
 
       /**
        * Save function listeners

@@ -75,7 +75,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'expand',
               function (properties)
               {
-                // console.log('expanding ->', key, properties);
+                 console.log('expanding ->', key, properties);
               }
             );
 
@@ -86,7 +86,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'collapse',
               function (properties)
               {
-                // console.log('collapsing ->', key, properties);
+                 console.log('collapsing ->', key, properties);
               }
             );
 
@@ -97,7 +97,7 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
             links.events.addListener(this.grids[key], 'select',
               function (properties)
               {
-                // console.log('selecting ->', key, properties);
+                 console.log('selecting ->', key, properties);
               }
             );
 

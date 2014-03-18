@@ -279,6 +279,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeStart', function (event, next, current)
     {
+       
        function resetLoaders ()
        {
          $rootScope.loaderIcons = {
@@ -291,7 +292,16 @@ angular.module('WebPaige')
            settings:   false
          };
        }
-
+       
+//       if(current.$route.controller == "manageCtrl"){
+//    	   // check if there are some changes in the panel
+//    	   
+//    	   if(window.confirm($rootScope.ui.teamup.managePanelchangePrompt)){
+//    		   console.log("Yes go back");    		   
+//    		   return;
+//    	   }
+//       }
+       
        resetLoaders();
 
        switch ($location.path())
@@ -416,6 +426,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous)
     {
+    	
       $rootScope.newLocation = $location.path();
 
       $rootScope.loadingBig = false;
