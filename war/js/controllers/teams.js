@@ -57,7 +57,13 @@ function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Stora
 		$location.search({
 			uuid : data.teams[0].uuid
 		}).hash('team');
-	} else {
+	} else if(!params.uuid){
+		uuid = data.teams[0].uuid;
+		view = $location.hash();
+		$location.search({
+			uuid : data.teams[0].uuid
+		});
+	}else{
 		uuid = params.uuid;
 		view = $location.hash();
 	}

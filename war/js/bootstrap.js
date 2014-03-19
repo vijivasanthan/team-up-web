@@ -218,8 +218,57 @@ angular.module('WebPaige')
 
 
 
+    $rootScope.nav = function(tabName){
+    	if($location.path() == "/manage"){
+    		if($rootScope.checkDataChangedInManage()){
+    			return;
+    		}
+    	}
+    	
+    	switch (tabName)
+    	{
+    	case 'team':
+    		$location.path("/team").search({local : "true"}).hash("team");
+    	break;
+    	case 'client':
+    		$location.path("/client").search({local : "true"}).hash("client");
+    	break;
+    	case 'planboard': 
+    		$location.path("/planboard").search({local : "true"}).hash("teams");
+        break;
+    	case 'profile': 
+    		$location.path("/profile").search({local : "true"}).hash("");
+        break;
+    	default: 
+    		console.log("scope nav : "+tabName);
+    	}
 
-
+    };
+    
+    $rootScope.checkDataChangedInManage = function(){
+    	var changes = {};
+		if($location.hash() == "teamClients"){
+			var argument = $rootScope.$$childTail.$$childTail.getData.teamClients();
+			changes = $rootScope.$$childTail.getChangesFromTeamClients(argument);
+		}else if($location.hash() == "teams"){
+			var preTeams = $rootScope.$$childTail.connections.teams;
+    		var afterTeams = $rootScope.$$childTail.$$childTail.getData.teams();
+    		changes = $rootScope.$$childTail.getChanges(preTeams,afterTeams);
+		}else if($location.hash() == "clients"){
+			var preClients = $rootScope.$$childTail.connections.clients;
+  	      	var afterClients = $rootScope.$$childTail.$$childTail.getData.clients();
+  	      	changes = $rootScope.$$childTail.getChanges(preClients,afterClients);
+		}
+		
+		if(angular.equals({},changes)){
+			console.log("no changes ! ");
+			return false;
+		}else{
+		  	if(!confirm($rootScope.ui.teamup.managePanelchangePrompt)) {
+		  		return true;
+		  	}
+		}
+    };
     /**
      * Allow webkit desktop notifications
      */

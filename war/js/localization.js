@@ -760,7 +760,7 @@ var ui = {
          editClientImg: "Wijzig foto van de cliënt",
          newTask: "Nieuwe Taak",
          updateTask: "Wijzig Taak",
-         managePanelchangePrompt: "You did some changes , go back to save it ?"
+         managePanelchangePrompt: "Data is changed. Click \"Yes\" to go on, \"Cancel\" to stay."
       }
     }
 };

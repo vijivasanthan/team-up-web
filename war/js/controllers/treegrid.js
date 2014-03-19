@@ -538,7 +538,27 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
         {
           $scope.treeGrid.init();
         };
+        
+        $scope.extract = function(sources){
+        	 var connections = {};
 
+             angular.forEach(sources, function (source)
+             {
+               if (source.nodes.data.length > 0)
+               {
+                 var nodes = [];
+
+                 angular.forEach(source.nodes.data, function (node)
+                 {
+                   nodes.push(node._id);
+                 });
+
+                 connections[source._id] = nodes;
+               }
+             });
+
+             return connections;
+        };
 
         /**
          * Save treeGrid
@@ -565,37 +585,12 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           },
 
           /**
-           * Extract data
-           */
-          extract: function (sources)
-          {
-            var connections = {};
-
-            angular.forEach(sources, function (source)
-            {
-              if (source.nodes.data.length > 0)
-              {
-                var nodes = [];
-
-                angular.forEach(source.nodes.data, function (node)
-                {
-                  nodes.push(node._id);
-                });
-
-                connections[source._id] = nodes;
-              }
-            });
-
-            return connections;
-          },
-
-          /**
            * Teams
            */
           teams: function ()
           {
             $rootScope.$broadcast('save:teams',
-              this.extract($scope.treeGrid.stores['teams_right'].data)
+            	$scope.extract($scope.treeGrid.stores['teams_right'].data)
             );
           },
 
@@ -605,10 +600,45 @@ angular.module('WebPaige.Controllers.TreeGrid', [])
           clients: function ()
           {
             $rootScope.$broadcast('save:clients',
-              this.extract($scope.treeGrid.stores['clients_right'].data)
+            	$scope.extract($scope.treeGrid.stores['clients_right'].data)
             );
           }
 
         };
+        
+        $scope.getData = {
+    		 teamClients: function ()
+             {
+               var data        = $scope.treeGrid.stores['teamClients_right'].data,
+                   connections = {};
+
+               angular.forEach(data, function (node)
+               {
+                 if (node._ids || node.links)
+                 {
+                   connections[node._id] = node._ids;
+                 }
+               });
+               
+               return connections;
+             },
+
+             /**
+              * Teams
+              */
+             teams: function ()
+             {
+               return $scope.extract($scope.treeGrid.stores['teams_right'].data);
+             },
+
+             /**
+              * Clients
+              */
+             clients: function ()
+             {
+               return $scope.extract($scope.treeGrid.stores['clients_right'].data); 
+             }	
+        };
+        
       }
     ]);
