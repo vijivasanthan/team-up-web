@@ -34,7 +34,7 @@ angular.module('WebPaige.Controllers.Login', [])
                 $scope.changepass = {
                     uuid : $routeParams.uuid,
                     key : $routeParams.key
-                }
+                };
             } else {
                 $scope.views = {
                     login : true,
@@ -201,7 +201,7 @@ angular.module('WebPaige.Controllers.Login', [])
  		              });
             	 }
             	 
-            }
+            };
             
             /**
              * TODO

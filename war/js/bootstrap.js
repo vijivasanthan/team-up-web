@@ -239,6 +239,9 @@ angular.module('WebPaige')
     	case 'profile': 
     		$location.path("/profile").search({local : "true"}).hash("");
         break;
+    	case 'logout': 
+    		$location.path("/logout");
+        break;
     	default: 
     		console.log("scope nav : "+tabName);
     	}
