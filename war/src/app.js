@@ -791,7 +791,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Login',
   'WebPaige.Controllers.Forgotpass',
   'WebPaige.Controllers.Register',
-  // 'WebPaige.Controllers.Logout',
+  'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',
   'WebPaige.Controllers.Teams',
@@ -1310,8 +1310,8 @@ angular.module('WebPaige')
      */
     .when('/logout',
     {
-      templateUrl: 'dist/views/login.html',
-      controller: 'login'
+      templateUrl: 'dist/views/logout.html',
+      controller: 'logout'
     })
 
 
@@ -1836,6 +1836,9 @@ angular.module('WebPaige')
         break;
     	case 'profile': 
     		$location.path("/profile").search({local : "true"}).hash("");
+        break;
+    	case 'logout': 
+    		$location.path("/logout");
         break;
     	default: 
     		console.log("scope nav : "+tabName);
@@ -9219,7 +9222,7 @@ angular.module('WebPaige.Controllers.Login', [])
                 $scope.changepass = {
                     uuid : $routeParams.uuid,
                     key : $routeParams.key
-                }
+                };
             } else {
                 $scope.views = {
                     login : true,
@@ -9386,7 +9389,7 @@ angular.module('WebPaige.Controllers.Login', [])
  		              });
             	 }
             	 
-            }
+            };
             
             /**
              * TODO
@@ -9569,6 +9572,47 @@ angular.module('WebPaige.Controllers.Register', [])
 		 */
 		$rootScope.fixStyles();
 
+	}
+]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Logout', [])
+
+
+/**
+ * Logout controller
+ */
+.controller('logout', 
+[
+	'$rootScope', '$scope', '$window', 'Session', 'User', 'Storage', 
+	function ($rootScope, $scope, $window, Session, User, Storage) 
+	{
+	  $('.navbar').hide();
+	  $('#footer').hide();
+
+	  var logindata = angular.fromJson(Storage.get('logindata'));
+
+		User.logout()
+		.then(function (result)
+		{
+	    if (result.error)
+	    {
+	      console.warn('error ->', result);
+	    }
+	    else
+	    {
+	      // Storage.clearAll();
+
+	      Storage.session.clearAll();
+
+	      Storage.add('logindata', angular.toJson(logindata));
+
+	      Storage.cookie.clearAll();
+	      $window.location.href = 'logout.html';
+	    };
+		});
 	}
 ]);;/*jslint node: true */
 /*global angular */
