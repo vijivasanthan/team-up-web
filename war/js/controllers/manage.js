@@ -143,7 +143,7 @@ angular.module('WebPaige.Controllers.Manage', [])
               return {'data' : {}, 'con' : {}};
           }
           
-      }
+      };
 
 
       var localdata = $scope.loadData(data);
@@ -185,6 +185,15 @@ angular.module('WebPaige.Controllers.Manage', [])
        */
       $scope.setViewTo = function (hash)
       {
+    	
+    	if(typeof $scope.dataChanged != "undefined" && $scope.dataChanged($location.$$hash)){
+    		if(!confirm($rootScope.ui.teamup.managePanelchangePrompt)) {
+		          event.preventDefault();
+//	    		  $scope.applyTeamClientsChanges(changes);
+	    		  return false; 
+		    }
+    	}
+    	
         $scope.$watch(hash, function ()
         {
           $location.hash(hash);
@@ -286,7 +295,7 @@ angular.module('WebPaige.Controllers.Manage', [])
                     _parent: section + key
                   });
                 }
-              })
+              });
             });
           });
 
@@ -405,7 +414,7 @@ angular.module('WebPaige.Controllers.Manage', [])
           });
           
           return changes; 
-      }
+      };
 
       /**
        * Save function listeners
@@ -427,45 +436,73 @@ angular.module('WebPaige.Controllers.Manage', [])
           $rootScope.$$listeners["save:clients"] = [];
       }
       
+      $scope.getChangesFromTeamClients = function(argument){
+    	  console.log("before changing ->",$scope.connections.teamClients);
+          console.log('saving team clients ->', argument);
+          
+          var preTc = $scope.connections.teamClients;
+          var afterTc = argument;
+          
+//          var addGroups = {};
+//          var removeGroups = {};
+          
+          var teamIds = [];
+          
+          angular.forEach(preTc,function(preG,teamId_i){
+              if(teamIds.indexOf(teamId_i) == -1){
+                  teamIds.push(teamId_i);
+              }
+          });
+          
+          angular.forEach(afterTc,function(afterG,teamId_j){
+              if(teamIds.indexOf(teamId_j) == -1){
+                  teamIds.push(teamId_j);
+              }
+          });
+          
+          var changes = {};
+          
+          angular.forEach(teamIds,function(tId){
+          	
+              if(typeof preTc[tId] == 'undefined' &&  afterTc[tId] ){
+                  changes[tId] = {a : [afterTc[tId]], r : []};
+              }else if(typeof afterTc[tId] == 'undefined' &&  preTc[tId] ){
+                  changes[tId] = {r : [preTc[tId]] , a : []};
+              }else if(preTc[tId] && afterTc[tId] && preTc[tId] != afterTc[tId]){
+              	changes[tId] = {a : [afterTc[tId]] , r : [preTc[tId]]};
+              }
+              
+          });
+          
+          return changes;
+      };
+      
+      $scope.applyTeamClientsChanges = function(changes){
+    	  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+          
+          Teams.manageGroups(changes).then(function(results){
+              var error = "";
+          	angular.forEach(results,function(res,i){
+          		if(res.error){
+          			error += res.error.data.error;
+          		}
+          	});
+          	
+          	if(error == ""){
+          		$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+          		$route.reload();
+          	}else{
+          		$rootScope.notifier.error(error);
+          	}
+              
+            $rootScope.statusBar.off();
+              
+          });
+      };
       
       $rootScope.$on('save:teamClients', function ()
       {
-        console.log("before changing ->",$scope.connections.teamClients);
-        console.log('saving team clients ->', arguments[1]);
-        
-        var preTc = $scope.connections.teamClients;
-        var afterTc = arguments[1];
-        
-//        var addGroups = {};
-//        var removeGroups = {};
-        
-        var teamIds = [];
-        
-        angular.forEach(preTc,function(preG,teamId_i){
-            if(teamIds.indexOf(teamId_i) == -1){
-                teamIds.push(teamId_i);
-            }
-        });
-        
-        angular.forEach(afterTc,function(afterG,teamId_j){
-            if(teamIds.indexOf(teamId_j) == -1){
-                teamIds.push(teamId_j);
-            }
-        });
-        
-        var changes = {};
-        
-        angular.forEach(teamIds,function(tId){
-        	
-            if(typeof preTc[tId] == 'undefined' &&  afterTc[tId] ){
-                changes[tId] = {a : [afterTc[tId]], r : []};
-            }else if(typeof afterTc[tId] == 'undefined' &&  preTc[tId] ){
-                changes[tId] = {r : [preTc[tId]] , a : []};
-            }else if(preTc[tId] && afterTc[tId] && preTc[tId] != afterTc[tId]){
-            	changes[tId] = {a : [afterTc[tId]] , r : [preTc[tId]]};
-            }
-            
-        });
+    	  var changes = $scope.getChangesFromTeamClients(arguments[1]);
         
 //        console.log("added ones :  " , addGroups);
 //        console.log("removed ones :  " , removeGroups);
@@ -481,31 +518,30 @@ angular.module('WebPaige.Controllers.Manage', [])
             console.log("no changes ! ");
         }else{
             console.log("Team Groups changes : " ,changes);
-            
-            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-            
-            Teams.manageGroups(changes).then(function(results){
-                var error = "";
-            	angular.forEach(results,function(res,i){
-            		if(res.error){
-            			error += res.error.data.error;
-            		}
-            	});
-            	
-            	if(error == ""){
-            		$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-            		$route.reload();
-            	}else{
-            		$rootScope.notifier.error(error);
-            	}
-                
-                $rootScope.statusBar.off();
-                
-            });
+            $scope.applyTeamClientsChanges(changes);
         }
         
-        
       });
+      
+      
+      $scope.applyTeamsChanges = function(changes){
+    	  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+          
+          Teams.manage(changes).then(function(result){
+              
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              
+//           	try to get the members not in the teams Aync 
+              Teams.queryMembersNotInTeams().then(function(result){
+              	console.log("members not in any teams loaded ");
+              	$rootScope.statusBar.off();
+              	$route.reload();
+              },function(error){
+              	console.log(error);
+              });
+              
+          });
+      };
       
       $rootScope.$on('save:teams', function ()
       {
@@ -522,22 +558,7 @@ angular.module('WebPaige.Controllers.Manage', [])
         }else{
             console.log("Team Member changes : " ,changes);
             
-            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-            
-            Teams.manage(changes).then(function(result){
-                
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                
-//             	try to get the members not in the teams Aync 
-                Teams.queryMembersNotInTeams().then(function(result){
-                	console.log("members not in any teams loaded ");
-                	$rootScope.statusBar.off();
-                	$route.reload();
-                },function(error){
-                	console.log(error);
-                });
-                
-            });
+            $scope.applyTeamsChanges(changes);
         }
         
         
@@ -570,7 +591,36 @@ angular.module('WebPaige.Controllers.Manage', [])
         
       });
       
+      $scope.dataChanged = function(currentLoc){
+    	  var loc_parts = currentLoc.split("#");
+    	  var tab = loc_parts[loc_parts.length-1];
+    	  var changes = {};
+    	  if(tab == "teamClients"){
+    		  var argument = $scope.$$childTail.getData.teamClients();
+    		  changes = $scope.getChangesFromTeamClients(argument);
+    	  }else if(tab == "teams"){
+    		  var preTeams = $scope.connections.teams;
+    		  var afterTeams = $scope.$$childTail.getData.teams();
+    		  changes = $scope.getChanges(preTeams,afterTeams);
+    	  }else if(tab == "clients"){
+    		  var preClients = $scope.connections.clients;
+    	      var afterClients = $scope.$$childTail.getData.clients();
+    	      changes = $scope.getChanges(preClients,afterClients);
+    	  }
+    	  
+    	  console.log(changes);
+		  if(angular.equals({},changes)){
+			  console.log("no changes ! ");
+			  return false;
+	      }else{
+	    	  return true;
+	      }
+      };
       
+//	  $scope.$on('$locationChangeStart', function(event, next, current) {
+//		  console.log(next, current);
+//		  $scope.dataChanged(current);
+//	  });
       
     }
     

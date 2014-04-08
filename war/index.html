@@ -75,16 +75,19 @@
 			 <!-- main nav -->
             <ul class="nav">
               <li data-match-route="/team">
-                <a href="#team?local=true">{{ui.teamup.teams}}</a>
+              	<!-- href="#team?local=true" -->
+                <a ng-click="nav('team')" >{{ui.teamup.teams}}</a>
               </li>
               <li data-match-route="/client">
-                <a href="#client?local=true">{{ui.teamup.clients}}</a>
+              <!--  href="#client?local=true"-->
+                <a ng-click="nav('client')">{{ui.teamup.clients}}</a>
               </li>
               <li data-match-route="/manage" ng-hide="app.resources.role > 1">
                 <a href="#manage">{{ui.teamup.manage}}</a>
               </li>
               <li data-match-route="/planboard" ng-hide="app.resources.role > 1">
-                <a href="#planboard">Agenda</a>
+              <!-- href="#planboard" -->
+                <a ng-click="nav('planboard')">Agenda</a>
               </li>
             </ul>
             
@@ -92,11 +95,12 @@
             <ul class="nav pull-right" ng-hide="browser.mobile">
 
               <li class="navbar-btn">
-                <a href="#profile"><i class="icon-search"></i> </a>
+                <a href="#search"><i class="icon-search"></i> </a>
               </li>
 
                 <li class="">
-                    <a href="#profile" id="account"><div class="roundedPicxSmall {{app.resources.states|stateColor}}" id="img_{{app.resources.uuid|escape}}"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a>
+                <!--  href="#profile"-->
+                    <a ng-click="nav('profile')" id="account"><div class="roundedPicxSmall {{app.resources.states|stateColor}}" id="img_{{app.resources.uuid|escape}}"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a>
                 </li>
 
 <!--              <li class="dropdown">
@@ -116,8 +120,8 @@
                 </ul>
               </li>-->
 
-              <li class="navbar-btn">
-                <a href="#logout"><i class="icon-off"></i></a>
+              <li class="navbar-btn">              
+                <a ng-click="nav('logout')"><i class="icon-off"></i></a>
               </li>
 
               <!-- <li id="fullscreener" ng-show="config.fullscreen && browser.webkit">

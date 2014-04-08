@@ -11,9 +11,7 @@
 
     <!-- teams&clients tab link -->
     <li class="{{(views.teamClients==true) && 'active'}}">
-      <a href="#viewTeamClientTab"
-         data-toggle="tab"
-         ng-click="setViewTo('teamClients')">
+      <a ng-click="setViewTo('teamClients')">
         <span class="icomoon" span data-icon="&#xe229;" aria-hidden="true"></span>
         <!--{{ui.teamup.TeamClients}}-->
         Teams & Clients
@@ -23,9 +21,7 @@
 
     <!-- teams organizer tab link -->
     <li class="{{(views.teams==true) && 'active'}}">
-      <a href="#viewTeamsTab"
-         data-toggle="tab"
-         ng-click="setViewTo('teams')">
+      <a ng-click="setViewTo('teams')">
          <span class="icomoon" span data-icon="&#xe043;" aria-hidden="true"></span>
         <!--{{ui.teamup.teams}}-->
         Teams
@@ -35,9 +31,7 @@
 
     <!-- clients organizer tab link -->
     <li class="{{(views.clients==true) && 'active'}}">
-      <a href="#viewClientsTab"
-         data-toggle="tab"
-         ng-click="setViewTo('clients')">
+      <a ng-click="setViewTo('clients')">
           <span class="icomoon" span data-icon="&#xe27f;" aria-hidden="true"></span>
         <!--{{ui.teamup.clients}}-->
         Clients

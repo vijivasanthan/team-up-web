@@ -218,8 +218,60 @@ angular.module('WebPaige')
 
 
 
+    $rootScope.nav = function(tabName){
+    	if($location.path() == "/manage"){
+    		if($rootScope.checkDataChangedInManage()){
+    			return;
+    		}
+    	}
+    	
+    	switch (tabName)
+    	{
+    	case 'team':
+    		$location.path("/team").search({local : "true"}).hash("team");
+    	break;
+    	case 'client':
+    		$location.path("/client").search({local : "true"}).hash("client");
+    	break;
+    	case 'planboard': 
+    		$location.path("/planboard").search({local : "true"}).hash("teams");
+        break;
+    	case 'profile': 
+    		$location.path("/profile").search({local : "true"}).hash("");
+        break;
+    	case 'logout': 
+    		$location.path("/logout");
+        break;
+    	default: 
+    		console.log("scope nav : "+tabName);
+    	}
 
-
+    };
+    
+    $rootScope.checkDataChangedInManage = function(){
+    	var changes = {};
+		if($location.hash() == "teamClients"){
+			var argument = $rootScope.$$childTail.$$childTail.getData.teamClients();
+			changes = $rootScope.$$childTail.getChangesFromTeamClients(argument);
+		}else if($location.hash() == "teams"){
+			var preTeams = $rootScope.$$childTail.connections.teams;
+    		var afterTeams = $rootScope.$$childTail.$$childTail.getData.teams();
+    		changes = $rootScope.$$childTail.getChanges(preTeams,afterTeams);
+		}else if($location.hash() == "clients"){
+			var preClients = $rootScope.$$childTail.connections.clients;
+  	      	var afterClients = $rootScope.$$childTail.$$childTail.getData.clients();
+  	      	changes = $rootScope.$$childTail.getChanges(preClients,afterClients);
+		}
+		
+		if(angular.equals({},changes)){
+			console.log("no changes ! ");
+			return false;
+		}else{
+		  	if(!confirm($rootScope.ui.teamup.managePanelchangePrompt)) {
+		  		return true;
+		  	}
+		}
+    };
     /**
      * Allow webkit desktop notifications
      */
@@ -279,6 +331,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeStart', function (event, next, current)
     {
+       
        function resetLoaders ()
        {
          $rootScope.loaderIcons = {
@@ -291,7 +344,16 @@ angular.module('WebPaige')
            settings:   false
          };
        }
-
+       
+//       if(current.$route.controller == "manageCtrl"){
+//    	   // check if there are some changes in the panel
+//    	   
+//    	   if(window.confirm($rootScope.ui.teamup.managePanelchangePrompt)){
+//    		   console.log("Yes go back");    		   
+//    		   return;
+//    	   }
+//       }
+       
        resetLoaders();
 
        switch ($location.path())
@@ -416,6 +478,7 @@ angular.module('WebPaige')
      */
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous)
     {
+    	
       $rootScope.newLocation = $location.path();
 
       $rootScope.loadingBig = false;

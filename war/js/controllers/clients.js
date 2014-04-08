@@ -86,7 +86,13 @@ function($rootScope, $scope, $location, Clients, data, $route, $routeParams, Sto
 		$location.search({
 			uuid : data.clientGroups[0].id
 		}).hash('client');
-	} else {
+	} else if(!params.uuid){
+		uuid = data.clientGroups[0].id;
+		view = $location.hash();
+		$location.search({
+			uuid : data.clientGroups[0].id
+		});
+	} else{
 		uuid = params.uuid;
 		if( typeof uuid == 'undefined') {
 			uuid = $scope.client.clientGroupUuid;

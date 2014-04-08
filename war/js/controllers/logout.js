@@ -34,6 +34,7 @@ angular.module('WebPaige.Controllers.Logout', [])
 
 	      Storage.add('logindata', angular.toJson(logindata));
 
+	      Storage.cookie.clearAll();
 	      $window.location.href = 'logout.html';
 	    };
 		});

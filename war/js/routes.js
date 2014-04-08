@@ -48,8 +48,8 @@ angular.module('WebPaige')
      */
     .when('/logout',
     {
-      templateUrl: 'dist/views/login.html',
-      controller: 'login'
+      templateUrl: 'dist/views/logout.html',
+      controller: 'logout'
     })
 
 
