@@ -1,0 +1,23 @@
+{
+  "name": "StandByr",
+  "version": "2.4.0",
+  "dependencies": {
+    "angular": "*",
+    "jquery": "*",
+    "bootstrap-sass-official": "*",
+    "es5-shim": "*",
+    "angular-resource": "*",
+    "angular-route": "*",
+    "angular-sanitize": "*",
+    "requirejs": "*",
+    "requirejs-domready": "*",
+    "lawnchair": "*",
+    "json3": "*",
+    "angular-cookies": "*",
+    "momentjs": "*"
+  },
+  "devDependencies": {
+    "angular-mocks": "*",
+    "angular-scenario": "*"
+  }
+}
