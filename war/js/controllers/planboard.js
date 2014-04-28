@@ -9,11 +9,14 @@ angular.module('WebPaige.Controllers.Planboard', [])
 .controller('planboard', ['$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams','Clients',
 function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
-	var self = this, params = $location.search();
-	$scope.imgHost = profile.host();
+	var self = this,
+      params = $location.search();
+
+  $scope.imgHost = profile.host();
 	$scope.ns = profile.ns();
 
-	var teams = angular.fromJson(Storage.get('Teams')), clients = angular.fromJson(Storage.get('ClientGroups'));
+	var teams = angular.fromJson(Storage.get('Teams')),
+      clients = angular.fromJson(Storage.get('ClientGroups'));
 
 	$scope.data = {
 		teams : {
@@ -68,9 +71,20 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				if(typeof imgfile == "undefined"){
 					imgURL = profile.noImgURL;
 				}
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+                      'style="float: left; background-image: url(' +
+                      imgURL +
+                      ');" memberId="' +
+                      member.uuid +
+                      '"></div>';
 
-				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+				var name = avatar +
+                    '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                    member.firstName +
+                    ' ' +
+                    member.lastName +
+                    '</div>';
+
 				var obj = {"head" : name , "memId" : member.uuid};
 				$scope.data.teams.members[team.uuid].push(obj);
 			});
@@ -94,9 +108,20 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				if(typeof imgfile == "undefined"){
 					imgURL = profile.noImgURL;
 				}
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+                      'style="float: left; background-image: url(' +
+                      imgURL +
+                      ');" memberId="' +
+                      member.uuid +
+                      '"></div>';
 
-				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+				var name = avatar +
+                    '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                    member.firstName +
+                    ' ' +
+                    member.lastName +
+                    '</div>';
+
 				var obj = {"head" : name , "memId" : member.uuid};
 				$scope.data.clients.members[client.id].push(obj);
 			});
@@ -123,7 +148,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 		
 	}
-
 
 	$scope.changeCurrent = function(current) {
 
@@ -209,9 +233,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		}	
 		
 	};
-
-
-    
     
 	/**
 	 * View setter
@@ -245,7 +266,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		});
 	};
 	
-	
 	$scope.resetViews = function ()
     {
       $scope.views.slot = {
@@ -261,7 +281,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
     $rootScope.$on('resetPlanboardViews', function (){
     	$scope.resetViews();    	
     });
-
 	
     var uuid, view;
     /**
@@ -414,9 +433,9 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	if ($.browser.msie && $.browser.version == '8.0') {
 		$scope.timeline.options = {
 			start : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-			end : $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-			min : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-			max : $scope.periods.days[Dater.current.today() + 7].last.timeStamp
+			end :   $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
+			min :   $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
+			max :   $scope.periods.days[Dater.current.today() + 7].last.timeStamp
 		};
 	}
 
@@ -439,7 +458,8 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	/**
 	 * Prepare timeline range for date ranger widget
 	 */
-	$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' + Dater.readable.date($scope.timeline.range.end);
+	$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
+                      Dater.readable.date($scope.timeline.range.end);
 	
 	/**
 	 * find the related users in the slot (could be a team member or a client) 
@@ -465,24 +485,23 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		}
 		
 		return relatedUsers; 
-	}
+	};
 	
 	/**
      * Reset inline forms
      */
-    $scope.resetInlineForms = function ()
-    {
-      $scope.slot = {};
+  $scope.resetInlineForms = function ()
+  {
+    $scope.slot = {};
 
-      $scope.original = {};
+    $scope.original = {};
 
-      $scope.resetViews();    
-      
-      if($scope.section == "teams"){
-    	  $scope.changeCurrent($scope.currentTeam);
-      }else if($scope.section == "clients"){
-    	  $scope.changeCurrent($scope.currentClientGroup);
-      }
-      
-    };
+    $scope.resetViews();
+
+    if($scope.section == "teams"){
+      $scope.changeCurrent($scope.currentTeam);
+    }else if($scope.section == "clients"){
+      $scope.changeCurrent($scope.currentClientGroup);
+    }
+  };
 }]);
