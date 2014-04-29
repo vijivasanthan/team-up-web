@@ -2,16 +2,11 @@ extends layout
 
 
 block icons
-  link(rel='apple-touch-icon-precomposed', sizes='144x144',
-  ng-href='images/img/ico/apple-touch-icon-144-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='114x114',
-  ng-href='images/img/ico/apple-touch-icon-114-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='72x72',
-  ng-href='images/img/ico/apple-touch-icon-72-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='57x57',
-  ng-href='images/img/ico/apple-touch-icon-57-precomposed.png')
-  link(rel='shortcut icon',
-  ng-href='images/img/ico/favicon.ico')
+  link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
+  link(rel='shortcut icon', href='icons/favicon.png')
 
 
 block scripts-first
@@ -28,6 +23,8 @@ block scripts-first
 
   script(src='scripts/js/profiles/profile.js')
 
+
+block iestuff
   //if IE
     link(rel='stylesheet', href='css/ie.css')
   //if IE 8
@@ -36,6 +33,17 @@ block scripts-first
     script(src='http://html5shiv.googlecode.com/svn/trunk/html5.js')
   //if gt IE 7
     script(src='scripts/js/libs/angular-ui/0.4.0/angular-ui-ieshiv.min.js')
+
+  //if lt IE 7
+    p.chromeframe
+      | You are using an outdated browser.
+      a(href='http://browsehappy.com/') Upgrade your browser today
+      | or
+      a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
+      | to better experience this site.
+  //if lt IE 9
+    script(src='vendors/es5-shim/es5-shim.js')
+    script(src='vendors/json3/lib/json3.min.js')
 
 
 block navbar
