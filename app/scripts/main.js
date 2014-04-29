@@ -52,7 +52,7 @@ require (
     'routes',
     'run',
 
-    // 'controllers/home',
+    'controllers/login',
     // 'controllers/partial1',
     // 'controllers/partial2',
 

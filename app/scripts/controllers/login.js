@@ -4,12 +4,11 @@ define(
   {
     'use strict';
 
-    controllers.controller ('partial1',
+    controllers.controller ('login',
       [
         '$scope',
         function ($scope)
         {
-          // $scope.name = User.get();
         }
       ]
     );

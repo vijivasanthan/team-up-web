@@ -10,23 +10,13 @@ define(
         function ($routeProvider, $httpProvider)
         {
           $routeProvider
-            .when('/home',
+            .when('/login',
             {
-              // templateUrl:  'views/home.html',
-              controller:   'home'
+              templateUrl: 'views/login.html',
+              controller: 'login'
             })
-//            .when('/partial1',
-//            {
-//              templateUrl:  'views/partial1.html',
-//              controller:   'partial1'
-//            })
-//            .when('/partial2',
-//            {
-//              templateUrl:  'views/partial2.html',
-//              controller:   'partial2'
-//            })
             .otherwise({
-              redirectTo: '/home'
+              redirectTo: '/login'
             });
 
           // $httpProvider.interceptors.push('Interceptor');
