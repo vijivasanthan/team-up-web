@@ -22,7 +22,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         {
           var groups = {};
 
-          angular.forEach(Storage.local.groups(), function (group)
+          angular.forEach(Storage.local.groups(), function (group, index)
           {
             groups[group.uuid] = group.name;
           });
@@ -34,7 +34,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         {
           var members = {};
 
-          angular.forEach(Storage.local.members(), function (member)
+          angular.forEach(Storage.local.members(), function (member, index)
           {
             members[member.uuid] = member.name;
           });
@@ -58,7 +58,7 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
        */
       addLoading: function (data, timedata, rows)
       {
-        angular.forEach(rows, function (row)
+        angular.forEach(rows, function(row, index)
         {
           timedata.push({
             start:  data.periods.end,
@@ -96,20 +96,20 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content:  _this.secret(angular.toJson({
                   type:   'slot',
-                  id:     index, // slot.id, 
+                  id:     slot.id, 
                   recursive: slot.recursive, 
                   state:  slot.text 
                   })),
-                className:  'slot-' + index + ' ' + config.states[slot.text].className,
+                className:  config.states[slot.text].className,
                 editable:   true
               });
-            }
+            };
           });       
         });
 
@@ -122,14 +122,15 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       },
     
       /**
-       * TODO: Look for ways to combine with user
+       * TODO
+       * Look for ways to combine with user
        * 
        * Profile timeline data processing
        */
       profile: function (data, config)
       {
-        var _this     = this,
-            timedata  = [];
+        var _this = this,
+            timedata = [];
 
         angular.forEach(data, function (slot, index)
         {
@@ -138,20 +139,20 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             if (slot.text == legenda && value)
             {
               timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
+                start:  Math.round(slot.start ),
+                end:    Math.round(slot.end ),
                 group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') : 
                                             _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
                 content: _this.secret(angular.toJson({
                   type: 'slot',
-                  id:   index, // slot.id, 
+                  id:   slot.id, 
                   recursive:  slot.recursive, 
                   state:      slot.text 
                   })),
-                className:  'slot-' + index + ' ' + config.states[slot.text].className,
+                className:  config.states[slot.text].className,
                 editable:   true
               });  
-            }
+            };
           });       
         });
 
@@ -179,18 +180,18 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       /**
        * Handle group name whether divisions selected
        */
-      namer: function (agg, privilage)
+      namer: function (data, divisions, privilage)
       {
         var groups  = this.get.groups(),
-            name    = groups[agg.id],
-            link    = '<a href="#/groups?uuid=' +
-                      agg.id +
+            name    = groups[data.aggs.id],
+            link    = '<a href="#/groups?uuid=' + 
+                      data.aggs.id + 
                       '#view">' +
                       name +
                       '</a>',
                       title;
 
-        if (!agg.division)
+        if (data.aggs.division == 'all' || data.aggs.division == undefined)
         {
           title = (privilage == 1) ? link : '<span>' + name + '</span>';
         }
@@ -198,10 +199,12 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
         {
           var label;
 
+          angular.forEach(divisions, function (division, index) { if (division.id == data.aggs.division) label = division.label; });
+
           title = (privilage == 1) ? link : '<span>' + name + '</span>';
 
-          title += ' <span class="label">' + agg.division.label + '</span>';
-        }
+          title += ' <span class="label">' + label + '</span>';
+        };
 
         return title;
       },
@@ -209,118 +212,112 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       /**
        * Handle group aggs (with divisions) with bars
        */
-      bars: function (data, timedata, config, privilage, current)
+      bars: function (data, timedata, config, name)
       {
         var _this = this,
-            maxh  = 0;
+            maxh = 0;
 
-        angular.forEach(_this.filtered(data, current), function (agg)
+        angular.forEach(data.aggs.data, function (slot, index) { if (slot.wish > maxh)  maxh = slot.wish; });
+
+        angular.forEach(data.aggs.data, function (slot, index)
         {
-          var name = _this.namer(agg, privilage);
+          var maxNum      = maxh,
+              num         = slot.wish,
+              xwish       = num,
+              height      = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
+              minHeight   = height,
+              style       = 'height:' + height + 'px;',
+              requirement = '<div class="requirement" style="' + 
+                            style + 
+                            '" ' + 
 
-          angular.forEach(agg.data, function (slot, index)
+                            'title="'+'Minimum aantal benodigden'+': ' + 
+
+                            num + 
+                            ' personen"></div>';
+
+          num = slot.wish + slot.diff;
+
+          var xcurrent = num;
+
+          height = Math.round(num / maxNum * 80 + 20);
+
+          if (slot.diff >= 0 && slot.diff < 7)
           {
-            if (slot.wish > maxh)  maxh = slot.wish;
-          });
-
-          angular.forEach(agg.data, function (slot, index)
+            switch (slot.diff)
+            {
+              case 0:
+                var color = config.densities.even;
+              break
+              case 1:
+                var color = config.densities.one;
+              break;
+              case 2:
+                var color = config.densities.two;
+              break;
+              case 3:
+                var color = config.densities.three;
+              break;
+              case 4:
+                var color = config.densities.four;
+              break;
+              case 5:
+                var color = config.densities.five;
+              break;
+              case 6:
+                var color = config.densities.six;
+              break;
+            }
+          }
+          else if (slot.diff >= 7)
           {
-            var maxNum      = maxh,
-                num         = slot.wish,
-                xwish       = num,
-                height      = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
-                minHeight   = height,
-                style       = 'height:' + height + 'px;',
-                requirement = '<div class="requirement" style="' +
-                              style +
-                              '" ' +
-                              'title="' + 'Minimum aantal benodigden' + ': ' +
-                              num +
-                              ' personen"></div>';
+            var color = config.densities.more;
+          }
+          else
+          {
+            var color = config.densities.less;
+          };
 
-            num = slot.wish + slot.diff;
+          var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
 
-            var xcurrent = num;
+          if (xcurrent > xwish) height = minHeight;
 
-            height = Math.round(num / maxNum * 80 + 20);
+          style = 'height:' + height + 'px;' + 'background-color: ' + color + ';';
 
-            if (slot.diff >= 0 && slot.diff < 7)
-            {
-              var color;
+          var actual = '<div class="bar" style="' + 
+                        style + 
+                        '" ' + 
 
-              switch (slot.diff)
-              {
-                case 0:
-                  color = config.densities.even;
-                  break;
-                case 1:
-                  color = config.densities.one;
-                  break;
-                case 2:
-                  color = config.densities.two;
-                  break;
-                case 3:
-                  color = config.densities.three;
-                  break;
-                case 4:
-                  color = config.densities.four;
-                  break;
-                case 5:
-                  color = config.densities.five;
-                  break;
-                case 6:
-                  color = config.densities.six;
-                  break;
-              }
-            }
-            else if (slot.diff >= 7)
-            {
-              color = config.densities.more;
-            }
-            else
-            {
-              color = config.densities.less;
-            }
+                        ' title="Huidig aantal beschikbaar: ' + 
 
-            var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
+                        num + 
+                        ' personen">' + 
+                        span + 
+                        '</div>';
 
-            if (xcurrent > xwish) height = minHeight;
+          if (  (slot.diff > 0  && config.legenda.groups.more) ||
+                (slot.diff == 0 && config.legenda.groups.even) || 
+                (slot.diff < 0  && config.legenda.groups.less) )
+          {
+            timedata.push({
+              start:    Math.round(slot.start ),
+              end:      Math.round(slot.end ),
+              group:    _this.wrapper('c') + name,
+              content:  requirement + 
+                        actual +
+                        _this.secret(angular.toJson({
+                          type: 'group',
+                          diff: slot.diff,
+                          group: name
+                        })),
+              className: 'group-aggs',
+              editable: false
+            });
+          };
 
-            style = 'height:' + height + 'px;' + 'background-color: ' + color + ';';
-
-            var actual = '<div class="bar" style="' +
-              style +
-              '" ' +
-              ' title="Huidig aantal beschikbaar: ' +
-              num +
-              ' personen">' +
-              span +
-              '</div>';
-
-            if (  (slot.diff > 0  && config.legenda.groups.more) ||
-              (slot.diff == 0 && config.legenda.groups.even) ||
-              (slot.diff < 0  && config.legenda.groups.less) )
-            {
-              timedata.push({
-                start:    Math.round(slot.start * 1000),
-                end:      Math.round(slot.end * 1000),
-                group:    _this.wrapper('c') + name,
-                content:  requirement +
-                  actual +
-                  _this.secret(angular.toJson({
-                    type: 'group',
-                    diff: slot.diff,
-                    group: name
-                  })),
-                className: 'group-aggs',
-                editable: false
-              });
-            }
-
-            timedata = _this.addLoading(data, timedata, [
-              _this.wrapper('c') + name
-            ]);
-          });
+          timedata = _this.addLoading(data, timedata, [
+            _this.wrapper('c') + name
+          ]);
         });
 
         return timedata;
@@ -329,64 +326,58 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       /**
        * Process plain group aggs
        */
-      aggs: function (data, timedata, config, privilage, current)
+      aggs: function (data, timedata, config, name)
       {
         var _this = this;
 
-        angular.forEach(_this.filtered(data, current), function (agg)
+        angular.forEach(data.aggs.data, function (slot, index)
         {
-          var name = _this.namer(agg, privilage);
+          var cn;
 
-          angular.forEach(agg.data, function (slot)
+          if (slot.diff >= 0 && slot.diff < 7)
           {
-            var cn;
-
-            if (slot.diff >= 0 && slot.diff < 7)
+            switch (slot.diff)
             {
-              switch (slot.diff)
-              {
-                case 0: cn = 'even';  break;
-                case 1: cn = 1;       break;
-                case 2: cn = 2;       break;
-                case 3: cn = 3;       break;
-                case 4: cn = 4;       break;
-                case 5: cn = 5;       break;
-                case 6: cn = 6;       break;
-              }
+              case 0: cn = 'even';  break
+              case 1: cn = 1;       break
+              case 2: cn = 2;       break
+              case 3: cn = 3;       break
+              case 4: cn = 4;       break
+              case 5: cn = 5;       break
+              case 6: cn = 6;       break
             }
-            else if (slot.diff >= 7)
-            {
-              cn = 'more';
-            }
-            else
-            {
-              cn = 'less'
-            }
+          }
+          else if (slot.diff >= 7)
+          {
+            cn = 'more';
+          }
+          else
+          {
+            cn = 'less'
+          };
 
-            if ((slot.diff > 0  && config.legenda.groups.more) ||
-              (slot.diff == 0 && config.legenda.groups.even) ||
-              (slot.diff < 0  && config.legenda.groups.less))
-            {
-              timedata.push({
-                start:  Math.round(slot.start * 1000),
-                end:    Math.round(slot.end * 1000),
-                group: _this.wrapper('c') + name,
-                content:  cn +
-                  _this.secret(angular.toJson({
-                    type: 'group',
-                    diff: slot.diff,
-                    group: name
-                  })),
-                className:  'agg-' + cn,
-                editable:   false
-              });
-            }
+          if (  (slot.diff > 0  && config.legenda.groups.more) ||
+                (slot.diff == 0 && config.legenda.groups.even) || 
+                (slot.diff < 0  && config.legenda.groups.less) )
+          {
+            timedata.push({
+              start:  Math.round(slot.start ),
+              end:    Math.round(slot.end ),
+              group: _this.wrapper('c') + name,
+              content:  cn +
+                        _this.secret(angular.toJson({
+                          type: 'group',
+                          diff: slot.diff,
+                          group: name
+                        })),
+              className:  'agg-' + cn,
+              editable:   false
+            });
+          };
 
-            timedata = _this.addLoading(data, timedata, [
-              _this.wrapper('c') + name
-            ]);
-          });
-
+          timedata = _this.addLoading(data, timedata, [
+            _this.wrapper('c') + name
+          ]);
         });
 
         return timedata;
@@ -395,57 +386,42 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       /**
        * Wish slots
        */
-      wishes: function (data, timedata, privilage)
+      wishes: function (data, timedata, name)
       {
-        var _this   = this;
+        var _this = this;
 
-        var groups  = this.get.groups(),
-            name    = groups[data.aggs[0].id],
-            link    = '<a href="#/groups?uuid=' +
-                      data.aggs[0].id +
-                      '#view">' +
-                      name +
-                      '</a>',
-            title;
-
-        title = (privilage == 1) ? link : '<span>' + name + '</span>';
-
-        title += ' <span class="label">Behoefte (elke divisie)</span>';
-
-        angular.forEach(data.aggs.wishes, function (wish)
+        angular.forEach(data.aggs.wishes, function (wish, index)
         {
-          var cn;
-
           if ( wish.count >= 7 )
           {
-            cn = 'wishes-more';
+            var cn = 'wishes-more';
           }
           else if ( wish.count == 0 )
           {
-            cn = 'wishes-even';
+            var cn = 'wishes-even';
           }
           else
           {
-            cn = 'wishes-' + wish.count;
-          }
+            var cn = 'wishes-' + wish.count;
+          };
 
           timedata.push({
-            start:  Math.round(wish.start * 1000),
-            end:    Math.round(wish.end * 1000),
-            group:  _this.wrapper('c') + title,
-            content: '<span class="badge badge-inverse">' + wish.count + '</span>' +
-              _this.secret(angular.toJson({
-                type: 'wish',
-                wish: wish.count,
-                group: title,
-                groupId: data.aggs[0].id
-              })),
+            start:  Math.round(wish.start ),
+            end:    Math.round(wish.end ),
+            group:  _this.wrapper('c') + name + ' (Wishes)',
+            content: '<span class="badge badge-inverse">' + wish.count + '</span>' + 
+                      _this.secret(angular.toJson({
+                        type: 'wish',
+                        wish: wish.count,
+                        group: name,
+                        groupId: data.aggs.id
+                      })),
             className:  cn,
             editable:   false
           });
 
           timedata = _this.addLoading(data, timedata, [
-            _this.wrapper('c') + title
+            _this.wrapper('c') + name + ' (Wishes)'
           ]);
         });
 
@@ -457,88 +433,96 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
        */
       members: function (data, timedata, config, privilage)
       {
-        var _this   = this,
-            members = this.get.members();
-
-
-        data.members.sort(
-          function (a, b)
+        var _this   = this;
+        var offset = Number(Date.now());
+        
+          angular.forEach(data.members, function (member, index)
           {
-            var aName = a.lastName.toLowerCase(),
-                bName = b.lastName.toLowerCase();
 
-            if (aName < bName)
+
+        	var tasks = [];
+        	if(data.section == "teams"){
+        		console.log("data.teams.tasks " , data.teams.tasks);
+        		if(data.teams.tasks[member.memId] != null){
+        			tasks.add(data.teams.tasks[member.memId]);	
+        		}        		
+        	}else if(data.section == "clients"){
+        		console.log("data.clients.tasks " , data.clients.tasks);
+        		if(data.clients.tasks[member.memId] != null){
+        			tasks.add(data.clients.tasks[member.memId]);	
+        		}  
+        	}
+        	
+        	
+            var mdata = [];
+
+            angular.forEach(tasks, function (task)
             {
-              return -1;
-            }
-
-            if (aName > bName)
-            {
-              return 1;
-            }
-
-            return 0;
-          }
-        );
-
-        angular.forEach(data.members, function (member)
-        {
-          var link = (privilage == 1) ?
-                        _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
-                        '<a href="#/profile/' + 
-                        member.id + 
-                        '#timeline">' + 
-                        members[member.id] + 
-                        '</a>' :
-                        _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
-                        members[member.id];
-
-          angular.forEach(member.data, function (slot)
-          {
-            angular.forEach(config.legenda, function (value, legenda)
-            {
-              if (slot.text == legenda && value)
-              {
-                timedata.push({
-                  start:  Math.round(slot.start * 1000),
-                  end:    Math.round(slot.end * 1000),
-                  group:  link,
-                  content: _this.secret(angular.toJson({ 
-                    type: 'member',
-                    id:   slot.id, 
-                    mid:  member.id,
-                    recursive: slot.recursive, 
-                    state: slot.text 
-                    })),
-                  className:  config.states[slot.text].className,
-                  editable:   false
-                });
+              var relatedUser = "";
+              if(data.section == "teams"){
+            	  // should get the name from team members ;
+            	  
+            	  relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
+              }else if(data.section == "clients"){
+            	  // should get the name from clients;
+            	  
+            	  relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
               }
+              var slotContent = "";
+              if(typeof relatedUser != 'undefined'){
+            	  slotContent = relatedUser.firstName + " " + relatedUser.lastName; 
+              }
+              // deal with the unfinished task 
+              if(task.plannedEndVisitTime == 0){
+            	  task.plannedEndVisitTime = offset;
+              }
+              timedata.push({
+	              start:  Math.round(task.plannedStartVisitTime ),
+	              end:    Math.round(task.plannedEndVisitTime ),
+	              // group:  link,
+	              group: member.head,
+	              /*
+	              content: _this.secret(angular.toJson({
+	                type: 'member',
+	                id:   slot.id,
+	                mid:  member.id,
+	                recursive: slot.recursive,
+	                state: slot.text
+	              })),
+	              */
+	              content: "<span>"+slotContent +"</span>" + 
+	              "<input type=hidden value='"+ angular.toJson({
+		                type: 'slot',
+		                id:   task.uuid,
+		                mid:  task.authorUuid,
+//		                recursive: slot.recursive,
+		                state: task.description,
+		                clientUuid : task.relatedClientUuid,
+		                memberId : task.assignedTeamMemberUuid
+		              }) +"'>",
+	              // className:  config.states[slot.text].className,
+	              className:  'state-available',
+	              editable:   false,	              
+	          });
+              
+            });
+
+
+
+            timedata = _this.addLoading(data, timedata, [ member.head ]);
+
+            /**
+             * TODO
+             * Good place to host this here?
+             */
+            angular.forEach(member.stats, function (stat, index)
+            {
+              var state = stat.state.split('.');
+              state.reverse();
+              stat.state = 'bar-' + state[0];
             });
           });
 
-          timedata.push({
-            start:    0,
-            end:      0,
-            group:    link,
-            content:  null,
-            className:null,
-            editable: false
-          });
-
-          timedata = _this.addLoading(data, timedata, [ link ]);
-
-          /**
-           * TODO: Good place to host this here?
-           */
-          angular.forEach(member.stats, function (stat)
-          {
-            var state = stat.state.split('.');
-            state.reverse();
-
-            stat.state = (stat.state.match(/bar-(.*)/)) ? stat.state : 'bar-' + state[0];
-          });
-        });
 
         return timedata;
       },
@@ -546,26 +530,11 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
       /**
        * Produce pie charts
        */
-      pies: function (data, current)
+      pies: function (data)
       {
-        var _this = this;
+        document.getElementById("groupPie").innerHTML = '';
 
-        angular.forEach(_this.filtered(data, current), function (agg)
-        {
-          var id;
-
-          id = ($rootScope.config.timeline.config.divisions.length > 0) ? agg.division.id : '';
-
-          if ($.browser.msie && $.browser.version == '8.0')
-          {
-            $('#' + 'groupPie-' + id).html('');
-          }
-          else
-          {
-            document.getElementById('groupPie-' + id).innerHTML = '';
-          }
-
-          var ratios    = [],
+        var ratios    = [],
             colorMap  = {
               more: '#415e6b',
               even: '#ba6a24',
@@ -574,89 +543,62 @@ angular.module('WebPaige.Services.Sloter', ['ngResource'])
             colors    = [],
             xratios   = [];
 
-          angular.forEach(agg.ratios, function (ratio, index)
+        angular.forEach(data.aggs.ratios, function (ratio, index)
+        {
+          if (ratio != 0)
           {
-            if (ratio != 0)
-            {
-              ratios.push({
-                ratio: ratio,
-                color: colorMap[index]
-              });
-            }
-          });
-
-          ratios = ratios.sort(function (a, b) { return b.ratio - a.ratio });
-
-          angular.forEach(ratios, function (ratio, index)
-          {
-            colors.push(ratio.color);
-            xratios.push(ratio.ratio);
-          });
-
-          var r   = Raphael('groupPie-' + id),
-              pie = r.piechart(120, 120, 100, xratios, { colors: colors });
+            ratios.push({
+              ratio: ratio, 
+              color: colorMap[index]
+            });
+          };
         });
-      },
 
+        ratios = ratios.sort(function (a, b) { return b.ratio - a.ratio });
 
-      /**
-       * Filter group agg data based on selected divisions
-       */
-      filtered: function (data, current)
-      {
-        var filtered = [];
-
-        if (current.division == 'all')
+        angular.forEach(ratios, function (ratio, index)
         {
-          filtered = data.aggs;
-        }
-        else
-        {
-          angular.forEach(data.aggs, function (agg)
-          {
-            if (current.division == agg.division.id)
-            {
-              filtered.push(agg);
-            }
-          });
-        }
+          colors.push(ratio.color);
+          xratios.push(ratio.ratio);
+        });
 
-        return filtered;
+        var r   = Raphael("groupPie"),
+            pie = r.piechart(120, 120, 100, xratios, { colors: colors });
       },
       
       /**
        * Timeline data processing
        */
-      process: function (data, config, divisions, privilage, current)
+      process: function (data, config, divisions, privilage)
       {
         var _this     = this,
             timedata  = [];
 
-        if (data.user) timedata = _this.user(data, timedata, config);
+        // if (data.user) timedata = _this.user(data, timedata, config);
 
+        /*
         if (data.aggs)
         {
+          var name = _this.namer(data, divisions, privilage);
+
           if (config.bar) 
           {
-            timedata = _this.bars(data, timedata, config, privilage, current);
+            timedata = _this.bars(data, timedata, config, name);
           }
           else
           {
-            timedata = _this.aggs(data, timedata, config, privilage, current);
-          }
-        }
+            timedata = _this.aggs(data, timedata, config, name);
+          };
+        };
 
-        if (config.wishes && data.aggs) timedata = _this.wishes(data, timedata, privilage);
+        if (config.wishes) timedata = _this.wishes(data, timedata, name);
+        */
 
         if (data.members) timedata = _this.members(data, timedata, config, privilage);
 
-        if (data.aggs)
-        {
-          setTimeout(function ()
-          {
-            _this.pies(data, current);
-          }, 100);
-        }
+        /*
+        if (data.aggs && data.aggs.ratios) _this.pies(data);
+        */
 
         return timedata;
       }

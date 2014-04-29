@@ -11,7 +11,7 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
 [
   '$rootScope', 'Storage', 
   function ($rootScope, Storage)
-  {  
+  {
     return {
 
       current:
@@ -23,28 +23,12 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
 
         week: function ()
         {
-          /**
-           * IE library does not exist bug
-           */
-          
-          if (new Date().getWeek())
-          {
-            return new Date().getWeek();
-          }
-          else
-          {
-            console.log('Date getWeek does not exist !');
-          }
+          return new Date().getWeek();
         },
 
         month: function ()
         {
           return new Date().getMonth() + 1;
-        },
-
-        year: function ()
-        {
-          return new Date().toString('yyyy');
         }
       },
 
@@ -101,27 +85,29 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
        * Get begin and end timestamps of months
        * in the current year
        */
-      getMonthTimeStamps: function (year)
+      getMonthTimeStamps: function ()
       {
-        var months  = {};
+        var months  = {}, 
+            year    = this.getThisYear();
 
         for (var i = 0; i < 12; i++)
         {
           var firstDay  = new Date(year, i).moveToFirstDayOfMonth(),
-              lastDay   = new Date(year, i).moveToLastDayOfMonth().addDays(1);
+              lastDay   = new Date(year, i).moveToLastDayOfMonth(),
+              month     = {
+                first: {
+                  day: firstDay,
+                  timeStamp: firstDay.getTime()
+                },
+                last: { 
+                  day: lastDay,
+                  timeStamp: lastDay.getTime() 
+                },
+                totalDays: Date.getDaysInMonth(year, i)
+              };
 
-          months[i+1] = {
-            first: {
-              day: firstDay,
-              timeStamp: firstDay.getTime()
-            },
-            last: {
-              day: lastDay,
-              timeStamp: lastDay.getTime()
-            },
-            totalDays: Date.getDaysInMonth(year, i)
-          };
-        }
+          months[i+1] = month;
+        };
 
         return months;
       },
@@ -129,17 +115,17 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
       /**
        * Get begin and end timestamps of weeks
        */
-      getWeekTimeStamps: function(year)
+      getWeekTimeStamps: function()
       {
         var nweeks    = [],
             weeks     = {},
-            nextMonday;
-
-        var firstDayInYear    = new Date(year, 0).moveToFirstDayOfMonth(),
+            nextMonday,
+            year      = this.getThisYear(), 
+            firstDayInYear    = new Date(year, 0).moveToFirstDayOfMonth(),
             firstMondayOfYear = new Date(year, 0).moveToFirstDayOfMonth().last().sunday().addWeeks(0),
             firstMonday       = new Date(firstMondayOfYear);
 
-        for (var i = 0; i < 54; i++)
+        for (var i = 0; i < 53; i++)
         {
           if (i == 0)
           {
@@ -155,24 +141,24 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
 
         nweeks.unshift(firstMonday);
 
-        var firstMondayofNextYear = new Date(nweeks[54].addWeeks(1));
+        var firstMondayofNextYear = new Date(nweeks[51].addWeeks(1));
 
-        for (var n = 0; n < 55; n++)
+        for (var i = 0; i < 55; i++)
         {
-          weeks[n+1] = {
+          weeks[i+1] = {
             first: {
-              day: nweeks[n],
-              timeStamp: new Date(nweeks[n]).getTime()
+              day: nweeks[i],
+              timeStamp: new Date(nweeks[i]).getTime()
             },
             last: {
-              day: nweeks[n+1],
-              timeStamp: new Date(nweeks[n+1]).getTime()
+              day: nweeks[i+1],
+              timeStamp: new Date(nweeks[i+1]).getTime()
             }
           }
         }
 
         /**
-         * Remove unnecessary periods
+         * Remove unneccessary periods
          */
         delete weeks[54];
         delete weeks[55];
@@ -182,11 +168,12 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
 
       /**
        */
-      getDayTimeStamps: function(year)
+      getDayTimeStamps: function()
       {
         var nextDay,
             ndays = [],
-            days  = {},
+            days = {},
+            year = this.getThisYear(),
             firstDayInYear = new Date(year, 0).moveToFirstDayOfMonth();
         
         for (var i = 0; i < 366; i++)
@@ -203,16 +190,16 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
           ndays.push(new Date(nextDay));
         }
 
-        for (var n = 0; n < 366; n++)
+        for (var i = 0; i < 366; i++)
         {
-          days[n+1] = {
+          days[i+1] = {
             first: {
-              day: ndays[n],
-              timeStamp: new Date(ndays[n]).getTime()
+              day: ndays[i],
+              timeStamp: new Date(ndays[i]).getTime()
             },
             last: {
-              day: ndays[n+1],
-              timeStamp: new Date(ndays[n+1]).getTime()
+              day: ndays[i+1],
+              timeStamp: new Date(ndays[i+1]).getTime()
             }
           };
         }
@@ -236,67 +223,18 @@ angular.module('WebPaige.Services.Dater', ['ngResource'])
 
       registerPeriods: function ()
       {
-        var periods     = angular.fromJson(Storage.get('periods') || '{}'),
-            periodsNext = angular.fromJson(Storage.get('periodsNext') || '{}');
-
-        var thisYear = this.getThisYear(),
-            nextYear = Number(thisYear) + 1;
+        var periods = angular.fromJson(Storage.get('periods') || '{}');
 
         Storage.add('periods', angular.toJson({
-          months: this.getMonthTimeStamps(thisYear),
-          weeks:  this.getWeekTimeStamps(thisYear),
-          days:   this.getDayTimeStamps(thisYear)
-        }));
-
-        Storage.add('periodsNext', angular.toJson({
-          months: this.getMonthTimeStamps(nextYear),
-          weeks:  this.getWeekTimeStamps(nextYear),
-          days:   this.getDayTimeStamps(nextYear)
-        }));
-
+          months: this.getMonthTimeStamps(),
+          weeks: this.getWeekTimeStamps(),
+          days: this.getDayTimeStamps()
+        }));      
       },
 
-      getPeriods: function (next)
+      getPeriods: function ()
       {
-        return angular.fromJson(Storage.get((!next) ? 'periods' : 'periodsNext'));
-      },
-
-      translateToDutch: function (date)
-      {
-        var conversions = {
-          // days
-          Monday:     'maandag',
-          tuesday:    'dinsdag',
-          wednesday:  'woensdag',
-          thursday:   'donderdag',
-          friday:     'vrijdag',
-          saturday:   'zaterdag',
-          sunday:     'zondag',
-          // months
-          january:    'januari',
-          february:   'februari',
-          march:      'maart',
-          april:      'april',
-          may:        'mei',
-          june:       'juni',
-          july:       'juli',
-          august:     'augustus',
-          september:  'september',
-          october:    'oktober',
-          november:   'november',
-          december:   'december'
-        };
-
-        if (date)
-        {
-          angular.forEach(conversions, function (conversion, index)
-          {
-            date = date.replace(new RegExp(index, 'gi'), conversion)
-          });
-
-          return date;
-        }
-
+        return angular.fromJson(Storage.get('periods'));
       }
     }
   }

@@ -4,6 +4,8 @@ define(
   {
     'use strict';
 
+    console.log('this one is working ->');
+
     app.run(
       [
         '$rootScope', '$location',

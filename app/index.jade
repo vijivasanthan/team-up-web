@@ -10,11 +10,11 @@ head
   meta(name='viewport', content='width=device-width')
   //
      favicons
-  link(rel='apple-touch-icon-precomposed', sizes='144x144', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/img/ico/apple-touch-icon-144-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='114x114', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/img/ico/apple-touch-icon-114-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='72x72', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/img/ico/apple-touch-icon-72-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='57x57', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/img/ico/apple-touch-icon-57-precomposed.png')
-  link(rel='shortcut icon', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/img/ico/favicon.ico')
+  link(rel='apple-touch-icon-precomposed', sizes='144x144', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/apple-touch-icon-144-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='114x114', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/apple-touch-icon-114-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='72x72', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/apple-touch-icon-72-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='57x57', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/apple-touch-icon-57-precomposed.png')
+  link(rel='shortcut icon', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/favicon.ico')
   //
      styles
   link(rel='stylesheet', href='scripts/js/dist/bootstrap.css')
@@ -23,8 +23,12 @@ head
   //
      jquery
   script(src='scripts/js/libs/date/1.0/date.min.js')
-  script(src='scripts/js/libs/jquery/2.0.3/jquery-2.0.3.min.js')
+
+
+  script(src='scripts/js/libs/jquery/1.9.1/jquery-1.9.1.min.js')
+  script(src='scripts/js/libs/jquery/1.9.1/jquery.form.min.js')
   script(src='scripts/js/libs/rsvp/1.0.0/rsvp.min.js')
+
   script(src='scripts/js/plugins/basket.js')
   script(src='scripts/js/plugins/browser.js')
   script(src='scripts/js/plugins/console.js')
@@ -32,7 +36,7 @@ head
   script(src='scripts/js/plugins/screenfull.js')
   //
      profile configs
-  script(src='scripts/js/profiles/standby/profile.js')
+  script(src='scripts/js/profiles/profile.js')
   //if IE
     link(rel='stylesheet', href='css/ie.css')
   //if IE 8
@@ -42,110 +46,68 @@ head
   //if gt IE 7
     script(src='scripts/js/libs/angular-ui/0.4.0/angular-ui-ieshiv.min.js')
 body
-  //
-     watermark for app
-  #watermark
-  //script.
-  //  $('#watermark').css({
-  //    backgroundImage: 'url(../scripts/js/profiles/' + profile.meta  + '/images/img/watermark.png)',
-  //    backgroundRepeat: 'no-repeat'
-  //  });
-  //  if ($.browser.mobile) $('#watermark').css({ bottom: '-10px' });
-  //
-     end watermark for app
-  //
-     navbar
-  .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(bs-navbar='bs-navbar')
+
+  .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
+  ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
+  bs-navbar='')
     .navbar-inner
       .container-fluid
         a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.brand(href='#dashboard') {{config.profile.title}}
-        //
-           nav-collapse
+          span.icon-bar {{ui.message.messages}}
+        a.brand(href='#team')
+        // nav-collapse
         .nav-collapse.collapse
-          //
-             main nav
+          // user menu
+          // main nav
           ul.nav
-            li(data-match-route='/dashboard')
-              a(href='#dashboard') Dashboard
-            li(data-match-route='/planboard')
-              a(href='#planboard') Agenda
-            li(data-match-route='/messages')
-              a(href='#messages')
-                | {{ui.message.messages}}
-                //
-                   unread messages
-                span(ng-show='ng-show')
-                  | 0)" class="badge badge-success"
-                  | {{app.unreadMessages}}
-                //
-                   end unread messages
-            li(data-match-route='/groups', ng-hide='ng-hide', app.resources.role='app.resources.role')
-              | 1"
-              a(href='#groups') {{ui.groups.groups}}
-          //
-             end main nav
-          //
-             user menu
-          //
-             desktop version
+            li(data-match-route='/team')
+              // href="#team?local=true"
+              a(ng-click='nav("team")') {{ui.teamup.teams}}
+            li(data-match-route='/client')
+              // href="#client?local=true"
+              a(ng-click='nav("client")') {{ui.teamup.clients}}
+            li(data-match-route='/manage', ng-hide='app.resources.role > 1')
+              a(href='#manage') {{ui.teamup.manage}}
+            li(data-match-route='/planboard', ng-hide='app.resources.role > 1')
+              // href="#planboard"
+              a(ng-click='nav("planboard")') Agenda
+          // desktop version
           ul.nav.pull-right(ng-hide='browser.mobile')
+            li.navbar-btn
+              a(href='#search')
+                i.icon-search
             li
-              a(href='#help#{{location}}')
-                i.icon-question-sign.icon-white
-                | Hulp & Ondersteuning
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown')
-                i.icon-user.icon-white
-                | {{app.resources.name}}
-                b.caret
-              ul.dropdown-menu
-                li
-                  a(href='#profile')
-                    i.icon-user
-                    | {{ui.profile.profile}}
-                li
-                  a(href='#settings')
-                    i.icon-wrench
-                    | {{ui.settings.settings}}
-                li.divider
-                li
-                  a(href='#logout')
-                    i.icon-off
-                    | {{ui.login.logout}}
-            li#fullscreener(ng-show='config.fullscreen && browser.webkit')
-              a(ng-click='fullScreen()')
-                i.icon-fullscreen.icon-white
-          //
-             end desktop version
-          //
-             mobile or tablet version
-          ul.nav.pull-right(ng-show='browser.mobile')
+              // href="#profile"
+              a#account(ng-click='nav("profile")')
+                .roundedPicxSmall(id='img_{{app.resources.uuid|escape}}',
+                class='{{app.resources.states|stateColor}}')
+                span {{app.resources.firstName}} {{app.resources.lastName}}
+            li.navbar-btn
+              a(ng-click='nav("logout")')
+                i.icon-off
+          // end desktop version
+          // mobile or tablet version
+          ul.nav.pull-right(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
             li
               a(href='#profile')
-                i.icon-user.icon-white(ng-hide='ng-hide', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
-                span(ng-show='ng-show', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
+                i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Profile
             li
               a(href='#settings')
-                i.icon-wrench.icon-white(ng-hide='ng-hide', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
-                span(ng-show='ng-show', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
+                i.icon-wrench.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Settings
             li
               a(href='#logout')
-                i.icon-off.icon-white(ng-hide='ng-hide', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
-                span(ng-show='ng-show', browser.portrait='browser.portrait', browser.screen.width='browser.screen.width')
-          //
-             end mobile or tablet version
-          //
-             end user menu
-        //
-           end nav-collapse
-  //
-     end navbar
-  //
-     loading
+                i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Logout
+          // end mobile or tablet version
+          // end user menu
+        // end nav-collapse
+  // end navbar
+  // loading
   #loading.ng-cloak(ng-show='loadingBig')
     div(ng-show='loaderIcons.general')
       span.entypo ⏳
@@ -157,7 +119,7 @@ body
         br
         | {{ui.loading.dashboard}}
     div(ng-show='loaderIcons.planboard')
-      span.entypo 
+      span.entypo 🕔
       p
         | {{ui.loading.general}}
         br
@@ -169,13 +131,13 @@ body
         br
         | {{ui.loading.messages}}
     div(ng-show='loaderIcons.groups')
-      span.entypo 
+      span.entypo 👥
       p
         | {{ui.loading.general}}
         br
         | {{ui.loading.groups}}
     div(ng-show='loaderIcons.profile')
-      span.entypo 
+      span.entypo 👤
       p
         | {{ui.loading.general}}
         br
@@ -186,133 +148,80 @@ body
         | {{ui.loading.general}}
         br
         | {{ui.loading.settings}}
-  //
-     end loading
-  //
-     notifications
-  #notification.alert.ng-cloak(class='{{notification.type}}', ng-show='notification.status')
+  // end loading
+  // notifications
+  #notification.alert(ng-show='notification.status', class='{{notification.type}}')
     button.close(type='button', ng-click='notification.status = false') ×
-    span(ng-hide='notification.confirm') {{notification.message}}
-    span(ng-show='notification.confirm')
-      | {{ui.confirms.remove}}
-      button.btn.btn-mini.btn-danger(ng-click='fireDeleteRequest(notification.options)') Delete
-  //
-     end notifications
-  //
-     wrap
+    | {{notification.message}}
+  // end notifications
+  // wrap
   #wrap
-    //
-       container-fluid
+    // container-fluid
     .container-fluid
-      div(ng-view='ng-view')
-    //
-       end container-fluid
+      div(ng-view='')
+    // end container-fluid
     #push
-  //
-     end wrap
-  //
-     mobile status bar
+  // end wrap
+  // chat screen
+  #chat(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
+  ng-controller='messagesCtrl')
+    #chat-btn(ng-click='openChat()')
+      span CHAT
+    #chat-content(ng-show='toggleChat')
+      p(ng-hide='messages.length > 0') {{ui.teamup.noMessages}}
+      div(ng-repeat='message in messages')
+        .chat-separator(ng-show='(message.date != "")')
+          span {{message.date}}
+          hr
+        .message(class='{{message.msgRole}}')
+          .chatAvatar.roundedPicSmall(id='img_{{message.member.uuid|escape}}',
+          class='{{message.member.states|stateColor}}')
+          .arrow(ng-show='(message.role == "other")')
+          .chatCloud
+            h5.name {{message.senderName}}
+            h5.time {{message.sendTime|nicelyTime}}
+            div
+              p {{message.body}}
+          .arrow(ng-hide='(message.role == "other")')
+      #pusher  
+    .input-area
+      input#messageField(type='text', ng-model='newMessage', ngenter='sendMessage(newMessage)')
+      button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
+  // end chat screen
+  // mobile status bar
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
     img(src='images/img/ajax-loader.gif')
     small {{loading.message}}
-  //
-     end mobile status bar
-  .ng-cloak.text-center(ng-show='browser.mobile && config.profile.mobileApp.status && ((config.profile.meta==\'standby\') || (config.profile.meta==\'monster\'))')
-    ul(style='list-style: none; position: relative; z-index: 20000; margin: 0;')
-      li(style='display: inline;')
-        a.btn.btn-success.btn-large(href='https://play.google.com/store/apps/details?id=com.askcs.standby')
-          | Download Android App
-      br(ng-show='ng-show', browser.screen.width='browser.screen.width')
-      br(ng-show='ng-show', browser.screen.width='browser.screen.width')
-      li(style='display: inline;')
-        a.btn.btn-success.btn-large(ng-show='(config.profile.meta==\'standby\')', href='https://itunes.apple.com/nl/app/standby/id655588325?mt=8&uo=4', target='itunes_store')
-          | Download iPhone App
-        a#popupBtn.btn.btn-success.btn-large(ng-show='(config.profile.meta==\'monster\')', data-toggle='popover', data-placement='top', data-content='Binnenkort te downloaden.', title='', data-original-title='Download iPhone App', onclick='console.log($(this).popover())') Download iPhone App
-      br(ng-show='ng-show', browser.screen.width='browser.screen.width')
-      br(ng-show='ng-show', browser.screen.width='browser.screen.width')
-  //
-     footer
-  #footer.ng-cloak(ng-hide='browser.mobile')
+  // end mobile status bar
+  // footer
+  #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
     .container-fluid
-      //
-         copyrights
+      // copyrights
       #copyrights
-        //
-           download mobile app
-        #download-footer
-          ul
-            //
-              Monster
-            li(ng-show='config.profile.mobileApp.status && (config.profile.meta == \'monster\')')
-              a.btn.btn-success.btn-large(href='https://play.google.com/store/apps/details?id=com.askcs.standby')
-                | Download Android App
-            li(ng-show='config.profile.mobileApp.status && (config.profile.meta == \'monster\')')
-              a.btn.btn-success.btn-large(href='https://itunes.apple.com/nl/app/standby/id655588325?mt=8&uo=4', target='itunes_store')
-                | Download iPhone App
-            //
-              end Monster
-            //
-              StandBy Firedep
-            li(ng-show='config.profile.mobileApp.status && ((config.profile.meta == \'standby\') || (config.profile.meta == \'knrm\'))')
-              a.btn.btn-success.btn-large(href='https://play.google.com/store/apps/details?id=com.askcs.standby')
-                | Download Android App
-            li(ng-show='config.profile.mobileApp.status && ((config.profile.meta == \'standby\') || (config.profile.meta == \'knrm\'))')
-              a.btn.btn-success.btn-large(href='https://itunes.apple.com/nl/app/standby/id655588325?mt=8&uo=4', target='itunes_store')
-                | Download iPhone App
-            //
-              end StandBy Firedep
-            //
-              <li ng-show="config.profile.mobileApp.status"
-            //
-              ng-hide="(config.profile.meta == 'standby') || (config.profile.meta == 'monster') || (config.profile.meta == 'knrm')">
-            //
-              <button class="btn btn-success btn-large"
-            //
-              type="button"
-            //
-              ng-click="downloadMobileApp('regular')">
-            //
-              Download Mobiele App
-            //
-              </button>
-            //
-              </li>
-            //
-              <li ng-show="config.profile.mobileApp.experimental">
-            //
-              <button class="btn btn-success btn-large"
-            //
-              type="button"
-            //
-              ng-click="downloadMobileApp('experimental')">
-            //
-              Download Experimentele App
-            //
-              </button>
-            //
-              </li>
-            li
-              span.muted
-                small
-                  | Ask Community Systems, 2013
-                  br
-                  i
-                    a(href='version.html', target='_blank', style='color: #dddddd;') StandBy v{{config.version}}
-        //
-           end download mobile app
-      //
-         end copyrights
-      //
-         general pre-loader
+        // ask & version
+        span.muted(ng-style='(!config.profile.mobileApp.status) && "right:0"')
+          small
+            | Ask Community Systems, 2013
+            br
+            i
+              | TeamUp
+              a(href='version.html', target='_blank') v{{config.version}}
+        // end ask & version
+      // end copyrights
+      // general preloader
       p.muted(ng-show='loading.status')
         img(src='images/img/ajax-loader.gif')
         small
           span(ng-show='app.preloader.status') {{app.preloader.count}}%
           | {{loading.message}}
-      //
-         end general pre-loader
-  //
-     end footer
+      // end general preloader
+  // end footer
+
+
+
+
+
+
   //if gt IE 7
   script(src='scripts/js/libs/chaps/timeline/2.4.0/timeline_modified.js')
   //
@@ -321,59 +230,45 @@ body
   script(src='scripts/js/libs/angular/1.0.5/angular-resource.min.js')
   script(src='scripts/js/libs/bootstrap/bootstrap.min.js')
 
+
+
   script(src='scripts/js/localization.js')
   script(src='scripts/js/webpaige.js')
   script(src='scripts/js/config.js')
   script(src='scripts/js/routes.js')
   script(src='scripts/js/bootstrap.js')
   script(src='scripts/js/modals/user.js')
-  script(src='scripts/js/modals/dashboard.js')
-  script(src='scripts/js/modals/slots.js')
-  script(src='scripts/js/modals/messages.js')
-  script(src='scripts/js/modals/groups.js')
   script(src='scripts/js/modals/profile.js')
+  script(src='scripts/js/modals/core.js')
+  script(src='scripts/js/modals/teams.js')
+  script(src='scripts/js/modals/clients.js')
   script(src='scripts/js/modals/settings.js')
+  script(src='scripts/js/modals/messages.js')
+  script(src='scripts/js/modals/slots.js')
   script(src='scripts/js/directives/directives.js')
   script(src='scripts/js/libs/angular-strap/0.7.0/angular-strap.min.js')
-  script(src='scripts/js/services/timer.js')
+  script(src='scripts/js/libs/bootstrap-custom/ui-bootstrap-custom-0.6.0.js')
+  script(src='scripts/js/libs/bootstrap-custom/ui-bootstrap-custom-tpls-0.6.0.js')
   script(src='scripts/js/services/session.js')
   script(src='scripts/js/services/dater.js')
-  script(src='scripts/js/services/eventbus.js')
-  script(src='scripts/js/services/interceptor.js')
   script(src='scripts/js/services/md5.js')
   script(src='scripts/js/services/storage.js')
   script(src='scripts/js/services/strings.js')
-  script(src='scripts/js/services/announcer.js')
+  script(src='scripts/js/services/generators.js')
   script(src='scripts/js/services/sloter.js')
-  script(src='scripts/js/services/stats.js')
-  script(src='scripts/js/services/offsetter.js')
   script(src='scripts/js/filters/filters.js')
   script(src='scripts/js/controllers/login.js')
+  script(src='scripts/js/controllers/forgotpass.js')
+  script(src='scripts/js/controllers/register.js')
   script(src='scripts/js/controllers/logout.js')
-  script(src='scripts/js/controllers/dashboard.js')
-  script(src='scripts/js/controllers/tv.js')
+  // script(src='scripts/js/controllers/dashboard.js')
+  script(src='scripts/js/controllers/core.js')
+  script(src='scripts/js/controllers/profile.js')
+  script(src='scripts/js/controllers/teams.js')
+  script(src='scripts/js/controllers/clients.js')
+  script(src='scripts/js/controllers/manage.js')
+  script(src='scripts/js/controllers/treegrid.js')
   script(src='scripts/js/controllers/planboard.js')
   script(src='scripts/js/controllers/timeline.js')
   script(src='scripts/js/controllers/timeline-navigation.js')
   script(src='scripts/js/controllers/messages.js')
-  script(src='scripts/js/controllers/scheaduler.js')
-  script(src='scripts/js/controllers/groups.js')
-  script(src='scripts/js/controllers/profile.js')
-  script(src='scripts/js/controllers/settings.js')
-  script(src='scripts/js/controllers/help.js')
-
-  script.
-    // if (window.profile.analytics.status) window.profile.analytics.code();
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-44867560-2');
-    ga('send', 'pageview');
-    if (location.host.split(':')[0] == 'localhost')
-    document.write(
-    '<script src="http://' +
-    (location.host || 'localhost').split(':')[0] +
-    ':35729/livereload.js?snipver=1"></' +
-    'script>'
-    );

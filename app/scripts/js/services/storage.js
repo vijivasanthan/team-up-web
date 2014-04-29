@@ -13,7 +13,6 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
   // period for readability
   // var prefix = angularLocalStorage.constant;
   
-
   if ($config.title.substr(-1) !== '.') $config.title = !!$config.title ? $config.title + '.' : '';
 
   // Checks the browser to see if local storage is supported
@@ -42,7 +41,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     }
     catch (e) {
       return false;
-    }
+    };
 
     return true;
   };
@@ -73,7 +72,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     } 
     catch (e) {
       return false;
-    }
+    };
 
     return true;
   };
@@ -98,9 +97,9 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
         } 
         catch (e) {
           return false;
-        }
-      }
-    }
+        };
+      };
+    };
 
     return true;
   };
@@ -134,7 +133,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     }
     catch (e) {
       return false;
-    }
+    };
 
     return true;
   };
@@ -167,7 +166,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     } 
     catch (e) {
       return false;
-    }
+    };
 
     return true;
   };
@@ -192,9 +191,9 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
         } 
         catch (e) {
           return false;
-        }
-      }
-    }
+        };
+      };
+    };
 
     return true;
   };
@@ -232,14 +231,14 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
         $config.cookie.expiry = -1;
 
         value = '';
-      }
+      };
 
       if ($config.cookie.expiry !== 0) 
       {
         expiryDate.setTime(expiryDate.getTime() + ($config.cookie.expiry * 60 * 60 * 1000));
 
         expiry = "; expires=" + expiryDate.toGMTString();
-      }
+      };
 
       document.cookie = $config.title + 
                         key + 
@@ -252,7 +251,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     } 
     catch (e) {
       return false;
-    }
+    };
 
     return true;
   };
@@ -279,7 +278,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
 
       if (thisCookie.indexOf($config.title + key + '=') == 0)
         return decodeURIComponent(thisCookie.substring($config.title.length + key.length + 1, thisCookie.length));
-    }
+    };
 
     return null;
   };
@@ -308,7 +307,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
       key = thisCookie.substring(prefixLength, thisCookie.indexOf('='));
 
       removeFromCookies(key);
-    }
+    };
   };
 
 
@@ -317,7 +316,7 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
     var item = (key) ? localStorage.key : localStorage;
 
     return ((3 + ((item.length * 16) / (8 * 1024))) * 0.0009765625).toPrecision(2) + ' MB';
-  };
+  }
 
 
   var getPeriods = function ()
@@ -344,7 +343,36 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
 
     return (!settings.settingsWebPaige) ? $rootScope.config.defaults.settingsWebPaige : angular.fromJson(settings.settingsWebPaige);
   };
-
+  
+  var addAvatarURLtoStorage = function(id, avatarUrl){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  if(avatarUrls){
+		angular.forEach(avatarUrls,function(item){
+			if(item.id == id){
+				item.url = avatarUrl;
+			}else{
+				var newItem = {'id' : id, 'url' : avatarUrl };
+				avatarUrls.add(newItem);
+			}
+		});
+	  }else{
+		  avatarUrls = [{'id' : id, 'url' : avatarUrl }];
+	  }
+	  addToLocalStorage('avatarUrls',angular.toJson(avatarUrls));
+  }
+  
+  var getAvatarURLFromStorage = function(id){
+	  var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+	  var ret;
+	  if(avatarUrls){
+		  angular.forEach(avatarUrls,function(item){
+			  if(item.id == id){
+				  ret = item.url; 
+			  }
+		  });
+	  }
+	  return ret;
+  }
 
   return {
     isSupported: browserSupportsLocalStorage,
@@ -370,6 +398,10 @@ angular.module('WebPaige.Services.Storage', ['ngResource'])
       groups:   getGroups,
       members:  getMembers,
       settings: getSettings
+    },
+    avatar: {
+    	addurl: addAvatarURLtoStorage,
+    	geturl: getAvatarURLFromStorage
     }
   }
 

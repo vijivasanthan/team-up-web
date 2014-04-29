@@ -38,7 +38,7 @@ angular.module('WebPaige.Modals.Settings', ['ngResource'])
 	    Profile.save(id, {
 	      settingsWebPaige: angular.toJson(settings)
 	    })
-	    .then(function ()
+	    .then(function (result)
 	    {
 	      deferred.resolve({
 	        saved: true

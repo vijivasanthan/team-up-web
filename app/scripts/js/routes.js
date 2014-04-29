@@ -24,6 +24,26 @@ angular.module('WebPaige')
 
 
     /**
+     * Forgot password router
+     */
+    .when('/forgotpass',
+    {
+      templateUrl: 'scripts/js/dist/views/forgotpass.html',
+      controller: 'forgotpass'
+    })
+
+
+    /**
+     * Register router
+     */
+    .when('/register',
+    {
+      templateUrl: 'scripts/js/dist/views/register.html',
+      controller: 'register'
+    })
+
+
+    /**
      * Logout router
      */
     .when('/logout',
@@ -34,218 +54,271 @@ angular.module('WebPaige')
 
 
     /**
-     * Dashboard router
+     * Teams router
      */
-    .when('/dashboard',
-    {
-      templateUrl: 'scripts/js/dist/views/dashboard.html',
-      controller: 'dashboard'
-    })
+     .when('/team',
+     {
+       templateUrl: 'scripts/js/dist/views/teams.html',
+       controller: 'teamCtrl',
+       resolve: {
+           data: [
+             'Teams','$route',
+             function (Teams,$route)
+             {
+               if($route.current.params.local && $route.current.params.local == "true"){
+                   return Teams.queryLocal();
+               }else{
+                   return Teams.query(false,$route.current.params); 
+               }
+             }
+           ]
+       },
+       reloadOnSearch: false
+     })
 
 
     /**
-     * TV Monitor / Dashboard router
+     * Client router
      */
-    .when('/tv',
+    .when('/client',
     {
-      templateUrl: 'scripts/js/dist/views/tv.html',
-      controller: 'tv',
+      templateUrl:    'scripts/js/dist/views/clients.html',
+      controller:     'clientCtrl',
       resolve: {
-        data:
-          [
-            '$route', '$http',
-            function ($route, $http)
+          data: [
+            'Clients','$route',
+            function (ClientGroups,$route)
             {
-              if ($route.current.params.sessionID)
-              {
-                $http.defaults.headers.common['X-SESSION_ID'] = $route.current.params.sessionID;
-              }
+                if($route.current.params.local && $route.current.params.local == "true"){
+                    return ClientGroups.queryLocal();
+                }else{
+                    return ClientGroups.query(false,$route.current.params);
+                }
             }
           ]
-      }
+      },
+      reloadOnSearch: false
+    })
+    
+    /**
+     * Client Profile router
+     */
+    .when('/clientProfile/:clientId',
+    {
+      templateUrl:    'scripts/js/dist/views/clients.html',
+      controller:     'clientCtrl',
+      resolve: {
+          data: [
+            '$rootScope', '$route', '$location', 'Clients', 
+            function ($rootScope, $route, $location, Clients)
+            {
+                var data = {clientId : $route.current.params.clientId};
+                return data;
+//                return Clients.getReports($route.current.params.clientId, false);
+            }
+          ]
+      },
+      reloadOnSearch: false
+    })
+    
+    /**
+     * Client Group - Team , Management 
+     */
+    .when('/manage',
+    {
+      templateUrl:    'scripts/js/dist/views/manage.html',
+      controller:     'manageCtrl',
+      resolve: {
+          data: [
+            'Clients','Teams','$location',
+            function (ClientGroups,Teams,$location)
+            {
+                  var ret = {};
+                  
+                  if($location.hash() && $location.hash() == 'reload'){
+                      var teams = Teams.query();
+                      var cGroups = ClientGroups.query();
+                      ret = { t : teams , cg : cGroups};
+                      // ret = Teams.getAll();
+                  }else{
+                      ret.local = true;
+                  }
+              
+                  return ret;
+            }
+          ]
+      },
+      reloadOnSearch: false
     })
 
 
     /**
-     * Planboard router
+     * Agenda router
      */
     .when('/planboard',
     {
-      templateUrl: 'scripts/js/dist/views/planboard.html',
-      controller: 'planboard',
-      resolve: {
-        data:
-        [
-          '$route', 'Slots', 'Storage', 'Dater',
-          function ($route, Slots, Storage, Dater)
-          {
-            var periods   = Storage.local.periods(),
-                settings  = Storage.local.settings();
-
-            var stamps = {};
-
-            if (Dater.current.today() > 360)
-            {
-              stamps = {
-                start:  periods.days[358].last.timeStamp,
-                end:    periods.days[365].last.timeStamp
-              }
-            }
-            else
-            {
-              stamps = {
-                start:  periods.days[Dater.current.today() - 1].last.timeStamp,
-                end:    periods.days[Dater.current.today() + 6].last.timeStamp
-              }
-            }
-
-            return  Slots.all({
-                      groupId:  settings.app.group,
-                      stamps:   stamps,
-                      month:    Dater.current.month(),
-                      layouts: {
-                        user:     true,
-                        group:    true,
-                        members:  false
-                      }
-                    });
-          }
-        ]
-      },
-      reloadOnSearch: false
-    })
-
-
-    /**
-     * Messages router
-     */
-    .when('/messages',
-    {
-      templateUrl: 'scripts/js/dist/views/messages.html',
-      controller: 'messages',
-      resolve: {
-        data: [
-          '$route', 'Messages',
-          function ($route, Messages)
-          {
-            return Messages.query();
-          }
-        ]
-      },
-      reloadOnSearch: false
-    })
-
-
-    /**
-     * Groups router
-     */
-    .when('/groups',
-    {
-      templateUrl: 'scripts/js/dist/views/groups.html',
-      controller: 'groups',
-      resolve: {
-        data: [
-          'Groups',
-          function (Groups)
-          {
-            return Groups.query();
-          }
-        ]
-      },
-      reloadOnSearch: false
-    })
-
-
-    /**
-     * Profile (user specific) router
-     */
-    .when('/profile/:userId',
-    {
-      templateUrl: 'scripts/js/dist/views/profile.html',
-      controller: 'profile',
-      resolve: {
-        data: [
-          '$rootScope', 'Profile', '$route', '$location',
-          function ($rootScope, Profile, $route, $location)
-          {
-            if ($route.current.params.userId.toLowerCase() != $rootScope.app.resources.uuid)
-            {
-              // IE route fix
-              var onejan = new Date(new Date().getFullYear(),0,1);
-
-              // var periods = Dater.getPeriods(),
-              var periods = angular.fromJson(localStorage.getItem('WebPaige.periods')),
-                  // current = Dater.current.week(),
-                  // current = new Date().getWeek(),
-                  current = Math.ceil((((new Date() - onejan) / 86400000) + onejan.getDay()+1)/7);
-
-              // console.log('---->', current);
-
-              var ranges  = {
-                    start:  periods.weeks[current].first.timeStamp / 1000,
-                    end:    periods.weeks[current].last.timeStamp / 1000
-                  };
-
-              return Profile.getWithSlots($route.current.params.userId.toLowerCase(), false, ranges);
-            }
-            else
-            {
-              return Profile.get($route.current.params.userId.toLowerCase(), false);
-            }
-          }
-        ]
-      },
-      reloadOnSearch: false
-    })
-
-
-    /**
-     * Profile (user hiself) router
-     */
-    .when('/profile',
-    {
-      templateUrl: 'scripts/js/dist/views/profile.html',
-      controller: 'profile',
-      resolve: {
-        data: [
-          '$rootScope', '$route', '$location',
-          function ($rootScope, $route, $location)
-          {
-            if (!$route.current.params.userId || !$location.hash())
-              $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
-          }
-        ]
-      }
+       templateUrl: 'scripts/js/dist/views/planboard.html',
+       controller: 'planboard',
+       reloadOnSearch: false
     })
 
 
     /**
      * Settings router
      */
-    .when('/settings',
-    {
-      templateUrl: 'scripts/js/dist/views/settings.html',
-      controller: 'settings',
-      resolve: {
-        data: [
-          'Settings',
-          function (Settings)
-          {
-            return angular.fromJson(Settings.get());
-          }
-        ]
-      }
-    })
+      // .when('/settings',
+      // {
+      //   templateUrl: 'scripts/js/dist/views/settings.html',
+      //   controller: 'settings'
+      // })
+
+
+    /**
+     * Planboard router
+     */
+    // .when('/planboard',
+    // {
+    //   templateUrl: 'scripts/js/dist/views/planboard.html',
+    //   controller: 'planboard',
+    //   resolve: {
+    //     data:
+    //     [
+    //       '$route', 'Slots', 'Storage', 'Dater',
+    //       function ($route, Slots, Storage, Dater)
+    //       {
+    //         var periods = Storage.local.periods(),
+    //             current = Dater.current.week(),
+    //             initial = periods.weeks[current],
+    //             groups  = Storage.local.groups(),
+    //             settings = Storage.local.settings();
+
+    //         return  Slots.all({
+    //                   groupId:  settings.app.group,
+    //                   division: 'all',
+    //                   stamps: {
+    //                     start:  initial.first.timeStamp,
+    //                     end:    initial.last.timeStamp
+    //                   },
+    //                   month: Dater.current.month(),
+    //                   layouts: {
+    //                     user:     true,
+    //                     group:    true,
+    //                     members:  false
+    //                   }
+    //                 });
+    //       }
+    //     ]
+    //   },
+    //   reloadOnSearch: false
+    // })
+
+
+    /**
+     * Messages router
+     */
+     .when('/messages',
+     {
+       templateUrl: 'scripts/js/dist/views/messages.html',
+       controller: 'messages',
+//       resolve: {
+//         data: [
+//           '$route', 'Messages',
+//           function ($route, Messages)
+//           {
+//             return Messages.query();
+//           }
+//         ]
+//       },
+       reloadOnSearch: false
+     })
+
+
+    /**
+     * Groups router
+     */
+    // .when('/groups',
+    // {
+    //   templateUrl: 'scripts/js/dist/views/groups.html',
+    //   controller: 'groups',
+    //   resolve: {
+    //     data: [
+    //       'Groups',
+    //       function (Groups)
+    //       {
+    //         return Groups.query();
+    //       }
+    //     ]
+    //   },
+    //   reloadOnSearch: false
+    // })
+
+
+    /**
+     * Profile (user specific) router
+     */
+     .when('/profile/:userId',
+     {
+       templateUrl: 'scripts/js/dist/views/profile.html',
+       controller: 'profileCtrl',
+       resolve: {
+         data: [
+           '$rootScope', 'Profile', '$route', '$location', 'Dater',
+           function ($rootScope, Profile, $route, $location, Dater)
+           {
+               return Profile.get($route.current.params.userId, false);
+           }
+         ]
+       },
+       reloadOnSearch: false
+     })
+
+    /**
+     * Profile (user hiself) router
+     */
+     .when('/profile',
+     {
+       templateUrl: 'scripts/js/dist/views/profile.html',
+       controller: 'profileCtrl',
+       resolve: {
+         data: [
+           '$rootScope', '$route', '$location',
+           function ($rootScope, $route, $location)
+           {
+             if (!$route.current.params.userId || !$location.hash())
+               $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
+           }
+         ]
+       }
+     })
+
+
+    /**
+     * Settings router
+     */
+    // .when('/settings',
+    // {
+    //   templateUrl: 'scripts/js/dist/views/settings.html',
+    //   controller: 'settings',
+    //   resolve: {
+    //     data: [
+    //       'Settings',
+    //       function (Settings)
+    //       {
+    //         return angular.fromJson(Settings.get());
+    //       }
+    //     ]
+    //   }
+    // })
 
 
     /**
      * Help router
      */
-    .when('/help',
-    {
-      templateUrl: 'scripts/js/dist/views/help.html',
-      controller: 'help'
-    })
+    // .when('/help',
+    // {
+    //   templateUrl: 'scripts/js/dist/views/help.html',
+    //   controller: 'help'
+    // })
 
 
     /**
@@ -259,6 +332,6 @@ angular.module('WebPaige')
     /**
      * Define interceptor
      */
-    $httpProvider.responseInterceptors.push('Interceptor');
+    // $httpProvider.responseInterceptors.push('Interceptor');
   }
 ]);

@@ -5,193 +5,361 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 
 /**
- * Convert date to object
+ * Translate package
  */
-  .filter('convertToDateObj',
-    [
-      function ()
-      {
-        return function (date)
-        {
-          return Date(date);
-        }
-      }
-    ])
+.filter('translatePackage', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.packages, function (pack)
+				{
+					if (pack.id == selected) gem = pack;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate country
+ */
+.filter('translateCountry', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.countries, function (country)
+				{
+					if (country.id == selected) gem = country;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate region
+ */
+.filter('translateRegion', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected, country)
+		{
+			if (selected && country)
+			{
+				var gem;
+
+				angular.forEach($config.regions[country], function (region)
+				{
+					if (region.id == selected) gem = region;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+
+/**
+ * Translate service
+ */
+.filter('translateService', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.virtuals, function (virtual)
+				{
+					if (virtual.id == selected) gem = virtual;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
 
 
 /**
  * Translate roles
  */
-  .filter('translateRole',
-    [
-      '$config',
-      function ($config)
-      {
-        return function (role)
-        {
-          var urole;
+ .filter('translateRole', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (role)
+ 		{
+ 			var urole;
 
-          angular.forEach($config.roles, function (prole)
-          {
-            if (prole.id == role) urole = prole.label;
-          });
+ 			angular.forEach($config.roles, function (prole)
+ 			{
+ 				if (prole.id == role) urole = prole.label;
+ 			});
 
-          return urole;
-        }
-      }
-    ])
+ 			return urole;
+ 		}
+ 	}
+ ])
 
+
+ /**
+ * Translate roles
+ */
+ .filter('translateFunc', 
+ [
+ 	'$config', 
+ 	function ($config)
+ 	{
+ 		return function (func)
+ 		{
+ 			var ufunc;
+
+ 			angular.forEach($config.mfunctions, function (pfunc)
+ 			{
+ 				if (pfunc.id == func) ufunc = pfunc.label;
+ 			});
+
+ 			return ufunc;
+ 		}
+ 	}
+ ])
+ 
 
 /**
- * Translate division ids to names
+ * Translate state value to icon
  */
-.filter('translateDivision',
-[
-  '$config',
-  function ($config)
-  {
-    return function (divid)
+ .filter('stateDataIcon', 
+ [
+    '$config', 
+    function ($config)
     {
-      var filtered;
+        return function (name,type){
+            var ret;
 
-      angular.forEach($config.timeline.config.divisions, function (division)
-      {
-        if (division.id == divid)
-        {
-          filtered = division.label;
+            angular.forEach($config.stateIcons, function (stateIcon, index)
+            {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
+                  if(type == "data_icon"){
+                      ret = stateIcon.data_icon;
+                  }else if(type == "class_name"){
+                      ret = stateIcon.class_name;
+                  }  
+                } 
+            });
+
+            return ret;
         }
-      });
-
-      return filtered;
     }
-  }
+ ])
+
+ 
+/**
+ * Translate state circle color 
+ */
+ .filter('stateColor', 
+ [
+    '$config', 
+    function ($config)
+    {
+        return function (states)
+        {
+            var ret = $config.stateColors.none;
+            
+            angular.forEach(states, function (state, index){
+                /**
+                 *    WORKING
+                 *    OFFLINE
+                 *    AVAILABLE
+                 *    UNAVAILABLE
+                 *    UNKNOWN
+                 */
+                if(angular.lowercase(state.name) == "availability" && state.share){
+                    if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
+                        ret = $config.stateColors.availalbe; 
+                    }else if(angular.lowercase(state.value) == "unavailable"){
+                        ret = $config.stateColors.busy;
+                    }else if(angular.lowercase(state.value) == "offline"){
+                        ret = $config.stateColors.offline;
+                    }
+                }
+            });
+
+            return ret;
+        }
+    }
+ ])
+
+ 
+ /**
+ * Translate state circle color 
+ */
+ .filter('stateValue', 
+ [
+    '$config', 
+    function ($config){
+        return function (state,type){
+            if(angular.lowercase(state.name) == "location"){
+                var value = state.value;
+                var match = value.match(/\((.*?)\)/);
+                if(match == null){
+                    return value;
+                }else{
+                    var ll = match[1];
+                    value = value.replace(match[0],"");
+                    if(type == "data"){
+                        return ll;
+                    }else{
+                        return value;
+                    }
+                }
+            }else{
+                return state.value;
+            }
+        }
+    }
 ])
+
+
 
 
 /**
  * Main range filter
  */
-.filter('rangeMainFilter', 
+.filter('rangeMainFilter',
 [
-	'Dater',
-	function (Dater)
+	'Dater', 'Storage',
+	function (Dater, Storage)
 	{
 		var periods = Dater.getPeriods();
 
 		return function (dates)
 		{
-      if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
-      {
-        dates.start = new Date(dates.end).addDays(-1);
-      }
+      // console.log('dates ->', dates);
 
-			var cFirst = function (str)
-			{
-        return str.charAt(0).toUpperCase() + str.substr(1);
-			};
-
-			var ndates = {
-            start: {
-              real: 	cFirst( Dater.translateToDutch(new Date(dates.start).toString('dddd d MMMM'))),
-              month: 	cFirst( Dater.translateToDutch(new Date(dates.start).toString('MMMM'))),
-              day: 		cFirst( Dater.translateToDutch(new Date(dates.start).toString('d'))),
-              year:   new Date(dates.start).toString('yyyy')
-            },
-            end: {
-              real: 	cFirst( Dater.translateToDutch(new Date(dates.end).toString('dddd d MMMM'))),
-              month: 	cFirst( Dater.translateToDutch(new Date(dates.end).toString('MMMM'))),
-              day: 		cFirst( Dater.translateToDutch(new Date(dates.end).toString('d'))),
-              year:   new Date(dates.end).toString('yyyy')
-            }
-          };
+			if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
+				dates.start = new Date(dates.end).addDays(-1);
 
 			var dates = {
-            start: {
-              real: 	new Date(dates.start).toString('dddd d MMMM'),
-              month: 	new Date(dates.start).toString('MMMM'),
-              day: 		new Date(dates.start).toString('d')
-            },
-            end: {
-              real: 	new Date(dates.end).toString('dddd d MMMM'),
-              month: 	new Date(dates.end).toString('MMMM'),
-              day: 		new Date(dates.end).toString('d')
-            }
-          },
-          monthNumber = Date.getMonthNumberFromName(dates.start.month);
+						start: {
+							real: 	new Date(dates.start).toString('dddd, MMMM d'),
+							month: 	new Date(dates.start).toString('MMMM'),
+							day: 		new Date(dates.start).toString('d')
+						},
+						end: {
+							real: 	new Date(dates.end).toString('dddd, MMMM d'),
+							month: 	new Date(dates.end).toString('MMMM'),
+							day: 		new Date(dates.end).toString('d')
+						}
+					},
+					monthNumber = Date.getMonthNumberFromName(dates.start.month);
 
-			if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) &&
-					dates.start.month == dates.end.month)
+			if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
 			{
-				return 	ndates.start.real +
+				return 	dates.start.real +
 								', ' +
-								ndates.start.year;
+								Dater.getThisYear();
 			}
-			else if (dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
+			else if(dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
 			{
-				return 	ndates.start.month +
+				return 	dates.start.month +
 								', ' +
-                ndates.start.year;
+								Dater.getThisYear();
 			}
 			else
 			{
-				return 	ndates.start.real +
-                ', ' +
-                ndates.start.year +
-								' / ' + 
-								ndates.end.real +
+				return 	dates.start.real +
+								' / ' +
+								dates.end.real +
 								', ' +
-                ndates.end.year;
+								Dater.getThisYear();
 			}
 
 		}
 	}
 ])
+
+
+
+
+
+
 
 
 /**
  * Main range week filter
  */
-.filter('rangeMainWeekFilter', 
+.filter('rangeMainWeekFilter',
 [
-	'Dater',
-	function (Dater)
+	'Dater', 'Storage',
+	function (Dater, Storage)
 	{
+		var periods = Dater.getPeriods();
+
 		return function (dates)
 		{
 			if (dates)
 			{
-				var cFirst = function (str)
-				{
-				  return str.charAt(0).toUpperCase() + str.substr(1);
+				var dates = {
+					start: 	new Date(dates.start).toString('dddd, MMMM d'),
+					end: 		new Date(dates.end).toString('dddd, MMMM d')
 				};
 
-				var newDates = {
-					start: 	cFirst(Dater.translateToDutch(new Date(dates.start).toString('dddd d MMMM'))),
-					end: 		cFirst(Dater.translateToDutch(new Date(dates.end).toString('dddd d MMMM')))
-				};
-
-				return 	newDates.start +
+				return 	dates.start +
 								' / ' +
-                newDates.end +
-								', ' + 
+								dates.end +
+								', ' +
 								Dater.getThisYear();
 			}
-      else
-      {
-        return false;
-      }
 		}
 	}
 ])
 
 
+
+
+
+
+
+
 /**
  * Range info filter
  */
-.filter('rangeInfoFilter', 
+.filter('rangeInfoFilter',
 [
-	'$rootScope', 'Dater', 'Storage', 
-	function ($rootScope, Dater, Storage)
+	'Dater', 'Storage',
+	function (Dater, Storage)
 	{
 		var periods = Dater.getPeriods();
 
@@ -201,15 +369,15 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 			if (diff > (2419200000 + 259200000))
 			{
-				return $rootScope.ui.planboard.rangeInfoTotalSelectedDays + Math.round(diff / 86400000);
+				return 'Total selected days: ' + Math.round(diff / 86400000);
 			}
 			else
 			{
 				if (timeline.scope.day)
 				{
 					var hours = {
-						start: 	new Date(timeline.range.start).toString('HH:mm'),
-						end: 		new Date(timeline.range.end).toString('HH:mm')
+						start: new Date(timeline.range.start).toString('HH:mm'),
+						end: new Date(timeline.range.end).toString('HH:mm')
 					};
 
 					/**
@@ -217,21 +385,21 @@ angular.module('WebPaige.Filters', ['ngResource'])
 					 */
 					if (hours.end == '00:00') hours.end = '24:00';
 
-					return 	$rootScope.ui.planboard.rangeInfoTime + 
-									hours.start + 
-									' / ' + 
+					return 	'Time: ' +
+									hours.start +
+									' / ' +
 									hours.end;
 				}
 				else if (timeline.scope.week)
 				{
-					return 	$rootScope.ui.planboard.rangeInfoWeekNumber + 
+					return 	'Week number: ' +
 									timeline.current.week;
 				}
 				else if (timeline.scope.month)
 				{
-					return 	$rootScope.ui.planboard.rangeInfoMonth + 
-									timeline.current.month + 
-									$rootScope.ui.planboard.rangeInfoTotalDays + 
+					return 	'Month number: ' +
+									timeline.current.month +
+									', Total days: ' +
 									periods.months[timeline.current.month].totalDays;
 				}
 			}
@@ -240,433 +408,595 @@ angular.module('WebPaige.Filters', ['ngResource'])
 ])
 
 
+
+
+
+
+
 /**
  * Range info week filter
  */
-.filter('rangeInfoWeekFilter', 
+.filter('rangeInfoWeekFilter',
 [
-	'$rootScope', 'Dater', 'Storage', 
-	function ($rootScope, Dater, Storage)
+	'Dater', 'Storage',
+	function (Dater, Storage)
 	{
 		var periods = Dater.getPeriods();
 
 		return function (timeline)
 		{
-			if (timeline) return $rootScope.ui.planboard.rangeInfoWeekNumber + timeline.current.week;
+			if (timeline) return 'Week number: ' + timeline.current.week;
 		};
 	}
 ])
+
+
+
+
+
+
 
 
 /**
- * TODO: POSSIBLE BUG? Maybe not replace bar- ?
- * TODO: Implement state conversion from config later on!
+ * BUG!
+ * Maybe not replace bar- ?
+ * 
+ * TODO
+ * Implement state conversion from config later on!
+ * 
  * Convert ratios to readable formats
  */
-.filter('convertRatios', 
-[
-	'$config', 
-	function ($config)
-	{
-		return function (stats)
-		{
-			var ratios = '';
+// .filter('convertRatios', 
+// [
+// 	'$config', 
+// 	function ($config)
+// 	{
+// 		return function (stats)
+// 		{
+// 			var ratios = '';
 
-			angular.forEach(stats, function (stat, index)
-			{
-				var state = stat.state.replace(/^bar-+/, '');
+// 			angular.forEach(stats, function (stat, index)
+// 			{
+// 				ratios += stat.ratio.toFixed(1) + '% ' + stat.state.replace(/^bar-+/, '') + ', ';
+// 			});
 
-				if (state == 'Available') state = 'Beschikbaar';
-				if (state == 'Unavailable') state = 'Niet Beschikbaar';
-				if (state == 'SchipperVanDienst') state = 'Schipper Van Dienst';
-				if (state == 'BeschikbaarNoord') state = 'Beschikbaar Noord';
-				if (state == 'BeschikbaarZuid') state = 'Beschikbaar Zuid';
-				if (state == 'Unreached') state = 'Niet Bereikt';
+// 			return ratios.substring(0, ratios.length - 2);
+// 		};
+// 	}
+// ])
 
-				ratios += stat.ratio.toFixed(1) + '% ' + state + ', ';
-			});
 
-			return ratios.substring(0, ratios.length - 2);
-		};
-	}
-])
+
+
+
+
 
 
 /** 
  * Calculate time in days
  */
-.filter('calculateTimeInDays', 
-	function ()
-	{
-		return function (stamp)
-		{
-			var day 		= 1000 * 60 * 60 * 24,
-					hour		=	1000 * 60 * 60,
-					days 		= 0,
-					hours 	= 0,
-					stamp 	= stamp * 1000,
-					hours 	= stamp % day,
-					days 		= stamp - hours;
+// .filter('calculateTimeInDays', 
+// 	function ()
+// 	{
+// 		return function (stamp)
+// 		{
+// 			var day 		= 1000 * 60 * 60 * 24,
+// 					hour		=	1000 * 60 * 60,
+// 					days 		= 0,
+// 					hours 	= 0,
+// 					stamp 	= stamp * 1000,
+// 					hours 	= stamp % day,
+// 					days 		= stamp - hours;
 
-			return 	Math.floor(days / day);
-		};
-	}
-)
+// 			return 	Math.floor(days / day);
+// 		};
+// 	}
+// )
+
+
+
+
+
+
 
 
 /**
  * Calculate time in hours
  */
-.filter('calculateTimeInHours', 
-	function ()
-	{
-		return function (stamp)
-		{
-			var day 		= 1000 * 60 * 60 * 24,
-					hour		=	1000 * 60 * 60,
-					days 		= 0,
-					hours 	= 0,
-					stamp 	= stamp * 1000,
-					hours 	= stamp % day,
-					days 		= stamp - hours;
+// .filter('calculateTimeInHours', 
+// 	function ()
+// 	{
+// 		return function (stamp)
+// 		{
+// 			var day 		= 1000 * 60 * 60 * 24,
+// 					hour		=	1000 * 60 * 60,
+// 					days 		= 0,
+// 					hours 	= 0,
+// 					stamp 	= stamp * 1000,
+// 					hours 	= stamp % day,
+// 					days 		= stamp - hours;
 
-			return 	Math.floor(hours / hour);
-		};
-	}
-)
+// 			return 	Math.floor(hours / hour);
+// 		};
+// 	}
+// )
+
+
+
+
+
 
 
 /**
  * Calculate time in minutes
  */
-.filter('calculateTimeInMinutes', 
-	function ()
-	{
-		return function (stamp)
-		{
-			var day 		= 1000 * 60 * 60 * 24,
-					hour		=	1000 * 60 * 60,
-					minute 	= 1000 * 60,
-					days 		= 0,
-					hours 	= 0,
-					minutes = 0,
-					stamp 	= stamp * 1000,
-					hours 	= stamp % day,
-					days 		= stamp - hours,
-					minutes = stamp % hour;
+// .filter('calculateTimeInMinutes', 
+// 	function ()
+// 	{
+// 		return function (stamp)
+// 		{
+// 			var day 		= 1000 * 60 * 60 * 24,
+// 					hour		=	1000 * 60 * 60,
+// 					minute 	= 1000 * 60,
+// 					days 		= 0,
+// 					hours 	= 0,
+// 					minutes = 0,
+// 					stamp 	= stamp * 1000,
+// 					hours 	= stamp % day,
+// 					days 		= stamp - hours,
+// 					minutes = stamp % hour;
 
-			return 	Math.floor(minutes / minute);
-		};
-	}
-)
+// 			return 	Math.floor(minutes / minute);
+// 		};
+// 	}
+// )
+
+
+
+
+
 
 
 /**
  * Convert eve urls to ids
  */
-.filter('convertEve',
-  [
-    '$config',
-    function ($config)
-    {
-      return function (url)
-      {
-        if ($config.profile.smartAlarm)
-        {
-          return url;
-        }
-        else
-        {
-          var eve = url;
+// .filter('convertEve', 
+// 	function ()
+// 	{
+// 	  return function (url)
+// 	  {
+// 	  	var eve = url;
 
-          eve = (typeof url != "undefined") ? url.split("/") : ["", url, ""];
+// 	  	eve = (typeof url != "undefined") ? url.split("/") : ["", url, ""];
 
-          return eve[eve.length-2];
-        }
-      };
-    }
-  ]
-)
+// 	    return eve[eve.length-2];
+// 	  };
+// 	}
+// )
+
+
+
+
+
 
 
 /** 
  * Convert user uuid to name
  */
-.filter('convertUserIdToName', 
-[
-	'Storage', 
-	function (Storage)
-	{
-		var members = angular.fromJson(Storage.get('members'));
+// .filter('convertUserIdToName', 
+// [
+// 	'Storage', 
+// 	function (Storage)
+// 	{
+// 		var members = angular.fromJson(Storage.get('members'));
 
-		return function (id)
-		{	
-	    if (members == null || typeof members[id] == "undefined")
-	    {
-	      return id;
-	    }
-	    else
-	    {
-	      return members[id].name;
-	    }
-		};
-	}
-])
+// 		return function (id)
+// 		{	
+// 	    if (members == null || typeof members[id] == "undefined")
+// 	    {
+// 	      return id;
+// 	    }
+// 	    else
+// 	    {
+// 	      return members[id].name;
+// 	    };
+// 		};
+// 	}
+// ])
+
+
+
+
+
 
 
 /**
  * Convert timeStamps to dates
  */
-.filter('nicelyDate', 
-[
-	'$rootScope', 
-	function ($rootScope)
-	{
-	 	return function (date)
-	 	{
-	 		if (typeof date == 'string') date = Number(date);
+ .filter('nicelyDate', 
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 	 	return function (date)
+ 	 	{
+      if (typeof date == 'string')
+      {
+        date = Number(date);
+      }
 
-	 		return new Date(date).toString($rootScope.config.formats.datetimefull);
-	 	};
-	}
-])
+
+
+      if (String(date).length == 10)
+      {
+        date *= 1000
+      }
+
+ 	 		return new Date(date).toString($rootScope.config.formats.date);
+ 	 	};
+ 	}
+ ])
 
 
 /**
- * TODO: Not used probably!
+ * Convert timeStamps to dates
+ */
+ .filter('nicelyTime', 
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 	 	return function (date)
+ 	 	{
+ 	 		if (typeof date == 'string') date = Number(date);
+
+ 	 		return new Date(date).toString($rootScope.config.formats.time);
+ 	 	};
+ 	}
+ ])
+
+
+
+
+/**
+ * TODO
+ * Not used probably!
+ *
  * Combine this either with nicelyDate or terminate!
+ * 
  * Convert timeStamp to readable date and time
  */
-.filter('convertTimeStamp', 
-	function ()
-	{
-		return function (stamp)
-		{
-			console.warn(typeof stamp);
+// .filter('convertTimeStamp', 
+// 	function ()
+// 	{
+// 		return function (stamp)
+// 		{
+// 			console.warn(typeof stamp);
 
-			return new Date(stamp).toString('dd-MM-yyyy HH:mm');
-		};
-	}
-)
+// 			return new Date(stamp).toString('dd-MM-yyyy HH:mm');
+// 		};
+// 	}
+// )
+
+
+
+
+
 
 
 /**
- * TODO: Still used?
+ * TODO
+ * Still used?
+ * 
  * No title filter
  */
-.filter('noTitle',
-	function ()
-	{
-		return function (title)
-		{
-			return (title == "") ? "- No Title -" : title;
-		}
-	}
-)
+// .filter('noTitle',
+// 	function ()
+// 	{
+// 		return function (title)
+// 		{
+// 			return (title == "") ? "- No Title -" : title;
+// 		}
+// 	}
+// )
+
+
+
+
+
 
 
 /**
- * TODO: Finish it!
+ * TODO
+ * Finish it!
+ * 
  * Strip span tags
  */
-.filter('stripSpan', 
-	function ()
-	{
-	  return function (string)
-	  {
-	    return string.match(/<span class="label">(.*)<\/span>/);
-	  }
-	}
-)
+// .filter('stripSpan', 
+// 	function ()
+// 	{
+// 	  return function (string)
+// 	  {
+// 	    return string.match(/<span class="label">(.*)<\/span>/);
+// 	  }
+// 	}
+// )
+
+
+
+
+
 
 
 /**
  * Strip html tags
  */
-.filter('stripHtml', 
-	function ()
-	{
-	  return function (string)
-	  {
-	  	if (string) return string.split('>')[1].split('<')[0];
-	  }
-	}
-)
+// .filter('stripHtml', 
+// 	function ()
+// 	{
+// 	  return function (string)
+// 	  {
+// 	  	if (string) return string.split('>')[1].split('<')[0];
+// 	  }
+// 	}
+// )
+
+
+
+
+
 
 
 /**
  * Convert group id to name
  */
-.filter('groupIdToName', 
-[
-	'Storage', 
-	function (Storage)
-	{
-	  return function (id)
-	  {
-	  	var groups = angular.fromJson(Storage.get('groups'));
+// .filter('groupIdToName', 
+// [
+// 	'Storage', 
+// 	function (Storage)
+// 	{
+// 	  return function (id)
+// 	  {
+// 	  	var groups = angular.fromJson(Storage.get('groups'));
 
-	  	for (var i in groups)
-	  	{
-	  		if (groups[i].uuid == id) return groups[i].name;
-	  	}
-	  }
-	}
-])
+// 	  	for (var i in groups)
+// 	  	{
+// 	  		if (groups[i].uuid == id) return groups[i].name;
+// 	  	};
+// 	  }
+// 	}
+// ])
+
+
+
+
+
+
 
 
 /**
- * TODO: Unknown filter
- */
-.filter('i18n_spec',
-[
-	'$rootScope', 
-	function ($rootScope)
-	{
-		return function (string, type)
-		{
-			var types = type.split("."),
-					ret 	= $rootScope.ui[types[0]][types[1]],
-					ret 	= ret.replace('$v',string);
+ * TODO
+ * Internationalization 
+ */ 
+ .filter('i18n_spec',
+ [
+ 	'$rootScope', 
+ 	function ($rootScope)
+ 	{
+ 		return function (string, type)
+ 		{
+ 			var types = type.split("."),
+ 					ret 	= $rootScope.ui[types[0]][types[1]],
+ 					ret 	= ret.replace('$v',string);
 			
-			return ret;
-		}
-	}
+ 			return ret;
+ 		}
+ 	}
+ ])
+
+
+.filter('stateIcon',
+[
+     '$rootScope',
+     function ($rootScope){
+         return function(state){    
+             switch(state){
+                 case 'emotion':
+                     return "icon-face";
+                 break;
+                 case 'availability':
+                     return "icon-avail";
+                 break;
+                 case 'location':
+                     return "icon-location";
+                 break;
+                 case 'activity':
+                     return "icon-activity";
+                 break;
+                 case 'reachability':
+                     return "icon-reach";
+                 break;
+                 default:
+                     return "icon-info-sign";
+             }
+         }
+     }
 ])
+
+/**
+ * TODO
+ * Internationalization 
+ */ 
+ .filter('escape',
+ [
+    '$rootScope', 
+    function ($rootScope)
+    {
+        return function (string)
+        {
+        	if(!string || string.indexOf(".") == -1){
+        		return string;
+        	}
+            var ret = string.replace(".","").replace("@","")
+            
+            return ret;
+        }
+    }
+ ])
 
 
 /**
  * Truncate group titles for dashboard pie widget
  */
-.filter('truncateGroupTitle', 
-[
-	'Strings', 
-	function (Strings) 
-	{
-		return function (title)
-		{
-	     return Strings.truncate(title, 20, true);
-	  }
-	}
-])
+// .filter('truncateGroupTitle', 
+// [
+// 	'Strings', 
+// 	function (Strings) 
+// 	{
+// 		return function (title)
+// 		{
+// 	     return Strings.truncate(title, 20, true);
+// 	  }
+// 	}
+// ])
+
+
+
+
+
 
 
 /**
  * Make first letter capital
  */
-.filter('toTitleCase', 
-[
-'Strings',
-  function (Strings)
-  {
-    return function (txt)
-    {
-      return Strings.toTitleCase(txt);
-    }
-  }
-])
+// .filter('toTitleCase', 
+// [
+// 	'Strings', 
+// 	function (Strings) 
+// 	{
+// 		return function (txt)
+// 		{
+// 	     return Strings.toTitleCase(txt);
+// 	  }
+// 	}
+// ])
+
+
+
+
+
 
 
 /**
  * Count messages in box
  */
-.filter('countBox',
-	function () 
-	{
-		return function (box)
-		{
-			var total = 0;
+// .filter('countBox',
+// 	function () 
+// 	{
+// 		return function (box)
+// 		{
+// 			var total = 0;
 
-			angular.forEach(box, function (bulk)
-			{
-				total = total + bulk.length;
-			});
+// 			angular.forEach(box, function (bulk, index)
+// 			{
+// 				total = total + bulk.length;
+// 			});
 
-	    return total;
-	  }
-	}
-)
+// 	    return total;
+// 	  }
+// 	}
+// )
+
+
+
+
+
+
 
 
 /**
- * Convert offsets array to nicely format in scheduled jobs
+ * Convert offsets array to nicely format in scheaduled jobs
  */
-.filter('nicelyOffsets', 
-[
-	'Dater', 'Storage', 'Offsetter',
-	function (Dater, Storage, Offsetter)
-	{
-		return function (data)
-		{
-			var offsets 	= Offsetter.factory(data),
-					compiled 	= '';
+// .filter('nicelyOffsets', 
+// [
+// 	'Dater', 'Storage', 'Offsetter',
+// 	function (Dater, Storage, Offsetter)
+// 	{
+// 		return function (data)
+// 		{
+// 			var offsets 	= Offsetter.factory(data),
+// 					compiled 	= '';
 
-			angular.forEach(offsets, function (offset)
-			{
-				compiled += '<div style="display:block; margin-bottom: 5px;">';
+// 			angular.forEach(offsets, function (offset, index)
+// 			{
+// 				compiled += '<div style="display:block; margin-bottom: 5px;">';
 
-				compiled += '<span class="badge">' + offset.time + '</span>&nbsp;';
+// 				compiled += '<span class="badge">' + offset.time + '</span>&nbsp;';
 
-				if (offset.mon) compiled += '<span class="muted"><small><i> maandag,</i></small></span>';
-				if (offset.tue) compiled += '<span class="muted"><small><i> dinsdag,</i></small></span>';
-				if (offset.wed) compiled += '<span class="muted"><small><i> woensdag,</i></small></span>';
-				if (offset.thu) compiled += '<span class="muted"><small><i> donderdag,</i></small></span>';
-				if (offset.fri) compiled += '<span class="muted"><small><i> vrijdag,</i></small></span>';
-				if (offset.sat) compiled += '<span class="muted"><small><i> zaterdag,</i></small></span>';
-				if (offset.sun) compiled += '<span class="muted"><small><i> zondag,</i></small></span>';
+// 				if (offset.mon) compiled += '<span class="muted"><small><i> maandag,</i></small></span>';
+// 				if (offset.tue) compiled += '<span class="muted"><small><i> dinsdag,</i></small></span>';
+// 				if (offset.wed) compiled += '<span class="muted"><small><i> woensdag,</i></small></span>';
+// 				if (offset.thu) compiled += '<span class="muted"><small><i> donderdag,</i></small></span>';
+// 				if (offset.fri) compiled += '<span class="muted"><small><i> vrijdag,</i></small></span>';
+// 				if (offset.sat) compiled += '<span class="muted"><small><i> zaterdag,</i></small></span>';
+// 				if (offset.sun) compiled += '<span class="muted"><small><i> zondag,</i></small></span>';
 
-				compiled = compiled.substring(0, compiled.length - 20);
+// 				compiled = compiled.substring(0, compiled.length - 20);
 
-				compiled = compiled += '</i></small></span>';
+// 				compiled = compiled += '</i></small></span>';
 
-				compiled += '</div>';
+// 				compiled += '</div>';
 
-				compiled = compiled.substring(0, compiled.length);
-			});
+// 				compiled = compiled.substring(0, compiled.length);
+// 			});
 
-			return compiled;
-		}
-	}
-])
+// 			return compiled;
+// 		}
+// 	}
+// ])
+
+
+
+
+
+
 
 
 /**
  * Convert array of audience to a nice list
  */
-.filter('nicelyAudience', 
-[
-	'Storage',
-	function (Storage)
-	{
-		return function (data)
-		{
-      if (data)
-      {
-        var members 	= angular.fromJson(Storage.get('members')),
-          groups 		= angular.fromJson(Storage.get('groups')),
-          audience 	= [];
+// .filter('nicelyAudience', 
+// [
+// 	'Storage',
+// 	function (Storage)
+// 	{
+// 		return function (data)
+// 		{
+// 			var members 	= angular.fromJson(Storage.get('members')),
+// 	    		groups 		= angular.fromJson(Storage.get('groups')),
+// 	    		audience 	= [];
 
-        angular.forEach(data, function (recipient)
-        {
-          var name;
+// 			angular.forEach(data, function (recipient, index)
+// 			{
+// 	  		var name;
 
-          if (members[recipient])
-          {
-            name = members[recipient].name;
-          }
-          else
-          {
-            angular.forEach(groups, function (group)
-            {
-              if (group.uuid == recipient) name = group.name;
-            });
-          }
+// 	  		if (members[recipient])
+// 	  		{
+// 		  		name = members[recipient].name;
+// 	  		}
+// 	  		else
+// 	  		{
+// 	  			angular.forEach(groups, function (group, index)
+// 	  			{
+// 	  				if (group.uuid == recipient) name = group.name;
+// 	  			});
+// 	  		}
 
-          audience += name + ', ';
-        });
+// 		  	audience += name + ', ';
+// 			});
 
-        return audience.substring(0, audience.length - 2);
-      }
-		}
-	}
-]);
+// 			return audience.substring(0, audience.length - 2);
+// 		}
+// 	}
+// ])
+;

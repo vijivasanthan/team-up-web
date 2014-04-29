@@ -3,12 +3,6 @@
 /*global basket */
 'use strict';
 
-/**
- * Temporarily remove calculated periods
- */
-localStorage.removeItem('WebPaige.periods');
-localStorage.removeItem('WebPaige.periodsNext');
-
 
 /**
  * Declare app level module which depends on filters, and services
@@ -16,45 +10,59 @@ localStorage.removeItem('WebPaige.periodsNext');
 angular.module('WebPaige',[
   'ngResource',
   // modals
-  'WebPaige.Modals.User',
-  'WebPaige.Modals.Dashboard',
-  'WebPaige.Modals.Slots',
-  'WebPaige.Modals.Messages',
-  'WebPaige.Modals.Groups',
+   'WebPaige.Modals.User',
+  // 'WebPaige.Modals.Dashboard',
+  'WebPaige.Modals.Core',
+  'WebPaige.Modals.Teams',
+  'WebPaige.Modals.Clients',
   'WebPaige.Modals.Profile',
   'WebPaige.Modals.Settings',
+  // 'WebPaige.Modals.Help',
+  'WebPaige.Modals.Messages',
+  'WebPaige.Modals.Slots',
+  
   // controller
   'WebPaige.Controllers.Login',
+  'WebPaige.Controllers.Forgotpass',
+  'WebPaige.Controllers.Register',
   'WebPaige.Controllers.Logout',
-  'WebPaige.Controllers.Dashboard',
-  'WebPaige.Controllers.TV',
+  // 'WebPaige.Controllers.Dashboard',
+  'WebPaige.Controllers.Core',
+  'WebPaige.Controllers.Teams',
+  'WebPaige.Controllers.Clients',
+  'WebPaige.Controllers.Manage',
+  'WebPaige.Controllers.TreeGrid',
   'WebPaige.Controllers.Planboard',
   'WebPaige.Controllers.Timeline',
   'WebPaige.Controllers.Timeline.Navigation',
-  'WebPaige.Controllers.Messages',
-  'WebPaige.Controllers.Scheaduler',
-  'WebPaige.Controllers.Groups',
   'WebPaige.Controllers.Profile',
-  'WebPaige.Controllers.Settings',
-  'WebPaige.Controllers.Help',
+  'WebPaige.Controllers.Messages',
+  // 'WebPaige.Controllers.Settings',
+  // 'WebPaige.Controllers.Help',
+  
   // services
-  'WebPaige.Services.Timer',
+  // 'WebPaige.Services.Timer',
   'WebPaige.Services.Session',
   'WebPaige.Services.Dater',
-  'WebPaige.Services.EventBus',
-  'WebPaige.Services.Interceptor',
+  // 'WebPaige.Services.EventBus',
+  // 'WebPaige.Services.Interceptor',
   'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
-  'WebPaige.Services.Announcer',
+  'WebPaige.Services.Generators',
   'WebPaige.Services.Sloter',
-  'WebPaige.Services.Stats',
-  'WebPaige.Services.Offsetter',
+  // 'WebPaige.Services.Stats',
+  // 'WebPaige.Services.Offsetter',
+  
   // directives
   'WebPaige.Directives',
   '$strap.directives',
+  
   // filters
-  'WebPaige.Filters'
+  'WebPaige.Filters',
+  
+  // libs 
+  'ui.bootstrap.modal'
 ]);
 
 
@@ -67,7 +75,7 @@ if ('localStorage' in window && window['localStorage'] !== null)
   basket
     .require(
       { url: 'scripts/js/libs/chosen/chosen.jquery.min.js' },
-      // { url: 'scripts/js/libs/chaps/timeline/2.4.0/timeline_modified.js' },
+      { url: 'scripts/js/libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
       { url: 'scripts/js/libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
       { url: 'scripts/js/libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
       { url: 'scripts/js/libs/daterangepicker/1.1.0/daterangepicker.min.js' },

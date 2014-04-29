@@ -9,31 +9,43 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
  */
 .factory('Profile', 
 [
-	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Groups', 'Slots', 'MD5',
-	function ($rootScope, $config, $resource, $q, Storage, Groups, Slots, MD5) 
+	'$rootScope', '$config', '$resource', '$q', 'Storage', 'Teams',  'MD5',
+	function ($rootScope, $config, $resource, $q, Storage, Teams,  MD5) 
 	{
+	  
+	  
 	  var Profile = $resource(
-	    $config.host + '/node/:id/:section',
-	    {
-	    },
-	    {
+	    $config.host + $config.namespace + '/team/member/:memberId/',{},{
 	      get: {
-	        method: 'GET',
-	        params: {id: '', section: 'resource'}
+	        method: 'GET'
 	      },
 	      save: {
-	        method: 'PUT',
-	        params: {section: 'resource'}
+	        method: 'PUT',	        
 	      },
 	      role: {
 	        method: 'PUT',
-	        params: {section: 'role'},
-          isArray: true
+	        params: {section: 'role'}
 	      }
 	    }
 	  );
-
-
+	  
+	  var ProfileSave = $resource(
+	    $config.host + $config.namespace + '/team/:teamId/member/:memberId/',{},{
+          save: {
+            method: 'PUT',          
+          }
+        }
+      ); 
+	  
+	  var ProfileImg = $resource(
+          $config.host + $config.namespace + '/team/member/:memberId/photourl',{},{
+            getURL: {
+              method: 'GET',
+              isArray: false              
+            }
+          }
+        ); 
+	  
 	  var Register = $resource(
 	    $config.host + '/register',
 	    {
@@ -43,8 +55,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	    {
 	      profile: {
 	        method: 'GET',
-	        params: {uuid: '', pass: '', name: '', phone: ''},
-          isArray: true
+	        params: {uuid: '', pass: '', name: '', phone: ''}
 	      }
 	    }
 	  );
@@ -79,28 +90,19 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-      var uuid = profile.username.toLowerCase();
-
-      console.log('profile ->', profile);
-
 	    Register.profile(
 	      {
-	        uuid: 	uuid,
-          // pass: 	($rootScope.config.profile.smartAlarm) ? profile.password : MD5(profile.password),
-          pass: 	MD5(profile.password),
-	        name: 	String(profile.firstName + ' ' + profile.lastName),
-	        phone: 	profile.PhoneAddress || ''
+	        uuid: 	profile.username,
+	        pass: 	MD5(profile.password),
+	        name: 	profile.name,
+	        phone: 	profile.PhoneAddress
 	      }, 
 	      function (registered) 
 	      {
-          console.log('registered ->', registered);
-
-          Profile.prototype.role( uuid, ($rootScope.config.profile.smartAlarm) ? 1 : profile.role.id )
+	        Profile.prototype.role(profile.username, profile.role.id)
 	        .then(function (roled)
 	        {
-	          Profile.prototype.save(uuid, {
-              firstName:    profile.firstName,
-              lastName:     profile.lastName,
+	          Profile.prototype.save(profile.username, {
 	            EmailAddress: profile.EmailAddress,
 	            PostAddress: 	profile.PostAddress,
 	            PostZip: 			profile.PostZip,
@@ -109,10 +111,10 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	          {
 	            var calls = [];
 
-	            angular.forEach(profile.groups, function (group)
+	            angular.forEach(profile.groups, function (group, index)
 	            {
 	              calls.push(Groups.addMember({
-	                id: 		uuid,
+	                id: 		profile.username,
 	                group: 	group
 	              }));
 	            });
@@ -121,7 +123,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	            .then(function (grouped)
 	            {
 	              deferred.resolve({
-	                registered: ($rootScope.config.profile.smartAlarm) ? registered[0] : registered,
+	                registered: registered,
 	                roled: 			roled,
 	                resourced: 	resourced,
 	                grouped: 		grouped
@@ -134,7 +136,7 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	      },
 	      function (error)
 	      {
-          deferred.resolve({error: error});
+	        deferred.resolve({error: error});
 	      }
 	    ); // register
 	   
@@ -197,13 +199,15 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-	    Profile.get({id: id}, function (result) 
+	    Profile.get({memberId: id}, function (result) 
 	    {
 	      if (id == $rootScope.app.resources.uuid) $rootScope.app.resources = result;
 
 	      if (localize) Storage.add('resources', angular.toJson(result));
 
 	      deferred.resolve({resources: result});
+	    }, function(error){
+	        console.log(error);
 	    });
 
 	    return deferred.promise;
@@ -234,8 +238,8 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	            end: 		params.end * 1000
 	          }
 	        }));        
-	      });
-	    });
+	      }); // user slots
+	    }); // profile get
 
 	    return deferred.promise;
 	  };
@@ -253,6 +257,8 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	      user:   id,
 	      start: 	params.start / 1000,
 	      end: 		params.end / 1000
+	      // start:  params.start,
+	      // end:    params.end
 	    }).then(function (slots)
 	    {
 	      deferred.resolve({
@@ -281,18 +287,11 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 	  Profile.prototype.save = function (id, resources) 
 	  {
 	    var deferred = $q.defer();
-
-      if (resources.firstName != undefined && resources.lastName != undefined)
-      {
-        resources.name = resources.firstName + ' ' + resources.lastName;
-      }
-
-	    Profile.save(
-	      {
-          id: id
-        },
-	      resources,
-	      function (result)
+	    
+	    ProfileSave.save(
+	      {teamId : resources.teamUuids[0] , memberId: id  }, 
+	      resources, 
+	      function (result) 
 	      {
 	        deferred.resolve(result);
 	      },
@@ -304,49 +303,64 @@ angular.module('WebPaige.Modals.Profile', ['ngResource'])
 
 	    return deferred.promise;
 	  };
-
-
+	  
 	  /**
-     * DEPRECIATED
-     *
+	   * get the upload URL
+	   */
+	  Profile.prototype.loadUploadURL = function(id){
+	      var deferred = $q.defer();
+	      
+	      ProfileImg.getURL(
+              {memberId : id},
+              function(result){
+                  deferred.resolve(result);
+              },
+              function(error){
+                  deferred.resolve({error: error});	                  
+              }
+	      );
+	      return deferred.promise;
+	  };
+	  
+	  /**
 	   * Create settings resources for user if it is missing
 	   */
-//	  Profile.prototype.createSettings_ = function (id)
-//	  {
-//	    var deferred = $q.defer();
-//
-//	    Profile.prototype.get(id, false)
-//	    .then(function (result)
-//	    {
-//	      if (result.settingsWebPaige == undefined || result.settingsWebPaige == null)
-//	      {
-//	        Profile.save(
-//	          {id: result.resources.uuid},
-//	          angular.toJson({ settingsWebPaige: $rootScope.config.defaults.settingsWebPaige }),
-//	          function (result)
-//	          {
-//	            deferred.resolve({
-//	              status: 'modified',
-//	              resources: result
-//	            });
-//	          },
-//	          function (error)
-//	          {
-//	            deferred.resolve({error: error});
-//	          }
-//	        );
-//	      }
-//	      else
-//	      {
-//	        deferred.resolve({
-//	          status: 'full',
-//	          resources: result
-//	        });
-//	      }
-//	    });
-//
-//	    return deferred.promise;
-//	  };
+	  Profile.prototype.createSettings_ = function (id) 
+	  {
+	    var deferred = $q.defer();
+
+	    Profile.prototype.get(id, false)
+	    .then(function (result) 
+	    {
+	      if (result.settingsWebPaige == undefined || result.settingsWebPaige == null)
+	      {
+	        Profile.save(
+	          {id: result.resources.uuid}, 
+	          angular.toJson({ settingsWebPaige: $rootScope.config.defaults.settingsWebPaige }), 
+	          function (result)
+	          {
+	            deferred.resolve({
+	              status: 'modified',
+	              resources: result
+	            });
+	          },
+	          function (error)
+	          {
+	            deferred.resolve({error: error});
+	          }
+	        );
+	      }
+	      else
+	      {
+	        deferred.resolve({
+	          status: 'full',
+	          resources: result
+	        });
+	      }
+	    });
+
+	    return deferred.promise;
+	  };
 
 
 	  return new Profile;

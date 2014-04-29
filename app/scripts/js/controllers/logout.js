@@ -15,11 +15,9 @@ angular.module('WebPaige.Controllers.Logout', [])
 	function ($rootScope, $scope, $window, Session, User, Storage) 
 	{
 	  $('.navbar').hide();
-    $('#footer').hide();
-    // $('#notification').hide();
+	  $('#footer').hide();
 
-    var logindata = angular.fromJson(Storage.get('logindata'));
-    var registeredNotifications = angular.fromJson(Storage.get('registeredNotifications'));
+	  var logindata = angular.fromJson(Storage.get('logindata'));
 
 		User.logout()
 		.then(function (result)
@@ -30,15 +28,15 @@ angular.module('WebPaige.Controllers.Logout', [])
 	    }
 	    else
 	    {
-	      Storage.clearAll();
+	      // Storage.clearAll();
 
 	      Storage.session.clearAll();
 
-        Storage.add('logindata', angular.toJson(logindata));
-        Storage.add('registeredNotifications', angular.toJson(registeredNotifications));
+	      Storage.add('logindata', angular.toJson(logindata));
 
+	      Storage.cookie.clearAll();
 	      $window.location.href = 'logout.html';
-	    }
+	    };
 		});
 	}
 ]);

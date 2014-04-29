@@ -1,9 +1,3 @@
-/*jslint node: true */
-'use strict';
-
-/**
- * Localizations
- */
 var ui = {
     en: {
       meta: {
@@ -11,14 +5,13 @@ var ui = {
         label: 'English'
       },
       login: {
-        setting_up_app: 'Setting up the application...',
         header: "Please sign in",
         placeholder_username: "Please enter your username",
         placeholder_password: "Your password",
         label_rememberMe: "Remember Me",
         button_login: "Login",
         button_loggingIn: "Logging...",
-        forgot_password: "forgot your password?",
+        forgot_password: "Forgot password?",
         forgetPassword: "Forgot password",
         emailAddress: "Email address",
         resetPassword: "Reset Password",
@@ -30,52 +23,25 @@ var ui = {
         ph_retypePass: "retype password",
         alert_fillfiled: 'Please fill all fields!',
         alert_wrongUserPass: 'Wrong username or password!',
+        alert_network: 'Network error',
         loading_User: 'Loading user information...',
         loading_Message: 'Loading messages...',
-        loading_Group:'Loading groups...',
+        loading_Teams:'Loading Teams...',
         loading_Members: 'Loading members...',
         loading_everything: 'Everything loaded!',
         logout: 'Logout',
         loading: 'Loading..',
-        setting: 'Setting..',
-        passwordChanged: 'Password changed!',
-        button_changePassword: 'Change password',
-        button_changingPassword: 'Changing password..',
-        checkYourMail: 'Please check your email to reset your password!',
-        help: {
-          content: [
-            'To login and use the availability management system of ASK, you should have valid login credentials. If you do not have these login details just yet, please contact your team leader for more information.',
-            "After filling in your login credentials you may use the 'Remember me' function. When checked, you'll be automatically logged in on every next visit.",
-            'If you forgot your password, you may use the "Forgot password" page to request a new password. The new password will be sent to your own email address.',
-            'By pressing English or Dutch you can change the used language.'
-          ],
-          cta: 'Return to login screen'
-        }
+        loading_clientGroups: 'Loading client groups...',
       },
       dashboard: {
-        dashboard: 'Dashboard',
-        groupOverviews: 'Loading and analyzing group overviews...',
-        thisWeek: 'This week',
-        nextWeek: 'Next week',
+        thisWeek: 'This Week',
         welcome: 'Welcome',
         newMessage: 'New Messages',
         goToInbox: 'Go to inbox',
         announcements: 'Announcements',
         loadingPie: 'Loading pie charts...',
         loadingP2000: 'Loading alarm messages',
-        noP2000: 'There are no alarm messages',
-        widgetSave: 'Save',
-        widgetCancel: 'Cancel',
-        currentState: 'Current state',
-        overview: 'Overview',
-        statMore: 'more',
-        statEven: 'enough',
-        statLess: 'less',
-        periods: 'Periods',
-        refreshGroupOverviews: 'Refreshing group overviews..',
-        showMore: 'meer tonen',
-        showLess: 'minder tonen',
-        gettingAlarms: 'Getting P2000 alarm messages'
+        noP2000: 'There are no alarm messages'
       },
       planboard: {
         planboard: 'Agenda',
@@ -90,7 +56,7 @@ var ui = {
         selectAState: 'select a state',
         reoccuring: 'Re-occuring',
         lessPeople: 'There $v less people than needed!',
-        samePeople: 'There are just as many peopleas needed.',
+        samePeople: 'There are just as many people as needed.',
         morePeople: 'There are $v more people than needed!',
         wished: 'Wished' ,
         combine_reoccuring: 'This is a combined row of planning with re-occuring rows.',
@@ -134,24 +100,7 @@ var ui = {
         preCompilingStortageMessage: 'Pre-compiling shortage message',
         weeklyPlanning: 'Weekly planning',
         planning: 'Planning',
-        minNumber: 'Minimum number benodigden',
-        statDays: 'days',
-        statHours: 'hours',
-        statMinutes: 'minutes',
-        statPeopleLess: 'Less people than expected',
-        statPeopleEven: 'Just enough people as expected',
-        statPeopleMore: 'More people than expected',
-        getWishes: 'Getting minimum required value...',
-        daterangerToday: 'Today',
-        daterangerTomorrow: 'Tomorrow',
-        daterangerYesterday: 'Yesterday',
-        daterangerNext3Days: 'Next 3 days',
-        daterangerNext7Days: 'Next 7 days',
-        rangeInfoTotalSelectedDays: 'Total selected days: ',
-        rangeInfoTime: 'Time: ',
-        rangeInfoWeekNumber: 'Week number: ',
-        rangeInfoMonth: 'Month: ',
-        rangeInfoTotalDays: ', Total days: '
+        minNumber: 'Minimum number benodigden'
       },
       message: {
         messages: 'Messages',
@@ -191,14 +140,14 @@ var ui = {
         escalation: 'Escalation message',
         escalationBody: function (diff,startDate,startTime,endDate,endTime)
         {
-          return 'We have ' +
-          diff +
-          ' shortage in between ' +
-          startDate + ' ' +
-          startTime + ' and ' +
-          endDate + ' ' +
-          endTime + '. ' +
-          'Would you please make yourself available if you are available for that period?';
+            return 'We have ' +
+            diff +
+            ' shortage in between ' +
+            startDate + ' ' +
+            startTime + ' and ' +
+            endDate + ' ' +
+            endTime + '. ' +
+            'Would you please make yourself available if you are available for that period?';
         },
         removed: 'Message removed successfully.',
         removing: 'Removing the message...',
@@ -215,60 +164,20 @@ var ui = {
         // messages: 'Messages',
         ph_filterMessage: 'Filter messages..',
         noReceivers: 'Please select a receiver.',
-        days: {
-          monday:     'monday',
-          tuesday:    'tuesday',
-          wednesday:  'wednesday',
-          thursday:   'thursday',
-          friday:     'friday',
-          saturday:   'saturday',
-          sunday:     'sunday'
-        },
-        repeat: 'Repeat',
-        repeatOn: 'On',
-        repeatOff: 'Off',
-        enabled: 'Enabled',
-        disabled: 'Disabled',
-        repeatNew: 'New repeat',
-        notificationLabel: 'Notification label',
-        notifications: 'Notifications',
-        notificationsEmpty: 'There are currently no notifications.Er zijn (nog) geen herhalingen.',
-        notificationStatus: 'Notification status',
-        notificationSave: 'Save',
-        notificationHeaderLabel: 'Label',
-        notificationHeaderReceivers: 'Receivers',
-        notificationHeaderFrequency: 'Frequency',
-        paginationPage: 'Page',
-        paginationOf: 'of',
-        paginationInTotal: 'in total',
-        paginationPrevious: 'Previous',
-        paginationNext: 'Next',
-        filterMessages: 'Filter messages...',
-        inTotal: 'In total:',
-        loadingNotifications: 'Getting notifications...',
-        receiversUsers: 'Users',
-        receiversGroups: 'Groups',
-        notificationsRefresh: 'Refreshing scheduled notifications...',
-        notificationsAdd: 'Adding a new scheduled notification...',
-        notificationSaved: 'Scheduled notification is successfully saved.',
-        notificationsEditing: 'Editing scheduled notification...',
-        notificationsEdited: 'Scheduled notification is successfully edited.',
-        notificationsDeleting: 'Deleting a scheduled notification...',
-        notificationsDeleted: 'Scheduled notification is successfully deleted.'
+        emptyMessageBody: 'Please write a message',
+        send: 'Send'
       },
       groups: {
         groups: 'Groups',
         newGroup: 'New Group',
         newMember: 'New Member',
-        search: 'Search',
+        serach: 'Search',
         addNewGroup: 'Add New Group',
         editGroup: 'Edit Group',
         searchResults: 'Search results',
         group: 'Group',
         close: 'Close',
         name: 'Name',
-        firstName: 'First Name',
-        lastName: 'Last Name',
         saveGroup: 'Save Group',
         registerMember: 'Register Member',
         role: 'Role',
@@ -283,7 +192,7 @@ var ui = {
         userName: 'Username',
         password: 'Password',
         saveMember: 'Save Member',
-        searchedFor: 'Search results for ',
+        serachFor: 'Search results for ',
         sorryCanNotFind: 'Sorry but we couldn\'t find what you are looking for.',
         // troubled
         // selectGroup: '-- select a group --',
@@ -300,7 +209,7 @@ var ui = {
         memberAdded: 'Member added to group successfully.',
         refreshingGroupMember: 'Refreshing groups and members list..',
         removingMember: 'Removing member from group..',
-        memberRemoved: 'Member(s) removed from group successfully.',
+        memberRemoved: 'Member removed from group successfully.',
         removingSelected: 'Removing selected members..',
         saving: 'Saving group..',
         groupSaved: 'Group saved successfully.',
@@ -309,10 +218,7 @@ var ui = {
         deleting: 'Deleting group..',
         deleted: 'Group deleted successfully.',
         filterMembers: 'Filter members..',
-        searchFor: 'firstname, lastname..',
-        widgetSave: 'Save',
-        widgetCancel: 'Cancel',
-        requiredPeople: 'Required'
+        searchfor: 'firstname, lastname..'
       },
       profile: {
         profile: 'Profile',
@@ -347,7 +253,15 @@ var ui = {
         newTimeslotAdded: 'New timeslot added successfully.',
         changingTimeslot: 'Changing a timeslot..',
         timeslotChanged: 'Timeslot is succesfully changed.',
-        passwordChangeWarning: 'Warning! with this option you will change password this user.'
+        firstName: 'first name',
+        lastName: 'last name',
+        editProfileImg : 'Edit profile image',
+        loadUploadURL : 'Loading image upload URL ',
+        click2upload : 'click here to upload',
+        birthday: 'Birthday',        
+        username: 'username',
+        retypePassword: 'retype password'
+        
       },
       settings: {
         settings: 'Settings',
@@ -362,7 +276,6 @@ var ui = {
         saved: 'Settings successfully saved.'
       },
       help: {
-        help: 'Help',
         header: 'Help & Support',
         support: 'Support'
       },
@@ -377,67 +290,97 @@ var ui = {
         messages:   'messages',
         groups:     'groups',
         profile:    'profile',
-        settings:   'settings',
-        loggingOut: 'Logging out...'
+        settings:   'settings'
       },
-      errors: {
-        dashboard: {
-          getOverviews: 'Error with getting group overviews!'
-        },
-        groups: {
-          query: 'Error with getting groups and users!',
-          saveWish: 'Error with changing wish value!',
-          searchMembers: 'Error with searching members!',
-          addMember: 'Error with adding a member to a group!',
-          removeMember: 'Error with removing a member from a group!',
-          removeMembers: 'Error with removing members from a group!',
-          groupSubmit: 'Error with saving group!',
-          memberSubmitRegistered: 'Username is already registered!',
-          memberSubmitRegister: 'Error with registering a member!',
-          deleteGroup: 'Error with deleting a group!'
-        },
-        login: {
-          changePass: 'Something wrong with password changing!',
-          forgotCantFind: 'Error this account does not exist!',
-          changePassAllFields: 'Please fill all fields!',
-          changePassNoMatch: 'Error, passwords do not match!' 
-        },
-        settings: {
-          save: 'Error with saving settings!'
-        },
-        profile: {
-          save: 'Error with saving profile information!',
-          get: 'Error with getting profile data!',
-          changePassword: 'Error with changing password!'
-        },
-        messages: {
-          query: 'Error with getting messages!',
-          changeState: 'Error with changing message state!',
-          removeMessage: 'Error with removing message!',
-          removeMessages: 'Error with removing messages!',
-          restoreMessage: 'Error with restoring message!',
-          restoreMessages: 'Error with restoring message!',
-          emptyTrash: 'Error with empting trash!',
-          send: 'Error with sending message!',
-          notificationsList: 'Error with getting scheduled notifictions!',
-          notificationsGet: 'Error with getting scheduled notification!',
-          notificationsAdd: 'Error with creating scheduled notification!',
-          notificationsEdit: 'Error with editing scheduled notification!',
-          notificationsDelete: 'Error with deleting scheduled notification!'
-        },
-        timeline: {
-          query: 'There has been some problems with syncing planboard information. Please refresh your browser for getting the latest planboard information.',
-          pastAdding: 'Invoer van tijden in het verleden is niet toegestaan!',
-          add: 'Error with adding a new timeslot!',
-          change: 'Error with changing timeslot!',
-          pastChanging: 'Veranderen van tijden in het verleden is niet toegestaan!',
-          pastDeleting: 'Verwijderen van tijden in het verleden is niet toegestaan!',
-          remove: 'Error with removing timeslot!',
-          wisher: 'Error with changing wish value!'
-        }
-      },
-      confirms: {
-        remove: 'Are you sure you want to delete it? You can not undo this action.'
+      teamup: {
+         teams: 'teams',
+         clients: 'clients',
+         client: 'client',
+         manage: 'manage',
+         chooseTeam: 'choose a team',         
+         edit: 'edit',
+         editTeam: 'edit team',
+         team: 'team',
+         del: 'delete',
+         noMembers: 'No members in this team.',
+         newTeam: 'New Team',
+         teamName: 'Team name',
+         createTeam: 'Create New Team',
+         newMember: 'New Member',
+         name: 'Name',
+         role: 'role',
+         phone: 'phone',
+         street: 'street',
+         postCode: 'post',
+         city: 'city',
+         saveMember: 'Save',
+         state: 'state',
+         states: 'States',
+         saveTeam: 'Saving team',
+         save: 'Save',
+         refreshing : 'Refreshing team info',
+         dataChanged : 'Data is changed',
+         teamSubmitError: 'Errors in creating the team',
+         queryTeamError: 'Errors in quering the teams',
+         teamNamePrompt1: 'Team name can not be empty',
+         teamNamePrompt2: 'Please fill the conatct data',
+         cancel: 'Cancel',
+         chooseRole : 'Choose a role',
+         func: 'function',
+         chooseFunction: 'Choose a function',
+         newClientGroup: 'New Group',
+         newClient: 'New Client',
+         reports: 'Reports',
+         report: 'Report',
+         noClients: 'There are no clients in this group',
+         TeamClients: 'TEAMS-CLIENTS',
+         createClientGroup: 'Create new client group',
+         contacts: 'Contacts',
+         Number: 'No',
+         clientProfileUrl: 'Client profile URL',
+         addContact: 'add contact',
+         saveClient: 'Save',
+         group: 'Group',
+         noContacts: 'There is no contact person.',
+         contactCount:  'There are $v contact(s)',
+         accountInfoFill: 'Please fill your account info.',
+         passNotSame: 'Passwrods are not same.',
+         savingMember: 'Saving member',
+         selectTeam: 'Please select a team',
+         clinetInfoFill: 'Please fill the basic client info : name and phone',
+         savingClient: 'Saving client',
+         clientSubmitError: 'Errors when creating new client',
+         clientGroups: 'Client groups',
+         teams_Cap: 'Teams',
+         editClient: 'Edit client',
+         loadingNumber: 'loading call-in number of this team',
+         birthdayError: 'Birthday error',
+         map: 'map',
+         saveContacts: 'Save contacts',
+         loadingReports: 'Loading reports',
+         datetime: 'Date & time',
+         writenBy: 'written by',
+         noSharedStates: 'No shared states',
+         savingContacts: 'Saving the contacts',
+         delClientGroupConfirm: 'Are you sure you want to delete this client group ? It might take a while.',
+         delTeamConfirm: 'Are you sure you want to delet this team ? It might take a while.',
+         deletingClientGroup: "Deleting group ... ",
+         deleteConfirm: "Please OK to process.",
+         deletingTeam: "Deleting team ...",
+         deletingMember: "Deleting member ...",
+         deletingClient: "Deleting client ...",
+         noMessages: "There are no messages",
+         newReport: "New Report",
+         selectClient: "Select a client",
+         selectMember: "Select a member",
+         selectMonth: "Select a month",
+         saveReport: "Save report",
+         reportTitle: "Title",
+         selectSlot: "Please select a slot",
+         editClientImg: "Edit client image",
+         newTask: "New Task",
+         updateTask: "Update Task",
+         managePanelchangePrompt: "You did some changes , save it ?"
       }
     },
     nl: {
@@ -446,7 +389,6 @@ var ui = {
         label: 'Nederlands'
       },
       login: {
-        setting_up_app: 'Applicatie laden...',
         header: "Inloggen",
         placeholder_username: "Vul uw gebruikersnaam in",
         placeholder_password: "Vul uw wachtwoord in",
@@ -470,47 +412,19 @@ var ui = {
         loading_Group:'Groepen laden...',
         loading_Members: 'Leden laden...',
         loading_everything: 'Alles is geladen!',
-        logout: 'Uitloggen',
-        loading: 'Aan het laden..',
-        setting: 'Aan het toepassen..',
-        passwordChanged: 'Wachtwoord gewijzigd!',
-        button_changePassword: 'Wachtwoord wijzigen',
-        button_changingPassword: 'Wachtwoord aan het wijzigen..',
-        checkYourMail: 'Controleer uw mailbox voor de instructies!',
-        help: {
-          content: [
-            'Om in te loggen en gebruik te maken van het paraatheidssysteem van ASK, dient u te beschikken over een juiste login. Heeft u nog geen login, neem dan contact op met uw teamleider voor meer informatie.',
-            'Na het invullen van uw login gegevens kunt u gebruik maken van de “onthoud mij” optie. Wanneer u deze optie aanvinkt, wordt u automatisch ingelogd, elke volgende keer dat u site bezoekt.',
-            'Bent u uw wachtwoord vergeten, dan kunt u door middel van de “wachtwoord vergeten” link een nieuw wachtwoord aanvragen en laten versturen naar uw eigen email adres.',
-            'Door op English of Nederlands te klikken kunt u de taal instellen.'
-          ],
-          cta: 'Terug naar inloggen'
-        }
+        logout: 'Logout',
+        loading: 'Loading..',
+        loading_clientGroups: 'Loading client groups...',
       },
       dashboard: {
-        dashboard: 'Dashboard',
-        groupOverviews: 'Laden en analyseren groepsoverzichten...',
         thisWeek: 'Deze week',
-        nextWeek: 'Volgende week',
         welcome: 'Welkom',
         newMessage: 'Nieuwe berichten',
         goToInbox: 'Ga naar inbox',
         loadingPie: 'Cirkeldiagrammen laden...',
         announcements: 'Alarm berichten',
         loadingP2000: 'Alarm berichten laden...',
-        noP2000: 'Er zijn geen alarm berichten.',
-        widgetSave: 'Opslaan',
-        widgetCancel: 'Annuleren',
-        currentState: 'Huidige status',
-        overview: 'Overzicht',
-        statMore: 'meer',
-        statEven: 'genoeg',
-        statLess: 'minder',
-        periods: 'Perioden',
-        refreshGroupOverviews: 'Groep overzichten laden...',
-        showMore: 'show more',
-        showLess: 'show less',
-        gettingAlarms: 'P2000 alarm berichten aan het ophalen...'
+        noP2000: 'Er zijn geen alarm berichten.'
       },
       planboard : {
         planboard: 'Agenda',
@@ -569,24 +483,7 @@ var ui = {
         preCompilingStortageMessage: 'Opstellen tekortbericht',
         weeklyPlanning: 'Wekelijkse planning',
         planning: 'Planning',
-        minNumber: 'Minimum aantal benodigde mensen',
-        statDays: 'dagen',
-        statHours: 'uren',
-        statMinutes: 'minuten',
-        statPeopleLess: 'Te weinig mensen',
-        statPeopleEven: 'Precies genoeg mensen',
-        statPeopleMore: 'Meer mensen',
-        getWishes: 'Groep behoefte getal aan het ophalen...',
-        daterangerToday: 'Vandaag',
-        daterangerTomorrow: 'Morgen',
-        daterangerYesterday: 'Gisteren',
-        daterangerNext3Days: 'Komende 3 dagen',
-        daterangerNext7Days: 'Komende 7 dagen',
-        rangeInfoTotalSelectedDays: 'Totaal aantal geselecteerde dagen: ',
-        rangeInfoTime: 'Tijd: ',
-        rangeInfoWeekNumber: 'Weeknummer: ',
-        rangeInfoMonth: 'Maand: ',
-        rangeInfoTotalDays: ', Totaal aantal dagen: '
+        minNumber: 'Minimum aantal benodigde mensen'
       },
       message: {
         messages: 'Berichten',
@@ -626,14 +523,14 @@ var ui = {
         escalation: 'Escalatiebericht',
         escalationBody: function(diff,startDate,startTime,endDate,endTime)
         {
-          return 'Er is een tekort van ' +
-          diff +
-          ' mensen tussen ' +
-          startDate + ' ' +
-          startTime + ' en ' +
-          endDate + ' ' +
-          endTime + '. ' +
-          'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
+            return 'Er is een tekort van ' +
+            diff +
+            ' mensen tussen ' +
+            startDate + ' ' +
+            startTime + ' en ' +
+            endDate + ' ' +
+            endTime + '. ' +
+            'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
         },
         removed: 'Bericht succesvol verwijderd.',
         removing: 'Bericht verwijderen...',
@@ -650,60 +547,20 @@ var ui = {
         // messages: 'Berichten',
         ph_filterMessage: 'Berichten filteren...',
         noReceivers: 'Graag een ontvanger selecteren.',
-        days: {
-          monday:     'maandag',
-          tuesday:    'dinsdag',
-          wednesday:  'woensdag',
-          thursday:   'donderdag',
-          friday:     'vrijdag',
-          saturday:   'zaterdag',
-          sunday:     'zondag'
-        },
-        repeat: 'Herhaling',
-        repeatOn: 'Aan',
-        repeatOff: 'Uit',
-        enabled: 'Ingeschakeld',
-        disabled: 'Uitgeschakeld',
-        repeatNew: 'Nieuwe herhaling',
-        notificationLabel: 'Notificatie label',
-        notifications: 'Herinneringen',
-        notificationsEmpty: 'Er zijn (nog) geen herhalingen.',
-        notificationStatus: 'Notificatie status',
-        notificationSave: 'Opslaan',
-        notificationHeaderLabel: 'Label',
-        notificationHeaderReceivers: 'Ontvangers',
-        notificationHeaderFrequency: 'Frequentie',
-        paginationPage: 'Pagina',
-        paginationOf: 'van',
-        paginationInTotal: 'in totaal',
-        paginationPrevious: 'Vorige',
-        paginationNext: 'Volgende',
-        filterMessages: 'Berichten filteren...',
-        inTotal: 'In totaal:',
-        loadingNotifications: 'Notificaties aan het laden...',
-        receiversUsers: 'Gebruikers',
-        receiversGroups: 'Groepen',
-        notificationsRefresh: 'Notificaties aan het laden...',
-        notificationsAdd: 'Notificatie aan het toevoegen...',
-        notificationSaved: 'Notificatie is met success opgeslagen.',
-        notificationsEditing: 'Notificatie wordt gewijzigd...',
-        notificationsEdited: 'Notificatie is met succes gewijzigd.',
-        notificationsDeleting: 'Notificatie wordt verwijderd...',
-        notificationsDeleted: 'Notificatie is met succes verwijderd.'
+        emptyMessageBody: 'The message is empty, please write a message',
+        send: 'Send'
       },
       groups: {
         groups: 'Groepen',
-        newGroup: 'Nieuwe groep',
+        newGroup: 'Nieuwe Group',
         newMember: 'Nieuw lid',
-        search: 'Zoeken',
+        serach: 'Zoeken',
         addNewGroup: 'Nieuwe groep toevoegen',
         editGroup: 'Groep wijzigen',
         searchResults: 'Zoekresultaten',
         group: 'Groep',
         close: 'Sluiten',
         name: 'Naam',
-        firstName: 'Voornaam',
-        lastName: 'Achternaam',
         saveGroup: 'Groep opslaan',
         registerMember: 'Lid registreren',
         role: 'Functie',
@@ -720,7 +577,7 @@ var ui = {
         userName: 'Gebruikersnaam',
         password: 'Wachtwoord',
         saveMember: 'Lid opslaan',
-        searchedFor: 'Zoekresultaten voor ',
+        serachFor: 'Zoekresultaten voor ',
         sorryCanNotFind: 'Sorry, geen resultaten.',
         addToGroup: 'Aan groep toevoegen',
         addMemberToGroup: 'Voeg geselecteerde leden aan groep toe',
@@ -734,7 +591,7 @@ var ui = {
         memberAdded: 'Lid succesvol aan groep toegevoegd.',
         refreshingGroupMember: 'Groepen- en ledenlijst vernieuwen...',
         removingMember: 'Lid van groep verwijderen...',
-        memberRemoved: 'Lid/leden succesvol van groep verwijderd.',
+        memberRemoved: 'Lid succesvol van groep verwijderd.',
         removingSelected: 'Geselecteerde leden verwijderen...',
         saving: 'Groep opslaan...',
         groupSaved: 'Groep succesvol opgeslagen.',
@@ -743,10 +600,7 @@ var ui = {
         deleting: 'Groep verwijderen...',
         deleted: 'Groep succesvol verwijderd.',
         filterMembers: 'Leden filteren...',
-        searchFor: 'voornaam, achternaam..',
-        widgetSave: 'Opslaan',
-        widgetCancel: 'Annuleren',
-        requiredPeople: 'Behoefte'
+        searchfor: 'voornaam, achternaam..'
       },
       profile: {
         profile: 'Profiel',
@@ -781,7 +635,14 @@ var ui = {
         newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
         changingTimeslot: 'Tijdslot wijzigen...',
         timeslotChanged: 'Tijdslot succesvol gewijzigd.',
-        passwordChangeWarning: 'Let op! Hiermee wijzigt u het wachtwoord van deze persoon.'
+        firstName: 'Voornaam',
+        lastName: 'Achternaam',
+        editProfileImg : 'Profile foto wijzigen',
+        loadUploadURL : 'Foto upload URL laden',
+        click2upload : 'Klik hier om te uploaden',
+        birthday: 'Geboortedag',        
+        username: 'Gebruikersnaam',
+        retypePassword: 'Nogmaals wachtwoord'
       },
       settings: {
         settings: 'Instellingen',
@@ -796,7 +657,6 @@ var ui = {
         saved: 'Instellingen succesvol gewijzigd.'
       },
       help: {
-        help: 'Hulp',
         header: 'Hulp & Ondersteuning',
         support: 'Ondersteuning'
       },
@@ -811,65 +671,96 @@ var ui = {
         messages:   'berichten',
         groups:     'groepen',
         profile:    'profiel',
-        settings:   'instellingen',
-        loggingOut: 'Aan het uitloggen...'
+        settings:   'instellingen'
       },
-      errors: {
-        dashboard: {
-          getOverviews: 'Fout bij het ophalen van groep overzichten!'
-        },
-        groups: {
-          query: 'Fout bij het ophalen van groepen en gebruikers!',
-          saveWish: 'Fout bij het veranderen van de behoefte!',
-          searchMembers: 'Fout bij het zoeken van leden!',
-          addMember: 'Fout bij het toevoegen van een lid aan een groep!',
-          removeMember: 'Fout bij het verwijderen van een lid uit een groep!',
-          removeMembers: 'Fout bij het verwijderen van leden uit een groep!',
-          groupSubmit: 'Fout bij het opslaan van de groep!',
-          memberSubmitRegistered: 'Gebruikersnaam bestaat al!',
-          memberSubmitRegister: 'Fout bij het registreren van een gebruiker!',
-          deleteGroup: 'Fout bij het verwijderen van een groep!'
-        },
-        login: {
-          changePass: 'Er ging iets mis met het wijzigen van het wachtwoord!',
-          forgotCantFind: 'Fout, deze account bestaat niet!',
-          changePassAllFields: 'Vul alstublieft alle velden in!',
-          changePassNoMatch: 'Fout, de wachtwoorden komen niet overeen!'
-        },
-        settings: {
-          save: 'Fout bij het opslaan van de instellingen!'
-        },
-        profile: {
-          save: 'Fout bij het opslaan van het profiel!',
-          get: 'Fout bij het ophalen van het profiel!',
-          changePassword: 'Fout bij het wijzigen van het wachtwoord!'
-        },
-        messages: {
-          query: 'Fout bij het ophalen van berichten!',
-          changeState: 'Fout bij het wijzigen van bericht status!',
-          removeMessage: 'Fout bij het verwijderen van het bericht!',
-          removeMessages: 'Fout bij het verwijderen van de berichten!',
-          restoreMessage: 'Fout bij het terugzetten van het bericht!',
-          restoreMessages: 'Fout bij het terugzetten van de berichten!',
-          emptyTrash: 'Fout bij het leegmaken van de prullenbak!',
-          send: 'Fout bij het verzenden van bericht!',
-          notificationsList: 'Fout bij het ophalen van de geplande notificaties!',
-          notificationsGet: 'Fout bij het ophalen van een geplande notificatie!',
-          notificationsAdd: 'Fout bij het aanmaken van een geplande notificatie!'
-        },
-        timeline: {
-          query: 'Er is iets fout gegaan bij het laden van de tijdlijndata. Vernieuw deze webpagina om het nogmaals te proberen.',
-          pastAdding: 'Invoer van tijden in het verleden is niet toegestaan!',
-          add: 'Error with adding a new timeslot!',
-          change: 'Error with changing timeslot!',
-          pastChanging: 'Veranderen van tijden in het verleden is niet toegestaan!',
-          pastDeleting: 'Verwijderen van tijden in het verleden is niet toegestaan!',
-          remove: 'Error with removing timeslot!',
-          wisher: 'Error with changing wish value!'
-        }
-      },
-      confirms: {
-        remove: 'Weet u zeker dat u dit wilt verwijderen? U kunt dit niet ongedaan maken.'
+      teamup: {
+         teams: 'teams',
+         clients: 'cliënten',
+         manage: 'beheren',
+         chooseTeam: 'Selecteer een team',         
+         edit: 'bewerk',
+         editTeam: 'bewerk team',
+         team: 'team',
+         del: 'verwijder',
+         noMembers: 'Geen leden in dit team',
+         newTeam: 'Nieuw Team',
+         teamName: 'Teamnaam',
+         createTeam: 'Maak nieuw team',
+         newMember: 'Nieuw lid',
+         name: 'Naam',
+         role: 'rol',
+         phone: 'telefoon',
+         street: 'straat',
+         postCode: 'postcode',
+         city: 'Stad',
+         saveMember: 'Opslaan',
+         state: 'status',
+         states: 'Status',
+         saveTeam: 'Team opslaan',
+         save: 'Opslaan',
+         refreshing : 'Team info opnieuw ophalen',
+         dataChanged : 'Data is veranderd',
+         teamSubmitError: 'Fouten tijdens aanmaken van het team',
+         queryTeamError: 'Fouten tijdens het opzoeken van de teams',
+         teamNamePrompt1: 'Teamnaam mag niet leeggelaten worden',
+         teamNamePrompt2: 'Voeg contact data toe a.u.b.',
+         cancel: 'Annuleren',
+         chooseRole : 'Kies een rol',
+         func: 'functie',
+         chooseFunction: 'Kies een functie',
+         newClientGroup: 'Nieuwe Groep',
+         newClient: 'Nieuwe cliënt',
+         reports: 'Rapporten',
+         report: 'Rapport',
+         noClients: 'Geen cliënten in deze groep',
+         TeamClients: 'TEAMS-CLIENTEN',
+         createClientGroup: 'Maak nieuwe cliënten groep aan',
+         contacts: 'Contacten',
+         Number: 'Nummer',
+         clientProfileUrl: 'URL Cliënten profiel',
+         addContact: 'contactpersoon toevoegen',
+         saveClient: 'Opslaan',
+         group: 'Groep',
+         noContacts: 'Er zijn geen contactpersonen gedefinieerd',
+         contactCount:  'Er zijn $v contactpersonen',
+         accountInfoFill: 'Vul uw account informatie in a.u.b.',
+         passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
+         savingMember: 'Lid aan het opslaan',
+         selectTeam: 'Selecteer een team a.u.b.',
+         clinetInfoFill: 'Vul the basis cliënt informatie (naam en telefoon) in a.u.b.',
+         savingClient: 'Cliënt aan het opslaan',
+         clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt',
+         clientGroups: 'Cliënten groepen',
+         teams_Cap: 'Teams',
+         editClient: 'Bewerk client',
+         loadingNumber: 'Team telefoonnummer aan het laden',
+         birthdayError: 'Fout in the geboortedatum',
+         map: 'kaart',
+         saveContacts: 'Contactpersonen opslaan',
+         loadingReports: 'Rapporten laden',
+         datetime: 'Datum en tijd',
+         writenBy: 'Geschreven door',
+         noSharedStates: 'Geen gedeelde status',
+         savingContacts: 'Contactpersonen oplsaan',
+         delClientGroupConfirm: 'Weet u zeker dat u deze cliënten groep wil verwijderen? Het kan even duren.',
+         delTeamConfirm: 'Weet u zeker dat u dit team wil verwijderen? Het kan even duren.',
+         deletingClientGroup: "Groep verwijderen ... ",
+         deleteConfirm: "Druk op OK om door te gaan.",
+         deletingTeam: "Team verwijderen...",
+         deletingMember: "Lid verwijderen ...",
+         deletingClient: "Cliënt verwijderen ...",
+         noMessages: "Er zijn geen berichten",
+         newReport: "Nieuw Rapport",
+         selectClient: "Selecteer een cliënt",
+         selectMember: "Selecteer een lid",
+         selectMonth: "Selecteer een maand",
+         saveReport: "Rapport opslaan",
+         reportTitle: "Titel",
+         selectSlot: "Selecteer een tijdsslot a.u.b.",
+         editClientImg: "Wijzig foto van de cliënt",
+         newTask: "Nieuwe Taak",
+         updateTask: "Wijzig Taak",
+         managePanelchangePrompt: "Data is changed. Click \"Yes\" to go on, \"Cancel\" to stay."
       }
     }
 };

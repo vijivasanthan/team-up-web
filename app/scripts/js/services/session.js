@@ -29,7 +29,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
         else
         {
           return false;
-        }
+        };
       },
 
       /**
@@ -45,7 +45,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
           values = pairs[i].split("=");
 
           if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
-        }
+        };
 
       },
 
@@ -77,9 +77,6 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
         $rootScope.session = session;
 
         $http.defaults.headers.common['X-SESSION_ID'] = $rootScope.session.id;
-
-        // $.ajaxSetup({cache: false});
-        // $http.defaults.cache = false;
 
         return session;
       },

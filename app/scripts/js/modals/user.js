@@ -19,74 +19,43 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 
 
 	  var Login = $resource(
-	    $config.host + '/login',
+	    $config.host + $config.namespace+'/login',
 	    {
 	    },
 	    {
 	      process: {
 	        method: 'GET',
-	        params: {
-            uuid:'',
-            pass:''
-          }
+//	        params: {username:'', passwordHash:''}
+	        params: {uuid:'', pass:''}
 	      }
 	    }
 	  );
 
 
 	  var Logout = $resource(
-	    $config.host + '/logout',
+	    $config.host + 'logout',
 	    {
 	    },
 	    {
 	      process: {
 	        method: 'GET',
-	        params: {},
-          isArray: true
+	        params: {}
 	      }
 	    }
 	  );
 
 
-    var Resources = $resource(
-        $config.host + '/resources',
-      {
-      },
-      {
-        get: {
-          method: 'GET',
-          params: {}
-        }
-      }
-    );
-
-
-    var Divisions = $resource(
-        $config.host + '/divisions',
-      {
-      },
-      {
-        get: {
-          method: 'GET',
-          params: {},
-          isArray: true
-        }
-      }
-    );
-
-
-    var States = $resource(
-        $config.host + '/states',
-      {
-      },
-      {
-        get: {
-          method: 'GET',
-          params: {},
-          isArray: true
-        }
-      }
-    );
+	  var MemberInfo = $resource(
+	    $config.host + $config.namespace + '/team/member',
+	    {
+	    },
+	    {
+	      get: {
+	        method: 'GET',
+	        params: {}
+	      }
+	    }
+	  );
 
 
 	  var Reset = $resource(
@@ -96,91 +65,21 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	    {
 	      password: {
 	        method: 'GET',
-	        params: {
-            uuid: '',
-            path:''
-          },
-          isArray: true
+	        params: {uuid: '', path:''}
 	      }
 	    }
 	  );
 
-
-	  var changePassword = $resource(
-      $config.host + '/passwordReset',
-      {
-      },
-	    {
-        reset: {
-          method: 'GET',
-          params: {
-            uuid: '',
-            pass: '',
-            key:  ''
-          }
-        }
-      });
-
-
-    /**
-     * Divisions
-     */
-    User.prototype.divisions = function ()
-    {
-      var deferred = $q.defer();
-
-      Divisions.get(
-        {},
-        function (result)
-        {
-          deferred.resolve(result);
-        },
-        function (error)
-        {
-          deferred.resolve(error);
-        }
-      );
-
-      return deferred.promise;
-    };
-
-
-    /**
-     * States
-     */
-    User.prototype.states = function ()
-    {
-      var deferred = $q.defer();
-
-      States.get(
-        {},
-        function (results)
-        {
-          var states = [];
-
-          angular.forEach(results, function (node)
-          {
-            var state = '';
-
-            angular.forEach(node, function (_s) { state += _s; });
-
-            states.push(state);
-          });
-
-          deferred.resolve(states);
-        },
-        function (error)
-        {
-          deferred.resolve(error);
-        }
-      );
-
-      return deferred.promise;
-    };
+	  // var changePassword = $resource($config.host+'/passwordReset', 
+	  //   {uuid: uuid,
+	  //    pass: newpass,
+	  //    key: key});
 	  
 	  
 	  /**
-	   * TODO: RE-FACTORY
+	   * TODO
+	   * RE-FACTORY
+	   * 
 	   * User login
 	   */
 	  User.prototype.password = function (uuid)
@@ -194,14 +93,14 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	      }, 
 	      function (result)
 	      {
-	        if (angular.equals(result, []) || angular.equals(result, [{}]))
+	        if (angular.equals(result, []))
 	        {
 	          deferred.resolve("ok");
 	        }
 	        else
 	        {
 	          deferred.resolve(result);
-	        }
+	        };
 	      },
 	      function (error)
 	      {
@@ -216,15 +115,11 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  /**
 	   * User login
 	   */
-	  User.prototype.login = function (uuid, pass) 
+	  User.prototype.login = function (username, passwordHash) 
 	  {    
 	    var deferred = $q.defer();
 
-	    Login.process(
-        {
-          uuid: uuid,
-          pass: pass
-        },
+	    Login.process({uuid : username , pass : passwordHash }, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 
@@ -234,7 +129,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	        else 
 	        {
 	          deferred.resolve(result);
-	        }
+	        };
 	      },
 	      function (error)
 	      {
@@ -257,11 +152,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	    /**
 	     * RE-FACTORY
 	     */
-	    changePassword.get({
-          uuid: uuid,
-          pass: newpass,
-          key:  key
-        },
+	    changePassword.get(
 	      function (result)
 	      {
 	        deferred.resolve(result);
@@ -273,7 +164,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	    );
 	    
 	    return deferred.promise;
-	  };
+	  }
 
 
 	  /**
@@ -283,8 +174,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  {    
 	    var deferred = $q.defer();
 
-	    Logout.process(
-        null,
+	    Logout.process(null, 
 	      function (result) 
 	      {
 	        deferred.resolve(result);
@@ -302,12 +192,11 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  /**
 	   * Get user resources
 	   */
-	  User.prototype.resources = function () 
+	  User.prototype.memberInfo = function () 
 	  {    
 	    var deferred = $q.defer();
 
-	    Resources.get(
-        null,
+	    MemberInfo.get(null, 
 	      function (result) 
 	      {
 	        if (angular.equals(result, [])) 

@@ -1,0 +1,44 @@
+<div id="welcome">
+
+	<!-- loginForm -->
+	<div id="login" class="boxed">
+
+		<form ng-submit="login()">
+
+		  <h4 class="form-signin-heading">Forget your password?</h4>
+
+		  <p style="font-size: 12px; margin-bottom: 25px;">
+		  	Please provide your mobile number that you used when you signed up to Oneline. We will send you an SMS to share your temporary password.
+		  </p>
+
+      <!-- alert login -->
+      <div class="alert {{alert.login.type}}" ng-show="alert.login.display">
+        <button class="close" type="button" ng-click="alert.login=false">×</button>
+        {{alert.login.message}}
+      </div>
+      <!-- end login password -->
+
+		  <input 
+		    class="" 
+		    type="text" 
+		    ng-model="logindata.username"
+		    placeholder="Mobile number" 
+		    autofocus>
+
+		  <button class="btn btn-large btn-primary" 
+		  				type="submit">Reset password</button>
+
+		  <p>
+		  	<small>
+		  		<a href="#login">login</a>
+		  	</small>
+		  </p>
+
+		  <span class="version"><a href="version.html" target="_blank">v{{config.version}}</a></span>
+
+		</form>
+	</div>
+	<!-- end loginForm -->
+	
+	<!-- end change pass -->
+</div>

@@ -29,7 +29,7 @@
  *
  * Copyright (c) 2011-2012 Almende B.V.
  *
- * @author  Jos de Jong, <jos@almende.org>
+ * @author 	Jos de Jong, <jos@almende.org>
  * @date    2012-10-04
  * @version 2.4.0
  */
@@ -2183,34 +2183,15 @@ links.Timeline.prototype.repaintNavigation = function () {
                     timeline.step.snap(xend);
                 }
 
-
-                /**
-                 * MODIFIED
-                 */
-                // var content = "New";
+                var content = "New";
                 var group = timeline.groups.length ? timeline.groups[0].content : undefined;
 
-                // timeline.addItem({
-                //     'start': xstart,
-                //     'end': xend,
-                //     'content': content,
-                //     'group': group
-                // });
-
-                // console.log('group from timeline 1 ->', group);
-
-                var recursive = (group.match(/recursive/)) ? 'true' : 'false';
-
-                this.addItem({
-                    'start':      xstart,
-                    'end':        xend,
-                    'content':    '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
-                    'group':      group,
-                    'className':  'state-available'
+                timeline.addItem({
+                    'start': xstart,
+                    'end': xend,
+                    'content': content,
+                    'group': group
                 });
-                //
-
-
                 var index = (timeline.items.length - 1);
                 timeline.selectItem(index);
 
@@ -2644,46 +2625,14 @@ links.Timeline.prototype.onMouseDown = function(event) {
             this.step.snap(xstart);
         }
         var xend = new Date(xstart);
-
-
-        /**
-         * MODIFIED
-         */
-        // var content = "New";
-        // var group = this.getGroupFromHeight(y);
-        // this.addItem({
-        //     'start': xstart,
-        //     'end': xend,
-        //     'content': content,
-        //     'group': this.getGroupName(group)
-        // });
-        
-        var group = this.getGroupFromHeight(y);   // (group may be undefined)
-
-        // console.log('group from timeline 2 ->', this.getGroupName(group));
-
-        var recursive = (this.getGroupName(group).match(/recursive/)) ? 'true' : 'false';
-
-
-        // push into the bulk
-        if (typeof window.slotsbulk === 'undefined') { window.slotsbulk = []; };
-        window.slotsbulk.push({
-          start:      new Date(xstart).getTime() / 1000,
-          end:        new Date(xend).getTime() / 1000,
-          recursive:  recursive,
-          state:      'available'
-        });
-        
-
+        var content = "New";
+        var group = this.getGroupFromHeight(y);
         this.addItem({
-            'start':      xstart,
-            'end':        xend,
-            'content':    '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
-            'group':      this.getGroupName(group),
-            'className':  'state-new'
+            'start': xstart,
+            'end': xend,
+            'content': content,
+            'group': this.getGroupName(group)
         });
-        //
-
         params.itemIndex = (this.items.length - 1);
         this.selectItem(params.itemIndex);
         params.itemDragRight = true;
@@ -3051,27 +3000,14 @@ links.Timeline.prototype.onDblClick = function (event) {
                 this.step.snap(xend);
             }
 
-
-            /**
-             * MODIFIED
-             */
-            // var content = "New";
+            var content = "New";
             var group = this.getGroupFromHeight(y);   // (group may be undefined)
-
-            // console.log('group from timeline 3 ->', this.getGroupName(group));
-
-            var recursive = (this.getGroupName(group).match(/recursive/)) ? 'true' : 'false';
-
             this.addItem({
-                'start':      xstart,
-                'end':        xend,
-                'content':    '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
-                'group':      this.getGroupName(group),
-                'className':  'state-available'
+                'start': xstart,
+                'end': xend,
+                'content': content,
+                'group': this.getGroupName(group)
             });
-            //
-
-
             params.itemIndex = (this.items.length - 1);
             this.selectItem(params.itemIndex);
 
