@@ -6,7 +6,7 @@ head
   meta(charset='utf-8')
   meta(content='width=device-width, initial-scale=1.0', name='viewport')
   meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
-  title StandBy
+  title TeamUp v0.2.0
   meta(name='viewport', content='width=device-width')
   //
      favicons
@@ -17,9 +17,12 @@ head
   link(rel='shortcut icon', ng-href='scripts/js/profiles/{{config.profile.meta}}/images/images/img/ico/favicon.ico')
   //
      styles
-  link(rel='stylesheet', href='scripts/js/dist/bootstrap.css')
-  link(rel='stylesheet', href='scripts/js/dist/responsive.css')
-  link(rel='stylesheet', href='scripts/js/dist/app.css')
+  // link(rel='stylesheet', href='styles/sass/bootstrap.css')
+  // link(rel='stylesheet', href='styles/sass/responsive.css')
+  // link(rel='stylesheet', href='styles/sass/app.css')
+  link(rel='stylesheet', href='styles/bootstrap.css')
+  link(rel='stylesheet', href='styles/main.css')
+
   //
      jquery
   script(src='scripts/js/libs/date/1.0/date.min.js')
@@ -49,7 +52,7 @@ body
 
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
   ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
-  bs-navbar='')
+  bs-navbar='', ng-show='false')
     .navbar-inner
       .container-fluid
         a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
@@ -59,7 +62,7 @@ body
           span.icon-bar {{ui.message.messages}}
         a.brand(href='#team')
         // nav-collapse
-        .nav-collapse.collapse
+        .navbar-collapse.collapse
           // user menu
           // main nav
           ul.nav
@@ -107,6 +110,8 @@ body
           // end user menu
         // end nav-collapse
   // end navbar
+
+
   // loading
   #loading.ng-cloak(ng-show='loadingBig')
     div(ng-show='loaderIcons.general')
@@ -149,6 +154,8 @@ body
         br
         | {{ui.loading.settings}}
   // end loading
+
+
   // notifications
   #notification.alert(ng-show='notification.status', class='{{notification.type}}')
     button.close(type='button', ng-click='notification.status = false') ×
@@ -162,6 +169,8 @@ body
     // end container-fluid
     #push
   // end wrap
+
+
   // chat screen
   #chat(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
   ng-controller='messagesCtrl')
@@ -188,11 +197,15 @@ body
       input#messageField(type='text', ng-model='newMessage', ngenter='sendMessage(newMessage)')
       button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
   // end chat screen
+
+
   // mobile status bar
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
     img(src='images/img/ajax-loader.gif')
     small {{loading.message}}
   // end mobile status bar
+
+
   // footer
   #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
     .container-fluid
