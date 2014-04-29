@@ -14,7 +14,12 @@
     "lawnchair": "*",
     "json3": "*",
     "angular-cookies": "*",
-    "momentjs": "*"
+    "momentjs": "*",
+    "chap-links-library": "https://github.com/almende/chap-links-library.git",
+    "angular-strap": "~2.0.2",
+    "angular-ui-bootstrap": "~0.10.0",
+    "bootstrap-datepicker": "~1.3.0",
+    "bootstrap-timepicker": "~0.2.6"
   },
   "devDependencies": {
     "angular-mocks": "*",

@@ -12,16 +12,26 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
+      'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       lawnchair:          '../vendors/lawnchair/src/Lawnchair',
-      dom:                '../vendors/lawnchair/src/adapters/dom'
+      dom:                '../vendors/lawnchair/src/adapters/dom',
+      timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
+      treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
+      datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
+      timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
     },
     shim: {
       angular:            { deps: ['jquery'], exports: 'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
+      'angular-strap':    { deps: ['angular'], exports: 'angular-strap' },
       bootstrap:          { deps: ['jquery'], exports: 'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
-      dom:                { deps: ['lawnchair'], exports: 'dom' }
+      dom:                { deps: ['lawnchair'], exports: 'dom' },
+      timeline:           { exports: 'timeline' },
+      treegrid:           { exports: 'treegrid' },
+      datepicker:         { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
+      timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' }
     }
   }
 );
@@ -33,6 +43,7 @@ require (
     'jquery',
     'angular-resource',
     'angular-route',
+    'angular-strap',
 
     'config',
     'app',
@@ -54,12 +65,15 @@ require (
 
     'bootstrap',
     'lawnchair',
-    'dom'
+    'dom',
+    'timeline',
+    'datepicker',
+    'timepicker'
   ],
   function (angular, domReady)
   {
     'use strict';
 
-    domReady(function () { angular.bootstrap(document, ['MyApp']) });
+    domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );

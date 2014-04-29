@@ -1,0 +1,13 @@
+{
+  "name": "chap-links-library",
+  "homepage": "https://github.com/almende/chap-links-library",
+  "_release": "2a8be0072c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "2a8be0072cc56d9cc8ccb643b13a87cbffb34dae"
+  },
+  "_source": "https://github.com/almende/chap-links-library.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/almende/chap-links-library.git"
+}
