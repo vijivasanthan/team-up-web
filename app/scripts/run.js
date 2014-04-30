@@ -502,7 +502,7 @@ define(
               {
                 // console.log('content is taller than tabs ->', $this);
                 // $('.tabs-left .nav-tabs').css( { height: contentHeight } );
-              };
+              }
             });
 
             /**

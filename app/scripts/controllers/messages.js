@@ -103,7 +103,7 @@ define(
             },function(error){
               console.log(error);
             });
-          }
+          };
 
           $scope.openChat = function(){
             $scope.toggleChat = !$scope.toggleChat;
@@ -121,7 +121,7 @@ define(
               // stop auto check chat mesage
               clearInterval($scope.autoCheckMonitorId);
             }
-          }
+          };
 
           $scope.sendMessage = function(newMessage){
             if(typeof newMessage == "undefined" || newMessage == ""){
@@ -145,7 +145,7 @@ define(
               $rootScope.statusBar.off();
             });
 
-          }
+          };
 
           /**
            * to do : auto refreshing the chat message

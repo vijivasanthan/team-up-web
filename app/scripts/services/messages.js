@@ -29,7 +29,7 @@ define(
             params : {}
           },
           send : {
-            method : 'POST',
+            method : 'POST'
           },
           save : {
             method : 'POST',
@@ -56,7 +56,7 @@ define(
             method : 'GET',
             params : {},
             isArray : true
-          },
+          }
         });
 
         Messages.prototype.queryTeamMessage = function(tId){

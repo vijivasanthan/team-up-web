@@ -17,7 +17,9 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
+      // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
+      'angular-strap':    'removables/angular-strap.min',
+      'ui-bootstrap':     'removables/ui-bootstrap-custom', // TODO: Remove later
       lawnchair:          '../vendors/lawnchair/src/Lawnchair',
       dom:                '../vendors/lawnchair/src/adapters/dom',
       moment:             '../vendors/momentjs/min/moment.min',
@@ -25,8 +27,9 @@ require.config (
       timeline:           'removables/timeline',
       treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      datepicker:         'removables/datepicker',
-      timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
+      datepicker:         'removables/datepicker.min',
+      // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
+      timepicker:         'removables/timepicker.min'
     },
     shim: {
       date:               { deps: [],                       exports: 'date'           },
@@ -35,6 +38,7 @@ require.config (
       'angular-resource': { deps: ['angular']                                         },
       'angular-route':    { deps: ['angular']                                         },
       'angular-strap':    { deps: ['angular'],              exports: 'angular-strap'  },
+      'ui-bootstrap':     { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap'   },
       bootstrap:          { deps: ['jquery'],               exports: 'bootstrap'      },
       lawnchair:          { deps: [],                       exports: 'lawnchair'      },
       dom:                { deps: ['lawnchair'],            exports: 'dom'            },
@@ -59,6 +63,7 @@ require (
     'angular-resource',
     'angular-route',
     'angular-strap',
+    'ui-bootstrap', // TODO: Remove later on
 
     'localization',
     'config',
