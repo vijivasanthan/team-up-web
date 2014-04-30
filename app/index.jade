@@ -176,7 +176,7 @@ block chat
 // TODO: Is it needed?
 block mobile-status
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
-    img(src='images/img/ajax-loader.gif')
+    img(src='images/ajax-loader.gif')
     small {{loading.message}}
 
 
@@ -194,7 +194,7 @@ block footer
               a(href='version.html',
               target='_blank') v{{config.version}}
       p.muted(ng-show='loading.status')
-        img(src='images/img/ajax-loader.gif')
+        img(src='images/ajax-loader.gif')
         small
           span(ng-show='app.preloader.status') {{app.preloader.count}}%
           | {{loading.message}}

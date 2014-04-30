@@ -26,7 +26,7 @@ require.config (
     shim: {
       date:               { deps: [],                       exports: 'date'           },
       plugins:            { deps: ['jquery'],               exports: 'plugins'        },
-      angular:            { deps: ['jquery'],               exports: 'angular'        },
+      angular:            { deps: ['jquery', 'date'],               exports: 'angular'        },
       'angular-resource': { deps: ['angular']                                         },
       'angular-route':    { deps: ['angular']                                         },
       'angular-strap':    { deps: ['angular'],              exports: 'angular-strap'  },
@@ -68,7 +68,7 @@ require (
     'services/logger',
     'services/moment',
     'services/offline',
-    'services/sessioner',
+    // 'services/sessioner',
     'services/md5er',
     'services/store',
 

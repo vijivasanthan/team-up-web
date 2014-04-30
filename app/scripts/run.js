@@ -378,7 +378,7 @@ define(
 
 
             // TODO: Implement the new session
-            console.log('Session ->', Session);
+            // console.log('Session ->', Session);
             if (!Session.check()) $location.path("/login");
 
 
