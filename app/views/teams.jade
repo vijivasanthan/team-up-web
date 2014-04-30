@@ -36,6 +36,7 @@
         aria-hidden='true')
         | {{ui.teamup.newMember}}
 
+
   .tab-content
 
     #viewTeamTab.tab-pane(class="{{(views.team==true) && 'active'}}")
@@ -101,6 +102,7 @@
             i
               | {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
 
+
     #newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")
       .tab-header
         h3.pull-left {{ui.teamup.newTeam}}
@@ -113,6 +115,7 @@
         .control-group
           button.btn.btn-success.confirmButton.controls(type='button',
           ng-click='teamSubmit(teamForm)') {{ui.teamup.createTeam}}
+
 
     #newMemberTab.tab-pane(class="{{(views.newMember==true) && 'active'}}")
       .tab-header
