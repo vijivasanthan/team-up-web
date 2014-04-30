@@ -1,5 +1,4 @@
 define ['services/services'], (services) ->
-
   'use strict'
 
   services.factory 'Log', [
@@ -16,7 +15,7 @@ define ['services/services'], (services) ->
 
         if trace.hasOwnProperty 'message'
           body = {
-            stack: trace.stack,
+            stack:   trace.stack,
             message: trace.message
           }
         else

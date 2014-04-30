@@ -4,7 +4,8 @@ define(
   {
     'use strict';
 
-    controllers.controller('logout',
+    controllers.controller(
+      'logout',
       [
         '$rootScope', '$scope', '$window', 'Session', 'User', 'Storage',
         function ($rootScope, $scope, $window, Session, User, Storage)
@@ -15,7 +16,8 @@ define(
           var logindata = angular.fromJson(Storage.get('logindata'));
 
           User.logout()
-            .then(function (result)
+            .then(
+            function (result)
             {
               if (result.error)
               {
@@ -35,7 +37,6 @@ define(
             });
         }
       ]);
-
 
   }
 );

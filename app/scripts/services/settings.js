@@ -4,9 +4,8 @@ define(
   {
     'use strict';
 
-
-
-    services.factory('Settings',
+    services.factory(
+      'Settings',
       [
         '$rootScope', '$resource', '$q', 'Storage', 'Profile',
         function ($rootScope, $resource, $q, Storage, Profile)
@@ -17,7 +16,6 @@ define(
            */
           var Settings = $resource();
 
-
           /**
            * Get settings from localStorage
            */
@@ -26,7 +24,6 @@ define(
             return angular.fromJson(Storage.get('resources')).settingsWebPaige || {};
           };
 
-
           /**
            * Save settings
            */
@@ -34,26 +31,25 @@ define(
           {
             var deferred = $q.defer();
 
-            Profile.save(id, {
-              settingsWebPaige: angular.toJson(settings)
-            })
-              .then(function (result)
+            Profile.save(
+              id, {
+                settingsWebPaige: angular.toJson(settings)
+              })
+              .then(
+              function (result)
               {
-                deferred.resolve({
-                  saved: true
-                });
+                deferred.resolve(
+                  {
+                    saved: true
+                  });
               });
 
             return deferred.promise;
           };
 
-
           return new Settings;
         }
       ]);
-
-
-
 
   }
 );

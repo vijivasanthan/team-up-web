@@ -4,145 +4,151 @@ define(
   {
     'use strict';
 
-
-
-    services.factory('Clients',
+    services.factory(
+      'Clients',
       [
         '$resource', '$q', 'Storage', '$rootScope',
         function ($resource, $q, Storage, $rootScope)
         {
 
-          var ClientGroups = $resource(config.app.host + config.app.namespace + '/client/clientGroups/', {
-          }, {
-            query : {
-              method : 'GET',
-              params : {},
-              isArray : true
-            },
-            get : {
-              method : 'GET',
-              params : {
-                id : ''
-              }
-            },
-            save : {
-              method : 'POST',
-              params : {
-                id : ''
-              }
-            },
-            edit : {
-              method : 'PUT',
-              params : {
-                id : ''
-              }
-            },
-            remove : {
-              method : 'DELETE',
-              params : {
-                id : ''
-              }
-            }
-          });
+          var ClientGroups = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroups/', {
+            }, {
+                query:  {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                },
+                get:    {
+                  method: 'GET',
+                  params: {
+                    id: ''
+                  }
+                },
+                save:   {
+                  method: 'POST',
+                  params: {
+                    id: ''
+                  }
+                },
+                edit:   {
+                  method: 'PUT',
+                  params: {
+                    id: ''
+                  }
+                },
+                remove: {
+                  method: 'DELETE',
+                  params: {
+                    id: ''
+                  }
+                }
+              });
 
-          var Clients_ByGroupId = $resource(config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/', {}, {
-            get : {
-              method : 'GET',
-              params : {},
-              isArray : true
-            },
-            save : {
-              method : 'POST',
-            },
-            remove : {
-              method : 'DELETE',
-            }
-          });
-
-          var ClientGroup = $resource(config.app.host + config.app.namespace + '/clientGroup/:clientGroupId', {}, {
-            save : {
-              method : 'POST',
-            },
-            edit : {
-              method : 'PUT',
-            },
-            del : {
-              method : 'DELETE',
-            }
-          });
-
-          var Client = $resource(config.app.host + config.app.namespace + '/client/:clientId', {}, {
-            save : {
-              method : 'POST',
-            },
-            edit : {
-              method : 'PUT',
-            },
-            del : {
-              method : 'DELETE'
-            },
-          });
-
-
-
-
-          var Clients = $resource(config.app.host + config.app.namespace + '/client/clients', {}, {
-            query : {
-              method : 'GET',
-              params : {},
-              isArray : true
-            }
-          });
-
-          var ClientReports = $resource(config.app.host + config.app.namespace + '/clients/:clientId/reports', {}, {
-            query : {
-              method : 'GET',
-              params : {},
-              isArray : true
-            }
-          });
-
-          var ClientsRemove = $resource(config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/removeClients/', {}, {
-            remove : {
-              method : 'PUT',
-            }
-          });
-
-          var ClientGroupReports = $resource(config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/reports', {}, {
-            query : {
-              method : 'GET',
-              params : {},
-              isArray : true
-            }
-          });
-
-          var GroupTasks = $resource(config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/tasks', {
-          }, {
-            query : {
-              method : 'GET',
-              params : {
-                from : '',
-                to: ''
+          var Clients_ByGroupId = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/', {}, {
+              get:    {
+                method:  'GET',
+                params:  {},
+                isArray: true
               },
-              isArray : true
-            }
-          });
+              save:   {
+                method: 'POST',
+              },
+              remove: {
+                method: 'DELETE',
+              }
+            });
 
-          var ClientReport = $resource(config.app.host + config.app.namespace + '/clients/:clientId/reports', {
-          }, {
-            save : {
-              method : 'POST',
-            },
-            remove : {
-              method : 'DELETE',
-              params : {reportId : ''}
-            }
-          });
+          var ClientGroup = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId', {}, {
+              save: {
+                method: 'POST',
+              },
+              edit: {
+                method: 'PUT',
+              },
+              del:  {
+                method: 'DELETE',
+              }
+            });
+
+          var Client = $resource(
+              config.app.host + config.app.namespace + '/client/:clientId', {}, {
+              save: {
+                method: 'POST',
+              },
+              edit: {
+                method: 'PUT',
+              },
+              del:  {
+                method: 'DELETE'
+              },
+            });
+
+          var Clients = $resource(
+              config.app.host + config.app.namespace + '/client/clients', {}, {
+              query: {
+                method:  'GET',
+                params:  {},
+                isArray: true
+              }
+            });
+
+          var ClientReports = $resource(
+              config.app.host + config.app.namespace + '/clients/:clientId/reports', {}, {
+              query: {
+                method:  'GET',
+                params:  {},
+                isArray: true
+              }
+            });
+
+          var ClientsRemove = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/removeClients/', {}, {
+              remove: {
+                method: 'PUT',
+              }
+            });
+
+          var ClientGroupReports = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/reports', {}, {
+              query: {
+                method:  'GET',
+                params:  {},
+                isArray: true
+              }
+            });
+
+          var GroupTasks = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/tasks', {
+            }, {
+                query: {
+                  method:  'GET',
+                  params:  {
+                    from: '',
+                    to:   ''
+                  },
+                  isArray: true
+                }
+              });
+
+          var ClientReport = $resource(
+              config.app.host + config.app.namespace + '/clients/:clientId/reports', {
+            }, {
+                save:   {
+                  method: 'POST',
+                },
+                remove: {
+                  method: 'DELETE',
+                  params: {reportId: ''}
+                }
+              });
 
           var ClientImg = $resource(
-              config.app.host + config.app.namespace + '/client/:clientId/photourl',{},{
+              config.app.host + config.app.namespace + '/client/:clientId/photourl', {}, {
               getURL: {
-                method: 'GET',
+                method:  'GET',
                 isArray: false
               }
             }
@@ -151,73 +157,99 @@ define(
           /**
            * get the client groups and the clients
            */
-          ClientGroups.prototype.query = function(only, routePara) {
+          ClientGroups.prototype.query = function (only, routePara)
+          {
             var deferred = $q.defer();
 
-            ClientGroups.query(function(cGroups) {
-              Storage.add('ClientGroups', angular.toJson(cGroups));
+            ClientGroups.query(
+              function (cGroups)
+              {
+                Storage.add('ClientGroups', angular.toJson(cGroups));
 
-              if(!only) {
-                var calls = [];
+                if (! only)
+                {
+                  var calls = [];
 
-                angular.forEach(cGroups, function(clientGroup, index) {
-                  if(routePara.uuid) {
-                    if(routePara.uuid == clientGroup.id) {
-                      calls.push(ClientGroups.prototype.get(clientGroup.id));
-                    }
-                  } else {
-                    calls.push(ClientGroups.prototype.get(clientGroup.id));
-                  }
-
-                });
-
-                $q.all(calls).then(function(results) {
-                  //                        Teams.prototype.uniqueMembers();
-
-                  var data = {};
-
-                  data.clients = {};
-
-                  angular.forEach(cGroups, function(cGroup, gindex) {
-                    data.clientGroups = cGroups;
-
-                    data.clients[cGroup.id] = [];
-
-                    angular.forEach(results, function(result, mindex) {
-                      if(routePara.uuid) {
-                        if(result.id == cGroup.id && routePara.uuid == cGroup.id) {
-                          data.clients[cGroup.id] = result.data;
-                        } else {
-                          data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
+                  angular.forEach(
+                    cGroups, function (clientGroup, index)
+                    {
+                      if (routePara.uuid)
+                      {
+                        if (routePara.uuid == clientGroup.id)
+                        {
+                          calls.push(ClientGroups.prototype.get(clientGroup.id));
                         }
-                      } else {
-                        if(result.id == cGroup.id) {
-                          data.clients[cGroup.id] = result.data;
-                        }
+                      }
+                      else
+                      {
+                        calls.push(ClientGroups.prototype.get(clientGroup.id));
                       }
 
                     });
+
+                  $q.all(calls).then(
+                    function (results)
+                    {
+                      //                        Teams.prototype.uniqueMembers();
+
+                      var data = {};
+
+                      data.clients = {};
+
+                      angular.forEach(
+                        cGroups, function (cGroup, gindex)
+                        {
+                          data.clientGroups = cGroups;
+
+                          data.clients[cGroup.id] = [];
+
+                          angular.forEach(
+                            results, function (result, mindex)
+                            {
+                              if (routePara.uuid)
+                              {
+                                if (result.id == cGroup.id && routePara.uuid == cGroup.id)
+                                {
+                                  data.clients[cGroup.id] = result.data;
+                                }
+                                else
+                                {
+                                  data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
+                                }
+                              }
+                              else
+                              {
+                                if (result.id == cGroup.id)
+                                {
+                                  data.clients[cGroup.id] = result.data;
+                                }
+                              }
+
+                            });
+                        });
+                      if (typeof data.clientGroups == 'undefined')
+                      {
+                        data.clientGroups = {};
+                      }
+
+                      deferred.resolve(data);
+                    });
+                }
+                else
+                {
+                  deferred.resolve(cGroups);
+                }
+
+              }, function (error)
+              {
+                console.log("Error" + error);
+                deferred.resolve(
+                  {
+                    error: error
                   });
-                  if( typeof data.clientGroups == 'undefined') {
-                    data.clientGroups = {};
-                  }
-
-                  deferred.resolve(data);
-                });
-              } else {
-                deferred.resolve(cGroups);
-              }
-
-            }, function(error) {
-              console.log("Error" + error);
-              deferred.resolve({
-                error : error
               });
-            });
             return deferred.promise;
           };
-
-
 
           /**
            * Get team data ( clients in the group)
@@ -227,7 +259,7 @@ define(
             var deferred = $q.defer();
 
             Clients_ByGroupId.get(
-              {clientGroupId : id},
+              {clientGroupId: id},
               function (result)
               {
                 /**
@@ -239,22 +271,24 @@ define(
                 var returned;
 
                 if (result.length == 4 &&
-                  result[0][0] == 'n' &&
-                  result[1][0] == 'u')
+                    result[0][0] == 'n' &&
+                    result[1][0] == 'u')
                 {
                   returned = [];
                 }
                 else
                 {
                   returned = result;
-                };
+                }
+                ;
 
                 Storage.add(id, angular.toJson(returned));
 
-                deferred.resolve({
-                  id: id,
-                  data: returned
-                });
+                deferred.resolve(
+                  {
+                    id:   id,
+                    data: returned
+                  });
               },
               function (error)
               {
@@ -268,16 +302,19 @@ define(
           /**
            * add new client group
            */
-          ClientGroups.prototype.saveGroup = function(group){
+          ClientGroups.prototype.saveGroup = function (group)
+          {
             var deferred = $q.defer();
 
             ClientGroup.save(
               group,
-              function(result){
+              function (result)
+              {
                 Storage.add(result.id, angular.toJson(result));
 
                 deferred.resolve(result);
-              },function(error){
+              }, function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -288,16 +325,19 @@ define(
           /**
            * add new client
            */
-          ClientGroups.prototype.save = function(client){
+          ClientGroups.prototype.save = function (client)
+          {
             var deferred = $q.defer();
 
             Client.save(
               client,
-              function(result){
+              function (result)
+              {
                 Storage.add(result.id, angular.toJson(result));
 
                 deferred.resolve(result);
-              },function(error){
+              }, function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -308,18 +348,21 @@ define(
           /**
            * update client group
            */
-          ClientGroups.prototype.edit = function(clientGroup){
+          ClientGroups.prototype.edit = function (clientGroup)
+          {
             var deferred = $q.defer();
 
             /**
              * Check if team id supplied
              * if save submitted from add / edit form
              */
-            if (clientGroup.id){
-              ClientGroup.edit({clientGroupId: clientGroup.id}, clientGroup, function (result)
-              {
-                deferred.resolve(result);
-              });
+            if (clientGroup.id)
+            {
+              ClientGroup.edit(
+                {clientGroupId: clientGroup.id}, clientGroup, function (result)
+                {
+                  deferred.resolve(result);
+                });
             }
 
             return deferred.promise;
@@ -328,15 +371,18 @@ define(
           /**
            * update client
            */
-          ClientGroups.prototype.updateClient = function(client){
+          ClientGroups.prototype.updateClient = function (client)
+          {
             var deferred = $q.defer();
 
             Client.edit(
               {clientId: client.uuid },
               client,
-              function(result){
+              function (result)
+              {
                 deferred.resolve(result);
-              },function(error){
+              }, function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -344,185 +390,221 @@ define(
             return deferred.promise;
           };
 
-
-
           /**
            * Add Member to a team
            */
-          ClientGroups.prototype.addClient = function(id, memberIds) {
+          ClientGroups.prototype.addClient = function (id, memberIds)
+          {
             var deferred = $q.defer();
-            Clients_ByGroupId.save({
-              clientGroupId : id
-            }, memberIds, function(result) {
-              deferred.resolve(result);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            Clients_ByGroupId.save(
+              {
+                clientGroupId: id
+              }, memberIds, function (result)
+              {
+                deferred.resolve(result);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
             return deferred.promise;
           };
-
-
-
 
           /**
            * Remove member from team
            */
-          ClientGroups.prototype.delClient = function(id, memberIds) {
+          ClientGroups.prototype.delClient = function (id, memberIds)
+          {
             var deferred = $q.defer();
 
-            ClientsRemove.remove({
-              clientGroupId : id
-            }, memberIds, function(result) {
-              deferred.resolve(result);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            ClientsRemove.remove(
+              {
+                clientGroupId: id
+              }, memberIds, function (result)
+              {
+                deferred.resolve(result);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
             return deferred.promise;
           };
 
-
           // private function
-          var getClientFromLocal = function(clientId){
+          var getClientFromLocal = function (clientId)
+          {
             var ret;
             var cGrps = angular.fromJson(Storage.get("ClientGroups"));
-            angular.forEach(cGrps,function(cGrp,i){
-              var clients = angular.fromJson(Storage.get(cGrp.id));
-              angular.forEach(clients,function(client,j){
-                if(client.uuid == clientId){
-                  ret = client;
-                }
+            angular.forEach(
+              cGrps, function (cGrp, i)
+              {
+                var clients = angular.fromJson(Storage.get(cGrp.id));
+                angular.forEach(
+                  clients, function (client, j)
+                  {
+                    if (client.uuid == clientId)
+                    {
+                      ret = client;
+                    }
+                  });
               });
-            });
             return ret;
           };
 
           /**
            * add or remove the clientfrom the client group
            */
-          ClientGroups.prototype.manage = function(changes) {
+          ClientGroups.prototype.manage = function (changes)
+          {
             var deferred = $q.defer();
 
             var calls = [];
 
-            angular.forEach(changes, function(change, clientGroupId) {
-              if(change.a.length > 0) {
-                calls.push(ClientGroups.prototype.addClient(clientGroupId, {
-                  ids : change.a
-                }));
-              }
-              if(change.r.length > 0) {
-                calls.push(ClientGroups.prototype.delClient(clientGroupId, {
-                  ids : change.r
-                }));
-              }
-            });
-
-            $q.all(calls).then(function(results) {
-              //                Teams.prototype.uniqueMembers();
-              var queryCalls = [];
-
-              var data = {};
-
-              var refreshGroups = [];
-              angular.forEach(changes, function(change, clientGroupId) {
-                // refresh the groups that used to have the client inside.
-                refreshGroups.add(clientGroupId);
-                if(change.a.length > 0){
-                  angular.forEach(change.a,function(clientId){
-                    var client = getClientFromLocal(clientId);
-                    if(typeof client != 'undefined' && refreshGroups.indexOf(client.clientGroupUuid) == -1){
-                      refreshGroups.add(client.clientGroupUuid);
-                      queryCalls.push(ClientGroups.prototype.get(client.clientGroupUuid));
-                    }
-                  });
+            angular.forEach(
+              changes, function (change, clientGroupId)
+              {
+                if (change.a.length > 0)
+                {
+                  calls.push(
+                    ClientGroups.prototype.addClient(
+                      clientGroupId, {
+                        ids: change.a
+                      }));
                 }
-
-                queryCalls.push(ClientGroups.prototype.get(clientGroupId));
+                if (change.r.length > 0)
+                {
+                  calls.push(
+                    ClientGroups.prototype.delClient(
+                      clientGroupId, {
+                        ids: change.r
+                      }));
+                }
               });
 
-              $q.all(queryCalls).then(function(results) {
-                deferred.resolve(data);
+            $q.all(calls).then(
+              function (results)
+              {
+                //                Teams.prototype.uniqueMembers();
+                var queryCalls = [];
+
+                var data = {};
+
+                var refreshGroups = [];
+                angular.forEach(
+                  changes, function (change, clientGroupId)
+                  {
+                    // refresh the groups that used to have the client inside.
+                    refreshGroups.add(clientGroupId);
+                    if (change.a.length > 0)
+                    {
+                      angular.forEach(
+                        change.a, function (clientId)
+                        {
+                          var client = getClientFromLocal(clientId);
+                          if (typeof client != 'undefined' && refreshGroups.indexOf(client.clientGroupUuid) == - 1)
+                          {
+                            refreshGroups.add(client.clientGroupUuid);
+                            queryCalls.push(ClientGroups.prototype.get(client.clientGroupUuid));
+                          }
+                        });
+                    }
+
+                    queryCalls.push(ClientGroups.prototype.get(clientGroupId));
+                  });
+
+                $q.all(queryCalls).then(
+                  function (results)
+                  {
+                    deferred.resolve(data);
+                  });
               });
-            });
             return deferred.promise;
           };
-
-
 
           /**
            * get all the clients , in or not in the client gourps
            */
-          ClientGroups.prototype.queryAll = function(changes) {
+          ClientGroups.prototype.queryAll = function (changes)
+          {
             var deferred = $q.defer();
 
-            Clients.query(function(clients) {
-              Storage.add('clients', angular.toJson(clients));
-              deferred.resolve(clients);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            Clients.query(
+              function (clients)
+              {
+                Storage.add('clients', angular.toJson(clients));
+                deferred.resolve(clients);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
-
-
 
           /**
            * get reports by the client id
            */
-          ClientGroups.prototype.queryReports = function(cId) {
+          ClientGroups.prototype.queryReports = function (cId)
+          {
             var deferred = $q.defer();
 
-            ClientReports.query({
-              clientId : cId
-            }, function(reports) {
-              Storage.add('reports_' + cId, angular.toJson(reports));
-              deferred.resolve(reports);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            ClientReports.query(
+              {
+                clientId: cId
+              }, function (reports)
+              {
+                Storage.add('reports_' + cId, angular.toJson(reports));
+                deferred.resolve(reports);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
             return deferred.promise;
           };
-
-
-
 
           /**
            * try  to preload the image from here, that ng-src can use the cache.
            */
-          ClientGroups.prototype.loadImg = function(imgURL) {
+          ClientGroups.prototype.loadImg = function (imgURL)
+          {
 
-            var LoadImg = $resource(imgURL, {
-            }, {
-              get : {
-                method : 'GET',
-              }
-            });
+            var LoadImg = $resource(
+              imgURL, {
+              }, {
+                get: {
+                  method: 'GET',
+                }
+              });
 
             var deferred = $q.defer();
 
-            LoadImg.get(function(result) {
-              deferred.resolve(result);
-            }, function(error) {
-              deferred.resolve(error);
-            });
+            LoadImg.get(
+              function (result)
+              {
+                deferred.resolve(result);
+              }, function (error)
+              {
+                deferred.resolve(error);
+              });
             return deferred.promise;
           };
-
-
 
           /**
            * get client groups and clients from local storage
            */
-          ClientGroups.prototype.queryLocal = function() {
+          ClientGroups.prototype.queryLocal = function ()
+          {
             var deferred = $q.defer();
 
             var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
@@ -531,10 +613,12 @@ define(
             data.clientGroups = clientGroups_local;
 
             data.clients = {};
-            angular.forEach(clientGroups_local, function(clientGroup, i) {
-              var clients = angular.fromJson(Storage.get(clientGroup.id));
-              data.clients[clientGroup.id] = clients;
-            });
+            angular.forEach(
+              clientGroups_local, function (clientGroup, i)
+              {
+                var clients = angular.fromJson(Storage.get(clientGroup.id));
+                data.clients[clientGroup.id] = clients;
+              });
 
             deferred.resolve(data);
 
@@ -544,43 +628,52 @@ define(
           /**
            * get reports by the client group Id
            */
-          ClientGroups.prototype.queryGroupReports = function(cId) {
+          ClientGroups.prototype.queryGroupReports = function (cId)
+          {
             var deferred = $q.defer();
 
-            ClientGroupReports.query({
-              clientGroupId : cId
-            }, function(reports) {
-//				Storage.add('reports_' + cId, angular.toJson(reports));
+            ClientGroupReports.query(
+              {
+                clientGroupId: cId
+              }, function (reports)
+              {
+                //				Storage.add('reports_' + cId, angular.toJson(reports));
 
-              deferred.resolve(reports);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+                deferred.resolve(reports);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
 
-
           /**
            * get  the client group for specific team
            */
-          ClientGroups.prototype.getClientTasks = function(id, start, end) {
+          ClientGroups.prototype.getClientTasks = function (id, start, end)
+          {
             var deferred = $q.defer();
 
-            GroupTasks.query({
-              clientGroupId : id,
-              from : start,
-              to : end
-            }, function(result) {
+            GroupTasks.query(
+              {
+                clientGroupId: id,
+                from:          start,
+                to:            end
+              }, function (result)
+              {
 
-              deferred.resolve(result);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+                deferred.resolve(result);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
@@ -588,95 +681,118 @@ define(
           /**
            * delete the client group
            */
-          ClientGroups.prototype.deleteClientGroup = function(id){
+          ClientGroups.prototype.deleteClientGroup = function (id)
+          {
             var deferred = $q.defer();
 
-            ClientGroup.del({
-              clientGroupId : id
-            }, function(result) {
-              var rs = angular.fromJson(result)
-              deferred.resolve(rs);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            ClientGroup.del(
+              {
+                clientGroupId: id
+              }, function (result)
+              {
+                var rs = angular.fromJson(result)
+                deferred.resolve(rs);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           }
 
-          ClientGroups.prototype.deleteClient = function(id){
+          ClientGroups.prototype.deleteClient = function (id)
+          {
             var deferred = $q.defer();
 
-            Client.del({
-              clientId : id
-            }, function(result) {
-              var rs = angular.fromJson(result)
-              deferred.resolve(rs);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            Client.del(
+              {
+                clientId: id
+              }, function (result)
+              {
+                var rs = angular.fromJson(result)
+                deferred.resolve(rs);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
 
           // add or edit report
-          ClientGroups.prototype.saveReport = function(id,report){
+          ClientGroups.prototype.saveReport = function (id, report)
+          {
             var deferred = $q.defer();
 
-            ClientReport.save({
-              clientId : id
-            }, report,function(result) {
-              var rs = angular.fromJson(result)
-              deferred.resolve(rs);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            ClientReport.save(
+              {
+                clientId: id
+              }, report, function (result)
+              {
+                var rs = angular.fromJson(result)
+                deferred.resolve(rs);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
 
           // remove the report
-          ClientGroups.prototype.removeReport = function(cId,rId){
+          ClientGroups.prototype.removeReport = function (cId, rId)
+          {
             var deferred = $q.defer();
-            ClientReport.remove({
-              clientId : cId,
-              reportId : rId
-            },function(result){
-              var rs = angular.fromJson(result)
-              deferred.resolve(rs);
-            },function(error){
-              deferred.resolve({
-                error : error
+            ClientReport.remove(
+              {
+                clientId: cId,
+                reportId: rId
+              }, function (result)
+              {
+                var rs = angular.fromJson(result)
+                deferred.resolve(rs);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
 
             return deferred.promise;
           };
-
 
           /**
            * get the upload URL
            */
-          ClientGroups.prototype.loadUploadURL = function(id) {
+          ClientGroups.prototype.loadUploadURL = function (id)
+          {
             var deferred = $q.defer();
 
-            ClientImg.getURL({
-              clientId : id
-            }, function(result) {
-              deferred.resolve(result);
-            }, function(error) {
-              deferred.resolve({
-                error : error
+            ClientImg.getURL(
+              {
+                clientId: id
+              }, function (result)
+              {
+                deferred.resolve(result);
+              }, function (error)
+              {
+                deferred.resolve(
+                  {
+                    error: error
+                  });
               });
-            });
             return deferred.promise;
           };
-
 
           return new ClientGroups;
         }
@@ -687,9 +803,6 @@ define(
 
 
       ]);
-
-
-
 
   }
 );

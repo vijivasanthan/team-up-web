@@ -4,77 +4,70 @@ define(
   {
     'use strict';
 
-
-
-    services.factory('User',
+    services.factory(
+      'User',
       [
         '$resource', '$q', '$location', 'Storage', '$rootScope',
         function ($resource, $q, $location, Storage, $rootScope)
         {
           var self = this;
 
-
           var User = $resource();
 
-
           var Login = $resource(
-              config.app.host + config.app.namespace+'/login',
-            {
-            },
-            {
-              process: {
-                method: 'GET',
-//	        params: {username:'', passwordHash:''}
-                params: {uuid:'', pass:''}
+              config.app.host + config.app.namespace + '/login',
+              {
+              },
+              {
+                process: {
+                  method: 'GET',
+                  //	        params: {username:'', passwordHash:''}
+                  params: {uuid: '', pass: ''}
+                }
               }
-            }
           );
-
 
           var Logout = $resource(
               config.app.host + 'logout',
-            {
-            },
-            {
-              process: {
-                method: 'GET',
-                params: {},
-                isArray: true
+              {
+              },
+              {
+                process: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
               }
-            }
           );
-
 
           var MemberInfo = $resource(
               config.app.host + config.app.namespace + '/team/member',
-            {
-            },
-            {
-              get: {
-                method: 'GET',
-                params: {}
+              {
+              },
+              {
+                get: {
+                  method: 'GET',
+                  params: {}
+                }
               }
-            }
           );
-
 
           var Reset = $resource(
               config.app.host + '/passwordReset',
-            {
-            },
-            {
-              password: {
-                method: 'GET',
-                params: {uuid: '', path:''}
+              {
+              },
+              {
+                password: {
+                  method: 'GET',
+                  params: {uuid: '', path: ''}
+                }
               }
-            }
           );
 
           // var changePassword = $resource(config.app.host+'/passwordReset',
           //   {uuid: uuid,
           //    pass: newpass,
           //    key: key});
-
 
           /**
            * TODO
@@ -100,7 +93,8 @@ define(
                 else
                 {
                   deferred.resolve(result);
-                };
+                }
+                ;
               },
               function (error)
               {
@@ -111,7 +105,6 @@ define(
             return deferred.promise;
           };
 
-
           /**
            * User login
            */
@@ -119,7 +112,8 @@ define(
           {
             var deferred = $q.defer();
 
-            Login.process({uuid : username , pass : passwordHash },
+            Login.process(
+              {uuid: username, pass: passwordHash },
               function (result)
               {
                 if (angular.equals(result, []))
@@ -129,7 +123,8 @@ define(
                 else
                 {
                   deferred.resolve(result);
-                };
+                }
+                ;
               },
               function (error)
               {
@@ -139,7 +134,6 @@ define(
 
             return deferred.promise;
           };
-
 
           /**
            * RE-FACTORY
@@ -166,7 +160,6 @@ define(
             return deferred.promise;
           }
 
-
           /**
            * User logout
            */
@@ -174,7 +167,8 @@ define(
           {
             var deferred = $q.defer();
 
-            Logout.process(null,
+            Logout.process(
+              null,
               function (result)
               {
                 deferred.resolve(result);
@@ -188,7 +182,6 @@ define(
             return deferred.promise;
           };
 
-
           /**
            * Get user resources
            */
@@ -196,7 +189,8 @@ define(
           {
             var deferred = $q.defer();
 
-            MemberInfo.get(null,
+            MemberInfo.get(
+              null,
               function (result)
               {
                 if (angular.equals(result, []))
@@ -222,9 +216,6 @@ define(
           return new User;
         }
       ]);
-
-
-
 
   }
 );

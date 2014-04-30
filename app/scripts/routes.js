@@ -11,23 +11,26 @@ define(
         {
           $routeProvider
 
-            .when('/login',
+            .when(
+            '/login',
             {
               templateUrl: 'views/login.html',
-              controller: 'login'
+              controller:  'login'
             })
 
-            .when('/logout',
+            .when(
+            '/logout',
             {
               templateUrl: 'views/logout.html',
-              controller: 'logout'
+              controller:  'logout'
             })
 
-            .when('/team',
+            .when(
+            '/team',
             {
-              templateUrl: 'views/teams.html',
-              controller: 'teamCtrl',
-              resolve: {
+              templateUrl:    'views/teams.html',
+              controller:     'teamCtrl',
+              resolve:        {
                 data: [
                   'Teams', '$route',
                   function (Teams, $route)
@@ -38,7 +41,7 @@ define(
                     }
                     else
                     {
-                      return Teams.query(false,$route.current.params);
+                      return Teams.query(false, $route.current.params);
                     }
                   }
                 ]
@@ -46,11 +49,12 @@ define(
               reloadOnSearch: false
             })
 
-            .when('/client',
+            .when(
+            '/client',
             {
-              templateUrl: 'views/clients.html',
-              controller: 'clientCtrl',
-              resolve: {
+              templateUrl:    'views/clients.html',
+              controller:     'clientCtrl',
+              resolve:        {
                 data: [
                   'Clients', '$route',
                   function (ClientGroups, $route)
@@ -61,7 +65,7 @@ define(
                     }
                     else
                     {
-                      return ClientGroups.query(false,$route.current.params);
+                      return ClientGroups.query(false, $route.current.params);
                     }
                   }
                 ]
@@ -69,11 +73,12 @@ define(
               reloadOnSearch: false
             })
 
-            .when('/clientProfile/:clientId',
+            .when(
+            '/clientProfile/:clientId',
             {
-              templateUrl: 'views/clients.html',
-              controller: 'clientCtrl',
-              resolve: {
+              templateUrl:    'views/clients.html',
+              controller:     'clientCtrl',
+              resolve:        {
                 data: [
                   '$rootScope', '$route',
                   function ($rootScope, $route)
@@ -87,11 +92,12 @@ define(
               reloadOnSearch: false
             })
 
-            .when('/manage',
+            .when(
+            '/manage',
             {
-              templateUrl: 'views/manage.html',
-              controller: 'manageCtrl',
-              resolve: {
+              templateUrl:    'views/manage.html',
+              controller:     'manageCtrl',
+              resolve:        {
                 data: [
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
@@ -103,7 +109,7 @@ define(
                       var teams = Teams.query();
                       var cGroups = ClientGroups.query();
                       ret = {
-                        t: teams,
+                        t:  teams,
                         cg: cGroups
                       };
                     }
@@ -119,25 +125,28 @@ define(
               reloadOnSearch: false
             })
 
-            .when('/planboard',
+            .when(
+            '/planboard',
             {
-              templateUrl: 'views/planboard.html',
-              controller: 'planboard',
+              templateUrl:    'views/planboard.html',
+              controller:     'planboard',
               reloadOnSearch: false
             })
 
-            .when('/messages',
+            .when(
+            '/messages',
             {
-              templateUrl: 'views/messages.html',
-              controller: 'messages',
+              templateUrl:    'views/messages.html',
+              controller:     'messages',
               reloadOnSearch: false
             })
 
-            .when('/profile/:userId',
+            .when(
+            '/profile/:userId',
             {
-              templateUrl: 'views/profile.html',
-              controller: 'profileCtrl',
-              resolve: {
+              templateUrl:    'views/profile.html',
+              controller:     'profileCtrl',
+              resolve:        {
                 data: [
                   '$rootScope', 'Profile', '$route',
                   function ($rootScope, Profile, $route)
@@ -149,23 +158,27 @@ define(
               reloadOnSearch: false
             })
 
-            .when('/profile',
+            .when(
+            '/profile',
             {
               templateUrl: 'views/profile.html',
-              controller: 'profileCtrl',
-              resolve: {
+              controller:  'profileCtrl',
+              resolve:     {
                 data: [
                   '$rootScope', '$route', '$location',
                   function ($rootScope, $route, $location)
                   {
-                    if (!$route.current.params.userId || !$location.hash())
+                    if (! $route.current.params.userId || ! $location.hash())
+                    {
                       $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
+                    }
                   }
                 ]
               }
             })
 
-            .otherwise({
+            .otherwise(
+            {
               redirectTo: '/login'
             });
 

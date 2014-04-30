@@ -16,7 +16,8 @@ define(
   ],
   function (angular)
   {
-    return angular.module('TeamUp',
+    return angular.module(
+      'TeamUp',
       [
         'controllers',
         'services',

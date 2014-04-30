@@ -1,5 +1,4 @@
 define ['services/services'], (services) ->
-
   'use strict'
 
   # TODOS
@@ -12,7 +11,6 @@ define ['services/services'], (services) ->
     '$log'
     '$parse'
     ($window, $log, $parse) ->
-
       return (name, config) ->
 
         # Get entry by ID
@@ -36,7 +34,7 @@ define ['services/services'], (services) ->
           else
             collection[key] = data
           update =
-            key: key
+            key:   key
             value: transformSave(collection[key])
           try
             LawnChair ->
@@ -123,11 +121,11 @@ define ['services/services'], (services) ->
         # Create Store object
         Store =
 
-          # Pass the collection
+        # Pass the collection
           collection: collection
 
-          # Save a record
-          save: (data, key, clear) ->
+        # Save a record
+          save:       (data, key, clear) ->
             unless data
               data = collection # if nothing is set save the current cache
               key = null
@@ -149,8 +147,8 @@ define ['services/services'], (services) ->
             updateArray collection if isArray
             return
 
-          # Batch treat records
-          batch: (keys, target, callback) ->
+        # Batch treat records
+          batch:      (keys, target, callback) ->
             cache = _.chain(keys).map((k) ->
               getDefault k
             ).value()
@@ -173,8 +171,8 @@ define ['services/services'], (services) ->
               return
             target
 
-          # Get record(s)
-          get: (key, callback) ->
+        # Get record(s)
+          get:        (key, callback) ->
             value = getDefault(key)
             LawnChair ->
               @get key, (result) ->
@@ -184,21 +182,21 @@ define ['services/services'], (services) ->
               return
             value
 
-          # Treat all
-          all: (if isArray then allAsArray else allAsCollection)
+        # Treat all
+          all:        (if isArray then allAsArray else allAsCollection)
 
-          # Remove a record
-          remove: removeEntry
+        # Remove a record
+          remove:     removeEntry
 
-          # Nuke localStorage
-          nuke: ->
+        # Nuke localStorage
+          nuke:       ->
             LawnChair ->
               @nuke()
               return
             return
 
-          # Destroy a collection
-          destroy: ->
+        # Destroy a collection
+          destroy:    ->
             for key of collection
               delete collection[key]
             LawnChair ->

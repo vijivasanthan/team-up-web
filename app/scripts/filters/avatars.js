@@ -4,23 +4,25 @@ define(
   {
     'use strict';
 
-    filters.filter('escape',
+    filters.filter(
+      'escape',
       [
         function ()
         {
           return function (string)
           {
-            if (!string || string.indexOf(".") == -1)
+            if (! string || string.indexOf(".") == - 1)
             {
               return string;
             }
 
-            return string.replace(".","").replace("@","");
+            return string.replace(".", "").replace("@", "");
           }
         }
       ]);
 
-    filters.filter('stateColor',
+    filters.filter(
+      'stateColor',
       [
         function ()
         {
@@ -28,32 +30,40 @@ define(
           {
             var ret = config.stateColors.none;
 
-            angular.forEach(states, function (state, index)
-            {
-              /**
-               *    WORKING
-               *    OFFLINE
-               *    AVAILABLE
-               *    UNAVAILABLE
-               *    UNKNOWN
-               */
-              if(angular.lowercase(state.name) == "availability" && state.share){
-                if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
-                  ret = config.app.stateColors.availalbe;
-                }else if(angular.lowercase(state.value) == "unavailable"){
-                  ret = config.app.stateColors.busy;
-                }else if(angular.lowercase(state.value) == "offline"){
-                  ret = config.app.stateColors.offline;
+            angular.forEach(
+              states, function (state, index)
+              {
+                /**
+                 *    WORKING
+                 *    OFFLINE
+                 *    AVAILABLE
+                 *    UNAVAILABLE
+                 *    UNKNOWN
+                 */
+                if (angular.lowercase(state.name) == "availability" && state.share)
+                {
+                  if (angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working")
+                  {
+                    ret = config.app.stateColors.availalbe;
+                  }
+                  else if (angular.lowercase(state.value) == "unavailable")
+                  {
+                    ret = config.app.stateColors.busy;
+                  }
+                  else if (angular.lowercase(state.value) == "offline")
+                  {
+                    ret = config.app.stateColors.offline;
+                  }
                 }
-              }
-            });
+              });
 
             return ret;
           }
         }
       ]);
 
-    filters.filter('nicelyDate',
+    filters.filter(
+      'nicelyDate',
       [
         '$rootScope',
         function ($rootScope)
@@ -75,7 +85,8 @@ define(
         }
       ]);
 
-    filters.filter('nicelyTime',
+    filters.filter(
+      'nicelyTime',
       [
         '$rootScope',
         function ($rootScope)
@@ -89,7 +100,8 @@ define(
         }
       ]);
 
-    filters.filter('translatePackage',
+    filters.filter(
+      'translatePackage',
       [
         function ()
         {
@@ -99,10 +111,11 @@ define(
             {
               var gem;
 
-              angular.forEach(config.app.packages, function (pack)
-              {
-                if (pack.id == selected) gem = pack;
-              });
+              angular.forEach(
+                config.app.packages, function (pack)
+                {
+                  if (pack.id == selected) gem = pack;
+                });
 
               return gem.label;
             }
@@ -110,7 +123,8 @@ define(
         }
       ]);
 
-    filters.filter('translateCountry',
+    filters.filter(
+      'translateCountry',
       [
         function ()
         {
@@ -120,10 +134,11 @@ define(
             {
               var gem;
 
-              angular.forEach(config.app.countries, function (country)
-              {
-                if (country.id == selected) gem = country;
-              });
+              angular.forEach(
+                config.app.countries, function (country)
+                {
+                  if (country.id == selected) gem = country;
+                });
 
               return gem.label;
             }
@@ -131,7 +146,8 @@ define(
         }
       ]);
 
-    filters.filter('translateRegion',
+    filters.filter(
+      'translateRegion',
       [
         function ()
         {
@@ -141,10 +157,11 @@ define(
             {
               var gem;
 
-              angular.forEach(config.app.regions[country], function (region)
-              {
-                if (region.id == selected) gem = region;
-              });
+              angular.forEach(
+                config.app.regions[country], function (region)
+                {
+                  if (region.id == selected) gem = region;
+                });
 
               return gem.label;
             }
@@ -152,7 +169,8 @@ define(
         }
       ]);
 
-    filters.filter('translateService',
+    filters.filter(
+      'translateService',
       [
         function ()
         {
@@ -162,10 +180,11 @@ define(
             {
               var gem;
 
-              angular.forEach(config.app.virtuals, function (virtual)
-              {
-                if (virtual.id == selected) gem = virtual;
-              });
+              angular.forEach(
+                config.app.virtuals, function (virtual)
+                {
+                  if (virtual.id == selected) gem = virtual;
+                });
 
               return gem.label;
             }
@@ -173,7 +192,8 @@ define(
         }
       ]);
 
-    filters.filter('translateRole',
+    filters.filter(
+      'translateRole',
       [
         function ()
         {
@@ -181,17 +201,19 @@ define(
           {
             var urole;
 
-            angular.forEach(config.app.roles, function (prole)
-            {
-              if (prole.id == role) urole = prole.label;
-            });
+            angular.forEach(
+              config.app.roles, function (prole)
+              {
+                if (prole.id == role) urole = prole.label;
+              });
 
             return urole;
           }
         }
       ]);
 
-    filters.filter('translateFunc',
+    filters.filter(
+      'translateFunc',
       [
         function ()
         {
@@ -199,40 +221,49 @@ define(
           {
             var ufunc;
 
-            angular.forEach(config.app.mfunctions, function (pfunc)
-            {
-              if (pfunc.id == func) ufunc = pfunc.label;
-            });
+            angular.forEach(
+              config.app.mfunctions, function (pfunc)
+              {
+                if (pfunc.id == func) ufunc = pfunc.label;
+              });
 
             return ufunc;
           }
         }
       ]);
 
-    filters.filter('stateDataIcon',
+    filters.filter(
+      'stateDataIcon',
       [
         function ()
         {
-          return function (name,type){
+          return function (name, type)
+          {
             var ret;
 
-            angular.forEach(config.app.stateIcons, function (stateIcon, index)
-            {
-              if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
-                if(type == "data_icon"){
-                  ret = stateIcon.data_icon;
-                }else if(type == "class_name"){
-                  ret = stateIcon.class_name;
+            angular.forEach(
+              config.app.stateIcons, function (stateIcon, index)
+              {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name))
+                {
+                  if (type == "data_icon")
+                  {
+                    ret = stateIcon.data_icon;
+                  }
+                  else if (type == "class_name")
+                  {
+                    ret = stateIcon.class_name;
+                  }
                 }
-              }
-            });
+              });
 
             return ret;
           }
         }
       ]);
 
-    filters.filter('___stateColor',
+    filters.filter(
+      '___stateColor',
       [
         function ()
         {
@@ -240,56 +271,77 @@ define(
           {
             var ret = config.app.stateColors.none;
 
-            angular.forEach(states, function (state, index){
-              /**
-               *    WORKING
-               *    OFFLINE
-               *    AVAILABLE
-               *    UNAVAILABLE
-               *    UNKNOWN
-               */
-              if(angular.lowercase(state.name) == "availability" && state.share){
-                if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
-                  ret = config.app.stateColors.availalbe;
-                }else if(angular.lowercase(state.value) == "unavailable"){
-                  ret = config.app.stateColors.busy;
-                }else if(angular.lowercase(state.value) == "offline"){
-                  ret = config.app.stateColors.offline;
+            angular.forEach(
+              states, function (state, index)
+              {
+                /**
+                 *    WORKING
+                 *    OFFLINE
+                 *    AVAILABLE
+                 *    UNAVAILABLE
+                 *    UNKNOWN
+                 */
+                if (angular.lowercase(state.name) == "availability" && state.share)
+                {
+                  if (angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working")
+                  {
+                    ret = config.app.stateColors.availalbe;
+                  }
+                  else if (angular.lowercase(state.value) == "unavailable")
+                  {
+                    ret = config.app.stateColors.busy;
+                  }
+                  else if (angular.lowercase(state.value) == "offline")
+                  {
+                    ret = config.app.stateColors.offline;
+                  }
                 }
-              }
-            });
+              });
 
             return ret;
           }
         }
       ]);
 
-    filters.filter('stateValue',
+    filters.filter(
+      'stateValue',
       [
-        function (){
-          return function (state,type){
-            if(angular.lowercase(state.name) == "location"){
+        function ()
+        {
+          return function (state, type)
+          {
+            if (angular.lowercase(state.name) == "location")
+            {
               var value = state.value;
               var match = value.match(/\((.*?)\)/);
-              if(match == null){
+              if (match == null)
+              {
                 return value;
-              }else{
+              }
+              else
+              {
                 var ll = match[1];
-                value = value.replace(match[0],"");
-                if(type == "data"){
+                value = value.replace(match[0], "");
+                if (type == "data")
+                {
                   return ll;
-                }else{
+                }
+                else
+                {
                   return value;
                 }
               }
-            }else{
+            }
+            else
+            {
               return state.value;
             }
           }
         }
       ]);
 
-    filters.filter('rangeMainFilter',
+    filters.filter(
+      'rangeMainFilter',
       [
         'Dater', 'Storage',
         function (Dater, Storage)
@@ -300,49 +352,56 @@ define(
           {
             // console.log('dates ->', dates);
 
-            if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
-              dates.start = new Date(dates.end).addDays(-1);
+            if ((
+                  new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
+            {
+              dates.start = new Date(dates.end).addDays(- 1);
+            }
 
             var dates = {
-                start: {
-                  real: 	new Date(dates.start).toString('dddd, MMMM d'),
-                  month: 	new Date(dates.start).toString('MMMM'),
-                  day: 		new Date(dates.start).toString('d')
+                  start: {
+                    real:  new Date(dates.start).toString('dddd, MMMM d'),
+                    month: new Date(dates.start).toString('MMMM'),
+                    day:   new Date(dates.start).toString('d')
+                  },
+                  end:   {
+                    real:  new Date(dates.end).toString('dddd, MMMM d'),
+                    month: new Date(dates.end).toString('MMMM'),
+                    day:   new Date(dates.end).toString('d')
+                  }
                 },
-                end: {
-                  real: 	new Date(dates.end).toString('dddd, MMMM d'),
-                  month: 	new Date(dates.end).toString('MMMM'),
-                  day: 		new Date(dates.end).toString('d')
-                }
-              },
-              monthNumber = Date.getMonthNumberFromName(dates.start.month);
+                monthNumber = Date.getMonthNumberFromName(dates.start.month);
 
-            if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
+            if ((
+                  (
+                    (
+                      Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) || dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
             {
-              return 	dates.start.real +
-                ', ' +
-                Dater.getThisYear();
+              return  dates.start.real +
+                      ', ' +
+                      Dater.getThisYear();
             }
-            else if(dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
+            else if (dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
             {
-              return 	dates.start.month +
-                ', ' +
-                Dater.getThisYear();
+              return  dates.start.month +
+                      ', ' +
+                      Dater.getThisYear();
             }
             else
             {
-              return 	dates.start.real +
-                ' / ' +
-                dates.end.real +
-                ', ' +
-                Dater.getThisYear();
+              return  dates.start.real +
+                      ' / ' +
+                      dates.end.real +
+                      ', ' +
+                      Dater.getThisYear();
             }
 
           }
         }
       ]);
 
-    filters.filter('rangeMainWeekFilter',
+    filters.filter(
+      'rangeMainWeekFilter',
       [
         'Dater', 'Storage',
         function (Dater, Storage)
@@ -354,21 +413,22 @@ define(
             if (dates)
             {
               var dates = {
-                start: 	new Date(dates.start).toString('dddd, MMMM d'),
-                end: 		new Date(dates.end).toString('dddd, MMMM d')
+                start: new Date(dates.start).toString('dddd, MMMM d'),
+                end:   new Date(dates.end).toString('dddd, MMMM d')
               };
 
-              return 	dates.start +
-                ' / ' +
-                dates.end +
-                ', ' +
-                Dater.getThisYear();
+              return  dates.start +
+                      ' / ' +
+                      dates.end +
+                      ', ' +
+                      Dater.getThisYear();
             }
           }
         }
       ]);
 
-    filters.filter('rangeInfoFilter',
+    filters.filter(
+      'rangeInfoFilter',
       [
         'Dater', 'Storage',
         function (Dater, Storage)
@@ -379,7 +439,8 @@ define(
           {
             var diff = new Date(timeline.range.end).getTime() - new Date(timeline.range.start).getTime();
 
-            if (diff > (2419200000 + 259200000))
+            if (diff > (
+              2419200000 + 259200000))
             {
               return 'Total selected days: ' + Math.round(diff / 86400000);
             }
@@ -389,7 +450,7 @@ define(
               {
                 var hours = {
                   start: new Date(timeline.range.start).toString('HH:mm'),
-                  end: new Date(timeline.range.end).toString('HH:mm')
+                  end:   new Date(timeline.range.end).toString('HH:mm')
                 };
 
                 /**
@@ -397,29 +458,30 @@ define(
                  */
                 if (hours.end == '00:00') hours.end = '24:00';
 
-                return 	'Time: ' +
-                  hours.start +
-                  ' / ' +
-                  hours.end;
+                return  'Time: ' +
+                        hours.start +
+                        ' / ' +
+                        hours.end;
               }
               else if (timeline.scope.week)
               {
-                return 	'Week number: ' +
-                  timeline.current.week;
+                return  'Week number: ' +
+                        timeline.current.week;
               }
               else if (timeline.scope.month)
               {
-                return 	'Month number: ' +
-                  timeline.current.month +
-                  ', Total days: ' +
-                  periods.months[timeline.current.month].totalDays;
+                return  'Month number: ' +
+                        timeline.current.month +
+                        ', Total days: ' +
+                        periods.months[timeline.current.month].totalDays;
               }
             }
           };
         }
       ]);
 
-    filters.filter('rangeInfoWeekFilter',
+    filters.filter(
+      'rangeInfoWeekFilter',
       [
         'Dater', 'Storage',
         function (Dater, Storage)
@@ -433,7 +495,8 @@ define(
         }
       ]);
 
-    filters.filter('___nicelyDate',
+    filters.filter(
+      '___nicelyDate',
       [
         '$rootScope',
         function ($rootScope)
@@ -455,7 +518,8 @@ define(
         }
       ]);
 
-    filters.filter('___nicelyTime',
+    filters.filter(
+      '___nicelyTime',
       [
         '$rootScope',
         function ($rootScope)
@@ -469,7 +533,8 @@ define(
         }
       ]);
 
-    filters.filter('i18n_spec',
+    filters.filter(
+      'i18n_spec',
       [
         '$rootScope',
         function ($rootScope)
@@ -477,20 +542,24 @@ define(
           return function (string, type)
           {
             var types = type.split("."),
-              ret 	= $rootScope.ui[types[0]][types[1]],
-              ret 	= ret.replace('$v',string);
+                ret = $rootScope.ui[types[0]][types[1]],
+                ret = ret.replace('$v', string);
 
             return ret;
           }
         }
       ]);
 
-    filters.filter('stateIcon',
+    filters.filter(
+      'stateIcon',
       [
         '$rootScope',
-        function ($rootScope){
-          return function(state){
-            switch(state){
+        function ($rootScope)
+        {
+          return function (state)
+          {
+            switch (state)
+            {
               case 'emotion':
                 return "icon-face";
                 break;
@@ -513,17 +582,19 @@ define(
         }
       ]);
 
-    filters.filter('___escape',
+    filters.filter(
+      '___escape',
       [
         '$rootScope',
         function ($rootScope)
         {
           return function (string)
           {
-            if(!string || string.indexOf(".") == -1){
+            if (! string || string.indexOf(".") == - 1)
+            {
               return string;
             }
-            var ret = string.replace(".","").replace("@","");
+            var ret = string.replace(".", "").replace("@", "");
 
             return ret;
           }

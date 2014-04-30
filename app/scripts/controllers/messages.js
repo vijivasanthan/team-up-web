@@ -4,134 +4,157 @@ define(
   {
     'use strict';
 
-    controllers.controller('messagesCtrl',
+    controllers.controller(
+      'messagesCtrl',
       [
         '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage', '$filter', 'Teams',
-        function ($scope, $rootScope, $q, $location, $route, Messages, Storage , $filter, Teams)
+        function ($scope, $rootScope, $q, $location, $route, Messages, Storage, $filter, Teams)
         {
           $scope.messages = [];
 
           $scope.imgHost = profile.host();
           $scope.ns = profile.ns();
 
-          $scope.renderMessage = function(){
+          $scope.renderMessage = function ()
+          {
 
+            Messages.queryTeamMessage($scope.chatTeamId).then(
+              function (messages)
+              {
 
-            Messages.queryTeamMessage($scope.chatTeamId).then(function(messages){
-
-              if(messages.error){
-                $rootScope.notifier.error(messages.error.data);
-                return;
-              }
-
-              console.log(messages.length,$scope.messages.length);
-              if($scope.messages.length == messages.length){
-                console.log("No new messages.");
-                return;
-              }
-
-              $scope.messages = [];
-
-              var msgDates = {};
-              var chatMembers = [];
-              // sort the messages by sendTime
-//    			messages = $filter('orderBy')(messages,'sendTime','reverse');
-              messages = $filter('orderBy')(messages,'sendTime');
-
-              angular.forEach(messages,function(message, i){
-
-                var minDate = $filter('nicelyDate')(parseInt(message.sendTime));
-                if(i > 0 && minDate == $filter('nicelyDate')(parseInt(messages[i-1].sendTime))){
-                  minDate = '';
+                if (messages.error)
+                {
+                  $rootScope.notifier.error(messages.error.data);
+                  return;
                 }
 
-                var msg = {date : minDate,
-                  role : "",
-                  member : {},
-                  senderName : "",
-                  sendTime: parseInt(message.sendTime),
-                  body: message.body,
-                  msgRole : "",
-                  senderUuid : message.senderUuid
+                console.log(messages.length, $scope.messages.length);
+                if ($scope.messages.length == messages.length)
+                {
+                  console.log("No new messages.");
+                  return;
                 }
 
-                var member = $scope.$root.getTeamMemberById(message.senderUuid);
-                if(message.senderUuid == $scope.$root.app.resources.uuid){
-                  msg.role = "own";
-                  msg.msgRole = "messageOwn"
-                  msg.member = $scope.$root.app.resources;
-                  msg.senderName = msg.member.firstName+" "+msg.member.lastName;
-                }else{
-                  msg.role = "other";
-                  msg.msgRole = "messageOther"
-                  msg.member = member;
-                  msg.senderName = member.firstName+" "+member.lastName;
-                }
+                $scope.messages = [];
 
-                $scope.messages.push(msg);
+                var msgDates = {};
+                var chatMembers = [];
+                // sort the messages by sendTime
+                //    			messages = $filter('orderBy')(messages,'sendTime','reverse');
+                messages = $filter('orderBy')(messages, 'sendTime');
 
-                if(chatMembers.indexOf(message.senderUuid) == -1){
-                  chatMembers.push(message.senderUuid);
-                }
+                angular.forEach(
+                  messages, function (message, i)
+                  {
+
+                    var minDate = $filter('nicelyDate')(parseInt(message.sendTime));
+                    if (i > 0 && minDate == $filter('nicelyDate')(parseInt(messages[i - 1].sendTime)))
+                    {
+                      minDate = '';
+                    }
+
+                    var msg = {date: minDate,
+                      role:          "",
+                      member:        {},
+                      senderName:    "",
+                      sendTime:      parseInt(message.sendTime),
+                      body:          message.body,
+                      msgRole:       "",
+                      senderUuid:    message.senderUuid
+                    }
+
+                    var member = $scope.$root.getTeamMemberById(message.senderUuid);
+                    if (message.senderUuid == $scope.$root.app.resources.uuid)
+                    {
+                      msg.role = "own";
+                      msg.msgRole = "messageOwn"
+                      msg.member = $scope.$root.app.resources;
+                      msg.senderName = msg.member.firstName + " " + msg.member.lastName;
+                    }
+                    else
+                    {
+                      msg.role = "other";
+                      msg.msgRole = "messageOther"
+                      msg.member = member;
+                      msg.senderName = member.firstName + " " + member.lastName;
+                    }
+
+                    $scope.messages.push(msg);
+
+                    if (chatMembers.indexOf(message.senderUuid) == - 1)
+                    {
+                      chatMembers.push(message.senderUuid);
+                    }
+                  });
+
+                // load the avatar img
+                angular.forEach(
+                  chatMembers, function (mId, i)
+                  {
+                    console.log(mId);
+                    var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
+
+                    var imgId = mId.replace(".", "").replace("@", "");
+                    $('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+
+                    //                Teams
+                    //                  .loadImg(imgURL).
+                    //                  then(function(result)
+                    //                  {
+                    //                  // console.log("loading pic " + imgURL);
+                    //
+                    //                  var imgId = mId.replace(".","").replace("@","");
+                    //                  if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+                    //                    console.log("no pics " ,result);
+                    //                  }else{
+                    //                    var realImgURL = $scope.imgHost + result.path;
+                    //                    $('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
+                    //                  }
+                    //
+                    //                },function(error){
+                    //                  console.log("error when load pic " + error);
+                    //                });
+                  });
+
+                // scroll to the bottom of the chat window
+                setTimeout(
+                  function ()
+                  {
+                    $('#chat-content #messageField').focus();
+                    $('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
+                  }, 100);
+              }, function (error)
+              {
+                console.log(error);
               });
-
-              // load the avatar img
-              angular.forEach(chatMembers, function(mId,i){
-                console.log(mId);
-                var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+mId+"/photo";
-
-                var imgId = mId.replace(".","").replace("@","");
-                $('#chat-content #img_'+imgId).css('background-image','url('+imgURL+')');
-
-//                Teams
-//                  .loadImg(imgURL).
-//                  then(function(result)
-//                  {
-//                  // console.log("loading pic " + imgURL);
-//
-//                  var imgId = mId.replace(".","").replace("@","");
-//                  if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-//                    console.log("no pics " ,result);
-//                  }else{
-//                    var realImgURL = $scope.imgHost + result.path;
-//                    $('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
-//                  }
-//
-//                },function(error){
-//                  console.log("error when load pic " + error);
-//                });
-              });
-
-              // scroll to the bottom of the chat window
-              setTimeout(function () {
-                $('#chat-content #messageField').focus();
-                $('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
-              }, 100);
-            },function(error){
-              console.log(error);
-            });
           };
 
-          $scope.openChat = function(){
-            $scope.toggleChat = !$scope.toggleChat;
+          $scope.openChat = function ()
+          {
+            $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $scope.$root.app.resources.teamUuids;
-            if(teamIds && $scope.toggleChat){
+            if (teamIds && $scope.toggleChat)
+            {
               var teamId = teamIds[0];
               $scope.chatTeamId = teamId;
               $scope.renderMessage();
 
               // start auto check chat mesage
-              $scope.autoCheckMonitorId =  setInterval($scope.renderMessage,5000);
+              $scope.autoCheckMonitorId = setInterval($scope.renderMessage, 5000);
 
-            }else{
+            }
+            else
+            {
               // stop auto check chat mesage
               clearInterval($scope.autoCheckMonitorId);
             }
           };
 
-          $scope.sendMessage = function(newMessage){
-            if(typeof newMessage == "undefined" || newMessage == ""){
+          $scope.sendMessage = function (newMessage)
+          {
+            if (typeof newMessage == "undefined" || newMessage == "")
+            {
               $rootScope.notifier.error($rootScope.ui.message.emptyMessageBody);
               return;
             }
@@ -139,18 +162,21 @@ define(
 
             var current = new Date();
             var message = {title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
-              body: newMessage,
-              sendTime : current.getTime()};
+              body:     newMessage,
+              sendTime: current.getTime()};
             console.log(message);
-            Messages.sendTeamMessage(message).then(function(result){
-              $scope.renderMessage();
-              $rootScope.statusBar.off();
-              $scope.newMessage = "";
+            Messages.sendTeamMessage(message).then(
+              function (result)
+              {
+                $scope.renderMessage();
+                $rootScope.statusBar.off();
+                $scope.newMessage = "";
 
-            },function(error){
-              $rootScope.notifier.error(error);
-              $rootScope.statusBar.off();
-            });
+              }, function (error)
+              {
+                $rootScope.notifier.error(error);
+                $rootScope.statusBar.off();
+              });
 
           };
 
@@ -170,7 +196,6 @@ define(
            */
         }
       ]);
-
 
   }
 );

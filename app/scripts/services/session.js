@@ -4,9 +4,8 @@ define(
   {
     'use strict';
 
-
-
-    services.factory('Session',
+    services.factory(
+      'Session',
       [
         '$rootScope', '$http', 'Storage',
         function ($rootScope, $http, Storage)
@@ -16,7 +15,7 @@ define(
              * Check session
              */
 
-            check: function()
+            check: function ()
             {
               var session = angular.fromJson(Storage.cookie.get('session'));
 
@@ -35,12 +34,12 @@ define(
             /**
              * Read cookie value
              */
-            cookie: function(session)
+            cookie: function (session)
             {
               var values,
-                pairs = document.cookie.split(";");
+                  pairs = document.cookie.split(";");
 
-              for (var i=0; i < pairs.length; i++)
+              for (var i = 0; i < pairs.length; i ++)
               {
                 values = pairs[i].split("=");
 
@@ -53,7 +52,7 @@ define(
              * Get session
              * Prolong session time by every check
              */
-            get: function(session)
+            get: function (session)
             {
               this.check(session);
 
@@ -65,10 +64,10 @@ define(
             /**
              * Set session
              */
-            set: function(sessionId)
+            set: function (sessionId)
             {
               var session = {
-                id: sessionId,
+                id:   sessionId,
                 time: new Date()
               };
 
@@ -84,7 +83,7 @@ define(
             /**
              * Clear session
              */
-            clear: function()
+            clear: function ()
             {
               $rootScope.session = null;
 
@@ -93,9 +92,6 @@ define(
           }
         }
       ]);
-
-
-
 
   }
 );

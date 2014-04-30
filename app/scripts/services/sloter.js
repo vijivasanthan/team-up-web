@@ -4,9 +4,8 @@ define(
   {
     'use strict';
 
-
-
-    services.factory('Sloter',
+    services.factory(
+      'Sloter',
       [
         '$rootScope', 'Storage',
         function ($rootScope, Storage)
@@ -21,10 +20,11 @@ define(
               {
                 var groups = {};
 
-                angular.forEach(Storage.local.groups(), function (group, index)
-                {
-                  groups[group.uuid] = group.name;
-                });
+                angular.forEach(
+                  Storage.local.groups(), function (group, index)
+                  {
+                    groups[group.uuid] = group.name;
+                  });
 
                 return groups;
               },
@@ -33,10 +33,11 @@ define(
               {
                 var members = {};
 
-                angular.forEach(Storage.local.members(), function (member, index)
-                {
-                  members[member.uuid] = member.name;
-                });
+                angular.forEach(
+                  Storage.local.members(), function (member, index)
+                  {
+                    members[member.uuid] = member.name;
+                  });
 
                 return members;
               }
@@ -57,26 +58,29 @@ define(
              */
             addLoading: function (data, timedata, rows)
             {
-              angular.forEach(rows, function(row, index)
-              {
-                timedata.push({
-                  start:  data.periods.end,
-                  end:    1577836800000,
-                  group:  row,
-                  content:    'loading',
-                  className:  'state-loading-right',
-                  editable:   false
-                });
+              angular.forEach(
+                rows, function (row, index)
+                {
+                  timedata.push(
+                    {
+                      start:     data.periods.end,
+                      end:       1577836800000,
+                      group:     row,
+                      content:   'loading',
+                      className: 'state-loading-right',
+                      editable:  false
+                    });
 
-                timedata.push({
-                  start:  0,
-                  end:    data.periods.start,
-                  group:  row,
-                  content:    'loading',
-                  className:  'state-loading-left',
-                  editable:   false
+                  timedata.push(
+                    {
+                      start:     0,
+                      end:       data.periods.start,
+                      group:     row,
+                      content:   'loading',
+                      className: 'state-loading-left',
+                      editable:  false
+                    });
                 });
-              });
 
               return timedata;
             },
@@ -88,34 +92,42 @@ define(
             {
               var _this = this;
 
-              angular.forEach(data.user, function (slot, index)
-              {
-                angular.forEach(config.legenda, function (value, legenda)
+              angular.forEach(
+                data.user, function (slot, index)
                 {
-                  if (slot.text == legenda && value)
-                  {
-                    timedata.push({
-                      start:  Math.round(slot.start ),
-                      end:    Math.round(slot.end ),
-                      group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
-                        _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
-                      content:  _this.secret(angular.toJson({
-                        type:   'slot',
-                        id:     slot.id,
-                        recursive: slot.recursive,
-                        state:  slot.text
-                      })),
-                      className:  config.states[slot.text].className,
-                      editable:   true
+                  angular.forEach(
+                    config.legenda, function (value, legenda)
+                    {
+                      if (slot.text == legenda && value)
+                      {
+                        timedata.push(
+                          {
+                            start:     Math.round(slot.start),
+                            end:       Math.round(slot.end),
+                            group: (
+                                     slot.recursive) ? _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
+                                   _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
+                            content:   _this.secret(
+                              angular.toJson(
+                                {
+                                  type:      'slot',
+                                  id:        slot.id,
+                                  recursive: slot.recursive,
+                                  state:     slot.text
+                                })),
+                            className: config.states[slot.text].className,
+                            editable:  true
+                          });
+                      }
+                      ;
                     });
-                  };
                 });
-              });
 
-              timedata = _this.addLoading(data, timedata, [
-                  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
-                  _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning')
-              ]);
+              timedata = _this.addLoading(
+                data, timedata, [
+                    _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
+                    _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning')
+                ]);
 
               return timedata;
             },
@@ -129,49 +141,58 @@ define(
             profile: function (data, config)
             {
               var _this = this,
-                timedata = [];
+                  timedata = [];
 
-              angular.forEach(data, function (slot, index)
-              {
-                angular.forEach(config.legenda, function (value, legenda)
+              angular.forEach(
+                data, function (slot, index)
                 {
-                  if (slot.text == legenda && value)
-                  {
-                    timedata.push({
-                      start:  Math.round(slot.start ),
-                      end:    Math.round(slot.end ),
-                      group:  (slot.recursive) ?  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
-                        _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
-                      content: _this.secret(angular.toJson({
-                        type: 'slot',
-                        id:   slot.id,
-                        recursive:  slot.recursive,
-                        state:      slot.text
-                      })),
-                      className:  config.states[slot.text].className,
-                      editable:   true
+                  angular.forEach(
+                    config.legenda, function (value, legenda)
+                    {
+                      if (slot.text == legenda && value)
+                      {
+                        timedata.push(
+                          {
+                            start:     Math.round(slot.start),
+                            end:       Math.round(slot.end),
+                            group: (
+                                     slot.recursive) ? _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
+                                   _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
+                            content:   _this.secret(
+                              angular.toJson(
+                                {
+                                  type:      'slot',
+                                  id:        slot.id,
+                                  recursive: slot.recursive,
+                                  state:     slot.text
+                                })),
+                            className: config.states[slot.text].className,
+                            editable:  true
+                          });
+                      }
+                      ;
                     });
-                  };
                 });
-              });
 
-              timedata.push({
-                start:  0,
-                end:    1,
-                group:  _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
-                content:    '',
-                className:  null,
-                editable:   false
-              });
+              timedata.push(
+                {
+                  start:     0,
+                  end:       1,
+                  group: _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
+                  content:   '',
+                  className: null,
+                  editable:  false
+                });
 
-              timedata.push({
-                start:  0,
-                end:    1,
-                group:  _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
-                content:    '',
-                className:  null,
-                editable:   false
-              });
+              timedata.push(
+                {
+                  start:     0,
+                  end:       1,
+                  group: _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
+                  content:   '',
+                  className: null,
+                  editable:  false
+                });
 
               return timedata;
             },
@@ -181,29 +202,37 @@ define(
              */
             namer: function (data, divisions, privilage)
             {
-              var groups  = this.get.groups(),
-                name    = groups[data.aggs.id],
-                link    = '<a href="#/groups?uuid=' +
-                  data.aggs.id +
-                  '#view">' +
-                  name +
-                  '</a>',
-                title;
+              var groups = this.get.groups(),
+                  name = groups[data.aggs.id],
+                  link = '<a href="#/groups?uuid=' +
+                         data.aggs.id +
+                         '#view">' +
+                         name +
+                         '</a>',
+                  title;
 
               if (data.aggs.division == 'all' || data.aggs.division == undefined)
               {
-                title = (privilage == 1) ? link : '<span>' + name + '</span>';
+                title = (
+                          privilage == 1) ? link : '<span>' + name + '</span>';
               }
               else
               {
                 var label;
 
-                angular.forEach(divisions, function (division, index) { if (division.id == data.aggs.division) label = division.label; });
+                angular.forEach(
+                  divisions, function (
+                    division,
+                    index
+                    )
+                  { if (division.id == data.aggs.division) label = division.label; });
 
-                title = (privilage == 1) ? link : '<span>' + name + '</span>';
+                title = (
+                          privilage == 1) ? link : '<span>' + name + '</span>';
 
                 title += ' <span class="label">' + label + '</span>';
-              };
+              }
+              ;
 
               return title;
             },
@@ -214,110 +243,120 @@ define(
             bars: function (data, timedata, config, name)
             {
               var _this = this,
-                maxh = 0;
+                  maxh = 0;
 
               angular.forEach(data.aggs.data, function (slot, index) { if (slot.wish > maxh)  maxh = slot.wish; });
 
-              angular.forEach(data.aggs.data, function (slot, index)
-              {
-                var maxNum      = maxh,
-                  num         = slot.wish,
-                  xwish       = num,
-                  height      = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
-                  minHeight   = height,
-                  style       = 'height:' + height + 'px;',
-                  requirement = '<div class="requirement" style="' +
-                    style +
-                    '" ' +
-
-                    'title="'+'Minimum aantal benodigden'+': ' +
-
-                    num +
-                    ' personen"></div>';
-
-                num = slot.wish + slot.diff;
-
-                var xcurrent = num;
-
-                height = Math.round(num / maxNum * 80 + 20);
-
-                if (slot.diff >= 0 && slot.diff < 7)
+              angular.forEach(
+                data.aggs.data, function (slot, index)
                 {
-                  switch (slot.diff)
+                  var maxNum = maxh,
+                      num = slot.wish,
+                      xwish = num,
+                      height = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
+                      minHeight = height,
+                      style = 'height:' + height + 'px;',
+                      requirement = '<div class="requirement" style="' +
+                                    style +
+                                    '" ' +
+
+                                    'title="' + 'Minimum aantal benodigden' + ': ' +
+
+                                    num +
+                                    ' personen"></div>';
+
+                  num = slot.wish + slot.diff;
+
+                  var xcurrent = num;
+
+                  height = Math.round(num / maxNum * 80 + 20);
+
+                  if (slot.diff >= 0 && slot.diff < 7)
                   {
-                    case 0:
-                      var color = config.densities.even;
-                      break
-                    case 1:
-                      var color = config.densities.one;
-                      break;
-                    case 2:
-                      var color = config.densities.two;
-                      break;
-                    case 3:
-                      var color = config.densities.three;
-                      break;
-                    case 4:
-                      var color = config.densities.four;
-                      break;
-                    case 5:
-                      var color = config.densities.five;
-                      break;
-                    case 6:
-                      var color = config.densities.six;
-                      break;
+                    switch (slot.diff)
+                    {
+                      case 0:
+                        var color = config.densities.even;
+                        break
+                      case 1:
+                        var color = config.densities.one;
+                        break;
+                      case 2:
+                        var color = config.densities.two;
+                        break;
+                      case 3:
+                        var color = config.densities.three;
+                        break;
+                      case 4:
+                        var color = config.densities.four;
+                        break;
+                      case 5:
+                        var color = config.densities.five;
+                        break;
+                      case 6:
+                        var color = config.densities.six;
+                        break;
+                    }
                   }
-                }
-                else if (slot.diff >= 7)
-                {
-                  var color = config.densities.more;
-                }
-                else
-                {
-                  var color = config.densities.less;
-                };
+                  else if (slot.diff >= 7)
+                  {
+                    var color = config.densities.more;
+                  }
+                  else
+                  {
+                    var color = config.densities.less;
+                  }
+                  ;
 
-                var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
+                  var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
 
-                if (xcurrent > xwish) height = minHeight;
+                  if (xcurrent > xwish) height = minHeight;
 
-                style = 'height:' + height + 'px;' + 'background-color: ' + color + ';';
+                  style = 'height:' + height + 'px;' + 'background-color: ' + color + ';';
 
-                var actual = '<div class="bar" style="' +
-                  style +
-                  '" ' +
+                  var actual = '<div class="bar" style="' +
+                               style +
+                               '" ' +
 
-                  ' title="Huidig aantal beschikbaar: ' +
+                               ' title="Huidig aantal beschikbaar: ' +
 
-                  num +
-                  ' personen">' +
-                  span +
-                  '</div>';
+                               num +
+                               ' personen">' +
+                               span +
+                               '</div>';
 
-                if (  (slot.diff > 0  && config.legenda.groups.more) ||
-                  (slot.diff == 0 && config.legenda.groups.even) ||
-                  (slot.diff < 0  && config.legenda.groups.less) )
-                {
-                  timedata.push({
-                    start:    Math.round(slot.start ),
-                    end:      Math.round(slot.end ),
-                    group:    _this.wrapper('c') + name,
-                    content:  requirement +
-                      actual +
-                      _this.secret(angular.toJson({
-                        type: 'group',
-                        diff: slot.diff,
-                        group: name
-                      })),
-                    className: 'group-aggs',
-                    editable: false
-                  });
-                };
+                  if ((
+                        slot.diff > 0 && config.legenda.groups.more) ||
+                      (
+                        slot.diff == 0 && config.legenda.groups.even) ||
+                      (
+                        slot.diff < 0 && config.legenda.groups.less))
+                  {
+                    timedata.push(
+                      {
+                        start:     Math.round(slot.start),
+                        end:       Math.round(slot.end),
+                        group: _this.wrapper('c') + name,
+                        content: requirement +
+                                 actual +
+                                 _this.secret(
+                                   angular.toJson(
+                                     {
+                                       type:  'group',
+                                       diff:  slot.diff,
+                                       group: name
+                                     })),
+                        className: 'group-aggs',
+                        editable:  false
+                      });
+                  }
+                  ;
 
-                timedata = _this.addLoading(data, timedata, [
-                    _this.wrapper('c') + name
-                ]);
-              });
+                  timedata = _this.addLoading(
+                    data, timedata, [
+                        _this.wrapper('c') + name
+                    ]);
+                });
 
               return timedata;
             },
@@ -329,55 +368,79 @@ define(
             {
               var _this = this;
 
-              angular.forEach(data.aggs.data, function (slot, index)
-              {
-                var cn;
-
-                if (slot.diff >= 0 && slot.diff < 7)
+              angular.forEach(
+                data.aggs.data, function (slot, index)
                 {
-                  switch (slot.diff)
+                  var cn;
+
+                  if (slot.diff >= 0 && slot.diff < 7)
                   {
-                    case 0: cn = 'even';  break
-                    case 1: cn = 1;       break
-                    case 2: cn = 2;       break
-                    case 3: cn = 3;       break
-                    case 4: cn = 4;       break
-                    case 5: cn = 5;       break
-                    case 6: cn = 6;       break
+                    switch (slot.diff)
+                    {
+                      case 0:
+                        cn = 'even';
+                        break
+                      case 1:
+                        cn = 1;
+                        break
+                      case 2:
+                        cn = 2;
+                        break
+                      case 3:
+                        cn = 3;
+                        break
+                      case 4:
+                        cn = 4;
+                        break
+                      case 5:
+                        cn = 5;
+                        break
+                      case 6:
+                        cn = 6;
+                        break
+                    }
                   }
-                }
-                else if (slot.diff >= 7)
-                {
-                  cn = 'more';
-                }
-                else
-                {
-                  cn = 'less'
-                };
+                  else if (slot.diff >= 7)
+                  {
+                    cn = 'more';
+                  }
+                  else
+                  {
+                    cn = 'less'
+                  }
+                  ;
 
-                if (  (slot.diff > 0  && config.legenda.groups.more) ||
-                  (slot.diff == 0 && config.legenda.groups.even) ||
-                  (slot.diff < 0  && config.legenda.groups.less) )
-                {
-                  timedata.push({
-                    start:  Math.round(slot.start ),
-                    end:    Math.round(slot.end ),
-                    group: _this.wrapper('c') + name,
-                    content:  cn +
-                      _this.secret(angular.toJson({
-                        type: 'group',
-                        diff: slot.diff,
-                        group: name
-                      })),
-                    className:  'agg-' + cn,
-                    editable:   false
-                  });
-                };
+                  if ((
+                        slot.diff > 0 && config.legenda.groups.more) ||
+                      (
+                        slot.diff == 0 && config.legenda.groups.even) ||
+                      (
+                        slot.diff < 0 && config.legenda.groups.less))
+                  {
+                    timedata.push(
+                      {
+                        start:    Math.round(slot.start),
+                        end:      Math.round(slot.end),
+                        group: _this.wrapper('c') + name,
+                        content: cn +
+                                 _this.secret(
+                                   angular.toJson(
+                                     {
+                                       type:  'group',
+                                       diff:  slot.diff,
+                                       group: name
+                                     })),
+                        className: 'agg-' + cn,
+                        editable: false
+                      });
+                  }
+                  ;
 
-                timedata = _this.addLoading(data, timedata, [
-                    _this.wrapper('c') + name
-                ]);
-              });
+                  timedata = _this.addLoading(
+                    data, timedata, [
+                        _this.wrapper('c') + name
+                    ]);
+                });
 
               return timedata;
             },
@@ -389,40 +452,46 @@ define(
             {
               var _this = this;
 
-              angular.forEach(data.aggs.wishes, function (wish, index)
-              {
-                if ( wish.count >= 7 )
+              angular.forEach(
+                data.aggs.wishes, function (wish, index)
                 {
-                  var cn = 'wishes-more';
-                }
-                else if ( wish.count == 0 )
-                {
-                  var cn = 'wishes-even';
-                }
-                else
-                {
-                  var cn = 'wishes-' + wish.count;
-                };
+                  if (wish.count >= 7)
+                  {
+                    var cn = 'wishes-more';
+                  }
+                  else if (wish.count == 0)
+                  {
+                    var cn = 'wishes-even';
+                  }
+                  else
+                  {
+                    var cn = 'wishes-' + wish.count;
+                  }
+                  ;
 
-                timedata.push({
-                  start:  Math.round(wish.start ),
-                  end:    Math.round(wish.end ),
-                  group:  _this.wrapper('c') + name + ' (Wishes)',
-                  content: '<span class="badge badge-inverse">' + wish.count + '</span>' +
-                    _this.secret(angular.toJson({
-                      type: 'wish',
-                      wish: wish.count,
-                      group: name,
-                      groupId: data.aggs.id
-                    })),
-                  className:  cn,
-                  editable:   false
+                  timedata.push(
+                    {
+                      start:     Math.round(wish.start),
+                      end:       Math.round(wish.end),
+                      group: _this.wrapper('c') + name + ' (Wishes)',
+                      content: '<span class="badge badge-inverse">' + wish.count + '</span>' +
+                               _this.secret(
+                                 angular.toJson(
+                                   {
+                                     type:    'wish',
+                                     wish:    wish.count,
+                                     group:   name,
+                                     groupId: data.aggs.id
+                                   })),
+                      className: cn,
+                      editable:  false
+                    });
+
+                  timedata = _this.addLoading(
+                    data, timedata, [
+                        _this.wrapper('c') + name + ' (Wishes)'
+                    ]);
                 });
-
-                timedata = _this.addLoading(data, timedata, [
-                    _this.wrapper('c') + name + ' (Wishes)'
-                ]);
-              });
 
               return timedata;
             },
@@ -432,96 +501,106 @@ define(
              */
             members: function (data, timedata, config, privilage)
             {
-              var _this   = this;
+              var _this = this;
               var offset = Number(Date.now());
 
-              angular.forEach(data.members, function (member, index)
-              {
-
-
-                var tasks = [];
-                if(data.section == "teams"){
-                  console.log("data.teams.tasks " , data.teams.tasks);
-                  if(data.teams.tasks[member.memId] != null){
-                    tasks.push(data.teams.tasks[member.memId]);
-                  }
-                }else if(data.section == "clients"){
-                  console.log("data.clients.tasks " , data.clients.tasks);
-                  if(data.clients.tasks[member.memId] != null){
-                    tasks.push(data.clients.tasks[member.memId]);
-                  }
-                }
-
-
-                var mdata = [];
-
-                angular.forEach(tasks, function (task)
+              angular.forEach(
+                data.members, function (member, index)
                 {
-                  var relatedUser = "";
-                  if(data.section == "teams"){
-                    // should get the name from team members ;
 
-                    relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
-                  }else if(data.section == "clients"){
-                    // should get the name from clients;
+                  var tasks = [];
+                  if (data.section == "teams")
+                  {
+                    console.log("data.teams.tasks ", data.teams.tasks);
+                    if (data.teams.tasks[member.memId] != null)
+                    {
+                      tasks.push(data.teams.tasks[member.memId]);
+                    }
+                  }
+                  else if (data.section == "clients")
+                  {
+                    console.log("data.clients.tasks ", data.clients.tasks);
+                    if (data.clients.tasks[member.memId] != null)
+                    {
+                      tasks.push(data.clients.tasks[member.memId]);
+                    }
+                  }
 
-                    relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
-                  }
-                  var slotContent = "";
-                  if(typeof relatedUser != 'undefined'){
-                    slotContent = relatedUser.firstName + " " + relatedUser.lastName;
-                  }
-                  // deal with the unfinished task
-                  if(task.plannedEndVisitTime == 0){
-                    task.plannedEndVisitTime = offset;
-                  }
-                  timedata.push({
-                    start:  Math.round(task.plannedStartVisitTime ),
-                    end:    Math.round(task.plannedEndVisitTime ),
-                    // group:  link,
-                    group: member.head,
-                    /*
-                     content: _this.secret(angular.toJson({
-                     type: 'member',
-                     id:   slot.id,
-                     mid:  member.id,
-                     recursive: slot.recursive,
-                     state: slot.text
-                     })),
-                     */
-                    content: "<span>"+slotContent +"</span>" +
-                      "<input type=hidden value='"+ angular.toJson({
-                      type: 'slot',
-                      id:   task.uuid,
-                      mid:  task.authorUuid,
-//		                recursive: slot.recursive,
-                      state: task.description,
-                      clientUuid : task.relatedClientUuid,
-                      memberId : task.assignedTeamMemberUuid
-                    }) +"'>",
-                    // className:  config.states[slot.text].className,
-                    className:  'state-available',
-                    editable:   false
-                  });
+                  var mdata = [];
 
+                  angular.forEach(
+                    tasks, function (task)
+                    {
+                      var relatedUser = "";
+                      if (data.section == "teams")
+                      {
+                        // should get the name from team members ;
+
+                        relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
+                      }
+                      else if (data.section == "clients")
+                      {
+                        // should get the name from clients;
+
+                        relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
+                      }
+                      var slotContent = "";
+                      if (typeof relatedUser != 'undefined')
+                      {
+                        slotContent = relatedUser.firstName + " " + relatedUser.lastName;
+                      }
+                      // deal with the unfinished task
+                      if (task.plannedEndVisitTime == 0)
+                      {
+                        task.plannedEndVisitTime = offset;
+                      }
+                      timedata.push(
+                        {
+                          start:     Math.round(task.plannedStartVisitTime),
+                          end:       Math.round(task.plannedEndVisitTime),
+                          // group:  link,
+                          group:     member.head,
+                          /*
+                           content: _this.secret(angular.toJson({
+                           type: 'member',
+                           id:   slot.id,
+                           mid:  member.id,
+                           recursive: slot.recursive,
+                           state: slot.text
+                           })),
+                           */
+                          content: "<span>" + slotContent + "</span>" +
+                                   "<input type=hidden value='" + angular.toJson(
+                            {
+                              type:       'slot',
+                              id:         task.uuid,
+                              mid:        task.authorUuid,
+                              //		                recursive: slot.recursive,
+                              state:      task.description,
+                              clientUuid: task.relatedClientUuid,
+                              memberId:   task.assignedTeamMemberUuid
+                            }) + "'>",
+                          // className:  config.states[slot.text].className,
+                          className: 'state-available',
+                          editable:  false
+                        });
+
+                    });
+
+                  timedata = _this.addLoading(data, timedata, [ member.head ]);
+
+                  /**
+                   * TODO
+                   * Good place to host this here?
+                   */
+                  angular.forEach(
+                    member.stats, function (stat, index)
+                    {
+                      var state = stat.state.split('.');
+                      state.reverse();
+                      stat.state = 'bar-' + state[0];
+                    });
                 });
-
-
-
-                timedata = _this.addLoading(data, timedata, [ member.head ]);
-
-                /**
-                 * TODO
-                 * Good place to host this here?
-                 */
-                angular.forEach(member.stats, function (stat, index)
-                {
-                  var state = stat.state.split('.');
-                  state.reverse();
-                  stat.state = 'bar-' + state[0];
-                });
-              });
-
 
               return timedata;
             },
@@ -533,36 +612,40 @@ define(
             {
               document.getElementById("groupPie").innerHTML = '';
 
-              var ratios    = [],
-                colorMap  = {
-                  more: '#415e6b',
-                  even: '#ba6a24',
-                  less: '#a0a0a0'
-                },
-                colors    = [],
-                xratios   = [];
+              var ratios = [],
+                  colorMap = {
+                    more: '#415e6b',
+                    even: '#ba6a24',
+                    less: '#a0a0a0'
+                  },
+                  colors = [],
+                  xratios = [];
 
-              angular.forEach(data.aggs.ratios, function (ratio, index)
-              {
-                if (ratio != 0)
+              angular.forEach(
+                data.aggs.ratios, function (ratio, index)
                 {
-                  ratios.push({
-                    ratio: ratio,
-                    color: colorMap[index]
-                  });
-                };
-              });
+                  if (ratio != 0)
+                  {
+                    ratios.push(
+                      {
+                        ratio: ratio,
+                        color: colorMap[index]
+                      });
+                  }
+                  ;
+                });
 
               ratios = ratios.sort(function (a, b) { return b.ratio - a.ratio });
 
-              angular.forEach(ratios, function (ratio, index)
-              {
-                colors.push(ratio.color);
-                xratios.push(ratio.ratio);
-              });
+              angular.forEach(
+                ratios, function (ratio, index)
+                {
+                  colors.push(ratio.color);
+                  xratios.push(ratio.ratio);
+                });
 
-              var r   = Raphael("groupPie"),
-                pie = r.piechart(120, 120, 100, xratios, { colors: colors });
+              var r = Raphael("groupPie"),
+                  pie = r.piechart(120, 120, 100, xratios, { colors: colors });
             },
 
             /**
@@ -570,8 +653,8 @@ define(
              */
             process: function (data, config, divisions, privilage)
             {
-              var _this     = this,
-                timedata  = [];
+              var _this = this,
+                  timedata = [];
 
               // if (data.user) timedata = _this.user(data, timedata, config);
 
@@ -605,9 +688,6 @@ define(
           }
         }
       ]);
-
-
-
 
   }
 );
