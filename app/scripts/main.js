@@ -3,6 +3,9 @@
 if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 
+localStorage.removeItem('TeamUp.periods');
+localStorage.removeItem('TeamUp.periodsNext');
+
 require.config (
   {
     paths: {
@@ -14,14 +17,19 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
+      // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
+      'angular-strap':    'removables/angular-strap.min',
+      'ui-bootstrap':     'removables/ui-bootstrap-custom', // TODO: Remove later
       lawnchair:          '../vendors/lawnchair/src/Lawnchair',
       dom:                '../vendors/lawnchair/src/adapters/dom',
       moment:             '../vendors/momentjs/min/moment.min',
-      timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
+      // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
+      timeline:           'removables/timeline',
       treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
-      datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
+      // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
+      datepicker:         'removables/datepicker.min',
+      // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
+      timepicker:         'removables/timepicker.min'
     },
     shim: {
       date:               { deps: [],                       exports: 'date'           },
@@ -30,6 +38,7 @@ require.config (
       'angular-resource': { deps: ['angular']                                         },
       'angular-route':    { deps: ['angular']                                         },
       'angular-strap':    { deps: ['angular'],              exports: 'angular-strap'  },
+      'ui-bootstrap':     { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap'   },
       bootstrap:          { deps: ['jquery'],               exports: 'bootstrap'      },
       lawnchair:          { deps: [],                       exports: 'lawnchair'      },
       dom:                { deps: ['lawnchair'],            exports: 'dom'            },
@@ -54,6 +63,7 @@ require (
     'angular-resource',
     'angular-route',
     'angular-strap',
+    'ui-bootstrap', // TODO: Remove later on
 
     'localization',
     'config',
@@ -68,7 +78,7 @@ require (
     'services/logger',
     'services/moment',
     'services/offline',
-    'services/sessioner',
+    // 'services/sessioner',
     'services/md5er',
     'services/store',
 
@@ -80,6 +90,7 @@ require (
     'services/profile',
     'services/settings',
     'services/sloter',
+    'services/slots',
     'services/strings',
     'services/teams',
     'services/user',
@@ -143,7 +154,7 @@ var profile = {
     return "teamup-dev";
   },
 
-  noImgURL : '/img/defaultAvatar.png',
+  noImgURL : '/images/defaultAvatar.png',
 
   states: [
     'com.ask-cs.State.Available',

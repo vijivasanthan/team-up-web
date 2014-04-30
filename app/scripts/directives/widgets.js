@@ -4,19 +4,6 @@ define(
   {
     'use strict';
 
-    directives.directive('widgets',
-      [
-        'version',
-        function (version)
-        {
-          return function (scope, elm, attrs)
-          {
-            elm.text(version);
-          };
-        }
-      ]
-    );
-
     directives.directive('chosen',
       function ()
       {
@@ -131,7 +118,7 @@ define(
           });
         },
         replace: false,
-        templateUrl: 'js/views/uploader.html'
+        templateUrl: 'views/uploader.html'
       };
 
     }]);
@@ -159,7 +146,7 @@ define(
           console.log(attrs.memberId );
         },
         replace: false,
-        templateUrl: 'js/views/profileTemplate.html'
+        templateUrl: 'views/profileTemplate.html'
       };
 
     }]);

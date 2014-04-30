@@ -111,7 +111,7 @@ define(
           editClient : false,
           viewClient : false,
           editImg : false,
-        }
+        };
 
         /**
          * View setter
@@ -136,7 +136,7 @@ define(
 
           $scope.views[hash] = true;
 
-        }
+        };
 
         /**
          * load the reports by the client ID
@@ -155,7 +155,7 @@ define(
           },function(error){
             console.log(error);
           });
-        }
+        };
 
         /**
          *  load the reports by the client group ID
@@ -179,7 +179,7 @@ define(
             console.log(error);
           });
 
-        }
+        };
 
         $scope.loadMembersImg = function(){
           // load the team members image
@@ -187,12 +187,12 @@ define(
           var memberIds = [];
           angular.forEach($scope.groupReports, function(rept,i){
             if(memberIds.indexOf(rept.author.uuid) == -1){
-              memberIds.add(rept.author.uuid);
+              memberIds.push(rept.author.uuid);
             }
           });
           angular.forEach($scope.reports, function(rept,i){
             if(memberIds.indexOf(rept.author.uuid) == -1){
-              memberIds.add(rept.author.uuid);
+              memberIds.push(rept.author.uuid);
             }
           });
           angular.forEach(memberIds , function(memberId,j){
@@ -214,7 +214,7 @@ define(
               console.log("error when load pic " + error);
             });
           });
-        }
+        };
 
         /**
          * Set view
@@ -329,10 +329,10 @@ define(
               client: $scope.$root.getClientByID(report.clientUuid),
               filtered: "false"};
 
-            rpts.add(newReport);
+            rpts.push(newReport);
           });
           return rpts;
-        }
+        };
 
         /**
          * Switch between the views and set hash accordingly
@@ -378,7 +378,7 @@ define(
             id : clientGroup.id
           };
           $scope.views.editClientGroup = true;
-        }
+        };
 
         $scope.cancelClientGroupEdit = function(clientGroup) {
           $scope.cGroupEditForm = {
@@ -386,7 +386,8 @@ define(
             id : clientGroup.id
           };
           $scope.views.editClientGroup = false;
-        }
+        };
+
         /**
          * save the changes on the team
          */
@@ -414,7 +415,7 @@ define(
               });
             }
           });
-        }
+        };
 
         var reloadGroup = function(result) {
           Clients.query(false,result).then(function(queryRs) {
@@ -449,7 +450,8 @@ define(
             $rootScope.statusBar.off();
 
           });
-        }
+        };
+
         /**
          * create new client group
          */
@@ -471,7 +473,8 @@ define(
               reloadGroup(routePara);
             }
           });
-        }
+        };
+
         /**
          * Close inline form
          */
@@ -511,7 +514,8 @@ define(
           }
           $scope.contacts.push(contactPerson);
 
-        }
+        };
+
         /**
          * add new client
          */
@@ -542,7 +546,7 @@ define(
               reloadGroup(routePara);
             }
           });
-        }
+        };
 
         /**
          * edit client profile
@@ -569,7 +573,7 @@ define(
               reloadGroup(routePara);
             }
           });
-        }
+        };
 
         /**
          * save the contacts for the client
@@ -606,7 +610,7 @@ define(
             }
             $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
           });
-        }
+        };
 
         /**
          * remove this line of contact info
@@ -617,7 +621,7 @@ define(
               $scope.contacts.splice(i,1);
             }
           });
-        }
+        };
 
         /**
          * delete the client group
@@ -649,7 +653,7 @@ define(
               console.log(error);
             });
           }
-        }
+        };
 
         /**
          *  delete the client
@@ -669,7 +673,7 @@ define(
                 var changes = {};
                 var clientIds = [];
                 var emptyAddIds = [];
-                clientIds.add(clientId);
+                clientIds.push(clientId);
                 changes[clientGroupId] = {a : emptyAddIds, r : clientIds};
                 if(clientGroupId != null && clientGroupId != "" && clientGroupId != $scope.clientGroup.id){
                   changes[$scope.clientGroup.id] = {a : emptyAddIds, r : clientIds};
@@ -693,7 +697,7 @@ define(
             });
 
           }
-        }
+        };
 
         $scope.requestReportsByFilter = function(){
 
@@ -718,7 +722,7 @@ define(
           });
 
           $scope.loadMembersImg();
-        }
+        };
 
 
         var ModalInstanceCtrl = function($scope, $modalInstance, report) {
@@ -756,7 +760,7 @@ define(
           $scope.report.editMode = false;
 
           var modalInstance = $modal.open({
-            templateUrl : './js/views/reportTemplate.html',
+            templateUrl : './views/reportTemplate.html',
             controller : ModalInstanceCtrl,
             resolve : {
               report : function() {
@@ -785,7 +789,7 @@ define(
           $scope.report = newReport;
 
           var modalInstance = $modal.open({
-            templateUrl : './js/views/reportTemplate.html',
+            templateUrl : './views/reportTemplate.html',
             controller : ModalInstanceCtrl,
             resolve : {
               report : function() {
@@ -801,13 +805,13 @@ define(
           }, function() {
             console.log('Modal dismissed at: ' + new Date());
           });
-        }
+        };
 
         $scope.editReport = function(report){
           $scope.report = report;
           $scope.report.editMode = true;
           var modalInstance = $modal.open({
-            templateUrl : './js/views/reportTemplate.html',
+            templateUrl : './views/reportTemplate.html',
             controller : ModalInstanceCtrl,
             resolve : {
               report : function() {
@@ -815,7 +819,7 @@ define(
               }
             }
           });
-        }
+        };
 
         $scope.removeReport = function(report){
           if(window.confirm($rootScope.ui.teamup.deleteConfirm)){
@@ -832,7 +836,7 @@ define(
               console.log(error);
             });
           }
-        }
+        };
 
         /**
          * load the dynamic upload URL for GAE

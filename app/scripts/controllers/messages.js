@@ -6,8 +6,8 @@ define(
 
     controllers.controller('messagesCtrl',
       [
-        '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage','$filter','Teams',
-        function ($scope, $rootScope, $q, $location, $route, Messages, Storage ,$filter,Teams)
+        '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage', '$filter', 'Teams',
+        function ($scope, $rootScope, $q, $location, $route, Messages, Storage , $filter, Teams)
         {
           $scope.messages = [];
 
@@ -68,10 +68,10 @@ define(
                   msg.senderName = member.firstName+" "+member.lastName;
                 }
 
-                $scope.messages.add(msg);
+                $scope.messages.push(msg);
 
                 if(chatMembers.indexOf(message.senderUuid) == -1){
-                  chatMembers.add(message.senderUuid);
+                  chatMembers.push(message.senderUuid);
                 }
               });
 
@@ -103,7 +103,7 @@ define(
             },function(error){
               console.log(error);
             });
-          }
+          };
 
           $scope.openChat = function(){
             $scope.toggleChat = !$scope.toggleChat;
@@ -121,7 +121,7 @@ define(
               // stop auto check chat mesage
               clearInterval($scope.autoCheckMonitorId);
             }
-          }
+          };
 
           $scope.sendMessage = function(newMessage){
             if(typeof newMessage == "undefined" || newMessage == ""){
@@ -145,7 +145,7 @@ define(
               $rootScope.statusBar.off();
             });
 
-          }
+          };
 
           /**
            * to do : auto refreshing the chat message

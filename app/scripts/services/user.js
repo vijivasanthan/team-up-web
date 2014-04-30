@@ -38,7 +38,8 @@ define(
             {
               process: {
                 method: 'GET',
-                params: {}
+                params: {},
+                isArray: true
               }
             }
           );

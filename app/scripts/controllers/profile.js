@@ -6,8 +6,8 @@ define(
 
     controllers.controller('profileCtrl',
       [
-        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5','$filter',
-        function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5,$filter)
+        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5', '$filter',
+        function ($rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5, $filter)
         {
           /**
            * Fix styles
@@ -35,8 +35,8 @@ define(
            */
           $scope.current = {
             day:    Date.today().getDayOfYear() + 1,
-            week:   new Date().getWeek(),
-            month:  new Date().getMonth() + 1
+            week:   new Dater.current.week(),
+            month:  new Dater.current.month() + 1
           };
 
           /**
@@ -67,15 +67,20 @@ define(
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
 
           $scope.currentRole = $scope.profilemeta.role;
+
           /**
            * Get teams of user
            */
           var teams = [];
           var storage_teams = angular.fromJson(Storage.get("Teams"));
-          angular.forEach($scope.profilemeta.teamUuids,function(teamId,index){
-            angular.forEach(storage_teams,function(team,index){
-              if(team.uuid == teamId){
-                teams.add(team);
+
+          angular.forEach($scope.profilemeta.teamUuids, function (teamId, index)
+          {
+            angular.forEach(storage_teams, function(team, index)
+            {
+              if (team.uuid == teamId)
+              {
+                teams.push(team);
               }
             });
           });
@@ -83,7 +88,7 @@ define(
           if(teams.length == 0){
             angular.forEach(storage_teams,function(team,index){
               if(team.uuid == sessionStorage.getItem(data.resources.uuid+"_team")){
-                teams.add(team);
+                teams.push(team);
               }
             });
           }

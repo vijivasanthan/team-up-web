@@ -11,7 +11,8 @@ define(
     'directives/directives',
     'angular-resource',
     'angular-route',
-    'angular-strap'
+    'angular-strap',
+    'ui-bootstrap'
   ],
   function (angular)
   {
@@ -23,7 +24,9 @@ define(
         'directives',
         'ngResource',
         'ngRoute',
-        'mgcrea.ngStrap'
+        // 'mgcrea.ngStrap'
+        '$strap.directives',
+        'ui.bootstrap.modal'
       ]);
   }
 );

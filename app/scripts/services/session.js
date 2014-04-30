@@ -18,8 +18,6 @@ define(
 
             check: function()
             {
-              console.log('this one workign ->');
-
               var session = angular.fromJson(Storage.cookie.get('session'));
 
               if (session)
@@ -31,7 +29,7 @@ define(
               else
               {
                 return false;
-              };
+              }
             },
 
             /**
@@ -47,7 +45,7 @@ define(
                 values = pairs[i].split("=");
 
                 if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
-              };
+              }
 
             },
 

@@ -443,12 +443,12 @@ define(
                 if(data.section == "teams"){
                   console.log("data.teams.tasks " , data.teams.tasks);
                   if(data.teams.tasks[member.memId] != null){
-                    tasks.add(data.teams.tasks[member.memId]);
+                    tasks.push(data.teams.tasks[member.memId]);
                   }
                 }else if(data.section == "clients"){
                   console.log("data.clients.tasks " , data.clients.tasks);
                   if(data.clients.tasks[member.memId] != null){
-                    tasks.add(data.clients.tasks[member.memId]);
+                    tasks.push(data.clients.tasks[member.memId]);
                   }
                 }
 
@@ -501,7 +501,7 @@ define(
                     }) +"'>",
                     // className:  config.states[slot.text].className,
                     className:  'state-available',
-                    editable:   false,
+                    editable:   false
                   });
 
                 });
