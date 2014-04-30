@@ -62,8 +62,8 @@ angular.module('WebPaige')
        controller: 'teamCtrl',
        resolve: {
            data: [
-             'Teams','$route',
-             function (Teams,$route)
+             'Teams', '$route',
+             function (Teams, $route)
              {
                if($route.current.params.local && $route.current.params.local == "true"){
                    return Teams.queryLocal();

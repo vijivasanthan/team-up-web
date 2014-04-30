@@ -1,6 +1,6 @@
 extends layout
 
-
+// TODO: Fix icon locations
 block icons
   link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
   link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
@@ -9,26 +9,7 @@ block icons
   link(rel='shortcut icon', href='icons/favicon.png')
 
 
-
-
-block scripts-first
-  script(src='scripts/js/libs/date/1.0/date.min.js')
-  script(src='scripts/js/libs/jquery/1.9.1/jquery-1.9.1.min.js')
-  script(src='scripts/js/libs/jquery/1.9.1/jquery.form.min.js')
-  script(src='scripts/js/libs/rsvp/1.0.0/rsvp.min.js')
-
-  script(src='scripts/js/plugins/basket.js')
-  script(src='scripts/js/plugins/browser.js')
-  script(src='scripts/js/plugins/console.js')
-  script(src='scripts/js/plugins/os.js')
-  script(src='scripts/js/plugins/screenfull.js')
-
-  script(src='scripts/js/profiles/profile.js')
-
-
-
-
-
+// TODO: Remove unneccessary IE styler files
 block iestuff
   //if IE
     link(rel='stylesheet', href='css/ie.css')
@@ -51,6 +32,9 @@ block iestuff
     script(src='vendors/json3/lib/json3.min.js')
 
 
+
+// TODO: Look for ways to simplify mobile menu view options
+// TODO: Arrange correct styling
 block navbar
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
   ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
@@ -71,9 +55,11 @@ block navbar
               a(ng-click='nav("team")') {{ui.teamup.teams}}
             li(data-match-route='/client')
               a(ng-click='nav("client")') {{ui.teamup.clients}}
-            li(data-match-route='/manage', ng-hide='app.resources.role > 1')
+            li(data-match-route='/manage',
+            ng-hide='app.resources.role > 1')
               a(href='#manage') {{ui.teamup.manage}}
-            li(data-match-route='/planboard', ng-hide='app.resources.role > 1')
+            li(data-match-route='/planboard',
+            ng-hide='app.resources.role > 1')
               a(ng-click='nav("planboard")') Agenda
           ul.nav.pull-right(ng-hide='browser.mobile')
             li.navbar-btn
@@ -102,6 +88,8 @@ block navbar
                 span(ng-show='browser.portrait || browser.screen.width < 768') Logout
 
 
+
+// TODO: Port loaders to a directive
 block loading
   #loading.ng-cloak(ng-show='loadingBig')
     div(ng-show='loaderIcons.general')
@@ -145,10 +133,15 @@ block loading
         | {{ui.loading.settings}}
 
 
+
+// TODO: Investigate the real usage of this
 block notifications
-  #notification.alert(ng-show='notification.status', class='{{notification.type}}')
-    button.close(type='button', ng-click='notification.status = false') ×
+  #notification.alert(ng-show='notification.status',
+  class='{{notification.type}}')
+    button.close(type='button',
+    ng-click='notification.status = false') ×
     | {{notification.message}}
+
 
 
 block chat
@@ -169,37 +162,69 @@ block chat
           .chatCloud
             h5.name {{message.senderName}}
             h5.time {{message.sendTime|nicelyTime}}
-            div
-              p {{message.body}}
+            div: p {{message.body}}
           .arrow(ng-hide='(message.role == "other")')
       #pusher  
     .input-area
-      input#messageField(type='text', ng-model='newMessage', ngenter='sendMessage(newMessage)')
+      input#messageField(type='text',
+      ng-model='newMessage',
+      ngenter='sendMessage(newMessage)')
       button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
 
 
+
+// TODO: Is it needed?
 block mobile-status
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
     img(src='images/img/ajax-loader.gif')
     small {{loading.message}}
 
 
+
+// TODO: Simplify it!
 block footer
   #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
     .container-fluid
       #copyrights
         span.muted(ng-style='(!config.profile.mobileApp.status) && "right:0"')
-          small
-            | Ask Community Systems, 2013
+          small Ask Community Systems, 2013
             br
             i
               | TeamUp
-              a(href='version.html', target='_blank') v{{config.version}}
+              a(href='version.html',
+              target='_blank') v{{config.version}}
       p.muted(ng-show='loading.status')
         img(src='images/img/ajax-loader.gif')
         small
           span(ng-show='app.preloader.status') {{app.preloader.count}}%
           | {{loading.message}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 block scripts-later
@@ -252,3 +277,19 @@ block scripts-later
   script(src='scripts/js/controllers/timeline.js')
   script(src='scripts/js/controllers/timeline-navigation.js')
   script(src='scripts/js/controllers/messages.js')
+
+
+
+block scripts-first
+  script(src='scripts/js/libs/date/1.0/date.min.js')
+  script(src='scripts/js/libs/jquery/1.9.1/jquery-1.9.1.min.js')
+  script(src='scripts/js/libs/jquery/1.9.1/jquery.form.min.js')
+  script(src='scripts/js/libs/rsvp/1.0.0/rsvp.min.js')
+
+  script(src='scripts/js/plugins/basket.js')
+  script(src='scripts/js/plugins/browser.js')
+  script(src='scripts/js/plugins/console.js')
+  script(src='scripts/js/plugins/os.js')
+  script(src='scripts/js/plugins/screenfull.js')
+
+  script(src='scripts/js/profiles/profile.js')

@@ -61,19 +61,14 @@
           thead
             tr
               th
-              th
-                a(ng-click='sorter="name"') {{ui.teamup.name}}
-              th
-                a {{ui.profile.address}}
+              th: a(ng-click='sorter="name"') {{ui.teamup.name}}
+              th: a {{ui.profile.address}}
               th
           tbody
             tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
-              td
-                .roundedPicSmall.memberStateBusy(id='img_{{client.uuid|escape}}')
-              td
-                a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
-              td
-                | {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
+              td: .roundedPicSmall.memberStateBusy(id='img_{{client.uuid|escape}}')
+              td: a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
+              td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
               td
                 .pull-right
                   a(href='#/clientProfile/{{client.uuid}}#editClient')
@@ -84,8 +79,7 @@
                     i.icon-trash
         span.muted.pull-right
           small
-            i
-              | {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+            i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
     #newClientGroupTab.tab-pane(class="{{(views.newClientGroup==true) && 'active'}}")
       .tab-header
         h3.pull-left {{ui.teamup.newClientGroup}}

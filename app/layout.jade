@@ -13,34 +13,22 @@ html.no-js(lang='en')
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     meta(name='description', content='TeamUp Web Application')
     meta(name='viewport', content='width=device-width')
-
     title TeamUp v0.2.0
-
     block icons
-
     // build:css({.tmp,app}) styles/main.css
     link(rel='stylesheet', href='styles/bootstrap.css')
     link(rel='stylesheet', href='styles/main.css')
     // endbuild
-
-    // block scripts-first
     block iestuff
-
   body
-
     block iestuff
     block navbar
     block loading
     block notifications
     // block chat
     block mobile-status
-
     #wrap
       .container-fluid(ng-view='')
       #push
-
     block footer
-
     script(data-main='scripts/main', src='vendors/requirejs/require.js')
-
-    // block scripts-later

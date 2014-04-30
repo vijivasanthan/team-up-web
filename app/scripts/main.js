@@ -47,28 +47,50 @@ require (
     'angular-route',
     'angular-strap',
 
+    'localization',
     'config',
     'app',
-    'routes',
     'run',
+    'routes',
 
-    'controllers/login',
-    // 'controllers/partial1',
-    // 'controllers/partial2',
-
-    // 'directives/appVersion',
-
-    'filters/avatars',
-
-    // 'services/version',
+    'services/storage',
+    'services/session',
 
     'services/interceptor',
     'services/logger',
     'services/moment',
     'services/offline',
-    'services/session',
-    'services/md5',
+    'services/sessioner',
+    'services/md5er',
     'services/store',
+
+
+    'services/clients',
+    'services/dater',
+    'services/md5',
+    'services/messages',
+    'services/profile',
+    'services/settings',
+    'services/sloter',
+    'services/strings',
+    'services/teams',
+    'services/user',
+
+    'directives/widgets',
+
+    'filters/avatars',
+
+    'controllers/clients',
+    'controllers/login',
+    'controllers/logout',
+    'controllers/manage',
+    'controllers/messages',
+    'controllers/planboard',
+    'controllers/profile',
+    'controllers/teams',
+    'controllers/timeline',
+    'controllers/timeline-navigation',
+    'controllers/treegrid',
 
     'bootstrap',
     'lawnchair',
@@ -85,3 +107,128 @@ require (
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
+
+
+
+
+/**
+ * Installation profile
+ */
+var profile = {
+
+  meta: 'teamup',
+
+  title: 'TeamUp',
+
+  host: function ()
+  {
+//       return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
+    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
+    return 'http://dev.ask-cs.com/';
+//     return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
+  },
+  ns : function (){
+//	 return "teamup_michael";
+    return "teamup-dev";
+  },
+  noImgURL : '/img/defaultAvatar.png',
+  states: [
+    'com.ask-cs.State.Available',
+    'com.ask-cs.State.KNRM.BeschikbaarNoord',
+    'com.ask-cs.State.KNRM.BeschikbaarZuid',
+    'com.ask-cs.State.Unavailable',
+    'com.ask-cs.State.KNRM.SchipperVanDienst',
+    'com.ask-cs.State.Unreached'
+  ],
+
+  timeline: {
+    config: {
+      layouts: {
+        groups:   true,
+        members:  true
+      }
+    }
+  },
+
+  divisions: [
+    {
+      id: 'all',
+      label: 'All divisions'
+    },
+    {
+      id: 'knrm.StateGroup.BeschikbaarNoord',
+      label: 'Noord'
+    },
+    {
+      id: 'knrm.StateGroup.BeschikbaarZuid',
+      label: 'Zuid'
+    }
+  ],
+
+  roles: [
+    {
+      id: "1",
+      label: 'coordinator'
+    },
+    {
+      id: "2",
+      label: 'team_member'
+    },
+    {
+      id: "3",
+      label: 'client'
+    }
+  ],
+  mfunctions: [
+    {
+      id: "1",
+      label: 'Doctor'
+    },
+    {
+      id: "2",
+      label: 'Nurse'
+    }
+  ],
+  stateIcons: [
+    {
+      name: "Availability",
+      data_icon: "&#xe04d;",
+      class_name: "icon-user-block"
+    },
+    {
+      name: "Location",
+      data_icon: "&#xe21a;",
+      class_name: "icon-location4"
+    },
+    {
+      name: "Emotion",
+      data_icon: "&#xe0f2;",
+      class_name: "icon-smiley"
+    },
+    {
+      name: "Activity",
+      data_icon: "&#xe4f2;",
+      class_name: "icon-accessibility"
+    },
+    {
+      name: "Reachability",
+      data_icon: "&#xe169;",
+      class_name: "icon-podcast2"
+    }
+  ],
+  stateColors : {
+    availalbe : "memberStateAvailalbe" ,
+    busy : "memberStateBusy" ,
+    offline : "memberStateOffline" ,
+    none : "memberStateNone"
+  },
+  p2000: {
+    status: true,
+    url:    'http://knrm.myask.me/rpc/client/p2000.php',
+    codes:  '1405545, 1405546, 1735749, 1735748'
+  },
+
+  mobileApp: {
+    status:   true
+  }
+};
