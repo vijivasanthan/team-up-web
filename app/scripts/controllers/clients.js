@@ -196,23 +196,29 @@ define(
             }
           });
           angular.forEach(memberIds , function(memberId,j){
-            var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photourl";
-            Teams.loadImg(imgURL).then(function(result){
-              // console.log("loading pic " + imgURL);
+            var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+memberId+"/photo?width=40&height=40";
 
-              var imgId = memberId.replace(".","").replace("@","");
-              if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-                console.log("no pics " ,result);
-              }else{
-                if(result.path){
-                  var avatarURL = $scope.imgHost + result.path;
-                  $('.tab-content #img_'+imgId).css('background-image','url('+avatarURL+')');
-                }
-              }
+            var imgId = memberId.replace(".","").replace("@","");
+            $('.tab-content #img_'+imgId).css('background-image','url('+imgURL+')');
 
-            },function(error){
-              console.log("error when load pic " + error);
-            });
+
+//            Teams.loadImg(imgURL).then(function(result){
+//              // console.log("loading pic " + imgURL);
+//
+//              var imgId = memberId.replace(".","").replace("@","");
+//              if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+//                console.log("no pics " ,result);
+//              }else{
+//                if(result.path){
+//                  var avatarURL = $scope.imgHost + result.path;
+//                  $('.tab-content #img_'+imgId).css('background-image','url('+avatarURL+')');
+//                }
+//              }
+//
+//            },function(error){
+//              console.log("error when load pic " + error);
+//            });
+
           });
         };
 
@@ -252,7 +258,7 @@ define(
           // load image
           if($scope.views.client){
             angular.forEach($scope.clients, function(client, index) {
-              var imgURL = $scope.imgHost+$scope.ns+"/client/"+client.uuid+"/photourl";
+              var imgURL = $scope.imgHost+$scope.ns+"/client/"+client.uuid+"/photo";
 
               Clients.loadImg(imgURL).then(function(result){
                 // console.log("loading pic " + imgURL);
@@ -275,7 +281,7 @@ define(
 
           // load the image in the client profile page
           if($scope.views.viewClient){
-            var imgURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
+            var imgURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";
 
             Clients.loadImg(imgURL).then(function(result){
               // console.log("loading pic " + imgURL);
@@ -843,7 +849,7 @@ define(
          */
         $scope.editImg = function() {
           $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-          $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photourl";
+          $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";
           Clients.loadImg($scope.uploadURL).then(function(result){
             $rootScope.statusBar.off();
 

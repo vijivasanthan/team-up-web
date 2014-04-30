@@ -704,9 +704,11 @@ define(
 
             var LoadImg = $resource(
               imgURL,{
+                width: 40,
+                height: 40
               },{
                 get : {
-                  method: 'GET',
+                  method: 'GET'
                 }
               }
             );

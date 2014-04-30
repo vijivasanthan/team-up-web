@@ -175,7 +175,7 @@ define(
             if(type == "team"){
               angular.forEach(members,function(mem){
                 // load the avatr URL and store them into the local storage
-                var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/team/member/" + mem.uuid + "/photourl";
+                var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/team/member/" + mem.uuid + "/photo";
                 Teams.loadImg(getAvatarUrl).then(function(res){
                   if(res.path){
                     Storage.avatar.addurl(mem.uuid,res.path);
@@ -187,7 +187,7 @@ define(
             }else if(type == "client"){
               angular.forEach(members,function(mem){
                 // load the avatr URL and store them into the local storage
-                var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/client/" + mem.uuid + "/photourl";
+                var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +"/client/" + mem.uuid + "/photo";
                 Clients.loadImg(getAvatarUrl).then(function(res){
                   if(res.path){
                     Storage.avatar.addurl(mem.uuid,res.path);

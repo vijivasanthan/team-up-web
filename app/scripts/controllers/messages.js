@@ -78,21 +78,28 @@ define(
               // load the avatar img
               angular.forEach(chatMembers, function(mId,i){
                 console.log(mId);
-                var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+mId+"/photourl";
-                Teams.loadImg(imgURL).then(function(result){
-                  // console.log("loading pic " + imgURL);
+                var imgURL = $scope.imgHost+$scope.ns+"/team/member/"+mId+"/photo";
 
-                  var imgId = mId.replace(".","").replace("@","");
-                  if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-                    console.log("no pics " ,result);
-                  }else{
-                    var realImgURL = $scope.imgHost + result.path;
-                    $('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
-                  }
+                var imgId = mId.replace(".","").replace("@","");
+                $('#chat-content #img_'+imgId).css('background-image','url('+imgURL+')');
 
-                },function(error){
-                  console.log("error when load pic " + error);
-                });
+//                Teams
+//                  .loadImg(imgURL).
+//                  then(function(result)
+//                  {
+//                  // console.log("loading pic " + imgURL);
+//
+//                  var imgId = mId.replace(".","").replace("@","");
+//                  if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
+//                    console.log("no pics " ,result);
+//                  }else{
+//                    var realImgURL = $scope.imgHost + result.path;
+//                    $('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
+//                  }
+//
+//                },function(error){
+//                  console.log("error when load pic " + error);
+//                });
               });
 
               // scroll to the bottom of the chat window

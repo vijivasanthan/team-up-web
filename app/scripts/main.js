@@ -145,13 +145,15 @@ var profile = {
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
-    return 'http://dev.ask-cs.com/';
+    // return 'http://dev.ask-cs.com/';
+    return 'http://askpack.ask-cs.com/';
   },
 
   ns: function ()
   {
     // return "teamup_michael";
-    return "teamup-dev";
+    // return "teamup-dev";
+    return "teamup-demo";
   },
 
   noImgURL : '/images/defaultAvatar.png',
