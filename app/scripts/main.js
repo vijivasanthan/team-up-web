@@ -1,12 +1,14 @@
 'use strict';
 
 if (window.location.port == '8080')
+{
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
+}
 
 localStorage.removeItem('TeamUp.periods');
 localStorage.removeItem('TeamUp.periodsNext');
 
-require.config (
+require.config(
   {
     paths: {
       date:               'removables/date',
@@ -31,27 +33,27 @@ require.config (
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
       timepicker:         'removables/timepicker.min'
     },
-    shim: {
-      date:               { deps: [],                       exports: 'date'           },
-      plugins:            { deps: ['jquery'],               exports: 'plugins'        },
-      angular:            { deps: ['jquery'],               exports: 'angular'        },
-      'angular-resource': { deps: ['angular']                                         },
-      'angular-route':    { deps: ['angular']                                         },
-      'angular-strap':    { deps: ['angular'],              exports: 'angular-strap'  },
-      'ui-bootstrap':     { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap'   },
-      bootstrap:          { deps: ['jquery'],               exports: 'bootstrap'      },
-      lawnchair:          { deps: [],                       exports: 'lawnchair'      },
-      dom:                { deps: ['lawnchair'],            exports: 'dom'            },
-      momentjs:           { deps: [],                       exports: 'moment'         },
-      timeline:           { deps: [],                       exports: 'timeline'       },
-      treegrid:           { deps: [],                       exports: 'treegrid'       },
-      datepicker:         { deps: ['jquery', 'bootstrap'],  exports: 'datepicker'     },
-      timepicker:         { deps: ['jquery', 'bootstrap'],  exports: 'timepicker'     }
+    shim:  {
+      date:               { deps: [], exports: 'date' },
+      plugins:            { deps: ['jquery'], exports: 'plugins' },
+      angular:            { deps: ['jquery'], exports: 'angular' },
+      'angular-resource': { deps: ['angular'] },
+      'angular-route':    { deps: ['angular'] },
+      'angular-strap':    { deps: ['angular'], exports: 'angular-strap' },
+      'ui-bootstrap':     { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
+      bootstrap:          { deps: ['jquery'], exports: 'bootstrap' },
+      lawnchair:          { deps: [], exports: 'lawnchair' },
+      dom:                { deps: ['lawnchair'], exports: 'dom' },
+      momentjs:           { deps: [], exports: 'moment' },
+      timeline:           { deps: [], exports: 'timeline' },
+      treegrid:           { deps: [], exports: 'treegrid' },
+      datepicker:         { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
+      timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' }
     }
   }
 );
 
-require (
+require(
   [
     'angular',
     'domReady',
@@ -81,7 +83,6 @@ require (
     // 'services/sessioner',
     'services/md5er',
     'services/store',
-
 
     'services/clients',
     'services/dater',
@@ -128,9 +129,6 @@ require (
   }
 );
 
-
-
-
 /**
  * Installation profile
  */
@@ -145,18 +143,18 @@ var profile = {
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
-    // return 'http://dev.ask-cs.com/';
-    return 'http://askpack.ask-cs.com/';
+    return 'http://dev.ask-cs.com/';
+    // return 'http://askpack.ask-cs.com/';
   },
 
   ns: function ()
   {
     // return "teamup_michael";
-    // return "teamup-dev";
-    return "teamup-demo";
+    return "teamup-dev";
+    // return "teamup-demo";
   },
 
-  noImgURL : '/images/defaultAvatar.png',
+  noImgURL: '/images/defaultAvatar.png',
 
   states: [
     'com.ask-cs.State.Available',
@@ -167,11 +165,11 @@ var profile = {
     'com.ask-cs.State.Unreached'
   ],
 
-  timeline: {
+  timeline:   {
     config: {
       layouts: {
-        groups:   true,
-        members:  true
+        groups:  true,
+        members: true
       }
     }
   },
@@ -179,15 +177,15 @@ var profile = {
   // TODO: Remove later on?!
   _divisions: [
     {
-      id: 'all',
+      id:    'all',
       label: 'All divisions'
     },
     {
-      id: 'knrm.StateGroup.BeschikbaarNoord',
+      id:    'knrm.StateGroup.BeschikbaarNoord',
       label: 'Noord'
     },
     {
-      id: 'knrm.StateGroup.BeschikbaarZuid',
+      id:    'knrm.StateGroup.BeschikbaarZuid',
       label: 'Zuid'
     }
   ],
@@ -196,63 +194,63 @@ var profile = {
 
   roles: [
     {
-      id: "1",
+      id:    "1",
       label: 'coordinator'
     },
     {
-      id: "2",
+      id:    "2",
       label: 'team_member'
     },
     {
-      id: "3",
+      id:    "3",
       label: 'client'
     }
   ],
 
   mfunctions: [
     {
-      id: "1",
+      id:    "1",
       label: 'Doctor'
     },
     {
-      id: "2",
+      id:    "2",
       label: 'Nurse'
     }
   ],
 
   stateIcons: [
     {
-      name: "Availability",
-      data_icon: "&#xe04d;",
+      name:       "Availability",
+      data_icon:  "&#xe04d;",
       class_name: "icon-user-block"
     },
     {
-      name: "Location",
-      data_icon: "&#xe21a;",
+      name:       "Location",
+      data_icon:  "&#xe21a;",
       class_name: "icon-location4"
     },
     {
-      name: "Emotion",
-      data_icon: "&#xe0f2;",
+      name:       "Emotion",
+      data_icon:  "&#xe0f2;",
       class_name: "icon-smiley"
     },
     {
-      name: "Activity",
-      data_icon: "&#xe4f2;",
+      name:       "Activity",
+      data_icon:  "&#xe4f2;",
       class_name: "icon-accessibility"
     },
     {
-      name: "Reachability",
-      data_icon: "&#xe169;",
+      name:       "Reachability",
+      data_icon:  "&#xe169;",
       class_name: "icon-podcast2"
     }
   ],
 
-  stateColors : {
-    availalbe : "memberStateAvailalbe" ,
-    busy : "memberStateBusy" ,
-    offline : "memberStateOffline" ,
-    none : "memberStateNone"
+  stateColors: {
+    availalbe: "memberStateAvailalbe",
+    busy:      "memberStateBusy",
+    offline:   "memberStateOffline",
+    none:      "memberStateNone"
   },
 
   p2000: {
@@ -262,6 +260,6 @@ var profile = {
   },
 
   mobileApp: {
-    status:   true
+    status: true
   }
 };
