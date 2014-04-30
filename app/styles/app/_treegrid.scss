@@ -58,7 +58,7 @@
     .treegrid-actions {    //copied from .btn-primary and .btn-mini
       margin-top: 3px;
       a {
-        background: $orange url("../images/img/unlink.png") no-repeat center;
+        background: $orange url("../images/unlink.png") no-repeat center;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);
@@ -79,7 +79,7 @@
     .treegrid-actions {    //copied from .btn-primary and .btn-mini
       margin-top: 4px;
       a {
-        background: $orange url("../images/img/unlink.png") no-repeat center;
+        background: $orange url("../images/unlink.png") no-repeat center;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);
@@ -102,7 +102,7 @@
 
 #teamClients_left, #teams_left, #clients_left {
   .treegrid-item{
-    background-image: url("../images/img/dragIcon.png");
+    background-image: url("../images/dragIcon.png");
     background-repeat: no-repeat;
     background-position: 10px;
     &:hover{
@@ -168,21 +168,21 @@
 }
 
 .treegrid-fold {
-  background: url('../images/img/treeRightTriangleBlack.png') no-repeat center;
+  background: url('../images/treeRightTriangleBlack.png') no-repeat center;
   cursor: pointer;
 }
 
 .treegrid-unfold {
-  background: url('../images/img/treeDownTriangleBlack.png') no-repeat center;
+  background: url('../images/treeDownTriangleBlack.png') no-repeat center;
   cursor: pointer;
 }
 
 .treegrid-loading-icon {
-  background: url('../images/img/wait16trans.gif') no-repeat center;
+  background: url('../images/wait16trans.gif') no-repeat center;
 }
 
 .treegrid-error-icon {
-  background: url('../images/img/warning-icon-16.png') no-repeat center;
+  background: url('../images/warning-icon-16.png') no-repeat center;
 }
 
 .treegrid-fold, .treegrid-unfold, .treegrid-loading-icon, .treegrid-error-icon {

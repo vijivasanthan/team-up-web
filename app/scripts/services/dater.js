@@ -1,8 +1,12 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services', 'date'],
+  function (services, date)
   {
     'use strict';
+
+
+
+
 
 
 

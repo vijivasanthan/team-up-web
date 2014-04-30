@@ -8,6 +8,7 @@
 .tabbable.tabs-left
 
   ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+
     li(class="{{(views.team==true) && 'active'}}")
       a(href='#viewTeamTab',
       data-toggle='tab',
@@ -16,6 +17,7 @@
         data-icon='',
         aria-hidden='true')
         | {{ui.teamup.teams}}
+
     li(class="{{(views.newTeam==true) && 'active'}}")
       a(href='#newTeamTab',
       data-toggle='tab',
@@ -24,6 +26,7 @@
         data-icon='',
         aria-hidden='true')
         | {{ui.teamup.newTeam}}
+
     li(class="{{(views.newMember==true) && 'active'}}")
       a(href='#newMemberTab',
       data-toggle='tab',

@@ -6,6 +6,7 @@ if (window.location.port == '8080')
 require.config (
   {
     paths: {
+      date:               'removables/date',
       angular:            '../vendors/angular/angular.min',
       jquery:             '../vendors/jquery/dist/jquery.min',
       plugins:            'plugins',
@@ -23,6 +24,7 @@ require.config (
       timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
     },
     shim: {
+      date:               { deps: [],                       exports: 'date'           },
       plugins:            { deps: ['jquery'],               exports: 'plugins'        },
       angular:            { deps: ['jquery'],               exports: 'angular'        },
       'angular-resource': { deps: ['angular']                                         },
@@ -45,6 +47,7 @@ require (
     'angular',
     'domReady',
 
+    'date',
     'jquery',
     'plugins',
 
@@ -102,6 +105,7 @@ require (
     'dom',
     'moment',
     'timeline',
+    'treegrid',
     'datepicker',
     'timepicker'
   ],

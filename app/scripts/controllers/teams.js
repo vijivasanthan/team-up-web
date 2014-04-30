@@ -4,7 +4,8 @@ define(
   {
     'use strict';
 
-    controllers.controller('teamCtrl', ['$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'MD5', 'Dater',
+    controllers.controller('teamCtrl', [
+      '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'MD5', 'Dater',
       function($rootScope, $scope, $location, Teams, data, $route, $routeParams, Storage, MD5, Dater) {
         /**
          * Fix styles

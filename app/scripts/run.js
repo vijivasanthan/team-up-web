@@ -376,9 +376,10 @@ define(
                 }
             }
 
-            
+
             // TODO: Implement the new session
-            // if (!Session.check()) $location.path("/login");
+            console.log('Session ->', Session);
+            if (!Session.check()) $location.path("/login");
 
 
             $rootScope.loadingBig = true;

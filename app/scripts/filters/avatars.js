@@ -10,12 +10,12 @@ define(
         {
           return function (string)
           {
-            if(!string || string.indexOf(".") == -1){
+            if (!string || string.indexOf(".") == -1)
+            {
               return string;
             }
-            var ret = string.replace(".","").replace("@","")
 
-            return ret;
+            return string.replace(".","").replace("@","");
           }
         }
       ]);
@@ -28,7 +28,8 @@ define(
           {
             var ret = config.stateColors.none;
 
-            angular.forEach(states, function (state, index){
+            angular.forEach(states, function (state, index)
+            {
               /**
                *    WORKING
                *    OFFLINE
@@ -90,8 +91,7 @@ define(
 
     filters.filter('translatePackage',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (selected)
           {
@@ -112,8 +112,7 @@ define(
 
     filters.filter('translateCountry',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (selected)
           {
@@ -134,8 +133,7 @@ define(
 
     filters.filter('translateRegion',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (selected, country)
           {
@@ -156,8 +154,7 @@ define(
 
     filters.filter('translateService',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (selected)
           {
@@ -178,8 +175,7 @@ define(
 
     filters.filter('translateRole',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (role)
           {
@@ -197,8 +193,7 @@ define(
 
     filters.filter('translateFunc',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (func)
           {
@@ -216,8 +211,7 @@ define(
 
     filters.filter('stateDataIcon',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (name,type){
             var ret;
@@ -240,8 +234,7 @@ define(
 
     filters.filter('___stateColor',
       [
-        '$config',
-        function ($config)
+        function ()
         {
           return function (states)
           {
@@ -273,8 +266,7 @@ define(
 
     filters.filter('stateValue',
       [
-        '$config',
-        function ($config){
+        function (){
           return function (state,type){
             if(angular.lowercase(state.name) == "location"){
               var value = state.value;

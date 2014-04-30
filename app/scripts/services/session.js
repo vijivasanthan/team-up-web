@@ -15,8 +15,11 @@ define(
             /**
              * Check session
              */
+
             check: function()
             {
+              console.log('this one workign ->');
+
               var session = angular.fromJson(Storage.cookie.get('session'));
 
               if (session)
