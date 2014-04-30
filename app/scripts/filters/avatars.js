@@ -38,11 +38,11 @@ define(
                */
               if(angular.lowercase(state.name) == "availability" && state.share){
                 if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
-                  ret = $config.stateColors.availalbe;
+                  ret = config.app.stateColors.availalbe;
                 }else if(angular.lowercase(state.value) == "unavailable"){
-                  ret = $config.stateColors.busy;
+                  ret = config.app.stateColors.busy;
                 }else if(angular.lowercase(state.value) == "offline"){
-                  ret = $config.stateColors.offline;
+                  ret = config.app.stateColors.offline;
                 }
               }
             });
@@ -99,7 +99,7 @@ define(
             {
               var gem;
 
-              angular.forEach($config.packages, function (pack)
+              angular.forEach(config.app.packages, function (pack)
               {
                 if (pack.id == selected) gem = pack;
               });
@@ -121,7 +121,7 @@ define(
             {
               var gem;
 
-              angular.forEach($config.countries, function (country)
+              angular.forEach(config.app.countries, function (country)
               {
                 if (country.id == selected) gem = country;
               });
@@ -143,7 +143,7 @@ define(
             {
               var gem;
 
-              angular.forEach($config.regions[country], function (region)
+              angular.forEach(config.app.regions[country], function (region)
               {
                 if (region.id == selected) gem = region;
               });
@@ -165,7 +165,7 @@ define(
             {
               var gem;
 
-              angular.forEach($config.virtuals, function (virtual)
+              angular.forEach(config.app.virtuals, function (virtual)
               {
                 if (virtual.id == selected) gem = virtual;
               });
@@ -185,7 +185,7 @@ define(
           {
             var urole;
 
-            angular.forEach($config.roles, function (prole)
+            angular.forEach(config.app.roles, function (prole)
             {
               if (prole.id == role) urole = prole.label;
             });
@@ -204,7 +204,7 @@ define(
           {
             var ufunc;
 
-            angular.forEach($config.mfunctions, function (pfunc)
+            angular.forEach(config.app.mfunctions, function (pfunc)
             {
               if (pfunc.id == func) ufunc = pfunc.label;
             });
@@ -222,7 +222,7 @@ define(
           return function (name,type){
             var ret;
 
-            angular.forEach($config.stateIcons, function (stateIcon, index)
+            angular.forEach(config.app.stateIcons, function (stateIcon, index)
             {
               if (angular.lowercase(stateIcon.name) == angular.lowercase(name)){
                 if(type == "data_icon"){
@@ -245,7 +245,7 @@ define(
         {
           return function (states)
           {
-            var ret = $config.stateColors.none;
+            var ret = config.app.stateColors.none;
 
             angular.forEach(states, function (state, index){
               /**
@@ -257,11 +257,11 @@ define(
                */
               if(angular.lowercase(state.name) == "availability" && state.share){
                 if(angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working" ){
-                  ret = $config.stateColors.availalbe;
+                  ret = config.app.stateColors.availalbe;
                 }else if(angular.lowercase(state.value) == "unavailable"){
-                  ret = $config.stateColors.busy;
+                  ret = config.app.stateColors.busy;
                 }else if(angular.lowercase(state.value) == "offline"){
-                  ret = $config.stateColors.offline;
+                  ret = config.app.stateColors.offline;
                 }
               }
             });

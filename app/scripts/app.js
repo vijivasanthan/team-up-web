@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: 'ui.bootstrap.modal', '$strap.directives',
+
 define(
   [
     'angular',

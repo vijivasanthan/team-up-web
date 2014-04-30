@@ -8,6 +8,7 @@ require.config (
     paths: {
       angular:            '../vendors/angular/angular.min',
       jquery:             '../vendors/jquery/dist/jquery.min',
+      plugins:            'plugins',
       domReady:           '../vendors/requirejs-domready/domReady',
       bootstrap:          '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
@@ -22,6 +23,7 @@ require.config (
       timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
     },
     shim: {
+      plugins:            { deps: ['jquery'],               exports: 'plugins'        },
       angular:            { deps: ['jquery'],               exports: 'angular'        },
       'angular-resource': { deps: ['angular']                                         },
       'angular-route':    { deps: ['angular']                                         },
@@ -42,7 +44,10 @@ require (
   [
     'angular',
     'domReady',
+
     'jquery',
+    'plugins',
+
     'angular-resource',
     'angular-route',
     'angular-strap',
@@ -122,16 +127,20 @@ var profile = {
 
   host: function ()
   {
-//       return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
+    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
+    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
     return 'http://dev.ask-cs.com/';
-//     return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
   },
-  ns : function (){
-//	 return "teamup_michael";
+
+  ns: function ()
+  {
+    // return "teamup_michael";
     return "teamup-dev";
   },
+
   noImgURL : '/img/defaultAvatar.png',
+
   states: [
     'com.ask-cs.State.Available',
     'com.ask-cs.State.KNRM.BeschikbaarNoord',
@@ -150,7 +159,8 @@ var profile = {
     }
   },
 
-  divisions: [
+  // TODO: Remove later on?!
+  _divisions: [
     {
       id: 'all',
       label: 'All divisions'
@@ -164,6 +174,8 @@ var profile = {
       label: 'Zuid'
     }
   ],
+
+  divisions: [],
 
   roles: [
     {
@@ -179,6 +191,7 @@ var profile = {
       label: 'client'
     }
   ],
+
   mfunctions: [
     {
       id: "1",
@@ -189,6 +202,7 @@ var profile = {
       label: 'Nurse'
     }
   ],
+
   stateIcons: [
     {
       name: "Availability",
@@ -216,12 +230,14 @@ var profile = {
       class_name: "icon-podcast2"
     }
   ],
+
   stateColors : {
     availalbe : "memberStateAvailalbe" ,
     busy : "memberStateBusy" ,
     offline : "memberStateOffline" ,
     none : "memberStateNone"
   },
+
   p2000: {
     status: true,
     url:    'http://knrm.myask.me/rpc/client/p2000.php',
