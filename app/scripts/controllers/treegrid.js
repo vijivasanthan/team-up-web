@@ -144,10 +144,7 @@ define(
 
 									for (var i = 0; i < data.length; i ++)
 									{
-										if (item._id == data[i]._id)
-										{
-											ret = false;
-										}
+										if (item._id == data[i]._id) ret = false;
 									}
 
 									if (item.nodes)
