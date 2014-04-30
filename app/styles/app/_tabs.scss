@@ -13,6 +13,9 @@
   }
 }
 
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  color: $brown;
+}
 
 ul.nav-tabs-app {
   li {
