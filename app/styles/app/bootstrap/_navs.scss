@@ -131,9 +131,9 @@
   }
 }
 // Active state, and it's :hover/:focus to override normal :hover/:focus
-.nav-tabs > .active > a,
-.nav-tabs > .active > a:hover,
-.nav-tabs > .active > a:focus {
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   color: $brown;
   background-color: $white;
   border: 1px solid #ddd;

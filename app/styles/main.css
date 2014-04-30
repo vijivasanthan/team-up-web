@@ -629,7 +629,6 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   display: inline-block;
-  height: 20px;
   padding: 4px 6px;
   margin-bottom: 10px;
   font-size: 14px;
@@ -2884,9 +2883,9 @@ input[type="submit"].btn {
   .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
     border-color: #eeeeee #eeeeee #dddddd; }
 
-.nav-tabs > .active > a,
-.nav-tabs > .active > a:hover,
-.nav-tabs > .active > a:focus {
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   color: #833c11;
   background-color: white;
   border: 1px solid #ddd;
@@ -9082,6 +9081,25 @@ label {
 .control-group {
   margin-bottom: 15px; }
 
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  height: auto; }
+
 .navbar {
   border: none; }
 
@@ -9232,7 +9250,6 @@ label {
 .page-header {
   overflow: hidden;
   min-height: 60px;
-  margin: -70px 0 0;
   border-bottom: none;
   padding-bottom: 0;
   position: absolute;
@@ -9295,6 +9312,9 @@ label {
   margin-right: -20px;
   margin-left: 20px; }
 
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  color: #833c11; }
+
 ul.nav-tabs-app li {
   text-align: center; }
   ul.nav-tabs-app li a {
@@ -9353,8 +9373,8 @@ ul.nav-tabs-app li {
     padding: 0; }
 
 .roundedPicSmall {
-  width: 46px;
-  height: 46px;
+  width: 50px;
+  height: 50px;
   border-radius: 25px;
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
@@ -9396,6 +9416,9 @@ ul.nav-tabs-app li {
   margin: 0 auto;
   text-align: center; }
 
+.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+  vertical-align: middle; }
+
 #chat {
   position: fixed;
   right: 0;
@@ -9411,8 +9434,8 @@ ul.nav-tabs-app li {
     color: floralwhite;
     z-index: 2001;
     display: block;
-    width: 40px;
-    height: 100px;
+    width: 46px;
+    height: 106px;
     border: 3px solid #833c11;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
