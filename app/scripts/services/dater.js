@@ -1,6 +1,6 @@
 define(
-  ['services/services', 'date'],
-  function (services, date)
+  ['services/services'],
+  function (services)
   {
     'use strict';
 
@@ -26,7 +26,7 @@ define(
 
               week: function ()
               {
-                return new Date().getWeek();
+                return Date.today().getWeekOfYear();
               },
 
               month: function ()
@@ -110,7 +110,7 @@ define(
                   };
 
                 months[i+1] = month;
-              };
+              }
 
               return months;
             },

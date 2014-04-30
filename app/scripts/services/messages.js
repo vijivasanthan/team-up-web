@@ -1,14 +1,16 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services', 'config'],
+  function (services, config)
   {
     'use strict';
 
 
 
-    services.factory('Messages', ['$rootScope', '$config', '$resource', '$q', 'Storage', '$http',
-      function($rootScope, $config, $resource, $q, Storage, $http) {
-        var Messages = $resource($config.host + $config.namespace + '/team/teamMessage/', {
+    services.factory('Messages', [
+      '$rootScope', '$resource', '$q', 'Storage', '$http',
+      function($rootScope, $resource, $q, Storage, $http)
+      {
+        var Messages = $resource(config.app.host + config.app.namespace + '/team/teamMessage/', {
         }, {
           query : {
             method : 'GET',
@@ -49,7 +51,7 @@ define(
 
 
 
-        var TeamMessage = $resource($config.host + $config.namespace + '/team/teamMessage/:teamId', {}, {
+        var TeamMessage = $resource(config.app.host + config.app.namespace + '/team/teamMessage/:teamId', {}, {
           query : {
             method : 'GET',
             params : {},

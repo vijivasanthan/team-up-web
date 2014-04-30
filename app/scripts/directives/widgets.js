@@ -131,7 +131,7 @@ define(
           });
         },
         replace: false,
-        templateUrl: 'js/views/uploader.html'
+        templateUrl: 'views/uploader.html'
       };
 
     }]);

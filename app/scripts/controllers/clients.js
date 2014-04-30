@@ -111,7 +111,7 @@ define(
           editClient : false,
           viewClient : false,
           editImg : false,
-        }
+        };
 
         /**
          * View setter
@@ -136,7 +136,7 @@ define(
 
           $scope.views[hash] = true;
 
-        }
+        };
 
         /**
          * load the reports by the client ID
@@ -187,12 +187,12 @@ define(
           var memberIds = [];
           angular.forEach($scope.groupReports, function(rept,i){
             if(memberIds.indexOf(rept.author.uuid) == -1){
-              memberIds.add(rept.author.uuid);
+              memberIds.push(rept.author.uuid);
             }
           });
           angular.forEach($scope.reports, function(rept,i){
             if(memberIds.indexOf(rept.author.uuid) == -1){
-              memberIds.add(rept.author.uuid);
+              memberIds.push(rept.author.uuid);
             }
           });
           angular.forEach(memberIds , function(memberId,j){
@@ -329,10 +329,10 @@ define(
               client: $scope.$root.getClientByID(report.clientUuid),
               filtered: "false"};
 
-            rpts.add(newReport);
+            rpts.push(newReport);
           });
           return rpts;
-        }
+        };
 
         /**
          * Switch between the views and set hash accordingly
@@ -669,7 +669,7 @@ define(
                 var changes = {};
                 var clientIds = [];
                 var emptyAddIds = [];
-                clientIds.add(clientId);
+                clientIds.push(clientId);
                 changes[clientGroupId] = {a : emptyAddIds, r : clientIds};
                 if(clientGroupId != null && clientGroupId != "" && clientGroupId != $scope.clientGroup.id){
                   changes[$scope.clientGroup.id] = {a : emptyAddIds, r : clientIds};

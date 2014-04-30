@@ -6,8 +6,8 @@ define(
 
     controllers.controller('messagesCtrl',
       [
-        '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage','$filter','Teams',
-        function ($scope, $rootScope, $q, $location, $route, Messages, Storage ,$filter,Teams)
+        '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage', '$filter', 'Teams',
+        function ($scope, $rootScope, $q, $location, $route, Messages, Storage , $filter, Teams)
         {
           $scope.messages = [];
 
@@ -68,10 +68,10 @@ define(
                   msg.senderName = member.firstName+" "+member.lastName;
                 }
 
-                $scope.messages.add(msg);
+                $scope.messages.push(msg);
 
                 if(chatMembers.indexOf(message.senderUuid) == -1){
-                  chatMembers.add(message.senderUuid);
+                  chatMembers.push(message.senderUuid);
                 }
               });
 

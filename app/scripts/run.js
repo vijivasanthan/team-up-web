@@ -633,10 +633,10 @@ define(
                 var gMembers = angular.fromJson(Storage.get(teamGrp.id));
                 angular.forEach(gMembers, function(mem) {
                   if(clientIds.indexOf(mem.uuid) == -1){
-                    clientIds.add(mem.uuid);
+                    clientIds.push(mem.uuid);
 
                     var clt = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
-                    clients.add(clt);
+                    clients.push(clt);
                   }
 
                 });
@@ -662,10 +662,10 @@ define(
                   var mebrs = angular.fromJson(Storage.get(team.uuid));
                   angular.forEach(mebrs,function(mem){
                     if(memberIds.indexOf(mem.uuid) == -1){
-                      memberIds.add(mem.uuid);
+                      memberIds.push(mem.uuid);
 
                       var tm = {uuid : mem.uuid, name : mem.firstName + " " + mem.lastName};
-                      members.add(tm);
+                      members.push(tm);
                     }
                   });
                 }

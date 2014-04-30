@@ -4,41 +4,46 @@
     ng-options='c.id as c.name for c in clientGroups', 
     ng-selected='current', 
     ng-change='requestClientGroup(current)')
+
+
+
 .tabbable.tabs-left
+
   ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+
     li(class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}")
-      a(href='#viewClientTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("client")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.clients}}
+
     li(class="{{(views.newClientGroup==true) && 'active'}}")
-      a(href='#newClientGroupTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("newClientGroup")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.newClientGroup}}
+
     li(class="{{(views.newClient==true) && 'active'}}")
-      a(href='#newClientTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("newClient")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.newClient}}
+
     li(class="{{(views.reports==true) && 'active'}}")
-      a(href='#reportsTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("reports")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.reports}}
+
+
+
   .tab-content
+
+
     #viewClientTab.tab-pane(class="{{(views.client==true) && 'active'}}")
       .tab-header(ng-hide='views.editClientGroup')
         h3.pull-left {{clientGroup.name}}
@@ -80,6 +85,8 @@
         span.muted.pull-right
           small
             i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+
+
     #newClientGroupTab.tab-pane(class="{{(views.newClientGroup==true) && 'active'}}")
       .tab-header
         h3.pull-left {{ui.teamup.newClientGroup}}
@@ -92,6 +99,8 @@
         .control-group
           button.btn.btn-success.confirmButton.controls(type='button',
           ng-click='cGroupSubmit(cGroupForm)') {{ui.teamup.createClientGroup}}
+
+
     #newClientTab.tab-pane(class="{{(views.newClient==true) && 'active'}}")
       .tab-header
         h3.pull-left {{ui.teamup.newClient}}
@@ -151,6 +160,8 @@
         .form-actions
           button.btn.btn-success(type='submit',
           ng-click='clientSubmit(clientForm)') {{ui.teamup.saveClient}}
+
+
     #reportsTab.tab-pane(class="{{(views.reports==true) && 'active'}}")
       .tab-header
         | {{ui.teamup.clients}} :
@@ -201,6 +212,8 @@
         span.muted.pull-right
           small
             i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+
+
     #viewClientTab.tab-pane(ng-show='views.viewClient',
     class="{{(views.viewClient==true) && 'active'}}")
       .tab-header
@@ -381,6 +394,8 @@
           .form-actions
             button.btn.btn-success(type='submit',
             ng-click='clientChange(clientmeta)') {{ui.teamup.saveClient}}
+
+
     #editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
       div(style='overflow: hidden; height: 35px')
         h3.pull-left(style='margin-top: 0;') {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}

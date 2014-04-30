@@ -3,6 +3,9 @@
 if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 
+localStorage.removeItem('TeamUp.periods');
+localStorage.removeItem('TeamUp.periodsNext');
+
 require.config (
   {
     paths: {
@@ -18,15 +21,17 @@ require.config (
       lawnchair:          '../vendors/lawnchair/src/Lawnchair',
       dom:                '../vendors/lawnchair/src/adapters/dom',
       moment:             '../vendors/momentjs/min/moment.min',
-      timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
+      // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
+      timeline:           'removables/timeline',
       treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
-      datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
+      // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
+      datepicker:         'removables/datepicker',
       timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
     },
     shim: {
       date:               { deps: [],                       exports: 'date'           },
       plugins:            { deps: ['jquery'],               exports: 'plugins'        },
-      angular:            { deps: ['jquery', 'date'],               exports: 'angular'        },
+      angular:            { deps: ['jquery'],               exports: 'angular'        },
       'angular-resource': { deps: ['angular']                                         },
       'angular-route':    { deps: ['angular']                                         },
       'angular-strap':    { deps: ['angular'],              exports: 'angular-strap'  },
@@ -80,6 +85,7 @@ require (
     'services/profile',
     'services/settings',
     'services/sloter',
+    'services/slots',
     'services/strings',
     'services/teams',
     'services/user',
@@ -143,7 +149,7 @@ var profile = {
     return "teamup-dev";
   },
 
-  noImgURL : '/img/defaultAvatar.png',
+  noImgURL : '/images/defaultAvatar.png',
 
   states: [
     'com.ask-cs.State.Available',

@@ -5,36 +5,33 @@
     ng-selected='current',
     ng-change='requestTeam(current)')
 
+
+
 .tabbable.tabs-left
 
   ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
 
     li(class="{{(views.team==true) && 'active'}}")
-      a(href='#viewTeamTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("team")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.teams}}
 
     li(class="{{(views.newTeam==true) && 'active'}}")
-      a(href='#newTeamTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("newTeam")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.newTeam}}
 
     li(class="{{(views.newMember==true) && 'active'}}")
-      a(href='#newMemberTab',
-      data-toggle='tab',
+      a(data-toggle='tab',
       ng-click='setViewTo("newMember")')
-        span.icomoon(span='',
-        data-icon='',
+        span.icomoon(data-icon='',
         aria-hidden='true')
         | {{ui.teamup.newMember}}
+
 
 
   .tab-content
