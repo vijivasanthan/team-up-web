@@ -11,17 +11,13 @@ define(
 				function ($rootScope, Storage)
 				{
 					return {
-
-						/**
-						 * Getters
-						 */
 						get: {
 							groups: function ()
 							{
 								var groups = {};
 
 								angular.forEach(
-									Storage.local.groups(), function (group, index)
+									Storage.local.groups(), function (group)
 									{
 										groups[group.uuid] = group.name;
 									});
@@ -34,7 +30,7 @@ define(
 								var members = {};
 
 								angular.forEach(
-									Storage.local.members(), function (member, index)
+									Storage.local.members(), function (member)
 									{
 										members[member.uuid] = member.name;
 									});
@@ -43,23 +39,14 @@ define(
 							}
 						},
 
-						/**
-						 * Wrap for sorting in list
-						 */
 						wrapper: function (rank) { return '<span style="display:none;">' + rank + '</span>' },
 
-						/**
-						 * Wrap secrets in slot contents
-						 */
 						secret: function (content) { return '<span class="secret">' + content + '</span>' },
 
-						/**
-						 * Add loading bars on both ends
-						 */
 						addLoading: function (data, timedata, rows)
 						{
 							angular.forEach(
-								rows, function (row, index)
+								rows, function (row)
 								{
 									timedata.push(
 										{
@@ -85,15 +72,12 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * Handle user slots
-						 */
 						user: function (data, timedata, config)
 						{
 							var _this = this;
 
 							angular.forEach(
-								data.user, function (slot, index)
+								data.user, function (slot)
 								{
 									angular.forEach(
 										config.legenda, function (value, legenda)
@@ -104,8 +88,7 @@ define(
 													{
 														start:     Math.round(slot.start),
 														end:       Math.round(slot.end),
-														group: (
-															       slot.recursive) ?
+														group: (slot.recursive) ?
 														       _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
 														       _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
 														content:   _this.secret(
@@ -120,7 +103,6 @@ define(
 														editable:  true
 													});
 											}
-											;
 										});
 								});
 
@@ -133,19 +115,13 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * TODO
-						 * Look for ways to combine with user
-						 *
-						 * Profile timeline data processing
-						 */
 						profile: function (data, config)
 						{
 							var _this = this,
 							    timedata = [];
 
 							angular.forEach(
-								data, function (slot, index)
+								data, function (slot)
 								{
 									angular.forEach(
 										config.legenda, function (value, legenda)
@@ -156,8 +132,7 @@ define(
 													{
 														start:     Math.round(slot.start),
 														end:       Math.round(slot.end),
-														group: (
-															       slot.recursive) ?
+														group: (slot.recursive) ?
 														       _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
 														       _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
 														content:   _this.secret(
@@ -172,7 +147,6 @@ define(
 														editable:  true
 													});
 											}
-											;
 										});
 								});
 
@@ -199,9 +173,6 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * Handle group name whether divisions selected
-						 */
 						namer: function (data, divisions, privilage)
 						{
 							var groups = this.get.groups(),
@@ -215,41 +186,34 @@ define(
 
 							if (data.aggs.division == 'all' || data.aggs.division == undefined)
 							{
-								title = (
-									        privilage == 1) ? link : '<span>' + name + '</span>';
+								title = (privilage == 1) ? link : '<span>' + name + '</span>';
 							}
 							else
 							{
 								var label;
 
 								angular.forEach(
-									divisions, function (
-										division, index
-										)
-									{ if (division.id == data.aggs.division) label = division.label; });
+									divisions,
+									function (division) { if (division.id == data.aggs.division) label = division.label }
+								);
 
-								title = (
-									        privilage == 1) ? link : '<span>' + name + '</span>';
+								title = (privilage == 1) ? link : '<span>' + name + '</span>';
 
 								title += ' <span class="label">' + label + '</span>';
 							}
-							;
 
 							return title;
 						},
 
-						/**
-						 * Handle group aggs (with divisions) with bars
-						 */
 						bars: function (data, timedata, config, name)
 						{
 							var _this = this,
 							    maxh = 0;
 
-							angular.forEach(data.aggs.data, function (slot, index) { if (slot.wish > maxh)  maxh = slot.wish; });
+							angular.forEach(data.aggs.data, function (slot) { if (slot.wish > maxh)  maxh = slot.wish });
 
 							angular.forEach(
-								data.aggs.data, function (slot, index)
+								data.aggs.data, function (slot)
 								{
 									var maxNum = maxh,
 									    num = slot.wish,
@@ -307,7 +271,6 @@ define(
 									{
 										var color = config.densities.less;
 									}
-									;
 
 									var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
 
@@ -318,20 +281,15 @@ define(
 									var actual = '<div class="bar" style="' +
 									             style +
 									             '" ' +
-
 									             ' title="Huidig aantal beschikbaar: ' +
-
 									             num +
 									             ' personen">' +
 									             span +
 									             '</div>';
 
-									if ((
-										    slot.diff > 0 && config.legenda.groups.more) ||
-									    (
-										    slot.diff == 0 && config.legenda.groups.even) ||
-									    (
-										    slot.diff < 0 && config.legenda.groups.less))
+									if ((slot.diff > 0 && config.legenda.groups.more) ||
+									    (slot.diff == 0 && config.legenda.groups.even) ||
+									    (slot.diff < 0 && config.legenda.groups.less))
 									{
 										timedata.push(
 											{
@@ -361,15 +319,12 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * Process plain group aggs
-						 */
 						aggs: function (data, timedata, config, name)
 						{
 							var _this = this;
 
 							angular.forEach(
-								data.aggs.data, function (slot, index)
+								data.aggs.data, function (slot)
 								{
 									var cn;
 
@@ -440,15 +395,12 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * Wish slots
-						 */
 						wishes: function (data, timedata, name)
 						{
 							var _this = this;
 
 							angular.forEach(
-								data.aggs.wishes, function (wish, index)
+								data.aggs.wishes, function (wish)
 								{
 									if (wish.count >= 7)
 									{
@@ -499,13 +451,13 @@ define(
 							var offset = Number(Date.now());
 
 							angular.forEach(
-								data.members, function (member, index)
+								data.members, function (member)
 								{
-
 									var tasks = [];
+
 									if (data.section == "teams")
 									{
-										console.log("data.teams.tasks ", data.teams.tasks);
+										// console.log("data.teams.tasks ", data.teams.tasks);
 
 										if (data.teams.tasks[member.memId] != null)
 										{
@@ -514,7 +466,7 @@ define(
 									}
 									else if (data.section == "clients")
 									{
-										console.log("data.clients.tasks ", data.clients.tasks);
+										// console.log("data.clients.tasks ", data.clients.tasks);
 
 										if (data.clients.tasks[member.memId] != null)
 										{
@@ -528,16 +480,15 @@ define(
 										tasks, function (task)
 										{
 											var relatedUser = "";
+
 											if (data.section == "teams")
 											{
 												// should get the name from team members ;
-
 												relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
 											}
 											else if (data.section == "clients")
 											{
 												// should get the name from clients;
-
 												relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
 											}
 
@@ -589,14 +540,11 @@ define(
 
 									timedata = _this.addLoading(data, timedata, [member.head]);
 
-									/**
-									 * TODO
-									 * Good place to host this here?
-									 */
 									angular.forEach(
-										member.stats, function (stat, index)
+										member.stats, function (stat)
 										{
 											var state = stat.state.split('.');
+
 											state.reverse();
 											stat.state = 'bar-' + state[0];
 										});
@@ -605,9 +553,6 @@ define(
 							return timedata;
 						},
 
-						/**
-						 * Produce pie charts
-						 */
 						pies: function (data)
 						{
 							document.getElementById("groupPie").innerHTML = '';
@@ -647,41 +592,12 @@ define(
 							    pie = r.piechart(120, 120, 100, xratios, { colors: colors });
 						},
 
-						/**
-						 * Timeline data processing
-						 */
 						process: function (data, config, divisions, privilage)
 						{
 							var _this = this,
 							    timedata = [];
 
-							// if (data.user) timedata = _this.user(data, timedata, config);
-
-							/*
-							 if (data.aggs)
-							 {
-							 var name = _this.namer(data, divisions, privilage);
-
-							 if (config.bar)
-							 {
-							 timedata = _this.bars(data, timedata, config, name);
-							 }
-							 else
-							 {
-							 timedata = _this.aggs(data, timedata, config, name);
-							 };
-							 };
-
-							 if (config.wishes) timedata = _this.wishes(data, timedata, name);
-							 */
-
 							if (data.members) timedata = _this.members(data, timedata, config, privilage);
-
-							/*
-							 if (data.aggs && data.aggs.ratios) _this.pies(data);
-							 */
-
-							// console.log('inside of process data =>', data, 'config =>',  config, 'divisions =>', divisions, privilage);
 
 							return timedata;
 						}

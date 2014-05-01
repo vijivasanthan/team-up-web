@@ -1,9 +1,9 @@
 define(
-  ['angular'],
-  function (angular)
-  {
-    'use strict';
+	['angular'],
+	function (angular)
+	{
+		'use strict';
 
-    return angular.module('services', []);
-  }
+		return angular.module('services', []);
+	}
 );

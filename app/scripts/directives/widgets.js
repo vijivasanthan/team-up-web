@@ -1,204 +1,168 @@
 define(
-  ['directives/directives'],
-  function (directives)
-  {
-    'use strict';
+	['directives/directives'],
+	function (directives)
+	{
+		'use strict';
 
-    directives.directive(
-      'chosen',
-      function ()
-      {
-        var linker = function (scope, element, attr)
-        {
-          scope.$watch(
-            'receviersList', function ()
-            {
-              element.trigger('liszt:updated');
-            });
+		directives.directive(
+			'chosen',
+			function ()
+			{
+				var linker = function (scope, element, attr)
+				{
+					scope.$watch(
+						'receviersList',
+						function () { element.trigger('liszt:updated') }
+					);
 
-          scope.$watch(
-            'message.receviers', function ()
-            {
-              $(element[0]).trigger('liszt:updated');
-            });
+					scope.$watch(
+						'message.receviers',
+						function () { $(element[0]).trigger('liszt:updated') }
+					);
 
-          element.chosen();
-        };
+					element.chosen();
+				};
 
-        return {
-          restrict: 'A',
-          link:     linker
-        };
-      }
-    );
+				return {
+					restrict: 'A',
+					link:     linker
+				};
+			}
+		);
 
-    directives.directive(
-      'uploader', [function ()
-                   {
+		directives.directive(
+			'uploader', [
+				function ()
+				{
+					return {
+						restrict:    'E',
+						scope:       {
+							action: '@'
+						},
+						controller:  [
+							'$scope', '$rootScope', 'Storage' ,
+							function ($scope, $rootScope, Storage)
+							{
+								$scope.progress = 0;
+								$scope.avatar = '';
+								$scope.uploadLabel = $rootScope.ui.profile.click2upload;
 
-                     return {
-                       restrict:    'E',
-                       scope:       {
-                         action: '@'
-                         // scope
-                         // define a new isolate scope
+								var session = angular.fromJson(Storage.cookie.get('session'));
 
-                       },
-                       controller:  ['$scope', '$rootScope', 'Storage' , function ($scope, $rootScope, Storage)
-                       {
+								if (session)
+								{
+									$scope.sessionId = session.id;
+								}
+								else
+								{
+									$rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
+									return false;
+								}
 
-                         // controller:
-                         // here you should define properties and methods
-                         // used in the directive's scope
+								$scope.sendFile = function (el)
+								{
+									var $form = $(el).parents('form');
 
-                         $scope.progress = 0;
-                         $scope.avatar = '';
-                         $scope.uploadLabel = $rootScope.ui.profile.click2upload;
+									if ($(el).val() == '')
+									{
+										return false;
+									}
 
-                         var session = angular.fromJson(Storage.cookie.get('session'));
-                         if (session)
-                         {
-                           $scope.sessionId = session.id;
-                         }
-                         else
-                         {
-                           $rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
-                           return false;
-                         }
+									$form.attr('action', $scope.action);
 
-                         $scope.sendFile = function (el)
-                         {
+									$scope.$apply(
+										function () { $scope.progress = 0 }
+									);
 
-                           var $form = $(el).parents('form');
+									$form.ajaxSubmit(
+										{
+											type:           'POST',
+											headers:        {
+												'X-SESSION_ID': $scope.sessionId
+											},
+											uploadProgress: function (event, position, total, percentComplete)
+											{
+												$scope.$apply(
+													function () { $scope.progress = percentComplete }
+												);
+											},
+											error:          function (event, statusText, responseText, form)
+											{
+												$form.removeAttr('action');
 
-                           if ($(el).val() == '')
-                           {
-                             return false;
-                           }
+												console.log("response : ", responseText);
+											},
+											success:        function (responseText, statusText, xhr, form)
+											{
+												var ar = $(el).val().split('\\'),
+												    filename = ar[ar.length - 1];
+												$form.removeAttr('action');
 
-                           $form.attr('action', $scope.action);
+												$scope.$apply(
+													function () { $scope.avatar = filename }
+												);
+											}
+										});
+								};
+							}
+						],
+						link:        function (scope, elem, attrs, ctrl)
+						{
+							elem.find('.fake-uploader').click(
+								function () { elem.find('input[type="file"]').click() }
+							);
+						},
+						replace:     false,
+						templateUrl: 'views/uploader.html'
+					};
+				}
+			]);
 
-                           $scope.$apply(
-                             function ()
-                             {
-                               $scope.progress = 0;
-                             });
+		directives.directive(
+			'profile', [
+				function ()
+				{
+					return {
+						restrict:    'E',
+						scope:       {
+							memberId: '@'
+						},
+						controller:  [
+							'$scope',
+							function ($scope)
+							{
+								$scope.loadMember = function (el) {}
+							}
+						],
+						link:        function (scope, elem, attrs, ctrl)
+						{
+							console.log(attrs.memberId);
+						},
+						replace:     false,
+						templateUrl: 'views/profileTemplate.html'
+					};
 
-                           $form.ajaxSubmit(
-                             {
-                               type:           'POST',
-                               headers:        {'X-SESSION_ID': $scope.sessionId},
-                               uploadProgress: function (event, position, total, percentComplete)
-                               {
+				}
+			]);
 
-                                 $scope.$apply(
-                                   function ()
-                                   {
-                                     // upload the progress bar during the upload
-                                     $scope.progress = percentComplete;
-                                   });
+		directives.directive(
+			'ngenter', function ()
+			{
+				return function (scope, element, attrs)
+				{
+					element.bind(
+						"keydown keypress", function (event)
+						{
+							if (event.which === 13)
+							{
+								scope.$apply(
+									function () { scope.$eval(attrs.ngenter) }
+								);
 
-                               },
-                               error:          function (event, statusText, responseText, form)
-                               {
-
-                                 // remove the action attribute from the form
-                                 $form.removeAttr('action');
-
-                                 /*
-                                  handle the error ...
-                                  */
-                                 console.log("response : ", responseText);
-                               },
-                               success:        function (responseText, statusText, xhr, form)
-                               {
-
-                                 var ar = $(el).val().split('\\'),
-                                     filename = ar[ar.length - 1];
-
-                                 // remove the action attribute from the form
-                                 $form.removeAttr('action');
-
-                                 $scope.$apply(
-                                   function ()
-                                   {
-                                     $scope.avatar = filename;
-                                   });
-
-                               }
-                             });
-
-                         };
-                       }],
-                       link:        function (scope, elem, attrs, ctrl)
-                       {
-
-                         // link function
-                         // here you should register listeners
-                         elem.find('.fake-uploader').click(
-                           function ()
-                           {
-                             elem.find('input[type="file"]').click();
-                           });
-                       },
-                       replace:     false,
-                       templateUrl: 'views/uploader.html'
-                     };
-
-                   }]);
-
-    directives.directive(
-      'profile', [function ()
-                  {
-
-                    return {
-                      restrict:    'E',
-                      scope:       {
-                        memberId: '@'
-                        // scope
-                        // define a new isolate scope
-
-                      },
-                      controller:  ['$scope', '$rootScope', 'Storage' , function ($scope, $rootScope, Storage)
-                      {
-                        console.log($scope.memberId);
-
-                        $scope.loadMember = function (el)
-                        {
-
-                        }
-
-                      }],
-                      link:        function (scope, elem, attrs, ctrl)
-                      {
-                        // link function
-                        console.log(attrs.memberId);
-                      },
-                      replace:     false,
-                      templateUrl: 'views/profileTemplate.html'
-                    };
-
-                  }]);
-
-    directives.directive(
-      'ngenter', function ()
-      {
-        return function (scope, element, attrs)
-        {
-          element.bind(
-            "keydown keypress", function (event)
-            {
-              if (event.which === 13)
-              {
-                scope.$apply(
-                  function ()
-                  {
-                    scope.$eval(attrs.ngenter);
-                  });
-                event.preventDefault();
-              }
-            });
-        };
-      });
-  }
+								event.preventDefault();
+							}
+						});
+				};
+			});
+	}
 );

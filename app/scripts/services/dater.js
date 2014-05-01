@@ -1,245 +1,197 @@
 define(
-  ['services/services'],
-  function (services)
-  {
-    'use strict';
+	['services/services'],
+	function (services)
+	{
+		'use strict';
 
-    services.factory(
-      'Dater',
-      [
-        '$rootScope', 'Storage',
-        function ($rootScope, Storage)
-        {
-          return {
+		services.factory(
+			'Dater',
+			[
+				'$rootScope', 'Storage',
+				function ($rootScope, Storage)
+				{
+					return {
+						current: {
+							today: function () { return Date.today().getDayOfYear() + 1 },
+							week:  function () { return Date.today().getWeekOfYear() },
+							month: function () { return new Date().getMonth() + 1 }
+						},
 
-            current: {
-              today: function ()
-              {
-                return Date.today().getDayOfYear() + 1;
-              },
+						readable: {
+							date: function (date) { return  new Date(date).toString($rootScope.config.formats.date) }
+						},
 
-              week: function ()
-              {
-                return Date.today().getWeekOfYear();
-              },
+						convert: {
+							absolute: function (date, time, flag)
+							{
+								var dates = date.split('-'),
+								    result = new Date(
+									    Date.parse(
+											    dates[2] +
+											    '-' +
+											    dates[1] +
+											    '-' +
+											    dates[0] +
+											    ' ' +
+											    time)).getTime();
 
-              month: function ()
-              {
-                return new Date().getMonth() + 1;
-              }
-            },
+								return (
+									       flag) ? result / 1000 : result;
+							}
+						},
 
-            readable: {
-              date: function (date)
-              {
-                return  new Date(date).toString($rootScope.config.formats.date);
-              }
-            },
+						calculate: {
+							diff: function (range) { return new Date(range.end).getTime() - new Date(range.start).getTime() }
+						},
 
-            convert: {
-              absolute: function (date, time, flag)
-              {
-                var dates = date.split('-'),
-                    result = new Date(
-                      Date.parse(
-                          dates[2] +
-                          '-' +
-                          dates[1] +
-                          '-' +
-                          dates[0] +
-                          ' ' +
-                          time)).getTime();
+						getThisMonth: function () { return new Date().toString('M') },
 
-                return (
-                         flag) ? result / 1000 : result;
-              }
-            },
+						getThisYear: function () { return new Date().toString('yyyy') },
 
-            calculate: {
-              diff: function (range)
-              {
-                return new Date(range.end).getTime() - new Date(range.start).getTime()
-              }
-            },
+						getMonthTimeStamps: function ()
+						{
+							var months = {},
+							    year = this.getThisYear();
 
-            /**
-             * Get the current month
-             */
-            getThisMonth: function ()
-            {
-              return new Date().toString('M');
-            },
+							for (var i = 0; i < 12; i ++)
+							{
+								var firstDay = new Date(year, i).moveToFirstDayOfMonth(),
+								    lastDay = new Date(year, i).moveToLastDayOfMonth(),
+								    month = {
+									    first:     {
+										    day:       firstDay,
+										    timeStamp: firstDay.getTime()
+									    },
+									    last:      {
+										    day:       lastDay,
+										    timeStamp: lastDay.getTime()
+									    },
+									    totalDays: Date.getDaysInMonth(year, i)
+								    };
 
-            /**
-             * Get the current year
-             */
-            getThisYear: function ()
-            {
-              return new Date().toString('yyyy');
-            },
+								months[i + 1] = month;
+							}
 
-            /**
-             * Get begin and end timestamps of months
-             * in the current year
-             */
-            getMonthTimeStamps: function ()
-            {
-              var months = {},
-                  year = this.getThisYear();
+							return months;
+						},
 
-              for (var i = 0; i < 12; i ++)
-              {
-                var firstDay = new Date(year, i).moveToFirstDayOfMonth(),
-                    lastDay = new Date(year, i).moveToLastDayOfMonth(),
-                    month = {
-                      first:     {
-                        day:       firstDay,
-                        timeStamp: firstDay.getTime()
-                      },
-                      last:      {
-                        day:       lastDay,
-                        timeStamp: lastDay.getTime()
-                      },
-                      totalDays: Date.getDaysInMonth(year, i)
-                    };
+						getWeekTimeStamps: function ()
+						{
+							var nweeks = [],
+							    weeks = {},
+							    nextMonday,
+							    year = this.getThisYear(),
+							    firstDayInYear = new Date(year, 0).moveToFirstDayOfMonth(),
+							    firstMondayOfYear = new Date(year, 0).moveToFirstDayOfMonth().last().sunday().addWeeks(0),
+							    firstMonday = new Date(firstMondayOfYear);
 
-                months[i + 1] = month;
-              }
+							for (var i = 0; i < 53; i ++)
+							{
+								if (i == 0)
+								{
+									nextMonday = firstMondayOfYear.addWeeks(1);
+								}
+								else
+								{
+									nextMonday = new Date(nweeks[i - 1]).addWeeks(1);
+								}
 
-              return months;
-            },
+								nweeks.push(new Date(nextMonday));
+							}
 
-            /**
-             * Get begin and end timestamps of weeks
-             */
-            getWeekTimeStamps: function ()
-            {
-              var nweeks = [],
-                  weeks = {},
-                  nextMonday,
-                  year = this.getThisYear(),
-                  firstDayInYear = new Date(year, 0).moveToFirstDayOfMonth(),
-                  firstMondayOfYear = new Date(year, 0).moveToFirstDayOfMonth().last().sunday().addWeeks(0),
-                  firstMonday = new Date(firstMondayOfYear);
+							nweeks.unshift(firstMonday);
 
-              for (var i = 0; i < 53; i ++)
-              {
-                if (i == 0)
-                {
-                  nextMonday = firstMondayOfYear.addWeeks(1);
-                }
-                else
-                {
-                  nextMonday = new Date(nweeks[i - 1]).addWeeks(1);
-                }
+							var firstMondayofNextYear = new Date(nweeks[51].addWeeks(1));
 
-                nweeks.push(new Date(nextMonday));
-              }
+							for (var i = 0; i < 55; i ++)
+							{
+								weeks[i + 1] = {
+									first: {
+										day:       nweeks[i],
+										timeStamp: new Date(nweeks[i]).getTime()
+									},
+									last:  {
+										day:       nweeks[i + 1],
+										timeStamp: new Date(nweeks[i + 1]).getTime()
+									}
+								}
+							}
 
-              nweeks.unshift(firstMonday);
+							delete weeks[54];
+							delete weeks[55];
 
-              var firstMondayofNextYear = new Date(nweeks[51].addWeeks(1));
+							return weeks;
+						},
 
-              for (var i = 0; i < 55; i ++)
-              {
-                weeks[i + 1] = {
-                  first: {
-                    day:       nweeks[i],
-                    timeStamp: new Date(nweeks[i]).getTime()
-                  },
-                  last:  {
-                    day:       nweeks[i + 1],
-                    timeStamp: new Date(nweeks[i + 1]).getTime()
-                  }
-                }
-              }
+						getDayTimeStamps: function ()
+						{
+							var nextDay,
+							    ndays = [],
+							    days = {},
+							    year = this.getThisYear(),
+							    firstDayInYear = new Date(year, 0).moveToFirstDayOfMonth();
 
-              /**
-               * Remove unneccessary periods
-               */
-              delete weeks[54];
-              delete weeks[55];
+							for (var i = 0; i < 366; i ++)
+							{
+								if (i == 0)
+								{
+									nextDay = firstDayInYear;
+								}
+								else
+								{
+									nextDay = new Date(ndays[i - 1]).addDays(1);
+								}
 
-              return weeks;
-            },
+								ndays.push(new Date(nextDay));
+							}
 
-            /**
-             */
-            getDayTimeStamps: function ()
-            {
-              var nextDay,
-                  ndays = [],
-                  days = {},
-                  year = this.getThisYear(),
-                  firstDayInYear = new Date(year, 0).moveToFirstDayOfMonth();
+							for (var i = 0; i < 366; i ++)
+							{
+								days[i + 1] = {
+									first: {
+										day:       ndays[i],
+										timeStamp: new Date(ndays[i]).getTime()
+									},
+									last:  {
+										day:       ndays[i + 1],
+										timeStamp: new Date(ndays[i + 1]).getTime()
+									}
+								};
+							}
 
-              for (var i = 0; i < 366; i ++)
-              {
-                if (i == 0)
-                {
-                  nextDay = firstDayInYear;
-                }
-                else
-                {
-                  nextDay = new Date(ndays[i - 1]).addDays(1);
-                }
+							if (! days[366].timeStamp)
+							{
+								delete days[366];
 
-                ndays.push(new Date(nextDay));
-              }
+								days.total = 365;
+							}
+							else
+							{
+								days.total = 366;
+							}
 
-              for (var i = 0; i < 366; i ++)
-              {
-                days[i + 1] = {
-                  first: {
-                    day:       ndays[i],
-                    timeStamp: new Date(ndays[i]).getTime()
-                  },
-                  last:  {
-                    day:       ndays[i + 1],
-                    timeStamp: new Date(ndays[i + 1]).getTime()
-                  }
-                };
-              }
+							return days;
+						},
 
-              /**
-               * Remove not existing date
-               */
-              if (! days[366].timeStamp)
-              {
-                delete days[366];
+						registerPeriods: function ()
+						{
+							var periods = angular.fromJson(Storage.get('periods') || '{}');
 
-                days.total = 365;
-              }
-              else
-              {
-                days.total = 366;
-              }
+							Storage.add(
+								'periods', angular.toJson(
+									{
+										months: this.getMonthTimeStamps(),
+										weeks:  this.getWeekTimeStamps(),
+										days:   this.getDayTimeStamps()
+									}));
+						},
 
-              return days;
-            },
-
-            registerPeriods: function ()
-            {
-              var periods = angular.fromJson(Storage.get('periods') || '{}');
-
-              Storage.add(
-                'periods', angular.toJson(
-                  {
-                    months: this.getMonthTimeStamps(),
-                    weeks:  this.getWeekTimeStamps(),
-                    days:   this.getDayTimeStamps()
-                  }));
-            },
-
-            getPeriods: function ()
-            {
-              return angular.fromJson(Storage.get('periods'));
-            }
-          }
-        }
-      ]);
-
-  }
+						getPeriods: function ()
+						{
+							return angular.fromJson(Storage.get('periods'));
+						}
+					}
+				}
+			]);
+	}
 );
-
-

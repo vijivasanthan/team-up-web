@@ -1,99 +1,80 @@
 define(
-  ['services/services'],
-  function (services)
-  {
-    'use strict';
+	['services/services'],
+	function (services)
+	{
+		'use strict';
 
-    services.factory(
-      'Session',
-      [
-        '$rootScope', '$http', 'Storage',
-        function ($rootScope, $http, Storage)
-        {
-          return {
-            /**
-             * Check session
-             */
+		services.factory(
+			'Session',
+			[
+				'$rootScope', '$http', 'Storage',
+				function ($rootScope, $http, Storage)
+				{
+					return {
+						check: function ()
+						{
+							var session = angular.fromJson(Storage.cookie.get('session'));
 
-            check: function ()
-            {
-              var session = angular.fromJson(Storage.cookie.get('session'));
+							if (session)
+							{
+								this.set(session.id);
 
-              if (session)
-              {
-                this.set(session.id);
+								return true;
+							}
+							else
+							{
+								return false;
+							}
+						},
 
-                return true;
-              }
-              else
-              {
-                return false;
-              }
-            },
+						cookie: function (session)
+						{
+							var values,
+							    pairs = document.cookie.split(";");
 
-            /**
-             * Read cookie value
-             */
-            cookie: function (session)
-            {
-              var values,
-                  pairs = document.cookie.split(";");
+							for (var i = 0; i < pairs.length; i ++)
+							{
+								values = pairs[i].split("=");
 
-              for (var i = 0; i < pairs.length; i ++)
-              {
-                values = pairs[i].split("=");
+								if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
+							}
+						},
 
-                if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
-              }
+						get: function (session)
+						{
+							this.check(session);
+							this.set(session.id);
 
-            },
+							return session.id;
+						},
 
-            /**
-             * Get session
-             * Prolong session time by every check
-             */
-            get: function (session)
-            {
-              this.check(session);
+						set: function (sessionId)
+						{
+							var session = {
+								id:   sessionId,
+								time: new Date()
+							};
 
-              this.set(session.id);
+							Storage.cookie.add('session', angular.toJson(session));
 
-              return session.id;
-            },
+							$rootScope.session = session;
 
-            /**
-             * Set session
-             */
-            set: function (sessionId)
-            {
-              var session = {
-                id:   sessionId,
-                time: new Date()
-              };
+							$http.defaults.headers.common['X-SESSION_ID'] = $rootScope.session.id;
 
-              Storage.cookie.add('session', angular.toJson(session));
+							return session;
+						},
 
-              $rootScope.session = session;
+						clear: function ()
+						{
+							$rootScope.session = null;
 
-              $http.defaults.headers.common['X-SESSION_ID'] = $rootScope.session.id;
+							$http.defaults.headers.common['X-SESSION_ID'] = null;
+						}
+					}
+				}
+			]);
 
-              return session;
-            },
-
-            /**
-             * Clear session
-             */
-            clear: function ()
-            {
-              $rootScope.session = null;
-
-              $http.defaults.headers.common['X-SESSION_ID'] = null;
-            }
-          }
-        }
-      ]);
-
-  }
+	}
 );
 
 
