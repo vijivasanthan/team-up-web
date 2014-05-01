@@ -14,8 +14,7 @@ define(
 
 					var Login = $resource(
 							config.app.host + config.app.namespace + '/login',
-							{
-							},
+							{},
 							{
 								process: {
 									method: 'GET',
@@ -29,8 +28,7 @@ define(
 
 					var Logout = $resource(
 							config.app.host + 'logout',
-							{
-							},
+							{},
 							{
 								process: {
 									method:  'GET',
@@ -42,8 +40,7 @@ define(
 
 					var MemberInfo = $resource(
 							config.app.host + config.app.namespace + '/team/member',
-							{
-							},
+							{},
 							{
 								get: {
 									method: 'GET',
@@ -54,8 +51,7 @@ define(
 
 					var Reset = $resource(
 							config.app.host + '/passwordReset',
-							{
-							},
+							{},
 							{
 								password: {
 									method: 'GET',
@@ -162,6 +158,7 @@ define(
 
 					return new User;
 				}
-			]);
+			]
+		);
 	}
 );

@@ -110,6 +110,7 @@ define(
 									if (clientIds.indexOf(client.uuid) == - 1)
 									{
 										clientIds.push(client.uuid);
+
 										clients.push(
 											{
 												"name": client.firstName + " " + client.lastName,
@@ -135,6 +136,7 @@ define(
 											if (groupIds.indexOf(grp.id) != - 1 && kp)
 											{
 												connections.teamClients[team.uuid] = grp.id;
+
 												kp = false;
 											}
 										});
@@ -472,7 +474,6 @@ define(
 						angular.forEach(
 							teamIds, function (tId)
 							{
-
 								if (typeof preTc[tId] == 'undefined' && afterTc[tId])
 								{
 									changes[tId] = {a: [afterTc[tId]], r: []};
@@ -485,7 +486,6 @@ define(
 								{
 									changes[tId] = {a: [afterTc[tId]], r: [preTc[tId]]};
 								}
-
 							});
 
 						return changes;
@@ -519,7 +519,6 @@ define(
 								}
 
 								$rootScope.statusBar.off();
-
 							});
 					};
 
@@ -534,11 +533,10 @@ define(
 							}
 							else
 							{
-								console.log("Team Groups changes : ", changes);
+								// console.log("Team Groups changes : ", changes);
 
 								$scope.applyTeamClientsChanges(changes);
 							}
-
 						});
 
 					$scope.applyTeamsChanges = function (changes)
@@ -554,13 +552,15 @@ define(
 								Teams.queryMembersNotInTeams().then(
 									function ()
 									{
-										console.log("members not in any teams loaded ");
+										// console.log("members not in any teams loaded ");
 
 										$rootScope.statusBar.off();
-										$route.reload();
-									}, function (error) { console.log(error) });
 
-							});
+										$route.reload();
+									},
+									function (error) { console.log(error) });
+							}
+						);
 					};
 
 					$rootScope.$on(
@@ -577,11 +577,10 @@ define(
 							}
 							else
 							{
-								console.log("Team Member changes : ", changes);
+								// console.log("Team Member changes : ", changes);
 
 								$scope.applyTeamsChanges(changes);
 							}
-
 						});
 
 					$rootScope.$on(
@@ -601,15 +600,14 @@ define(
 								$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
 								Clients.manage(changes).then(
-									function (result)
+									function ()
 									{
-
 										$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 										$rootScope.statusBar.off();
+
 										$route.reload();
 									});
 							}
-
 						});
 
 					$scope.dataChanged = function (currentLoc)

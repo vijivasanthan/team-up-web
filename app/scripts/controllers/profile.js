@@ -64,7 +64,7 @@ define(
 					if (teams.length == 0)
 					{
 						angular.forEach(
-							storage_teams, function (team, index)
+							storage_teams, function (team)
 							{
 								if (team.uuid == sessionStorage.getItem(data.resources.uuid + "_team"))
 								{

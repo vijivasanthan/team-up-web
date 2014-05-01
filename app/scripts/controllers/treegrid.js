@@ -30,18 +30,8 @@ define(
 						caches:      {},
 						connections: {},
 
-						/**
-						 * Calculate height of available area
-						 */
-						areas: function ()
-						{
-							this.options.grid.height = $('#wrap').height() - (
-								270 + 200) + 'px'
-						},
+						areas: function () { this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px' },
 
-						/**
-						 * Build TreeGrid
-						 */
 						build: function (id, data)
 						{
 							var _this = this,
@@ -68,33 +58,21 @@ define(
 
 							this.grids[key].draw(this.store(id, data));
 
-							/**
-							 * Expand listener
-							 */
 							links.events.addListener(
 								this.grids[key], 'expand',
 								function (properties) { console.log('expanding ->', key, properties) }
 							);
 
-							/**
-							 * Collapse listener
-							 */
 							links.events.addListener(
 								this.grids[key], 'collapse',
 								function (properties) { console.log('collapsing ->', key, properties) }
 							);
 
-							/**
-							 * Select listener
-							 */
 							links.events.addListener(
 								this.grids[key], 'select',
 								function (properties) { console.log('selecting ->', key, properties) }
 							);
 
-							/**
-							 * Remove listener
-							 */
 							links.events.addListener(
 								this.grids[key], 'remove',
 								function (event)
@@ -107,9 +85,6 @@ define(
 							);
 						},
 
-						/**
-						 * Initialize a DataTable
-						 */
 						store: function (id, data)
 						{
 							var _this = this,
@@ -122,9 +97,6 @@ define(
 
 							this.stores[key].totalItems = this.stores[key].data.length;
 
-							/**
-							 * Append items
-							 */
 							this.stores[key].appendItems = function (items, callback)
 							{
 								function isUnique (item, data)
@@ -176,9 +148,6 @@ define(
 								}
 							};
 
-							/**
-							 * Link items
-							 */
 							this.stores[key].linkItems = function (sourceItems, targetItem, callback, errback)
 							{
 								var index = this.data.indexOf(targetItem);
@@ -217,9 +186,6 @@ define(
 								this.update();
 							};
 
-							/**
-							 * Unlink items
-							 */
 							this.stores[key].unlink = function (item)
 							{
 								var index = this.data.indexOf(item);
@@ -237,9 +203,6 @@ define(
 								this.update();
 							};
 
-							/**
-							 * Remove links
-							 */
 							this.stores[key].removeLink = function (item)
 							{
 								var filtered = [];
@@ -282,9 +245,6 @@ define(
 								this.update();
 							};
 
-							/**
-							 * Change listener
-							 */
 							links.events.addListener(
 								this.stores[key], 'change',
 								function ()
@@ -299,9 +259,6 @@ define(
 								}
 							);
 
-							/**
-							 * (Custom) unlink listener
-							 */
 							links.events.addListener(
 								this.stores[key], 'unlink',
 								function (event)
@@ -315,9 +272,6 @@ define(
 								}
 							);
 
-							/**
-							 * Add teamClients connections if they exist
-							 */
 							if ($scope.treeGrid.grid == 'teamClients' && id == 'right')
 							{
 								if (this.connections.teamClients.length > 0)
@@ -363,9 +317,6 @@ define(
 							return this.stores[key];
 						},
 
-						/**
-						 * Process data
-						 */
 						process: function (id, data)
 						{
 							var _this = this,
@@ -445,9 +396,6 @@ define(
 							return this.processed[key];
 						},
 
-						/**
-						 * Configure TreeGrids
-						 */
 						configure: function (id)
 						{
 							var options = {
@@ -465,6 +413,7 @@ define(
 												allowedEffect: 'link'
 											};
 											break;
+
 										case 'right':
 											options.dataTransfer = {
 												dropEffect: 'link'
@@ -484,21 +433,14 @@ define(
 							return options;
 						},
 
-						/**
-						 * Init TreeGrid
-						 */
 						init: function ()
 						{
 							this.areas();
-
 							this.build('left', this.data.left);
 							this.build('right', this.data.right);
 						}
 					};
 
-					/**
-					 * TreeGrid manager listener
-					 */
 					$rootScope.$on(
 						'TreeGridManager', function ()
 						{
@@ -517,9 +459,6 @@ define(
 							})($scope);
 						});
 
-					/**
-					 * Attach listener for window resizing
-					 */
 					$window.onresize = function () { $scope.treeGrid.init() };
 
 					$scope.extract = function (sources)
@@ -546,14 +485,7 @@ define(
 						return connections;
 					};
 
-					/**
-					 * Save treeGrid
-					 */
 					$scope.save = {
-
-						/**
-						 * Teams & Clients
-						 */
 						teamClients: function ()
 						{
 							var data = $scope.treeGrid.stores['teamClients_right'].data,
@@ -571,9 +503,6 @@ define(
 							$rootScope.$broadcast('save:teamClients', connections);
 						},
 
-						/**
-						 * Teams
-						 */
 						teams: function ()
 						{
 							$rootScope.$broadcast(
@@ -582,9 +511,6 @@ define(
 							);
 						},
 
-						/**
-						 * Clients
-						 */
 						clients: function ()
 						{
 							$rootScope.$broadcast(
@@ -592,7 +518,6 @@ define(
 								$scope.extract($scope.treeGrid.stores['clients_right'].data)
 							);
 						}
-
 					};
 
 					$scope.getData = {
@@ -613,23 +538,10 @@ define(
 							return connections;
 						},
 
-						/**
-						 * Teams
-						 */
-						teams: function ()
-						{
-							return $scope.extract($scope.treeGrid.stores['teams_right'].data);
-						},
+						teams: function () { return $scope.extract($scope.treeGrid.stores['teams_right'].data) },
 
-						/**
-						 * Clients
-						 */
-						clients: function ()
-						{
-							return $scope.extract($scope.treeGrid.stores['clients_right'].data);
-						}
+						clients: function () { return $scope.extract($scope.treeGrid.stores['clients_right'].data) }
 					};
-
 				}
 			]);
 	}

@@ -12,8 +12,7 @@ define(
 				{
 					var Teams = $resource(
 							config.app.host + config.app.namespace + '/team/',
-							{
-							},
+							{},
 							{
 								query:  {
 									method:  'GET',
@@ -373,29 +372,12 @@ define(
 						angular.forEach(
 							teams_local, function (team)
 							{
-								var members = angular.fromJson(Storage.get(team.uuid));
-
-								data.members[team.uuid] = members;
+								data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
 							});
 
 						deferred.resolve(data);
 
 						return deferred.promise;
-					};
-
-					Teams.prototype.queryStatus = function (teamId)
-					{
-						var deferred = $q.defer();
-						TeamStatus.query(
-							{},
-							function ()
-							{
-								deferred.resolve(
-									{
-										id:   id,
-										data: returned
-									});
-							}, function (error) { deferred.resolve({error: error}) });
 					};
 
 					Teams.prototype.get = function (id)
@@ -790,6 +772,7 @@ define(
 
 					return new Teams;
 				}
-			]);
+			]
+		);
 	}
 );

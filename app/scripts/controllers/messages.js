@@ -128,7 +128,8 @@ define(
 										$('#chat-content #messageField').focus();
 										$('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
 									}, 100);
-							}, function (error) { console.log(error) });
+							},
+							function (error) { console.log(error) });
 					};
 
 					$scope.openChat = function ()
@@ -173,18 +174,19 @@ define(
 						console.log(message);
 
 						Messages.sendTeamMessage(message).then(
-							function (result)
+							function ()
 							{
 								$scope.renderMessage();
 								$rootScope.statusBar.off();
 								$scope.newMessage = "";
 
-							}, function (error)
+							},
+							function (error)
 							{
 								$rootScope.notifier.error(error);
 								$rootScope.statusBar.off();
-							});
-
+							}
+						);
 					};
 
 					/**

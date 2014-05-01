@@ -206,64 +206,6 @@ define(
 						return deferred.promise;
 					};
 
-					Profile.prototype.getWithSlots = function (id, localize, params)
-					{
-						var deferred = $q.defer();
-
-						Profile.prototype.get(id, localize)
-							.then(
-							function (resources)
-							{
-								Slots.user(
-									{
-										user:  id,
-										start: params.start,
-										end:   params.end
-									}).then(
-									function (slots)
-									{
-										deferred.resolve(
-											angular.extend(
-												resources, {
-													slots:   slots,
-													synced:  new Date().getTime(),
-													periods: {
-														start: params.start * 1000,
-														end: params.end * 1000
-													}
-												}));
-									});
-							});
-
-						return deferred.promise;
-					};
-
-					Profile.prototype.getSlots = function (id, params)
-					{
-						var deferred = $q.defer();
-
-						Slots.user(
-							{
-								user: id,
-								start: params.start / 1000,
-								end: params.end / 1000
-							}).then(
-							function (slots)
-							{
-								deferred.resolve(
-									{
-										slots:   slots,
-										synced:  new Date().getTime(),
-										periods: {
-											start: params.start,
-											end:   params.end
-										}
-									});
-							});
-
-						return deferred.promise;
-					};
-
 					Profile.prototype.local = function () { return angular.fromJson(Storage.get('resources')) };
 
 					Profile.prototype.save = function (id, resources)
@@ -306,7 +248,7 @@ define(
 
 					return new Profile;
 				}
-			]);
-
+			]
+		);
 	}
 );

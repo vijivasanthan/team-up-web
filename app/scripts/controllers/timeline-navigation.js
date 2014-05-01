@@ -10,9 +10,6 @@ define(
 				'$rootScope', '$scope', '$window',
 				function ($rootScope, $scope, $window)
 				{
-					/**
-					 * Day & Week & Month toggle actions
-					 */
 					$scope.timelineScoper = function (period)
 					{
 						$scope.timeline.current.day = $scope.current.day;
@@ -65,9 +62,6 @@ define(
 						}
 					};
 
-					/**
-					 * Go one period in past
-					 */
 					$scope.timelineBefore = function ()
 					{
 						if ($scope.timeline.scope.day)
@@ -111,16 +105,10 @@ define(
 						}
 					};
 
-					/**
-					 * Go one period in future
-					 */
 					$scope.timelineAfter = function ()
 					{
 						if ($scope.timeline.scope.day)
 						{
-							/**
-							 * Total days in a month can change so get it start periods cache
-							 */
 							if ($scope.timeline.current.day != $scope.periods.days.total)
 							{
 								$scope.timeline.current.day ++;
@@ -160,9 +148,6 @@ define(
 						}
 					};
 
-					/**
-					 * Go to this week
-					 */
 					$scope.timelineThisWeek = function ()
 					{
 						if ($scope.timeline.current.week != new Date().getWeek())
@@ -180,9 +165,6 @@ define(
 						}
 					};
 
-					/**
-					 * Go one week in past
-					 */
 					$scope.timelineWeekBefore = function ()
 					{
 						if ($scope.timeline.current.week != 1)
@@ -202,9 +184,6 @@ define(
 						};
 					};
 
-					/**
-					 * Go one week in future
-					 */
 					$scope.timelineWeekAfter = function ()
 					{
 						if ($scope.timeline.current.week != 53)
@@ -224,25 +203,16 @@ define(
 						};
 					};
 
-					/**
-					 * Timeline zoom in
-					 */
 					$scope.timelineZoomIn = function ()
 					{
 						$scope.self.timeline.zoom($rootScope.config.timeline.config.zoom, Date.now());
 					};
 
-					/**
-					 * Timeline zoom out
-					 */
 					$scope.timelineZoomOut = function ()
 					{
 						$scope.self.timeline.zoom(- $rootScope.config.timeline.config.zoom, Date.now());
 					};
 
-					/**
-					 * Redraw timeline on window resize
-					 */
 					$window.onresize = function () { $scope.self.timeline.redraw() };
 
 					$scope.fullWidth = function () { $scope.self.timeline.redraw() }

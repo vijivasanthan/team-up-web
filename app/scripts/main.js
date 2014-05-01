@@ -73,6 +73,7 @@ require(
 		'run',
 		'routes',
 
+		'services/teamup',
 		'services/storage',
 		'services/session',
 

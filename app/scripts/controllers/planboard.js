@@ -9,8 +9,7 @@ define(
 				'$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams', 'Clients',
 				function ($rootScope, $scope, $location, Dater, Storage, Teams, Clients)
 				{
-					var self = this,
-					    params = $location.search();
+					var params = $location.search();
 
 					$scope.imgHost = profile.host();
 					$scope.ns = profile.ns();
@@ -264,10 +263,12 @@ define(
 
 									// process the tasks data
 									storeTask(tasks, startTime, endTime);
-								}, function (error)
+								},
+								function (error)
 								{
 									console.log("error happend when getting the tasks for the team members " + error);
-								});
+								}
+							);
 						}
 						else if ($scope.data.section == "clients")
 						{
@@ -280,10 +281,12 @@ define(
 								function (tasks)
 								{
 									storeTask(tasks, startTime, endTime);
-								}, function (error)
+								},
+								function (error)
 								{
 									console.log("error happend when getting the tasks for the team members " + error);
-								});
+								}
+							);
 						}
 					};
 
@@ -465,9 +468,7 @@ define(
 					$scope.resetInlineForms = function ()
 					{
 						$scope.slot = {};
-
 						$scope.original = {};
-
 						$scope.resetViews();
 
 						if ($scope.section == "teams")

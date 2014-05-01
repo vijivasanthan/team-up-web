@@ -1,11 +1,11 @@
 define(
 	{
 		app: {
-			version:  '@@version',
+			// version:  '@@version',
 			released: '@@released',
 
 			title: 'TeamUp',
-			// version:  '0.2.0',
+			version:  '0.2.0',
 			lang:  'nl',
 
 			fullscreen: true,

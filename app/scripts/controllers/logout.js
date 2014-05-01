@@ -34,9 +34,10 @@ define(
 								Storage.cookie.clearAll();
 								$window.location.href = 'logout.html';
 							}
-						});
+						}
+					);
 				}
-			]);
-
+			]
+		);
 	}
 );

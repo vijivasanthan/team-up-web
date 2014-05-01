@@ -39,6 +39,7 @@ define(
 
 					return new Settings;
 				}
-			]);
+			]
+		);
 	}
 );

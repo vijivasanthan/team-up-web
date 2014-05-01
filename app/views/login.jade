@@ -8,20 +8,29 @@
 		span.muted
 	#login.boxed
 		form(ng-submit='login()')
-			.alert(class='{{alert.login.type}}', ng-show='alert.login.display')
-				button.close(type='button', ng-click='alert.login=false') ×
+			.alert(class='{{alert.login.type}}',
+			ng-show='alert.login.display')
+				button.close(type='button',
+				ng-click='alert.login=false') ×
 				| {{alert.login.message}}
-			input(type='text', ng-model='logindata.username', placeholder='{{ui.login.ph_username}}', autofocus='')
-			input(type='password', ng-model='logindata.password', placeholder='Password')
+			input(type='text',
+			ng-model='logindata.username',
+			placeholder='{{ui.login.ph_username}}',
+			autofocus='')
+			input(type='password',
+			ng-model='logindata.password',
+			placeholder='Password')
 			label.checkbox.span3
-				input(type='checkbox', ng-model='logindata.remember')
+				input(type='checkbox',
+				ng-model='logindata.remember')
 				| Remember me
 			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
-			p.loginp(style='font-size: 12px; margin-bottom: 25px;')
-				a(href='#register') Register
-			p#separator.loginp |
-			p.loginp
-				small
-					a(href='#forgotpass') {{ui.login.forgot_password}}
+			// p.loginp(style='font-size: 12px; margin-bottom: 25px;')
+			// 	a(href='#register') Register
+			// p#separator.loginp |
+			// p.loginp
+			// 	small
+			// 		a(href='#forgotpass') {{ui.login.forgot_password}}
 			span.version
-				a(href='version.html', target='_blank') v{{config.version}}
+				a(href='version.html',
+				target='_blank') v{{config.version}}

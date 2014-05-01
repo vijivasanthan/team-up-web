@@ -14,7 +14,7 @@ define(
 					$scope.members = data.members;
 					$scope.teams = data.teams;
 
-					var self = this, params = $location.search();
+					var params = $location.search();
 
 					$scope.imgHost = profile.host();
 					$scope.ns = profile.ns();
@@ -107,7 +107,8 @@ define(
 											$('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
 										}
 
-									}, function (error) { console.log("error when load pic " + error) });
+									}, function (error) { console.log("error when load pic " + error) }
+								);
 
 								var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
 
@@ -179,7 +180,8 @@ define(
 
 					$scope.toggleSelection = function (group, master)
 					{
-						var flag = (master) ? true : false, members = angular.fromJson(Storage.get(group.uuid));
+						var flag = (master) ? true : false,
+						    members = angular.fromJson(Storage.get(group.uuid));
 
 						angular.forEach(
 							members, function (member)
@@ -434,6 +436,7 @@ define(
 					{
 						var flag = true;
 						var ret = true;
+
 						angular.forEach(
 							states, function (state)
 							{
@@ -443,12 +446,13 @@ define(
 									flag = false;
 								}
 							});
+
 						return ret;
 					};
 
 					$scope.deleteTeam = function ()
 					{
-						console.log($scope.current);
+						// console.log($scope.current);
 
 						if (window.confirm($rootScope.ui.teamup.delTeamConfirm))
 						{
@@ -476,14 +480,13 @@ define(
 
 												// 	try to get the members not in the teams Aync
 												Teams.queryMembersNotInTeams().then(
-													function (result)
+													function ()
 													{
-														console.log("members not in any teams loaded ");
+														// console.log("members not in any teams loaded ");
 														$rootScope.statusBar.off();
-													}, function (error)
-													{
-														console.log(error);
-													});
+													},
+													function (error) { console.log(error) }
+												);
 											}, function (error) { console.log(error) });
 
 									}
@@ -521,7 +524,7 @@ define(
 															var routePara = {'uuid': teamId};
 
 															Teams.query(false, routePara).then(
-																function (queryRs)
+																function ()
 																{
 																	$rootScope.statusBar.off();
 																});
@@ -542,14 +545,13 @@ define(
 
 										// 	try to get the members not in the teams Aync
 										Teams.queryMembersNotInTeams().then(
-											function (result)
+											function ()
 											{
-												console.log("members not in any teams loaded ");
+												// console.log("members not in any teams loaded ");
 												$rootScope.statusBar.off();
-											}, function (error)
-											{
-												console.log(error);
-											});
+											},
+											function (error) { console.log(error) }
+										);
 									}
 								}, function (error) { console.log(error) });
 						}
