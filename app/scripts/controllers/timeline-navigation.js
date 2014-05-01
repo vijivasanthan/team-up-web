@@ -243,17 +243,9 @@ define(
 					/**
 					 * Redraw timeline on window resize
 					 */
-					$window.onresize = function ()
-					{
-						$scope.self.timeline.redraw();
-					};
+					$window.onresize = function () { $scope.self.timeline.redraw() };
 
-					$scope.fullWidth = function ()
-					{
-						console.log('ok!');
-
-						$scope.self.timeline.redraw();
-					}
+					$scope.fullWidth = function () { $scope.self.timeline.redraw() }
 				}
 			]);
 	}

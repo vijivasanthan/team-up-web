@@ -9,43 +9,37 @@ define(
 				'$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window', 'data',
 				function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage, Teams, $window, data)
 				{
-
 					$scope.loadData = function (data)
 					{
-
 						if (data && data.local)
 						{
-							/*
-							 * data from local storage
-							 */
-
 							/**
 							 * teams , team-member , team-group connection data
 							 */
 							var teams_local = angular.fromJson(Storage.get("Teams"));
 
-							//              console.log('teams ->', teams_local);
-
-							var connections = {teamClients: {}, teams: {}, clients: {} };
+							var connections = {
+								teamClients: {},
+								teams:       {},
+								clients:     {}
+							};
 
 							var members = [];
+
 							data.teams = [];
+
 							var memGlobalIds = [];
 
 							angular.forEach(
-								teams_local, function (team, index)
+								teams_local, function (team)
 								{
-
-									/*
-									 * push team data
-									 */
 									data.teams.push({"id": team.uuid, "name": team.name});
 
 									var mems = angular.fromJson(Storage.get(team.uuid));
 									var memIds = [];
 
 									angular.forEach(
-										mems, function (mem, index)
+										mems, function (mem)
 										{
 											memIds.push(mem.uuid);
 											if (memGlobalIds.indexOf(mem.uuid) == - 1)
@@ -55,12 +49,11 @@ define(
 											}
 										});
 
-									//                console.log(team.name+"("+team.uuid+")","==>",memIds);
 									connections.teams[team.uuid] = memIds;
-
 								});
 
 							var members_Not_In_team = angular.fromJson(Storage.get("members"));
+
 							angular.forEach(
 								members_Not_In_team, function (mem, index)
 								{
@@ -72,9 +65,6 @@ define(
 
 							data.members = members;
 
-							/**
-							 * clients , group-client connection data
-							 */
 							var groups = angular.fromJson(Storage.get("ClientGroups"));
 							var groupIds = [];
 							data.groups = groups;
@@ -83,21 +73,24 @@ define(
 							var clientIds = [];
 
 							angular.forEach(
-								groups, function (group, index)
+								groups, function (group)
 								{
 									var cts = angular.fromJson(Storage.get(group.id));
 									var ctIds = [];
 									angular.forEach(
-										cts, function (client, index)
+										cts, function (client)
 										{
-
 											ctIds.push(client.uuid);
 
 											// add to global client ids
 											if (clientIds.indexOf(client.uuid) == - 1)
 											{
 												clientIds.push(client.uuid);
-												clients.push({"name": client.firstName + " " + client.lastName, "id": client.uuid});
+												clients.push(
+													{
+														"name": client.firstName + " " + client.lastName,
+														"id": client.uuid
+													});
 											}
 										});
 
@@ -112,27 +105,32 @@ define(
 							var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
 
 							angular.forEach(
-								clients_Not_In_Group, function (client, index)
+								clients_Not_In_Group, function (client)
 								{
 									if (clientIds.indexOf(client.uuid) == - 1)
 									{
 										clientIds.push(client.uuid);
-										clients.push({"name": client.firstName + " " + client.lastName, "id": client.uuid});
+										clients.push(
+											{
+												"name": client.firstName + " " + client.lastName,
+												"id": client.uuid
+											});
 									}
 								});
 
 							data.clients = clients;
 
 							angular.forEach(
-								teams_local, function (team, index)
+								teams_local, function (team)
 								{
 									/*
 									 * push team group connection data
 									 */
 									var grps = angular.fromJson(Storage.get("teamGroup_" + team.uuid));
 									var kp = true;
+
 									angular.forEach(
-										grps, function (grp, i)
+										grps, function (grp)
 										{
 											if (groupIds.indexOf(grp.id) != - 1 && kp)
 											{
@@ -162,26 +160,25 @@ define(
 						else
 						{
 							// data from the server
-							return {'data': {}, 'con': {}};
+							return {
+								'data': {},
+								'con':  {}
+							};
 						}
 
 					};
 
 					var localdata = $scope.loadData(data);
+
 					data = localdata.data;
+
 					var connections = localdata.con;
 
-					/**
-					 * Introduce and reset data containers
-					 */
 					$scope.data = {
 						left:  [],
 						right: []
 					};
 
-					/**
-					 * View setter
-					 */
 					function setView (hash)
 					{
 						$scope.views = {
@@ -195,21 +192,16 @@ define(
 						var localdata = $scope.loadData(data);
 						data = localdata.data;
 						connections = localdata.con;
-
 					}
 
-					/**
-					 * Switch between the views and set hash accordingly
-					 */
 					$scope.setViewTo = function (hash)
 					{
-
 						if (typeof $scope.dataChanged != "undefined" && $scope.dataChanged($location.$$hash))
 						{
 							if (! confirm($rootScope.ui.teamup.managePanelchangePrompt))
 							{
 								event.preventDefault();
-								//	    		  $scope.applyTeamClientsChanges(changes);
+
 								return false;
 							}
 						}
@@ -225,33 +217,15 @@ define(
 							});
 					};
 
-					/**
-					 * Default view
-					 */
 					$scope.setViewTo('teamClients');
 
-					/**
-					 * Prepare connections
-					 */
 					$scope.connector = {
-
-						/**
-						 * Cache connections
-						 */
-						data: connections,
-
-						/**
-						 * Containers
-						 */
+						data:        connections,
 						connections: {
 							teamClients: [],
 							teams:       {},
 							clients:     {}
 						},
-
-						/**
-						 * Team & Clients connections
-						 */
 						teamClients: function ()
 						{
 							this.connections.teamClients = [];
@@ -293,9 +267,6 @@ define(
 							return this.connections;
 						},
 
-						/**
-						 * Populate connections
-						 */
 						populate: function (connections, data, section)
 						{
 							var population = {};
@@ -327,9 +298,6 @@ define(
 							return population;
 						},
 
-						/**
-						 * Teams connections
-						 */
 						teams: function ()
 						{
 							this.connections.teams = {};
@@ -339,9 +307,6 @@ define(
 							return this.connections;
 						},
 
-						/**
-						 * Clients connections
-						 */
 						clients: function ()
 						{
 							this.connections.clients = {};
@@ -352,9 +317,6 @@ define(
 						}
 					};
 
-					/**
-					 * Manage TreeGrids
-					 */
 					$scope.manage = function (grid)
 					{
 						switch (grid)
@@ -390,19 +352,20 @@ define(
 
 					$scope.getChanges = function (preTeams, afterTeams)
 					{
-
 						var changes = {};
+
 						angular.forEach(
 							preTeams, function (pMembers, tId)
 							{
 								var notChanged = [];
-								var afterMembers = afterTeams[tId]
+								var afterMembers = afterTeams[tId];
+
 								// find the unchanged items
 								angular.forEach(
-									pMembers, function (p_mem, t_i)
+									pMembers, function (p_mem)
 									{
 										angular.forEach(
-											afterMembers, function (at, t_j)
+											afterMembers, function (at)
 											{
 												if (p_mem == at)
 												{
@@ -410,7 +373,6 @@ define(
 												}
 											});
 									});
-								//              console.log(tId,"-->",notChanged);
 
 								/*
 								 * try to remove the unchanged items from both list
@@ -427,20 +389,21 @@ define(
 										afterMembers.splice(afterMembers.indexOf(nc), 1);
 									});
 
-								//              console.log("need to remove : " + pMembers);
-								//              console.log("need to add : " + afterMembers);
-								//              console.log("----------------------");
-
 								var addMembers = [];
 								var removeMembers = [];
 
 								angular.copy(pMembers, removeMembers);
 								angular.copy(afterMembers, addMembers);
 
-								if (addMembers.length > 0 || addMembers.length > 0 || removeMembers.length > 0 || removeMembers.length > 0)
+								if (addMembers.length > 0 ||
+								    addMembers.length > 0 ||
+								    removeMembers.length > 0 ||
+								    removeMembers.length > 0)
 								{
-									changes[tId] = {a: addMembers,
-										r:               removeMembers};
+									changes[tId] = {
+										a: addMembers,
+										r: removeMembers
+									};
 								}
 
 								// add the nonChanged item back
@@ -448,6 +411,7 @@ define(
 									notChanged, function (nc)
 									{
 										pMembers.push(nc);
+
 										afterMembers.push(nc);
 									});
 
@@ -459,8 +423,7 @@ define(
 					/**
 					 * Save function listeners
 					 */
-
-					/*
+					/**
 					 * remove the duplicated listeners when going back to the controller
 					 * temp solution
 					 */
@@ -481,14 +444,8 @@ define(
 
 					$scope.getChangesFromTeamClients = function (argument)
 					{
-						console.log("before changing ->", $scope.connections.teamClients);
-						console.log('saving team clients ->', argument);
-
 						var preTc = $scope.connections.teamClients;
 						var afterTc = argument;
-
-						//          var addGroups = {};
-						//          var removeGroups = {};
 
 						var teamIds = [];
 
@@ -571,15 +528,6 @@ define(
 						{
 							var changes = $scope.getChangesFromTeamClients(arguments[1]);
 
-							//        console.log("added ones :  " , addGroups);
-							//        console.log("removed ones :  " , removeGroups);
-
-							//        if(!angular.equals({},addGroups) || !angular.equals({},removeGroups) ){
-							//            changes = {a : addGroups , r : removeGroups};
-							//        }
-
-							//        console.log(changes);
-
 							if (angular.equals({}, changes))
 							{
 								console.log("no changes ! ");
@@ -587,6 +535,7 @@ define(
 							else
 							{
 								console.log("Team Groups changes : ", changes);
+
 								$scope.applyTeamClientsChanges(changes);
 							}
 
@@ -597,22 +546,19 @@ define(
 						$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
 						Teams.manage(changes).then(
-							function (result)
+							function ()
 							{
-
 								$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
 								//           	try to get the members not in the teams Aync
 								Teams.queryMembersNotInTeams().then(
-									function (result)
+									function ()
 									{
 										console.log("members not in any teams loaded ");
+
 										$rootScope.statusBar.off();
 										$route.reload();
-									}, function (error)
-									{
-										console.log(error);
-									});
+									}, function (error) { console.log(error) });
 
 							});
 					};
@@ -620,9 +566,6 @@ define(
 					$rootScope.$on(
 						'save:teams', function ()
 						{
-							console.log("before teams -> ", $scope.connections.teams);
-							console.log('saving teams ->', arguments[1]);
-
 							var preTeams = $scope.connections.teams;
 							var afterTeams = arguments[1];
 							var changes = $scope.getChanges(preTeams, afterTeams);
@@ -644,14 +587,9 @@ define(
 					$rootScope.$on(
 						'save:clients', function ()
 						{
-							console.log("before clients -> ", $scope.connections.clients);
-							console.log('saving clients ->', arguments[1]);
-
 							var preClients = $scope.connections.clients;
 							var afterClients = arguments[1];
 							var changes = $scope.getChanges(preClients, afterClients);
-
-							console.log("Group Client changes : ", changes);
 
 							// get all the changes
 							if (angular.equals({}, changes))
@@ -679,6 +617,7 @@ define(
 						var loc_parts = currentLoc.split("#");
 						var tab = loc_parts[loc_parts.length - 1];
 						var changes = {};
+
 						if (tab == "teamClients")
 						{
 							var argument = $scope.$$childTail.getData.teamClients();
@@ -697,26 +636,9 @@ define(
 							changes = $scope.getChanges(preClients, afterClients);
 						}
 
-						console.log(changes);
-						if (angular.equals({}, changes))
-						{
-							console.log("no changes ! ");
-							return false;
-						}
-						else
-						{
-							return true;
-						}
+						return (angular.equals({}, changes)) ? false : true;
 					};
-
-					//	  $scope.$on('$locationChangeStart', function(event, next, current) {
-					//		  console.log(next, current);
-					//		  $scope.dataChanged(current);
-					//	  });
-
 				}
-
 			]);
-
 	}
 );

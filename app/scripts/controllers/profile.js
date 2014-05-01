@@ -13,76 +13,46 @@ define(
 					$rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5, $filter
 					)
 				{
-					/**
-					 * Fix styles
-					 */
 					$rootScope.fixStyles();
 
-					/**
-					 * Pass the self
-					 */
 					$scope.self = this;
 
-					/**
-					 * Pass periods
-					 */
 					$scope.periods = Dater.getPeriods();
 
-					/**
-					 * apply the host to img url
-					 */
 					$scope.imgHost = profile.host();
 					$scope.ns = profile.ns();
 
-					/**
-					 * Pass current
-					 */
 					$scope.current = {
 						day: Date.today().getDayOfYear() + 1,
 						week: new Dater.current.week(),
 						month: new Dater.current.month() + 1
 					};
 
-					/**
-					 * Grab and set roles for view
-					 */
 					$scope.roles = $rootScope.config.roles;
 					$scope.mfuncs = $rootScope.config.mfunctions;
 
-					/**
-					 * Set data for view
-					 */
 					if (data.slots)
 					{
 						data.user = data.slots.data;
 					}
 
-					/**
-					 * PAss data container
-					 */
 					$scope.data = data;
 					$scope.noImgURL = $rootScope.config.noImgURL;
 
-					/**
-					 * Pass profile information
-					 */
 					$scope.profilemeta = data.resources;
 					// deal with date
 					$scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
 
 					$scope.currentRole = $scope.profilemeta.role;
 
-					/**
-					 * Get teams of user
-					 */
 					var teams = [];
 					var storage_teams = angular.fromJson(Storage.get("Teams"));
 
 					angular.forEach(
-						$scope.profilemeta.teamUuids, function (teamId, index)
+						$scope.profilemeta.teamUuids, function (teamId)
 						{
 							angular.forEach(
-								storage_teams, function (team, index)
+								storage_teams, function (team)
 								{
 									if (team.uuid == teamId)
 									{
@@ -106,26 +76,17 @@ define(
 					$scope.teams = teams;
 					$scope.selectTeams = storage_teams;
 
-					/**
-					 * Default values for passwords
-					 */
 					$scope.passwords = {
 						current: '',
 						new1:    '',
 						new2:    ''
 					};
 
-					/**
-					 * Default form views
-					 */
 					$scope.forms = {
 						add:  false,
 						edit: false
 					};
 
-					/**
-					 * Slot form toggler
-					 */
 					$scope.toggleSlotForm = function ()
 					{
 						if ($scope.forms.add)
@@ -159,9 +120,6 @@ define(
 						}
 					};
 
-					/**
-					 * Reset inline forms
-					 */
 					$scope.resetInlineForms = function ()
 					{
 						$scope.slot = {};
@@ -174,14 +132,8 @@ define(
 						};
 					};
 
-					/**
-					 * Extract view action from url and set view
-					 */
 					setView($location.hash());
 
-					/**
-					 * View setter
-					 */
 					function setView (hash)
 					{
 						$scope.views = {
@@ -199,12 +151,14 @@ define(
 						// load the avatar by ajax way
 						var memberId = $route.current.params.userId;
 						var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photourl";
+
 						Teams.loadImg(imgURL).then(
 							function (result)
 							{
 								// console.log("loading pic " + imgURL);
 
 								var imgId = memberId.replace(".", "").replace("@", "");
+
 								if (result.status && (
 									result.status == 404 || result.status == 403 || result.status == 500))
 								{
@@ -216,16 +170,9 @@ define(
 									var realImgURL = $scope.imgHost.replace("\\:", ":") + result.path;
 									$('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
 								}
-
-							}, function (error)
-							{
-								console.log("error when load pic " + error);
-							});
+							}, function (error) { console.log("error when load pic " + error) });
 					}
 
-					/**
-					 * Switch between the views and set hash ccordingly
-					 */
 					$scope.setViewTo = function (hash)
 					{
 						$scope.$watch(
@@ -237,9 +184,6 @@ define(
 							});
 					};
 
-					/**
-					 * Save user
-					 */
 					$scope.save = function (resources)
 					{
 						$rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
@@ -256,8 +200,8 @@ define(
 							{
 								resources.teamUuids.push($scope.teams[0].uuid);
 							}
-
 						}
+
 						// deal with birthday
 						try
 						{
@@ -269,6 +213,7 @@ define(
 							$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
 							return;
 						}
+
 						delete resources.birthday;
 
 						Profile.save($route.current.params.userId, resources)
@@ -317,16 +262,12 @@ define(
 																$rootScope.statusBar.off();
 															});
 													});
-
 											}
 										});
 								}
 							});
 					};
 
-					/**
-					 * Change passwords
-					 */
 					$scope.change = function (passwords)
 					{
 						if (passwords.new1 == '' || passwords.new2 == '')
@@ -386,87 +327,13 @@ define(
 						}
 					};
 
-					/**
-					 * Render timeline if hash is timeline
-					 */
-					// if ($location.hash() == 'timeline')
-					//	  if ($rootScope.app.resources.uuid != $route.current.params.userId)
-					//	  {
-					//	  	timelinebooter();
-					//	  };
-
-					/**
-					 * Redraw timeline
-					 */
-					$scope.redraw = function ()
-					{
-						setTimeout(
-							function ()
-							{
-								// timelinebooter();
-							}, 100);
-					};
-
-					function timelinebooter ()
-					{
-						$scope.timeline = {
-							id:      'userTimeline',
-							main:    false,
-							user:    {
-								id: $route.current.params.userId
-							},
-							current: $scope.current,
-							options: {
-								start: new Date($scope.periods.weeks[$scope.current.week].first.day),
-								end:   new Date($scope.periods.weeks[$scope.current.week].last.day),
-								min:   new Date($scope.periods.weeks[$scope.current.week].first.day),
-								max:   new Date($scope.periods.weeks[$scope.current.week].last.day)
-							},
-							range:   {
-								start: $scope.periods.weeks[$scope.current.week].first.day,
-								end:   $scope.periods.weeks[$scope.current.week].last.day
-							},
-							config:  {
-								legenda:    {},
-								legendarer: $rootScope.config.timeline.config.legendarer,
-								states:     $rootScope.config.timeline.config.states
-							}
-						};
-
-						var states = {};
-
-						angular.forEach($scope.timeline.config.states, function (state, key) { states[key] = state.label });
-
-						$scope.states = states;
-
-						angular.forEach(
-							$rootScope.config.timeline.config.states, function (state, index)
-							{
-								$scope.timeline.config.legenda[index] = true;
-							});
-
-						/**
-						 * Prepeare timeline range for dateranger widget
-						 */
-						$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-						                   Dater.readable.date($scope.timeline.range.end);
-
-						$('#timeline').html('');
-						$('#timeline').append('<div id="userTimeline"></div>');
-					};
-
-					/**
-					 * show edit member profile TabView
-					 */
-
 					$scope.editProfile = function () { setView('edit') };
 
-					/**
-					 * load the dynamic upload URL for GAE
-					 */
 					$scope.editImg = function ()
 					{
-						$scope.uploadURL = $scope.imgHost + $scope.ns + "/team/member/" + $route.current.params.userId + "/photourl";
+						$scope.uploadURL = $scope.imgHost + $scope.ns +
+						                   "/team/member/" + $route.current.params.userId + "/photourl";
+
 						Teams.loadImg($scope.uploadURL).then(
 							function (result)
 							{
@@ -475,14 +342,13 @@ define(
 								{
 									$scope.avatarURL = imgHost + result.path;
 								}
-								$scope.uploadURL = imgHost + $scope.ns + "/team/member/" + $route.current.params.userId + "/photo";
+								$scope.uploadURL = imgHost + $scope.ns +
+								                   "/team/member/" + $route.current.params.userId + "/photo";
+
 								$scope.setViewTo('editImg');
 							});
 					};
 
-					/**
-					 * delete the team member
-					 */
 					$scope.deleteProfile = function ()
 					{
 						if (window.confirm($rootScope.ui.teamup.deleteConfirm))
@@ -509,7 +375,6 @@ define(
 													{
 														$rootScope.statusBar.off();
 													});
-
 											});
 
 										// try to get the members not in the teams Aync
@@ -522,15 +387,11 @@ define(
 											{
 												console.log(error);
 											});
-
 									}
-
 								}, function (error) { console.log(error) });
 						}
 					};
-
 				}
 			]);
-
 	}
 );

@@ -9,48 +9,29 @@ define(
 				'$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'MD5', 'Dater',
 				function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Storage, MD5, Dater)
 				{
-					/**
-					 * Fix styles
-					 */
 					$rootScope.fixStyles();
 
 					$scope.members = data.members;
 					$scope.teams = data.teams;
 
-					/**
-					 * Self this
-					 */
 					var self = this, params = $location.search();
 
 					$scope.imgHost = profile.host();
 					$scope.ns = profile.ns();
-					/**
-					 * Init search query
-					 */
+
 					$scope.search = {
 						query: ''
 					};
 
-					/**
-					 * Reset selection
-					 */
 					$scope.selection = {};
 
-					/**
-					 * Set groups
-					 */
 					$scope.data = data;
 
-					/**
-					 * Grab and set roles for view
-					 */
 					$scope.roles = $rootScope.config.roles;
 					$scope.mfuncs = $rootScope.config.mfunctions;
+
 					var uuid, view;
 
-					/**
-					 * If no params or hashes given in url
-					 */
 					if (! params.uuid && ! $location.hash())
 					{
 						uuid = data.teams[0].uuid;
@@ -76,29 +57,19 @@ define(
 						view = $location.hash();
 					}
 
-					/**
-					 * Set group
-					 */
 					setTeamView(uuid);
 
-					/**
-					 * Set Team View
-					 */
 					$scope.views = {
 						team:      true,
 						newTeam:   false,
 						newMember: false,
-						editTeam:  false,
+						editTeam:  false
 					};
 
-					/**
-					 * Set given team for view
-					 */
 					function setTeamView (id)
 					{
-
 						angular.forEach(
-							data.teams, function (team, index)
+							data.teams, function (team)
 							{
 								if (team.uuid == id)
 								{
@@ -112,49 +83,52 @@ define(
 
 						// load image
 						angular.forEach(
-							$scope.members, function (member, index)
+							$scope.members, function (member)
 							{
-
 								var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photo?width=40&height=40";
 
-								var imgId = member.uuid.replace(".", "").replace("@", "");
-								$('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+								//								var imgId = member.uuid.replace(".", "").replace("@", "");
+								//								$('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
-								//            Teams.loadImg(imgURL).then(function(result){
-								//              // console.log("loading pic " + imgURL);
-								//
-								//              var imgId = member.uuid.replace(".","").replace("@","");
-								//              if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-								//                console.log("no pics " ,result);
-								//              }else{
-								//                var realImgURL = $scope.imgHost + result.path;
-								//                $('.tab-content #img_'+imgId).css('background-image','url('+realImgURL+')');
-								//              }
-								//
-								//
-								//            },function(error){
-								//              console.log("error when load pic " + error);
-								//            });
+								Teams.loadImg(imgURL).then(
+									function (result)
+									{
+										// console.log("loading pic " + imgURL);
 
-								//			var tempURL = $scope.imgHost+ $scope.ns +"/team/member/"+member.uuid+"/photourl";
-								//			$scope.photoURL = tempURL;
-								//			Teams.loadImg(tempURL).then(function(result){
-								//				console.log(result);
-								//			});
+										var imgId = member.uuid.replace(".", "").replace("@", "");
+
+										if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+										{
+											console.log("no pics ", result);
+										}
+										else
+										{
+											var realImgURL = $scope.imgHost + result.path;
+											$('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+										}
+
+									}, function (error) { console.log("error when load pic " + error) });
+
+								var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
+
+								$scope.photoURL = tempURL;
+
+								Teams.loadImg(tempURL).then(
+									function (result)
+									{
+										console.log(result);
+									});
 							});
 
 						$scope.team.phone = $rootScope.ui.teamup.loadingNumber;
+
 						Teams.loadTeamCallinNumber($scope.team.uuid).then(
 							function (result)
 							{
 								$scope.team.phone = result.phone;
 							});
-
 					}
 
-					/**
-					 * Request for a team
-					 */
 					$scope.requestTeam = function (current, switched)
 					{
 						setTeamView(current);
@@ -177,9 +151,7 @@ define(
 							setView('team');
 						}
 					};
-					/**
-					 * View setter
-					 */
+
 					var setView = function (hash)
 					{
 						$scope.views = {
@@ -191,9 +163,7 @@ define(
 
 						$scope.views[hash] = true;
 					};
-					/**
-					 * Switch between the views and set hash accordingly
-					 */
+
 					$scope.setViewTo = function (hash)
 					{
 						$scope.$watch(
@@ -204,28 +174,20 @@ define(
 								setView(hash);
 							});
 					};
-					/**
-					 * Set view
-					 */
+
 					setView(view);
 
-					/**
-					 * Selection toggler
-					 */
 					$scope.toggleSelection = function (group, master)
 					{
-						var flag = (
-							           master) ? true : false, members = angular.fromJson(Storage.get(group.uuid));
+						var flag = (master) ? true : false, members = angular.fromJson(Storage.get(group.uuid));
 
 						angular.forEach(
-							members, function (member, index)
+							members, function (member)
 							{
 								$scope.selection[member.uuid] = flag;
 							});
 					};
-					/**
-					 * show edit mode of the Team
-					 */
+
 					$scope.editTeam = function (team)
 					{
 						$scope.teamEditForm = {
@@ -243,12 +205,9 @@ define(
 						};
 						$scope.views.editTeam = false;
 					};
-					/**
-					 * save the changes on the team
-					 */
+
 					$scope.changeTeam = function (team)
 					{
-
 						if ($.trim(team.name) == '')
 						{
 							$rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
@@ -280,9 +239,7 @@ define(
 								}
 							});
 					};
-					/**
-					 * create new Team
-					 */
+
 					$scope.teamSubmit = function (team)
 					{
 						if (typeof team == 'undefined' || $.trim(team.name) == '')
@@ -357,9 +314,7 @@ define(
 								}
 							});
 					};
-					/**
-					 * create a new team member
-					 */
+
 					$scope.memberSubmit = function (member)
 					{
 						if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword)
@@ -367,11 +322,13 @@ define(
 							$rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
 							return;
 						}
+
 						if (member.password != member.reTypePassword)
 						{
 							$rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
 							return;
 						}
+
 						if (! member.team)
 						{
 							$rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
@@ -396,7 +353,6 @@ define(
 							function (result)
 							{
 								// change the REST return to json.
-
 								if (result.error)
 								{
 									$rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + " : " + result.error);
@@ -455,15 +411,11 @@ define(
 											}
 
 											$rootScope.statusBar.off();
-
 										});
 								}
 							});
 					};
 
-					/**
-					 * Close inline form
-					 */
 					$scope.closeTabs = function ()
 					{
 						$scope.teamForm = {};
@@ -473,18 +425,11 @@ define(
 						$scope.setViewTo('team');
 					};
 
-					/**
-					 * edit the profile function
-					 * only for set the team Id in sessionStorage , for later saving
-					 */
 					$scope.editProfile = function (memberId, teamId)
 					{
 						sessionStorage.setItem(memberId + "_team", teamId);
 					};
 
-					/**
-					 * show the String "no shared states" if there is no shared states
-					 */
 					$scope.noSharedStates = function (states)
 					{
 						var flag = true;
@@ -501,12 +446,10 @@ define(
 						return ret;
 					};
 
-					/*
-					 * delete the team
-					 */
 					$scope.deleteTeam = function ()
 					{
 						console.log($scope.current);
+
 						if (window.confirm($rootScope.ui.teamup.delTeamConfirm))
 						{
 							$rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
@@ -514,7 +457,6 @@ define(
 							Teams.deleteTeam($scope.current).then(
 								function (result)
 								{
-
 									if (result)
 									{
 										Teams.query(true, {}).then(
@@ -542,31 +484,22 @@ define(
 													{
 														console.log(error);
 													});
-											}, function (error)
-											{
-												console.log(error);
-											});
+											}, function (error) { console.log(error) });
 
 									}
 
 									$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 									$rootScope.statusBar.off();
-
-								}, function (error)
-								{
-									console.log(error);
-								});
+								}, function (error) { console.log(error) });
 						}
 					};
 
-					/**
-					 * delete the team member
-					 */
 					$scope.deleteMember = function (memberId)
 					{
 						if (window.confirm($rootScope.ui.teamup.deleteConfirm))
 						{
 							$rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+
 							Teams.deleteMember(memberId).then(
 								function (result)
 								{
@@ -586,6 +519,7 @@ define(
 															$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
 															var routePara = {'uuid': teamId};
+
 															Teams.query(false, routePara).then(
 																function (queryRs)
 																{
@@ -605,6 +539,7 @@ define(
 
 												}
 											});
+
 										// 	try to get the members not in the teams Aync
 										Teams.queryMembersNotInTeams().then(
 											function (result)
@@ -615,45 +550,45 @@ define(
 											{
 												console.log(error);
 											});
-
 									}
-
-								}, function (error)
-								{
-									console.log(error);
-								});
+								}, function (error) { console.log(error) });
 						}
 					};
 
 					// brefoe I know there is a good place to put this code
 					// load the login user's avatar
 
-					var imgURL = profile.host() + profile.ns() + "/team/member/" + $rootScope.app.resources.uuid + "/photo?width=40&height=40";
+					var imgURL = profile.host() + profile.ns() +
+					             "/team/member/" + $rootScope.app.resources.uuid + "/photo?width=40&height=40";
 
-					var mId = $rootScope.app.resources.uuid;
-					var imgId = mId.replace(".", "").replace("@", "");
-					$('.navbar-inner #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+					/*
+					 var mId = $rootScope.app.resources.uuid;
+					 var imgId = mId.replace(".", "").replace("@", "");
+					 $('.navbar-inner #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+					 */
 
-					//        Teams.loadImg(imgURL).then(function(result) {
-					//          // console.log("loading pic " + imgURL);
-					//          var mId = $rootScope.app.resources.uuid;
-					//          var imgId = mId.replace(".", "").replace("@", "");
-					//          if (result.status && (result.status == 404 || result.status == 403 || result.status == 500)) {
-					//            console.log("no pics ", result);
-					//          } else {
-					//            if(result.path){
-					//              var realImgURL = profile.host().replace("\\:",":") + result.path;
-					//              $('.navbar-inner #img_'+imgId).css('background-image', 'url("' + realImgURL + '")');
-					//            }
-					//
-					//          }
-					//
-					//        }, function(error) {
-					//          console.log("error when load pic " + error);
-					//        });
+					Teams.loadImg(imgURL).then(
+						function (result)
+						{
+							// console.log("loading pic " + imgURL);
 
+							var mId = $rootScope.app.resources.uuid;
+							var imgId = mId.replace(".", "").replace("@", "");
+
+							if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+							{
+								console.log("no pics ", result);
+							}
+							else
+							{
+								if (result.path)
+								{
+									var realImgURL = profile.host().replace("\\:", ":") + result.path;
+									$('.navbar-inner #img_' + imgId).css('background-image', 'url("' + realImgURL + '")');
+								}
+							}
+						}, function (error) { console.log("error when load pic " + error) });
 				}
 			]);
-
 	}
 );

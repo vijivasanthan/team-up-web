@@ -73,10 +73,7 @@ define(
 							 */
 							links.events.addListener(
 								this.grids[key], 'expand',
-								function (properties)
-								{
-									console.log('expanding ->', key, properties);
-								}
+								function (properties) { console.log('expanding ->', key, properties) }
 							);
 
 							/**
@@ -84,10 +81,7 @@ define(
 							 */
 							links.events.addListener(
 								this.grids[key], 'collapse',
-								function (properties)
-								{
-									console.log('collapsing ->', key, properties);
-								}
+								function (properties) { console.log('collapsing ->', key, properties) }
 							);
 
 							/**
@@ -95,10 +89,7 @@ define(
 							 */
 							links.events.addListener(
 								this.grids[key], 'select',
-								function (properties)
-								{
-									console.log('selecting ->', key, properties);
-								}
+								function (properties) { console.log('selecting ->', key, properties) }
 							);
 
 							/**
@@ -111,9 +102,7 @@ define(
 									var items = event.items;
 
 									for (var i = 0; i < items.length; i ++)
-									{
 										_this.stores[key].removeLink(items[i]);
-									}
 								}
 							);
 						},
@@ -143,9 +132,7 @@ define(
 									var ret = true;
 
 									for (var i = 0; i < data.length; i ++)
-									{
 										if (item._id == data[i]._id) ret = false;
-									}
 
 									if (item.nodes)
 									{
@@ -260,8 +247,7 @@ define(
 								angular.forEach(
 									_this.stores[item._parent].data, function (data)
 									{
-										(
-											data._id != item._id) && filtered.push(data);
+										(data._id != item._id) && filtered.push(data);
 									});
 
 								_this.stores[item._parent].data = _this.stores[item._parent].filteredData = filtered;
@@ -390,8 +376,7 @@ define(
 							angular.forEach(
 								data, function (node)
 								{
-									(
-										node.id) && filtered.push(node);
+									(node.id) && filtered.push(node);
 								});
 
 							this.processed[key] = [];
@@ -508,13 +493,6 @@ define(
 
 							this.build('left', this.data.left);
 							this.build('right', this.data.right);
-
-							/*
-							 setTimeout(function ()
-							 {
-							 console.log('treeGrid ->', $scope.treeGrid);
-							 }, 500);
-							 */
 						}
 					};
 
@@ -529,24 +507,20 @@ define(
 							$scope.treeGrid.data = arguments[3];
 							$scope.treeGrid.connections = arguments[4];
 
-							(
-								function ($scope)
-								{
-									setTimeout(
-										function ()
-										{
-											$scope.treeGrid.init();
-										}, 100)
-								})($scope);
+							(function ($scope)
+							{
+								setTimeout(
+									function ()
+									{
+										$scope.treeGrid.init();
+									}, 100)
+							})($scope);
 						});
 
 					/**
 					 * Attach listener for window resizing
 					 */
-					$window.onresize = function ()
-					{
-						$scope.treeGrid.init();
-					};
+					$window.onresize = function () { $scope.treeGrid.init() };
 
 					$scope.extract = function (sources)
 					{

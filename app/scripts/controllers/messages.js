@@ -21,7 +21,6 @@ define(
 						Messages.queryTeamMessage($scope.chatTeamId).then(
 							function (messages)
 							{
-
 								if (messages.error)
 								{
 									$rootScope.notifier.error(messages.error.data);
@@ -29,6 +28,7 @@ define(
 								}
 
 								console.log(messages.length, $scope.messages.length);
+
 								if ($scope.messages.length == messages.length)
 								{
 									console.log("No new messages.");
@@ -39,6 +39,7 @@ define(
 
 								var msgDates = {};
 								var chatMembers = [];
+
 								// sort the messages by sendTime
 								//    			messages = $filter('orderBy')(messages,'sendTime','reverse');
 								messages = $filter('orderBy')(messages, 'sendTime');
@@ -46,8 +47,8 @@ define(
 								angular.forEach(
 									messages, function (message, i)
 									{
-
 										var minDate = $filter('nicelyDate')(parseInt(message.sendTime));
+
 										if (i > 0 && minDate == $filter('nicelyDate')(parseInt(messages[i - 1].sendTime)))
 										{
 											minDate = '';
@@ -61,9 +62,10 @@ define(
 											body:          message.body,
 											msgRole:       "",
 											senderUuid:    message.senderUuid
-										}
+										};
 
 										var member = $scope.$root.getTeamMemberById(message.senderUuid);
+
 										if (message.senderUuid == $scope.$root.app.resources.uuid)
 										{
 											msg.role = "own";
@@ -92,28 +94,31 @@ define(
 									chatMembers, function (mId, i)
 									{
 										console.log(mId);
+
 										var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
 
-										var imgId = mId.replace(".", "").replace("@", "");
-										$('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+										// var imgId = mId.replace(".", "").replace("@", "");
+										// $('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
-										//                Teams
-										//                  .loadImg(imgURL).
-										//                  then(function(result)
-										//                  {
-										//                  // console.log("loading pic " + imgURL);
-										//
-										//                  var imgId = mId.replace(".","").replace("@","");
-										//                  if(result.status && (result.status == 404 || result.status == 403 || result.status == 500) ){
-										//                    console.log("no pics " ,result);
-										//                  }else{
-										//                    var realImgURL = $scope.imgHost + result.path;
-										//                    $('#chat-content #img_'+imgId).css('background-image','url('+realImgURL+')');
-										//                  }
-										//
-										//                },function(error){
-										//                  console.log("error when load pic " + error);
-										//                });
+										Teams
+											.loadImg(imgURL).
+											then(
+											function (result)
+											{
+												// console.log("loading pic " + imgURL);
+
+												var imgId = mId.replace(".", "").replace("@", "");
+
+												if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+												{
+													console.log("no pics ", result);
+												}
+												else
+												{
+													var realImgURL = $scope.imgHost + result.path;
+													$('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+												}
+											}, function (error) { console.log("error when load pic " + error) });
 									});
 
 								// scroll to the bottom of the chat window
@@ -123,10 +128,7 @@ define(
 										$('#chat-content #messageField').focus();
 										$('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
 									}, 100);
-							}, function (error)
-							{
-								console.log(error);
-							});
+							}, function (error) { console.log(error) });
 					};
 
 					$scope.openChat = function ()
@@ -134,6 +136,7 @@ define(
 						$scope.toggleChat = ! $scope.toggleChat;
 
 						var teamIds = $scope.$root.app.resources.teamUuids;
+
 						if (teamIds && $scope.toggleChat)
 						{
 							var teamId = teamIds[0];
@@ -142,7 +145,6 @@ define(
 
 							// start auto check chat mesage
 							$scope.autoCheckMonitorId = setInterval($scope.renderMessage, 5000);
-
 						}
 						else
 						{
@@ -158,13 +160,18 @@ define(
 							$rootScope.notifier.error($rootScope.ui.message.emptyMessageBody);
 							return;
 						}
+
 						$rootScope.statusBar.display($rootScope.ui.message.sending);
 
 						var current = new Date();
-						var message = {title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
+						var message = {
+							title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
 							body:     newMessage,
-							sendTime: current.getTime()};
+							sendTime: current.getTime()
+						};
+
 						console.log(message);
+
 						Messages.sendTeamMessage(message).then(
 							function (result)
 							{
@@ -196,6 +203,5 @@ define(
 					 */
 				}
 			]);
-
 	}
 );

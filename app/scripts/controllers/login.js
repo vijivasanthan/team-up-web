@@ -7,14 +7,13 @@ define(
 		controllers.controller(
 			'login',
 			[
-				'$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Clients', 'Storage', '$routeParams', 'Settings', 'Profile', 'MD5',
+				'$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Clients', 'Storage', '$routeParams',
+				'Settings', 'Profile', 'MD5',
 				function (
 					$rootScope, $location, $q, $scope, Session, User, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5
 					)
 				{
 					var self = this;
-
-					// console.log('location ->', $location.path());
 
 					if ($location.path() == '/logout')
 					{
@@ -25,9 +24,6 @@ define(
 							});
 					}
 
-					/**
-					 * Set default views
-					 */
 					if ($routeParams.uuid && $routeParams.key)
 					{
 						$scope.views = {
@@ -47,9 +43,6 @@ define(
 						};
 					}
 
-					/**
-					 * Set default alerts
-					 */
 					$scope.alert = {
 						login:  {
 							display: false,
@@ -63,17 +56,8 @@ define(
 						}
 					};
 
-					/**
-					 * Init rootScope app info container
-					 */
 					if (! Storage.session.get('app')) Storage.session.add('app', '{}');
 
-					/**
-					 * TODO
-					 * Lose this jQuery stuff later on!
-					 *
-					 * Jquery solution of toggling between login and app view
-					 */
 					$('.navbar').hide();
 					$('#footer').hide();
 					$('#watermark').hide();
@@ -82,21 +66,10 @@ define(
 							'backgroundColor': '#1dc8b6'
 						});
 
-					/**
-					 * TODO
-					 * use native JSON functions of angular and Store service
-					 */
 					var logindata = angular.fromJson(Storage.get('logindata'));
 
 					if (logindata && logindata.remember) $scope.logindata = logindata;
 
-					/**
-					 * TODO
-					 * Remove unneccessary DOM manipulation
-					 * Use cookies for user credentials
-					 *
-					 * Login trigger
-					 */
 					$scope.login = function ()
 					{
 						$('#alertDiv').hide();
@@ -133,9 +106,6 @@ define(
 						self.auth($scope.logindata.username, MD5($scope.logindata.password));
 					};
 
-					/**
-					 * Authorize user
-					 */
 					self.auth = function (uuid, pass)
 					{
 						User.login(uuid.toLowerCase(), pass)
@@ -191,15 +161,18 @@ define(
 								members, function (mem)
 								{
 									// load the avatr URL and store them into the local storage
-									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace + "/team/member/" + mem.uuid + "/photo";
+									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+									                   "/team/member/" + mem.uuid + "/photo";
+
 									Teams.loadImg(getAvatarUrl).then(
 										function (res)
 										{
 											if (res.path)
 											{
 												Storage.avatar.addurl(mem.uuid, res.path);
-												console.log("Member Avatar path for " + mem.uuid + " - " + res.path);
-												console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+
+												// console.log("Member Avatar path for " + mem.uuid + " - " + res.path);
+												// console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
 											}
 										});
 								});
@@ -210,29 +183,24 @@ define(
 								members, function (mem)
 								{
 									// load the avatr URL and store them into the local storage
-									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace + "/client/" + mem.uuid + "/photo";
+									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+									                   "/client/" + mem.uuid + "/photo";
+
 									Clients.loadImg(getAvatarUrl).then(
 										function (res)
 										{
 											if (res.path)
 											{
 												Storage.avatar.addurl(mem.uuid, res.path);
-												console.log("Client Avatar path for " + mem.uuid + " - " + res.path);
-												console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
+
+												// console.log("Client Avatar path for " + mem.uuid + " - " + res.path);
+												// console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
 											}
 										});
 								});
 						}
-
 					};
 
-					/**
-					 * TODO
-					 * What happens if preloader stucks?
-					 * Optimize preloader and messages
-					 *
-					 * Initialize preloader
-					 */
 					self.preloader = function ()
 					{
 						$('#login').hide();
@@ -261,34 +229,33 @@ define(
 										.then(
 										function (teams)
 										{
-											console.log("got teams ", teams);
-
+											// console.log("got teams ", teams);
 											// try to get the members not in the teams Aync
-											console.log("got members not in any teams");
+											// console.log("got members not in any teams");
+
 											Teams.queryMembersNotInTeams().then(
 												function (result)
 												{
-													console.log("all members loaded (include the members not in any teams)", result);
-													initAvatarUrls(result, "team");
-												}, function (error)
-												{
+													// console.log("all members loaded (include the members not in any teams)", result);
 
-												});
+													initAvatarUrls(result, "team");
+												}, function (error) {});
 
 											if (teams.error)
 											{
 												console.warn('error ->', teams);
 											}
 
-											console.log("start to query team-clientgroup relation async ");
+											// console.log("start to query team-clientgroup relation async ");
 
 											self.progress(60, $rootScope.ui.login.loading_clientGroups);
+
 											// preload the clientGroups for each team
 											Teams.queryClientGroups(teams)
 												.then(
 												function ()
 												{
-													console.log("got clientGroups belong to the teams ");
+													// console.log("got clientGroups belong to the teams ");
 
 													self.progress(80, $rootScope.ui.login.loading_clientGroups);
 
@@ -296,61 +263,55 @@ define(
 														.then(
 														function (res_clients)
 														{
-															console.log("got all clients in or not in the client groups ", res_clients);
+															// console.log("got all clients in or not in the client groups ", res_clients);
+
 															initAvatarUrls(res_clients, "client");
 
 															Clients.query(false, {})
 																.then(
 																function ()
 																{
-																	console.log("got all grous and the clients in the groups ");
+																	// console.log("got all grous and the clients in the groups ");
 
 																	finalize();
 																}, function (error)
 																{
-																	deferred.resolve({error: error});
+																	console.log('something terrible happened!');
+
+																	// deferred.resolve({error: error});
 																})
 
 														}, function (error)
 														{
-															deferred.resolve({error: error});
+															console.log('something terrible happened!');
+
+															// deferred.resolve({error: error});
 														});
 
 												}, function (error)
 												{
-													deferred.resolve({error: error});
+													console.log('something terrible happened!');
+
+													// deferred.resolve({error: error});
 												});
 
 										}, function (error)
 										{
-											deferred.resolve({error: error});
+											console.log('something terrible happened!');
+
+											// deferred.resolve({error: error});
 										});
 								}
 							});
 					};
 
-					/**
-					 * Finalize the preloading
-					 */
 					function finalize ()
 					{
-						// console.warn( 'settings ->',
-						//               'user ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).user,
-						//               'widgets ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.widgets,
-						//               'group ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.group);
-
 						self.progress(100, $rootScope.ui.login.loading_everything);
 
 						self.redirectToTeamPage();
-
-						//              self.getMessages();
-
-						//              self.getMembers();
 					}
 
-					/**
-					 * Redirect to dashboard
-					 */
 					self.redirectToTeamPage = function ()
 					{
 						$location.path('/team');
@@ -368,9 +329,6 @@ define(
 							}, 100);
 					};
 
-					/**
-					 * Progress bar
-					 */
 					self.progress = function (ratio, message)
 					{
 						$('#preloader .progress .bar').css({ width: ratio + '%' });
@@ -378,6 +336,5 @@ define(
 					};
 				}
 			]);
-
 	}
 );

@@ -11,27 +11,15 @@ define(
 				{
 					var range, diff;
 
-					/**
-					 * Watch for changes in timeline range
-					 */
 					$scope.$watch(
 						function ()
 						{
-							/**
-							 * If main timeline
-							 */
 							if ($scope.timeline && $scope.timeline.main)
 							{
 								range = $scope.self.timeline.getVisibleChartRange();
 
 								diff = Dater.calculate.diff(range);
 
-								/**
-								 * Scope is a day
-								 *
-								 * TODO (try later on!)
-								 * new Date(range.start).toString('d') == new Date(range.end).toString('d')
-								 */
 								if (diff <= 86400000)
 								{
 									$scope.timeline.scope = {
@@ -40,9 +28,6 @@ define(
 										month: false
 									};
 								}
-								/**
-								 * Scope is less than a week
-								 */
 								else if (diff < 604800000)
 								{
 									$scope.timeline.scope = {
@@ -51,9 +36,6 @@ define(
 										month: false
 									};
 								}
-								/**
-								 * Scope is more than a week
-								 */
 								else if (diff > 604800000)
 								{
 									$scope.timeline.scope = {
@@ -71,10 +53,6 @@ define(
 								$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
 								                   Dater.readable.date($scope.timeline.range.end);
 							}
-							/**
-							 * User timeline
-							 * Allow only if it is not user
-							 */
 							else if ($route.current.params.userId != $rootScope.app.resources.uuid)
 							{
 								if ($scope.self.timeline)
@@ -90,9 +68,6 @@ define(
 						}
 					);
 
-					/**
-					 * Timeline listener
-					 */
 					$rootScope.$on(
 						'slotInitials', function ()
 						{
@@ -116,14 +91,7 @@ define(
 						}
 					);
 
-					/**
-					 * Timeline (The big boy)
-					 */
 					$scope.timeliner = {
-
-						/**
-						 * Init timeline
-						 */
 						init: function ()
 						{
 							$scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id));
@@ -137,93 +105,21 @@ define(
 							this.render($scope.timeline.options);
 						},
 
-						getRange: function ()
-						{
-							$scope.timelineGetRange()
-						},
+						getRange: function () { $scope.timelineGetRange() },
 
-						onAdd: function ()
-						{
-							$scope.timelineOnAdd()
-						},
+						onAdd: function () { $scope.timelineOnAdd() },
 
-						onRemove: function ()
-						{
-							$scope.timelineOnRemove()
-						},
+						onRemove: function () { $scope.timelineOnRemove() },
 
-						onChange: function ()
-						{
-							$scope.timelineChanging()
-						},
+						onChange: function () { $scope.timelineChanging() },
 
-						onSelect: function ()
-						{
-							$scope.timelineOnSelect()
-						},
+						onSelect: function () { $scope.timelineOnSelect() },
 
-						/**
-						 * (Re-) Render timeline
-						 */
 						render: function (options, remember)
 						{
-							/**
-							 * First setup comes with undefined
-							 */
-							/*
-							 if (remember === undefined)
-							 {
-							 remember = true;
-							 }
-							 */
-
-							//			var start, end;
-							//
-							//			/**
-							//			 * Hot fix for not converted Date objects initially given by timeline
-							//			 */
-							//			if ($scope.timeline.range) {
-							//				if ( typeof $scope.timeline.range.start != Date) {
-							//					$scope.timeline.range.start = new Date($scope.timeline.range.start);
-							//				}
-							//
-							//				if ( typeof $scope.timeline.range.end != Date) {
-							//					$scope.timeline.range.end = new Date($scope.timeline.range.end);
-							//				}
-							//
-							//				// console.log('RANGE GOOD !!');
-							//				start = $scope.timeline.range.start;
-							//				end = $scope.timeline.range.end;
-							//			} else {
-							//				// console.log('NOOOO RANGE !!');
-							//				start = new Date(options.start);
-							//				end = new Date(options.end);
-							//			}
-							//
-							//			// console.log('range in timeline ->', $scope.timeline.range);
-							//			// console.log('REMEMBER ->', remember);
-							//
-							//			$scope.timeline = {
-							//				id : $scope.timeline.id,
-							//				main : $scope.timeline.main,
-							//				user : $scope.timeline.user,
-							//				current : $scope.timeline.current,
-							//				scope : $scope.timeline.scope,
-							//				config : $scope.timeline.config,
-							//				options : {
-							//					start : (remember) ? start : new Date(options.start),
-							//					end : (remember) ? end : new Date(options.end),
-							//					min : new Date(options.start),
-							//					max : new Date(options.end)
-							//				}
-							//			};
-
 							var start,
 							    end;
 
-							/**
-							 * Hot fix for not converted Date objects initially given by timeline
-							 */
 							if ($scope.timeline.range)
 							{
 								if (typeof $scope.timeline.range.start != Date)
@@ -253,18 +149,13 @@ define(
 								scope:   $scope.timeline.scope,
 								config:  $scope.timeline.config,
 								options: {
-									start: (
-										       remember) ? start : new Date(options.start),
-									end: (
-										     remember) ? end : new Date(options.end),
+									start: (remember) ? start : new Date(options.start),
+									end: (remember) ? end : new Date(options.end),
 									min: new Date(options.start),
 									max: new Date(options.end)
 								}
 							};
 
-							/**
-							 * IE8 fix for inability of - signs in date object
-							 */
 							if ($.browser.msie && $.browser.version == '8.0')
 							{
 								$scope.timeline.options.start = new Date(options.start);
@@ -275,12 +166,18 @@ define(
 
 							if ($scope.timeline.main)
 							{
-								$scope.self.timeline.draw(Sloter.process($scope.data, $scope.timeline.config, $scope.divisions, $scope.timeline.user.role, $scope.timeline.current), $scope.timeline.options);
+								$scope.self.timeline.draw(
+									Sloter.process(
+										$scope.data,
+										$scope.timeline.config,
+										$scope.divisions,
+										$scope.timeline.user.role,
+										$scope.timeline.current), $scope.timeline.options
+								);
 							}
 							else
 							{
-								var timeout = (
-									              $location.hash() == 'timeline') ? 100 : 2000;
+								var timeout = ($location.hash() == 'timeline') ? 100 : 2000;
 
 								$rootScope.timelineLoaded = false;
 
@@ -290,7 +187,9 @@ define(
 										$rootScope.timelineLoaded = true;
 										$rootScope.$apply();
 
-										$scope.self.timeline.draw(Sloter.profile($scope.data.slots.data, $scope.timeline.config), $scope.timeline.options);
+										$scope.self.timeline.draw(
+											Sloter.profile($scope.data.slots.data, $scope.timeline.config),
+											$scope.timeline.options);
 									}, timeout
 								);
 							}
@@ -299,86 +198,13 @@ define(
 
 						},
 
-						/**
-						 * Grab new timeline data from backend and render timeline again
-						 */
 						load: function (stamps, remember)
 						{
 							var _this = this;
 
-							//            $scope.self.timeline.draw(
-							//              Sloter.profile(
-							//                $scope.data.slots.data,
-							//                $scope.timeline.config
-							//              ), $scope.timeline.options);
-
-							// $scope.data = data;
-
-							// console.log('render data ->', angular.toJson($scope.data.members));
-
 							_this.render(stamps, remember);
-
-							//            $rootScope.statusBar.display($rootScope.ui.planboard.refreshTimeline);
-							//
-							//            if ($scope.timeline.main)
-							//            {
-							//              Slots.all({
-							//                groupId:  $scope.timeline.current.group,
-							//                division: $scope.timeline.current.division,
-							//                layouts:  $scope.timeline.current.layouts,
-							//                month:    $scope.timeline.current.month,
-							//                stamps:   stamps
-							//              })
-							//                .then(function (data)
-							//                {
-							//                  if (data.error)
-							//                  {
-							//                    $rootScope.notifier.error($rootScope.ui.errors.timeline.query);
-							//                    console.warn('error ->', data);
-							//                  }
-							//                  else
-							//                  {
-							//                    $scope.data = data;
-							//
-							//                    _this.render(stamps, remember);
-							//                  }
-							//
-							//                  $rootScope.statusBar.off();
-							//
-							//                  if ($scope.timeline.config.wishes)
-							//                  {
-							//                    getWishes();
-							//                  }
-							//                });
-							//            }
-							//            else
-							//            {
-							//              Profile.getSlots($scope.timeline.user.id, stamps)
-							//                .then(function (data)
-							//                {
-							//                  if (data.error)
-							//                  {
-							//                    $rootScope.notifier.error($rootScope.ui.errors.timeline.query);
-							//                    console.warn('error ->', data);
-							//                  }
-							//                  else
-							//                  {
-							//                    data.user 	= data.slots.data;
-							//
-							//                    $scope.data = data;
-							//
-							//                    _this.render(stamps, remember);
-							//
-							//                    $rootScope.statusBar.off();
-							//                  }
-							//                });
-							//            }
-
 						},
 
-						/**
-						 * Refresh timeline as it is
-						 */
 						refresh: function ()
 						{
 							$scope.slot = {};
@@ -395,8 +221,6 @@ define(
 								};
 							}
 
-							console.log('timeline refresh ->');
-
 							this.load(
 								{
 									start: $scope.data.periods.start,
@@ -405,45 +229,18 @@ define(
 							);
 						},
 
-						/**
-						 * Redraw timeline
-						 */
-						redraw: function ()
-						{
-							$scope.self.timeline.redraw();
-						},
+						redraw: function () { $scope.self.timeline.redraw() },
 
-						isAdded: function ()
-						{
-							// return $('.timeline-event-content')
-							//            .contents()
-							//            .filter(function ()
-							//            {
-							//              return this.nodeValue == 'New'
-							//            }).length;
-							return $('.state-new').length;
-						},
+						isAdded: function () { return $('.state-new').length },
 
-						/**
-						 * Cancel add
-						 */
-						cancelAdd: function ()
-						{
-							$scope.self.timeline.cancelAdd();
-						}
+						cancelAdd: function () { $scope.self.timeline.cancelAdd() }
 					};
 
-					/**
-					 * Init timeline
-					 */
 					if ($scope.timeline)
 					{
 						$scope.timeliner.init();
 					}
 
-					/**
-					 * Timeliner listener
-					 */
 					$rootScope.$on(
 						'timeliner', function ()
 						{
@@ -456,9 +253,6 @@ define(
 						}
 					);
 
-					/**
-					 * Handle new requests for timeline
-					 */
 					$scope.requestTimeline = function (section)
 					{
 						switch (section)
@@ -470,6 +264,7 @@ define(
 								{
 									$scope.timeline.current.layouts.members = false;
 								}
+
 								break;
 
 							case 'members':
@@ -479,6 +274,7 @@ define(
 								{
 									$scope.timeline.current.layouts.group = true;
 								}
+
 								break;
 						}
 
@@ -490,9 +286,6 @@ define(
 						);
 					};
 
-					/**
-					 * Timeline get ranges
-					 */
 					$scope.timelineGetRange = function ()
 					{
 						var range = $scope.self.timeline.getVisibleChartRange();
@@ -517,26 +310,9 @@ define(
 						);
 					};
 
-					/**
-					 * Get information of the selected slot
-					 */
 					$scope.selectedSlot = function ()
 					{
 						var selection;
-
-						// if ($scope.mode == 'edit')
-						// {
-						// 	console.log('in edit mode');
-						// }
-						// else
-						// {
-						// 	console.log('not in editing mode');
-						// }
-
-						/**
-						 * TODO (Not working!!)
-						 */
-						// $scope.self.timeline.cancelAdd();
 
 						if ($scope.timeliner.isAdded() > 0)
 						{
@@ -549,7 +325,6 @@ define(
 
 						if (selection = $scope.self.timeline.getSelection()[0])
 						{
-							//var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
 							var values = $scope.self.timeline.getItem(selection.row);
 							var content = $scope.getSlotContentJSON(values.content);
 
@@ -567,9 +342,6 @@ define(
 							}
 							else if (values.content != "New")
 							{
-								/**
-								 * TODO (Convert to resetview?)
-								 */
 								$scope.forms = {
 									add:  false,
 									edit: true
@@ -592,8 +364,7 @@ define(
 									switch (content.type)
 									{
 										case 'slot':
-											if (values.content == "New" || (
-												content.relatedUser && typeof content.id == "undefined"))
+											if (values.content == "New" || (content.relatedUser && typeof content.id == "undefined"))
 											{
 												$scope.views.slot.add = true;
 											}
@@ -615,6 +386,7 @@ define(
 								}
 
 								var relatedUserId;
+
 								if ($scope.views.teams)
 								{
 									relatedUserId = content.clientUuid;
@@ -623,6 +395,7 @@ define(
 								{
 									relatedUserId = content.memberId;
 								}
+
 								$scope.slot = {
 									start:       {
 										date:     new Date(values.start).toString($rootScope.config.formats.date),
@@ -643,11 +416,6 @@ define(
 									relatedUser: relatedUserId
 								};
 
-								/**
-								 * TODO (Check if this can be combined with switch later on!)
-								 *
-								 * Set extra data based slot type for inline form
-								 */
 								if ($scope.timeline.main)
 								{
 									switch (content.type)
@@ -679,13 +447,8 @@ define(
 						}
 					};
 
-					/**
-					 * Timeline on select
-					 */
 					$scope.timelineOnSelect = function ()
 					{
-						// $rootScope.planboardSync.clear();
-
 						$scope.$apply(
 							function ()
 							{
@@ -696,14 +459,10 @@ define(
 								{
 									$scope.redrawSlot($scope.selectedOriginal);
 								}
-
 							}
 						);
 					};
 
-					/**
-					 * Prevent re-rendering issues with timeline
-					 */
 					$scope.destroy = {
 						timeline:   function ()
 						{
@@ -721,148 +480,15 @@ define(
 						}
 					};
 
-					/**
-					 * Change division
-					 */
-					//        $scope.changeDivision = function ()
-					//        {
-					////      var filtered = [];
-					////
-					////      if ($scope.timeline.current.division == 'all')
-					////      {
-					////        filtered = $scope.data.aggs;
-					////      }
-					////      else
-					////      {
-					////        angular.forEach($scope.data.aggs, function (agg)
-					////        {
-					////          if ($scope.timeline.current.division == agg.division.id)
-					////          {
-					////            filtered.push(agg);
-					////          }
-					////        });
-					////      }
-					////
-					////      $scope.data.filtered = filtered;
-					//
-					////      console.log('division ->', $scope.timeline.current.division);
-					////
-					////      console.log('div ->', $scope.groupPieHide);
-					//
-					//          angular.forEach($scope.divisions, function (division)
-					//          {
-					//            $scope.groupPieHide[division.id] = false;
-					//          });
-					//
-					//          if ($scope.timeline.current.division !== 'all')
-					//          {
-					//            $scope.groupPieHide[$scope.timeline.current.division] = true;
-					//          }
-					//
-					//          $scope.timeliner.render({
-					//            start:  $scope.timeline.range.start,
-					//            end:    $scope.timeline.range.end
-					//          });
-					//        };
-
-					/**
-					 * Group aggs barCharts toggle
-					 */
-					//        $scope.barCharts = function ()
-					//        {
-					//          $scope.timeline.config.bar = !$scope.timeline.config.bar;
-					//
-					//          $scope.timeliner.render({
-					//            start:  $scope.timeline.range.start,
-					//            end:    $scope.timeline.range.end
-					//          });
-					//        };
-
-					/**
-					 * Group wishes toggle
-					 */
-					//        $scope.groupWishes = function ()
-					//        {
-					//          if ($scope.timeline.config.wishes)
-					//          {
-					//            $scope.timeline.config.wishes = false;
-					//
-					//            delete $scope.data.aggs.wishes;
-					//
-					//            $scope.timeliner.render({
-					//              start:  	$scope.timeline.range.start,
-					//              end:    	$scope.timeline.range.end
-					//            }, true);
-					//          }
-					//          else
-					//          {
-					//            $scope.timeline.config.wishes = true;
-					//
-					//            getWishes();
-					//          }
-					//        };
-
-					/**
-					 * Get wishes
-					 */
-					//        function getWishes ()
-					//        {
-					//          if ($scope.timeline.current.layouts.group)
-					//          {
-					//            $rootScope.statusBar.display($rootScope.ui.message.getWishes);
-					//
-					//            Slots.wishes({
-					//              id:  			$scope.timeline.current.group,
-					//              start:  	$scope.data.periods.start / 1000,
-					//              end:    	$scope.data.periods.end / 1000
-					//            }).then(function (wishes)
-					//              {
-					//                $rootScope.statusBar.off();
-					//
-					//                $scope.data.aggs.wishes = wishes;
-					//
-					//                $scope.timeliner.render({
-					//                  start:  	$scope.timeline.range.start,
-					//                  end:    	$scope.timeline.range.end
-					//                }, true);
-					//              });
-					//          }
-					//        }
-
-					/**
-					 * Timeline legend toggle
-					 */
-					//        $scope.showLegenda = function ()
-					//        {
-					//          $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
-					//        };
-
-					/**
-					 * Alter legend settings
-					 */
-					//        $scope.alterLegenda = function (legenda)
-					//        {
-					//          $scope.timeline.config.legenda = legenda;
-					//
-					//          $scope.timeliner.render({
-					//            start:  $scope.timeline.range.start,
-					//            end:    $scope.timeline.range.end
-					//          });
-					//        };
-
-					/**
-					 * Add slot trigger start view
-					 */
 					$scope.timelineOnAdd = function (form, slot)
 					{
 						$rootScope.planboardSync.clear();
 
-						/**
-						 * Make view for new slot
-						 */
+						var values;
+
 						if (! form)
 						{
-							var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
+							values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 
 							$scope.relatedUsers = $scope.processRelatedUsers(values);
 
@@ -879,7 +505,6 @@ define(
 										$rootScope.$broadcast('resetPlanboardViews');
 
 										$scope.views.slot.add = true;
-
 									}
 									else
 									{
@@ -900,38 +525,26 @@ define(
 											time:     new Date(values.end).toString($rootScope.config.formats.time),
 											datetime: new Date(values.end).toISOString()
 										},
-										recursive: (
-											           values.group.match(/recursive/)) ? true : false,
-										/**
-										 * INFO
-										 * First state is hard-coded
-										 * Maybe use the first one from array later on?
-										 */
+										recursive: (values.group.match(/recursive/)) ? true : false,
 										state: 'com.ask-cs.State.Available'
 									};
 								}
 							);
 						}
-						/**
-						 * Add new slot
-						 */
 						else
 						{
-							var now = Date.now().getTime(),
-							    values = {
-								    startTime: (
-									               $rootScope.browser.mobile) ?
-								               new Date(slot.start.datetime).getTime() :
-								               Dater.convert.absolute(slot.start.date, slot.start.time, false),
-								    endTime: (
-									             $rootScope.browser.mobile) ?
-								             new Date(slot.end.datetime).getTime() :
-								             Dater.convert.absolute(slot.end.date, slot.end.time, false),
-								    //				recursive : (slot.recursive) ? true : false,
-								    description: (
-									                 typeof slot.state == "undefined") ? "" : slot.state,
-								    relatedUserId: slot.relatedUser
-							    };
+							// var now = Date.now().getTime();
+
+							values = {
+								startTime: ($rootScope.browser.mobile) ?
+								           new Date(slot.start.datetime).getTime() :
+								           Dater.convert.absolute(slot.start.date, slot.start.time, false),
+								endTime: ($rootScope.browser.mobile) ?
+								         new Date(slot.end.datetime).getTime() :
+								         Dater.convert.absolute(slot.end.date, slot.end.time, false),
+								description: (typeof slot.state == "undefined") ? "" : slot.state,
+								relatedUserId: slot.relatedUser
+							};
 
 							if (typeof slot.relatedUser == "undefined" || slot.relatedUser == "")
 							{
@@ -943,11 +556,13 @@ define(
 								{
 									$rootScope.notifier.error($rootScope.ui.teamup.selectMember);
 								}
+
 								return;
 							}
 
 							var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 							var memberId = $(selected.group).attr("memberId");
+
 							if (typeof memberId == "undefined")
 							{
 								$rootScope.notifier.error($rootScope.ui.teamup.selectSlot);
@@ -985,8 +600,6 @@ define(
 									}
 
 									$scope.timeliner.refresh();
-									// $scope.timeliner.render();
-									//				$rootScope.planboardSync.start();
 								}
 							);
 
@@ -1010,11 +623,13 @@ define(
 						{
 							teamMemberId = rawSlot.relatedUserId;
 							clientId = rawSlot.memberId;
+
 							var member = $rootScope.getTeamMemberById(teamMemberId);
+
 							team = member.teamUuids[0];
 						}
 
-						var newSlot = {
+						return {
 							uuid:                   rawSlot.uuid,
 							status:                 1,
 							plannedStartVisitTime:  rawSlot.startTime,
@@ -1024,13 +639,10 @@ define(
 							description:            rawSlot.description,
 							assignedTeamMemberUuid: teamMemberId
 						};
+					};
 
-						return newSlot;
-					}
-
-					$scope.redrawSlot = function (slot)
+					$scope.redrawSlot = function ()
 					{
-
 						var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false);
 						var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
 
@@ -1060,6 +672,7 @@ define(
 						var item = $scope.self.timeline.getItem(row);
 
 						var relateUserName = "";
+
 						angular.forEach(
 							$scope.relatedUsers, function (ru)
 							{
@@ -1072,6 +685,7 @@ define(
 						);
 
 						var content_obj = item.content;
+
 						if (content_obj != "New")
 						{
 							content_obj = $scope.getSlotContentJSON(item.content);
@@ -1080,64 +694,59 @@ define(
 						}
 						else
 						{
-
 							content_obj = {
 								clientUuid: $scope.slot.clientUuid,
 								memberId:   $scope.slot.memberId
 							};
 						}
 
-						var content = "<span>" + relateUserName + "</span>" + "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
-						if ((
-							    typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
-						    (
-							    typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
+						var content = "<span>" + relateUserName + "</span>" +
+						              "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
+
+						if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
+						    (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
 						{
 							if (typeof $scope.slot.relatedUser == "undefined" || $scope.slot.relatedUser == "")
 							{
 								content = "New";
 							}
 						}
+
 						return content;
 					};
 
-					/**
-					 * Timeline on change
-					 */
 					$scope.timelineChanging = function ()
 					{
 						$rootScope.planboardSync.clear();
 
 						var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-						var options = {
-							start:   values.start,
-							end:     values.end,
-							//              content:  angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
-							content: values.content
-						};
+
+						/*
+						 var options = {
+						 start:   values.start,
+						 end:     values.end,
+						 // content:  angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
+						 content: values.content
+						 };
+						 */
 
 						var content_obj = $scope.getSlotContentJSON(values.content);
 
 						$scope.$apply(
 							function ()
 							{
-
 								$scope.slot = {
-									start: {
+									start:       {
 										date:     new Date(values.start).toString($rootScope.config.formats.date),
 										time:     new Date(values.start).toString($rootScope.config.formats.time),
 										datetime: new Date(values.start).toISOString()
 									},
-									end:   {
+									end:         {
 										date:     new Date(values.end).toString($rootScope.config.formats.date),
 										time:     new Date(values.end).toString($rootScope.config.formats.time),
 										datetime: new Date(values.end).toISOString()
 									},
-									//	              state:      options.content.state,
-									//	              recursive:  options.content.recursive,
-									//	              id:         options.content.id
-									state: content_obj.state,
-
+									state:       content_obj.state,
 									id:          content_obj.id,
 									memberId:    content_obj.memberId,
 									mid:         content_obj.mid,
@@ -1146,31 +755,12 @@ define(
 								};
 							}
 						);
-
-						/**
-						 * DEPRECIATED
-						 */
-
-						// console.log('content ->', options.content);
-
-						// if ($scope.mode == 'edit')
-						// {
-						// 	if (options.content.id != $scope.slotid)
-						// 	{
-						// 		$scope.self.timeline.cancelChange();
-						// 	}
-						// }
-						// else
-						// {
-						// 	$scope.mode = 'edit';
-						// 	$scope.slotid = options.content.id;
-						// }
-
 					};
 
 					$scope.getRelatedUserId = function (name)
 					{
 						var ret = "";
+
 						angular.forEach(
 							$scope.relatedUsers, function (user)
 							{
@@ -1180,12 +770,10 @@ define(
 								}
 							}
 						);
+
 						return ret;
 					};
 
-					/**
-					 * Timeline on change
-					 */
 					$scope.timelineOnChange = function (direct, original, slot, options)
 					{
 						$rootScope.planboardSync.clear();
@@ -1195,32 +783,26 @@ define(
 
 						var memberId = $(selected.group).attr("memberId");
 
+						var options;
+
 						if (! direct)
 						{
-							/**
-							 * Through timeline
-							 */
-							var options = {
+							options = {
 								startTime:     selected.start,
 								endTime:       selected.end,
 								description:   "",
 								relatedUserId: slot.relatedUser,
 								uuid:          content.id,
-								memberId:      memberId,
+								memberId:      memberId
 							};
 						}
 						else
 						{
-							/**
-							 * Through form
-							 */
-							var options = {
-								startTime: (
-									           $rootScope.browser.mobile) ?
+							options = {
+								startTime: ($rootScope.browser.mobile) ?
 								           new Date(slot.start.datetime).getTime() :
 								           Dater.convert.absolute(slot.start.date, slot.start.time, false),
-								endTime: (
-									         $rootScope.browser.mobile) ?
+								endTime: ($rootScope.browser.mobile) ?
 								         new Date(slot.end.datetime).getTime() :
 								         Dater.convert.absolute(slot.end.date, slot.end.time, false),
 								description:   "",
@@ -1234,25 +816,16 @@ define(
 						{
 							var now = Date.now().getTime();
 
-							if (old == curr)
-							{
-								return true;
-							}
-
-							if (old < now)
-							{
-								return false;
-							}
-
-							if (curr < now)
-							{
-								return false;
-							}
+							// TODO: Simplify these statemanents
+							if (old == curr)  return true;
+							if (old < now)    return false;
+							if (curr < now)   return false;
 
 							return true;
 						};
 
 						var values = $scope.convertTaskJsonObject(options);
+
 						Slots.update(values).then(
 							function (result)
 							{
@@ -1278,14 +851,10 @@ define(
 
 								$scope.timeliner.refresh();
 								$rootScope.statusBar.off();
-								//				$rootScope.planboardSync.start();
 							}
 						);
 					};
 
-					/**
-					 * Timeline on remove
-					 */
 					$scope.timelineOnRemove = function ()
 					{
 						$rootScope.planboardSync.clear();
@@ -1295,10 +864,7 @@ define(
 							$scope.self.timeline.cancelAdd();
 
 							$scope.$apply(
-								function ()
-								{
-									$scope.resetInlineForms();
-								}
+								function () { $scope.resetInlineForms() }
 							);
 						}
 						else
@@ -1334,6 +900,7 @@ define(
 									else
 									{
 										$rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
+
 										if ($scope.section == "teams")
 										{
 											$scope.changeCurrent($scope.currentTeam);
@@ -1342,7 +909,6 @@ define(
 										{
 											$scope.changeCurrent($scope.currentClientGroup);
 										}
-
 									}
 
 									$scope.timeliner.refresh();
@@ -1355,51 +921,6 @@ define(
 						}
 					};
 
-					/**
-					 * Set wish
-					 */
-					//        $scope.wisher = function (slot)
-					//        {
-					//          $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
-					//
-					//          Slots.setWish(
-					//            {
-					//              id:     slot.groupId,
-					//              start:  ($rootScope.browser.mobile) ?
-					//                new Date(slot.start.datetime).getTime() / 1000 :
-					//                Dater.convert.absolute(slot.start.date, slot.start.time, true),
-					//              end:    ($rootScope.browser.mobile) ?
-					//                new Date(slot.end.datetime).getTime() / 1000 :
-					//                Dater.convert.absolute(slot.end.date, slot.end.time, true),
-					//              recursive:  false,
-					//              wish:       slot.wish
-					//            })
-					//            .then(
-					//            function (result)
-					//            {
-					//              $rootScope.$broadcast('resetPlanboardViews');
-					//
-					//              if (result.error)
-					//              {
-					//                $rootScope.notifier.error($rootScope.ui.errors.timeline.wisher);
-					//                console.warn('error ->', result);
-					//              }
-					//              else
-					//              {
-					//                $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
-					//              }
-					//
-					//              $scope.timeliner.refresh();
-					//            }
-					//          );
-					//        };
-
-					/**
-					 * TODO
-					 * Stress-test this!
-					 *
-					 * Hot fix against not-dom-ready problem for timeline
-					 */
 					if ($scope.timeline && $scope.timeline.main)
 					{
 						setTimeout(
@@ -1410,32 +931,17 @@ define(
 						);
 					}
 
-					/**
-					 * Background sync in every 60 sec
-					 */
 					$rootScope.planboardSync = {
-						/**
-						 * Start planboard sync
-						 */
 						start: function ()
 						{
 							$window.planboardSync = $window.setInterval(
 								function ()
 								{
-									// console.log('planboard sync started..', new Date.now());
-
-									/**
-									 * Update planboard only in planboard is selected
-									 */
 									if ($location.path() == '/planboard')
 									{
 										$scope.slot = {};
 
 										$rootScope.$broadcast('resetPlanboardViews');
-										// $scope.resetViews();
-
-										// if ($scope.views.slot.add) $scope.views.slot.add = true;
-										// if ($scope.views.slot.edit) $scope.views.slot.edit = true;
 
 										$scope.timeliner.load(
 											{
@@ -1444,41 +950,19 @@ define(
 											}, true
 										);
 									}
-									// Sync periodically for a minute
 								}, 60000
 							);
-							// 1 minute
-							// }, 5000); //  10 seconds
 						},
 
-						/**
-						 * Clear planboard sync
-						 */
-						clear: function ()
-						{
-							// console.log('planboard sync STOPPED');
-
-							// if ($window.planboardSync)
-							// {
-							// 	console.log('it exists', $window);
-							// }
-							// else
-							// {
-							// 	console.log('NOT existing !');
-							// }
-
-							$window.clearInterval($window.planboardSync);
-						}
+						clear: function () { $window.clearInterval($window.planboardSync) }
 					};
 
-					/**
-					 * Start planboard sync
-					 */
 					$rootScope.planboardSync.start();
 
 					$scope.getSlotContentJSON = function (content)
 					{
 						var jsonStr = content.substring(content.indexOf("value=") + 7, content.length - 2);
+
 						return angular.fromJson(jsonStr);
 					}
 				}

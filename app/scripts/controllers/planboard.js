@@ -9,7 +9,6 @@ define(
 				'$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams', 'Clients',
 				function ($rootScope, $scope, $location, Dater, Storage, Teams, Clients)
 				{
-
 					var self = this,
 					    params = $location.search();
 
@@ -53,10 +52,8 @@ define(
 						members: [],
 						synced:  Number(Date.today()),
 						periods: {
-							start: Number(Date.today()) - (
-								7 * 24 * 60 * 60 * 1000),
-							end: Number(Date.today()) + (
-								7 * 24 * 60 * 60 * 1000)
+							start: Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
+							end: Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
 						}
 					};
 
@@ -80,10 +77,12 @@ define(
 									{
 										var imgfile = Storage.avatar.geturl(member.uuid);
 										var imgURL = $scope.imgHost + imgfile;
+
 										if (typeof imgfile == "undefined")
 										{
 											imgURL = profile.noImgURL;
 										}
+
 										var avatar = '<div class="roundedPicSmall memberStateNone" ' +
 										             'style="float: left; background-image: url(' +
 										             imgURL +
@@ -99,6 +98,7 @@ define(
 										           '</div>';
 
 										var obj = {"head": name, "memId": member.uuid};
+
 										$scope.data.teams.members[team.uuid].push(obj);
 									});
 							}
@@ -124,10 +124,12 @@ define(
 									{
 										var imgfile = Storage.avatar.geturl(member.uuid);
 										var imgURL = $scope.imgHost + imgfile;
+
 										if (typeof imgfile == "undefined")
 										{
 											imgURL = profile.noImgURL;
 										}
+
 										var avatar = '<div class="roundedPicSmall memberStateNone" ' +
 										             'style="float: left; background-image: url(' +
 										             imgURL +
@@ -142,7 +144,11 @@ define(
 										           member.lastName +
 										           '</div>';
 
-										var obj = {"head": name, "memId": member.uuid};
+										var obj = {
+											"head":  name,
+											"memId": member.uuid
+										};
+
 										$scope.data.clients.members[client.id].push(obj);
 									});
 							}
@@ -154,18 +160,23 @@ define(
 						{
 							case 'teams':
 								$scope.list = $scope.data.teams.list;
+
 								if (typeof $scope.currentTeam == "undefined")
 								{
 									$scope.currentTeam = $scope.data.teams.list[0].uuid;
 								}
+
 								$scope.changeCurrent($scope.currentTeam);
 								break;
+
 							case 'clients':
 								$scope.list = $scope.data.clients.list;
+
 								if (typeof $scope.currentClientGroup == "undefined")
 								{
 									$scope.currentClientGroup = $scope.data.clients.list[0].uuid;
 								}
+
 								$scope.changeCurrent($scope.currentClientGroup);
 								break;
 						}
@@ -174,7 +185,6 @@ define(
 
 					$scope.changeCurrent = function (current)
 					{
-
 						angular.forEach(
 							$scope.data[$scope.section].list, function (node)
 							{
@@ -184,16 +194,6 @@ define(
 								}
 							});
 
-						// change the tab
-						//		if(typeof $scope.data.section != "undefined" && $scope.data.section != $scope.section){
-						//			if($scope.section == "teams"){
-						//				$scope.current = $scope.data.teams.list[0].uuid;
-						//
-						//			}else if($scope.section == "clients"){
-						//				$scope.current = $scope.data.clients.list[0].uuid;
-						//
-						//			}
-						//		}
 						if ($scope.section == "teams")
 						{
 							$scope.currentTeam = current;
@@ -204,28 +204,30 @@ define(
 							$scope.currentClientGroup = current;
 							$scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
 						}
+
 						$scope.data.section = $scope.section;
 
 						// try to loading the slots from here
-						var startTime = Number(Date.today()) - (
-							7 * 24 * 60 * 60 * 1000);
-						var endTime = Number(Date.today()) + (
-							7 * 24 * 60 * 60 * 1000);
+						var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000);
+						var endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 
 						var storeTask = function (tasks, startTime, endTime)
 						{
 							// clear the array to keep tasks sync with sever side after changing
 							$scope.data[$scope.section].tasks = [];
+
 							angular.forEach(
 								tasks, function (task, i)
 								{
 									if (task != null)
 									{
 										var memberId = "";
+
 										if ($scope.section == "teams")
 										{
 											memberId = task.assignedTeamMemberUuid;
 										}
+
 										if ($scope.section == "clients")
 										{
 											memberId = task.relatedClientUuid;
@@ -235,6 +237,7 @@ define(
 										{
 											$scope.data[$scope.section].tasks[memberId] = new Array();
 										}
+
 										$scope.data[$scope.section].tasks[memberId].push(task);
 									}
 								});
@@ -248,15 +251,17 @@ define(
 
 						if ($scope.data.section == "teams")
 						{
-
 							$location.search(
 								{
 									uuid: $scope.currentTeam
 								}).hash('teams');
 
-							Teams.getTeamTasks($scope.currentTeam, startTime, endTime).then(
+							Teams.getTeamTasks($scope.currentTeam, startTime, endTime)
+								.then(
 								function (tasks)
 								{
+									// console.log('get team tasks ->');
+
 									// process the tasks data
 									storeTask(tasks, startTime, endTime);
 								}, function (error)
@@ -266,7 +271,6 @@ define(
 						}
 						else if ($scope.data.section == "clients")
 						{
-
 							$location.search(
 								{
 									uuid: $scope.currentClientGroup
@@ -281,12 +285,8 @@ define(
 									console.log("error happend when getting the tasks for the team members " + error);
 								});
 						}
-
 					};
 
-					/**
-					 * View setter
-					 */
 					function setView (hash)
 					{
 						$scope.views = {
@@ -302,9 +302,6 @@ define(
 						$scope.views[hash] = true;
 					}
 
-					/**
-					 * Switch between the views and set hash accordingly
-					 */
 					$scope.setViewTo = function (uuid, hash)
 					{
 						$scope.$watch(
@@ -326,22 +323,14 @@ define(
 							add:  false,
 							edit: false
 						};
-
 					};
 
-					/**
-					 * Reset planboard views
-					 */
 					$rootScope.$on(
-						'resetPlanboardViews', function ()
-						{
-							$scope.resetViews();
-						});
+						'resetPlanboardViews', function () { $scope.resetViews() }
+					);
 
 					var uuid, view;
-					/**
-					 * If no params or hashes given in url
-					 */
+
 					if (! params.uuid && ! $location.hash())
 					{
 						uuid = $scope.data.teams.list[0].uuid;
@@ -358,100 +347,30 @@ define(
 						view = $location.hash();
 					}
 
-					/**
-					 * Default view
-					 */
 					$scope.setViewTo(uuid, view);
 
-					/*
-					 var data = {
-					 "user": [
-					 {
-					 "count": 0,
-					 "end": 1378681200,
-					 "recursive": true,
-					 "start": 1378504800,
-					 "text": "com.ask-cs.State.Available",
-					 "type": "availability",
-					 "wish": 0
-					 },
-					 {
-					 "count": 0,
-					 "end": 1378850400,
-					 "recursive": true,
-					 "start": 1378720800,
-					 "text": "com.ask-cs.State.Available",
-					 "type": "availability",
-					 "wish": 0
-					 }
-					 ],
-					 "synced": Number(Date.today()),
-					 "periods": {
-					 "start": Number(Date.today()),
-					 "end":   Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
-					 }
-					 };
-
-					 // console.log('data ->', angular.toJson(data));
-
-					 console.log('this week ->', Number(Date.today()));
-					 */
-
-					/**
-					 * Pass the self
-					 */
 					$scope.self = this;
 
-					/**
-					 * Pass time slots data
-					 */
-					// $scope.data = data;
-
-					/**
-					 * Get groups and settings
-					 */
-					//      var groups  	= Storage.local.groups(),
-					//        settings 	= Storage.local.settings();
-
-					/**
-					 * Pass current
-					 */
 					$scope.current = {
 						layouts:  {
 							user:    true,
 							group:   false,
 							members: false
 						},
-						/**
-						 * Fix for timeline scope to day
-						 */
 						day: Dater.current.today() + 1,
 						week:     Dater.current.week(),
 						month:    Dater.current.month(),
-						// group:    settings.app.group,
 						division: 'all'
 					};
 
-					/**
-					 * Pass periods
-					 */
 					Dater.registerPeriods();
 
 					$scope.periods = Dater.getPeriods();
 
-					/**
-					 * Reset and init slot container which
-					 * is used for adding or changing slots
-					 */
 					$scope.slot = {};
 
-					/**
-					 * Set defaults for timeline
-					 */
-					var index_start = (
-						                  (
-							                  Dater.current.today() - 7) < 1 ) ? 1 : (
-						                  Dater.current.today() - 7);
+					var index_start = ((Dater.current.today() - 7) < 1 ) ? 1 : (Dater.current.today() - 7);
+
 					$scope.timeline = {
 						id:      'mainTimeline',
 						main:    true,
@@ -460,9 +379,6 @@ define(
 							role: $rootScope.app.resources.role
 						},
 						current: $scope.current,
-						/**
-						 * Initial start up is next 7 days
-						 */
 						options: {
 							start: $scope.periods.days[index_start].last.day,
 							end:   $scope.periods.days[Dater.current.today() + 7].last.day,
@@ -490,9 +406,6 @@ define(
 						}
 					};
 
-					/**
-					 * IE8 fix for inability of - signs in date object
-					 */
 					if ($.browser.msie && $.browser.version == '8.0')
 					{
 						$scope.timeline.options = {
@@ -503,44 +416,32 @@ define(
 						};
 					}
 
-					/**
-					 * Legend defaults
-					 */
 					angular.forEach(
 						$rootScope.config.timeline.config.states, function (state, index)
 						{
 							$scope.timeline.config.legenda[index] = true;
 						});
 
-					/**
-					 * Timeline group legend default configuration
-					 */
 					$scope.timeline.config.legenda.groups = {
 						more: true,
 						even: true,
 						less: true
 					};
 
-					/**
-					 * Prepare timeline range for date ranger widget
-					 */
 					$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
 					                   Dater.readable.date($scope.timeline.range.end);
 
-					/**
-					 * find the related users in the slot (could be a team member or a client)
-					 */
 					$scope.processRelatedUsers = function (selectedSlot)
 					{
-
 						var relatedUsers = [];
 						var memberId = $(selectedSlot.group).attr("memberId");
 
 						if ($scope.views.teams)
 						{
-
 							$scope.relatedUserLabel = $rootScope.ui.teamup.clients;
+
 							var member = $rootScope.getTeamMemberById(memberId);
+
 							if (typeof member.teamUuids != "undefined" && member.teamUuids.length > 0)
 							{
 								relatedUsers = $rootScope.getClientsByTeam(member.teamUuids);
@@ -549,7 +450,9 @@ define(
 						else if ($scope.views.clients)
 						{
 							$scope.relatedUserLabel = $rootScope.ui.planboard.members;
+
 							var client = $rootScope.getClientByID(memberId);
+
 							if (typeof client.clientGroupUuid != "undefined" && client.clientGroupUuid != "")
 							{
 								relatedUsers = $rootScope.getMembersByClient(client.clientGroupUuid);
@@ -559,9 +462,6 @@ define(
 						return relatedUsers;
 					};
 
-					/**
-					 * Reset inline forms
-					 */
 					$scope.resetInlineForms = function ()
 					{
 						$scope.slot = {};
@@ -581,6 +481,5 @@ define(
 					};
 				}
 			]);
-
 	}
 );
