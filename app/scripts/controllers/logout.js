@@ -1,42 +1,42 @@
 define(
-	['controllers/controllers'],
-	function (controllers)
-	{
-		'use strict';
+  ['controllers/controllers'],
+  function (controllers)
+  {
+    'use strict';
 
-		controllers.controller(
-			'logout',
-			[
-				'$rootScope', '$scope', '$window', 'Session', 'Storage', 'TeamUp',
-				function ($rootScope, $scope, $window, Session, Storage, TeamUp)
-				{
-					$('.navbar').hide();
-					$('#footer').hide();
+    controllers.controller(
+      'logout',
+      [
+        '$rootScope', '$scope', '$window', 'Session', 'Storage', 'TeamUp',
+        function ($rootScope, $scope, $window, Session, Storage, TeamUp)
+        {
+          $('.navbar').hide();
+          $('#footer').hide();
 
-					var logindata = angular.fromJson(Storage.get('logindata'));
+          var logindata = angular.fromJson(Storage.get('logindata'));
 
-					TeamUp.caller('logout')
-						.then(
-						function (result)
-						{
-							if (result.error)
-							{
-								console.warn('error ->', result);
-							}
-							else
-							{
-								Storage.session.clearAll();
+          TeamUp.caller('logout')
+            .then(
+            function (result)
+            {
+              if (result.error)
+              {
+                console.warn('error ->', result);
+              }
+              else
+              {
+                Storage.session.clearAll();
 
-								Storage.add('logindata', angular.toJson(logindata));
+                Storage.add('logindata', angular.toJson(logindata));
 
-								Storage.cookie.clearAll();
+                Storage.cookie.clearAll();
 
-								$window.location.href = 'logout.html';
-							}
-						}
-					);
-				}
-			]
-		);
-	}
+                $window.location.href = 'logout.html';
+              }
+            }
+          );
+        }
+      ]
+    );
+  }
 );

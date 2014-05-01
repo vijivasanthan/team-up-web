@@ -6766,12 +6766,16 @@ links.Timeline.StepDate.prototype.isMajor = function ()
  */
 links.Timeline.StepDate.prototype.getLabelMinor = function (date)
 {
-  var MONTHS_SHORT = ["jan", "feb", "mrt",
-                      "apr", "mei", "jun",
-                      "jul", "aug", "sep",
-                      "okt", "nov", "dec"];
-  var DAYS_SHORT = ["zo", "ma", "di",
-                    "wo", "do", "vr", "za"];
+  var MONTHS_SHORT = [
+    "jan", "feb", "mrt",
+    "apr", "mei", "jun",
+    "jul", "aug", "sep",
+    "okt", "nov", "dec"
+  ];
+  var DAYS_SHORT = [
+    "zo", "ma", "di",
+    "wo", "do", "vr", "za"
+  ];
 
   if (date == undefined)
   {
@@ -6809,12 +6813,16 @@ links.Timeline.StepDate.prototype.getLabelMinor = function (date)
  */
 links.Timeline.StepDate.prototype.getLabelMajor = function (date)
 {
-  var MONTHS = ["januari", "februari", "maart",
-                "april", "mei", "juni",
-                "juli", "augustus", "september",
-                "oktober", "november", "december"];
-  var DAYS = ["zondag", "maandag", "dinsdag",
-              "woensdag", "donderdag", "vrijdag", "zaterdag"];
+  var MONTHS = [
+    "januari", "februari", "maart",
+    "april", "mei", "juni",
+    "juli", "augustus", "september",
+    "oktober", "november", "december"
+  ];
+  var DAYS = [
+    "zondag", "maandag", "dinsdag",
+    "woensdag", "donderdag", "vrijdag", "zaterdag"
+  ];
 
   if (date == undefined)
   {
@@ -6877,185 +6885,184 @@ links.Timeline.StepDate.prototype.addZeros = function (value, len)
  * can be used to get a callback when a certain image is loaded
  *
  */
-links.imageloader = (
-  function ()
+links.imageloader = (function ()
+{
+  var urls = {};  // the loaded urls
+  var callbacks = {}; // the urls currently being loaded. Each key contains
+  // an array with callbacks
+
+  /**
+   * Check if an image url is loaded
+   * @param {String} url
+   * @return {boolean} loaded   True when loaded, false when not loaded
+   *                            or when being loaded
+   */
+  function isLoaded (url)
   {
-    var urls = {};  // the loaded urls
-    var callbacks = {}; // the urls currently being loaded. Each key contains
-    // an array with callbacks
-
-    /**
-     * Check if an image url is loaded
-     * @param {String} url
-     * @return {boolean} loaded   True when loaded, false when not loaded
-     *                            or when being loaded
-     */
-    function isLoaded (url)
+    if (urls[url] == true)
     {
-      if (urls[url] == true)
-      {
-        return true;
-      }
+      return true;
+    }
 
+    var image = new Image();
+    image.src = url;
+    if (image.complete)
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if an image url is being loaded
+   * @param {String} url
+   * @return {boolean} loading   True when being loaded, false when not loading
+   *                             or when already loaded
+   */
+  function isLoading (url)
+  {
+    return (
+      callbacks[url] != undefined);
+  }
+
+  /**
+   * Load given image url
+   * @param {String} url
+   * @param {function} callback
+   * @param {boolean} sendCallbackWhenAlreadyLoaded  optional
+   */
+  function load (url, callback, sendCallbackWhenAlreadyLoaded)
+  {
+    if (sendCallbackWhenAlreadyLoaded == undefined)
+    {
+      sendCallbackWhenAlreadyLoaded = true;
+    }
+
+    if (isLoaded(url))
+    {
+      if (sendCallbackWhenAlreadyLoaded)
+      {
+        callback(url);
+      }
+      return;
+    }
+
+    if (isLoading(url) && ! sendCallbackWhenAlreadyLoaded)
+    {
+      return;
+    }
+
+    var c = callbacks[url];
+    if (! c)
+    {
       var image = new Image();
       image.src = url;
-      if (image.complete)
+
+      c = [];
+      callbacks[url] = c;
+
+      image.onload = function (event)
       {
-        return true;
-      }
+        urls[url] = true;
+        delete callbacks[url];
 
-      return false;
-    }
-
-    /**
-     * Check if an image url is being loaded
-     * @param {String} url
-     * @return {boolean} loading   True when being loaded, false when not loading
-     *                             or when already loaded
-     */
-    function isLoading (url)
-    {
-      return (
-        callbacks[url] != undefined);
-    }
-
-    /**
-     * Load given image url
-     * @param {String} url
-     * @param {function} callback
-     * @param {boolean} sendCallbackWhenAlreadyLoaded  optional
-     */
-    function load (url, callback, sendCallbackWhenAlreadyLoaded)
-    {
-      if (sendCallbackWhenAlreadyLoaded == undefined)
-      {
-        sendCallbackWhenAlreadyLoaded = true;
-      }
-
-      if (isLoaded(url))
-      {
-        if (sendCallbackWhenAlreadyLoaded)
+        for (var i = 0; i < c.length; i ++)
         {
-          callback(url);
-        }
-        return;
-      }
-
-      if (isLoading(url) && ! sendCallbackWhenAlreadyLoaded)
-      {
-        return;
-      }
-
-      var c = callbacks[url];
-      if (! c)
-      {
-        var image = new Image();
-        image.src = url;
-
-        c = [];
-        callbacks[url] = c;
-
-        image.onload = function (event)
-        {
-          urls[url] = true;
-          delete callbacks[url];
-
-          for (var i = 0; i < c.length; i ++)
-          {
-            c[i](url);
-          }
+          c[i](url);
         }
       }
-
-      if (c.indexOf(callback) == - 1)
-      {
-        c.push(callback);
-      }
     }
 
-    /**
-     * Load a set of images, and send a callback as soon as all images are
-     * loaded
-     * @param {String[]} urls
-     * @param {function } callback
-     * @param {boolean} sendCallbackWhenAlreadyLoaded
-     */
-    function loadAll (urls, callback, sendCallbackWhenAlreadyLoaded)
+    if (c.indexOf(callback) == - 1)
     {
-      // list all urls which are not yet loaded
-      var urlsLeft = [];
-      urls.forEach(
+      c.push(callback);
+    }
+  }
+
+  /**
+   * Load a set of images, and send a callback as soon as all images are
+   * loaded
+   * @param {String[]} urls
+   * @param {function } callback
+   * @param {boolean} sendCallbackWhenAlreadyLoaded
+   */
+  function loadAll (urls, callback, sendCallbackWhenAlreadyLoaded)
+  {
+    // list all urls which are not yet loaded
+    var urlsLeft = [];
+    urls.forEach(
+      function (url)
+      {
+        if (! isLoaded(url))
+        {
+          urlsLeft.push(url);
+        }
+      });
+
+    if (urlsLeft.length)
+    {
+      // there are unloaded images
+      var countLeft = urlsLeft.length;
+      urlsLeft.forEach(
         function (url)
         {
-          if (! isLoaded(url))
-          {
-            urlsLeft.push(url);
-          }
-        });
-
-      if (urlsLeft.length)
-      {
-        // there are unloaded images
-        var countLeft = urlsLeft.length;
-        urlsLeft.forEach(
-          function (url)
-          {
-            load(
-              url, function ()
+          load(
+            url, function ()
+            {
+              countLeft --;
+              if (countLeft == 0)
               {
-                countLeft --;
-                if (countLeft == 0)
-                {
-                  // done!
-                  callback();
-                }
-              }, sendCallbackWhenAlreadyLoaded);
-          });
-      }
-      else
-      {
-        // we are already done!
-        if (sendCallbackWhenAlreadyLoaded)
-        {
-          callback();
-        }
-      }
+                // done!
+                callback();
+              }
+            }, sendCallbackWhenAlreadyLoaded);
+        });
     }
-
-    /**
-     * Recursively retrieve all image urls from the images located inside a given
-     * HTML element
-     * @param {Node} elem
-     * @param {String[]} urls   Urls will be added here (no duplicates)
-     */
-    function filterImageUrls (elem, urls)
+    else
     {
-      var child = elem.firstChild;
-      while (child)
+      // we are already done!
+      if (sendCallbackWhenAlreadyLoaded)
       {
-        if (child.tagName == 'IMG')
-        {
-          var url = child.src;
-          if (urls.indexOf(url) == - 1)
-          {
-            urls.push(url);
-          }
-        }
-
-        filterImageUrls(child, urls);
-
-        child = child.nextSibling;
+        callback();
       }
     }
+  }
 
-    return {
-      'isLoaded':        isLoaded,
-      'isLoading':       isLoading,
-      'load':            load,
-      'loadAll':         loadAll,
-      'filterImageUrls': filterImageUrls
-    };
-  })();
+  /**
+   * Recursively retrieve all image urls from the images located inside a given
+   * HTML element
+   * @param {Node} elem
+   * @param {String[]} urls   Urls will be added here (no duplicates)
+   */
+  function filterImageUrls (elem, urls)
+  {
+    var child = elem.firstChild;
+    while (child)
+    {
+      if (child.tagName == 'IMG')
+      {
+        var url = child.src;
+        if (urls.indexOf(url) == - 1)
+        {
+          urls.push(url);
+        }
+      }
+
+      filterImageUrls(child, urls);
+
+      child = child.nextSibling;
+    }
+  }
+
+  return {
+    'isLoaded':        isLoaded,
+    'isLoading':       isLoading,
+    'load':            load,
+    'loadAll':         loadAll,
+    'filterImageUrls': filterImageUrls
+  };
+})();
 
 /** ------------------------------------------------------------------------ **/
 

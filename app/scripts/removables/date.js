@@ -5,7 +5,16 @@
  * License: Licensed under The MIT License. See license.txt and http://www.datejs.com/license/.
  * Website: http://www.datejs.com/ or http://www.coolite.com/datejs/
  */
-Date.CultureInfo = {name: "en-US", englishName: "English (United States)", nativeName: "English (United States)", dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], abbreviatedDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], shortestDayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], firstLetterDayNames: ["S", "M", "T", "W", "T", "F", "S"], monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], abbreviatedMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], amDesignator: "AM", pmDesignator: "PM", firstDayOfWeek: 0, twoDigitYearMax: 2029, dateElementOrder: "mdy", formatPatterns: {shortDate: "M/d/yyyy", longDate: "dddd, MMMM dd, yyyy", shortTime: "h:mm tt", longTime: "h:mm:ss tt", fullDateTime: "dddd, MMMM dd, yyyy h:mm:ss tt", sortableDateTime: "yyyy-MM-ddTHH:mm:ss", universalSortableDateTime: "yyyy-MM-dd HH:mm:ssZ", rfc1123: "ddd, dd MMM yyyy HH:mm:ss GMT", monthDay: "MMMM dd", yearMonth: "MMMM, yyyy"}, regexPatterns: {jan: /^jan(uary)?/i, feb: /^feb(ruary)?/i, mar: /^mar(ch)?/i, apr: /^apr(il)?/i, may: /^may/i, jun: /^jun(e)?/i, jul: /^jul(y)?/i, aug: /^aug(ust)?/i, sep: /^sep(t(ember)?)?/i, oct: /^oct(ober)?/i, nov: /^nov(ember)?/i, dec: /^dec(ember)?/i, sun: /^su(n(day)?)?/i, mon: /^mo(n(day)?)?/i, tue: /^tu(e(s(day)?)?)?/i, wed: /^we(d(nesday)?)?/i, thu: /^th(u(r(s(day)?)?)?)?/i, fri: /^fr(i(day)?)?/i, sat: /^sa(t(urday)?)?/i, future: /^next/i, past: /^last|past|prev(ious)?/i, add: /^(\+|after|from)/i, subtract: /^(\-|before|ago)/i, yesterday: /^yesterday/i, today: /^t(oday)?/i, tomorrow: /^tomorrow/i, now: /^n(ow)?/i, millisecond: /^ms|milli(second)?s?/i, second: /^sec(ond)?s?/i, minute: /^min(ute)?s?/i, hour: /^h(ou)?rs?/i, week: /^w(ee)?k/i, month: /^m(o(nth)?s?)?/i, day: /^d(ays?)?/i, year: /^y((ea)?rs?)?/i, shortMeridian: /^(a|p)/i, longMeridian: /^(a\.?m?\.?|p\.?m?\.?)/i, timezone: /^((e(s|d)t|c(s|d)t|m(s|d)t|p(s|d)t)|((gmt)?\s*(\+|\-)\s*\d\d\d\d?)|gmt)/i, ordinalSuffix: /^\s*(st|nd|rd|th)/i, timeContext: /^\s*(\:|a|p)/i}, abbreviatedTimeZoneStandard: {GMT: "-000", EST: "-0400", CST: "-0500", MST: "-0600", PST: "-0700"}, abbreviatedTimeZoneDST: {GMT: "-000", EDT: "-0500", CDT: "-0600", MDT: "-0700", PDT: "-0800"}};
+Date.CultureInfo = {name: "en-US", englishName: "English (United States)", nativeName: "English (United States)", dayNames: [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+], abbreviatedDayNames:   ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], shortestDayNames: [
+  "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"
+], firstLetterDayNames:   ["S", "M", "T", "W", "T", "F", "S"], monthNames: [
+  "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
+  "December"
+], abbreviatedMonthNames: [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+], amDesignator:          "AM", pmDesignator: "PM", firstDayOfWeek: 0, twoDigitYearMax: 2029, dateElementOrder: "mdy", formatPatterns: {shortDate: "M/d/yyyy", longDate: "dddd, MMMM dd, yyyy", shortTime: "h:mm tt", longTime: "h:mm:ss tt", fullDateTime: "dddd, MMMM dd, yyyy h:mm:ss tt", sortableDateTime: "yyyy-MM-ddTHH:mm:ss", universalSortableDateTime: "yyyy-MM-dd HH:mm:ssZ", rfc1123: "ddd, dd MMM yyyy HH:mm:ss GMT", monthDay: "MMMM dd", yearMonth: "MMMM, yyyy"}, regexPatterns: {jan: /^jan(uary)?/i, feb: /^feb(ruary)?/i, mar: /^mar(ch)?/i, apr: /^apr(il)?/i, may: /^may/i, jun: /^jun(e)?/i, jul: /^jul(y)?/i, aug: /^aug(ust)?/i, sep: /^sep(t(ember)?)?/i, oct: /^oct(ober)?/i, nov: /^nov(ember)?/i, dec: /^dec(ember)?/i, sun: /^su(n(day)?)?/i, mon: /^mo(n(day)?)?/i, tue: /^tu(e(s(day)?)?)?/i, wed: /^we(d(nesday)?)?/i, thu: /^th(u(r(s(day)?)?)?)?/i, fri: /^fr(i(day)?)?/i, sat: /^sa(t(urday)?)?/i, future: /^next/i, past: /^last|past|prev(ious)?/i, add: /^(\+|after|from)/i, subtract: /^(\-|before|ago)/i, yesterday: /^yesterday/i, today: /^t(oday)?/i, tomorrow: /^tomorrow/i, now: /^n(ow)?/i, millisecond: /^ms|milli(second)?s?/i, second: /^sec(ond)?s?/i, minute: /^min(ute)?s?/i, hour: /^h(ou)?rs?/i, week: /^w(ee)?k/i, month: /^m(o(nth)?s?)?/i, day: /^d(ays?)?/i, year: /^y((ea)?rs?)?/i, shortMeridian: /^(a|p)/i, longMeridian: /^(a\.?m?\.?|p\.?m?\.?)/i, timezone: /^((e(s|d)t|c(s|d)t|m(s|d)t|p(s|d)t)|((gmt)?\s*(\+|\-)\s*\d\d\d\d?)|gmt)/i, ordinalSuffix: /^\s*(st|nd|rd|th)/i, timeContext: /^\s*(\:|a|p)/i}, abbreviatedTimeZoneStandard: {GMT: "-000", EST: "-0400", CST: "-0500", MST: "-0600", PST: "-0700"}, abbreviatedTimeZoneDST: {GMT: "-000", EDT: "-0500", CDT: "-0600", MDT: "-0700", PDT: "-0800"}};
 Date.getMonthNumberFromName = function (name)
 {
   var n = Date.CultureInfo.monthNames, m = Date.CultureInfo.abbreviatedMonthNames, s = name.toLowerCase();
@@ -37,13 +46,17 @@ Date.isLeapYear = function (year)
 };
 Date.getDaysInMonth = function (year, month)
 {
-  return[31, (
-    Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+  return[
+    31, (
+      Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+  ][month];
 };
 Date.getTimezoneOffset = function (s, dst)
 {
   return(
-          dst || false) ? Date.CultureInfo.abbreviatedTimeZoneDST[s.toUpperCase()] : Date.CultureInfo.abbreviatedTimeZoneStandard[s.toUpperCase()];
+          dst || false) ?
+        Date.CultureInfo.abbreviatedTimeZoneDST[s.toUpperCase()] :
+        Date.CultureInfo.abbreviatedTimeZoneStandard[s.toUpperCase()];
 };
 Date.getTimezoneAbbreviation = function (offset, dst)
 {
@@ -280,8 +293,18 @@ Date.prototype.getUTCOffset = function ()
     return"+" + r.substr(1);
   }
 };
-Date.prototype.getDayName = function (abbrev) {return abbrev ? Date.CultureInfo.abbreviatedDayNames[this.getDay()] : Date.CultureInfo.dayNames[this.getDay()];};
-Date.prototype.getMonthName = function (abbrev) {return abbrev ? Date.CultureInfo.abbreviatedMonthNames[this.getMonth()] : Date.CultureInfo.monthNames[this.getMonth()];};
+Date.prototype.getDayName = function (abbrev)
+{
+  return abbrev ?
+         Date.CultureInfo.abbreviatedDayNames[this.getDay()] :
+         Date.CultureInfo.dayNames[this.getDay()];
+};
+Date.prototype.getMonthName = function (abbrev)
+{
+  return abbrev ?
+         Date.CultureInfo.abbreviatedMonthNames[this.getMonth()] :
+         Date.CultureInfo.monthNames[this.getMonth()];
+};
 Date.prototype._toString = Date.prototype.toString;
 Date.prototype.toString = function (format)
 {
@@ -338,7 +361,9 @@ Date.prototype.toString = function (format)
         case"M":
           return self.getMonth() + 1;
         case"t":
-          return self.getHours() < 12 ? Date.CultureInfo.amDesignator.substring(0, 1) : Date.CultureInfo.pmDesignator.substring(0, 1);
+          return self.getHours() < 12 ?
+                 Date.CultureInfo.amDesignator.substring(0, 1) :
+                 Date.CultureInfo.pmDesignator.substring(0, 1);
         case"tt":
           return self.getHours() < 12 ? Date.CultureInfo.amDesignator : Date.CultureInfo.pmDesignator;
         case"zzz":
@@ -653,8 +678,10 @@ Date.prototype.getOrdinal = function ()
           catch (ey)
           {throw new $P.Exception(r[1]);}
         }
-        return[rx, (
-          r ? r[1] : s)];
+        return[
+          rx, (
+            r ? r[1] : s)
+        ];
       };
     }, between: function (d1, p, d2)
     {
@@ -673,7 +700,9 @@ Date.prototype.getOrdinal = function ()
       d = d || _.rtoken(/^\s*/);
       c = c || null;
       return(
-          p instanceof Array ? _.each(_.product(p.slice(0, - 1), _.ignore(d)), p.slice(- 1), _.ignore(c)) : _.each(_.many(_.each(p, _.ignore(d))), px, _.ignore(c)));
+          p instanceof Array ?
+          _.each(_.product(p.slice(0, - 1), _.ignore(d)), p.slice(- 1), _.ignore(c)) :
+          _.each(_.many(_.each(p, _.ignore(d))), px, _.ignore(c)));
     }, set: function (px, d, c)
     {
       d = d || _.rtoken(/^\s*/);
@@ -743,12 +772,10 @@ Date.prototype.getOrdinal = function ()
         return best;
       };
     }, forward: function (
-      gr,
-      fname
+      gr, fname
       )
     {return function (s) {return gr[fname].call(this, s);};}, replace: function (
-      rule,
-      repl
+      rule, repl
       )
     {
       return function (s)
@@ -757,8 +784,7 @@ Date.prototype.getOrdinal = function ()
         return[repl, r[1]];
       };
     }, process: function (
-      rule,
-      fn
+      rule, fn
       )
     {
       return function (s)
