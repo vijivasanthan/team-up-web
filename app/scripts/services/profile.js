@@ -84,6 +84,7 @@ define(
 							}
 					);
 
+
 					Profile.prototype.register = function (profile)
 					{
 						var deferred = $q.defer();
@@ -146,6 +147,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Profile.prototype.role = function (id, role)
 					{
 						var deferred = $q.defer();
@@ -165,6 +167,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Profile.prototype.changePassword = function (passwords)
 					{
 						var deferred = $q.defer();
@@ -183,6 +186,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Profile.prototype.get = function (id, localize)
 					{
@@ -206,7 +210,9 @@ define(
 						return deferred.promise;
 					};
 
+
 					Profile.prototype.local = function () { return angular.fromJson(Storage.get('resources')) };
+
 
 					Profile.prototype.save = function (id, resources)
 					{
@@ -228,6 +234,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Profile.prototype.loadUploadURL = function (id)
 					{
 						var deferred = $q.defer();
@@ -245,6 +252,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					return new Profile;
 				}

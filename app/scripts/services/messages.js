@@ -48,7 +48,8 @@ define(
 										action: 'deleteQuestions'
 									}
 								}
-							});
+							}
+					);
 
 					var TeamMessage = $resource(
 							config.app.host + config.app.namespace + '/team/teamMessage/:teamId',
@@ -59,7 +60,9 @@ define(
 									params:  {},
 									isArray: true
 								}
-							});
+							}
+					);
+
 
 					Messages.prototype.queryTeamMessage = function (tId)
 					{
@@ -79,6 +82,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Messages.prototype.sendTeamMessage = function (messageObj)
 					{
 						var deferred = $q.defer();
@@ -95,8 +99,10 @@ define(
 						return deferred.promise;
 					};
 
+
 					return new Messages;
 				}
-			]);
+			]
+		);
 	}
 );

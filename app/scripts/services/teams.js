@@ -162,6 +162,7 @@ define(
 								}
 							});
 
+
 					Teams.prototype.addMember = function (id, memberIds)
 					{
 						var deferred = $q.defer();
@@ -180,6 +181,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.delMember = function (tId, memberIds)
 					{
@@ -200,6 +202,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.addGroup = function (id, groupIds)
 					{
 						var deferred = $q.defer();
@@ -218,6 +221,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.delGroup = function (tId, groupIds)
 					{
@@ -238,6 +242,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.updateGroup = function (tId, changes)
 					{
 						var deferred = $q.defer();
@@ -257,6 +262,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.updateMemberRelation = function (tId, changes)
 					{
 						var deferred = $q.defer();
@@ -275,6 +281,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.query = function (only, routePara)
 					{
@@ -359,6 +366,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.queryLocal = function ()
 					{
 						var deferred = $q.defer();
@@ -379,6 +387,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.get = function (id)
 					{
@@ -406,6 +415,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.save = function (team)
 					{
 						var deferred = $q.defer();
@@ -425,6 +435,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.saveMember = function (member)
 					{
 						var deferred = $q.defer();
@@ -441,6 +452,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.edit = function (team)
 					{
@@ -461,6 +473,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.loadImg = function (imgURL)
 					{
@@ -489,6 +502,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.loadTeamCallinNumber = function (teamUuid)
 					{
 						var TeamNumber = $resource(
@@ -515,6 +529,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.queryClientGroups = function (teams)
 					{
@@ -555,6 +570,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.getGroup = function (id)
 					{
 						var deferred = $q.defer();
@@ -580,6 +596,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.manage = function (changes)
 					{
@@ -636,6 +653,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					/**
 					 * add or remove the client group from the teams
@@ -698,6 +716,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.getTeamTasks = function (id, start, end)
 					{
 						var deferred = $q.defer();
@@ -715,6 +734,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					Teams.prototype.queryMembersNotInTeams = function ()
 					{
@@ -734,6 +754,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.deleteTeam = function (id)
 					{
 						var deferred = $q.defer();
@@ -752,6 +773,7 @@ define(
 						return deferred.promise;
 					};
 
+
 					Teams.prototype.deleteMember = function (id)
 					{
 						var deferred = $q.defer();
@@ -769,6 +791,7 @@ define(
 
 						return deferred.promise;
 					};
+
 
 					return new Teams;
 				}

@@ -1,6 +1,6 @@
 define(
-	['controllers/controllers', 'config'],
-	function (controllers, config)
+	['controllers/controllers'],
+	function (controllers)
 	{
 		'use strict';
 
@@ -20,10 +20,10 @@ define(
 						data.clients = {};
 
 						angular.forEach(
-							data.clientGroups, function (cGroup, index)
+							data.clientGroups, function (cGroup)
 							{
 								var clients = angular.fromJson(Storage.get(cGroup.id));
-								var key = cGroup.id;
+								// var key = cGroup.id;
 
 								data.clients[cGroup.id] = clients;
 
@@ -36,7 +36,7 @@ define(
 											$scope.contacts = client.contacts;
 
 											// deal with the date thing for editing
-											client.birthDate = $filter('nicelyDate')(client.birthDate)
+											client.birthDate = $filter('nicelyDate')(client.birthDate);
 											$scope.clientmeta = client;
 										}
 									});
@@ -64,7 +64,7 @@ define(
 
 					$scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
 
-					var self = this, params = $location.search();
+					var params = $location.search();
 
 					$scope.imgHost = profile.host();
 					$scope.ns = profile.ns();
@@ -116,7 +116,7 @@ define(
 						editClientGroup: false,
 						editClient:      false,
 						viewClient:      false,
-						editImg: false
+						editImg:         false
 					};
 
 					var setView = function (hash)
@@ -126,7 +126,7 @@ define(
 							newClientGroup: false,
 							newClient:      false,
 							reports:        false,
-							editImg: false
+							editImg:        false
 						};
 
 						//load the reports on this view
@@ -195,7 +195,7 @@ define(
 						var memberIds = [];
 
 						angular.forEach(
-							$scope.groupReports, function (rept, i)
+							$scope.groupReports, function (rept)
 							{
 								if (memberIds.indexOf(rept.author.uuid) == - 1)
 								{
@@ -204,7 +204,7 @@ define(
 							});
 
 						angular.forEach(
-							$scope.reports, function (rept, i)
+							$scope.reports, function (rept)
 							{
 								if (memberIds.indexOf(rept.author.uuid) == - 1)
 								{
@@ -213,7 +213,7 @@ define(
 							});
 
 						angular.forEach(
-							memberIds, function (memberId, j)
+							memberIds, function (memberId)
 							{
 								var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photo?width=40&height=40";
 
@@ -452,7 +452,7 @@ define(
 									$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
 									Clients.query(false).then(
-										function (result)
+										function ()
 										{
 											$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 											$rootScope.statusBar.off();
@@ -594,7 +594,7 @@ define(
 						}
 						catch (error)
 						{
-							console.log(error);
+							// console.log(error);
 
 							$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
 
@@ -628,8 +628,10 @@ define(
 						}
 						catch (error)
 						{
-							console.log(error);
+							// console.log(error);
+
 							$rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
 							return;
 						}
 
@@ -684,7 +686,6 @@ define(
 								}
 								else
 								{
-
 									$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 									$rootScope.statusBar.off();
 
@@ -692,6 +693,7 @@ define(
 
 									Clients.query(false, routePara).then(function (queryRs) {});
 								}
+
 								$scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
 							});
 					};
@@ -842,9 +844,9 @@ define(
 						$scope.report = report;
 
 						$scope.view = {
-							editReport: (report.editMode) ? true : false,
-							viewReport: (report.editMode || typeof report.uuid == 'undefined') ? false : true,
-							newReport: (typeof report.uuid == 'undefined') ? true : false
+							editReport: ! ! (report.editMode),
+							viewReport: (! (report.editMode || typeof report.uuid == 'undefined')),
+							newReport: (typeof report.uuid == 'undefined')
 						};
 
 						$scope.close = function () { $modalInstance.dismiss() };
@@ -865,6 +867,7 @@ define(
 								function ()
 								{
 									$modalInstance.close(report);
+
 									$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 								});
 						};
@@ -875,7 +878,8 @@ define(
 						$scope.report = report;
 						$scope.report.editMode = false;
 
-						var modalInstance = $modal.open(
+						// var modalInstance = $modal.open(
+						$modal.open(
 							{
 								templateUrl: './views/reportTemplate.html',
 								controller:  ModalInstanceCtrl,
@@ -893,34 +897,34 @@ define(
 						if ($scope.currentCLient == 0)
 						{
 							$rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+
 							return;
 						}
 
-						var newReport = {
+						$scope.report = {
 							title:        $rootScope.ui.teamupnewReport,
 							creationTime: new Date().getTime(),
 							clientUuid:   $scope.currentCLient,
 							body:         null,
 							author:       $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
 							client:       $scope.$root.getClientByID($scope.currentCLient),
-							editMode:     false};
-
-						$scope.report = newReport;
+							editMode:     false
+						};
 
 						var modalInstance = $modal.open(
 							{
 								templateUrl: './views/reportTemplate.html',
 								controller:  ModalInstanceCtrl,
 								resolve:     {
-									report: function () { return $scope.report },
+									report:   function () { return $scope.report },
 									editMode: false
 								}
 							});
 
 						modalInstance.result.then(
-							function (report)
+							function ()
 							{
-								console.log('Modal close at: ' + new Date());
+								// console.log('Modal close at: ' + new Date());
 
 								loadGroupReports();
 							}, function () { console.log('Modal dismissed at: ' + new Date()) });
@@ -931,7 +935,8 @@ define(
 						$scope.report = report;
 						$scope.report.editMode = true;
 
-						var modalInstance = $modal.open(
+						// var modalInstance = $modal.open(
+						$modal.open(
 							{
 								templateUrl: './views/reportTemplate.html',
 								controller:  ModalInstanceCtrl,
@@ -955,6 +960,7 @@ define(
 									if (rs.result == "ok")
 									{
 										$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
 										loadGroupReports();
 									}
 									else
@@ -976,15 +982,20 @@ define(
 								$rootScope.statusBar.off();
 
 								var imgHost = $scope.imgHost.replace("\\:", ":");
+
 								if (result.path)
 								{
 									$scope.avatarURL = imgHost + result.path;
 								}
+
 								$scope.uploadURL = imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo";
 								$scope.setViewTo('editImg');
-							});
+							}
+						);
 					}
+
 				}
-			]);
+			]
+		);
 	}
 );

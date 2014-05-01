@@ -95,7 +95,7 @@ require(
 		'services/slots',
 		'services/strings',
 		'services/teams',
-		'services/user',
+		// 'services/user',
 
 		'directives/widgets',
 

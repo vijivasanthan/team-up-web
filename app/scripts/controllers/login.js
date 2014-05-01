@@ -7,10 +7,10 @@ define(
 		controllers.controller(
 			'login',
 			[
-				'$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Teams', 'Clients', 'Storage', '$routeParams',
-				'Settings', 'Profile', 'MD5',
+				'$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Storage', '$routeParams',
+				'Settings', 'Profile', 'MD5', 'TeamUp',
 				function (
-					$rootScope, $location, $q, $scope, Session, User, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5
+					$rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5, TeamUp
 					)
 				{
 					var self = this;
@@ -108,8 +108,13 @@ define(
 
 					self.auth = function (uuid, pass)
 					{
-						User.login(uuid.toLowerCase(), pass)
-							.then(
+						TeamUp.caller(
+							'login',
+							{
+								uuid: uuid,
+								pass: pass
+							}
+						).then(
 							function (result)
 							{
 								if (result.status == 400 || result.status == 403 || result.status == 404)
@@ -150,7 +155,8 @@ define(
 
 									self.preloader();
 								}
-							});
+							}
+						)
 					};
 
 					var initAvatarUrls = function (members, type)
@@ -160,7 +166,6 @@ define(
 							angular.forEach(
 								members, function (mem)
 								{
-									// load the avatr URL and store them into the local storage
 									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
 									                   "/team/member/" + mem.uuid + "/photo";
 
@@ -170,9 +175,6 @@ define(
 											if (res.path)
 											{
 												Storage.avatar.addurl(mem.uuid, res.path);
-
-												// console.log("Member Avatar path for " + mem.uuid + " - " + res.path);
-												// console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
 											}
 										});
 								});
@@ -182,7 +184,6 @@ define(
 							angular.forEach(
 								members, function (mem)
 								{
-									// load the avatr URL and store them into the local storage
 									var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
 									                   "/client/" + mem.uuid + "/photo";
 
@@ -192,14 +193,19 @@ define(
 											if (res.path)
 											{
 												Storage.avatar.addurl(mem.uuid, res.path);
-
-												// console.log("Client Avatar path for " + mem.uuid + " - " + res.path);
-												// console.log("get it from the storage " + Storage.avatar.geturl(mem.uuid));
 											}
 										});
 								});
 						}
 					};
+
+					// TODO: Move this to somewhere later on!
+					function queryMembersNotInTeams ()
+					{
+						Teams.queryMembersNotInTeams().then(
+							function (result) { initAvatarUrls(result, "team") }
+						);
+					}
 
 					self.preloader = function ()
 					{
@@ -209,9 +215,7 @@ define(
 
 						self.progress(20, $rootScope.ui.login.loading_User);
 
-						// preload the user's info
-						User.memberInfo()
-							.then(
+						TeamUp.caller('user').then(
 							function (resources)
 							{
 								if (resources.error)
@@ -222,111 +226,56 @@ define(
 								{
 									$rootScope.app.resources = resources;
 
+									Storage.add('resources', angular.toJson(resources));
+
 									self.progress(40, $rootScope.ui.login.loading_Teams);
 
-									// preload the teams and members
 									Teams.query(true, {})
 										.then(
 										function (teams)
 										{
-											// console.log("got teams ", teams);
-											// try to get the members not in the teams Aync
-											// console.log("got members not in any teams");
-
-											Teams.queryMembersNotInTeams().then(
-												function (result)
-												{
-													// console.log("all members loaded (include the members not in any teams)", result);
-
-													initAvatarUrls(result, "team");
-												}, function (error) {});
+											queryMembersNotInTeams();
 
 											if (teams.error)
 											{
 												console.warn('error ->', teams);
 											}
 
-											// console.log("start to query team-clientgroup relation async ");
-
 											self.progress(60, $rootScope.ui.login.loading_clientGroups);
 
-											// preload the clientGroups for each team
 											Teams.queryClientGroups(teams)
 												.then(
 												function ()
 												{
-													// console.log("got clientGroups belong to the teams ");
-
 													self.progress(80, $rootScope.ui.login.loading_clientGroups);
 
 													Clients.queryAll()
 														.then(
 														function (res_clients)
 														{
-															// console.log("got all clients in or not in the client groups ", res_clients);
-
 															initAvatarUrls(res_clients, "client");
 
 															Clients.query(false, {})
 																.then(
 																function ()
 																{
-																	// console.log("got all grous and the clients in the groups ");
+																	self.progress(100, $rootScope.ui.login.loading_everything);
 
-																	finalize();
-																}, function (error)
-																{
-																	console.log('something terrible happened!');
+																	$location.path('/team');
 
-																	// deferred.resolve({error: error});
-																})
-
-														}, function (error)
-														{
-															console.log('something terrible happened!');
-
-															// deferred.resolve({error: error});
+																	setTimeout(
+																		function ()
+																		{
+																			$('.navbar').show();
+																			$('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+																			if (! $rootScope.browser.mobile) $('#footer').show();
+																		}, 100);
+																});
 														});
-
-												}, function (error)
-												{
-													console.log('something terrible happened!');
-
-													// deferred.resolve({error: error});
 												});
-
-										}, function (error)
-										{
-											console.log('something terrible happened!');
-
-											// deferred.resolve({error: error});
 										});
 								}
 							});
-					};
-
-					function finalize ()
-					{
-						self.progress(100, $rootScope.ui.login.loading_everything);
-
-						self.redirectToTeamPage();
-					}
-
-					self.redirectToTeamPage = function ()
-					{
-						$location.path('/team');
-
-						setTimeout(
-							function ()
-							{
-								$('body').css({ 'background': 'none' });
-								$('.navbar').show();
-								// $('#mobile-status-bar').show();
-								// $('#notification').show();
-								if (! $rootScope.browser.mobile) $('#footer').show();
-								$('#watermark').show();
-								$('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
-							}, 100);
 					};
 
 					self.progress = function (ratio, message)
