@@ -17,15 +17,6 @@ define(
 					$scope.$watch(
 						function ()
 						{
-							/*
-							 if (!$scope.timeline.current.layouts.group)
-							 {
-							 // timeline.current.layouts.group
-							 $scope.timeline.config.wishes = false;
-							 $scope.groupWishes();
-							 }
-							 */
-
 							/**
 							 * If main timeline
 							 */
@@ -77,7 +68,8 @@ define(
 									end:   new Date(range.end).toString()
 								};
 
-								$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' + Dater.readable.date($scope.timeline.range.end);
+								$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
+								                   Dater.readable.date($scope.timeline.range.end);
 							}
 							/**
 							 * User timeline
@@ -95,7 +87,8 @@ define(
 									};
 								}
 							}
-						});
+						}
+					);
 
 					/**
 					 * Timeline listener
@@ -120,7 +113,8 @@ define(
 								recursive: false,
 								id:        ''
 							};
-						});
+						}
+					);
 
 					/**
 					 * Timeline (The big boy)
@@ -297,7 +291,8 @@ define(
 										$rootScope.$apply();
 
 										$scope.self.timeline.draw(Sloter.profile($scope.data.slots.data, $scope.timeline.config), $scope.timeline.options);
-									}, timeout);
+									}, timeout
+								);
 							}
 
 							$scope.self.timeline.setVisibleChartRange($scope.timeline.options.start, $scope.timeline.options.end);
@@ -406,7 +401,8 @@ define(
 								{
 									start: $scope.data.periods.start,
 									end:   $scope.data.periods.end
-								}, true);
+								}, true
+							);
 						},
 
 						/**
@@ -455,8 +451,10 @@ define(
 								{
 									start: new Date(arguments[1].start).getTime(),
 									end:   new Date(arguments[1].end).getTime()
-								});
-						});
+								}
+							);
+						}
+					);
 
 					/**
 					 * Handle new requests for timeline
@@ -488,7 +486,8 @@ define(
 							{
 								start: $scope.data.periods.start,
 								end:   $scope.data.periods.end
-							});
+							}
+						);
 					};
 
 					/**
@@ -514,7 +513,8 @@ define(
 									};
 								}
 
-							});
+							}
+						);
 					};
 
 					/**
@@ -697,7 +697,8 @@ define(
 									$scope.redrawSlot($scope.selectedOriginal);
 								}
 
-							});
+							}
+						);
 					};
 
 					/**
@@ -715,7 +716,8 @@ define(
 								function ()
 								{
 									$scope.timeliner.redraw();
-								}, 10);
+								}, 10
+							);
 						}
 					};
 
@@ -907,23 +909,29 @@ define(
 										 */
 										state: 'com.ask-cs.State.Available'
 									};
-								});
+								}
+							);
 						}
 						/**
 						 * Add new slot
 						 */
 						else
 						{
-							var now = Date.now().getTime(), values = {
-								startTime: (
-									           $rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, false),
-								endTime: (
-									         $rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, false),
-								//				recursive : (slot.recursive) ? true : false,
-								description: (
-									             typeof slot.state == "undefined") ? "" : slot.state,
-								relatedUserId: slot.relatedUser,
-							};
+							var now = Date.now().getTime(),
+							    values = {
+								    startTime: (
+									               $rootScope.browser.mobile) ?
+								               new Date(slot.start.datetime).getTime() :
+								               Dater.convert.absolute(slot.start.date, slot.start.time, false),
+								    endTime: (
+									             $rootScope.browser.mobile) ?
+								             new Date(slot.end.datetime).getTime() :
+								             Dater.convert.absolute(slot.end.date, slot.end.time, false),
+								    //				recursive : (slot.recursive) ? true : false,
+								    description: (
+									                 typeof slot.state == "undefined") ? "" : slot.state,
+								    relatedUserId: slot.relatedUser
+							    };
 
 							if (typeof slot.relatedUser == "undefined" || slot.relatedUser == "")
 							{
@@ -979,7 +987,8 @@ define(
 									$scope.timeliner.refresh();
 									// $scope.timeliner.render();
 									//				$rootScope.planboardSync.start();
-								});
+								}
+							);
 
 						}
 					};
@@ -1036,7 +1045,8 @@ define(
 									'content': slotContent,
 									'start':   new Date(start),
 									'end':     new Date(end)
-								});
+								}
+							);
 						}
 						else
 						{
@@ -1058,7 +1068,8 @@ define(
 								{
 									relateUserName = ru.name;
 								}
-							});
+							}
+						);
 
 						var content_obj = item.content;
 						if (content_obj != "New")
@@ -1133,7 +1144,8 @@ define(
 									clientUuid:  content_obj.clientUuid,
 									relatedUser: $scope.slot.relatedUser
 								};
-							});
+							}
+						);
 
 						/**
 						 * DEPRECIATED
@@ -1166,7 +1178,8 @@ define(
 								{
 									ret = user.uuid;
 								}
-							});
+							}
+						);
 						return ret;
 					};
 
@@ -1203,9 +1216,13 @@ define(
 							 */
 							var options = {
 								startTime: (
-									           $rootScope.browser.mobile) ? new Date(slot.start.datetime).getTime() : Dater.convert.absolute(slot.start.date, slot.start.time, false),
+									           $rootScope.browser.mobile) ?
+								           new Date(slot.start.datetime).getTime() :
+								           Dater.convert.absolute(slot.start.date, slot.start.time, false),
 								endTime: (
-									         $rootScope.browser.mobile) ? new Date(slot.end.datetime).getTime() : Dater.convert.absolute(slot.end.date, slot.end.time, false),
+									         $rootScope.browser.mobile) ?
+								         new Date(slot.end.datetime).getTime() :
+								         Dater.convert.absolute(slot.end.date, slot.end.time, false),
 								description:   "",
 								relatedUserId: slot.relatedUser,
 								uuid:          content.id,
@@ -1262,7 +1279,8 @@ define(
 								$scope.timeliner.refresh();
 								$rootScope.statusBar.off();
 								//				$rootScope.planboardSync.start();
-							});
+							}
+						);
 					};
 
 					/**
@@ -1280,11 +1298,11 @@ define(
 								function ()
 								{
 									$scope.resetInlineForms();
-								});
+								}
+							);
 						}
 						else
 						{
-
 							var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 							var content = $scope.getSlotContentJSON(selected.content);
 							var memberId = $(selected.group).attr("memberId");
@@ -1331,7 +1349,8 @@ define(
 
 									$rootScope.statusBar.off();
 									$rootScope.planboardSync.start();
-								});
+								}
+							);
 
 						}
 					};
@@ -1387,7 +1406,8 @@ define(
 							function ()
 							{
 								$scope.self.timeline.redraw();
-							}, 100);
+							}, 100
+						);
 					}
 
 					/**
@@ -1421,10 +1441,12 @@ define(
 											{
 												start: $scope.data.periods.start,
 												end:   $scope.data.periods.end
-											}, true);
+											}, true
+										);
 									}
 									// Sync periodically for a minute
-								}, 60000);
+								}, 60000
+							);
 							// 1 minute
 							// }, 5000); //  10 seconds
 						},
@@ -1459,6 +1481,8 @@ define(
 						var jsonStr = content.substring(content.indexOf("value=") + 7, content.length - 2);
 						return angular.fromJson(jsonStr);
 					}
-				}]);
+				}
+			]
+		);
 	}
 );

@@ -285,7 +285,6 @@ define(
 					 */
 					$scope.teamSubmit = function (team)
 					{
-
 						if (typeof team == 'undefined' || $.trim(team.name) == '')
 						{
 							$rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
@@ -481,7 +480,7 @@ define(
 					$scope.editProfile = function (memberId, teamId)
 					{
 						sessionStorage.setItem(memberId + "_team", teamId);
-					}
+					};
 
 					/**
 					 * show the String "no shared states" if there is no shared states
@@ -500,7 +499,7 @@ define(
 								}
 							});
 						return ret;
-					}
+					};
 
 					/*
 					 * delete the team
@@ -558,14 +557,13 @@ define(
 									console.log(error);
 								});
 						}
-					}
+					};
 
 					/**
 					 * delete the team member
 					 */
 					$scope.deleteMember = function (memberId)
 					{
-
 						if (window.confirm($rootScope.ui.teamup.deleteConfirm))
 						{
 							$rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
@@ -625,7 +623,7 @@ define(
 									console.log(error);
 								});
 						}
-					}
+					};
 
 					// brefoe I know there is a good place to put this code
 					// load the login user's avatar
@@ -654,7 +652,8 @@ define(
 					//          console.log("error when load pic " + error);
 					//        });
 
-				}]);
+				}
+			]);
 
 	}
 );

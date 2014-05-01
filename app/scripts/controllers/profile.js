@@ -7,7 +7,8 @@ define(
 		controllers.controller(
 			'profileCtrl',
 			[
-				'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater', 'MD5', '$filter',
+				'$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater',
+				'MD5', '$filter',
 				function (
 					$rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5, $filter
 					)
@@ -193,8 +194,7 @@ define(
 
 						$scope.views[hash] = true;
 
-						$scope.views.user = (
-							                    $rootScope.app.resources.uuid == $route.current.params.userId) ? true : false;
+						$scope.views.user = ($rootScope.app.resources.uuid == $route.current.params.userId) ? true : false;
 
 						// load the avatar by ajax way
 						var memberId = $route.current.params.userId;
@@ -221,7 +221,7 @@ define(
 							{
 								console.log("error when load pic " + error);
 							});
-					};
+					}
 
 					/**
 					 * Switch between the views and set hash ccordingly
@@ -284,8 +284,7 @@ define(
 								{
 									$rootScope.statusBar.display($rootScope.ui.profile.refreshing);
 
-									var flag = (
-										           $route.current.params.userId == $rootScope.app.resources.uuid) ? true : false;
+									var flag = ($route.current.params.userId == $rootScope.app.resources.uuid) ? true : false;
 
 									Profile.get($route.current.params.userId, flag)
 										.then(
@@ -320,10 +319,8 @@ define(
 													});
 
 											}
-											;
 										});
 								}
-								;
 							});
 					};
 
@@ -338,7 +335,6 @@ define(
 
 							return false;
 						}
-						;
 
 						if (passwords.new1 != passwords.new2)
 						{
@@ -380,17 +376,14 @@ define(
 
 													$rootScope.statusBar.off();
 												}
-												;
 											});
 									}
-									;
 								});
 						}
 						else
 						{
 							$rootScope.notifier.error($rootScope.ui.profile.passwrong, true);
 						}
-						;
 					};
 
 					/**
@@ -466,10 +459,7 @@ define(
 					 * show edit member profile TabView
 					 */
 
-					$scope.editProfile = function ()
-					{
-						setView('edit');
-					};
+					$scope.editProfile = function () { setView('edit') };
 
 					/**
 					 * load the dynamic upload URL for GAE
@@ -535,10 +525,7 @@ define(
 
 									}
 
-								}, function (error)
-								{
-									console.log(error);
-								});
+								}, function (error) { console.log(error) });
 						}
 					};
 
