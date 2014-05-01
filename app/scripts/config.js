@@ -8,23 +8,6 @@ define(
       version: '0.2.0',
       lang:    'nl',
 
-      fullscreen: true,
-
-      // REMOVE
-      demo_users: false,
-
-      profile: {
-        meta:      profile.meta,
-        title:     profile.title,
-        logos:     {
-          login: 'profiles/' + profile.meta + '/img/login_logo.png',
-          app: ''
-        },
-        background: 'profiles/' + profile.meta + '/img/login_bg.jpg', // jpg for smaller size,
-        p2000:     profile.p2000,
-        mobileApp: profile.mobileApp
-      },
-
       statesall: {
         'com.ask-cs.State.Available':              {
           className: 'state-available',
@@ -149,15 +132,11 @@ define(
         var _this = this;
 
         angular.forEach(
-          profile.states, function (state, index)
+          profile.states, function (state)
           {
             _this.timeline.config.states[state] = _this.statesall[state];
           });
       }
-
-
-    },
-
-    stateColors: {availalbe: "memberStateAvailalbe", busy: "memberStateBusy", offline: "memberStateOffline", none: "memberStateNone"}
+    }
   }
 );

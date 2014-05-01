@@ -28,10 +28,10 @@ define(
         {
           return function (states)
           {
-            var ret = config.stateColors.none;
+            var ret = config.app.stateColors.none;
 
             angular.forEach(
-              states, function (state, index)
+              states, function (state)
               {
                 /**
                  *    WORKING
@@ -170,29 +170,6 @@ define(
       ]);
 
     filters.filter(
-      'translateService',
-      [
-        function ()
-        {
-          return function (selected)
-          {
-            if (selected)
-            {
-              var gem;
-
-              angular.forEach(
-                config.app.virtuals, function (virtual)
-                {
-                  if (virtual.id == selected) gem = virtual;
-                });
-
-              return gem.label;
-            }
-          }
-        }
-      ]);
-
-    filters.filter(
       'translateRole',
       [
         function ()
@@ -273,6 +250,7 @@ define(
             {
               var value = state.value;
               var match = value.match(/\((.*?)\)/);
+
               if (match == null)
               {
                 return value;
@@ -280,7 +258,9 @@ define(
               else
               {
                 var ll = match[1];
+
                 value = value.replace(match[0], "");
+
                 if (type == "data")
                 {
                   return ll;
@@ -460,11 +440,9 @@ define(
         {
           return function (string, type)
           {
-            var types = type.split("."),
-                ret = $rootScope.ui[types[0]][types[1]],
-                ret = ret.replace('$v', string);
+            var types = type.split(".");
 
-            return ret;
+            return ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
           }
         }
       ]);
