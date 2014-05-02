@@ -10,6 +10,8 @@ define(
         '$scope', '$rootScope', '$q', '$location', '$route', 'Storage', '$filter', 'Teams', 'TeamUp',
         function ($scope, $rootScope, $q, $location, $route, Storage, $filter, Teams, TeamUp)
         {
+          // TODO: Move this to config
+          // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 5000 * 10;
 
           $scope.messages = [];
@@ -60,17 +62,18 @@ define(
                       minDate = '';
                     }
 
-                    var msg = {date: minDate,
-                      role:          "",
-                      member:        {},
-                      senderName:    "",
-                      sendTime:      parseInt(message.sendTime),
-                      body:          message.body,
-                      msgRole:       "",
-                      senderUuid:    message.senderUuid
+                    var msg = {
+                      date:       minDate,
+                      role:       "",
+                      member:     {},
+                      senderName: "",
+                      sendTime:   parseInt(message.sendTime),
+                      body:       message.body,
+                      msgRole:    "",
+                      senderUuid: message.senderUuid
                     };
 
-                    var member = $scope.$root.getTeamMemberById(message.senderUuid);
+                    var member = $rootScope.getTeamMemberById(message.senderUuid);
 
                     if (message.senderUuid == $scope.$root.app.resources.uuid)
                     {
@@ -145,20 +148,17 @@ define(
           {
             $scope.toggleChat = ! $scope.toggleChat;
 
-            var teamIds = $scope.$root.app.resources.teamUuids;
+            var teamIds = $rootScope.app.resources.teamUuids;
 
             if (teamIds && $scope.toggleChat)
             {
-              var teamId = teamIds[0];
-              $scope.chatTeamId = teamId;
+              $scope.chatTeamId = teamIds[0];
               $scope.renderMessage();
 
-              // start auto check chat mesage
               $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);
             }
             else
             {
-              // stop auto check chat mesage
               clearInterval($scope.autoCheckMonitorId);
             }
           };

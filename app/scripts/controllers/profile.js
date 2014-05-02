@@ -8,39 +8,25 @@ define(
       'profileCtrl',
       [
         '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater',
-        'MD5', '$filter',
+        '$filter',
         function (
-          $rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, MD5, $filter
+          $rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, $filter
           )
         {
           $rootScope.fixStyles();
 
           $scope.self = this;
 
-          $scope.periods = Dater.getPeriods();
-
           $scope.imgHost = profile.host();
           $scope.ns = profile.ns();
 
-          $scope.current = {
-            day: Date.today().getDayOfYear() + 1,
-            week: new Dater.current.week(),
-            month: new Dater.current.month() + 1
-          };
-
           $scope.roles = $rootScope.config.roles;
           $scope.mfuncs = $rootScope.config.mfunctions;
-
-          if (data.slots)
-          {
-            data.user = data.slots.data;
-          }
 
           $scope.data = data;
           $scope.noImgURL = $rootScope.config.noImgURL;
 
           $scope.profilemeta = data.resources;
-          // deal with date
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
 
           $scope.currentRole = $scope.profilemeta.role;
@@ -76,60 +62,9 @@ define(
           $scope.teams = teams;
           $scope.selectTeams = storage_teams;
 
-          $scope.passwords = {
-            current: '',
-            new1:    '',
-            new2:    ''
-          };
-
           $scope.forms = {
             add:  false,
             edit: false
-          };
-
-          $scope.toggleSlotForm = function ()
-          {
-            if ($scope.forms.add)
-            {
-              $scope.resetInlineForms();
-            }
-            else
-            {
-              $scope.slot = {};
-
-              $scope.slot = {
-                start:     {
-                  date:     new Date().toString($rootScope.config.formats.date),
-                  time:     new Date().toString($rootScope.config.formats.time),
-                  datetime: new Date().toISOString()
-                },
-                end:       {
-                  date:     new Date().toString($rootScope.config.formats.date),
-                  time:     new Date().addHours(1).toString($rootScope.config.formats.time),
-                  datetime: new Date().toISOString()
-                },
-                state:     '',
-                recursive: false,
-                id:        ''
-              };
-
-              $scope.forms = {
-                add:  true,
-                edit: false
-              };
-            }
-          };
-
-          $scope.resetInlineForms = function ()
-          {
-            $scope.slot = {};
-
-            $scope.original = {};
-
-            $scope.forms = {
-              add:  false,
-              edit: false
-            };
           };
 
           setView($location.hash());
@@ -137,40 +72,41 @@ define(
           function setView (hash)
           {
             $scope.views = {
-              profile:  false,
-              edit:     false,
-              editImg:  false,
-              password: false,
-              timeline: false
+              profile: false,
+              edit:    false,
+              editImg: false
             };
 
             $scope.views[hash] = true;
 
             $scope.views.user = ($rootScope.app.resources.uuid == $route.current.params.userId) ? true : false;
 
-            // load the avatar by ajax way
-            var memberId = $route.current.params.userId;
-            var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photourl";
 
-            Teams.loadImg(imgURL).then(
-              function (result)
-              {
-                // console.log("loading pic " + imgURL);
+            //            // load the avatar by ajax way
+            //            var memberId = $route.current.params.userId;
+            //            var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photourl";
+            //
+            //            Teams.loadImg(imgURL).then(
+            //              function (result)
+            //              {
+            //                // console.log("loading pic " + imgURL);
+            //
+            //                var imgId = memberId.replace(".", "").replace("@", "");
+            //
+            //                if (result.status && (
+            //                  result.status == 404 || result.status == 403 || result.status == 500))
+            //                {
+            //                  console.log("loading pic ", result);
+            //                  $('#profile #img_' + imgId).css('background-image', 'url(' + $scope.noImgURL + ')');
+            //                }
+            //                else
+            //                {
+            //                  var realImgURL = $scope.imgHost.replace("\\:", ":") + result.path;
+            //                  $('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+            //                }
+            //              }, function (error) { console.log("error when load pic " + error) });
 
-                var imgId = memberId.replace(".", "").replace("@", "");
 
-                if (result.status && (
-                  result.status == 404 || result.status == 403 || result.status == 500))
-                {
-                  console.log("loading pic ", result);
-                  $('#profile #img_' + imgId).css('background-image', 'url(' + $scope.noImgURL + ')');
-                }
-                else
-                {
-                  var realImgURL = $scope.imgHost.replace("\\:", ":") + result.path;
-                  $('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                }
-              }, function (error) { console.log("error when load pic " + error) });
           }
 
           $scope.setViewTo = function (hash)
@@ -266,65 +202,6 @@ define(
                     });
                 }
               });
-          };
-
-          $scope.change = function (passwords)
-          {
-            if (passwords.new1 == '' || passwords.new2 == '')
-            {
-              $rootScope.notifier.error($rootScope.ui.profile.pleaseFill, true);
-
-              return false;
-            }
-
-            if (passwords.new1 != passwords.new2)
-            {
-              $rootScope.notifier.error($rootScope.ui.profile.passNotMatch, true);
-
-              return false;
-            }
-            else if ($rootScope.app.resources.askPass == MD5(passwords.current))
-            {
-              $rootScope.statusBar.display($rootScope.ui.profile.changingPass);
-
-              Profile.changePassword(passwords)
-                .then(
-                function (result)
-                {
-                  if (result.error)
-                  {
-                    $rootScope.notifier.error('Error with changing password.');
-                    console.warn('error ->', result);
-                  }
-                  else
-                  {
-                    $rootScope.statusBar.display($rootScope.ui.profile.refreshing);
-
-                    Profile.get($rootScope.app.resources.uuid, true)
-                      .then(
-                      function (data)
-                      {
-                        if (data.error)
-                        {
-                          $rootScope.notifier.error('Error with getting profile data.');
-                          console.warn('error ->', data);
-                        }
-                        else
-                        {
-                          $rootScope.notifier.success($rootScope.ui.profile.passChanged);
-
-                          $scope.data = data;
-
-                          $rootScope.statusBar.off();
-                        }
-                      });
-                  }
-                });
-            }
-            else
-            {
-              $rootScope.notifier.error($rootScope.ui.profile.passwrong, true);
-            }
           };
 
           $scope.editProfile = function () { setView('edit') };

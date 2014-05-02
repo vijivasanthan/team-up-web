@@ -50,25 +50,6 @@ define(
               }
           );
 
-          var Register = $resource(
-              config.app.host + '/register',
-              {
-                direct: 'true',
-                module: 'default'
-              },
-              {
-                profile: {
-                  method: 'GET',
-                  params: {
-                    uuid:  '',
-                    pass:  '',
-                    name:  '',
-                    phone: ''
-                  }
-                }
-              }
-          );
-
           var Resources = $resource(
               config.app.host + '/resources',
               {},
@@ -83,68 +64,6 @@ define(
                 }
               }
           );
-
-          Profile.prototype.register = function (profile)
-          {
-            var deferred = $q.defer();
-
-            Register.profile(
-              {
-                uuid:  profile.username,
-                pass:  MD5(profile.password),
-                name:  profile.name,
-                phone: profile.PhoneAddress
-              },
-              function (registered)
-              {
-                Profile.prototype.role(profile.username, profile.role.id)
-                  .then(
-                  function (roled)
-                  {
-                    Profile.prototype.save(
-                      profile.username, {
-                        EmailAddress: profile.EmailAddress,
-                        PostAddress:  profile.PostAddress,
-                        PostZip:      profile.PostZip,
-                        PostCity:     profile.PostCity
-                      }).then(
-                      function (resourced)
-                      {
-                        var calls = [];
-
-                        angular.forEach(
-                          profile.groups, function (group)
-                          {
-                            calls.push(
-                              Groups.addMember(
-                                {
-                                  id:    profile.username,
-                                  group: group
-                                }));
-                          });
-
-                        $q.all(calls)
-                          .then(
-                          function (grouped)
-                          {
-                            deferred.resolve(
-                              {
-                                registered: registered,
-                                roled:      roled,
-                                resourced:  resourced,
-                                grouped:    grouped
-                              });
-                          });
-
-                      });
-
-                  });
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
 
           Profile.prototype.role = function (id, role)
           {

@@ -108,28 +108,3 @@ section#profile
 					#uploadImgModule
 						form.form-vertical(enctype='multipart/form-data')
 							uploader(action='{{uploadURL}}')
-
-				#passwordTab.tab-pane(class="{{(views.password==true) && 'active'}}",
-				ng-show='views.user')
-					div(style='overflow: hidden; height: 35px')
-						h3.pull-left(style='margin-top: 0;') {{ui.profile.passChange}}
-					hr
-					form.form-vertical
-						.control-group
-							label.control-label {{ui.profile.currentPass}}
-							.controls
-								input.span3(type='password',
-								ng-model='passwords.current')
-						.control-group
-							label.control-label {{ui.profile.newPass}}
-							.controls
-								input.span3(type='password',
-								ng-model='passwords.new1')
-						.control-group
-							label.control-label {{ui.profile.newPassRepeat}}
-							.controls
-								input.span3(type='password',
-								ng-model='passwords.new2')
-						.form-actions
-							button.btn.btn-success(type='submit',
-							ng-click='change(passwords)') {{ui.profile.changePass}}
