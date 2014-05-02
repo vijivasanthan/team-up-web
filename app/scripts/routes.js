@@ -26,6 +26,13 @@ define(
             })
 
             .when(
+            '/tasks',
+            {
+              templateUrl: 'views/tasks.html',
+              controller:  'tasksCtrl'
+            })
+
+            .when(
             '/team',
             {
               templateUrl:    'views/teams.html',

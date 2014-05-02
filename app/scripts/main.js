@@ -109,6 +109,7 @@ require(
     'controllers/planboard',
     'controllers/profile',
     'controllers/teams',
+    'controllers/tasks',
     'controllers/timeline',
     'controllers/timeline-navigation',
     'controllers/treegrid',

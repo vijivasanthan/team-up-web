@@ -1,0 +1,46 @@
+.page-header
+
+.tabbable.tabs-left
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{(views.myTasks==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("myTasks")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| MIJN TAKEN
+		li(class="{{(views.allTasks==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("allTasks")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| ALLE TAKEN
+		li(class="{{(views.newTask==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("newTask")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| NIEUWE TAAK
+
+	.tab-content
+
+		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
+			.tab-header
+				h3.pull-left Mine Taken
+			hr
+			p
+				| Mijn taken content
+
+		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
+			.tab-header
+				h3.pull-left Alle Taken
+			hr
+			p
+				| Alle taken content
+
+		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}")
+			.tab-header
+				h3.pull-left Nieuwe Taak
+			hr
+			p
+				| Nieuwe taak content
