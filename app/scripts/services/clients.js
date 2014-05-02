@@ -211,7 +211,6 @@ define(
                       {
                         calls.push(ClientGroups.prototype.get(clientGroup.id));
                       }
-
                     });
 
                   $q.all(calls).then(
@@ -722,6 +721,7 @@ define(
 
           return new ClientGroups;
         }
-      ]);
+      ]
+    );
   }
 );

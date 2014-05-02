@@ -161,6 +161,9 @@ define(
 
             switch (tabName)
             {
+              case 'tasks':
+                $location.path("/tasks").search({}).hash('');
+                break;
               case 'team':
                 $location.path("/team").search({local: "true"}).hash("team");
                 break;

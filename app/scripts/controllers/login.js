@@ -108,7 +108,7 @@ define(
 
           self.auth = function (uuid, pass)
           {
-            TeamUp.caller(
+            TeamUp._(
               'login',
               {
                 uuid: uuid,
@@ -215,7 +215,7 @@ define(
 
             self.progress(20, $rootScope.ui.login.loading_User);
 
-            TeamUp.caller('user').then(
+            TeamUp._('user').then(
               function (resources)
               {
                 if (resources.error)
