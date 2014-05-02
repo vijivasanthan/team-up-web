@@ -88,7 +88,7 @@ require(
     'services/clients',
     'services/dater',
     'services/md5',
-    'services/messages',
+    // 'services/messages',
     'services/profile',
     'services/settings',
     'services/sloter',

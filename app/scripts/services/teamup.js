@@ -35,11 +35,29 @@ define(
                     first:  'team',
                     second: 'member'
                   }
+                },
+
+                chats:   {
+                  method:  'GET',
+                  params:  {
+                    first:  'team',
+                    second: 'teamMessage',
+                    third:  ''
+                  },
+                  isArray: true
+                },
+                message: {
+                  method: 'POST',
+                  params: {
+                    first:  'team',
+                    second: 'teamMessage'
+                  }
                 }
+
               }
           );
 
-          TeamUp.prototype.caller = function (proxy, params, data, callback)
+          TeamUp.prototype._ = function (proxy, params, data, callback)
           {
             console.log('call: proxy ->', arguments);
 

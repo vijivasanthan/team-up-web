@@ -81,45 +81,49 @@ define(
 
             $scope.current = id;
 
+
+
             // load image
-            angular.forEach(
-              $scope.members, function (member)
-              {
-                var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photo?width=40&height=40";
+//            angular.forEach(
+//              $scope.members, function (member)
+//              {
+//                var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photo?width=40&height=40";
+//
+//                //								var imgId = member.uuid.replace(".", "").replace("@", "");
+//                //								$('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+//
+//                Teams.loadImg(imgURL).then(
+//                  function (result)
+//                  {
+//                    // console.log("loading pic " + imgURL);
+//
+//                    var imgId = member.uuid.replace(".", "").replace("@", "");
+//
+//                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+//                    {
+//                      console.log("no pics ", result);
+//                    }
+//                    else
+//                    {
+//                      var realImgURL = $scope.imgHost + result.path;
+//                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+//                    }
+//
+//                  }, function (error) { console.log("error when load pic " + error) }
+//                );
+//
+//                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
+//
+//                $scope.photoURL = tempURL;
+//
+//                Teams.loadImg(tempURL).then(
+//                  function (result)
+//                  {
+//                    console.log(result);
+//                  });
+//              });
 
-                //								var imgId = member.uuid.replace(".", "").replace("@", "");
-                //								$('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
-                Teams.loadImg(imgURL).then(
-                  function (result)
-                  {
-                    // console.log("loading pic " + imgURL);
-
-                    var imgId = member.uuid.replace(".", "").replace("@", "");
-
-                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                    {
-                      console.log("no pics ", result);
-                    }
-                    else
-                    {
-                      var realImgURL = $scope.imgHost + result.path;
-                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                    }
-
-                  }, function (error) { console.log("error when load pic " + error) }
-                );
-
-                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
-
-                $scope.photoURL = tempURL;
-
-                Teams.loadImg(tempURL).then(
-                  function (result)
-                  {
-                    console.log(result);
-                  });
-              });
 
             $scope.team.phone = $rootScope.ui.teamup.loadingNumber;
 

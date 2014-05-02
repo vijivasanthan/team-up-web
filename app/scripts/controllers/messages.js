@@ -7,18 +7,25 @@ define(
     controllers.controller(
       'messagesCtrl',
       [
-        '$scope', '$rootScope', '$q', '$location', '$route', 'Messages', 'Storage', '$filter', 'Teams',
-        function ($scope, $rootScope, $q, $location, $route, Messages, Storage, $filter, Teams)
+        '$scope', '$rootScope', '$q', '$location', '$route', 'Storage', '$filter', 'Teams', 'TeamUp',
+        function ($scope, $rootScope, $q, $location, $route, Storage, $filter, Teams, TeamUp)
         {
+          var REFRESH_CHAT_MESSAGES = 5000 * 10;
+
           $scope.messages = [];
 
           $scope.imgHost = profile.host();
           $scope.ns = profile.ns();
 
+
           $scope.renderMessage = function ()
           {
-
-            Messages.queryTeamMessage($scope.chatTeamId).then(
+            TeamUp._(
+              'chats',
+              {
+                third: $scope.chatTeamId
+              }
+            ).then(
               function (messages)
               {
                 if (messages.error)
@@ -26,8 +33,6 @@ define(
                   $rootScope.notifier.error(messages.error.data);
                   return;
                 }
-
-                console.log(messages.length, $scope.messages.length);
 
                 if ($scope.messages.length == messages.length)
                 {
@@ -37,7 +42,8 @@ define(
 
                 $scope.messages = [];
 
-                var msgDates = {};
+                // var msgDates = {};
+
                 var chatMembers = [];
 
                 // sort the messages by sendTime
@@ -89,48 +95,51 @@ define(
                     }
                   });
 
-                // load the avatar img
-                angular.forEach(
-                  chatMembers, function (mId, i)
-                  {
-                    console.log(mId);
-
-                    var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
-
-                    // var imgId = mId.replace(".", "").replace("@", "");
-                    // $('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
-
-                    Teams
-                      .loadImg(imgURL).
-                      then(
-                      function (result)
-                      {
-                        // console.log("loading pic " + imgURL);
-
-                        var imgId = mId.replace(".", "").replace("@", "");
-
-                        if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                        {
-                          console.log("no pics ", result);
-                        }
-                        else
-                        {
-                          var realImgURL = $scope.imgHost + result.path;
-                          $('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                        }
-                      }, function (error) { console.log("error when load pic " + error) });
-                  });
+                //                // load the avatar img
+                //                angular.forEach(
+                //                  chatMembers, function (mId, i)
+                //                  {
+                //                    var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
+                //
+                //                    // var imgId = mId.replace(".", "").replace("@", "");
+                //                    // $('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+                //
+                //                    Teams
+                //                      .loadImg(imgURL).
+                //                      then(
+                //                      function (result)
+                //                      {
+                //                        // console.log("loading pic " + imgURL);
+                //
+                //                        var imgId = mId.replace(".", "").replace("@", "");
+                //
+                //                        if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+                //                        {
+                //                          console.log("no pics ", result);
+                //                        }
+                //                        else
+                //                        {
+                //                          var realImgURL = $scope.imgHost + result.path;
+                //                          $('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+                //                        }
+                //                      }, function (error) { console.log("error when load pic " + error) });
+                //
+                //                  });
 
                 // scroll to the bottom of the chat window
+                // TODO: Is this a handy way of doing this?
                 setTimeout(
                   function ()
                   {
                     $('#chat-content #messageField').focus();
                     $('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
-                  }, 100);
+                  }, 100 * 1000); // Temporarily made it longer till there is a better solution
+
               },
               function (error) { console.log(error) });
+
           };
+
 
           $scope.openChat = function ()
           {
@@ -145,7 +154,7 @@ define(
               $scope.renderMessage();
 
               // start auto check chat mesage
-              $scope.autoCheckMonitorId = setInterval($scope.renderMessage, 5000);
+              $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);
             }
             else
             {
@@ -153,6 +162,7 @@ define(
               clearInterval($scope.autoCheckMonitorId);
             }
           };
+
 
           $scope.sendMessage = function (newMessage)
           {
@@ -165,15 +175,15 @@ define(
             $rootScope.statusBar.display($rootScope.ui.message.sending);
 
             var current = new Date();
-            var message = {
-              title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
-              body:     newMessage,
-              sendTime: current.getTime()
-            };
 
-            console.log(message);
-
-            Messages.sendTeamMessage(message).then(
+            TeamUp._(
+              'message',
+              {},
+              {
+                title: "From Web-Paige" + current.toString($rootScope.config.formats.date),
+                body:     newMessage,
+                sendTime: current.getTime()
+              }).then(
               function ()
               {
                 $scope.renderMessage();
@@ -188,21 +198,6 @@ define(
               }
             );
           };
-
-          /**
-           * to do : auto refreshing the chat message
-           * get the latest chat record , and only get the chat message after it (compare by the time stamp)
-           * then add new itmes to the $scope.messages
-           *
-           * concurrent issue
-           * There could be concurrent issue for real chat usage
-           * get the data a little bit earlier then the latest record
-           * and compare the id to see if the message it already be rendered.
-           */
-
-          /**
-           * only do the global refresh when open the chat tap
-           */
         }
       ]);
   }

@@ -15,7 +15,7 @@ define(
 
           var logindata = angular.fromJson(Storage.get('logindata'));
 
-          TeamUp.caller('logout')
+          TeamUp._('logout')
             .then(
             function (result)
             {
