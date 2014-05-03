@@ -7,8 +7,8 @@ define(
     services.factory(
       'Slots',
       [
-        '$rootScope', '$resource', '$q', 'Storage',
-        function ($rootScope, $resource, $q, Storage)
+        '$rootScope', '$resource', '$q',
+        function ($rootScope, $resource, $q)
         {
           var Slots = $resource(
               config.app.host + config.app.namespace + '/tasks/:taskId',
@@ -34,7 +34,9 @@ define(
               }
           );
 
-          Slots.prototype.local = function () { return angular.fromJson(Storage.get('slots')) };
+
+          // Slots.prototype.local = function () { return angular.fromJson(Storage.get('slots')) };
+
 
           Slots.prototype.add = function (slot)
           {
@@ -51,6 +53,10 @@ define(
 
             return deferred.promise;
           };
+
+
+
+
 
           Slots.prototype.update = function (slot)
           {
@@ -71,12 +77,25 @@ define(
             return deferred.promise;
           };
 
-          Slots.prototype.change = function (changed, user)
+
+
+
+
+          Slots.prototype.change = function (slot, user)
           {
             var deferred = $q.defer();
 
             Slots.change(
-              angular.extend(naturalize(changed), { member: user }),
+              angular.extend(
+                {
+                  start: new Date(slot.start).getTime() / 1000,
+                  end: new Date(slot.end).getTime() / 1000,
+                  recursive: angular.fromJson(slot.content).recursive,
+                  text:      angular.fromJson(slot.content).state,
+                  id:        angular.fromJson(slot.content).id
+                },
+                { member: user }
+              ),
               function (result)
               {
                 deferred.resolve(result);
@@ -86,6 +105,11 @@ define(
 
             return deferred.promise;
           };
+
+
+
+
+
 
           Slots.prototype.remove = function (tId)
           {
@@ -105,18 +129,9 @@ define(
             return deferred.promise;
           };
 
-          function naturalize (slot)
-          {
-            var content = angular.fromJson(slot.content);
 
-            return {
-              start: new Date(slot.start).getTime() / 1000,
-              end: new Date(slot.end).getTime() / 1000,
-              recursive: content.recursive,
-              text:      content.state,
-              id:        content.id
-            }
-          }
+
+
 
           return new Slots;
         }

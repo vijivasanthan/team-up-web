@@ -92,7 +92,7 @@ require(
     // 'services/profile',
     // 'services/settings',
     'services/sloter',
-    'services/slots',
+    // 'services/slots',
     'services/strings',
     'services/teams',
     // 'services/user',

@@ -64,8 +64,37 @@ define(
                 profileSave: {
                   method: '',
                   params: {
-                    first:  '/team/',
-                    third:  'member'
+                    first: '/team/',
+                    third: 'member'
+                  }
+                },
+
+
+                taskQuery:  {
+                  method:  'GET',
+                  params:  {
+                    first: 'tasks',
+                    start: '',
+                    end:   ''
+                  },
+                  isArray: true
+                },
+                taskAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'tasks'
+                  }
+                },
+                taskUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'tasks'
+                  }
+                },
+                taskDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'tasks'
                   }
                 }
 

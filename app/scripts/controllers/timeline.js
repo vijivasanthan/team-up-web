@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'Sloter', 'Slots',
-        function ($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slots)
+        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'Sloter', 'TeamUp',
+        function ($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, TeamUp)
         {
           var range, diff;
 
@@ -575,7 +575,10 @@ define(
               values = $.extend(values, {'memberId': memberId});
               values = $scope.convertTaskJsonObject(values);
 
-              Slots.add(values).then(
+              TeamUp._(
+                'taskAdd',
+                values
+              ).then(
                 function (result)
                 {
                   $rootScope.$broadcast('resetPlanboardViews');
@@ -774,7 +777,7 @@ define(
             return ret;
           };
 
-          $scope.timelineOnChange = function (direct, original, slot, options)
+          $scope.timelineOnChange = function (direct, original, slot)
           {
             $rootScope.planboardSync.clear();
 
@@ -812,21 +815,12 @@ define(
               };
             }
 
-            var isChangeAllowed = function (old, curr)
-            {
-              var now = Date.now().getTime();
-
-              // TODO: Simplify these statemanents
-              if (old == curr)  return true;
-              if (old < now)    return false;
-              if (curr < now)   return false;
-
-              return true;
-            };
-
             var values = $scope.convertTaskJsonObject(options);
 
-            Slots.update(values).then(
+            TeamUp._(
+              'taskUpdate',
+              values
+            ).then(
               function (result)
               {
                 $rootScope.$broadcast('resetPlanboardViews');
@@ -887,7 +881,10 @@ define(
 
               $rootScope.statusBar.display($rootScope.ui.planboard.deletingTimeslot);
 
-              Slots.remove(content.id, memberId).then(
+              TeamUp._(
+                'taskDelete',
+                content.id
+              ).then(
                 function (result)
                 {
                   $rootScope.$broadcast('resetPlanboardViews');
