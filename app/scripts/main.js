@@ -89,8 +89,8 @@ require(
     'services/dater',
     'services/md5',
     // 'services/messages',
-    'services/profile',
-    'services/settings',
+    // 'services/profile',
+    // 'services/settings',
     'services/sloter',
     'services/slots',
     'services/strings',
@@ -145,13 +145,13 @@ var profile = {
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
     // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
+
     return 'http://dev.ask-cs.com/';
     // return 'http://askpack.ask-cs.com/';
   },
 
   ns: function ()
   {
-    // return "teamup_michael";
     return "teamup-dev";
     // return "teamup-demo";
   },
@@ -253,12 +253,6 @@ var profile = {
     busy:      "memberStateBusy",
     offline:   "memberStateOffline",
     none:      "memberStateNone"
-  },
-
-  p2000: {
-    status: true,
-    url:    'http://knrm.myask.me/rpc/client/p2000.php',
-    codes:  '1405545, 1405546, 1735749, 1735748'
   },
 
   mobileApp: {

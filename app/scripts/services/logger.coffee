@@ -5,6 +5,15 @@ define ['services/services'], (services) ->
     'Store'
     (Store) ->
 
+      # Log anything
+      record: (message) ->
+        stamp = Date.now()
+
+        Store('logs').save {
+          time: stamp
+          message: message
+        }
+
       # Log any given errors
       error: (trace) ->
         Store = Store('error')

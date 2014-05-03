@@ -52,6 +52,21 @@ define(
                     first:  'team',
                     second: 'teamMessage'
                   }
+                },
+
+                profileGet:  {
+                  method: 'GET',
+                  params: {
+                    first:  'team',
+                    second: 'member'
+                  }
+                },
+                profileSave: {
+                  method: '',
+                  params: {
+                    first:  '/team/',
+                    third:  'member'
+                  }
                 }
 
               }
@@ -60,6 +75,8 @@ define(
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
             console.log('call: proxy ->', arguments);
+
+            Log.record(arguments);
 
             var deferred = $q.defer();
 
@@ -72,13 +89,19 @@ define(
                 data,
                 function (result)
                 {
-                  if (callback && callback.success) callback.success.call(this, result);
+                  if (callback && callback.success)
+                  {
+                    callback.success.call(this, result);
+                  }
 
                   deferred.resolve(result);
                 },
                 function (result)
                 {
-                  if (callback && callback.error) callback.error.call(this, result);
+                  if (callback && callback.error)
+                  {
+                    callback.error.call(this, result);
+                  }
 
                   deferred.resolve({error: result});
                 }

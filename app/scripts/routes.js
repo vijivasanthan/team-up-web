@@ -156,10 +156,28 @@ define(
               reloadOnSearch: false,
               resolve:        {
                 data: [
-                  '$rootScope', 'Profile', '$route',
-                  function ($rootScope, Profile, $route)
+                  '$rootScope', '$route', 'TeamUp', 'Storage',
+                  function ($rootScope, $route, TeamUp, Storage)
                   {
-                    return Profile.get($route.current.params.userId, false);
+                    return TeamUp._(
+                      'profileGet',
+                      {
+                        third: $route.current.params.userId
+                      },
+                      null,
+                      {
+                        success: function (resources)
+                        {
+                          // TODO: Move this callback with other identical ones to a central location
+                          if ($route.current.params.userId == $rootScope.app.resources.uuid)
+                          {
+                            $rootScope.app.resources = resources;
+
+                            Storage.add('resources', angular.toJson(resources));
+                          }
+                        }
+                      }
+                    );
                   }
                 ]
               }

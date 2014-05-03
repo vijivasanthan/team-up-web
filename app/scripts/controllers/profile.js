@@ -7,11 +7,9 @@ define(
     controllers.controller(
       'profileCtrl',
       [
-        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Profile', 'Storage', 'Teams', 'Dater',
-        '$filter',
-        function (
-          $rootScope, $scope, $q, $location, $window, $route, data, Profile, Storage, Teams, Dater, $filter
-          )
+        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Storage', 'Teams', 'Dater',
+        '$filter', 'TeamUp',
+        function ($rootScope, $scope, $q, $location, $window, $route, data, Storage, Teams, Dater, $filter, TeamUp)
         {
           $rootScope.fixStyles();
 
@@ -26,8 +24,8 @@ define(
           $scope.data = data;
           $scope.noImgURL = $rootScope.config.noImgURL;
 
-          $scope.profilemeta = data.resources;
-          $scope.profilemeta.birthday = $filter('nicelyDate')(data.resources.birthDate);
+          $scope.profilemeta = data;
+          $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
 
           $scope.currentRole = $scope.profilemeta.role;
 
@@ -52,7 +50,7 @@ define(
             angular.forEach(
               storage_teams, function (team)
               {
-                if (team.uuid == sessionStorage.getItem(data.resources.uuid + "_team"))
+                if (team.uuid == sessionStorage.getItem(data.uuid + "_team"))
                 {
                   teams.push(team);
                 }
@@ -79,7 +77,7 @@ define(
 
             $scope.views[hash] = true;
 
-            $scope.views.user = ($rootScope.app.resources.uuid == $route.current.params.userId) ? true : false;
+            $scope.views.user = (($rootScope.app.resources.uuid == $route.current.params.userId));
 
 
             //            // load the avatar by ajax way
@@ -120,6 +118,8 @@ define(
               });
           };
 
+          // console.log('userID ->', $route.current.params.userId, $rootScope.app.resources.uuid);
+
           $scope.save = function (resources)
           {
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
@@ -152,8 +152,14 @@ define(
 
             delete resources.birthday;
 
-            Profile.save($route.current.params.userId, resources)
-              .then(
+            TeamUp._(
+              'profileSave',
+              {
+                second: resources.teamUuids[0],
+                fourth: id
+              },
+              resources
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -165,10 +171,22 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.profile.refreshing);
 
-                  var flag = ($route.current.params.userId == $rootScope.app.resources.uuid) ? true : false;
+                  TeamUp._(
+                    'profileGet',
+                    {
+                      third: $route.current.params.userId
+                    },
+                    null,
+                    function (resources)
+                    {
+                      if ($route.current.params.userId == $rootScope.app.resources.uuid)
+                      {
+                        $rootScope.app.resources = result;
 
-                  Profile.get($route.current.params.userId, flag)
-                    .then(
+                        Storage.add('resources', angular.toJson(resources));
+                      }
+                    }
+                  ).then(
                     function (data)
                     {
                       if (data.error)
@@ -190,13 +208,15 @@ define(
                         angular.forEach(
                           resources.teamUuids, function (teamId)
                           {
-                            var routePara = {uuid: teamId};
-                            $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
-                            Teams.query(false, routePara).then(
-                              function ()
-                              {
-                                $rootScope.statusBar.off();
-                              });
+                            var routePara = { uuid: teamId };
+
+                            // TODO: Message is not absent in localization file so turned off
+                            // $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
+
+                            Teams.query(false, routePara)
+                              .then(
+                              function () { $rootScope.statusBar.off() }
+                            );
                           });
                       }
                     });
@@ -204,21 +224,26 @@ define(
               });
           };
 
+
           $scope.editProfile = function () { setView('edit') };
+
 
           $scope.editImg = function ()
           {
             $scope.uploadURL = $scope.imgHost + $scope.ns +
                                "/team/member/" + $route.current.params.userId + "/photourl";
 
-            Teams.loadImg($scope.uploadURL).then(
+            Teams.loadImg($scope.uploadURL)
+              .then(
               function (result)
               {
                 var imgHost = $scope.imgHost.replace("\\", "");
+
                 if (result.path)
                 {
                   $scope.avatarURL = imgHost + result.path;
                 }
+
                 $scope.uploadURL = imgHost + $scope.ns +
                                    "/team/member/" + $route.current.params.userId + "/photo";
 
@@ -226,20 +251,20 @@ define(
               });
           };
 
+
           $scope.deleteProfile = function ()
           {
             if (window.confirm($rootScope.ui.teamup.deleteConfirm))
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-              Teams.deleteMember($scope.profilemeta.uuid).then(
+              Teams.deleteMember($scope.profilemeta.uuid)
+                .then(
                 function (result)
                 {
                   if (result.uuid)
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
-                    // refresh the teams that contains  this user
 
                     angular.forEach(
                       $scope.profilemeta.teamUuids, function (teamId, i)
@@ -247,28 +272,27 @@ define(
                         $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                         var routePara = {'uuid': teamId};
-                        Teams.query(false, routePara).then(
-                          function (queryRs)
-                          {
-                            $rootScope.statusBar.off();
-                          });
+                        Teams.query(false, routePara)
+                          .then(
+                          function () { $rootScope.statusBar.off() }
+                        );
                       });
 
-                    // try to get the members not in the teams Aync
-                    Teams.queryMembersNotInTeams().then(
-                      function (result)
+                    Teams.queryMembersNotInTeams()
+                      .then(
+                      function ()
                       {
                         console.log("members not in any teams loaded ");
                         $rootScope.statusBar.off();
-                      }, function (error)
-                      {
-                        console.log(error);
-                      });
+                      },
+                      function (error) { console.log(error) }
+                    );
                   }
                 }, function (error) { console.log(error) });
             }
           };
         }
-      ]);
+      ])
+    ;
   }
 );

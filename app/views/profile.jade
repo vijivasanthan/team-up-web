@@ -1,5 +1,5 @@
 section#profile
-	.page-header: h2 {{data.resources.name}}
+	.page-header: h2 {{data.name}}
 
 	.row-fluid
 
@@ -16,7 +16,7 @@ section#profile
 
 				#profileTab.tab-pane(class="{{(views.profile==true) && 'active'}}")
 					.tab-header
-						h3.pull-left {{data.resources.firstName}} {{data.resources.lastName}}
+						h3.pull-left {{data.firstName}} {{data.lastName}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
 						ng-click='deleteProfile()') {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
@@ -32,24 +32,24 @@ section#profile
 											a(href='#/team?uuid={{team.uuid}}#team') {{team.name}} ,
 										span(ng-show='app.resources.role > 1') {{team.name}},
 								dt {{ui.teamup.role}}
-								dd {{data.resources.role|translateRole}}
+								dd {{data.role|translateRole}}
 								dt {{ui.profile.phone}}
-								dd {{data.resources.phone}}
+								dd {{data.phone}}
 								dt {{ui.teamup.func}}
-								dd {{data.resources.function|translateFunc}}
+								dd {{data.function|translateFunc}}
 								dt {{ui.profile.birthday}}
-								dd {{data.resources.birthDate|nicelyDate}}
+								dd {{data.birthDate|nicelyDate}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
 							// profile image
-							// style= "background-image: url({{imgHost}}/teamup/team/member/{{data.resources.uuid}}/photo)
-							.roundedPicLarge(id='img_{{data.resources.uuid|escape}}',
-							class='{{data.resources.states|stateColor}}')
+							// style= "background-image: url({{imgHost}}/teamup/team/member/{{data.uuid}}/photo)
+							.roundedPicLarge(id='img_{{data.uuid|escape}}',
+							class='{{data.states|stateColor}}')
 							div
-								a(href='#/profile/{{data.resources.uuid}}#editImg')
+								a(href='#/profile/{{data.uuid}}#editImg')
 									button.btn.btn-mini.btn-primary(ng-click='editImg()')
 										i.icon-edit
 								button.btn.btn-mini.btn-primary(type='submit',
-								ng-click='removeImg(data.resources.uuid)')
+								ng-click='removeImg(data.uuid)')
 									i.icon-trash
 
 				#editTab.tab-pane(class="{{(views.edit==true) && 'active'}}")
@@ -62,13 +62,13 @@ section#profile
 							.controls
 								input.span4(type='text',
 								ng-model='profilemeta.firstName',
-								value='{{data.resources.firstName}}')
+								value='{{data.firstName}}')
 						.control-group
 							label.control-label {{ui.profile.lastName}}
 							.controls
 								input.span4(type='text',
 								ng-model='profilemeta.lastName',
-								value='{{data.resources.lastName}}')
+								value='{{data.lastName}}')
 						.control-group
 							label.control-label {{ui.teamup.role}}
 							.controls
@@ -80,7 +80,7 @@ section#profile
 							.controls
 								input.span3(type='text',
 								ng-model='profilemeta.phone',
-								value='{{data.resources.phone}}')
+								value='{{data.phone}}')
 						.control-group
 							label.control-label {{ui.teamup.func}}
 							.controls
@@ -102,7 +102,7 @@ section#profile
 				#editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;')
-							| {{ui.profile.editProfileImg}} : {{data.resources.firstName}} {{data.resources.lastName}}
+							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
 					hr
 					div: img(ng-src='{{avatarURL}}')
 					#uploadImgModule

@@ -8,10 +8,8 @@ define(
       'login',
       [
         '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Storage', '$routeParams',
-        'Settings', 'Profile', 'MD5', 'TeamUp',
-        function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, Settings, Profile, MD5, TeamUp
-          )
+        'MD5', 'TeamUp',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, MD5, TeamUp)
         {
           var self = this;
 
@@ -169,7 +167,8 @@ define(
                   var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
                                      "/team/member/" + mem.uuid + "/photo";
 
-                  Teams.loadImg(getAvatarUrl).then(
+                  Teams.loadImg(getAvatarUrl)
+                    .then(
                     function (res)
                     {
                       if (res.path)
@@ -187,7 +186,8 @@ define(
                   var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
                                      "/client/" + mem.uuid + "/photo";
 
-                  Clients.loadImg(getAvatarUrl).then(
+                  Clients.loadImg(getAvatarUrl)
+                    .then(
                     function (res)
                     {
                       if (res.path)
@@ -202,7 +202,8 @@ define(
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
           {
-            Teams.queryMembersNotInTeams().then(
+            Teams.queryMembersNotInTeams()
+              .then(
               function (result) { initAvatarUrls(result, "team") }
             );
           }
