@@ -399,7 +399,7 @@ module.exports = (grunt) ->
       args: ['add'].concat(files)
     , grunt.task.current.async()
 
-  grunt.registerTask 'server', 'start a web server with extras', (target) ->
+  grunt.registerTask 'serve', 'start a web server with extras', (target) ->
     return grunt.task.run(['build', 'connect:dist:keepalive'])  if target is 'dist'
     grunt.task.run [
       'clean:server'
@@ -408,6 +408,10 @@ module.exports = (grunt) ->
       'connect:livereload'
       'watch'
     ]
+
+  grunt.registerTask 'server', [
+    'serve'
+  ]
 
   grunt.registerTask 'test', [
     'clean:server'
