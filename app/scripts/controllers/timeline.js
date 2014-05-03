@@ -819,7 +819,9 @@ define(
 
             TeamUp._(
               'taskUpdate',
-              values
+              {
+                taskId: values.uuid
+              }
             ).then(
               function (result)
               {
@@ -883,7 +885,9 @@ define(
 
               TeamUp._(
                 'taskDelete',
-                content.id
+                {
+                  taskId: content.id
+                }
               ).then(
                 function (result)
                 {

@@ -78,33 +78,35 @@ define(
           };
 
 
-
-
-
-          Slots.prototype.change = function (slot, user)
-          {
-            var deferred = $q.defer();
-
-            Slots.change(
-              angular.extend(
-                {
-                  start: new Date(slot.start).getTime() / 1000,
-                  end: new Date(slot.end).getTime() / 1000,
-                  recursive: angular.fromJson(slot.content).recursive,
-                  text:      angular.fromJson(slot.content).state,
-                  id:        angular.fromJson(slot.content).id
-                },
-                { member: user }
-              ),
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
+          /**
+           * This was not in use already!
+           * @param tId
+           * @returns {*}
+           */
+//          Slots.prototype.change = function (slot, user)
+//          {
+//            var deferred = $q.defer();
+//
+//            Slots.change(
+//              angular.extend(
+//                {
+//                  start: new Date(slot.start).getTime() / 1000,
+//                  end: new Date(slot.end).getTime() / 1000,
+//                  recursive: angular.fromJson(slot.content).recursive,
+//                  text:      angular.fromJson(slot.content).state,
+//                  id:        angular.fromJson(slot.content).id
+//                },
+//                { member: user }
+//              ),
+//              function (result)
+//              {
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
 
 
 
