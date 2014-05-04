@@ -7,9 +7,9 @@ define(
     controllers.controller(
       'clientCtrl', [
         '$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Storage', 'Dater', '$filter',
-        '$modal', 'Teams',
+        '$modal', 'Teams', 'TeamUp',
         function (
-          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage, Dater, $filter, $modal, Teams
+          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage, Dater, $filter, $modal, Teams, TeamUp
           )
         {
           $rootScope.fixStyles();

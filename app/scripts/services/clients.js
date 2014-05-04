@@ -14,175 +14,38 @@ define(
               config.app.host + config.app.namespace + '/client/clientGroups/',
               {},
               {
-                query:  {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                },
-                get:    {
-                  method: 'GET',
-                  params: {
-                    id: ''
-                  }
-                },
-                save:   {
-                  method: 'POST',
-                  params: {
-                    id: ''
-                  }
-                },
-                edit:   {
-                  method: 'PUT',
-                  params: {
-                    id: ''
-                  }
-                },
-                remove: {
-                  method: 'DELETE',
-                  params: {
-                    id: ''
-                  }
-                }
-              }
-          );
-
-          var Clients_ByGroupId = $resource(
-              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/',
-              {},
-              {
-                get:    {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                },
-                save:   {
-                  method: 'POST'
-                },
-                remove: {
-                  method: 'DELETE'
-                }
-              }
-          );
-
-          var ClientGroup = $resource(
-              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                },
-                edit: {
-                  method: 'PUT'
-                },
-                del:  {
-                  method: 'DELETE'
-                }
-              }
-          );
-
-          var Client = $resource(
-              config.app.host + config.app.namespace + '/client/:clientId',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                },
-                edit: {
-                  method: 'PUT'
-                },
-                del:  {
-                  method: 'DELETE'
-                }
-              }
-          );
-
-          var Clients = $resource(
-              config.app.host + config.app.namespace + '/client/clients',
-              {},
-              {
                 query: {
                   method:  'GET',
                   params:  {},
                   isArray: true
                 }
+                //                get:    {
+                //                  method: 'GET',
+                //                  params: {
+                //                    id: ''
+                //                  }
+                //                },
+                //                save:   {
+                //                  method: 'POST',
+                //                  params: {
+                //                    id: ''
+                //                  }
+                //                },
+                //                edit:   {
+                //                  method: 'PUT',
+                //                  params: {
+                //                    id: ''
+                //                  }
+                //                },
+                //                remove: {
+                //                  method: 'DELETE',
+                //                  params: {
+                //                    id: ''
+                //                  }
+                //                }
               }
           );
 
-          var ClientReports = $resource(
-              config.app.host + config.app.namespace + '/clients/:clientId/reports',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                }
-              }
-          );
-
-          var ClientsRemove = $resource(
-              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/removeClients/',
-              {},
-              {
-                remove: {
-                  method: 'PUT'
-                }
-              }
-          );
-
-          var ClientGroupReports = $resource(
-              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/reports',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                }
-              }
-          );
-
-          var GroupTasks = $resource(
-              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/tasks',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {
-                    from: '',
-                    to:   ''
-                  },
-                  isArray: true
-                }
-              }
-          );
-
-          var ClientReport = $resource(
-              config.app.host + config.app.namespace + '/clients/:clientId/reports',
-              {},
-              {
-                save:   {
-                  method: 'POST'
-                },
-                remove: {
-                  method: 'DELETE',
-                  params: {
-                    reportId: ''
-                  }
-                }
-              }
-          );
-
-          var ClientImg = $resource(
-              config.app.host + config.app.namespace + '/client/:clientId/photourl',
-              {},
-              {
-                getURL: {
-                  method:  'GET',
-                  isArray: false
-                }
-              }
-          );
 
           ClientGroups.prototype.query = function (only, routePara)
           {
@@ -271,6 +134,27 @@ define(
             return deferred.promise;
           };
 
+
+          var Clients_ByGroupId = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/',
+              {},
+              {
+                get:  {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                },
+                save: {
+                  method: 'POST'
+                }
+                //                ,
+                //                remove: {
+                //                  method: 'DELETE'
+                //                }
+              }
+          );
+
+
           ClientGroups.prototype.get = function (id)
           {
             var deferred = $q.defer();
@@ -308,6 +192,62 @@ define(
             return deferred.promise;
           };
 
+
+          ClientGroups.prototype.addClient = function (id, memberIds)
+          {
+            var deferred = $q.defer();
+
+            Clients_ByGroupId.save(
+              {
+                clientGroupId: id
+              },
+              memberIds,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+            return deferred.promise;
+          };
+
+
+          var ClientGroup = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId',
+              {},
+              {
+                save: {
+                  method: 'POST'
+                },
+                edit: {
+                  method: 'PUT'
+                },
+                del:  {
+                  method: 'DELETE'
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.deleteClientGroup = function (id)
+          {
+            var deferred = $q.defer();
+
+            ClientGroup.del(
+              {
+                clientGroupId: id
+              },
+              function (result)
+              {
+                deferred.resolve(angular.fromJson(result));
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
           ClientGroups.prototype.saveGroup = function (group)
           {
             var deferred = $q.defer();
@@ -326,23 +266,6 @@ define(
             return deferred.promise;
           };
 
-          ClientGroups.prototype.save = function (client)
-          {
-            var deferred = $q.defer();
-
-            Client.save(
-              client,
-              function (result)
-              {
-                Storage.add(result.id, angular.toJson(result));
-
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
 
           ClientGroups.prototype.edit = function (clientGroup)
           {
@@ -366,6 +289,62 @@ define(
             return deferred.promise;
           };
 
+
+          var Client = $resource(
+              config.app.host + config.app.namespace + '/client/:clientId',
+              {},
+              {
+                save: {
+                  method: 'POST'
+                },
+                edit: {
+                  method: 'PUT'
+                },
+                del:  {
+                  method: 'DELETE'
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.deleteClient = function (id)
+          {
+            var deferred = $q.defer();
+
+            Client.del(
+              {
+                clientId: id
+              },
+              function (result)
+              {
+                deferred.resolve(angular.fromJson(result));
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          ClientGroups.prototype.save = function (client)
+          {
+            var deferred = $q.defer();
+
+            Client.save(
+              client,
+              function (result)
+              {
+                Storage.add(result.id, angular.toJson(result));
+
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
           ClientGroups.prototype.updateClient = function (client)
           {
             var deferred = $q.defer();
@@ -385,23 +364,82 @@ define(
             return deferred.promise;
           };
 
-          ClientGroups.prototype.addClient = function (id, memberIds)
+
+          var Clients = $resource(
+              config.app.host + config.app.namespace + '/client/clients',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.queryAll = function ()
           {
             var deferred = $q.defer();
 
-            Clients_ByGroupId.save(
+            Clients.query(
+              function (clients)
               {
-                clientGroupId: id
-              },
-              memberIds,
-              function (result)
-              {
-                deferred.resolve(result);
+                Storage.add('clients', angular.toJson(clients));
+
+                deferred.resolve(clients);
               },
               function (error) { deferred.resolve({error: error}) }
             );
+
             return deferred.promise;
           };
+
+
+          var ClientReports = $resource(
+              config.app.host + config.app.namespace + '/clients/:clientId/reports',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.queryReports = function (cId)
+          {
+            var deferred = $q.defer();
+
+            ClientReports.query(
+              {
+                clientId: cId
+              },
+              function (reports)
+              {
+                Storage.add('reports_' + cId, angular.toJson(reports));
+
+                deferred.resolve(reports);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var ClientsRemove = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/removeClients/',
+              {},
+              {
+                remove: {
+                  method: 'PUT'
+                }
+              }
+          );
+
 
           ClientGroups.prototype.delClient = function (id, memberIds)
           {
@@ -422,29 +460,166 @@ define(
             return deferred.promise;
           };
 
-          var getClientFromLocal = function (clientId)
-          {
-            var ret;
-            var cGrps = angular.fromJson(Storage.get("ClientGroups"));
 
-            angular.forEach(
-              cGrps, function (cGrp)
+          var ClientGroupReports = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/reports',
+              {},
               {
-                var clients = angular.fromJson(Storage.get(cGrp.id));
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
+              }
+          );
 
-                angular.forEach(
-                  clients, function (client)
-                  {
-                    if (client.uuid == clientId)
-                    {
-                      ret = client;
-                    }
-                  });
-              });
 
-            return ret;
+          ClientGroups.prototype.queryGroupReports = function (cId)
+          {
+            var deferred = $q.defer();
+
+            ClientGroupReports.query(
+              {
+                clientGroupId: cId
+              },
+              function (reports)
+              {
+                deferred.resolve(reports);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
           };
 
+
+          var GroupTasks = $resource(
+              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId/tasks',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {
+                    from: '',
+                    to:   ''
+                  },
+                  isArray: true
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.getClientTasks = function (id, start, end)
+          {
+            var deferred = $q.defer();
+
+            GroupTasks.query(
+              {
+                clientGroupId: id,
+                from:          start,
+                to:            end
+              },
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var ClientReport = $resource(
+              config.app.host + config.app.namespace + '/clients/:clientId/reports',
+              {},
+              {
+                save:   {
+                  method: 'POST'
+                },
+                remove: {
+                  method: 'DELETE',
+                  params: {
+                    reportId: ''
+                  }
+                }
+              }
+          );
+
+          ClientGroups.prototype.removeReport = function (cId, rId)
+          {
+            var deferred = $q.defer();
+
+            ClientReport.remove(
+              {
+                clientId: cId,
+                reportId: rId
+              },
+              function (result)
+              {
+                deferred.resolve(angular.fromJson(result));
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          ClientGroups.prototype.saveReport = function (id, report)
+          {
+            var deferred = $q.defer();
+
+            ClientReport.save(
+              {
+                clientId: id
+              },
+              report,
+              function (result)
+              {
+                deferred.resolve(angular.fromJson(result));
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var ClientImg = $resource(
+              config.app.host + config.app.namespace + '/client/:clientId/photourl',
+              {},
+              {
+                getURL: {
+                  method:  'GET',
+                  isArray: false
+                }
+              }
+          );
+
+
+          ClientGroups.prototype.loadUploadURL = function (id)
+          {
+            var deferred = $q.defer();
+
+            ClientImg.getURL(
+              {
+                clientId: id
+              },
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          /**
+           * Some others!!
+           */
           ClientGroups.prototype.manage = function (changes)
           {
             var deferred = $q.defer();
@@ -480,6 +655,29 @@ define(
                 var data = {};
                 var refreshGroups = [];
 
+                var getClientFromLocal = function (clientId)
+                {
+                  var ret;
+                  var cGrps = angular.fromJson(Storage.get("ClientGroups"));
+
+                  angular.forEach(
+                    cGrps, function (cGrp)
+                    {
+                      var clients = angular.fromJson(Storage.get(cGrp.id));
+
+                      angular.forEach(
+                        clients, function (client)
+                        {
+                          if (client.uuid == clientId)
+                          {
+                            ret = client;
+                          }
+                        });
+                    });
+
+                  return ret;
+                };
+
                 angular.forEach(
                   changes, function (change, clientGroupId)
                   {
@@ -510,40 +708,6 @@ define(
             return deferred.promise;
           };
 
-          ClientGroups.prototype.queryAll = function ()
-          {
-            var deferred = $q.defer();
-
-            Clients.query(
-              function (clients)
-              {
-                Storage.add('clients', angular.toJson(clients));
-                deferred.resolve(clients);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.queryReports = function (cId)
-          {
-            var deferred = $q.defer();
-
-            ClientReports.query(
-              {
-                clientId: cId
-              },
-              function (reports)
-              {
-                Storage.add('reports_' + cId, angular.toJson(reports));
-                deferred.resolve(reports);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
 
           ClientGroups.prototype.loadImg = function (imgURL)
           {
@@ -569,9 +733,11 @@ define(
             return deferred.promise;
           };
 
+
           ClientGroups.prototype.queryLocal = function ()
           {
             var deferred = $q.defer();
+
             var clientGroups_local = angular.fromJson(Storage.get("ClientGroups"));
             var data = {};
 
@@ -579,145 +745,18 @@ define(
             data.clients = {};
 
             angular.forEach(
-              clientGroups_local, function (clientGroup)
+              clientGroups_local,
+              function (clientGroup)
               {
                 data.clients[clientGroup.id] = angular.fromJson(Storage.get(clientGroup.id));
-              });
+              }
+            );
 
             deferred.resolve(data);
 
             return deferred.promise;
           };
 
-          ClientGroups.prototype.queryGroupReports = function (cId)
-          {
-            var deferred = $q.defer();
-
-            ClientGroupReports.query(
-              {
-                clientGroupId: cId
-              },
-              function (reports)
-              {
-                deferred.resolve(reports);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.getClientTasks = function (id, start, end)
-          {
-            var deferred = $q.defer();
-
-            GroupTasks.query(
-              {
-                clientGroupId: id,
-                from:          start,
-                to:            end
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.deleteClientGroup = function (id)
-          {
-            var deferred = $q.defer();
-
-            ClientGroup.del(
-              {
-                clientGroupId: id
-              },
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.deleteClient = function (id)
-          {
-            var deferred = $q.defer();
-
-            Client.del(
-              {
-                clientId: id
-              },
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.saveReport = function (id, report)
-          {
-            var deferred = $q.defer();
-
-            ClientReport.save(
-              {
-                clientId: id
-              },
-              report,
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.removeReport = function (cId, rId)
-          {
-            var deferred = $q.defer();
-
-            ClientReport.remove(
-              {
-                clientId: cId,
-                reportId: rId
-              },
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          ClientGroups.prototype.loadUploadURL = function (id)
-          {
-            var deferred = $q.defer();
-
-            ClientImg.getURL(
-              {
-                clientId: id
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
 
           return new ClientGroups;
         }

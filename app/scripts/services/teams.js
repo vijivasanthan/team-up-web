@@ -14,267 +14,30 @@ define(
               config.app.host + config.app.namespace + '/team/',
               {},
               {
-                query:  {
+                query: {
                   method:  'GET',
                   params:  {},
                   isArray: true
                 },
-                get:    {
-                  method: 'GET',
-                  params: { id: '' }
-                },
-                save:   {
+                save:  {
                   method: 'POST',
                   params: { id: '' }
-                },
-                edit:   {
-                  method: 'PUT',
-                  params: { id: '' }
-                },
-                remove: {
-                  method: 'DELETE',
-                  params: { id: '' }
                 }
+                //                ,
+                //                get:    {
+                //                  method: 'GET',
+                //                  params: { id: '' }
+                //                },
+                //                edit:   {
+                //                  method: 'PUT',
+                //                  params: { id: '' }
+                //                },
+                //                remove: {
+                //                  method: 'DELETE',
+                //                  params: { id: '' }
+                //                }
               }
           );
-
-          var TeamStatus = $resource(
-              config.app.host + config.app.namespace + '/team/status/:teamId/',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                }
-              });
-
-          var Team = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/',
-              {},
-              {
-                edit: {
-                  method: 'PUT'
-                },
-                del:  {
-                  method: 'DELETE'
-                }
-              });
-
-          var Members = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/member',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                }
-              });
-
-          var RemoveMembers = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/removeMember',
-              {},
-              {
-                remove: {
-                  method: 'PUT'
-                }
-              });
-
-          var cGroup = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/clientGroups',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                },
-                add:   {
-                  method: 'POST'
-                }
-              });
-
-          var unAssignGroups = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/unAssignClientGroups',
-              {},
-              {
-                unssign: {
-                  method: 'PUT'
-                }
-              });
-
-          var updateGroups = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/updateClientGroups',
-              {},
-              {
-                update: {
-                  method: 'PUT'
-                }
-              });
-
-          var updateMembers = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/updateMembers',
-              {},
-              {
-                update: {
-                  method: 'PUT'
-                }
-              });
-
-          var Member = $resource(
-              config.app.host + config.app.namespace + '/team/member',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                }
-              });
-
-          var TeamTasks = $resource(
-              config.app.host + config.app.namespace + '/team/:teamId/tasks',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {
-                    from: '',
-                    to:   ''
-                  },
-                  isArray: true
-                }
-              });
-
-          var MembersNotInTeam = $resource(
-              config.app.host + config.app.namespace + '/team/members',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  isArray: true
-                }
-              });
-
-          var RemoveMember = $resource(
-              config.app.host + config.app.namespace + '/team/member/:memberId',
-              {},
-              {
-                remove: {
-                  method: 'DELETE'
-                }
-              });
-
-          Teams.prototype.addMember = function (id, memberIds)
-          {
-            var deferred = $q.defer();
-
-            Members.save(
-              {
-                teamId: id
-              },
-              memberIds,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.delMember = function (tId, memberIds)
-          {
-            var deferred = $q.defer();
-
-            RemoveMembers.remove(
-              {
-                teamId: tId
-              },
-              memberIds,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.addGroup = function (id, groupIds)
-          {
-            var deferred = $q.defer();
-
-            cGroup.add(
-              {
-                teamId: id
-              },
-              groupIds,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.delGroup = function (tId, groupIds)
-          {
-            var deferred = $q.defer();
-
-            unAssignGroups.unssign(
-              {
-                teamId: tId
-              },
-              groupIds,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.updateGroup = function (tId, changes)
-          {
-            var deferred = $q.defer();
-
-            updateGroups.update(
-              {
-                teamId: tId
-              },
-              changes,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.updateMemberRelation = function (tId, changes)
-          {
-            var deferred = $q.defer();
-
-            updateMembers.update(
-              {
-                teamId: tId
-              },
-              changes,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
 
           Teams.prototype.query = function (only, routePara)
           {
@@ -359,26 +122,37 @@ define(
             return deferred.promise;
           };
 
-          Teams.prototype.queryLocal = function ()
+          Teams.prototype.save = function (team)
           {
             var deferred = $q.defer();
 
-            var teams_local = angular.fromJson(Storage.get("Teams"));
-            var data = {};
-
-            data.teams = teams_local;
-            data.members = {};
-
-            angular.forEach(
-              teams_local, function (team)
+            Teams.save(
               {
-                data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
-              });
-
-            deferred.resolve(data);
+                id: $rootScope.app.resources.uuid
+              },
+              team,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
 
             return deferred.promise;
           };
+
+
+          var TeamStatus = $resource(
+              config.app.host + config.app.namespace + '/team/status/:teamId/',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
+              }
+          );
 
           Teams.prototype.get = function (id)
           {
@@ -406,15 +180,79 @@ define(
             return deferred.promise;
           };
 
-          Teams.prototype.save = function (team)
+
+          var Team = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/',
+              {},
+              {
+                edit: {
+                  method: 'PUT'
+                },
+                del:  {
+                  method: 'DELETE'
+                }
+              }
+          );
+
+          Teams.prototype.edit = function (team)
           {
             var deferred = $q.defer();
 
-            Teams.save(
+            if (team.uuid)
+            {
+              Team.edit(
+                {
+                  teamId: team.uuid
+                },
+                team,
+                function (result)
+                {
+                  deferred.resolve(result);
+                });
+            }
+
+            return deferred.promise;
+          };
+
+          Teams.prototype.deleteTeam = function (id)
+          {
+            var deferred = $q.defer();
+
+            Team.delete(
               {
-                id: $rootScope.app.resources.uuid
+                teamId: id
               },
-              team,
+              function (result)
+              {
+                deferred.resolve(result.result);
+              },
+              function (error) { deferred.resolve({error: error })}
+            );
+
+            return deferred.promise;
+          };
+
+
+          var Members = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/member',
+              {},
+              {
+                save: {
+                  method: 'POST'
+                }
+              }
+          );
+
+
+          Teams.prototype.addMember = function (id, memberIds)
+          {
+            var deferred = $q.defer();
+
+            Members.save(
+              {
+                teamId: id
+              },
+              memberIds,
               function (result)
               {
                 deferred.resolve(result);
@@ -424,6 +262,198 @@ define(
 
             return deferred.promise;
           };
+
+
+          var RemoveMembers = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/removeMember',
+              {},
+              {
+                remove: {
+                  method: 'PUT'
+                }
+              }
+          );
+
+          Teams.prototype.delMember = function (tId, memberIds)
+          {
+            var deferred = $q.defer();
+
+            RemoveMembers.remove(
+              {
+                teamId: tId
+              },
+              memberIds,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var cGroup = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/clientGroups',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                },
+                add:   {
+                  method: 'POST'
+                }
+              }
+          );
+
+          Teams.prototype.addGroup = function (id, groupIds)
+          {
+            var deferred = $q.defer();
+
+            cGroup.add(
+              {
+                teamId: id
+              },
+              groupIds,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+          Teams.prototype.getGroup = function (id)
+          {
+            var deferred = $q.defer();
+
+            cGroup.query(
+              {
+                teamId: id
+              },
+              function (result)
+              {
+                var returned = (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result;
+
+                Storage.add("teamGroup_" + id, angular.toJson(returned));
+
+                deferred.resolve(
+                  {
+                    id:   id,
+                    data: returned
+                  });
+              },
+              function (error) { deferred.resolve({error: error})}
+            );
+
+            return deferred.promise;
+          };
+
+
+          var unAssignGroups = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/unAssignClientGroups',
+              {},
+              {
+                unssign: {
+                  method: 'PUT'
+                }
+              }
+          );
+
+          Teams.prototype.delGroup = function (tId, groupIds)
+          {
+            var deferred = $q.defer();
+
+            unAssignGroups.unssign(
+              {
+                teamId: tId
+              },
+              groupIds,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var updateGroups = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/updateClientGroups',
+              {},
+              {
+                update: {
+                  method: 'PUT'
+                }
+              }
+          );
+
+          Teams.prototype.updateGroup = function (tId, changes)
+          {
+            var deferred = $q.defer();
+
+            updateGroups.update(
+              {
+                teamId: tId
+              },
+              changes,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var updateMembers = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/updateMembers',
+              {},
+              {
+                update: {
+                  method: 'PUT'
+                }
+              }
+          );
+
+          Teams.prototype.updateMemberRelation = function (tId, changes)
+          {
+            var deferred = $q.defer();
+
+            updateMembers.update(
+              {
+                teamId: tId
+              },
+              changes,
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var Member = $resource(
+              config.app.host + config.app.namespace + '/team/member',
+              {},
+              {
+                save: {
+                  method: 'POST'
+                }
+              }
+          );
 
           Teams.prototype.saveMember = function (member)
           {
@@ -442,22 +472,120 @@ define(
             return deferred.promise;
           };
 
-          Teams.prototype.edit = function (team)
+
+          var TeamTasks = $resource(
+              config.app.host + config.app.namespace + '/team/:teamId/tasks',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {
+                    from: '',
+                    to:   ''
+                  },
+                  isArray: true
+                }
+              }
+          );
+
+          Teams.prototype.getTeamTasks = function (id, start, end)
           {
             var deferred = $q.defer();
 
-            if (team.uuid)
-            {
-              Team.edit(
-                {
-                  teamId: team.uuid
-                },
-                team,
-                function (result)
-                {
-                  deferred.resolve(result);
-                });
-            }
+            TeamTasks.query(
+              {
+                teamId: id, from: start, to: end
+              },
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error}) }
+            );
+
+            return deferred.promise;
+          };
+
+
+          var MembersNotInTeam = $resource(
+              config.app.host + config.app.namespace + '/team/members',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  isArray: true
+                }
+              }
+          );
+
+          Teams.prototype.queryMembersNotInTeams = function ()
+          {
+            var deferred = $q.defer();
+
+            MembersNotInTeam.query(
+              {},
+              function (result)
+              {
+                Storage.add("members", angular.toJson(result));
+
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error })}
+            );
+
+            return deferred.promise;
+          };
+
+
+          var RemoveMember = $resource(
+              config.app.host + config.app.namespace + '/team/member/:memberId',
+              {},
+              {
+                remove: {
+                  method: 'DELETE'
+                }
+              }
+          );
+
+          Teams.prototype.deleteMember = function (id)
+          {
+            var deferred = $q.defer();
+
+            RemoveMember.remove(
+              {
+                memberId: id
+              },
+              function (result)
+              {
+                deferred.resolve(result);
+              },
+              function (error) { deferred.resolve({error: error })}
+            );
+
+            return deferred.promise;
+          };
+
+
+          /**
+           * Others !!
+           */
+          Teams.prototype.queryLocal = function ()
+          {
+            var deferred = $q.defer();
+
+            var teams_local = angular.fromJson(Storage.get("Teams"));
+            var data = {};
+
+            data.teams = teams_local;
+            data.members = {};
+
+            angular.forEach(
+              teams_local, function (team)
+              {
+                data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
+              });
+
+            deferred.resolve(data);
 
             return deferred.promise;
           };
@@ -555,31 +683,6 @@ define(
             return deferred.promise;
           };
 
-          Teams.prototype.getGroup = function (id)
-          {
-            var deferred = $q.defer();
-
-            cGroup.query(
-              {
-                teamId: id
-              },
-              function (result)
-              {
-                var returned = (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result;
-
-                Storage.add("teamGroup_" + id, angular.toJson(returned));
-
-                deferred.resolve(
-                  {
-                    id:   id,
-                    data: returned
-                  });
-              },
-              function (error) { deferred.resolve({error: error})}
-            );
-
-            return deferred.promise;
-          };
 
           Teams.prototype.manage = function (changes)
           {
@@ -694,78 +797,6 @@ define(
 
                 $q.all(queryCalls).then(function () { deferred.resolve(data) });
               });
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.getTeamTasks = function (id, start, end)
-          {
-            var deferred = $q.defer();
-
-            TeamTasks.query(
-              {
-                teamId: id, from: start, to: end
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.queryMembersNotInTeams = function ()
-          {
-            var deferred = $q.defer();
-
-            MembersNotInTeam.query(
-              {},
-              function (result)
-              {
-                Storage.add("members", angular.toJson(result));
-
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error })}
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.deleteTeam = function (id)
-          {
-            var deferred = $q.defer();
-
-            Team.delete(
-              {
-                teamId: id
-              },
-              function (result)
-              {
-                deferred.resolve(result.result);
-              },
-              function (error) { deferred.resolve({error: error })}
-            );
-
-            return deferred.promise;
-          };
-
-          Teams.prototype.deleteMember = function (id)
-          {
-            var deferred = $q.defer();
-
-            RemoveMember.remove(
-              {
-                memberId: id
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error })}
-            );
 
             return deferred.promise;
           };

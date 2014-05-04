@@ -14,6 +14,9 @@ define(
               config.app.host + config.app.namespace + '/:first/:second/:third/:fourth',
               {},
               {
+                /**
+                 * Account calls
+                 */
                 login:  {
                   method: 'GET',
                   params: {
@@ -37,6 +40,9 @@ define(
                   }
                 },
 
+                /**
+                 * Messaging
+                 */
                 chats:   {
                   method:  'GET',
                   params:  {
@@ -54,6 +60,9 @@ define(
                   }
                 },
 
+                /**
+                 * Team profiles
+                 */
                 profileGet:  {
                   method: 'GET',
                   params: {
@@ -69,7 +78,9 @@ define(
                   }
                 },
 
-
+                /**
+                 * Tasks
+                 */
                 taskQuery:  {
                   method:  'GET',
                   params:  {
@@ -96,7 +107,21 @@ define(
                   params: {
                     first: 'tasks'
                   }
+                },
+
+                /**
+                 * Client-Group
+                 */
+                clientGroupQuery: {
+                  method:  'GET',
+                  params:  {
+                    first:  'client',
+                    second: 'clientGroups'
+                  },
+                  isArray: true
                 }
+
+
 
               }
           );
