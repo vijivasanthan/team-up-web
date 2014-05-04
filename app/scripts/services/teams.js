@@ -142,6 +142,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var TeamStatus = $resource(
               config.app.host + config.app.namespace + '/team/status/:teamId/',
               {},
@@ -179,6 +184,11 @@ define(
 
             return deferred.promise;
           };
+
+
+          /**
+           * **************************************************************************************
+           */
 
 
           var Team = $resource(
@@ -233,6 +243,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var Members = $resource(
               config.app.host + config.app.namespace + '/team/:teamId/member',
               {},
@@ -264,6 +279,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var RemoveMembers = $resource(
               config.app.host + config.app.namespace + '/team/:teamId/removeMember',
               {},
@@ -292,6 +312,11 @@ define(
 
             return deferred.promise;
           };
+
+
+          /**
+           * **************************************************************************************
+           */
 
 
           var cGroup = $resource(
@@ -355,6 +380,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var unAssignGroups = $resource(
               config.app.host + config.app.namespace + '/team/:teamId/unAssignClientGroups',
               {},
@@ -383,6 +413,11 @@ define(
 
             return deferred.promise;
           };
+
+
+          /**
+           * **************************************************************************************
+           */
 
 
           var updateGroups = $resource(
@@ -415,6 +450,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var updateMembers = $resource(
               config.app.host + config.app.namespace + '/team/:teamId/updateMembers',
               {},
@@ -445,6 +485,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var Member = $resource(
               config.app.host + config.app.namespace + '/team/member',
               {},
@@ -471,6 +516,11 @@ define(
 
             return deferred.promise;
           };
+
+
+          /**
+           * **************************************************************************************
+           */
 
 
           var TeamTasks = $resource(
@@ -507,6 +557,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var MembersNotInTeam = $resource(
               config.app.host + config.app.namespace + '/team/members',
               {},
@@ -537,6 +592,11 @@ define(
           };
 
 
+          /**
+           * **************************************************************************************
+           */
+
+
           var RemoveMember = $resource(
               config.app.host + config.app.namespace + '/team/member/:memberId',
               {},
@@ -564,6 +624,11 @@ define(
 
             return deferred.promise;
           };
+
+
+          /**
+           * **************************************************************************************
+           */
 
 
           /**

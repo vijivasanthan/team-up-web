@@ -7,9 +7,9 @@ define(
     controllers.controller(
       'clientCtrl', [
         '$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Storage', 'Dater', '$filter',
-        '$modal', 'Teams', 'TeamUp',
+        '$modal', 'TeamUp',
         function (
-          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage, Dater, $filter, $modal, Teams, TeamUp
+          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage, Dater, $filter, $modal, TeamUp
           )
         {
           $rootScope.fixStyles();
@@ -46,7 +46,7 @@ define(
           $scope.clients = data.clients;
           $scope.clientGroups = data.clientGroups;
 
-          // process month dropdown list
+          // process month drop-down list
           var Months = Dater.getMonthTimeStamps();
 
           $scope.Months = [];
@@ -92,7 +92,9 @@ define(
           else if (! params.uuid)
           {
             uuid = data.clientGroups[0].id;
+
             view = $location.hash();
+
             $location.search(
               {
                 uuid: data.clientGroups[0].id
@@ -101,10 +103,12 @@ define(
           else
           {
             uuid = params.uuid;
+
             if (typeof uuid == 'undefined')
             {
               uuid = $scope.client.clientGroupUuid;
             }
+
             view = $location.hash();
           }
 
@@ -151,14 +155,16 @@ define(
               function (reports)
               {
                 $rootScope.statusBar.off();
+
                 $scope.reports = $scope.processReports(reports);
 
-                $scope.$watch(
-                  $scope.reports, function (rs)
-                  {
-                    console.log("watcher found ... ", rs);
-                    $scope.loadMembersImg();
-                  });
+                //                $scope.$watch(
+                //                  $scope.reports, function (rs)
+                //                  {
+                //                    console.log("watcher found ... ", rs);
+                //                    $scope.loadMembersImg();
+                //                  }
+                //                );
 
               }, function (error) { console.log(error) });
           };
@@ -171,6 +177,7 @@ define(
               function (reports)
               {
                 $rootScope.statusBar.off();
+
                 $scope.groupReports = $scope.processReports(reports);
 
                 if ($scope.currentCLient != 0)
@@ -178,71 +185,79 @@ define(
                   $scope.requestReportsByFilter();
                 }
 
-                $scope.$watch(
-                  $scope.groupReports, function (rs)
-                  {
-                    console.log("watcher found ... ", rs);
-                    $scope.loadMembersImg();
-                  });
+                //                $scope.$watch(
+                //                  $scope.groupReports, function (rs)
+                //                  {
+                //                    console.log("watcher found ... ", rs);
+                //                    $scope.loadMembersImg();
+                //                  }
+                //                );
+
               }, function (error) { console.log(error) });
 
           };
 
-          $scope.loadMembersImg = function ()
-          {
-            // load the team members image
+          /*
+           $scope.___loadMembersImg = function ()
+           {
+           // load the team members image
 
-            var memberIds = [];
+           var memberIds = [];
 
-            angular.forEach(
-              $scope.groupReports, function (rept)
-              {
-                if (memberIds.indexOf(rept.author.uuid) == - 1)
-                {
-                  memberIds.push(rept.author.uuid);
-                }
-              });
+           angular.forEach(
+           $scope.groupReports, function (rept)
+           {
+           if (memberIds.indexOf(rept.author.uuid) == - 1)
+           {
+           memberIds.push(rept.author.uuid);
+           }
+           }
+           );
 
-            angular.forEach(
-              $scope.reports, function (rept)
-              {
-                if (memberIds.indexOf(rept.author.uuid) == - 1)
-                {
-                  memberIds.push(rept.author.uuid);
-                }
-              });
+           angular.forEach(
+           $scope.reports, function (rept)
+           {
+           if (memberIds.indexOf(rept.author.uuid) == - 1)
+           {
+           memberIds.push(rept.author.uuid);
+           }
+           }
+           );
 
-            angular.forEach(
-              memberIds, function (memberId)
-              {
-                var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photo?width=40&height=40";
+           angular.forEach(
+           memberIds, function (memberId)
+           {
+           var imgURL = $scope.imgHost + $scope.ns +
+           "/team/member/" + memberId + "/photo?width=40&height=40";
 
-                // var imgId = memberId.replace(".", "").replace("@", "");
-                // $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+           // var imgId = memberId.replace(".", "").replace("@", "");
+           // $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
-                Teams.loadImg(imgURL).then(
-                  function (result)
-                  {
-                    // console.log("loading pic " + imgURL);
+           Teams.loadImg(imgURL).then(
+           function (result)
+           {
+           // console.log("loading pic " + imgURL);
 
-                    var imgId = memberId.replace(".", "").replace("@", "");
+           var imgId = memberId.replace(".", "").replace("@", "");
 
-                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                    {
-                      console.log("no pics ", result);
-                    }
-                    else
-                    {
-                      if (result.path)
-                      {
-                        var avatarURL = $scope.imgHost + result.path;
-                        $('.tab-content #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
-                      }
-                    }
+           if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+           {
+           console.log("no pics ", result);
+           }
+           else
+           {
+           if (result.path)
+           {
+           var avatarURL = $scope.imgHost + result.path;
+           $('.tab-content #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+           }
+           }
 
-                  }, function (error) { console.log("error when load pic " + error) });
-              });
-          };
+           }, function (error) { console.log("error when load pic " + error) });
+           }
+           );
+           };
+           */
 
           setView(view);
 
@@ -257,7 +272,8 @@ define(
                 {
                   $scope.clientGroup = cGroup;
                 }
-              });
+              }
+            );
 
             $scope.clients = data.clients[id];
 
@@ -273,69 +289,69 @@ define(
               loadGroupReports();
             }
 
-            // load image
-            if ($scope.views.client)
-            {
-              angular.forEach(
-                $scope.clients, function (client)
-                {
-                  var imgURL = $scope.imgHost + $scope.ns + "/client/" + client.uuid + "/photo";
+            //            // load image
+            //            if ($scope.views.client)
+            //            {
+            //              angular.forEach(
+            //                $scope.clients, function (client)
+            //                {
+            //                  var imgURL = $scope.imgHost + $scope.ns + "/client/" + client.uuid + "/photo";
+            //
+            //                  Clients.loadImg(imgURL).then(
+            //                    function (result)
+            //                    {
+            //                      // console.log("loading pic " + imgURL);
+            //
+            //                      var imgId = client.uuid.replace(".", "").replace("@", "");
+            //
+            //                      if (result.status && (
+            //                        result.status == 404 || result.status == 403 || result.status == 500))
+            //                      {
+            //                        console.log("loading pic ", result);
+            //                      }
+            //                      else
+            //                      {
+            //                        //imgURL = imgURL.replace("\\:",":");
+            //                        if (result.path)
+            //                        {
+            //                          var avatarURL = $scope.imgHost + result.path;
+            //                          $('#img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+            //                        }
+            //                      }
+            //
+            //                    }, function (error) { console.log("error when load pic " + error) });
+            //                });
+            //            }
 
-                  Clients.loadImg(imgURL).then(
-                    function (result)
-                    {
-                      // console.log("loading pic " + imgURL);
-
-                      var imgId = client.uuid.replace(".", "").replace("@", "");
-
-                      if (result.status && (
-                        result.status == 404 || result.status == 403 || result.status == 500))
-                      {
-                        console.log("loading pic ", result);
-                      }
-                      else
-                      {
-                        //imgURL = imgURL.replace("\\:",":");
-                        if (result.path)
-                        {
-                          var avatarURL = $scope.imgHost + result.path;
-                          $('#img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
-                        }
-                      }
-
-                    }, function (error) { console.log("error when load pic " + error) });
-                });
-            }
-
-            // load the image in the client profile page
-            if ($scope.views.viewClient)
-            {
-              var imgURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo";
-
-              Clients.loadImg(imgURL).then(
-                function (result)
-                {
-                  // console.log("loading pic " + imgURL);
-                  var imgId = $scope.client.uuid.replace(".", "").replace("@", "");
-
-                  if (result.status && (
-                    result.status == 404 || result.status == 403 || result.status == 500))
-                  {
-                    console.log("loading pic ", result);
-                  }
-                  else
-                  {
-                    // imgURL = imgURL.replace("\\:",":");
-                    if (result.path)
-                    {
-                      var avatarURL = $scope.imgHost + result.path;
-
-                      $('#viewClientTab #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
-                    }
-                  }
-
-                }, function (error) { console.log("error when load pic " + error) });
-            }
+            //            // load the image in the client profile page
+            //            if ($scope.views.viewClient)
+            //            {
+            //              var imgURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo";
+            //
+            //              Clients.loadImg(imgURL).then(
+            //                function (result)
+            //                {
+            //                  // console.log("loading pic " + imgURL);
+            //                  var imgId = $scope.client.uuid.replace(".", "").replace("@", "");
+            //
+            //                  if (result.status && (
+            //                    result.status == 404 || result.status == 403 || result.status == 500))
+            //                  {
+            //                    console.log("loading pic ", result);
+            //                  }
+            //                  else
+            //                  {
+            //                    // imgURL = imgURL.replace("\\:",":");
+            //                    if (result.path)
+            //                    {
+            //                      var avatarURL = $scope.imgHost + result.path;
+            //
+            //                      $('#viewClientTab #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+            //                    }
+            //                  }
+            //
+            //                }, function (error) { console.log("error when load pic " + error) });
+            //            }
           }
 
           $scope.requestClientGroup = function (current, switched)
@@ -381,7 +397,8 @@ define(
                 };
 
                 rpts.push(newReport);
-              });
+              }
+            );
 
             return rpts;
           };
@@ -434,11 +451,13 @@ define(
           {
             if ($.trim(cGroup.name) == '')
             {
-              $rootScope.notifier.error($rootScope.ui.teamup.cGroupNamePrompt1);
+              // FIXME: Message does not exist!
+              // $rootScope.notifier.error($rootScope.ui.teamup.cGroupNamePrompt1);
               return;
             }
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
+            // FIXME: Message does not exist!
+            // $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
 
             Clients.edit(cGroup).then(
               function (result)
@@ -471,7 +490,8 @@ define(
               {
                 if (queryRs.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.queryCGroupError);
+                  // FIXME: Message does not exist!
+                  // $rootScope.notifier.error($rootScope.ui.teamup.queryCGroupError);
                   console.warn('error ->', queryRs);
                 }
                 else
@@ -517,19 +537,23 @@ define(
               return;
             }
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
+            // FIXME: Message does not exist!
+            // $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
 
             Clients.saveGroup(cGroup).then(
               function (result)
               {
                 if (result.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.cGroupSubmitError);
+                  // FIXME: Message does not exist!
+                  // $rootScope.notifier.error($rootScope.ui.teamup.cGroupSubmitError);
                 }
                 else
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-                  var routePara = {'uuid': result.id};
+
+                  var routePara = { 'uuid': result.id };
+
                   reloadGroup(routePara);
                 }
               });
@@ -560,9 +584,9 @@ define(
             };
 
             contactPerson.firstName = $scope.contactForm.firstName;
-            contactPerson.lastName = $scope.contactForm.lastName;
-            contactPerson.function = $scope.contactForm.function;
-            contactPerson.phone = $scope.contactForm.phone;
+            contactPerson.lastName  = $scope.contactForm.lastName;
+            contactPerson.function  = $scope.contactForm.function;
+            contactPerson.phone     = $scope.contactForm.phone;
 
             if (typeof $scope.contacts == 'undefined')
             {
@@ -612,7 +636,7 @@ define(
                 }
                 else
                 {
-                  var routePara = {'uuid': result.clientGroupUuid};
+                  var routePara = { 'uuid': result.clientGroupUuid };
                   reloadGroup(routePara);
                 }
               });
@@ -648,7 +672,7 @@ define(
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                  var routePara = {'uuid': result.clientGroupUuid};
+                  var routePara = { 'uuid': result.clientGroupUuid };
 
                   reloadGroup(routePara);
                 }
@@ -657,9 +681,6 @@ define(
 
           $scope.saveContacts = function (contacts)
           {
-            // console.log("client id ", $scope.client.uuid);
-            // console.log("contacts ", contacts);
-
             var client = $scope.client;
 
             try
@@ -836,7 +857,8 @@ define(
 
               });
 
-            $scope.loadMembersImg();
+            // Turned off temporarily
+            // $scope.loadMembersImg();
           };
 
           var ModalInstanceCtrl = function ($scope, $modalInstance, report)
@@ -884,10 +906,7 @@ define(
                 templateUrl: './views/reportTemplate.html',
                 controller:  ModalInstanceCtrl,
                 resolve:     {
-                  report: function ()
-                  {
-                    return $scope.report;
-                  }
+                  report: function () { return $scope.report }
                 }
               });
           };
@@ -922,12 +941,8 @@ define(
               });
 
             modalInstance.result.then(
-              function ()
-              {
-                // console.log('Modal close at: ' + new Date());
-
-                loadGroupReports();
-              }, function () { console.log('Modal dismissed at: ' + new Date()) });
+              function () { loadGroupReports() },
+              function () { console.log('Modal dismissed at: ' + new Date()) });
           };
 
           $scope.editReport = function (report)
@@ -955,8 +970,6 @@ define(
               Clients.removeReport(report.clientUuid, report.uuid).then(
                 function (rs)
                 {
-                  // console.log(rs);
-
                   if (rs.result == "ok")
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -974,7 +987,9 @@ define(
           $scope.editImg = function ()
           {
             $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-            $scope.uploadURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo";
+
+            $scope.uploadURL = $scope.imgHost + $scope.ns +
+                               "/client/" + $scope.client.uuid + "/photo";
 
             Clients.loadImg($scope.uploadURL).then(
               function (result)
@@ -988,7 +1003,9 @@ define(
                   $scope.avatarURL = imgHost + result.path;
                 }
 
-                $scope.uploadURL = imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo";
+                $scope.uploadURL = imgHost + $scope.ns +
+                                   "/client/" + $scope.client.uuid + "/photo";
+
                 $scope.setViewTo('editImg');
               }
             );

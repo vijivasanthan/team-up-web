@@ -12,6 +12,19 @@ define(
         {
           var ClientsService = $resource();
 
+          var ClientGroups = $resource(
+              config.app.host + config.app.namespace + '/client/clientGroups/',
+              {},
+              {
+                query: {
+                  method:  'GET',
+                  params:  {},
+                  isArray: true
+                }
+              }
+          );
+
+
           ClientsService.prototype.query = function (only, routePara)
           {
             var deferred = $q.defer();
@@ -21,45 +34,22 @@ define(
               null,
               null,
               {
-                success: function (clientGroups)
+                success: function (cGroups)
                 {
-                  Storage.add('ClientGroups', angular.toJson(clientGroups));
+                  Storage.add('ClientGroups', angular.toJson(cGroups));
 
                   if (! only)
                   {
                     var calls = [];
 
                     angular.forEach(
-                      clientGroups,
-                      function (clientGroup)
+                      cGroups, function (clientGroup)
                       {
                         if (! routePara.uuid || (routePara.uuid == clientGroup.id))
                         {
                           calls.push(
-                            TeamUp._(
-                              'clientsByGroupID',
-                              { third: clientGroup.id },
-                              null,
-                              {
-                                success: function (result)
-                                {
-                                  Storage.add(
-                                    clientGroup.id, angular.toJson(
-                                      (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
-                                      [] :
-                                      result
-                                    )
-                                  );
-
-                                  // TODO: Do something about return object!
-                                  //                                  deferred.resolve(
-                                  //                                    {
-                                  //                                      id:   id,
-                                  //                                      data: returned
-                                  //                                    });
-                                }
-                              }
-                            )
+                            // TeamUp
+                            ClientsService.prototype.get(clientGroup.id)
                           );
                         }
                       });
@@ -71,33 +61,36 @@ define(
 
                         data.clients = {};
 
-                        data.clientGroups = clientGroups;
-
                         angular.forEach(
-                          clientGroups,
-                          function (clientGroup)
+                          cGroups, function (cGroup)
                           {
-                            data.clients[clientGroup.id] = [];
+                            data.clientGroups = cGroups;
+
+                            data.clients[cGroup.id] = [];
 
                             angular.forEach(
                               results, function (result)
                               {
                                 if (routePara.uuid)
                                 {
-                                  data.clients[clientGroup.id] = (result.id == clientGroup.id && routePara.uuid == clientGroup.id) ?
-                                                                 result.data :
-                                                                 angular.fromJson(Storage.get(clientGroup.id));
+                                  if (result.id == cGroup.id && routePara.uuid == cGroup.id)
+                                  {
+                                    data.clients[cGroup.id] = result.data;
+                                  }
+                                  else
+                                  {
+                                    data.clients[cGroup.id] = angular.fromJson(Storage.get(cGroup.id));
+                                  }
                                 }
                                 else
                                 {
-                                  if (result.id == clientGroup.id)
+                                  if (result.id == cGroup.id)
                                   {
-                                    data.clients[clientGroup.id] = result.data;
+                                    data.clients[cGroup.id] = result.data;
                                   }
                                 }
                               });
-                          }
-                        );
+                          });
 
                         if (typeof data.clientGroups == 'undefined')
                         {

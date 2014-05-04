@@ -112,15 +112,23 @@ define(
                 /**
                  * Client-Group
                  */
-                clientGroupQuery: {
+                clientGroupsQuery: {
                   method:  'GET',
                   params:  {
                     first:  'client',
                     second: 'clientGroups'
                   },
                   isArray: true
+                },
+                clientsByGroupID:  {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first:  'client',
+                    second: 'clientGroup',
+                    fourth: 'clients'
+                  }
                 }
-
 
 
               }
@@ -148,6 +156,7 @@ define(
                     callback.success.call(this, result);
                   }
 
+                  // TODO: Maybe a custom object wanted to be returned?
                   deferred.resolve(result);
                 },
                 function (result)

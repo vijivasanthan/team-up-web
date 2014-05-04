@@ -65,15 +65,15 @@ define(
               resolve:        {
                 data: [
                   'Clients', '$route',
-                  function (ClientGroups, $route)
+                  function (Clients, $route)
                   {
                     if ($route.current.params.local && $route.current.params.local == "true")
                     {
-                      return ClientGroups.queryLocal();
+                      return Clients.queryLocal();
                     }
                     else
                     {
-                      return ClientGroups.query(false, $route.current.params);
+                      return Clients.query(false, $route.current.params);
                     }
                   }
                 ]
