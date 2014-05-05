@@ -192,8 +192,6 @@ var profile = {
     }
   ],
 
-  // divisions: [],
-
   roles: [
     {
       id:    "1",
@@ -253,9 +251,5 @@ var profile = {
     busy:      "memberStateBusy",
     offline:   "memberStateOffline",
     none:      "memberStateNone"
-  },
-
-  mobileApp: {
-    status: true
   }
 };
