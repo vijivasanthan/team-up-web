@@ -255,15 +255,15 @@ define(
                   uuid: $scope.currentTeam
                 }).hash('teams');
 
-              Teams.getTeamTasks($scope.currentTeam, startTime, endTime)
-                .then(
-                function (tasks)
+              TeamUp._(
+                'teamTaskQuery',
                 {
-                  // console.log('get team tasks ->');
-
-                  // process the tasks data
-                  storeTask(tasks, startTime, endTime);
-                },
+                  second: $scope.currentTeam,
+                  from:   startTime,
+                  to:     endTime
+                }
+              ).then(
+                function (tasks) { storeTask(tasks, startTime, endTime) },
                 function (error)
                 {
                   console.log("error happend when getting the tasks for the team members " + error);

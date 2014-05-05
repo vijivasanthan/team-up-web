@@ -204,11 +204,10 @@ define(
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
           {
-            Teams.queryMembersNotInTeams()
-              .then(
-              function (result) {
-                // initAvatarUrls(result, "team")
-              }
+            TeamUp._(
+              'teamMemberFree'
+            ).then(
+              function (result) { Storage.add("members", angular.toJson(result)) }
             );
           }
 

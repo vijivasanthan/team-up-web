@@ -44,7 +44,8 @@ define(
                                 success: function (result)
                                 {
                                   Storage.add(
-                                    clientGroup.id, angular.toJson(
+                                    clientGroup.id,
+                                    angular.toJson(
                                       (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
                                       [] :
                                       result
