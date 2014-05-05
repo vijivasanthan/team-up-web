@@ -6,9 +6,9 @@ define(
 
     controllers.controller(
       'teamCtrl', [
-        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'MD5', 'Dater',
+        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'Dater',
         'TeamUp',
-        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Storage, MD5, Dater, TeamUp)
+        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Storage, Dater, TeamUp)
         {
           $rootScope.fixStyles();
 
@@ -361,7 +361,7 @@ define(
               {
                 uuid:         member.username,
                 userName:     member.username,
-                passwordHash: MD5(member.password),
+                passwordHash: MD5.parse(member.password),
                 firstName:    member.firstName,
                 lastName:     member.lastName,
                 phone:        member.phone,

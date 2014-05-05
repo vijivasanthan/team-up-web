@@ -7,9 +7,8 @@ define(
     controllers.controller(
       'login',
       [
-        '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Storage', '$routeParams',
-        'MD5', 'TeamUp',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, MD5, TeamUp)
+        '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Storage', '$routeParams', 'TeamUp',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, TeamUp)
         {
           var self = this;
 
@@ -101,7 +100,7 @@ define(
                   remember: $scope.logindata.remember
                 }));
 
-            self.auth($scope.logindata.username, MD5($scope.logindata.password));
+            self.auth($scope.logindata.username, MD5.parse($scope.logindata.password));
           };
 
           self.auth = function (uuid, pass)
