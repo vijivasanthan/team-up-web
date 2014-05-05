@@ -704,10 +704,15 @@ define(
                 if (change.r.length > 0)
                 {
                   calls.push(
+
+
                     ClientsService.prototype.delClient(
                       clientGroupId, {
                         ids: change.r
-                      }));
+                      })
+
+
+                  );
                 }
               });
 

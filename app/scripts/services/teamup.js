@@ -125,7 +125,8 @@ define(
                  * Clients-By-Group-ID
                  */
                 clientsByGroupIDQuery: {
-                  method:  'GET',
+                  method: 'GET',
+
                   isArray: true,
                   params:  {
                     first:  'client',
@@ -196,6 +197,77 @@ define(
                     first:  'client',
                     second: 'clients'
                   }
+                },
+
+                /**
+                 * Client-Reports
+                 */
+                clientReportsQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'clients',
+                    third: 'reports'
+                  }
+                },
+
+                /**
+                 * Client-Group-Client
+                 */
+                clientGroupClientDelete: {
+                  method: 'PUT',
+                  params: {
+                    first:  'client',
+                    second: 'clientGroup',
+                    fourth: 'removeClients'
+                  }
+                },
+
+                /**
+                 * Client-Group-Reports
+                 */
+                clientGroupReportsQuery: {
+                  query: {
+                    method:  'GET',
+                    isArray: true,
+                    params:  {
+                      first: 'clientGroup',
+                      third: 'reports'
+                    }
+                  }
+                },
+
+                /**
+                 * Client-Group-Tasks
+                 */
+                clientGroupTasksQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'clientGroup',
+                    third: 'tasks',
+                    from:  '',
+                    to:    ''
+                  }
+                },
+
+                /**
+                 * Client-Report
+                 */
+                clientReportAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'clients',
+                    third: 'reports'
+                  }
+                },
+                clientReportDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first:    'clients',
+                    third:    'reports',
+                    reportId: ''
+                  }
                 }
 
               }
@@ -203,9 +275,9 @@ define(
 
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
+            // TODO: Turn on logging later on!
+            // Log.record(arguments);
             console.log('call: proxy ->', arguments);
-
-            Log.record(arguments);
 
             var deferred = $q.defer();
 
@@ -231,8 +303,7 @@ define(
                 }
               );
             }
-            catch (err)
-            { Log.error(err) }
+            catch (err) { Log.error(err) }
 
             return deferred.promise;
           };

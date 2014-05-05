@@ -228,28 +228,28 @@ define(
           $scope.editProfile = function () { setView('edit') };
 
 
-          $scope.editImg = function ()
-          {
-            $scope.uploadURL = $scope.imgHost + $scope.ns +
-                               "/team/member/" + $route.current.params.userId + "/photourl";
-
-            Teams.loadImg($scope.uploadURL)
-              .then(
-              function (result)
-              {
-                var imgHost = $scope.imgHost.replace("\\", "");
-
-                if (result.path)
-                {
-                  $scope.avatarURL = imgHost + result.path;
-                }
-
-                $scope.uploadURL = imgHost + $scope.ns +
-                                   "/team/member/" + $route.current.params.userId + "/photo";
-
-                $scope.setViewTo('editImg');
-              });
-          };
+//          $scope.editImg = function ()
+//          {
+//            $scope.uploadURL = $scope.imgHost + $scope.ns +
+//                               "/team/member/" + $route.current.params.userId + "/photourl";
+//
+//            Teams.loadImg($scope.uploadURL)
+//              .then(
+//              function (result)
+//              {
+//                var imgHost = $scope.imgHost.replace("\\", "");
+//
+//                if (result.path)
+//                {
+//                  $scope.avatarURL = imgHost + result.path;
+//                }
+//
+//                $scope.uploadURL = imgHost + $scope.ns +
+//                                   "/team/member/" + $route.current.params.userId + "/photo";
+//
+//                $scope.setViewTo('editImg');
+//              });
+//          };
 
 
           $scope.deleteProfile = function ()

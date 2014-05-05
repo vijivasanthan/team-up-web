@@ -151,7 +151,12 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            Clients.queryReports($scope.client.uuid).then(
+            TeamUp._(
+              'clientReportsQuery',
+              { second: $scope.client.uuid },
+              null,
+              { success: function (reports) { Storage.add('reports_' + $scope.client.uuid, angular.toJson(reports)) }}
+            ).then(
               function (reports)
               {
                 $rootScope.statusBar.off();
@@ -173,7 +178,10 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            Clients.queryGroupReports($scope.clientGroup.id).then(
+            TeamUp._(
+              'clientGroupReportsQuery',
+              { second: $scope.clientGroup.id }
+            ).then(
               function (reports)
               {
                 $rootScope.statusBar.off();
@@ -911,17 +919,16 @@ define(
 
             $scope.saveReport = function (report)
             {
-              // console.log("save report");
-              // console.log(Clients);
-
-              var paraObj = {
-                uuid:         report.uuid,
-                title:        report.title,
-                body:         report.body,
-                creationTime: report.creationTime
-              };
-
-              Clients.saveReport(report.clientUuid, paraObj).then(
+              TeamUp._(
+                'clientReportAdd',
+                { second: 'report.clientUuid' },
+                {
+                  uuid:         report.uuid,
+                  title:        report.title,
+                  body:         report.body,
+                  creationTime: report.creationTime
+                }
+              ).then(
                 function ()
                 {
                   $modalInstance.close(report);
@@ -1003,7 +1010,13 @@ define(
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.loading);
 
-              Clients.removeReport(report.clientUuid, report.uuid).then(
+              TeamUp._(
+                'clientReportDelete',
+                {
+                  second:   report.clientUuid,
+                  reportId: report.uuid
+                }
+              ).then(
                 function (rs)
                 {
                   if (rs.result == "ok")
@@ -1020,32 +1033,32 @@ define(
             }
           };
 
-          $scope.editImg = function ()
-          {
-            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-
-            $scope.uploadURL = $scope.imgHost + $scope.ns +
-                               "/client/" + $scope.client.uuid + "/photo";
-
-            Clients.loadImg($scope.uploadURL).then(
-              function (result)
-              {
-                $rootScope.statusBar.off();
-
-                var imgHost = $scope.imgHost.replace("\\:", ":");
-
-                if (result.path)
-                {
-                  $scope.avatarURL = imgHost + result.path;
-                }
-
-                $scope.uploadURL = imgHost + $scope.ns +
-                                   "/client/" + $scope.client.uuid + "/photo";
-
-                $scope.setViewTo('editImg');
-              }
-            );
-          }
+//          $scope.editImg = function ()
+//          {
+//            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
+//
+//            $scope.uploadURL = $scope.imgHost + $scope.ns +
+//                               "/client/" + $scope.client.uuid + "/photo";
+//
+//            Clients.loadImg($scope.uploadURL).then(
+//              function (result)
+//              {
+//                $rootScope.statusBar.off();
+//
+//                var imgHost = $scope.imgHost.replace("\\:", ":");
+//
+//                if (result.path)
+//                {
+//                  $scope.avatarURL = imgHost + result.path;
+//                }
+//
+//                $scope.uploadURL = imgHost + $scope.ns +
+//                                   "/client/" + $scope.client.uuid + "/photo";
+//
+//                $scope.setViewTo('editImg');
+//              }
+//            );
+//          }
 
         }
       ]

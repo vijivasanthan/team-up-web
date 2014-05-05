@@ -655,32 +655,32 @@ define(
             return deferred.promise;
           };
 
-          Teams.prototype.loadImg = function (imgURL)
-          {
-            var LoadImg = $resource(
-              imgURL,
-              {
-                width:  40,
-                height: 40
-              },
-              {
-                get: {
-                  method: 'GET'
-                }
-              }
-            );
-
-            var deferred = $q.defer();
-
-            LoadImg.get(
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve(error) });
-
-            return deferred.promise;
-          };
+//          Teams.prototype.loadImg = function (imgURL)
+//          {
+//            var LoadImg = $resource(
+//              imgURL,
+//              {
+//                width:  40,
+//                height: 40
+//              },
+//              {
+//                get: {
+//                  method: 'GET'
+//                }
+//              }
+//            );
+//
+//            var deferred = $q.defer();
+//
+//            LoadImg.get(
+//              function (result)
+//              {
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve(error) });
+//
+//            return deferred.promise;
+//          };
 
           Teams.prototype.loadTeamCallinNumber = function (teamUuid)
           {

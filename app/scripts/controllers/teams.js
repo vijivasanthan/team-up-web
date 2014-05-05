@@ -573,27 +573,30 @@ define(
            $('.navbar-inner #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
            */
 
-          Teams.loadImg(imgURL).then(
-            function (result)
-            {
-              // console.log("loading pic " + imgURL);
+//          Teams.loadImg(imgURL).then(
+//            function (result)
+//            {
+//              // console.log("loading pic " + imgURL);
+//
+//              var mId = $rootScope.app.resources.uuid;
+//              var imgId = mId.replace(".", "").replace("@", "");
+//
+//              if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+//              {
+//                console.log("no pics ", result);
+//              }
+//              else
+//              {
+//                if (result.path)
+//                {
+//                  var realImgURL = profile.host().replace("\\:", ":") + result.path;
+//                  $('.navbar-inner #img_' + imgId).css('background-image', 'url("' + realImgURL + '")');
+//                }
+//              }
+//            }, function (error) { console.log("error when load pic " + error) }
+//          );
 
-              var mId = $rootScope.app.resources.uuid;
-              var imgId = mId.replace(".", "").replace("@", "");
 
-              if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-              {
-                console.log("no pics ", result);
-              }
-              else
-              {
-                if (result.path)
-                {
-                  var realImgURL = profile.host().replace("\\:", ":") + result.path;
-                  $('.navbar-inner #img_' + imgId).css('background-image', 'url("' + realImgURL + '")');
-                }
-              }
-            }, function (error) { console.log("error when load pic " + error) });
         }
       ]);
   }
