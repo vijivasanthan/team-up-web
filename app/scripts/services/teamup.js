@@ -120,7 +120,11 @@ define(
                   },
                   isArray: true
                 },
-                clientsByGroupID:  {
+
+                /**
+                 * Clients-By-Group-ID
+                 */
+                clientsByGroupIDQuery: {
                   method:  'GET',
                   isArray: true,
                   params:  {
@@ -128,8 +132,71 @@ define(
                     second: 'clientGroup',
                     fourth: 'clients'
                   }
-                }
+                },
+                clientsByGroupIDAdd:   {
+                  method: 'POST',
+                  params: {
+                    first:  'client',
+                    second: 'clientGroup',
+                    fourth: 'clients'
+                  }
+                },
 
+                /**
+                 * Client-Group
+                 */
+                clientGroupAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+                clientGroupUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+                clientGroupDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+
+                /**
+                 * Client
+                 */
+                clientAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'client'
+                  }
+                },
+                clientUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'client'
+                  }
+                },
+                clientDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'client'
+                  }
+                },
+
+                /**
+                 * Clients
+                 */
+                clientsQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first:  'client',
+                    second: 'clients'
+                  }
+                }
 
               }
           );

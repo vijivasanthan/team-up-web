@@ -12,7 +12,7 @@ define(
         {
           var ClientsService = $resource();
 
-          ClientsService.prototype.query = function (only, routePara)
+          ClientsService.prototype.query = function (only, routeParams)
           {
             var deferred = $q.defer();
 
@@ -33,11 +33,11 @@ define(
                       clientGroups,
                       function (clientGroup)
                       {
-                        if (! routePara.uuid || (routePara.uuid == clientGroup.id))
+                        if (! routeParams.uuid || (routeParams.uuid == clientGroup.id))
                         {
                           calls.push(
                             TeamUp._(
-                              'clientsByGroupID',
+                              'clientsByGroupIDQuery',
                               { third: clientGroup.id },
                               null,
                               {
@@ -52,11 +52,13 @@ define(
                                   );
 
                                   // TODO: Do something about return object!
-                                  //                                  deferred.resolve(
-                                  //                                    {
-                                  //                                      id:   id,
-                                  //                                      data: returned
-                                  //                                    });
+                                  /*
+                                  deferred.resolve(
+                                    {
+                                      id:   id,
+                                      data: returned
+                                    });
+                                    */
                                 }
                               }
                             )
@@ -82,7 +84,7 @@ define(
                             angular.forEach(
                               results, function (result)
                               {
-                                if (routePara.uuid)
+                                if (routeParams.uuid)
                                 {
                                   data.clients[clientGroup.id] = (result.id == clientGroup.id && routePara.uuid == clientGroup.id) ?
                                                                  result.data :
@@ -109,7 +111,7 @@ define(
                   }
                   else
                   {
-                    deferred.resolve(cGroups);
+                    deferred.resolve(clientGroups);
                   }
 
                 },
@@ -126,291 +128,291 @@ define(
            */
 
 
-          var Clients_ByGroupId = $resource(
-              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/',
-              {},
-              {
-                get:  {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                },
-                save: {
-                  method: 'POST'
-                }
-              }
-          );
+//          var Clients_ByGroupId = $resource(
+//              config.app.host + config.app.namespace + '/client/clientGroup/:clientGroupId/clients/',
+//              {},
+//              {
+//                get:  {
+//                  method:  'GET',
+//                  params:  {},
+//                  isArray: true
+//                },
+//                save: {
+//                  method: 'POST'
+//                }
+//              }
+//          );
 
 
-          ClientsService.prototype.get = function (id)
-          {
-            console.log('ClientsService.prototype.get');
-
-            var deferred = $q.defer();
-
-            Clients_ByGroupId.get(
-              {
-                clientGroupId: id
-              },
-              function (result)
-              {
-                var returned;
-
-                if (result.length == 4 &&
-                    result[0][0] == 'n' &&
-                    result[1][0] == 'u')
-                {
-                  returned = [];
-                }
-                else
-                {
-                  returned = result;
-                }
-
-                Storage.add(id, angular.toJson(returned));
-
-                deferred.resolve(
-                  {
-                    id:   id,
-                    data: returned
-                  });
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-
-          ClientsService.prototype.addClient = function (id, memberIds)
-          {
-            console.log('ClientsService.prototype.addClient');
-
-            var deferred = $q.defer();
-
-            Clients_ByGroupId.save(
-              {
-                clientGroupId: id
-              },
-              memberIds,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-            return deferred.promise;
-          };
+//          ClientsService.prototype.get = function (id)
+//          {
+//            console.log('ClientsService.prototype.get');
+//
+//            var deferred = $q.defer();
+//
+//            Clients_ByGroupId.get(
+//              {
+//                clientGroupId: id
+//              },
+//              function (result)
+//              {
+//                var returned;
+//
+//                if (result.length == 4 &&
+//                    result[0][0] == 'n' &&
+//                    result[1][0] == 'u')
+//                {
+//                  returned = [];
+//                }
+//                else
+//                {
+//                  returned = result;
+//                }
+//
+//                Storage.add(id, angular.toJson(returned));
+//
+//                deferred.resolve(
+//                  {
+//                    id:   id,
+//                    data: returned
+//                  });
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
 
 
-          /**
-           * **************************************************************************************
-           */
-
-          var ClientGroup = $resource(
-              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                },
-                edit: {
-                  method: 'PUT'
-                },
-                del:  {
-                  method: 'DELETE'
-                }
-              }
-          );
-
-
-          ClientsService.prototype.deleteClientGroup = function (id)
-          {
-            console.log('ClientsService.prototype.deleteClientGroup');
-
-            var deferred = $q.defer();
-
-            ClientGroup.del(
-              {
-                clientGroupId: id
-              },
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-
-          ClientsService.prototype.saveGroup = function (group)
-          {
-            console.log('ClientsService.prototype.saveGroup');
-
-            var deferred = $q.defer();
-
-            ClientGroup.save(
-              group,
-              function (result)
-              {
-                Storage.add(result.id, angular.toJson(result));
-
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-
-          ClientsService.prototype.edit = function (clientGroup)
-          {
-            console.log('ClientsService.prototype.edit');
-
-            var deferred = $q.defer();
-
-            if (clientGroup.id)
-            {
-              ClientGroup.edit(
-                {
-                  clientGroupId: clientGroup.id
-                },
-                clientGroup,
-                function (result)
-                {
-                  deferred.resolve(result);
-                },
-                function (error) { deferred.resolve({error: error}) }
-              );
-            }
-
-            return deferred.promise;
-          };
-
-          /**
-           * **************************************************************************************
-           */
-
-
-          var Client = $resource(
-              config.app.host + config.app.namespace + '/client/:clientId',
-              {},
-              {
-                save: {
-                  method: 'POST'
-                },
-                edit: {
-                  method: 'PUT'
-                },
-                del:  {
-                  method: 'DELETE'
-                }
-              }
-          );
-
-
-          ClientsService.prototype.deleteClient = function (id)
-          {
-            console.log('ClientsService.prototype.deleteClient');
-
-            var deferred = $q.defer();
-
-            Client.del(
-              {
-                clientId: id
-              },
-              function (result)
-              {
-                deferred.resolve(angular.fromJson(result));
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-
-          ClientsService.prototype.save = function (client)
-          {
-            console.log('ClientsService.prototype.save');
-
-            var deferred = $q.defer();
-
-            Client.save(
-              client,
-              function (result)
-              {
-                Storage.add(result.id, angular.toJson(result));
-
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
-
-
-          ClientsService.prototype.updateClient = function (client)
-          {
-            console.log('ClientsService.prototype.updateClient');
-
-            var deferred = $q.defer();
-
-            Client.edit(
-              {
-                clientId: client.uuid
-              },
-              client,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
-          };
+//          ClientsService.prototype.addClient = function (id, memberIds)
+//          {
+//            console.log('ClientsService.prototype.addClient');
+//
+//            var deferred = $q.defer();
+//
+//            Clients_ByGroupId.save(
+//              {
+//                clientGroupId: id
+//              },
+//              memberIds,
+//              function (result)
+//              {
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//            return deferred.promise;
+//          };
 
 
           /**
            * **************************************************************************************
            */
 
-          var Clients = $resource(
-              config.app.host + config.app.namespace + '/client/clients',
-              {},
-              {
-                query: {
-                  method:  'GET',
-                  params:  {},
-                  isArray: true
-                }
-              }
-          );
+//          var ClientGroup = $resource(
+//              config.app.host + config.app.namespace + '/clientGroup/:clientGroupId',
+//              {},
+//              {
+//                save: {
+//                  method: 'POST'
+//                },
+//                edit: {
+//                  method: 'PUT'
+//                },
+//                del:  {
+//                  method: 'DELETE'
+//                }
+//              }
+//          );
 
 
-          ClientsService.prototype.queryAll = function ()
-          {
-            console.log('ClientsService.prototype.queryAll');
+//          ClientsService.prototype.deleteClientGroup = function (id)
+//          {
+//            console.log('ClientsService.prototype.deleteClientGroup');
+//
+//            var deferred = $q.defer();
+//
+//            ClientGroup.del(
+//              {
+//                clientGroupId: id
+//              },
+//              function (result)
+//              {
+//                deferred.resolve(angular.fromJson(result));
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
 
-            var deferred = $q.defer();
 
-            Clients.query(
-              function (clients)
-              {
-                Storage.add('clients', angular.toJson(clients));
+//          ClientsService.prototype.saveGroup = function (group)
+//          {
+//            console.log('ClientsService.prototype.saveGroup');
+//
+//            var deferred = $q.defer();
+//
+//            ClientGroup.save(
+//              group,
+//              function (result)
+//              {
+//                Storage.add(result.id, angular.toJson(result));
+//
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
 
-                deferred.resolve(clients);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
 
-            return deferred.promise;
-          };
+//          ClientsService.prototype.edit = function (clientGroup)
+//          {
+//            console.log('ClientsService.prototype.edit');
+//
+//            var deferred = $q.defer();
+//
+//            if (clientGroup.id)
+//            {
+//              ClientGroup.edit(
+//                {
+//                  clientGroupId: clientGroup.id
+//                },
+//                clientGroup,
+//                function (result)
+//                {
+//                  deferred.resolve(result);
+//                },
+//                function (error) { deferred.resolve({error: error}) }
+//              );
+//            }
+//
+//            return deferred.promise;
+//          };
+
+          /**
+           * **************************************************************************************
+           */
+
+
+//          var Client = $resource(
+//              config.app.host + config.app.namespace + '/client/:clientId',
+//              {},
+//              {
+//                save: {
+//                  method: 'POST'
+//                },
+//                edit: {
+//                  method: 'PUT'
+//                },
+//                del:  {
+//                  method: 'DELETE'
+//                }
+//              }
+//          );
+
+
+//          ClientsService.prototype.deleteClient = function (id)
+//          {
+//            console.log('ClientsService.prototype.deleteClient');
+//
+//            var deferred = $q.defer();
+//
+//            Client.del(
+//              {
+//                clientId: id
+//              },
+//              function (result)
+//              {
+//                deferred.resolve(angular.fromJson(result));
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
+
+
+//          ClientsService.prototype.save = function (client)
+//          {
+//            console.log('ClientsService.prototype.save');
+//
+//            var deferred = $q.defer();
+//
+//            Client.save(
+//              client,
+//              function (result)
+//              {
+//                Storage.add(result.id, angular.toJson(result));
+//
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
+
+
+//          ClientsService.prototype.updateClient = function (client)
+//          {
+//            console.log('ClientsService.prototype.updateClient');
+//
+//            var deferred = $q.defer();
+//
+//            Client.edit(
+//              {
+//                clientId: client.uuid
+//              },
+//              client,
+//              function (result)
+//              {
+//                deferred.resolve(result);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
+
+
+          /**
+           * **************************************************************************************
+           */
+
+//          var Clients = $resource(
+//              config.app.host + config.app.namespace + '/client/clients',
+//              {},
+//              {
+//                query: {
+//                  method:  'GET',
+//                  params:  {},
+//                  isArray: true
+//                }
+//              }
+//          );
+
+
+//          ClientsService.prototype.queryAll = function ()
+//          {
+//            console.log('ClientsService.prototype.queryAll');
+//
+//            var deferred = $q.defer();
+//
+//            Clients.query(
+//              function (clients)
+//              {
+//                Storage.add('clients', angular.toJson(clients));
+//
+//                deferred.resolve(clients);
+//              },
+//              function (error) { deferred.resolve({error: error}) }
+//            );
+//
+//            return deferred.promise;
+//          };
 
 
           /**
@@ -702,10 +704,12 @@ define(
                 if (change.a.length > 0)
                 {
                   calls.push(
-                    ClientsService.prototype.addClient(
-                      clientGroupId, {
-                        ids: change.a
-                      }));
+                    TeamUp._(
+                      'clientsByGroupIDAdd',
+                      { third: clientGroupId },
+                      { ids: change.a }
+                    )
+                  );
                 }
 
                 if (change.r.length > 0)

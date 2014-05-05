@@ -250,8 +250,9 @@ define(
                         {
                           self.progress(80, $rootScope.ui.login.loading_clientGroups);
 
-                          Clients.queryAll()
-                            .then(
+                          TeamUp._(
+                            'clientsQuery'
+                          ).then(
                             function (res_clients)
                             {
                               initAvatarUrls(res_clients, "client");
