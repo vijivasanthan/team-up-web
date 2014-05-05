@@ -383,7 +383,8 @@ define(
 
                   var routePara = {'uuid': result.teamId};
 
-                  Teams.query(false, routePara).then(
+                  Teams.query(false, routePara)
+                    .then(
                     function (queryRs)
                     {
                       if (queryRs.error)

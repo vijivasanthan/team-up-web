@@ -9,6 +9,6 @@
     "commit": "4ef3b28eb418adb93f67334479eccd80435319ba"
   },
   "_source": "git://github.com/brianleroux/lawnchair.git",
-  "_target": "*",
+  "_target": "~0.6.3",
   "_originalSource": "lawnchair"
 }

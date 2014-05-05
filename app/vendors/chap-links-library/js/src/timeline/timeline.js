@@ -179,6 +179,7 @@ links.Timeline = function(container, options) {
         'width': "100%",
         'height': "auto",
         'minHeight': 0,        // minimal height in pixels
+        'groupMinHeight': 0,
         'autoHeight': true,
 
         'eventMargin': 10,     // minimal margin between events
@@ -1512,9 +1513,9 @@ links.Timeline.prototype.reflowItems = function() {
         }
 
         if (group) {
-            group.itemsHeight = group.itemsHeight ?
+            group.itemsHeight = Math.max(this.options.groupMinHeight,group.itemsHeight ?
                 Math.max(group.itemsHeight, item.height) :
-                item.height;
+                item.height);
         }
     }
 
@@ -1613,7 +1614,7 @@ links.Timeline.prototype.recalcItems = function () {
             //
             var groupHeight = group.itemsHeight;
             resized = resized || (groupHeight != group.height);
-            group.height = groupHeight;
+            group.height = Math.max(groupHeight, options.groupMinHeight);
 
             actualHeight += groups[i].height + options.eventMargin;
         }
@@ -2950,6 +2951,9 @@ links.Timeline.prototype.onMouseUp = function (event) {
             // Note that the change can be canceled from within an event listener if
             // this listener calls the method cancelChange().
             this.trigger(params.addItem ? 'add' : 'changed');
+            
+            //retrieve item data again to include changes made to it in the triggered event handlers
+            item = this.items[params.itemIndex];
 
             if (params.addItem) {
                 if (this.applyAdd) {
@@ -5216,6 +5220,11 @@ links.Timeline.prototype.stackCalculateFinal = function(items) {
         var group = this.groups[j];
 
         if (!groupedItems[group.content]) {
+            if (axisOnTop) {
+                groupBase += options.groupMinHeight + eventMargin;
+            } else {
+                groupBase -= (options.groupMinHeight + eventMargin);
+            }
             continue;
         }
 

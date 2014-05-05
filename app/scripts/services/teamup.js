@@ -420,8 +420,6 @@ define(
                     second: 'member'
                   }
                 }
-
-
               }
           );
 

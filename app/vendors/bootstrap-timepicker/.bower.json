@@ -24,6 +24,5 @@
   },
   "_source": "git://github.com/jdewit/bootstrap-timepicker.git",
   "_target": "~0.2.6",
-  "_originalSource": "bootstrap-timepicker",
-  "_direct": true
+  "_originalSource": "bootstrap-timepicker"
 }
