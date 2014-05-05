@@ -151,20 +151,14 @@ define(
                 data,
                 function (result)
                 {
-                  if (callback && callback.success)
-                  {
-                    callback.success.call(this, result);
-                  }
+                  callback && callback.success && callback.success.call(this, result);
 
                   // TODO: Maybe a custom object wanted to be returned?
                   deferred.resolve(result);
                 },
                 function (result)
                 {
-                  if (callback && callback.error)
-                  {
-                    callback.error.call(this, result);
-                  }
+                  callback && callback.error && callback.error.call(this, result);
 
                   deferred.resolve({error: result});
                 }
