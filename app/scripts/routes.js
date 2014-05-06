@@ -116,6 +116,7 @@ define(
                     {
                       var teams = Teams.query();
                       var cGroups = ClientGroups.query();
+
                       ret = {
                         t:  teams,
                         cg: cGroups
@@ -207,7 +208,7 @@ define(
               redirectTo: '/login'
             });
 
-          // $httpProvider.interceptors.push('Interceptor');
+          $httpProvider.interceptors.push('Interceptor');
         }
       ]);
   }

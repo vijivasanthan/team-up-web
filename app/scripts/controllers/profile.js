@@ -228,28 +228,28 @@ define(
           $scope.editProfile = function () { setView('edit') };
 
 
-          $scope.editImg = function ()
-          {
-            $scope.uploadURL = $scope.imgHost + $scope.ns +
-                               "/team/member/" + $route.current.params.userId + "/photourl";
-
-            Teams.loadImg($scope.uploadURL)
-              .then(
-              function (result)
-              {
-                var imgHost = $scope.imgHost.replace("\\", "");
-
-                if (result.path)
-                {
-                  $scope.avatarURL = imgHost + result.path;
-                }
-
-                $scope.uploadURL = imgHost + $scope.ns +
-                                   "/team/member/" + $route.current.params.userId + "/photo";
-
-                $scope.setViewTo('editImg');
-              });
-          };
+          //          $scope.editImg = function ()
+          //          {
+          //            $scope.uploadURL = $scope.imgHost + $scope.ns +
+          //                               "/team/member/" + $route.current.params.userId + "/photourl";
+          //
+          //            Teams.loadImg($scope.uploadURL)
+          //              .then(
+          //              function (result)
+          //              {
+          //                var imgHost = $scope.imgHost.replace("\\", "");
+          //
+          //                if (result.path)
+          //                {
+          //                  $scope.avatarURL = imgHost + result.path;
+          //                }
+          //
+          //                $scope.uploadURL = imgHost + $scope.ns +
+          //                                   "/team/member/" + $route.current.params.userId + "/photo";
+          //
+          //                $scope.setViewTo('editImg');
+          //              });
+          //          };
 
 
           $scope.deleteProfile = function ()
@@ -258,8 +258,10 @@ define(
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-              Teams.deleteMember($scope.profilemeta.uuid)
-                .then(
+              TeamUp._(
+                'memberDelete',
+                { third: $scope.profilemeta.uuid }
+              ).then(
                 function (result)
                 {
                   if (result.uuid)
@@ -278,11 +280,14 @@ define(
                         );
                       });
 
-                    Teams.queryMembersNotInTeams()
-                      .then(
-                      function ()
+                    TeamUp._(
+                      'teamMemberFree'
+                    ).then(
+                      function (result)
                       {
                         console.log("members not in any teams loaded ");
+                        Storage.add("members", angular.toJson(result));
+
                         $rootScope.statusBar.off();
                       },
                       function (error) { console.log(error) }

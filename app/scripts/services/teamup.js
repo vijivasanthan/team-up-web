@@ -120,25 +120,314 @@ define(
                   },
                   isArray: true
                 },
-                clientsByGroupID:  {
-                  method:  'GET',
+
+                /**
+                 * Clients-By-Group-ID
+                 */
+                clientsByGroupIDQuery: {
+                  method: 'GET',
+
                   isArray: true,
                   params:  {
                     first:  'client',
                     second: 'clientGroup',
                     fourth: 'clients'
                   }
+                },
+                clientsByGroupIDAdd:   {
+                  method: 'POST',
+                  params: {
+                    first:  'client',
+                    second: 'clientGroup',
+                    fourth: 'clients'
+                  }
+                },
+
+                /**
+                 * Client-Group
+                 */
+                clientGroupAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+                clientGroupUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+                clientGroupDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
+
+                /**
+                 * Client
+                 */
+                clientAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'client'
+                  }
+                },
+                clientUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'client'
+                  }
+                },
+                clientDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'client'
+                  }
+                },
+
+                /**
+                 * Clients
+                 */
+                clientsQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first:  'client',
+                    second: 'clients'
+                  }
+                },
+
+                /**
+                 * Client-Reports
+                 */
+                clientReportsQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'clients',
+                    third: 'reports'
+                  }
+                },
+
+                /**
+                 * Client-Group-Client
+                 */
+                clientGroupClientDelete: {
+                  method: 'PUT',
+                  params: {
+                    first:  'client',
+                    second: 'clientGroup',
+                    fourth: 'removeClients'
+                  }
+                },
+
+                /**
+                 * Client-Group-Reports
+                 */
+                clientGroupReportsQuery: {
+                  query: {
+                    method:  'GET',
+                    isArray: true,
+                    params:  {
+                      first: 'clientGroup',
+                      third: 'reports'
+                    }
+                  }
+                },
+
+                /**
+                 * Client-Group-Tasks
+                 */
+                clientGroupTasksQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'clientGroup',
+                    third: 'tasks',
+                    from:  '',
+                    to:    ''
+                  }
+                },
+
+                /**
+                 * Client-Report
+                 */
+                clientReportAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'clients',
+                    third: 'reports'
+                  }
+                },
+                clientReportDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first:    'clients',
+                    third:    'reports',
+                    reportId: ''
+                  }
+                },
+
+                /**
+                 * Team
+                 */
+                teamQuery:  {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'team'
+                  }
+                },
+                teamAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'team',
+                    id:    ''
+                  }
+                },
+                teamUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team'
+                  }
+                },
+                teamDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first: 'team'
+                  }
+                },
+
+                /**
+                 * Team-Status
+                 */
+                teamStatusQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first:  'team',
+                    second: 'status'
+                  }
+                },
+
+                /**
+                 * Team-Member
+                 */
+                teamMemberAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'team',
+                    third: 'member'
+                  }
+                },
+                teamMemberUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'updateMembers'
+                  }
+                },
+                teamMemberDelete: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'removeMember'
+                  }
+                },
+                teamMemberFree:   {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first:  'team',
+                    second: 'members'
+                  }
+                },
+
+                /**
+                 * Team-Client-Group
+                 */
+                teamClientGroupQuery:  {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'team',
+                    third: 'clientGroups'
+                  }
+                },
+                teamClientGroupAdd:    {
+                  method: 'POST',
+                  params: {
+                    first: 'team',
+                    third: 'clientGroups'
+                  }
+                },
+                teamClientGroupUpdate: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'updateClientGroups'
+                  }
+                },
+                teamClientGroupDelete: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'unAssignClientGroups'
+                  }
+                },
+
+                /**
+                 * Team-Task
+                 */
+                teamTaskQuery: {
+                  method:  'GET',
+                  isArray: true,
+                  params:  {
+                    first: 'team',
+                    third: 'tasks',
+                    from:  '',
+                    to:    ''
+                  }
+                },
+
+                /**
+                 * Team number
+                 */
+                teamPhoneNumber: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'phone'
+                  }
+                },
+
+                /**
+                 * Member
+                 */
+                memberAdd:    {
+                  method: 'POST',
+                  params: {
+                    first:  'team',
+                    second: 'member'
+                  }
+                },
+                memberDelete: {
+                  method: 'DELETE',
+                  params: {
+                    first:  'team',
+                    second: 'member'
+                  }
                 }
-
-
               }
           );
 
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
-            console.log('call: proxy ->', arguments);
-
-            Log.record(arguments);
+            // TODO: Turn on logging later on!
+            // Log.record(arguments);
+            console.log('call ->', arguments);
 
             var deferred = $q.defer();
 
@@ -151,20 +440,14 @@ define(
                 data,
                 function (result)
                 {
-                  if (callback && callback.success)
-                  {
-                    callback.success.call(this, result);
-                  }
+                  callback && callback.success && callback.success.call(this, result);
 
                   // TODO: Maybe a custom object wanted to be returned?
                   deferred.resolve(result);
                 },
                 function (result)
                 {
-                  if (callback && callback.error)
-                  {
-                    callback.error.call(this, result);
-                  }
+                  callback && callback.error && callback.error.call(this, result);
 
                   deferred.resolve({error: result});
                 }

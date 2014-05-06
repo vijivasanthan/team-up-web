@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'manageCtrl', [
-        '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window', 'data',
-        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage, Teams, $window, data)
+        '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window', 'data', 'TeamUp',
+        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage, Teams, $window, data, TeamUp)
         {
           $scope.loadData = function (data)
           {
@@ -549,10 +549,13 @@ define(
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
                 //           	try to get the members not in the teams Aync
-                Teams.queryMembersNotInTeams().then(
-                  function ()
+                TeamUp._(
+                  'teamMemberFree'
+                ).then(
+                  function (result)
                   {
                     // console.log("members not in any teams loaded ");
+                    Storage.add("members", angular.toJson(result));
 
                     $rootScope.statusBar.off();
 

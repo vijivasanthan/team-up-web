@@ -151,7 +151,12 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            Clients.queryReports($scope.client.uuid).then(
+            TeamUp._(
+              'clientReportsQuery',
+              { second: $scope.client.uuid },
+              null,
+              { success: function (reports) { Storage.add('reports_' + $scope.client.uuid, angular.toJson(reports)) }}
+            ).then(
               function (reports)
               {
                 $rootScope.statusBar.off();
@@ -173,7 +178,10 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            Clients.queryGroupReports($scope.clientGroup.id).then(
+            TeamUp._(
+              'clientGroupReportsQuery',
+              { second: $scope.clientGroup.id }
+            ).then(
               function (reports)
               {
                 $rootScope.statusBar.off();
@@ -447,9 +455,9 @@ define(
             $scope.views.editClientGroup = false;
           };
 
-          $scope.changeClientGroup = function (cGroup)
+          $scope.changeClientGroup = function (clientGroup)
           {
-            if ($.trim(cGroup.name) == '')
+            if ($.trim(clientGroup.name) == '')
             {
               // FIXME: Message does not exist!
               // $rootScope.notifier.error($rootScope.ui.teamup.cGroupNamePrompt1);
@@ -459,7 +467,11 @@ define(
             // FIXME: Message does not exist!
             // $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
 
-            Clients.edit(cGroup).then(
+            TeamUp._(
+              'clientGroupUpdate',
+              { second: clientGroup.id },
+              clientGroup.id
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -476,7 +488,7 @@ define(
                       $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                       $rootScope.statusBar.off();
 
-                      $scope.clientGroup.name = cGroup.name;
+                      $scope.clientGroup.name = clientGroup.name;
                       $scope.views.editClientGroup = false;
                     });
                 }
@@ -529,9 +541,9 @@ define(
               });
           };
 
-          $scope.cGroupSubmit = function (cGroup)
+          $scope.cGroupSubmit = function (clientGroup)
           {
-            if (typeof cGroup == 'undefined' || $.trim(cGroup.name) == '')
+            if (typeof clientGroup == 'undefined' || $.trim(clientGroup.name) == '')
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
               return;
@@ -540,7 +552,14 @@ define(
             // FIXME: Message does not exist!
             // $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
 
-            Clients.saveGroup(cGroup).then(
+            TeamUp._(
+              'clientGroupAdd',
+              null,
+              clientGroup,
+              {
+                success: function (result) { Storage.add(result.id, angular.toJson(result)) }
+              }
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -584,9 +603,9 @@ define(
             };
 
             contactPerson.firstName = $scope.contactForm.firstName;
-            contactPerson.lastName  = $scope.contactForm.lastName;
-            contactPerson.function  = $scope.contactForm.function;
-            contactPerson.phone     = $scope.contactForm.phone;
+            contactPerson.lastName = $scope.contactForm.lastName;
+            contactPerson.function = $scope.contactForm.function;
+            contactPerson.phone = $scope.contactForm.phone;
 
             if (typeof $scope.contacts == 'undefined')
             {
@@ -627,7 +646,14 @@ define(
 
             client.clientGroupUuid = $scope.clientGroup.id;
 
-            Clients.save(client).then(
+            TeamUp._(
+              'clientAdd',
+              null,
+              client,
+              {
+                success: function (result) { Storage.add(result.id, angular.toJson(result)) }
+              }
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -659,7 +685,11 @@ define(
               return;
             }
 
-            Clients.updateClient(client).then(
+            TeamUp._(
+              'clientUpdate',
+              { second: client.uuid },
+              client
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -698,7 +728,11 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingContacts);
 
-            Clients.updateClient(client).then(
+            TeamUp._(
+              'clientUpdate',
+              { second: client.uuid },
+              client
+            ).then(
               function (result)
               {
                 if (result.error)
@@ -737,7 +771,10 @@ define(
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingClientGroup);
 
-              Clients.deleteClientGroup($scope.current).then(
+              TeamUp._(
+                'clientGroupDelete',
+                { second: $scope.current }
+              ).then(
                 function (result)
                 {
                   if (result.id)
@@ -803,11 +840,18 @@ define(
                     Clients.manage(changes).then(
                       function ()
                       {
-                        // delete the client
-                        Clients.deleteClient(clientId).then(
+                        TeamUp._(
+                          'clientDelete',
+                          { second: clientId }
+                        ).then(
                           function ()
                           {
-                            Clients.queryAll().then(
+                            TeamUp._(
+                              'clientsQuery',
+                              null,
+                              null,
+                              { success: function (clients) { Storage.add('clients', angular.toJson(clients)) } }
+                            ).then(
                               function ()
                               {
                                 if ($scope.views.viewClient == true)
@@ -875,17 +919,16 @@ define(
 
             $scope.saveReport = function (report)
             {
-              // console.log("save report");
-              // console.log(Clients);
-
-              var paraObj = {
-                uuid:         report.uuid,
-                title:        report.title,
-                body:         report.body,
-                creationTime: report.creationTime
-              };
-
-              Clients.saveReport(report.clientUuid, paraObj).then(
+              TeamUp._(
+                'clientReportAdd',
+                { second: 'report.clientUuid' },
+                {
+                  uuid:         report.uuid,
+                  title:        report.title,
+                  body:         report.body,
+                  creationTime: report.creationTime
+                }
+              ).then(
                 function ()
                 {
                   $modalInstance.close(report);
@@ -967,7 +1010,13 @@ define(
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.loading);
 
-              Clients.removeReport(report.clientUuid, report.uuid).then(
+              TeamUp._(
+                'clientReportDelete',
+                {
+                  second:   report.clientUuid,
+                  reportId: report.uuid
+                }
+              ).then(
                 function (rs)
                 {
                   if (rs.result == "ok")
@@ -984,32 +1033,32 @@ define(
             }
           };
 
-          $scope.editImg = function ()
-          {
-            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-
-            $scope.uploadURL = $scope.imgHost + $scope.ns +
-                               "/client/" + $scope.client.uuid + "/photo";
-
-            Clients.loadImg($scope.uploadURL).then(
-              function (result)
-              {
-                $rootScope.statusBar.off();
-
-                var imgHost = $scope.imgHost.replace("\\:", ":");
-
-                if (result.path)
-                {
-                  $scope.avatarURL = imgHost + result.path;
-                }
-
-                $scope.uploadURL = imgHost + $scope.ns +
-                                   "/client/" + $scope.client.uuid + "/photo";
-
-                $scope.setViewTo('editImg');
-              }
-            );
-          }
+//          $scope.editImg = function ()
+//          {
+//            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
+//
+//            $scope.uploadURL = $scope.imgHost + $scope.ns +
+//                               "/client/" + $scope.client.uuid + "/photo";
+//
+//            Clients.loadImg($scope.uploadURL).then(
+//              function (result)
+//              {
+//                $rootScope.statusBar.off();
+//
+//                var imgHost = $scope.imgHost.replace("\\:", ":");
+//
+//                if (result.path)
+//                {
+//                  $scope.avatarURL = imgHost + result.path;
+//                }
+//
+//                $scope.uploadURL = imgHost + $scope.ns +
+//                                   "/client/" + $scope.client.uuid + "/photo";
+//
+//                $scope.setViewTo('editImg');
+//              }
+//            );
+//          }
 
         }
       ]

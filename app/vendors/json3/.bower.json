@@ -26,6 +26,6 @@
     "commit": "5fbfe36a589da7e226e1ea2a030d890fd387c79f"
   },
   "_source": "git://github.com/bestiejs/json3.git",
-  "_target": "*",
+  "_target": "~3.3.1",
   "_originalSource": "json3"
 }

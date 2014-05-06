@@ -31,7 +31,8 @@ require.config(
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
       datepicker:         'removables/datepicker.min',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
-      timepicker:         'removables/timepicker.min'
+      timepicker:         'removables/timepicker.min',
+      md5:                '../vendors/web-lib-md5/md5.min'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -48,7 +49,8 @@ require.config(
       timeline:           { deps: [], exports: 'timeline' },
       treegrid:           { deps: [], exports: 'treegrid' },
       datepicker:         { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
-      timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' }
+      timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
+      md5:                { exports: 'md5'}
     }
   }
 );
@@ -81,21 +83,13 @@ require(
     'services/logger',
     'services/moment',
     'services/offline',
-    // 'services/sessioner',
     'services/md5er',
     'services/store',
 
     'services/clients',
     'services/dater',
-    'services/md5',
-    // 'services/messages',
-    // 'services/profile',
-    // 'services/settings',
     'services/sloter',
-    // 'services/slots',
-    'services/strings',
     'services/teams',
-    // 'services/user',
 
     'directives/widgets',
 
@@ -121,7 +115,8 @@ require(
     'timeline',
     'treegrid',
     'datepicker',
-    'timepicker'
+    'timepicker',
+    'md5'
   ],
   function (angular, domReady)
   {
@@ -192,8 +187,6 @@ var profile = {
     }
   ],
 
-  // divisions: [],
-
   roles: [
     {
       id:    "1",
@@ -253,9 +246,5 @@ var profile = {
     busy:      "memberStateBusy",
     offline:   "memberStateOffline",
     none:      "memberStateNone"
-  },
-
-  mobileApp: {
-    status: true
   }
 };

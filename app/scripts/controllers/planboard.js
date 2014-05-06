@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'planboard', [
-        '$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams', 'Clients',
-        function ($rootScope, $scope, $location, Dater, Storage, Teams, Clients)
+        '$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams', 'Clients', 'TeamUp',
+        function ($rootScope, $scope, $location, Dater, Storage, Teams, Clients, TeamUp)
         {
           var params = $location.search();
 
@@ -255,15 +255,15 @@ define(
                   uuid: $scope.currentTeam
                 }).hash('teams');
 
-              Teams.getTeamTasks($scope.currentTeam, startTime, endTime)
-                .then(
-                function (tasks)
+              TeamUp._(
+                'teamTaskQuery',
                 {
-                  // console.log('get team tasks ->');
-
-                  // process the tasks data
-                  storeTask(tasks, startTime, endTime);
-                },
+                  second: $scope.currentTeam,
+                  from:   startTime,
+                  to:     endTime
+                }
+              ).then(
+                function (tasks) { storeTask(tasks, startTime, endTime) },
                 function (error)
                 {
                   console.log("error happend when getting the tasks for the team members " + error);
@@ -277,15 +277,22 @@ define(
                   uuid: $scope.currentClientGroup
                 }).hash('clients');
 
-              Clients.getClientTasks($scope.currentClientGroup, startTime, endTime).then(
-                function (tasks)
+              TeamUp._(
+                'clientGroupTasksQuery',
                 {
-                  storeTask(tasks, startTime, endTime);
+                  second: $scope.currentClientGroup,
+                  from:   startTime,
+                  to:     endTime
                 },
-                function (error)
+                null,
                 {
-                  console.log("error happend when getting the tasks for the team members " + error);
+                  error: function (error)
+                  {
+                    console.log("error happend when getting the tasks for the team members " + error);
+                  }
                 }
+              ).then(
+                function (tasks) { storeTask(tasks, startTime, endTime) }
               );
             }
           };
