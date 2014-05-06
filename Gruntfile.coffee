@@ -64,7 +64,7 @@ module.exports = (grunt) ->
           'coffee:testEnd'
         ]
       compass:
-        files: ['<%= paths.app %>/styles/{,*/}*.{scss,sass}']
+        files: ['<%= paths.app %>/styles/{,*/}{,*/}*.{scss,sass}']
         tasks: ['compass:server']
       livereload:
         options:

@@ -20,7 +20,7 @@
   vertical-align: middle;
   cursor: pointer;
 
-/*  @include buttonBackground($btnBackground, $grayDark, 0 1px 1px rgba(255,255,255,.85));   //$btnBackgroundHighlight is demolished*/
+  //@include buttonBackground($btnBackground, $grayDark, 0 1px 1px rgba(255,255,255,.85));   //$btnBackgroundHighlight is demolished
 
   border: none;
   *border: 0; // Remove the border to prevent IE7's black border on input:focus
@@ -108,10 +108,10 @@
 }
 
 // Badges in buttons
-// .btn [class^="badge"],
-// .btn [class*="badge"] {
-//   margin-top: 2px;
-// }
+.btn [class^="badge"],
+.btn [class*="badge"] {
+margin-top: 2px;
+}
 
 
 // Block button
@@ -160,7 +160,9 @@ input[type="button"] {
   background-color: $orange;
   color:$brown;
   &:hover,
-  &:focus {
+  &:focus,
+  &:active {
+    background-color: $orange;
     color: $offwhite;
   }
 }
@@ -168,7 +170,9 @@ input[type="button"] {
 .btn-warning {
   background-color:$red;
   &:hover,
-  &:focus {
+  &:focus,
+  &:active {
+    background-color:$red;
     color: $offwhite;
   }
 }
@@ -177,7 +181,9 @@ input[type="button"] {
   background-color:$red;
   color:$offwhite;
   &:hover,
-  &:focus {
+  &:focus,
+  &:active, {
+    background-color:$red;
     color: $brown;
   }
 }
@@ -186,7 +192,9 @@ input[type="button"] {
   background-color:$turq;
   color:$offwhite;
   &:hover,
-  &:focus {
+  &:focus,
+  &:active {
+    background-color:$turq;
     color: $brown;
   }
 }
@@ -195,7 +203,10 @@ input[type="button"] {
   background-color:$brown;
   color:$offwhite;
   &:hover,
-  &:focus {
+  &:focus,
+  &:active,
+  &.active{
+    background-color:$brown;
     color: $orange;
   }
 
@@ -203,7 +214,7 @@ input[type="button"] {
 }
 // Inverse appears as dark gray
 .btn-inverse {
-  @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
+ // @include buttonBackground($btnInverseBackground, $btnInverseBackgroundHighlight);
 }
 
 
