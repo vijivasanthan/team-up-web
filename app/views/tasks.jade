@@ -8,83 +8,108 @@
       ng-click='setViewTo("myTasks")')
         span.icomoon(data-icon='',
         aria-hidden='true')
-        | MIJN TAKEN
+        | Mijn Taken
     li(class="{{(views.allTasks==true) && 'active'}}")
       a(data-toggle='tab',
       ng-click='setViewTo("allTasks")')
         span.icomoon(data-icon='',
         aria-hidden='true')
-        | ALLE TAKEN
+        | Alle Taken
     li(class="{{(views.newTask==true) && 'active'}}")
       a(data-toggle='tab',
       ng-click='setViewTo("newTask")')
         span.icomoon(data-icon='',
         aria-hidden='true')
-        | NIEUWE TAAK
+        | Nieuwe Taak
 
   .tab-content
 
     #myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
       .tab-header
-        h3.pull-left Mine Taken
-        h4.pull-left djbdsfb
-          button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.del}}
-          button.btn.pull-right.btn-info(type='button',
-          ng-click='editTeam(team)') {{ui.teamup.edit}}
-          .tab-header(ng-show='views.editTeam')
-            input.pull-left(type='text',
-            ng-model='teamEditForm.name')
-            button.btn.pull-right.btn-info.marginLeftTen(type='reset',
-            ng-click='cancelTeamEdit(team)') {{ui.teamup.cancel}}
-            button.btn.pull-right.btn-info.marginLeftTen(type='button',
-            ng-click='changeTeam(teamEditForm)') {{ui.teamup.save}}
-          hr
-          p(ng-hide='(data.members[team.uuid]).length > 0')
-            | {{ui.teamup.noMembers}}
-          div(ng-show='(data.members[team.uuid]).length > 0')
-            table.table.table-striped
-              thead
-                tr
-                  th
-                  th
-                    a(ng-click='sorter="name"') {{ui.teamup.name}}
-                  th
-                    a {{ui.teamup.states}}
-                  th
-              tbody
-                tr(ng-repeat='member in data.members[team.uuid]|orderBy:"lastName"')
-                  td
-                    .roundedPicSmall(id='img_{{member.uuid|escape}}',
-                    class='{{member.states|stateColor}}')
-                  td
-                    a(href='#/profile/{{member.uuid}}#profile',
-                    ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}
-                  // <td>{{member.resources.role|translateRole}}</td>
-                  // <td>{{member.resources.PhoneAddress}}</td>
-                  td
-                    span.states(ng-show='noSharedStates(member.states)')  {{ui.teamup.noSharedStates}}
-                    span.states(ng-repeat='state in member.states | filter:share=true ')
-                      span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
-                      aria-hidden='true',
-                      class="{{state.name|stateDataIcon:'class_name'}}")
-                      // <i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>
-                      span.stateValue
-                        | {{state|stateValue}}
-                        a(ng-show='(state.name == "Location")',
-                        href='http://maps.google.com/?q={{state|stateValue:"data"}}') {{ui.teamup.map}}
-                  td
-                    .pull-right
-                      a(href='#/profile/{{member.uuid}}#edit',
-                      ng-click='editProfile(member.uuid,team.uuid)')
-                        button.btn-primary.btn-mini
-                          i.icon-edit
-                      button.btn-primary.btn-mini(type='submit',
-                      ng-click='deleteMember(member.uuid)')
-                        i.icon-trash
-            span.muted.pull-right
-              small
-                i
-                  | {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+        h3.pull-left Mijn taken
+        button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.del}}
+        button.btn.pull-right.btn-info(type='button') {{ui.teamup.edit}}
+      .tab-header.hide
+        input.pull-left(type='text')
+        button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
+        button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
+      hr
+      p.hide
+        | {{ui.teamup.noMembers}}
+      div
+        table.table.table-striped.taskTable
+          thead
+            tr
+              th
+              th
+                a Naam Cliënt
+              th
+                a Informatie
+              th
+              th
+                a Naam Lid
+              th
+          tbody
+            tr
+              td
+                .roundedPicSmall(id='img_{{member.uuid|escape}}',
+                class='{{member.states|stateColor}}')
+              td
+                a(href='#/profile/{{member.uuid}}#profile') Piet de Vries
+              td
+                dl
+                  span.stateIcon.icon-location4(aria-hidden='true', data-icon='')
+                  span.taskInfo 12,1 km Molenweg Dordrecht
+                    a(href='http://maps.google.com/?q={{state|stateValue:"data"}}') {{ui.teamup.map}}
+                dl
+                  span.stateIcon.icon-location4(aria-hidden='true', data-icon='')
+                  span.taskInfo Maandag 10.00 - 13.00 uur
+                dl
+                  dd Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              td
+                .roundedPicSmall(id='img_{{member.uuid|escape}}',
+                class='{{member.states|stateColor}}')
+              td
+                a(href='#/profile/{{member.uuid}}#profile') Remco van Schie
+              td
+                .pull-right
+                  a(href='#/profile/{{member.uuid}}#edit')
+                    button.btn-primary.btn-mini
+                      i.icon-edit
+                  button.btn-primary.btn-mini(type='submit')
+                    i.icon-trash
+            tr
+              td
+                .roundedPicSmall(id='img_{{member.uuid|escape}}',
+                class='{{member.states|stateColor}}')
+              td
+                a(href='#/profile/{{member.uuid}}#profile') Piet de Vries
+              td
+                dl
+                  span.stateIcon.icon-location4(aria-hidden='true', data-icon='')
+                  span.taskInfo 12,1 km Molenweg Dordrecht
+                    a(href='http://maps.google.com/?q={{state|stateValue:"data"}}') {{ui.teamup.map}}
+                dl
+                  span.stateIcon.icon-location4(aria-hidden='true', data-icon='')
+                  span.taskInfo Maandag 10.00 - 13.00 uur
+                dl
+                  dd Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              td
+                .roundedPicSmall(id='img_{{member.uuid|escape}}',
+                class='{{member.states|stateColor}}')
+              td
+                a(href='#/profile/{{member.uuid}}#profile') Remco van Schie
+              td
+                .pull-right
+                  a(href='#/profile/{{member.uuid}}#edit')
+                    button.btn-primary.btn-mini
+                      i.icon-edit
+                  button.btn-primary.btn-mini(type='submit')
+                    i.icon-trash
+        span.muted.pull-right
+          small
+            i
+              | {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
 
 
     #allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
