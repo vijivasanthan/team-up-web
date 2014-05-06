@@ -83,7 +83,6 @@ require(
     'services/logger',
     'services/moment',
     'services/offline',
-    'services/md5er',
     'services/store',
 
     'services/clients',
