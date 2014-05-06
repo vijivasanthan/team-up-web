@@ -32,8 +32,6 @@
         aria-hidden='true')
         | {{ui.teamup.newMember}}
 
-
-
   .tab-content
 
     #viewTeamTab.tab-pane(class="{{(views.team==true) && 'active'}}")
@@ -72,15 +70,12 @@
               td
                 a(href='#/profile/{{member.uuid}}#profile',
                 ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}
-              // <td>{{member.resources.role|translateRole}}</td>
-              // <td>{{member.resources.PhoneAddress}}</td>
               td
                 span.states(ng-show='noSharedStates(member.states)')  {{ui.teamup.noSharedStates}}
                 span.states(ng-repeat='state in member.states | filter:share=true ')
                   span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
                   aria-hidden='true',
                   class="{{state.name|stateDataIcon:'class_name'}}")
-                  // <i class="{{state.name|stateIcon}} icon-yellow icomoon-plus" ></i>
                   span.stateValue
                     | {{state|stateValue}}
                     a(ng-show='(state.name == "Location")',

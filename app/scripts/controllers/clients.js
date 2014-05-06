@@ -297,6 +297,17 @@ define(
               loadGroupReports();
             }
 
+            if ($scope.views.client)
+            {
+              angular.forEach(
+                $scope.clients,
+                function (client)
+                {
+                  console.log('image url ->', $scope.imgHost + $scope.ns + "/client/" + client.uuid + "/photo");
+                }
+              )
+            }
+
             //            // load image
             //            if ($scope.views.client)
             //            {

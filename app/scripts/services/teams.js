@@ -17,86 +17,60 @@ define(
             var deferred = $q.defer();
 
             TeamUp._(
-              'teamQuery',
-              null,
-              null,
+              'teamQuery'
+            ).then(
+              function (teams)
               {
-                success: function (teams)
+                Storage.add('Teams', angular.toJson(teams));
+
+                if (! only)
                 {
-                  Storage.add('Teams', angular.toJson(teams));
+                  var calls = [];
 
-                  if (! only)
-                  {
-                    var calls = [];
+                  var data = {
+                    teams:   teams,
+                    members: {}
+                  };
 
-                    angular.forEach(
-                      teams,
-                      function (team)
-                      {
-                        calls.push(
+                  angular.forEach(
+                    teams,
+                    function (team)
+                    {
+                      calls.push(
+                        (function (team, data)
+                        {
                           TeamUp._(
                             'teamStatusQuery',
-                            { third: team.uuid }
-                          )
-                        );
-                      }
-                    );
-
-                    $q.all(calls)
-                      .then(
-                      function (results)
-                      {
-                        var data = {};
-
-                        data.members = {};
-
-                        angular.forEach(
-                          teams,
-                          function (team)
-                          {
-                            data.teams = teams;
-
-                            data.members[team.uuid] = [];
-
-                            angular.forEach(
-                              results,
-                              function (result)
+                            { third: team.uuid },
+                            null,
+                            {
+                              success: function (results)
                               {
-                                if (routeParams.uuid)
-                                {
-                                  if (result.id == team.uuid && routeParams.uuid == team.uuid)
-                                  {
-                                    data.members[team.uuid] = result.data;
-                                  }
-                                  else
-                                  {
-                                    data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid));
-                                  }
-                                }
-                                else if (result.id == team.uuid)
-                                {
-                                  data.members[team.uuid] = result.data;
-                                }
-                              });
-                          });
+                                data.members[team.uuid] = [];
 
-                        deferred.resolve(data);
-                      }
-                    );
-                  }
-                  else
-                  {
-                    deferred.resolve(teams);
-                  }
+                                data.members[team.uuid] = results;
+                              }
+                            }
+                          )
+                        })(team, data)
+                      );
+                    }
+                  );
 
-                },
-                error:   function (error) { deferred.resolve({error: error}) }
-              }
-            );
+                  $q.all(calls)
+                    .then(
+                    function () { deferred.resolve(data) }
+                  );
+                }
+                else
+                {
+                  deferred.resolve(teams);
+                }
+
+              });
 
             return deferred.promise;
           };
-
 
           TeamsService.prototype.queryLocal = function ()
           {
