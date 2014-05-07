@@ -286,6 +286,10 @@ input.search-query {
 }
 
 
+// Tasks Table
 
-
-
+.taskTable {
+  dl, dd{
+    margin: 0;
+  }
+}
