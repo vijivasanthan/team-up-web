@@ -5,6 +5,7 @@ if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
 
+// tODO: Remove them later on!
 localStorage.removeItem('TeamUp.periods');
 localStorage.removeItem('TeamUp.periodsNext');
 
@@ -32,7 +33,9 @@ require.config(
       datepicker:         'removables/datepicker.min',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
       timepicker:         'removables/timepicker.min',
-      md5:                '../vendors/web-lib-md5/md5.min'
+      underscore:         '../vendors/underscore/underscore',
+      md5:                '../vendors/web-lib-md5/md5.min',
+      store:              '../vendors/web-lib-store/dist/store'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -50,7 +53,9 @@ require.config(
       treegrid:           { deps: [], exports: 'treegrid' },
       datepicker:         { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
-      md5:                { exports: 'md5'}
+      md5:                { exports: 'md5'},
+      underscore:         { exports: 'underscore'},
+      store:              { deps: ['angular', 'underscore']}
     }
   }
 );
@@ -83,7 +88,6 @@ require(
     'services/logger',
     'services/moment',
     'services/offline',
-    'services/store',
 
     'services/clients',
     'services/dater',
@@ -115,7 +119,9 @@ require(
     'treegrid',
     'datepicker',
     'timepicker',
-    'md5'
+    'md5',
+    'underscore',
+    'store'
   ],
   function (angular, domReady)
   {
@@ -124,126 +130,3 @@ require(
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
-
-/**
- * Installation profile
- */
-var profile = {
-
-  meta: 'teamup',
-
-  title: 'TeamUp',
-
-  host: function ()
-  {
-    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
-    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
-    // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
-
-    return 'http://dev.ask-cs.com/';
-    // return 'http://askpack.ask-cs.com/';
-  },
-
-  ns: function ()
-  {
-    return "teamup-dev";
-    // return "teamup-demo";
-  },
-
-  noImgURL: '/images/defaultAvatar.png',
-
-  states: [
-    'com.ask-cs.State.Available',
-    'com.ask-cs.State.KNRM.BeschikbaarNoord',
-    'com.ask-cs.State.KNRM.BeschikbaarZuid',
-    'com.ask-cs.State.Unavailable',
-    'com.ask-cs.State.KNRM.SchipperVanDienst',
-    'com.ask-cs.State.Unreached'
-  ],
-
-  timeline:  {
-    config: {
-      layouts: {
-        groups:  true,
-        members: true
-      }
-    }
-  },
-
-  // TODO: Remove later on?!
-  divisions: [
-    {
-      id:    'all',
-      label: 'All divisions'
-    },
-    {
-      id:    'knrm.StateGroup.BeschikbaarNoord',
-      label: 'Noord'
-    },
-    {
-      id:    'knrm.StateGroup.BeschikbaarZuid',
-      label: 'Zuid'
-    }
-  ],
-
-  roles: [
-    {
-      id:    "1",
-      label: 'coordinator'
-    },
-    {
-      id:    "2",
-      label: 'team_member'
-    },
-    {
-      id:    "3",
-      label: 'client'
-    }
-  ],
-
-  mfunctions: [
-    {
-      id:    "1",
-      label: 'Doctor'
-    },
-    {
-      id:    "2",
-      label: 'Nurse'
-    }
-  ],
-
-  stateIcons: [
-    {
-      name:       "Availability",
-      data_icon:  "&#xe04d;",
-      class_name: "icon-user-block"
-    },
-    {
-      name:       "Location",
-      data_icon:  "&#xe21a;",
-      class_name: "icon-location4"
-    },
-    {
-      name:       "Emotion",
-      data_icon:  "&#xe0f2;",
-      class_name: "icon-smiley"
-    },
-    {
-      name:       "Activity",
-      data_icon:  "&#xe4f2;",
-      class_name: "icon-accessibility"
-    },
-    {
-      name:       "Reachability",
-      data_icon:  "&#xe169;",
-      class_name: "icon-podcast2"
-    }
-  ],
-
-  stateColors: {
-    availalbe: "memberStateAvailalbe",
-    busy:      "memberStateBusy",
-    offline:   "memberStateOffline",
-    none:      "memberStateNone"
-  }
-};

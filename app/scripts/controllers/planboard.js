@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -11,8 +11,9 @@ define(
         {
           var params = $location.search();
 
-          $scope.imgHost = profile.host();
-          $scope.ns = profile.ns();
+          // TODO: Remove these ones too!
+          $scope.imgHost = config.app.host;
+          $scope.ns = config.app.ns;
 
           var teams = angular.fromJson(Storage.get('Teams')),
               clients = angular.fromJson(Storage.get('ClientGroups'));

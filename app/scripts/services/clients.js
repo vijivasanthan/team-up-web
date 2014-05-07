@@ -7,8 +7,8 @@ define(
     services.factory(
       'Clients',
       [
-        '$resource', '$q', 'Storage', 'TeamUp',
-        function ($resource, $q, Storage, TeamUp)
+        '$resource', '$q', 'Storage', 'TeamUp', 'Store',
+        function ($resource, $q, Storage, TeamUp, Store)
         {
           var ClientsService = $resource();
 

@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -16,8 +16,9 @@ define(
 
           var params = $location.search();
 
-          $scope.imgHost = profile.host();
-          $scope.ns = profile.ns();
+          // TODO: Remove these ones too!
+          $scope.imgHost = config.app.host;
+          $scope.ns = config.app.ns;
 
           $scope.search = {
             query: ''
@@ -609,7 +610,7 @@ define(
           // brefoe I know there is a good place to put this code
           // load the login user's avatar
 
-          var imgURL = profile.host() + profile.ns() +
+          var imgURL = config.app.host + config.app.ns +
                        "/team/member/" + $rootScope.app.resources.uuid + "/photo?width=40&height=40";
 
           console.log('imgURL ->', imgURL);

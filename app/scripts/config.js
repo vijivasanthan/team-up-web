@@ -47,8 +47,20 @@ define(
         }
       },
 
-      host:      profile.host(),
-      namespace: profile.ns(),
+      host: (function ()
+      {
+        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
+        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
+        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
+
+        return 'http://dev.ask-cs.com/';
+        // return 'http://askpack.ask-cs.com/';
+      })(),
+      namespace: (function ()
+      {
+        return "teamup-dev";
+        // return "teamup-demo";
+      })(),
 
       formats: {
         date:         'dd-MM-yyyy',
@@ -57,15 +69,68 @@ define(
         datetimefull: 'dd-MM-yyyy HH:mm'
       },
 
-      roles: profile.roles,
+      roles: [
+        {
+          id:    "1",
+          label: 'coordinator'
+        },
+        {
+          id:    "2",
+          label: 'team_member'
+        },
+        {
+          id:    "3",
+          label: 'client'
+        }
+      ],
 
-      mfunctions: profile.mfunctions,
+      mfunctions: [
+        {
+          id:    "1",
+          label: 'Doctor'
+        },
+        {
+          id:    "2",
+          label: 'Nurse'
+        }
+      ],
 
-      stateIcons: profile.stateIcons,
+      stateIcons: [
+        {
+          name:       "Availability",
+          data_icon:  "&#xe04d;",
+          class_name: "icon-user-block"
+        },
+        {
+          name:       "Location",
+          data_icon:  "&#xe21a;",
+          class_name: "icon-location4"
+        },
+        {
+          name:       "Emotion",
+          data_icon:  "&#xe0f2;",
+          class_name: "icon-smiley"
+        },
+        {
+          name:       "Activity",
+          data_icon:  "&#xe4f2;",
+          class_name: "icon-accessibility"
+        },
+        {
+          name:       "Reachability",
+          data_icon:  "&#xe169;",
+          class_name: "icon-podcast2"
+        }
+      ],
 
-      stateColors: profile.stateColors,
+      stateColors: {
+        availalbe: "memberStateAvailalbe",
+        busy:      "memberStateBusy",
+        offline:   "memberStateOffline",
+        none:      "memberStateNone"
+      },
 
-      noImgURL: profile.noImgURL,
+      noImgURL: '/images/defaultAvatar.png',
 
       timeline: {
         options: {
@@ -85,12 +150,28 @@ define(
         config:  {
           zoom:       '0.4',
           bar:        false,
-          layouts:    profile.timeline.config.layouts,
+          layouts:    {
+            groups:  true,
+            members: true
+          },
           wishes:     false,
           legenda:    {},
           legendarer: false,
           states:     {},
-          divisions:  profile.divisions,
+          divisions:  [
+            {
+              id:    'all',
+              label: 'All divisions'
+            },
+            {
+              id:    'knrm.StateGroup.BeschikbaarNoord',
+              label: 'Noord'
+            },
+            {
+              id:    'knrm.StateGroup.BeschikbaarZuid',
+              label: 'Zuid'
+            }
+          ],
           densities:  {
             less:  '#a0a0a0',
             even:  '#ba6a24',
@@ -127,15 +208,21 @@ define(
         path:   '/'
       },
 
+      states: [
+        'com.ask-cs.State.Available',
+        'com.ask-cs.State.KNRM.BeschikbaarNoord',
+        'com.ask-cs.State.KNRM.BeschikbaarZuid',
+        'com.ask-cs.State.Unavailable',
+        'com.ask-cs.State.KNRM.SchipperVanDienst',
+        'com.ask-cs.State.Unreached'
+      ],
+
       init: function ()
       {
-        var _this = this;
-
         angular.forEach(
-          profile.states, function (state)
-          {
-            _this.timeline.config.states[state] = _this.statesall[state];
-          });
+          this.states,
+          (function (state) { this.timeline.config.states[state] = this.statesall[state] }).bind(this)
+        );
       }
     }
   }

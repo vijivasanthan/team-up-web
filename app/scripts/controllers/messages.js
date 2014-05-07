@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -16,8 +16,9 @@ define(
 
           $scope.messages = [];
 
-          $scope.imgHost = profile.host();
-          $scope.ns = profile.ns();
+          // TODO: Remove these ones later on!
+          $scope.imgHost = config.app.host;
+          $scope.ns = config.app.ns;
 
 
           $scope.renderMessage = function ()
