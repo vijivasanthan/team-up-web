@@ -18,6 +18,8 @@ define(
           var teams = angular.fromJson(Storage.get('Teams')),
               clients = angular.fromJson(Storage.get('ClientGroups'));
 
+          // console.log('Teams ->', teams);
+
           $scope.data = {
             teams:   {
               list:    [],
@@ -58,12 +60,17 @@ define(
           };
 
           angular.forEach(
-            teams, function (team)
+            teams,
+            function (team)
             {
               var members = angular.fromJson(Storage.get(team.uuid));
 
+              console.log('members ->', members);
+
               if (members && members.length > 0)
               {
+                console.log('team ->', team);
+
                 $scope.data.teams.list.push(
                   {
                     uuid: team.uuid,
@@ -80,7 +87,7 @@ define(
 
                     if (typeof imgfile == "undefined")
                     {
-                      imgURL = profile.noImgURL;
+                      imgURL = config.app.noImgURL;
                     }
 
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +
@@ -127,7 +134,7 @@ define(
 
                     if (typeof imgfile == "undefined")
                     {
-                      imgURL = profile.noImgURL;
+                      imgURL = config.app.noImgURL;
                     }
 
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +

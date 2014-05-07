@@ -1,6 +1,6 @@
 define(
-  ['services/services', 'config'],
-  function (services, config)
+  ['services/services'],
+  function (services)
   {
     'use strict';
 
@@ -12,7 +12,7 @@ define(
         {
           var TeamsService = $resource();
 
-          TeamsService.prototype.query = function (only, routeParams)
+          TeamsService.prototype.query = function (only)
           {
             var deferred = $q.defer();
 
@@ -46,6 +46,10 @@ define(
                             {
                               success: function (results)
                               {
+                                console.log('teamStatusQuery ->', results);
+
+                                Storage.add(team.uuid, angular.toJson(results));
+
                                 data.members[team.uuid] = [];
 
                                 data.members[team.uuid] = results;

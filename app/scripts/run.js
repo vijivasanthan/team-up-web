@@ -11,7 +11,7 @@ define(
         {
           $rootScope.config = config.app;
 
-          $rootScope.config.init();
+          // $rootScope.config.init();
 
           $rootScope.browser = $.browser;
 
