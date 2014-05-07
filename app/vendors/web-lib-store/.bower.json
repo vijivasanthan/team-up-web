@@ -1,0 +1,24 @@
+{
+  "name": "web-lib-store",
+  "homepage": "https://github.com/askcs/web-lib-store",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "A LawnchairJS based browser storage AngularJS directive.",
+  "main": "store.js",
+  "keywords": [
+    "lawnchair",
+    "storage"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "ea55b8ff90",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ea55b8ff90c61f5e415e917e81906ffa668d1475"
+  },
+  "_source": "https://github.com/askcs/web-lib-store.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-store.git"
+}

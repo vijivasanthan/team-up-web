@@ -1,0 +1,16 @@
+{
+  "name": "web-lib-store",
+  "version": "1.0.0",
+  "homepage": "https://github.com/askcs/web-lib-store",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "A LawnchairJS based browser storage AngularJS directive.",
+  "main": "store.js",
+  "keywords": [
+    "lawnchair",
+    "storage"
+  ],
+  "license": "MIT",
+  "private": true
+}
