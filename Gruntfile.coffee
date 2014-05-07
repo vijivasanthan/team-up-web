@@ -191,7 +191,7 @@ module.exports = (grunt) ->
       server:
         options:
           debugInfo: false
-  
+
     rev:
       dist:
         files:
@@ -233,7 +233,7 @@ module.exports = (grunt) ->
 
 
     cssmin: {}
-  
+
     htmlmin:
       dist:
         options: {}

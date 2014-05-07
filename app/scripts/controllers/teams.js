@@ -46,6 +46,7 @@ define(
           {
             uuid = data.teams[0].uuid;
             view = $location.hash();
+
             $location.search(
               {
                 uuid: data.teams[0].uuid
@@ -79,52 +80,57 @@ define(
 
             $scope.members = data.members[id];
 
-
-            console.log('data.members ->', data.members);
-
             $scope.current = id;
 
+            console.log('render photos ->', data);
 
-            // load image
             angular.forEach(
               $scope.members,
               function (member)
               {
-                var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photo?width=40&height=40";
+                var imgURL = $scope.imgHost + $scope.ns +
+                             "/team/member/" + member.uuid + "/photo?width=40&height=40";
 
-                // var imgId = member.uuid.replace(".", "").replace("@", "");
+                var imgId = member.uuid.replace(".", "").replace("@", "");
                 $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
-                //                Teams.loadImg(imgURL).then(
-                //                  function (result)
-                //                  {
-                //                    // console.log("loading pic " + imgURL);
-                //
-                //                    var imgId = member.uuid.replace(".", "").replace("@", "");
-                //
-                //                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                //                    {
-                //                      console.log("no pics ", result);
-                //                    }
-                //                    else
-                //                    {
-                //                      var realImgURL = $scope.imgHost + result.path;
-                //                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                //                    }
-                //
-                //                  }, function (error) { console.log("error when load pic " + error) }
-                //                );
-                //
-                //                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
-                //
-                //                $scope.photoURL = tempURL;
-                //
-                //                Teams.loadImg(tempURL).then(
-                //                  function (result)
-                //                  {
-                //                    console.log(result);
-                //                  }
-                //                );
+                // console.log('url, imgid ->', imgURL, imgId);
+
+//                TeamUp._(
+//                  'memberPhoto',
+//                  { third: member.uuid }
+//                ).then(
+//                  function (result)
+//                  {
+//                    console.log('result ->', result);
+//                    // console.log("loading pic " + imgURL);
+//
+////                    var imgId = member.uuid.replace(".", "").replace("@", "");
+////
+////                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+////                    {
+////                      console.log("no pics ", result);
+////                    }
+////                    else
+////                    {
+////                      var realImgURL = $scope.imgHost + result.path;
+////                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+////                    }
+//
+//                  },
+//                  function (error) { console.log("error when load pic " + error) }
+//                );
+
+//                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
+//
+//                $scope.photoURL = tempURL;
+//
+//                Teams.loadImg(tempURL).then(
+//                  function (result)
+//                  {
+//                    console.log(result);
+//                  }
+//                );
 
               });
 
@@ -595,6 +601,10 @@ define(
                 }, function (error) { console.log(error) });
             }
           };
+
+
+
+
 
           // brefoe I know there is a good place to put this code
           // load the login user's avatar

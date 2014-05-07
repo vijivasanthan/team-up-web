@@ -44,8 +44,6 @@ define(
               diff: function (range) { return new Date(range.end).getTime() - new Date(range.start).getTime() }
             },
 
-            getThisMonth: function () { return new Date().toString('M') },
-
             getThisYear: function () { return new Date().toString('yyyy') },
 
             getMonthTimeStamps: function ()

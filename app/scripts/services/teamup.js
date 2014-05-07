@@ -419,6 +419,16 @@ define(
                     first:  'team',
                     second: 'member'
                   }
+                },
+                memberPhoto:  {
+                  method: 'GET',
+                  params: {
+                    first:  'team',
+                    second: 'member',
+                    fourth: 'photo',
+                    width:  40,
+                    height: 40
+                  }
                 }
               }
           );
@@ -440,19 +450,13 @@ define(
                 data,
                 function (result)
                 {
-                  if (callback && callback.success)
-                  {
-                    callback.success.call(this, result);
-                  }
+                  ((callback && callback.success)) && callback.success.call(this, result);
 
                   deferred.resolve(result);
                 },
                 function (result)
                 {
-                  if (callback && callback.error)
-                  {
-                    callback.error.call(this, result);
-                  }
+                  ((callback && callback.error)) && callback.error.call(this, result);
 
                   deferred.resolve({error: result});
                 }

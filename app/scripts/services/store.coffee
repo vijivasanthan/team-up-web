@@ -1,9 +1,9 @@
 define ['services/services'], (services) ->
   'use strict'
 
-  # TODOS
+  # TODO
   # 1. Return callbacks in CRUD actions
-  # 2. Extend it with local searching capabilitites
+  # 2. Extend it with local searching capabilities
   # 3. Implement Log module for errors
 
   services.factory 'Store', [
@@ -34,7 +34,7 @@ define ['services/services'], (services) ->
           else
             collection[key] = data
           update =
-            key:   key
+            key: key
             value: transformSave(collection[key])
           try
             LawnChair ->
@@ -63,7 +63,7 @@ define ['services/services'], (services) ->
             collection[key] = obj
           return
 
-        # Update cahe from storage
+        # Update cache from storage
         updateCacheFromStorage = (cache, storage) ->
           if storage
             if angular.isObject(storage.value) and angular.isObject(cache)
@@ -125,7 +125,7 @@ define ['services/services'], (services) ->
           collection: collection
 
         # Save a record
-          save:       (data, key, clear) ->
+          save: (data, key, clear) ->
             unless data
               data = collection # if nothing is set save the current cache
               key = null
@@ -140,7 +140,7 @@ define ['services/services'], (services) ->
             if clear
               newIds = (if angular.isArray(data) then _.chain(data).map(getEntryId).map(String).value() else _.keys(data))
               _.chain(collection).keys().difference(newIds).each removeEntry
-              # remove entries wihtout ids
+              # remove entries without ids
               _.chain(collection).filter((entry) ->
                 not getEntryId(entry)
               ).keys().each removeEntry
@@ -148,7 +148,7 @@ define ['services/services'], (services) ->
             return
 
         # Batch treat records
-          batch:      (keys, target, callback) ->
+          batch: (keys, target, callback) ->
             cache = _.chain(keys).map((k) ->
               getDefault k
             ).value()
@@ -172,7 +172,7 @@ define ['services/services'], (services) ->
             target
 
         # Get record(s)
-          get:        (key, callback) ->
+          get: (key, callback) ->
             value = getDefault(key)
             LawnChair ->
               @get key, (result) ->
@@ -183,20 +183,20 @@ define ['services/services'], (services) ->
             value
 
         # Treat all
-          all:        (if isArray then allAsArray else allAsCollection)
+          all: (if isArray then allAsArray else allAsCollection)
 
         # Remove a record
-          remove:     removeEntry
+          remove: removeEntry
 
         # Nuke localStorage
-          nuke:       ->
+          nuke: ->
             LawnChair ->
               @nuke()
               return
             return
 
         # Destroy a collection
-          destroy:    ->
+          destroy: ->
             for key of collection
               delete collection[key]
             LawnChair ->
