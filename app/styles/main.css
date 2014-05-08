@@ -6094,10 +6094,10 @@ label {
 .dater {
   margin-right: 15px; }
   .dater input[type=text] {
-    width: 100px; }
-  .dater .icon-calendar {
+    width: 120px; }
+  .dater .icon-calendar, .dater .icon-time {
     position: relative;
-    margin: -3px 0 0 -21px; }
+    margin: -3px 6px 0 -21px; }
 
 .dater-mobile input[type=datetime] {
   width: 140px;
@@ -6420,7 +6420,7 @@ ul.nav-tabs-app li {
   overflow: hidden;
   height: 35px; }
   .tab-header h3 {
-    margin-top: 0;
+    margin-top: 10px;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35); }
   .tab-header h4 {
     margin-left: 10px; }
@@ -6782,7 +6782,6 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1;
     color: #999999; }
 
-label,
 input,
 button,
 select,
@@ -6954,8 +6953,17 @@ input.search-query {
   -moz-border-radius: 15px;
   border-radius: 15px; }
 
+.taskTable tr {
+  cursor: move; }
 .taskTable dl, .taskTable dd {
   margin: 0; }
+.taskTable .taskIcon {
+  margin-right: 6px; }
+.taskTable .dragIcon {
+  background-image: url("../images/dragIcon.png");
+  background-repeat: no-repeat;
+  height: 16px;
+  margin: 0 10px; }
 
 #chat {
   position: fixed;
@@ -7075,7 +7083,7 @@ input.search-query {
       border-bottom: 8px solid transparent;
       border-top: 8px solid transparent;*/
       position: absolute;
-      margin: 20px 0 0 278px;
+      margin: 20px 0 0 262px;
       -moz-box-shadow: 2px 2px 1px -1px #833c11;
       -webkit-box-shadow: 2px 2px 1px -1px #833c11;
       box-shadow: 2px 2px 1px -1px #833c11;
@@ -7091,7 +7099,7 @@ input.search-query {
       float: right; }
   #chat .input-area {
     position: absolute;
-    bottom: 11px;
+    bottom: 27px;
     left: 8px;
     width: 100%;
     padding-top: 10px;

@@ -45,7 +45,6 @@ legend {
 
 
 // Set font for forms
-label,
 input,
 button,
 select,
@@ -64,6 +63,7 @@ label {
   display: block;
   margin-bottom: 5px;
   text-transform: capitalize;
+  font-weight: bold;
 }
 
 // Form controls

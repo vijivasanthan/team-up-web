@@ -20,12 +20,12 @@ label {
   margin-right: 15px;
   
   input[type=text] {
-    width: 100px;
+    width: 120px;
   }
 
-  .icon-calendar {
+  .icon-calendar, .icon-time {
     position: relative;
-    margin: -3px 0 0 -21px;
+    margin: -3px 6px 0 -21px;
   }
 }
 
