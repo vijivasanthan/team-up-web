@@ -15,7 +15,7 @@ define(
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.ns;
 
-          var teams   = Store('app').get('teams'),
+          var teams = Store('app').get('teams'),
               clients = Store('app').get('ClientGroups');
 
           $scope.data = {
@@ -79,6 +79,26 @@ define(
                   function (member)
                   {
                     // TODO: Remove this completely later on!
+                    //                    var getAvatarURLFromStorage = function (id)
+                    //                    {
+                    //                      var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+                    //                      var ret;
+                    //
+                    //                      if (avatarUrls)
+                    //                      {
+                    //                        angular.forEach(
+                    //                          avatarUrls, function (item)
+                    //                          {
+                    //                            if (item.id == id)
+                    //                            {
+                    //                              ret = item.url;
+                    //                            }
+                    //                          });
+                    //                      }
+                    //
+                    //                      return ret;
+                    //                    };
+                    //
                     // var imgfile = Storage.avatar.geturl(member.uuid);
                     var imgfile = '';
                     var imgURL = $scope.imgHost + imgfile;

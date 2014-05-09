@@ -157,6 +157,41 @@ define(
             )
           };
 
+
+          //          Taken from Storage module
+          //          Storage.avatar.addurl(mem.uuid, res.path);
+          //          var addAvatarURLtoStorage = function (id, avatarUrl)
+          //          {
+          //            var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
+          //
+          //            if (avatarUrls)
+          //            {
+          //              angular.forEach(
+          //                avatarUrls, function (item)
+          //                {
+          //                  if (item.id == id)
+          //                  {
+          //                    item.url = avatarUrl;
+          //                  }
+          //                  else
+          //                  {
+          //                    var newItem = {'id': id, 'url': avatarUrl };
+          //                    avatarUrls.add(newItem);
+          //                  }
+          //                });
+          //            }
+          //            else
+          //            {
+          //              avatarUrls = [
+          //                {
+          //                  'id':  id,
+          //                  'url': avatarUrl
+          //                }
+          //              ];
+          //            }
+          //            addToLocalStorage('avatarUrls', angular.toJson(avatarUrls));
+          //          };
+
           //          var initAvatarUrls = function (members, type)
           //          {
           //            if (type == "team")

@@ -235,10 +235,9 @@ define(
             {
               this.connections.teamClients = [];
 
-              var _this = this;
-
               angular.forEach(
-                this.data.teamClients, function (gid, tid)
+                this.data.teamClients,
+                (function (gid, tid)
                 {
                   var connection = {
                     sourceItems: [],
@@ -246,7 +245,8 @@ define(
                   };
 
                   angular.forEach(
-                    data.teams, function (team)
+                    data.teams,
+                    function (team)
                     {
                       if (team.id == tid)
                       {
@@ -266,8 +266,9 @@ define(
                     }
                   }
 
-                  _this.connections.teamClients.push(connection);
-                });
+                  this.connections.teamClients.push(connection);
+                }).bind(this)
+              );
 
               return this.connections;
             },

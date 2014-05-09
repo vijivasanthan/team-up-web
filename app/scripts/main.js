@@ -5,9 +5,9 @@ if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
 
-// tODO: Remove them later on!
-localStorage.removeItem('TeamUp.periods');
-localStorage.removeItem('TeamUp.periodsNext');
+// TODO: Remove them later on!
+// localStorage.removeItem('TeamUp.periods');
+// localStorage.removeItem('TeamUp.periodsNext');
 
 require.config(
   {
@@ -81,7 +81,6 @@ require(
     'routes',
 
     'services/teamup',
-    'services/storage',
     'services/session',
 
     'services/interceptor',
