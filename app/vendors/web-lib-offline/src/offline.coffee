@@ -22,6 +22,7 @@ define ['services/services'], (services) ->
 
         offline: ->
           $rootScope.$broadcast 'connection', true
-          
+
+      return Offline
   ]
   return

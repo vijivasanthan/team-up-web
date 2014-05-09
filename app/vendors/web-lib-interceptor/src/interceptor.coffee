@@ -6,21 +6,22 @@ define ['services/services'], (services) ->
     'Log'
     ($q, Log) ->
 
-      request:       (config) ->
+      request: (config) ->
         # console.log 'request ->', config
         config or $q.when(config)
 
-      requestError:  (rejection) ->
+      requestError: (rejection) ->
         console.warn 'request error ->', rejection
         $q.reject rejection
 
-      response:      (response) ->
+      response: (response) ->
         # console.log 'response', response
         response or $q.when(response)
 
       responseError: (rejection) ->
         console.warn 'response error ->', rejection
         $q.reject rejection
+
   ]
 
   return

@@ -35,7 +35,9 @@ require.config(
       timepicker:         'removables/timepicker.min',
       underscore:         '../vendors/underscore/underscore',
       md5:                '../vendors/web-lib-md5/md5.min',
-      store:              '../vendors/web-lib-store/dist/store'
+      store:              '../vendors/web-lib-store/dist/store',
+      offline:            '../vendors/web-lib-offline/dist/offline',
+      interceptor:        '../vendors/web-lib-interceptor/dist/interceptor'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -55,7 +57,9 @@ require.config(
       timepicker:         { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       md5:                { exports: 'md5'},
       underscore:         { exports: 'underscore'},
-      store:              { deps: ['angular', 'underscore']}
+      store:              { deps: ['angular', 'underscore']},
+      offline:            { deps: ['angular'] },
+      interceptor:        { deps: ['angular'] }
     }
   }
 );
@@ -83,10 +87,8 @@ require(
     'services/teamup',
     'services/session',
 
-    'services/interceptor',
     'services/logger',
     'services/moment',
-    'services/offline',
 
     'services/clients',
     'services/dater',
@@ -120,7 +122,9 @@ require(
     'timepicker',
     'md5',
     'underscore',
-    'store'
+    'store',
+    'offline',
+    'interceptor'
   ],
   function (angular, domReady)
   {

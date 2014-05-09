@@ -1,0 +1,23 @@
+{
+  "name": "web-lib-offline",
+  "homepage": "https://github.com/askcs/web-lib-offline",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "Offline detector for making web apps more offline capable.",
+  "main": "dist/offline.js",
+  "keywords": [
+    "offline"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "81cb18845b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "81cb18845b376bb5f800e17d7d98ecd2c3f0069e"
+  },
+  "_source": "https://github.com/askcs/web-lib-offline.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-offline.git"
+}

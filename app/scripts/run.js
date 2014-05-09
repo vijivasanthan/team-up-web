@@ -6,9 +6,23 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', '$timeout', 'Session', 'Store', '$window', 'Teams', 'Dater',
-        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Dater)
+        '$rootScope', '$location', '$timeout', 'Session', 'Store', '$window', 'Teams', 'Dater', 'Offline',
+        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Dater, Offline)
         {
+          new Offline();
+
+          $rootScope.$on('connection', function ()
+          {
+            if (!arguments[1])
+            {
+              console.log('connection restored');
+            }
+            else
+            {
+              console.log('connection lost :[');
+            }
+          });
+
           $rootScope.config = config.app;
 
           // TODO: Remove later if it is not needed?!
