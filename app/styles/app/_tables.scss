@@ -290,6 +290,14 @@ input.search-query {
 .taskTable {
   tr {
     cursor: move;
+    td:last-child {
+      min-width: 120px;
+      text-align: right;
+      a.noteLink {
+        clear: both;
+        display: block;
+      }
+    }
   }
   dl, dd{
     margin: 0;
