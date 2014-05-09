@@ -5,7 +5,6 @@ define ['services/services'], (services) ->
     'Store'
     (Store) ->
 
-      # Log anything
       record: (message) ->
         stamp = Date.now()
 
@@ -14,7 +13,6 @@ define ['services/services'], (services) ->
           message: message
         }
 
-      # Log any given errors
       error: (trace) ->
         Store = Store('error')
 
@@ -23,14 +21,12 @@ define ['services/services'], (services) ->
         body = {}
 
         if trace.hasOwnProperty 'message'
-          body = {
+          body:
             stack:   trace.stack,
             message: trace.message
-          }
         else
-          body = {
+          body:
             trace: trace
-          }
 
         err[stamp] = body
 

@@ -6,11 +6,12 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', '$timeout', 'Session', 'Storage', '$window', 'Teams', 'Dater',
-        function ($rootScope, $location, $timeout, Session, Storage, $window, Teams, Dater)
+        '$rootScope', '$location', '$timeout', 'Session', 'Store', '$window', 'Teams', 'Dater',
+        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Dater)
         {
           $rootScope.config = config.app;
 
+          // TODO: Remove later if it is not needed?!
           // $rootScope.config.init();
 
           $rootScope.browser = $.browser;
@@ -68,11 +69,11 @@ define(
           $rootScope.changeLanguage = function (lang) { $rootScope.ui = ui[lang] };
           $rootScope.ui = ui[$rootScope.config.lang];
 
-          if (! Storage.get('periods') || Storage.get('periods') == null) Dater.registerPeriods();
+          if (! Store('app').get('periods') || Store('app').get('periods') == null) Dater.registerPeriods();
 
           $rootScope.app = $rootScope.app || {};
 
-          $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
+          $rootScope.app.resources = Store('app').get('resources');
 
           $rootScope.statusBar =
           {
@@ -226,7 +227,6 @@ define(
           $rootScope.$on(
             '$routeChangeStart', function ()
             {
-
               function resetLoaders ()
               {
                 $rootScope.loaderIcons = {
@@ -272,19 +272,21 @@ define(
 
                   $rootScope.location = 'logout';
 
-                  var logindata = angular.fromJson(Storage.get('logindata'));
+                  var logindata = Store('app').get('logindata');
 
-                  Storage.clearAll();
+                  // TODO: Test this later on!
+                  Store('app').nuke();
 
                   if (logindata.remember)
                   {
-                    Storage.add(
-                      'logindata', angular.toJson(
-                        {
-                          username: logindata.username,
-                          password: logindata.password,
-                          remember: logindata.remember
-                        }));
+                    Store('app').save(
+                      'logindata',
+                      {
+                        username: logindata.username,
+                        password: logindata.password,
+                        remember: logindata.remember
+                      }
+                    );
                   }
 
                   break;
@@ -339,7 +341,8 @@ define(
             var tabHeight = $('.tabs-left .nav-tabs').height();
 
             $.each(
-              $('.tab-content').children(), function ()
+              $('.tab-content').children(),
+              function ()
               {
                 var $this = $(this).attr('id'),
                     contentHeight = $('.tabs-left .tab-content #' + $this).height();
@@ -363,7 +366,8 @@ define(
                 {
                   paddingTop:   '10px',
                   marginBottom: '0px'
-                });
+                }
+              );
             }
           };
 
@@ -377,20 +381,19 @@ define(
 
           $rootScope.getTeamMemberById = function (memberId)
           {
-            var teams_local = angular.fromJson(Storage.get("Teams"));
             var member;
 
             angular.forEach(
-              teams_local, function (team)
+              Store('app').get('teams'),
+              function (team)
               {
-                var mems = angular.fromJson(Storage.get(team.uuid));
-
                 angular.forEach(
-                  mems, function (mem)
+                  Store('app').get(team.uuid),
+                  function (_member)
                   {
-                    if (mem.uuid == memberId)
+                    if (_member.uuid == memberId)
                     {
-                      member = mem;
+                      member = _member;
                       return;
                     }
                   });
@@ -411,10 +414,10 @@ define(
           $rootScope.getClientByID = function (clientId)
           {
             var ret;
-            var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
 
             angular.forEach(
-              clients_Not_In_Group, function (client)
+              Store('app').get('clients'),
+              function (client)
               {
                 if (clientId == client.uuid)
                 {
@@ -425,14 +428,13 @@ define(
 
             if (ret == null)
             {
-              var groups = angular.fromJson(Storage.get("ClientGroups"));
               angular.forEach(
-                groups, function (group)
+                Store('app').get('ClientGroups'),
+                function (group)
                 {
-                  var cts = angular.fromJson(Storage.get(group.id));
-
                   angular.forEach(
-                    cts, function (client)
+                    Store('app').get(group.id),
+                    function (client)
                     {
                       if (client.uuid = clientId)
                       {
@@ -459,25 +461,27 @@ define(
             var clientIds = [];
 
             angular.forEach(
-              teamIds, function (teamId)
+              teamIds,
+              function (teamId)
               {
-                var teamGroups = angular.fromJson(Storage.get('teamGroup_' + teamId));
-
                 angular.forEach(
-                  teamGroups, function (teamGrp)
+                  Store('app').get('teamGroup_' + teamId),
+                  function (teamGroup)
                   {
-                    var gMembers = angular.fromJson(Storage.get(teamGrp.id));
-
                     angular.forEach(
-                      gMembers, function (mem)
+                      Store('app').get(teamGroup.id),
+                      function (member)
                       {
-                        if (clientIds.indexOf(mem.uuid) == - 1)
+                        if (clientIds.indexOf(member.uuid) == - 1)
                         {
-                          clientIds.push(mem.uuid);
+                          clientIds.push(member.uuid);
 
-                          var clt = {uuid: mem.uuid, name: mem.firstName + " " + mem.lastName};
-
-                          clients.push(clt);
+                          clients.push(
+                            {
+                              uuid: member.uuid,
+                              name: member.firstName + ' ' + member.lastName
+                            }
+                          );
                         }
                       });
                   });
@@ -495,30 +499,31 @@ define(
           {
             var members = [];
             var memberIds = [];
-            var teams = angular.fromJson(Storage.get('Teams'));
 
             angular.forEach(
-              teams, function (team)
+              Store('app').get('teams'),
+              function (team)
               {
-                var teamGroups = angular.fromJson(Storage.get('teamGroup_' + team.uuid));
-
                 angular.forEach(
-                  teamGroups, function (teamGrp)
+                  Store('app').get('teamGroup_' + team.uuid),
+                  function (teamGrp)
                   {
                     if (clientGroup == teamGrp.id)
                     {
-                      var mebrs = angular.fromJson(Storage.get(team.uuid));
-
                       angular.forEach(
-                        mebrs, function (mem)
+                        Store('app').get(team.uuid),
+                        function (member)
                         {
-                          if (memberIds.indexOf(mem.uuid) == - 1)
+                          if (memberIds.indexOf(member.uuid) == - 1)
                           {
-                            memberIds.push(mem.uuid);
+                            memberIds.push(member.uuid);
 
-                            var tm = {uuid: mem.uuid, name: mem.firstName + " " + mem.lastName};
-
-                            members.push(tm);
+                            members.push(
+                              {
+                                uuid: member.uuid,
+                                name: member.firstName + ' ' + member.lastName
+                              }
+                            );
                           }
                         });
                     }
@@ -530,17 +535,19 @@ define(
 
           $rootScope.getAvatarURL = function (userId)
           {
-            var avatarURLs = angular.fromJson(Storage.get("avatarUrls"));
             var ret = '';
 
             angular.forEach(
-              avatarURLs, function (avatar)
+              Store('app').get('avatarUrls'),
+              function (avatar)
               {
                 if (avatar.userId == userId)
                 {
                   ret = avatar.url;
                 }
-              });
+              }
+            );
+
             return ret;
           };
         }

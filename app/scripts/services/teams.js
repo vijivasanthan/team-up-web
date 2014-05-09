@@ -7,8 +7,8 @@ define(
     services.factory(
       'Teams',
       [
-        '$resource', '$q', 'Storage', '$rootScope', 'TeamUp',
-        function ($resource, $q, Storage, $rootScope, TeamUp)
+        '$resource', '$q', 'Store', '$rootScope', 'TeamUp',
+        function ($resource, $q, Store, $rootScope, TeamUp)
         {
           var TeamsService = $resource();
 
@@ -16,12 +16,11 @@ define(
           {
             var deferred = $q.defer();
 
-            TeamUp._(
-              'teamQuery'
-            ).then(
+            TeamUp._('teamQuery')
+              .then(
               function (teams)
               {
-                Storage.add('Teams', angular.toJson(teams));
+                Store('app').save('teams', teams);
 
                 if (! only)
                 {
@@ -37,7 +36,7 @@ define(
                     function (team)
                     {
                       calls.push(
-                        (function (team, data)
+                        (function (team, data, Store)
                         {
                           TeamUp._(
                             'teamStatusQuery',
@@ -46,9 +45,7 @@ define(
                             {
                               success: function (results)
                               {
-                                console.log('teamStatusQuery ->', results);
-
-                                Storage.add(team.uuid, angular.toJson(results));
+                                Store('app').save(team.uuid, results);
 
                                 data.members[team.uuid] = [];
 
@@ -56,7 +53,7 @@ define(
                               }
                             }
                           )
-                        })(team, data)
+                        })(team, data, Store)
                       );
                     }
                   );
@@ -79,13 +76,13 @@ define(
           TeamsService.prototype.queryLocal = function ()
           {
             var data = {
-              teams:   angular.fromJson(Storage.get("Teams")),
+              teams:   Store('app').get('teams'),
               members: {}
             };
 
             angular.forEach(
               data.teams,
-              function (team) { data.members[team.uuid] = angular.fromJson(Storage.get(team.uuid)) }
+              function (team) { data.members[team.uuid] = Store('app').get(team.uuid) }
             );
 
             return data;
@@ -120,13 +117,9 @@ define(
                       ).then(
                         function (result)
                         {
-                          Storage.add(
+                          Store('app').save(
                               'teamGroup_' + team.uuid,
-                              angular.toJson(
-                                (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
-                                [] :
-                                result
-                              )
+                              (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result
                           );
 
                           data.groups[team.uuid] = [];
@@ -311,13 +304,11 @@ define(
                           ).then(
                             function (result)
                             {
-                              Storage.add(
+                              Store('app').save(
                                   'teamGroup_' + teamId,
-                                  angular.toJson(
-                                    (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
-                                    [] :
-                                    result
-                                  )
+                                  (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
+                                  [] :
+                                  result
                               );
 
                               return result;

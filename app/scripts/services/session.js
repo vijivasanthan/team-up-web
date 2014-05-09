@@ -7,13 +7,13 @@ define(
     services.factory(
       'Session',
       [
-        '$rootScope', '$http', 'Storage',
-        function ($rootScope, $http, Storage)
+        '$rootScope', '$http', 'Store',
+        function ($rootScope, $http, Store)
         {
           return {
             check: function ()
             {
-              var session = angular.fromJson(Storage.cookie.get('session'));
+              var session = Store('app').get('session');
 
               if (session)
               {
@@ -27,7 +27,7 @@ define(
               }
             },
 
-            cookie: function (session)
+            cookie: function ()
             {
               var values,
                   pairs = document.cookie.split(";");
@@ -55,7 +55,7 @@ define(
                 time: new Date()
               };
 
-              Storage.cookie.add('session', angular.toJson(session));
+              Store('app').save('session', session);
 
               $rootScope.session = session;
 

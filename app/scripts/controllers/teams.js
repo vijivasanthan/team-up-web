@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'teamCtrl', [
-        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Storage', 'Dater', 'TeamUp',
-        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Storage, Dater, TeamUp)
+        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Store', 'Dater', 'TeamUp',
+        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater, TeamUp)
         {
           $rootScope.fixStyles();
 
@@ -82,8 +82,6 @@ define(
             $scope.members = data.members[id];
 
             $scope.current = id;
-
-            console.log('render photos ->', data);
 
             angular.forEach(
               $scope.members,
@@ -199,14 +197,11 @@ define(
 
           $scope.toggleSelection = function (group, master)
           {
-            var flag = (master) ? true : false,
-                members = angular.fromJson(Storage.get(group.uuid));
+            var flag = (master) ? true : false;
 
             angular.forEach(
-              members, function (member)
-              {
-                $scope.selection[member.uuid] = flag;
-              });
+              Store('app').get(group.uuid),
+              function (member) { $scope.selection[member.uuid] = flag });
           };
 
           $scope.editTeam = function (team)
@@ -215,6 +210,7 @@ define(
               name: team.name,
               uuid: team.uuid
             };
+
             $scope.views.editTeam = true;
           };
 
@@ -224,6 +220,7 @@ define(
               name: team.name,
               uuid: team.uuid
             };
+
             $scope.views.editTeam = false;
           };
 
@@ -513,14 +510,11 @@ define(
                             }
                           });
 
-                        // 	try to get the members not in the teams Aync
-                        TeamUp._(
-                          'teamMemberFree'
-                        ).then(
+                        TeamUp._('teamMemberFree')
+                          .then(
                           function (result)
                           {
-                            // console.log("members not in any teams loaded ");
-                            Storage.add("members", angular.toJson(result));
+                            Store('app').save('members', result);
 
                             $rootScope.statusBar.off();
                           },
@@ -585,14 +579,11 @@ define(
                         }
                       });
 
-                    // 	try to get the members not in the teams Aync
-                    TeamUp._(
-                      'teamMemberFree'
-                    ).then(
+                    TeamUp._('teamMemberFree')
+                      .then(
                       function (result)
                       {
-                        // console.log("members not in any teams loaded ");
-                        Storage.add("members", angular.toJson(result));
+                        Store('app').save('members', result);
 
                         $rootScope.statusBar.off();
                       },
@@ -613,7 +604,7 @@ define(
           var imgURL = config.app.host + config.app.ns +
                        "/team/member/" + $rootScope.app.resources.uuid + "/photo?width=40&height=40";
 
-          console.log('imgURL ->', imgURL);
+          // console.log('imgURL ->', imgURL);
 
           /*
            var mId = $rootScope.app.resources.uuid;

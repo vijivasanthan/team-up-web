@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'messagesCtrl',
       [
-        '$scope', '$rootScope', '$q', '$location', '$route', 'Storage', '$filter', 'Teams', 'TeamUp',
-        function ($scope, $rootScope, $q, $location, $route, Storage, $filter, Teams, TeamUp)
+        '$scope', '$rootScope', '$q', '$location', '$route', '$filter', 'Teams', 'TeamUp',
+        function ($scope, $rootScope, $q, $location, $route, $filter, Teams, TeamUp)
         {
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages

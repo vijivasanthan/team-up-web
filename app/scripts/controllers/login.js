@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'login',
       [
-        '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Storage', '$routeParams', 'TeamUp',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Storage, $routeParams, TeamUp)
+        '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Store', '$routeParams', 'TeamUp',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp)
         {
           var self = this;
 
@@ -53,17 +53,17 @@ define(
             }
           };
 
-          if (! Storage.session.get('app')) Storage.session.add('app', '{}');
+          if (! Store('app').get('app'))
+          {
+            Store('app').save('app', '{}');
+          }
 
           $('.navbar').hide();
           $('#footer').hide();
           $('#watermark').hide();
-          $('body').css(
-            {
-              'backgroundColor': '#1dc8b6'
-            });
+          $('body').css({ 'backgroundColor': '#1dc8b6' });
 
-          var logindata = angular.fromJson(Storage.get('logindata'));
+          var logindata = Store('app').get('logindata');
 
           if (logindata && logindata.remember) $scope.logindata = logindata;
 
@@ -92,13 +92,14 @@ define(
               .text($rootScope.ui.login.button_loggingIn)
               .attr('disabled', 'disabled');
 
-            Storage.add(
-              'logindata', angular.toJson(
-                {
-                  username: $scope.logindata.username,
-                  password: $scope.logindata.password,
-                  remember: $scope.logindata.remember
-                }));
+            Store('app').save(
+              'logindata',
+              {
+                username: $scope.logindata.username,
+                password: $scope.logindata.password,
+                remember: $scope.logindata.remember
+              }
+            );
 
             self.auth($scope.logindata.username, MD5.parse($scope.logindata.password));
           };
@@ -156,57 +157,56 @@ define(
             )
           };
 
-//          var initAvatarUrls = function (members, type)
-//          {
-//            if (type == "team")
-//            {
-//              angular.forEach(
-//                members,
-//                function (mem)
-//                {
-//                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
-//                                     "/team/member/" + mem.uuid + "/photo";
-//
-//                  Teams.loadImg(getAvatarUrl)
-//                    .then(
-//                    function (res)
-//                    {
-//                      if (res.path)
-//                      {
-//                        Storage.avatar.addurl(mem.uuid, res.path);
-//                      }
-//                    });
-//                }
-//              );
-//            }
-//            else if (type == "client")
-//            {
-//              angular.forEach(
-//                members, function (mem)
-//                {
-//                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
-//                                     "/client/" + mem.uuid + "/photo";
-//
-//                  Clients.loadImg(getAvatarUrl)
-//                    .then(
-//                    function (res)
-//                    {
-//                      if (res.path)
-//                      {
-//                        Storage.avatar.addurl(mem.uuid, res.path);
-//                      }
-//                    });
-//                });
-//            }
-//          };
+          //          var initAvatarUrls = function (members, type)
+          //          {
+          //            if (type == "team")
+          //            {
+          //              angular.forEach(
+          //                members,
+          //                function (mem)
+          //                {
+          //                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+          //                                     "/team/member/" + mem.uuid + "/photo";
+          //
+          //                  Teams.loadImg(getAvatarUrl)
+          //                    .then(
+          //                    function (res)
+          //                    {
+          //                      if (res.path)
+          //                      {
+          //                        Storage.avatar.addurl(mem.uuid, res.path);
+          //                      }
+          //                    });
+          //                }
+          //              );
+          //            }
+          //            else if (type == "client")
+          //            {
+          //              angular.forEach(
+          //                members, function (mem)
+          //                {
+          //                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+          //                                     "/client/" + mem.uuid + "/photo";
+          //
+          //                  Clients.loadImg(getAvatarUrl)
+          //                    .then(
+          //                    function (res)
+          //                    {
+          //                      if (res.path)
+          //                      {
+          //                        Storage.avatar.addurl(mem.uuid, res.path);
+          //                      }
+          //                    });
+          //                });
+          //            }
+          //          };
 
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
           {
-            TeamUp._(
-              'teamMemberFree'
-            ).then(
-              function (result) { Storage.add("members", angular.toJson(result)) }
+            TeamUp._('teamMemberFree')
+              .then(
+              function (result) { Store('app').save('members', result) }
             );
           }
 
@@ -218,7 +218,8 @@ define(
 
             self.progress(20, $rootScope.ui.login.loading_User);
 
-            TeamUp._('user').then(
+            TeamUp._('user')
+              .then(
               function (resources)
               {
                 if (resources.error)
@@ -229,7 +230,7 @@ define(
                 {
                   $rootScope.app.resources = resources;
 
-                  Storage.add('resources', angular.toJson(resources));
+                  Store('app').save('resources', resources);
 
                   self.progress(40, $rootScope.ui.login.loading_Teams);
 
@@ -252,9 +253,8 @@ define(
                         {
                           self.progress(80, $rootScope.ui.login.loading_clientGroups);
 
-                          TeamUp._(
-                            'clientsQuery'
-                          ).then(
+                          TeamUp._('clientsQuery')
+                            .then(
                             function (res_clients)
                             {
                               // initAvatarUrls(res_clients, "client");

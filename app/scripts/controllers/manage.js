@@ -6,17 +6,15 @@ define(
 
     controllers.controller(
       'manageCtrl', [
-        '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Storage', 'Teams', '$window', 'data', 'TeamUp',
-        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Storage, Teams, $window, data, TeamUp)
+        '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Store', 'Teams', '$window', 'data',
+        'TeamUp',
+        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp)
         {
           $scope.loadData = function (data)
           {
             if (data && data.local)
             {
-              /**
-               * teams , team-member , team-group connection data
-               */
-              var teams_local = angular.fromJson(Storage.get("Teams"));
+              var teamsLocal = Store('app').get('teams');
 
               var connections = {
                 teamClients: {},
@@ -28,84 +26,100 @@ define(
 
               data.teams = [];
 
-              var memGlobalIds = [];
+              var memberGlobalIds = [];
 
               angular.forEach(
-                teams_local, function (team)
+                teamsLocal,
+                function (team)
                 {
-                  data.teams.push({"id": team.uuid, "name": team.name});
+                  data.teams.push(
+                    {
+                      'id':   team.uuid,
+                      'name': team.name
+                    }
+                  );
 
-                  var mems = angular.fromJson(Storage.get(team.uuid));
-                  var memIds = [];
+                  var memberIds = [];
 
                   angular.forEach(
-                    mems, function (mem)
+                    Store('app').get(team.uuid),
+                    function (member)
                     {
-                      memIds.push(mem.uuid);
-                      if (memGlobalIds.indexOf(mem.uuid) == - 1)
+                      memberIds.push(member.uuid);
+
+                      if (memberGlobalIds.indexOf(member.uuid) == - 1)
                       {
-                        members.push({"name": mem.firstName + " " + mem.lastName, "id": mem.uuid });
-                        memGlobalIds.push(mem.uuid);
+                        members.push(
+                          {
+                            'name': member.firstName + ' ' + member.lastName,
+                            'id': member.uuid
+                          }
+                        );
+
+                        memberGlobalIds.push(member.uuid);
                       }
                     });
 
-                  connections.teams[team.uuid] = memIds;
+                  connections.teams[team.uuid] = memberIds;
                 });
 
-              var members_Not_In_team = angular.fromJson(Storage.get("members"));
-
               angular.forEach(
-                members_Not_In_team, function (mem, index)
+                Store('app').get('members'),
+                function (member)
                 {
-                  if (memGlobalIds.indexOf(mem.uuid) == - 1)
+                  if (memberGlobalIds.indexOf(member.uuid) == - 1)
                   {
-                    members.push({"name": mem.firstName + " " + mem.lastName, "id": mem.uuid });
+                    members.push(
+                      {
+                        'name': member.firstName + " " + member.lastName,
+                        'id': member.uuid
+                      }
+                    );
                   }
                 });
 
               data.members = members;
 
-              var groups = angular.fromJson(Storage.get("ClientGroups"));
-              var groupIds = [];
-              data.groups = groups;
+              data.groups = Store('app').get('ClientGroups');
 
+              var groupIds = [];
               var clients = [];
               var clientIds = [];
 
               angular.forEach(
-                groups, function (group)
+                data.groups,
+                function (group)
                 {
-                  var cts = angular.fromJson(Storage.get(group.id));
-                  var ctIds = [];
+                  var clientIds = [];
+
                   angular.forEach(
-                    cts, function (client)
+                    Store('app').get(group.id),
+                    function (client)
                     {
-                      ctIds.push(client.uuid);
+                      clientIds.push(client.uuid);
 
                       // add to global client ids
                       if (clientIds.indexOf(client.uuid) == - 1)
                       {
                         clientIds.push(client.uuid);
+
                         clients.push(
                           {
-                            "name": client.firstName + " " + client.lastName,
-                            "id": client.uuid
-                          });
+                            'name': client.firstName + ' ' + client.lastName,
+                            'id': client.uuid
+                          }
+                        );
                       }
                     });
 
-                  connections.clients[group.id] = ctIds;
+                  connections.clients[group.id] = clientIds;
 
                   groupIds.push(group.id);
                 });
 
-              /*
-               * get the clients not in the client group
-               */
-              var clients_Not_In_Group = angular.fromJson(Storage.get("clients"));
-
               angular.forEach(
-                clients_Not_In_Group, function (client)
+                Store('app').get('clients'),
+                function (client)
                 {
                   if (clientIds.indexOf(client.uuid) == - 1)
                   {
@@ -113,29 +127,28 @@ define(
 
                     clients.push(
                       {
-                        "name": client.firstName + " " + client.lastName,
-                        "id": client.uuid
-                      });
+                        'name': client.firstName + ' ' + client.lastName,
+                        'id': client.uuid
+                      }
+                    );
                   }
                 });
 
               data.clients = clients;
 
               angular.forEach(
-                teams_local, function (team)
+                teamsLocal,
+                function (team)
                 {
-                  /*
-                   * push team group connection data
-                   */
-                  var grps = angular.fromJson(Storage.get("teamGroup_" + team.uuid));
                   var kp = true;
 
                   angular.forEach(
-                    grps, function (grp)
+                    Store('app').get('teamGroup_' + team.uuid),
+                    function (group)
                     {
-                      if (groupIds.indexOf(grp.id) != - 1 && kp)
+                      if (groupIds.indexOf(group.id) != - 1 && kp)
                       {
-                        connections.teamClients[team.uuid] = grp.id;
+                        connections.teamClients[team.uuid] = group.id;
 
                         kp = false;
                       }
@@ -143,38 +156,27 @@ define(
 
                 });
 
-              // log the links
-              //              angular.forEach(connections.teamClients,function(grpLink,teamId){
-              //                  angular.forEach(data.groups,function(grp){
-              //                     if(grpLink == grp.id){
-              //                         console.log("group in the team-clients links " , grp);
-              //                     }
-              //                  });
-              //              });
-              //              console.log("data.groups" , data.groups);
-
-              // keep the original connections into the scope
               $scope.connections = connections;
 
-              //              console.log("Members : " , data.members);
-              return {'data': data, 'con': connections};
+              return {
+                data: data,
+                con:  connections
+              };
             }
             else
             {
-              // data from the server
               return {
-                'data': {},
-                'con':  {}
+                data: {},
+                con:  {}
               };
             }
 
           };
 
-          var localdata = $scope.loadData(data);
-
-          data = localdata.data;
-
-          var connections = localdata.con;
+          // TODO: Repetitive code
+          var localData = $scope.loadData(data);
+          data = localData.data;
+          var connections = localData.con;
 
           $scope.data = {
             left:  [],
@@ -191,9 +193,10 @@ define(
 
             $scope.views[hash] = true;
 
-            var localdata = $scope.loadData(data);
-            data = localdata.data;
-            connections = localdata.con;
+            // TODO: Repetitive code
+            var localData = $scope.loadData(data);
+            data = localData.data;
+            connections = localData.con;
           }
 
           $scope.setViewTo = function (hash)
@@ -548,14 +551,11 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                //           	try to get the members not in the teams Aync
-                TeamUp._(
-                  'teamMemberFree'
-                ).then(
+                TeamUp._('teamMemberFree')
+                  .then(
                   function (result)
                   {
-                    // console.log("members not in any teams loaded ");
-                    Storage.add("members", angular.toJson(result));
+                    Store('app').save('members', result);
 
                     $rootScope.statusBar.off();
 
@@ -567,33 +567,31 @@ define(
           };
 
           $rootScope.$on(
-            'save:teams', function ()
+            'save:teams',
+            function ()
             {
               var preTeams = $scope.connections.teams;
               var afterTeams = arguments[1];
               var changes = $scope.getChanges(preTeams, afterTeams);
 
-              // get all the changes
               if (angular.equals({}, changes))
               {
                 console.log("no changes ! ");
               }
               else
               {
-                // console.log("Team Member changes : ", changes);
-
                 $scope.applyTeamsChanges(changes);
               }
             });
 
           $rootScope.$on(
-            'save:clients', function ()
+            'save:clients',
+            function ()
             {
               var preClients = $scope.connections.clients;
               var afterClients = arguments[1];
               var changes = $scope.getChanges(preClients, afterClients);
 
-              // get all the changes
               if (angular.equals({}, changes))
               {
                 console.log("no changes ! ");
@@ -602,14 +600,16 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                Clients.manage(changes).then(
+                Clients.manage(changes)
+                  .then(
                   function ()
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                     $rootScope.statusBar.off();
 
                     $route.reload();
-                  });
+                  }
+                );
               }
             });
 

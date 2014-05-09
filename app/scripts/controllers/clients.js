@@ -6,29 +6,28 @@ define(
 
     controllers.controller(
       'clientCtrl', [
-        '$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Storage', 'Dater', '$filter',
+        '$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Store', 'Dater', '$filter',
         '$modal', 'TeamUp',
         function (
-          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Storage, Dater, $filter, $modal, TeamUp
+          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp
           )
         {
           $rootScope.fixStyles();
 
           if (data.clientId)
           {
-            data.clientGroups = angular.fromJson(Storage.get("ClientGroups"));
+            data.clientGroups = Store('app').get('ClientGroups');
             data.clients = {};
 
             angular.forEach(
-              data.clientGroups, function (cGroup)
+              data.clientGroups,
+              function (clientGroup)
               {
-                var clients = angular.fromJson(Storage.get(cGroup.id));
-                // var key = cGroup.id;
-
-                data.clients[cGroup.id] = clients;
+                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
 
                 angular.forEach(
-                  clients, function (client)
+                  data.clients[clientGroup.id],
+                  function (client)
                   {
                     if (client.uuid == data.clientId)
                     {
@@ -156,7 +155,7 @@ define(
               'clientReportsQuery',
               { second: $scope.client.uuid },
               null,
-              { success: function (reports) { Storage.add('reports_' + $scope.client.uuid, angular.toJson(reports)) }}
+              { success: function (reports) { Store('app').save('reports_' + $scope.client.uuid, reports) }}
             ).then(
               function (reports)
               {
@@ -298,16 +297,16 @@ define(
               loadGroupReports();
             }
 
-            if ($scope.views.client)
-            {
-              angular.forEach(
-                $scope.clients,
-                function (client)
-                {
-                  console.log('image url ->', $scope.imgHost + $scope.ns + "/client/" + client.uuid + "/photo");
-                }
-              )
-            }
+//            if ($scope.views.client)
+//            {
+//              angular.forEach(
+//                $scope.clients,
+//                function (client)
+//                {
+//                  console.log('image url ->', $scope.imgHost + $scope.ns + "/client/" + client.uuid + "/photo");
+//                }
+//              )
+//            }
 
             //            // load image
             //            if ($scope.views.client)
@@ -568,9 +567,7 @@ define(
               'clientGroupAdd',
               null,
               clientGroup,
-              {
-                success: function (result) { Storage.add(result.id, angular.toJson(result)) }
-              }
+              { success: function (result) { Store('app').save(result.id, result) } }
             ).then(
               function (result)
               {
@@ -583,9 +580,7 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                  var routePara = { 'uuid': result.id };
-
-                  reloadGroup(routePara);
+                  reloadGroup({ 'uuid': result.id });
                 }
               });
           };
@@ -662,9 +657,7 @@ define(
               'clientAdd',
               null,
               client,
-              {
-                success: function (result) { Storage.add(result.id, angular.toJson(result)) }
-              }
+              { success: function (result) { Store('app').save(result.id, result) } }
             ).then(
               function (result)
               {
@@ -674,8 +667,7 @@ define(
                 }
                 else
                 {
-                  var routePara = { 'uuid': result.clientGroupUuid };
-                  reloadGroup(routePara);
+                  reloadGroup({ 'uuid': result.clientGroupUuid });
                 }
               });
           };
@@ -862,7 +854,7 @@ define(
                               'clientsQuery',
                               null,
                               null,
-                              { success: function (clients) { Storage.add('clients', angular.toJson(clients)) } }
+                              { success: function (clients) { Store('app').save('clients', clients) } }
                             ).then(
                               function ()
                               {
@@ -886,7 +878,8 @@ define(
           $scope.requestReportsByFilter = function ()
           {
             angular.forEach(
-              $scope.groupReports, function (report)
+              $scope.groupReports,
+              function (report)
               {
                 // filter need to be checked
                 // client Id, month
@@ -1045,32 +1038,32 @@ define(
             }
           };
 
-//          $scope.editImg = function ()
-//          {
-//            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
-//
-//            $scope.uploadURL = $scope.imgHost + $scope.ns +
-//                               "/client/" + $scope.client.uuid + "/photo";
-//
-//            Clients.loadImg($scope.uploadURL).then(
-//              function (result)
-//              {
-//                $rootScope.statusBar.off();
-//
-//                var imgHost = $scope.imgHost.replace("\\:", ":");
-//
-//                if (result.path)
-//                {
-//                  $scope.avatarURL = imgHost + result.path;
-//                }
-//
-//                $scope.uploadURL = imgHost + $scope.ns +
-//                                   "/client/" + $scope.client.uuid + "/photo";
-//
-//                $scope.setViewTo('editImg');
-//              }
-//            );
-//          }
+          //          $scope.editImg = function ()
+          //          {
+          //            $rootScope.statusBar.display($rootScope.ui.profile.loadUploadURL);
+          //
+          //            $scope.uploadURL = $scope.imgHost + $scope.ns +
+          //                               "/client/" + $scope.client.uuid + "/photo";
+          //
+          //            Clients.loadImg($scope.uploadURL).then(
+          //              function (result)
+          //              {
+          //                $rootScope.statusBar.off();
+          //
+          //                var imgHost = $scope.imgHost.replace("\\:", ":");
+          //
+          //                if (result.path)
+          //                {
+          //                  $scope.avatarURL = imgHost + result.path;
+          //                }
+          //
+          //                $scope.uploadURL = imgHost + $scope.ns +
+          //                                   "/client/" + $scope.client.uuid + "/photo";
+          //
+          //                $scope.setViewTo('editImg');
+          //              }
+          //            );
+          //          }
 
         }
       ]

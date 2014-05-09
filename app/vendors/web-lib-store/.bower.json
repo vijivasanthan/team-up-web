@@ -12,11 +12,11 @@
   ],
   "license": "MIT",
   "private": true,
-  "_release": "ea55b8ff90",
+  "_release": "58d67be457",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "ea55b8ff90c61f5e415e917e81906ffa668d1475"
+    "commit": "58d67be45740ededd27d511e658329d6c8064b48"
   },
   "_source": "https://github.com/askcs/web-lib-store.git",
   "_target": "*",

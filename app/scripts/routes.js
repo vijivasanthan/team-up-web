@@ -157,8 +157,8 @@ define(
               reloadOnSearch: false,
               resolve:        {
                 data: [
-                  '$rootScope', '$route', 'TeamUp', 'Storage',
-                  function ($rootScope, $route, TeamUp, Storage)
+                  '$rootScope', '$route', 'TeamUp', 'Store',
+                  function ($rootScope, $route, TeamUp, Store)
                   {
                     return TeamUp._(
                       'profileGet',
@@ -174,7 +174,7 @@ define(
                           {
                             $rootScope.app.resources = resources;
 
-                            Storage.add('resources', angular.toJson(resources));
+                            Store('app').save('resources', resources);
                           }
                         }
                       }

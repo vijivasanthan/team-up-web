@@ -116,21 +116,28 @@ define ['services/services'], (services) ->
             unless data
               data = collection
               key = null
-            if angular.isArray(data)
-              angular.forEach data, (e, index) ->
-                saveEntry e, getEntryId(e) or index
-                return
-            else if key or (data and getEntryId(data))
-              saveEntry data, key or getEntryId(data)
-            else
-              angular.forEach data, saveEntry
+            saveEntry data, key or getEntryId(data)
+
+#            Temporarily disabled because of the arrayed data load
+#            if angular.isArray(data)
+#              angular.forEach data, (e, index) ->
+#                saveEntry e, getEntryId(e) or index
+#                return
+#            else if key or (data and getEntryId(data))
+#              saveEntry data, key or getEntryId(data)
+#            else
+#              angular.forEach data, saveEntry
+
             if clear
               newIds = (if angular.isArray(data) then _.chain(data).map(getEntryId).map(String).value() else _.keys(data))
               _.chain(collection).keys().difference(newIds).each removeEntry
               _.chain(collection).filter((entry) ->
                 not getEntryId(entry)
               ).keys().each removeEntry
-            updateArray collection if isArray
+
+#            Probably not used
+#            updateArray collection if isArray
+
             return
 
           batch: (keys, target, callback) ->
@@ -161,6 +168,13 @@ define ['services/services'], (services) ->
             LawnChair ->
               @get key, (result) ->
                 value = updateCacheFromStorage(value, result) if result
+                # TODO: Solve permanently in a better way
+                # Little hack for de-serializing array-object back to an array
+                if value.hasOwnProperty("0")
+                  value = _.map(value, (_value) ->
+                    _value
+                  )
+                  value.pop()
                 callback value if callback
                 return
               return

@@ -7,13 +7,13 @@ define(
     controllers.controller(
       'logout',
       [
-        '$rootScope', '$scope', '$window', 'Session', 'Storage', 'TeamUp',
-        function ($rootScope, $scope, $window, Session, Storage, TeamUp)
+        '$rootScope', '$scope', '$window', 'Session', 'Store', 'TeamUp',
+        function ($rootScope, $scope, $window, Session, Store, TeamUp)
         {
           $('.navbar').hide();
           $('#footer').hide();
 
-          var logindata = angular.fromJson(Storage.get('logindata'));
+          var logindata = Store('app').get('logindata');
 
           TeamUp._('logout')
             .then(
@@ -25,11 +25,9 @@ define(
               }
               else
               {
-                Storage.session.clearAll();
+                Store('app').nuke();
 
-                Storage.add('logindata', angular.toJson(logindata));
-
-                Storage.cookie.clearAll();
+                Store('app').save('logindata', logindata);
 
                 $window.location.href = 'logout.html';
               }

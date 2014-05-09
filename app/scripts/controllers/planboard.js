@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'planboard', [
-        '$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams', 'Clients', 'TeamUp',
-        function ($rootScope, $scope, $location, Dater, Storage, Teams, Clients, TeamUp)
+        '$rootScope', '$scope', '$location', 'Dater', 'Store', 'Teams', 'Clients', 'TeamUp',
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp)
         {
           var params = $location.search();
 
@@ -15,10 +15,8 @@ define(
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.ns;
 
-          var teams = angular.fromJson(Storage.get('Teams')),
-              clients = angular.fromJson(Storage.get('ClientGroups'));
-
-          // console.log('Teams ->', teams);
+          var teams   = Store('app').get('teams'),
+              clients = Store('app').get('ClientGroups');
 
           $scope.data = {
             teams:   {
@@ -63,26 +61,26 @@ define(
             teams,
             function (team)
             {
-              var members = angular.fromJson(Storage.get(team.uuid));
-
-              console.log('members ->', members);
+              var members = Store('app').get(team.uuid);
 
               if (members && members.length > 0)
               {
-                console.log('team ->', team);
-
                 $scope.data.teams.list.push(
                   {
                     uuid: team.uuid,
                     name: team.name
-                  });
+                  }
+                );
 
                 $scope.data.teams.members[team.uuid] = [];
 
                 angular.forEach(
-                  members, function (member)
+                  members,
+                  function (member)
                   {
-                    var imgfile = Storage.avatar.geturl(member.uuid);
+                    // TODO: Remove this completely later on!
+                    // var imgfile = Storage.avatar.geturl(member.uuid);
+                    var imgfile = '';
                     var imgURL = $scope.imgHost + imgfile;
 
                     if (typeof imgfile == "undefined")
@@ -112,9 +110,10 @@ define(
             });
 
           angular.forEach(
-            clients, function (client)
+            clients,
+            function (client)
             {
-              var members = angular.fromJson(Storage.get(client.id));
+              var members = Store('app').get(client.id);
 
               if (members && members.length > 0)
               {
@@ -129,7 +128,9 @@ define(
                 angular.forEach(
                   members, function (member)
                   {
-                    var imgfile = Storage.avatar.geturl(member.uuid);
+                    // TODO: Remove this one later on!
+                    // var imgfile = Storage.avatar.geturl(member.uuid);
+                    var imgfile = '';
                     var imgURL = $scope.imgHost + imgfile;
 
                     if (typeof imgfile == "undefined")

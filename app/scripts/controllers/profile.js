@@ -7,9 +7,9 @@ define(
     controllers.controller(
       'profileCtrl',
       [
-        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Storage', 'Teams', 'Dater',
+        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Store', 'Teams', 'Dater',
         '$filter', 'TeamUp',
-        function ($rootScope, $scope, $q, $location, $window, $route, data, Storage, Teams, Dater, $filter, TeamUp)
+        function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams, Dater, $filter, TeamUp)
         {
           $rootScope.fixStyles();
 
@@ -31,13 +31,15 @@ define(
           $scope.currentRole = $scope.profilemeta.role;
 
           var teams = [];
-          var storage_teams = angular.fromJson(Storage.get("Teams"));
+          $scope.selectTeams = Store('app').get('teams');
 
           angular.forEach(
-            $scope.profilemeta.teamUuids, function (teamId)
+            $scope.profilemeta.teamUuids,
+            function (teamId)
             {
               angular.forEach(
-                storage_teams, function (team)
+                $scope.selectTeams,
+                function (team)
                 {
                   if (team.uuid == teamId)
                   {
@@ -49,7 +51,8 @@ define(
           if (teams.length == 0)
           {
             angular.forEach(
-              storage_teams, function (team)
+              $scope.selectTeams,
+              function (team)
               {
                 if (team.uuid == sessionStorage.getItem(data.uuid + "_team"))
                 {
@@ -59,7 +62,6 @@ define(
           }
 
           $scope.teams = teams;
-          $scope.selectTeams = storage_teams;
 
           $scope.forms = {
             add:  false,
@@ -128,6 +130,7 @@ define(
             if (resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined')
             {
               resources.teamUuids = [];
+
               if ($scope.teams.length == 0)
               {
                 //resources.teamUuids.push($scope.selectTeams[0].uuid);
@@ -184,7 +187,7 @@ define(
                       {
                         $rootScope.app.resources = result;
 
-                        Storage.add('resources', angular.toJson(resources));
+                        Store('app').save('resources', resources);
                       }
                     }
                   ).then(
@@ -281,13 +284,11 @@ define(
                         );
                       });
 
-                    TeamUp._(
-                      'teamMemberFree'
-                    ).then(
+                    TeamUp._('teamMemberFree')
+                      .then(
                       function (result)
                       {
-                        console.log("members not in any teams loaded ");
-                        Storage.add("members", angular.toJson(result));
+                        Store('app').save('members', result);
 
                         $rootScope.statusBar.off();
                       },

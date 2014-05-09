@@ -7,8 +7,8 @@ define(
     services.factory(
       'Sloter',
       [
-        '$rootScope', 'Storage',
-        function ($rootScope, Storage)
+        '$rootScope', 'Store',
+        function ($rootScope, Store)
         {
           return {
             get: {
@@ -17,7 +17,8 @@ define(
                 var groups = {};
 
                 angular.forEach(
-                  Storage.local.groups(), function (group)
+                  Store('app').get('groups'),
+                  function (group)
                   {
                     groups[group.uuid] = group.name;
                   });
@@ -30,7 +31,8 @@ define(
                 var members = {};
 
                 angular.forEach(
-                  Storage.local.members(), function (member)
+                  Store('app').get('members'),
+                  function (member)
                   {
                     members[member.uuid] = member.name;
                   });

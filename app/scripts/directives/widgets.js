@@ -40,14 +40,15 @@ define(
               action: '@'
             },
             controller:  [
-              '$scope', '$rootScope', 'Storage' ,
-              function ($scope, $rootScope, Storage)
+              '$scope', '$rootScope', 'Store' ,
+              function ($scope, $rootScope, Store)
               {
                 $scope.progress = 0;
                 $scope.avatar = '';
                 $scope.uploadLabel = $rootScope.ui.profile.click2upload;
 
-                var session = angular.fromJson(Storage.cookie.get('session'));
+                // var session = angular.fromJson(Storage.cookie.get('session'));
+                var session = Store('app').get('session');
 
                 if (session)
                 {
@@ -55,7 +56,9 @@ define(
                 }
                 else
                 {
-                  $rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
+                  console.log('session expired!!');
+                  // FIXME: Message does not exist!
+                  // $rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
                   return false;
                 }
 

@@ -7,8 +7,8 @@ define(
     services.factory(
       'Clients',
       [
-        '$resource', '$q', 'Storage', 'TeamUp', 'Store',
-        function ($resource, $q, Storage, TeamUp, Store)
+        '$resource', '$q', 'Store', 'TeamUp',
+        function ($resource, $q, Store, TeamUp)
         {
           var ClientsService = $resource();
 
@@ -23,7 +23,7 @@ define(
               {
                 success: function (clientGroups)
                 {
-                  Storage.add('ClientGroups', angular.toJson(clientGroups));
+                  Store('app').save('ClientGroups', clientGroups);
 
                   if (! only)
                   {
@@ -43,23 +43,12 @@ define(
                               {
                                 success: function (result)
                                 {
-                                  Storage.add(
+                                  Store('app').save(
                                     clientGroup.id,
-                                    angular.toJson(
-                                      (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
-                                      [] :
-                                      result
-                                    )
+                                    (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
+                                    [] :
+                                    result
                                   );
-
-                                  // TODO: Do something about return object!
-                                  /*
-                                   deferred.resolve(
-                                   {
-                                   id:   id,
-                                   data: returned
-                                   });
-                                   */
                                 }
                               }
                             )
@@ -89,7 +78,7 @@ define(
                                 {
                                   data.clients[clientGroup.id] = (result.id == clientGroup.id && routeParams.uuid == clientGroup.id) ?
                                                                  result.data :
-                                                                 angular.fromJson(Storage.get(clientGroup.id));
+                                                                 Store('app').get(clientGroup.id);
                                 }
                                 else
                                 {
@@ -170,10 +159,10 @@ define(
                   var ret;
 
                   angular.forEach(
-                    angular.fromJson(Storage.get("ClientGroups")),
+                    Store('app').get('ClientGroups'),
                     function (cGrp)
                     {
-                      var clients = angular.fromJson(Storage.get(cGrp.id));
+                      var clients = Store('app').get(cGrp.id);
 
                       angular.forEach(
                         clients,
@@ -225,13 +214,13 @@ define(
 
             var data = {};
 
-            data.clientGroups = angular.fromJson(Storage.get("ClientGroups"));
+            data.clientGroups = Store('app').get('ClientGroups');
 
             data.clients = {};
 
             angular.forEach(
               data.clientGroups,
-              function (clientGroup) { data.clients[clientGroup.id] = angular.fromJson(Storage.get(clientGroup.id)) }
+              function (clientGroup) { data.clients[clientGroup.id] = Store('app').get(clientGroup.id) }
             );
 
             return data;

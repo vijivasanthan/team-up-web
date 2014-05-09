@@ -120,24 +120,13 @@
                 data = collection;
                 key = null;
               }
-              if (angular.isArray(data)) {
-                angular.forEach(data, function(e, index) {
-                  saveEntry(e, getEntryId(e) || index);
-                });
-              } else if (key || (data && getEntryId(data))) {
-                saveEntry(data, key || getEntryId(data));
-              } else {
-                angular.forEach(data, saveEntry);
-              }
+              saveEntry(data, key || getEntryId(data));
               if (clear) {
                 newIds = (angular.isArray(data) ? _.chain(data).map(getEntryId).map(String).value() : _.keys(data));
                 _.chain(collection).keys().difference(newIds).each(removeEntry);
                 _.chain(collection).filter(function(entry) {
                   return !getEntryId(entry);
                 }).keys().each(removeEntry);
-              }
-              if (isArray) {
-                updateArray(collection);
               }
             },
             batch: function(keys, target, callback) {
@@ -177,6 +166,12 @@
                 this.get(key, function(result) {
                   if (result) {
                     value = updateCacheFromStorage(value, result);
+                  }
+                  if (value.hasOwnProperty("0")) {
+                    value = _.map(value, function(_value) {
+                      return _value;
+                    });
+                    value.pop();
                   }
                   if (callback) {
                     callback(value);

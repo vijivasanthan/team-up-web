@@ -7,8 +7,8 @@ define(
     services.factory(
       'Dater',
       [
-        '$rootScope', 'Storage',
-        function ($rootScope, Storage)
+        '$rootScope', 'Store',
+        function ($rootScope, Store)
         {
           return {
             current: {
@@ -35,8 +35,7 @@ define(
                           ' ' +
                           time)).getTime();
 
-                return (
-                         flag) ? result / 1000 : result;
+                return (flag) ? result / 1000 : result;
               }
             },
 
@@ -173,20 +172,18 @@ define(
 
             registerPeriods: function ()
             {
-              var periods = angular.fromJson(Storage.get('periods') || '{}');
+              var periods = Store('app').get('periods') || '{}';
 
-              Storage.add(
-                'periods', angular.toJson(
-                  {
-                    months: this.getMonthTimeStamps(),
-                    weeks:  this.getWeekTimeStamps(),
-                    days:   this.getDayTimeStamps()
-                  }));
+              Store('app').save('periods', {
+                months: this.getMonthTimeStamps(),
+                weeks:  this.getWeekTimeStamps(),
+                days:   this.getDayTimeStamps()
+              });
             },
 
             getPeriods: function ()
             {
-              return angular.fromJson(Storage.get('periods'));
+              return Store('app').get('periods');
             }
           }
         }
