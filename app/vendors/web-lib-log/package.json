@@ -1,7 +1,7 @@
 {
-  "name": "web-lib-store",
+  "name": "web-lib-log",
   "version": "1.0.0",
-  "description": "A LawnchairJS based browser storage AngularJS directive.",
+  "description": "Log any errors or other useful information and collect usage data.",
   "dependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-coffee": "^0.10.1",
@@ -10,7 +10,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/askcs/web-lib-md5.git"
+    "url": "https://github.com/askcs/web-lib-log.git"
   },
   "author": "Cengiz Ulusoy",
   "license": "BSD"

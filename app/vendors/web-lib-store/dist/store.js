@@ -120,7 +120,9 @@
                 data = collection;
                 key = null;
               }
-              saveEntry(data, key || getEntryId(data));
+              if (key) {
+                saveEntry(data, key || getEntryId(data));
+              }
               if (clear) {
                 newIds = (angular.isArray(data) ? _.chain(data).map(getEntryId).map(String).value() : _.keys(data));
                 _.chain(collection).keys().difference(newIds).each(removeEntry);

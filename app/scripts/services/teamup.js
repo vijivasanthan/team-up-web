@@ -436,7 +436,7 @@ define(
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
             // TODO: Turn on logging later on!
-            // Log.record(arguments);
+            // Log.record('call', arguments);
             // console.log('call ->', arguments);
 
             var deferred = $q.defer();

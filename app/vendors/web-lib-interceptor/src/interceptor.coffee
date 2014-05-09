@@ -12,6 +12,7 @@ define ['services/services'], (services) ->
 
       requestError: (rejection) ->
         console.warn 'request error ->', rejection
+        Log.error rejection
         $q.reject rejection
 
       response: (response) ->
@@ -20,6 +21,7 @@ define ['services/services'], (services) ->
 
       responseError: (rejection) ->
         console.warn 'response error ->', rejection
+        Log.error rejection
         $q.reject rejection
 
   ]

@@ -56,6 +56,7 @@ define(
         return 'http://dev.ask-cs.com/';
         // return 'http://askpack.ask-cs.com/';
       })(),
+
       namespace: (function ()
       {
         return "teamup-dev";
@@ -201,11 +202,6 @@ define(
             }
           }
         }
-      },
-
-      cookie: {
-        expiry: 30,
-        path:   '/'
       },
 
       states: [

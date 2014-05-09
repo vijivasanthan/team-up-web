@@ -13,11 +13,11 @@
   ],
   "license": "MIT",
   "private": true,
-  "_release": "36e497ff37",
+  "_release": "d02948bcb1",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "36e497ff37bce93ccbb6586d82f7a5cdeccd80d9"
+    "commit": "d02948bcb1e685d989270f90ee31ddbcf92b0e94"
   },
   "_source": "https://github.com/askcs/web-lib-interceptor.git",
   "_target": "*",

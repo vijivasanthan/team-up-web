@@ -116,7 +116,7 @@ define ['services/services'], (services) ->
             unless data
               data = collection
               key = null
-            saveEntry data, key or getEntryId(data)
+            saveEntry data, key or getEntryId(data) if key
 
 #            Temporarily disabled because of the arrayed data load
 #            if angular.isArray(data)

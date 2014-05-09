@@ -5,10 +5,11 @@ define ['services/services'], (services) ->
     'Store'
     (Store) ->
 
-      record: (message) ->
+      record: (key, message) ->
         stamp = Date.now()
+        key += '_' + stamp
 
-        Store('logs').save {
+        Store('logs').save key, {
           time: stamp
           message: message
         }
@@ -21,17 +22,19 @@ define ['services/services'], (services) ->
         body = {}
 
         if trace.hasOwnProperty 'message'
-          body:
+          body = {
             stack:   trace.stack,
             message: trace.message
+          }
         else
-          body:
+          body = {
             trace: trace
+          }
 
         err[stamp] = body
 
         console.warn 'Error: ', trace
 
-        Store.save err
+        Store.save 'error_' + stamp, err
   ]
   return

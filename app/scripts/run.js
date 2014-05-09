@@ -11,17 +11,13 @@ define(
         {
           new Offline();
 
-          $rootScope.$on('connection', function ()
-          {
-            if (!arguments[1])
+          $rootScope.$on(
+            'connection',
+            function ()
             {
-              console.log('connection restored');
+              console.log((! arguments[1]) ? 'connection restored :]' : 'connection lost :[');
             }
-            else
-            {
-              console.log('connection lost :[');
-            }
-          });
+          );
 
           $rootScope.config = config.app;
 

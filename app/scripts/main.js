@@ -5,10 +5,6 @@ if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
 
-// TODO: Remove them later on!
-// localStorage.removeItem('TeamUp.periods');
-// localStorage.removeItem('TeamUp.periodsNext');
-
 require.config(
   {
     paths: {
@@ -37,7 +33,9 @@ require.config(
       md5:                '../vendors/web-lib-md5/md5.min',
       store:              '../vendors/web-lib-store/dist/store',
       offline:            '../vendors/web-lib-offline/dist/offline',
-      interceptor:        '../vendors/web-lib-interceptor/dist/interceptor'
+      interceptor:        '../vendors/web-lib-interceptor/dist/interceptor',
+      log:                '../vendors/web-lib-log/dist/log',
+      _moment:            '../vendors/web-lib-moment/dist/moment'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -50,7 +48,7 @@ require.config(
       bootstrap:          { deps: ['jquery'], exports: 'bootstrap' },
       lawnchair:          { deps: [], exports: 'lawnchair' },
       dom:                { deps: ['lawnchair'], exports: 'dom' },
-      momentjs:           { deps: [], exports: 'moment' },
+      moment:             { deps: [], exports: 'moment' },
       timeline:           { deps: [], exports: 'timeline' },
       treegrid:           { deps: [], exports: 'treegrid' },
       datepicker:         { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
@@ -59,7 +57,9 @@ require.config(
       underscore:         { exports: 'underscore'},
       store:              { deps: ['angular', 'underscore']},
       offline:            { deps: ['angular'] },
-      interceptor:        { deps: ['angular'] }
+      interceptor:        { deps: ['angular'] },
+      log:                { deps: ['angular'] },
+      _moment:            { deps: ['angular', 'moment'] }
     }
   }
 );
@@ -86,9 +86,6 @@ require(
 
     'services/teamup',
     'services/session',
-
-    'services/logger',
-    'services/moment',
 
     'services/clients',
     'services/dater',
@@ -124,7 +121,9 @@ require(
     'underscore',
     'store',
     'offline',
-    'interceptor'
+    'interceptor',
+    'log',
+    '_moment'
   ],
   function (angular, domReady)
   {

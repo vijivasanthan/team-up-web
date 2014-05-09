@@ -6,7 +6,7 @@
     "Cengizism <culusoy@ask-cs.com>"
   ],
   "description": "A LawnchairJS based browser storage AngularJS directive.",
-  "main": "store.js",
+  "main": "dist/store.js",
   "keywords": [
     "lawnchair",
     "storage"
