@@ -161,11 +161,15 @@ input[type="button"] {
   color:$brown;
   &:hover,
   &:focus,
-  &:active {
+  &:active,
+  &.active,
+  &.dropdown-toggle{
     background-color: $orange;
     color: $offwhite;
   }
 }
+
+
 /*// Warning appears are orange   */
 .btn-warning {
   background-color:$red;
