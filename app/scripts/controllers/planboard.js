@@ -434,14 +434,14 @@ define(
               month: false
             },
             config:  {
-              bar:        $rootScope.config.timeline.config.bar,
-              layouts:    $rootScope.config.timeline.config.layouts,
-              wishes:     $rootScope.config.timeline.config.wishes,
+              bar:        config.app.timeline.config.bar,
+              layouts:    config.app.timeline.config.layouts,
+              wishes:     config.app.timeline.config.wishes,
               legenda:    {},
-              legendarer: $rootScope.config.timeline.config.legendarer,
-              states:     $rootScope.config.timeline.config.states,
-              divisions:  $rootScope.config.timeline.config.divisions,
-              densities:  $rootScope.config.timeline.config.densities
+              legendarer: config.app.timeline.config.legendarer,
+              states:     config.app.timeline.config.states,
+              divisions:  config.app.timeline.config.divisions,
+              densities:  config.app.timeline.config.densities
             }
           };
 
@@ -456,7 +456,7 @@ define(
           }
 
           angular.forEach(
-            $rootScope.config.timeline.config.states, function (state, index)
+            config.app.timeline.config.states, function (state, index)
             {
               $scope.timeline.config.legenda[index] = true;
             });

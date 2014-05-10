@@ -28,8 +28,8 @@ define(
 
           $scope.data = data;
 
-          $scope.roles = $rootScope.config.roles;
-          $scope.mfuncs = $rootScope.config.mfunctions;
+          $scope.roles = config.app.roles;
+          $scope.mfuncs = config.app.mfunctions;
 
           var uuid, view;
 

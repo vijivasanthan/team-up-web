@@ -62,7 +62,7 @@ require.config(
       interceptor:        { deps: ['angular'] },
       log:                { deps: ['angular'] },
       _moment:            { deps: ['angular', 'moment'] },
-      session:                { deps: ['angular'] }
+      session:            { deps: ['angular'] }
     }
   }
 );
@@ -81,11 +81,13 @@ require(
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
 
-    'localization',
+    'locals',
     'config',
     'app',
     'run',
     'routes',
+    'states',
+    'services/browsers',
 
     'services/teamup',
 

@@ -126,7 +126,6 @@ define(
                  */
                 clientsByGroupIDQuery: {
                   method: 'GET',
-
                   isArray: true,
                   params:  {
                     first:  'client',

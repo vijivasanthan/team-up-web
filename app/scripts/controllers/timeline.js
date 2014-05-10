@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -75,13 +75,13 @@ define(
 
               $scope.slot = {
                 start:     {
-                  date:     new Date().toString($rootScope.config.formats.date),
-                  time:     new Date().toString($rootScope.config.formats.time),
+                  date:     new Date().toString(config.app.formats.date),
+                  time:     new Date().toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
                 end:       {
-                  date:     new Date().toString($rootScope.config.formats.date),
-                  time:     new Date().addHours(1).toString($rootScope.config.formats.time),
+                  date:     new Date().toString(config.app.formats.date),
+                  time:     new Date().addHours(1).toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
                 state:     'com.ask-cs.State.Available',
@@ -162,7 +162,7 @@ define(
                 $scope.timeline.options.end = new Date(options.end);
               }
 
-              angular.extend($scope.timeline.options, $rootScope.config.timeline.options);
+              angular.extend($scope.timeline.options, config.app.timeline.options);
 
               if ($scope.timeline.main)
               {
@@ -400,13 +400,13 @@ define(
 
                 $scope.slot = {
                   start:       {
-                    date:     new Date(values.start).toString($rootScope.config.formats.date),
-                    time:     new Date(values.start).toString($rootScope.config.formats.time),
+                    date:     new Date(values.start).toString(config.app.formats.date),
+                    time:     new Date(values.start).toString(config.app.formats.time),
                     datetime: new Date(values.start).toISOString()
                   },
                   end:         {
-                    date:     new Date(values.end).toString($rootScope.config.formats.date),
-                    time:     new Date(values.end).toString($rootScope.config.formats.time),
+                    date:     new Date(values.end).toString(config.app.formats.date),
+                    time:     new Date(values.end).toString(config.app.formats.time),
                     datetime: new Date(values.end).toISOString()
                   },
                   state:       content.state,
@@ -518,13 +518,13 @@ define(
 
                   $scope.slot = {
                     start: {
-                      date:     new Date(values.start).toString($rootScope.config.formats.date),
-                      time:     new Date(values.start).toString($rootScope.config.formats.time),
+                      date:     new Date(values.start).toString(config.app.formats.date),
+                      time:     new Date(values.start).toString(config.app.formats.time),
                       datetime: new Date(values.start).toISOString()
                     },
                     end:   {
-                      date:     new Date(values.end).toString($rootScope.config.formats.date),
-                      time:     new Date(values.end).toString($rootScope.config.formats.time),
+                      date:     new Date(values.end).toString(config.app.formats.date),
+                      time:     new Date(values.end).toString(config.app.formats.time),
                       datetime: new Date(values.end).toISOString()
                     },
                     recursive: (values.group.match(/recursive/)) ? true : false,
@@ -742,13 +742,13 @@ define(
               {
                 $scope.slot = {
                   start:       {
-                    date:     new Date(values.start).toString($rootScope.config.formats.date),
-                    time:     new Date(values.start).toString($rootScope.config.formats.time),
+                    date:     new Date(values.start).toString(config.app.formats.date),
+                    time:     new Date(values.start).toString(config.app.formats.time),
                     datetime: new Date(values.start).toISOString()
                   },
                   end:         {
-                    date:     new Date(values.end).toString($rootScope.config.formats.date),
-                    time:     new Date(values.end).toString($rootScope.config.formats.time),
+                    date:     new Date(values.end).toString(config.app.formats.date),
+                    time:     new Date(values.end).toString(config.app.formats.time),
                     datetime: new Date(values.end).toISOString()
                   },
                   state:       content_obj.state,

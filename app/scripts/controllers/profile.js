@@ -19,11 +19,11 @@ define(
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.ns;
 
-          $scope.roles = $rootScope.config.roles;
-          $scope.mfuncs = $rootScope.config.mfunctions;
+          $scope.roles = config.app.roles;
+          $scope.mfuncs = config.app.mfunctions;
 
           $scope.data = data;
-          $scope.noImgURL = $rootScope.config.noImgURL;
+          $scope.noImgURL = config.app.noImgURL;
 
           $scope.profilemeta = data;
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);

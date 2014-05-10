@@ -64,19 +64,11 @@
 
 })(jQuery, window);
 
-if ($.browser.msie)
-{
-  var ver = $.browser.version || $.browser.version[0];
-
-  if (ver == '6.0' || ver == '7.0') window.location = 'browsers.html';
-}
-
 (function (jQuery, window)
 {
   "use strict";
 
   var os = {},
-
       navOS = window.navigator.appVersion;
 
   if (navOS.indexOf("Win") != - 1)   os.windows = true;
@@ -88,25 +80,31 @@ if ($.browser.msie)
 
 })(jQuery, window);
 
-(
-  function ()
+(function ()
+{
+  var method,
+      noop = function () {},
+      methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeStamp', 'trace', 'warn'
+      ],
+      length = methods.length,
+      console = (
+        window.console = window.console || {});
+
+  while (length --)
   {
-    var method,
-        noop = function () {},
-        methods = [
-          'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-          'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-          'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-          'timeStamp', 'trace', 'warn'
-        ],
-        length = methods.length,
-        console = (
-          window.console = window.console || {});
+    method = methods[length];
 
-    while (length --)
-    {
-      method = methods[length];
+    if (! console[method]) console[method] = noop;
+  }
+}());
 
-      if (! console[method]) console[method] = noop;
-    }
-  }());
+if ($.browser.msie)
+{
+  var ver = $.browser.version || $.browser.version[0];
+
+  if (ver == '6.0' || ver == '7.0') window.location = 'browsers.html';
+}

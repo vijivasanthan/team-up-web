@@ -80,7 +80,7 @@ define(
               date *= 1000
             }
 
-            return new Date(date).toString($rootScope.config.formats.date);
+            return new Date(date).toString(config.app.formats.date);
           };
         }
       ]);
@@ -95,7 +95,7 @@ define(
           {
             if (typeof date == 'string') date = Number(date);
 
-            return new Date(date).toString($rootScope.config.formats.time);
+            return new Date(date).toString(config.app.formats.time);
           };
         }
       ]);

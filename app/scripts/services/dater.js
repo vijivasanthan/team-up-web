@@ -1,6 +1,6 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services', 'config'],
+  function (services, config)
   {
     'use strict';
 
@@ -18,7 +18,7 @@ define(
             },
 
             readable: {
-              date: function (date) { return  new Date(date).toString($rootScope.config.formats.date) }
+              date: function (date) { return  new Date(date).toString(config.app.formats.date) }
             },
 
             convert: {

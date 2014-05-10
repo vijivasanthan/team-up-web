@@ -200,7 +200,7 @@ define(
           //                members,
           //                function (mem)
           //                {
-          //                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+          //                  var getAvatarUrl = config.app.host + config.app.namespace +
           //                                     "/team/member/" + mem.uuid + "/photo";
           //
           //                  Teams.loadImg(getAvatarUrl)
@@ -220,7 +220,7 @@ define(
           //              angular.forEach(
           //                members, function (mem)
           //                {
-          //                  var getAvatarUrl = $rootScope.config.host + $rootScope.config.namespace +
+          //                  var getAvatarUrl = config.app.host + config.app.namespace +
           //                                     "/client/" + mem.uuid + "/photo";
           //
           //                  Clients.loadImg(getAvatarUrl)

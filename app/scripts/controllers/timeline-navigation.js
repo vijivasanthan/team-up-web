@@ -205,12 +205,12 @@ define(
 
           $scope.timelineZoomIn = function ()
           {
-            $scope.self.timeline.zoom($rootScope.config.timeline.config.zoom, Date.now());
+            $scope.self.timeline.zoom(config.app.timeline.config.zoom, Date.now());
           };
 
           $scope.timelineZoomOut = function ()
           {
-            $scope.self.timeline.zoom(- $rootScope.config.timeline.config.zoom, Date.now());
+            $scope.self.timeline.zoom(- config.app.timeline.config.zoom, Date.now());
           };
 
           $window.onresize = function () { $scope.self.timeline.redraw() };

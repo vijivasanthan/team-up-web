@@ -43,14 +43,9 @@ define(
                   'Teams', '$route',
                   function (Teams, $route)
                   {
-                    if ($route.current.params.local && $route.current.params.local == "true")
-                    {
-                      return Teams.queryLocal();
-                    }
-                    else
-                    {
-                      return Teams.query(false, $route.current.params);
-                    }
+                    return ($route.current.params.local && $route.current.params.local == "true") ?
+                           Teams.queryLocal() :
+                           Teams.query(false, $route.current.params);
                   }
                 ]
               }
@@ -67,14 +62,9 @@ define(
                   'Clients', '$route',
                   function (Clients, $route)
                   {
-                    if ($route.current.params.local && $route.current.params.local == "true")
-                    {
-                      return Clients.queryLocal();
-                    }
-                    else
-                    {
-                      return Clients.query(false, $route.current.params);
-                    }
+                    return ($route.current.params.local && $route.current.params.local == "true") ?
+                           Clients.queryLocal() :
+                           Clients.query(false, $route.current.params);
                   }
                 ]
               }
@@ -91,9 +81,7 @@ define(
                   '$rootScope', '$route',
                   function ($rootScope, $route)
                   {
-                    return {
-                      clientId: $route.current.params.clientId
-                    };
+                    return { clientId: $route.current.params.clientId };
                   }
                 ]
               }
@@ -110,24 +98,12 @@ define(
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
                   {
-                    var ret = {};
-
-                    if ($location.hash() && $location.hash() == 'reload')
-                    {
-                      var teams = Teams.query();
-                      var cGroups = ClientGroups.query();
-
-                      ret = {
-                        t:  teams,
-                        cg: cGroups
-                      };
-                    }
-                    else
-                    {
-                      ret.local = true;
-                    }
-
-                    return ret;
+                    return ($location.hash() && $location.hash() == 'reload') ?
+                           {
+                             t:  Teams.query(),
+                             cg: ClientGroups.query()
+                           } :
+                           { local: true };
                   }
                 ]
               }
@@ -203,10 +179,7 @@ define(
               }
             })
 
-            .otherwise(
-            {
-              redirectTo: '/login'
-            });
+            .otherwise({ redirectTo: '/login' });
 
           $httpProvider.interceptors.push('Interceptor');
         }
