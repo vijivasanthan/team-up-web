@@ -31,16 +31,13 @@ define(
           /**
            * Status-Bar
            */
+          $rootScope.loading = {
+            status:  false,
+            message: 'Loading..'
+          };
+
           $rootScope.statusBar =
           {
-            init: function ()
-            {
-              $rootScope.loading = {
-                status:  false,
-                message: 'Loading..'
-              };
-            },
-
             display: function (message)
             {
               $rootScope.loading = {
@@ -51,8 +48,6 @@ define(
 
             off: function () { $rootScope.loading.status = false }
           };
-
-          $rootScope.statusBar.init();
 
 
           /**

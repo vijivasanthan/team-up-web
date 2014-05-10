@@ -1,26 +1,34 @@
 Lawnchair.adapter('memory', (function(){
 
-    var storage = {}, index = []
+    var data = {}
 
     return {
         valid: function() { return true },
 
-        init: function(opts, cb) {
-            this.fn(this.name, cb).call(this, this)
+        init: function (options, callback) {
+            data[this.name] = data[this.name] || {index:[],store:{}}
+            this.index = data[this.name].index
+            this.store = data[this.name].store
+            var cb = this.fn(this.name, callback)
+            if (cb) cb.call(this, this)
             return this
         },
 
-        keys: function() { return index },
+        keys: function (callback) {
+            this.fn('keys', callback).call(this, this.index)
+            return this
+        },
 
         save: function(obj, cb) {
             var key = obj.key || this.uuid()
             
-            if (obj.key) delete obj.key 
-           
             this.exists(key, function(exists) {
-                if (!exists) index.push(key)
+                if (!exists) {
+                    if (obj.key) delete obj.key
+                    this.index.push(key)
+                }
 
-                storage[key] = obj
+                this.store[key] = obj
                 
                 if (cb) {
                     obj.key = key
@@ -47,10 +55,10 @@ Lawnchair.adapter('memory', (function(){
             if (this.isArray(keyOrArray)) {
                 r = []
                 for (var i = 0, l = keyOrArray.length; i < l; i++) {
-                    r.push(storage[keyOrArray[i]]) 
+                    r.push(this.store[keyOrArray[i]])
                 }
             } else {
-                r = storage[keyOrArray]
+                r = this.store[keyOrArray]
                 if (r) r.key = keyOrArray
             }
             if (cb) this.lambda(cb).call(this, r)
@@ -58,15 +66,15 @@ Lawnchair.adapter('memory', (function(){
         },
 
         exists: function (key, cb) {
-            this.lambda(cb).call(this, !!(storage[key]))
+            this.lambda(cb).call(this, !!(this.store[key]))
             return this
         },
 
         all: function (cb) {
             var r = []
-            for (var i = 0, l = index.length; i < l; i++) {
-                var obj = storage[index[i]]
-                obj.key = index[i]
+            for (var i = 0, l = this.index.length; i < l; i++) {
+                var obj = this.store[this.index[i]]
+                obj.key = this.index[i]
                 r.push(obj)
             }
             this.fn(this.name, cb).call(this, r)
@@ -76,19 +84,22 @@ Lawnchair.adapter('memory', (function(){
         remove: function (keyOrArray, cb) {
             var del = this.isArray(keyOrArray) ? keyOrArray : [keyOrArray]
             for (var i = 0, l = del.length; i < l; i++) {
-                delete storage[del[i]]
-                index.splice(index.indexOf(del[i]), 1)
+                var key = del[i].key ? del[i].key : del[i]
+                var where = this.indexOf(this.index, key)
+                if (where < 0) continue /* key not present */
+                delete this.store[key]
+                this.index.splice(where, 1)
             }
             if (cb) this.lambda(cb).call(this)
             return this
         },
 
         nuke: function (cb) {
-            storage = {}
-            index = []
+            this.store = data[this.name].store = {}
+            this.index = data[this.name].index = []
             if (cb) this.lambda(cb).call(this)
             return this
         }
     }
 /////
-})())
+})());
