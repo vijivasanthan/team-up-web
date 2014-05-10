@@ -19,6 +19,8 @@ define(
             }
           );
 
+          Session.check();
+
           $rootScope.config = config.app;
 
           // TODO: Remove later if it is not needed?!
@@ -237,6 +239,8 @@ define(
           $rootScope.$on(
             '$routeChangeStart', function ()
             {
+              Session.check();
+
               function resetLoaders ()
               {
                 $rootScope.loaderIcons = {
@@ -313,8 +317,6 @@ define(
                     $rootScope.loaderIcons.general = true;
                   }
               }
-
-              if (! Session.check()) $location.path("/login");
 
               $rootScope.loadingBig = true;
 

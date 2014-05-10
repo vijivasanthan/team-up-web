@@ -35,7 +35,9 @@ require.config(
       offline:            '../vendors/web-lib-offline/dist/offline',
       interceptor:        '../vendors/web-lib-interceptor/dist/interceptor',
       log:                '../vendors/web-lib-log/dist/log',
-      _moment:            '../vendors/web-lib-moment/dist/moment'
+      _moment:            '../vendors/web-lib-moment/dist/moment',
+      session:            '../vendors/web-lib-session/dist/session'
+
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -59,7 +61,8 @@ require.config(
       offline:            { deps: ['angular'] },
       interceptor:        { deps: ['angular'] },
       log:                { deps: ['angular'] },
-      _moment:            { deps: ['angular', 'moment'] }
+      _moment:            { deps: ['angular', 'moment'] },
+      session:                { deps: ['angular'] }
     }
   }
 );
@@ -85,7 +88,6 @@ require(
     'routes',
 
     'services/teamup',
-    'services/session',
 
     'services/clients',
     'services/dater',
@@ -123,7 +125,8 @@ require(
     'offline',
     'interceptor',
     'log',
-    '_moment'
+    '_moment',
+    'session'
   ],
   function (angular, domReady)
   {

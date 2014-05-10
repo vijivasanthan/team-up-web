@@ -25,6 +25,8 @@ define(
               }
               else
               {
+                Session.clear();
+
                 Store('app').nuke();
 
                 Store('app').save('logindata', logindata);
