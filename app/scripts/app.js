@@ -12,7 +12,8 @@ define(
     'angular-resource',
     'angular-route',
     'angular-strap',
-    'ui-bootstrap'
+    'ui-bootstrap',
+    'ng-vis'
   ],
   function (angular)
   {
@@ -27,7 +28,8 @@ define(
         'ngRoute',
         // 'mgcrea.ngStrap'
         '$strap.directives',
-        'ui.bootstrap.modal'
+        'ui.bootstrap.modal',
+        'NgVis'
       ]);
   }
 );

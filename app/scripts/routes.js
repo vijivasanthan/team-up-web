@@ -179,6 +179,14 @@ define(
               }
             })
 
+            .when(
+            '/vis',
+            {
+              templateUrl:    'views/vis.html',
+              controller:     'vis',
+              reloadOnSearch: false
+            })
+
             .otherwise({ redirectTo: '/login' });
 
           $httpProvider.interceptors.push('Interceptor');

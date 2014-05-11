@@ -166,6 +166,11 @@ define(
               case 'planboard':
                 $location.path("/planboard").search({local: "true"}).hash("teams");
                 break;
+
+              case 'vis':
+                $location.path("/vis").search({local: "true"}).hash("teams");
+                break;
+
               case 'profile':
                 $location.path("/profile").search({local: "true"}).hash("");
                 break;

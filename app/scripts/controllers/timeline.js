@@ -166,7 +166,7 @@ define(
 
               if ($scope.timeline.main)
               {
-                console.log('timeline data ->', $scope.data);
+                // console.log('timeline data ->', $scope.data);
 
                 $scope.self.timeline.draw(
                   Sloter.process(

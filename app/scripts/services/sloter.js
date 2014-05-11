@@ -452,14 +452,17 @@ define(
               var _this = this;
               var offset = Number(Date.now());
 
+              console.log('data.members ->', data.members);
+
               angular.forEach(
-                data.members, function (member)
+                data.members,
+                function (member)
                 {
                   var tasks = [];
 
                   if (data.section == "teams")
                   {
-                    // console.log("data.teams.tasks ", data.teams.tasks);
+                    console.log("data.teams.tasks ", data.teams.tasks);
 
                     if (data.teams.tasks[member.memId] != null)
                     {
@@ -584,7 +587,8 @@ define(
               ratios = ratios.sort(function (a, b) { return b.ratio - a.ratio });
 
               angular.forEach(
-                ratios, function (ratio, index)
+                ratios,
+                function (ratio)
                 {
                   colors.push(ratio.color);
                   xratios.push(ratio.ratio);
@@ -596,10 +600,16 @@ define(
 
             process: function (data, config, divisions, privilage)
             {
-              var _this = this,
-                  timedata = [];
+              var timedata = [];
 
-              if (data.members) timedata = _this.members(data, timedata, config, privilage);
+              console.log('data ->', data, 'config ->', config, 'divisions ->', divisions, 'privilage ->', privilage);
+
+              if (data.members)
+              {
+                timedata = this.members(data, timedata, config, privilage);
+              }
+
+              console.log('timedata ->', timedata);
 
               return timedata;
             }

@@ -14,16 +14,14 @@ section#planboard(ng-controller='timeline')
 
 		#timeline-controls.pull-right(ng-controller='timeline-navigation',
 		style='text-align: right')
-			h4(style='font-weight: normal; padding-right: 40px;')
-				| {{timeline.range | rangeMainFilter}}
+			h4(style='font-weight: normal; padding-right: 40px;') {{timeline.range | rangeMainFilter}}
 				br
 				div(style='font-size: 15px; font-weight: lighter')
 					span {{timeline | rangeInfoFilter}}
 
 	.row-fluid(ng-show='views.slot.add || views.slot.edit')
 		form.form-inline.form-toggled.well
-			button.close(ng-click='resetInlineForms()')
-				| ×
+			button.close(ng-click='resetInlineForms()') ×
 			h4(ng-show='views.slot.add') {{ui.teamup.newTask}}
 			h4(ng-show='views.slot.edit') {{ui.teamup.updateTask}}
 			hr

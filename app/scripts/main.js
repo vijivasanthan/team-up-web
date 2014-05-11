@@ -36,8 +36,9 @@ require.config(
       interceptor:        '../vendors/web-lib-interceptor/dist/interceptor',
       log:                '../vendors/web-lib-log/dist/log',
       _moment:            '../vendors/web-lib-moment/dist/moment',
-      session:            '../vendors/web-lib-session/dist/session'
-
+      session:            '../vendors/web-lib-session/dist/session',
+      vis:                '../vendors/vis/dist/vis.min',
+      'ng-vis':           '../vendors/web-lib-vis/public/dist/ng-vis'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -62,7 +63,9 @@ require.config(
       interceptor:        { deps: ['angular'] },
       log:                { deps: ['angular'] },
       _moment:            { deps: ['angular', 'moment'] },
-      session:            { deps: ['angular'] }
+      session:            { deps: ['angular'] },
+      vis:                { exports: 'vis' },
+      'ng-vis':           { deps: ['angular', 'vis'], exports: 'ng-vis' }
     }
   }
 );
@@ -106,6 +109,9 @@ require(
     'controllers/manage',
     'controllers/messages',
     'controllers/planboard',
+
+    'controllers/vis',
+
     'controllers/profile',
     'controllers/teams',
     'controllers/tasks',
@@ -128,7 +134,9 @@ require(
     'interceptor',
     'log',
     '_moment',
-    'session'
+    'session',
+    'vis',
+    'ng-vis'
   ],
   function (angular, domReady)
   {
