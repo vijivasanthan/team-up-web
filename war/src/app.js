@@ -13010,11 +13010,14 @@ angular.module('WebPaige.Controllers.Planboard', [])
 .controller('planboard', ['$rootScope', '$scope', '$location', 'Dater', 'Storage', 'Teams','Clients',
 function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
-	var self = this, params = $location.search();
-	$scope.imgHost = profile.host();
+	var self = this,
+      params = $location.search();
+
+  $scope.imgHost = profile.host();
 	$scope.ns = profile.ns();
 
-	var teams = angular.fromJson(Storage.get('Teams')), clients = angular.fromJson(Storage.get('ClientGroups'));
+	var teams = angular.fromJson(Storage.get('Teams')),
+      clients = angular.fromJson(Storage.get('ClientGroups'));
 
 	$scope.data = {
 		teams : {
@@ -13069,9 +13072,20 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				if(typeof imgfile == "undefined"){
 					imgURL = profile.noImgURL;
 				}
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+                      'style="float: left; background-image: url(' +
+                      imgURL +
+                      ');" memberId="' +
+                      member.uuid +
+                      '"></div>';
 
-				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+				var name = avatar +
+                    '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                    member.firstName +
+                    ' ' +
+                    member.lastName +
+                    '</div>';
+
 				var obj = {"head" : name , "memId" : member.uuid};
 				$scope.data.teams.members[team.uuid].push(obj);
 			});
@@ -13095,9 +13109,20 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 				if(typeof imgfile == "undefined"){
 					imgURL = profile.noImgURL;
 				}
-				var avatar = '<div class="roundedPicSmall memberStateNone" ' + 'style="float: left; background-image: url(' + imgURL + ');" memberId="'+member.uuid+'"></div>';
+				var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+                      'style="float: left; background-image: url(' +
+                      imgURL +
+                      ');" memberId="' +
+                      member.uuid +
+                      '"></div>';
 
-				var name = avatar + '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' + member.firstName + ' ' + member.lastName + '</div>';
+				var name = avatar +
+                    '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                    member.firstName +
+                    ' ' +
+                    member.lastName +
+                    '</div>';
+
 				var obj = {"head" : name , "memId" : member.uuid};
 				$scope.data.clients.members[client.id].push(obj);
 			});
@@ -13124,7 +13149,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 
 		
 	}
-
 
 	$scope.changeCurrent = function(current) {
 
@@ -13210,9 +13234,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		}	
 		
 	};
-
-
-    
     
 	/**
 	 * View setter
@@ -13246,7 +13267,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		});
 	};
 	
-	
 	$scope.resetViews = function ()
     {
       $scope.views.slot = {
@@ -13262,7 +13282,6 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
     $rootScope.$on('resetPlanboardViews', function (){
     	$scope.resetViews();    	
     });
-
 	
     var uuid, view;
     /**
@@ -13415,9 +13434,9 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	if ($.browser.msie && $.browser.version == '8.0') {
 		$scope.timeline.options = {
 			start : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-			end : $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-			min : $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-			max : $scope.periods.days[Dater.current.today() + 7].last.timeStamp
+			end :   $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
+			min :   $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
+			max :   $scope.periods.days[Dater.current.today() + 7].last.timeStamp
 		};
 	}
 
@@ -13440,7 +13459,8 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 	/**
 	 * Prepare timeline range for date ranger widget
 	 */
-	$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' + Dater.readable.date($scope.timeline.range.end);
+	$scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
+                      Dater.readable.date($scope.timeline.range.end);
 	
 	/**
 	 * find the related users in the slot (could be a team member or a client) 
@@ -13466,26 +13486,25 @@ function($rootScope, $scope, $location, Dater, Storage, Teams,Clients) {
 		}
 		
 		return relatedUsers; 
-	}
+	};
 	
 	/**
      * Reset inline forms
      */
-    $scope.resetInlineForms = function ()
-    {
-      $scope.slot = {};
+  $scope.resetInlineForms = function ()
+  {
+    $scope.slot = {};
 
-      $scope.original = {};
+    $scope.original = {};
 
-      $scope.resetViews();    
-      
-      if($scope.section == "teams"){
-    	  $scope.changeCurrent($scope.currentTeam);
-      }else if($scope.section == "clients"){
-    	  $scope.changeCurrent($scope.currentClientGroup);
-      }
-      
-    };
+    $scope.resetViews();
+
+    if($scope.section == "teams"){
+      $scope.changeCurrent($scope.currentTeam);
+    }else if($scope.section == "clients"){
+      $scope.changeCurrent($scope.currentClientGroup);
+    }
+  };
 }]);
 ;/*jslint node: true */
 /*global angular */'use strict';
@@ -13652,46 +13671,89 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			 }
 			 */
 
-			var start, end;
+//			var start, end;
+//
+//			/**
+//			 * Hot fix for not converted Date objects initially given by timeline
+//			 */
+//			if ($scope.timeline.range) {
+//				if ( typeof $scope.timeline.range.start != Date) {
+//					$scope.timeline.range.start = new Date($scope.timeline.range.start);
+//				}
+//
+//				if ( typeof $scope.timeline.range.end != Date) {
+//					$scope.timeline.range.end = new Date($scope.timeline.range.end);
+//				}
+//
+//				// console.log('RANGE GOOD !!');
+//				start = $scope.timeline.range.start;
+//				end = $scope.timeline.range.end;
+//			} else {
+//				// console.log('NOOOO RANGE !!');
+//				start = new Date(options.start);
+//				end = new Date(options.end);
+//			}
+//
+//			// console.log('range in timeline ->', $scope.timeline.range);
+//			// console.log('REMEMBER ->', remember);
+//
+//			$scope.timeline = {
+//				id : $scope.timeline.id,
+//				main : $scope.timeline.main,
+//				user : $scope.timeline.user,
+//				current : $scope.timeline.current,
+//				scope : $scope.timeline.scope,
+//				config : $scope.timeline.config,
+//				options : {
+//					start : (remember) ? start : new Date(options.start),
+//					end : (remember) ? end : new Date(options.end),
+//					min : new Date(options.start),
+//					max : new Date(options.end)
+//				}
+//			};
 
-			/**
-			 * Hot fix for not converted Date objects initially given by timeline
-			 */
-			if ($scope.timeline.range) {
-				if ( typeof $scope.timeline.range.start != Date) {
-					$scope.timeline.range.start = new Date($scope.timeline.range.start);
-				}
 
-				if ( typeof $scope.timeline.range.end != Date) {
-					$scope.timeline.range.end = new Date($scope.timeline.range.end);
-				}
+      var start,
+        end;
 
-				// console.log('RANGE GOOD !!');
-				start = $scope.timeline.range.start;
-				end = $scope.timeline.range.end;
-			} else {
-				// console.log('NOOOO RANGE !!');
-				start = new Date(options.start);
-				end = new Date(options.end);
-			}
+      /**
+       * Hot fix for not converted Date objects initially given by timeline
+       */
+      if ($scope.timeline.range)
+      {
+        if (typeof $scope.timeline.range.start != Date)
+        {
+          $scope.timeline.range.start = new Date($scope.timeline.range.start);
+        }
 
-			// console.log('range in timeline ->', $scope.timeline.range);
-			// console.log('REMEMBER ->', remember);
+        if (typeof $scope.timeline.range.end != Date)
+        {
+          $scope.timeline.range.end = new Date($scope.timeline.range.end);
+        }
 
-			$scope.timeline = {
-				id : $scope.timeline.id,
-				main : $scope.timeline.main,
-				user : $scope.timeline.user,
-				current : $scope.timeline.current,
-				scope : $scope.timeline.scope,
-				config : $scope.timeline.config,
-				options : {
-					start : (remember) ? start : new Date(options.start),
-					end : (remember) ? end : new Date(options.end),
-					min : new Date(options.start),
-					max : new Date(options.end)
-				}
-			};
+        start = $scope.timeline.range.start;
+        end   = $scope.timeline.range.end;
+      }
+      else
+      {
+        start = new Date(options.start);
+        end   = new Date(options.end);
+      }
+
+      $scope.timeline = {
+        id: 			$scope.timeline.id,
+        main: 		$scope.timeline.main,
+        user: 		$scope.timeline.user,
+        current:  $scope.timeline.current,
+        scope: 		$scope.timeline.scope,
+        config:   $scope.timeline.config,
+        options: {
+          start:  (remember) ? start : new Date(options.start),
+          end:    (remember) ? end : new Date(options.end),
+          min:    new Date(options.start),
+          max:    new Date(options.end)
+        }
+      };
 
 			/**
 			 * IE8 fix for inability of - signs in date object
@@ -13812,10 +13874,12 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 					edit : false
 				};
 			}
+      
+      console.log('timeline refresh ->');
 
 			this.load({
 				start : $scope.data.periods.start,
-				end : $scope.data.periods.end
+				end :   $scope.data.periods.end
 			}, true);
 		},
 
@@ -13854,8 +13918,6 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 	 * Timeliner listener
 	 */
 	$rootScope.$on('timeliner', function() {
-		// console.log('data ->', $scope.data);
-
 		$scope.timeliner.load({
 			start : new Date(arguments[1].start).getTime(),
 			end : new Date(arguments[1].end).getTime()
@@ -13941,14 +14003,14 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 		if ( selection = $scope.self.timeline.getSelection()[0]) {
 			//var values = $scope.self.timeline.getItem(selection.row), content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
 			var values = $scope.self.timeline.getItem(selection.row);
-			var content = $scope.getSlotContentJSON(values.content) ;
+			var content = $scope.getSlotContentJSON(values.content);
 
 			$scope.relatedUsers = $scope.processRelatedUsers(values);
 
 			$scope.original = {
 				start : values.start,
 				end : values.end,
-				content : content,
+				content : content
 			};
 
 			if ($scope.timeline.main && values.content != "New") {
@@ -14295,6 +14357,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 			// convert the value to the new Task json object
 			values = $.extend(values,{'memberId': memberId});
 			values = $scope.convertTaskJsonObject(values);
+      
 			Slots.add(values).then(function(result) {
 				$rootScope.$broadcast('resetPlanboardViews');
 
@@ -14312,6 +14375,7 @@ function($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, Slot
 				}
 
 				$scope.timeliner.refresh();
+				// $scope.timeliner.render();
 				//				$rootScope.planboardSync.start();
 			});
 
