@@ -380,7 +380,7 @@ var ui = {
          editClientImg: "Edit client image",
          newTask: "New Task",
          updateTask: "Update Task",
-         managePanelchangePrompt: "You did some changes , save it ?"
+         managePanelchangePrompt: "Changes have not been saved. Click Yes to continue without changes, Cancel to stay."
       }
     },
     nl: {
@@ -760,7 +760,7 @@ var ui = {
          editClientImg: "Wijzig foto van de cliënt",
          newTask: "Nieuwe Taak",
          updateTask: "Wijzig Taak",
-         managePanelchangePrompt: "Data is changed. Click \"Yes\" to go on, \"Cancel\" to stay."
+         managePanelchangePrompt: "Changes have not been saved. Click Yes to continue without changes, Cancel to stay."
       }
     }
 };
