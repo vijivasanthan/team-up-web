@@ -200,12 +200,7 @@ define(
 
             },
 
-            load: function (stamps, remember)
-            {
-              var _this = this;
-
-              _this.render(stamps, remember);
-            },
+            load: function (stamps, remember) { this.render(stamps, remember) },
 
             refresh: function ()
             {

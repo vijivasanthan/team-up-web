@@ -7,10 +7,25 @@ define(
     controllers.controller(
       'login',
       [
-        '$rootScope', '$location', '$q', '$scope', 'Session', 'Teams', 'Clients', 'Store', '$routeParams', 'TeamUp',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp)
+        '$rootScope',
+        '$location',
+        '$q',
+        '$scope',
+        'Session',
+        'Teams',
+        'Clients',
+        'Store',
+        '$routeParams',
+        'TeamUp',
+        'Dater',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater)
         {
+          // TODO: Investigate for removing
           var self = this;
+
+          // TODO: Soon not needed!
+          Dater.registerPeriods();
+
 
           if ($location.path() == '/logout')
           {

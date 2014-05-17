@@ -6,9 +6,25 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', '$timeout', 'Session', 'Store', '$window', 'Teams', 'Offline', 'States', 'Browsers',
-        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers)
+        '$rootScope',
+        '$location',
+        '$timeout',
+        'Session',
+        'Store',
+        '$window',
+        'Teams',
+        'Offline',
+        'States',
+        'Browsers',
+        'Dater',
+        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater)
         {
+          // TODO: Remove later on (Needed for timeline info filters)
+          if (! Dater.getPeriods())
+          {
+            Dater.registerPeriods();
+          }
+
           new Offline();
 
           $rootScope.$on(
@@ -23,13 +39,17 @@ define(
             }
           );
 
+
           Session.check();
+
 
           $rootScope.config = config;
           $rootScope.ui = locals.ui[config.app.lang];
 
+
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
+
 
           /**
            * Status-Bar

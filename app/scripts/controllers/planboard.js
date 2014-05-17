@@ -122,12 +122,18 @@ define(
                                member.lastName +
                                '</div>';
 
-                    var obj = {"head": name, "memId": member.uuid};
-
-                    $scope.data.teams.members[team.uuid].push(obj);
+                    $scope.data.teams.members[team.uuid].push(
+                      {
+                        'head':  name,
+                        'memId': member.uuid
+                      }
+                    );
                   });
               }
-            });
+            }
+          );
+
+          console.log('$scope.data.teams ->', $scope.data.teams);
 
           angular.forEach(
             clients,
@@ -241,11 +247,14 @@ define(
 
             var storeTask = function (tasks, startTime, endTime)
             {
+              console.log('storing task ->', tasks, startTime, endTime);
+
               // clear the array to keep tasks sync with sever side after changing
               $scope.data[$scope.section].tasks = [];
 
               angular.forEach(
-                tasks, function (task, i)
+                tasks,
+                function (task)
                 {
                   if (task != null)
                   {
@@ -268,21 +277,24 @@ define(
 
                     $scope.data[$scope.section].tasks[memberId].push(task);
                   }
-                });
+                }
+              );
 
               $rootScope.$broadcast(
                 'timeliner', {
                   start: startTime,
                   end:   endTime
-                });
+                }
+              );
+
+              console.log('DATA ->', $scope.data);
             };
 
             if ($scope.data.section == "teams")
             {
-              $location.search(
-                {
-                  uuid: $scope.currentTeam
-                }).hash('teams');
+              $location.search({ uuid: $scope.currentTeam }).hash('teams');
+
+              console.log('querying team tasks ->');
 
               TeamUp._(
                 'teamTaskQuery',
@@ -290,12 +302,21 @@ define(
                   second: $scope.currentTeam,
                   from:   startTime,
                   to:     endTime
+                },
+                null,
+                {
+                  error: function (error)
+                  {
+                    console.log("error happend when getting the tasks for the team members " + error);
+                  }
                 }
               ).then(
-                function (tasks) { storeTask(tasks, startTime, endTime) },
-                function (error)
+                function (tasks)
                 {
-                  console.log("error happend when getting the tasks for the team members " + error);
+                  console.log('tasks ->', tasks);
+
+                  storeTask(tasks, startTime, endTime);
+
                 }
               );
             }
@@ -344,7 +365,8 @@ define(
           $scope.setViewTo = function (uuid, hash)
           {
             $scope.$watch(
-              hash, function ()
+              hash,
+              function ()
               {
                 $location.hash(hash);
 
@@ -353,7 +375,8 @@ define(
                 switchData();
 
                 setView(hash);
-              });
+              }
+            );
           };
 
           $scope.resetViews = function ()
@@ -365,7 +388,8 @@ define(
           };
 
           $rootScope.$on(
-            'resetPlanboardViews', function () { $scope.resetViews() }
+            'resetPlanboardViews',
+            function () { $scope.resetViews() }
           );
 
           var uuid, view;
@@ -375,10 +399,7 @@ define(
             uuid = $scope.data.teams.list[0].uuid;
             view = 'teams';
 
-            $location.search(
-              {
-                uuid: $scope.data.teams.list[0].uuid
-              }).hash('teams');
+            $location.search({ uuid: $scope.data.teams.list[0].uuid }).hash('teams');
           }
           else
           {

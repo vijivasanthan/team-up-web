@@ -71,13 +71,15 @@ define(
           function setTeamView (id)
           {
             angular.forEach(
-              data.teams, function (team)
+              data.teams,
+              function (team)
               {
                 if (team.uuid == id)
                 {
                   $scope.team = team;
                 }
-              });
+              }
+            );
 
             $scope.members = data.members[id];
 
@@ -95,41 +97,41 @@ define(
 
                 // console.log('url, imgid ->', imgURL, imgId);
 
-//                TeamUp._(
-//                  'memberPhoto',
-//                  { third: member.uuid }
-//                ).then(
-//                  function (result)
-//                  {
-//                    console.log('result ->', result);
-//                    // console.log("loading pic " + imgURL);
-//
-////                    var imgId = member.uuid.replace(".", "").replace("@", "");
-////
-////                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-////                    {
-////                      console.log("no pics ", result);
-////                    }
-////                    else
-////                    {
-////                      var realImgURL = $scope.imgHost + result.path;
-////                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-////                    }
-//
-//                  },
-//                  function (error) { console.log("error when load pic " + error) }
-//                );
+                //                TeamUp._(
+                //                  'memberPhoto',
+                //                  { third: member.uuid }
+                //                ).then(
+                //                  function (result)
+                //                  {
+                //                    console.log('result ->', result);
+                //                    // console.log("loading pic " + imgURL);
+                //
+                ////                    var imgId = member.uuid.replace(".", "").replace("@", "");
+                ////
+                ////                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+                ////                    {
+                ////                      console.log("no pics ", result);
+                ////                    }
+                ////                    else
+                ////                    {
+                ////                      var realImgURL = $scope.imgHost + result.path;
+                ////                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+                ////                    }
+                //
+                //                  },
+                //                  function (error) { console.log("error when load pic " + error) }
+                //                );
 
-//                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
-//
-//                $scope.photoURL = tempURL;
-//
-//                Teams.loadImg(tempURL).then(
-//                  function (result)
-//                  {
-//                    console.log(result);
-//                  }
-//                );
+                //                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
+                //
+                //                $scope.photoURL = tempURL;
+                //
+                //                Teams.loadImg(tempURL).then(
+                //                  function (result)
+                //                  {
+                //                    console.log(result);
+                //                  }
+                //                );
 
               });
 
@@ -185,12 +187,14 @@ define(
           $scope.setViewTo = function (hash)
           {
             $scope.$watch(
-              hash, function ()
+              hash,
+              function ()
               {
                 $location.hash(hash);
 
                 setView(hash);
-              });
+              }
+            );
           };
 
           setView(view);
@@ -201,7 +205,8 @@ define(
 
             angular.forEach(
               Store('app').get(group.uuid),
-              function (member) { $scope.selection[member.uuid] = flag });
+              function (member) { $scope.selection[member.uuid] = flag }
+            );
           };
 
           $scope.editTeam = function (team)
@@ -467,14 +472,16 @@ define(
             var ret = true;
 
             angular.forEach(
-              states, function (state)
+              states,
+              function (state)
               {
                 if (state.share && flag)
                 {
                   ret = false;
                   flag = false;
                 }
-              });
+              }
+            );
 
             return ret;
           };
@@ -548,34 +555,36 @@ define(
 
                     // refresh the teams that contains  this user
                     angular.forEach(
-                      $scope.members, function (mem, i)
+                      $scope.members,
+                      function (mem)
                       {
                         if (mem.uuid == memberId)
                         {
                           angular.forEach(
-                            mem.teamUuids, function (teamId, i)
+                            mem.teamUuids,
+                            function (teamId)
                             {
                               $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                               var routePara = {'uuid': teamId};
 
-                              Teams.query(false, routePara).then(
-                                function ()
-                                {
-                                  $rootScope.statusBar.off();
-                                });
+                              Teams.query(false, routePara)
+                                .then(
+                                function () { $rootScope.statusBar.off() }
+                              );
 
                               angular.forEach(
-                                data.members[teamId], function (mem, j)
+                                data.members[teamId],
+                                function (mem, j)
                                 {
                                   if (mem.uuid == memberId)
                                   {
                                     data.members[teamId].splice(j, 1);
                                   }
-                                });
-
-                            });
-
+                                }
+                              );
+                            }
+                          );
                         }
                       });
 
@@ -593,9 +602,6 @@ define(
                 }, function (error) { console.log(error) });
             }
           };
-
-
-
 
 
           // brefoe I know there is a good place to put this code

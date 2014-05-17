@@ -2,7 +2,7 @@ section#planboard(ng-controller='timeline')
 
 	.page-header.row-fluid
 
-		span.nullable.pull-left(ng-show='views.teams')
+		span.nullable.pull-left(style='margin-top: -500px; display: block', ng-show='views.teams')
 			select(ng-model='currentTeam',
 			ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
 			ng-change='changeCurrent(currentTeam)')
@@ -186,6 +186,9 @@ section#planboard(ng-controller='timeline')
 				.tab-header
 					h3.pull-left {{currentName}}
 				br
+				select(ng-model='currentTeam',
+				ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
+				ng-change='changeCurrent(currentTeam)')
 				hr
 				#timeline
 					#mainTimeline

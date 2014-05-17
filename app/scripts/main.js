@@ -95,7 +95,9 @@ require(
     'services/teamup',
 
     'services/clients',
-    'services/dater',
+
+    'services/dater', // TODO: Remove later on
+
     'services/sloter',
     'services/teams',
 
