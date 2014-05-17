@@ -139,7 +139,7 @@ block loading
 
 // TODO: Investigate the real usage of this
 block notifications
-	#notification.alert(ng-show='notification.status',
+	#notification.alert.ng-cloak(ng-show='notification.status',
 	class='{{notification.type}}')
 		button.close(type='button',
 		ng-click='notification.status = false') ×
@@ -148,7 +148,7 @@ block notifications
 
 
 block chat
-	#chat(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
+	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
 	ng-controller='messagesCtrl')
 		#chat-btn(ng-click='openChat()')
 			span CHAT
