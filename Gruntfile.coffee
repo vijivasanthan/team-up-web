@@ -187,6 +187,7 @@ module.exports = (grunt) ->
         httpGeneratedImagesPath: '/images/generated'
         httpFontsPath: '/styles/fonts'
         relativeAssets: false
+        noLineComments: true
       dist: {}
       server:
         options:

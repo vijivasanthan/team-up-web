@@ -127,9 +127,13 @@ require(
     'treegrid',
     'datepicker',
     'timepicker',
+
     'md5',
+
     'underscore',
+
     'store',
+
     'offline',
     'interceptor',
     'log',

@@ -17,6 +17,7 @@
           },
           responseError: function(rejection) {
             console.warn('response error ->', rejection);
+
             Log.error(rejection);
             return $q.reject(rejection);
           }

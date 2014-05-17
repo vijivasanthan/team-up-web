@@ -15,7 +15,11 @@ define(
             'connection',
             function ()
             {
-              console.log((! arguments[1]) ? 'connection restored :]' : 'connection lost :[');
+              console.log(
+                (! arguments[1]) ?
+                'connection restored :]' + Date.now() :
+                'connection lost :[' + Date.now()
+              );
             }
           );
 
@@ -26,7 +30,6 @@ define(
 
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
-
 
           /**
            * Status-Bar
