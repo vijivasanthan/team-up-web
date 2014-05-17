@@ -315,7 +315,7 @@ define(
                                 {
                                   self.progress(100, $rootScope.ui.login.loading_everything);
 
-                                  $location.path('/team');
+                                  $location.path('/tasks');
 
                                   setTimeout(
                                     function ()
