@@ -5,8 +5,6 @@ define(
     'use strict';
 
 
-
-
     services.factory(
       'States',
       [
@@ -160,12 +158,15 @@ define(
               case 'tasks':
                 $location.path("/tasks").search({}).hash('');
                 break;
+
               case 'team':
                 $location.path("/team").search({local: "true"}).hash("team");
                 break;
+
               case 'client':
                 $location.path("/client").search({local: "true"}).hash("client");
                 break;
+
               case 'planboard':
                 $location.path("/planboard").search({local: "true"}).hash("teams");
                 break;
@@ -177,9 +178,11 @@ define(
               case 'profile':
                 $location.path("/profile").search({local: "true"}).hash("");
                 break;
+
               case 'logout':
                 $location.path("/logout");
                 break;
+
               default:
                 console.log("scope nav : " + tabName);
             }
@@ -209,7 +212,6 @@ define(
         }
       ]
     );
-
 
 
   }

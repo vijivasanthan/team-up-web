@@ -45,7 +45,7 @@ define(
                   {
                     return ($route.current.params.local && $route.current.params.local == "true") ?
                            Teams.queryLocal() :
-                           Teams.query(false, $route.current.params);
+                           Teams.query();
                   }
                 ]
               }
@@ -98,6 +98,7 @@ define(
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
                   {
+                    // TODO: Lose short property names and make them more readable!
                     return ($location.hash() && $location.hash() == 'reload') ?
                            {
                              t:  Teams.query(),
@@ -138,9 +139,7 @@ define(
                   {
                     return TeamUp._(
                       'profileGet',
-                      {
-                        third: $route.current.params.userId
-                      },
+                      { third: $route.current.params.userId },
                       null,
                       {
                         success: function (resources)

@@ -38,10 +38,7 @@ define(
             uuid = data.teams[0].uuid;
             view = 'team';
 
-            $location.search(
-              {
-                uuid: data.teams[0].uuid
-              }).hash('team');
+            $location.search({ uuid: data.teams[0].uuid }).hash('team');
           }
           else if (! params.uuid)
           {
@@ -85,6 +82,7 @@ define(
 
             $scope.current = id;
 
+            /*
             angular.forEach(
               $scope.members,
               function (member)
@@ -133,7 +131,9 @@ define(
                 //                  }
                 //                );
 
-              });
+              }
+            );
+            */
 
 
             $scope.team.phone = $rootScope.ui.teamup.loadingNumber;

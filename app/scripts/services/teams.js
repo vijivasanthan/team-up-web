@@ -106,7 +106,6 @@ define(
               function (team)
               {
                 calls.push(
-                  // TODO: Tricky! Test this whether works!
                   (function (team, data)
                   {
                     return {
@@ -135,7 +134,8 @@ define(
               }
             );
 
-            $q.all(calls).then(
+            $q.all(calls)
+              .then(
               (function (results)
               {
                 angular.forEach(

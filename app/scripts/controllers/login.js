@@ -315,15 +315,21 @@ define(
                                 {
                                   self.progress(100, $rootScope.ui.login.loading_everything);
 
-                                  $location.path('/tasks');
-
-                                  setTimeout(
+                                  Teams.query()
+                                    .then(
                                     function ()
                                     {
-                                      $('.navbar').show();
-                                      $('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
-                                      if (! $rootScope.browser.mobile) $('#footer').show();
-                                    }, 100);
+                                      $location.path('/tasks');
+
+                                      setTimeout(
+                                        function ()
+                                        {
+                                          $('.navbar').show();
+                                          $('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+                                          if (! $rootScope.browser.mobile) $('#footer').show();
+                                        }, 100);
+                                    }
+                                  );
                                 });
                             });
                         });
