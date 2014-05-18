@@ -166,7 +166,7 @@ define(
 
               if ($scope.timeline.main)
               {
-                // console.log('timeline data ->', $scope.data);
+                console.log('timeline data ->', $scope.data);
 
                 $scope.self.timeline.draw(
                   Sloter.process(
@@ -440,7 +440,7 @@ define(
             else
             {
               //			$scope.resetInlineForms();
-              console.log("click the timeline , but not a slot");
+              // console.log("click the timeline , but not a slot");
             }
           };
 
@@ -583,7 +583,7 @@ define(
                   if (result.error)
                   {
                     $rootScope.notifier.error(result.error.data.result);
-                    console.warn('error ->', result.error.data.result);
+                    // console.warn('error ->', result.error.data.result);
                   }
                   else
                   {
@@ -827,7 +827,7 @@ define(
                 if (result.error)
                 {
                   $rootScope.notifier.error(result.error.data.result);
-                  console.warn('error ->', result);
+                  // console.warn('error ->', result);
                 }
                 else
                 {
@@ -874,7 +874,7 @@ define(
 
               if (typeof content.id == "undefined")
               {
-                console.log("Nothing to delete");
+                // console.log("Nothing to delete");
                 return;
               }
 
@@ -893,7 +893,7 @@ define(
                   if (result.error)
                   {
                     $rootScope.notifier.error(result.error.data.result);
-                    console.warn('error ->', result);
+                    // console.warn('error ->', result);
                   }
                   else
                   {

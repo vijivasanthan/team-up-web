@@ -436,7 +436,8 @@ define(
           {
             // TODO: Turn on logging later on!
             // Log.record('call', arguments);
-            // console.log('call ->', arguments);
+
+            console.log('call ->', arguments);
 
             var deferred = $q.defer();
 

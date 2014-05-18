@@ -11,9 +11,13 @@ define(
         {
           var params = $location.search();
 
+
+
           // TODO: Remove these ones too!
-          $scope.imgHost = config.app.host;
-          $scope.ns = config.app.ns;
+          // $scope.imgHost = config.app.host;
+          // $scope.ns = config.app.ns;
+
+
 
           var teams = Store('app').get('teams'),
               clients = Store('app').get('ClientGroups');
@@ -100,13 +104,16 @@ define(
                     //                    };
                     //
                     // var imgfile = Storage.avatar.geturl(member.uuid);
-                    var imgfile = '';
-                    var imgURL = $scope.imgHost + imgfile;
 
-                    if (typeof imgfile == "undefined")
-                    {
-                      imgURL = config.app.noImgURL;
-                    }
+                    // var imgfile = '';
+                    // var imgURL = $scope.imgHost + imgfile;
+
+                    // if (typeof imgfile == "undefined")
+                    // {
+                    //   imgURL = config.app.noImgURL;
+                    // }
+
+                    var imgURL = '';
 
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
@@ -133,7 +140,7 @@ define(
             }
           );
 
-          console.log('$scope.data.teams ->', $scope.data.teams);
+          // console.log('$scope.data.teams ->', $scope.data.teams);
 
           angular.forEach(
             clients,
@@ -220,7 +227,8 @@ define(
           $scope.changeCurrent = function (current)
           {
             angular.forEach(
-              $scope.data[$scope.section].list, function (node)
+              $scope.data[$scope.section].list,
+              function (node)
               {
                 if (node.uuid == current)
                 {
@@ -247,7 +255,7 @@ define(
 
             var storeTask = function (tasks, startTime, endTime)
             {
-              console.log('storing task ->', tasks, startTime, endTime);
+              // console.log('storing task ->', tasks, startTime, endTime);
 
               // clear the array to keep tasks sync with sever side after changing
               $scope.data[$scope.section].tasks = [];
@@ -287,14 +295,14 @@ define(
                 }
               );
 
-              console.log('DATA ->', $scope.data);
+              // console.log('DATA ->', $scope.data);
             };
 
             if ($scope.data.section == "teams")
             {
               $location.search({ uuid: $scope.currentTeam }).hash('teams');
 
-              console.log('querying team tasks ->');
+              // console.log('querying team tasks ->');
 
               TeamUp._(
                 'teamTaskQuery',
@@ -307,13 +315,13 @@ define(
                 {
                   error: function (error)
                   {
-                    console.log("error happend when getting the tasks for the team members " + error);
+                    // console.log("error happend when getting the tasks for the team members " + error);
                   }
                 }
               ).then(
                 function (tasks)
                 {
-                  console.log('tasks ->', tasks);
+                  // console.log('tasks ->', tasks);
 
                   storeTask(tasks, startTime, endTime);
 
@@ -322,10 +330,7 @@ define(
             }
             else if ($scope.data.section == "clients")
             {
-              $location.search(
-                {
-                  uuid: $scope.currentClientGroup
-                }).hash('clients');
+              $location.search({ uuid: $scope.currentClientGroup }).hash('clients');
 
               TeamUp._(
                 'clientGroupTasksQuery',
@@ -338,7 +343,7 @@ define(
                 {
                   error: function (error)
                   {
-                    console.log("error happend when getting the tasks for the team members " + error);
+                    // console.log("error happend when getting the tasks for the team members " + error);
                   }
                 }
               ).then(
@@ -477,7 +482,8 @@ define(
           }
 
           angular.forEach(
-            config.app.timeline.config.states, function (state, index)
+            config.app.timeline.config.states,
+            function (state, index)
             {
               $scope.timeline.config.legenda[index] = true;
             });
@@ -493,8 +499,8 @@ define(
 
           $scope.processRelatedUsers = function (selectedSlot)
           {
-            var relatedUsers = [];
-            var memberId = $(selectedSlot.group).attr("memberId");
+            var relatedUsers = [],
+                memberId = $(selectedSlot.group).attr("memberId");
 
             if ($scope.views.teams)
             {

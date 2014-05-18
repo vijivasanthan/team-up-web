@@ -249,21 +249,30 @@ define(
            */
           $rootScope.getClientsByTeam = function (teamIds)
           {
-            var clients = [];
-            var clientIds = [];
+            var clients = [],
+                clientIds = [];
+
+            console.log('teamIds ->', teamIds);
 
             angular.forEach(
               teamIds,
               function (teamId)
               {
+                console.log('TID ->', teamId);
+
                 angular.forEach(
                   Store('app').get('teamGroup_' + teamId),
                   function (teamGroup)
                   {
+                    console.log('teamGroup ->', teamGroup);
+                    console.log('length ->', Store('app').get(teamGroup.id).length);
+
                     angular.forEach(
                       Store('app').get(teamGroup.id),
                       function (member)
                       {
+                        console.log('member ->', member);
+
                         if (clientIds.indexOf(member.uuid) == - 1)
                         {
                           clientIds.push(member.uuid);
@@ -275,8 +284,11 @@ define(
                             }
                           );
                         }
-                      });
-                  });
+                      }
+                    );
+
+                  }
+                );
               });
 
             return clients;

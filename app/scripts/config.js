@@ -143,7 +143,7 @@ define(
           style:            'box',
           groupsWidth:      '200px',
           eventMarginAxis:  0,
-          showCustomTime:   true,
+          showCustomTime:   false,
           groupsChangeable: false,
           showNavigation:   false,
           intervalMin: 1000 * 60 * 60 * 1
