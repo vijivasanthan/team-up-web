@@ -459,6 +459,7 @@ define(
               week:  true,
               month: false
             },
+            // TODO: Remove unneeded config elements!
             config:  {
               bar:        config.app.timeline.config.bar,
               layouts:    config.app.timeline.config.layouts,

@@ -323,6 +323,7 @@ define(
             if (selection = $scope.self.timeline.getSelection()[0])
             {
               var values = $scope.self.timeline.getItem(selection.row);
+              
               var content = $scope.getSlotContentJSON(values.content);
 
               $scope.relatedUsers = $scope.processRelatedUsers(values);
@@ -333,11 +334,11 @@ define(
                 content: content
               };
 
-              if ($scope.timeline.main && values.content != "New")
+              if ($scope.timeline.main && values.content != 'New')
               {
                 $rootScope.$broadcast('resetPlanboardViews');
               }
-              else if (values.content != "New")
+              else if (values.content != 'New')
               {
                 $scope.forms = {
                   add:  false,
@@ -345,13 +346,13 @@ define(
                 };
               }
 
-              if (values.content == "New")
+              if (values.content == 'New')
               {
-                content = {type: "slot"};
+                content = {type: 'slot'};
               }
-              else if (content.clientUuid && typeof content.id == "undefined")
+              else if (content.clientUuid && typeof content.id == 'undefined')
               {
-                content = $.extend(content, {type: "slot"});
+                content = $.extend(content, {type: 'slot'});
               }
 
               if (content.type)
@@ -361,7 +362,7 @@ define(
                   switch (content.type)
                   {
                     case 'slot':
-                      if (values.content == "New" || (content.relatedUser && typeof content.id == "undefined"))
+                      if (values.content == 'New' || (content.relatedUser && typeof content.id == 'undefined'))
                       {
                         $scope.views.slot.add = true;
                       }
@@ -440,7 +441,7 @@ define(
             else
             {
               //			$scope.resetInlineForms();
-              // console.log("click the timeline , but not a slot");
+              // console.log('click the timeline , but not a slot');
             }
           };
 
@@ -452,7 +453,7 @@ define(
                 $scope.selectedOriginal = $scope.selectedSlot();
 
                 // make the slot movable (editable)
-                if (typeof $scope.selectedOriginal != "undefined")
+                if (typeof $scope.selectedOriginal != 'undefined')
                 {
                   $scope.redrawSlot($scope.selectedOriginal);
                 }
@@ -539,11 +540,11 @@ define(
                 endTime: ($rootScope.browser.mobile) ?
                          new Date(slot.end.datetime).getTime() :
                          Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description: (typeof slot.state == "undefined") ? "" : slot.state,
+                description: (typeof slot.state == 'undefined') ? '' : slot.state,
                 relatedUserId: slot.relatedUser
               };
 
-              if (typeof slot.relatedUser == "undefined" || slot.relatedUser == "")
+              if (typeof slot.relatedUser == 'undefined' || slot.relatedUser == '')
               {
                 if ($scope.views.teams)
                 {
@@ -558,9 +559,9 @@ define(
               }
 
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-              var memberId = $(selected.group).attr("memberId");
+              var memberId = $(selected.group).attr('memberId');
 
-              if (typeof memberId == "undefined")
+              if (typeof memberId == 'undefined')
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.selectSlot);
                 return;
@@ -588,11 +589,11 @@ define(
                   else
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
-                    if ($scope.section == "teams")
+                    if ($scope.section == 'teams')
                     {
                       $scope.changeCurrent($scope.currentTeam);
                     }
-                    else if ($scope.section == "clients")
+                    else if ($scope.section == 'clients')
                     {
                       $scope.changeCurrent($scope.currentClientGroup);
                     }
@@ -648,7 +649,7 @@ define(
 
             var selectedSlot = $scope.self.timeline.getSelection()[0];
 
-            if (typeof selectedSlot != "undefined")
+            if (typeof selectedSlot != 'undefined')
             {
               var slotContent = $scope.processSlotContent(selectedSlot.row);
 
@@ -671,7 +672,7 @@ define(
           {
             var item = $scope.self.timeline.getItem(row);
 
-            var relateUserName = "";
+            var relateUserName = '';
 
             angular.forEach(
               $scope.relatedUsers, function (ru)
@@ -686,7 +687,7 @@ define(
 
             var content_obj = item.content;
 
-            if (content_obj != "New")
+            if (content_obj != 'New')
             {
               content_obj = $scope.getSlotContentJSON(item.content);
               content_obj.clientUuid = $scope.slot.clientUuid;
@@ -700,15 +701,15 @@ define(
               };
             }
 
-            var content = "<span>" + relateUserName + "</span>" +
-                          "<input type=hidden value='" + angular.toJson(content_obj) + "'>";
+            var content = '<span>' + relateUserName + '</span>' +
+                          '<input type="hidden" value="' + angular.toJson(content_obj) + '">';
 
             if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
                 (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
             {
-              if (typeof $scope.slot.relatedUser == "undefined" || $scope.slot.relatedUser == "")
+              if (typeof $scope.slot.relatedUser == 'undefined' || $scope.slot.relatedUser == '')
               {
-                content = "New";
+                content = 'New';
               }
             }
 
@@ -725,7 +726,7 @@ define(
              var options = {
              start:   values.start,
              end:     values.end,
-             // content:  angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
+             // content:  angular.fromJson(values.content.match(/<span class='secret'>(.*)<\/span>/)[1])
              content: values.content
              };
              */
@@ -759,7 +760,7 @@ define(
 
           $scope.getRelatedUserId = function (name)
           {
-            var ret = "";
+            var ret = '';
 
             angular.forEach(
               $scope.relatedUsers, function (user)
@@ -781,7 +782,7 @@ define(
             var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
             var content = $scope.getSlotContentJSON(selected.content);
 
-            var memberId = $(selected.group).attr("memberId");
+            var memberId = $(selected.group).attr('memberId');
 
             var options;
 
@@ -790,7 +791,7 @@ define(
               options = {
                 startTime:     selected.start,
                 endTime:       selected.end,
-                description:   "",
+                description:   '',
                 relatedUserId: slot.relatedUser,
                 uuid:          content.id,
                 memberId:      memberId
@@ -805,7 +806,7 @@ define(
                 endTime: ($rootScope.browser.mobile) ?
                          new Date(slot.end.datetime).getTime() :
                          Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description:   "",
+                description:   '',
                 relatedUserId: slot.relatedUser,
                 uuid:          content.id,
                 memberId:      memberId
@@ -832,11 +833,11 @@ define(
                 else
                 {
                   $rootScope.notifier.success($rootScope.ui.planboard.slotChanged);
-                  if ($scope.section == "teams")
+                  if ($scope.section == 'teams')
                   {
                     $scope.changeCurrent($scope.currentTeam);
                   }
-                  else if ($scope.section == "clients")
+                  else if ($scope.section == 'clients')
                   {
                     $scope.changeCurrent($scope.currentClientGroup);
                   }
@@ -864,17 +865,17 @@ define(
             {
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
               var content = $scope.getSlotContentJSON(selected.content);
-              var memberId = $(selected.group).attr("memberId");
+              var memberId = $(selected.group).attr('memberId');
 
-              if (typeof content == "undefined")
+              if (typeof content == 'undefined')
               {
                 $scope.timeliner.refresh();
                 return;
               }
 
-              if (typeof content.id == "undefined")
+              if (typeof content.id == 'undefined')
               {
-                // console.log("Nothing to delete");
+                // console.log('Nothing to delete');
                 return;
               }
 
@@ -899,11 +900,11 @@ define(
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
 
-                    if ($scope.section == "teams")
+                    if ($scope.section == 'teams')
                     {
                       $scope.changeCurrent($scope.currentTeam);
                     }
-                    else if ($scope.section == "clients")
+                    else if ($scope.section == 'clients')
                     {
                       $scope.changeCurrent($scope.currentClientGroup);
                     }
@@ -959,7 +960,7 @@ define(
 
           $scope.getSlotContentJSON = function (content)
           {
-            var jsonStr = content.substring(content.indexOf("value=") + 7, content.length - 2);
+            var jsonStr = content.substring(content.indexOf('value=') + 7, content.length - 2);
 
             return angular.fromJson(jsonStr);
           }
