@@ -20,11 +20,14 @@ section#planboard(ng-controller='timeline')
 					span {{timeline | rangeInfoFilter}}
 
 	.row-fluid(ng-show='views.slot.add || views.slot.edit')
+
 		form.form-inline.form-toggled.well
+
 			button.close(ng-click='resetInlineForms()') ×
 			h4(ng-show='views.slot.add') {{ui.teamup.newTask}}
 			h4(ng-show='views.slot.edit') {{ui.teamup.updateTask}}
 			hr
+
 			.form-elements-group(ng-show='browser.mobile')
 				label {{ui.planboard.from}}
 				.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
@@ -35,6 +38,7 @@ section#planboard(ng-controller='timeline')
 					type='datetime',
 					ng-model='slot.start.datetime',
 					disabled='')
+
 			.form-elements-group(ng-hide='browser.mobile')
 				label {{ui.planboard.from}}
 				.control-group.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
@@ -64,6 +68,7 @@ section#planboard(ng-controller='timeline')
 					ng-model='slot.start.time',
 					disabled='')
 					i.icon-time
+
 			.form-elements-group(ng-show='browser.mobile')
 				label {{ui.planboard.from}}
 				.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
@@ -75,6 +80,7 @@ section#planboard(ng-controller='timeline')
 					type='datetime',
 					ng-model='slot.end.datetime',
 					disabled='')
+
 			.form-elements-group(ng-hide='browser.mobile')
 				label {{ui.planboard.till}}
 				.control-group.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
@@ -104,6 +110,7 @@ section#planboard(ng-controller='timeline')
 					ng-model='slot.end.time',
 					disabled='')
 					i.icon-time
+
 			.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
 				label {{relatedUserLabel}}
 				select(ng-model='slot.relatedUser',
@@ -114,11 +121,13 @@ section#planboard(ng-controller='timeline')
 				disabled='',
 				ng-options='r.uuid as r.name for r in relatedUsers',
 				ng-show='views.member')
+
 			.form-elements-group(ng-show='views.group')
 				small
 					i(ng-show='(slot.diff < 0)') {{slot.diff | i18n_spec:'planboard.lessPeople'}}
 					i(ng-show='(slot.diff == 0)') {{ui.planboard.samePeople}}
 					i(ng-show='(slot.diff > 0)') {{slot.diff | i18n_spec:'planboard.morePeople'}}
+
 			.form-elements-group(ng-show='views.wish')
 				label {{ui.planboard.wished}}
 				input.input-mini(name='wish-count',
@@ -130,9 +139,11 @@ section#planboard(ng-controller='timeline')
 				ng-model='slot.wish',
 				disabled='',
 				ng-show='app.resources.role > 1')
+
 			.form-elements-group(ng-show='views.member')
 				small
 					i {{ui.planboard.combine_reoccuring}}
+
 			.form-elements-actions.pull-right
 				div(ng-show='(slot.diff < 0)')
 					button.btn.btn-success(type='button',
@@ -147,10 +158,10 @@ section#planboard(ng-controller='timeline')
 					button.btn.btn-danger(type='button',
 					ng-click='timelineOnRemove(slot)',
 					style='margin-right: 5px')
-						| {{ui.planboard.del}} timelineOnRemove
+						| {{ui.planboard.del}}
 					button.btn.btn-success(type='button',
 					ng-click='timelineOnChange("true", original, slot)')
-						| {{ui.planboard.change}} timelineOnChange
+						| {{ui.planboard.change}}
 				div(ng-show='views.wish')
 					button.btn.btn-success(type='button',
 					ng-click='wisher(slot)',

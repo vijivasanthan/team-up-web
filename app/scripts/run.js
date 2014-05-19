@@ -132,6 +132,7 @@ define(
           /**
            * Fix styles
            */
+          // TODO: Turn it to a jQuery plugin
           $rootScope.fixStyles = function ()
           {
             var tabHeight = $('.tabs-left .nav-tabs').height();
@@ -247,6 +248,7 @@ define(
            * 2> find the groups belong to this team,
            * 3> get all the clients under the group
            */
+          // TODO: It is only called from planboard controller. Maybe move it to there?
           $rootScope.getClientsByTeam = function (teamIds)
           {
             var clients = [],
@@ -299,6 +301,7 @@ define(
            * 1> get the team link to this client group ,
            * 2> get the members in the team.
            */
+            // TODO: It is only called from planboard controller. Maybe move it to there?
           $rootScope.getMembersByClient = function (clientGroup)
           {
             var members = [];
