@@ -78,47 +78,67 @@ define(
               }
             );
 
+            console.log('setting team view ->');
+
             $scope.members = data.members[id];
 
             $scope.current = id;
 
-            /*
             angular.forEach(
               $scope.members,
               function (member)
               {
-                var imgURL = $scope.imgHost + $scope.ns +
-                             "/team/member/" + member.uuid + "/photo?width=40&height=40";
+                /*
+                 var imgURL = $scope.imgHost + $scope.ns +
+                 "/team/member/" + member.uuid + "/photourl?width=40&height=40";
 
-                var imgId = member.uuid.replace(".", "").replace("@", "");
-                $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+                 var imgId = member.uuid.replace(".", "").replace("@", "");
+                 $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+                 */
 
                 // console.log('url, imgid ->', imgURL, imgId);
 
-                //                TeamUp._(
-                //                  'memberPhoto',
-                //                  { third: member.uuid }
-                //                ).then(
-                //                  function (result)
-                //                  {
-                //                    console.log('result ->', result);
-                //                    // console.log("loading pic " + imgURL);
-                //
-                ////                    var imgId = member.uuid.replace(".", "").replace("@", "");
-                ////
-                ////                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                ////                    {
-                ////                      console.log("no pics ", result);
-                ////                    }
-                ////                    else
-                ////                    {
-                ////                      var realImgURL = $scope.imgHost + result.path;
-                ////                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                ////                    }
-                //
-                //                  },
-                //                  function (error) { console.log("error when load pic " + error) }
-                //                );
+                TeamUp._(
+                  'memberPhoto',
+                  { third: member.uuid }
+                ).then(
+                  function (result)
+                  {
+                    console.log('result ->', result);
+                    // console.log("loading pic " + imgURL);
+
+                    var url = '';
+
+                    angular.forEach(
+                      result,
+                      function (str)
+                      {
+                        console.log('str ->', str);
+
+                        if (str.length == 1)
+                        {
+                          url += str;
+                        }
+                      }
+                    );
+
+                    var imgId = member.uuid.replace(".", "").replace("@", "");
+
+                    $('.tab-content #img_' + imgId).css('background-image', 'url(' + url + ')');
+//
+//                    if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
+//                    {
+//                      console.log("no pics ", result);
+//                    }
+//                    else
+//                    {
+//                      var realImgURL = $scope.imgHost + result.path;
+//                      $('.tab-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+//                    }
+
+                  },
+                  function (error) { console.log("error when load pic " + error) }
+                );
 
                 //                var tempURL = $scope.imgHost + $scope.ns + "/team/member/" + member.uuid + "/photourl";
                 //
@@ -133,7 +153,6 @@ define(
 
               }
             );
-            */
 
 
             $scope.team.phone = $rootScope.ui.teamup.loadingNumber;
