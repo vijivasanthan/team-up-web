@@ -44,6 +44,12 @@ $graph-darker-gray:   #cccccc !default;
           box-shadow: $horizontal, $vertical, $blur, $spread, $color;
 }
 
+.timeline-periode {
+  h4 {
+    font-weight: normal;
+  }
+}
+
 .vis.timeline {
   &.rootpanel {
     position: relative;

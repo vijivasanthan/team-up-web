@@ -1,8 +1,8 @@
 section#planboard(ng-controller='timeline')
 
-	.page-header.row-fluid
+	.page-header.timeline
 
-		span.nullable.pull-left(style='margin-top: -500px; display: block', ng-show='views.teams')
+		span.nullable.pull-left(ng-show='views.teams')
 			select(ng-model='currentTeam',
 			ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
 			ng-change='changeCurrent(currentTeam)')
@@ -14,12 +14,12 @@ section#planboard(ng-controller='timeline')
 
 		#timeline-controls.pull-right(ng-controller='timeline-navigation',
 		style='text-align: right')
-			h4(style='font-weight: normal; padding-right: 40px;') {{timeline.range | rangeMainFilter}}
+			h4(style='font-weight: normal;') {{timeline.range | rangeMainFilter}}
 				br
 				div(style='font-size: 15px; font-weight: lighter')
 					span {{timeline | rangeInfoFilter}}
 
-	.row-fluid(ng-show='views.slot.add || views.slot.edit')
+	.row-fluid(ng-show='views.slot.add || views.slot.edit').changeTimeSlot
 
 		form.form-inline.form-toggled.well
 
@@ -197,10 +197,6 @@ section#planboard(ng-controller='timeline')
 			#viewTeamsTab.tab-pane(class="{{(views.teams==true || views.clients==true) && 'active'}}")
 				.tab-header
 					h3.pull-left {{currentName}}
-				br
-				select(ng-model='currentTeam',
-				ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
-				ng-change='changeCurrent(currentTeam)')
 				hr
 				#timeline
 					#mainTimeline

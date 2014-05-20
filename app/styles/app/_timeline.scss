@@ -90,6 +90,7 @@ div.timeline-event-dot {
 }
 
 div.timeline-event-range {
+  height: 40px;
 }
 
 div.timeline-event-range-drag-left {
@@ -148,8 +149,8 @@ div.timeline-navigation-delete {
   padding: 0px 0px 0px 5px;
   /*background: url('images/img/16/delete.png') no-repeat center;*/
   display: inline-block;
-  margin-top: 2px;
-  margin-left: -16px;
+  margin-top: 4px;
+  margin-left: -7px;
   width: 14px;
   height: 14px;
   /*background-position: -10px 1px;*/
@@ -252,6 +253,10 @@ div.timeline-event-range {
   opacity: 0.5;
 }
 
+.changeTimeSlot {
+  padding-top: 100px;
+  margin-bottom: -100px;
+}
 
 .timeline-footer-text {
   font-style: italic;

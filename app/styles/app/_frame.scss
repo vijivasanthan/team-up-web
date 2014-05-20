@@ -205,19 +205,39 @@
 }
 
 
+section {
+  position: relative;
+}
+
 // Page header
 // -------------------------
 
+.page-header.timeline.vis {
+  margin-top: 4px;
+  h4 {
+    line-height: 14px;
+  }
+  h5 {
+    color: $brown;
+    font-weight: normal;
+  }
+}
+
+.page-header.timeline {
+  width: 100%;
+}
 .page-header {
   overflow: hidden;
   min-height: 60px;
   border-bottom: none;
-  padding-bottom: 0;
+  padding: 0;
   position: absolute;
   color: $turq;
   font-size: 30px;
   font-weight: 700;
   line-height: 40px;
+  //padding-right: 40px;
+
 
 
   h2 {
