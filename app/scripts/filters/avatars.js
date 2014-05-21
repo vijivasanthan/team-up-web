@@ -484,15 +484,23 @@ define(
         'Session',
         function (Session)
         {
-          return function (id)
+          return function (id, type, size)
           {
             if (id)
             {
+              var path;
+
+              switch (type)
+              {
+                case 'team':    path = '/team/member/'; break;
+                case 'client':  path = '/client/';      break;
+              }
+
               var url = config.app.host +
                         config.app.namespace +
-                        '/team/member/' +
+                        path +
                         id +
-                        '/photo?width=40&height=40&sid=' +
+                        '/photo?width=' + size + '&height=' + size + '&sid=' +
                         Session.get();
 
               return url;

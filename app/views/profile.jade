@@ -40,9 +40,7 @@ section#profile
 								dt {{ui.profile.birthday}}
 								dd {{data.birthDate|nicelyDate}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-							// profile image
-							// style= "background-image: url({{imgHost}}/teamup/team/member/{{data.uuid}}/photo)
-							.roundedPicLarge(id='img_{{data.uuid|escape}}',
+							.roundedPicLarge(style='background-image: url({{data.uuid | avatar:"team":"368" }})',
 							class='{{data.states|stateColor}}')
 							div
 								a(href='#/profile/{{data.uuid}}#editImg')

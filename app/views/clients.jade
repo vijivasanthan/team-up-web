@@ -71,7 +71,8 @@
 							th
 					tbody
 						tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
-							td: .roundedPicSmall.memberStateBusy(id='img_{{client.uuid|escape}}')
+							td
+								.roundedPicSmall.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"80" }})')
 							td: a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
 							td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
 							td
@@ -240,7 +241,7 @@
 						dt {{ui.teamup.clientProfileUrl}}
 						dd {{client.clientProfileUrl}}
 				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-					.roundedPicLarge.memberStateBusy(id='img_{{client.uuid|escape}}')
+					.roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
 					div
 						a(href='#/clientProfile/{{client.uuid}}#editImg')
 							button.btn.btn-mini.btn-primary(ng-click='editImg()')

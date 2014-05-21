@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'planboard', [
-        '$rootScope', '$scope', '$location', 'Dater', 'Store', 'Teams', 'Clients', 'TeamUp',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp)
+        '$rootScope', '$scope', '$location', 'Dater', 'Store', 'Teams', 'Clients', 'TeamUp', 'Session',
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session)
         {
           var params = $location.search();
 
@@ -74,42 +74,14 @@ define(
                   members,
                   function (member)
                   {
-                    // TODO: Remove this completely later on!
-                    //                    var getAvatarURLFromStorage = function (id)
-                    //                    {
-                    //                      var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
-                    //                      var ret;
-                    //
-                    //                      if (avatarUrls)
-                    //                      {
-                    //                        angular.forEach(
-                    //                          avatarUrls, function (item)
-                    //                          {
-                    //                            if (item.id == id)
-                    //                            {
-                    //                              ret = item.url;
-                    //                            }
-                    //                          });
-                    //                      }
-                    //
-                    //                      return ret;
-                    //                    };
-                    //
-                    // var imgfile = Storage.avatar.geturl(member.uuid);
-
-                    // var imgfile = '';
-                    // var imgURL = $scope.imgHost + imgfile;
-
-                    // if (typeof imgfile == "undefined")
-                    // {
-                    //   imgURL = config.app.noImgURL;
-                    // }
-
-                    var imgURL = '';
-
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
-                                 imgURL +
+                                 config.app.host +
+                                 config.app.namespace +
+                                 '/team/member/' +
+                                 member.uuid +
+                                 '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
+                                 Session.get() +
                                  ');" memberId="' +
                                  member.uuid +
                                  '"></div>';
@@ -127,12 +99,11 @@ define(
                         'memId': member.uuid
                       }
                     );
-                  });
+                  }
+                );
               }
             }
           );
-
-          // console.log('$scope.data.teams ->', $scope.data.teams);
 
           angular.forEach(
             clients,
@@ -153,19 +124,14 @@ define(
                 angular.forEach(
                   members, function (member)
                   {
-                    // TODO: Remove this one later on!
-                    // var imgfile = Storage.avatar.geturl(member.uuid);
-                    var imgfile = '';
-                    var imgURL = $scope.imgHost + imgfile;
-
-                    if (typeof imgfile == "undefined")
-                    {
-                      imgURL = config.app.noImgURL;
-                    }
-
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
-                                 imgURL +
+                                 config.app.host +
+                                 config.app.namespace +
+                                 '/client/' +
+                                 member.uuid +
+                                 '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
+                                 Session.get() +
                                  ');" memberId="' +
                                  member.uuid +
                                  '"></div>';
@@ -178,8 +144,8 @@ define(
                                '</div>';
 
                     var obj = {
-                      "head":  name,
-                      "memId": member.uuid
+                      'head':  name,
+                      'memId': member.uuid
                     };
 
                     $scope.data.clients.members[client.id].push(obj);

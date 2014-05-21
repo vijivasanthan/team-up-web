@@ -66,9 +66,8 @@
           tbody
             tr(ng-repeat='member in data.members[team.uuid]|orderBy:"lastName"')
               td
-                .roundedPicSmall(id='img_{{member.uuid|escape}}',
-                class='{{member.states|stateColor}}',
-								style='background-image: url({{member.uuid | avatar}})')
+                .roundedPicSmall(class='{{member.states|stateColor}}',
+								style='background-image: url({{member.uuid | avatar:"team":"80" }})')
               td
                 a(href='#/profile/{{member.uuid}}#profile',
                 ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}

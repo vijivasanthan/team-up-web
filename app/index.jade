@@ -71,7 +71,7 @@ block navbar
 								i.icon-search
 						li
 							a#account(ng-click='nav("profile")')
-								.roundedPicxSmall(id='img_{{app.resources.uuid|escape}}',
+								.roundedPicxSmall(style='background-image: url({{app.resources.uuid | avatar:"team":"80" }})',
 								class='{{app.resources.states|stateColor}}')
 								span {{app.resources.firstName}} {{app.resources.lastName}}
 						li.navbar-btn
