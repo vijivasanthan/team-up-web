@@ -126,16 +126,13 @@ section#planboard(ng-controller='timeline')
 			.form-elements-actions.pull-right
 				div(ng-show='views.slot.add')
 					button.btn.btn-success(type='button',
-					ng-click='timelineOnAdd("true", slot)')
-						| {{ui.planboard.add}}
+					ng-click='timelineOnAdd("true", slot)') {{ui.planboard.add}}
 				div(ng-show='views.slot.edit')
 					button.btn.btn-danger(type='button',
 					ng-click='timelineOnRemove(slot)',
-					style='margin-right: 5px')
-						| {{ui.planboard.del}}
+					style='margin-right: 5px') {{ui.planboard.del}}
 					button.btn.btn-success(type='button',
-					ng-click='timelineOnChange("true", original, slot)')
-						| {{ui.planboard.change}}
+					ng-click='timelineOnChange("true", original, slot)') {{ui.planboard.change}}
 
 
 

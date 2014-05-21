@@ -2499,7 +2499,7 @@ links.Timeline.prototype.repaintNavigation = function ()
           timeline.step.snap(xend);
         }
 
-        var content = "New";
+        var content = 'Nieuw';
         var group = timeline.groups.length ? timeline.groups[0].content : undefined;
 
         timeline.addItem(
@@ -2996,7 +2996,7 @@ links.Timeline.prototype.onMouseDown = function (event)
       this.step.snap(xstart);
     }
     var xend = new Date(xstart);
-    var content = "New";
+    var content = 'Nieuw';
     var group = this.getGroupFromHeight(y);
     this.addItem(
       {
@@ -3442,7 +3442,7 @@ links.Timeline.prototype.onDblClick = function (event)
         this.step.snap(xend);
       }
 
-      var content = "New";
+      var content = 'Nieuw';
       var group = this.getGroupFromHeight(y);   // (group may be undefined)
       this.addItem(
         {

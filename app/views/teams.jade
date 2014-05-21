@@ -6,7 +6,6 @@
     ng-change='requestTeam(current)')
 
 
-
 .tabbable.tabs-left
 
   ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
@@ -43,6 +42,7 @@
         ng-click='deleteTeam()') {{ui.teamup.del}}
         button.btn.pull-right.btn-info(type='button',
         ng-click='editTeam(team)') {{ui.teamup.edit}}
+
       .tab-header(ng-show='views.editTeam')
         input.pull-left(type='text',
         ng-model='teamEditForm.name')
@@ -53,35 +53,32 @@
 
       hr
 
-      p(ng-hide='(data.members[team.uuid]).length > 0')
-        | {{ui.teamup.noMembers}}
+      p(ng-hide='(data.members[team.uuid]).length > 0') {{ui.teamup.noMembers}}
 
       div(ng-show='(data.members[team.uuid]).length > 0')
         table.table.table-striped
           thead
             tr
               th
-              th
-                a(ng-click='sorter="name"') {{ui.teamup.name}}
-              th
-                a {{ui.teamup.states}}
+              th: a(ng-click='sorter="name"') {{ui.teamup.name}}
+              th: a {{ui.teamup.states}}
               th
           tbody
             tr(ng-repeat='member in data.members[team.uuid]|orderBy:"lastName"')
               td
                 .roundedPicSmall(id='img_{{member.uuid|escape}}',
-                class='{{member.states|stateColor}}')
+                class='{{member.states|stateColor}}',
+								style='background-image: url({{member.uuid | avatar}})')
               td
                 a(href='#/profile/{{member.uuid}}#profile',
                 ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}
               td
-                span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}} here?
+                span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}}
                 span.states(ng-repeat='state in member.states | filter:share=true ')
                   span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
                   aria-hidden='true',
                   class="{{state.name|stateDataIcon:'class_name'}}")
-                  span.stateValue
-                    | {{state.value_rscoded}}
+                  span.stateValue {{state.value_rscoded}}
                     a(ng-show='(state.name == "Location")',
                     href='http://maps.google.com/?q={{state|stateValue:"data"}}') {{ui.teamup.map}}
               td
@@ -95,8 +92,7 @@
                     i.icon-trash
         span.muted.pull-right
           small
-            i
-              | {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+            i {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
 
 
     #newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")

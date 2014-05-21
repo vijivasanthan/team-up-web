@@ -165,40 +165,12 @@ define(
 
               angular.extend($scope.timeline.options, config.app.timeline.options);
 
-              if ($scope.timeline.main)
-              {
-                console.log('timeline data ->', $scope.data);
-
-                $scope.self.timeline.draw(
-                  Sloter.process(
-                    $scope.data,
-                    $scope.timeline.config,
-                    $scope.divisions,
-                    $scope.timeline.user.role,
-                    $scope.timeline.current), $scope.timeline.options
-                );
-              }
-              else
-              {
-                var timeout = ($location.hash() == 'timeline') ? 100 : 2000;
-
-                $rootScope.timelineLoaded = false;
-
-                setTimeout(
-                  function ()
-                  {
-                    $rootScope.timelineLoaded = true;
-                    $rootScope.$apply();
-
-                    $scope.self.timeline.draw(
-                      Sloter.profile($scope.data.slots.data, $scope.timeline.config),
-                      $scope.timeline.options);
-                  }, timeout
-                );
-              }
+              $scope.self.timeline.draw(
+                Sloter.process($scope.data),
+                $scope.timeline.options
+              );
 
               $scope.self.timeline.setVisibleChartRange($scope.timeline.options.start, $scope.timeline.options.end);
-
             },
 
             load: function (stamps, remember) { this.render(stamps, remember) },
@@ -335,11 +307,11 @@ define(
                 content: content
               };
 
-              if ($scope.timeline.main && values.content != 'New')
+              if ($scope.timeline.main && values.content != 'Nieuw')
               {
                 $rootScope.$broadcast('resetPlanboardViews');
               }
-              else if (values.content != 'New')
+              else if (values.content != 'Nieuw')
               {
                 $scope.forms = {
                   add:  false,
@@ -347,7 +319,7 @@ define(
                 };
               }
 
-              if (values.content == 'New')
+              if (values.content == 'Nieuw')
               {
                 content = {type: 'slot'};
               }
@@ -363,7 +335,7 @@ define(
                   switch (content.type)
                   {
                     case 'slot':
-                      if (values.content == 'New' || (content.relatedUser && typeof content.id == 'undefined'))
+                      if (values.content == 'Nieuw' || (content.relatedUser && typeof content.id == 'undefined'))
                       {
                         $scope.views.slot.add = true;
                       }
@@ -534,6 +506,8 @@ define(
             {
               // var now = Date.now().getTime();
 
+              console.log('slot ->', slot);
+
               values = {
                 startTime: ($rootScope.browser.mobile) ?
                            new Date(slot.start.datetime).getTime() :
@@ -688,7 +662,7 @@ define(
 
             var content_obj = item.content;
 
-            if (content_obj != 'New')
+            if (content_obj != 'Nieuw')
             {
               content_obj = $scope.getSlotContentJSON(item.content);
               content_obj.clientUuid = $scope.slot.clientUuid;
@@ -710,7 +684,7 @@ define(
             {
               if (typeof $scope.slot.relatedUser == 'undefined' || $scope.slot.relatedUser == '')
               {
-                content = 'New';
+                content = 'Nieuw';
               }
             }
 
@@ -954,7 +928,7 @@ define(
 
           $scope.getSlotContentJSON = function (content)
           {
-            if (content != 'New')
+            if (content != 'Nieuw')
             {
               return angular.fromJson(
                 content.substring(content.indexOf('value=') + 7, content.length - 2)

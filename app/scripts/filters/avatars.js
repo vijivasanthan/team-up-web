@@ -477,5 +477,28 @@ define(
           }
         }
       ]);
+
+    filters.filter(
+      'avatar',
+      [
+        'Session',
+        function (Session)
+        {
+          return function (id)
+          {
+            if (id)
+            {
+              var url = config.app.host +
+                        config.app.namespace +
+                        '/team/member/' +
+                        id +
+                        '/photo?width=40&height=40&sid=' +
+                        Session.get();
+
+              return url;
+            }
+          }
+        }
+      ]);
   }
 );

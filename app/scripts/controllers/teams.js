@@ -6,11 +6,19 @@ define(
 
     controllers.controller(
       'teamCtrl', [
-        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Store', 'Dater', 'TeamUp','GoogleGEO',
-        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater, TeamUp,GoogleGEO)
+        '$rootScope',
+        '$scope',
+        '$location',
+        'Teams',
+        'data',
+        '$route',
+        '$routeParams',
+        'Store',
+        'Dater',
+        'TeamUp',
+        'GoogleGEO',
+        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater, TeamUp, GoogleGEO)
         {
-          console.log("GoogleGEO" , GoogleGEO);
-
           $rootScope.fixStyles();
 
           $scope.members = data.members;
@@ -22,9 +30,7 @@ define(
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.ns;
 
-          $scope.search = {
-            query: ''
-          };
+          $scope.search = { query: '' };
 
           $scope.selection = {};
 
@@ -47,10 +53,7 @@ define(
             uuid = data.teams[0].uuid;
             view = $location.hash();
 
-            $location.search(
-              {
-                uuid: data.teams[0].uuid
-              });
+            $location.search({ uuid: data.teams[0].uuid });
           }
           else
           {
@@ -82,67 +85,62 @@ define(
 
             $scope.members = data.members[id];
 
-            
-            
-            angular.forEach($scope.members,function(mem,i){
-
-              console.log("test",mem.states);
-              angular.forEach(mem.states,function(state){
-                  if(state.name == "Location"){
-                      state.value_rscoded = "loading address";
-                      var latlngStr = state.value.split(",");
-                      var lat = parseFloat(latlngStr[0]);
-                      var lng = parseFloat(latlngStr[1]);
-                      var latlng = new google.maps.LatLng(lat, lng);
-                      GoogleGEO.geocode({'latLng': latlng}, function(results, status) {
-                      if (status == google.maps.GeocoderStatus.OK) {
-                        if (results[1]) {
-                          state.value_rscoded = results[1].formatted_address;
-                        } else {
-                          alert('No results found');
-                        }
-                      } else {
-                        alert('Geocoder failed due to: ' + status);
-                      }
-                    });
-                    }
-                });             
-            });
-
-            $scope.current = id;
-
             angular.forEach(
               $scope.members,
               function (member)
               {
-                $('#img_' + member.uuid.replace('.', '').replace('@', '')).css(
-                  'backgroundImage',
-                  'url(' +
-                    config.app.host + config.app.namespace +
-                    '/team/member/' + member.uuid + '/photo?width=40&height=40' +
-                  ')'
-                );
+                angular.forEach(
+                  member.states,
+                  function (state)
+                  {
+                    if (state.name == "Location")
+                    {
+                      state.value_rscoded = "loading address";
 
-                $('.tab-content').append(
-                    '<img src="' +
-                    config.app.host + config.app.namespace +
-                    '/team/member/' + member.uuid + '/photo?width=140&height=140' +
-                    '" />');
+                      var coordinates = state.value.split(","),
+                          latitude = parseFloat(coordinates[0]),
+                          longitude = parseFloat(coordinates[1]);
+
+                      GoogleGEO.geocode(
+                        {
+                          'latLng': new google.maps.LatLng(latitude, longitude)
+                        },
+                        function (results, status)
+                        {
+                          // TODO: What if there are more results? Which one to pick?
+                          // console.log('results ->', results);
+
+                          if (status == google.maps.GeocoderStatus.OK)
+                          {
+                            if (results[1])
+                            {
+                              state.value_rscoded = results[1].formatted_address;
+                            }
+                            else
+                            {
+                              console.log('No results found for geo reversing!');
+                            }
+                          }
+                          else
+                          {
+                            alert('Geocoder failed due to: ' + status);
+                          }
+                        }
+                      );
+                    }
+                  }
+                );
               }
             );
 
+            $scope.current = id;
 
             $scope.team.phone = $rootScope.ui.teamup.loadingNumber;
 
             TeamUp._(
               'teamPhoneNumber',
               { second: $scope.team.uuid }
-            ).then(
-              function (result)
-              {
-                $scope.team.phone = result.phone;
-              }
-            );
+            ).then(function (result) { $scope.team.phone = result.phone });
           }
 
           $scope.requestTeam = function (current, switched)
@@ -150,13 +148,10 @@ define(
             setTeamView(current);
 
             $scope.$watch(
-              $location.search(), function ()
-              {
-                $location.search(
-                  {
-                    uuid: current
-                  });
-              });
+              $location.search(),
+              function () { $location.search({ uuid: current }) }
+            );
+
             if (switched)
             {
               if ($location.hash() != 'team')
@@ -230,6 +225,7 @@ define(
             if ($.trim(team.name) == '')
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+
               return;
             }
 
@@ -259,7 +255,8 @@ define(
 
                       $scope.team.name = team.name;
                       $scope.views.editTeam = false;
-                    });
+                    }
+                  );
                 }
               });
           };
@@ -269,6 +266,7 @@ define(
             if (typeof team == 'undefined' || $.trim(team.name) == '')
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+
               return;
             }
 
@@ -289,12 +287,14 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                  Teams.query(false, result).then(
+                  Teams.query(false, result)
+                    .then(
                     function (queryRs)
                     {
                       if (queryRs.error)
                       {
                         $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
+
                         console.warn('error ->', queryRs);
                       }
                       else
@@ -305,14 +305,16 @@ define(
                         $scope.data = queryRs;
 
                         angular.forEach(
-                          queryRs.teams, function (t_obj)
+                          queryRs.teams,
+                          function (t_obj)
                           {
                             if (t_obj.uuid == result.uuid)
                             {
                               $scope.teams = queryRs.teams;
 
                               angular.forEach(
-                                queryRs.teams, function (t)
+                                queryRs.teams,
+                                function (t)
                                 {
                                   if (t.uuid == t_obj.uuid)
                                   {
@@ -325,22 +327,19 @@ define(
                               $scope.current = t_obj.uuid;
 
                               $scope.$watch(
-                                $location.search(), function ()
-                                {
-                                  $location.search(
-                                    {
-                                      uuid: t_obj.uuid
-                                    });
-                                });
+                                $location.search(),
+                                function () { $location.search({ uuid: t_obj.uuid }) }
+                              );
                             }
                           });
                       }
 
                       $rootScope.statusBar.off();
-
-                    });
+                    }
+                  );
                 }
-              });
+              }
+            );
           };
 
           $scope.memberSubmit = function (member)
@@ -348,18 +347,21 @@ define(
             if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
+
               return;
             }
 
             if (member.password != member.reTypePassword)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+
               return;
             }
 
             if (! member.team)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
+
               return;
             }
 
@@ -418,7 +420,8 @@ define(
                               $scope.teams = queryRs.teams;
 
                               angular.forEach(
-                                queryRs.teams, function (t)
+                                queryRs.teams,
+                                function (t)
                                 {
                                   if (t.uuid == t_obj.uuid)
                                   {
@@ -431,21 +434,19 @@ define(
                               $scope.current = t_obj.uuid;
 
                               $scope.$watch(
-                                $location.search(), function ()
-                                {
-                                  $location.search(
-                                    {
-                                      uuid: t_obj.uuid
-                                    });
-                                });
+                                $location.search(),
+                                function () { $location.search({ uuid: t_obj.uuid }) }
+                              );
                             }
                           });
                       }
 
                       $rootScope.statusBar.off();
-                    });
+                    }
+                  );
                 }
-              });
+              }
+            );
           };
 
           $scope.closeTabs = function ()
@@ -457,15 +458,12 @@ define(
             $scope.setViewTo('team');
           };
 
-          $scope.editProfile = function (memberId, teamId)
-          {
-            sessionStorage.setItem(memberId + "_team", teamId);
-          };
+          $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(memberId + "_team", teamId) };
 
           $scope.noSharedStates = function (states)
           {
-            var flag = true;
-            var ret = true;
+            var flag = true,
+                ret = true;
 
             angular.forEach(
               states,
@@ -498,14 +496,18 @@ define(
                 {
                   if (result)
                   {
-                    Teams.query(true, {}).then(
+                    Teams.query(
+                      true,
+                      {}
+                    ).then(
                       function (teams)
                       {
                         $scope.requestTeam(teams[0].uuid);
 
                         // locally refresh
                         angular.forEach(
-                          $scope.teams, function (team, i)
+                          $scope.teams,
+                          function (team, i)
                           {
                             if (team.uuid == result)
                             {
@@ -552,12 +554,12 @@ define(
                     // refresh the teams that contains  this user
                     angular.forEach(
                       $scope.members,
-                      function (mem)
+                      function (member)
                       {
-                        if (mem.uuid == memberId)
+                        if (member.uuid == memberId)
                         {
                           angular.forEach(
-                            mem.teamUuids,
+                            member.teamUuids,
                             function (teamId)
                             {
                               $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
@@ -598,47 +600,8 @@ define(
                 }, function (error) { console.log(error) });
             }
           };
-
-
-          // brefoe I know there is a good place to put this code
-          // load the login user's avatar
-
-          var imgURL = config.app.host + config.app.ns +
-                       "/team/member/" + $rootScope.app.resources.uuid + "/photo?width=40&height=40";
-
-          // console.log('imgURL ->', imgURL);
-
-          /*
-           var mId = $rootScope.app.resources.uuid;
-           var imgId = mId.replace(".", "").replace("@", "");
-           $('.navbar-inner #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
-           */
-
-          //          Teams.loadImg(imgURL).then(
-          //            function (result)
-          //            {
-          //              // console.log("loading pic " + imgURL);
-          //
-          //              var mId = $rootScope.app.resources.uuid;
-          //              var imgId = mId.replace(".", "").replace("@", "");
-          //
-          //              if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-          //              {
-          //                console.log("no pics ", result);
-          //              }
-          //              else
-          //              {
-          //                if (result.path)
-          //                {
-          //                  var realImgURL = profile.host().replace("\\:", ":") + result.path;
-          //                  $('.navbar-inner #img_' + imgId).css('background-image', 'url("' + realImgURL + '")');
-          //                }
-          //              }
-          //            }, function (error) { console.log("error when load pic " + error) }
-          //          );
-
-
         }
-      ]);
+      ]
+    );
   }
 );

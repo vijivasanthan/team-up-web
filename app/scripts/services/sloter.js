@@ -11,35 +11,35 @@ define(
         function ($rootScope, Store)
         {
           return {
-            get: {
-              groups: function ()
-              {
-                var groups = {};
-
-                angular.forEach(
-                  Store('app').get('groups'),
-                  function (group)
-                  {
-                    groups[group.uuid] = group.name;
-                  });
-
-                return groups;
-              },
-
-              members: function ()
-              {
-                var members = {};
-
-                angular.forEach(
-                  Store('app').get('members'),
-                  function (member)
-                  {
-                    members[member.uuid] = member.name;
-                  });
-
-                return members;
-              }
-            },
+//            get: {
+//              groups: function ()
+//              {
+//                var groups = {};
+//
+//                angular.forEach(
+//                  Store('app').get('groups'),
+//                  function (group)
+//                  {
+//                    groups[group.uuid] = group.name;
+//                  });
+//
+//                return groups;
+//              },
+//
+//              members: function ()
+//              {
+//                var members = {};
+//
+//                angular.forEach(
+//                  Store('app').get('members'),
+//                  function (member)
+//                  {
+//                    members[member.uuid] = member.name;
+//                  });
+//
+//                return members;
+//              }
+//            },
 
             wrapper: function (rank) { return '<span style="display:none;">' + rank + '</span>' },
 
@@ -175,14 +175,15 @@ define(
               return timedata;
             },
 
-            members: function (data, timedata)
+            process: function (data)
             {
-              var _this = this,
-                  offset = Number(Date.now());
+              var timedata = [];
+
+              var offset = Number(Date.now());
 
               angular.forEach(
                 data.members,
-                function (member)
+                (function (member)
                 {
                   var tasks = [];
 
@@ -209,7 +210,7 @@ define(
                         memberTasks,
                         function (task)
                         {
-                          var relatedUser = "";
+                          var relatedUser = '';
 
                           if (data.section == "teams")
                           {
@@ -264,20 +265,9 @@ define(
                     }
                   );
 
-                  timedata = _this.addLoading(data, timedata, [member.head]);
-                });
-
-              return timedata;
-            },
-
-            process: function (data, config, divisions, privilage)
-            {
-              var timedata = [];
-
-              if (data.members)
-              {
-                timedata = this.members(data, timedata, config, privilage);
-              }
+                  timedata = this.addLoading(data, timedata, [member.head]);
+                }).bind(this)
+              );
 
               return timedata;
             }

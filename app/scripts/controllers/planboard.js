@@ -11,14 +11,6 @@ define(
         {
           var params = $location.search();
 
-
-
-          // TODO: Remove these ones too!
-          // $scope.imgHost = config.app.host;
-          // $scope.ns = config.app.ns;
-
-
-
           var teams = Store('app').get('teams'),
               clients = Store('app').get('ClientGroups');
 
@@ -280,7 +272,7 @@ define(
 
                     if (typeof $scope.data[$scope.section].tasks[memberId] == "undefined")
                     {
-                      $scope.data[$scope.section].tasks[memberId] = new Array();
+                      $scope.data[$scope.section].tasks[memberId] = [];
                     }
 
                     $scope.data[$scope.section].tasks[memberId].push(task);
@@ -346,9 +338,7 @@ define(
                     // console.log("error happend when getting the tasks for the team members " + error);
                   }
                 }
-              ).then(
-                function (tasks) { storeTask(tasks, startTime, endTime) }
-              );
+              ).then(function (tasks) { storeTask(tasks, startTime, endTime) });
             }
           };
 
@@ -484,10 +474,8 @@ define(
 
           angular.forEach(
             config.app.timeline.config.states,
-            function (state, index)
-            {
-              $scope.timeline.config.legenda[index] = true;
-            });
+            function (state, index) { $scope.timeline.config.legenda[index] = true }
+          );
 
           $scope.timeline.config.legenda.groups = {
             more: true,
@@ -533,6 +521,7 @@ define(
           {
             $scope.slot = {};
             $scope.original = {};
+
             $scope.resetViews();
 
             if ($scope.section == "teams")
@@ -545,6 +534,7 @@ define(
             }
           };
         }
-      ]);
+      ]
+    );
   }
 );
