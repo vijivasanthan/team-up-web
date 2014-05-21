@@ -69,7 +69,8 @@ define(
           );
 
           $rootScope.$on(
-            'slotInitials', function ()
+            'slotInitials',
+            function ()
             {
               $scope.slot = {};
 
@@ -323,7 +324,7 @@ define(
             if (selection = $scope.self.timeline.getSelection()[0])
             {
               var values = $scope.self.timeline.getItem(selection.row);
-              
+
               var content = $scope.getSlotContentJSON(values.content);
 
               $scope.relatedUsers = $scope.processRelatedUsers(values);
@@ -720,42 +721,35 @@ define(
           {
             $rootScope.planboardSync.clear();
 
-            var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
+            var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                content = $scope.getSlotContentJSON(values.content);
 
-            /*
-             var options = {
-             start:   values.start,
-             end:     values.end,
-             // content:  angular.fromJson(values.content.match(/<span class='secret'>(.*)<\/span>/)[1])
-             content: values.content
-             };
-             */
-
-            var content_obj = $scope.getSlotContentJSON(values.content);
-
-            $scope.$apply(
-              function ()
-              {
-                $scope.slot = {
-                  start:       {
-                    date:     new Date(values.start).toString(config.app.formats.date),
-                    time:     new Date(values.start).toString(config.app.formats.time),
-                    datetime: new Date(values.start).toISOString()
-                  },
-                  end:         {
-                    date:     new Date(values.end).toString(config.app.formats.date),
-                    time:     new Date(values.end).toString(config.app.formats.time),
-                    datetime: new Date(values.end).toISOString()
-                  },
-                  state:       content_obj.state,
-                  id:          content_obj.id,
-                  memberId:    content_obj.memberId,
-                  mid:         content_obj.mid,
-                  clientUuid:  content_obj.clientUuid,
-                  relatedUser: $scope.slot.relatedUser
-                };
-              }
-            );
+            if (content != undefined)
+            {
+              $scope.$apply(
+                function ()
+                {
+                  $scope.slot = {
+                    start:       {
+                      date:     new Date(values.start).toString(config.app.formats.date),
+                      time:     new Date(values.start).toString(config.app.formats.time),
+                      datetime: new Date(values.start).toISOString()
+                    },
+                    end:         {
+                      date:     new Date(values.end).toString(config.app.formats.date),
+                      time:     new Date(values.end).toString(config.app.formats.time),
+                      datetime: new Date(values.end).toISOString()
+                    },
+                    state:       content.state,
+                    id:          content.id,
+                    memberId:    content.memberId,
+                    mid:         content.mid,
+                    clientUuid:  content.clientUuid,
+                    relatedUser: $scope.slot.relatedUser
+                  };
+                }
+              );
+            }
           };
 
           $scope.getRelatedUserId = function (name)
@@ -960,9 +954,12 @@ define(
 
           $scope.getSlotContentJSON = function (content)
           {
-            var jsonStr = content.substring(content.indexOf('value=') + 7, content.length - 2);
-
-            return angular.fromJson(jsonStr);
+            if (content != 'New')
+            {
+              return angular.fromJson(
+                content.substring(content.indexOf('value=') + 7, content.length - 2)
+              );
+            }
           }
         }
       ]

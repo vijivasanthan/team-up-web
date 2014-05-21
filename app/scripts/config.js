@@ -144,7 +144,7 @@ define(
           groupsWidth:      '200px',
           eventMarginAxis:  0,
           showCustomTime:   false,
-          groupsChangeable: false,
+          groupsChangeable: true,
           showNavigation:   false,
           intervalMin: 1000 * 60 * 60 * 1
         },

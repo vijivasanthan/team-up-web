@@ -168,6 +168,7 @@ define(
                   Session.set(result['X-SESSION_ID']);
 
                   document.cookie = 'X-SESSION_ID=' + result['X-SESSION_ID'];
+                                    //';expires=Fri, 3 Aug 2014 20:47:11 UTC; domain=dev.ask-cs.com; path=teamup-dev';
 
                   // $cookieStore.put('X-SESSION_ID', result['X-SESSION_ID']);
 

@@ -249,45 +249,44 @@ define(
            * 3> get all the clients under the group
            */
           // TODO: It is only called from planboard controller. Maybe move it to there?
+          // FIXME: It breaks down when the selected groups has no clientGroup on adding slot on timeline
           $rootScope.getClientsByTeam = function (teamIds)
           {
             var clients = [],
                 clientIds = [];
 
-            console.log('teamIds ->', teamIds);
-
             angular.forEach(
               teamIds,
               function (teamId)
               {
-                console.log('TID ->', teamId);
-
                 angular.forEach(
                   Store('app').get('teamGroup_' + teamId),
                   function (teamGroup)
                   {
-                    console.log('teamGroup ->', teamGroup);
-                    console.log('length ->', Store('app').get(teamGroup.id).length);
+                    var members = Store('app').get(teamGroup.id);
 
-                    angular.forEach(
-                      Store('app').get(teamGroup.id),
-                      function (member)
-                      {
-                        console.log('member ->', member);
-
-                        if (clientIds.indexOf(member.uuid) == - 1)
+                    if (members.length > 1)
+                    {
+                      angular.forEach(
+                        members,
+                        function (member)
                         {
-                          clientIds.push(member.uuid);
+                          console.log('member ->', member);
 
-                          clients.push(
-                            {
-                              uuid: member.uuid,
-                              name: member.firstName + ' ' + member.lastName
-                            }
-                          );
+                          if (clientIds.indexOf(member.uuid) == - 1)
+                          {
+                            clientIds.push(member.uuid);
+
+                            clients.push(
+                              {
+                                uuid: member.uuid,
+                                name: member.firstName + ' ' + member.lastName
+                              }
+                            );
+                          }
                         }
-                      }
-                    );
+                      );
+                    }
 
                   }
                 );
