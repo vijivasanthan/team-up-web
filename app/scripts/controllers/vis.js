@@ -44,7 +44,7 @@ define(
 
           $scope.items = {
             team_1: [
-              {id: 1, content: 'item 1', start: '2014-05-20'},
+              {id: 1, content: 'item 1', start: '2014-05-22', end: '2014-05-29'},
               {id: 2, content: 'item 2', start: '2014-05-20'}
             ],
             team_2: [
