@@ -75,7 +75,7 @@
                 a(href='#/profile/{{member.uuid}}#profile',
                 ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}
               td
-                span.states(ng-show='noSharedStates(member.states)')  {{ui.teamup.noSharedStates}}
+                span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}} here?
                 span.states(ng-repeat='state in member.states | filter:share=true ')
                   span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
                   aria-hidden='true',
