@@ -6,9 +6,11 @@ define(
 
     controllers.controller(
       'teamCtrl', [
-        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Store', 'Dater', 'TeamUp',
-        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater, TeamUp)
+        '$rootScope', '$scope', '$location', 'Teams', 'data', '$route', '$routeParams', 'Store', 'Dater', 'TeamUp','GoogleGEO',
+        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater, TeamUp,GoogleGEO)
         {
+          console.log("GoogleGEO" , GoogleGEO);
+
           $rootScope.fixStyles();
 
           $scope.members = data.members;
@@ -78,9 +80,34 @@ define(
               }
             );
 
-            console.log('setting team view ->');
-
             $scope.members = data.members[id];
+
+            
+            
+            angular.forEach($scope.members,function(mem,i){
+
+              console.log("test",mem.states);
+              angular.forEach(mem.states,function(state){
+                  if(state.name == "Location"){
+                      state.value_rscoded = "loading address";
+                      var latlngStr = state.value.split(",");
+                      var lat = parseFloat(latlngStr[0]);
+                      var lng = parseFloat(latlngStr[1]);
+                      var latlng = new google.maps.LatLng(lat, lng);
+                      GoogleGEO.geocode({'latLng': latlng}, function(results, status) {
+                      if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                          state.value_rscoded = results[1].formatted_address;
+                        } else {
+                          alert('No results found');
+                        }
+                      } else {
+                        alert('Geocoder failed due to: ' + status);
+                      }
+                    });
+                    }
+                });             
+            });
 
             $scope.current = id;
 

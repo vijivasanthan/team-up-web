@@ -81,7 +81,7 @@
                   aria-hidden='true',
                   class="{{state.name|stateDataIcon:'class_name'}}")
                   span.stateValue
-                    | {{state|stateValue}}
+                    | {{state.value_rscoded}}
                     a(ng-show='(state.name == "Location")',
                     href='http://maps.google.com/?q={{state|stateValue:"data"}}') {{ui.teamup.map}}
               td

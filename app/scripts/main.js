@@ -40,6 +40,7 @@ require.config(
       session:            '../vendors/web-lib-session/dist/session',
       vis:                '../vendors/vis/dist/vis.min',
       'ng-vis':           '../vendors/web-lib-vis/public/dist/ng-vis'
+      //'async':            '../vendors/requirejs-plugins/src/async',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -103,6 +104,7 @@ require(
 
     'services/sloter',
     'services/teams',
+    'services/GoogleGEO',
 
     'directives/widgets',
 
