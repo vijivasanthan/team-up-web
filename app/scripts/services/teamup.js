@@ -424,7 +424,7 @@ define(
                   params: {
                     first:  'team',
                     second: 'member',
-                    fourth: 'photo',
+                    fourth: 'photourl',
                     width:  40,
                     height: 40
                   }
@@ -437,7 +437,7 @@ define(
             // TODO: Turn on logging later on!
             // Log.record('call', arguments);
 
-            console.log('call ->', arguments);
+            // console.log('call ->', arguments);
 
             var deferred = $q.defer();
 

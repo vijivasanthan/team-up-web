@@ -18,7 +18,8 @@ define(
         '$routeParams',
         'TeamUp',
         'Dater',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater)
+        '$cookieStore',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $cookieStore)
         {
           // TODO: Investigate for removing
           var self = this;
@@ -164,7 +165,11 @@ define(
                 }
                 else
                 {
-                  Session.set(result["X-SESSION_ID"]);
+                  Session.set(result['X-SESSION_ID']);
+
+                  document.cookie = 'X-SESSION_ID=' + result['X-SESSION_ID'];
+
+                  // $cookieStore.put('X-SESSION_ID', result['X-SESSION_ID']);
 
                   self.preloader();
                 }
