@@ -141,7 +141,7 @@ block loading
 
 // TODO: Investigate the real usage of this
 block notifications
-	#notification.alert.ng-cloak(ng-show='notification.status',
+	#notification.alert(ng-show='notification.status',
 	class='{{notification.type}}')
 		button.close(type='button',
 		ng-click='notification.status = false') ×
