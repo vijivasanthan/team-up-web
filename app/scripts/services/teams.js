@@ -24,12 +24,11 @@ define(
 
                 if (! only)
                 {
-                  var calls = [];
-
-                  var data = {
-                    teams:   teams,
-                    members: {}
-                  };
+                  var calls = [],
+                      data = {
+                        teams:   teams,
+                        members: {}
+                      };
 
                   angular.forEach(
                     teams,
@@ -67,8 +66,8 @@ define(
                 {
                   deferred.resolve(teams);
                 }
-
-              });
+              }
+            );
 
             return deferred.promise;
           };
@@ -88,14 +87,11 @@ define(
             return data;
           };
 
-
           TeamsService.prototype.queryClientGroups = function (teams)
           {
-            var deferred = $q.defer();
-
-            var calls = [];
-
-            var data = {};
+            var deferred = $q.defer(),
+                calls = [],
+                data = {};
 
             data.groups = {};
 
@@ -116,9 +112,12 @@ define(
                       ).then(
                         function (result)
                         {
+                          // TODO: Repetitive code
                           Store('app').save(
                               'teamGroup_' + team.uuid,
-                              (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result
+                              (result.length == 4 &&
+                               result[0][0] == 'n' &&
+                               result[1][0] == 'u') ? [] : result
                           );
 
                           data.groups[team.uuid] = [];
@@ -163,9 +162,8 @@ define(
 
           TeamsService.prototype.manage = function (changes)
           {
-            var deferred = $q.defer();
-
-            var calls = [];
+            var deferred = $q.defer(),
+                calls = [];
 
             angular.forEach(
               changes,
@@ -211,8 +209,8 @@ define(
             $q.all(calls).then(
               function ()
               {
-                var queryCalls = [];
-                var data = {};
+                var queryCalls = [],
+                    data = {};
 
                 angular.forEach(
                   changes,
@@ -224,10 +222,13 @@ define(
                         { third: teamId }
                       )
                     );
-                  });
+                  }
+                );
 
-                $q.all(queryCalls).then(function () { deferred.resolve(data) });
-              });
+                $q.all(queryCalls)
+                  .then(function () { deferred.resolve(data) });
+              }
+            );
 
             return deferred.promise;
           };
@@ -237,12 +238,12 @@ define(
            */
           TeamsService.prototype.manageGroups = function (changes)
           {
-            var deferred = $q.defer();
-
-            var calls = [];
+            var deferred = $q.defer(),
+                calls = [];
 
             angular.forEach(
-              changes, function (change, teamId)
+              changes,
+              function (change, teamId)
               {
                 if (change.a.length > 0 && change.r.length == 0)
                 {
@@ -279,14 +280,15 @@ define(
                     )
                   );
                 }
-              });
+              }
+            );
 
-            $q.all(calls).then(
+            $q.all(calls)
+              .then(
               function (changeResults)
               {
-                var data = changeResults;
-
-                var queryCalls = [];
+                var data = changeResults,
+                    queryCalls = [];
 
                 angular.forEach(
                   changes,
@@ -304,9 +306,12 @@ define(
                           ).then(
                             function (result)
                             {
+                              // TODO: Repetitive code
                               Store('app').save(
                                   'teamGroup_' + teamId,
-                                  (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
+                                  (result.length == 4 &&
+                                   result[0][0] == 'n' &&
+                                   result[1][0] == 'u') ?
                                   [] :
                                   result
                               );
@@ -317,14 +322,16 @@ define(
                         }
                       })(teamId)
                     );
-                  });
+                  }
+                );
 
-                $q.all(queryCalls).then(function () { deferred.resolve(data) });
-              });
+                $q.all(queryCalls)
+                  .then(function () { deferred.resolve(data) });
+              }
+            );
 
             return deferred.promise;
           };
-
 
           return new TeamsService;
         }

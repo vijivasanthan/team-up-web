@@ -45,7 +45,9 @@ define(
                                 {
                                   Store('app').save(
                                     clientGroup.id,
-                                    (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ?
+                                    (result.length == 4 &&
+                                     result[0][0] == 'n' &&
+                                     result[1][0] == 'u') ?
                                     [] :
                                     result
                                   );
@@ -56,7 +58,8 @@ define(
                         }
                       });
 
-                    $q.all(calls).then(
+                    $q.all(calls)
+                      .then(
                       function (results)
                       {
                         var data = {};
@@ -76,7 +79,8 @@ define(
                               {
                                 if (routeParams.uuid)
                                 {
-                                  data.clients[clientGroup.id] = (result.id == clientGroup.id && routeParams.uuid == clientGroup.id) ?
+                                  data.clients[clientGroup.id] = (result.id == clientGroup.id &&
+                                                                  routeParams.uuid == clientGroup.id) ?
                                                                  result.data :
                                                                  Store('app').get(clientGroup.id);
                                 }
@@ -87,7 +91,8 @@ define(
                                     data.clients[clientGroup.id] = result.data;
                                   }
                                 }
-                              });
+                              }
+                            );
                           }
                         );
 
@@ -105,7 +110,7 @@ define(
                   }
 
                 },
-                error:   function (error) { deferred.resolve({error: error}) }
+                error:   function (error) { deferred.resolve({ error: error }) }
               }
             );
 
@@ -117,12 +122,12 @@ define(
           {
             console.log('ClientsService.prototype.manage');
 
-            var deferred = $q.defer();
-
-            var calls = [];
+            var deferred = $q.defer(),
+                calls = [];
 
             angular.forEach(
-              changes, function (change, clientGroupId)
+              changes,
+              function (change, clientGroupId)
               {
                 if (change.a.length > 0)
                 {
@@ -147,16 +152,17 @@ define(
                 }
               });
 
-            $q.all(calls).then(
+            $q.all(calls)
+              .then(
               function ()
               {
-                var queryCalls = [];
-                var data = {};
-                var refreshGroups = [];
+                var queryCalls = [],
+                    data = {},
+                    refreshGroups = [];
 
                 var getClientFromLocal = function (clientId)
                 {
-                  var ret;
+                  var result;
 
                   angular.forEach(
                     Store('app').get('ClientGroups'),
@@ -170,12 +176,13 @@ define(
                         {
                           if (client.uuid == clientId)
                           {
-                            ret = client;
+                            result = client;
                           }
-                        });
+                        }
+                      );
                     });
 
-                  return ret;
+                  return result;
                 };
 
                 angular.forEach(
@@ -187,22 +194,27 @@ define(
                     if (change.a.length > 0)
                     {
                       angular.forEach(
-                        change.a, function (clientId)
+                        change.a,
+                        function (clientId)
                         {
                           var client = getClientFromLocal(clientId);
 
-                          if (typeof client != 'undefined' && refreshGroups.indexOf(client.clientGroupUuid) == - 1)
+                          if (typeof client != 'undefined' &&
+                              refreshGroups.indexOf(client.clientGroupUuid) == - 1)
                           {
                             refreshGroups.add(client.clientGroupUuid);
+
                             queryCalls.push(ClientsService.prototype.get(client.clientGroupUuid));
                           }
-                        });
+                        }
+                      );
                     }
 
                     queryCalls.push(ClientsService.prototype.get(clientGroupId));
                   });
 
-                $q.all(queryCalls).then(function () { deferred.resolve(data) });
+                $q.all(queryCalls)
+                  .then(function () { deferred.resolve(data) });
               });
 
             return deferred.promise;
@@ -210,8 +222,6 @@ define(
 
           ClientsService.prototype.queryLocal = function ()
           {
-            console.log('ClientsService.prototype.queryLocal');
-
             var data = {};
 
             data.clientGroups = Store('app').get('ClientGroups');
@@ -224,44 +234,6 @@ define(
             );
 
             return data;
-          };
-
-
-          /**
-           * Image calls
-           */
-
-          // TODO: Do not forget to port this one!
-          var ClientImg = $resource(
-              config.app.host + config.app.namespace + '/client/:clientId/photourl',
-              {},
-              {
-                getURL: {
-                  method:  'GET',
-                  isArray: false
-                }
-              }
-          );
-
-
-          ClientsService.prototype.loadUploadURL = function (id)
-          {
-            console.log('ClientsService.prototype.loadUploadURL');
-
-            var deferred = $q.defer();
-
-            ClientImg.getURL(
-              {
-                clientId: id
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error) { deferred.resolve({error: error}) }
-            );
-
-            return deferred.promise;
           };
 
           return new ClientsService;

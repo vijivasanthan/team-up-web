@@ -7,10 +7,9 @@ define(
     services.factory(
       'GoogleGEO',
       [
-        '$rootScope', 
-        function ($rootScope)
+        function ()
         {
-            return new google.maps.Geocoder();          
+          return new google.maps.Geocoder();
         }
       ]
     );

@@ -11,15 +11,13 @@ define(
         {
           return function (string)
           {
-            if (! string || string.indexOf(".") == - 1)
-            {
-              return string;
-            }
-
-            return string.replace(".", "").replace("@", "");
+            return (! string || string.indexOf(".") == - 1) ?
+                   string :
+                   string.replace(".", "").replace("@", "");
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'stateColor',
@@ -28,10 +26,11 @@ define(
         {
           return function (states)
           {
-            var ret = config.app.stateColors.none;
+            var result = config.app.stateColors.none;
 
             angular.forEach(
-              states, function (state)
+              states,
+              function (state)
               {
                 /**
                  *    WORKING
@@ -42,31 +41,33 @@ define(
                  */
                 if (angular.lowercase(state.name) == "availability" && state.share)
                 {
-                  if (angular.lowercase(state.value) == "available" || angular.lowercase(state.value) == "working")
+                  if (angular.lowercase(state.value) == "available" ||
+                      angular.lowercase(state.value) == "working")
                   {
-                    ret = config.app.stateColors.availalbe;
+                    result = config.app.stateColors.availalbe;
                   }
                   else if (angular.lowercase(state.value) == "unavailable")
                   {
-                    ret = config.app.stateColors.busy;
+                    result = config.app.stateColors.busy;
                   }
                   else if (angular.lowercase(state.value) == "offline")
                   {
-                    ret = config.app.stateColors.offline;
+                    result = config.app.stateColors.offline;
                   }
                 }
-              });
+              }
+            );
 
-            return ret;
+            return result;
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'nicelyDate',
       [
-        '$rootScope',
-        function ($rootScope)
+        function ()
         {
           return function (date)
           {
@@ -83,13 +84,13 @@ define(
             return new Date(date).toString(config.app.formats.date);
           };
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'nicelyTime',
       [
-        '$rootScope',
-        function ($rootScope)
+        function ()
         {
           return function (date)
           {
@@ -98,76 +99,8 @@ define(
             return new Date(date).toString(config.app.formats.time);
           };
         }
-      ]);
-
-    filters.filter(
-      'translatePackage',
-      [
-        function ()
-        {
-          return function (selected)
-          {
-            if (selected)
-            {
-              var gem;
-
-              angular.forEach(
-                config.app.packages, function (pack)
-                {
-                  if (pack.id == selected) gem = pack;
-                });
-
-              return gem.label;
-            }
-          }
-        }
-      ]);
-
-    filters.filter(
-      'translateCountry',
-      [
-        function ()
-        {
-          return function (selected)
-          {
-            if (selected)
-            {
-              var gem;
-
-              angular.forEach(
-                config.app.countries, function (country)
-                {
-                  if (country.id == selected) gem = country;
-                });
-
-              return gem.label;
-            }
-          }
-        }
-      ]);
-
-    filters.filter(
-      'translateRegion',
-      [
-        function ()
-        {
-          return function (selected, country)
-          {
-            if (selected && country)
-            {
-              var gem;
-
-              angular.forEach(
-                config.app.regions[country], function (region)
-                {
-                  if (region.id == selected) gem = region;
-                });
-
-              return gem.label;
-            }
-          }
-        }
-      ]);
+      ]
+    );
 
     filters.filter(
       'translateRole',
@@ -176,18 +109,24 @@ define(
         {
           return function (role)
           {
-            var urole;
+            var userRole;
 
             angular.forEach(
-              config.app.roles, function (prole)
+              config.app.roles,
+              function (_role)
               {
-                if (prole.id == role) urole = prole.label;
-              });
+                if (_role.id == role)
+                {
+                  userRole = _role.label;
+                }
+              }
+            );
 
-            return urole;
+            return userRole;
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'translateFunc',
@@ -196,18 +135,20 @@ define(
         {
           return function (func)
           {
-            var ufunc;
+            var userFunction;
 
             angular.forEach(
-              config.app.mfunctions, function (pfunc)
+              config.app.mfunctions,
+              function (_func)
               {
-                if (pfunc.id == func) ufunc = pfunc.label;
+                if (_func.id == func) userFunction = _func.label;
               });
 
-            return ufunc;
+            return userFunction;
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'stateDataIcon',
@@ -216,28 +157,30 @@ define(
         {
           return function (name, type)
           {
-            var ret;
+            var result;
 
             angular.forEach(
-              config.app.stateIcons, function (stateIcon)
+              config.app.stateIcons,
+              function (stateIcon)
               {
                 if (angular.lowercase(stateIcon.name) == angular.lowercase(name))
                 {
                   if (type == "data_icon")
                   {
-                    ret = stateIcon.data_icon;
+                    result = stateIcon.data_icon;
                   }
                   else if (type == "class_name")
                   {
-                    ret = stateIcon.class_name;
+                    result = stateIcon.class_name;
                   }
                 }
               });
 
-            return ret;
+            return result;
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'stateValue',
@@ -248,8 +191,8 @@ define(
           {
             if (angular.lowercase(state.name) == "location")
             {
-              var value = state.value;
-              var match = value.match(/\((.*?)\)/);
+              var value = state.value,
+                  match = value.match(/\((.*?)\)/);
 
               if (match == null)
               {
@@ -257,18 +200,9 @@ define(
               }
               else
               {
-                var ll = match[1];
-
-                value = value.replace(match[0], "");
-
-                if (type == "data")
-                {
-                  return ll;
-                }
-                else
-                {
-                  return value;
-                }
+                return (type == "data") ?
+                       match[1] :
+                       value.replace(match[0], "");
               }
             }
             else
@@ -277,7 +211,8 @@ define(
             }
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'rangeMainFilter',
@@ -289,10 +224,7 @@ define(
 
           return function (dates)
           {
-            // console.log('dates ->', dates);
-
-            if ((
-                  new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
+            if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
             {
               dates.start = new Date(dates.end).addDays(- 1);
             }
@@ -311,9 +243,8 @@ define(
                 },
                 monthNumber = Date.getMonthNumberFromName(dates.start.month);
 
-            if (
-              (((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) ||
-               dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
+            if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) ||
+                 dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
             {
               return  dates.start.real +
                       ', ' +
@@ -333,10 +264,10 @@ define(
                       ', ' +
                       Dater.getThisYear();
             }
-
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'rangeMainWeekFilter',
@@ -344,20 +275,18 @@ define(
         'Dater',
         function (Dater)
         {
-          var periods = Dater.getPeriods();
-
           return function (dates)
           {
             if (dates)
             {
-              var dates = {
+              var _dates = {
                 start: new Date(dates.start).toString('dddd, MMMM d'),
                 end:   new Date(dates.end).toString('dddd, MMMM d')
               };
 
-              return  dates.start +
+              return  _dates.start +
                       ' / ' +
-                      dates.end +
+                      _dates.end +
                       ', ' +
                       Dater.getThisYear();
             }
@@ -415,22 +344,24 @@ define(
             }
           };
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'rangeInfoWeekFilter',
       [
-        'Dater',
-        function (Dater)
+        function ()
         {
-          var periods = Dater.getPeriods();
-
           return function (timeline)
           {
-            if (timeline) return 'Week number: ' + timeline.current.week;
+            if (timeline)
+            {
+              return 'Week number: ' + timeline.current.week;
+            }
           };
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'i18n_spec',
@@ -445,7 +376,8 @@ define(
             return ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'stateIcon',
@@ -459,24 +391,30 @@ define(
               case 'emotion':
                 return "icon-face";
                 break;
+
               case 'availability':
                 return "icon-avail";
                 break;
+
               case 'location':
                 return "icon-location";
                 break;
+
               case 'activity':
                 return "icon-activity";
                 break;
+
               case 'reachability':
                 return "icon-reach";
                 break;
+
               default:
                 return "icon-info-sign";
             }
           }
         }
-      ]);
+      ]
+    );
 
     filters.filter(
       'avatar',
@@ -495,6 +433,7 @@ define(
                 case 'team':
                   path = '/team/member/';
                   break;
+
                 case 'client':
                   path = '/client/';
                   break;
@@ -509,6 +448,7 @@ define(
             }
           }
         }
-      ]);
+      ]
+    );
   }
 );

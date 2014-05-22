@@ -8,7 +8,7 @@ define(
       'chosen',
       function ()
       {
-        var linker = function (scope, element, attr)
+        var linker = function (scope, element)
         {
           scope.$watch(
             'receviersList',
@@ -40,26 +40,18 @@ define(
               action: '@'
             },
             controller:  [
-              '$scope', '$rootScope', 'Store' ,
-              function ($scope, $rootScope, Store)
+              '$scope', '$rootScope', 'Session' ,
+              function ($scope, $rootScope, Session)
               {
                 $scope.progress = 0;
                 $scope.avatar = '';
                 $scope.uploadLabel = $rootScope.ui.profile.click2upload;
 
-                // var session = angular.fromJson(Storage.cookie.get('session'));
-                var session = Store('app').get('session');
+                var session = Session.get();
 
                 if (session)
                 {
-                  $scope.sessionId = session.id;
-                }
-                else
-                {
-                  console.log('session expired!!');
-                  // FIXME: Message does not exist!
-                  // $rootScope.notifier.success($rootScope.ui.profile.sessionExpired);
-                  return false;
+                  $scope.sessionId = session;
                 }
 
                 $scope.sendFile = function (el)
@@ -99,6 +91,7 @@ define(
                       {
                         var ar = $(el).val().split('\\'),
                             filename = ar[ar.length - 1];
+
                         $form.removeAttr('action');
 
                         $scope.$apply(
@@ -119,7 +112,8 @@ define(
             templateUrl: 'views/uploader.html'
           };
         }
-      ]);
+      ]
+    );
 
     directives.directive(
       'profile', [
@@ -139,15 +133,17 @@ define(
             ],
             link:        function (scope, elem, attrs, ctrl)
             {
-              console.log(attrs.memberId);
+              console.log('profile directive ->', attrs.memberId);
             },
             replace:     false,
             templateUrl: 'views/profileTemplate.html'
           };
 
         }
-      ]);
+      ]
+    );
 
+    // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
       'ngenter', function ()
       {
@@ -164,8 +160,10 @@ define(
 
                 event.preventDefault();
               }
-            });
+            }
+          );
         };
-      });
+      }
+    );
   }
 );

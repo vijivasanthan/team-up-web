@@ -420,6 +420,7 @@ define(
                   }
                 },
 
+                // TODO: Not used as a AJAX call!
                 memberPhoto:  {
                   method: 'GET',
                   params: {

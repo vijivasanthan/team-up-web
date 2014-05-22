@@ -161,7 +161,7 @@ block chat
 					span {{message.date}}
 					hr
 				.message(class='{{message.msgRole}}')
-					.chatAvatar.roundedPicSmall(id='img_{{message.member.uuid|escape}}',
+					.chatAvatar.roundedPicSmall(style='background-image: url({{message.member.uuid | avatar:"team":"80" }})',
 					class='{{message.member.states|stateColor}}')
 					.arrow(ng-show='(message.role == "other")')
 					.chatCloud
