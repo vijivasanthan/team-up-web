@@ -98,12 +98,12 @@ define(
             //                  result.status == 404 || result.status == 403 || result.status == 500))
             //                {
             //                  console.log("loading pic ", result);
-            //                  $('#profile #img_' + imgId).css('background-image', 'url(' + $scope.noImgURL + ')');
+            //                  angular.element('#profile #img_' + imgId).css('background-image', 'url(' + $scope.noImgURL + ')');
             //                }
             //                else
             //                {
             //                  var realImgURL = $scope.imgHost.replace("\\:", ":") + result.path;
-            //                  $('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+            //                  angular.element('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
             //                }
             //              }, function (error) { console.log("error when load pic " + error) });
 
@@ -113,12 +113,14 @@ define(
           $scope.setViewTo = function (hash)
           {
             $scope.$watch(
-              $location.hash(), function ()
+              $location.hash(),
+              function ()
               {
                 $location.hash(hash);
 
                 setView(hash);
-              });
+              }
+            );
           };
 
           // console.log('userID ->', $route.current.params.userId, $rootScope.app.resources.uuid);

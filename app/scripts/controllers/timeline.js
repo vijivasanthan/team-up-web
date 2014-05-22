@@ -94,7 +94,7 @@ define(
 
           var Sloter = function (data)
           {
-            var timedata = [];
+            var timelineData = [];
 
             var offset = Number(Date.now());
 
@@ -167,7 +167,7 @@ define(
                                       ) +
                                       "'>";
 
-                        timedata.push(
+                        timelineData.push(
                           {
                             start:     Math.round(task.plannedStartVisitTime),
                             end:       Math.round(task.plannedEndVisitTime),
@@ -212,11 +212,11 @@ define(
                   return timedata;
                 };
 
-                timedata = addLoading(data, timedata, [member.head]);
+                timelineData = addLoading(data, timelineData, [member.head]);
               }).bind(this)
             );
 
-            return timedata;
+            return timelineData;
           };
 
           $scope.timeliner = {
@@ -328,7 +328,7 @@ define(
 
             redraw: function () { $scope.self.timeline.redraw() },
 
-            isAdded: function () { return $('.state-new').length },
+            isAdded: function () { return angular.element('.state-new').length },
 
             cancelAdd: function () { $scope.self.timeline.cancelAdd() }
           };
@@ -662,7 +662,7 @@ define(
               }
 
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-              var memberId = $(selected.group).attr('memberId');
+              var memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof memberId == 'undefined')
               {
@@ -768,7 +768,6 @@ define(
             {
               alert($rootScope.ui.teamup.selectSlot);
             }
-
           };
 
           $scope.processSlotContent = function (row)
@@ -878,7 +877,7 @@ define(
             var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
             var content = $scope.getSlotContentJSON(selected.content);
 
-            var memberId = $(selected.group).attr('memberId');
+            var memberId = angular.element(selected.group).attr('memberId');
 
             var options;
 
@@ -961,7 +960,7 @@ define(
             {
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
               var content = $scope.getSlotContentJSON(selected.content);
-              var memberId = $(selected.group).attr('memberId');
+              var memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof content == 'undefined')
               {

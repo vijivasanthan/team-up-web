@@ -14,15 +14,15 @@
 				ng-click='alert.login=false') ×
 				| {{alert.login.message}}
 			input(type='text',
-			ng-model='logindata.username',
+			ng-model='loginData.username',
 			placeholder='{{ui.login.ph_username}}',
 			autofocus='')
 			input(type='password',
-			ng-model='logindata.password',
+			ng-model='loginData.password',
 			placeholder='Password')
 			label.checkbox.span3
 				input(type='checkbox',
-				ng-model='logindata.remember')
+				ng-model='loginData.remember')
 				| Remember me
 			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
 			span.version

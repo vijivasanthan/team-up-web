@@ -239,7 +239,7 @@ define(
            "/team/member/" + memberId + "/photo?width=40&height=40";
 
            // var imgId = memberId.replace(".", "").replace("@", "");
-           // $('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+           // angular.element('.tab-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
 
            Teams.loadImg(imgURL).then(
            function (result)
@@ -257,7 +257,7 @@ define(
            if (result.path)
            {
            var avatarURL = $scope.imgHost + result.path;
-           $('.tab-content #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+           angular.element('.tab-content #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
            }
            }
 
@@ -334,7 +334,7 @@ define(
             //                        if (result.path)
             //                        {
             //                          var avatarURL = $scope.imgHost + result.path;
-            //                          $('#img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+            //                          angular.element('#img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
             //                        }
             //                      }
             //
@@ -365,7 +365,7 @@ define(
             //                    {
             //                      var avatarURL = $scope.imgHost + result.path;
             //
-            //                      $('#viewClientTab #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
+            //                      angular.element('#viewClientTab #img_' + imgId).css('background-image', 'url(' + avatarURL + ')');
             //                    }
             //                  }
             //

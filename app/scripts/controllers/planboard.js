@@ -455,7 +455,7 @@ define(
           $scope.processRelatedUsers = function (selectedSlot)
           {
             var relatedUsers = [],
-                memberId = $(selectedSlot.group).attr("memberId");
+                memberId = angular.element(selectedSlot.group).attr("memberId");
 
             if ($scope.views.teams)
             {

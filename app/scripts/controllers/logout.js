@@ -10,10 +10,10 @@ define(
         '$rootScope', '$scope', '$window', 'Session', 'Store', 'TeamUp',
         function ($rootScope, $scope, $window, Session, Store, TeamUp)
         {
-          $('.navbar').hide();
-          $('#footer').hide();
+          angular.element('.navbar').hide();
+          angular.element('#footer').hide();
 
-          var logindata = Store('app').get('logindata');
+          var loginData = Store('app').get('loginData');
 
           TeamUp._('logout')
             .then(
@@ -29,7 +29,7 @@ define(
 
                 Store('app').nuke();
 
-                Store('app').save('logindata', logindata);
+                Store('app').save('loginData', loginData);
 
                 $window.location.href = 'logout.html';
               }

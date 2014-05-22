@@ -30,12 +30,14 @@ define(
           $scope.setViewTo = function (hash)
           {
             $scope.$watch(
-              hash, function ()
+              hash,
+              function ()
               {
                 $location.hash(hash);
 
                 setView(hash);
-              });
+              }
+            );
           };
 
           setView('teams');

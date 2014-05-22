@@ -106,7 +106,7 @@ define(
                 //                    var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
                 //
                 //                    // var imgId = mId.replace(".", "").replace("@", "");
-                //                    // $('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
+                //                    // angular.element('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
                 //
                 //                    Teams
                 //                      .loadImg(imgURL).
@@ -124,7 +124,7 @@ define(
                 //                        else
                 //                        {
                 //                          var realImgURL = $scope.imgHost + result.path;
-                //                          $('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
+                //                          angular.element('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
                 //                        }
                 //                      }, function (error) { console.log("error when load pic " + error) });
                 //
@@ -135,8 +135,8 @@ define(
                 setTimeout(
                   function ()
                   {
-                    $('#chat-content #messageField').focus();
-                    $('#chat-content').scrollTop($('#chat-content')[0].scrollHeight);
+                    angular.element('#chat-content #messageField').focus();
+                    angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
                   }, 100 * 1000); // Temporarily made it longer till there is a better solution
 
               },

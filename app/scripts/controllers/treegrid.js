@@ -30,7 +30,7 @@ define(
             caches:      {},
             connections: {},
 
-            areas: function () { this.options.grid.height = $('#wrap').height() - (270 + 200) + 'px' },
+            areas: function () { this.options.grid.height = angular.element('#wrap').height() - (270 + 200) + 'px' },
 
             build: function (id, data)
             {

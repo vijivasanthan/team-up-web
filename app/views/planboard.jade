@@ -111,7 +111,9 @@ section#planboard(ng-controller='timeline')
 					disabled='')
 					i.icon-time
 
-			div(ng-show='relatedUsers.length > 0')
+			// TODO: Look at to this later on!
+			//div(ng-show='relatedUsers.length > 0')
+			div
 				.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
 					label {{relatedUserLabel}}
 					select(ng-model='slot.relatedUser',

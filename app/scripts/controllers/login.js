@@ -29,18 +29,17 @@ define(
 
           if ($location.path() == '/logout')
           {
-            $('body').css(
+            angular.element('body').css(
               {
                 'backgroundColor': '#1dc8b6',
                 'backgroundImage': 'none'
-              });
+              }
+            );
           }
 
           if ($routeParams.uuid && $routeParams.key)
           {
-            $scope.views = {
-              changePass: true
-            };
+            $scope.views = { changePass: true };
 
             $scope.changepass = {
               uuid: $routeParams.uuid,
@@ -73,50 +72,50 @@ define(
             Store('app').save('app', '{}');
           }
 
-          $('.navbar').hide();
-          $('#footer').hide();
-          $('#watermark').hide();
-          $('body').css({ 'backgroundColor': '#1dc8b6' });
+          angular.element('.navbar').hide();
+          angular.element('#footer').hide();
+          angular.element('#watermark').hide();
+          angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
 
-          var logindata = Store('app').get('logindata');
+          var loginData = Store('app').get('loginData');
 
-          if (logindata && logindata.remember) $scope.logindata = logindata;
+          if (loginData && loginData.remember) $scope.loginData = loginData;
 
           $scope.login = function ()
           {
-            $('#alertDiv').hide();
+            angular.element('#alertDiv').hide();
 
-            if (! $scope.logindata || ! $scope.logindata.username || ! $scope.logindata.password)
+            if (! $scope.loginData || ! $scope.loginData.username || ! $scope.loginData.password)
             {
               $scope.alert = {
                 login: {
                   display: true,
                   type:    'alert-error',
-                  message: $rootScope.ui.login.alert_fillfiled
+                  message: angular.elementrootScope.ui.login.alert_fillfiled
                 }
               };
 
-              $('#login button[type=submit]')
-                .text($rootScope.ui.login.button_login)
+              angular.element('#login button[type=submit]')
+                .text(angular.elementrootScope.ui.login.button_login)
                 .removeAttr('disabled');
 
               return false;
             }
 
-            $('#login button[type=submit]')
+            angular.element('#login button[type=submit]')
               .text($rootScope.ui.login.button_loggingIn)
               .attr('disabled', 'disabled');
 
             Store('app').save(
-              'logindata',
+              'loginData',
               {
-                username: $scope.logindata.username,
-                password: $scope.logindata.password,
-                remember: $scope.logindata.remember
+                username: $scope.loginData.username,
+                password: $scope.loginData.password,
+                remember: $scope.loginData.remember
               }
             );
 
-            self.auth($scope.logindata.username, MD5.parse($scope.logindata.password));
+            self.auth($scope.loginData.username, MD5.parse($scope.loginData.password));
           };
 
           self.auth = function (uuid, pass)
@@ -136,11 +135,11 @@ define(
                     login: {
                       display: true,
                       type:    'alert-error',
-                      message: $rootScope.ui.login.alert_wrongUserPass
+                      message: angular.elementrootScope.ui.login.alert_wrongUserPass
                     }
                   };
 
-                  $('#login button[type=submit]')
+                  angular.element('#login button[type=submit]')
                     .text($rootScope.ui.login.button_loggingIn)
                     .removeAttr('disabled');
 
@@ -152,11 +151,11 @@ define(
                     login: {
                       display: true,
                       type:    'alert-error',
-                      message: $rootScope.ui.login.alert_network
+                      message: angular.elementrootScope.ui.login.alert_network
                     }
                   };
 
-                  $('#login button[type=submit]')
+                  angular.element('#login button[type=submit]')
                     .text($rootScope.ui.login.button_loggingIn)
                     .removeAttr('disabled');
 
@@ -166,96 +165,11 @@ define(
                 {
                   Session.set(result['X-SESSION_ID']);
 
-//                  document.cookie = 'X-SESSION_ID=' + result['X-SESSION_ID'] +
-//                                    ';domain=dev.ask-cs.com; path=/ ;expires=' +
-//                                    'Fri, 31 Dec 9999 23:59:59 GMT';
-
-                  // $cookieStore.put('X-SESSION_ID', result['X-SESSION_ID']);
-
                   self.preloader();
                 }
               }
             )
           };
-
-
-          //          Taken from Storage module
-          //          Storage.avatar.addurl(mem.uuid, res.path);
-          //          var addAvatarURLtoStorage = function (id, avatarUrl)
-          //          {
-          //            var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
-          //
-          //            if (avatarUrls)
-          //            {
-          //              angular.forEach(
-          //                avatarUrls, function (item)
-          //                {
-          //                  if (item.id == id)
-          //                  {
-          //                    item.url = avatarUrl;
-          //                  }
-          //                  else
-          //                  {
-          //                    var newItem = {'id': id, 'url': avatarUrl };
-          //                    avatarUrls.add(newItem);
-          //                  }
-          //                });
-          //            }
-          //            else
-          //            {
-          //              avatarUrls = [
-          //                {
-          //                  'id':  id,
-          //                  'url': avatarUrl
-          //                }
-          //              ];
-          //            }
-          //            addToLocalStorage('avatarUrls', angular.toJson(avatarUrls));
-          //          };
-
-          //          var initAvatarUrls = function (members, type)
-          //          {
-          //            if (type == "team")
-          //            {
-          //              angular.forEach(
-          //                members,
-          //                function (mem)
-          //                {
-          //                  var getAvatarUrl = config.app.host + config.app.namespace +
-          //                                     "/team/member/" + mem.uuid + "/photo";
-          //
-          //                  Teams.loadImg(getAvatarUrl)
-          //                    .then(
-          //                    function (res)
-          //                    {
-          //                      if (res.path)
-          //                      {
-          //                        Storage.avatar.addurl(mem.uuid, res.path);
-          //                      }
-          //                    });
-          //                }
-          //              );
-          //            }
-          //            else if (type == "client")
-          //            {
-          //              angular.forEach(
-          //                members, function (mem)
-          //                {
-          //                  var getAvatarUrl = config.app.host + config.app.namespace +
-          //                                     "/client/" + mem.uuid + "/photo";
-          //
-          //                  Clients.loadImg(getAvatarUrl)
-          //                    .then(
-          //                    function (res)
-          //                    {
-          //                      if (res.path)
-          //                      {
-          //                        Storage.avatar.addurl(mem.uuid, res.path);
-          //                      }
-          //                    });
-          //                });
-          //            }
-          //          };
 
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
@@ -268,9 +182,9 @@ define(
 
           self.preloader = function ()
           {
-            $('#login').hide();
-            $('#download').hide();
-            $('#preloader').show();
+            angular.element('#login').hide();
+            angular.element('#download').hide();
+            angular.element('#preloader').show();
 
             self.progress(20, $rootScope.ui.login.loading_User);
 
@@ -311,10 +225,8 @@ define(
 
                           TeamUp._('clientsQuery')
                             .then(
-                            function (res_clients)
+                            function ()
                             {
-                              // initAvatarUrls(res_clients, "client");
-
                               Clients.query(false, {})
                                 .then(
                                 function ()
@@ -330,24 +242,33 @@ define(
                                       setTimeout(
                                         function ()
                                         {
-                                          $('.navbar').show();
-                                          $('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
-                                          if (! $rootScope.browser.mobile) $('#footer').show();
+                                          angular.element('.navbar').show();
+                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+
+                                          if (! $rootScope.browser.mobile)
+                                          {
+                                            angular.element('#footer').show();
+                                          }
                                         }, 100);
                                     }
                                   );
-                                });
-                            });
-                        });
-                    });
+                                }
+                              );
+                            }
+                          );
+                        }
+                      );
+                    }
+                  );
                 }
-              });
+              }
+            );
           };
 
           self.progress = function (ratio, message)
           {
-            $('#preloader .progress .bar').css({ width: ratio + '%' });
-            $('#preloader span').text(message);
+            angular.element('#preloader .progress .bar').css({ width: ratio + '%' });
+            angular.element('#preloader span').text(message);
           };
         }
       ]);

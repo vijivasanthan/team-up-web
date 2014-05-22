@@ -59,25 +59,7 @@ define(
                   break;
 
                 case '/logout':
-
                   $rootScope.location = 'logout';
-
-                  //                  var logindata = Store('app').get('logindata');
-                  //
-                  //                  // TODO: Test this later on!
-                  //                  Store('app').nuke();
-                  //
-                  //                  if (logindata.remember)
-                  //                  {
-                  //                    Store('app').save(
-                  //                      'logindata',
-                  //                      {
-                  //                        username: logindata.username,
-                  //                        password: logindata.password,
-                  //                        remember: logindata.remember
-                  //                      }
-                  //                    );
-                  //                  }
 
                   break;
 
