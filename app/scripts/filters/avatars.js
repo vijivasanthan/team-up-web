@@ -492,18 +492,20 @@ define(
 
               switch (type)
               {
-                case 'team':    path = '/team/member/'; break;
-                case 'client':  path = '/client/';      break;
+                case 'team':
+                  path = '/team/member/';
+                  break;
+                case 'client':
+                  path = '/client/';
+                  break;
               }
 
-              var url = config.app.host +
-                        config.app.namespace +
-                        path +
-                        id +
-                        '/photo?width=' + size + '&height=' + size + '&sid=' +
-                        Session.get();
-
-              return url;
+              return config.app.host +
+                     config.app.namespace +
+                     path +
+                     id +
+                     '/photo?width=' + size + '&height=' + size + '&sid=' +
+                     Session.get();
             }
           }
         }

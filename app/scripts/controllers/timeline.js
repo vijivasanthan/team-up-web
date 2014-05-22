@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'Sloter', 'TeamUp',
-        function ($rootScope, $scope, $q, $location, $route, $window, Dater, Sloter, TeamUp)
+        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'TeamUp',
+        function ($rootScope, $scope, $q, $location, $route, $window, Dater, TeamUp)
         {
           var range, diff;
 
@@ -92,6 +92,133 @@ define(
             }
           );
 
+          var Sloter = function (data)
+          {
+            var timedata = [];
+
+            var offset = Number(Date.now());
+
+            angular.forEach(
+              data.members,
+              (function (member)
+              {
+                var tasks = [];
+
+                if (data.section == "teams")
+                {
+                  if (data.teams.tasks[member.memId] != null)
+                  {
+                    tasks.push(data.teams.tasks[member.memId]);
+                  }
+                }
+                else if (data.section == "clients")
+                {
+                  if (data.clients.tasks[member.memId] != null)
+                  {
+                    tasks.push(data.clients.tasks[member.memId]);
+                  }
+                }
+
+                angular.forEach(
+                  tasks,
+                  function (memberTasks)
+                  {
+                    angular.forEach(
+                      memberTasks,
+                      function (task)
+                      {
+                        var relatedUser = '';
+
+                        if (data.section == "teams")
+                        {
+                          // should get the name from team members ;
+                          relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
+                        }
+                        else if (data.section == "clients")
+                        {
+                          // should get the name from clients;
+                          relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
+                        }
+
+                        var slotContent = "";
+
+                        if (typeof relatedUser != 'undefined')
+                        {
+                          slotContent = relatedUser.firstName + " " + relatedUser.lastName;
+                        }
+
+                        // deal with the unfinished task
+                        if (task.plannedEndVisitTime == 0)
+                        {
+                          task.plannedEndVisitTime = offset;
+                        }
+
+                        var content = "<span>" + slotContent + "</span>" +
+                                      "<input type=hidden value='" +
+                                      angular.toJson(
+                                        {
+                                          type:       'slot',
+                                          id:         task.uuid,
+                                          mid:        task.authorUuid,
+                                          state:      task.description,
+                                          clientUuid: task.relatedClientUuid,
+                                          memberId:   task.assignedTeamMemberUuid
+                                        }
+                                      ) +
+                                      "'>";
+
+                        timedata.push(
+                          {
+                            start:     Math.round(task.plannedStartVisitTime),
+                            end:       Math.round(task.plannedEndVisitTime),
+                            group:     member.head,
+                            content:   content,
+                            className: 'state-available',
+                            editable:  false
+                          }
+                        );
+                      }
+                    );
+                  }
+                );
+
+                var addLoading = function (data, timedata, rows)
+                {
+                  angular.forEach(
+                    rows,
+                    function (row)
+                    {
+                      timedata.push(
+                        {
+                          start:     data.periods.end,
+                          end:       1577836800000,
+                          group:     row,
+                          content:   'loading',
+                          className: 'state-loading-right',
+                          editable:  false
+                        });
+
+                      timedata.push(
+                        {
+                          start:     0,
+                          end:       data.periods.start,
+                          group:     row,
+                          content:   'loading',
+                          className: 'state-loading-left',
+                          editable:  false
+                        });
+                    });
+
+                  return timedata;
+                };
+
+                timedata = addLoading(data, timedata, [member.head]);
+              }).bind(this)
+            );
+
+            return timedata;
+          };
+
           $scope.timeliner = {
             init: function ()
             {
@@ -166,7 +293,7 @@ define(
               angular.extend($scope.timeline.options, config.app.timeline.options);
 
               $scope.self.timeline.draw(
-                Sloter.process($scope.data),
+                Sloter($scope.data),
                 $scope.timeline.options
               );
 
@@ -212,7 +339,8 @@ define(
           }
 
           $rootScope.$on(
-            'timeliner', function ()
+            'timeliner',
+            function ()
             {
               $scope.timeliner.load(
                 {

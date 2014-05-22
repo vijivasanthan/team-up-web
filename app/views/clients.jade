@@ -72,7 +72,8 @@
 					tbody
 						tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
 							td
-								.roundedPicSmall.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"80" }})')
+								.avatar
+									.roundedPicSmall.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"80"}})')
 							td: a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
 							td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
 							td
@@ -196,8 +197,9 @@
 					tbody
 						tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:creationTime ')
 							td
-								.roundedPicSmall(id='img_{{report.author.uuid|escape}}',
-								class='{{report.author.states|stateColor}}')
+								.avatar
+									.roundedPicSmall(class='{{report.author.states|stateColor}}',
+									style='background-image: url({{report.author.uuid | avatar:"client":"80"}})')
 							td
 								| {{report.author.firstName}} {{report.author.lastName}}
 							td
@@ -241,7 +243,8 @@
 						dt {{ui.teamup.clientProfileUrl}}
 						dd {{client.clientProfileUrl}}
 				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-					.roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
+					.avatarLarge
+						.roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
 					div
 						a(href='#/clientProfile/{{client.uuid}}#editImg')
 							button.btn.btn-mini.btn-primary(ng-click='editImg()')
@@ -313,8 +316,9 @@
 					tbody
 						tr(ng-repeat='report in reports|orderBy:creationTime')
 							td
-								.roundedPicSmall(id='img_{{report.author.uuid|escape}}',
-								class='{{report.author.states|stateColor}}')
+								.avatar
+									.roundedPicSmall(style='background-image: url({{report.author.uuid | avatar:"client":"80"}})',
+									class='{{report.author.states|stateColor}}')
 							td
 								| {{report.author.firstName}} {{report.author.lastName}}
 							td

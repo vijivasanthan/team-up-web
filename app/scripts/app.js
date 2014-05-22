@@ -11,7 +11,6 @@ define(
     'directives/directives',
     'angular-resource',
     'angular-route',
-    'angular-cookies',
     'angular-strap',
     'ui-bootstrap',
     'ng-vis'
@@ -27,7 +26,6 @@ define(
         'directives',
         'ngResource',
         'ngRoute',
-        'ngCookies',
         // 'mgcrea.ngStrap'
         '$strap.directives',
         'ui.bootstrap.modal',

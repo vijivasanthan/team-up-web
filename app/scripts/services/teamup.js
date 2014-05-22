@@ -419,6 +419,7 @@ define(
                     second: 'member'
                   }
                 },
+
                 memberPhoto:  {
                   method: 'GET',
                   params: {
@@ -429,6 +430,7 @@ define(
                     height: 40
                   }
                 }
+
               }
           );
 

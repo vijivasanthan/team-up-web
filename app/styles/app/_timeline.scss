@@ -25,17 +25,17 @@ div.timeline-axis-grid-minor {
 }
 
 /*striped background*/
-div.timeline-frame div:nth-child(1) {
-  div.timeline-axis-grid-minor:nth-child(2n) {
-    border-bottom: 70px solid $offwhite;
-  }
-}
-
-div.timeline-groups-axis {
-  div.timeline-axis-grid-minor:nth-child(4n) {
-    border-bottom: 70px solid $offwhite;
-  }
-}
+//div.timeline-frame div:nth-child(1) {
+//  div.timeline-axis-grid-minor:nth-child(2n) {
+//    border-bottom: 70px solid $offwhite;
+//  }
+//}
+//
+//div.timeline-groups-axis {
+//  div.timeline-axis-grid-minor:nth-child(4n) {
+//    border-bottom: 70px solid $offwhite;
+//  }
+//}
 /*end striped background*/
 
 div.timeline-axis-grid-major {
@@ -176,21 +176,6 @@ div.timeline-navigation-move-right {
 div.timeline-event.state-available {
   margin: 0;
   background-color: #f5a962;
-}
-
-div.timeline-event.state-available-south {
-  margin: 0;
-  background-color: #e08a0c;
-}
-
-div.timeline-event.state-available-north {
-  margin: 0;
-  background-color: black;
-}
-
-div.timeline-event.state-schipper-service {
-  margin: 0;
-  background-color: #e0c100;
 }
 
 div.timeline-event.state-unreached {

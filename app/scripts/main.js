@@ -16,7 +16,6 @@ require.config(
       bootstrap:          '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      'angular-cookies':  '../vendors/angular-cookies/angular-cookies.min',
       // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap':    'removables/angular-strap.min',
       'ui-bootstrap':     'removables/ui-bootstrap-custom', // TODO: Remove later
@@ -48,7 +47,6 @@ require.config(
       angular:            { deps: ['jquery'], exports: 'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
-      'angular-cookies':  { deps: ['angular'] },
       'angular-strap':    { deps: ['angular'], exports: 'angular-strap' },
       'ui-bootstrap':     { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
       bootstrap:          { deps: ['jquery'], exports: 'bootstrap' },
@@ -84,7 +82,6 @@ require(
 
     'angular-resource',
     'angular-route',
-    'angular-cookies',
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
 
@@ -102,7 +99,6 @@ require(
 
     'services/dater', // TODO: Remove later on
 
-    'services/sloter',
     'services/teams',
     'services/GoogleGEO',
 

@@ -18,8 +18,7 @@ define(
         '$routeParams',
         'TeamUp',
         'Dater',
-        '$cookieStore',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $cookieStore)
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater)
         {
           // TODO: Investigate for removing
           var self = this;
