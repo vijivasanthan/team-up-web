@@ -104,14 +104,14 @@ define(
               {
                 var tasks = [];
 
-                if (data.section == "teams")
+                if (data.section == 'teams')
                 {
                   if (data.teams.tasks[member.memId] != null)
                   {
                     tasks.push(data.teams.tasks[member.memId]);
                   }
                 }
-                else if (data.section == "clients")
+                else if (data.section == 'clients')
                 {
                   if (data.clients.tasks[member.memId] != null)
                   {
@@ -129,22 +129,22 @@ define(
                       {
                         var relatedUser = '';
 
-                        if (data.section == "teams")
+                        if (data.section == 'teams')
                         {
                           // should get the name from team members ;
                           relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
                         }
-                        else if (data.section == "clients")
+                        else if (data.section == 'clients')
                         {
                           // should get the name from clients;
                           relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
                         }
 
-                        var slotContent = "";
+                        var slotContent = '';
 
                         if (typeof relatedUser != 'undefined')
                         {
-                          slotContent = relatedUser.firstName + " " + relatedUser.lastName;
+                          slotContent = relatedUser.firstName + ' ' + relatedUser.lastName;
                         }
 
                         // deal with the unfinished task
@@ -153,7 +153,8 @@ define(
                           task.plannedEndVisitTime = offset;
                         }
 
-                        var content = "<span>" + slotContent + "</span>" +
+                        // FIXME: Organise this one!
+                        var content = '<span>' + slotContent + '</span>' +
                                       "<input type=hidden value='" +
                                       angular.toJson(
                                         {

@@ -32,7 +32,7 @@ define(
 
                 if ($scope.messages.length == messages.length)
                 {
-                  console.log("No new messages.");
+                  console.log('No new messages.');
                   return;
                 }
 
@@ -59,12 +59,12 @@ define(
 
                     var msg = {
                       date:       minDate,
-                      role:       "",
+                      role:       '',
                       member:     {},
-                      senderName: "",
+                      senderName: '',
                       sendTime:   parseInt(message.sendTime),
                       body:       message.body,
-                      msgRole:    "",
+                      msgRole:    '',
                       senderUuid: message.senderUuid
                     };
 
@@ -72,17 +72,17 @@ define(
 
                     if (message.senderUuid == $scope.$root.app.resources.uuid)
                     {
-                      msg.role = "own";
-                      msg.msgRole = "messageOwn"
+                      msg.role = 'own';
+                      msg.msgRole = 'messageOwn'
                       msg.member = $scope.$root.app.resources;
-                      msg.senderName = msg.member.firstName + " " + msg.member.lastName;
+                      msg.senderName = msg.member.firstName + ' ' + msg.member.lastName;
                     }
                     else
                     {
-                      msg.role = "other";
-                      msg.msgRole = "messageOther"
+                      msg.role = 'other';
+                      msg.msgRole = 'messageOther'
                       msg.member = member;
-                      msg.senderName = member.firstName + " " + member.lastName;
+                      msg.senderName = member.firstName + ' ' + member.lastName;
                     }
 
                     $scope.messages.push(msg);
@@ -134,7 +134,7 @@ define(
 
           $scope.sendMessage = function (newMessage)
           {
-            if (typeof newMessage == "undefined" || newMessage == "")
+            if (typeof newMessage == 'undefined' || newMessage == '')
             {
               $rootScope.notifier.error($rootScope.ui.message.emptyMessageBody);
 
@@ -149,7 +149,7 @@ define(
               'message',
               {},
               {
-                title: "Van: TeamUp" + current.toString(config.app.formats.date),
+                title: 'Van: TeamUp' + current.toString(config.app.formats.date),
                 body:     newMessage,
                 sendTime: current.getTime()
               }).then(
@@ -158,7 +158,7 @@ define(
                 $scope.renderMessage();
 
                 $rootScope.statusBar.off();
-                $scope.newMessage = "";
+                $scope.newMessage = '';
               },
               function (error)
               {

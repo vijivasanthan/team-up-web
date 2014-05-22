@@ -40,7 +40,7 @@ define(
                   'Teams', '$route',
                   function (Teams, $route)
                   {
-                    return ($route.current.params.local && $route.current.params.local == "true") ?
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
                            Teams.queryLocal() :
                            Teams.query();
                   }
@@ -59,7 +59,7 @@ define(
                   'Clients', '$route',
                   function (Clients, $route)
                   {
-                    return ($route.current.params.local && $route.current.params.local == "true") ?
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
                            Clients.queryLocal() :
                            Clients.query(false, $route.current.params);
                   }

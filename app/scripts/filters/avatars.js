@@ -11,9 +11,9 @@ define(
         {
           return function (string)
           {
-            return (! string || string.indexOf(".") == - 1) ?
+            return (! string || string.indexOf('.') == - 1) ?
                    string :
-                   string.replace(".", "").replace("@", "");
+                   string.replace('.', '').replace('@', '');
           }
         }
       ]
@@ -39,18 +39,18 @@ define(
                  *    UNAVAILABLE
                  *    UNKNOWN
                  */
-                if (angular.lowercase(state.name) == "availability" && state.share)
+                if (angular.lowercase(state.name) == 'availability' && state.share)
                 {
-                  if (angular.lowercase(state.value) == "available" ||
-                      angular.lowercase(state.value) == "working")
+                  if (angular.lowercase(state.value) == 'available' ||
+                      angular.lowercase(state.value) == 'working')
                   {
                     result = config.app.stateColors.availalbe;
                   }
-                  else if (angular.lowercase(state.value) == "unavailable")
+                  else if (angular.lowercase(state.value) == 'unavailable')
                   {
                     result = config.app.stateColors.busy;
                   }
-                  else if (angular.lowercase(state.value) == "offline")
+                  else if (angular.lowercase(state.value) == 'offline')
                   {
                     result = config.app.stateColors.offline;
                   }
@@ -165,11 +165,11 @@ define(
               {
                 if (angular.lowercase(stateIcon.name) == angular.lowercase(name))
                 {
-                  if (type == "data_icon")
+                  if (type == 'data_icon')
                   {
                     result = stateIcon.data_icon;
                   }
-                  else if (type == "class_name")
+                  else if (type == 'class_name')
                   {
                     result = stateIcon.class_name;
                   }
@@ -189,7 +189,7 @@ define(
         {
           return function (state, type)
           {
-            if (angular.lowercase(state.name) == "location")
+            if (angular.lowercase(state.name) == 'location')
             {
               var value = state.value,
                   match = value.match(/\((.*?)\)/);
@@ -200,9 +200,9 @@ define(
               }
               else
               {
-                return (type == "data") ?
+                return (type == 'data') ?
                        match[1] :
-                       value.replace(match[0], "");
+                       value.replace(match[0], '');
               }
             }
             else
@@ -371,7 +371,7 @@ define(
         {
           return function (string, type)
           {
-            var types = type.split(".");
+            var types = type.split('.');
 
             return ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
           }
@@ -389,27 +389,27 @@ define(
             switch (state)
             {
               case 'emotion':
-                return "icon-face";
+                return 'icon-face';
                 break;
 
               case 'availability':
-                return "icon-avail";
+                return 'icon-avail';
                 break;
 
               case 'location':
-                return "icon-location";
+                return 'icon-location';
                 break;
 
               case 'activity':
-                return "icon-activity";
+                return 'icon-activity';
                 break;
 
               case 'reachability':
-                return "icon-reach";
+                return 'icon-reach';
                 break;
 
               default:
-                return "icon-info-sign";
+                return 'icon-info-sign';
             }
           }
         }

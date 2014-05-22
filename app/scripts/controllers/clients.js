@@ -136,12 +136,12 @@ define(
             };
 
             //load the reports on this view
-            if (hash == "viewClient")
+            if (hash == 'viewClient')
             {
               loadReports();
             }
 
-            if (hash == "reports")
+            if (hash == 'reports')
             {
               loadGroupReports();
             }
@@ -170,7 +170,7 @@ define(
                 //                $scope.$watch(
                 //                  $scope.reports, function (rs)
                 //                  {
-                //                    console.log("watcher found ... ", rs);
+                //                    console.log('watcher found ... ', rs);
                 //                    $scope.loadMembersImg();
                 //                  }
                 //                );
@@ -200,7 +200,7 @@ define(
                 //                $scope.$watch(
                 //                  $scope.groupReports, function (rs)
                 //                  {
-                //                    console.log("watcher found ... ", rs);
+                //                    console.log('watcher found ... ', rs);
                 //                    $scope.loadMembersImg();
                 //                  }
                 //                );
@@ -280,7 +280,7 @@ define(
                     body:         report.body,
                     author:       $scope.$root.getTeamMemberById(report.authorUuid),
                     client:       $scope.$root.getClientByID(report.clientUuid),
-                    filtered:     "false"
+                    filtered:     'false'
                   }
                 );
               }
@@ -300,11 +300,11 @@ define(
                   $scope.clientGroup = $scope.clientGroups[0]
                 }
 
-                if (($location.hash() == "viewClient" ||
-                     $location.hash() == "editClient" ||
-                     $location.hash() == "editImg") && hash == "client")
+                if (($location.hash() == 'viewClient' ||
+                     $location.hash() == 'editClient' ||
+                     $location.hash() == 'editImg') && hash == 'client')
                 {
-                  $location.path("/client").search({uuid: $scope.clientGroup.id});
+                  $location.path('/client').search({uuid: $scope.clientGroup.id});
                 }
 
                 $location.hash(hash);
@@ -356,7 +356,7 @@ define(
               {
                 if (result.error)
                 {
-                  $rootScope.notifier.error("Error with saving client Group info");
+                  $rootScope.notifier.error('Error with saving client Group info');
                 }
                 else
                 {
@@ -715,7 +715,7 @@ define(
                   {
                     var clientGroupId = client.clientGroupUuid;
 
-                    if (clientGroupId == null || clientGroupId == "")
+                    if (clientGroupId == null || clientGroupId == '')
                     {
                       clientGroupId = $scope.clientGroup.id;
                     }
@@ -732,7 +732,7 @@ define(
                       r: clientIds
                     };
 
-                    if (clientGroupId != null && clientGroupId != "" && clientGroupId != $scope.clientGroup.id)
+                    if (clientGroupId != null && clientGroupId != '' && clientGroupId != $scope.clientGroup.id)
                     {
                       changes[$scope.clientGroup.id] = {a: emptyAddIds, r: clientIds};
                     }
@@ -755,7 +755,7 @@ define(
 
                                 if ($scope.views.viewClient == true)
                                 {
-                                  $scope.setViewTo("client");
+                                  $scope.setViewTo('client');
                                 }
                                 else
                                 {
@@ -779,25 +779,25 @@ define(
               {
                 // filter need to be checked
                 // client Id, month
-                if (report.clientUuid != $scope.currentCLient && $scope.currentCLient != "0")
+                if (report.clientUuid != $scope.currentCLient && $scope.currentCLient != '0')
                 {
-                  report.filtered = "true";
+                  report.filtered = 'true';
                 }
                 else
                 {
-                  report.filtered = "false";
+                  report.filtered = 'false';
                 }
 
                 // TODO: Could they be converted to boolans?
                 var reportMonth = new Date(report.creationTime).getMonth() + 1;
 
-                if ((reportMonth != $scope.currentMonth && $scope.currentMonth != "0") || report.filtered == "true")
+                if ((reportMonth != $scope.currentMonth && $scope.currentMonth != '0') || report.filtered == 'true')
                 {
-                  report.filtered = "true";
+                  report.filtered = 'true';
                 }
                 else
                 {
-                  report.filtered = "false";
+                  report.filtered = 'false';
                 }
 
               }
@@ -920,7 +920,7 @@ define(
               ).then(
                 function (result)
                 {
-                  if (result.result == "ok")
+                  if (result.result == 'ok')
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 

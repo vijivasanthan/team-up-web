@@ -1,6 +1,6 @@
 (function (jQuery, window)
 {
-  "use strict";
+  'use strict';
 
   var matched, browser;
 
@@ -11,16 +11,16 @@
     var match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
                 /(webkit)[ \/]([\w.]+)/.exec(ua) ||
                 /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
-                /(msie) ([\w.]+)/.exec(ua) || ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [];
+                /(msie) ([\w.]+)/.exec(ua) || ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [];
 
     var platform_match = /(ipad)/.exec(ua) ||
                          /(iphone)/.exec(ua) ||
                          /(android)/.exec(ua) || [];
 
     return {
-      browser: match[1] || "",
-      version: match[2] || "0",
-      platform: platform_match[0] || ""
+      browser: match[1] || '',
+      version: match[2] || '0',
+      platform: platform_match[0] || ''
     };
   };
 
@@ -66,15 +66,15 @@
 
 (function (jQuery, window)
 {
-  "use strict";
+  'use strict';
 
   var os = {},
       navOS = window.navigator.appVersion;
 
-  if (navOS.indexOf("Win") != - 1)   os.windows = true;
-  if (navOS.indexOf("Mac") != - 1)   os.mac = true;
-  if (navOS.indexOf("X11") != - 1)   os.unix = true;
-  if (navOS.indexOf("Linux") != - 1) os.linux = true;
+  if (navOS.indexOf('Win') != - 1)   os.windows = true;
+  if (navOS.indexOf('Mac') != - 1)   os.mac = true;
+  if (navOS.indexOf('X11') != - 1)   os.unix = true;
+  if (navOS.indexOf('Linux') != - 1) os.linux = true;
 
   jQuery.os = os;
 

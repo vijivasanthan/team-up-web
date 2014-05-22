@@ -85,7 +85,7 @@ define(
                       {
                         $form.removeAttr('action');
 
-                        console.log("response : ", responseText);
+                        console.log('response : ', responseText);
                       },
                       success:        function (responseText, statusText, xhr, form)
                       {
@@ -150,7 +150,8 @@ define(
         return function (scope, element, attrs)
         {
           element.bind(
-            "keydown keypress", function (event)
+            'keydown keypress',
+            function (event)
             {
               if (event.which === 13)
               {

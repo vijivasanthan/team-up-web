@@ -90,20 +90,20 @@ define(
           {
             var changes = {};
 
-            if ($location.hash() == "teamClients")
+            if ($location.hash() == 'teamClients')
             {
               var argument = $rootScope.$$childTail.$$childTail.getData.teamClients();
 
               changes = $rootScope.$$childTail.getChangesFromTeamClients(argument);
             }
-            else if ($location.hash() == "teams")
+            else if ($location.hash() == 'teams')
             {
               var preTeams = $rootScope.$$childTail.connections.teams;
               var afterTeams = $rootScope.$$childTail.$$childTail.getData.teams();
 
               changes = $rootScope.$$childTail.getChanges(preTeams, afterTeams);
             }
-            else if ($location.hash() == "clients")
+            else if ($location.hash() == 'clients')
             {
               var preClients = $rootScope.$$childTail.connections.clients;
               var afterClients = $rootScope.$$childTail.$$childTail.getData.clients();
@@ -113,7 +113,7 @@ define(
 
             if (angular.equals({}, changes))
             {
-              // console.log("no changes ! ");
+              // console.log('no changes ! ');
               return false;
             }
             else
@@ -127,7 +127,7 @@ define(
 
           $rootScope.nav = function (tabName)
           {
-            if ($location.path() == "/manage")
+            if ($location.path() == '/manage')
             {
               if ($rootScope.checkDataChangedInManage())
               {
@@ -138,36 +138,36 @@ define(
             switch (tabName)
             {
               case 'tasks':
-                $location.path("/tasks").search({}).hash('');
+                $location.path('/tasks').search({}).hash('');
                 break;
 
               case 'team':
-                $location.path("/team").search({local: "true"}).hash("team");
+                $location.path('/team').search({local: 'true'}).hash('team');
                 break;
 
               case 'client':
-                $location.path("/client").search({local: "true"}).hash("client");
+                $location.path('/client').search({local: 'true'}).hash('client');
                 break;
 
               case 'planboard':
-                $location.path("/planboard").search({local: "true"}).hash("teams");
+                $location.path('/planboard').search({local: 'true'}).hash('teams');
                 break;
 
               case 'vis':
-                $location.path("/vis").search({local: "true"}).hash("teams");
+                $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;
 
               case 'profile':
-                $location.path("/profile").search({local: "true"}).hash("");
+                $location.path('/profile').search({local: 'true'}).hash('');
                 break;
 
               case 'logout':
-                $location.path("/logout");
+                $location.path('/logout');
                 $rootScope.logout();
                 break;
 
               default:
-                console.log("scope nav : " + tabName);
+                console.log('scope nav : ' + tabName);
             }
           };
 

@@ -92,11 +92,11 @@ define(
                   member.states,
                   function (state)
                   {
-                    if (state.name == "Location")
+                    if (state.name == 'Location')
                     {
-                      state.value_rscoded = "loading address";
+                      state.value_rscoded = 'loading address';
 
-                      var coordinates = state.value.split(","),
+                      var coordinates = state.value.split(','),
                           latitude = parseFloat(coordinates[0]),
                           longitude = parseFloat(coordinates[1]);
 
@@ -239,7 +239,7 @@ define(
               {
                 if (result.error)
                 {
-                  $rootScope.notifier.error("Error with saving team info : " + result.error);
+                  $rootScope.notifier.error('Error with saving team info : ' + result.error);
                 }
                 else
                 {
@@ -389,7 +389,7 @@ define(
                 // change the REST return to json.
                 if (result.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + " : " + result.error);
+                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + ' : ' + result.error);
                 }
                 else
                 {
@@ -462,7 +462,7 @@ define(
             $scope.setViewTo('team');
           };
 
-          $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(memberId + "_team", teamId) };
+          $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(memberId + '_team', teamId) };
 
           $scope.noSharedStates = function (states)
           {

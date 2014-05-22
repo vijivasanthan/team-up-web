@@ -64,7 +64,7 @@ define(
               $scope.selectTeams,
               function (team)
               {
-                if (team.uuid == sessionStorage.getItem(data.uuid + "_team"))
+                if (team.uuid == sessionStorage.getItem(data.uuid + '_team'))
                 {
                   teams.push(team);
                 }
@@ -118,7 +118,7 @@ define(
               if ($scope.teams.length == 0)
               {
                 //resources.teamUuids.push($scope.selectTeams[0].uuid);
-                resources.teamUuids.push(sessionStorage.getItem(resources.uuid + "_team"));
+                resources.teamUuids.push(sessionStorage.getItem(resources.uuid + '_team'));
               }
               else
               {
@@ -191,7 +191,7 @@ define(
 
                         $rootScope.statusBar.off();
 
-                        $scope.setViewTo("profile");
+                        $scope.setViewTo('profile');
 
                         // refresh the teams in the background
                         angular.forEach(

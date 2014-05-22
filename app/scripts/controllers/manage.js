@@ -71,7 +71,7 @@ define(
                   {
                     members.push(
                       {
-                        'name': member.firstName + " " + member.lastName,
+                        'name': member.firstName + ' ' + member.lastName,
                         'id': member.uuid
                       }
                     );
@@ -202,7 +202,7 @@ define(
 
           $scope.setViewTo = function (hash)
           {
-            if (typeof $scope.dataChanged != "undefined" &&
+            if (typeof $scope.dataChanged != 'undefined' &&
                 $scope.dataChanged($location.$$hash))
             {
               if (! confirm($rootScope.ui.teamup.managePanelchangePrompt))
@@ -451,22 +451,22 @@ define(
            * remove the duplicated listeners when going back to the controller
            * temp solution
            */
-          if ($rootScope.$$listeners["save:teamClients"] &&
-              $rootScope.$$listeners["save:teamClients"].length > 0)
+          if ($rootScope.$$listeners['save:teamClients'] &&
+              $rootScope.$$listeners['save:teamClients'].length > 0)
           {
-            $rootScope.$$listeners["save:teamClients"] = [];
+            $rootScope.$$listeners['save:teamClients'] = [];
           }
 
-          if ($rootScope.$$listeners["save:teams"] &&
-              $rootScope.$$listeners["save:teams"].length > 0)
+          if ($rootScope.$$listeners['save:teams'] &&
+              $rootScope.$$listeners['save:teams'].length > 0)
           {
-            $rootScope.$$listeners["save:teams"] = [];
+            $rootScope.$$listeners['save:teams'] = [];
           }
 
-          if ($rootScope.$$listeners["save:clients"] &&
-              $rootScope.$$listeners["save:clients"].length > 0)
+          if ($rootScope.$$listeners['save:clients'] &&
+              $rootScope.$$listeners['save:clients'].length > 0)
           {
-            $rootScope.$$listeners["save:clients"] = [];
+            $rootScope.$$listeners['save:clients'] = [];
           }
 
           $scope.getChangesFromTeamClients = function (argument)
@@ -541,7 +541,7 @@ define(
               .then(
               function (results)
               {
-                var error = "";
+                var error = '';
 
                 angular.forEach(
                   results,
@@ -553,7 +553,7 @@ define(
                     }
                   });
 
-                if (error == "")
+                if (error == '')
                 {
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   $route.reload();
@@ -576,11 +576,11 @@ define(
 
               if (angular.equals({}, changes))
               {
-                console.log("no changes ! ");
+                console.log('no changes ! ');
               }
               else
               {
-                // console.log("Team Groups changes : ", changes);
+                // console.log('Team Groups changes : ', changes);
 
                 $scope.applyTeamClientsChanges(changes);
               }
@@ -619,7 +619,7 @@ define(
 
               if (angular.equals({}, changes))
               {
-                console.log("no changes ! ");
+                console.log('no changes ! ');
               }
               else
               {
@@ -636,7 +636,7 @@ define(
 
               if (angular.equals({}, changes))
               {
-                console.log("no changes ! ");
+                console.log('no changes ! ');
               }
               else
               {
@@ -658,23 +658,23 @@ define(
 
           $scope.dataChanged = function (current)
           {
-            var parts = current.split("#"),
+            var parts = current.split('#'),
                 tab = parts[parts.length - 1],
                 changes = {};
 
-            if (tab == "teamClients")
+            if (tab == 'teamClients')
             {
               // TODO: Remove this intern angular method
               changes = $scope.getChangesFromTeamClients($scope.$$childTail.getData.teamClients());
             }
-            else if (tab == "teams")
+            else if (tab == 'teams')
             {
               changes = $scope.getChanges(
                 $scope.connections.teams,
                 $scope.$$childTail.getData.teams()
               );
             }
-            else if (tab == "clients")
+            else if (tab == 'clients')
             {
               changes = $scope.getChanges(
                 $scope.connections.clients,

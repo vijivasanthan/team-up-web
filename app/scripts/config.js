@@ -42,63 +42,63 @@ define(
 
       roles: [
         {
-          id:    "1",
+          id:    '1',
           label: 'coordinator'
         },
         {
-          id:    "2",
+          id:    '2',
           label: 'team_member'
         },
         {
-          id:    "3",
+          id:    '3',
           label: 'client'
         }
       ],
 
       mfunctions: [
         {
-          id:    "1",
+          id:    '1',
           label: 'Doctor'
         },
         {
-          id:    "2",
+          id:    '2',
           label: 'Nurse'
         }
       ],
 
       stateIcons: [
         {
-          name:       "Availability",
-          data_icon:  "&#xe04d;",
-          class_name: "icon-user-block"
+          name:       'Availability',
+          data_icon:  '&#xe04d;',
+          class_name: 'icon-user-block'
         },
         {
-          name:       "Location",
-          data_icon:  "&#xe21a;",
-          class_name: "icon-location4"
+          name:       'Location',
+          data_icon:  '&#xe21a;',
+          class_name: 'icon-location4'
         },
         {
-          name:       "Emotion",
-          data_icon:  "&#xe0f2;",
-          class_name: "icon-smiley"
+          name:       'Emotion',
+          data_icon:  '&#xe0f2;',
+          class_name: 'icon-smiley'
         },
         {
-          name:       "Activity",
-          data_icon:  "&#xe4f2;",
-          class_name: "icon-accessibility"
+          name:       'Activity',
+          data_icon:  '&#xe4f2;',
+          class_name: 'icon-accessibility'
         },
         {
-          name:       "Reachability",
-          data_icon:  "&#xe169;",
-          class_name: "icon-podcast2"
+          name:       'Reachability',
+          data_icon:  '&#xe169;',
+          class_name: 'icon-podcast2'
         }
       ],
 
       stateColors: {
-        availalbe: "memberStateAvailalbe",
-        busy:      "memberStateBusy",
-        offline:   "memberStateOffline",
-        none:      "memberStateNone"
+        availalbe: 'memberStateAvailalbe',
+        busy:      'memberStateBusy',
+        offline:   'memberStateOffline',
+        none:      'memberStateNone'
       },
 
       noImgURL: '/images/defaultAvatar.png',

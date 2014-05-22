@@ -27,22 +27,22 @@ define(
             },
             user:    [
               {
-                "count":     0,
-                "end":       1378681200,
-                "recursive": true,
-                "start":     1378504800,
-                "text":      "com.ask-cs.State.Available",
-                "type":      "availability",
-                "wish":      0
+                'count':     0,
+                'end':       1378681200,
+                'recursive': true,
+                'start':     1378504800,
+                'text':      'com.ask-cs.State.Available',
+                'type':      'availability',
+                'wish':      0
               },
               {
-                "count":     0,
-                "end":       1378850400,
-                "recursive": true,
-                "start":     1378720800,
-                "text":      "com.ask-cs.State.Available",
-                "type":      "availability",
-                "wish":      0
+                'count':     0,
+                'end':       1378850400,
+                'recursive': true,
+                'start':     1378720800,
+                'text':      'com.ask-cs.State.Available',
+                'type':      'availability',
+                'wish':      0
               }
             ],
             members: [],
@@ -145,12 +145,12 @@ define(
                                member.lastName +
                                '</div>';
 
-                    var obj = {
-                      'head':  name,
-                      'memId': member.uuid
-                    };
-
-                    $scope.data.clients.members[client.id].push(obj);
+                    $scope.data.clients.members[client.id].push(
+                      {
+                        'head':  name,
+                        'memId': member.uuid
+                      }
+                    );
                   }
                 );
               }
@@ -164,7 +164,7 @@ define(
               case 'teams':
                 $scope.list = $scope.data.teams.list;
 
-                if (typeof $scope.currentTeam == "undefined")
+                if (typeof $scope.currentTeam == 'undefined')
                 {
                   $scope.currentTeam = $scope.data.teams.list[0].uuid;
                 }
@@ -176,7 +176,7 @@ define(
               case 'clients':
                 $scope.list = $scope.data.clients.list;
 
-                if (typeof $scope.currentClientGroup == "undefined")
+                if (typeof $scope.currentClientGroup == 'undefined')
                 {
                   $scope.currentClientGroup = $scope.data.clients.list[0].uuid;
                 }
@@ -198,14 +198,15 @@ define(
                 {
                   $scope.currentName = node.name;
                 }
-              });
+              }
+            );
 
-            if ($scope.section == "teams")
+            if ($scope.section == 'teams')
             {
               $scope.currentTeam = current;
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
             }
-            else if ($scope.section == "clients")
+            else if ($scope.section == 'clients')
             {
               $scope.currentClientGroup = current;
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
@@ -220,8 +221,6 @@ define(
 
             var storeTask = function (tasks, startTime, endTime)
             {
-              // console.log('storing task ->', tasks, startTime, endTime);
-
               // clear the array to keep tasks sync with sever side after changing
               $scope.data[$scope.section].tasks = [];
 
@@ -231,19 +230,19 @@ define(
                 {
                   if (task != null)
                   {
-                    var memberId = "";
+                    var memberId = '';
 
-                    if ($scope.section == "teams")
+                    if ($scope.section == 'teams')
                     {
                       memberId = task.assignedTeamMemberUuid;
                     }
 
-                    if ($scope.section == "clients")
+                    if ($scope.section == 'clients')
                     {
                       memberId = task.relatedClientUuid;
                     }
 
-                    if (typeof $scope.data[$scope.section].tasks[memberId] == "undefined")
+                    if (typeof $scope.data[$scope.section].tasks[memberId] == 'undefined')
                     {
                       $scope.data[$scope.section].tasks[memberId] = [];
                     }
@@ -254,14 +253,15 @@ define(
               );
 
               $rootScope.$broadcast(
-                'timeliner', {
+                'timeliner',
+                {
                   start: startTime,
                   end:   endTime
                 }
               );
             };
 
-            if ($scope.data.section == "teams")
+            if ($scope.data.section == 'teams')
             {
               $location.search({ uuid: $scope.currentTeam }).hash('teams');
 
@@ -276,7 +276,7 @@ define(
                 function (tasks) { storeTask(tasks, startTime, endTime) }
               );
             }
-            else if ($scope.data.section == "clients")
+            else if ($scope.data.section == 'clients')
             {
               $location.search({ uuid: $scope.currentClientGroup }).hash('clients');
 
@@ -344,7 +344,7 @@ define(
             uuid = $scope.data.teams.list[0].uuid;
             view = 'teams';
 
-            $location.search({ uuid: $scope.data.teams.list[0].uuid }).hash('teams');
+            $location.search({ uuid: $scope.data.teams.list[0].uuid }).hash(view);
           }
           else
           {
@@ -440,7 +440,7 @@ define(
           {
             var relatedUsers = [],
                 memberId = angular.element(selectedSlot.group)
-                  .attr("memberId");
+                  .attr('memberId');
 
             if ($scope.views.teams)
             {
@@ -448,7 +448,7 @@ define(
 
               var member = $rootScope.getTeamMemberById(memberId);
 
-              if (typeof member.teamUuids != "undefined" && member.teamUuids.length > 0)
+              if (typeof member.teamUuids != 'undefined' && member.teamUuids.length > 0)
               {
                 relatedUsers = $rootScope.getClientsByTeam(member.teamUuids);
               }
@@ -459,7 +459,7 @@ define(
 
               var client = $rootScope.getClientByID(memberId);
 
-              if (typeof client.clientGroupUuid != "undefined" && client.clientGroupUuid != "")
+              if (typeof client.clientGroupUuid != 'undefined' && client.clientGroupUuid != '')
               {
                 relatedUsers = $rootScope.getMembersByClient(client.clientGroupUuid);
               }
@@ -475,11 +475,11 @@ define(
 
             $scope.resetViews();
 
-            if ($scope.section == "teams")
+            if ($scope.section == 'teams')
             {
               $scope.changeCurrent($scope.currentTeam);
             }
-            else if ($scope.section == "clients")
+            else if ($scope.section == 'clients')
             {
               $scope.changeCurrent($scope.currentClientGroup);
             }

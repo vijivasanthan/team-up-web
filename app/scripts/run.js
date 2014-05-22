@@ -195,7 +195,7 @@ define(
               }
             );
 
-            if (typeof member == "undefined")
+            if (typeof member == 'undefined')
             {
               member = {
                 uuid:      memberId,
