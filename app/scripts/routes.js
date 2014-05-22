@@ -95,13 +95,27 @@ define(
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
                   {
-                    // TODO: Lose short property names and make them more readable!
-                    return ($location.hash() && $location.hash() == 'reload') ?
-                           {
-                             t:  Teams.query(),
-                             cg: ClientGroups.query()
-                           } :
-                           { local: true };
+
+                    var ret = {};
+
+                    if($location.hash() && $location.hash() == 'reload'){
+                      var teams = Teams.query();
+                      var cGroups = ClientGroups.query();
+                      ret = { t : teams , cg : cGroups};
+                      // ret = Teams.getAll();
+                    }else{
+                      ret.local = true;
+                    }
+
+                    return ret;
+
+//                    // TODO: Lose short property names and make them more readable!
+//                    return (($location.hash() && $location.hash() == 'reload')) ?
+//                           {
+//                             t:  Teams.query(),
+//                             cg: ClientGroups.query()
+//                           } :
+//                           { local: true };
                   }
                 ]
               }

@@ -92,6 +92,8 @@ define(
 
             if ($location.hash() == 'teamClients')
             {
+              console.log('!! location is team clients from states ->');
+
               var argument = $rootScope.$$childTail.$$childTail.getData.teamClients();
 
               changes = $rootScope.$$childTail.getChangesFromTeamClients(argument);
@@ -99,6 +101,7 @@ define(
             else if ($location.hash() == 'teams')
             {
               var preTeams = $rootScope.$$childTail.connections.teams;
+
               var afterTeams = $rootScope.$$childTail.$$childTail.getData.teams();
 
               changes = $rootScope.$$childTail.getChanges(preTeams, afterTeams);
@@ -106,6 +109,7 @@ define(
             else if ($location.hash() == 'clients')
             {
               var preClients = $rootScope.$$childTail.connections.clients;
+
               var afterClients = $rootScope.$$childTail.$$childTail.getData.clients();
 
               changes = $rootScope.$$childTail.getChanges(preClients, afterClients);

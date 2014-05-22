@@ -54,10 +54,7 @@ define(
 
                   angular.forEach(
                     store.data,
-                    function (node)
-                    {
-                      node._id && filtered.push(node);
-                    }
+                    function (node) { node._id && filtered.push(node) }
                   );
 
                   store.data = store.filteredData = filtered;
@@ -124,7 +121,7 @@ define(
 
                   if (item.nodes)
                   {
-                    result = false;
+                    result = false
                   }
 
                   return result;

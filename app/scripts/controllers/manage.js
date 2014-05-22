@@ -6,27 +6,33 @@ define(
 
     controllers.controller(
       'manageCtrl', [
-        '$rootScope', '$scope', '$location', 'Clients', '$route', '$routeParams', 'Store', 'Teams', '$window', 'data',
+        '$rootScope',
+        '$scope',
+        '$location',
+        'Clients',
+        '$route',
+        '$routeParams',
+        'Store',
+        'Teams',
+        '$window',
+        'data',
         'TeamUp',
         function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp)
         {
-          $scope.loadData = function (data)
+          var loadData = function (data)
           {
             if (data && data.local)
             {
-              var teamsLocal = Store('app').get('teams');
-
-              var connections = {
-                teamClients: {},
-                teams:       {},
-                clients:     {}
-              };
-
-              var members = [];
+              var teamsLocal = Store('app').get('teams'),
+                  connections = {
+                    teamClients: {},
+                    teams:       {},
+                    clients:     {}
+                  },
+                  members = [],
+                  memberGlobalIds = [];
 
               data.teams = [];
-
-              var memberGlobalIds = [];
 
               angular.forEach(
                 teamsLocal,
@@ -40,7 +46,7 @@ define(
                   );
 
                   var memberIds = [];
-
+                  
                   angular.forEach(
                     Store('app').get(team.uuid),
                     function (member)
@@ -58,11 +64,13 @@ define(
 
                         memberGlobalIds.push(member.uuid);
                       }
-                    });
+                    }
+                  );
 
                   connections.teams[team.uuid] = memberIds;
-                });
-
+                }
+              );
+              
               angular.forEach(
                 Store('app').get('members'),
                 function (member)
@@ -76,7 +84,8 @@ define(
                       }
                     );
                   }
-                });
+                }
+              );
 
               data.members = members;
 
@@ -98,7 +107,6 @@ define(
                     {
                       clientIds.push(client.uuid);
 
-                      // add to global client ids
                       if (clientIds.indexOf(client.uuid) == - 1)
                       {
                         clientIds.push(client.uuid);
@@ -110,12 +118,14 @@ define(
                           }
                         );
                       }
-                    });
+                    }
+                  );
 
                   connections.clients[group.id] = clientIds;
 
                   groupIds.push(group.id);
-                });
+                }
+              );
 
               angular.forEach(
                 Store('app').get('clients'),
@@ -153,9 +163,10 @@ define(
 
                         flag = false;
                       }
-                    });
-
-                });
+                    }
+                  );
+                }
+              );
 
               $scope.connections = connections;
 
@@ -175,7 +186,7 @@ define(
           };
 
           // TODO: Repetitive code
-          var localData = $scope.loadData(data);
+          var localData = loadData(data);
           data = localData.data;
           var connections = localData.con;
 
@@ -195,15 +206,14 @@ define(
             $scope.views[hash] = true;
 
             // TODO: Repetitive code
-            var localData = $scope.loadData(data);
+            var localData = loadData(data);
             data = localData.data;
             connections = localData.con;
           }
 
           $scope.setViewTo = function (hash)
           {
-            if (typeof $scope.dataChanged != 'undefined' &&
-                $scope.dataChanged($location.$$hash))
+            if (typeof $scope.dataChanged != 'undefined' && $scope.dataChanged($location.$$hash))
             {
               if (! confirm($rootScope.ui.teamup.managePanelchangePrompt))
               {
@@ -241,7 +251,7 @@ define(
 
               angular.forEach(
                 this.data.teamClients,
-                (function (gid, tid)
+                (function (groupId, teamId)
                 {
                   var connection = {
                     sourceItems: [],
@@ -252,7 +262,7 @@ define(
                     data.teams,
                     function (team)
                     {
-                      if (team.id == tid)
+                      if (team.id == teamId)
                       {
                         connection.targetItem = team;
                       }
@@ -263,7 +273,7 @@ define(
 
                   for (var i = 0; i < data.groups.length; i ++)
                   {
-                    if (data.groups[i].id == gid)
+                    if (data.groups[i].id == groupId)
                     {
                       _group = data.groups[i];
 
@@ -306,9 +316,12 @@ define(
                               }
                             );
                           }
-                        });
-                    });
-                });
+                        }
+                      );
+                    }
+                  );
+                }
+              );
 
               return population;
             },
@@ -337,30 +350,47 @@ define(
             switch (grid)
             {
               case 'teamClients':
+
                 $rootScope.$broadcast(
-                  'TreeGridManager', grid, '1:1', {
+                  'TreeGridManager',
+                  grid,
+                  '1:1',
+                  {
                     left:  data.groups,
                     right: data.teams
                   },
-                  $scope.connector.teamClients());
+                  $scope.connector.teamClients()
+                );
+
                 break;
 
               case 'teams':
+
                 $rootScope.$broadcast(
-                  'TreeGridManager', grid, '1:n', {
+                  'TreeGridManager',
+                  grid,
+                  '1:n',
+                  {
                     left:  data.members,
                     right: data.teams
                   },
-                  $scope.connector.teams());
+                  $scope.connector.teams()
+                );
+
                 break;
 
               case 'clients':
                 $rootScope.$broadcast(
-                  'TreeGridManager', grid, '1:n', {
+                  'TreeGridManager',
+                  grid,
+                  '1:n',
+                  {
                     left:  data.clients,
                     right: data.groups
                   },
-                  $scope.connector.clients());
+                  $scope.connector.clients()
+                );
+
                 break;
             }
           };
@@ -370,26 +400,27 @@ define(
             var changes = {};
 
             angular.forEach(
-              beforeTeams, 
-              function (_beforeTeam, tId)
+              beforeTeams,
+              function (_beforeTeam, teamId)
               {
-                var notChanged = [];
-                var afterMembers = afterTeams[tId];
+                var notChanged = [],
+                    afterMembers = afterTeams[teamId];
 
                 // find the unchanged items
                 angular.forEach(
-                  _beforeTeam, 
+                  _beforeTeam,
                   function (_beforeTeamMember)
                   {
                     angular.forEach(
-                      afterMembers, 
+                      afterMembers,
                       function (afterTeam)
                       {
                         if (_beforeTeamMember == afterTeam)
                         {
                           notChanged.push(_beforeTeamMember);
                         }
-                      });
+                      }
+                    );
                   }
                 );
 
@@ -402,13 +433,14 @@ define(
                  */
 
                 angular.forEach(
-                  notChanged, 
-                  function (notchangedNode)
+                  notChanged,
+                  function (notChangedNode)
                   {
-                    _beforeTeam.splice(_beforeTeam.indexOf(notchangedNode), 1);
-                    
-                    afterMembers.splice(afterMembers.indexOf(notchangedNode), 1);
-                  });
+                    _beforeTeam.splice(_beforeTeam.indexOf(notChangedNode), 1);
+
+                    afterMembers.splice(afterMembers.indexOf(notChangedNode), 1);
+                  }
+                );
 
                 var addMembers = [],
                     removeMembers = [];
@@ -421,7 +453,8 @@ define(
                     removeMembers.length > 0 ||
                     removeMembers.length > 0)
                 {
-                  changes[tId] = {
+                  // TODO: More readable property names!
+                  changes[teamId] = {
                     a: addMembers,
                     r: removeMembers
                   };
@@ -429,7 +462,7 @@ define(
 
                 // add the nonChanged item back
                 angular.forEach(
-                  notChanged, 
+                  notChanged,
                   function (notChangedNode)
                   {
                     _beforeTeam.push(notChangedNode);
@@ -437,8 +470,8 @@ define(
                     afterMembers.push(notChangedNode);
                   }
                 );
-
-              });
+              }
+            );
 
             return changes;
           };
@@ -472,9 +505,8 @@ define(
           $scope.getChangesFromTeamClients = function (argument)
           {
             var beforeTeamClients = $scope.connections.teamClients,
-                afterTeamClients = argument;
-
-            var teamIds = [];
+                afterTeamClients = argument,
+                teamIds = [];
 
             angular.forEach(
               beforeTeamClients,
@@ -495,7 +527,8 @@ define(
                 {
                   teamIds.push(i);
                 }
-              });
+              }
+            );
 
             var changes = {};
 
@@ -503,17 +536,17 @@ define(
               teamIds,
               function (tId)
               {
-                if (typeof beforeTeamClients[tId] == 'undefined' &&
-                    afterTeamClients[tId])
+                if (typeof beforeTeamClients[tId] == 'undefined' && afterTeamClients[tId])
                 {
+                  // TODO: More readable property names!
                   changes[tId] = {
                     a: [afterTeamClients[tId]],
                     r: []
                   };
                 }
-                else if (typeof afterTeamClients[tId] == 'undefined' &&
-                         beforeTeamClients[tId])
+                else if (typeof afterTeamClients[tId] == 'undefined' && beforeTeamClients[tId])
                 {
+                  // TODO: More readable property names!
                   changes[tId] = {
                     r: [beforeTeamClients[tId]],
                     a: []
@@ -523,6 +556,7 @@ define(
                          afterTeamClients[tId] &&
                          beforeTeamClients[tId] != afterTeamClients[tId])
                 {
+                  // TODO: More readable property names!
                   changes[tId] = {
                     a: [afterTeamClients[tId]],
                     r: [beforeTeamClients[tId]]
@@ -551,7 +585,8 @@ define(
                     {
                       error += result.error.data.error;
                     }
-                  });
+                  }
+                );
 
                 if (error == '')
                 {
@@ -580,11 +615,10 @@ define(
               }
               else
               {
-                // console.log('Team Groups changes : ', changes);
-
                 $scope.applyTeamClientsChanges(changes);
               }
-            });
+            }
+          );
 
           $scope.applyTeamsChanges = function (changes)
           {
@@ -685,6 +719,7 @@ define(
             return (angular.equals({}, changes)) ? false : true;
           };
         }
-      ]);
+      ]
+    );
   }
 );

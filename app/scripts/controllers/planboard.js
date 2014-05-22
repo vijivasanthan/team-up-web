@@ -74,7 +74,7 @@ define(
                   members,
                   function (member)
                   {
-                    var avatar = '<div class="avatar"><div class="roundedPicSmall memberStateNone" ' +
+                    var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
                                  config.app.host +
                                  config.app.namespace +
@@ -84,7 +84,7 @@ define(
                                  Session.get() +
                                  ');" memberId="' +
                                  member.uuid +
-                                 '"></div></div>';
+                                 '"></div>';
 
                     var name = avatar +
                                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
@@ -126,7 +126,7 @@ define(
                   members,
                   function (member)
                   {
-                    var avatar = '<div class="avatar"><div class="roundedPicSmall memberStateNone" ' +
+                    var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
                                  config.app.host +
                                  config.app.namespace +
@@ -136,7 +136,7 @@ define(
                                  Session.get() +
                                  ');" memberId="' +
                                  member.uuid +
-                                 '"></div></div>';
+                                 '"></div>';
 
                     var name = avatar +
                                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
