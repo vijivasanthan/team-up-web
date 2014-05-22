@@ -1,16 +1,24 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
     controllers.controller(
       'clientCtrl', [
-        '$rootScope', '$scope', '$location', 'Clients', 'data', '$route', '$routeParams', 'Store', 'Dater', '$filter',
-        '$modal', 'TeamUp',
-        function (
-          $rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp
-          )
+        '$rootScope',
+        '$scope',
+        '$location',
+        'Clients',
+        'data',
+        '$route',
+        '$routeParams',
+        'Store',
+        'Dater',
+        '$filter',
+        '$modal',
+        'TeamUp',
+        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp)
         {
           $rootScope.fixStyles();
 
@@ -63,7 +71,8 @@ define(
                 start:  month.first.timeStamp,
                 end:    month.last.timeStamp
               };
-            });
+            }
+          );
 
           $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
 
@@ -327,6 +336,7 @@ define(
 
           $scope.changeClientGroup = function (clientGroup)
           {
+            // TODO: Replace jQuery trimmer
             if ($.trim(clientGroup.name) == '')
             {
               // FIXME: Message does not exist!
@@ -364,7 +374,8 @@ define(
                     }
                   );
                 }
-              });
+              }
+            );
           };
 
           var reloadGroup = function (result)
@@ -661,8 +672,10 @@ define(
                 {
                   if (result.id)
                   {
-                    Clients.query(true, {})
-                      .then(
+                    Clients.query(
+                      true,
+                      {}
+                    ).then(
                       function (clientGroups)
                       {
                         $scope.requestClientGroup(clientGroups[0].id);
@@ -734,15 +747,12 @@ define(
                           function ()
                           {
                             TeamUp._(
-                              'clientsQuery',
-                              null,
-                              null,
-                              {
-                                success: function (clients) { Store('app').save('clients', clients) }
-                              }
+                              'clientsQuery'
                             ).then(
-                              function ()
+                              function (clients)
                               {
+                                Store('app').save('clients', clients);
+
                                 if ($scope.views.viewClient == true)
                                 {
                                   $scope.setViewTo("client");
@@ -751,7 +761,8 @@ define(
                                 {
                                   $route.reload();
                                 }
-                              });
+                              }
+                            );
                           }, function (error) { console.log(error) });
                       });
 
@@ -777,10 +788,10 @@ define(
                   report.filtered = "false";
                 }
 
+                // TODO: Could they be converted to boolans?
                 var reportMonth = new Date(report.creationTime).getMonth() + 1;
 
-                if ((reportMonth != $scope.currentMonth && $scope.currentMonth != "0")
-                  || report.filtered == "true")
+                if ((reportMonth != $scope.currentMonth && $scope.currentMonth != "0") || report.filtered == "true")
                 {
                   report.filtered = "true";
                 }

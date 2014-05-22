@@ -20,9 +20,7 @@ define(
 
             .when(
             '/logout',
-            {
-              templateUrl: 'views/logout.html'
-            })
+            { templateUrl: 'views/logout.html' })
 
             .when(
             '/tasks',

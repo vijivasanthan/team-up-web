@@ -136,31 +136,31 @@ define(
           // TODO: Turn it to a jQuery plugin
           $rootScope.fixStyles = function ()
           {
-            var tabHeight = $('.tabs-left .nav-tabs').height();
+            var tabHeight = angular.element('.tabs-left .nav-tabs').height();
 
             $.each(
-              $('.tab-content').children(),
+              angular.element('.tab-content').children(),
               function ()
               {
-                var $this = $(this).attr('id'),
-                    contentHeight = $('.tabs-left .tab-content #' + $this).height();
+                var $this = angular.element(this).attr('id'),
+                    contentHeight = angular.element('.tabs-left .tab-content #' + $this).height();
 
                 if (tabHeight > contentHeight)
                 {
-                  $('.tabs-left .tab-content #' + $this).css(
+                  angular.element('.tabs-left .tab-content #' + $this).css(
                     {
-                      height: $('.tabs-left .nav-tabs').height() + 6
+                      height: angular.element('.tabs-left .nav-tabs').height() + 6
                     });
                 }
                 else if (contentHeight > tabHeight)
                 {
-                  // $('.tabs-left .nav-tabs').css( { height: contentHeight } );
+                  // angular.element('.tabs-left .nav-tabs').css( { height: contentHeight } );
                 }
               });
 
             if ($.os.mac || $.os.linux)
             {
-              $('.nav-tabs-app li a span').css(
+              angular.element('.nav-tabs-app li a span').css(
                 {
                   paddingTop:   '10px',
                   marginBottom: '0px'
@@ -190,8 +190,10 @@ define(
                       member = _member;
                       return;
                     }
-                  });
-              });
+                  }
+                );
+              }
+            );
 
             if (typeof member == "undefined")
             {
@@ -207,7 +209,7 @@ define(
 
           $rootScope.getClientByID = function (clientId)
           {
-            var ret;
+            var result;
 
             angular.forEach(
               Store('app').get('clients'),
@@ -215,12 +217,15 @@ define(
               {
                 if (clientId == client.uuid)
                 {
-                  ret = client;
+                  result = client;
+
+                  // TODO: return is needed here?
                   return;
                 }
-              });
+              }
+            );
 
-            if (ret == null)
+            if (result == null)
             {
               angular.forEach(
                 Store('app').get('ClientGroups'),
@@ -232,15 +237,18 @@ define(
                     {
                       if (client.uuid = clientId)
                       {
-                        ret = client;
+                        result = client;
+
+                        // TODO: return is needed here?
                         return;
                       }
-                    });
-
-                });
+                    }
+                  );
+                }
+              );
             }
 
-            return ret;
+            return result;
           };
 
           /**
@@ -304,8 +312,8 @@ define(
             // TODO: It is only called from planboard controller. Maybe move it to there?
           $rootScope.getMembersByClient = function (clientGroup)
           {
-            var members = [];
-            var memberIds = [];
+            var members = [],
+                memberIds = [];
 
             angular.forEach(
               Store('app').get('teams'),
@@ -332,30 +340,15 @@ define(
                               }
                             );
                           }
-                        });
+                        }
+                      );
                     }
-                  });
-              });
-
-            return members;
-          };
-
-          $rootScope.getAvatarURL = function (userId)
-          {
-            var ret = '';
-
-            angular.forEach(
-              Store('app').get('avatarUrls'),
-              function (avatar)
-              {
-                if (avatar.userId == userId)
-                {
-                  ret = avatar.url;
-                }
+                  }
+                );
               }
             );
 
-            return ret;
+            return members;
           };
 
 

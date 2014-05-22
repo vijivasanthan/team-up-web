@@ -71,20 +71,18 @@ require.config(
   }
 );
 
+// TODO: Look for ways to reduce the number of files loaded
 require(
   [
     'angular',
     'domReady',
-
     'date',
     'jquery',
     'plugins',
-
     'angular-resource',
     'angular-route',
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
-
     'locals',
     'config',
     'app',
@@ -92,35 +90,25 @@ require(
     'routes',
     'states',
     'services/browsers',
-
     'services/teamup',
-
     'services/clients',
-
     'services/dater', // TODO: Remove later on
-
     'services/teams',
     'services/GoogleGEO',
-
     'directives/widgets',
-
     'filters/avatars',
-
     'controllers/clients',
     'controllers/login',
     'controllers/manage',
     'controllers/messages',
     'controllers/planboard',
-
     'controllers/vis',
-
     'controllers/profile',
     'controllers/teams',
     'controllers/tasks',
     'controllers/timeline',
     'controllers/timeline-navigation',
     'controllers/treegrid',
-
     'bootstrap',
     'lawnchair',
     'dom',
@@ -129,13 +117,9 @@ require(
     'treegrid',
     'datepicker',
     'timepicker',
-
     'md5',
-
     'underscore',
-
     'store',
-
     'offline',
     'interceptor',
     'log',

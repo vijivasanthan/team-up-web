@@ -29,6 +29,8 @@ define(
           $scope.mfuncs = config.app.mfunctions;
 
           $scope.data = data;
+
+          // TODO: Still needed?
           $scope.noImgURL = config.app.noImgURL;
 
           $scope.profilemeta = data;
@@ -51,8 +53,10 @@ define(
                   {
                     teams.push(team);
                   }
-                });
-            });
+                }
+              );
+            }
+          );
 
           if (teams.length == 0)
           {
@@ -64,7 +68,8 @@ define(
                 {
                   teams.push(team);
                 }
-              });
+              }
+            );
           }
 
           $scope.teams = teams;
@@ -234,9 +239,10 @@ define(
                       {
                         $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                        var routePara = {'uuid': teamId};
-                        Teams.query(false, routePara)
-                          .then(
+                        Teams.query(
+                          false,
+                          { 'uuid': teamId }
+                        ).then(
                           function () { $rootScope.statusBar.off() }
                         );
                       });

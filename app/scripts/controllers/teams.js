@@ -37,7 +37,8 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          var uuid, view;
+          var uuid,
+              view;
 
           if (! params.uuid && ! $location.hash())
           {
@@ -256,7 +257,8 @@ define(
                     }
                   );
                 }
-              });
+              }
+            );
           };
 
           $scope.teamSubmit = function (team)
@@ -330,7 +332,8 @@ define(
                                 function () { $location.search({ uuid: team.uuid }) }
                               );
                             }
-                          });
+                          }
+                        );
                       }
 
                       $rootScope.statusBar.off();
@@ -392,11 +395,11 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                  var routePara = {'uuid': result.teamId};
-
                   // TODO: Repetitive code!
-                  Teams.query(false, routePara)
-                    .then(
+                  Teams.query(
+                    false,
+                    { 'uuid': result.teamId }
+                  ).then(
                     function (queries)
                     {
                       if (queries.error)
@@ -438,7 +441,8 @@ define(
                                 function () { $location.search({ uuid: team.uuid }) }
                               );
                             }
-                          });
+                          }
+                        );
                       }
 
                       $rootScope.statusBar.off();
@@ -513,7 +517,8 @@ define(
                             {
                               $scope.teams.splice(i, 1);
                             }
-                          });
+                          }
+                        );
 
                         TeamUp._('teamMemberFree')
                           .then(
@@ -597,7 +602,8 @@ define(
                       function (error) { console.log(error) }
                     );
                   }
-                }, function (error) { console.log(error) });
+                }, function (error) { console.log(error) }
+              );
             }
           };
         }

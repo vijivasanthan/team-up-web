@@ -9,37 +9,19 @@ define(
       lang:    'nl',
 
       statesall: {
-        'com.ask-cs.State.Available':              {
+        'com.ask-cs.State.Available':   {
           className: 'state-available',
           label:     'Beschikbaar',
           color:     '#4f824f',
           type:      'Beschikbaar'
         },
-        'com.ask-cs.State.KNRM.BeschikbaarNoord':  {
-          className: 'state-available-north',
-          label:     'Beschikbaar voor Noord',
-          color:     '#000',
-          type:      'Beschikbaar'
-        },
-        'com.ask-cs.State.KNRM.BeschikbaarZuid':   {
-          className: 'state-available-south',
-          label:     'Beschikbaar voor Zuid',
-          color:     '#e08a0c',
-          type:      'Beschikbaar'
-        },
-        'com.ask-cs.State.Unavailable':            {
+        'com.ask-cs.State.Unavailable': {
           className: 'state-unavailable',
           label:     'Niet Beschikbaar',
           color:     '#a93232',
           type:      'Niet Beschikbaar'
         },
-        'com.ask-cs.State.KNRM.SchipperVanDienst': {
-          className: 'state-schipper-service',
-          label:     'Schipper van Dienst',
-          color:     '#e0c100',
-          type:      'Beschikbaar'
-        },
-        'com.ask-cs.State.Unreached':              {
+        'com.ask-cs.State.Unreached':   {
           className: 'state-unreached',
           label:     'Niet Bereikt',
           color:     '#65619b',
@@ -47,21 +29,9 @@ define(
         }
       },
 
-      host: (function ()
-      {
-        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://askpack.ask-cs.com/';
-        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://dev.ask-cs.com/';
-        // return ($.browser.msie) ? '/proxy/ns_knrmtest' : 'http://192.168.128.205\\:9000/';
+      host: 'http://dev.ask-cs.com/',
 
-        return 'http://dev.ask-cs.com/';
-        // return 'http://askpack.ask-cs.com/';
-      })(),
-
-      namespace: (function ()
-      {
-        return "teamup-dev";
-        // return "teamup-demo";
-      })(),
+      namespace: 'teamup-dev',
 
       formats: {
         date:         'dd-MM-yyyy',
@@ -148,6 +118,7 @@ define(
           showNavigation:   false,
           intervalMin: 1000 * 60 * 60 * 1
         },
+        // TODO: Remove unused config properties
         config:  {
           zoom:       '0.4',
           bar:        false,
@@ -206,10 +177,7 @@ define(
 
       states: [
         'com.ask-cs.State.Available',
-        'com.ask-cs.State.KNRM.BeschikbaarNoord',
-        'com.ask-cs.State.KNRM.BeschikbaarZuid',
         'com.ask-cs.State.Unavailable',
-        'com.ask-cs.State.KNRM.SchipperVanDienst',
         'com.ask-cs.State.Unreached'
       ],
 

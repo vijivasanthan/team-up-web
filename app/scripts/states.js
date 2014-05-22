@@ -82,7 +82,7 @@ define(
 
               $rootScope.location = $location.path().substring(1);
 
-              $('div[ng-view]').hide();
+              angular.element('div[ng-view]').hide();
             }
           );
 
@@ -181,7 +181,7 @@ define(
 
               $rootScope.statusBar.off();
 
-              $('div[ng-view]').show();
+              angular.element('div[ng-view]').show();
             }
           );
 

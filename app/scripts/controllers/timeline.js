@@ -562,23 +562,6 @@ define(
             );
           };
 
-          $scope.destroy = {
-            timeline:   function ()
-            {
-              // Not working !! :(
-              // Sloter.pies($scope.data);
-            },
-            statistics: function ()
-            {
-              setTimeout(
-                function ()
-                {
-                  $scope.timeliner.redraw();
-                }, 10
-              );
-            }
-          };
-
           $scope.timelineOnAdd = function (form, slot)
           {
             $rootScope.planboardSync.clear();
@@ -710,7 +693,6 @@ define(
                   $scope.timeliner.refresh();
                 }
               );
-
             }
           };
 
@@ -749,6 +731,7 @@ define(
             };
           };
 
+          // TODO: Investigate on when it is run and from where?
           $scope.redrawSlot = function ()
           {
             var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false),
@@ -761,7 +744,8 @@ define(
               var slotContent = $scope.processSlotContent(selectedSlot.row);
 
               $scope.self.timeline.changeItem(
-                selectedSlot.row, {
+                selectedSlot.row,
+                {
                   'content': slotContent,
                   'start':   new Date(start),
                   'end':     new Date(end)
@@ -1014,17 +998,13 @@ define(
                   $rootScope.planboardSync.start();
                 }
               );
-
             }
           };
 
           if ($scope.timeline && $scope.timeline.main)
           {
             setTimeout(
-              function ()
-              {
-                $scope.self.timeline.redraw();
-              }, 100
+              function () { $scope.self.timeline.redraw() }, 100
             );
           }
 

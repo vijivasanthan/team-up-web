@@ -149,7 +149,7 @@ define(
               'message',
               {},
               {
-                title: "From Web-Paige" + current.toString(config.app.formats.date),
+                title: "Van: TeamUp" + current.toString(config.app.formats.date),
                 body:     newMessage,
                 sendTime: current.getTime()
               }).then(

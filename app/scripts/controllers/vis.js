@@ -344,35 +344,7 @@ define(
                   members,
                   function (member)
                   {
-                    // TODO: Remove this completely later on!
-                    //                    var getAvatarURLFromStorage = function (id)
-                    //                    {
-                    //                      var avatarUrls = angular.fromJson(getFromLocalStorage('avatarUrls'));
-                    //                      var ret;
-                    //
-                    //                      if (avatarUrls)
-                    //                      {
-                    //                        angular.forEach(
-                    //                          avatarUrls, function (item)
-                    //                          {
-                    //                            if (item.id == id)
-                    //                            {
-                    //                              ret = item.url;
-                    //                            }
-                    //                          });
-                    //                      }
-                    //
-                    //                      return ret;
-                    //                    };
-                    //
-                    // var imgfile = Storage.avatar.geturl(member.uuid);
-                    var imgfile = '';
-                    var imgURL = $scope.imgHost + imgfile;
-
-                    if (typeof imgfile == "undefined")
-                    {
-                      imgURL = config.app.noImgURL;
-                    }
+                    var imgURL = '';
 
                     var avatar = '<div class="roundedPicSmall memberStateNone" ' +
                                  'style="float: left; background-image: url(' +
@@ -687,7 +659,7 @@ define(
           $scope.processRelatedUsers = function (selectedSlot)
           {
             var relatedUsers = [];
-            var memberId = $(selectedSlot.group).attr("memberId");
+            var memberId = angular.element(selectedSlot.group).attr("memberId");
 
             if ($scope.views.teams)
             {

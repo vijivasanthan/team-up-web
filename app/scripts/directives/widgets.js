@@ -17,7 +17,7 @@ define(
 
           scope.$watch(
             'message.receviers',
-            function () { $(element[0]).trigger('liszt:updated') }
+            function () { angular.element(element[0]).trigger('liszt:updated') }
           );
 
           element.chosen();
@@ -56,9 +56,9 @@ define(
 
                 $scope.sendFile = function (el)
                 {
-                  var $form = $(el).parents('form');
+                  var $form = angular.element(el).parents('form');
 
-                  if ($(el).val() == '')
+                  if (angular.element(el).val() == '')
                   {
                     return false;
                   }
@@ -89,7 +89,7 @@ define(
                       },
                       success:        function (responseText, statusText, xhr, form)
                       {
-                        var ar = $(el).val().split('\\'),
+                        var ar = angular.element(el).val().split('\\'),
                             filename = ar[ar.length - 1];
 
                         $form.removeAttr('action');
