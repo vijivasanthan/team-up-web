@@ -30,7 +30,11 @@ define(
             caches:      {},
             connections: {},
 
-            areas: function () { this.options.grid.height = angular.element('#wrap').height() - (270 + 200) + 'px' },
+            areas: function ()
+            {
+              this.options.grid.height = angular.element('#wrap')
+                                           .height() - (270 + 200) + 'px'
+            },
 
             build: function (id, data)
             {
@@ -43,44 +47,54 @@ define(
               );
 
               angular.forEach(
-                this.stores, function (store)
+                this.stores,
+                function (store)
                 {
                   var filtered = [];
 
                   angular.forEach(
-                    store.data, function (node)
+                    store.data,
+                    function (node)
                     {
                       node._id && filtered.push(node);
-                    });
+                    }
+                  );
 
                   store.data = store.filteredData = filtered;
-                });
+                }
+              );
 
               this.grids[key].draw(this.store(id, data));
 
               links.events.addListener(
-                this.grids[key], 'expand',
+                this.grids[key],
+                'expand',
                 function (properties) { console.log('expanding ->', key, properties) }
               );
 
               links.events.addListener(
-                this.grids[key], 'collapse',
+                this.grids[key],
+                'collapse',
                 function (properties) { console.log('collapsing ->', key, properties) }
               );
 
               links.events.addListener(
-                this.grids[key], 'select',
+                this.grids[key],
+                'select',
                 function (properties) { console.log('selecting ->', key, properties) }
               );
 
               links.events.addListener(
-                this.grids[key], 'remove',
+                this.grids[key],
+                'remove',
                 function (event)
                 {
                   var items = event.items;
 
                   for (var i = 0; i < items.length; i ++)
+                  {
                     _this.stores[key].removeLink(items[i]);
+                  }
                 }
               );
             },
@@ -101,17 +115,19 @@ define(
               {
                 function isUnique (item, data)
                 {
-                  var ret = true;
+                  var result = true;
 
                   for (var i = 0; i < data.length; i ++)
-                    if (item._id == data[i]._id) ret = false;
+                  {
+                    if (item._id == data[i]._id) result = false;
+                  }
 
                   if (item.nodes)
                   {
-                    ret = false;
+                    result = false;
                   }
 
-                  return ret;
+                  return result;
                 }
 
                 for (var i = 0; i < items.length; i ++)
@@ -141,7 +157,8 @@ define(
                       {
                         'totalItems': this.filteredData.length,
                         'items':      items
-                      });
+                      }
+                    );
                   }
 
                   this.trigger('change', undefined);
@@ -181,7 +198,8 @@ define(
                   {
                     'items':      [targetItem],
                     'totalItems': this.data.length
-                  });
+                  }
+                );
 
                 this.update();
               };
@@ -208,10 +226,12 @@ define(
                 var filtered = [];
 
                 angular.forEach(
-                  _this.stores[item._parent].data, function (data)
+                  _this.stores[item._parent].data,
+                  function (data)
                   {
                     (data._id != item._id) && filtered.push(data);
-                  });
+                  }
+                );
 
                 _this.stores[item._parent].data = _this.stores[item._parent].filteredData = filtered;
 
@@ -225,7 +245,8 @@ define(
                     last = pieces[pieces.length - 1];
 
                 angular.forEach(
-                  _this.connections[section][last], function (connection)
+                  _this.connections[section][last],
+                  function (connection)
                   {
                     if (connection._id != item._id)
                     {
@@ -238,7 +259,8 @@ define(
 
                       processed.push(connection);
                     }
-                  });
+                  }
+                );
 
                 _this.connections[section][last] = _this.caches[item._parent] = processed;
 
@@ -246,21 +268,25 @@ define(
               };
 
               links.events.addListener(
-                this.stores[key], 'change',
+                this.stores[key],
+                'change',
                 function ()
                 {
                   angular.forEach(
-                    _this.stores[key].data, function (data)
+                    _this.stores[key].data,
+                    function (data)
                     {
                       data._parent = key;
-                    });
+                    }
+                  );
 
                   _this.caches[key] = _this.stores[key].data;
                 }
               );
 
               links.events.addListener(
-                this.stores[key], 'unlink',
+                this.stores[key],
+                'unlink',
                 function (event)
                 {
                   var items = event.items;
@@ -277,12 +303,14 @@ define(
                 if (this.connections.teamClients.length > 0)
                 {
                   angular.forEach(
-                    this.connections.teamClients, function (connection)
+                    this.connections.teamClients,
+                    function (connection)
                     {
                       var index;
 
                       angular.forEach(
-                        _this.stores['teamClients_right'].data, function (data, ind)
+                        _this.stores['teamClients_right'].data,
+                        function (data, ind)
                         {
                           if (connection.targetItem.id == data._id)
                           {
@@ -303,14 +331,19 @@ define(
                               'links':    names.join(', '),
                               '_ids':     ids.join(', '),
                               '_actions': [
-                                {'event': 'unlink', 'text': 'unlink'}
+                                {
+                                  'event': 'unlink',
+                                  'text':  'unlink'
+                                }
                               ]
                             };
 
                             _this.stores['teamClients_right'].update();
                           }
-                        });
-                    });
+                        }
+                      );
+                    }
+                  );
                 }
               }
 
@@ -320,20 +353,22 @@ define(
             process: function (id, data)
             {
               var _this = this,
+                  filtered = [],
                   key = $scope.treeGrid.grid + '_' + id;
 
-              var filtered = [];
-
               angular.forEach(
-                data, function (node)
+                data,
+                function (node)
                 {
                   (node.id) && filtered.push(node);
-                });
+                }
+              );
 
               this.processed[key] = [];
 
               angular.forEach(
-                filtered, function (node)
+                filtered,
+                function (node)
                 {
                   var fid = _this.grid + '_' + id + '_' + node.id;
 
@@ -354,10 +389,7 @@ define(
                         {
                           _this.stores[fid].appendItems(
                             _this.connections.teams[node.id],
-                            function (results)
-                            {
-                              _this.stores[fid].totalItems = results.totalItems;
-                            }
+                            function (results) { _this.stores[fid].totalItems = results.totalItems }
                           );
                         }, 100);
                     }
@@ -371,10 +403,7 @@ define(
                         {
                           _this.stores[fid].appendItems(
                             _this.connections.clients[node.id],
-                            function (results)
-                            {
-                              _this.stores[fid].totalItems = results.totalItems;
-                            }
+                            function (results) { _this.stores[fid].totalItems = results.totalItems }
                           );
                         }, 100);
                     }
@@ -406,27 +435,35 @@ define(
               switch (this.type)
               {
                 case '1:1':
+
                   switch (id)
                   {
                     case 'left':
+
                       options.dataTransfer = {
                         allowedEffect: 'link'
                       };
+
                       break;
 
                     case 'right':
+
                       options.dataTransfer = {
                         dropEffect: 'link'
                       };
+
                       break;
                   }
+
                   break;
 
                 case '1:n':
+
                   options.dataTransfer = {
                     allowedEffect: 'copy',
                     dropEffect:    'copy'
                   };
+
                   break;
               }
 
@@ -442,7 +479,8 @@ define(
           };
 
           $rootScope.$on(
-            'TreeGridManager', function ()
+            'TreeGridManager',
+            function ()
             {
               $scope.treeGrid.grid = arguments[1];
               $scope.treeGrid.type = arguments[2];
@@ -452,10 +490,8 @@ define(
               (function ($scope)
               {
                 setTimeout(
-                  function ()
-                  {
-                    $scope.treeGrid.init();
-                  }, 100)
+                  function () { $scope.treeGrid.init() }, 100
+                )
               })($scope);
             });
 
@@ -466,17 +502,17 @@ define(
             var connections = {};
 
             angular.forEach(
-              sources, function (source)
+              sources,
+              function (source)
               {
                 if (source.nodes.data.length > 0)
                 {
                   var nodes = [];
 
                   angular.forEach(
-                    source.nodes.data, function (node)
-                    {
-                      nodes.push(node._id);
-                    });
+                    source.nodes.data,
+                    function (node) { nodes.push(node._id) }
+                  );
 
                   connections[source._id] = nodes;
                 }
@@ -492,13 +528,15 @@ define(
                   connections = {};
 
               angular.forEach(
-                data, function (node)
+                data,
+                function (node)
                 {
                   if (node._ids || node.links)
                   {
                     connections[node._id] = node._ids;
                   }
-                });
+                }
+              );
 
               $rootScope.$broadcast('save:teamClients', connections);
             },
@@ -527,7 +565,8 @@ define(
                   connections = {};
 
               angular.forEach(
-                data, function (node)
+                data,
+                function (node)
                 {
                   if (node._ids || node.links)
                   {
@@ -543,6 +582,7 @@ define(
             clients: function () { return $scope.extract($scope.treeGrid.stores['clients_right'].data) }
           };
         }
-      ]);
+      ]
+    );
   }
 );

@@ -108,7 +108,6 @@ require(
 
     'controllers/clients',
     'controllers/login',
-    'controllers/logout',
     'controllers/manage',
     'controllers/messages',
     'controllers/planboard',

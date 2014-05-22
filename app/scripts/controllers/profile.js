@@ -7,17 +7,23 @@ define(
     controllers.controller(
       'profileCtrl',
       [
-        '$rootScope', '$scope', '$q', '$location', '$window', '$route', 'data', 'Store', 'Teams', 'Dater',
-        '$filter', 'TeamUp',
+        '$rootScope',
+        '$scope',
+        '$q',
+        '$location',
+        '$window',
+        '$route',
+        'data',
+        'Store',
+        'Teams',
+        'Dater',
+        '$filter',
+        'TeamUp',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams, Dater, $filter, TeamUp)
         {
           $rootScope.fixStyles();
 
           $scope.self = this;
-
-          // TODO: Remove these ones too!
-          $scope.imgHost = config.app.host;
-          $scope.ns = config.app.ns;
 
           $scope.roles = config.app.roles;
           $scope.mfuncs = config.app.mfunctions;
@@ -81,33 +87,6 @@ define(
             $scope.views[hash] = true;
 
             $scope.views.user = (($rootScope.app.resources.uuid == $route.current.params.userId));
-
-
-            //            // load the avatar by ajax way
-            //            var memberId = $route.current.params.userId;
-            //            var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + memberId + "/photourl";
-            //
-            //            Teams.loadImg(imgURL).then(
-            //              function (result)
-            //              {
-            //                // console.log("loading pic " + imgURL);
-            //
-            //                var imgId = memberId.replace(".", "").replace("@", "");
-            //
-            //                if (result.status && (
-            //                  result.status == 404 || result.status == 403 || result.status == 500))
-            //                {
-            //                  console.log("loading pic ", result);
-            //                  angular.element('#profile #img_' + imgId).css('background-image', 'url(' + $scope.noImgURL + ')');
-            //                }
-            //                else
-            //                {
-            //                  var realImgURL = $scope.imgHost.replace("\\:", ":") + result.path;
-            //                  angular.element('#profile #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-            //                }
-            //              }, function (error) { console.log("error when load pic " + error) });
-
-
           }
 
           $scope.setViewTo = function (hash)
@@ -122,8 +101,6 @@ define(
               }
             );
           };
-
-          // console.log('userID ->', $route.current.params.userId, $rootScope.app.resources.uuid);
 
           $scope.save = function (resources)
           {
@@ -153,6 +130,7 @@ define(
             {
               console.log(error);
               $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
               return;
             }
 
@@ -214,49 +192,26 @@ define(
                         angular.forEach(
                           resources.teamUuids, function (teamId)
                           {
-                            var routePara = { uuid: teamId };
-
-                            // TODO: Message is not absent in localization file so turned off
+                            // FIXME: Message is not absent in localization file so turned off
                             // $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
 
-                            Teams.query(false, routePara)
-                              .then(
+                            Teams.query(
+                              false,
+                              { uuid: teamId }
+                            ).then(
                               function () { $rootScope.statusBar.off() }
                             );
-                          });
+                          }
+                        );
                       }
-                    });
+                    }
+                  );
                 }
-              });
+              }
+            );
           };
 
-
           $scope.editProfile = function () { setView('edit') };
-
-
-          //          $scope.editImg = function ()
-          //          {
-          //            $scope.uploadURL = $scope.imgHost + $scope.ns +
-          //                               "/team/member/" + $route.current.params.userId + "/photourl";
-          //
-          //            Teams.loadImg($scope.uploadURL)
-          //              .then(
-          //              function (result)
-          //              {
-          //                var imgHost = $scope.imgHost.replace("\\", "");
-          //
-          //                if (result.path)
-          //                {
-          //                  $scope.avatarURL = imgHost + result.path;
-          //                }
-          //
-          //                $scope.uploadURL = imgHost + $scope.ns +
-          //                                   "/team/member/" + $route.current.params.userId + "/photo";
-          //
-          //                $scope.setViewTo('editImg');
-          //              });
-          //          };
-
 
           $scope.deleteProfile = function ()
           {
@@ -297,11 +252,12 @@ define(
                       function (error) { console.log(error) }
                     );
                   }
-                }, function (error) { console.log(error) });
+                }, function (error) { console.log(error) }
+              );
             }
           };
         }
-      ])
-    ;
+      ]
+    );
   }
 );

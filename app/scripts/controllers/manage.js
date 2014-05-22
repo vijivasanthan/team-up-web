@@ -82,9 +82,9 @@ define(
 
               data.groups = Store('app').get('ClientGroups');
 
-              var groupIds = [];
-              var clients = [];
-              var clientIds = [];
+              var groupIds = [],
+                  clients = [],
+                  clientIds = [];
 
               angular.forEach(
                 data.groups,
@@ -132,7 +132,8 @@ define(
                       }
                     );
                   }
-                });
+                }
+              );
 
               data.clients = clients;
 
@@ -140,17 +141,17 @@ define(
                 teamsLocal,
                 function (team)
                 {
-                  var kp = true;
+                  var flag = true;
 
                   angular.forEach(
                     Store('app').get('teamGroup_' + team.uuid),
                     function (group)
                     {
-                      if (groupIds.indexOf(group.id) != - 1 && kp)
+                      if (groupIds.indexOf(group.id) != - 1 && flag)
                       {
                         connections.teamClients[team.uuid] = group.id;
 
-                        kp = false;
+                        flag = false;
                       }
                     });
 
@@ -201,7 +202,8 @@ define(
 
           $scope.setViewTo = function (hash)
           {
-            if (typeof $scope.dataChanged != "undefined" && $scope.dataChanged($location.$$hash))
+            if (typeof $scope.dataChanged != "undefined" &&
+                $scope.dataChanged($location.$$hash))
             {
               if (! confirm($rootScope.ui.teamup.managePanelchangePrompt))
               {
@@ -212,14 +214,16 @@ define(
             }
 
             $scope.$watch(
-              hash, function ()
+              hash,
+              function ()
               {
                 $location.hash(hash);
 
                 setView(hash);
 
                 $scope.manage(hash);
-              });
+              }
+            );
           };
 
           $scope.setViewTo('teamClients');
@@ -252,7 +256,8 @@ define(
                       {
                         connection.targetItem = team;
                       }
-                    });
+                    }
+                  );
 
                   var _group;
 
@@ -278,15 +283,18 @@ define(
               var population = {};
 
               angular.forEach(
-                connections, function (nodes, key)
+                connections,
+                function (nodes, key)
                 {
                   population[key] = [];
 
                   angular.forEach(
-                    nodes, function (kid)
+                    nodes,
+                    function (kid)
                     {
                       angular.forEach(
-                        data, function (node)
+                        data,
+                        function (node)
                         {
                           if (node.id == kid)
                           {
@@ -295,7 +303,8 @@ define(
                                 _id:  node.id,
                                 name: node.name,
                                 _parent: section + key
-                              });
+                              }
+                            );
                           }
                         });
                     });
@@ -356,29 +365,33 @@ define(
             }
           };
 
-          $scope.getChanges = function (preTeams, afterTeams)
+          $scope.getChanges = function (beforeTeams, afterTeams)
           {
             var changes = {};
 
             angular.forEach(
-              preTeams, function (pMembers, tId)
+              beforeTeams, 
+              function (_beforeTeam, tId)
               {
                 var notChanged = [];
                 var afterMembers = afterTeams[tId];
 
                 // find the unchanged items
                 angular.forEach(
-                  pMembers, function (p_mem)
+                  _beforeTeam, 
+                  function (_beforeTeamMember)
                   {
                     angular.forEach(
-                      afterMembers, function (at)
+                      afterMembers, 
+                      function (afterTeam)
                       {
-                        if (p_mem == at)
+                        if (_beforeTeamMember == afterTeam)
                         {
-                          notChanged.push(p_mem);
+                          notChanged.push(_beforeTeamMember);
                         }
                       });
-                  });
+                  }
+                );
 
                 /*
                  * try to remove the unchanged items from both list
@@ -389,16 +402,18 @@ define(
                  */
 
                 angular.forEach(
-                  notChanged, function (nc)
+                  notChanged, 
+                  function (notchangedNode)
                   {
-                    pMembers.splice(pMembers.indexOf(nc), 1);
-                    afterMembers.splice(afterMembers.indexOf(nc), 1);
+                    _beforeTeam.splice(_beforeTeam.indexOf(notchangedNode), 1);
+                    
+                    afterMembers.splice(afterMembers.indexOf(notchangedNode), 1);
                   });
 
-                var addMembers = [];
-                var removeMembers = [];
+                var addMembers = [],
+                    removeMembers = [];
 
-                angular.copy(pMembers, removeMembers);
+                angular.copy(_beforeTeam, removeMembers);
                 angular.copy(afterMembers, addMembers);
 
                 if (addMembers.length > 0 ||
@@ -414,18 +429,21 @@ define(
 
                 // add the nonChanged item back
                 angular.forEach(
-                  notChanged, function (nc)
+                  notChanged, 
+                  function (notChangedNode)
                   {
-                    pMembers.push(nc);
+                    _beforeTeam.push(notChangedNode);
 
-                    afterMembers.push(nc);
-                  });
+                    afterMembers.push(notChangedNode);
+                  }
+                );
 
               });
 
             return changes;
           };
 
+          // TODO: Remove these intern angular methods!!
           /**
            * Save function listeners
            */
@@ -433,62 +451,82 @@ define(
            * remove the duplicated listeners when going back to the controller
            * temp solution
            */
-          if ($rootScope.$$listeners["save:teamClients"] && $rootScope.$$listeners["save:teamClients"].length > 0)
+          if ($rootScope.$$listeners["save:teamClients"] &&
+              $rootScope.$$listeners["save:teamClients"].length > 0)
           {
             $rootScope.$$listeners["save:teamClients"] = [];
           }
 
-          if ($rootScope.$$listeners["save:teams"] && $rootScope.$$listeners["save:teams"].length > 0)
+          if ($rootScope.$$listeners["save:teams"] &&
+              $rootScope.$$listeners["save:teams"].length > 0)
           {
             $rootScope.$$listeners["save:teams"] = [];
           }
 
-          if ($rootScope.$$listeners["save:clients"] && $rootScope.$$listeners["save:clients"].length > 0)
+          if ($rootScope.$$listeners["save:clients"] &&
+              $rootScope.$$listeners["save:clients"].length > 0)
           {
             $rootScope.$$listeners["save:clients"] = [];
           }
 
           $scope.getChangesFromTeamClients = function (argument)
           {
-            var preTc = $scope.connections.teamClients;
-            var afterTc = argument;
+            var beforeTeamClients = $scope.connections.teamClients,
+                afterTeamClients = argument;
 
             var teamIds = [];
 
             angular.forEach(
-              preTc, function (preG, teamId_i)
+              beforeTeamClients,
+              function (teamClient, i)
               {
-                if (teamIds.indexOf(teamId_i) == - 1)
+                if (teamIds.indexOf(i) == - 1)
                 {
-                  teamIds.push(teamId_i);
+                  teamIds.push(i);
                 }
-              });
+              }
+            );
 
             angular.forEach(
-              afterTc, function (afterG, teamId_j)
+              afterTeamClients,
+              function (teamClient, i)
               {
-                if (teamIds.indexOf(teamId_j) == - 1)
+                if (teamIds.indexOf(i) == - 1)
                 {
-                  teamIds.push(teamId_j);
+                  teamIds.push(i);
                 }
               });
 
             var changes = {};
 
             angular.forEach(
-              teamIds, function (tId)
+              teamIds,
+              function (tId)
               {
-                if (typeof preTc[tId] == 'undefined' && afterTc[tId])
+                if (typeof beforeTeamClients[tId] == 'undefined' &&
+                    afterTeamClients[tId])
                 {
-                  changes[tId] = {a: [afterTc[tId]], r: []};
+                  changes[tId] = {
+                    a: [afterTeamClients[tId]],
+                    r: []
+                  };
                 }
-                else if (typeof afterTc[tId] == 'undefined' && preTc[tId])
+                else if (typeof afterTeamClients[tId] == 'undefined' &&
+                         beforeTeamClients[tId])
                 {
-                  changes[tId] = {r: [preTc[tId]], a: []};
+                  changes[tId] = {
+                    r: [beforeTeamClients[tId]],
+                    a: []
+                  };
                 }
-                else if (preTc[tId] && afterTc[tId] && preTc[tId] != afterTc[tId])
+                else if (beforeTeamClients[tId] &&
+                         afterTeamClients[tId] &&
+                         beforeTeamClients[tId] != afterTeamClients[tId])
                 {
-                  changes[tId] = {a: [afterTc[tId]], r: [preTc[tId]]};
+                  changes[tId] = {
+                    a: [afterTeamClients[tId]],
+                    r: [beforeTeamClients[tId]]
+                  };
                 }
               });
 
@@ -499,16 +537,19 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-            Teams.manageGroups(changes).then(
+            Teams.manageGroups(changes)
+              .then(
               function (results)
               {
                 var error = "";
+
                 angular.forEach(
-                  results, function (res, i)
+                  results,
+                  function (result)
                   {
-                    if (res.error)
+                    if (result.error)
                     {
-                      error += res.error.data.error;
+                      error += result.error.data.error;
                     }
                   });
 
@@ -523,11 +564,13 @@ define(
                 }
 
                 $rootScope.statusBar.off();
-              });
+              }
+            );
           };
 
           $rootScope.$on(
-            'save:teamClients', function ()
+            'save:teamClients',
+            function ()
             {
               var changes = $scope.getChangesFromTeamClients(arguments[1]);
 
@@ -547,7 +590,8 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-            Teams.manage(changes).then(
+            Teams.manage(changes)
+              .then(
               function ()
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -571,9 +615,7 @@ define(
             'save:teams',
             function ()
             {
-              var preTeams = $scope.connections.teams;
-              var afterTeams = arguments[1];
-              var changes = $scope.getChanges(preTeams, afterTeams);
+              var changes = $scope.getChanges($scope.connections.teams, arguments[1]);
 
               if (angular.equals({}, changes))
               {
@@ -583,15 +625,14 @@ define(
               {
                 $scope.applyTeamsChanges(changes);
               }
-            });
+            }
+          );
 
           $rootScope.$on(
             'save:clients',
             function ()
             {
-              var preClients = $scope.connections.clients;
-              var afterClients = arguments[1];
-              var changes = $scope.getChanges(preClients, afterClients);
+              var changes = $scope.getChanges($scope.connections.clients, arguments[1]);
 
               if (angular.equals({}, changes))
               {
@@ -612,30 +653,33 @@ define(
                   }
                 );
               }
-            });
+            }
+          );
 
-          $scope.dataChanged = function (currentLoc)
+          $scope.dataChanged = function (current)
           {
-            var loc_parts = currentLoc.split("#");
-            var tab = loc_parts[loc_parts.length - 1];
-            var changes = {};
+            var parts = current.split("#"),
+                tab = parts[parts.length - 1],
+                changes = {};
 
             if (tab == "teamClients")
             {
-              var argument = $scope.$$childTail.getData.teamClients();
-              changes = $scope.getChangesFromTeamClients(argument);
+              // TODO: Remove this intern angular method
+              changes = $scope.getChangesFromTeamClients($scope.$$childTail.getData.teamClients());
             }
             else if (tab == "teams")
             {
-              var preTeams = $scope.connections.teams;
-              var afterTeams = $scope.$$childTail.getData.teams();
-              changes = $scope.getChanges(preTeams, afterTeams);
+              changes = $scope.getChanges(
+                $scope.connections.teams,
+                $scope.$$childTail.getData.teams()
+              );
             }
             else if (tab == "clients")
             {
-              var preClients = $scope.connections.clients;
-              var afterClients = $scope.$$childTail.getData.clients();
-              changes = $scope.getChanges(preClients, afterClients);
+              changes = $scope.getChanges(
+                $scope.connections.clients,
+                $scope.$$childTail.getData.clients()
+              );
             }
 
             return (angular.equals({}, changes)) ? false : true;

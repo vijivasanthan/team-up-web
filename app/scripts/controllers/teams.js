@@ -26,10 +26,6 @@ define(
 
           var params = $location.search();
 
-          // TODO: Remove these ones too!
-          $scope.imgHost = config.app.host;
-          $scope.ns = config.app.ns;
-
           $scope.search = { query: '' };
 
           $scope.selection = {};
@@ -37,6 +33,8 @@ define(
           $scope.data = data;
 
           $scope.roles = config.app.roles;
+
+          // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
           var uuid, view;
@@ -287,48 +285,49 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
+                  // TODO: Repetitive code!
                   Teams.query(false, result)
                     .then(
-                    function (queryRs)
+                    function (queries)
                     {
-                      if (queryRs.error)
+                      if (queries.error)
                       {
                         $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
 
-                        console.warn('error ->', queryRs);
+                        console.warn('error ->', queries);
                       }
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                         $scope.closeTabs();
 
-                        $scope.data = queryRs;
+                        $scope.data = queries;
 
                         angular.forEach(
-                          queryRs.teams,
-                          function (t_obj)
+                          queries.teams,
+                          function (team)
                           {
-                            if (t_obj.uuid == result.uuid)
+                            if (team.uuid == result.uuid)
                             {
-                              $scope.teams = queryRs.teams;
+                              $scope.teams = queries.teams;
 
                               angular.forEach(
-                                queryRs.teams,
-                                function (t)
+                                queries.teams,
+                                function (_team)
                                 {
-                                  if (t.uuid == t_obj.uuid)
+                                  if (_team.uuid == team.uuid)
                                   {
-                                    $scope.team = t;
+                                    $scope.team = _team;
                                   }
                                 });
 
-                              $scope.members = data.members[t_obj.uuid];
+                              $scope.members = data.members[team.uuid];
 
-                              $scope.current = t_obj.uuid;
+                              $scope.current = team.uuid;
 
                               $scope.$watch(
                                 $location.search(),
-                                function () { $location.search({ uuid: t_obj.uuid }) }
+                                function () { $location.search({ uuid: team.uuid }) }
                               );
                             }
                           });
@@ -395,47 +394,48 @@ define(
 
                   var routePara = {'uuid': result.teamId};
 
+                  // TODO: Repetitive code!
                   Teams.query(false, routePara)
                     .then(
-                    function (queryRs)
+                    function (queries)
                     {
-                      if (queryRs.error)
+                      if (queries.error)
                       {
                         $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
-                        console.warn('error ->', queryRs);
+                        console.warn('error ->', queries);
                       }
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                         $scope.closeTabs();
 
-                        $scope.data = queryRs;
+                        $scope.data = queries;
 
                         angular.forEach(
-                          queryRs.teams,
-                          function (t_obj)
+                          queries.teams,
+                          function (team)
                           {
-                            if (t_obj.uuid == routePara.uuid)
+                            if (team.uuid == routePara.uuid)
                             {
-                              $scope.teams = queryRs.teams;
+                              $scope.teams = queries.teams;
 
                               angular.forEach(
-                                queryRs.teams,
-                                function (t)
+                                queries.teams,
+                                function (_team)
                                 {
-                                  if (t.uuid == t_obj.uuid)
+                                  if (_team.uuid == team.uuid)
                                   {
-                                    $scope.team = t;
+                                    $scope.team = _team;
                                   }
                                 });
 
-                              $scope.members = data.members[t_obj.uuid];
+                              $scope.members = data.members[team.uuid];
 
-                              $scope.current = t_obj.uuid;
+                              $scope.current = team.uuid;
 
                               $scope.$watch(
                                 $location.search(),
-                                function () { $location.search({ uuid: t_obj.uuid }) }
+                                function () { $location.search({ uuid: team.uuid }) }
                               );
                             }
                           });
@@ -463,7 +463,7 @@ define(
           $scope.noSharedStates = function (states)
           {
             var flag = true,
-                ret = true;
+                result = true;
 
             angular.forEach(
               states,
@@ -471,13 +471,13 @@ define(
               {
                 if (state.share && flag)
                 {
-                  ret = false;
+                  result = false;
                   flag = false;
                 }
               }
             );
 
-            return ret;
+            return result;
           };
 
           $scope.deleteTeam = function ()
@@ -573,11 +573,11 @@ define(
 
                               angular.forEach(
                                 data.members[teamId],
-                                function (mem, j)
+                                function (member, i)
                                 {
-                                  if (mem.uuid == memberId)
+                                  if (member.uuid == memberId)
                                   {
-                                    data.members[teamId].splice(j, 1);
+                                    data.members[teamId].splice(i, 1);
                                   }
                                 }
                               );

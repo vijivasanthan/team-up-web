@@ -17,7 +17,8 @@ define(
         'States',
         'Browsers',
         'Dater',
-        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater)
+        'TeamUp',
+        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp)
         {
           // TODO: Remove later on (Needed for timeline info filters)
           if (! Dater.getPeriods())
@@ -356,6 +357,39 @@ define(
 
             return ret;
           };
+
+
+          $rootScope.logout = function ()
+          {
+            angular.element('.navbar')
+              .hide();
+
+            angular.element('#footer')
+              .hide();
+
+            var loginData = Store('app').get('loginData');
+
+            TeamUp._('logout')
+              .then(
+              function (result)
+              {
+                if (result.error)
+                {
+                  console.warn('error ->', result);
+                }
+                else
+                {
+                  Session.clear();
+
+                  Store('app').nuke();
+
+                  Store('app').save('loginData', loginData);
+
+                  $window.location.href = 'logout.html';
+                }
+              }
+            );
+          }
         }
       ]
     );

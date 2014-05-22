@@ -16,18 +16,11 @@ define(
 
           $scope.messages = [];
 
-          // TODO: Remove these ones later on!
-          $scope.imgHost = config.app.host;
-          $scope.ns = config.app.ns;
-
-
           $scope.renderMessage = function ()
           {
             TeamUp._(
               'chats',
-              {
-                third: $scope.chatTeamId
-              }
+              { third: $scope.chatTeamId }
             ).then(
               function (messages)
               {
@@ -54,7 +47,8 @@ define(
                 messages = $filter('orderBy')(messages, 'sendTime');
 
                 angular.forEach(
-                  messages, function (message, i)
+                  messages,
+                  function (message, i)
                   {
                     var minDate = $filter('nicelyDate')(parseInt(message.sendTime));
 
@@ -97,51 +91,24 @@ define(
                     {
                       chatMembers.push(message.senderUuid);
                     }
-                  });
-
-                //                // load the avatar img
-                //                angular.forEach(
-                //                  chatMembers, function (mId, i)
-                //                  {
-                //                    var imgURL = $scope.imgHost + $scope.ns + "/team/member/" + mId + "/photo";
-                //
-                //                    // var imgId = mId.replace(".", "").replace("@", "");
-                //                    // angular.element('#chat-content #img_' + imgId).css('background-image', 'url(' + imgURL + ')');
-                //
-                //                    Teams
-                //                      .loadImg(imgURL).
-                //                      then(
-                //                      function (result)
-                //                      {
-                //                        // console.log("loading pic " + imgURL);
-                //
-                //                        var imgId = mId.replace(".", "").replace("@", "");
-                //
-                //                        if (result.status && (result.status == 404 || result.status == 403 || result.status == 500))
-                //                        {
-                //                          console.log("no pics ", result);
-                //                        }
-                //                        else
-                //                        {
-                //                          var realImgURL = $scope.imgHost + result.path;
-                //                          angular.element('#chat-content #img_' + imgId).css('background-image', 'url(' + realImgURL + ')');
-                //                        }
-                //                      }, function (error) { console.log("error when load pic " + error) });
-                //
-                //                  });
+                  }
+                );
 
                 // scroll to the bottom of the chat window
                 // TODO: Is this a handy way of doing this?
                 setTimeout(
                   function ()
                   {
-                    angular.element('#chat-content #messageField').focus();
-                    angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
-                  }, 100 * 1000); // Temporarily made it longer till there is a better solution
+                    angular.element('#chat-content #messageField')
+                      .focus();
+
+                    angular.element('#chat-content')
+                      .scrollTop(angular.element('#chat-content')[0].scrollHeight);
+                  }, 100 * 1000); // FIXME: Temporarily made it longer till there is a better solution
 
               },
-              function (error) { console.log(error) });
-
+              function (error) { console.log(error) }
+            );
           };
 
 
@@ -170,6 +137,7 @@ define(
             if (typeof newMessage == "undefined" || newMessage == "")
             {
               $rootScope.notifier.error($rootScope.ui.message.emptyMessageBody);
+
               return;
             }
 
@@ -188,9 +156,9 @@ define(
               function ()
               {
                 $scope.renderMessage();
+
                 $rootScope.statusBar.off();
                 $scope.newMessage = "";
-
               },
               function (error)
               {
@@ -200,6 +168,7 @@ define(
             );
           };
         }
-      ]);
+      ]
+    );
   }
 );

@@ -20,16 +20,13 @@ define(
         'Dater',
         function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater)
         {
-          // TODO: Investigate for removing
-          var self = this;
-
           // TODO: Soon not needed!
           Dater.registerPeriods();
 
-
           if ($location.path() == '/logout')
           {
-            angular.element('body').css(
+            angular.element('body')
+              .css(
               {
                 'backgroundColor': '#1dc8b6',
                 'backgroundImage': 'none'
@@ -72,10 +69,17 @@ define(
             Store('app').save('app', '{}');
           }
 
-          angular.element('.navbar').hide();
-          angular.element('#footer').hide();
-          angular.element('#watermark').hide();
-          angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
+          angular.element('.navbar')
+            .hide();
+
+          angular.element('#footer')
+            .hide();
+
+          angular.element('#watermark')
+            .hide();
+
+          angular.element('body')
+            .css({ 'backgroundColor': '#1dc8b6' });
 
           var loginData = Store('app').get('loginData');
 
@@ -83,7 +87,8 @@ define(
 
           $scope.login = function ()
           {
-            angular.element('#alertDiv').hide();
+            angular.element('#alertDiv')
+              .hide();
 
             if (! $scope.loginData || ! $scope.loginData.username || ! $scope.loginData.password)
             {
@@ -91,12 +96,12 @@ define(
                 login: {
                   display: true,
                   type:    'alert-error',
-                  message: angular.elementrootScope.ui.login.alert_fillfiled
+                  message: $rootScope.ui.login.alert_fillfiled
                 }
               };
 
               angular.element('#login button[type=submit]')
-                .text(angular.elementrootScope.ui.login.button_login)
+                .text($rootScope.ui.login.button_login)
                 .removeAttr('disabled');
 
               return false;
@@ -115,10 +120,10 @@ define(
               }
             );
 
-            self.auth($scope.loginData.username, MD5.parse($scope.loginData.password));
+            auth($scope.loginData.username, MD5.parse($scope.loginData.password));
           };
 
-          self.auth = function (uuid, pass)
+          var auth = function (uuid, pass)
           {
             TeamUp._(
               'login',
@@ -129,13 +134,15 @@ define(
             ).then(
               function (result)
               {
-                if (result.status == 400 || result.status == 403 || result.status == 404)
+                if (result.status == 400 ||
+                    result.status == 403 ||
+                    result.status == 404)
                 {
                   $scope.alert = {
                     login: {
                       display: true,
                       type:    'alert-error',
-                      message: angular.elementrootScope.ui.login.alert_wrongUserPass
+                      message: $rootScope.ui.login.alert_wrongUserPass
                     }
                   };
 
@@ -151,7 +158,7 @@ define(
                     login: {
                       display: true,
                       type:    'alert-error',
-                      message: angular.elementrootScope.ui.login.alert_network
+                      message: $rootScope.ui.login.alert_network
                     }
                   };
 
@@ -165,7 +172,7 @@ define(
                 {
                   Session.set(result['X-SESSION_ID']);
 
-                  self.preloader();
+                  preLoader();
                 }
               }
             )
@@ -180,13 +187,18 @@ define(
             );
           }
 
-          self.preloader = function ()
+          var preLoader = function ()
           {
-            angular.element('#login').hide();
-            angular.element('#download').hide();
-            angular.element('#preloader').show();
+            angular.element('#login')
+              .hide();
 
-            self.progress(20, $rootScope.ui.login.loading_User);
+            angular.element('#download')
+              .hide();
+
+            angular.element('#preloader')
+              .show();
+
+            progress(20, $rootScope.ui.login.loading_User);
 
             TeamUp._('user')
               .then(
@@ -202,7 +214,7 @@ define(
 
                   Store('app').save('resources', resources);
 
-                  self.progress(40, $rootScope.ui.login.loading_Teams);
+                  progress(40, $rootScope.ui.login.loading_Teams);
 
                   Teams.query(true, {})
                     .then(
@@ -215,13 +227,13 @@ define(
                         console.warn('error ->', teams);
                       }
 
-                      self.progress(60, $rootScope.ui.login.loading_clientGroups);
+                      progress(60, $rootScope.ui.login.loading_clientGroups);
 
                       Teams.queryClientGroups(teams)
                         .then(
                         function ()
                         {
-                          self.progress(80, $rootScope.ui.login.loading_clientGroups);
+                          progress(80, $rootScope.ui.login.loading_clientGroups);
 
                           TeamUp._('clientsQuery')
                             .then(
@@ -231,7 +243,7 @@ define(
                                 .then(
                                 function ()
                                 {
-                                  self.progress(100, $rootScope.ui.login.loading_everything);
+                                  progress(100, $rootScope.ui.login.loading_everything);
 
                                   Teams.query()
                                     .then(
@@ -242,12 +254,16 @@ define(
                                       setTimeout(
                                         function ()
                                         {
-                                          angular.element('.navbar').show();
-                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+                                          angular.element('.navbar')
+                                            .show();
+
+                                          angular.element('body')
+                                            .css({ 'background': 'url(../images/bg.jpg) repeat' });
 
                                           if (! $rootScope.browser.mobile)
                                           {
-                                            angular.element('#footer').show();
+                                            angular.element('#footer')
+                                              .show();
                                           }
                                         }, 100);
                                     }
@@ -265,10 +281,13 @@ define(
             );
           };
 
-          self.progress = function (ratio, message)
+          var progress = function (ratio, message)
           {
-            angular.element('#preloader .progress .bar').css({ width: ratio + '%' });
-            angular.element('#preloader span').text(message);
+            angular.element('#preloader .progress .bar')
+              .css({ width: ratio + '%' });
+
+            angular.element('#preloader span')
+              .text(message);
           };
         }
       ]);

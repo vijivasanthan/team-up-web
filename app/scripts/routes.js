@@ -21,8 +21,7 @@ define(
             .when(
             '/logout',
             {
-              templateUrl: 'views/logout.html',
-              controller:  'logout'
+              templateUrl: 'views/logout.html'
             })
 
             .when(

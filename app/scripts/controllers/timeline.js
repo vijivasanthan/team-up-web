@@ -661,12 +661,14 @@ define(
                 return;
               }
 
-              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-              var memberId = angular.element(selected.group).attr('memberId');
+              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                  memberId = angular.element(selected.group)
+                    .attr('memberId');
 
               if (typeof memberId == 'undefined')
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.selectSlot);
+
                 return;
               }
 
@@ -692,6 +694,7 @@ define(
                   else
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
+
                     if ($scope.section == 'teams')
                     {
                       $scope.changeCurrent($scope.currentTeam);
@@ -700,6 +703,7 @@ define(
                     {
                       $scope.changeCurrent($scope.currentClientGroup);
                     }
+
                     $rootScope.statusBar.off();
                   }
 
@@ -747,8 +751,8 @@ define(
 
           $scope.redrawSlot = function ()
           {
-            var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false);
-            var end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
+            var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false),
+                end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
 
             var selectedSlot = $scope.self.timeline.getSelection()[0];
 
@@ -774,37 +778,38 @@ define(
           {
             var item = $scope.self.timeline.getItem(row);
 
-            var relateUserName = '';
+            var relatedUserName = '';
 
             angular.forEach(
-              $scope.relatedUsers, function (ru)
+              $scope.relatedUsers,
+              function (user)
               {
                 // client might not allowed to changed here
-                if (ru.uuid == $scope.slot.relatedUser)
+                if (user.uuid == $scope.slot.relatedUser)
                 {
-                  relateUserName = ru.name;
+                  relatedUserName = user.name;
                 }
               }
             );
 
-            var content_obj = item.content;
+            var itemContent = item.content;
 
-            if (content_obj != 'Nieuw')
+            if (itemContent != 'Nieuw')
             {
-              content_obj = $scope.getSlotContentJSON(item.content);
-              content_obj.clientUuid = $scope.slot.clientUuid;
-              content_obj.memberId = $scope.slot.memberId;
+              itemContent = $scope.getSlotContentJSON(item.content);
+              itemContent.clientUuid = $scope.slot.clientUuid;
+              itemContent.memberId = $scope.slot.memberId;
             }
             else
             {
-              content_obj = {
+              itemContent = {
                 clientUuid: $scope.slot.clientUuid,
                 memberId:   $scope.slot.memberId
               };
             }
 
-            var content = '<span>' + relateUserName + '</span>' +
-                          '<input type="hidden" value="' + angular.toJson(content_obj) + '">';
+            var content = '<span>' + relatedUserName + '</span>' +
+                          '<input type="hidden" value="' + angular.toJson(itemContent) + '">';
 
             if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
                 (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
@@ -855,31 +860,31 @@ define(
 
           $scope.getRelatedUserId = function (name)
           {
-            var ret = '';
+            var result = '';
 
             angular.forEach(
-              $scope.relatedUsers, function (user)
+              $scope.relatedUsers,
+              function (user)
               {
                 if (user.name == name)
                 {
-                  ret = user.uuid;
+                  result = user.uuid;
                 }
               }
             );
 
-            return ret;
+            return result;
           };
 
           $scope.timelineOnChange = function (direct, original, slot)
           {
             $rootScope.planboardSync.clear();
 
-            var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-            var content = $scope.getSlotContentJSON(selected.content);
-
-            var memberId = angular.element(selected.group).attr('memberId');
-
-            var options;
+            var options,
+                selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                content = $scope.getSlotContentJSON(selected.content),
+                memberId = angular.element(selected.group)
+                  .attr('memberId');
 
             if (! direct)
             {
@@ -912,9 +917,7 @@ define(
 
             TeamUp._(
               'taskUpdate',
-              {
-                taskId: values.uuid
-              }
+              { taskId: values.uuid }
             ).then(
               function (result)
               {
@@ -928,6 +931,7 @@ define(
                 else
                 {
                   $rootScope.notifier.success($rootScope.ui.planboard.slotChanged);
+
                   if ($scope.section == 'teams')
                   {
                     $scope.changeCurrent($scope.currentTeam);
@@ -958,9 +962,10 @@ define(
             }
             else
             {
-              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-              var content = $scope.getSlotContentJSON(selected.content);
-              var memberId = angular.element(selected.group).attr('memberId');
+              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                  content = $scope.getSlotContentJSON(selected.content),
+                  memberId = angular.element(selected.group)
+                    .attr('memberId');
 
               if (typeof content == 'undefined')
               {
@@ -978,9 +983,7 @@ define(
 
               TeamUp._(
                 'taskDelete',
-                {
-                  taskId: content.id
-                }
+                { taskId: content.id }
               ).then(
                 function (result)
                 {
