@@ -19,10 +19,14 @@ define(
         'TeamUp',
         function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp)
         {
-          var loadData = function (data)
+          function loadData (data)
           {
+            console.log('loading data -> ', new Date());
+
             if (data && data.local)
             {
+              console.log('loading local ->', data.local);
+
               var teamsLocal = Store('app').get('teams'),
                   connections = {
                     teamClients: {},
@@ -31,6 +35,9 @@ define(
                   },
                   members = [],
                   memberGlobalIds = [];
+
+              console.log('teamsLocal ->', teamsLocal);
+              console.log('-------------------------------------------');
 
               data.teams = [];
 
@@ -70,6 +77,11 @@ define(
                   connections.teams[team.uuid] = memberIds;
                 }
               );
+
+              console.log('dat.teams ->', data.teams);
+              console.log('memberGlobalIds ->', memberGlobalIds);
+              console.log('connections ->', connections);
+              console.log('-------------------------------------------');
               
               angular.forEach(
                 Store('app').get('members'),
@@ -90,6 +102,10 @@ define(
               data.members = members;
 
               data.groups = Store('app').get('ClientGroups');
+
+              console.log('members ->', members);
+              console.log('ClientGroups ->', data.groups);
+              console.log('-------------------------------------------');
 
               var groupIds = [],
                   clients = [],
@@ -127,6 +143,11 @@ define(
                 }
               );
 
+              console.log('clientIds ->', clientIds);
+              console.log('groupIds ->', groupIds);
+              console.log('connections ->', connections);
+              console.log('-------------------------------------------');
+
               angular.forEach(
                 Store('app').get('clients'),
                 function (client)
@@ -145,6 +166,10 @@ define(
                 }
               );
 
+              console.log('clients ->', clients);
+              console.log('clientIds ->', clientIds);
+              console.log('-------------------------------------------');
+
               data.clients = clients;
 
               angular.forEach(
@@ -153,8 +178,17 @@ define(
                 {
                   var flag = true;
 
+                  var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
+
+                  if (! angular.isArray(_teamGroup))
+                  {
+                    _teamGroup = [_teamGroup];
+                  }
+
+                  console.log('_teamGroup ->', _teamGroup);
+
                   angular.forEach(
-                    Store('app').get('teamGroup_' + team.uuid),
+                    _teamGroup,
                     function (group)
                     {
                       if (groupIds.indexOf(group.id) != - 1 && flag)
@@ -167,6 +201,11 @@ define(
                   );
                 }
               );
+
+              console.log('********************************************');
+              console.log('connections ->', connections);
+              console.log('data ->', data);
+              console.log('-------------------------------------------');
 
               $scope.connections = connections;
 
@@ -182,8 +221,8 @@ define(
                 con:  {}
               };
             }
-
-          };
+          }
+          // end of loadData
 
           // TODO: Repetitive code
           var localData = loadData(data);
@@ -590,6 +629,8 @@ define(
 
                 if (error == '')
                 {
+                  console.log('everything okay ->');
+
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   $route.reload();
                 }
