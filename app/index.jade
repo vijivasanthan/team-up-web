@@ -73,7 +73,8 @@ block navbar
 						li
 							a#account(ng-click='nav("profile")')
 								.roundedPicxSmall(style='background-image: url({{app.resources.uuid | avatar:"team":"80" }})',
-								class='{{app.resources.states|stateColor}}')
+								class='{{app.resources.states|stateColor}}',
+								ng-show='app.resources.firstName')
 								span {{app.resources.firstName}} {{app.resources.lastName}}
 						li.navbar-btn
 							a(ng-click='nav("logout")')

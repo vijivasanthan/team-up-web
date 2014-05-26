@@ -169,6 +169,7 @@ define(
                 if (index == - 1)
                 {
                   errback('Error: targetItem not found in data');
+                  
                   return;
                 }
 
@@ -187,7 +188,10 @@ define(
                   'links':    names.join(', '),
                   '_ids':     ids.join(', '),
                   '_actions': [
-                    {'event': 'unlink', 'text': 'unlink'}
+                    {
+                      'event': 'unlink',
+                      'text':  'unlink'
+                    }
                   ]
                 };
 
@@ -224,10 +228,7 @@ define(
 
                 angular.forEach(
                   _this.stores[item._parent].data,
-                  function (data)
-                  {
-                    (data._id != item._id) && filtered.push(data);
-                  }
+                  function (data) { (data._id != item._id) && filtered.push(data) }
                 );
 
                 _this.stores[item._parent].data = _this.stores[item._parent].filteredData = filtered;
@@ -271,10 +272,7 @@ define(
                 {
                   angular.forEach(
                     _this.stores[key].data,
-                    function (data)
-                    {
-                      data._parent = key;
-                    }
+                    function (data) { data._parent = key }
                   );
 
                   _this.caches[key] = _this.stores[key].data;
@@ -355,10 +353,7 @@ define(
 
               angular.forEach(
                 data,
-                function (node)
-                {
-                  (node.id) && filtered.push(node);
-                }
+                function (node) { (node.id) && filtered.push(node) }
               );
 
               this.processed[key] = [];
@@ -405,8 +400,7 @@ define(
                         }, 100);
                     }
 
-                    var data = (
-                                 _this.caches[fid]) ? _this.caches[fid] : [];
+                    var data = ( _this.caches[fid]) ? _this.caches[fid] : [];
 
                     record.nodes = _this.store(
                         id + '_' + node.id,
@@ -436,31 +430,25 @@ define(
                   switch (id)
                   {
                     case 'left':
-
                       options.dataTransfer = {
                         allowedEffect: 'link'
                       };
-
                       break;
 
                     case 'right':
-
                       options.dataTransfer = {
                         dropEffect: 'link'
                       };
-
                       break;
                   }
 
                   break;
 
                 case '1:n':
-
                   options.dataTransfer = {
                     allowedEffect: 'copy',
                     dropEffect:    'copy'
                   };
-
                   break;
               }
 
@@ -490,7 +478,8 @@ define(
                   function () { $scope.treeGrid.init() }, 100
                 )
               })($scope);
-            });
+            }
+          );
 
           $window.onresize = function () { $scope.treeGrid.init() };
 
@@ -569,7 +558,8 @@ define(
                   {
                     connections[node._id] = node._ids;
                   }
-                });
+                }
+              );
 
               return connections;
             },

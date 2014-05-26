@@ -24,7 +24,8 @@ require.config(
       moment:             '../vendors/momentjs/min/moment.min',
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline:           'removables/timeline',
-      treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
+      // treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
+      treegrid:           'removables/treegrid',
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
       datepicker:         'removables/datepicker.min',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
