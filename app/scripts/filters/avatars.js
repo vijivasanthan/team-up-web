@@ -424,7 +424,9 @@ define(
         {
           return function (id, type, size)
           {
-            if (id)
+            var session = Session.get();
+
+            if (session && id)
             {
               var path;
 
@@ -444,7 +446,7 @@ define(
                      path +
                      id +
                      '/photo?width=' + size + '&height=' + size + '&sid=' +
-                     Session.get();
+                     session;
             }
           }
         }
