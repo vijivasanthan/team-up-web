@@ -99,11 +99,9 @@ define(
                 setTimeout(
                   function ()
                   {
-                    angular.element('#chat-content #messageField')
-                      .focus();
+                    angular.element('#chat-content #messageField').focus();
 
-                    angular.element('#chat-content')
-                      .scrollTop(angular.element('#chat-content')[0].scrollHeight);
+                    angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
                   }, 100 * 1000); // FIXME: Temporarily made it longer till there is a better solution
 
               },

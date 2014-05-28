@@ -69,17 +69,18 @@ define(
             Store('app').save('app', '{}');
           }
 
-          angular.element('.navbar')
-            .hide();
+          angular.element('.navbar').hide();
 
-          angular.element('#footer')
-            .hide();
+          angular.element('#footer').hide();
 
-          angular.element('#watermark')
-            .hide();
+          angular.element('#watermark').hide();
 
           angular.element('body')
-            .css({ 'backgroundColor': '#1dc8b6' });
+            .css(
+            {
+              'backgroundColor': '#1dc8b6'
+            }
+          );
 
           var loginData = Store('app').get('loginData');
 
@@ -87,8 +88,7 @@ define(
 
           $scope.login = function ()
           {
-            angular.element('#alertDiv')
-              .hide();
+            angular.element('#alertDiv').hide();
 
             if (! $scope.loginData || ! $scope.loginData.username || ! $scope.loginData.password)
             {
@@ -189,14 +189,11 @@ define(
 
           var preLoader = function ()
           {
-            angular.element('#login')
-              .hide();
+            angular.element('#login').hide();
 
-            angular.element('#download')
-              .hide();
+            angular.element('#download').hide();
 
-            angular.element('#preloader')
-              .show();
+            angular.element('#preloader').show();
 
             progress(20, $rootScope.ui.login.loading_User);
 
@@ -254,16 +251,18 @@ define(
                                       setTimeout(
                                         function ()
                                         {
-                                          angular.element('.navbar')
-                                            .show();
+                                          angular.element('.navbar').show();
 
                                           angular.element('body')
-                                            .css({ 'background': 'url(../images/bg.jpg) repeat' });
+                                            .css(
+                                            {
+                                              'background': 'url(../images/bg.jpg) repeat'
+                                            }
+                                          );
 
                                           if (! $rootScope.browser.mobile)
                                           {
-                                            angular.element('#footer')
-                                              .show();
+                                            angular.element('#footer').show();
                                           }
                                         }, 100);
                                     }
@@ -284,10 +283,13 @@ define(
           var progress = function (ratio, message)
           {
             angular.element('#preloader .progress .bar')
-              .css({ width: ratio + '%' });
+              .css(
+              {
+                width: ratio + '%'
+              }
+            );
 
-            angular.element('#preloader span')
-              .text(message);
+            angular.element('#preloader span').text(message);
           };
         }
       ]);

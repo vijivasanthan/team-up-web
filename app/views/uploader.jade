@@ -3,7 +3,7 @@ div.uploader
 	input(type='file',
 	name='file',
 	style='display:none;',
-	onchange='angular.element(this).scope().sendFile(this);')
+	onchange='$(this).scope().sendFile(this);')
 
 	div.fake-uploader
 		label(for='uploader') {{uploadLabel}}

@@ -617,6 +617,9 @@ define(
             else
             {
               // var now = Date.now().getTime();
+              values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
+
+              console.log('values from row ->', values);
 
               console.log('slot ->', slot);
 
@@ -636,18 +639,21 @@ define(
                 if ($scope.views.teams)
                 {
                   $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+
+                  return;
                 }
                 else if ($scope.views.clients)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
+                  // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
                 }
 
-                return;
+                slot.relatedUser = null;
               }
 
+              console.log('values ->', values);
+
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                  memberId = angular.element(selected.group)
-                    .attr('memberId');
+                  memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof memberId == 'undefined')
               {
@@ -703,7 +709,11 @@ define(
            */
           $scope.convertTaskJsonObject = function (rawSlot)
           {
-            var teamMemberId, clientId, team;
+            console.log('rawSlot ->', rawSlot);
+
+            var teamMemberId,
+                clientId,
+                team;
 
             if ($scope.views.teams)
             {
@@ -713,12 +723,18 @@ define(
             }
             else if ($scope.views.clients)
             {
-              teamMemberId = rawSlot.relatedUserId;
+              if (rawSlot.relatedUserId)
+              {
+                teamMemberId = rawSlot.relatedUserId;
+                var member = $rootScope.getTeamMemberById(teamMemberId);
+                team = member.teamUuids[0];
+              }
+              else
+              {
+                team = null;
+              }
+
               clientId = rawSlot.memberId;
-
-              var member = $rootScope.getTeamMemberById(teamMemberId);
-
-              team = member.teamUuids[0];
             }
 
             return {
@@ -869,8 +885,7 @@ define(
             var options,
                 selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                 content = $scope.getSlotContentJSON(selected.content),
-                memberId = angular.element(selected.group)
-                  .attr('memberId');
+                memberId = angular.element(selected.group).attr('memberId');
 
             if (! direct)
             {
@@ -950,8 +965,7 @@ define(
             {
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                   content = $scope.getSlotContentJSON(selected.content),
-                  memberId = angular.element(selected.group)
-                    .attr('memberId');
+                  memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof content == 'undefined')
               {

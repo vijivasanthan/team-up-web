@@ -147,10 +147,12 @@ define(
 
                 if (tabHeight > contentHeight)
                 {
-                  angular.element('.tabs-left .tab-content #' + $this).css(
+                  angular.element('.tabs-left .tab-content #' + $this)
+                    .css(
                     {
                       height: angular.element('.tabs-left .nav-tabs').height() + 6
-                    });
+                    }
+                  );
                 }
                 else if (contentHeight > tabHeight)
                 {
@@ -160,7 +162,8 @@ define(
 
             if ($.os.mac || $.os.linux)
             {
-              angular.element('.nav-tabs-app li a span').css(
+              angular.element('.nav-tabs-app li a span')
+                .css(
                 {
                   paddingTop:   '10px',
                   marginBottom: '0px'
@@ -354,11 +357,9 @@ define(
 
           $rootScope.logout = function ()
           {
-            angular.element('.navbar')
-              .hide();
+            angular.element('.navbar').hide();
 
-            angular.element('#footer')
-              .hide();
+            angular.element('#footer').hide();
 
             var loginData = Store('app').get('loginData');
 

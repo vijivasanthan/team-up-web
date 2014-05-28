@@ -21,7 +21,12 @@ define(
           // TODO: Is this for all?
           if ($.os.windows)
           {
-            angular.element('#loading p').css({ paddingTop: '130px' });
+            angular.element('#loading p')
+              .css(
+              {
+                paddingTop: '130px'
+              }
+            );
           }
 
           if ($rootScope.browser.ios)
