@@ -22,7 +22,11 @@ define(
               {
                 Store('app').save('teams', teams);
 
-                if (! only)
+                if (only)
+                {
+                  deferred.resolve(teams);
+                }
+                else
                 {
                   var calls = [],
                       data = {
@@ -61,10 +65,6 @@ define(
                     .then(
                     function () { deferred.resolve(data) }
                   );
-                }
-                else
-                {
-                  deferred.resolve(teams);
                 }
               }
             );

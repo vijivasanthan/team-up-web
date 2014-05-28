@@ -17,7 +17,8 @@ define(
         '$window',
         'data',
         'TeamUp',
-        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp)
+        '$timeout',
+        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp, $timeout)
         {
           function loadData (data)
           {
@@ -25,7 +26,7 @@ define(
 
             if (data && data.local)
             {
-              console.log('loading local ->', data.local);
+              // console.log('loading local ->', data.local);
 
               var teamsLocal = Store('app').get('teams'),
                   connections = {
@@ -36,8 +37,8 @@ define(
                   members = [],
                   memberGlobalIds = [];
 
-              console.log('teamsLocal ->', teamsLocal);
-              console.log('-------------------------------------------');
+              // console.log('teamsLocal ->', teamsLocal);
+              // console.log('-------------------------------------------');
 
               data.teams = [];
 
@@ -53,7 +54,7 @@ define(
                   );
 
                   var memberIds = [];
-                  
+
                   angular.forEach(
                     Store('app').get(team.uuid),
                     function (member)
@@ -78,11 +79,11 @@ define(
                 }
               );
 
-              console.log('dat.teams ->', data.teams);
-              console.log('memberGlobalIds ->', memberGlobalIds);
-              console.log('connections ->', connections);
-              console.log('-------------------------------------------');
-              
+              // console.log('dat.teams ->', data.teams);
+              // console.log('memberGlobalIds ->', memberGlobalIds);
+              // console.log('connections ->', connections);
+              // console.log('-------------------------------------------');
+
               angular.forEach(
                 Store('app').get('members'),
                 function (member)
@@ -103,9 +104,9 @@ define(
 
               data.groups = Store('app').get('ClientGroups');
 
-              console.log('members ->', members);
-              console.log('ClientGroups ->', data.groups);
-              console.log('-------------------------------------------');
+              // console.log('members ->', members);
+              // console.log('ClientGroups ->', data.groups);
+              // console.log('-------------------------------------------');
 
               var groupIds = [],
                   clients = [],
@@ -143,9 +144,9 @@ define(
                 }
               );
 
-              console.log('clientIds ->', clientIds);
+              // console.log('clientIds ->', clientIds);
               console.log('groupIds ->', groupIds);
-              console.log('connections ->', connections);
+              // console.log('connections ->', connections);
               console.log('-------------------------------------------');
 
               angular.forEach(
@@ -166,9 +167,9 @@ define(
                 }
               );
 
-              console.log('clients ->', clients);
-              console.log('clientIds ->', clientIds);
-              console.log('-------------------------------------------');
+              // console.log('clients ->', clients);
+              // console.log('clientIds ->', clientIds);
+              // console.log('-------------------------------------------');
 
               data.clients = clients;
 
@@ -180,19 +181,40 @@ define(
 
                   var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
 
-                  if (! angular.isArray(_teamGroup))
+                  //                  if (! angular.isArray(_teamGroup))
+                  //                  {
+                  //                    _teamGroup = [_teamGroup];
+                  //                  }
+
+                  // console.log('team ->', team.name, team.uuid);
+
+                  if (_teamGroup == [])
                   {
-                    _teamGroup = [_teamGroup];
+                    console.log('it is empty ->');
                   }
 
-                  console.log('_teamGroup ->', _teamGroup);
+                  console.log('_teamGroup ->', angular.toJson(_teamGroup));
+
+                  _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
+                  // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
 
                   angular.forEach(
                     _teamGroup,
                     function (group)
                     {
+                      // console.log('match? ->', groupIds.indexOf(group.id), group.id, flag);
+
+                      //                      if (group.id == team.uuid && flag)
+                      //                      {
+                      //                        connections.teamClients[team.uuid] = group.id;
+                      //
+                      //                        flag = false;
+                      //                      }
+
                       if (groupIds.indexOf(group.id) != - 1 && flag)
                       {
+                        console.log('putting in ->', group.id);
+
                         connections.teamClients[team.uuid] = group.id;
 
                         flag = false;
@@ -222,6 +244,7 @@ define(
               };
             }
           }
+
           // end of loadData
 
           // TODO: Repetitive code
@@ -606,6 +629,23 @@ define(
             return changes;
           };
 
+          $scope.safeApply = function (fn)
+          {
+            var phase = this.$root.$$phase;
+
+            if (phase == '$apply' || phase == '$digest')
+            {
+              if (fn && (typeof(fn) === 'function'))
+              {
+                fn();
+              }
+            }
+            else
+            {
+              this.$apply(fn);
+            }
+          };
+
           $scope.applyTeamClientsChanges = function (changes)
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
@@ -629,10 +669,9 @@ define(
 
                 if (error == '')
                 {
-                  console.log('everything okay ->');
-
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  $route.reload();
+
+                  $timeout(function () { $route.reload() }, 250);
                 }
                 else
                 {
@@ -679,7 +718,21 @@ define(
 
                     $rootScope.statusBar.off();
 
-                    $route.reload();
+                    $timeout(function () { $route.reload() }, 250);
+                    //                    $timeout(
+                    //                      function ()
+                    //                      {
+                    //                        $route.reload();
+                    //                        $timeout(
+                    //                          function ()
+                    //                          {
+                    //                            $location.path('/manage').hash('teams');
+                    //                          },
+                    //                          250
+                    //                        );
+                    //                      },
+                    //                      150
+                    //                    );
                   },
                   function (error) { console.log(error) });
               }
@@ -724,7 +777,7 @@ define(
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                     $rootScope.statusBar.off();
 
-                    $route.reload();
+                    $timeout(function () { $route.reload() }, 250);
                   }
                 );
               }
