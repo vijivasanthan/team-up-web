@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'manageCtrl', [
+      'treegridCtrl', [
         '$rootScope',
         '$scope',
         '$location',
@@ -412,11 +412,6 @@ define(
             switch (grid)
             {
               case 'teamClients':
-
-                // console.log('grid ->', grid);
-                // console.log('groups ->', data.groups);
-                // console.log('teams ->', data.teams);
-                // console.log('connections ->', $scope.connector.teamClients());
 
                 $rootScope.$broadcast(
                   'TreeGridManager',
