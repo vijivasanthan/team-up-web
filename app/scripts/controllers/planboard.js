@@ -252,27 +252,9 @@ define(
                 }
               );
 
-              var _periods;
-
-              if (periods)
-              {
-                _periods = periods;
-
-                console.log('given periods ->', periods);
-              }
-              else
-              {
-                console.log('use the defaults ->');
-
-                _periods = {
-                  start: startTime,
-                  end: endTime
-                };
-              }
-
               $rootScope.$broadcast(
                 'timeliner',
-                _periods
+                (periods) ? periods : { start: startTime, end: endTime }
               );
             };
 
