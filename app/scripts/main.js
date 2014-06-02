@@ -97,10 +97,12 @@ require(
     'services/teams',
     'services/GoogleGEO',
     'directives/widgets',
+    // 'directives/treegrid',
     'filters/avatars',
     'controllers/clients',
     'controllers/login',
     'controllers/manage',
+    'controllers/treegridCtrl', // TODO: Remove it later on
     'controllers/messages',
     'controllers/planboard',
     'controllers/vis',

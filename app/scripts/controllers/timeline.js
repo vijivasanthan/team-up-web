@@ -23,31 +23,31 @@ define(
                 if (diff <= 86400000)
                 {
                   $scope.timeline.scope = {
-                    day:   true,
-                    week:  false,
+                    day: true,
+                    week: false,
                     month: false
                   };
                 }
                 else if (diff < 604800000)
                 {
                   $scope.timeline.scope = {
-                    day:   false,
-                    week:  true,
+                    day: false,
+                    week: true,
                     month: false
                   };
                 }
                 else if (diff > 604800000)
                 {
                   $scope.timeline.scope = {
-                    day:   false,
-                    week:  false,
+                    day: false,
+                    week: false,
                     month: true
                   };
                 }
 
                 $scope.timeline.range = {
                   start: new Date(range.start).toString(),
-                  end:   new Date(range.end).toString()
+                  end: new Date(range.end).toString()
                 };
 
                 $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
@@ -61,7 +61,7 @@ define(
 
                   $scope.timeline.range = {
                     start: new Date(range.start).toString(),
-                    end:   new Date(range.end).toString()
+                    end: new Date(range.end).toString()
                   };
                 }
               }
@@ -75,161 +75,33 @@ define(
               $scope.slot = {};
 
               $scope.slot = {
-                start:     {
-                  date:     new Date().toString(config.app.formats.date),
-                  time:     new Date().toString(config.app.formats.time),
+                start: {
+                  date: new Date().toString(config.app.formats.date),
+                  time: new Date().toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
-                end:       {
-                  date:     new Date().toString(config.app.formats.date),
-                  time:     new Date().addHours(1).toString(config.app.formats.time),
+                end: {
+                  date: new Date().toString(config.app.formats.date),
+                  time: new Date().addHours(1).toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
-                state:     'com.ask-cs.State.Available',
+                state: 'com.ask-cs.State.Available',
                 recursive: false,
-                id:        ''
+                id: ''
               };
             }
           );
-
-          var Sloter = function (data)
-          {
-            var timelineData = [];
-
-            var offset = Number(Date.now());
-
-            angular.forEach(
-              data.members,
-              (function (member)
-              {
-                var tasks = [];
-
-                if (data.section == 'teams')
-                {
-                  if (data.teams.tasks[member.memId] != null)
-                  {
-                    tasks.push(data.teams.tasks[member.memId]);
-                  }
-                }
-                else if (data.section == 'clients')
-                {
-                  if (data.clients.tasks[member.memId] != null)
-                  {
-                    tasks.push(data.clients.tasks[member.memId]);
-                  }
-                }
-
-                angular.forEach(
-                  tasks,
-                  function (memberTasks)
-                  {
-                    angular.forEach(
-                      memberTasks,
-                      function (task)
-                      {
-                        var relatedUser = '';
-
-                        if (data.section == 'teams')
-                        {
-                          // should get the name from team members ;
-                          relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
-                        }
-                        else if (data.section == 'clients')
-                        {
-                          // should get the name from clients;
-                          relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
-                        }
-
-                        var slotContent = '';
-
-                        if (typeof relatedUser != 'undefined')
-                        {
-                          slotContent = relatedUser.firstName + ' ' + relatedUser.lastName;
-                        }
-
-                        // deal with the unfinished task
-                        if (task.plannedEndVisitTime == 0)
-                        {
-                          task.plannedEndVisitTime = offset;
-                        }
-
-                        // FIXME: Organise this one!
-                        var content = '<span>' + slotContent + '</span>' +
-                                      "<input type=hidden value='" +
-                                      angular.toJson(
-                                        {
-                                          type:       'slot',
-                                          id:         task.uuid,
-                                          mid:        task.authorUuid,
-                                          state:      task.description,
-                                          clientUuid: task.relatedClientUuid,
-                                          memberId:   task.assignedTeamMemberUuid
-                                        }
-                                      ) +
-                                      "'>";
-
-                        timelineData.push(
-                          {
-                            start:     Math.round(task.plannedStartVisitTime),
-                            end:       Math.round(task.plannedEndVisitTime),
-                            group:     member.head,
-                            content:   content,
-                            className: 'state-available',
-                            editable:  false
-                          }
-                        );
-                      }
-                    );
-                  }
-                );
-
-                var addLoading = function (data, timedata, rows)
-                {
-                  angular.forEach(
-                    rows,
-                    function (row)
-                    {
-                      timedata.push(
-                        {
-                          start:     data.periods.end,
-                          end:       1577836800000,
-                          group:     row,
-                          content:   'loading',
-                          className: 'state-loading-right',
-                          editable:  false
-                        });
-
-                      timedata.push(
-                        {
-                          start:     0,
-                          end:       data.periods.start,
-                          group:     row,
-                          content:   'loading',
-                          className: 'state-loading-left',
-                          editable:  false
-                        });
-                    });
-
-                  return timedata;
-                };
-
-                timelineData = addLoading(data, timelineData, [member.head]);
-              }).bind(this)
-            );
-
-            return timelineData;
-          };
 
           $scope.timeliner = {
             init: function ()
             {
               $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id));
 
-              links.events.addListener($scope.self.timeline, 'rangechanged',  this.getRange);
-              links.events.addListener($scope.self.timeline, 'add',           this.onAdd);
-              links.events.addListener($scope.self.timeline, 'delete',        this.onRemove);
-              links.events.addListener($scope.self.timeline, 'change',        this.onChange);
-              links.events.addListener($scope.self.timeline, 'select',        this.onSelect);
+              links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
+              links.events.addListener($scope.self.timeline, 'add', this.onAdd);
+              links.events.addListener($scope.self.timeline, 'delete', this.onRemove);
+              links.events.addListener($scope.self.timeline, 'change', this.onChange);
+              links.events.addListener($scope.self.timeline, 'select', this.onSelect);
 
               this.render($scope.timeline.options);
             },
@@ -243,6 +115,134 @@ define(
             onChange: function () { $scope.timelineChanging() },
 
             onSelect: function () { $scope.timelineOnSelect() },
+
+            process: function (data)
+            {
+              var timelineData = [];
+
+              var offset = Number(Date.now());
+
+              angular.forEach(
+                data.members,
+                (function (member)
+                {
+                  var tasks = [];
+
+                  if (data.section == 'teams')
+                  {
+                    if (data.teams.tasks[member.memId] != null)
+                    {
+                      tasks.push(data.teams.tasks[member.memId]);
+                    }
+                  }
+                  else if (data.section == 'clients')
+                  {
+                    if (data.clients.tasks[member.memId] != null)
+                    {
+                      tasks.push(data.clients.tasks[member.memId]);
+                    }
+                  }
+
+                  angular.forEach(
+                    tasks,
+                    function (memberTasks)
+                    {
+                      angular.forEach(
+                        memberTasks,
+                        function (task)
+                        {
+                          var relatedUser = '';
+
+                          if (data.section == 'teams')
+                          {
+                            // should get the name from team members ;
+                            relatedUser = $rootScope.getClientByID(task.relatedClientUuid);
+                          }
+                          else if (data.section == 'clients')
+                          {
+                            // should get the name from clients;
+                            relatedUser = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
+                          }
+
+                          var slotContent = '';
+
+                          if (typeof relatedUser != 'undefined')
+                          {
+                            slotContent = relatedUser.firstName + ' ' + relatedUser.lastName;
+                          }
+
+                          // deal with the unfinished task
+                          if (task.plannedEndVisitTime == 0)
+                          {
+                            task.plannedEndVisitTime = offset;
+                          }
+
+                          // FIXME: Organise this one!
+                          var content = '<span>' + slotContent + '</span>' +
+                                        "<input type=hidden value='" +
+                                        angular.toJson(
+                                          {
+                                            type: 'slot',
+                                            id: task.uuid,
+                                            mid: task.authorUuid,
+                                            state: task.description,
+                                            clientUuid: task.relatedClientUuid,
+                                            memberId: task.assignedTeamMemberUuid
+                                          }
+                                        ) +
+                                        "'>";
+
+                          timelineData.push(
+                            {
+                              start: Math.round(task.plannedStartVisitTime),
+                              end: Math.round(task.plannedEndVisitTime),
+                              group: member.head,
+                              content: content,
+                              className: 'state-available',
+                              editable: false
+                            }
+                          );
+                        }
+                      );
+                    }
+                  );
+
+                  var addLoading = function (data, timedata, rows)
+                  {
+                    angular.forEach(
+                      rows,
+                      function (row)
+                      {
+                        timedata.push(
+                          {
+                            start: data.periods.end,
+                            end: 1577836800000,
+                            group: row,
+                            content: 'loading',
+                            className: 'state-loading-right',
+                            editable: false
+                          });
+
+                        timedata.push(
+                          {
+                            start: 0,
+                            end: data.periods.start,
+                            group: row,
+                            content: 'loading',
+                            className: 'state-loading-left',
+                            editable: false
+                          });
+                      });
+
+                    return timedata;
+                  };
+
+                  timelineData = addLoading(data, timelineData, [member.head]);
+                }).bind(this)
+              );
+
+              return timelineData;
+            },
 
             render: function (options, remember)
             {
@@ -271,12 +271,12 @@ define(
               }
 
               $scope.timeline = {
-                id:      $scope.timeline.id,
-                main:    $scope.timeline.main,
-                user:    $scope.timeline.user,
+                id: $scope.timeline.id,
+                main: $scope.timeline.main,
+                user: $scope.timeline.user,
                 current: $scope.timeline.current,
-                scope:   $scope.timeline.scope,
-                config:  $scope.timeline.config,
+                scope: $scope.timeline.scope,
+                config: $scope.timeline.config,
                 options: {
                   start: (remember) ? start : new Date(options.start),
                   end: (remember) ? end : new Date(options.end),
@@ -294,14 +294,19 @@ define(
               angular.extend($scope.timeline.options, config.app.timeline.options);
 
               $scope.self.timeline.draw(
-                Sloter($scope.data),
+                this.process($scope.data),
                 $scope.timeline.options
               );
 
-              $scope.self.timeline.setVisibleChartRange($scope.timeline.options.start, $scope.timeline.options.end);
+              if (remember)
+              {
+                $scope.self.timeline.setVisibleChartRange(start, end);
+              }
+              else
+              {
+                $scope.self.timeline.setVisibleChartRange($scope.timeline.options.start, $scope.timeline.options.end);
+              }
             },
-
-            load: function (stamps, remember) { this.render(stamps, remember) },
 
             refresh: function ()
             {
@@ -314,15 +319,15 @@ define(
               else
               {
                 $scope.forms = {
-                  add:  true,
+                  add: true,
                   edit: false
                 };
               }
 
-              this.load(
+              this.render(
                 {
                   start: $scope.data.periods.start,
-                  end:   $scope.data.periods.end
+                  end: $scope.data.periods.end
                 }, true
               );
             },
@@ -335,18 +340,18 @@ define(
           };
 
           if ($scope.timeline)
-          {
-            $scope.timeliner.init();
-          }
+          { $scope.timeliner.init() }
 
           $rootScope.$on(
             'timeliner',
             function ()
             {
-              $scope.timeliner.load(
+              console.log('timeline render has been inited!');
+
+              $scope.timeliner.render(
                 {
                   start: new Date(arguments[1].start).getTime(),
-                  end:   new Date(arguments[1].end).getTime()
+                  end: new Date(arguments[1].end).getTime()
                 }
               );
             }
@@ -377,10 +382,10 @@ define(
                 break;
             }
 
-            $scope.timeliner.load(
+            $scope.timeliner.render(
               {
                 start: $scope.data.periods.start,
-                end:   $scope.data.periods.end
+                end: $scope.data.periods.end
               }
             );
           };
@@ -394,14 +399,14 @@ define(
               {
                 $scope.timeline.range = {
                   start: new Date(range.from).toString(),
-                  end:   new Date(range.till).toString()
+                  end: new Date(range.till).toString()
                 };
 
                 if ($scope.timeline.main)
                 {
                   $scope.daterange = {
                     start: Dater.readable.date(new Date(range.start).getTime()),
-                    end:   Dater.readable.date(new Date(range.end).getTime())
+                    end: Dater.readable.date(new Date(range.end).getTime())
                   };
                 }
 
@@ -431,8 +436,8 @@ define(
               $scope.relatedUsers = $scope.processRelatedUsers(values);
 
               $scope.original = {
-                start:   values.start,
-                end:     values.end,
+                start: values.start,
+                end: values.end,
                 content: content
               };
 
@@ -443,7 +448,7 @@ define(
               else if (values.content != 'Nieuw')
               {
                 $scope.forms = {
-                  add:  false,
+                  add: false,
                   edit: true
                 };
               }
@@ -497,22 +502,22 @@ define(
                 }
 
                 $scope.slot = {
-                  start:       {
-                    date:     new Date(values.start).toString(config.app.formats.date),
-                    time:     new Date(values.start).toString(config.app.formats.time),
+                  start: {
+                    date: new Date(values.start).toString(config.app.formats.date),
+                    time: new Date(values.start).toString(config.app.formats.time),
                     datetime: new Date(values.start).toISOString()
                   },
-                  end:         {
-                    date:     new Date(values.end).toString(config.app.formats.date),
-                    time:     new Date(values.end).toString(config.app.formats.time),
+                  end: {
+                    date: new Date(values.end).toString(config.app.formats.date),
+                    time: new Date(values.end).toString(config.app.formats.time),
                     datetime: new Date(values.end).toISOString()
                   },
-                  state:       content.state,
-                  recursive:   content.recursive,
-                  id:          content.id,
-                  memberId:    content.memberId,
-                  mid:         content.mid,
-                  clientUuid:  content.clientUuid,
+                  state: content.state,
+                  recursive: content.recursive,
+                  id: content.id,
+                  memberId: content.memberId,
+                  mid: content.mid,
+                  clientUuid: content.clientUuid,
                   relatedUser: relatedUserId
                 };
 
@@ -592,20 +597,20 @@ define(
                   else
                   {
                     $scope.forms = {
-                      add:  true,
+                      add: true,
                       edit: false
                     };
                   }
 
                   $scope.slot = {
                     start: {
-                      date:     new Date(values.start).toString(config.app.formats.date),
-                      time:     new Date(values.start).toString(config.app.formats.time),
+                      date: new Date(values.start).toString(config.app.formats.date),
+                      time: new Date(values.start).toString(config.app.formats.time),
                       datetime: new Date(values.start).toISOString()
                     },
-                    end:   {
-                      date:     new Date(values.end).toString(config.app.formats.date),
-                      time:     new Date(values.end).toString(config.app.formats.time),
+                    end: {
+                      date: new Date(values.end).toString(config.app.formats.date),
+                      time: new Date(values.end).toString(config.app.formats.time),
                       datetime: new Date(values.end).toISOString()
                     },
                     recursive: (values.group.match(/recursive/)) ? true : false,
@@ -619,9 +624,9 @@ define(
               // var now = Date.now().getTime();
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 
-              console.log('values from row ->', values);
+              // console.log('values from row ->', values);
 
-              console.log('slot ->', slot);
+              // console.log('slot ->', slot);
 
               values = {
                 startTime: ($rootScope.browser.mobile) ?
@@ -650,7 +655,7 @@ define(
                 slot.relatedUser = null;
               }
 
-              console.log('values ->', values);
+              // console.log('values ->', values);
 
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                   memberId = angular.element(selected.group).attr('memberId');
@@ -688,17 +693,23 @@ define(
 
                     if ($scope.section == 'teams')
                     {
-                      $scope.changeCurrent($scope.currentTeam);
+                      $scope.changeCurrent($scope.currentTeam, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                     }
                     else if ($scope.section == 'clients')
                     {
-                      $scope.changeCurrent($scope.currentClientGroup);
+                      $scope.changeCurrent($scope.currentClientGroup, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                     }
 
                     $rootScope.statusBar.off();
                   }
 
-                  $scope.timeliner.refresh();
+                  // $scope.timeliner.refresh();
                 }
               );
             }
@@ -709,7 +720,7 @@ define(
            */
           $scope.convertTaskJsonObject = function (rawSlot)
           {
-            console.log('rawSlot ->', rawSlot);
+            // console.log('rawSlot ->', rawSlot);
 
             var teamMemberId,
                 clientId,
@@ -738,13 +749,13 @@ define(
             }
 
             return {
-              uuid:                   rawSlot.uuid,
-              status:                 1,
-              plannedStartVisitTime:  rawSlot.startTime,
-              plannedEndVisitTime:    rawSlot.endTime,
-              relatedClientUuid:      clientId,
-              assignedTeamUuid:       team,
-              description:            rawSlot.description,
+              uuid: rawSlot.uuid,
+              status: 1,
+              plannedStartVisitTime: rawSlot.startTime,
+              plannedEndVisitTime: rawSlot.endTime,
+              relatedClientUuid: clientId,
+              assignedTeamUuid: team,
+              description: rawSlot.description,
               assignedTeamMemberUuid: teamMemberId
             };
           };
@@ -765,8 +776,8 @@ define(
                 selectedSlot.row,
                 {
                   'content': slotContent,
-                  'start':   new Date(start),
-                  'end':     new Date(end)
+                  'start': new Date(start),
+                  'end': new Date(end)
                 }
               );
             }
@@ -806,7 +817,7 @@ define(
             {
               itemContent = {
                 clientUuid: $scope.slot.clientUuid,
-                memberId:   $scope.slot.memberId
+                memberId: $scope.slot.memberId
               };
             }
 
@@ -838,21 +849,21 @@ define(
                 function ()
                 {
                   $scope.slot = {
-                    start:       {
-                      date:     new Date(values.start).toString(config.app.formats.date),
-                      time:     new Date(values.start).toString(config.app.formats.time),
+                    start: {
+                      date: new Date(values.start).toString(config.app.formats.date),
+                      time: new Date(values.start).toString(config.app.formats.time),
                       datetime: new Date(values.start).toISOString()
                     },
-                    end:         {
-                      date:     new Date(values.end).toString(config.app.formats.date),
-                      time:     new Date(values.end).toString(config.app.formats.time),
+                    end: {
+                      date: new Date(values.end).toString(config.app.formats.date),
+                      time: new Date(values.end).toString(config.app.formats.time),
                       datetime: new Date(values.end).toISOString()
                     },
-                    state:       content.state,
-                    id:          content.id,
-                    memberId:    content.memberId,
-                    mid:         content.mid,
-                    clientUuid:  content.clientUuid,
+                    state: content.state,
+                    id: content.id,
+                    memberId: content.memberId,
+                    mid: content.mid,
+                    clientUuid: content.clientUuid,
                     relatedUser: $scope.slot.relatedUser
                   };
                 }
@@ -890,12 +901,12 @@ define(
             if (! direct)
             {
               options = {
-                startTime:     selected.start,
-                endTime:       selected.end,
-                description:   '',
+                startTime: selected.start,
+                endTime: selected.end,
+                description: '',
                 relatedUserId: slot.relatedUser,
-                uuid:          content.id,
-                memberId:      memberId
+                uuid: content.id,
+                memberId: memberId
               };
             }
             else
@@ -907,10 +918,10 @@ define(
                 endTime: ($rootScope.browser.mobile) ?
                          new Date(slot.end.datetime).getTime() :
                          Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description:   '',
+                description: '',
                 relatedUserId: slot.relatedUser,
-                uuid:          content.id,
-                memberId:      memberId
+                uuid: content.id,
+                memberId: memberId
               };
             }
 
@@ -918,7 +929,8 @@ define(
 
             TeamUp._(
               'taskUpdate',
-              { taskId: values.uuid }
+              { second: values.uuid },
+              values
             ).then(
               function (result)
               {
@@ -935,15 +947,29 @@ define(
 
                   if ($scope.section == 'teams')
                   {
-                    $scope.changeCurrent($scope.currentTeam);
+                    $scope.changeCurrent($scope.currentTeam, {
+                      start: $scope.timeline.range.start,
+                      end: $scope.timeline.range.end
+                    });
                   }
                   else if ($scope.section == 'clients')
                   {
-                    $scope.changeCurrent($scope.currentClientGroup);
+                    $scope.changeCurrent($scope.currentClientGroup, {
+                      start: $scope.timeline.range.start,
+                      end: $scope.timeline.range.end
+                    });
                   }
                 }
 
-                $scope.timeliner.refresh();
+                // $scope.timeliner.refresh();
+//                $scope.timeliner.render(
+//                  {
+//                    start: $scope.timeline.options.start,
+//                    end: $scope.timeline.options.end
+//                  },
+//                  true
+//                );
+
                 $rootScope.statusBar.off();
               }
             );
@@ -983,7 +1009,7 @@ define(
 
               TeamUp._(
                 'taskDelete',
-                { taskId: content.id }
+                { second: content.id }
               ).then(
                 function (result)
                 {
@@ -1000,15 +1026,21 @@ define(
 
                     if ($scope.section == 'teams')
                     {
-                      $scope.changeCurrent($scope.currentTeam);
+                      $scope.changeCurrent($scope.currentTeam, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                     }
                     else if ($scope.section == 'clients')
                     {
-                      $scope.changeCurrent($scope.currentClientGroup);
+                      $scope.changeCurrent($scope.currentClientGroup, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                     }
                   }
 
-                  $scope.timeliner.refresh();
+                  // $scope.timeliner.refresh();
 
                   $rootScope.statusBar.off();
                   $rootScope.planboardSync.start();
@@ -1036,10 +1068,10 @@ define(
 
                     $rootScope.$broadcast('resetPlanboardViews');
 
-                    $scope.timeliner.load(
+                    $scope.timeliner.render(
                       {
                         start: $scope.data.periods.start,
-                        end:   $scope.data.periods.end
+                        end: $scope.data.periods.end
                       }, true
                     );
                   }

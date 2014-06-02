@@ -45,6 +45,8 @@ define(
                 this.options.grid
               );
 
+              // console.log('this stores ->', this.stores);
+
               angular.forEach(
                 this.stores,
                 function (store)
@@ -59,6 +61,8 @@ define(
                   store.data = store.filteredData = filtered;
                 }
               );
+
+              // console.log('store.data ->', this.store.data);
 
               this.grids[key].draw(this.store(id, data));
 
@@ -501,7 +505,8 @@ define(
 
                   connections[source._id] = nodes;
                 }
-              });
+              }
+            );
 
             return connections;
           };

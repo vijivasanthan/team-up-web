@@ -15,38 +15,38 @@ define(
               clients = Store('app').get('ClientGroups');
 
           $scope.data = {
-            teams:   {
-              list:    [],
+            teams: {
+              list: [],
               members: {},
-              tasks:   []
+              tasks: []
             },
             clients: {
-              list:    [],
+              list: [],
               members: {},
-              tasks:   []
+              tasks: []
             },
-            user:    [
+            user: [
               {
-                'count':     0,
-                'end':       1378681200,
+                'count': 0,
+                'end': 1378681200,
                 'recursive': true,
-                'start':     1378504800,
-                'text':      'com.ask-cs.State.Available',
-                'type':      'availability',
-                'wish':      0
+                'start': 1378504800,
+                'text': 'com.ask-cs.State.Available',
+                'type': 'availability',
+                'wish': 0
               },
               {
-                'count':     0,
-                'end':       1378850400,
+                'count': 0,
+                'end': 1378850400,
                 'recursive': true,
-                'start':     1378720800,
-                'text':      'com.ask-cs.State.Available',
-                'type':      'availability',
-                'wish':      0
+                'start': 1378720800,
+                'text': 'com.ask-cs.State.Available',
+                'type': 'availability',
+                'wish': 0
               }
             ],
             members: [],
-            synced:  Number(Date.today()),
+            synced: Number(Date.today()),
             periods: {
               start: Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
               end: Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
@@ -95,7 +95,7 @@ define(
 
                     $scope.data.teams.members[team.uuid].push(
                       {
-                        'head':  name,
+                        'head': name,
                         'memId': member.uuid
                       }
                     );
@@ -147,7 +147,7 @@ define(
 
                     $scope.data.clients.members[client.id].push(
                       {
-                        'head':  name,
+                        'head': name,
                         'memId': member.uuid
                       }
                     );
@@ -188,7 +188,7 @@ define(
 
           }
 
-          $scope.changeCurrent = function (current)
+          $scope.changeCurrent = function (current, periods)
           {
             angular.forEach(
               $scope.data[$scope.section].list,
@@ -254,10 +254,7 @@ define(
 
               $rootScope.$broadcast(
                 'timeliner',
-                {
-                  start: startTime,
-                  end:   endTime
-                }
+                (periods) ? periods : { start: startTime, end: endTime }
               );
             };
 
@@ -269,8 +266,8 @@ define(
                 'teamTaskQuery',
                 {
                   second: $scope.currentTeam,
-                  from:   startTime,
-                  to:     endTime
+                  from: startTime,
+                  to: endTime
                 }
               ).then(
                 function (tasks) { storeTask(tasks, startTime, endTime) }
@@ -284,8 +281,8 @@ define(
                 'clientGroupTasksQuery',
                 {
                   second: $scope.currentClientGroup,
-                  from:   startTime,
-                  to:     endTime
+                  from: startTime,
+                  to: endTime
                 }
               ).then(function (tasks) { storeTask(tasks, startTime, endTime) });
             }
@@ -294,11 +291,11 @@ define(
           function setView (hash)
           {
             $scope.views = {
-              teams:   false,
+              teams: false,
               clients: false,
-              member:  false,
-              slot:    {
-                add:  false,
+              member: false,
+              slot: {
+                add: false,
                 edit: false
               }
             };
@@ -326,7 +323,7 @@ define(
           $scope.resetViews = function ()
           {
             $scope.views.slot = {
-              add:  false,
+              add: false,
               edit: false
             };
           };
@@ -357,14 +354,14 @@ define(
           $scope.self = this;
 
           $scope.current = {
-            layouts:  {
-              user:    true,
-              group:   false,
+            layouts: {
+              user: true,
+              group: false,
               members: false
             },
             day: Dater.current.today() + 1,
-            week:     Dater.current.week(),
-            month:    Dater.current.month(),
+            week: Dater.current.week(),
+            month: Dater.current.month(),
             division: 'all'
           };
 
@@ -377,38 +374,38 @@ define(
           var indexStart = ((Dater.current.today() - 7) < 1 ) ? 1 : (Dater.current.today() - 7);
 
           $scope.timeline = {
-            id:      'mainTimeline',
-            main:    true,
-            user:    {
-              id:   $rootScope.app.resources.uuid,
+            id: 'mainTimeline',
+            main: true,
+            user: {
+              id: $rootScope.app.resources.uuid,
               role: $rootScope.app.resources.role
             },
             current: $scope.current,
             options: {
               start: $scope.periods.days[indexStart].last.day,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.day,
-              min:   $scope.periods.days[indexStart].last.day,
-              max:   $scope.periods.days[Dater.current.today() + 7].last.day
+              end: $scope.periods.days[Dater.current.today() + 7].last.day,
+              min: $scope.periods.days[indexStart].last.day,
+              max: $scope.periods.days[Dater.current.today() + 7].last.day
             },
-            range:   {
+            range: {
               start: $scope.periods.days[indexStart].last.day,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.day
+              end: $scope.periods.days[Dater.current.today() + 7].last.day
             },
-            scope:   {
-              day:   false,
-              week:  true,
+            scope: {
+              day: false,
+              week: true,
               month: false
             },
             // TODO: Remove unneeded config elements!
-            config:  {
-              bar:        config.app.timeline.config.bar,
-              layouts:    config.app.timeline.config.layouts,
-              wishes:     config.app.timeline.config.wishes,
-              legenda:    {},
+            config: {
+              bar: config.app.timeline.config.bar,
+              layouts: config.app.timeline.config.layouts,
+              wishes: config.app.timeline.config.wishes,
+              legenda: {},
               legendarer: config.app.timeline.config.legendarer,
-              states:     config.app.timeline.config.states,
-              divisions:  config.app.timeline.config.divisions,
-              densities:  config.app.timeline.config.densities
+              states: config.app.timeline.config.states,
+              divisions: config.app.timeline.config.divisions,
+              densities: config.app.timeline.config.densities
             }
           };
 
@@ -416,9 +413,9 @@ define(
           {
             $scope.timeline.options = {
               start: $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-              min:   $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-              max:   $scope.periods.days[Dater.current.today() + 7].last.timeStamp
+              end: $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
+              min: $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
+              max: $scope.periods.days[Dater.current.today() + 7].last.timeStamp
             };
           }
 
