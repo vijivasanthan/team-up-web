@@ -30,7 +30,7 @@
               };
             }
             err[stamp] = body;
-            console.warn('Error: ', trace);
+            // console.warn('Error: ', trace);
             return Store.save('error_' + stamp, err);
           }
         };

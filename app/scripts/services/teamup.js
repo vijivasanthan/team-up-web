@@ -226,14 +226,12 @@ define(
                  * Client-Group-Reports
                  */
                 clientGroupReportsQuery: {
-                  query: {
                     method:  'GET',
                     isArray: true,
                     params:  {
                       first: 'clientGroup',
                       third: 'reports'
                     }
-                  }
                 },
 
                 /**
@@ -258,6 +256,13 @@ define(
                   params: {
                     first: 'clients',
                     third: 'reports'
+                  }
+                },
+                clientReportUpdate:    {
+                  method: 'PUT',
+                  params: {
+                    first: 'clients',
+                    third: 'reports',                    
                   }
                 },
                 clientReportDelete: {
