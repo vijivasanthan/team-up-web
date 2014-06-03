@@ -58,11 +58,10 @@ define(
                   angular.forEach(
                     Store('app').get(team.uuid),
                     function (member)
-                    {
-                      memberIds.push(member.uuid);
-
-                      if (memberGlobalIds.indexOf(member.uuid) == - 1)
+                    {                      
+                      if (memberGlobalIds.indexOf(member.uuid) == - 1 && typeof member.uuid != "undefined")
                       {
+                        memberIds.push(member.uuid);
                         members.push(
                           {
                             'name': member.firstName + ' ' + member.lastName,
@@ -140,7 +139,7 @@ define(
                     }
                   );
                   console.log("cIds : ",cIds);
-                  if(cIds.length == 1)
+                  
                   connections.clients[group.id] = cIds;                  
                   groupIds.push(group.id);
                 }
@@ -731,31 +730,33 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                TeamUp._('teamMemberFree')
-                  .then(
-                  function (result)
-                  {
-                    Store('app').save('members', result);
+                // TeamUp._('teamMemberFree')
+                //   .then(
+                //   function (result)
+                //   {
+                //     // Store('app').save('members', result);
 
-                    $rootScope.statusBar.off();
+                //     $rootScope.statusBar.off();
 
-                    $timeout(function () { $route.reload() }, 250);
-                    //                    $timeout(
-                    //                      function ()
-                    //                      {
-                    //                        $route.reload();
-                    //                        $timeout(
-                    //                          function ()
-                    //                          {
-                    //                            $location.path('/manage').hash('teams');
-                    //                          },
-                    //                          250
-                    //                        );
-                    //                      },
-                    //                      150
-                    //                    );
-                  },
-                  function (error) { console.log(error) });
+                $timeout(function () { $route.reload() }, 250);
+                //     //                    $timeout(
+                //     //                      function ()
+                //     //                      {
+                //     //                        $route.reload();
+                //     //                        $timeout(
+                //     //                          function ()
+                //     //                          {
+                //     //                            $location.path('/manage').hash('teams');
+                //     //                          },
+                //     //                          250
+                //     //                        );
+                //     //                      },
+                //     //                      150
+                //     //                    );
+                //   },
+                //   function (error) { console.log(error) });
+
+                
               }
             );
           };
