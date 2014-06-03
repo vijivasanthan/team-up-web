@@ -234,8 +234,11 @@ define(
 
                           TeamUp._('clientsQuery')
                             .then(
-                            function ()
+                            function (allClients)
                             {
+                              // save all clients into the localstorage 
+                              Store('app').save('clients', allClients);
+
                               Clients.query(false, {})
                                 .then(
                                 function ()

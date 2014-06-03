@@ -116,17 +116,15 @@ define(
                 data.groups,
                 function (group)
                 {
-                  var clientIds = [];
+                  var cIds = [];
 
                   angular.forEach(
                     Store('app').get(group.id),
                     function (client)
-                    {
-                      clientIds.push(client.uuid);
-
-                      if (clientIds.indexOf(client.uuid) == - 1)
+                    {                      
+                      if (cIds.indexOf(client.uuid) == -1 && typeof client.uuid != "undefined")
                       {
-                        clientIds.push(client.uuid);
+                        cIds.push(client.uuid);
 
                         clients.push(
                           {
@@ -135,11 +133,15 @@ define(
                           }
                         );
                       }
+
+                      if(clientIds.indexOf(client.uuid) == -1){
+                        clientIds.push(client.uuid);
+                      }
                     }
                   );
-
-                  connections.clients[group.id] = clientIds;
-
+                  console.log("cIds : ",cIds);
+                  if(cIds.length == 1)
+                  connections.clients[group.id] = cIds;                  
                   groupIds.push(group.id);
                 }
               );
@@ -516,9 +518,8 @@ define(
                 angular.copy(afterMembers, addMembers);
 
                 if (addMembers.length > 0 ||
-                    addMembers.length > 0 ||
-                    removeMembers.length > 0 ||
-                    removeMembers.length > 0)
+                    removeMembers.length > 0 
+                    )
                 {
                   // TODO: More readable property names!
                   changes[teamId] = {
@@ -539,7 +540,22 @@ define(
                 );
               }
             );
-
+            
+            // deal the empty "before team"
+            angular.forEach(afterTeams,function(_afterTeam,afterteamId){                
+                angular.forEach(beforeTeams,function(beforeTeam,beforeteamId){
+                    if(afterteamId == beforeteamId){
+                      afterteamId = null;
+                    }
+                });
+                // this means there is new items going to add to the emtpy before team
+                if(afterteamId != null){
+                    changes[afterteamId] = {
+                      a: _afterTeam,
+                      r: []                      
+                    };
+                }
+            });
             return changes;
           };
 
