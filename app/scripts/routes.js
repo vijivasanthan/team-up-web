@@ -42,7 +42,7 @@ define(
                   {
                     return ($route.current.params.local && $route.current.params.local == 'true') ?
                            Teams.queryLocal() :
-                           Teams.query();
+                           Teams.query(false, $route.current.params);
                   }
                 ]
               }

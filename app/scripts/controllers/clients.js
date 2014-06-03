@@ -442,7 +442,9 @@ define(
               null,
               clientGroup,
               {
-                success: function (result) { Store('app').save(result.id, result) }
+                success: function (result) { 
+                  Store('app').save(result.id, result);
+                }
               }
             ).then(
               function (result)

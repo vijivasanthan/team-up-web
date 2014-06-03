@@ -34,7 +34,7 @@ define(
                     teams,
                     function (team)
                     {
-                      if(team.uuid == routeParams.uuid){
+                      if(typeof routeParams == "undefined" || team.uuid == routeParams.uuid){
                          calls.push(
                           (function (team, data, Store)
                           {

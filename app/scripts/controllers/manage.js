@@ -121,7 +121,7 @@ define(
                     Store('app').get(group.id),
                     function (client)
                     {                      
-                      if (cIds.indexOf(client.uuid) == -1 && typeof client.uuid != "undefined")
+                      if (client != null && cIds.indexOf(client.uuid) == -1 && typeof client.uuid != "undefined")
                       {
                         cIds.push(client.uuid);
 
@@ -133,7 +133,7 @@ define(
                         );
                       }
 
-                      if(clientIds.indexOf(client.uuid) == -1){
+                      if(client != null && clientIds.indexOf(client.uuid) == -1){
                         clientIds.push(client.uuid);
                       }
                     }

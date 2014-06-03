@@ -305,6 +305,11 @@ define(
 
                         $scope.data = queries;
 
+                        // also refresh the team-client group links cache 
+                        Teams.queryClientGroups(queries.teams).then(function(res){
+                            console.log("new team added to team-client list", res);
+                        });
+
                         angular.forEach(
                           queries.teams,
                           function (team)
@@ -513,7 +518,7 @@ define(
                           $scope.teams,
                           function (team, i)
                           {
-                            if (team.uuid == result)
+                            if (team.uuid == result.result)
                             {
                               $scope.teams.splice(i, 1);
                             }
