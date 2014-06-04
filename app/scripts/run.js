@@ -277,7 +277,7 @@ define(
                   {
                     var members = Store('app').get(teamGroup.id);
 
-                    if (members.length > 1)
+                    if (members.length > 0)
                     {
                       angular.forEach(
                         members,
