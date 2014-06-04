@@ -184,10 +184,12 @@ define(
 
             TeamUp._(
               'clientGroupReportsQuery',
-              { second: $scope.clientGroup.id }
+              { 
+                second: $scope.clientGroup.id 
+              }
             ).then(
               function (reports)
-              {
+              {                
                 $rootScope.statusBar.off();
 
                 $scope.groupReports = $scope.processReports(reports);
@@ -265,8 +267,7 @@ define(
 
           $scope.processReports = function (reports)
           {
-            var _reports = [];
-
+            var _reports = [];            
             angular.forEach(
               reports,
               function (report)
@@ -441,7 +442,9 @@ define(
               null,
               clientGroup,
               {
-                success: function (result) { Store('app').save(result.id, result) }
+                success: function (result) { 
+                  Store('app').save(result.id, result);
+                }
               }
             ).then(
               function (result)
@@ -818,23 +821,47 @@ define(
 
             $scope.saveReport = function (report)
             {
-              TeamUp._(
-                'clientReportAdd',
-                { second: 'report.clientUuid' },
-                {
-                  uuid:         report.uuid,
-                  title:        report.title,
-                  body:         report.body,
-                  creationTime: report.creationTime
-                }
-              ).then(
-                function ()
-                {
-                  $modalInstance.close(report);
+              console.log(report);
+              if(report.editMode){
+                    
+                  TeamUp._(
+                    'clientReportUpdate',
+                    { second: report.clientUuid , 
+                      fourth: report.uuid},
+                    {
+                      uuid:         report.uuid,
+                      title:        report.title,
+                      body:         report.body,
+                      creationTime: report.creationTime
+                    }
+                  ).then(
+                    function ()
+                    {
+                      $modalInstance.close(report);
 
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                }
-              );
+                      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    }
+                  );
+              }else{
+                  TeamUp._(
+                    'clientReportAdd',
+                    { second: report.clientUuid },
+                    {
+                      uuid:         report.uuid,
+                      title:        report.title,
+                      body:         report.body,
+                      creationTime: report.creationTime
+                    }
+                  ).then(
+                    function ()
+                    {
+                      $modalInstance.close(report);
+
+                      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    }
+                  );
+              }
+                                
             };
           };
 
@@ -875,7 +902,7 @@ define(
 
             var modalInstance = $modal.open(
               {
-                templateUrl: './views/reportTemplate.html',
+                templateUrl: 'views/reportTemplate.html',
                 controller:  ModalInstanceCtrl,
                 resolve:     {
                   report:   function () { return $scope.report },

@@ -12,7 +12,7 @@ define(
         {
           var TeamsService = $resource();
 
-          TeamsService.prototype.query = function (only)
+          TeamsService.prototype.query = function (only,routeParams)
           {
             var deferred = $q.defer();
 
@@ -22,11 +22,7 @@ define(
               {
                 Store('app').save('teams', teams);
 
-                if (only)
-                {
-                  deferred.resolve(teams);
-                }
-                else
+                if (!only)
                 {
                   var calls = [],
                       data = {
@@ -38,26 +34,28 @@ define(
                     teams,
                     function (team)
                     {
-                      calls.push(
-                        (function (team, data, Store)
-                        {
-                          TeamUp._(
-                            'teamStatusQuery',
-                            { third: team.uuid },
-                            null,
-                            {
-                              success: function (results)
+                      if(typeof routeParams == "undefined" || team.uuid == routeParams.uuid){
+                         calls.push(
+                          (function (team, data, Store)
+                          {
+                            TeamUp._(
+                              'teamStatusQuery',
+                              { third: team.uuid },
+                              null,
                               {
-                                Store('app').save(team.uuid, results);
+                                success: function (results)
+                                {
+                                  Store('app').save(team.uuid, results);
 
-                                data.members[team.uuid] = [];
+                                  data.members[team.uuid] = [];
 
-                                data.members[team.uuid] = results;
+                                  data.members[team.uuid] = results;
+                                }
                               }
-                            }
-                          )
-                        })(team, data, Store)
-                      );
+                            )
+                          })(team, data, Store)
+                        );
+                      }
                     }
                   );
 
@@ -65,6 +63,11 @@ define(
                     .then(
                     function () { deferred.resolve(data) }
                   );
+                  
+                }
+                else
+                {
+                  deferred.resolve(teams);
                 }
               }
             );
@@ -218,12 +221,14 @@ define(
                   changes,
                   function (change, teamId)
                   {
-                    queryCalls.push(
-                      TeamUp._(
-                        'teamStatusQuery',
-                        { third: teamId }
-                      )
-                    );
+                    // queryCalls.push(
+                    //   TeamUp._(
+                    //     'teamStatusQuery',
+                    //     { third: teamId }
+                    //   )
+                    // );
+                    var routeParam = {uuid : teamId};
+                    queryCalls.push(TeamsService.prototype.query(false,routeParam));                    
                   }
                 );
 

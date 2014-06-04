@@ -81,7 +81,7 @@ angular.module('ui.bootstrap.modal', [])
       return {
         restrict:    'EA',
         replace:     true,
-        templateUrl: 'template/modal/backdrop.html',
+        templateUrl: 'vendors/angular-ui-bootstrap/template/modal/backdrop.html',
         link:        function (scope, element, attrs)
         {
 
@@ -118,7 +118,7 @@ angular.module('ui.bootstrap.modal', [])
         },
         replace:     true,
         transclude:  true,
-        templateUrl: 'template/modal/window.html',
+        templateUrl: 'vendors/angular-ui-bootstrap/template/modal/window.html',
         link:        function (scope, element, attrs)
         {
           scope.windowClass = attrs.windowClass || '';

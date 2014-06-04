@@ -189,28 +189,29 @@ define(
                   changes,
                   function (change, clientGroupId)
                   {
-                    refreshGroups.add(clientGroupId);
+                    refreshGroups.push(clientGroupId);
 
-                    if (change.a.length > 0)
-                    {
-                      angular.forEach(
-                        change.a,
-                        function (clientId)
-                        {
-                          var client = getClientFromLocal(clientId);
+                    // if (change.a.length > 0)
+                    // {
+                    //   angular.forEach(
+                    //     change.a,
+                    //     function (clientId)
+                    //     {
+                    //       var client = getClientFromLocal(clientId);
 
-                          if (typeof client != 'undefined' &&
-                              refreshGroups.indexOf(client.clientGroupUuid) == - 1)
-                          {
-                            refreshGroups.add(client.clientGroupUuid);
+                    //       if (typeof client != 'undefined' &&
+                    //           refreshGroups.indexOf(client.clientGroupUuid) == - 1)
+                    //       {
+                    //         refreshGroups.push(client.clientGroupUuid);
+                    //         var routeParam = {uuid : client.clientGroupUuid};
+                    //         queryCalls.push(ClientsService.prototype.query(false,routeParam));
+                    //       }
+                    //     }
+                    //   );
+                    // }
 
-                            queryCalls.push(ClientsService.prototype.get(client.clientGroupUuid));
-                          }
-                        }
-                      );
-                    }
-
-                    queryCalls.push(ClientsService.prototype.get(clientGroupId));
+                    var routeParam = {uuid : clientGroupId};
+                    queryCalls.push(ClientsService.prototype.query(false,routeParam));
                   });
 
                 $q.all(queryCalls)

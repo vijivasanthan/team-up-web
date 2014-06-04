@@ -58,11 +58,10 @@ define(
                   angular.forEach(
                     Store('app').get(team.uuid),
                     function (member)
-                    {
-                      memberIds.push(member.uuid);
-
-                      if (memberGlobalIds.indexOf(member.uuid) == - 1)
+                    {                      
+                      if (memberGlobalIds.indexOf(member.uuid) == - 1 && typeof member.uuid != "undefined")
                       {
+                        memberIds.push(member.uuid);
                         members.push(
                           {
                             'name': member.firstName + ' ' + member.lastName,
@@ -116,17 +115,15 @@ define(
                 data.groups,
                 function (group)
                 {
-                  var clientIds = [];
+                  var cIds = [];
 
                   angular.forEach(
                     Store('app').get(group.id),
                     function (client)
-                    {
-                      clientIds.push(client.uuid);
-
-                      if (clientIds.indexOf(client.uuid) == - 1)
+                    {                      
+                      if (client != null && cIds.indexOf(client.uuid) == -1 && typeof client.uuid != "undefined")
                       {
-                        clientIds.push(client.uuid);
+                        cIds.push(client.uuid);
 
                         clients.push(
                           {
@@ -135,11 +132,15 @@ define(
                           }
                         );
                       }
+
+                      if(client != null && clientIds.indexOf(client.uuid) == -1){
+                        clientIds.push(client.uuid);
+                      }
                     }
                   );
-
-                  connections.clients[group.id] = clientIds;
-
+                  console.log("cIds : ",cIds);
+                  
+                  connections.clients[group.id] = cIds;                  
                   groupIds.push(group.id);
                 }
               );
@@ -516,9 +517,8 @@ define(
                 angular.copy(afterMembers, addMembers);
 
                 if (addMembers.length > 0 ||
-                    addMembers.length > 0 ||
-                    removeMembers.length > 0 ||
-                    removeMembers.length > 0)
+                    removeMembers.length > 0 
+                    )
                 {
                   // TODO: More readable property names!
                   changes[teamId] = {
@@ -539,7 +539,22 @@ define(
                 );
               }
             );
-
+            
+            // deal the empty "before team"
+            angular.forEach(afterTeams,function(_afterTeam,afterteamId){                
+                angular.forEach(beforeTeams,function(beforeTeam,beforeteamId){
+                    if(afterteamId == beforeteamId){
+                      afterteamId = null;
+                    }
+                });
+                // this means there is new items going to add to the emtpy before team
+                if(afterteamId != null){
+                    changes[afterteamId] = {
+                      a: _afterTeam,
+                      r: []                      
+                    };
+                }
+            });
             return changes;
           };
 
@@ -715,31 +730,33 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                TeamUp._('teamMemberFree')
-                  .then(
-                  function (result)
-                  {
-                    Store('app').save('members', result);
+                // TeamUp._('teamMemberFree')
+                //   .then(
+                //   function (result)
+                //   {
+                //     // Store('app').save('members', result);
 
-                    $rootScope.statusBar.off();
+                //     $rootScope.statusBar.off();
 
-                    $timeout(function () { $route.reload() }, 250);
-                    //                    $timeout(
-                    //                      function ()
-                    //                      {
-                    //                        $route.reload();
-                    //                        $timeout(
-                    //                          function ()
-                    //                          {
-                    //                            $location.path('/manage').hash('teams');
-                    //                          },
-                    //                          250
-                    //                        );
-                    //                      },
-                    //                      150
-                    //                    );
-                  },
-                  function (error) { console.log(error) });
+                $timeout(function () { $route.reload() }, 250);
+                //     //                    $timeout(
+                //     //                      function ()
+                //     //                      {
+                //     //                        $route.reload();
+                //     //                        $timeout(
+                //     //                          function ()
+                //     //                          {
+                //     //                            $location.path('/manage').hash('teams');
+                //     //                          },
+                //     //                          250
+                //     //                        );
+                //     //                      },
+                //     //                      150
+                //     //                    );
+                //   },
+                //   function (error) { console.log(error) });
+
+                
               }
             );
           };
