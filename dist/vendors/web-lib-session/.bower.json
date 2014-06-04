@@ -1,0 +1,23 @@
+{
+  "name": "web-lib-session",
+  "homepage": "https://github.com/askcs/web-lib-session",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "Session management module with deep linking prevention.",
+  "main": "dist/session.js",
+  "keywords": [
+    "session"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "c8eb34f3d6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c8eb34f3d6fb3dbd96008f21ad236ce8da70e296"
+  },
+  "_source": "https://github.com/askcs/web-lib-session.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-session.git"
+}

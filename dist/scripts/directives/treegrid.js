@@ -1,0 +1,1 @@
+define(["directives/directives"],function(e){e.directive("treeGrid",["$rootScope","$window",function(e,t){return{restrict:"AE",controller:function(e){},link:function(e,t,n){console.log("$rootScope, $scope, $window ->",e)}}}])});

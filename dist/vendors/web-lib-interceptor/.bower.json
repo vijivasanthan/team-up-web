@@ -1,0 +1,25 @@
+{
+  "name": "web-lib-interceptor",
+  "homepage": "https://github.com/askcs/web-lib-interceptor",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "REST calls interceptor.",
+  "main": "dist/interceptor.js",
+  "keywords": [
+    "interceptor",
+    "REST",
+    "angular"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "d02948bcb1",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d02948bcb1e685d989270f90ee31ddbcf92b0e94"
+  },
+  "_source": "https://github.com/askcs/web-lib-interceptor.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-interceptor.git"
+}

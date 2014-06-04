@@ -1,0 +1,231 @@
+<div class="page-header"></div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Mijn Taken</a></li>
+    <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Alle Taken</a></li>
+    <li class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Nieuwe Taak</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="myTasks" class="tab-pane {{(views.myTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">Mijn taken</h3>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+      </div>
+      <div class="tab-header hide">
+        <input type="text" class="pull-left">
+        <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
+      </div>
+      <hr>
+      <p class="hide">{{ui.teamup.noMembers}}</p>
+      <div>
+        <table class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th><a>Naam Cliënt</a></th>
+              <th><a>Informatie</a></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="dragIcon"></div>
+              </td>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Piet de Vries</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">12,1 km Molenweg Dordrecht<a href="">{{ui.teamup.map}}</a></span></dl>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span class="taskInfo">Maandag 10.00 - 13.00 uur</span></dl>
+                <dl>
+                  <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vulputate magna in diam laoreet eleifend. Maecenas non ultricies est. Vivamus vestibulum dui vitae tempor tristique. Nunc ultricies turpis tortor, ac.</dd>
+                </dl>
+              </td>
+              <td>
+                <div class="pull-right"><a href="#">
+                    <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
+                  <button type="submit" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a class="noteLink">
+                    <p>Opmerkingen<i class="icon-arrow-down2"></i></p></a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="dragIcon"></div>
+              </td>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Piet de Vries</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">12,1 km Molenweg Dordrecht<a href="#">{{ui.teamup.map}}</a></span></dl>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span class="taskInfo">Maandag 10.00 - 13.00 uur</span></dl>
+                <dl>
+                  <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+                </dl>
+              </td>
+              <td>
+                <div class="pull-right"><a href="#">
+                    <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
+                  <button type="submit" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
+      </div>
+    </div>
+    <div id="allTasks" class="tab-pane {{(views.allTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">Alle taken</h3>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+      </div>
+      <div class="tab-header hide">
+        <input type="text" class="pull-left">
+        <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
+      </div>
+      <hr>
+      <p class="hide">{{ui.teamup.noMembers}}</p>
+      <div>
+        <table class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th><a>Naam Cliënt</a></th>
+              <th><a>Informatie</a></th>
+              <th></th>
+              <th><a>Naam Lid</a></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Piet de Vries</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">12,1 km Molenweg Dordrecht<a href="">{{ui.teamup.map}}</a></span></dl>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span class="taskInfo">Maandag 10.00 - 13.00 uur</span></dl>
+                <dl>
+                  <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+                </dl>
+              </td>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Remco van Schie</a></td>
+              <td>
+                <div class="pull-right"><a href="#">
+                    <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
+                  <button type="submit" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Piet de Vries</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">12,1 km Molenweg Dordrecht<a href="#">{{ui.teamup.map}}</a></span></dl>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span class="taskInfo">Maandag 10.00 - 13.00 uur</span></dl>
+                <dl>
+                  <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+                </dl>
+              </td>
+              <td>
+                <div class="roundedPicSmall"></div>
+              </td>
+              <td><a href="#">Remco van Schie</a></td>
+              <td>
+                <div class="pull-right">
+                  <button type="submit" class="btn-primary btn-mini"><i class="icon-plus"></i></button><a href="#">
+                    <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
+                  <button type="submit" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a class="noteLink">
+                    <p>Opmerkingen<i class="icon-arrow-down2"></i></p></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
+      </div>
+    </div>
+    <div id="newTask" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">Nieuwe taak</h3>
+      </div>
+      <hr>
+      <form>
+        <div class="row">
+          <div class="span6">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label">Cliënt</label>
+                <div class="controls">
+                  <select>
+                    <option value="">Cliëntengroep</option>
+                  </select>
+                  <select>
+                    <option value="">Cliënt</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Verzorger</label>
+                <div class="controls">
+                  <select>
+                    <option value="">Team</option>
+                  </select>
+                  <select>
+                    <option value="">Lid</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="control-group dater">
+                <label class="control-label">Begin</label>
+                <div class="controls">
+                  <input type="text"><i class="icon-calendar"></i>
+                  <input type="text"><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group dater">
+                <label class="control-label">Eind</label>
+                <div class="controls">
+                  <input type="text"><i class="icon-calendar"></i>
+                  <input type="text"><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Opmerkingen</label>
+                <div class="controls">
+                  <textarea class="span4"></textarea>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="span6">
+            <fieldset>
+              <div class="control-group">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2461.4264625712335!2d4.452300999999999!3d51.90793!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c432d6cfa243cd%3A0xa8a80eca30f68c56!2sASK+Community+Systems!5e0!3m2!1sen!2s!4v1399557503251" width="400" height="300" frameborder="0" style="border: 0"></iframe>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <hr>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">{{ui.teamup.saveMember}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
