@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'TeamUp',
-        function ($rootScope, $scope, $q, $location, $route, $window, Dater, TeamUp)
+        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'TeamUp', 'Store',
+        function ($rootScope, $scope, $q, $location, $route, $window, Dater, TeamUp, Store)
         {
           var range, diff;
 
@@ -346,8 +346,6 @@ define(
             'timeliner',
             function ()
             {
-              console.log('timeline render has been inited!');
-
               $scope.timeliner.render(
                 {
                   start: new Date(arguments[1].start).getTime(),
@@ -650,6 +648,9 @@ define(
                 else if ($scope.views.clients)
                 {
                   // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
+
+                  // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
+                  console.log('currentTeam ->', $scope.currentClientGroup);
                 }
 
                 slot.relatedUser = null;

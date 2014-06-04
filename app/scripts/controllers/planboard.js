@@ -188,6 +188,34 @@ define(
 
           }
 
+          var getTeamID = function ()
+          {
+            var found = false;
+
+            var team = angular.forEach(
+              Store('app').all(),
+              function (value, key)
+              {
+                if (/teamGroup_/.test(key) && value.hasOwnProperty('0') && ! found)
+                {
+                  if (value[0].id == $scope.currentClientGroup)
+                  {
+                    found = true;
+
+                    return key;
+                  }
+                }
+              }
+            );
+
+            return (found) ? team : false;
+          };
+
+          $scope.getTeamID = function ()
+          {
+            console.log('result ->', getTeamID());
+          };
+
           $scope.changeCurrent = function (current, periods)
           {
             angular.forEach(

@@ -12,6 +12,10 @@ section#planboard(ng-controller='timeline')
 			ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
 			ng-change='changeCurrent(currentClientGroup)')
 
+		br
+		a(class='btn btn-primary', ng-click='getTeamID()') get team id
+		span team: {{currentTeamID}}
+
 		#timeline-controls.pull-right(ng-controller='timeline-navigation',
 		style='text-align: right')
 			h4(style='font-weight: normal;') {{timeline.range | rangeMainFilter}}

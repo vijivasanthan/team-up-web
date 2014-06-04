@@ -120,6 +120,8 @@ define(
                                result[1][0] == 'u') ? [] : result
                           );
 
+                          console.log('clientGroup ->', result);
+
                           data.groups[team.uuid] = [];
 
                           data.groups[team.uuid] = result.data;
