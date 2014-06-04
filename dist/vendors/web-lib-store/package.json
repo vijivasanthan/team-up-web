@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-store",
+  "version": "1.0.0",
+  "description": "A LawnchairJS based browser storage AngularJS directive.",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askcs/web-lib-md5.git"
+  },
+  "author": "Cengiz Ulusoy",
+  "license": "BSD"
+}

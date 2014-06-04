@@ -1,0 +1,1 @@
+define(["services/services"],function(e){e.factory("GoogleGEO",[function(){return new google.maps.Geocoder}])});

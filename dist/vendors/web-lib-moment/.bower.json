@@ -1,0 +1,25 @@
+{
+  "name": "web-lib-moment",
+  "homepage": "https://github.com/askcs/web-lib-moment",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "A MomentJS service wrapper with some handy date/time related functionality.",
+  "main": "store.js",
+  "keywords": [
+    "momentJS",
+    "date",
+    "time"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "6c2d39ab10",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "6c2d39ab1021c120865859394dc652fdc39e19a9"
+  },
+  "_source": "https://github.com/askcs/web-lib-moment.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-moment.git"
+}

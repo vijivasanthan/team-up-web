@@ -1,0 +1,16 @@
+{
+  "name": "web-lib-md5",
+  "version": "1.0.0",
+  "homepage": "https://github.com/askcs/web-lib-md5",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "MD5 parser.",
+  "main": "md5.js",
+  "keywords": [
+    "md5",
+    "password"
+  ],
+  "license": "MIT",
+  "private": true
+}

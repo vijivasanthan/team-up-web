@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-log",
+  "version": "1.0.0",
+  "homepage": "https://github.com/askcs/web-lib-log",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "Log any errors or other useful information and collect usage data.",
+  "main": "dist/log.js",
+  "keywords": [
+    "log",
+    "statistics",
+    "errors"
+  ],
+  "license": "MIT",
+  "private": true
+}

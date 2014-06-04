@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-interceptor",
+  "version": "1.0.0",
+  "description": "REST calls interceptor.",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askcs/web-lib-interceptor.git"
+  },
+  "author": "Cengiz Ulusoy",
+  "license": "BSD"
+}

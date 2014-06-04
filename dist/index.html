@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--if lt IE 7html.no-js.lt-ie9.lt-ie8.lt-ie7
+-->
+<!--if IE 7html.no-js.lt-ie9.lt-ie8
+-->
+<!--if IE 8html.no-js.lt-ie9
+-->
+<!-- [if gt IE 8] <!-->
+<html lang="en" class="no-js">
+  <!-- <![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="TeamUp Web Application">
+    <meta name="viewport" content="width=device-width">
+    <title>TeamUp v0.2.0</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="styles/b8842963.main.css"/>
+    <!-- block iestuff-->
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  </head>
+  <body>
+    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            <!-- span.icon-bar {{ui.message.messages}}-->
+          </button><a ng-click="nav(&quot;tasks&quot;)" class="navbar-brand">TeamUp</a>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li data-match-route="/tasks"><a ng-click="nav(&quot;tasks&quot;)">Taken</a></li>
+              <li data-match-route="/team"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
+              <li data-match-route="/client"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
+              <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>
+              <li data-match-route="/planboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;planboard&quot;)">Agenda</a></li>
+              <!--li(data-match-route='/planboard',-->
+              <!--ng-hide='app.resources.role > 1')-->
+              <!--	a(ng-click='nav("vis")') Vis-->
+            </ul>
+            <ul ng-hide="browser.mobile" class="nav pull-right">
+              <!--Disabled temporarily till the functionailty exists-->
+              <!--li.navbar-btn-->
+              <!--	a(href='#search')-->
+              <!--		i.icon-search-->
+              <li><a id="account" ng-click="nav(&quot;profile&quot;)">
+                  <div style="background-image: url({{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }})" class="roundedPicxSmall {{app.resources.states|stateColor}}"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
+              <li class="navbar-btn"><a ng-click="nav(&quot;logout&quot;)"><i class="icon-off"></i></a></li>
+            </ul>
+            <ul ng-show="browser.mobile" style="{{(browser.landscape) &amp;&amp; &quot;margin-right:-20px&quot;}}" class="nav pull-right">
+              <li><a href="#profile"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Profile</span></a></li>
+              <li><a href="#settings"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-wrench icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Settings</span></a></li>
+              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Logout</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="loading" ng-show="loadingBig" class="ng-cloak">
+      <div ng-show="loaderIcons.general"><span class="entypo">⏳</span>
+        <p>{{ui.loading.general}}...</p>
+      </div>
+      <div ng-show="loaderIcons.dashboard"><span class="entypo">◴</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.dashboard}}</p>
+      </div>
+      <div ng-show="loaderIcons.planboard"><span class="entypo">🕔</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.planboard}}</p>
+      </div>
+      <div ng-show="loaderIcons.messages"><span class="entypo"></span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.messages}}</p>
+      </div>
+      <div ng-show="loaderIcons.groups"><span class="entypo">👥</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.groups}}</p>
+      </div>
+      <div ng-show="loaderIcons.profile"><span class="entypo">👤</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.profile}}</p>
+      </div>
+      <div ng-show="loaderIcons.settings"><span class="entypo">⚒</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.settings}}</p>
+      </div>
+    </div>
+    <div id="notification" ng-show="notification.status" class="alert {{notification.type}}">
+      <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
+    </div>
+    <div id="chat" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)" ng-controller="messagesCtrl" class="ng-cloak">
+      <div id="chat-btn" ng-click="openChat()"><span>CHAT</span></div>
+      <div id="chat-content" ng-show="toggleChat">
+        <p ng-hide="messages.length &gt; 0">{{ui.teamup.noMessages}}</p>
+        <div ng-repeat="message in messages">
+          <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
+            <hr>
+          </div>
+          <div class="message {{message.msgRole}}">
+            <div style="background-image: url({{message.member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }})" class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"></div>
+            <div ng-show="(message.role == &quot;other&quot;)" class="arrow"></div>
+            <div class="chatCloud">
+              <h5 class="name">{{message.senderName}}</h5>
+              <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
+              <div>
+                <p>{{message.body}}</p>
+              </div>
+            </div>
+            <div ng-hide="(message.role == &quot;other&quot;)" class="arrow"></div>
+          </div>
+        </div>
+        <div id="pusher"> </div>
+      </div>
+      <div class="input-area">
+        <input id="messageField" type="text" ng-model="newMessage" ngenter="sendMessage(newMessage)">
+        <button ng-click="sendMessage(newMessage)" class="btn btn-success">{{ui.message.send}}</button>
+      </div>
+    </div>
+    <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/ca504260.ajax-loader.gif"><small>{{loading.message}}</small></div>
+    <div id="wrap">
+      <div ng-view="" class="container-fluid"></div>
+      <div id="push"></div>
+    </div>
+    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak">
+      <div class="container-fluid">
+        <div id="copyrights"><span ng-style="(!config.profile.mobileApp.status) &amp;&amp; &quot;right:0&quot;" class="muted"><small>Ask Community Systems, 2013<br><i>TeamUp&nbsp;<a href="version.html" target="_blank">v{{config.app.version}}</a></i></small></span></div>
+        <p ng-show="loading.status" class="muted"><img src="images/ca504260.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
+      </div>
+    </div>
+    <script data-main="scripts/541a5c4c.main" src="vendors/requirejs/require.js"></script>
+  </body>
+</html>
