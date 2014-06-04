@@ -95,7 +95,7 @@ require(
     'services/clients',
     'services/dater', // TODO: Remove later on
     'services/teams',
-    'services/GoogleGEO',
+    'services/googleGEO',
     'directives/widgets',
     // 'directives/treegrid',
     'filters/avatars',
