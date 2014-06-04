@@ -38,6 +38,9 @@ define(
 
           $scope.currentRole = $scope.profilemeta.role;
 
+          $scope.imgHost = config.app.host;
+          $scope.ns = config.app.namespace;
+
           var teams = [];
           $scope.selectTeams = Store('app').get('teams');
 
@@ -145,7 +148,7 @@ define(
               'profileSave',
               {
                 second: resources.teamUuids[0],
-                fourth: id
+                fourth: resources.uuid
               },
               resources
             ).then(
@@ -217,6 +220,11 @@ define(
           };
 
           $scope.editProfile = function () { setView('edit') };
+          
+          $scope.editImg = function(){
+            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";                
+            $scope.setViewTo('editImg');
+          };
 
           $scope.deleteProfile = function ()
           {
