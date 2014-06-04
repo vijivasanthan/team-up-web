@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -52,6 +52,9 @@ define(
             );
           }
 
+          $scope.imgHost = config.app.host;
+          $scope.ns = config.app.namespace;
+          
           $scope.clients = data.clients;
           $scope.clientGroups = data.clientGroups;
 
@@ -960,6 +963,12 @@ define(
                 }, function (error) { console.log(error) });
             }
           };
+
+          $scope.editImg = function() {            
+              $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";              
+              $scope.setViewTo('editImg');
+          };
+
         }
       ]
     );

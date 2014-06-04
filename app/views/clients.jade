@@ -197,7 +197,7 @@
 						tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:creationTime ')
 							td
 								.roundedPicSmall(class='{{report.author.states|stateColor}}',
-									style='background-image: url({{report.author.uuid | avatar:"client":"80"}})')
+									style='background-image: url({{report.author.uuid | avatar:"team":"80"}})')
 							td
 								| {{report.author.firstName}} {{report.author.lastName}}
 							td
@@ -313,7 +313,7 @@
 					tbody
 						tr(ng-repeat='report in reports|orderBy:creationTime')
 							td
-								.roundedPicSmall(style='background-image: url({{report.author.uuid | avatar:"client":"80"}})',
+								.roundedPicSmall(style='background-image: url({{report.author.uuid | avatar:"team":"80"}})',
 								class='{{report.author.states|stateColor}}')
 							td
 								| {{report.author.firstName}} {{report.author.lastName}}
@@ -401,8 +401,8 @@
 			div(style='overflow: hidden; height: 35px')
 				h3.pull-left(style='margin-top: 0;') {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}
 			hr
-			div
-				img(ng-src='{{avatarURL}}')
+			div.roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
+				//img(ng-src='{{avatarURL}}')
 			#uploadImgModule
 				form.form-vertical(enctype='multipart/form-data')
 					uploader(action='{{uploadURL}}')

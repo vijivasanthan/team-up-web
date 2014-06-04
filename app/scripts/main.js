@@ -39,7 +39,8 @@ require.config(
       _moment:            '../vendors/web-lib-moment/dist/moment',
       session:            '../vendors/web-lib-session/dist/session',
       vis:                '../vendors/vis/dist/vis.min',
-      'ng-vis':           '../vendors/web-lib-vis/public/dist/ng-vis'
+      'ng-vis':           '../vendors/web-lib-vis/public/dist/ng-vis',
+      'jquery-form':      '../vendors/jquery-form/jquery.form'
       //'async':            '../vendors/requirejs-plugins/src/async',
     },
     shim:  {
@@ -67,7 +68,8 @@ require.config(
       _moment:            { deps: ['angular', 'moment'] },
       session:            { deps: ['angular'] },
       vis:                { exports: 'vis' },
-      'ng-vis':           { deps: ['angular', 'vis'], exports: 'ng-vis' }
+      'ng-vis':           { deps: ['angular', 'vis'], exports: 'ng-vis' },
+      'jquery-form':      { deps: ['jquery'], exports: 'jquery-form' }
     }
   }
 );
@@ -129,7 +131,8 @@ require(
     '_moment',
     'session',
     'vis',
-    'ng-vis'
+    'ng-vis',
+    'jquery-form'
   ],
   function (angular, domReady)
   {
