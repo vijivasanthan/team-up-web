@@ -750,7 +750,7 @@ define(
 
             return {
               uuid: rawSlot.uuid,
-              status: 1,
+              status: 2,
               plannedStartVisitTime: rawSlot.startTime,
               plannedEndVisitTime: rawSlot.endTime,
               relatedClientUuid: clientId,
