@@ -175,7 +175,7 @@ define(
                       {
                         $rootScope.app.resources = result;
 
-                        Store('app').save('resources', resources);
+                        Store('app').save('resources', resources);                        
                       }
                     }
                   ).then(
@@ -195,6 +195,9 @@ define(
                         $rootScope.statusBar.off();
 
                         $scope.setViewTo('profile');
+
+                        // put back the birthday for display after update the member.
+                        resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
                         // refresh the teams in the background
                         angular.forEach(
@@ -222,7 +225,7 @@ define(
           $scope.editProfile = function () { setView('edit') };
           
           $scope.editImg = function(){
-            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";                
+            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";            
             $scope.setViewTo('editImg');
           };
 

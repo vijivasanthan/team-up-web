@@ -386,7 +386,8 @@ define(
                 phone:        member.phone,
                 teamUuids:    [member.team],
                 role:         member.role,
-                birthDate:    Dater.convert.absolute(member.birthDate, 0)
+                birthDate:    Dater.convert.absolute(member.birthDate, 0),
+                function: member.function
               }
             ).then(
               function (result)
@@ -418,6 +419,7 @@ define(
                         $scope.closeTabs();
 
                         $scope.data = queries;
+                        var routePara = {'uuid' : result.teamId};
 
                         angular.forEach(
                           queries.teams,

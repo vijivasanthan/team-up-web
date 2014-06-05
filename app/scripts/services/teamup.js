@@ -71,9 +71,9 @@ define(
                   }
                 },
                 profileSave: {
-                  method: '',
+                  method: 'PUT',
                   params: {
-                    first: '/team/',
+                    first: 'team',
                     third: 'member'
                   }
                 },

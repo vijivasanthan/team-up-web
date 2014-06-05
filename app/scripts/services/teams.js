@@ -55,6 +55,8 @@ define(
                             )
                           })(team, data, Store)
                         );
+                      }else{
+                        data.members[team.uuid] = Store('app').get(team.uuid);
                       }
                     }
                   );
