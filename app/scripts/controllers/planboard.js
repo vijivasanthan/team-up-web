@@ -202,6 +202,8 @@ define(
                   {
                     found = true;
 
+                    console.log('key ->', key, $scope.currentClientGroup);
+
                     return key;
                   }
                 }
@@ -213,7 +215,9 @@ define(
 
           $scope.getTeamID = function ()
           {
-            console.log('result ->', getTeamID());
+            getTeamID();
+
+            // console.log('result ->', getTeamID());
           };
 
           $scope.changeCurrent = function (current, periods)

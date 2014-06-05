@@ -84,6 +84,8 @@ define(
 
           function resetViews ()
           {
+            console.log('resetViews ->');
+
             $scope.views = {
               myTasks:  false,
               allTasks: false,
@@ -93,6 +95,8 @@ define(
 
           var setView = function (hash)
           {
+            console.log('setView ->');
+
             resetViews();
 
             $scope.views[hash] = true;
@@ -100,13 +104,17 @@ define(
 
           $scope.setViewTo = function (hash)
           {
+            console.log('setViewTo ->');
+
             $scope.$watch(
-              hash, function ()
+              hash,
+              function ()
               {
                 $location.hash(hash);
 
                 setView(hash);
-              });
+              }
+            );
           };
 
           setView('myTasks');
