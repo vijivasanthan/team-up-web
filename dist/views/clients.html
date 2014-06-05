@@ -156,7 +156,7 @@
           <tbody>
             <tr ng-repeat="report in groupReports | filter:{filtered:&quot;false&quot;} | orderBy:creationTime ">
               <td>
-                <div style="background-image: url({{report.author.uuid | avatar:&quot;client&quot;:&quot;80&quot;}})" class="roundedPicSmall {{report.author.states|stateColor}}"></div>
+                <div style="background-image: url({{report.author.uuid | avatar:&quot;team&quot;:&quot;80&quot;}})" class="roundedPicSmall {{report.author.states|stateColor}}"></div>
               </td>
               <td>{{report.author.firstName}} {{report.author.lastName}}</td>
               <td><a ng-click="openReport(report)">{{report.title}}</a></td>
@@ -275,7 +275,7 @@
           <tbody>
             <tr ng-repeat="report in reports|orderBy:creationTime">
               <td>
-                <div style="background-image: url({{report.author.uuid | avatar:&quot;client&quot;:&quot;80&quot;}})" class="roundedPicSmall {{report.author.states|stateColor}}"></div>
+                <div style="background-image: url({{report.author.uuid | avatar:&quot;team&quot;:&quot;80&quot;}})" class="roundedPicSmall {{report.author.states|stateColor}}"></div>
               </td>
               <td>{{report.author.firstName}} {{report.author.lastName}}</td>
               <td><a ng-click="openReport(report)">{{report.title}}</a></td>
@@ -359,7 +359,9 @@
         <h3 style="margin-top: 0" class="pull-left">{{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}</h3>
       </div>
       <hr>
-      <div><img ng-src="{{avatarURL}}"></div>
+      <div style="background-image: url({{client.uuid | avatar:&quot;client&quot;:&quot;368&quot; }})" class="roundedPicLarge memberStateBusy">
+        <!--img(ng-src='{{avatarURL}}')-->
+      </div>
       <div id="uploadImgModule">
         <form enctype="multipart/form-data" class="form-vertical">
           <uploader action="{{uploadURL}}"></uploader>
