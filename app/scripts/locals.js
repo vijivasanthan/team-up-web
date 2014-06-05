@@ -381,6 +381,12 @@ define(
           newTask:                 'Nieuwe Taak',
           updateTask:              'Wijzig Taak',
           managePanelchangePrompt: 'Data is changed. Click \'Yes\' to go on, \'Cancel\' to stay.'
+        },
+        task:{
+          information : 'informatie',
+          noTasks: 'No Tasks',
+          clientName: 'client',
+          memberName: 'Member'
         }
       }
     }

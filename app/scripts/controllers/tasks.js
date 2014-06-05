@@ -6,11 +6,14 @@ define(
 
     controllers.controller(
       'tasksCtrl', [
-        '$rootScope', '$scope', '$location',
-        function ($rootScope, $scope, $location)
+        '$rootScope', '$scope', '$location','Store',
+        function ($rootScope, $scope, $location,Store)
         {
           $rootScope.fixStyles();
+          $scope.myTasks = Store('app').get('myTasks');
+          $scope.allTasks = Store('app').get('allTasks');
 
+          console.log("in controllers ",$scope.myTasks);
 //          var params = $location.search();
 //
 //          var uuid, view;

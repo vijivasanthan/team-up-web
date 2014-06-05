@@ -34,37 +34,36 @@
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
 			hr
-			p.hide
-				| {{ui.teamup.noMembers}}
-			div
+			p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}				
+			div(ng-show='myTasks.length > 0')
 				table.table.table-striped.taskTable
 					thead
 						tr
 							th
 							th
 							th
-								a Naam Cliënt
+								a {{ui.task.clientName}}
 							th
-								a Informatie
+								a {{ui.task.information}}
 							th
 					tbody
-						tr
+						tr(ng-repeat='task in myTasks|orderBy:"plannedEndVisitTime"')
 							td
 								.dragIcon
 							td
-								.roundedPicSmall
+								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
-								a(href='#') Piet de Vries
+								a(href='#') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo 12,1 km Molenweg Dordrecht
-										a(href='') {{ui.teamup.map}}
+									span.taskInfo  km {{task.relatedClientUuid | getObjAttr:"client":"address" }}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}
 								dl
 									span.taskIcon.icon-time(aria-hidden='true')
-									span.taskInfo Maandag 10.00 - 13.00 uur
+									span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
 								dl
-									dd Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vulputate magna in diam laoreet eleifend. Maecenas non ultricies est. Vivamus vestibulum dui vitae tempor tristique. Nunc ultricies turpis tortor, ac.
+									dd {{task.description}}
 							td
 								.pull-right
 									a(href='#')
@@ -75,35 +74,10 @@
 									a.noteLink
 										p Opmerkingen
 											i.icon-arrow-down2
-
-						tr
-							td
-								.dragIcon
-							td
-								.roundedPicSmall
-							td
-								a(href='#') Piet de Vries
-							td
-								dl
-									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo 12,1 km Molenweg Dordrecht
-										a(href='#') {{ui.teamup.map}}
-								dl
-									span.taskIcon.icon-time(aria-hidden='true')
-									span.taskInfo Maandag 10.00 - 13.00 uur
-								dl
-									dd Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-							td
-								.pull-right
-									a(href='#')
-										button.btn-primary.btn-mini
-											i.icon-edit
-									button.btn-primary.btn-mini(type='submit')
-										i.icon-trash
 				span.muted.pull-right
 					small
 						i
-							| {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+							| {{myTasks.length | i18n_spec:'groups.memberCount'}}
 
 
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
@@ -116,67 +90,40 @@
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
 			hr
-			p.hide
-				| {{ui.teamup.noMembers}}
+			p(ng-hide='allTasks.length > 0') {{ui.task.noTasks}}								
 			div
 				table.table.table-striped.taskTable
 					thead
 						tr
 							th
 							th
-								a Naam Cliënt
+								a {{ui.task.clientName}}
 							th
-								a Informatie
+								a {{ui.task.information}}
 							th
 							th
-								a Naam Lid
+								a {{ui.task.memberName}}
 							th
 					tbody
-						tr
+						tr(ng-repeat='task in allTasks|orderBy:"plannedEndVisitTime"')
 							td
-								.roundedPicSmall
+								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
-								a(href='#') Piet de Vries
-							td
-								dl
-									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo 12,1 km Molenweg Dordrecht
-										a(href='') {{ui.teamup.map}}
-								dl
-									span.taskIcon.icon-time(aria-hidden='true')
-									span.taskInfo Maandag 10.00 - 13.00 uur
-								dl
-									dd Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-							td
-								.roundedPicSmall
-							td
-								a(href='#') Remco van Schie
-							td
-								.pull-right
-									a(href='#')
-										button.btn-primary.btn-mini
-											i.icon-edit
-									button.btn-primary.btn-mini(type='submit')
-										i.icon-trash
-						tr
-							td
-								.roundedPicSmall
-							td
-								a(href='#') Piet de Vries
+								a(href='#') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo 12,1 km Molenweg Dordrecht
-										a(href='#') {{ui.teamup.map}}
+									span.taskInfo km {{task.relatedClientUuid | getObjAttr:"client":"address" }}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}
 								dl
 									span.taskIcon.icon-time(aria-hidden='true')
-									span.taskInfo Maandag 10.00 - 13.00 uur
+									span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
 								dl
-									dd Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+									dd {{task.description}}
 							td
 								.roundedPicSmall
 							td
-								a(href='#') Remco van Schie
+								a(href='#') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}						
 							td
 								.pull-right
 									button.btn-primary.btn-mini(type='submit')
@@ -192,7 +139,7 @@
 				span.muted.pull-right
 					small
 						i
-							| {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+							| {{allTasks.length | i18n_spec:'groups.memberCount'}}
 
 
 		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}")

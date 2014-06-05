@@ -108,7 +108,22 @@ define(
                     first: 'tasks'
                   }
                 },
-
+                taskMineQuery: {
+                  method: 'GET',
+                  params: {
+                    first: 'tasks',
+                    second: 'mine'
+                  },
+                  isArray: true
+                },
+                taskByTeam:{
+                  method: 'GET',
+                  params:{
+                    first: 'tasks',
+                    second: 'team',                     
+                  },
+                  isArray: true
+                },
                 /**
                  * Client-Group
                  */
