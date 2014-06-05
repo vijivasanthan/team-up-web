@@ -260,7 +260,9 @@ define(
           click2upload:     'Klik hier om te uploaden',
           birthday:         'Geboortedag',
           username:         'Gebruikersnaam',
-          retypePassword:   'Nogmaals wachtwoord'
+          retypePassword:   'Nogmaals wachtwoord',
+          roleChangePrompt: 'Je veranderd je eigen rol, zal het systeem automatisch uitloggen, druk op "Yes" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
+          specifyTeam: 'Je moet een team opgeven om deze gebruiker'//'You need to sepcify a team to this user'
         },
         settings:  {
           settings:     'Instellingen',
