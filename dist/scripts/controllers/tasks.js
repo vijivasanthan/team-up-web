@@ -1,0 +1,1 @@
+define(["controllers/controllers"],function(e){e.controller("tasksCtrl",["$rootScope","$scope","$location",function(e,t,n){function r(){t.views={myTasks:!1,allTasks:!1,newTask:!1}}e.fixStyles();var i=function(e){r(),t.views[e]=!0};t.setViewTo=function(e){t.$watch(e,function(){n.hash(e),i(e)})},i("myTasks")}])});
