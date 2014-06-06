@@ -18,7 +18,7 @@
 				aria-hidden='true')
 				| {{ui.teamup.clients}}
 
-		li(class="{{(views.newClientGroup==true) && 'active'}}")
+		li(class="{{(views.newClientGroup==true) && 'active'}}",ng-hide="app.resources.role > 1")
 			a(data-toggle='tab',
 			ng-click='setViewTo("newClientGroup")')
 				span.icomoon(data-icon='',

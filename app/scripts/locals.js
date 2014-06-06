@@ -386,7 +386,20 @@ define(
           information : 'informatie',
           noTasks: 'No Tasks',
           clientName: 'client',
-          memberName: 'Member'
+          memberName: 'Member',
+          orderType1: 'StandRoute',
+          orderType2: 'PlanningTime',
+          myTask: 'Mijn taken',
+          orderby: 'Sorteer op',
+          allTasks: 'Alle Taken',
+          description: 'Opmerkingen',
+          filltheTime: 'Please fill the start and end time for the task',
+          startTimeEmpty: 'Please fill the start date or time',
+          endTimeEmpty: 'Please fill the end date or time',
+          planTaskInFuture: 'Please sepcify the start and end time in the future.',
+          startLaterThanEnd: 'Start time should be eailer than the end time',
+          specifyClient: 'Please specify a client to the task.',
+          taskSaved: 'Task saved.',
         }
       }
     }

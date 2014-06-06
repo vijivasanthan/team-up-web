@@ -461,6 +461,10 @@ define(
           return function(id,usertype,itemName){
             if(usertype == 'client'){
                 var client = $rootScope.getClientByID(id);
+                if(client == null || typeof client == 'undefined'){
+                    return "";
+                }
+
                 if(itemName == 'name'){
                     return client.firstName + ' ' + client.lastName;  
                 }else if(itemName == 'address'){
@@ -477,7 +481,12 @@ define(
                   return "";
                 }
                 var member = $rootScope.getTeamMemberById(id);                
-                return member.firstName + ' ' + member.lastName;
+                if(itemName == 'name'){
+                    return member.firstName + ' ' + member.lastName; 
+                }else if(itemName == 'states'){
+                    return member.states;
+                }
+                
             }else{
                 return "no name";
             }

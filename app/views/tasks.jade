@@ -26,9 +26,12 @@
 
 		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
 			.tab-header
-				h3.pull-left Mijn taken
-				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.del}}
-				button.btn.pull-right.btn-info(type='button') {{ui.teamup.edit}}
+				h3.pull-left {{ui.task.myTask}}
+				select.pull-right(ng-model='currentOrder',
+				ng-options='order.id as order.name for order in orders',
+				ng-selected='currentOrder',
+				ng-change='tasksOrderBy(currentOrder)')				
+				span.pull-right {{ui.task.orderby}}
 			.tab-header.hide
 				input.pull-left(type='text')
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
@@ -82,9 +85,12 @@
 
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
-				h3.pull-left Alle taken
-				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.del}}
-				button.btn.pull-right.btn-info(type='button') {{ui.teamup.edit}}
+				h3.pull-left {{ui.task.allTasks}}
+				select.pull-right(ng-model='currentOrder',
+				ng-options='order.id as order.name for order in orders',
+				ng-selected='currentOrder',
+				ng-change='tasksOrderBy(currentOrder)')				
+				span.pull-right {{ui.task.orderby}}				
 			.tab-header.hide
 				input.pull-left(type='text')
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
@@ -121,8 +127,9 @@
 								dl
 									dd {{task.description}}
 							td
-								.roundedPicSmall
-							td
+								.roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',style='background-image: url({{task.assignedTeamMemberUuid | avatar:"team":"80"}})',
+									ng-hide='{{task.assignedTeamMemberUuid == null}}')
+							td								
 								a(href='#') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}						
 							td
 								.pull-right
@@ -144,7 +151,7 @@
 
 		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}")
 			.tab-header
-				h3.pull-left Nieuwe taak
+				h3.pull-left Nieuwe taak			
 			hr
 			form
 				.row
@@ -153,36 +160,70 @@
 							.control-group
 								label.control-label Cliënt
 								.controls
-									select
+									select(ng-model='currentGroup',
+										ng-options='g.id as g.name for g in groups | orderBy:"name"',
+										ng-selected='currentGroup',
+										ng-change='changeClientGroup(currentGroup)'
+										)
 										option(value='') Cliëntengroep
-									select
-										option(value='') Cliënt
+									select(ng-model='task.client',
+										ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in clients | orderBy:"lastName" ',
+										ng-selected='currentClient',
+										ng-change=''
+										)
+										option(value='') Cliënt										
 							.control-group
 								label.control-label Verzorger
 								.controls
-									select
+									select(ng-model='task.team',
+										ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+										ng-selected='currentTeam',
+										ng-change='changeTeam(task.team)'
+										)
 										option(value='') Team
-									select
+									select(ng-model='task.member',
+										ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
+										ng-selected='currentMember',
+										ng-change=''
+										)
 										option(value='') Lid
 						fieldset
 							.control-group.dater
-								label.control-label Begin
+								label.control-label {{ui.planboard.from}}
 								.controls
-									input(type='text')
+									input(name='date-start',
+									type='text',
+									ng-model='task.start.date',
+									data-date-format='dd-mm-yyyy',
+									bs-datepicker='',
+									ng-change='changeDate(date)')
 									i.icon-calendar
-									input(type='text')
+									input(name='time-start',
+									type='text',
+									ng-model='task.start.time',
+									ng-change='changeTime(time)',
+									bs-timepicker='')
 									i.icon-time
 							.control-group.dater
-								label.control-label Eind
+								label.control-label {{ui.planboard.till}}
 								.controls
-									input(type='text')
+									input(name='date-end',
+									type='text',
+									ng-model='task.end.date',
+									data-date-format='dd-mm-yyyy',
+									bs-datepicker='',
+									ng-change='changeDate(date)')
 									i.icon-calendar
-									input(type='text')
+									input(name='time-end',
+									type='text',
+									ng-model='task.end.time',
+									ng-change='changeTime(time)',
+									bs-timepicker='')
 									i.icon-time
 							.control-group
-								label.control-label Opmerkingen
+								label.control-label {{ui.task.description}}
 								.controls
-									textarea.span4
+									textarea.span4(ng-model='task.description')
 
 					.span6
 						fieldset
@@ -190,4 +231,10 @@
 								iframe(src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2461.4264625712335!2d4.452300999999999!3d51.90793!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c432d6cfa243cd%3A0xa8a80eca30f68c56!2sASK+Community+Systems!5e0!3m2!1sen!2s!4v1399557503251', width='400', height='300', frameborder='0', style='border: 0;')
 				hr
 				.form-actions
-					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
+					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
+				hr
+				div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}} 
+				div {{task}}
+				div 
+				div 
+				div 
