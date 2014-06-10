@@ -104,17 +104,17 @@ define(
 
           $scope.setViewTo = function (hash)
           {
-            console.log('setViewTo ->');
+            console.log('setViewTo ->', hash);
 
-            $scope.$watch(
-              hash,
-              function ()
-              {
-                $location.hash(hash);
-
-                setView(hash);
-              }
-            );
+//            $scope.$watch(
+//              hash,
+//              function ()
+//              {
+//                $location.hash(hash);
+//
+//                setView(hash);
+//              }
+//            );
           };
 
           setView('myTasks');
