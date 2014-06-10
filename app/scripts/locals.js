@@ -260,7 +260,9 @@ define(
           click2upload:     'Klik hier om te uploaden',
           birthday:         'Geboortedag',
           username:         'Gebruikersnaam',
-          retypePassword:   'Nogmaals wachtwoord'
+          retypePassword:   'Nogmaals wachtwoord',
+          roleChangePrompt: 'Je veranderd je eigen rol, zal het systeem automatisch uitloggen, druk op "Yes" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
+          specifyTeam: 'Je moet een team opgeven om deze gebruiker'//'You need to sepcify a team to this user'
         },
         settings:  {
           settings:     'Instellingen',
@@ -379,6 +381,25 @@ define(
           newTask:                 'Nieuwe Taak',
           updateTask:              'Wijzig Taak',
           managePanelchangePrompt: 'Data is changed. Click \'Yes\' to go on, \'Cancel\' to stay.'
+        },
+        task:{
+          information : 'informatie',
+          noTasks: 'No Tasks',
+          clientName: 'client',
+          memberName: 'Member',
+          orderType1: 'StandRoute',
+          orderType2: 'PlanningTime',
+          myTask: 'Mijn taken',
+          orderby: 'Sorteer op',
+          allTasks: 'Alle Taken',
+          description: 'Opmerkingen',
+          filltheTime: 'Please fill the start and end time for the task',
+          startTimeEmpty: 'Please fill the start date or time',
+          endTimeEmpty: 'Please fill the end date or time',
+          planTaskInFuture: 'Please sepcify the start and end time in the future.',
+          startLaterThanEnd: 'Start time should be eailer than the end time',
+          specifyClient: 'Please specify a client to the task.',
+          taskSaved: 'Task saved.',
         }
       }
     }

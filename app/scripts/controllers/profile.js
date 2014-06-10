@@ -112,8 +112,14 @@ define(
 
           $scope.save = function (resources)
           {
-            $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
-
+            // let user know that user need to re-relogin if the login-user's role is changed.
+            if($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid){
+              if(!confirm($rootScope.ui.profile.roleChangePrompt)){
+                  return;
+              }
+            }
+            
+            // check if the member is belong to any team, warn user to put his/herself to a team
             if (resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined')
             {
               resources.teamUuids = [];
@@ -127,7 +133,13 @@ define(
               {
                 resources.teamUuids.push($scope.teams[0].uuid);
               }
+              if(resources.teamUuids[0] == null){
+                $rootScope.notifier.error($rootScope.ui.profile.specifyTeam);
+                return;
+              }
             }
+
+            $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             // deal with birthday
             try
@@ -198,6 +210,11 @@ define(
 
                         // put back the birthday for display after update the member.
                         resources.birthday = $filter('nicelyDate')(resources.birthDate);
+
+                        // will logout if the role is changed for the user him/her-self.
+                        if($scope.currentRole != resources.role && $rootScope.app.resources.uuid == $route.current.params.userId){
+                            $rootScope.nav("logout");
+                        }
 
                         // refresh the teams in the background
                         angular.forEach(

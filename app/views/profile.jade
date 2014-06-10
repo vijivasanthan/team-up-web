@@ -67,7 +67,7 @@ section#profile
 								input.span4(type='text',
 								ng-model='profilemeta.lastName',
 								value='{{data.lastName}}')
-						.control-group
+						.control-group(ng-hide='(app.resources.role > 1 && profilemeta.uuid != app.resources.uuid) || (currentRole > 1 &&  profilemeta.uuid == app.resources.uuid)')
 							label.control-label {{ui.teamup.role}}
 							.controls
 								select(ng-model='profilemeta.role',
@@ -101,8 +101,7 @@ section#profile
 					div(style='overflow: hidden; height: 35px')						
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
-					hr
-					//- div: img(ng-src='{{uploadURL}}')					
+					hr					
 					div.roundedPicLarge(style='background-image: url({{data.uuid | avatar:"team":"368" }})')					
 					#uploadImgModule
 						form.form-vertical(enctype='multipart/form-data')

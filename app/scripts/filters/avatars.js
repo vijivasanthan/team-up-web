@@ -452,5 +452,48 @@ define(
         }
       ]
     );
+
+    filters.filter(
+      'getObjAttr',
+      [
+        '$rootScope',
+        function($rootScope){
+          return function(id,usertype,itemName){
+            if(usertype == 'client'){
+                var client = $rootScope.getClientByID(id);
+                if(client == null || typeof client == 'undefined'){
+                    return "";
+                }
+
+                if(itemName == 'name'){
+                    return client.firstName + ' ' + client.lastName;  
+                }else if(itemName == 'address'){
+                    return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ' + client.address.city ;
+                }else if(itemName == 'latlong'){
+                    if(typeof client.latitude == 'undefined' || typeof client.longitude == 'undefined' ){
+                        return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ' + client.address.city ;
+                    }else{
+                        return client.latitude + ',' + client.longitude;
+                    }                    
+                }    
+            }else if(usertype == "member"){
+                if(id == null){
+                  return "";
+                }
+                var member = $rootScope.getTeamMemberById(id);                
+                if(itemName == 'name'){
+                    return member.firstName + ' ' + member.lastName; 
+                }else if(itemName == 'states'){
+                    return member.states;
+                }
+                
+            }else{
+                return "no name";
+            }
+
+          }
+        }
+      ]
+    );    
   }
 );

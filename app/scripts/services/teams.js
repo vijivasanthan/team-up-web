@@ -166,6 +166,50 @@ define(
             return deferred.promise;
           };
 
+          TeamsService.prototype.queryLocalClientGroup = function(teamsLocal){
+            
+            var groupIds = [];
+            var grps = Store('app').get('ClientGroups');
+            angular.forEach(grps,function(grp){
+              groupIds.push(grp.id);
+            });
+
+            var returnValue = {};
+            angular.forEach(
+                teamsLocal,
+                function (team)
+                {
+                  var flag = true;
+
+                  var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
+
+                  if (_teamGroup == [])
+                  {
+                    // console.log('it is empty ->');
+                  }                  
+
+                  _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
+                  // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
+
+                  angular.forEach(
+                    _teamGroup,
+                    function (group)
+                    {              
+                      if (groupIds.indexOf(group.id) != - 1 && flag)
+                      {
+                        // console.log('putting in ->', group.id);
+
+                        returnValue[team.uuid] = group.id;
+
+                        flag = false;
+                      }
+                    }
+                  );
+                }
+              );
+              
+              return returnValue;
+          }
 
           TeamsService.prototype.manage = function (changes)
           {

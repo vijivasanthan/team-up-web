@@ -187,6 +187,28 @@ define(
             );
           }
 
+          // query the tasks for login user and all other unsigned task in login user's team
+          function queryTasks (teams){
+            // query my tasks
+            TeamUp._("taskMineQuery").then(function(result){
+                Store('app').save('myTasks',result);
+            });
+            // query unassigned tasks from each team
+            var allTasks = [];            
+            angular.forEach(teams,function(team_obj){                
+                TeamUp._("taskByTeam",
+                  {fourth : team_obj.uuid}
+                  ).then(function(result){
+                      angular.forEach(result,function(taskObj){
+                          allTasks.push(taskObj);
+                      });                      
+                      Store('app').save('allTasks',allTasks);                      
+                });
+            });
+            
+            
+          }
+
           var preLoader = function ()
           {
             angular.element('#login').hide();
@@ -219,6 +241,7 @@ define(
                     {
                       queryMembersNotInTeams();
 
+                      queryTasks(teams);
                       if (teams.error)
                       {
                         console.warn('error ->', teams);

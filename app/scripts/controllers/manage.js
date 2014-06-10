@@ -137,8 +137,7 @@ define(
                         clientIds.push(client.uuid);
                       }
                     }
-                  );
-                  console.log("cIds : ",cIds);
+                  );                  
                   
                   connections.clients[group.id] = cIds;                  
                   groupIds.push(group.id);
@@ -174,56 +173,7 @@ define(
 
               data.clients = clients;
 
-              angular.forEach(
-                teamsLocal,
-                function (team)
-                {
-                  var flag = true;
-
-                  var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
-
-                  //                  if (! angular.isArray(_teamGroup))
-                  //                  {
-                  //                    _teamGroup = [_teamGroup];
-                  //                  }
-
-                  // console.log('team ->', team.name, team.uuid);
-
-                  if (_teamGroup == [])
-                  {
-                    // console.log('it is empty ->');
-                  }
-
-                  // console.log('_teamGroup ->', angular.toJson(_teamGroup));
-
-                  _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
-                  // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
-
-                  angular.forEach(
-                    _teamGroup,
-                    function (group)
-                    {
-                      // console.log('match? ->', groupIds.indexOf(group.id), group.id, flag);
-
-                      //                      if (group.id == team.uuid && flag)
-                      //                      {
-                      //                        connections.teamClients[team.uuid] = group.id;
-                      //
-                      //                        flag = false;
-                      //                      }
-
-                      if (groupIds.indexOf(group.id) != - 1 && flag)
-                      {
-                        // console.log('putting in ->', group.id);
-
-                        connections.teamClients[team.uuid] = group.id;
-
-                        flag = false;
-                      }
-                    }
-                  );
-                }
-              );
+              connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
 
               // console.log('********************************************');
               // console.log('connections ->', connections);
