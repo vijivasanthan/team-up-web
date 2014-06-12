@@ -129,6 +129,7 @@
 							td
 								.roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',style='background-image: url({{task.assignedTeamMemberUuid | avatar:"team":"80"}})',
 									ng-hide='{{task.assignedTeamMemberUuid == null}}')
+							// FIXME: Check this upper line!
 							td								
 								a(href='#') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}						
 							td
@@ -233,8 +234,9 @@
 				.form-actions
 					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
 				hr
-				div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}} 
+				// FIXME: It needs some attention
+				// div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}}
 				div {{task}}
 				div 
 				div 
-				div 
+				div Is it working?
