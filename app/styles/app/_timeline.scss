@@ -239,8 +239,13 @@ div.timeline-event-range {
 }
 
 .changeTimeSlot {
-  padding-top: 100px;
-  margin-bottom: -100px;
+  padding-right: 30px;
+  padding-top: 10px;
+  position: fixed;
+  z-index: 10000;
+  form {
+//    border: 1px solid $graytu;
+  }
 }
 
 .timeline-footer-text {
