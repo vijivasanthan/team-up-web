@@ -56,7 +56,7 @@
 							td
 								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
-								a(href='#') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
+								a(href='clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
@@ -70,9 +70,11 @@
 							td
 								.pull-right
 									a(href='#')
-										button.btn-primary.btn-mini
-											i.icon-edit
-									button.btn-primary.btn-mini(type='submit')
+									button.btn-primary.btn-mini(type='button' ng-click='unassignYourself(task)')
+										i.icon-minus
+									button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
+										i.icon-edit
+									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
 										i.icon-trash
 									a.noteLink
 										p Opmerkingen
@@ -115,7 +117,7 @@
 							td
 								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
-								a(href='#') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
+								a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
@@ -131,15 +133,14 @@
 									ng-hide='{{task.assignedTeamMemberUuid == null}}')
 							// FIXME: Check this upper line!
 							td								
-								a(href='#') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}						
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}						
 							td
 								.pull-right
-									button.btn-primary.btn-mini(type='submit')
-										i.icon-plus
-									a(href='#')
-										button.btn-primary.btn-mini
-											i.icon-edit
-									button.btn-primary.btn-mini(type='submit')
+									button.btn-primary.btn-mini(type='button' ng-hide='task.assignedTeamMemberUuid' ng-click="assignYourself(task)")
+										i.icon-plus									
+									button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
+										i.icon-edit
+									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
 										i.icon-trash
 									a.noteLink
 										p Opmerkingen
@@ -236,7 +237,7 @@
 				hr
 				// FIXME: It needs some attention
 				// div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}}
-				div {{task}}
 				div 
 				div 
-				div Is it working?
+				div 
+				div 

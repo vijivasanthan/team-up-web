@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'tasksCtrl', [
-        '$rootScope', '$scope', '$location', 'Store', 'Teams', 'Clients', 'Dater', 'TeamUp',
-        function ($rootScope, $scope, $location, Store, Teams, Clients, Dater, TeamUp)
+        '$rootScope', '$scope', '$location', 'Store', 'Teams', 'Clients', 'Dater', 'TeamUp','$filter','$route',
+        function ($rootScope, $scope, $location, Store, Teams, Clients, Dater, TeamUp, $filter,$route)
         {
           $rootScope.fixStyles();
 
@@ -173,6 +173,100 @@ define(
             return true;
           };
 
+          // reload the task and save it into the localstorage "all tasks" or "my tasks"
+          $scope.reloadAndSaveTask = function(taskId,type){
+              TeamUp._(
+                'taskById',
+                {second : taskId},
+                null
+              ).then(function(result){
+                  // refresh the local cache 
+
+                  // forward pages 
+                  if(result.error && type != 'delete'){
+                      $rootScope.notifier.error(result.error);
+                  }else{
+                      var allTasks = Store('app').get('allTasks');
+                      var myTasks = Store('app').get('myTasks'); 
+
+                      var forwardTab = '';
+
+                        // remove the task item from the 
+                      var deleteTask = function(tasks,uuid){
+                          var i = 0 ;
+                          for(;i < tasks.length;i++){
+                            if(uuid == tasks[i].uuid){
+                               tasks.splice(i,1);
+                               i--;
+                            }
+                          }
+                          return tasks;
+                      }
+
+                      if(type == 'assign' || type == 'unAssign' || type == 'add'){
+                          var foundTaskinAll = $filter('getByUuid')(allTasks,result.uuid);
+                          var foundTaskinMy = $filter('getByUuid')(myTasks,result.uuid);
+
+                           if(result.assignedTeamMemberUuid && result.assignedTeamMemberUuid == $rootScope.app.resources.uuid){                          
+                              // remove it from the all tasks
+                              if(foundTaskinAll){
+                                  allTasks = deleteTask(allTasks,foundTaskinAll.uuid);
+                              }
+
+                              if(foundTaskinMy){
+                                  // found it in my task list , means it is updated , so remove it first 
+                                  myTasks = deleteTask(myTasks,foundTaskinMy.uuid);                              
+                              }
+                              if(!myTasks.length || myTasks.length == 0){
+                                myTasks = [];
+                              }
+                              myTasks.push(result);                          
+                          }else if(!result.assignedTeamMemberUuid){
+                              // forward to all task page 
+                              if(foundTaskinAll){
+                                  allTasks = deleteTask(allTasks,foundTaskinAll.uuid); 
+                              }
+                              if(foundTaskinMy){
+                                  // found it in my task list , means it is updated , so remove it first 
+                                  myTasks = deleteTask(myTasks,foundTaskinMy.uuid);                              
+                              }
+
+                              if(!allTasks.length || allTasks.length == 0){
+                                allTasks = [];
+                              }
+                              allTasks.push(result);
+                          }
+
+                          // forward to specific tab 
+                          if(result.assignedTeamMemberUuid && result.assignedTeamMemberUuid == $rootScope.app.resources.uuid){
+                              // forward to my task pages 
+                              forwardTab = 'myTasks';
+                          }else{
+                              // forward to all task pages 
+                              forwardTab =  'allTasks';
+                          }
+
+                      }else if(type == 'delete'){
+                          allTasks = deleteTask(allTasks,taskId);
+                          myTasks = deleteTask(myTasks,taskId);
+
+                          forwardTab = $location.hash();
+                          $route.reload();
+                      }else if(type == 'update'){
+
+                      }
+                    
+                      Store('app').save('allTasks',allTasks);
+                      Store('app').save('myTasks',myTasks);
+
+                      
+                      $location.hash(forwardTab)
+                  }
+                }  
+              );
+          }
+
+          // create a new task
           $scope.createTask = function (task)
           {
 
@@ -206,83 +300,31 @@ define(
                 else
                 {
                   $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+
+                  // refresh the tasks in that team and 
+                  // forward user to the task overview page. 
+                  // 1> forward to my task page if the task is assgined to the login mebmer
+                  // 2> forward to all task page if the task is assgined to other member or nobody
+
+                  // result is the taskId
+                  $scope.reloadAndSaveTask(result.result,'add');
+
                 }
               });
 
           };
           //
-          //          var uuid, view;
-          //
-          //          if (! params.uuid && ! $location.hash())
-          //          {
-          //            uuid = data.teams[0].uuid;
-          //            view = 'team';
-          //
-          //            $location.search(
-          //              {
-          //                uuid: data.teams[0].uuid
-          //              }).hash('team');
-          //          }
-          //          else if (! params.uuid)
-          //          {
-          //            uuid = data.teams[0].uuid;
-          //            view = $location.hash();
-          //            $location.search(
-          //              {
-          //                uuid: data.teams[0].uuid
-          //              });
-          //          }
-          //          else
-          //          {
-          //            uuid = params.uuid;
-          //            view = $location.hash();
-          //          }
-          //
-          //          setTeamView(uuid);
 
-          //          function setTeamView (id)
-          //          {
-          //            angular.forEach(
-          //              data.teams, function (team)
-          //              {
-          //                if (team.uuid == id)
-          //                {
-          //                  $scope.team = team;
-          //                }
-          //              });
-          //
-          //            $scope.members = data.members[id];
-          //
-          //            $scope.current = id;
-          //          }
-          //
-          //          $scope.requestTeam = function (current, switched)
-          //          {
-          //            setTeamView(current);
-          //
-          //            $scope.$watch(
-          //              $location.search(), function ()
-          //              {
-          //                $location.search(
-          //                  {
-          //                    uuid: current
-          //                  });
-          //              });
-          //
-          //            if (switched)
-          //            {
-          //              if ($location.hash() != 'team')
-          //              {
-          //                $location.hash('team');
-          //              }
-          //
-          //              setView('team');
-          //            }
-          //          };
+          var view;
+          if(! $location.hash()){
+            view = 'myTasks';
+          }else{
+            view = $location.hash();
+          }
 
           function resetViews ()
           {
-            console.log('resetViews ->');
+            console.log('resetViews ->',$scope.views);
 
             $scope.views = {
               myTasks: false,
@@ -293,7 +335,7 @@ define(
 
           var setView = function (hash)
           {
-            console.log('setView ->');
+            console.log('setView -> ',hash);
 
             resetViews();
 
@@ -315,8 +357,102 @@ define(
             );
           };
 
-          setView('myTasks');
+          setView(view);
 
+          $scope.assignYourself = function(task){
+              task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;              
+              TeamUp._(
+                'taskUpdate',
+                { second: task.uuid },
+                task
+                ).then(function(result){
+                  console.log(result);
+                  if(result.error ){
+                      if(result.error.data.result){
+                        $rootScope.notifier.error(result.error.data.result); 
+                      }else{
+                        $rootScope.notifier.error(result.error); 
+                      }
+                      task.assignedTeamMemberUuid = null;                      
+                  }else{
+                    console.log(result); 
+                    $scope.reloadAndSaveTask(result.result,'assign'); 
+                  }
+                  
+                }
+              );
+          };
+
+          $scope.unassignYourself = function(task){
+              task.assignedTeamMemberUuid = null;              
+              TeamUp._(
+                'taskUpdate',
+                { second: task.uuid },
+                task
+                ).then(function(result){
+                  console.log(result);
+                  if(result.error ){
+                      if(result.error.data){
+                        $rootScope.notifier.error(result.error.data.result); 
+                      }else{
+                        $rootScope.notifier.error(result.error); 
+                      }
+                      task.assignedTeamMemberUuid = null;                      
+                  }else{
+                    console.log(result); 
+                    $scope.reloadAndSaveTask(result.result,'unAssign'); 
+                  }
+                  
+                }
+              );  
+          }
+
+          $scope.deleteTask = function(task){
+              if(!confirm($rootScope.ui.task.deleteTaskConfirm)){
+                  return;
+              }
+              TeamUp._(
+                'taskDelete',
+                { second: task.uuid },
+                task
+                ).then(function(result){
+                  console.log("after delete action , " , result);
+                  if(result.error){
+                      if(result.error.data){                        
+                        $rootScope.notifier.error(result.error.data); 
+                      }else{
+                        $rootScope.notifier.error(result.error); 
+                      }                      
+                  }else{                    
+                    $rootScope.notifier.success($rootScope.ui.task.taskDeleted); 
+                    $scope.reloadAndSaveTask(result.uuid,'delete'); 
+                  }
+                  
+                }
+              ); 
+          }
+
+          $scope.updateTask = function(task){
+              // TeamUp._(
+              //   'taskDelete',
+              //   { second: task.uuid },
+              //   task
+              //   ).then(function(result){
+              //     console.log(result);
+              //     if(result.error ){
+              //         if(result.error.data){
+              //           $rootScope.notifier.error(result.error.data.result); 
+              //         }else{
+              //           $rootScope.notifier.error(result.error); 
+              //         }                      
+              //     }else{
+              //       console.log(result); 
+              //       $scope.reloadAndSaveTask(result.result,'delete'); 
+              //     }
+                  
+              //   }
+              // ); 
+          }
           //          $scope.toggleSelection = function (group, master)
           //          {
           //            var flag    = (master) ? true : false,

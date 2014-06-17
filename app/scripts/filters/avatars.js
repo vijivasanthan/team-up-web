@@ -494,6 +494,21 @@ define(
           }
         }
       ]
-    );    
+    );   
+
+    filters.filter(
+      'getByUuid',function(){
+         return function(input,uuid){
+            var i = 0;
+            var len = input.length;
+            for(; i < len ; i++){
+              if(input[i].uuid == uuid){
+                return input[i];
+              }
+            }
+            return null;
+         }
+      }
+    );     
   }
 );

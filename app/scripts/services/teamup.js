@@ -124,6 +124,13 @@ define(
                   },
                   isArray: true
                 },
+                taskById:{
+                  method: 'GET',
+                  params:{
+                    first: 'tasks'                    
+                  },
+                  isArray: false
+                },
                 /**
                  * Client-Group
                  */
@@ -135,7 +142,6 @@ define(
                   },
                   isArray: true
                 },
-
                 /**
                  * Clients-By-Group-ID
                  */

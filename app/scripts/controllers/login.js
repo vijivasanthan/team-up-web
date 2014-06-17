@@ -18,7 +18,8 @@ define(
         '$routeParams',
         'TeamUp',
         'Dater',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater)
+        '$filter',
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater,$filter)
         {
           // TODO: Soon not needed!
           Dater.registerPeriods();
@@ -194,13 +195,16 @@ define(
                 Store('app').save('myTasks',result);
             });
             // query unassigned tasks from each team
-            var allTasks = [];            
+            var allTasks = [];
             angular.forEach(teams,function(team_obj){                
                 TeamUp._("taskByTeam",
                   {fourth : team_obj.uuid}
                   ).then(function(result){
-                      angular.forEach(result,function(taskObj){
-                          allTasks.push(taskObj);
+                      angular.forEach(result,function(taskObj){                          
+                          var foundTask = $filter('getByUuid')(allTasks,taskObj.uuid);
+                          if(foundTask == null){
+                              allTasks.push(taskObj);
+                          }
                       });                      
                       Store('app').save('allTasks',allTasks);                      
                 });
