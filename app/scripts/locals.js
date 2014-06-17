@@ -400,6 +400,9 @@ define(
           startLaterThanEnd: 'Start time should be eailer than the end time',
           specifyClient: 'Please specify a client to the task.',
           taskSaved: 'Task saved.',
+          deleteTaskConfirm: 'Delete this task ? The task will be permanently deleted.',
+          taskDeleted: 'Task deleted.',
+          planningTime: 'planning time',
         }
       }
     }

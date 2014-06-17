@@ -31,16 +31,32 @@ define(
             $scope.currentOrder = params.orderType;
           }
 
+          $scope.orderItem = "plannedEndVisitTime";
+          $scope.reverse = false;
+
+          $scope.resort = function(col){
+              if(col == "clientName"){
+                  var sortClient = function(task){                      
+                      return $filter('getObjAttr')(task.relatedClientUuid,'client','name') + ""; 
+                  }
+                  $scope.orderItem = sortClient;                  
+              }else if(col == "memberName"){
+                  var sortMember = function(task){
+                    return $filter('getObjAttr')(task.assignedTeamMemberUuid,'member','name') + ""; 
+                  }
+                  $scope.orderItem = sortMember;
+              }else{
+                  $scope.orderItem = col;                  
+              }
+              $scope.reverse = !$scope.reverse; 
+          }
+
           // prepare the teams, members, client groups and clients
           var teamsLocal = Teams.queryLocal();
           var clientLocal = Clients.queryLocal();
 
           var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          console.log("teamsLocal ", teamsLocal);
-          console.log("clientLocal  ", clientLocal);
-          console.log("teamClientLocal ", teamClientLocal);
-
+          
           $scope.teams = teamsLocal.teams;
 
           if ($scope.currentTeam == null || typeof $scope.currentTeam == 'undefined')

@@ -25,7 +25,7 @@
 	.tab-content
 
 		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
-			.tab-header
+			.tab-header.hide
 				h3.pull-left {{ui.task.myTask}}
 				select.pull-right(ng-model='currentOrder',
 				ng-options='order.id as order.name for order in orders',
@@ -45,28 +45,31 @@
 							th
 							th
 							th
-								a {{ui.task.clientName}}
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
 							th
 								a {{ui.task.information}}
 							th
+								a(ng-click = 'resort("plannedEndVisitTime")') {{ui.task.planningTime}}
+							th
 					tbody
-						tr(ng-repeat='task in myTasks|orderBy:"plannedEndVisitTime"')
+						tr(ng-repeat='task in myTasks|orderBy:orderItem:reverse')
 							td
 								.dragIcon
 							td
 								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
-								a(href='clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
+								a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
 									span.taskInfo  km {{task.relatedClientUuid | getObjAttr:"client":"address" }}
-										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}								
+								dl
+									dd {{task.description}}
+							td 
 								dl
 									span.taskIcon.icon-time(aria-hidden='true')
 									span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
-								dl
-									dd {{task.description}}
 							td
 								.pull-right
 									a(href='#')
@@ -77,7 +80,7 @@
 									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
 										i.icon-trash
 									a.noteLink
-										p Opmerkingen
+										p {{ui.task.description}}
 											i.icon-arrow-down2
 				span.muted.pull-right
 					small
@@ -86,7 +89,7 @@
 
 
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
-			.tab-header
+			.tab-header.hide
 				h3.pull-left {{ui.task.allTasks}}
 				select.pull-right(ng-model='currentOrder',
 				ng-options='order.id as order.name for order in orders',
@@ -105,15 +108,15 @@
 						tr
 							th
 							th
-								a {{ui.task.clientName}}
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
 							th
 								a {{ui.task.information}}
 							th
 							th
-								a {{ui.task.memberName}}
+								a(ng-click = 'resort("memberName")') {{ui.task.memberName}}
 							th
 					tbody
-						tr(ng-repeat='task in allTasks|orderBy:"plannedEndVisitTime"')
+						tr(ng-repeat='task in allTasks|orderBy:orderItem:reverse')
 							td
 								.roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')						
 							td
@@ -143,7 +146,7 @@
 									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
 										i.icon-trash
 									a.noteLink
-										p Opmerkingen
+										p {{ui.task.description}}
 											i.icon-arrow-down2
 				span.muted.pull-right
 					small
