@@ -29,9 +29,10 @@ define(
         }
       },
 
-      host: 'http://dev.ask-cs.com/',
-
-      namespace: 'teamup-dev',
+      // host: 'http://dev.ask-cs.com/',
+      host: 'http://192.168.128.205:9000/',
+      // namespace: 'teamup-dev',
+      namespace: 'teamup_local',
 
       formats: {
         date:         'dd-MM-yyyy',

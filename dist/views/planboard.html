@@ -2,6 +2,9 @@
   <div class="page-header timeline"><span ng-show="views.teams" class="nullable pull-left">
       <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select></span><span ng-show="views.clients" class="nullable pull-left">
       <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select></span>
+    <!--br-->
+    <!--a(class='btn btn-primary', ng-click='getTeamID()') get team id-->
+    <!--span team: {{currentTeamID}}-->
     <div id="timeline-controls" ng-controller="timeline-navigation" style="text-align: right" class="pull-right">
       <h4 style="font-weight: normal">{{timeline.range | rangeMainFilter}}<br>
         <div style="font-size: 15px; font-weight: lighter"><span>{{timeline | rangeInfoFilter}}</span></div>

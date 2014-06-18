@@ -119,6 +119,7 @@ define(
 
           $scope.changeClientGroup = function (cGroupId)
           {
+            console.log('client group id' , cGroupId);
             $scope.groupAffectClient(cGroupId);
           };
 
@@ -468,6 +469,69 @@ define(
                   
               //   }
               // ); 
+          }
+
+          if(!$scope.map){
+              $scope.map = {
+                  center: {
+                      latitude: 52,
+                      longitude: 4
+                  },
+                  zoom: 8,
+                  events: {
+                      tilesloaded: function (map) {
+                          $scope.$apply(function () {
+                              $log.info('this is the map instance', map);       
+                          });
+                      },
+                      click: function (mapModel, eventName, originalEventArgs) {
+                          console.log(eventName);
+                      }
+                  },
+                  clientMarks: [],
+                  memberMarks: []
+              };
+          }
+
+          $scope.$on('$viewContentLoaded', function () {               
+              var mapHeight = 500; // or any other calculated value
+              $("#task-map .angular-google-map-container").height(mapHeight);     
+
+          });
+
+          $scope.changeClient = function(clientId){
+              
+                          
+              // var client = $rootScope.getClientByID(clientId);
+              // console.log("client " , client );
+
+              // console.log("address " + $filter('getObjAttr')(clientId,'client','address') );
+
+              console.log("latlong " + $filter('getObjAttr')(clientId,'client','latlong') );
+              var str_ll = $filter('getObjAttr')(clientId,'client','latlong');
+              var ll = str_ll.split(",");
+              
+
+              // if(ll.length == 2){
+              //     var clientMark = {
+              //       latitude: ll[0],
+              //       longitude: ll[1],
+              //       title: 'client' ,
+              //       id: clientId
+              //     };
+
+              //     var cMarks = [];
+              //     cMarks.push(clientMark);  
+
+              //     $scope.map.clientMarks = cMarks;
+
+              //     console.log($scope.map);                  
+              // }
+
+          }
+
+          $scope.clickMarker = function(){
+              alert("click");
           }
           //          $scope.toggleSelection = function (group, master)
           //          {

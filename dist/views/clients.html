@@ -3,7 +3,7 @@
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.client==true || views.viewClient==true || views.editClient) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;client&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.clients}}</a></li>
-    <li class="{{(views.newClientGroup==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newClientGroup&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newClientGroup}}</a></li>
+    <li ng-hide="app.resources.role &gt; 1" class="{{(views.newClientGroup==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newClientGroup&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newClientGroup}}</a></li>
     <li class="{{(views.newClient==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newClient&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newClient}}</a></li>
     <li class="{{(views.reports==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;reports&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.reports}}</a></li>
   </ul>

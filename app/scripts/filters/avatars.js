@@ -470,10 +470,10 @@ define(
                 }else if(itemName == 'address'){
                     return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ' + client.address.city ;
                 }else if(itemName == 'latlong'){
-                    if(typeof client.latitude == 'undefined' || typeof client.longitude == 'undefined' ){
-                        return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ' + client.address.city ;
+                    if(typeof client.address.latitude == 'undefined' || typeof client.address.longitude == 'undefined' ){
+                        return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ,' + client.address.city ;
                     }else{
-                        return client.latitude + ',' + client.longitude;
+                        return client.address.latitude + ',' + client.address.longitude;
                     }                    
                 }    
             }else if(usertype == "member"){
