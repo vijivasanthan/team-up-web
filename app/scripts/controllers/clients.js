@@ -812,6 +812,8 @@ define(
 
           var ModalInstanceCtrl = function ($scope, $modalInstance, report)
           {
+            // console.log(' ModalInstanceCtrl ->', $scope, $modalInstance, report);
+
             $scope.report = report;
 
             $scope.view = {
@@ -826,10 +828,10 @@ define(
             {
               console.log(report);
               if(report.editMode){
-                    
+
                   TeamUp._(
                     'clientReportUpdate',
-                    { second: report.clientUuid , 
+                    { second: report.clientUuid ,
                       fourth: report.uuid},
                     {
                       uuid:         report.uuid,
@@ -864,20 +866,21 @@ define(
                     }
                   );
               }
-                                
+
             };
           };
+
+          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', 'report'];
 
           $scope.openReport = function (report)
           {
             $scope.report = report;
             $scope.report.editMode = false;
 
-            // var modalInstance = $modal.open(
             $modal.open(
               {
                 templateUrl: './views/reportTemplate.html',
-                controller:  ModalInstanceCtrl,
+                controller: ModalInstanceCtrl,
                 resolve:     {
                   report: function () { return $scope.report }
                 }
