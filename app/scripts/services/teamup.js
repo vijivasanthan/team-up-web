@@ -493,8 +493,7 @@ define(
             }
             catch (err)
             { 
-              // Log.error(err) 
-                 console.log("Teamup REST call error : " , err);
+              Log.error(err)               
             }
 
             return deferred.promise;

@@ -40,10 +40,10 @@ require.config(
       session:            '../vendors/web-lib-session/dist/session',
       vis:                '../vendors/vis/dist/vis.min',
       'ng-vis':           '../vendors/web-lib-vis/public/dist/ng-vis',
-      'jquery-form':      '../vendors/jquery-form/jquery.form'
+      'jquery-form':      '../vendors/jquery-form/jquery.form',
       //'async':            '../vendors/requirejs-plugins/src/async',
-      // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
-      // 'lodash':           '../vendors/lodash/dist/lodash.underscore.min'
+      'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
+      'lodash':           '../vendors/lodash/dist/lodash.underscore.min'
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -71,9 +71,9 @@ require.config(
       session:            { deps: ['angular'] },
       vis:                { exports: 'vis' },
       'ng-vis':           { deps: ['angular', 'vis'], exports: 'ng-vis' },
-      'jquery-form':      { deps: ['jquery'], exports: 'jquery-form' }
-      // 'angular-google-maps':    { deps: ['angular'] },
-      // lodash:          { deps: [], exports: 'lodash' }
+      'jquery-form':      { deps: ['jquery'], exports: 'jquery-form' },
+      'angular-google-maps':    { deps: ['angular'] },
+      lodash:          { deps: [], exports: 'lodash' }
     }
   }
 );
@@ -136,9 +136,9 @@ require(
     'session',
     'vis',
     'ng-vis',
-    'jquery-form'
-    // 'lodash',
-    // 'angular-google-maps'
+    'jquery-form',
+    'lodash',
+    'angular-google-maps'
   ],
   function (angular, domReady)
   {

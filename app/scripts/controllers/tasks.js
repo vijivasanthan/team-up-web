@@ -129,6 +129,9 @@ define(
             $scope.currentGroup = teamClientLocal[teamUuid];
 
             $scope.teamAffectGroup(teamUuid);
+
+            // load team member's locations
+
           };
 
           $scope.validateTaskForm = function (task)
@@ -471,40 +474,72 @@ define(
               // ); 
           }
 
-          if(!$scope.map){
+          console.log("scope map " , $scope.map);
+
+          if(view != 'myTasks' && view != 'allTasks'){              
               $scope.map = {
                   center: {
                       latitude: 52,
                       longitude: 4
                   },
                   zoom: 8,
-                  events: {
-                      tilesloaded: function (map) {
-                          $scope.$apply(function () {
-                              $log.info('this is the map instance', map);       
-                          });
-                      },
-                      click: function (mapModel, eventName, originalEventArgs) {
-                          console.log(eventName);
-                      }
-                  },
-                  clientMarks: [],
-                  memberMarks: []
-              };
+                  bounds: {},
+              };  
           }
+          
+          
+          $scope.$on('$viewContentLoaded', function () {
+              console.log("$viewContentLoaded" );            
+              $("#task-map .angular-google-map-container").height(500);
 
-          $scope.$on('$viewContentLoaded', function () {               
-              var mapHeight = 500; // or any other calculated value
-              $("#task-map .angular-google-map-container").height(mapHeight);     
-
+              // if($($("#task-map .angular-google-map-container")[0]).css('position') != 'relative'){
+              //     var mapHeight = 500; // or any other calculated value              
+              //     $("#task-map .angular-google-map-container").height(mapHeight);
+              // }else{
+              //     $("#task-map .angular-google-map-container").height(500);
+              // }
           });
+          
+          $scope.clientCoords = {latitude : 0, longitude : 0};
+          $scope.memberMarkers = [
+                      {
+                        id: 1,
+                        
+                        showWindow: false,
+                        title: 'Marker 2'
+                      },
+                      {
+                        id: 2,
+                        
+                        showWindow: false,
+                        title: 'Marker 2'
+                      },
+                      {
+                        id: 3,
+                        icon: 'http://paige4ask.appspot.com/alarm/images/taker_blue.png',
+                        
+                        showWindow: false,
+                        title: 'Plane'
+                      }
+                    ];
+          $scope.memberCoords = [{
+                                    latitude: 45,
+                                    longitude: -74
+                                  },
+                                  { 
+                                    latitude: 15,
+                                    longitude: 30
+                                  },
+                                  {
+                                    latitude: 37,
+                                    longitude: -122
+                                  }];
+          
 
           $scope.changeClient = function(clientId){
               
-                          
               // var client = $rootScope.getClientByID(clientId);
               // console.log("client " , client );
-
               // console.log("address " + $filter('getObjAttr')(clientId,'client','address') );
 
               console.log("latlong " + $filter('getObjAttr')(clientId,'client','latlong') );
@@ -512,38 +547,19 @@ define(
               var ll = str_ll.split(",");
               
 
-              // if(ll.length == 2){
-              //     var clientMark = {
-              //       latitude: ll[0],
-              //       longitude: ll[1],
-              //       title: 'client' ,
-              //       id: clientId
-              //     };
+              if(ll.length == 2){
 
-              //     var cMarks = [];
-              //     cMarks.push(clientMark);  
+                  $scope.clientCoords.latitude =  ll[0];
+                  $scope.clientCoords.longitude =  ll[1];      
 
-              //     $scope.map.clientMarks = cMarks;
+                  $scope.map.center.latitude =  ll[0];
+                  $scope.map.center.longitude =  ll[1];                                     
+              }
 
-              //     console.log($scope.map);                  
-              // }
+
 
           }
 
-          $scope.clickMarker = function(){
-              alert("click");
-          }
-          //          $scope.toggleSelection = function (group, master)
-          //          {
-          //            var flag    = (master) ? true : false,
-          //                members = angular.fromJson(Storage.get(group.uuid));
-          //
-          //            angular.forEach(
-          //              members, function (member)
-          //              {
-          //                $scope.selection[member.uuid] = flag;
-          //              });
-          //          };
         }
       ]
     );

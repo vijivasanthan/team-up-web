@@ -13,7 +13,8 @@ define(
     'angular-route',
     'angular-strap',
     'ui-bootstrap',
-    'ng-vis'
+    'ng-vis',
+    'angular-google-maps'
   ],
   function (angular)
   {
@@ -29,7 +30,8 @@ define(
         // 'mgcrea.ngStrap'
         '$strap.directives',
         'ui.bootstrap.modal',
-        'NgVis'
+        'NgVis',
+        'google-maps'
       ]);
   }
 );
