@@ -474,8 +474,6 @@ define(
               // ); 
           }
 
-          console.log("scope map " , $scope.map);
-
           if(view != 'myTasks' && view != 'allTasks'){              
               $scope.map = {
                   center: {
@@ -489,64 +487,22 @@ define(
           
           
           $scope.$on('$viewContentLoaded', function () {
+
               console.log("$viewContentLoaded" );            
+
               $("#task-map .angular-google-map-container").height(500);
+              google.maps.event.trigger($("#task-map"),"resize");
 
-              // if($($("#task-map .angular-google-map-container")[0]).css('position') != 'relative'){
-              //     var mapHeight = 500; // or any other calculated value              
-              //     $("#task-map .angular-google-map-container").height(mapHeight);
-              // }else{
-              //     $("#task-map .angular-google-map-container").height(500);
-              // }
-          });
-          
+          });          
+
           $scope.clientCoords = {latitude : 0, longitude : 0};
-          $scope.memberMarkers = [
-                      {
-                        id: 1,
-                        
-                        showWindow: false,
-                        title: 'Marker 2'
-                      },
-                      {
-                        id: 2,
-                        
-                        showWindow: false,
-                        title: 'Marker 2'
-                      },
-                      {
-                        id: 3,
-                        icon: 'http://paige4ask.appspot.com/alarm/images/taker_blue.png',
-                        
-                        showWindow: false,
-                        title: 'Plane'
-                      }
-                    ];
-          $scope.memberCoords = [{
-                                    latitude: 45,
-                                    longitude: -74
-                                  },
-                                  { 
-                                    latitude: 15,
-                                    longitude: 30
-                                  },
-                                  {
-                                    latitude: 37,
-                                    longitude: -122
-                                  }];
           
-
           $scope.changeClient = function(clientId){
-              
-              // var client = $rootScope.getClientByID(clientId);
-              // console.log("client " , client );
-              // console.log("address " + $filter('getObjAttr')(clientId,'client','address') );
-
+          
               console.log("latlong " + $filter('getObjAttr')(clientId,'client','latlong') );
               var str_ll = $filter('getObjAttr')(clientId,'client','latlong');
               var ll = str_ll.split(",");
-              
-
+          
               if(ll.length == 2){
 
                   $scope.clientCoords.latitude =  ll[0];
@@ -555,8 +511,6 @@ define(
                   $scope.map.center.latitude =  ll[0];
                   $scope.map.center.longitude =  ll[1];                                     
               }
-
-
 
           }
 
