@@ -474,6 +474,8 @@ define(
               // ); 
           }
 
+          //--------------- map function start  ------------------//
+
           if(view != 'myTasks' && view != 'allTasks'){              
               $scope.map = {
                   center: {
@@ -514,6 +516,24 @@ define(
 
           }
 
+          //--------------- map function end  ------------------//
+
+
+            $scope.sortableOptions = {
+              update: function(e, ui) {
+                var logEntry = tmpList.map(function(i){
+                  return i.value;
+                }).join(', ');
+                $scope.sortingLog.push('Update: ' + logEntry);
+              },
+              stop: function(e, ui) {
+                // this callback has the changed model
+                var logEntry = tmpList.map(function(i){
+                  return i.value;
+                }).join(', ');
+                $scope.sortingLog.push('Stop: ' + logEntry);
+              }
+            };
         }
       ]
     );

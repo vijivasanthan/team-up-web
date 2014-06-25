@@ -78,7 +78,7 @@ define(
                       uploadProgress: function (event, position, total, percentComplete)
                       {
                         $scope.$apply(
-                          function () { $scope.progress = percentComplete }
+                          function () { $scope.progress = percentComplete ;}
                         );
                       },
                       error:          function (event, statusText, responseText, form)
@@ -95,7 +95,31 @@ define(
                         $form.removeAttr('action');
 
                         $scope.$apply(
-                          function () { $scope.avatar = filename }
+                          function () { 
+                            $scope.avatar = filename ;
+
+                            console.log($scope,$scope.$parent.data.uuid); 
+
+                            if($scope.$parent.data.clientId){
+                                $scope.$parent.$root.avatarChange($scope.$parent.data.clientId); 
+                            }else if($scope.$parent.data.uuid){
+                                $scope.$parent.$root.avatarChange($scope.$parent.data.uuid); 
+                            }
+                                                      
+                            var avatarType = '';                            
+                            var avatarTagStyle = $('.roundedPicLarge').attr('style');
+                            var size = 0;
+                            try{
+                               size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1],10);
+                            }catch(e){
+                                console.log(e);
+                            }
+                            
+                            var newSize = parseInt(size,10)+$scope.$parent.$root.getAvatarChangeTimes($scope.$parent.data.uuid);                              
+                            var newStyle = avatarTagStyle.replace("width="+size,"width="+newSize);
+                            
+                            $('.roundedPicLarge').attr('style',newStyle);
+                          }
                         );
                       }
                     });
@@ -166,5 +190,15 @@ define(
         };
       }
     );
+
+    directives.directive('backImg', function(){
+        return function(scope, element, attrs){
+            var url = attrs.backImg;
+            element.css({
+                'background-image': 'url(' + url +')',
+                'background-size' : 'cover'
+            });
+        };
+    });   
   }
 );

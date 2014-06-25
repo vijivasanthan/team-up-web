@@ -956,8 +956,10 @@ define(
                   if (result.result == 'ok')
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
                     loadGroupReports();
+                    if($scope.views.viewClient == true){
+                        loadReports();  
+                    }                    
                   }
                   else
                   {

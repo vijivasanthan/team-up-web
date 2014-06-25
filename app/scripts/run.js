@@ -17,7 +17,7 @@ define(
         'States',
         'Browsers',
         'Dater',
-        'TeamUp',
+        'TeamUp',        
         function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp)
         {
           // TODO: Remove later on (Needed for timeline info filters)
@@ -384,6 +384,29 @@ define(
               }
             );
           }
+
+          // add 1 to the changed record when user do a upload pic
+          $rootScope.avatarChange = function (avatarId){
+              var list = Store('app').get('avatarChangeRecord');
+              if(!angular.isArray(list)){
+                  list = [];
+              }
+              list.push(avatarId);              
+              Store('app').save('avatarChangeRecord',list);
+          }
+
+          // know how many times user changed the avatar from upload function.
+          $rootScope.getAvatarChangeTimes = function (id){
+              var changedTimes = 0;                                  
+              var list = Store('app').get('avatarChangeRecord');
+              angular.forEach(list,function(avatarId){
+                    if(avatarId == id){
+                        changedTimes++;                        
+                    }
+              });                
+              return changedTimes;
+          }
+
         }
       ]
     );

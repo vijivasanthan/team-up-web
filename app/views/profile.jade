@@ -102,7 +102,8 @@ section#profile
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
 					hr					
-					div.roundedPicLarge(style='background-image: url({{data.uuid | avatar:"team":"368" }})')					
+					//style='background-image: url({{data.uuid | avatar:"team":"368" }})'
+					div.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}')
 					#uploadImgModule
 						form.form-vertical(enctype='multipart/form-data')
 							uploader(action='{{uploadURL}}')

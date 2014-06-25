@@ -419,8 +419,8 @@ define(
     filters.filter(
       'avatar',
       [
-        'Session',
-        function (Session)
+        'Session','Store',
+        function (Session,Store)
         {
           return function (id, type, size)
           {
@@ -440,12 +440,29 @@ define(
                   path = '/client/';
                   break;
               }
+              
+              var avatarChanged = function(id){
 
+                  var changedTimes = 0;                  
+                  
+                  var list = Store('app').get('avatarChangeRecord');
+                  angular.forEach(list,function(avatarId){
+                      if(avatarId == id){
+                          changedTimes++;                        
+                      }
+                  });
+                  
+                  return parseInt(changedTimes,10);
+              }
+              // better use a special para to specify the avatar is changed. 
+              
+              var newsize = parseInt(size,10) + parseInt(avatarChanged(id), 10);
+              
               return config.app.host +
                      config.app.namespace +
                      path +
                      id +
-                     '/photo?width=' + size + '&height=' + size + '&sid=' +
+                     '/photo?width=' + newsize + '&height=' + newsize + '&sid=' +
                      session;
             }
           }
