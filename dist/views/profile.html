@@ -86,7 +86,8 @@
             <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}</h3>
           </div>
           <hr>
-          <div style="background-image: url({{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }})" class="roundedPicLarge">					</div>
+          <!--style='background-image: url({{data.uuid | avatar:"team":"368" }})'-->
+          <div back-img="{{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }}" class="roundedPicLarge"></div>
           <div id="uploadImgModule">
             <form enctype="multipart/form-data" class="form-vertical">
               <uploader action="{{uploadURL}}"></uploader>
