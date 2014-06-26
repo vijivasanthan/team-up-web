@@ -14,7 +14,9 @@ define(
     'angular-strap',
     'ui-bootstrap',
     'ng-vis',
-    'angular-google-maps'
+    'angular-google-maps',
+    // 'angular-dragdrop',
+    'ui-sortable',    
   ],
   function (angular)
   {
@@ -31,7 +33,9 @@ define(
         '$strap.directives',
         'ui.bootstrap.modal',
         'NgVis',
-        'google-maps'
+        'google-maps',
+        // 'ngDragDrop',
+        'ui.sortable',        
       ]);
   }
 );
