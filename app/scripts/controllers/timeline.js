@@ -685,30 +685,33 @@ define(
 
                   if (result.error)
                   {
-                    $rootScope.notifier.error(result.error.data.result);
-                    // console.warn('error ->', result.error.data.result);
+                    if(result.error.data){
+                        $rootScope.notifier.error($rootScope.transError(result.error.data.result)); 
+                    }else{
+                        $rootScope.notifier.error($rootScope.transError(result.error)); 
+                    }                                        
                   }
                   else
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
-
-                    if ($scope.section == 'teams')
-                    {
-                      $scope.changeCurrent($scope.currentTeam, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
-                    }
-                    else if ($scope.section == 'clients')
-                    {
-                      $scope.changeCurrent($scope.currentClientGroup, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
-                    }
-
-                    $rootScope.statusBar.off();
                   }
+
+                 if ($scope.section == 'teams')
+                 {
+                    $scope.changeCurrent($scope.currentTeam, {
+                      start: $scope.timeline.range.start,
+                      end: $scope.timeline.range.end
+                    });
+                 }
+                 else if ($scope.section == 'clients')
+                 {
+                    $scope.changeCurrent($scope.currentClientGroup, {
+                      start: $scope.timeline.range.start,
+                      end: $scope.timeline.range.end
+                    });
+                 }
+
+                  $rootScope.statusBar.off();
 
                   // $scope.timeliner.refresh();
                 }

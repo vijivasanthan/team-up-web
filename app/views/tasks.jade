@@ -51,7 +51,7 @@
 							th
 								a(ng-click = 'resort("plannedEndVisitTime")') {{ui.task.planningTime}}
 							th
-					tbody
+					tbody(ui-sortable="sortableOptions")
 						tr(ng-repeat='task in myTasks|orderBy:orderItem:reverse')
 							td
 								.dragIcon

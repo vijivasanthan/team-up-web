@@ -493,7 +493,7 @@ define(
             }
             catch (err)
             { 
-              Log.error(err)               
+              // Log.error(err)               
             }
 
             return deferred.promise;

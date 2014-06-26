@@ -43,7 +43,10 @@ require.config(
       'jquery-form':      '../vendors/jquery-form/jquery.form',
       //'async':            '../vendors/requirejs-plugins/src/async',
       'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
-      'lodash':           '../vendors/lodash/dist/lodash.underscore.min'
+      'lodash':           '../vendors/lodash/dist/lodash.underscore.min',
+      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      // 'angular-dragdrop': '../vendors/angular-dragdrop/src/angular-dragdrop',
+      'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -73,7 +76,10 @@ require.config(
       'ng-vis':           { deps: ['angular', 'vis'], exports: 'ng-vis' },
       'jquery-form':      { deps: ['jquery'], exports: 'jquery-form' },
       'angular-google-maps':    { deps: ['angular'] },
-      lodash:          { deps: [], exports: 'lodash' }
+      lodash:             { deps: [], exports: 'lodash' },
+      'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
+      'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
     }
   }
 );
@@ -138,7 +144,10 @@ require(
     'ng-vis',
     'jquery-form',
     'lodash',
-    'angular-google-maps'
+    'angular-google-maps',
+    'jquery-ui',
+    // 'angular-dragdrop',
+    'ui-sortable',
   ],
   function (angular, domReady)
   {

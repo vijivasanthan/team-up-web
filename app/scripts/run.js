@@ -383,7 +383,7 @@ define(
                 }
               }
             );
-          }
+          };
 
           // add 1 to the changed record when user do a upload pic
           $rootScope.avatarChange = function (avatarId){
@@ -393,7 +393,7 @@ define(
               }
               list.push(avatarId);              
               Store('app').save('avatarChangeRecord',list);
-          }
+          };
 
           // know how many times user changed the avatar from upload function.
           $rootScope.getAvatarChangeTimes = function (id){
@@ -405,7 +405,49 @@ define(
                     }
               });                
               return changedTimes;
-          }
+          };
+
+          // extract the team and group id from error message and trans them into the name 
+          $rootScope.transError = function(errorMessage){
+              // assume all the words are devided by the space
+              var arr = errorMessage.split(" ");
+              var ret = errorMessage;
+              angular.forEach(arr,function(word){
+                  if(word.indexOf('_cg') > -1){
+                      // might be the group id , try to search it , replace it with name if we found it
+                      ret = ret.replace(word,$rootScope.getClientGroupName(word));
+                  }else if(word.indexOf('_team') > -1){
+                      // might be the team id , try to search it , replace it with name if we found it                    
+                      ret = ret.replace(word,$rootScope.getTeamName(word));
+                  }
+              });
+
+              return ret;
+          };
+
+          // get group name by id
+          $rootScope.getClientGroupName = function(groupId){
+              var groups = Store('app').get('ClientGroups');
+              var ret = groupId;
+              angular.forEach(groups,function(g){
+                  if(g.id = groupId){
+                      ret = g.name;
+                  }
+              });
+              return ret;
+          };
+
+          // get team name by id 
+          $rootScope.getTeamName = function(teamId){
+              var teams = Store('app').get('teams');
+              var ret = teamId;
+              angular.forEach(teams,function(t){
+                  if(t.uuid = teamId){
+                      ret = t.name;
+                  }
+              });
+              return ret;
+          };
 
         }
       ]

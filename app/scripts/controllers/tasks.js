@@ -315,7 +315,11 @@ define(
               {
                 if (result.error)
                 {
-                  $rootScope.notifier.error(result.error);
+                  if(result.error.data){
+                      $rootScope.notifier.error($rootScope.transError(result.error.data.result));  
+                  }else{
+                      $rootScope.notifier.error($rootScope.transError(result.error));  
+                  }                  
                 }
                 else
                 {
@@ -389,9 +393,9 @@ define(
                   console.log(result);
                   if(result.error ){
                       if(result.error.data.result){
-                        $rootScope.notifier.error(result.error.data.result); 
+                        $rootScope.notifier.error($rootScope.transError(result.error.data.result)); 
                       }else{
-                        $rootScope.notifier.error(result.error); 
+                        $rootScope.notifier.error($rootScope.transError(result.error)); 
                       }
                       task.assignedTeamMemberUuid = null;                      
                   }else{
@@ -413,11 +417,11 @@ define(
                   console.log(result);
                   if(result.error ){
                       if(result.error.data){
-                        $rootScope.notifier.error(result.error.data.result); 
+                        $rootScope.notifier.error($rootScope.transError(result.error.data.result)); 
                       }else{
-                        $rootScope.notifier.error(result.error); 
+                        $rootScope.notifier.error($rootScope.transError(result.error)); 
                       }
-                      task.assignedTeamMemberUuid = null;                      
+                      task.assignedTeamMemberUuid = null;
                   }else{
                     console.log(result); 
                     $scope.reloadAndSaveTask(result.result,'unAssign'); 
@@ -521,19 +525,22 @@ define(
 
             $scope.sortableOptions = {
               update: function(e, ui) {
-                var logEntry = tmpList.map(function(i){
-                  return i.value;
+                var logEntry = $scope.myTasks.map(function(i){                  
+                  return i.plannedEndVisitTime;
                 }).join(', ');
-                $scope.sortingLog.push('Update: ' + logEntry);
+                console.log('update',logEntry);
+                //$scope.sortingLog.push('Update: ' + logEntry);
               },
               stop: function(e, ui) {
                 // this callback has the changed model
-                var logEntry = tmpList.map(function(i){
-                  return i.value;
+                var logEntry = $scope.myTasks.map(function(i){
+                  return i.plannedEndVisitTime;
                 }).join(', ');
-                $scope.sortingLog.push('Stop: ' + logEntry);
+                console.log('stop',logEntry);
+                //$scope.sortingLog.push('Stop: ' + logEntry);
               }
             };
+
         }
       ]
     );
