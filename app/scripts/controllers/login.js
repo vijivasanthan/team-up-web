@@ -135,9 +135,15 @@ define(
             ).then(
               function (result)
               {
-                if (result.status == 400 ||
-                    result.status == 403 ||
-                    result.status == 404)
+                var status = 0;
+                if(result.status){
+                    status = result.status;
+                }else if(result.error && result.error.status){
+                    status = result.error.status;
+                }
+                if (status == 400 ||
+                    status == 403 ||
+                    status == 404 )
                 {
                   $scope.alert = {
                     login: {
@@ -168,9 +174,22 @@ define(
                     .removeAttr('disabled');
 
                   return false;
-                }
-                else
-                {
+                }else if(result.error){
+                    $scope.alert = {
+                      login: {
+                        display: true,
+                        type:    'alert-error',
+                        message: $rootScope.ui.login.alert_wrongUserPass
+                      }
+                    };
+
+                    angular.element('#login button[type=submit]')
+                      .text($rootScope.ui.login.button_loggingIn)
+                      .removeAttr('disabled');
+
+                    console.log("Pay attention, this might caused by the Log module");
+                    return false;   
+                }else{
                   Session.set(result['X-SESSION_ID']);
 
                   preLoader();
