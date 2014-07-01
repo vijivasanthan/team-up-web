@@ -45,11 +45,13 @@
 							th
 							th
 							th
-								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}} 
+									i.icon-sort
 							th
 								a {{ui.task.information}}
 							th
-								a(ng-click = 'resort("plannedEndVisitTime")') {{ui.task.planningTime}}
+								a(ng-click = 'resort("plannedEndVisitTime")') {{ui.task.planningTime}} 
+									i.icon-sort
 							th
 					tbody(ui-sortable="sortableOptions")
 						tr(ng-repeat='task in myTasks|orderBy:orderItem:reverse')
@@ -62,8 +64,8 @@
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo  km {{task.relatedClientUuid | getObjAttr:"client":"address" }}
-										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}								
+									span.taskInfo  {{task.relatedClientUuid | getObjAttr:"client":"address" }}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')  {{ui.teamup.map}}								
 								dl
 									dd {{task.description}}
 							td 
@@ -73,7 +75,7 @@
 							td
 								.pull-right
 									a(href='#')
-									button.btn-primary.btn-mini(type='button' ng-click='unassignYourself(task)')
+									button.btn-primary.btn-mini(type='button' ng-click='unassignYourself(task)' style="font-size: 15px;")
 										i.icon-minus
 									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
 									//- 	i.icon-edit
@@ -108,12 +110,14 @@
 						tr
 							th
 							th
-								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}} 
+									i.icon-sort
 							th
 								a {{ui.task.information}}
 							th
 							th
-								a(ng-click = 'resort("memberName")') {{ui.task.memberName}}
+								a(ng-click = 'resort("memberName")') {{ui.task.memberName}} 
+									i.icon-sort
 							th
 					tbody
 						tr(ng-repeat='task in allTasks|orderBy:orderItem:reverse')
@@ -124,8 +128,8 @@
 							td
 								dl
 									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-									span.taskInfo km {{task.relatedClientUuid | getObjAttr:"client":"address" }}
-										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}') {{ui.teamup.map}}
+									span.taskInfo {{task.relatedClientUuid | getObjAttr:"client":"address" }}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')  {{ui.teamup.map}}
 								dl
 									span.taskIcon.icon-time(aria-hidden='true')
 									span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur

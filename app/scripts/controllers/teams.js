@@ -100,32 +100,33 @@ define(
                           latitude = parseFloat(coordinates[0]),
                           longitude = parseFloat(coordinates[1]);
 
-                      GoogleGEO.geocode(
-                        {
-                          'latLng': new google.maps.LatLng(latitude, longitude)
-                        },
-                        function (results, status)
-                        {
-                          // TODO: What if there are more results? Which one to pick?
-                          // console.log('results ->', results);
+                      // GoogleGEO.geocode(
+                      //   {
+                      //     'latLng': new google.maps.LatLng(latitude, longitude)
+                      //   },
+                      //   function (results, status)
+                      //   {
+                      //     // TODO: What if there are more results? Which one to pick?
+                      //     // console.log('results ->', results);
 
-                          if (status == google.maps.GeocoderStatus.OK)
-                          {
-                            if (results[1])
-                            {
-                              state.value_rscoded = results[1].formatted_address;
-                            }
-                            else
-                            {
-                              console.log('No results found for geo reversing!');
-                            }
-                          }
-                          else
-                          {
-                            alert('Geocoder failed due to: ' + status);
-                          }
-                        }
-                      );
+                      //     if (status == google.maps.GeocoderStatus.OK)
+                      //     {
+                      //       if (results[1])
+                      //       {
+                      //         state.value_rscoded = results[1].formatted_address;
+                      //       }
+                      //       else
+                      //       {
+                      //         console.log('No results found for geo reversing!');
+                      //       }
+                      //     }
+                      //     else
+                      //     {
+                      //       alert('Geocoder failed due to: ' + status);
+                      //     }
+                      //   }
+                      // );
+
                     }
                   }
                 );

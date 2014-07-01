@@ -166,22 +166,24 @@ define(
             $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $rootScope.app.resources.teamUuids;
+            $scope.chatTeamId = teamIds[0];
 
-            if (teamIds && $scope.toggleChat)
-            {
-              $scope.chatTeamId = teamIds[0];
-              $scope.renderMessage();
+            if($scope.chatTeamId){
+                if  ($scope.toggleChat){
+                    $scope.renderMessage();
 
-              clearInterval($scope.autoCheckMonitorId);              
-              $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);
+                    clearInterval($scope.autoCheckMonitorId);              
+                    $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);
 
-              $scope.newCount = '';
+                    $scope.newCount = '';
+                }else {
+                    clearInterval($scope.autoCheckMonitorId);
+                    $scope.autoCheckMonitorId = setInterval($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+                }
+            }else{
+                console.log("login user doesn't belong to any team.")
             }
-            else
-            {
-              clearInterval($scope.autoCheckMonitorId);
-              $scope.autoCheckMonitorId = setInterval($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
-            }
+            
           };
 
 

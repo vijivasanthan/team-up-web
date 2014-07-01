@@ -1,5 +1,5 @@
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
-	span.nullable
+	span.nullable {{ui.teamup.clients}}
 		select(ng-model='current',
 		ng-options='c.id as c.name for c in clientGroups',
 		ng-selected='current',
@@ -174,7 +174,8 @@
 					option(value='0') {{ui.teamup.selectClient}}
 					option(ng-repeat='client in clients',
 					value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
-				| {{ui.planboard.month}} :
+
+				| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}} :				
 				select(ng-init='currentMonth=0',
 				ng-model='currentMonth',
 				ng-selected='currentMonth',
@@ -194,7 +195,7 @@
 							th {{ui.teamup.datetime}}
 							th
 					tbody
-						tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:creationTime ')
+						tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:"creationTime":"reverse" ')
 							td
 								.roundedPicSmall(class='{{report.author.states|stateColor}}',
 									style='background-image: url({{report.author.uuid | avatar:"team":"80"}})')
@@ -311,7 +312,7 @@
 							th {{ui.teamup.datetime}}
 							th
 					tbody
-						tr(ng-repeat='report in reports|orderBy:creationTime')
+						tr(ng-repeat='report in reports|orderBy:"creationTime":"reverse"')
 							td
 								.roundedPicSmall(style='background-image: url({{report.author.uuid | avatar:"team":"80"}})',
 								class='{{report.author.states|stateColor}}')
