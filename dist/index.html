@@ -83,10 +83,10 @@
       <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
     </div>
     <div id="chat" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)" ng-controller="messagesCtrl" class="ng-cloak">
-      <div id="chat-btn" ng-click="openChat()"><span>CHAT</span></div>
+      <div id="chat-btn" ng-click="openChat()"><span>CHAT {{teamName}}{{newCount}}</span></div>
       <div id="chat-content" ng-show="toggleChat">
-        <p ng-hide="messages.length &gt; 0">{{ui.teamup.noMessages}}</p>
-        <div ng-repeat="message in messages">
+        <p ng-hide="messagesShow.length &gt; 0">{{ui.teamup.noMessages}}</p>
+        <div ng-repeat="message in messagesShow">
           <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
             <hr>
           </div>

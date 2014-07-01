@@ -50,8 +50,7 @@ define(
 
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
-
-
+          
           /**
            * Status-Bar
            */
@@ -283,7 +282,7 @@ define(
                         members,
                         function (member)
                         {
-                          console.log('member ->', member);
+                          // console.log('member ->', member);
 
                           if (clientIds.indexOf(member.uuid) == - 1)
                           {
@@ -430,7 +429,7 @@ define(
               var groups = Store('app').get('ClientGroups');
               var ret = groupId;
               angular.forEach(groups,function(g){
-                  if(g.id = groupId){
+                  if(g.id == groupId){
                       ret = g.name;
                   }
               });
@@ -442,7 +441,7 @@ define(
               var teams = Store('app').get('teams');
               var ret = teamId;
               angular.forEach(teams,function(t){
-                  if(t.uuid = teamId){
+                  if(t.uuid == teamId){
                       ret = t.name;
                   }
               });

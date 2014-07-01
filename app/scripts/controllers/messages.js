@@ -11,10 +11,27 @@ define(
         function ($scope, $rootScope, $q, $location, $route, $filter, Teams, TeamUp)
         {
           // TODO: Move this to config
-          // TODO: Find a better way for refreshing chat messages
-          var REFRESH_CHAT_MESSAGES = 5000 * 10;
+          // TODO: Find a better way for refreshing chat messages          
+          var REFRESH_CHAT_MESSAGES = 2000 ;
+          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000 ;
+          var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
 
           $scope.messages = [];
+          $scope.messagesShow = [];
+
+          $scope.teamName = '';
+          
+          $rootScope.$on('taskFinishLoading',function(event,args){
+              if(angular.isArray($rootScope.app.resources.teamUuids)){
+                  $scope.teamName = $rootScope.getTeamName($rootScope.app.resources.teamUuids[0]);
+
+                  $scope.chatTeamId = $rootScope.app.resources.teamUuids[0];
+                  if($scope.chatTeamId && !$scope.toggleChat){
+                      clearInterval($scope.autoCheckMonitorId);
+                      $scope.autoCheckMonitorId = setInterval($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+                  }
+              }              
+          });          
 
           $scope.renderMessage = function ()
           {
@@ -87,6 +104,12 @@ define(
 
                     $scope.messages.push(msg);
 
+                    // limit the messages within one week 
+                    var now = new Date();
+                    if((now.getTime() - parseInt(message.sendTime)) <= SECONDS_A_WEEK){
+                        $scope.messagesShow.push(msg);
+                    }
+
                     if (chatMembers.indexOf(message.senderUuid) == - 1)
                     {
                       chatMembers.push(message.senderUuid);
@@ -102,13 +125,41 @@ define(
                     angular.element('#chat-content #messageField').focus();
 
                     angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
-                  }, 100 * 1000); // FIXME: Temporarily made it longer till there is a better solution
+                  }, 1000); // FIXME: Temporarily made it longer till there is a better solution
 
               },
               function (error) { console.log(error) }
             );
           };
 
+          $scope.checkMessage = function(){
+              TeamUp._(
+                'chats',
+                { third: $scope.chatTeamId }
+              ).then(function(messages){
+                  if (messages.error)
+                  {
+                    $rootScope.notifier.error(messages.error.data);
+                    return;
+                  }
+
+                  if ($scope.messages.length == messages.length)
+                  {
+                    console.log('No new messages.');
+                    return;
+                  }
+
+                  $scope.newCount = messages.length - $scope.messages.length;
+                  if($scope.newCount > 0){
+                      $scope.newCount = "("+$scope.newCount+")";
+                  }
+                  $scope.teamName = $scope.teamName;                  
+
+                  // flash the tab ?  TODO : turing the color here
+                  $('#chat-btn').animate({ 'background-color' : "yellow" }, "slow").animate({ 'background-color' : "#1dc8b6" }, "slow");
+
+              });
+          }
 
           $scope.openChat = function ()
           {
@@ -121,11 +172,15 @@ define(
               $scope.chatTeamId = teamIds[0];
               $scope.renderMessage();
 
+              clearInterval($scope.autoCheckMonitorId);              
               $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);
+
+              $scope.newCount = '';
             }
             else
             {
               clearInterval($scope.autoCheckMonitorId);
+              $scope.autoCheckMonitorId = setInterval($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
             }
           };
 

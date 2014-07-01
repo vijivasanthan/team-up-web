@@ -70,8 +70,8 @@
         <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
       </div>
       <hr>
-      <p ng-hide="allTasks.length &gt; 0">{{ui.task.noTasks}}								</p>
-      <div>
+      <p ng-hide="allTasks.length || allTasks.length &gt; 0">{{ui.task.noTasks}}								</p>
+      <div ng-show="allTasks.length || allTasks.length &gt; 0">
         <table class="table table-striped taskTable">
           <thead>
             <tr>

@@ -456,6 +456,7 @@ define(
               ); 
           }
 
+          //TODO : update task page and function 
           $scope.updateTask = function(task){
               // TeamUp._(
               //   'taskDelete',
@@ -491,7 +492,8 @@ define(
               };  
           }
           
-          
+          // Entry page, so might need to trigger some user defiend event here, 
+          // TODO : this might not be a good idea, better solution neede.
           $scope.$on('$viewContentLoaded', function () {
 
               console.log("$viewContentLoaded" );            
@@ -499,6 +501,7 @@ define(
               $("#task-map .angular-google-map-container").height(500);
               google.maps.event.trigger($("#task-map"),"resize");
 
+              $rootScope.$broadcast('taskFinishLoading');
           });          
 
           $scope.clientCoords = {latitude : 0, longitude : 0};
@@ -522,7 +525,7 @@ define(
 
           //--------------- map function end  ------------------//
 
-
+          //--------------- start the sortable function ----------//
             $scope.sortableOptions = {
               update: function(e, ui) {
                 var logEntry = $scope.myTasks.map(function(i){                  
@@ -538,9 +541,13 @@ define(
                 }).join(', ');
                 console.log('stop',logEntry);
                 //$scope.sortingLog.push('Stop: ' + logEntry);
-              }
+              },
+              cancel: function(e ,ui){
+                console(e,ui);
+              },
             };
 
+         //--------------- end the sortable function ----------//        
         }
       ]
     );

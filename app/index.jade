@@ -153,10 +153,10 @@ block chat
 	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
 	ng-controller='messagesCtrl')
 		#chat-btn(ng-click='openChat()')
-			span CHAT
+			span CHAT {{teamName}}{{newCount}}
 		#chat-content(ng-show='toggleChat')
-			p(ng-hide='messages.length > 0') {{ui.teamup.noMessages}}
-			div(ng-repeat='message in messages')
+			p(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
+			div(ng-repeat='message in messagesShow')
 				.chat-separator(ng-show='(message.date != "")')
 					span {{message.date}}
 					hr

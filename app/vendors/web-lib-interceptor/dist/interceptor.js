@@ -18,6 +18,11 @@
           responseError: function(rejection) {
             console.warn('response error ->', rejection);
 
+            if (rejection.status == 403){
+               localStorage.setItem('sessionTimeout', '');
+               $window.location.href = 'logout.html';
+            }
+
             Log.error(rejection);
             return $q.reject(rejection);
           }
