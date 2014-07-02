@@ -383,9 +383,9 @@ define(
           managePanelchangePrompt: 'Data is changed. Click \'Yes\' to go on, \'Cancel\' to stay.'
         },
         task:{
-          information : 'informatie',
+          information : 'Informatie',
           noTasks: 'No Tasks',
-          clientName: 'client',
+          clientName: 'Client',
           memberName: 'Member',
           orderType1: 'StandRoute',
           orderType2: 'PlanningTime',
@@ -402,7 +402,7 @@ define(
           taskSaved: 'Task saved.',
           deleteTaskConfirm: 'Delete this task ? The task will be permanently deleted.',
           taskDeleted: 'Task deleted.',
-          planningTime: 'planning time',
+          planningTime: 'Planning time',
         }
       }
     }
