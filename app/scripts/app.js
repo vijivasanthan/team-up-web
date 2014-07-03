@@ -16,7 +16,7 @@ define(
     'ng-vis',
     'angular-google-maps',
     // 'angular-dragdrop',
-    'ui-sortable',    
+    // 'ui-sortable',    
   ],
   function (angular)
   {
@@ -35,7 +35,7 @@ define(
         'NgVis',
         'google-maps',
         // 'ngDragDrop',
-        'ui.sortable',        
+        // 'ui.sortable',        
       ]);
   }
 );

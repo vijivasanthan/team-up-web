@@ -28,6 +28,8 @@ require.config(
       treegrid:           'removables/treegrid',
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
       datepicker:         'removables/datepicker.min',
+      // datepicker:         '../vendors/angular-ui-bootstrap/src/datepicker/datepicker',
+      // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
       timepicker:         'removables/timepicker.min',
       underscore:         '../vendors/underscore/underscore',
@@ -44,9 +46,9 @@ require.config(
       //'async':            '../vendors/requirejs-plugins/src/async',
       'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'lodash':           '../vendors/lodash/dist/lodash.underscore.min',
-      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       // 'angular-dragdrop': '../vendors/angular-dragdrop/src/angular-dragdrop',
-      'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -77,9 +79,9 @@ require.config(
       'jquery-form':      { deps: ['jquery'], exports: 'jquery-form' },
       'angular-google-maps':    { deps: ['angular'] },
       lodash:             { deps: [], exports: 'lodash' },
-      'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      // 'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
+      // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
     }
   }
 );
@@ -145,9 +147,9 @@ require(
     'jquery-form',
     'lodash',
     'angular-google-maps',
-    'jquery-ui',
+    // 'jquery-ui',
     // 'angular-dragdrop',
-    'ui-sortable',
+    // 'ui-sortable',
   ],
   function (angular, domReady)
   {
