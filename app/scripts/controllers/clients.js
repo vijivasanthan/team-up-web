@@ -970,7 +970,7 @@ define(
           };
 
           $scope.editImg = function() {            
-              $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo";              
+              $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo?square=true";              
               $scope.setViewTo('editImg');
           };
 

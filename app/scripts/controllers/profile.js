@@ -242,7 +242,7 @@ define(
           $scope.editProfile = function () { setView('edit') };
           
           $scope.editImg = function(){
-            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo";            
+            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo?square=true";
             $scope.setViewTo('editImg');
           };
 
