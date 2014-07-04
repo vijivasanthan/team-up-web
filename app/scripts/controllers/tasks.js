@@ -31,8 +31,8 @@ define(
             $scope.currentOrder = params.orderType;
           }
 
-          $scope.orderItem = "plannedEndVisitTime";
-          $scope.reverse = false;
+          $scope.orderItem = "plannedStartVisitTime";
+          $scope.reverse = true;
 
           $scope.resort = function(col){
               if(col == "clientName"){
@@ -241,7 +241,7 @@ define(
                                 myTasks = [];
                               }
                               myTasks.push(result);                          
-                          }else if(!result.assignedTeamMemberUuid){
+                          }else {
                               // forward to all task page 
                               if(foundTaskinAll){
                                   allTasks = deleteTask(allTasks,foundTaskinAll.uuid); 

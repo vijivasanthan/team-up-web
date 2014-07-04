@@ -12,8 +12,8 @@ define(
         {
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages          
-          var REFRESH_CHAT_MESSAGES = 2000 ;
-          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000 ;
+          var REFRESH_CHAT_MESSAGES = 2000 * 10 ;
+          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000 * 10;
           var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
 
           $scope.messages = [];

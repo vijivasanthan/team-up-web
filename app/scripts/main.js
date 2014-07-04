@@ -49,6 +49,7 @@ require.config(
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       // 'angular-dragdrop': '../vendors/angular-dragdrop/src/angular-dragdrop',
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      // 'collapse':         '../vendors/angular-ui-bootstrap/src/collapse/collapse',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -82,6 +83,7 @@ require.config(
       // 'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
+      // 'collapse':         { deps: ['angular'], exports: 'collapse'},
     }
   }
 );
@@ -150,6 +152,7 @@ require(
     // 'jquery-ui',
     // 'angular-dragdrop',
     // 'ui-sortable',
+    // 'collapse',
   ],
   function (angular, domReady)
   {

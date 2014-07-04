@@ -23,7 +23,7 @@
                $window.location.href = 'logout.html';
             }
 
-            Log.error(rejection);
+            // Log.error(rejection);
             return $q.reject(rejection);
           }
         };

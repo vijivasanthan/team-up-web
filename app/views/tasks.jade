@@ -37,7 +37,7 @@
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
 			hr
-			p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}				
+			p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}
 			div(ng-show='myTasks.length > 0')
 				table.table.table-striped.taskTable
 					thead
@@ -81,9 +81,9 @@
 									//- 	i.icon-edit
 									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
 										i.icon-trash
-									//- a.noteLink
-									//- 	p {{ui.task.description}}
-									//- 		i.icon-arrow-down2
+									a.noteLink
+										p {{ui.task.description}}
+											i.icon-arrow-down2
 				span.muted.pull-right
 					small
 						i
@@ -134,7 +134,8 @@
 									span.taskIcon.icon-time(aria-hidden='true')
 									span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
 								dl
-									dd {{task.description}}
+									dd(collapse="isCollapsed") 
+										div {{task.description}}
 							td
 								.roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',style='background-image: url({{task.assignedTeamMemberUuid | avatar:"team":"80"}})',
 									ng-hide='{{task.assignedTeamMemberUuid == null}}')
@@ -148,10 +149,10 @@
 									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
 									//- 	i.icon-edit
 									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
-										i.icon-trash
-									//- a.noteLink
-									//- 	p {{ui.task.description}}
-									//- 		i.icon-arrow-down2
+										i.icon-trash									
+									a.noteLink(ng-click="isCollapsed = !isCollapsed")
+										p {{ui.task.description}}
+											i.icon-arrow-down2
 				span.muted.pull-right
 					small
 						i
