@@ -22,6 +22,8 @@ define(
         {
           $rootScope.fixStyles();
 
+            // $rootScope.notifier.success('test message');
+
           if (data.clientId)
           {
             data.clientGroups = Store('app').get('ClientGroups');
@@ -360,7 +362,7 @@ define(
               {
                 if (result.error)
                 {
-                  $rootScope.notifier.error('Error with saving client Group info');
+                  $rootScope.notifier.error($rootScope.ui.teamup.errorSaveClientGroup);
                 }
                 else
                 {

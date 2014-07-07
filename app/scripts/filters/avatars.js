@@ -485,11 +485,11 @@ define(
                 if(itemName == 'name'){
                     return client.firstName + ' ' + client.lastName;  
                 }else if(itemName == 'address'){
-                    return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ' + client.address.city ;
+                    return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ' + client.address.city ;
                 }else if(itemName == 'latlong'){
                     if(typeof client.address.latitude == 'undefined' || typeof client.address.longitude == 'undefined' || 
                         (client.address.longitude == 0 && client.address.latitude == 0)){
-                        return client.address.street + ' ' + client.address.no + ' , ' + client.address.zip + ' ,' + client.address.city ;
+                        return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ,' + client.address.city ;
                     }else{
                         return client.address.latitude + ',' + client.address.longitude;
                     }                    

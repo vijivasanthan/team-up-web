@@ -19,11 +19,11 @@
 			autofocus='')
 			input(type='password',
 			ng-model='loginData.password',
-			placeholder='Password')
+			placeholder='{{ui.login.ph_password}}')
 			label.checkbox.span3
 				input(type='checkbox',
 				ng-model='loginData.remember')
-				| Remember me
+				| {{ui.login.label_rememberMe}}
 			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
 			span.version
 				//TODO: Create a version file later on or disable the link
