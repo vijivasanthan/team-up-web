@@ -7043,8 +7043,21 @@ input.search-query {
     box-shadow: 0 0 0 3px #833c11;
     overflow-y: scroll;
     overflow-x: hidden; }
+    #chat #chat-content .chatHeader {
+      height: 20px;
+      background-color: floralwhite;
+      position: fixed;
+      width: 100%;
+      z-index: 21; }
+      #chat #chat-content .chatHeader h4 {
+        font-size: 12px;
+        line-height: 12px;
+        margin-top: 4px;
+        margin-left: 4px; }
+    #chat #chat-content .mainContent {
+      margin-top: 30px; }
     #chat #chat-content .noMessages {
-      padding: 10px; }
+      padding: 0 10px; }
     #chat #chat-content .chat-separator {
       clear: both; }
       #chat #chat-content .chat-separator span {
