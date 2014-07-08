@@ -19,7 +19,7 @@
             <div class="widget {{(!browser.mobile) &amp;&amp; 'span9' || 'span12'}}">
               <dl>
                 <dt>{{ui.teamup.teams}}</dt>
-                <dd><span ng-repeat="team in teams"><span ng-hide="app.resources.role &gt; 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}} </a></span><span ng-hide="{{((teams.length-1) == $index)}}">,	</span><span ng-show="app.resources.role &gt; 1">{{team.name}}</span></span></dd>
+                <dd><span ng-repeat="team in teams"><span ng-hide="app.resources.role &gt; 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}}</a></span><span ng-show="app.resources.role &gt; 1">{{team.name}}</span></span></dd>
                 <dt>{{ui.teamup.role}}</dt>
                 <dd>{{data.role|translateRole}}</dd>
                 <dt>{{ui.profile.phone}}</dt>
@@ -82,7 +82,7 @@
           </form>
         </div>
         <div id="editImgTab" class="tab-pane {{(views.editImg==true) &amp;&amp; 'active'}}">
-          <div style="overflow: hidden; height: 35px">						
+          <div style="overflow: hidden; height: 35px">
             <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}</h3>
           </div>
           <hr>
