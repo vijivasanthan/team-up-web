@@ -73,8 +73,9 @@
                   dd {{task.description}}
               td
                 dl
-                  span.taskIcon.icon-time(aria-hidden='true')
-                  span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+                  span.taskIcon.icon-time(aria-hidden='true') 
+                  span.taskInfo(ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+                  span.taskInfo(ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
               td
                 .pull-right
                   a(href='#')
@@ -135,7 +136,8 @@
                     a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')  {{ui.teamup.map}}
                 dl
                   span.taskIcon.icon-time(aria-hidden='true')
-                  span.taskInfo {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+                  span.taskInfo(ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+                  span.taskInfo(ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
                 dl
                   dd(collapse="isCollapsed")
                     div {{task.description}}
