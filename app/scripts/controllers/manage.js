@@ -59,7 +59,7 @@ define(
                     Store('app').get(team.uuid),
                     function (member)
                     {                      
-                      if (memberGlobalIds.indexOf(member.uuid) == - 1 && typeof member.uuid != "undefined")
+                      if (typeof member.uuid != "undefined")
                       {
                         memberIds.push(member.uuid);
                         members.push(
@@ -67,8 +67,10 @@ define(
                             'name': member.firstName + ' ' + member.lastName,
                             'id': member.uuid
                           }
-                        );
-
+                        );                        
+                      }
+                      
+                      if(memberGlobalIds.indexOf(member.uuid) == - 1){
                         memberGlobalIds.push(member.uuid);
                       }
                     }
