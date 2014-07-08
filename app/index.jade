@@ -155,7 +155,7 @@ block chat
 		#chat-btn(ng-click='openChat()')
 			span CHAT {{teamName}}{{newCount}}
 		#chat-content(ng-show='toggleChat')
-			p(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
+			p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
 			div(ng-repeat='message in messagesShow')
 				.chat-separator(ng-show='(message.date != "")')
 					span {{message.date}}

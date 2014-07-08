@@ -227,28 +227,45 @@ section {
   width: 100%;
 }
 .page-header {
+  margin-top:14px;
   overflow: hidden;
-  min-height: 60px;
   border-bottom: none;
   padding: 0;
   position: absolute;
-  color: $turq;
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 40px;
+
   //padding-right: 40px;
 
 
 
   h2 {
-    display: inline;
-    margin-top: 0;
-    padding-top: 0;
+    padding-top: 10px;
+    color: $turq;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    min-height: 60px;
+    display: inline-block;
+    padding-right: 20px;
+    float: left;
   }
+
 
   h4 {
     color: $brown;
   }
+
+  .selectGroup {
+    float: left;
+    .selectTitle {
+      font-weight: bold;
+      font-style: italic;
+    }
+    select {
+      display: block;
+      margin-top:4px;
+    }
+  }
+
 
   .btn-group {
     margin-left: 15px;

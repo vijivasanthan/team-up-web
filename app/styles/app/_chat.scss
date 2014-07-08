@@ -57,6 +57,10 @@
     overflow-y: scroll;
     overflow-x: hidden;
 
+    .noMessages {
+      padding:10px;
+    }
+
     .chat-separator {
       //display: table-caption;
       clear: both;
