@@ -57,6 +57,26 @@
     overflow-y: scroll;
     overflow-x: hidden;
 
+    .chatHeader {
+      height: 20px;
+      background-color: $offwhite;
+      position: fixed;
+      width: 100%;
+      z-index: 21;
+      h4 {
+        font-size: 12px;
+        line-height: 12px;
+        margin-top: 4px;
+        margin-left: 4px;
+      }
+    }
+    .mainContent {
+      margin-top: 30px;
+    }
+    .noMessages {
+      padding:0 10px;
+    }
+
     .chat-separator {
       //display: table-caption;
       clear: both;
