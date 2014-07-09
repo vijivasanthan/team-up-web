@@ -16,7 +16,7 @@
     <title>TeamUp v0.3.0-SNAPSHOT</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/61321eef.main.css">
+    <link rel="stylesheet" href="styles/c8410653.main.css"/>
     <!-- block iestuff-->
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
@@ -83,31 +83,36 @@
       <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
     </div>
     <div id="chat" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)" ng-controller="messagesCtrl" class="ng-cloak">
-      <div id="chat-btn" ng-click="openChat()"><span>CHAT {{teamName}}{{newCount}}</span></div>
+      <div id="chat-btn" ng-click="openChat()"><span>CHAT {{newCount}}</span></div>
       <div id="chat-content" ng-show="toggleChat">
-        <p ng-hide="messagesShow.length &gt; 0">{{ui.teamup.noMessages}}</p>
-        <div ng-repeat="message in messagesShow">
-          <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
-            <hr>
-          </div>
-          <div class="message {{message.msgRole}}">
-            <div style="background-image: url({{message.member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }})" class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"></div>
-            <div ng-show="(message.role == &quot;other&quot;)" class="arrow"></div>
-            <div class="chatCloud">
-              <h5 class="name">{{message.senderName}}</h5>
-              <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
-              <div>
-                <p>{{message.body}}</p>
-              </div>
-            </div>
-            <div ng-hide="(message.role == &quot;other&quot;)" class="arrow"></div>
-          </div>
+        <div class="chatHeader">
+          <h4>{{teamName}}</h4>
         </div>
-        <div id="pusher"> </div>
-      </div>
-      <div class="input-area">
-        <input id="messageField" type="text" ng-model="newMessage" ngenter="sendMessage(newMessage)">
-        <button ng-click="sendMessage(newMessage)" class="btn btn-success">{{ui.message.send}}</button>
+        <div class="mainContent">
+          <p ng-hide="messagesShow.length &gt; 0" class="noMessages">{{ui.teamup.noMessages}}</p>
+          <div ng-repeat="message in messagesShow">
+            <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
+              <hr>
+            </div>
+            <div class="message {{message.msgRole}}">
+              <div style="background-image: url({{message.member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }})" class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"></div>
+              <div ng-show="(message.role == &quot;other&quot;)" class="arrow"></div>
+              <div class="chatCloud">
+                <h5 class="name">{{message.senderName}}</h5>
+                <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
+                <div>
+                  <p>{{message.body}}</p>
+                </div>
+              </div>
+              <div ng-hide="(message.role == &quot;other&quot;)" class="arrow"></div>
+            </div>
+          </div>
+          <div id="pusher"> </div>
+        </div>
+        <div class="input-area">
+          <input id="messageField" type="text" ng-model="newMessage" ngenter="sendMessage(newMessage)">
+          <button ng-click="sendMessage(newMessage)" class="btn btn-success">{{ui.message.send}}</button>
+        </div>
       </div>
     </div>
     <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/ca504260.ajax-loader.gif"><small>{{loading.message}}</small></div>

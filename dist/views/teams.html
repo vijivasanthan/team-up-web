@@ -1,5 +1,9 @@
-<div ng-hide="views.newTeam || views.newMember" class="page-header"><span class="nullable">{{ui.teamup.teams}}
-    <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select></span></div>
+<div ng-hide="views.newTeam || views.newMember" class="page-header">
+  <h2 class="nullable">{{ui.teamup.teams}}</h2>
+  <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+    <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
+  </div>
+</div>
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.team==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;team&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.teams}}</a></li>

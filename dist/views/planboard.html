@@ -1,7 +1,12 @@
 <section id="planboard" ng-controller="timeline">
-  <div class="page-header timeline"><span ng-show="views.teams" class="nullable pull-left">
-      <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select></span><span ng-show="views.clients" class="nullable pull-left">
-      <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select></span>
+  <div class="page-header timeline">
+    <h2 class="nullable">{{ui.planboard.planboard}}</h2><span ng-show="views.teams" class="nullable pull-left">
+      <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+        <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
+      </div></span><span ng-show="views.clients" class="nullable pull-left">
+      <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
+        <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select>
+      </div></span>
     <!--br-->
     <!--a(class='btn btn-primary', ng-click='getTeamID()') get team id-->
     <!--span team: {{currentTeamID}}-->

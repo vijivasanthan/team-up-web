@@ -1,5 +1,9 @@
-<div ng-hide="views.viewClient || views.editClient || views.newClientGroup" class="page-header"><span class="nullable">{{ui.teamup.clients}}
-    <select ng-model="current" ng-options="c.id as c.name for c in clientGroups" ng-selected="current" ng-change="requestClientGroup(current)"></select></span></div>
+<div ng-hide="views.viewClient || views.editClient || views.newClientGroup" class="page-header">
+  <h2 class="nullable">{{ui.teamup.clients}}</h2>
+  <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
+    <select ng-model="current" ng-options="c.id as c.name for c in clientGroups" ng-selected="current" ng-change="requestClientGroup(current)"></select>
+  </div>
+</div>
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.client==true || views.viewClient==true || views.editClient) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;client&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.clients}}</a></li>
@@ -130,12 +134,12 @@
       </form>
     </div>
     <div id="reportsTab" class="tab-pane {{(views.reports==true) &amp;&amp; 'active'}}">
-      <div class="tab-header">{{ui.teamup.clients}} :
+      <div class="tab-header">{{ui.teamup.clients}}:
         <!-- ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients"-->
         <select ng-init="currentCLient=0" ng-model="currentCLient" ng-selected="currentCLient" ng-change="requestReportsByFilter()">
           <option value="0">{{ui.teamup.selectClient}}</option>
           <option ng-repeat="client in clients" value="{{client.uuid}}">{{client.firstName}} {{client.lastName}}</option>
-        </select>&nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}} :				
+        </select>&nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
         <select ng-init="currentMonth=0" ng-model="currentMonth" ng-selected="currentMonth" ng-change="requestReportsByFilter()">
           <option ng-repeat="month in Months|orderBy:number" value="{{month.number}}">{{month.name}}</option>
         </select>
@@ -223,7 +227,7 @@
         <div class="controls">
           <input type="text" ng-model="contactForm.phone" class="span4">
         </div>
-        <button type="reset" ng-click="addContacts()" class="btn pull-right btn-info">{{ui.teamup.addContact}}</button>
+        <button type="reset" ng-click="addContacts()" class="btn btn-info">{{ui.teamup.addContact}}</button>
       </div>
       <p ng-hide="contacts.length &gt; 0">{{ui.teamup.noContacts}}</p>
       <div ng-show="contacts.length &gt; 0">
