@@ -8,20 +8,25 @@
   // position: relative;
 
   #chat-btn {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
     position: absolute;
     top: 50%;
     margin-top:-50px;
-    left: -45px;
+    left: -78px;
     color: $offwhite;
     z-index: 2001;
     display: block;
-    width: 46px;
-    height: 106px;
+    width: 106px;
+    height: 50px;
     border: 3px solid #833c11;
     border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
     background-color: #1dc8b6;
-    border-right: 3px solid #1dc8b6;
+    border-bottom: 3px solid #1dc8b6;
 
     &:hover {
       cursor: pointer;
@@ -30,15 +35,12 @@
 
     span {
       display: block;
-      -webkit-transform: rotate(-90deg);
-      -moz-transform: rotate(-90deg);
-      -ms-transform: rotate(-90deg);
-      -o-transform: rotate(-90deg);
-      transform: rotate(-90deg);
       font-size: 16px;
       font-weight: bold;
-      margin-left: 6px;
-      margin-top: 46px;
+      height:100%;
+      width: 100%;
+      text-align: center;
+      margin-top: 13px;
     }
   }
 
