@@ -234,7 +234,7 @@
             dt {{ui.teamup.group}}
             dd
               span(ng-hide='app.resources.role > 1')
-                a(href='#/client?uuid={{clientGroup.id}}#client') {{clientGroup.name}}
+                a(href='#/client?uuid={{client.clientGroupUuid}}#client') {{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}
             dt {{ui.profile.birthday}}
             dd {{client.birthDate}}
             dt {{ui.teamup.phone}}

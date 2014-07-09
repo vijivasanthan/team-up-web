@@ -187,7 +187,7 @@
         <div class="widget {{(!browser.mobile) &amp;&amp; 'span9' || 'span12'}}">
           <dl>
             <dt>{{ui.teamup.group}}</dt>
-            <dd><span ng-hide="app.resources.role &gt; 1"><a href="#/client?uuid={{clientGroup.id}}#client">{{clientGroup.name}}</a></span></dd>
+            <dd><span ng-hide="app.resources.role &gt; 1"><a href="#/client?uuid={{client.clientGroupUuid}}#client">{{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}</a></span></dd>
             <dt>{{ui.profile.birthday}}</dt>
             <dd>{{client.birthDate}}</dd>
             <dt>{{ui.teamup.phone}}</dt>

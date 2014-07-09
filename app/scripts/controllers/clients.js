@@ -416,10 +416,12 @@ define(
 
                         $scope.current = clientGroup.id;
 
-                        $scope.$watch(
-                          $location.search(),
-                          function () { $location.search({ id: clientGroup.id }) }
-                        );
+                        // $scope.$watch(
+                        //   $location.search(),
+                        //   function () { $location.search({ id: clientGroup.id }) }
+                        // );
+
+                        $location.url('/client?uuid='+clientGroup.id).hash('client');
                       }
                     }
                   );

@@ -614,6 +614,20 @@ define(
               );
             }
           };
+
+
+          $scope.$on('$viewContentLoaded', function () {
+
+              console.log("teams : viewContentLoaded" );            
+              // make sure the loading of the 
+              if(!$rootScope.taskVisit){
+                  $rootScope.$broadcast('taskFinishLoading');
+                  $rootScope.taskVisit = true;
+              }
+              
+         });
+
+
         }
       ]
     );

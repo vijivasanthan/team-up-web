@@ -124,14 +124,18 @@ define(
                 $scope.formatMessage(messages);
 
                 // scroll to the bottom of the chat window
-                // TODO: Is this a handy way of doing this?
-                setTimeout(
-                  function ()
-                  {
-                    angular.element('#chat-content #messageField').focus();
-
-                    angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
-                  }, 1000); // FIXME: Temporarily made it longer till there is a better solution
+                // TODO: Is this a handy way of doing this? 
+                // try to do it only once. 
+                
+                if($scope.moveToBottom){
+                    setTimeout(
+                    function (){
+                        angular.element('#chat-content #messageField').focus();
+                        angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
+                        $scope.moveToBottom = false;
+                    }, 1000); // FIXME: Temporarily made it longer till there is a better solution 
+                }
+                
 
                 if($scope.toggleChat){
                     $scope.latestMsgTime = messages[messages.length-1].sendTime;
@@ -169,25 +173,26 @@ define(
                   // if the message is not appied to the scope , then make the message count 0 .
                   if($scope.newCount == 0 || $scope.messages.length == 0){
                       if($scope.unReadCount == 0 || typeof $scope.unReadCount == 'undefined'){
-                          $scope.newCount = ''; 
+                          $scope.newCountShow = ''; 
                       }else{
-                          $scope.newCount = "("+$scope.unReadCount+")";; 
+                          $scope.newCountShow = "("+$scope.unReadCount+")";; 
                       }
                       
                   }else{
                       $scope.unReadCount = $scope.newCount + (typeof $scope.unReadCount == 'undefined'?0:$scope.unReadCount);
-                      $scope.newCount = "("+$scope.unReadCount+")";
+                      $scope.newCountShow = "("+$scope.unReadCount+")";
                   }
-                  
-                  $scope.teamName = $scope.teamName;
-
+                                    
                   // flash the tab ?  TODO : turing the color here
+                  // you might need Jquery UI to make this work.
                   $('#chat-btn').animate({ 'background-color' : "yellow" }, "slow").animate({ 'background-color' : "#1dc8b6" }, "slow");                  
 
                   if (!$scope.toggleChat){
                       // get the latest message 
                       messages = $filter('orderBy')(messages, 'sendTime');                      
-                      $scope.formatMessage(messages);
+                      if($scope.messages.length == 0 || (!$scope.newCount == 0 && !$scope.newCount == '')){
+                          $scope.formatMessage(messages);  
+                      }                      
 
                       $scope.latestMsgTime = messages[messages.length-1].sendTime;
                       setTimeout($scope.checkMessage,REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
@@ -216,8 +221,9 @@ define(
                     // clearInterval($scope.autoCheckMonitorId);              
                     // $scope.autoCheckMonitorId = setInterval($scope.renderMessage, REFRESH_CHAT_MESSAGES);                    
 
-                    $scope.newCount = '';
+                    $scope.newCountShow = '';
                     $scope.unReadCount = 0;
+                    $scope.moveToBottom = true;
                 }else {
                     // clearInterval($scope.autoCheckMonitorId);
                     // $scope.autoCheckMonitorId = setInterval($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
@@ -257,6 +263,7 @@ define(
 
                 $rootScope.statusBar.off();
                 $scope.newMessage = '';
+                $scope.moveToBottom = true;
               },
               function (error)
               {
@@ -265,6 +272,7 @@ define(
               }
             );
           };
+          
         }
       ]
     );

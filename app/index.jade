@@ -153,7 +153,7 @@ block chat
   #chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
   ng-controller='messagesCtrl')
     #chat-btn(ng-click='openChat()')
-      span CHAT {{newCount}}
+      span CHAT {{newCountShow}}
     #chat-content(ng-show='toggleChat')
       .chatHeader
         h4 {{teamName}}

@@ -505,6 +505,13 @@ define(
                     return member.states;
                 }
                 
+            }else if(usertype == 'clientGroup'){
+                if(id == null){
+                    return "";
+                }
+                if(itemName == 'name'){
+                    return $rootScope.getClientGroupName(id); 
+                }                
             }else{
                 return "no name";
             }

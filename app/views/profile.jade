@@ -29,8 +29,9 @@ section#profile
                 dd
                   span(ng-repeat='team in teams')
                     span(ng-hide='app.resources.role > 1')
-                      a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
-                    span(ng-show='app.resources.role > 1') {{team.name}}
+                        a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+                    span(ng-hide = '{{((teams.length-1) == $index)}}') ,
+                    span(ng-show = 'app.resources.role > 1') {{team.name}}
                 dt {{ui.teamup.role}}
                 dd {{data.role|translateRole}}
                 dt {{ui.profile.phone}}

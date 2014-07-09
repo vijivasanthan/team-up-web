@@ -493,7 +493,7 @@ define(
           }
           
           // Entry page, so might need to trigger some user defiend event here, 
-          // TODO : this might not be a good idea, better solution neede.
+          // TODO : this might not be a good idea, better solution needed.
           $scope.$on('$viewContentLoaded', function () {
 
               console.log("$viewContentLoaded" );            
@@ -501,8 +501,13 @@ define(
               $("#task-map .angular-google-map-container").height(500);
               google.maps.event.trigger($("#task-map"),"resize");
 
-              $rootScope.$broadcast('taskFinishLoading');
-          });          
+              // make sure the loading of the 
+              if(!$rootScope.taskVisit){
+                  $rootScope.$broadcast('taskFinishLoading');
+                  $rootScope.taskVisit = true;
+              }
+              
+          });
 
           $scope.clientCoords = {latitude : 0, longitude : 0};
           
