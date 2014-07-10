@@ -18,6 +18,7 @@ define(
     // 'angular-dragdrop',
     // 'ui-sortable',    
     // 'collapse',
+    'ui.bootstrap.pagination',
   ],
   function (angular)
   {
@@ -38,6 +39,7 @@ define(
         // 'ngDragDrop',
         // 'ui.sortable',   
         // 'collapse',
+        'ui.bootstrap.pagination',
       ]);
   }
 );

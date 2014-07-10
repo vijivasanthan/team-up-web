@@ -88,7 +88,7 @@ angular.module('ui.bootstrap.pagination', [])
       onSelectPage:' &'
     },
     controller: 'PaginationController',
-    templateUrl: 'template/pagination/pagination.html',
+    templateUrl: 'vendors/angular-ui-bootstrap/template/pagination/pagination.html',
     replace: true,
     link: function(scope, element, attrs, paginationCtrl) {
 
@@ -208,7 +208,7 @@ angular.module('ui.bootstrap.pagination', [])
       onSelectPage:' &'
     },
     controller: 'PaginationController',
-    templateUrl: 'template/pagination/pager.html',
+    templateUrl: 'vendors/angular-ui-bootstrap/template/pagination/pager.html',
     replace: true,
     link: function(scope, element, attrs, paginationCtrl) {
 

@@ -553,6 +553,63 @@ define(
             };
 
          //--------------- end the sortable function ----------//        
+
+          //--------------- start the pagination test ----------//
+          //TODO  these can be set as parameters , it should also be binded to the URL paramemter
+          $scope.tasksPerPage = 7;
+          if(params.tasksPerPage){
+               $scope.taskPerPage = parseInt(params.tasksPerPage);
+          }
+
+          console.log("params", params);          
+          var currentPage = 1;
+          if(params.currentPage){
+              currentPage = parseInt(params.currentPage);
+              if(view == "myTasks"){
+                  if(currentPage > Math.round($scope.myTasks.length/$scope.tasksPerPage)){
+                      currentPage = 1;
+                  }
+              }else if(view == "allTasks"){
+                  if(currentPage > Math.round($scope.allTasks.length/$scope.tasksPerPage)){
+                      currentPage = 1;
+                  }
+              }
+          }
+          $scope.allTaskCurrentPage = currentPage;
+          $scope.myTaskCurrentPage = currentPage;
+
+          $scope.maxSize = 10;
+          if(params.maxSize){
+               $scope.maxSize = parseInt(params.maxSize);
+          }
+                           
+          $scope.currentTasks = [];
+
+          $scope.$watch('allTaskCurrentPage', function(){
+              //console.log("All task page changed to  " + $scope.allTaskCurrentPage);
+              $scope.currentTasks = [];
+
+              angular.forEach($scope.allTasks,function(task,i){
+                                    
+                  if(i >= ($scope.allTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.allTaskCurrentPage)*$scope.tasksPerPage){                      
+                      $scope.currentTasks.push(task);
+                  }
+              });
+          });
+
+
+          $scope.$watch('myTaskCurrentPage', function(){
+              //console.log("My task page changed to  " + $scope.myTaskCurrentPage);
+              $scope.currentTasks = [];
+              angular.forEach($scope.myTasks,function(task,i){
+                                    
+                  if(i >= ($scope.myTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.myTaskCurrentPage)*$scope.tasksPerPage){                      
+                      $scope.currentTasks.push(task);
+                  }
+              });
+          });
+
+           //--------------- end the pagination test ----------//        
         }
       ]
     );

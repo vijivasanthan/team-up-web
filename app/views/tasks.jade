@@ -38,6 +38,8 @@
         input.pull-left(type='text')
         button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
         button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
+      pagination(total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
+      //pre Page: {{myTaskCurrentPage}} / {{numPages_mytask}}  = {{myTasks.length}} / {{tasksPerPage}} = {{myTasks.length/maxSize}}
       hr
       p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}
       div(ng-show='myTasks.length > 0')
@@ -56,13 +58,13 @@
                   i.icon-sort
               th
           tbody(ui-sortable="sortableOptions")
-            tr(ng-repeat='task in myTasks|orderBy:orderItem:reverse')
-              td
+            tr(ng-repeat='task in currentTasks|orderBy:orderItem:reverse')          
+              td 
                 .dragIcon
               td
                 .roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')
               td
-                a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
+                a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}                
               td
                 dl
                   span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
@@ -105,6 +107,8 @@
         input.pull-left(type='text')
         button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
         button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
+      pagination(total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage"  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
+      //pre Page: {{allTaskCurrentPage}} / {{numPages}} 
       hr
       p(ng-hide='allTasks.length || allTasks.length > 0') {{ui.task.noTasks}}
       div(ng-show='allTasks.length || allTasks.length > 0')
@@ -123,7 +127,7 @@
                   i.icon-sort
               th
           tbody
-            tr(ng-repeat='task in allTasks|orderBy:orderItem:reverse')
+            tr(ng-repeat='task in currentTasks | orderBy:orderItem:reverse ' )
               td
                 .roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')
               td

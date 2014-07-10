@@ -382,7 +382,11 @@ define(
           editClientImg:           'Wijzig foto van de cliënt',
           newTask:                 'Nieuwe taak',
           updateTask:              'Wijzig taak',
-          managePanelchangePrompt: 'Data is gewijzigd. Klik op \'Ok\' om door te gaan, \'Annuleren\' om te blijven.'
+          managePanelchangePrompt: 'Data is gewijzigd. Klik op \'Ok\' om door te gaan, \'Annuleren\' om te blijven.',
+          pagePrevious:            'Vorige',
+          pageNext:                'Volgende',
+          pageFirst:               'Eerste',
+          pageLast:                'Laatste',
         },
         task:{
           information : 'Informatie',
