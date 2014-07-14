@@ -134,13 +134,7 @@ define(
             );
 
             $scope.current = id;
-
-            $scope.team.phone = $rootScope.ui.teamup.loadingNumber;
-
-            TeamUp._(
-              'teamPhoneNumber',
-              { second: $scope.team.uuid }
-            ).then(function (result) { $scope.team.phone = result.phone });
+            
           }
 
           $scope.requestTeam = function (current, switched)

@@ -596,10 +596,16 @@ define(
                           if(!allTasks.length){
                               allTasks = [];
                           }
+                          if(action == 'update'){
+                              allTasks = deleteTask(allTasks,result.uuid);
+                          }
                           allTasks.push(result);
                           if(result.assignedTeamMemberUuid == $rootScope.app.resources.uuid){
                               if(!myTasks.length){
                                   myTasks = [];
+                              }
+                              if(action == 'update'){
+                                  myTasks = deleteTask(myTasks,result.uuid);      
                               }
                               myTasks.push(result);
                           }
