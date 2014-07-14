@@ -5,7 +5,7 @@ define(
       released: '@@released',
 
       title:   'TeamUp',
-      version: '0.3.0-SNAPSHOT',
+      version: '0.3.0-alpha',
       lang:    'nl',
 
       statesall: {

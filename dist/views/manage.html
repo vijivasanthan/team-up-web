@@ -1,11 +1,11 @@
 <div class="page-header">
-  <h2 class="nullable">Teams - Clienten</h2>
+  <h2 class="nullable">Teams - Cliënten</h2>
 </div>
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
-    <li class="{{(views.teamClients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teamClients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams & Clients</a></li>
+    <li class="{{(views.teamClients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teamClients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams & Cliënten</a></li>
     <li class="{{(views.teams==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams</a></li>
-    <li class="{{(views.clients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Clients</a></li>
+    <li class="{{(views.clients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Cliënten</a></li>
   </ul>
   <div ng-controller="treegrid" class="tab-content treegrid-container">
     <div id="viewTeamClientTab" class="tab-pane {{(views.teamClients==true) &amp;&amp; 'active'}}">
@@ -27,7 +27,7 @@
     <div id="viewTeamsTab" class="tab-pane {{(views.teams==true) &amp;&amp; 'active'}}">
       <div class="row-fluid">
         <div class="span6">
-          <h3><span class="titleIcon icon-user0"></span>Members</h3>
+          <h3><span class="titleIcon icon-user0"></span>Leden</h3>
           <hr>
           <div id="teams_left"></div>
         </div>
@@ -43,12 +43,12 @@
     <div id="viewClientsTab" class="tab-pane {{(views.clients==true) &amp;&amp; 'active'}}">
       <div class="row-fluid">
         <div class="span6">
-          <h3><span class="titleIcon icon-heart7"></span>Clients</h3>
+          <h3><span class="titleIcon icon-heart7"></span>Cliënten</h3>
           <hr>
           <div id="clients_left"></div>
         </div>
         <div class="span6">
-          <h3><span class="titleIcon icon-users"></span>Groups</h3>
+          <h3><span class="titleIcon icon-users"></span>Groepen</h3>
           <hr>
           <div id="clients_right"></div>
         </div>
