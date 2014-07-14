@@ -241,9 +241,10 @@ $navbarInverseBrandColor:                $navbarInverseLinkColor !default;
 
 // Pagination
 // -------------------------
-$paginationBackground:                #fff !default;
-$paginationBorder:                    #ddd !default;
-$paginationActiveBackground:          #f5f5f5 !default;
+$paginationBackground:                $brown !default;
+$paginationBorder:                    $brown !default;
+$paginationActiveBackground:          $brown !default;
+$paginationLinkColor:                  $turq !default;
 
 
 
