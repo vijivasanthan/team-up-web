@@ -14,6 +14,9 @@ define(
           $scope.myTasks = Store('app').get('myTasks');
           $scope.allTasks = Store('app').get('allTasks');
 
+          $scope.allTasks = $filter('orderBy')($scope.allTasks,"plannedStartVisitTime",true);
+          $scope.myTasks = $filter('orderBy')($scope.myTasks,"plannedStartVisitTime",true);
+
           // prepare the order
           $scope.orders = [
             {id: 1, name: $rootScope.ui.task.orderType1},
@@ -50,6 +53,8 @@ define(
               }
               $scope.reverse = !$scope.reverse; 
           }
+
+        
 
           // prepare the teams, members, client groups and clients
           var teamsLocal = Teams.queryLocal();
@@ -561,7 +566,7 @@ define(
                $scope.taskPerPage = parseInt(params.tasksPerPage);
           }
 
-          console.log("params", params);          
+          
           var currentPage = 1;
           if(params.currentPage){
               currentPage = parseInt(params.currentPage);
@@ -585,31 +590,95 @@ define(
                            
           $scope.currentTasks = [];
 
-          $scope.$watch('allTaskCurrentPage', function(){
+          if(view == 'allTasks'){
+              $scope.$watch('allTaskCurrentPage', function(){
               //console.log("All task page changed to  " + $scope.allTaskCurrentPage);
-              $scope.currentTasks = [];
+                  $scope.currentTasks = [];
 
-              angular.forEach($scope.allTasks,function(task,i){
-                                    
-                  if(i >= ($scope.allTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.allTaskCurrentPage)*$scope.tasksPerPage){                      
-                      $scope.currentTasks.push(task);
-                  }
-              });
-          });
+                  angular.forEach($scope.allTasks,function(task,i){
+                                        
+                      if(i >= ($scope.allTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.allTaskCurrentPage)*$scope.tasksPerPage){                      
+                          $scope.currentTasks.push(task);
+                      }
+                  });
+              });            
+          }
+          
+          if(view == 'myTasks'){
+              $scope.$watch('myTaskCurrentPage', function(){
+                  //console.log("My task page changed to  " + $scope.myTaskCurrentPage);
+                  $scope.currentTasks = [];
+                  angular.forEach($scope.myTasks,function(task,i){
+                                        
+                      if(i >= ($scope.myTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.myTaskCurrentPage)*$scope.tasksPerPage){                      
+                          $scope.currentTasks.push(task);
+                      }
+                  });
+              }); 
+          }
+          
+          //--------------- end the pagination test ----------//        
 
+          // refersh the task list manually 
+          $scope.refreshTask = function(tab){
+              console.log(tab);              
+              $rootScope.statusBar.display($rootScope.ui.task.refreshTask);
+              if(tab == 'my'){
+                  TeamUp._("taskMineQuery").then(function(result){
+                      Store('app').save('myTasks',result);
+                      $scope.myTasks = Store('app').get('myTasks');                      
+                      $scope.myTasks = $filter('orderBy')($scope.myTasks,"plannedStartVisitTime",true);
 
-          $scope.$watch('myTaskCurrentPage', function(){
-              //console.log("My task page changed to  " + $scope.myTaskCurrentPage);
-              $scope.currentTasks = [];
-              angular.forEach($scope.myTasks,function(task,i){
-                                    
-                  if(i >= ($scope.myTaskCurrentPage-1)*$scope.tasksPerPage && i < ($scope.myTaskCurrentPage)*$scope.tasksPerPage){                      
-                      $scope.currentTasks.push(task);
-                  }
-              });
-          });
+                      // refresh the paging data 
+                      if($scope.myTaskCurrentPage != 1){
+                          $scope.myTaskCurrentPage = 1;
+                          $rootScope.statusBar.off();
+                      }else{
+                          $scope.myTaskCurrentPage = 0;
+                          setTimeout(function(){
+                              $scope.myTaskCurrentPage = 1;
+                              $rootScope.statusBar.off();
+                          },500);                                
+                      }
+                  });
+              }else if(tab == 'all'){
+                  var allTasks = [];
+                  angular.forEach($scope.teams,function(team_obj){                
+                      TeamUp._("taskByTeam",
+                        {fourth : team_obj.uuid}
+                        ).then(function(result){
+                            angular.forEach(result,function(taskObj){                          
+                                var foundTask = $filter('getByUuid')(allTasks,taskObj.uuid);
+                                if(foundTask == null){
+                                    allTasks.push(taskObj);
+                                }
+                            });                      
+                            Store('app').save('allTasks',allTasks);                                                  
+                            $scope.allTasks = $filter('orderBy')(allTasks,"plannedStartVisitTime",true);
+                            
+                            // refresh the paging data 
+                            if($scope.allTaskCurrentPage != 1){
+                                $scope.allTaskCurrentPage = 1;
+                                $rootScope.statusBar.off();
+                            }else{
+                                $scope.allTaskCurrentPage = 0;
+                                setTimeout(function(){
+                                    $scope.allTaskCurrentPage = 1;
+                                    $rootScope.statusBar.off();
+                                },500);                                
+                            }
+                      });
+                  });
+              }
+          }
 
-           //--------------- end the pagination test ----------//        
+          $scope.toggleMyDesc = function(taskId){                            
+              $('#myTaskdesc_'+taskId).toggle()
+          }
+
+          $scope.toggleAllDesc = function(taskId){                            
+              $('#allTaskdesc_'+taskId).toggle()
+          }
         }
       ]
     );

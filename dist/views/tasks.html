@@ -5,7 +5,7 @@
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Mijn Taken</a></li>
     <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Alle Taken</a></li>
-    <li class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Nieuwe Taak</a></li>
+    <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Nieuwe Taak</a></li>
   </ul>
   <div class="tab-content">
     <div id="myTasks" class="tab-pane {{(views.myTasks==true) &amp;&amp; 'active'}}">
@@ -18,8 +18,10 @@
         <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
         <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
       </div>
-      <pagination total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"> </pagination>
-      <!--pre Page: {{myTaskCurrentPage}} / {{numPages_mytask}}  = {{myTasks.length}} / {{tasksPerPage}} = {{myTasks.length/maxSize}}-->
+      <div> 
+        <pagination total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"> </pagination>
+        <button type="button" ng-click="refreshTask('my')" style="margin-top : 20px" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.refresh}}</button>
+      </div>
       <hr>
       <p ng-hide="myTasks.length &gt; 0">{{ui.task.noTasks}}</p>
       <div ng-show="myTasks.length &gt; 0">
@@ -46,7 +48,9 @@
               <td>
                 <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo"> {{task.relatedClientUuid | getObjAttr:"client":"address"}}<a href="http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:&quot;client&quot;:&quot;latlong&quot; }}"> {{ui.teamup.map}}</a></span></dl>
                 <dl>
-                  <dd>{{task.description}}</dd>
+                  <dd>
+                    <div id="myTaskdesc_{{task.uuid}}">{{task.description}} </div>
+                  </dd>
                 </dl>
               </td>
               <td>
@@ -55,7 +59,7 @@
               <td>
                 <div class="pull-right"><a href="#"></a>
                   <button type="button" ng-click="unassignYourself(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
-                  <button type="button" ng-click="deleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a class="noteLink">
+                  <button type="button" ng-click="deleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a ng-click="toggleMyDesc(task.uuid)" class="noteLink">
                     <p>{{ui.task.description}}<i class="icon-arrow-down2"></i></p></a>
                 </div>
               </td>
@@ -74,7 +78,10 @@
         <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
         <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
       </div>
-      <pagination total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"> </pagination>
+      <div> 
+        <pagination total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"> </pagination>
+        <button type="button" ng-click="refreshTask('all')" style="margin-top : 20px" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.refresh}}</button>
+      </div>
       <!--pre Page: {{allTaskCurrentPage}} / {{numPages}} -->
       <hr>
       <p ng-hide="allTasks.length || allTasks.length &gt; 0">{{ui.task.noTasks}}</p>
@@ -100,8 +107,8 @@
                 <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">{{task.relatedClientUuid | getObjAttr:"client":"address"}}<a href="http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:&quot;client&quot;:&quot;latlong&quot; }}"> {{ui.teamup.map}}</a></span></dl>
                 <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0 }}" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span><span ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0 }}" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span></dl>
                 <dl>
-                  <dd collapse="isCollapsed">
-                    <div>{{task.description}}</div>
+                  <dd>
+                    <div id="allTaskdesc_{{task.uuid}}">{{task.description}} </div>
                   </dd>
                 </dl>
               </td>
@@ -113,7 +120,7 @@
               <td>
                 <div class="pull-right">
                   <button type="button" ng-hide="task.assignedTeamMemberUuid" ng-click="assignYourself(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
-                  <button type="button" ng-click="deleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a ng-click="isCollapsed = !isCollapsed" class="noteLink">
+                  <button type="button" ng-click="deleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a ng-click="toggleAllDesc(task.uuid)" class="noteLink">
                     <p>{{ui.task.description}}<i class="icon-arrow-down2"></i></p></a>
                 </div>
               </td>
@@ -122,7 +129,7 @@
         </table><span class="muted pull-right"><small><i>{{allTasks.length | i18n_spec:'groups.memberCount'}}</i></small></span>
       </div>
     </div>
-    <div id="newTask" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
+    <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
       <div class="tab-header">
         <h3 class="pull-left">Nieuwe taak</h3>
       </div>
@@ -180,10 +187,11 @@
           <div class="span6">
             <fieldset>
               <div class="control-group"></div>
-              <google-map center="map.center" zoom="map.zoom" id="task-map" draggable="true" dragging="map.dragging">
-                <marker coords="clientCoords"></marker>
-                <markers models="memberMarkers"></markers>
-              </google-map>
+              <!--google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+              marker(coords = 'clientCoords')
+              markers(models = 'memberMarkers' )
+              
+              -->
             </fieldset>
           </div>
         </div>

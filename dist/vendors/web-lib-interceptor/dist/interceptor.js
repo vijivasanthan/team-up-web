@@ -2,7 +2,7 @@
   define(['services/services'], function(services) {
     'use strict';
     services.factory('Interceptor', [
-      '$q', 'Log', function($q, Log) {
+      '$q', 'Log', '$location' , function($q, Log, $location) {
         return {
           request: function(config) {
             return config || $q.when(config);
@@ -20,7 +20,8 @@
 
             if (rejection.status == 403){
                localStorage.setItem('sessionTimeout', '');
-               $window.location.href = 'logout.html';
+               $location.path('/logout');
+               //window.location.href = 'logout.html';
             }
 
             // Log.error(rejection);

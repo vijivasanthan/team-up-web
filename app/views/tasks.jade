@@ -17,7 +17,7 @@
         span.icomoon(data-icon='',
         aria-hidden='true')
         | Alle Taken
-    li(class="{{(views.newTask==true) && 'active'}}")
+    li(class="{{(views.newTask==true) && 'active'}}" ng-hide="app.resources.role > 1")
       a(data-toggle='tab',
       ng-click='setViewTo("newTask")')
         span.icomoon(data-icon='',
@@ -38,8 +38,9 @@
         input.pull-left(type='text')
         button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
         button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
-      pagination(total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
-      //pre Page: {{myTaskCurrentPage}} / {{numPages_mytask}}  = {{myTasks.length}} / {{tasksPerPage}} = {{myTasks.length/maxSize}}
+      div  
+        pagination(total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
+        button.btn.pull-right.btn-info.marginLeftTen(type='button' ng-click="refreshTask('my')" style="margin-top : 20px") {{ui.teamup.refresh}}
       hr
       p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}
       div(ng-show='myTasks.length > 0')
@@ -71,7 +72,8 @@
                   span.taskInfo  {{task.relatedClientUuid | getObjAttr:"client":"address"}}
                     a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')  {{ui.teamup.map}}
                 dl
-                  dd {{task.description}}
+                  dd 
+                    div(id = 'myTaskdesc_{{task.uuid}}' ) {{task.description}} 
               td
                 dl
                   span.taskIcon.icon-time(aria-hidden='true') 
@@ -86,7 +88,7 @@
                   //- 	i.icon-edit
                   button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
                     i.icon-trash
-                  a.noteLink
+                  a.noteLink(ng-click="toggleMyDesc(task.uuid)")
                     p {{ui.task.description}}
                       i.icon-arrow-down2
         span.muted.pull-right
@@ -107,7 +109,9 @@
         input.pull-left(type='text')
         button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
         button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
-      pagination(total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage"  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
+      div  
+        pagination(total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage"  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")  
+        button.btn.pull-right.btn-info.marginLeftTen(type='button' ng-click="refreshTask('all')" style="margin-top : 20px") {{ui.teamup.refresh}}
       //pre Page: {{allTaskCurrentPage}} / {{numPages}} 
       hr
       p(ng-hide='allTasks.length || allTasks.length > 0') {{ui.task.noTasks}}
@@ -142,8 +146,8 @@
                   span.taskInfo(ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
                   span.taskInfo(ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
                 dl
-                  dd(collapse="isCollapsed")
-                    div {{task.description}}
+                  dd
+                    div(id = 'allTaskdesc_{{task.uuid}}' ) {{task.description}} 
               td
                 .roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',
                 style='background-image: url({{task.assignedTeamMemberUuid | avatar:"team":"80"}})',
@@ -159,7 +163,7 @@
                   //- 	i.icon-edit
                   button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
                     i.icon-trash
-                  a.noteLink(ng-click="isCollapsed = !isCollapsed")
+                  a.noteLink(ng-click="toggleAllDesc(task.uuid)")
                     p {{ui.task.description}}
                       i.icon-arrow-down2
         span.muted.pull-right
@@ -168,7 +172,7 @@
               | {{allTasks.length | i18n_spec:'groups.memberCount'}}
 
 
-    #newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}")
+    #newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}" ng-hide="app.resources.role > 1")
       .tab-header
         h3.pull-left Nieuwe taak
       hr
@@ -247,7 +251,7 @@
           .span6
             fieldset
               .control-group
-              google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+              //google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
                 marker(coords = 'clientCoords')
                 markers(models = 'memberMarkers' )
 

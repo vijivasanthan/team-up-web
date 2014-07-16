@@ -16,9 +16,8 @@ define(
     'ng-vis',
     'angular-google-maps',
     // 'angular-dragdrop',
-    // 'ui-sortable',    
-    // 'collapse',
-    'ui.bootstrap.pagination',
+    // 'ui-sortable',        
+    'ui.bootstrap.pagination'    
   ],
   function (angular)
   {
@@ -38,8 +37,8 @@ define(
         'google-maps',
         // 'ngDragDrop',
         // 'ui.sortable',   
-        // 'collapse',
-        'ui.bootstrap.pagination',
+        // 'collapse',        
+        'ui.bootstrap.pagination'
       ]);
   }
 );

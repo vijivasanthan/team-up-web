@@ -48,9 +48,9 @@ require.config(
       'lodash':           '../vendors/lodash/dist/lodash.underscore.min',
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       // 'angular-dragdrop': '../vendors/angular-dragdrop/src/angular-dragdrop',
-      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
-      // 'collapse':         '../vendors/angular-ui-bootstrap/src/collapse/collapse',
+      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
       'ui.bootstrap.pagination':     '../vendors/angular-ui-bootstrap/src/pagination/pagination',
+      // 'collapse':       '../vendors/angular-ui-bootstrap/src/collapse/collapse',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -85,6 +85,7 @@ require.config(
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
       'ui.bootstrap.pagination': { deps: ['angular'] },
+      // 'collapse': { deps: ['angular'] },
     }
   }
 );
@@ -152,7 +153,7 @@ require(
     'angular-google-maps',
     // 'jquery-ui',
     // 'angular-dragdrop',
-    // 'ui-sortable',
+    // 'ui-sortable',    
   ],
   function (angular, domReady)
   {

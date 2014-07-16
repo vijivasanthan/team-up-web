@@ -386,7 +386,8 @@ define(
           pagePrevious:            'Vorige',
           pageNext:                'Volgende',
           pageFirst:               'Eerste',
-          pageLast:                'Laatste'
+          pageLast:                'Laatste',
+          refresh:                 'Verversen',
         },
         task:{
           information : 'Informatie',
@@ -408,7 +409,8 @@ define(
           taskSaved: 'Taak is aangemaakt.',
           deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
           taskDeleted: 'Taak verwijderd.',
-          planningTime: 'Tijdsbestek'
+          planningTime: 'Tijdsbestek',
+          refreshTask: 'Het herladen van de taken',          
         }
       }
     }

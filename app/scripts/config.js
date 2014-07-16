@@ -5,7 +5,7 @@ define(
       released: '@@released',
 
       title:   'TeamUp',
-      version: '0.3.0-alpha',
+      version: '0.3.0-alpha-1',
       lang:    'nl',
 
       statesall: {
@@ -29,8 +29,9 @@ define(
         }
       },
 
-      host: 'http://dev.ask-cs.com/',      
-      namespace: 'teamup-dev',      
+      host:"http://test.ask-cs.com/",
+      namespace:"teamup-test",
+
 
       formats: {
         date:         'dd-MM-yyyy',
