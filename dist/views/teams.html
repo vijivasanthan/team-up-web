@@ -43,7 +43,7 @@
               <td><a href="#/profile/{{member.uuid}}#profile" ng-click="editProfile(member.uuid,team.uuid)">{{member.firstName}} {{member.lastName}}</a></td>
               <td><span ng-show="noSharedStates(member.states)" class="states">{{ui.teamup.noSharedStates}}</span>
                 <ul ng-repeat="state in member.states | filter:share=true " class="states">
-                  <li data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></li><span class="stateValue">{{member.address}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{state|stateValue:&quot;data&quot;}}">{{ui.teamup.map}}</a></span>
+                  <li data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></li><span ng-show="(state.name == &quot;Location&quot;)" class="stateValue">{{member.address.street}} {{member.address.no}}, {{member.address.zip}} {{member.address.city}}</span><span ng-show="(state.name != &quot;Location&quot;)" class="stateValue">{{state.value}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}"> {{ui.teamup.map}}</a></span>
                 </ul>
               </td>
               <td>
