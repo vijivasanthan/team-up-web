@@ -346,7 +346,7 @@ define(
 
           $scope.memberSubmit = function (member)
           {
-            if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword)
+            if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword || ! member.birthDate)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
 
@@ -464,7 +464,7 @@ define(
             $scope.setViewTo('team');
           };
 
-          $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(memberId + '_team', teamId) };
+          $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId) };
 
           $scope.noSharedStates = function (states)
           {
@@ -547,7 +547,9 @@ define(
             if (window.confirm($rootScope.ui.teamup.deleteConfirm))
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
-
+              // lower case of the id : 
+              // TODO : we should also fix the issue in the backend. 
+              memberId = angular.lowercase(memberId);
               TeamUp._(
                 'memberDelete',
                 { third: memberId }
@@ -621,6 +623,9 @@ define(
               
          });
 
+          $scope.convertUserName = function(){
+              $scope.memberForm.username = angular.lowercase($scope.memberForm.username);
+          }
 
         }
       ]
