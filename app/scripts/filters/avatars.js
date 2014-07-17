@@ -301,8 +301,8 @@ define(
     filters.filter(
       'rangeInfoFilter',
       [
-        'Dater',
-        function (Dater)
+        'Dater','$rootScope',
+        function (Dater,$rootScope)
         {
           var periods = Dater.getPeriods();
 
@@ -328,21 +328,21 @@ define(
                  */
                 if (hours.end == '00:00') hours.end = '24:00';
 
-                return  'Time: ' +
+                return  $rootScope.ui.planboard.time + 
                         hours.start +
                         ' / ' +
                         hours.end;
               }
               else if (timeline.scope.week)
               {
-                return  'Week number: ' +
+                return  $rootScope.ui.planboard.weekNumber + 
                         timeline.current.week;
               }
               else if (timeline.scope.month)
               {
-                return  'Month number: ' +
+                return  $rootScope.ui.planboard.monthNumber + 
                         timeline.current.month +
-                        ', Total days: ' +
+                        ','  + $rootScope.ui.planboard.totalDays + 
                         periods.months[timeline.current.month].totalDays;
               }
             }

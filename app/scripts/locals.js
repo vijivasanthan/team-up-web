@@ -102,7 +102,11 @@ define(
           preCompilingStortageMessage: 'Opstellen tekortbericht',
           weeklyPlanning:              'Wekelijkse planning',
           planning:                    'Planning',
-          minNumber:                   'Minimum aantal benodigde mensen'
+          minNumber:                   'Minimum aantal benodigde mensen',
+          time:                        'Time: ',
+          weekNumber:                  'Weeknummer: ',
+          monthNumber:                 'Maand nummer: ',
+          totalDays:                   'Totaal dagen: ',
         },
         message:   {
           messages:          'Berichten',
