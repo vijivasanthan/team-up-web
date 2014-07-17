@@ -173,7 +173,7 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small></span>
+        </table><span class="muted pull-right"><small><i>{{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
       </div>
     </div>
     <div id="viewClientTab" ng-show="views.viewClient" class="tab-pane {{(views.viewClient==true) &amp;&amp; 'active'}}">
@@ -292,7 +292,7 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small></span>
+        </table><span class="muted pull-right"><small><i>{{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
       </div>
     </div>
     <div ng-show="views.editClient" class="tab-pane {{(views.editClient==true) &amp;&amp; 'active'}}">

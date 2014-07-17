@@ -345,6 +345,7 @@ define(
           errorSaveClientGroup:    'Opslaan wijzigingen cliëntengroep mislukt.',
           noContacts:              'Er zijn geen contactpersonen gedefinieerd.',
           contactCount:            'Er zijn $v contactpersonen.',
+          reportCount:             'Er zijn $v rapporteren.',
           accountInfoFill:         'Vul uw accountinformatie in a.u.b.',
           passNotSame:             'Wachtwoorden zijn niet hetzelfde.',
           savingMember:            'Lid aan het opslaan',

@@ -216,7 +216,7 @@
                     i.icon-trash
         span.muted.pull-right
           small
-            i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+            i {{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
 
 
     #viewClientTab.tab-pane(ng-show='views.viewClient',
@@ -333,7 +333,7 @@
                     i.icon-trash
         span.muted.pull-right
           small
-            i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+            i {{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
     .tab-pane(ng-show='views.editClient',
     class="{{(views.editClient==true) && 'active'}}")
       div(style='overflow: hidden; height: 35px')

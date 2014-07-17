@@ -46,11 +46,10 @@ require.config(
       //'async':            '../vendors/requirejs-plugins/src/async',
       'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'lodash':           '../vendors/lodash/dist/lodash.underscore.min',
-      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      // 'angular-dragdrop': '../vendors/angular-dragdrop/src/angular-dragdrop',
+      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
-      'ui.bootstrap.pagination':     '../vendors/angular-ui-bootstrap/src/pagination/pagination',
-      // 'collapse':       '../vendors/angular-ui-bootstrap/src/collapse/collapse',
+      'ui.bootstrap.pagination':     '../vendors/angular-ui-bootstrap/src/pagination/pagination',      
+      'locale_nl':        'i18n/angular-locale_nl',
     },
     shim:  {
       date:               { deps: [], exports: 'date' },
@@ -85,7 +84,7 @@ require.config(
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      // 'collapse': { deps: ['angular'] },
+      'locale_nl': { deps: ['angular'] },
     }
   }
 );
@@ -153,7 +152,8 @@ require(
     'angular-google-maps',
     // 'jquery-ui',
     // 'angular-dragdrop',
-    // 'ui-sortable',    
+    // 'ui-sortable',  
+    'locale_nl',
   ],
   function (angular, domReady)
   {

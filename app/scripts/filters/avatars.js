@@ -217,31 +217,35 @@ define(
     filters.filter(
       'rangeMainFilter',
       [
-        'Dater',
-        function (Dater)
+        'Dater','$filter',
+        function (Dater,$filter)
         {
           var periods = Dater.getPeriods();
 
           return function (dates)
-          {
-            if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000)
+          {      
+            var startTime = new Date(dates.start).getTime();
+            var endTime =  new Date(dates.end).getTime();
+            if (( endTime - startTime ) == 86401000)
             {
               dates.start = new Date(dates.end).addDays(- 1);
+              startTime = new Date(dates.start).getTime();
             }
 
+            
             var dates = {
-                  start: {
-                    real:  new Date(dates.start).toString('dddd, MMMM d'),
-                    month: new Date(dates.start).toString('MMMM'),
-                    day:   new Date(dates.start).toString('d')
+                  start: {                    
+                    real:  $filter('date')(startTime,'EEEE, MMMM d'),
+                    month: $filter('date')(startTime,'MMMM'),
+                    day:   $filter('date')(startTime,'d')
                   },
-                  end:   {
-                    real:  new Date(dates.end).toString('dddd, MMMM d'),
-                    month: new Date(dates.end).toString('MMMM'),
-                    day:   new Date(dates.end).toString('d')
+                  end:   {                    
+                    real:  $filter('date')(endTime,'EEEE, MMMM d'),
+                    month: $filter('date')(endTime,'MMMM'),
+                    day:   $filter('date')(endTime,'d')
                   }
-                },
-                monthNumber = Date.getMonthNumberFromName(dates.start.month);
+                },                
+                monthNumber = $filter('date')(endTime,'M') - 1; 
 
             if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) ||
                  dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
@@ -535,5 +539,17 @@ define(
          }
       }
     );     
+
+    filters.filter(
+        'dateReverse' ,  [
+            '$filter', function($filter){
+              return function(date,pattern){
+                 var timestamp = new Date(date).getTime();
+                 var ret = $filter('date')(timestamp,pattern);
+                 return ret;
+              }
+          }  
+        ] 
+    );
   }
 );
