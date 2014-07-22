@@ -7134,6 +7134,11 @@ input.search-query {
   height: 16px;
   margin: 0 10px; }
 
+.teamsTable dl, .teamsTable dd {
+  margin: 0; }
+.teamsTable .stateIcon {
+  margin-right: 6px; }
+
 #chat {
   position: fixed;
   right: 0;
