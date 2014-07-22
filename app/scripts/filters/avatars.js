@@ -376,8 +376,23 @@ define(
           return function (string, type)
           {
             var types = type.split('.');
+            var ret;
+            if(types[1] == 'stateValue'){
+                var statesTrans = $rootScope.ui[types[0]][types[1]];
+                angular.forEach(statesTrans,function(v,k){
+                    if(k == string){
+                      ret = v;
+                    }                    
+                });
+                return ret;
+            }
 
-            return ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
+            ret = ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
+            if(typeof ret == 'undefined'){
+                ret = string;
+            }
+           
+            return ret;
           }
         }
       ]

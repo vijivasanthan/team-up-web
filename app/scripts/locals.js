@@ -392,7 +392,12 @@ define(
           pageNext:                'Volgende',
           pageFirst:               'Eerste',
           pageLast:                'Laatste',
-          refresh:                 'Verversen'
+          refresh:                 'Verversen',
+          stateValue:              { 'reachable' : 'Bereikbaar',
+                                     'available' : 'Beschikbaar',
+                                     'working' : 'Aan het werk',
+                                     'offline': 'Offline',
+                                    },
         },
         task:{
           information : 'Informatie',
