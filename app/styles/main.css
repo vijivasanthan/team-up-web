@@ -7253,7 +7253,8 @@ input.search-query {
           color: #f5a962;
           margin-left: 10px; }
         #chat #chat-content .message .chatCloud p {
-          clear: both; }
+          clear: both;
+          word-break: break-all; }
     #chat #chat-content .messageOther .chatAvatar {
       margin-right: 14px;
       float: left; }
