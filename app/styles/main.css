@@ -7193,6 +7193,7 @@ input.search-query {
     overflow-x: hidden; }
     #chat #chat-content .chatHeader {
       height: 20px;
+      border-top-left-radius: 10px;
       background-color: floralwhite;
       position: fixed;
       width: 100%;
@@ -7299,7 +7300,7 @@ input.search-query {
     #chat .input-area #messageField {
       margin-left: 10px;
       float: left;
-      width: 277px; }
+      width: 260px; }
     #chat .input-area button {
       margin: 0 0 0 10px; }
   #chat #pusher {

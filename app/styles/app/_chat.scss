@@ -61,6 +61,7 @@
 
     .chatHeader {
       height: 20px;
+      border-top-left-radius: 10px;
       background-color: $offwhite;
       position: fixed;
       width: 100%;
@@ -203,7 +204,7 @@
     #messageField {
       margin-left: 10px;
       float: left;
-      width: 277px;
+      width: 260px;
     }
 
     button {
