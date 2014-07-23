@@ -7208,6 +7208,7 @@ input.search-query {
       padding: 0 10px; }
     #chat #chat-content .chat-separator {
       width: 100%;
+      display: inline-block;
       text-align: center; }
       #chat #chat-content .chat-separator span {
         background-color: #f5e6d8;
