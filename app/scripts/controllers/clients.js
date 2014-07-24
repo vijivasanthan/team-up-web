@@ -211,13 +211,21 @@ define(
 
                 // open the report tab if the there is report Id in the params
                 var reportId = $location.search().reportUuid;                
-                var report_modal;
+                var report_modal = null;
                 if(reportId){
                     angular.forEach($scope.groupReports,function(report){
                           if(report.uuid == reportId){
                               report_modal = report;
                           }
                     });
+                    if(report_modal == null){
+                        // clear the url param
+                        if($location.search().reportUuid){
+                            $location.search('reportUuid',null);
+                        }
+                        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                        return;
+                    }
                     $scope.openReport(report_modal);
                 }
 
@@ -1036,13 +1044,21 @@ define(
                             currentScope.setViewTo('reports');
                         }else{
                             if(param_report){
-                                  var param_report;
+                                  var report_obj = null;
                                   angular.forEach($scope.groupReports,function(rpt){
                                       if(rpt.uuid == param_report){
-                                          param_report = rpt;
+                                          report_obj = rpt;
                                       }
                                   });
-                                  currentScope.openReport(param_report);
+                                  if(report_obj == null){
+                                      $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                                      // clear the url param
+                                      if($location.search().reportUuid){
+                                          $location.search('reportUuid',null);
+                                      }
+                                      return ;
+                                  }
+                                  currentScope.openReport(report_obj);
                             }
                         }
                     }                                 
