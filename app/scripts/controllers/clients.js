@@ -151,7 +151,7 @@ define(
               loadGroupReports();
             }
 
-            $scope.views[hash] = true;
+            $scope.views[hash] = true;            
           };
 
           var loadReports = function ()
@@ -187,6 +187,11 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
+            // get the groupId from the url
+            if(!$scope.clientGroup){
+                $scope.clientGroup = data.clientGroups[0];
+            }
+
             TeamUp._(
               'clientGroupReportsQuery',
               { 
@@ -204,13 +209,17 @@ define(
                   $scope.requestReportsByFilter();
                 }
 
-                //                $scope.$watch(
-                //                  $scope.groupReports, function (rs)
-                //                  {
-                //                    console.log('watcher found ... ', rs);
-                //                    $scope.loadMembersImg();
-                //                  }
-                //                );
+                // open the report tab if the there is report Id in the params
+                var reportId = $location.search().reportUuid;                
+                var report_modal;
+                if(reportId){
+                    angular.forEach($scope.groupReports,function(report){
+                          if(report.uuid == reportId){
+                              report_modal = report;
+                          }
+                    });
+                    $scope.openReport(report_modal);
+                }
 
               }, function (error) { console.log(error) });
 
@@ -826,7 +835,12 @@ define(
               newReport:  (typeof report.uuid == 'undefined')
             };
 
-            $scope.close = function () { $modalInstance.dismiss() };
+            $scope.close = function () { 
+                $modalInstance.dismiss() ;
+                if($location.search().reportUuid){
+                    $location.search('reportUuid',null);
+                }
+            };
 
             $scope.saveReport = function (report)
             {
@@ -844,7 +858,7 @@ define(
                       creationTime: report.creationTime
                     }
                   ).then(
-                    function ()
+                    function (result)
                     {
                       $modalInstance.close(report);
 
@@ -862,8 +876,35 @@ define(
                       creationTime: report.creationTime
                     }
                   ).then(
-                    function ()
+                    function (result)                    
                     {
+                      // send the message to team that new report created
+                      var current = new Date();
+
+                      var messageBody = {"reportUuid" : result.result, 
+                                         "reportTitle" : report.title,
+                                         "clientUuid" : report.client.uuid,
+                                         "authorUuid" : report.author.uuid,
+                                         "creationTime" : report.creationTime};
+                      TeamUp._(
+                        'message',
+                        {},
+                        {
+                          title: 'Nieuw rapport over ' + report.client.firstName + " " + report.client.lastName,
+                          body:     JSON.stringify(messageBody),
+                          sendTime: current.getTime(),
+                          type: 'REPORT_NEW'
+                        }).then(
+                        function (msgResult){
+                            console.log("new report message : " + msgResult);
+                        },
+                        function (error)
+                        {
+                          $rootScope.notifier.error(error);
+                          $rootScope.statusBar.off();
+                        }
+                      );
+
                       $modalInstance.close(report);
 
                       $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -977,6 +1018,37 @@ define(
               $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo?square=true";              
               $scope.setViewTo('editImg');
           };
+
+          $scope.$on('$locationChangeSuccess',function(event,currentURL,preURL){
+                console.log("event " , event);
+                var currentScope = event.currentScope;
+                if($location.hash() == "reports"){
+                    var param_clientGroup = $location.search().uuid;
+                    var param_report = $location.search().reportUuid;
+
+                    if(param_clientGroup) {
+                        if(param_clientGroup != currentScope.clientGroup.id){
+                            angular.forEach(currentScope.data.clientGroups,function(cGrp){
+                                if(cGrp.id == param_clientGroup){
+                                    currentScope.clientGroup = cGrp;
+                                }
+                            });
+                            currentScope.setViewTo('reports');
+                        }else{
+                            if(param_report){
+                                  var param_report;
+                                  angular.forEach($scope.groupReports,function(rpt){
+                                      if(rpt.uuid == param_report){
+                                          param_report = rpt;
+                                      }
+                                  });
+                                  currentScope.openReport(param_report);
+                            }
+                        }
+                    }                                 
+                }                
+                
+          });
 
         }
       ]

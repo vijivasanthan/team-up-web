@@ -163,15 +163,20 @@ block chat
           .chat-separator(ng-show='(message.date != "")')
             span {{message.date}}
             hr
-          .message(class='{{message.msgRole}}')
+          .chat-separator(ng-show='(message.type == "REPORT_NEW")')
+            a(href='#/client?uuid={{message.body.clientGroupId}}&reportUuid={{message.body.reportUuid}}#reports')
+              span {{message.title}} 
+              hr    
+          .message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
             .chatAvatar.roundedPicSmall(style='background-image: url({{message.member.uuid | avatar:"team":"80" }})',
             class='{{message.member.states|stateColor}}')
             .arrow(ng-show='(message.role == "other")')
             .chatCloud
               h5.name {{message.senderName}}
               h5.time {{message.sendTime|nicelyTime}}
-              div: p {{message.body}}
+              div: p {{message.body}} 
             .arrow(ng-hide='(message.role == "other")')
+
         #pusher  
       .input-area
         input#messageField(type='text',

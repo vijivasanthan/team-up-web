@@ -62,7 +62,9 @@ define(
                     body:       message.body,
                     msgRole:    '',
                     senderUuid: message.senderUuid,
-                    uuid:       message.uuid
+                    uuid:       message.uuid,
+                    type:       message.type,
+                    title:      message.title, 
                   };
 
                   var member = $rootScope.getTeamMemberById(message.senderUuid);
@@ -81,7 +83,13 @@ define(
                     msg.member = member;
                     msg.senderName = member.firstName + ' ' + member.lastName;
                   }
-
+                  // parse the message body if necessary
+                  if(msg.type == 'REPORT_NEW'){
+                      var msgBody = JSON.parse(message.body);
+                      var client = $rootScope.getClientByID(msgBody.clientUuid); 
+                      angular.extend(msgBody,{clientGroupId : client.clientGroupUuid});
+                      msg.body = msgBody;
+                  }
                   $scope.messages.push(msg);
 
                   // limit the messages within one week 
@@ -131,7 +139,7 @@ define(
                     setTimeout(
                     function (){
                         angular.element('#chat-content #messageField').focus();
-                        angular.element('#chat-content').scrollTop(angular.element('#chat-content')[0].scrollHeight);
+                        angular.element('#chat-content .mainContent').scrollTop(angular.element('#chat-content .mainContent')[0].scrollHeight);
                         $scope.moveToBottom = false;
                     }, 1000); // FIXME: Temporarily made it longer till there is a better solution 
                 }
