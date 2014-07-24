@@ -365,6 +365,7 @@ define(
           map:                     'kaart',
           saveContacts:            'Contactpersonen opslaan',
           loadingReports:          'Rapporten laden',
+          date:                    'Datum',
           datetime:                'Datum en tijd',
           writenBy:                'Geschreven door',
           noSharedStates:          'Geen gedeelde status',
@@ -396,7 +397,7 @@ define(
           stateValue:              { 'reachable' : 'Bereikbaar',
                                      'available' : 'Beschikbaar',
                                      'working' : 'Aan het werk',
-                                     'offline': 'Offline',
+                                     'offline': 'Offline'
                                     },
         },
         task:{

@@ -104,6 +104,19 @@
       }
     }
 
+    .chat-separator.reportLink {
+      a {
+        color: $orange;
+      }
+      a:hover {
+        color: darken($orange, 10%);
+      }
+
+      hr {
+        border-color: $orange;
+      }
+    }
+
     .message {
       padding: 0 15px;
       clear: both;

@@ -1,6 +1,6 @@
 .modal-header
-	h4(ng-hide='view.newReport == true') {{report.title}}
-	h4(ng-hide='view.newReport == false') {{ui.teamup.newReport}}
+	h4.reportTitle(ng-hide='view.newReport == true') {{report.title}}
+	h4.reportTitle(ng-hide='view.newReport == false') {{ui.teamup.newReport}}
 	button.btn.pull-right.btn-primary.marginLeftTen(type='button',
 	ng-click='close()') {{ui.groups.close}}
 hr
@@ -8,7 +8,7 @@ hr
 	table
 		thead
 			tr
-				th {{ui.teamup.datetime}}
+				th {{ui.teamup.date}}
 				th {{ui.teamup.writenBy}}
 				th {{ui.teamup.client}}
 		tbody

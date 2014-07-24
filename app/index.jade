@@ -163,7 +163,7 @@ block chat
           .chat-separator(ng-show='(message.date != "")')
             span {{message.date}}
             hr
-          .chat-separator(ng-show='(message.type == "REPORT_NEW")')
+          .chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
             a(href='#/client?uuid={{message.body.clientGroupId}}&reportUuid={{message.body.reportUuid}}#reports')
               span {{message.title}} 
               hr    
@@ -177,7 +177,6 @@ block chat
               div: p {{message.body}} 
             .arrow(ng-hide='(message.role == "other")')
 
-        #pusher  
       .input-area
         input#messageField(type='text',
         ng-model='newMessage',

@@ -6183,6 +6183,13 @@ input[type="color"],
 .uneditable-input {
   height: auto; }
 
+/*----------REPORTS-----------*/
+.modal-header h4.reportTitle {
+  display: inline; }
+
+.modal-body table {
+  width: 100%; }
+
 .navbar {
   border: none; }
 
@@ -7227,6 +7234,12 @@ input.search-query {
         border: none;
         border-bottom: 1px solid #833c11;
         text-align: center; }
+    #chat #chat-content .chat-separator.reportLink a {
+      color: #f5a962; }
+    #chat #chat-content .chat-separator.reportLink a:hover {
+      color: #f28f32; }
+    #chat #chat-content .chat-separator.reportLink hr {
+      border-color: #f5a962; }
     #chat #chat-content .message {
       padding: 0 15px;
       clear: both;
