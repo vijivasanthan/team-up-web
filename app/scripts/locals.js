@@ -399,6 +399,7 @@ define(
                                      'working' : 'Aan het werk',
                                      'offline': 'Offline'
                                     },
+          reportNotExists: 'Rapport bestaat niet.'
         },
         task:{
           information : 'Informatie',
