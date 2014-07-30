@@ -412,7 +412,8 @@ define(
             );
           };
 
-          // ?
+          // Refresh the clients in the certain group after adding , updating or removing client. 
+          // forward user to the client view if the group is successfully refreshed. 
           var reloadGroup = function (result)
           {
             Clients.query(false, result)

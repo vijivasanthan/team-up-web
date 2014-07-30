@@ -188,7 +188,7 @@ define(
 
           }
 
-          // ?
+          // TODO: not really sure what this function is used for
           var getTeamID = function ()
           {
             var found = false;

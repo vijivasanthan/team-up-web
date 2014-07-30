@@ -468,7 +468,7 @@ define(
 
           $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId) };
 
-          // ?
+          // give a special flag to member if there is no states being shared 
           $scope.noSharedStates = function (states)
           {
             var flag = true,
