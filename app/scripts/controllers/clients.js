@@ -511,6 +511,8 @@ define(
             setView('client');
           };
 
+          // This function only push new contact into a scope array, need to submit to save the contact
+          // TODO: design a way to save the contact directly
           $scope.addContacts = function ()
           {
             if (typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == '')
@@ -545,6 +547,7 @@ define(
             $scope.contacts.push(contactPerson);
           };
 
+          // create a new client
           $scope.clientSubmit = function (client)
           {
             if (typeof client == 'undefined' || ! client.firstName || ! client.lastName || ! client.phone)
@@ -592,8 +595,10 @@ define(
                 }
               }
             );
+
           };
 
+          // update client infomation
           $scope.clientChange = function (client)
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
@@ -634,6 +639,8 @@ define(
             );
           };
 
+          // update the client's contact , this one really submit the info to the backend.
+          // addContacts only add contact to the scope.
           $scope.saveContacts = function (contacts)
           {
             var client = $scope.client;
@@ -681,7 +688,7 @@ define(
               }
             );
           };
-
+          // after people remove the contacts, you still need to save it to make it work.
           $scope.removeContact = function (contact)
           {
             // TODO: Contact has only been removed from list also from backend?!
@@ -741,6 +748,7 @@ define(
             }
           };
 
+          // after delete the client, refresh the client group which used to have the client inside.
           $scope.deleteClient = function (clientId)
           {
             if (window.confirm($rootScope.ui.teamup.deleteConfirm))
@@ -812,6 +820,7 @@ define(
             }
           };
 
+          // filter the report by client or the created month 
           $scope.requestReportsByFilter = function ()
           {
             angular.forEach(
@@ -866,6 +875,7 @@ define(
               }
             };
 
+            // add new report, send systemm message at the same time. 
             $scope.saveReport = function (report)
             {
               console.log(report);
@@ -942,6 +952,9 @@ define(
 
             };
           };
+
+          // open a report by using the modal plug-in , here you need to use inject function to inject 
+          // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript 
 
           ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', 'report'];
 
@@ -1049,6 +1062,8 @@ define(
             $scope.setViewTo('editImg');
           };
 
+          // open report from the link ( from the chat message ) 
+          // there will be a link URL changing when opening a report from other views , need to do some special process
           $scope.$on(
             '$locationChangeSuccess', function (event, currentURL, preURL)
             {

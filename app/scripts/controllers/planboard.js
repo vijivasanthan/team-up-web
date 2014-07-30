@@ -156,7 +156,8 @@ define(
               }
             }
           );
-
+          
+          // switch agenda (timeline) between Team view or Client view 
           function switchData ()
           {
             switch ($scope.section)
@@ -462,6 +463,8 @@ define(
           $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
                              Dater.readable.date($scope.timeline.range.end);
 
+          // return the related user when select a time slot, etc, return client object 
+          // when select a time slot from Team view , return member object when select a time slot from client view.
           $scope.processRelatedUsers = function (selectedSlot)
           {
             var relatedUsers = [],
