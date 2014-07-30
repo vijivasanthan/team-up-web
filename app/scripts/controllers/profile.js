@@ -38,6 +38,7 @@ define(
 
           $scope.currentRole = $scope.profilemeta.role;
 
+          // TODO: Investigate whether they are in use!
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.namespace;
 
@@ -78,7 +79,7 @@ define(
           $scope.teams = teams;
 
           $scope.forms = {
-            add:  false,
+            add: false,
             edit: false
           };
 
@@ -88,7 +89,7 @@ define(
           {
             $scope.views = {
               profile: false,
-              edit:    false,
+              edit: false,
               editImg: false
             };
 
@@ -110,15 +111,18 @@ define(
             );
           };
 
+          // Save a profile
           $scope.save = function (resources)
           {
             // let user know that user need to re-relogin if the login-user's role is changed.
-            if($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid){
-              if(!confirm($rootScope.ui.profile.roleChangePrompt)){
-                  return;
+            if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
+            {
+              if (! confirm($rootScope.ui.profile.roleChangePrompt))
+              {
+                return;
               }
             }
-            
+
             // check if the member is belong to any team, warn user to put his/herself to a team
             if (resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined')
             {
@@ -133,7 +137,8 @@ define(
               {
                 resources.teamUuids.push($scope.teams[0].uuid);
               }
-              if(resources.teamUuids[0] == null){
+              if (resources.teamUuids[0] == null)
+              {
                 $rootScope.notifier.error($rootScope.ui.profile.specifyTeam);
                 return;
               }
@@ -187,7 +192,7 @@ define(
                       {
                         $rootScope.app.resources = result;
 
-                        Store('app').save('resources', resources);                        
+                        Store('app').save('resources', resources);
                       }
                     }
                   ).then(
@@ -212,8 +217,9 @@ define(
                         resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
                         // will logout if the role is changed for the user him/her-self.
-                        if($scope.currentRole != resources.role && $rootScope.app.resources.uuid == $route.current.params.userId){
-                            $rootScope.nav("logout");
+                        if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == $route.current.params.userId)
+                        {
+                          $rootScope.nav("logout");
                         }
 
                         // refresh the teams in the background
@@ -240,12 +246,15 @@ define(
           };
 
           $scope.editProfile = function () { setView('edit') };
-          
-          $scope.editImg = function(){
-            $scope.uploadURL = $scope.imgHost+$scope.ns+"/team/member/"+$route.current.params.userId+"/photo?square=true";
+
+          // Change an avatar
+          $scope.editImg = function ()
+          {
+            $scope.uploadURL = $scope.imgHost + $scope.ns + "/team/member/" + $route.current.params.userId + "/photo?square=true";
             $scope.setViewTo('editImg');
           };
 
+          // Remove a profile completely
           $scope.deleteProfile = function ()
           {
             if (window.confirm($rootScope.ui.teamup.deleteConfirm))

@@ -17,7 +17,7 @@ define(
         'States',
         'Browsers',
         'Dater',
-        'TeamUp',        
+        'TeamUp',
         function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp)
         {
           // TODO: Remove later on (Needed for timeline info filters)
@@ -50,12 +50,12 @@ define(
 
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
-          
+
           /**
            * Status-Bar
            */
           $rootScope.loading = {
-            status:  false,
+            status: false,
             message: 'Loading..'
           };
 
@@ -64,7 +64,7 @@ define(
             display: function (message)
             {
               $rootScope.loading = {
-                status:  true,
+                status: true,
                 message: message
               };
             },
@@ -77,8 +77,8 @@ define(
            * Notification
            */
           $rootScope.notification = {
-            status:  false,
-            type:    '',
+            status: false,
+            type: '',
             message: ''
           };
 
@@ -95,8 +95,8 @@ define(
               else
               {
                 $rootScope.notification = {
-                  status:  status,
-                  type:    type,
+                  status: status,
+                  type: type,
                   message: message
                 };
               }
@@ -132,7 +132,7 @@ define(
           /**
            * Fix styles
            */
-          // TODO: Turn it to a jQuery plugin
+            // TODO: Turn it to a jQuery plugin
           $rootScope.fixStyles = function ()
           {
             var tabHeight = angular.element('.tabs-left .nav-tabs').height();
@@ -164,7 +164,7 @@ define(
               angular.element('.nav-tabs-app li a span')
                 .css(
                 {
-                  paddingTop:   '10px',
+                  paddingTop: '10px',
                   marginBottom: '0px'
                 }
               );
@@ -172,9 +172,7 @@ define(
           };
 
 
-          /**
-           * Shared functions
-           */
+          // Get team member by id (shared)
           $rootScope.getTeamMemberById = function (memberId)
           {
             var member;
@@ -200,15 +198,16 @@ define(
             if (typeof member == 'undefined')
             {
               member = {
-                uuid:      memberId,
+                uuid: memberId,
                 firstName: memberId,
-                lastName:  ''
+                lastName: ''
               };
             }
 
             return member;
           };
 
+          // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
           {
             var result;
@@ -253,14 +252,46 @@ define(
             return result;
           };
 
+          // Get group name by id (shared)
+          $rootScope.getClientGroupName = function (groupId)
+          {
+            var groups = Store('app').get('ClientGroups');
+            var ret = groupId;
+            angular.forEach(
+              groups, function (g)
+              {
+                if (g.id == groupId)
+                {
+                  ret = g.name;
+                }
+              });
+            return ret;
+          };
+
+          // Get team name by id (shared)
+          $rootScope.getTeamName = function (teamId)
+          {
+            var teams = Store('app').get('teams');
+            var ret = teamId;
+            angular.forEach(
+              teams, function (t)
+              {
+                if (t.uuid == teamId)
+                {
+                  ret = t.name;
+                }
+              });
+            return ret;
+          };
+
           /**
            * Here we need to find the clients for this team member,
            * 1> get the team,
            * 2> find the groups belong to this team,
            * 3> get all the clients under the group
            */
-          // TODO: It is only called from planboard controller. Maybe move it to there?
-          // FIXME: It breaks down when the selected groups has no clientGroup on adding slot on timeline
+            // TODO: It is only called from planboard controller. Maybe move it to there?
+            // FIXME: It breaks down when the selected groups has no clientGroup on adding slot on timeline
           $rootScope.getClientsByTeam = function (teamIds)
           {
             var clients = [],
@@ -353,7 +384,7 @@ define(
             return members;
           };
 
-
+          // TODO: Combine login and logout together
           $rootScope.logout = function ()
           {
             angular.element('.navbar').hide();
@@ -384,68 +415,60 @@ define(
             );
           };
 
-          // add 1 to the changed record when user do a upload pic
-          $rootScope.avatarChange = function (avatarId){
-              var list = Store('app').get('avatarChangeRecord');
-              if(!angular.isArray(list)){
-                  list = [];
-              }
-              list.push(avatarId);              
-              Store('app').save('avatarChangeRecord',list);
+          // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
+          // Trick browser for avatar url change against caching
+          $rootScope.avatarChange = function (avatarId)
+          {
+            var list = Store('app').get('avatarChangeRecord');
+            if (! angular.isArray(list))
+            {
+              list = [];
+            }
+            list.push(avatarId);
+            Store('app').save('avatarChangeRecord', list);
           };
 
-          // know how many times user changed the avatar from upload function.
-          $rootScope.getAvatarChangeTimes = function (id){
-              var changedTimes = 0;                                  
-              var list = Store('app').get('avatarChangeRecord');
-              angular.forEach(list,function(avatarId){
-                    if(avatarId == id){
-                        changedTimes++;                        
-                    }
-              });                
-              return changedTimes;
+          // TODO: Investigate on this!
+          // Know how many times user changed the avatar from upload function.
+          $rootScope.getAvatarChangeTimes = function (id)
+          {
+            var changedTimes = 0;
+            var list = Store('app').get('avatarChangeRecord');
+            angular.forEach(
+              list, function (avatarId)
+              {
+                if (avatarId == id)
+                {
+                  changedTimes ++;
+                }
+              });
+            return changedTimes;
           };
 
-          // extract the team and group id from error message and trans them into the name 
-          $rootScope.transError = function(errorMessage){
-              // assume all the words are devided by the space
-              var arr = errorMessage.split(" ");
-              var ret = errorMessage;
-              angular.forEach(arr,function(word){
-                  if(word.indexOf('_cg') > -1){
-                      // might be the group id , try to search it , replace it with name if we found it
-                      ret = ret.replace(word,$rootScope.getClientGroupName(word));
-                  }else if(word.indexOf('_team') > -1){
-                      // might be the team id , try to search it , replace it with name if we found it                    
-                      ret = ret.replace(word,$rootScope.getTeamName(word));
-                  }
+          // TODO: Investigate on this!
+          // Translate the error message
+          // Extract the team and group id from error message and trans them into the name
+          $rootScope.transError = function (errorMessage)
+          {
+            // assume all the words are devided by the space
+            var arr = errorMessage.split(" ");
+            var ret = errorMessage;
+            angular.forEach(
+              arr, function (word)
+              {
+                if (word.indexOf('_cg') > - 1)
+                {
+                  // might be the group id , try to search it , replace it with name if we found it
+                  ret = ret.replace(word, $rootScope.getClientGroupName(word));
+                }
+                else if (word.indexOf('_team') > - 1)
+                {
+                  // might be the team id , try to search it , replace it with name if we found it
+                  ret = ret.replace(word, $rootScope.getTeamName(word));
+                }
               });
 
-              return ret;
-          };
-
-          // get group name by id
-          $rootScope.getClientGroupName = function(groupId){
-              var groups = Store('app').get('ClientGroups');
-              var ret = groupId;
-              angular.forEach(groups,function(g){
-                  if(g.id == groupId){
-                      ret = g.name;
-                  }
-              });
-              return ret;
-          };
-
-          // get team name by id 
-          $rootScope.getTeamName = function(teamId){
-              var teams = Store('app').get('teams');
-              var ret = teamId;
-              angular.forEach(teams,function(t){
-                  if(t.uuid == teamId){
-                      ret = t.name;
-                  }
-              });
-              return ret;
+            return ret;
           };
 
         }

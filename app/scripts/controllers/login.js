@@ -19,7 +19,7 @@ define(
         'TeamUp',
         'Dater',
         '$filter',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater,$filter)
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter)
         {
           // TODO: Soon not needed!
           Dater.registerPeriods();
@@ -41,26 +41,26 @@ define(
 
             $scope.changepass = {
               uuid: $routeParams.uuid,
-              key:  $routeParams.key
+              key: $routeParams.key
             };
           }
           else
           {
             $scope.views = {
-              login:  true,
+              login: true,
               forgot: false
             };
           }
 
           $scope.alert = {
-            login:  {
+            login: {
               display: false,
-              type:    '',
+              type: '',
               message: ''
             },
             forgot: {
               display: false,
-              type:    '',
+              type: '',
               message: ''
             }
           };
@@ -96,7 +96,7 @@ define(
               $scope.alert = {
                 login: {
                   display: true,
-                  type:    'alert-error',
+                  type: 'alert-error',
                   message: $rootScope.ui.login.alert_fillfiled
                 }
               };
@@ -136,19 +136,22 @@ define(
               function (result)
               {
                 var status = 0;
-                if(result.status){
-                    status = result.status;
-                }else if(result.error && result.error.status){
-                    status = result.error.status;
+                if (result.status)
+                {
+                  status = result.status;
+                }
+                else if (result.error && result.error.status)
+                {
+                  status = result.error.status;
                 }
                 if (status == 400 ||
                     status == 403 ||
-                    status == 404 )
+                    status == 404)
                 {
                   $scope.alert = {
                     login: {
                       display: true,
-                      type:    'alert-error',
+                      type: 'alert-error',
                       message: $rootScope.ui.login.alert_wrongUserPass
                     }
                   };
@@ -164,7 +167,7 @@ define(
                   $scope.alert = {
                     login: {
                       display: true,
-                      type:    'alert-error',
+                      type: 'alert-error',
                       message: $rootScope.ui.login.alert_network
                     }
                   };
@@ -174,22 +177,26 @@ define(
                     .removeAttr('disabled');
 
                   return false;
-                }else if(result.error){
-                    $scope.alert = {
-                      login: {
-                        display: true,
-                        type:    'alert-error',
-                        message: $rootScope.ui.login.alert_wrongUserPass
-                      }
-                    };
+                }
+                else if (result.error)
+                {
+                  $scope.alert = {
+                    login: {
+                      display: true,
+                      type: 'alert-error',
+                      message: $rootScope.ui.login.alert_wrongUserPass
+                    }
+                  };
 
-                    angular.element('#login button[type=submit]')
-                      .text($rootScope.ui.login.button_loggingIn)
-                      .removeAttr('disabled');
+                  angular.element('#login button[type=submit]')
+                    .text($rootScope.ui.login.button_loggingIn)
+                    .removeAttr('disabled');
 
-                    console.log("Pay attention, this might caused by the Log module");
-                    return false;   
-                }else{
+                  console.log("Pay attention, this might caused by the Log module");
+                  return false;
+                }
+                else
+                {
                   Session.set(result['X-SESSION_ID']);
 
                   preLoader();
@@ -207,29 +214,40 @@ define(
             );
           }
 
-          // query the tasks for login user and all other unsigned task in login user's team
-          function queryTasks (teams){
+          // Query the tasks for login user and all other unsigned task in login user's team
+          function queryTasks (teams)
+          {
             // query my tasks
-            TeamUp._("taskMineQuery").then(function(result){
-                Store('app').save('myTasks',result);
-            });
+            TeamUp._("taskMineQuery").then(
+              function (result)
+              {
+                Store('app').save('myTasks', result);
+              });
             // query unassigned tasks from each team
             var allTasks = [];
-            angular.forEach(teams,function(team_obj){                
-                TeamUp._("taskByTeam",
-                  {fourth : team_obj.uuid}
-                  ).then(function(result){
-                      angular.forEach(result,function(taskObj){                          
-                          var foundTask = $filter('getByUuid')(allTasks,taskObj.uuid);
-                          if(foundTask == null){
-                              allTasks.push(taskObj);
-                          }
-                      });                      
-                      Store('app').save('allTasks',allTasks);                      
-                });
-            });
-            
-            
+            angular.forEach(
+              teams, function (team_obj)
+              {
+                TeamUp._(
+                  "taskByTeam",
+                  {fourth: team_obj.uuid}
+                ).then(
+                  function (result)
+                  {
+                    angular.forEach(
+                      result, function (taskObj)
+                      {
+                        var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
+                        if (foundTask == null)
+                        {
+                          allTasks.push(taskObj);
+                        }
+                      });
+                    Store('app').save('allTasks', allTasks);
+                  });
+              });
+
+
           }
 
           var preLoader = function ()
@@ -282,7 +300,7 @@ define(
                             .then(
                             function (allClients)
                             {
-                              // save all clients into the localstorage 
+                              // Save all clients into the localStorage
                               Store('app').save('clients', allClients);
 
                               Clients.query(false, {})

@@ -4,6 +4,7 @@ define(
   {
     'use strict';
 
+    // Chosen multiple selection
     directives.directive(
       'chosen',
       function ()
@@ -25,21 +26,22 @@ define(
 
         return {
           restrict: 'A',
-          link:     linker
+          link: linker
         };
       }
     );
 
+    // Upload images
     directives.directive(
       'uploader', [
         function ()
         {
           return {
-            restrict:    'E',
-            scope:       {
+            restrict: 'E',
+            scope: {
               action: '@'
             },
-            controller:  [
+            controller: [
               '$scope', '$rootScope', 'Session' ,
               function ($scope, $rootScope, Session)
               {
@@ -71,23 +73,23 @@ define(
 
                   $form.ajaxSubmit(
                     {
-                      type:           'POST',
-                      headers:        {
+                      type: 'POST',
+                      headers: {
                         'X-SESSION_ID': $scope.sessionId
                       },
                       uploadProgress: function (event, position, total, percentComplete)
                       {
                         $scope.$apply(
-                          function () { $scope.progress = percentComplete ;}
+                          function () { $scope.progress = percentComplete;}
                         );
                       },
-                      error:          function (event, statusText, responseText, form)
+                      error: function (event, statusText, responseText, form)
                       {
                         $form.removeAttr('action');
 
                         console.log('response : ', responseText);
                       },
-                      success:        function (responseText, statusText, xhr, form)
+                      success: function (responseText, statusText, xhr, form)
                       {
                         var ar = angular.element(el).val().split('\\'),
                             filename = ar[ar.length - 1];
@@ -95,30 +97,37 @@ define(
                         $form.removeAttr('action');
 
                         $scope.$apply(
-                          function () { 
-                            $scope.avatar = filename ;
+                          function ()
+                          {
+                            $scope.avatar = filename;
 
-                            console.log($scope,$scope.$parent.data.uuid); 
+                            console.log($scope, $scope.$parent.data.uuid);
 
-                            if($scope.$parent.data.clientId){
-                                $scope.$parent.$root.avatarChange($scope.$parent.data.clientId); 
-                            }else if($scope.$parent.data.uuid){
-                                $scope.$parent.$root.avatarChange($scope.$parent.data.uuid); 
+                            if ($scope.$parent.data.clientId)
+                            {
+                              $scope.$parent.$root.avatarChange($scope.$parent.data.clientId);
                             }
-                                                      
-                            var avatarType = '';                            
+                            else if ($scope.$parent.data.uuid)
+                            {
+                              $scope.$parent.$root.avatarChange($scope.$parent.data.uuid);
+                            }
+
+                            var avatarType = '';
                             var avatarTagStyle = $('.roundedPicLarge').attr('style');
                             var size = 0;
-                            try{
-                               size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1],10);
-                            }catch(e){
-                                console.log(e);
+                            try
+                            {
+                              size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
                             }
-                            
-                            var newSize = parseInt(size,10)+$scope.$parent.$root.getAvatarChangeTimes($scope.$parent.data.uuid);                              
-                            var newStyle = avatarTagStyle.replace("width="+size,"width="+newSize);
-                            
-                            $('.roundedPicLarge').attr('style',newStyle);
+                            catch (e)
+                            {
+                              console.log(e);
+                            }
+
+                            var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes($scope.$parent.data.uuid);
+                            var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+
+                            $('.roundedPicLarge').attr('style', newStyle);
                           }
                         );
                       }
@@ -126,40 +135,41 @@ define(
                 };
               }
             ],
-            link:        function (scope, elem, attrs, ctrl)
+            link: function (scope, elem, attrs, ctrl)
             {
               elem.find('.fake-uploader').click(
                 function () { elem.find('input[type="file"]').click() }
               );
             },
-            replace:     false,
+            replace: false,
             templateUrl: 'views/uploader.html'
           };
         }
       ]
     );
 
+    // TODO: Check whether it is being used.
     directives.directive(
       'profile', [
         function ()
         {
           return {
-            restrict:    'E',
-            scope:       {
+            restrict: 'E',
+            scope: {
               memberId: '@'
             },
-            controller:  [
+            controller: [
               '$scope',
               function ($scope)
               {
                 $scope.loadMember = function (el) {}
               }
             ],
-            link:        function (scope, elem, attrs, ctrl)
+            link: function (scope, elem, attrs, ctrl)
             {
               console.log('profile directive ->', attrs.memberId);
             },
-            replace:     false,
+            replace: false,
             templateUrl: 'views/profileTemplate.html'
           };
 
@@ -169,7 +179,8 @@ define(
 
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
-      'ngenter', function ()
+      'ngenter',
+      function ()
       {
         return function (scope, element, attrs)
         {
@@ -191,14 +202,19 @@ define(
       }
     );
 
-    directives.directive('backImg', function(){
-        return function(scope, element, attrs){
-            var url = attrs.backImg;
-            element.css({
-                'background-image': 'url(' + url +')',
-                'background-size' : 'cover'
+    // Setup the background image
+    directives.directive(
+      'backImg', function ()
+      {
+        return function (scope, element, attrs)
+        {
+          var url = attrs.backImg;
+          element.css(
+            {
+              'background-image': 'url(' + url + ')',
+              'background-size': 'cover'
             });
         };
-    });   
+      });
   }
 );

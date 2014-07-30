@@ -12,10 +12,12 @@ define(
         {
           var ClientsService = $resource();
 
+          // Get the list of clients
           ClientsService.prototype.query = function (only, routeParams)
           {
             var deferred = $q.defer();
 
+            // List of client groups
             TeamUp._(
               'clientGroupsQuery',
               null,
@@ -35,6 +37,7 @@ define(
                       {
                         if (! routeParams.uuid || (routeParams.uuid == clientGroup.id))
                         {
+                          // For each client group get the list of clients
                           calls.push(
                             TeamUp._(
                               'clientsByGroupIDQuery',
@@ -74,8 +77,10 @@ define(
                           {
                             data.clients[clientGroup.id] = [];
 
+                            // Iterate over the list of client groups for getting clients belong to it
                             angular.forEach(
-                              results, function (result)
+                              results,
+                              function (result)
                               {
                                 if (routeParams.uuid)
                                 {
@@ -118,6 +123,7 @@ define(
           };
 
 
+          // Manage 1:n relations between clients and client groups
           ClientsService.prototype.manage = function (changes)
           {
             console.log('ClientsService.prototype.manage');
@@ -221,6 +227,7 @@ define(
             return deferred.promise;
           };
 
+          // Get the list local client groups with clients in it
           ClientsService.prototype.queryLocal = function ()
           {
             var data = {};

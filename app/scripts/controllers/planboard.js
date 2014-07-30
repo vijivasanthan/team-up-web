@@ -188,6 +188,7 @@ define(
 
           }
 
+          // ?
           var getTeamID = function ()
           {
             var found = false;
@@ -213,13 +214,9 @@ define(
             return (found) ? team : false;
           };
 
-          $scope.getTeamID = function ()
-          {
-            getTeamID();
+          $scope.getTeamID = function () { getTeamID() };
 
-            // console.log('result ->', getTeamID());
-          };
-
+          // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
             angular.forEach(

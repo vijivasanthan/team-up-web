@@ -63,10 +63,10 @@ define(
           setTeamView(uuid);
 
           $scope.views = {
-            team:      true,
-            newTeam:   false,
+            team: true,
+            newTeam: false,
             newMember: false,
-            editTeam:  false
+            editTeam: false
           };
 
           function setTeamView (id)
@@ -134,7 +134,7 @@ define(
             );
 
             $scope.current = id;
-            
+
           }
 
           $scope.requestTeam = function (current, switched)
@@ -160,10 +160,10 @@ define(
           var setView = function (hash)
           {
             $scope.views = {
-              team:      false,
-              newTeam:   false,
+              team: false,
+              newTeam: false,
               newMember: false,
-              editTeam:  false
+              editTeam: false
             };
 
             $scope.views[hash] = true;
@@ -301,9 +301,11 @@ define(
                         $scope.data = queries;
 
                         // also refresh the team-client group links cache 
-                        Teams.queryClientGroups(queries.teams).then(function(res){
+                        Teams.queryClientGroups(queries.teams).then(
+                          function (res)
+                          {
                             console.log("new team added to team-client list", res);
-                        });
+                          });
 
                         angular.forEach(
                           queries.teams,
@@ -373,15 +375,15 @@ define(
               'memberAdd',
               null,
               {
-                uuid:         member.username,
-                userName:     member.username,
+                uuid: member.username,
+                userName: member.username,
                 passwordHash: MD5.parse(member.password),
-                firstName:    member.firstName,
-                lastName:     member.lastName,
-                phone:        member.phone,
-                teamUuids:    [member.team],
-                role:         member.role,
-                birthDate:    Dater.convert.absolute(member.birthDate, 0),
+                firstName: member.firstName,
+                lastName: member.lastName,
+                phone: member.phone,
+                teamUuids: [member.team],
+                role: member.role,
+                birthDate: Dater.convert.absolute(member.birthDate, 0),
                 function: member.function
               }
             ).then(
@@ -414,7 +416,7 @@ define(
                         $scope.closeTabs();
 
                         $scope.data = queries;
-                        var routePara = {'uuid' : result.teamId};
+                        var routePara = {'uuid': result.teamId};
 
                         angular.forEach(
                           queries.teams,
@@ -466,6 +468,7 @@ define(
 
           $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId) };
 
+          // ?
           $scope.noSharedStates = function (states)
           {
             var flag = true,
@@ -611,20 +614,25 @@ define(
             }
           };
 
+          // TODO: Investigate on this!
+          $scope.$on(
+            '$viewContentLoaded',
+            function ()
+            {
+              console.log("teams : viewContentLoaded");
 
-          $scope.$on('$viewContentLoaded', function () {
-
-              console.log("teams : viewContentLoaded" );            
               // make sure the loading of the 
-              if(!$rootScope.taskVisit){
-                  $rootScope.$broadcast('taskFinishLoading');
-                  $rootScope.taskVisit = true;
+              if (! $rootScope.taskVisit)
+              {
+                $rootScope.$broadcast('taskFinishLoading');
+                $rootScope.taskVisit = true;
               }
-              
-         });
+            }
+          );
 
-          $scope.convertUserName = function(){
-              $scope.memberForm.username = angular.lowercase($scope.memberForm.username);
+          $scope.convertUserName = function ()
+          {
+            $scope.memberForm.username = angular.lowercase($scope.memberForm.username);
           }
 
         }

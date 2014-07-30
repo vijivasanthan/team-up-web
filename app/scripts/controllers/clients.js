@@ -22,7 +22,7 @@ define(
         {
           $rootScope.fixStyles();
 
-            // $rootScope.notifier.success('test message');
+          // $rootScope.notifier.success('test message');
 
           if (data.clientId)
           {
@@ -54,9 +54,10 @@ define(
             );
           }
 
+          // TODO: Check if it is use!
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.namespace;
-          
+
           $scope.clients = data.clients;
           $scope.clientGroups = data.clientGroups;
 
@@ -72,9 +73,9 @@ define(
             {
               $scope.Months[i] = {
                 number: i,
-                name:   i,
-                start:  month.first.timeStamp,
-                end:    month.last.timeStamp
+                name: i,
+                start: month.first.timeStamp,
+                end: month.last.timeStamp
               };
             }
           );
@@ -120,24 +121,24 @@ define(
           }
 
           $scope.views = {
-            client:          true,
-            newClientGroup:  false,
-            newClient:       false,
-            reports:         false,
+            client: true,
+            newClientGroup: false,
+            newClient: false,
+            reports: false,
             editClientGroup: false,
-            editClient:      false,
-            viewClient:      false,
-            editImg:         false
+            editClient: false,
+            viewClient: false,
+            editImg: false
           };
 
           var setView = function (hash)
           {
             $scope.views = {
-              client:         false,
+              client: false,
               newClientGroup: false,
-              newClient:      false,
-              reports:        false,
-              editImg:        false
+              newClient: false,
+              reports: false,
+              editImg: false
             };
 
             //load the reports on this view
@@ -151,9 +152,10 @@ define(
               loadGroupReports();
             }
 
-            $scope.views[hash] = true;            
+            $scope.views[hash] = true;
           };
 
+          // Load reports list for client profile view
           var loadReports = function ()
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
@@ -183,23 +185,25 @@ define(
               }, function (error) { console.log(error) });
           };
 
+          // Get the list of reports for certain client group for reports tab
           var loadGroupReports = function ()
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
             // get the groupId from the url
-            if(!$scope.clientGroup){
-                $scope.clientGroup = data.clientGroups[0];
+            if (! $scope.clientGroup)
+            {
+              $scope.clientGroup = data.clientGroups[0];
             }
 
             TeamUp._(
               'clientGroupReportsQuery',
-              { 
-                second: $scope.clientGroup.id 
+              {
+                second: $scope.clientGroup.id
               }
             ).then(
               function (reports)
-              {                
+              {
                 $rootScope.statusBar.off();
 
                 $scope.groupReports = $scope.processReports(reports);
@@ -210,23 +214,29 @@ define(
                 }
 
                 // open the report tab if the there is report Id in the params
-                var reportId = $location.search().reportUuid;                
+                var reportId = $location.search().reportUuid;
                 var report_modal = null;
-                if(reportId){
-                    angular.forEach($scope.groupReports,function(report){
-                          if(report.uuid == reportId){
-                              report_modal = report;
-                          }
+                if (reportId)
+                {
+                  angular.forEach(
+                    $scope.groupReports, function (report)
+                    {
+                      if (report.uuid == reportId)
+                      {
+                        report_modal = report;
+                      }
                     });
-                    if(report_modal == null){
-                        // clear the url param
-                        if($location.search().reportUuid){
-                            $location.search('reportUuid',null);
-                        }
-                        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                        return;
+                  if (report_modal == null)
+                  {
+                    // clear the url param
+                    if ($location.search().reportUuid)
+                    {
+                      $location.search('reportUuid', null);
                     }
-                    $scope.openReport(report_modal);
+                    $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                    return;
+                  }
+                  $scope.openReport(report_modal);
                 }
 
               }, function (error) { console.log(error) });
@@ -287,23 +297,24 @@ define(
             }
           };
 
+          // Make reports data view friendly
           $scope.processReports = function (reports)
           {
-            var _reports = [];            
+            var _reports = [];
             angular.forEach(
               reports,
               function (report)
               {
                 _reports.push(
                   {
-                    uuid:         report.uuid,
-                    title:        report.title,
+                    uuid: report.uuid,
+                    title: report.title,
                     creationTime: report.creationTime,
-                    clientUuid:   report.clientUuid,
-                    body:         report.body,
-                    author:       $scope.$root.getTeamMemberById(report.authorUuid),
-                    client:       $scope.$root.getClientByID(report.clientUuid),
-                    filtered:     'false'
+                    clientUuid: report.clientUuid,
+                    body: report.body,
+                    author: $scope.$root.getTeamMemberById(report.authorUuid),
+                    client: $scope.$root.getClientByID(report.clientUuid),
+                    filtered: 'false'
                   }
                 );
               }
@@ -341,7 +352,7 @@ define(
           {
             $scope.cGroupEditForm = {
               name: clientGroup.name,
-              id:   clientGroup.id
+              id: clientGroup.id
             };
 
             $scope.views.editClientGroup = true;
@@ -351,7 +362,7 @@ define(
           {
             $scope.cGroupEditForm = {
               name: clientGroup.name,
-              id:   clientGroup.id
+              id: clientGroup.id
             };
 
             $scope.views.editClientGroup = false;
@@ -401,6 +412,7 @@ define(
             );
           };
 
+          // ?
           var reloadGroup = function (result)
           {
             Clients.query(false, result)
@@ -438,7 +450,7 @@ define(
                         //   function () { $location.search({ id: clientGroup.id }) }
                         // );
 
-                        $location.url('/client?uuid='+clientGroup.id).hash('client');
+                        $location.url('/client?uuid=' + clientGroup.id).hash('client');
                       }
                     }
                   );
@@ -466,7 +478,8 @@ define(
               null,
               clientGroup,
               {
-                success: function (result) { 
+                success: function (result)
+                {
                   Store('app').save(result.id, result);
                 }
               }
@@ -508,9 +521,9 @@ define(
 
             var contactPerson = {
               firstName: '',
-              lastName:  '',
-              function:  '',
-              phone:     ''
+              lastName: '',
+              function: '',
+              phone: ''
             };
 
             contactPerson.firstName = $scope.contactForm.firstName;
@@ -840,84 +853,90 @@ define(
             $scope.view = {
               editReport: ! ! (report.editMode),
               viewReport: (! (report.editMode || typeof report.uuid == 'undefined')),
-              newReport:  (typeof report.uuid == 'undefined')
+              newReport: (typeof report.uuid == 'undefined')
             };
 
-            $scope.close = function () { 
-                $modalInstance.dismiss() ;
-                if($location.search().reportUuid){
-                    $location.search('reportUuid',null);
-                }
+            $scope.close = function ()
+            {
+              $modalInstance.dismiss();
+              if ($location.search().reportUuid)
+              {
+                $location.search('reportUuid', null);
+              }
             };
 
             $scope.saveReport = function (report)
             {
               console.log(report);
-              if(report.editMode){
+              if (report.editMode)
+              {
 
-                  TeamUp._(
-                    'clientReportUpdate',
-                    { second: report.clientUuid ,
-                      fourth: report.uuid},
-                    {
-                      uuid:         report.uuid,
-                      title:        report.title,
-                      body:         report.body,
-                      creationTime: report.creationTime
-                    }
-                  ).then(
-                    function (result)
-                    {
-                      $modalInstance.close(report);
+                TeamUp._(
+                  'clientReportUpdate',
+                  { second: report.clientUuid,
+                    fourth: report.uuid},
+                  {
+                    uuid: report.uuid,
+                    title: report.title,
+                    body: report.body,
+                    creationTime: report.creationTime
+                  }
+                ).then(
+                  function (result)
+                  {
+                    $modalInstance.close(report);
 
-                      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                    }
-                  );
-              }else{
-                  TeamUp._(
-                    'clientReportAdd',
-                    { second: report.clientUuid },
-                    {
-                      uuid:         report.uuid,
-                      title:        report.title,
-                      body:         report.body,
-                      creationTime: report.creationTime
-                    }
-                  ).then(
-                    function (result)                    
-                    {
-                      // send the message to team that new report created
-                      var current = new Date();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  }
+                );
+              }
+              else
+              {
+                TeamUp._(
+                  'clientReportAdd',
+                  { second: report.clientUuid },
+                  {
+                    uuid: report.uuid,
+                    title: report.title,
+                    body: report.body,
+                    creationTime: report.creationTime
+                  }
+                ).then(
+                  function (result)
+                  {
+                    // send the message to team that new report created
+                    var current = new Date();
 
-                      var messageBody = {"reportUuid" : result.result, 
-                                         "reportTitle" : report.title,
-                                         "clientUuid" : report.client.uuid,
-                                         "authorUuid" : report.author.uuid,
-                                         "creationTime" : report.creationTime};
-                      TeamUp._(
-                        'message',
-                        {},
-                        {
-                          title: 'Nieuw rapport over ' + report.client.firstName + " " + report.client.lastName,
-                          body:     JSON.stringify(messageBody),
-                          sendTime: current.getTime(),
-                          type: 'REPORT_NEW'
-                        }).then(
-                        function (msgResult){
-                            console.log("new report message : " + msgResult);
-                        },
-                        function (error)
-                        {
-                          $rootScope.notifier.error(error);
-                          $rootScope.statusBar.off();
-                        }
-                      );
+                    var messageBody = {"reportUuid": result.result,
+                      "reportTitle": report.title,
+                      "clientUuid": report.client.uuid,
+                      "authorUuid": report.author.uuid,
+                      "creationTime": report.creationTime};
+                    TeamUp._(
+                      'message',
+                      {},
+                      {
+                        title: 'Nieuw rapport over ' + report.client.firstName + " " + report.client.lastName,
+                        body: JSON.stringify(messageBody),
+                        sendTime: current.getTime(),
+                        type: 'REPORT_NEW'
+                      }).then(
+                      function (msgResult)
+                      {
+                        console.log("new report message : " + msgResult);
+                      },
+                      function (error)
+                      {
+                        $rootScope.notifier.error(error);
+                        $rootScope.statusBar.off();
+                      }
+                    );
 
-                      $modalInstance.close(report);
+                    $modalInstance.close(report);
 
-                      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                    }
-                  );
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  }
+                );
               }
 
             };
@@ -934,7 +953,7 @@ define(
               {
                 templateUrl: './views/reportTemplate.html',
                 controller: ModalInstanceCtrl,
-                resolve:     {
+                resolve: {
                   report: function () { return $scope.report }
                 }
               });
@@ -950,21 +969,21 @@ define(
             }
 
             $scope.report = {
-              title:        $rootScope.ui.teamupnewReport,
+              title: $rootScope.ui.teamupnewReport,
               creationTime: new Date().getTime(),
-              clientUuid:   $scope.currentCLient,
-              body:         null,
-              author:       $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
-              client:       $scope.$root.getClientByID($scope.currentCLient),
-              editMode:     false
+              clientUuid: $scope.currentCLient,
+              body: null,
+              author: $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
+              client: $scope.$root.getClientByID($scope.currentCLient),
+              editMode: false
             };
 
             var modalInstance = $modal.open(
               {
                 templateUrl: 'views/reportTemplate.html',
-                controller:  ModalInstanceCtrl,
-                resolve:     {
-                  report:   function () { return $scope.report },
+                controller: ModalInstanceCtrl,
+                resolve: {
+                  report: function () { return $scope.report },
                   editMode: false
                 }
               }
@@ -984,8 +1003,8 @@ define(
             $modal.open(
               {
                 templateUrl: './views/reportTemplate.html',
-                controller:  ModalInstanceCtrl,
-                resolve:     {
+                controller: ModalInstanceCtrl,
+                resolve: {
                   report: function () { return $scope.report }
                 }
               });
@@ -1000,7 +1019,7 @@ define(
               TeamUp._(
                 'clientReportDelete',
                 {
-                  second:   report.clientUuid,
+                  second: report.clientUuid,
                   reportId: report.uuid
                 }
               ).then(
@@ -1010,9 +1029,10 @@ define(
                   {
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                     loadGroupReports();
-                    if($scope.views.viewClient == true){
-                        loadReports();  
-                    }                    
+                    if ($scope.views.viewClient == true)
+                    {
+                      loadReports();
+                    }
                   }
                   else
                   {
@@ -1022,49 +1042,66 @@ define(
             }
           };
 
-          $scope.editImg = function() {            
-              $scope.uploadURL = $scope.imgHost+$scope.ns+"/client/"+$scope.client.uuid+"/photo?square=true";              
-              $scope.setViewTo('editImg');
+          $scope.editImg = function ()
+          {
+            $scope.uploadURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo?square=true";
+            $scope.setViewTo('editImg');
           };
 
-          $scope.$on('$locationChangeSuccess',function(event,currentURL,preURL){
-                console.log("event " , event);
-                var currentScope = event.currentScope;
-                if($location.hash() == "reports"){
-                    var param_clientGroup = $location.search().uuid;
-                    var param_report = $location.search().reportUuid;
+          $scope.$on(
+            '$locationChangeSuccess', function (event, currentURL, preURL)
+            {
+              console.log("event ", event);
+              var currentScope = event.currentScope;
+              if ($location.hash() == "reports")
+              {
+                var param_clientGroup = $location.search().uuid;
+                var param_report = $location.search().reportUuid;
 
-                    if(param_clientGroup) {
-                        if(param_clientGroup != currentScope.clientGroup.id){
-                            angular.forEach(currentScope.data.clientGroups,function(cGrp){
-                                if(cGrp.id == param_clientGroup){
-                                    currentScope.clientGroup = cGrp;
-                                }
-                            });
-                            currentScope.setViewTo('reports');
-                        }else{
-                            if(param_report){
-                                  var report_obj = null;
-                                  angular.forEach($scope.groupReports,function(rpt){
-                                      if(rpt.uuid == param_report){
-                                          report_obj = rpt;
-                                      }
-                                  });
-                                  if(report_obj == null){
-                                      $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                                      // clear the url param
-                                      if($location.search().reportUuid){
-                                          $location.search('reportUuid',null);
-                                      }
-                                      return ;
-                                  }
-                                  currentScope.openReport(report_obj);
-                            }
+                if (param_clientGroup)
+                {
+                  if (param_clientGroup != currentScope.clientGroup.id)
+                  {
+                    angular.forEach(
+                      currentScope.data.clientGroups, function (cGrp)
+                      {
+                        if (cGrp.id == param_clientGroup)
+                        {
+                          currentScope.clientGroup = cGrp;
                         }
-                    }                                 
-                }                
-                
-          });
+                      });
+                    currentScope.setViewTo('reports');
+                  }
+                  else
+                  {
+                    if (param_report)
+                    {
+                      var report_obj = null;
+                      angular.forEach(
+                        $scope.groupReports, function (rpt)
+                        {
+                          if (rpt.uuid == param_report)
+                          {
+                            report_obj = rpt;
+                          }
+                        });
+                      if (report_obj == null)
+                      {
+                        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                        // clear the url param
+                        if ($location.search().reportUuid)
+                        {
+                          $location.search('reportUuid', null);
+                        }
+                        return;
+                      }
+                      currentScope.openReport(report_obj);
+                    }
+                  }
+                }
+              }
+
+            });
 
         }
       ]

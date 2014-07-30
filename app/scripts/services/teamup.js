@@ -17,38 +17,39 @@ define(
                 /**
                  * Account calls
                  */
-                login:  {
+                login: {
                   method: 'GET',
                   params: {
                     first: 'login',
-                    uuid:  '',
-                    pass:  ''
+                    uuid: '',
+                    pass: ''
                   }
                 },
                 logout: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'logout'
                   }
                 },
-                user:   {
+                user: {
                   method: 'GET',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'member'
                   }
                 },
 
+
                 /**
                  * Messaging
                  */
-                chats:   {
-                  method:  'GET',
-                  params:  {
-                    first:  'team',
+                chats: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
                     second: 'teamMessage',
-                    third:  '',
+                    third: '',
                     since: ''
                   },
                   isArray: true
@@ -56,18 +57,19 @@ define(
                 message: {
                   method: 'POST',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'teamMessage'
                   }
                 },
 
+
                 /**
                  * Team profiles
                  */
-                profileGet:  {
+                profileGet: {
                   method: 'GET',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'member'
                   }
                 },
@@ -79,36 +81,42 @@ define(
                   }
                 },
 
+
                 /**
                  * Tasks
                  */
-                taskQuery:  {
-                  method:  'GET',
-                  params:  {
+                // get list
+                taskQuery: {
+                  method: 'GET',
+                  params: {
                     first: 'tasks',
                     start: '',
-                    end:   ''
+                    end: ''
                   },
                   isArray: true
                 },
-                taskAdd:    {
+                // add a task
+                taskAdd: {
                   method: 'POST',
                   params: {
                     first: 'tasks'
                   }
                 },
+                // update a task
                 taskUpdate: {
                   method: 'PUT',
                   params: {
                     first: 'tasks'
                   }
                 },
+                // remove a task
                 taskDelete: {
                   method: 'DELETE',
                   params: {
                     first: 'tasks'
                   }
                 },
+                // get mine tasks only
                 taskMineQuery: {
                   method: 'GET',
                   params: {
@@ -117,68 +125,77 @@ define(
                   },
                   isArray: true
                 },
-                taskByTeam:{
+                // get tasks list of team id
+                taskByTeam: {
                   method: 'GET',
-                  params:{
+                  params: {
                     first: 'tasks',
-                    second: 'team',                     
+                    second: 'team'
                   },
                   isArray: true
                 },
-                taskById:{
+                // get a specific task
+                // TODO: check whether is being used on the web
+                taskById: {
                   method: 'GET',
-                  params:{
-                    first: 'tasks'                    
+                  params: {
+                    first: 'tasks'
                   },
                   isArray: false
                 },
+
+
                 /**
                  * Client-Group
                  */
+                // get list of all the client groups
                 clientGroupsQuery: {
-                  method:  'GET',
-                  params:  {
-                    first:  'client',
+                  method: 'GET',
+                  params: {
+                    first: 'client',
                     second: 'clientGroups'
                   },
                   isArray: true
                 },
-                /**
-                 * Clients-By-Group-ID
-                 */
+                // get clients by client group id
                 clientsByGroupIDQuery: {
                   method: 'GET',
                   isArray: true,
-                  params:  {
-                    first:  'client',
+                  params: {
+                    first: 'client',
                     second: 'clientGroup',
                     fourth: 'clients'
                   }
                 },
-                clientsByGroupIDAdd:   {
+                // add clients by client group id
+                clientsByGroupIDAdd: {
                   method: 'POST',
                   params: {
-                    first:  'client',
+                    first: 'client',
                     second: 'clientGroup',
                     fourth: 'clients'
                   }
                 },
 
+
                 /**
                  * Client-Group
                  */
-                clientGroupAdd:    {
+                // create a new client group
+                clientGroupAdd: {
                   method: 'POST',
                   params: {
                     first: 'clientGroup'
                   }
                 },
+                // update a client group
                 clientGroupUpdate: {
                   method: 'PUT',
                   params: {
                     first: 'clientGroup'
                   }
                 },
+                // delete a client group
                 clientGroupDelete: {
                   method: 'DELETE',
                   params: {
@@ -186,21 +203,25 @@ define(
                   }
                 },
 
+
                 /**
                  * Client
                  */
-                clientAdd:    {
+                // add a client
+                clientAdd: {
                   method: 'POST',
                   params: {
                     first: 'client'
                   }
                 },
+                // update a client
                 clientUpdate: {
                   method: 'PUT',
                   params: {
                     first: 'client'
                   }
                 },
+                // remove a client
                 clientDelete: {
                   method: 'DELETE',
                   params: {
@@ -208,117 +229,137 @@ define(
                   }
                 },
 
+
                 /**
                  * Clients
                  */
+                // get the list of clients
+                // meant more for management tab
                 clientsQuery: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
-                    first:  'client',
+                  params: {
+                    first: 'client',
                     second: 'clients'
                   }
                 },
 
+
                 /**
                  * Client-Reports
                  */
+                // get the reports of that particular client
                 clientReportsQuery: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'clients',
                     third: 'reports'
                   }
                 },
 
+
                 /**
                  * Client-Group-Client
                  */
+                // remove the client(s) from the specific group, meant more for management
                 clientGroupClientDelete: {
                   method: 'PUT',
                   params: {
-                    first:  'client',
+                    first: 'client',
                     second: 'clientGroup',
                     fourth: 'removeClients'
                   }
                 },
 
+
                 /**
                  * Client-Group-Reports
                  */
+                // get the reports of a particular client group
                 clientGroupReportsQuery: {
-                    method:  'GET',
-                    isArray: true,
-                    params:  {
-                      first: 'clientGroup',
-                      third: 'reports'
-                    }
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clientGroup',
+                    third: 'reports'
+                  }
                 },
+
 
                 /**
                  * Client-Group-Tasks
                  */
+                // get the tasks of particular client group, used in agenda
                 clientGroupTasksQuery: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'clientGroup',
                     third: 'tasks',
-                    from:  '',
-                    to:    ''
+                    from: '',
+                    to: ''
                   }
                 },
+
 
                 /**
                  * Client-Report
                  */
-                clientReportAdd:    {
+                // add a client report
+                clientReportAdd: {
                   method: 'POST',
                   params: {
                     first: 'clients',
                     third: 'reports'
                   }
                 },
-                clientReportUpdate:    {
+                // update a client report
+                clientReportUpdate: {
                   method: 'PUT',
                   params: {
                     first: 'clients',
-                    third: 'reports',                    
+                    third: 'reports'
                   }
                 },
+                // remove a client report
                 clientReportDelete: {
                   method: 'DELETE',
                   params: {
-                    first:    'clients',
-                    third:    'reports',
+                    first: 'clients',
+                    third: 'reports',
                     reportId: ''
                   }
                 },
 
+
                 /**
                  * Team
                  */
-                teamQuery:  {
-                  method:  'GET',
+                // get the list of teams
+                teamQuery: {
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'team'
                   }
                 },
-                teamAdd:    {
+                // add a team
+                teamAdd: {
                   method: 'POST',
                   params: {
                     first: 'team',
-                    id:    ''
+                    id: ''
                   }
                 },
+                // update a team
                 teamUpdate: {
                   method: 'PUT',
                   params: {
                     first: 'team'
                   }
                 },
+                // remove a team
                 teamDelete: {
                   method: 'DELETE',
                   params: {
@@ -326,28 +367,33 @@ define(
                   }
                 },
 
+
                 /**
                  * Team-Status
                  */
+                // get the list of team members with their states of a particular team
                 teamStatusQuery: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
-                    first:  'team',
+                  params: {
+                    first: 'team',
                     second: 'status'
                   }
                 },
 
+
                 /**
                  * Team-Member
                  */
-                teamMemberAdd:    {
+                // add a member to a team
+                teamMemberAdd: {
                   method: 'POST',
                   params: {
                     first: 'team',
                     third: 'member'
                   }
                 },
+                // update the list a team in case of there are adds and removes
                 teamMemberUpdate: {
                   method: 'PUT',
                   params: {
@@ -355,6 +401,7 @@ define(
                     third: 'updateMembers'
                   }
                 },
+                // remove members from a team
                 teamMemberDelete: {
                   method: 'PUT',
                   params: {
@@ -362,33 +409,39 @@ define(
                     third: 'removeMember'
                   }
                 },
-                teamMemberFree:   {
-                  method:  'GET',
+                // get all members including members which do not belong to any teams
+                // TODO: Makes a general query for members
+                teamMemberFree: {
+                  method: 'GET',
                   isArray: true,
-                  params:  {
-                    first:  'team',
+                  params: {
+                    first: 'team',
                     second: 'members'
                   }
                 },
 
+
                 /**
-                 * Team-Client-Group
+                 * Team-ClientGroup
                  */
-                teamClientGroupQuery:  {
-                  method:  'GET',
+                // get all the links between teams and client groups
+                teamClientGroupQuery: {
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'team',
                     third: 'clientGroups'
                   }
                 },
-                teamClientGroupAdd:    {
+                // add a link between teams and client groups
+                teamClientGroupAdd: {
                   method: 'POST',
                   params: {
                     first: 'team',
                     third: 'clientGroups'
                   }
                 },
+                // update a link between teams and client groups
                 teamClientGroupUpdate: {
                   method: 'PUT',
                   params: {
@@ -396,6 +449,7 @@ define(
                     third: 'updateClientGroups'
                   }
                 },
+                // remove a link between teams and client groups
                 teamClientGroupDelete: {
                   method: 'PUT',
                   params: {
@@ -404,23 +458,27 @@ define(
                   }
                 },
 
+
                 /**
                  * Team-Task
                  */
+                // Get tasks of a team, mainly used in agenda
                 teamTaskQuery: {
-                  method:  'GET',
+                  method: 'GET',
                   isArray: true,
-                  params:  {
+                  params: {
                     first: 'team',
                     third: 'tasks',
-                    from:  '',
-                    to:    ''
+                    from: '',
+                    to: ''
                   }
                 },
+
 
                 /**
                  * Team number
                  */
+                // TODO: Depreciated functionailty
                 teamPhoneNumber: {
                   method: 'GET',
                   params: {
@@ -429,32 +487,38 @@ define(
                   }
                 },
 
+
                 /**
                  * Member
                  */
-                memberAdd:    {
+                // create a new team member
+                // TODO: Check whether editing a member is being bundled in this call with id check in load
+                memberAdd: {
                   method: 'POST',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'member'
                   }
                 },
+                // remove a team member
                 memberDelete: {
                   method: 'DELETE',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'member'
                   }
                 },
 
+
                 // TODO: Not used as a AJAX call!
-                memberPhoto:  {
+                // TODO: Depreciated!
+                memberPhoto: {
                   method: 'GET',
                   params: {
-                    first:  'team',
+                    first: 'team',
                     second: 'member',
                     fourth: 'photourl',
-                    width:  40,
+                    width: 40,
                     height: 40
                   }
                 }
@@ -493,7 +557,7 @@ define(
               );
             }
             catch (err)
-            { 
+            {
               // Log.error(err)               
             }
 

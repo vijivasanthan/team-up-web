@@ -15,7 +15,7 @@ define(
             '/login',
             {
               templateUrl: 'views/login.html',
-              controller:  'login'
+              controller: 'login'
             })
 
             .when(
@@ -26,16 +26,16 @@ define(
             '/tasks',
             {
               templateUrl: 'views/tasks.html',
-              controller:  'tasksCtrl'
+              controller: 'tasksCtrl'
             })
 
             .when(
             '/team',
             {
-              templateUrl:    'views/teams.html',
-              controller:     'teamCtrl',
+              templateUrl: 'views/teams.html',
+              controller: 'teamCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   'Teams', '$route',
                   function (Teams, $route)
@@ -51,10 +51,10 @@ define(
             .when(
             '/client',
             {
-              templateUrl:    'views/clients.html',
-              controller:     'clientCtrl',
+              templateUrl: 'views/clients.html',
+              controller: 'clientCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   'Clients', '$route',
                   function (Clients, $route)
@@ -70,10 +70,10 @@ define(
             .when(
             '/clientProfile/:clientId',
             {
-              templateUrl:    'views/clients.html',
-              controller:     'clientCtrl',
+              templateUrl: 'views/clients.html',
+              controller: 'clientCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   '$rootScope', '$route',
                   function ($rootScope, $route)
@@ -87,10 +87,10 @@ define(
             .when(
             '/manage',
             {
-              templateUrl:    'views/manage.html',
-              controller:     'manageCtrl',
+              templateUrl: 'views/manage.html',
+              controller: 'manageCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
@@ -98,7 +98,7 @@ define(
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
                            {
-                             t:  Teams.query(),
+                             t: Teams.query(),
                              cg: ClientGroups.query()
                            } :
                            { local: true };
@@ -110,10 +110,10 @@ define(
             .when(
             '/treegrid',
             {
-              templateUrl:    'views/treegrid.html',
-              controller:     'treegridCtrl',
+              templateUrl: 'views/treegrid.html',
+              controller: 'treegridCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   'Clients', 'Teams', '$location',
                   function (ClientGroups, Teams, $location)
@@ -121,7 +121,7 @@ define(
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
                            {
-                             t:  Teams.query(),
+                             t: Teams.query(),
                              cg: ClientGroups.query()
                            } :
                            { local: true };
@@ -133,26 +133,26 @@ define(
             .when(
             '/planboard',
             {
-              templateUrl:    'views/planboard.html',
-              controller:     'planboard',
+              templateUrl: 'views/planboard.html',
+              controller: 'planboard',
               reloadOnSearch: false
             })
 
             .when(
             '/messages',
             {
-              templateUrl:    'views/messages.html',
-              controller:     'messages',
+              templateUrl: 'views/messages.html',
+              controller: 'messages',
               reloadOnSearch: false
             })
 
             .when(
             '/profile/:userId',
             {
-              templateUrl:    'views/profile.html',
-              controller:     'profileCtrl',
+              templateUrl: 'views/profile.html',
+              controller: 'profileCtrl',
               reloadOnSearch: false,
-              resolve:        {
+              resolve: {
                 data: [
                   '$rootScope', '$route', 'TeamUp', 'Store',
                   function ($rootScope, $route, TeamUp, Store)
@@ -183,8 +183,8 @@ define(
             '/profile',
             {
               templateUrl: 'views/profile.html',
-              controller:  'profileCtrl',
-              resolve:     {
+              controller: 'profileCtrl',
+              resolve: {
                 data: [
                   '$rootScope', '$route', '$location',
                   function ($rootScope, $route, $location)
@@ -201,8 +201,8 @@ define(
             .when(
             '/vis',
             {
-              templateUrl:    'views/vis.html',
-              controller:     'vis',
+              templateUrl: 'views/vis.html',
+              controller: 'vis',
               reloadOnSearch: false
             })
 

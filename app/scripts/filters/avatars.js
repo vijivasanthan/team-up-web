@@ -4,6 +4,7 @@ define(
   {
     'use strict';
 
+    // TODO: Depreciated!
     filters.filter(
       'escape',
       [
@@ -19,6 +20,7 @@ define(
       ]
     );
 
+    // Determine the color of circle based on the state
     filters.filter(
       'stateColor',
       [
@@ -64,6 +66,7 @@ define(
       ]
     );
 
+    // Convert date
     filters.filter(
       'nicelyDate',
       [
@@ -87,6 +90,7 @@ define(
       ]
     );
 
+    // Convert time
     filters.filter(
       'nicelyTime',
       [
@@ -102,6 +106,7 @@ define(
       ]
     );
 
+    // Translate role
     filters.filter(
       'translateRole',
       [
@@ -128,6 +133,7 @@ define(
       ]
     );
 
+    // Translate user (working) function
     filters.filter(
       'translateFunc',
       [
@@ -150,6 +156,7 @@ define(
       ]
     );
 
+    // Show the correct icon based on the state's name
     filters.filter(
       'stateDataIcon',
       [
@@ -182,6 +189,7 @@ define(
       ]
     );
 
+    // Format state value
     filters.filter(
       'stateValue',
       [
@@ -214,38 +222,39 @@ define(
       ]
     );
 
+    // Agenda periods
     filters.filter(
       'rangeMainFilter',
       [
-        'Dater','$filter',
-        function (Dater,$filter)
+        'Dater', '$filter',
+        function (Dater, $filter)
         {
           var periods = Dater.getPeriods();
 
           return function (dates)
-          {      
+          {
             var startTime = new Date(dates.start).getTime();
-            var endTime =  new Date(dates.end).getTime();
+            var endTime = new Date(dates.end).getTime();
             if (( endTime - startTime ) == 86401000)
             {
               dates.start = new Date(dates.end).addDays(- 1);
               startTime = new Date(dates.start).getTime();
             }
 
-            
+
             var dates = {
-                  start: {                    
-                    real:  $filter('date')(startTime,'EEEE, MMMM d'),
-                    month: $filter('date')(startTime,'MMMM'),
-                    day:   $filter('date')(startTime,'d')
+                  start: {
+                    real: $filter('date')(startTime, 'EEEE, MMMM d'),
+                    month: $filter('date')(startTime, 'MMMM'),
+                    day: $filter('date')(startTime, 'd')
                   },
-                  end:   {                    
-                    real:  $filter('date')(endTime,'EEEE, MMMM d'),
-                    month: $filter('date')(endTime,'MMMM'),
-                    day:   $filter('date')(endTime,'d')
+                  end: {
+                    real: $filter('date')(endTime, 'EEEE, MMMM d'),
+                    month: $filter('date')(endTime, 'MMMM'),
+                    day: $filter('date')(endTime, 'd')
                   }
-                },                
-                monthNumber = $filter('date')(endTime,'M') - 1; 
+                },
+                monthNumber = $filter('date')(endTime, 'M') - 1;
 
             if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) ||
                  dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
@@ -273,6 +282,7 @@ define(
       ]
     );
 
+    // Agenda periods
     filters.filter(
       'rangeMainWeekFilter',
       [
@@ -285,7 +295,7 @@ define(
             {
               var _dates = {
                 start: new Date(dates.start).toString('dddd, MMMM d'),
-                end:   new Date(dates.end).toString('dddd, MMMM d')
+                end: new Date(dates.end).toString('dddd, MMMM d')
               };
 
               return  _dates.start +
@@ -298,11 +308,12 @@ define(
         }
       ]);
 
+    // Agenda periods
     filters.filter(
       'rangeInfoFilter',
       [
-        'Dater','$rootScope',
-        function (Dater,$rootScope)
+        'Dater', '$rootScope',
+        function (Dater, $rootScope)
         {
           var periods = Dater.getPeriods();
 
@@ -320,7 +331,7 @@ define(
               {
                 var hours = {
                   start: new Date(timeline.range.start).toString('HH:mm'),
-                  end:   new Date(timeline.range.end).toString('HH:mm')
+                  end: new Date(timeline.range.end).toString('HH:mm')
                 };
 
                 /**
@@ -328,21 +339,21 @@ define(
                  */
                 if (hours.end == '00:00') hours.end = '24:00';
 
-                return  $rootScope.ui.planboard.time + 
+                return  $rootScope.ui.planboard.time +
                         hours.start +
                         ' / ' +
                         hours.end;
               }
               else if (timeline.scope.week)
               {
-                return  $rootScope.ui.planboard.weekNumber + 
+                return  $rootScope.ui.planboard.weekNumber +
                         timeline.current.week;
               }
               else if (timeline.scope.month)
               {
-                return  $rootScope.ui.planboard.monthNumber + 
+                return  $rootScope.ui.planboard.monthNumber +
                         timeline.current.month +
-                        ','  + $rootScope.ui.planboard.totalDays + 
+                        ',' + $rootScope.ui.planboard.totalDays +
                         periods.months[timeline.current.month].totalDays;
               }
             }
@@ -351,6 +362,7 @@ define(
       ]
     );
 
+    // Agenda periods
     filters.filter(
       'rangeInfoWeekFilter',
       [
@@ -367,6 +379,7 @@ define(
       ]
     );
 
+    // Internalisation
     filters.filter(
       'i18n_spec',
       [
@@ -377,27 +390,33 @@ define(
           {
             var types = type.split('.');
             var ret;
-            if(types[1] == 'stateValue'){
-                var statesTrans = $rootScope.ui[types[0]][types[1]];
-                angular.forEach(statesTrans,function(v,k){
-                    if(k == string){
-                      ret = v;
-                    }                    
+            if (types[1] == 'stateValue')
+            {
+              var statesTrans = $rootScope.ui[types[0]][types[1]];
+              angular.forEach(
+                statesTrans, function (v, k)
+                {
+                  if (k == string)
+                  {
+                    ret = v;
+                  }
                 });
-                return ret;
+              return ret;
             }
 
             ret = ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
-            if(typeof ret == 'undefined'){
-                ret = string;
+            if (typeof ret == 'undefined')
+            {
+              ret = string;
             }
-           
+
             return ret;
           }
         }
       ]
     );
 
+    // TODO: Cehck whether it is used or combine witht he other one?
     filters.filter(
       'stateIcon',
       [
@@ -435,11 +454,12 @@ define(
       ]
     );
 
+    // Avatars
     filters.filter(
       'avatar',
       [
-        'Session','Store',
-        function (Session,Store)
+        'Session', 'Store',
+        function (Session, Store)
         {
           return function (id, type, size)
           {
@@ -459,24 +479,30 @@ define(
                   path = '/client/';
                   break;
               }
-              
-              var avatarChanged = function(id){
 
-                  var changedTimes = 0;                  
-                  
-                  var list = Store('app').get('avatarChangeRecord');
-                  angular.forEach(list,function(avatarId){
-                      if(avatarId == id){
-                          changedTimes++;                        
-                      }
+              var avatarChanged = function (id)
+              {
+
+                var changedTimes = 0;
+
+                var list = Store('app').get('avatarChangeRecord');
+
+                angular.forEach(
+                  list, function (avatarId)
+                  {
+                    if (avatarId == id)
+                    {
+                      changedTimes ++;
+                    }
                   });
-                  
-                  return parseInt(changedTimes,10);
-              }
-              // better use a special para to specify the avatar is changed. 
-              
-              var newsize = parseInt(size,10) + parseInt(avatarChanged(id), 10);
-              
+
+                return parseInt(changedTimes, 10);
+              };
+
+              // TODO: Better use a special parameter to specify the avatar is changed.
+
+              var newsize = parseInt(size, 10) + parseInt(avatarChanged(id), 10);
+
               return config.app.host +
                      config.app.namespace +
                      path +
@@ -489,82 +515,115 @@ define(
       ]
     );
 
+    // Get more information about client / member
     filters.filter(
       'getObjAttr',
       [
         '$rootScope',
-        function($rootScope){
-          return function(id,usertype,itemName){
-            if(usertype == 'client'){
-                var client = $rootScope.getClientByID(id);
-                if(client == null || typeof client == 'undefined'){
-                    return "";
-                }
+        function ($rootScope)
+        {
+          return function (id, usertype, itemName)
+          {
+            if (usertype == 'client')
+            {
+              var client = $rootScope.getClientByID(id);
+              if (client == null || typeof client == 'undefined')
+              {
+                return "";
+              }
 
-                if(itemName == 'name'){
-                    return client.firstName + ' ' + client.lastName;  
-                }else if(itemName == 'address'){
-                    return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ' + client.address.city ;
-                }else if(itemName == 'latlong'){
-                    if(typeof client.address.latitude == 'undefined' || typeof client.address.longitude == 'undefined' || 
-                        (client.address.longitude == 0 && client.address.latitude == 0)){
-                        return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ,' + client.address.city ;
-                    }else{
-                        return client.address.latitude + ',' + client.address.longitude;
-                    }                    
-                }    
-            }else if(usertype == "member"){
-                if(id == null){
-                  return "";
+              if (itemName == 'name')
+              {
+                return client.firstName + ' ' + client.lastName;
+              }
+              else if (itemName == 'address')
+              {
+                return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ' + client.address.city;
+              }
+              else if (itemName == 'latlong')
+              {
+                if (typeof client.address.latitude == 'undefined' || typeof client.address.longitude == 'undefined' ||
+                    (client.address.longitude == 0 && client.address.latitude == 0))
+                {
+                  return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ,' + client.address.city;
                 }
-                var member = $rootScope.getTeamMemberById(id);                
-                if(itemName == 'name'){
-                    return member.firstName + ' ' + member.lastName; 
-                }else if(itemName == 'states'){
-                    return member.states;
+                else
+                {
+                  return client.address.latitude + ',' + client.address.longitude;
                 }
-                
-            }else if(usertype == 'clientGroup'){
-                if(id == null){
-                    return "";
-                }
-                if(itemName == 'name'){
-                    return $rootScope.getClientGroupName(id); 
-                }                
-            }else{
-                return "no name";
+              }
+            }
+            else if (usertype == "member")
+            {
+              if (id == null)
+              {
+                return "";
+              }
+              var member = $rootScope.getTeamMemberById(id);
+              if (itemName == 'name')
+              {
+                return member.firstName + ' ' + member.lastName;
+              }
+              else if (itemName == 'states')
+              {
+                return member.states;
+              }
+
+            }
+            else if (usertype == 'clientGroup')
+            {
+              if (id == null)
+              {
+                return "";
+              }
+              if (itemName == 'name')
+              {
+                return $rootScope.getClientGroupName(id);
+              }
+            }
+            else
+            {
+              return "no name";
             }
 
           }
         }
       ]
-    );   
+    );
 
+    // Get a target out of a collection based on the id
     filters.filter(
-      'getByUuid',function(){
-         return function(input,uuid){
-            var i = 0;
-            var len = input.length;
-            for(; i < len ; i++){
-              if(input[i].uuid == uuid){
-                return input[i];
-              }
+      'getByUuid', function ()
+      {
+        return function (input, uuid)
+        {
+          var i = 0;
+          var len = input.length;
+          for (; i < len; i ++)
+          {
+            if (input[i].uuid == uuid)
+            {
+              return input[i];
             }
-            return null;
-         }
+          }
+          return null;
+        }
       }
-    );     
+    );
 
+    // Date reversing
     filters.filter(
-        'dateReverse' ,  [
-            '$filter', function($filter){
-              return function(date,pattern){
-                 var timestamp = new Date(date).getTime();
-                 var ret = $filter('date')(timestamp,pattern);
-                 return ret;
-              }
-          }  
-        ] 
+      'dateReverse', [
+        '$filter', function ($filter)
+        {
+          return function (date, pattern)
+          {
+            var timestamp = new Date(date).getTime();
+            var ret = $filter('date')(timestamp, pattern);
+            return ret;
+          }
+        }
+      ]
     );
   }
 );

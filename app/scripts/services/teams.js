@@ -12,32 +12,37 @@ define(
         {
           var TeamsService = $resource();
 
-          TeamsService.prototype.query = function (only,routeParams)
+          // Get the list of teams
+          TeamsService.prototype.query = function (only, routeParams)
           {
             var deferred = $q.defer();
 
+            // Get the list of teams
             TeamUp._('teamQuery')
               .then(
               function (teams)
               {
                 Store('app').save('teams', teams);
 
-                if (!only)
+                if (! only)
                 {
                   var calls = [],
                       data = {
-                        teams:   teams,
+                        teams: teams,
                         members: {}
                       };
 
+                  // Walk through the team list
                   angular.forEach(
                     teams,
                     function (team)
                     {
-                      if(typeof routeParams == "undefined" || team.uuid == routeParams.uuid){
-                         calls.push(
+                      if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
+                      {
+                        calls.push(
                           (function (team, data, Store)
                           {
+                            // Get the list of members of that particular team
                             TeamUp._(
                               'teamStatusQuery',
                               { third: team.uuid },
@@ -55,7 +60,9 @@ define(
                             )
                           })(team, data, Store)
                         );
-                      }else{
+                      }
+                      else
+                      {
                         data.members[team.uuid] = Store('app').get(team.uuid);
                       }
                     }
@@ -65,7 +72,7 @@ define(
                     .then(
                     function () { deferred.resolve(data) }
                   );
-                  
+
                 }
                 else
                 {
@@ -77,10 +84,11 @@ define(
             return deferred.promise;
           };
 
+          // Get teams data from localStorage
           TeamsService.prototype.queryLocal = function ()
           {
             var data = {
-              teams:   Store('app').get('teams'),
+              teams: Store('app').get('teams'),
               members: {}
             };
 
@@ -92,6 +100,7 @@ define(
             return data;
           };
 
+          // Get the list of links between client groups and teams
           TeamsService.prototype.queryClientGroups = function (teams)
           {
             var deferred = $q.defer(),
@@ -110,7 +119,7 @@ define(
                   (function (team, data)
                   {
                     return {
-                      id:   team.uuid,
+                      id: team.uuid,
                       data: TeamUp._(
                         'teamClientGroupQuery',
                         { second: team.uuid }
@@ -166,51 +175,56 @@ define(
             return deferred.promise;
           };
 
-          TeamsService.prototype.queryLocalClientGroup = function(teamsLocal){
-            
+          // Get local data of links between client groups and teams
+          TeamsService.prototype.queryLocalClientGroup = function (teamsLocal)
+          {
             var groupIds = [];
             var grps = Store('app').get('ClientGroups');
-            angular.forEach(grps,function(grp){
-              groupIds.push(grp.id);
-            });
+
+            angular.forEach(
+              grps,
+              function (grp) { groupIds.push(grp.id) }
+            );
 
             var returnValue = {};
+
             angular.forEach(
-                teamsLocal,
-                function (team)
+              teamsLocal,
+              function (team)
+              {
+                var flag = true;
+
+                var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
+
+                if (_teamGroup == [])
                 {
-                  var flag = true;
-
-                  var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
-
-                  if (_teamGroup == [])
-                  {
-                    // console.log('it is empty ->');
-                  }                  
-
-                  _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
-                  // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
-
-                  angular.forEach(
-                    _teamGroup,
-                    function (group)
-                    {              
-                      if (groupIds.indexOf(group.id) != - 1 && flag)
-                      {
-                        // console.log('putting in ->', group.id);
-
-                        returnValue[team.uuid] = group.id;
-
-                        flag = false;
-                      }
-                    }
-                  );
+                  // console.log('it is empty ->');
                 }
-              );
-              
-              return returnValue;
-          }
 
+                _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
+                // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
+
+                angular.forEach(
+                  _teamGroup,
+                  function (group)
+                  {
+                    if (groupIds.indexOf(group.id) != - 1 && flag)
+                    {
+                      // console.log('putting in ->', group.id);
+
+                      returnValue[team.uuid] = group.id;
+
+                      flag = false;
+                    }
+                  }
+                );
+              }
+            );
+
+            return returnValue;
+          };
+
+          // Manage 1:n relations between teams and team members
           TeamsService.prototype.manage = function (changes)
           {
             var deferred = $q.defer(),
@@ -250,7 +264,7 @@ define(
                       { second: teamId },
                       {
                         remove: change.r,
-                        add:    change.a
+                        add: change.a
                       }
                     )
                   );
@@ -273,8 +287,8 @@ define(
                     //     { third: teamId }
                     //   )
                     // );
-                    var routeParam = {uuid : teamId};
-                    queryCalls.push(TeamsService.prototype.query(false,routeParam));                    
+                    var routeParam = {uuid: teamId};
+                    queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
 
@@ -286,9 +300,7 @@ define(
             return deferred.promise;
           };
 
-          /**
-           * add or remove the client group from the teams
-           */
+          // Manage 1:1 relations between teams and client groups
           TeamsService.prototype.manageGroups = function (changes)
           {
             var deferred = $q.defer(),
@@ -328,7 +340,7 @@ define(
                       { second: teamId },
                       {
                         remove: change.r,
-                        add:    change.a
+                        add: change.a
                       }
                     )
                   );
@@ -352,7 +364,7 @@ define(
                       (function (teamId)
                       {
                         return {
-                          id:   teamId,
+                          id: teamId,
                           data: TeamUp._(
                             'teamClientGroupQuery',
                             { second: teamId }

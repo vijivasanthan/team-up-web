@@ -20,12 +20,12 @@ define(
               function resetLoaders ()
               {
                 $rootScope.loaderIcons = {
-                  general:  false,
-                  teams:    false,
-                  clients:  false,
+                  general: false,
+                  teams: false,
+                  clients: false,
                   messages: false,
-                  manage:   false,
-                  profile:  false,
+                  manage: false,
+                  profile: false,
                   settings: false
                 };
               }
