@@ -38,7 +38,7 @@
           <tbody>
             <tr ng-repeat="member in data.members[team.uuid]|orderBy:&quot;lastName&quot;">
               <td>
-                <div style="background-image: url({{member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }})" class="roundedPicSmall {{member.states|stateColor}}"></div>
+                <div back-img="{{member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicSmall {{member.states|stateColor}}"></div>
               </td>
               <td><a href="#/profile/{{member.uuid|lowercase}}#profile" ng-click="editProfile(member.uuid,team.uuid)">{{member.firstName}} {{member.lastName}}</a></td>
               <td><span ng-show="noSharedStates(member.states)" class="states">{{ui.teamup.noSharedStates}}</span>

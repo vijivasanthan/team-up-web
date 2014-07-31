@@ -75,7 +75,7 @@
           tbody
             tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
               td
-                .roundedPicSmall.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"80"}})')
+                .roundedPicSmall.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"80"}}')
               td: a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
               td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
               td
@@ -201,7 +201,7 @@
             tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:"creationTime":"reverse" ')
               td
                 .roundedPicSmall(class='{{report.author.states|stateColor}}',
-                style='background-image: url({{report.author.uuid | avatar:"team":"80"}})')
+                back-img = '{{report.author.uuid | avatar:"team":"80"}}')
               td
                 | {{report.author.firstName}} {{report.author.lastName}}
               td
@@ -245,7 +245,7 @@
             dt {{ui.teamup.clientProfileUrl}}
             dd {{client.clientProfileUrl}}
         .widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-          .roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
+          .roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
           div
             a(href='#/clientProfile/{{client.uuid}}#editImg')
               button.btn.btn-mini.btn-primary(ng-click='editImg()')
@@ -317,7 +317,7 @@
           tbody
             tr(ng-repeat='report in reports|orderBy:"creationTime":"reverse"')
               td
-                .roundedPicSmall(style='background-image: url({{report.author.uuid | avatar:"team":"80"}})',
+                .roundedPicSmall(back-img = '{{report.author.uuid | avatar:"team":"80"}}',
                 class='{{report.author.states|stateColor}}')
               td
                 | {{report.author.firstName}} {{report.author.lastName}}
@@ -405,7 +405,7 @@
       div(style='overflow: hidden; height: 35px')
         h3.pull-left(style='margin-top: 0;') {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}
       hr
-      div.roundedPicLarge.memberStateBusy(style='background-image: url({{client.uuid | avatar:"client":"368" }})')
+      div.roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
         //img(ng-src='{{avatarURL}}')
       #uploadImgModule
         form.form-vertical(enctype='multipart/form-data')

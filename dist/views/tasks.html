@@ -42,7 +42,7 @@
                 <div class="dragIcon"></div>
               </td>
               <td>
-                <div style="background-image: url({{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}})" class="roundedPicSmall memberStateBusy"></div>
+                <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClientUuid | getObjAttr:"client":"name" }}                </a></td>
               <td>
@@ -100,7 +100,7 @@
           <tbody>
             <tr ng-repeat="task in currentTasks | orderBy:orderItem:reverse ">
               <td>
-                <div style="background-image: url({{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}})" class="roundedPicSmall memberStateBusy"></div>
+                <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClientUuid | getObjAttr:"client":"name" }}</a></td>
               <td>
@@ -113,7 +113,7 @@
                 </dl>
               </td>
               <td>
-                <div style="background-image: url({{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}})" ng-hide="task.assignedTeamMemberUuid == null" class="roundedPicSmall {{task.assignedTeamMemberUuid | getObjAttr:&quot;member&quot;:&quot;states&quot; | stateColor}}"></div>
+                <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-hide="task.assignedTeamMemberUuid == null" class="roundedPicSmall {{task.assignedTeamMemberUuid | getObjAttr:&quot;member&quot;:&quot;states&quot; | stateColor}}"></div>
               </td>
               <!-- FIXME: Check this upper line!-->
               <td><a href="index.html#/profile/{{task.assignedTeamMemberUuid}}#profile">{{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}</a></td>

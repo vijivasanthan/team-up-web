@@ -63,7 +63,7 @@
               td 
                 .dragIcon
               td
-                .roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')
+                .roundedPicSmall.memberStateBusy(back-img = '{{task.relatedClientUuid | avatar:"client":"80"}}')
               td
                 a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}                
               td
@@ -133,7 +133,7 @@
           tbody
             tr(ng-repeat='task in currentTasks | orderBy:orderItem:reverse ' )
               td
-                .roundedPicSmall.memberStateBusy(style='background-image: url({{task.relatedClientUuid | avatar:"client":"80"}})')
+                .roundedPicSmall.memberStateBusy(back-img = '{{task.relatedClientUuid | avatar:"client":"80"}}')
               td
                 a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
               td
@@ -150,7 +150,7 @@
                     div(id = 'allTaskdesc_{{task.uuid}}' ) {{task.description}} 
               td
                 .roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',
-                style='background-image: url({{task.assignedTeamMemberUuid | avatar:"team":"80"}})',
+                back-img = '{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
                 ng-hide='task.assignedTeamMemberUuid == null')
               // FIXME: Check this upper line!
               td

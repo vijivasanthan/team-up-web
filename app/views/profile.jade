@@ -40,9 +40,8 @@ section#profile
                 dd {{data.function|translateFunc}}
                 dt {{ui.profile.birthday}}
                 dd {{data.birthDate|nicelyDate}}
-            .widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-              .roundedPicLarge(style='background-image: url({{data.uuid | avatar:"team":"368" }})',
-              class='{{data.states|stateColor}}')
+            .widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")              
+              .roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}' class='{{data.states|stateColor}}')              
               div
                 a(href='#/profile/{{data.uuid}}#editImg')
                   button.btn.btn-mini.btn-primary(ng-click='editImg()')
@@ -104,7 +103,6 @@ section#profile
             h3.pull-left(style='margin-top: 0;')
               | {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
           hr
-          //style='background-image: url({{data.uuid | avatar:"team":"368" }})'
           div.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}')
           #uploadImgModule
             form.form-vertical(enctype='multipart/form-data')
