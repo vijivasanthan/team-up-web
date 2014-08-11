@@ -131,30 +131,30 @@ links.Timeline = function (container)
   // Needed for IE (which gives an error when you try to set an undefined
   // value in a style)
   this.size = {
-    'actualHeight':  0,
-    'axis':          {
+    'actualHeight': 0,
+    'axis': {
       'characterMajorHeight': 0,
-      'characterMajorWidth':  0,
+      'characterMajorWidth': 0,
       'characterMinorHeight': 0,
-      'characterMinorWidth':  0,
-      'height':               0,
-      'labelMajorTop':        0,
-      'labelMinorTop':        0,
-      'line':                 0,
-      'lineMajorWidth':       0,
-      'lineMinorHeight':      0,
-      'lineMinorTop':         0,
-      'lineMinorWidth':       0,
-      'top':                  0
+      'characterMinorWidth': 0,
+      'height': 0,
+      'labelMajorTop': 0,
+      'labelMinorTop': 0,
+      'line': 0,
+      'lineMajorWidth': 0,
+      'lineMinorHeight': 0,
+      'lineMinorTop': 0,
+      'lineMinorWidth': 0,
+      'top': 0
     },
     'contentHeight': 0,
-    'contentLeft':   0,
-    'contentWidth':  0,
-    'frameHeight':   0,
-    'frameWidth':    0,
-    'groupsLeft':    0,
-    'groupsWidth':   0,
-    'items':         {
+    'contentLeft': 0,
+    'contentWidth': 0,
+    'frameHeight': 0,
+    'frameWidth': 0,
+    'groupsLeft': 0,
+    'groupsWidth': 0,
+    'items': {
       'top': 0
     }
   };
@@ -162,40 +162,40 @@ links.Timeline = function (container)
   this.dom.container = container;
 
   this.options = {
-    'width':      "100%",
-    'height':     "auto",
-    'minHeight':  0,        // minimal height in pixels
+    'width': "100%",
+    'height': "auto",
+    'minHeight': 0,        // minimal height in pixels
     'autoHeight': true,
 
-    'eventMargin':     10,     // minimal margin between events
+    'eventMargin': 10,     // minimal margin between events
     'eventMarginAxis': 20, // minimal margin between events and the axis
-    'dragAreaWidth':   10,   // pixels
+    'dragAreaWidth': 10,   // pixels
 
-    'min':         undefined,
-    'max':         undefined,
+    'min': undefined,
+    'max': undefined,
     'intervalMin': 10,     // milliseconds
     'intervalMax': 1000 * 60 * 60 * 24 * 365 * 10000, // milliseconds
 
-    'moveable':        true,
-    'zoomable':        true,
-    'selectable':      true,
-    'editable':        false,
-    'snapEvents':      true,
+    'moveable': true,
+    'zoomable': true,
+    'selectable': true,
+    'editable': false,
+    'snapEvents': true,
     'groupChangeable': true,
 
     'showCurrentTime': true, // show a red bar displaying the current time
-    'showCustomTime':  false, // show a blue, draggable bar displaying a custom time
+    'showCustomTime': false, // show a blue, draggable bar displaying a custom time
     'showMajorLabels': true,
     'showMinorLabels': true,
-    'showNavigation':  false,
-    'showButtonNew':   false,
-    'groupsOnRight':   false,
-    'axisOnTop':       false,
-    'stackEvents':     true,
-    'animate':         true,
-    'animateZoom':     true,
-    'cluster':         false,
-    'style':           'box'
+    'showNavigation': false,
+    'showButtonNew': false,
+    'groupsOnRight': false,
+    'axisOnTop': false,
+    'stackEvents': true,
+    'animate': true,
+    'animateZoom': true,
+    'cluster': false,
+    'style': 'box'
   };
 
   this.clientTimeOffset = 0;    // difference between client time and the time
@@ -372,22 +372,22 @@ links.Timeline.prototype.setData = function (data)
       items.push(
         this.createItem(
           {
-            'start':     (
+            'start': (
               (
                 cols.start != undefined) ? data.getValue(row, cols.start) : undefined),
-            'end':       (
+            'end': (
               (
                 cols.end != undefined) ? data.getValue(row, cols.end) : undefined),
-            'content':   (
+            'content': (
               (
                 cols.content != undefined) ? data.getValue(row, cols.content) : undefined),
-            'group':     (
+            'group': (
               (
                 cols.group != undefined) ? data.getValue(row, cols.group) : undefined),
             'className': (
               (
                 cols.className != undefined) ? data.getValue(row, cols.className) : undefined),
-            'editable':  (
+            'editable': (
               (
                 cols.editable != undefined) ? data.getValue(row, cols.editable) : undefined)
           }));
@@ -725,7 +725,7 @@ links.Timeline.prototype.getVisibleChartRange = function ()
 {
   return {
     'start': new Date(this.start),
-    'end':   new Date(this.end)
+    'end': new Date(this.end)
   };
 };
 
@@ -1014,13 +1014,21 @@ links.Timeline.prototype.reflowAxis = function ()
       axisDom = dom.axis;
 
   var characterMinorWidth = (
-                              axisDom && axisDom.characterMinor) ? axisDom.characterMinor.clientWidth : 0,
+                              axisDom && axisDom.characterMinor) ?
+                            axisDom.characterMinor.clientWidth :
+                            0,
       characterMinorHeight = (
-                               axisDom && axisDom.characterMinor) ? axisDom.characterMinor.clientHeight : 0,
+                               axisDom && axisDom.characterMinor) ?
+                             axisDom.characterMinor.clientHeight :
+                             0,
       characterMajorWidth = (
-                              axisDom && axisDom.characterMajor) ? axisDom.characterMajor.clientWidth : 0,
+                              axisDom && axisDom.characterMajor) ?
+                            axisDom.characterMajor.clientWidth :
+                            0,
       characterMajorHeight = (
-                               axisDom && axisDom.characterMajor) ? axisDom.characterMajor.clientHeight : 0,
+                               axisDom && axisDom.characterMajor) ?
+                             axisDom.characterMajor.clientHeight :
+                             0,
       axisHeight = (
                      options.showMinorLabels ? characterMinorHeight : 0) +
                    (
@@ -1040,7 +1048,9 @@ links.Timeline.prototype.reflowAxis = function ()
   size.axis.height = axisHeight;
   size.axis.labelMajorTop = options.axisOnTop ? 0 : axisLine +
                                                     (
-                                                      options.showMinorLabels ? characterMinorHeight : 0);
+                                                      options.showMinorLabels ?
+                                                      characterMinorHeight :
+                                                      0);
   size.axis.labelMinorTop = options.axisOnTop ?
                             (
                               options.showMajorLabels ? characterMajorHeight : 0) :
@@ -2504,10 +2514,10 @@ links.Timeline.prototype.repaintNavigation = function ()
 
         timeline.addItem(
           {
-            'start':   xstart,
-            'end':     xend,
+            'start': xstart,
+            'end': xend,
             'content': content,
-            'group':   group
+            'group': group
           });
         var index = (
           timeline.items.length - 1);
@@ -3000,10 +3010,10 @@ links.Timeline.prototype.onMouseDown = function (event)
     var group = this.getGroupFromHeight(y);
     this.addItem(
       {
-        'start':   xstart,
-        'end':     xend,
+        'start': xstart,
+        'end': xend,
         'content': content,
-        'group':   this.getGroupName(group)
+        'group': this.getGroupName(group)
       });
     params.itemIndex = (
       this.items.length - 1);
@@ -3288,7 +3298,7 @@ links.Timeline.prototype.onMouseUp = function (event)
       this.updateData(
         params.itemIndex, {
           'start': item.start,
-          'end':   item.end
+          'end': item.end
         });
 
       // fire an add or change event. 
@@ -3302,10 +3312,10 @@ links.Timeline.prototype.onMouseUp = function (event)
         {
           this.updateData(
             params.itemIndex, {
-              'start':   item.start,
-              'end':     item.end,
+              'start': item.start,
+              'end': item.end,
               'content': item.content,
-              'group':   this.getGroupName(item.group)
+              'group': this.getGroupName(item.group)
             });
         }
         else
@@ -3321,7 +3331,7 @@ links.Timeline.prototype.onMouseUp = function (event)
           this.updateData(
             params.itemIndex, {
               'start': item.start,
-              'end':   item.end
+              'end': item.end
             });
         }
         else
@@ -3446,10 +3456,10 @@ links.Timeline.prototype.onDblClick = function (event)
       var group = this.getGroupFromHeight(y);   // (group may be undefined)
       this.addItem(
         {
-          'start':   xstart,
-          'end':     xend,
+          'start': xstart,
+          'end': xend,
           'content': content,
-          'group':   this.getGroupName(group)
+          'group': this.getGroupName(group)
         });
       params.itemIndex = (
         this.items.length - 1);
@@ -4965,12 +4975,12 @@ links.Timeline.prototype.createItem = function (itemData)
 {
   var type = itemData.end ? 'range' : this.options.style;
   var data = {
-    start:     itemData.start,
-    end:       itemData.end,
-    content:   itemData.content,
+    start: itemData.start,
+    end: itemData.end,
+    content: itemData.content,
     className: itemData.className,
-    editable:  itemData.editable,
-    group:     this.getGroup(itemData.group)
+    editable: itemData.editable,
+    group: this.getGroup(itemData.group)
   };
   // TODO: optimize this, when creating an item, all data is copied twice...
 
@@ -5070,9 +5080,9 @@ links.Timeline.prototype.getGroup = function (groupName)
   if (groupIndex === undefined && groupName !== undefined)
   {
     groupObj = {
-      'content':  groupName,
+      'content': groupName,
       'labelTop': 0,
-      'lineTop':  0
+      'lineTop': 0
       // note: this object will lateron get addition information, 
       //       such as height and width of the group         
     };
@@ -5233,7 +5243,7 @@ links.Timeline.prototype.selectItem = function (index)
 
     this.selection = {
       'index': index,
-      'item':  domItem
+      'item': domItem
     };
 
     // TODO: move adjusting the domItem to the item itself
@@ -5447,12 +5457,12 @@ links.Timeline.prototype.stackCalculateFinal = function (items)
     }
 
     finalItems[i] = {
-      'left':   left,
-      'top':    top,
-      'right':  right,
+      'left': left,
+      'top': top,
+      'right': right,
       'bottom': bottom,
       'height': height,
-      'item':   item
+      'item': item
     };
   }
 
@@ -5641,7 +5651,7 @@ links.Timeline.prototype.trigger = function (event)
     case 'rangechanged':
       properties = {
         'start': new Date(this.start),
-        'end':   new Date(this.end)
+        'end': new Date(this.end)
       };
       break;
 
@@ -5934,10 +5944,10 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
               // boxes and/or ranges
               cluster = this.timeline.createItem(
                 {
-                  'start':   new Date(min),
-                  'end':     new Date(max),
+                  'start': new Date(min),
+                  'end': new Date(max),
                   'content': content,
-                  'group':   group
+                  'group': group
                 });
             }
             else
@@ -5945,9 +5955,9 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
               // boxes only
               cluster = this.timeline.createItem(
                 {
-                  'start':   new Date(avg),
+                  'start': new Date(avg),
                   'content': content,
-                  'group':   group
+                  'group': group
                 });
             }
             cluster.isCluster = true;
@@ -6161,13 +6171,13 @@ links.Timeline.StepDate = function (start, end, minimumStep)
 /// enum scale
 links.Timeline.StepDate.SCALE = {
   MILLISECOND: 1,
-  SECOND:      2,
-  MINUTE:      3,
-  HOUR:        4,
-  DAY:         5,
-  WEEKDAY:     6,
-  MONTH:       7,
-  YEAR:        8
+  SECOND: 2,
+  MINUTE: 3,
+  HOUR: 4,
+  DAY: 5,
+  WEEKDAY: 6,
+  MONTH: 7,
+  YEAR: 8
 };
 
 /**
@@ -7056,10 +7066,10 @@ links.imageloader = (function ()
   }
 
   return {
-    'isLoaded':        isLoaded,
-    'isLoading':       isLoading,
-    'load':            load,
-    'loadAll':         loadAll,
+    'isLoaded': isLoaded,
+    'isLoading': isLoading,
+    'load': load,
+    'loadAll': loadAll,
     'filterImageUrls': filterImageUrls
   };
 })();

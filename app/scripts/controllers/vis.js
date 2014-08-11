@@ -15,7 +15,7 @@ define(
           function resetViews ()
           {
             $scope.views = {
-              teams:  false,
+              teams: false,
               clients: false
             };
           }
@@ -108,8 +108,8 @@ define(
                   if (item.id == selected.items[0])
                   {
                     $scope.slot = {
-                      id:      item.id,
-                      start:   Moment(item.start).format(format),
+                      id: item.id,
+                      start: Moment(item.start).format(format),
                       end: (item.end) ? Moment(item.end).format(format) : null,
                       content: item.content
                     };
@@ -267,14 +267,6 @@ define(
           };
 
 
-
-
-
-
-
-
-
-
           var params = $location.search();
 
           // TODO: Remove these ones too!
@@ -285,38 +277,38 @@ define(
               clients = Store('app').get('ClientGroups');
 
           $scope.data = {
-            teams:   {
-              list:    [],
+            teams: {
+              list: [],
               members: {},
-              tasks:   []
+              tasks: []
             },
             clients: {
-              list:    [],
+              list: [],
               members: {},
-              tasks:   []
+              tasks: []
             },
-            user:    [
+            user: [
               {
-                'count':     0,
-                'end':       1378681200,
+                'count': 0,
+                'end': 1378681200,
                 'recursive': true,
-                'start':     1378504800,
-                'text':      'com.ask-cs.State.Available',
-                'type':      'availability',
-                'wish':      0
+                'start': 1378504800,
+                'text': 'com.ask-cs.State.Available',
+                'type': 'availability',
+                'wish': 0
               },
               {
-                'count':     0,
-                'end':       1378850400,
+                'count': 0,
+                'end': 1378850400,
                 'recursive': true,
-                'start':     1378720800,
-                'text':      'com.ask-cs.State.Available',
-                'type':      'availability',
-                'wish':      0
+                'start': 1378720800,
+                'text': 'com.ask-cs.State.Available',
+                'type': 'availability',
+                'wish': 0
               }
             ],
             members: [],
-            synced:  Number(Date.today()),
+            synced: Number(Date.today()),
             periods: {
               start: Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
               end: Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
@@ -415,7 +407,7 @@ define(
                                '</div>';
 
                     var obj = {
-                      'head':  name,
+                      'head': name,
                       'memId': member.uuid
                     };
 
@@ -518,7 +510,7 @@ define(
               $rootScope.$broadcast(
                 'timeliner', {
                   start: startTime,
-                  end:   endTime
+                  end: endTime
                 });
             };
 
@@ -533,8 +525,8 @@ define(
                 'teamTaskQuery',
                 {
                   second: $scope.currentTeam,
-                  from:   startTime,
-                  to:     endTime
+                  from: startTime,
+                  to: endTime
                 }
               ).then(
                 function (tasks) { storeTask(tasks, startTime, endTime) },
@@ -555,8 +547,8 @@ define(
                 'clientGroupTasksQuery',
                 {
                   second: $scope.currentClientGroup,
-                  from:   startTime,
-                  to:     endTime
+                  from: startTime,
+                  to: endTime
                 },
                 null,
                 {
@@ -572,19 +564,17 @@ define(
           };
 
 
-
-
           $scope.self = this;
 
           $scope.current = {
-            layouts:  {
-              user:    true,
-              group:   false,
+            layouts: {
+              user: true,
+              group: false,
               members: false
             },
             day: Dater.current.today() + 1,
-            week:     Dater.current.week(),
-            month:    Dater.current.month(),
+            week: Dater.current.week(),
+            month: Dater.current.month(),
             division: 'all'
           };
 
@@ -597,37 +587,37 @@ define(
           var index_start = ((Dater.current.today() - 7) < 1 ) ? 1 : (Dater.current.today() - 7);
 
           $scope.__timeline = {
-            id:      'mainTimeline',
-            main:    true,
-            user:    {
-              id:   $rootScope.app.resources.uuid,
+            id: 'mainTimeline',
+            main: true,
+            user: {
+              id: $rootScope.app.resources.uuid,
               role: $rootScope.app.resources.role
             },
             current: $scope.current,
             options: {
               start: $scope.periods.days[index_start].last.day,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.day,
-              min:   $scope.periods.days[index_start].last.day,
-              max:   $scope.periods.days[Dater.current.today() + 7].last.day
+              end: $scope.periods.days[Dater.current.today() + 7].last.day,
+              min: $scope.periods.days[index_start].last.day,
+              max: $scope.periods.days[Dater.current.today() + 7].last.day
             },
-            range:   {
+            range: {
               start: $scope.periods.days[index_start].last.day,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.day
+              end: $scope.periods.days[Dater.current.today() + 7].last.day
             },
-            scope:   {
-              day:   false,
-              week:  true,
+            scope: {
+              day: false,
+              week: true,
               month: false
             },
-            config:  {
-              bar:        config.app.timeline.config.bar,
-              layouts:    config.app.timeline.config.layouts,
-              wishes:     config.app.timeline.config.wishes,
-              legenda:    {},
+            config: {
+              bar: config.app.timeline.config.bar,
+              layouts: config.app.timeline.config.layouts,
+              wishes: config.app.timeline.config.wishes,
+              legenda: {},
               legendarer: config.app.timeline.config.legendarer,
-              states:     config.app.timeline.config.states,
-              divisions:  config.app.timeline.config.divisions,
-              densities:  config.app.timeline.config.densities
+              states: config.app.timeline.config.states,
+              divisions: config.app.timeline.config.divisions,
+              densities: config.app.timeline.config.densities
             }
           };
 
@@ -635,9 +625,9 @@ define(
           {
             $scope.timeline.options = {
               start: $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-              end:   $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-              min:   $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
-              max:   $scope.periods.days[Dater.current.today() + 7].last.timeStamp
+              end: $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
+              min: $scope.periods.days[Dater.current.today() - 7].last.timeStamp,
+              max: $scope.periods.days[Dater.current.today() + 7].last.timeStamp
             };
           }
 
@@ -702,7 +692,6 @@ define(
               $scope.changeCurrent($scope.currentClientGroup);
             }
           };
-
 
 
         }

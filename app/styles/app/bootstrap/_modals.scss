@@ -12,7 +12,9 @@
   z-index: $zindexModalBackdrop;
   background-color: $black;
   // Fade for backdrop
-  &.fade { opacity: 0; }
+  &.fade {
+    opacity: 0;
+  }
 }
 
 .modal-backdrop,
@@ -30,10 +32,10 @@
   margin-left: -280px;
   background-color: $white;
   border: 1px solid #999;
-  border: 1px solid rgba(0,0,0,.3);
+  border: 1px solid rgba(0, 0, 0, .3);
   *border: 1px solid #999; /* IE6-7 */
   @include border-radius(6px);
-  @include box-shadow(0 3px 7px rgba(0,0,0,0.3));
+  @include box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
   @include background-clip(padding-box);
   // Remove focus outline from opened modal
   outline: none;
@@ -44,15 +46,19 @@
   }
   &.fade.in {
     top: 10%;
-    padding:20px;}
+    padding: 20px;
+  }
   hr {
     clear: both;
   }
 }
+
 .modal-header {
   padding-bottom: 10px;
   // Close icon
-  .close { margin-top: 2px; }
+  .close {
+    margin-top: 2px;
+  }
   // Heading
   h3 {
     margin: 0;
@@ -74,10 +80,11 @@
   table {
     width: 100%;
     th, tr {
-      text-align:left;
+      text-align: left;
     }
   }
 }
+
 // Remove bottom margin if need be
 .modal-form {
   margin-bottom: 0;

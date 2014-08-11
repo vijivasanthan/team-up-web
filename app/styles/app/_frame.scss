@@ -4,6 +4,7 @@
 .navbar {
   border: none;
 }
+
 .navbar-brand {
   z-index: 100;
   margin-top: 0px;
@@ -24,13 +25,11 @@
   &:focus {
     text-decoration: none;
   }
- }
-
+}
 
 .navbar-btn {
   margin-bottom: 0px;
 }
-
 
 /* Wrapper for page content to push down footer */
 #wrap {
@@ -52,12 +51,10 @@
   }
 }
 
-
 /* Set the fixed height of the footer here */
 #push {
   height: 60px;
 }
-
 
 .header {
   display: table;
@@ -75,7 +72,6 @@
     margin-top: 5px;
   }
 }
- 
 
 #download {
   margin: 5px auto;
@@ -90,7 +86,7 @@
 
   span.entypo {
     position: relative;
-    top:-10px;
+    top: -10px;
     margin-right: 5px;
     /* height: 30px; */
     /* text-shadow: 1px 1px 0 black; */
@@ -106,8 +102,6 @@
     font-size: 18px;
   }
 }
-
-
 
 #footer {
   position: fixed;
@@ -130,12 +124,12 @@
   }
 
   p.muted {
-    float:left;
+    float: left;
     margin-top: 6px;
 
     img {
       margin-right: 5px;
-/*      height: 20px;*/
+      /*      height: 20px;*/
     }
   }
 
@@ -160,7 +154,6 @@
     }
   }
 }
-
 
 #download-footer {
   button {
@@ -190,7 +183,6 @@
   }
 }
 
-
 .page {
   overflow: hidden;
   /* margin-top: 15px; */
@@ -203,7 +195,6 @@
     padding: 20px;
   }
 }
-
 
 section {
   position: relative;
@@ -226,16 +217,15 @@ section {
 .page-header.timeline {
   width: 100%;
 }
+
 .page-header {
-  margin-top:14px;
+  margin-top: 14px;
   overflow: hidden;
   border-bottom: none;
   padding: 0;
   position: absolute;
 
   //padding-right: 40px;
-
-
 
   h2 {
     padding-top: 10px;
@@ -249,7 +239,6 @@ section {
     float: left;
   }
 
-
   h4 {
     color: $brown;
   }
@@ -262,10 +251,9 @@ section {
     }
     select {
       display: block;
-      margin-top:4px;
+      margin-top: 4px;
     }
   }
-
 
   .btn-group {
     margin-left: 15px;

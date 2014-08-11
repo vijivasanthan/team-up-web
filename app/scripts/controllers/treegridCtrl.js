@@ -31,8 +31,8 @@ define(
               var teamsLocal = Store('app').get('teams'),
                   connections = {
                     teamClients: {},
-                    teams:       {},
-                    clients:     {}
+                    teams: {},
+                    clients: {}
                   },
                   members = [],
                   memberGlobalIds = [];
@@ -48,7 +48,7 @@ define(
                 {
                   data.teams.push(
                     {
-                      'id':   team.uuid,
+                      'id': team.uuid,
                       'name': team.name
                     }
                   );
@@ -233,14 +233,14 @@ define(
 
               return {
                 data: data,
-                con:  connections
+                con: connections
               };
             }
             else
             {
               return {
                 data: {},
-                con:  {}
+                con: {}
               };
             }
           }
@@ -253,7 +253,7 @@ define(
           var connections = localData.con;
 
           $scope.data = {
-            left:  [],
+            left: [],
             right: []
           };
 
@@ -261,8 +261,8 @@ define(
           {
             $scope.views = {
               teamClients: false,
-              teams:       false,
-              clients:     false
+              teams: false,
+              clients: false
             };
 
             $scope.views[hash] = true;
@@ -301,11 +301,11 @@ define(
           $scope.setViewTo('teamClients');
 
           $scope.connector = {
-            data:        connections,
+            data: connections,
             connections: {
               teamClients: [],
-              teams:       {},
-              clients:     {}
+              teams: {},
+              clients: {}
             },
             teamClients: function ()
             {
@@ -317,7 +317,7 @@ define(
                 {
                   var connection = {
                     sourceItems: [],
-                    targetItem:  {}
+                    targetItem: {}
                   };
 
                   angular.forEach(
@@ -372,7 +372,7 @@ define(
                           {
                             population[key].push(
                               {
-                                _id:  node.id,
+                                _id: node.id,
                                 name: node.name,
                                 _parent: section + key
                               }
@@ -418,7 +418,7 @@ define(
                   grid,
                   '1:1',
                   {
-                    left:  data.groups,
+                    left: data.groups,
                     right: data.teams
                   },
                   $scope.connector.teamClients()
@@ -433,7 +433,7 @@ define(
                   grid,
                   '1:n',
                   {
-                    left:  data.members,
+                    left: data.members,
                     right: data.teams
                   },
                   $scope.connector.teams()
@@ -447,7 +447,7 @@ define(
                   grid,
                   '1:n',
                   {
-                    left:  data.clients,
+                    left: data.clients,
                     right: data.groups
                   },
                   $scope.connector.clients()

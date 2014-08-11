@@ -1,4 +1,5 @@
-#timeline {}
+#timeline {
+}
 
 div.timeline-frame {
   border: 1px solid #ddd;
@@ -49,9 +50,11 @@ div.timeline-axis-text {
   font-size: 11px;
 }
 
-div.timeline-axis-text-minor {}
+div.timeline-axis-text-minor {
+}
 
-div.timeline-axis-text-major {}
+div.timeline-axis-text-major {
+}
 
 div.timeline-event {
   display: inline-block;
@@ -244,7 +247,7 @@ div.timeline-event-range {
   position: fixed;
   z-index: 10000;
   form {
-//    border: 1px solid $graytu;
+    //    border: 1px solid $graytu;
   }
 }
 

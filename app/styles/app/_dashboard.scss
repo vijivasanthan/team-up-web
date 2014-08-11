@@ -54,7 +54,7 @@
       padding: 0;
 
       li {
-        border-bottom:1px solid #d3d1c4;
+        border-bottom: 1px solid #d3d1c4;
         padding: 10px;
         margin: 0;
         overflow: hidden;
@@ -102,8 +102,8 @@
               width: 80px;
             }
 
-            td.last { 
-              width: 100%;              
+            td.last {
+              width: 100%;
             }
           }
         }
@@ -170,18 +170,18 @@
             overflow: hidden;
             margin-bottom: 10px;
 
-            .icon {   
+            .icon {
               margin-right: 20px;
               float: left;
-                 
+
               .scoreboard {
                 display: block;
                 min-width: 75px;
                 height: 48px;
                 text-align: center;
                 -webkit-border-radius: 5px;
-                   -moz-border-radius: 5px;
-                        border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
                 color: #fff;
                 margin-bottom: 5px;
                 padding-top: 27px;
@@ -198,7 +198,7 @@
                   float: left;
                   font-size: 46px;
                   font-weight: normal;
-                  margin-right: 4px;                  
+                  margin-right: 4px;
                 }
 
                 .wish {
@@ -210,15 +210,15 @@
               }
 
               .more {
-                background-color: #415e6b;  
+                background-color: #415e6b;
               }
 
               .even {
-                background-color: #ba6a24;  
+                background-color: #ba6a24;
               }
 
               .less {
-                background-color: #a0a0a0;  
+                background-color: #a0a0a0;
               }
 
               .pie {
@@ -267,8 +267,8 @@
                     }
 
                     h6 {
-                      margin-top: 0; 
-                      margin-bottom: 0;  
+                      margin-top: 0;
+                      margin-bottom: 0;
                     }
 
                     .badge {
@@ -277,14 +277,14 @@
                   }
                 }
               }
-              
+
             }
 
             .btn-group .dropdown-menu {
               z-index: 2000;
             }
           }
-          
+
         }
 
         footer {
@@ -324,11 +324,11 @@
 
                 li {
                   padding: 5px;
-                  
+
                   &:first-child {
                     border-top: 1px solid #ddd;
                   }
-                  
+
                   &:last-child {
                     border-bottom: 1px solid #ddd;
                   }
@@ -349,18 +349,16 @@
                 }
               }
 
-
             }
           }
         }
 
       }
     }
-    
-  }
-  
-}
 
+  }
+
+}
 
 #widget-pies {
   padding-bottom: 0;
@@ -371,7 +369,7 @@
     list-style: none;
     li {
       margin: 3px auto;
-        
+
       label {
         font-weight: normal;
         font-size: 13px;
@@ -385,7 +383,7 @@
   }
 
   hr {
-    margin: 5px auto 10px auto;  
+    margin: 5px auto 10px auto;
   }
 
   .actions {

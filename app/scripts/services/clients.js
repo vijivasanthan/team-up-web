@@ -115,7 +115,7 @@ define(
                   }
 
                 },
-                error:   function (error) { deferred.resolve({ error: error }) }
+                error: function (error) { deferred.resolve({ error: error }) }
               }
             );
 
@@ -216,8 +216,8 @@ define(
                     //   );
                     // }
 
-                    var routeParam = {uuid : clientGroupId};
-                    queryCalls.push(ClientsService.prototype.query(false,routeParam));
+                    var routeParam = {uuid: clientGroupId};
+                    queryCalls.push(ClientsService.prototype.query(false, routeParam));
                   });
 
                 $q.all(queryCalls)

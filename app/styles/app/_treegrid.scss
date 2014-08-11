@@ -1,13 +1,13 @@
 .treegrid-container {
   .row-fluid {
-    hr {margin:20px 0 0;}
+    hr {
+      margin: 20px 0 0;
+    }
   }
   hr {
-    margin: 0 0 20px;}
+    margin: 0 0 20px;
+  }
 }
-
-
-
 
 .treegrid-frame {
   color: #1A1A1A;
@@ -36,10 +36,8 @@
 }
 
 .treegrid-item:nth-child(even) {
-   //background-color: $tableBackgroundAccent;
+  //background-color: $tableBackgroundAccent;
 }
-
-
 
 .treegrid-header, .treegrid-item {
   // padding: 8px;
@@ -49,23 +47,24 @@
   // border-top: 1px solid $tableBorder;
 }
 
-#teamClients_right{
-  .treegrid-item{
+#teamClients_right {
+  .treegrid-item {
     div:nth-child(2) {
-      color:$orange;
+      color: $orange;
       font-size: 12px;
     }
-    .treegrid-actions {    //copied from .btn-primary and .btn-mini
+    .treegrid-actions {
+      //copied from .btn-primary and .btn-mini
       margin-top: 3px;
       a {
         background: $orange url("../images/unlink.png") no-repeat center;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);
-        height:30px;
+        height: 30px;
         width: 30px;
         padding: 0;
-        border:none;
+        border: none;
         text-indent: -9999px;
         display: block;
       }
@@ -74,19 +73,20 @@
   }
 }
 
-#teams_right, #clients_right{
+#teams_right, #clients_right {
   .treegrid-item {
-    .treegrid-actions {    //copied from .btn-primary and .btn-mini
+    .treegrid-actions {
+      //copied from .btn-primary and .btn-mini
       margin-top: 4px;
       a {
         background: $orange url("../images/unlink.png") no-repeat center;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);
-        height:30px;
+        height: 30px;
         width: 30px;
         padding: 0;
-        border:none;
+        border: none;
         text-indent: -9999px;
         display: block;
       }
@@ -95,33 +95,30 @@
   }
 }
 
-
 .treegrid-item:hover {
   cursor: pointer;
 }
 
 #teamClients_left, #teams_left, #clients_left {
-  .treegrid-item{
+  .treegrid-item {
     background-image: url("../images/dragIcon.png");
     background-repeat: no-repeat;
     background-position: 10px;
-    &:hover{
+    &:hover {
       cursor: move;
     }
   }
 }
 
 #teams_right, #clients_right {
-  .treegrid-item{
+  .treegrid-item {
     .treegrid-fold, .treegrid-unfold {
       background-repeat: no-repeat;
       margin-top: 10px;
-      margin-left:8px;
+      margin-left: 8px;
     }
   }
 }
-
-
 
 .treegrid-item-selected {
   background-color: $tableBackgroundAccent;
@@ -140,7 +137,6 @@
   background-color: #F5F5F5;
   border: 1px dashed gray;
 }
-
 
 .treegrid-item-dragbefore {
   border-top-color: red;
@@ -196,7 +192,8 @@
   /*
     background-color: gray;
     opacity: 0.1;
-    filter: alpha(opacity=10);*/ /* For IE8 and earlier */
+    filter: alpha(opacity=10);*/
+  /* For IE8 and earlier */
   width: 100%;
   height: 100%;
 }
@@ -231,6 +228,7 @@
   margin-left: 5px;
   color: #97B0F8;
 }
+
 .treegrid-action-link:hover {
   color: red;
 }
@@ -248,8 +246,6 @@
   background-color: #7F7F7F;
 }
 */
-
-
 
 #files, #folders {
   width: 100%;

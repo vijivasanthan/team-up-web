@@ -6,7 +6,15 @@ define(
 
     controllers.controller(
       'planboard', [
-        '$rootScope', '$scope', '$location', 'Dater', 'Store', 'Teams', 'Clients', 'TeamUp', 'Session',
+        '$rootScope',
+        '$scope',
+        '$location',
+        'Dater',
+        'Store',
+        'Teams',
+        'Clients',
+        'TeamUp',
+        'Session',
         function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session)
         {
           var params = $location.search();
@@ -156,7 +164,7 @@ define(
               }
             }
           );
-          
+
           // switch agenda (timeline) between Team view or Client view 
           function switchData ()
           {

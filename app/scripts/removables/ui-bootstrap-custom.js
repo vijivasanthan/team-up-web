@@ -14,15 +14,15 @@ angular.module('ui.bootstrap.modal', [])
         var stack = [];
 
         return {
-          add:       function (key, value)
+          add: function (key, value)
           {
             stack.push(
               {
-                key:   key,
+                key: key,
                 value: value
               });
           },
-          get:       function (key)
+          get: function (key)
           {
             for (var i = 0; i < stack.length; i ++)
             {
@@ -32,7 +32,7 @@ angular.module('ui.bootstrap.modal', [])
               }
             }
           },
-          keys:      function ()
+          keys: function ()
           {
             var keys = [];
             for (var i = 0; i < stack.length; i ++)
@@ -41,11 +41,11 @@ angular.module('ui.bootstrap.modal', [])
             }
             return keys;
           },
-          top:       function ()
+          top: function ()
           {
             return stack[stack.length - 1];
           },
-          remove:    function (key)
+          remove: function (key)
           {
             var idx = - 1;
             for (var i = 0; i < stack.length; i ++)
@@ -62,7 +62,7 @@ angular.module('ui.bootstrap.modal', [])
           {
             return stack.splice(stack.length - 1, 1)[0];
           },
-          length:    function ()
+          length: function ()
           {
             return stack.length;
           }
@@ -79,10 +79,10 @@ angular.module('ui.bootstrap.modal', [])
     '$modalStack', '$timeout', function ($modalStack, $timeout)
     {
       return {
-        restrict:    'EA',
-        replace:     true,
+        restrict: 'EA',
+        replace: true,
         templateUrl: 'vendors/angular-ui-bootstrap/template/modal/backdrop.html',
-        link:        function (scope, element, attrs)
+        link: function (scope, element, attrs)
         {
 
           //trigger CSS transitions
@@ -112,14 +112,14 @@ angular.module('ui.bootstrap.modal', [])
     '$timeout', function ($timeout)
     {
       return {
-        restrict:    'EA',
-        scope:       {
+        restrict: 'EA',
+        scope: {
           index: '@'
         },
-        replace:     true,
-        transclude:  true,
+        replace: true,
+        transclude: true,
         templateUrl: 'vendors/angular-ui-bootstrap/template/modal/window.html',
-        link:        function (scope, element, attrs)
+        link: function (scope, element, attrs)
         {
           scope.windowClass = attrs.windowClass || '';
 
@@ -212,10 +212,10 @@ angular.module('ui.bootstrap.modal', [])
 
         openedWindows.add(
           modalInstance, {
-            deferred:   modal.deferred,
+            deferred: modal.deferred,
             modalScope: modal.scope,
-            backdrop:   modal.backdrop,
-            keyboard:   modal.keyboard
+            backdrop: modal.backdrop,
+            keyboard: modal.keyboard
           });
 
         var angularDomEl = angular.element('<div modal-window></div>');
@@ -273,7 +273,7 @@ angular.module('ui.bootstrap.modal', [])
         backdrop: true, //can be also false or 'static'
         keyboard: true
       },
-      $get:    [
+      $get: [
         '$injector', '$rootScope', '$q', '$http', '$templateCache', '$controller', '$modalStack',
         function ($injector, $rootScope, $q, $http, $templateCache, $controller, $modalStack)
         {
@@ -312,9 +312,9 @@ angular.module('ui.bootstrap.modal', [])
 
             //prepare an instance of a modal to be injected into controllers and returned to a caller
             var modalInstance = {
-              result:  modalResultDeferred.promise,
-              opened:  modalOpenedDeferred.promise,
-              close:   function (result)
+              result: modalResultDeferred.promise,
+              opened: modalOpenedDeferred.promise,
+              close: function (result)
               {
                 $modalStack.close(modalInstance, result);
               },
@@ -365,11 +365,11 @@ angular.module('ui.bootstrap.modal', [])
 
                 $modalStack.open(
                   modalInstance, {
-                    scope:       modalScope,
-                    deferred:    modalResultDeferred,
-                    content:     tplAndVars[0],
-                    backdrop:    modalOptions.backdrop,
-                    keyboard:    modalOptions.keyboard,
+                    scope: modalScope,
+                    deferred: modalResultDeferred,
+                    content: tplAndVars[0],
+                    backdrop: modalOptions.backdrop,
+                    keyboard: modalOptions.keyboard,
                     windowClass: modalOptions.windowClass
                   });
 

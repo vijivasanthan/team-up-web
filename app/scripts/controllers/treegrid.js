@@ -12,22 +12,22 @@ define(
         {
           $scope.treeGrid = {
 
-            options:     {
+            options: {
               grid: {
-                width:  'auto',
+                width: 'auto',
                 height: null,
-                items:  {
+                items: {
                   minHeight: 40
                 }
               }
             },
-            type:        null,
-            grid:        null,
-            data:        {},
-            processed:   {},
-            grids:       {},
-            stores:      {},
-            caches:      {},
+            type: null,
+            grid: null,
+            data: {},
+            processed: {},
+            grids: {},
+            stores: {},
+            caches: {},
             connections: {},
 
             areas: function ()
@@ -139,7 +139,7 @@ define(
                     items[i]._actions = [
                       {
                         event: 'remove',
-                        text:  'remove'
+                        text: 'remove'
                       }
                     ];
 
@@ -156,7 +156,7 @@ define(
                     callback(
                       {
                         'totalItems': this.filteredData.length,
-                        'items':      items
+                        'items': items
                       }
                     );
                   }
@@ -172,7 +172,7 @@ define(
                 if (index == - 1)
                 {
                   errback('Error: targetItem not found in data');
-                  
+
                   return;
                 }
 
@@ -186,21 +186,21 @@ define(
                 }
 
                 this.data[index] = {
-                  '_id':      targetItem._id,
-                  'name':     targetItem.name,
-                  'links':    names.join(', '),
-                  '_ids':     ids.join(', '),
+                  '_id': targetItem._id,
+                  'name': targetItem.name,
+                  'links': names.join(', '),
+                  '_ids': ids.join(', '),
                   '_actions': [
                     {
                       'event': 'unlink',
-                      'text':  'unlink'
+                      'text': 'unlink'
                     }
                   ]
                 };
 
                 callback(
                   {
-                    'items':      [targetItem],
+                    'items': [targetItem],
                     'totalItems': this.data.length
                   }
                 );
@@ -218,7 +218,7 @@ define(
                 }
 
                 this.data[index] = {
-                  _id:  item._id,
+                  _id: item._id,
                   name: item.name
                 };
 
@@ -254,7 +254,7 @@ define(
                       connection._actions = [
                         {
                           event: 'remove',
-                          text:  'remove'
+                          text: 'remove'
                         }
                       ];
 
@@ -324,14 +324,14 @@ define(
                             }
 
                             _this.stores['teamClients_right'].data[index] = {
-                              '_id':      connection.targetItem.id,
-                              'name':     connection.targetItem.name,
-                              'links':    names.join(', '),
-                              '_ids':     ids.join(', '),
+                              '_id': connection.targetItem.id,
+                              'name': connection.targetItem.name,
+                              'links': names.join(', '),
+                              '_ids': ids.join(', '),
                               '_actions': [
                                 {
                                   'event': 'unlink',
-                                  'text':  'unlink'
+                                  'text': 'unlink'
                                 }
                               ]
                             };
@@ -368,8 +368,8 @@ define(
                   var fid = _this.grid + '_' + id + '_' + node.id;
 
                   var record = {
-                    name:    node.name,
-                    _id:     node.id,
+                    name: node.name,
+                    _id: node.id,
                     _parent: fid
                   };
 
@@ -422,7 +422,7 @@ define(
             configure: function (id)
             {
               var options = {
-                showHeader:   false,
+                showHeader: false,
                 dataTransfer: {}
               };
 
@@ -450,7 +450,7 @@ define(
                 case '1:n':
                   options.dataTransfer = {
                     allowedEffect: 'copy',
-                    dropEffect:    'copy'
+                    dropEffect: 'copy'
                   };
                   break;
               }

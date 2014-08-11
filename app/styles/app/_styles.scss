@@ -7,17 +7,15 @@ ng\:form {
   display: block;
 }
 
-html,body {
-  margin:0;
+html, body {
+  margin: 0;
   height: 100%;
   min-height: 100%;
 }
 
-
 /*body {
   background: url(../images/bg.jpg) repeat;
 }*/
-
 
 a {
   &:hover {
@@ -25,34 +23,31 @@ a {
   }
 }
 
-
 dl {
   dt {
-    
+
   }
   dd {
     margin-bottom: 15px;
   }
 }
 
-
-.titleIcon{
+.titleIcon {
   margin-right: 20px;
   display: inline-block;
 }
 
 .left-border-fix {
-  width: 1px; 
-  border-left: 1px solid red; 
-  z-index: 10000; 
-/*  position: absolute;*/
+  width: 1px;
+  border-left: 1px solid red;
+  z-index: 10000;
+  /*  position: absolute;*/
   top: 0;
   left: 0;
   float: left;
   display: block;
   margin-left: -1px;
 }
-
 
 .greetings {
   margin: 25px 0;
@@ -68,36 +63,30 @@ dl {
   height: 400px
 }
 
-
 .label-natural,
 .badge-natural {
   background-color: #433c2d;
 }
-
 
 .label-natural[href],
 .badge-natural[href] {
   background-color: #342f23;
 }
 
-
 .label-more,
 .badge-more {
   background-color: #415e6b;
 }
-
 
 .label-less,
 .badge-less {
   background-color: #a0a0a0;
 }
 
-
 .label-even,
 .badge-even {
   background-color: #ba6a24;
 }
-
 
 .label-inset,
 .badge-inset {
@@ -105,13 +94,11 @@ dl {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.30);
 }
 
-
 .navbar {
   .badge-success {
     background-color: $btnSuccessBackground;
   }
 }
-
 
 .modal-body {
   ul {
@@ -123,7 +110,7 @@ dl {
 
       label {
         font-weight: normal;
-        
+
         input[type=checkbox] {
           margin: -2px 3px 0 2px;
         }
@@ -131,7 +118,6 @@ dl {
     }
   }
 }
-
 
 #versions {
 
@@ -168,7 +154,6 @@ dl {
   }
 }
 
-
 #groups-wish {
   form {
     margin-top: 15px;
@@ -182,7 +167,6 @@ dl {
     }
   }
 }
-
 
 #mobile-status-bar {
   position: fixed;
@@ -205,11 +189,9 @@ dl {
   }
 }
 
-
 // .navbar, #footer, #notification, #mobile-status-bar {
 //   display: none;
 // }
-
 
 #scheaduler-pane {
   margin-top: 15px;
@@ -285,16 +267,14 @@ dl {
   }
 }
 
-
-
 .scheadule-icons {
-  width: 48px; 
-  height: 24px; 
+  width: 48px;
+  height: 24px;
   overflow: hidden;
 
   div {
     float: left;
-    display:inline;
+    display: inline;
     width: 24px;
     height: 24px;
 

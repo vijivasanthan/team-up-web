@@ -2,7 +2,6 @@
 // Tables
 // --------------------------------------------------
 
-
 // BASE TABLES
 // -----------------
 
@@ -66,8 +65,6 @@ table {
   }
 }
 
-
-
 // CONDENSED TABLE W/ HALF PADDING
 // -------------------------------
 
@@ -77,7 +74,6 @@ table {
     padding: 4px 5px;
   }
 }
-
 
 // BORDERED VERSION
 // ----------------
@@ -157,9 +153,6 @@ table {
 
 }
 
-
-
-
 // ZEBRA-STRIPING
 // --------------
 
@@ -173,7 +166,6 @@ table {
   }
 }
 
-
 // HOVER EFFECT
 // ------------
 // Placed here since it has to come after the potential zebra striping
@@ -185,7 +177,6 @@ table {
     }
   }
 }
-
 
 // TABLE CELL SIZING
 // -----------------
@@ -204,11 +195,11 @@ table th[class*="span"],
 .table td,
 .table th {
   @for $i from 1 through 12 {
-    &.span#{$i} { @include tableColumns($i); }
+    &.span#{$i} {
+      @include tableColumns($i);
+    }
   }
 }
-
-
 
 // TABLE BACKGROUNDS
 // -----------------
@@ -244,8 +235,6 @@ table th[class*="span"],
     background-color: darken($infoBackground, 5%);
   }
 }
-
-
 
 //Description list
 dl {

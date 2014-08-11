@@ -13,7 +13,7 @@ define(
           return {
             current: {
               today: function () { return Date.today().getDayOfYear() + 1 },
-              week:  function () { return Date.today().getWeekOfYear() },
+              week: function () { return Date.today().getWeekOfYear() },
               month: function () { return new Date().getMonth() + 1 }
             },
 
@@ -55,12 +55,12 @@ define(
                 var firstDay = new Date(year, i).moveToFirstDayOfMonth(),
                     lastDay = new Date(year, i).moveToLastDayOfMonth(),
                     month = {
-                      first:     {
-                        day:       firstDay,
+                      first: {
+                        day: firstDay,
                         timeStamp: firstDay.getTime()
                       },
-                      last:      {
-                        day:       lastDay,
+                      last: {
+                        day: lastDay,
                         timeStamp: lastDay.getTime()
                       },
                       totalDays: Date.getDaysInMonth(year, i)
@@ -104,11 +104,11 @@ define(
               {
                 weeks[i + 1] = {
                   first: {
-                    day:       nweeks[i],
+                    day: nweeks[i],
                     timeStamp: new Date(nweeks[i]).getTime()
                   },
-                  last:  {
-                    day:       nweeks[i + 1],
+                  last: {
+                    day: nweeks[i + 1],
                     timeStamp: new Date(nweeks[i + 1]).getTime()
                   }
                 }
@@ -146,11 +146,11 @@ define(
               {
                 days[i + 1] = {
                   first: {
-                    day:       ndays[i],
+                    day: ndays[i],
                     timeStamp: new Date(ndays[i]).getTime()
                   },
-                  last:  {
-                    day:       ndays[i + 1],
+                  last: {
+                    day: ndays[i + 1],
                     timeStamp: new Date(ndays[i + 1]).getTime()
                   }
                 };
@@ -174,11 +174,12 @@ define(
             {
               var periods = Store('app').get('periods') || '{}';
 
-              Store('app').save('periods', {
-                months: this.getMonthTimeStamps(),
-                weeks:  this.getWeekTimeStamps(),
-                days:   this.getDayTimeStamps()
-              });
+              Store('app').save(
+                'periods', {
+                  months: this.getMonthTimeStamps(),
+                  weeks: this.getWeekTimeStamps(),
+                  days: this.getDayTimeStamps()
+                });
             },
 
             getPeriods: function ()

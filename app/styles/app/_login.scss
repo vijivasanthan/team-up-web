@@ -14,7 +14,7 @@
   border-left: 32px solid transparent;
   border-right: 32px solid transparent;
   border-bottom: 15px solid $offwhite;
-  position:absolute;
+  position: absolute;
   left: 50%;
   margin: -15px 0 0 -80px;
 }
@@ -41,7 +41,6 @@
   }
 }
 
-
 /**
  * Box style
  */
@@ -53,7 +52,7 @@
   }
 
   p {
-    margin-top:16px;
+    margin-top: 16px;
   }
 
   form {
@@ -115,20 +114,19 @@
 }
 
 #separator {
-  margin-right:8px;
+  margin-right: 8px;
   margin-left: 3px;
   color: $brown;
 }
 
 p.loginp {
-  float:left;
+  float: left;
 
   a {
     color: $turq;
     margin-right: 5px;
   }
 }
-
 
 #demo_users {
   position: absolute;
@@ -138,9 +136,9 @@ p.loginp {
   ul {
     margin: 0;
     padding: 0;
-    list-style-type: none; 
+    list-style-type: none;
   }
 
-  li {  
+  li {
   }
 }

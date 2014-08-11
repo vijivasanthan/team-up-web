@@ -2,7 +2,6 @@ label {
   font-weight: bold;
 }
 
-
 .form-toggled {
   h4 {
     margin: 0;
@@ -15,10 +14,9 @@ label {
   }
 }
 
-
 .dater {
   margin-right: 15px;
-  
+
   input[type=text] {
     width: 120px;
   }
@@ -29,7 +27,6 @@ label {
   }
 }
 
-
 .dater-mobile {
   input[type=datetime] {
     width: 140px;
@@ -38,9 +35,8 @@ label {
   }
 }
 
-
 .timer {
-  margin-right: 5px;  
+  margin-right: 5px;
 
   input[type=text] {
     width: 80px;
@@ -51,7 +47,6 @@ label {
     margin: -2px 0 0 -24px;
   }
 }
-
 
 .form-elements-group {
   display: inline;
@@ -78,11 +73,9 @@ label {
   margin-right: 0;
 }
 
-
 .form-elements-actions {
   display: inline;
 }
-
 
 #form-open {
   border-top: 1px solid #c6c3b6;
@@ -98,7 +91,6 @@ label {
     }
   }
 }
-
 
 #inline-form {
   form {
@@ -117,12 +109,12 @@ label {
     }
 
     .control-group {
-      label { 
+      label {
         display: inline;
         margin: 0;
         margin-right: 10px;
         padding: 0;
-      }      
+      }
     }
 
     input[type=text] {
@@ -134,7 +126,6 @@ label {
     }
   }
 }
-
 
 .control-group {
   margin-bottom: 15px;
@@ -161,7 +152,6 @@ input[type="color"],
   height: auto;
 }
 
-
 /*----------REPORTS-----------*/
 
 .modal-header {
@@ -169,6 +159,7 @@ input[type="color"],
     display: inline;
   }
 }
+
 .modal-body {
   table {
     width: 100%;

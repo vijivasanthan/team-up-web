@@ -17,7 +17,7 @@ define(
     'angular-google-maps',
     // 'angular-dragdrop',
     // 'ui-sortable',        
-    'ui.bootstrap.pagination'    
+    'ui.bootstrap.pagination'
   ],
   function (angular)
   {

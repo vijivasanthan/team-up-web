@@ -6,7 +6,16 @@ define(
 
     controllers.controller(
       'tasksCtrl', [
-        '$rootScope', '$scope', '$location', 'Store', 'Teams', 'Clients', 'Dater', 'TeamUp', '$filter', '$route',
+        '$rootScope',
+        '$scope',
+        '$location',
+        'Store',
+        'Teams',
+        'Clients',
+        'Dater',
+        'TeamUp',
+        '$filter',
+        '$route',
         function ($rootScope, $scope, $location, Store, Teams, Clients, Dater, TeamUp, $filter, $route)
         {
           $rootScope.fixStyles();

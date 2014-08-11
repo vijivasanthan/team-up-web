@@ -20,43 +20,43 @@ define(
             {
               case 'day':
                 $scope.timeline.scope = {
-                  day:   true,
-                  week:  false,
+                  day: true,
+                  week: false,
                   month: false
                 };
 
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end:   $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
                   });
                 break;
 
               case 'week':
                 $scope.timeline.scope = {
-                  day:   false,
-                  week:  true,
+                  day: false,
+                  week: true,
                   month: false
                 };
 
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end:   $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
                   });
                 break;
 
               case 'month':
                 $scope.timeline.scope = {
-                  day:   false,
-                  week:  false,
+                  day: false,
+                  week: false,
                   month: true
                 };
 
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end:   $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
                   });
                 break;
             }
@@ -73,7 +73,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end:   $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
                   });
               }
             }
@@ -86,7 +86,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end:   $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
                   });
               }
             }
@@ -99,7 +99,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end:   $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
                   });
               }
             }
@@ -116,7 +116,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end:   $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
                   });
               }
             }
@@ -129,7 +129,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end:   $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
                   });
               }
             }
@@ -142,7 +142,7 @@ define(
                 $scope.timeliner.load(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end:   $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
                   });
               }
             }
@@ -155,12 +155,12 @@ define(
               $scope.timeliner.load(
                 {
                   start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,
-                  end:   $scope.periods.weeks[new Date().getWeek()].last.timeStamp
+                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp
                 });
 
               $scope.timeline.range = {
                 start: $scope.periods.weeks[new Date().getWeek()].first.day,
-                end:   $scope.periods.weeks[new Date().getWeek()].last.day
+                end: $scope.periods.weeks[new Date().getWeek()].last.day
               };
             }
           };
@@ -174,13 +174,13 @@ define(
               $scope.timeliner.load(
                 {
                   start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end:   $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
                 });
             }
 
             $scope.timeline.range = {
               start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end:   $scope.periods.weeks[$scope.timeline.current.week].last.day
+              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
             };
           };
 
@@ -193,13 +193,13 @@ define(
               $scope.timeliner.load(
                 {
                   start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end:   $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
                 });
             }
 
             $scope.timeline.range = {
               start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end:   $scope.periods.weeks[$scope.timeline.current.week].last.day
+              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
             };
           };
 

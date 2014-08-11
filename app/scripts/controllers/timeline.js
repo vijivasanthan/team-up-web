@@ -567,58 +567,75 @@ define(
           };
 
           // refresh myTasks and alltasks 
-          $scope.refreshTasks = function (taskId,action){
-              
-              // remove the task item from the 
-              var deleteTask = function(tasks,uuid){
-                  var i = 0 ;
-                  for(;i < tasks.length;i++){
-                    if(uuid == tasks[i].uuid){
-                       tasks.splice(i,1);
-                       i--;
+          $scope.refreshTasks = function (taskId, action)
+          {
+
+            // remove the task item from the
+            var deleteTask = function (tasks, uuid)
+            {
+              var i = 0;
+              for (; i < tasks.length; i ++)
+              {
+                if (uuid == tasks[i].uuid)
+                {
+                  tasks.splice(i, 1);
+                  i --;
+                }
+              }
+              return tasks;
+            }
+
+            TeamUp._(
+              'taskById',
+              {second: taskId},
+              null
+            ).then(
+              function (result)
+              {
+                var allTasks = Store('app').get('allTasks');
+                var myTasks = Store('app').get('myTasks');
+
+                if (action == 'add' || action == 'update')
+                {
+                  if (result.error)
+                  {
+                    $rootScope.notifier.error(result.error);
+                  }
+                  else
+                  {
+                    if (! allTasks.length)
+                    {
+                      allTasks = [];
+                    }
+                    if (action == 'update')
+                    {
+                      allTasks = deleteTask(allTasks, result.uuid);
+                    }
+                    allTasks.push(result);
+                    if (result.assignedTeamMemberUuid == $rootScope.app.resources.uuid)
+                    {
+                      if (! myTasks.length)
+                      {
+                        myTasks = [];
+                      }
+                      if (action == 'update')
+                      {
+                        myTasks = deleteTask(myTasks, result.uuid);
+                      }
+                      myTasks.push(result);
                     }
                   }
-                  return tasks;
-              }
-              
-              TeamUp._(
-                'taskById',
-                {second : taskId},
-                null
-              ).then(function(result){
-                  var allTasks = Store('app').get('allTasks');
-                  var myTasks = Store('app').get('myTasks'); 
+                }
+                else if (action == 'delete')
+                {
+                  allTasks = deleteTask(allTasks, result.uuid);
+                  myTasks = deleteTask(myTasks, result.uuid);
+                }
 
-                  if(action == 'add' || action == 'update'){                  
-                      if(result.error){
-                          $rootScope.notifier.error(result.error);
-                      }else{
-                          if(!allTasks.length){
-                              allTasks = [];
-                          }
-                          if(action == 'update'){
-                              allTasks = deleteTask(allTasks,result.uuid);
-                          }
-                          allTasks.push(result);
-                          if(result.assignedTeamMemberUuid == $rootScope.app.resources.uuid){
-                              if(!myTasks.length){
-                                  myTasks = [];
-                              }
-                              if(action == 'update'){
-                                  myTasks = deleteTask(myTasks,result.uuid);      
-                              }
-                              myTasks.push(result);
-                          }
-                      }                         
-                  }else if(action == 'delete'){
-                      allTasks = deleteTask(allTasks,result.uuid);
-                      myTasks = deleteTask(myTasks,result.uuid);
-                  }
-
-                  Store('app').save('allTasks',allTasks);
-                  Store('app').save('myTasks',myTasks);
+                Store('app').save('allTasks', allTasks);
+                Store('app').save('myTasks', myTasks);
               });
-                            
+
           }
 
           $scope.timelineOnAdd = function (form, slot)
@@ -740,36 +757,41 @@ define(
 
                   if (result.error)
                   {
-                    if(result.error.data){
-                        $rootScope.notifier.error($rootScope.transError(result.error.data.result)); 
-                    }else{
-                        $rootScope.notifier.error($rootScope.transError(result.error)); 
-                    }                                        
+                    if (result.error.data)
+                    {
+                      $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                    }
+                    else
+                    {
+                      $rootScope.notifier.error($rootScope.transError(result.error));
+                    }
                   }
                   else
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
                   }
 
-                 if ($scope.section == 'teams')
-                 {
-                    $scope.changeCurrent($scope.currentTeam, {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    });
-                 }
-                 else if ($scope.section == 'clients')
-                 {
-                    $scope.changeCurrent($scope.currentClientGroup, {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    });
-                 }
-                 
-                 // refresh my tasks or alltasks 
-                 $scope.refreshTasks(result.result,"add");
+                  if ($scope.section == 'teams')
+                  {
+                    $scope.changeCurrent(
+                      $scope.currentTeam, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
+                  }
+                  else if ($scope.section == 'clients')
+                  {
+                    $scope.changeCurrent(
+                      $scope.currentClientGroup, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
+                  }
 
-                 $rootScope.statusBar.off();
+                  // refresh my tasks or alltasks
+                  $scope.refreshTasks(result.result, "add");
+
+                  $rootScope.statusBar.off();
 
                   // $scope.timeliner.refresh();
                 }
@@ -1009,31 +1031,33 @@ define(
 
                   if ($scope.section == 'teams')
                   {
-                    $scope.changeCurrent($scope.currentTeam, {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    });
+                    $scope.changeCurrent(
+                      $scope.currentTeam, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                   }
                   else if ($scope.section == 'clients')
                   {
-                    $scope.changeCurrent($scope.currentClientGroup, {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    });
+                    $scope.changeCurrent(
+                      $scope.currentClientGroup, {
+                        start: $scope.timeline.range.start,
+                        end: $scope.timeline.range.end
+                      });
                   }
                 }
-                
-                 // refresh my tasks or alltasks 
-                 $scope.refreshTasks(result.result,"update");
+
+                // refresh my tasks or alltasks
+                $scope.refreshTasks(result.result, "update");
 
                 // $scope.timeliner.refresh();
-//                $scope.timeliner.render(
-//                  {
-//                    start: $scope.timeline.options.start,
-//                    end: $scope.timeline.options.end
-//                  },
-//                  true
-//                );
+                //                $scope.timeliner.render(
+                //                  {
+                //                    start: $scope.timeline.options.start,
+                //                    end: $scope.timeline.options.end
+                //                  },
+                //                  true
+                //                );
 
                 $rootScope.statusBar.off();
               }
@@ -1091,22 +1115,24 @@ define(
 
                     if ($scope.section == 'teams')
                     {
-                      $scope.changeCurrent($scope.currentTeam, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
+                      $scope.changeCurrent(
+                        $scope.currentTeam, {
+                          start: $scope.timeline.range.start,
+                          end: $scope.timeline.range.end
+                        });
                     }
                     else if ($scope.section == 'clients')
                     {
-                      $scope.changeCurrent($scope.currentClientGroup, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
+                      $scope.changeCurrent(
+                        $scope.currentClientGroup, {
+                          start: $scope.timeline.range.start,
+                          end: $scope.timeline.range.end
+                        });
                     }
                   }
 
                   // $scope.timeliner.refresh();
-                  $scope.refreshTasks(result.result,"delete");
+                  $scope.refreshTasks(result.result, "delete");
 
                   $rootScope.statusBar.off();
                   $rootScope.planboardSync.start();
