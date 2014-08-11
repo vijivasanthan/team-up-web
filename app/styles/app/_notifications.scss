@@ -2,11 +2,9 @@
   display: none;
 }
 
-
 #preloader {
   display: none;
 }
-
 
 #loading {
   position: absolute;
@@ -19,9 +17,9 @@
     text-align: center;
     color: $brown;
     opacity: 0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
+    filter: alpha(opacity=40); /* For IE8 and earlier */
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
-    font-size: 18px; 
+    font-size: 18px;
   }
 
   span.entypo {
@@ -29,12 +27,11 @@
     /*height: 160px;*/
     color: $brown;
     opacity: 0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
+    filter: alpha(opacity=40); /* For IE8 and earlier */
     text-shadow: 1px 1px 1px rgba(255, 255, 255, 1);
     font-size: 20em;
   }
 }
-
 
 #notification {
   position: fixed;
@@ -43,4 +40,5 @@
   margin-left: -175px;
   width: 300px;
   z-index: 200;
+  display: none;
 }

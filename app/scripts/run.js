@@ -40,6 +40,7 @@ define(
             }
           );
 
+          angular.element('#notification').css({display: 'block'});
 
           Session.check();
 
