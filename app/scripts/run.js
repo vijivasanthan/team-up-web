@@ -258,14 +258,18 @@ define(
           {
             var groups = Store('app').get('ClientGroups');
             var ret = groupId;
+
             angular.forEach(
-              groups, function (g)
+              groups,
+              function (g)
               {
                 if (g.id == groupId)
                 {
                   ret = g.name;
                 }
-              });
+              }
+            );
+
             return ret;
           };
 
@@ -274,14 +278,18 @@ define(
           {
             var teams = Store('app').get('teams');
             var ret = teamId;
+
             angular.forEach(
-              teams, function (t)
+              teams,
+              function (t)
               {
                 if (t.uuid == teamId)
                 {
                   ret = t.name;
                 }
-              });
+              }
+            );
+
             return ret;
           };
 
@@ -421,10 +429,12 @@ define(
           $rootScope.avatarChange = function (avatarId)
           {
             var list = Store('app').get('avatarChangeRecord');
+
             if (! angular.isArray(list))
             {
               list = [];
             }
+
             list.push(avatarId);
             Store('app').save('avatarChangeRecord', list);
           };
@@ -435,8 +445,10 @@ define(
           {
             var changedTimes = 0;
             var list = Store('app').get('avatarChangeRecord');
+
             angular.forEach(
-              list, function (avatarId)
+              list,
+              function (avatarId)
               {
                 if (avatarId == id)
                 {
@@ -454,8 +466,10 @@ define(
             // assume all the words are devided by the space
             var arr = errorMessage.split(" ");
             var ret = errorMessage;
+
             angular.forEach(
-              arr, function (word)
+              arr,
+              function (word)
               {
                 if (word.indexOf('_cg') > - 1)
                 {

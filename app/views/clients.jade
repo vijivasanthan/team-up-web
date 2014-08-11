@@ -1,3 +1,41 @@
+#confirmClientModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmClientModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteClient}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') Annuleren
+				button.btn.btn-primary(type='button',
+				ng-click='deleteClient(_clientId)') Verwijderen
+
+#confirmReportModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmReportModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmReportModalLabel.modal-title {{ui.teamup.confirms.deleteReportTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteReport}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') Annuleren
+				button.btn.btn-primary(type='button',
+				ng-click='removeReport(_report)') Verwijderen
+
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
 	h2.nullable {{ui.teamup.clients}}
 	.selectGroup
@@ -76,7 +114,9 @@
 						tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
 							td
 								.roundedPicSmall.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"80"}}')
-							td: a(href='#/clientProfile/{{client.uuid}}#viewClient') {{client.firstName}} {{client.lastName}}
+							td
+								a(href='#/clientProfile/{{client.uuid}}#viewClient')
+									| {{client.firstName}} {{client.lastName}}
 							td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
 							td
 								.pull-right
@@ -84,8 +124,26 @@
 										button.btn-primary.btn-mini
 											i.icon-edit
 									button.btn-primary.btn-mini(type='submit',
-									ng-click='deleteClient(client.uuid)')
+									ng-click='confirmDeleteClient(client.uuid)')
 										i.icon-trash
+				#confirmClientModal.modal.fade(tabindex='-1',
+				role='dialog',
+				aria-labelledby='confirmClientModalLabel',
+				aria-hidden='true')
+					.modal-dialog
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal')
+									span(aria-hidden='true') ×
+									span.sr-only Close
+								h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
+							.modal-body
+								| {{ui.teamup.confirms.deleteClient}}
+							.modal-footer
+								button.btn.btn-default(type='button',
+								data-dismiss='modal') Annuleren
+								button.btn.btn-primary(type='button',
+								ng-click='deleteClient(_clientId)') Verwijderen
 				span.muted.pull-right
 					small
 						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
@@ -224,7 +282,7 @@
 			.tab-header
 				h3.pull-left {{client.firstName}} {{client.lastName}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
-				ng-click='deleteClient(client.uuid)') {{ui.teamup.del}}
+				ng-click='confirmDeleteClient(client.uuid)') {{ui.teamup.del}}
 				button.btn.pull-right.btn-info(type='button',
 				ng-click='setViewTo("editClient")') {{ui.profile.edit}}
 			hr
@@ -234,7 +292,8 @@
 						dt {{ui.teamup.group}}
 						dd
 							span(ng-hide='app.resources.role > 1')
-								a(href='#/client?uuid={{client.clientGroupUuid}}#client') {{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}
+								a(href='#/client?uuid={{client.clientGroupUuid}}#client')
+									| {{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}
 						dt {{ui.profile.birthday}}
 						dd {{client.birthDate}}
 						dt {{ui.teamup.phone}}
@@ -329,7 +388,7 @@
 									a
 										button.btn-primary.btn-mini(ng-click='editReport(report)')
 											i.icon-edit
-									button.btn-primary.btn-mini(ng-click='removeReport(report)')
+									button.btn-primary.btn-mini(ng-click="confirmDeleteReport(report)")
 										i.icon-trash
 				span.muted.pull-right
 					small
@@ -403,7 +462,8 @@
 
 		#editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
 			div(style='overflow: hidden; height: 35px')
-				h3.pull-left(style='margin-top: 0;') {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}
+				h3.pull-left(style='margin-top: 0;')
+					| {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}
 			hr
 			div.roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
 				//img(ng-src='{{avatarURL}}')

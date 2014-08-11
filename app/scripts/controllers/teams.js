@@ -547,7 +547,7 @@ define(
 
           $scope.deleteMember = function (memberId)
           {
-            if (window.confirm($rootScope.ui.teamup.deleteConfirm))
+            if (window.confirm($rootScope.ui.teamup.confirms.deleteMember))
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
               // lower case of the id : 

@@ -257,7 +257,7 @@ define(
           // Remove a profile completely
           $scope.deleteProfile = function ()
           {
-            if (window.confirm($rootScope.ui.teamup.deleteConfirm))
+            if (window.confirm($rootScope.ui.teamup.confirms.deleteProfile))
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 

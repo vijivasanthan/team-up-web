@@ -373,7 +373,17 @@ define(
           delClientGroupConfirm: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
           delTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
           deletingClientGroup: 'Groep verwijderen... ',
-          deleteConfirm: 'Druk op OK om door te gaan.',
+          //deleteConfirm: 'Druk op OK om door te gaan.',
+          confirms: {
+            deleteClientTitle: 'Verwijder client',
+            deleteClient: 'Weet u zeker dat u de client wilt verwijderen?',
+            deleteReportTitle: 'Verwijder rapport',
+            deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
+            deleteProfileTitle: 'Verwijder profile',
+            deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
+            deleteMemberTitle: 'Weet u zeker dat u het lid wilt verwijderen?',
+            deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?'
+          },
           deletingTeam: 'Team verwijderen...',
           deletingMember: 'Lid verwijderen ...',
           deletingClient: 'Cliënt verwijderen ...',
@@ -394,7 +404,8 @@ define(
           pageFirst: 'Eerste',
           pageLast: 'Laatste',
           refresh: 'Verversen',
-          stateValue: { 'reachable': 'Bereikbaar',
+          stateValue: {
+            'reachable': 'Bereikbaar',
             'available': 'Beschikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline'

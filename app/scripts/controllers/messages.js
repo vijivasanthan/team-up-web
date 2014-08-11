@@ -12,8 +12,8 @@ define(
         {
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages          
-          var REFRESH_CHAT_MESSAGES = 2000;
-          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000;
+          var REFRESH_CHAT_MESSAGES = 2000 * 60;
+          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000 * 60;
           var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
 
           $scope.messages = [];
@@ -31,6 +31,7 @@ define(
                 $scope.teamName = $rootScope.getTeamName($rootScope.app.resources.teamUuids[0]);
 
                 $scope.chatTeamId = $rootScope.app.resources.teamUuids[0];
+
                 if ($scope.chatTeamId && ! $scope.toggleChat)
                 {
                   // clearInterval($scope.autoCheckMonitorId);
@@ -49,6 +50,7 @@ define(
               function (message, i)
               {
                 var msgExist = $filter('getByUuid')($scope.messages, message.uuid);
+
                 if (msgExist)
                 {
                   return;
@@ -91,6 +93,7 @@ define(
                   msg.member = member;
                   msg.senderName = member.firstName + ' ' + member.lastName;
                 }
+
                 // parse the message body if necessary
                 if (msg.type == 'REPORT_NEW')
                 {
@@ -99,10 +102,12 @@ define(
                   angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
                   msg.body = msgBody;
                 }
+
                 $scope.messages.push(msg);
 
                 // limit the messages within one week
                 var now = new Date();
+
                 if ((now.getTime() - parseInt(message.sendTime)) <= SECONDS_A_WEEK)
                 {
                   $scope.messagesShow.push(msg);

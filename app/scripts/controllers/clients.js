@@ -18,7 +18,9 @@ define(
         '$filter',
         '$modal',
         'TeamUp',
-        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp)
+        '$timeout',
+        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store,
+                  Dater, $filter, $modal, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
 
@@ -748,76 +750,91 @@ define(
             }
           };
 
+          $scope._clientId = {};
+
+          $scope.confirmDeleteClient = function (clientId)
+          {
+            $timeout(
+              function ()
+              {
+                $scope._clientId = clientId;
+
+                angular.element('#confirmClientModal').modal('show');
+              }
+            );
+          };
+
           // after delete the client, refresh the client group which used to have the client inside.
           $scope.deleteClient = function (clientId)
           {
-            if (window.confirm($rootScope.ui.teamup.deleteConfirm))
-            {
-              $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
+            $scope._clientId = {};
 
-              // client lost the client group ID, remove this client from the group first
-              angular.forEach(
-                $scope.clients,
-                function (client)
+            angular.element('#confirmClientModal').modal('hide');
+
+            $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
+
+            // client lost the client group ID, remove this client from the group first
+            angular.forEach(
+              $scope.clients,
+              function (client)
+              {
+                if (client.uuid == clientId)
                 {
-                  if (client.uuid == clientId)
+                  var clientGroupId = client.clientGroupUuid;
+
+                  if (clientGroupId == null || clientGroupId == '')
                   {
-                    var clientGroupId = client.clientGroupUuid;
-
-                    if (clientGroupId == null || clientGroupId == '')
-                    {
-                      clientGroupId = $scope.clientGroup.id;
-                    }
-
-                    var changes = {},
-                        clientIds = [],
-                        emptyAddIds = [];
-
-                    clientIds.push(clientId);
-
-                    // TODO: More readable property names
-                    changes[clientGroupId] = {
-                      a: emptyAddIds,
-                      r: clientIds
-                    };
-
-                    if (clientGroupId != null && clientGroupId != '' && clientGroupId != $scope.clientGroup.id)
-                    {
-                      changes[$scope.clientGroup.id] = {a: emptyAddIds, r: clientIds};
-                    }
-
-                    Clients.manage(changes).then(
-                      function ()
-                      {
-                        TeamUp._(
-                          'clientDelete',
-                          { second: clientId }
-                        ).then(
-                          function ()
-                          {
-                            TeamUp._(
-                              'clientsQuery'
-                            ).then(
-                              function (clients)
-                              {
-                                Store('app').save('clients', clients);
-
-                                if ($scope.views.viewClient == true)
-                                {
-                                  $scope.setViewTo('client');
-                                }
-                                else
-                                {
-                                  $route.reload();
-                                }
-                              }
-                            );
-                          }, function (error) { console.log(error) });
-                      });
-
+                    clientGroupId = $scope.clientGroup.id;
                   }
-                });
-            }
+
+                  var changes = {},
+                      clientIds = [],
+                      emptyAddIds = [];
+
+                  clientIds.push(clientId);
+
+                  // TODO: More readable property names
+                  changes[clientGroupId] = {
+                    a: emptyAddIds,
+                    r: clientIds
+                  };
+
+                  if (clientGroupId != null && clientGroupId != '' && clientGroupId != $scope.clientGroup.id)
+                  {
+                    changes[$scope.clientGroup.id] = {a: emptyAddIds, r: clientIds};
+                  }
+
+                  Clients.manage(changes).then(
+                    function ()
+                    {
+                      TeamUp._(
+                        'clientDelete',
+                        { second: clientId }
+                      ).then(
+                        function ()
+                        {
+                          TeamUp._(
+                            'clientsQuery'
+                          ).then(
+                            function (clients)
+                            {
+                              Store('app').save('clients', clients);
+
+                              if ($scope.views.viewClient == true)
+                              {
+                                $scope.setViewTo('client');
+                              }
+                              else
+                              {
+                                $route.reload();
+                              }
+                            }
+                          );
+                        }, function (error) { console.log(error) });
+                    });
+
+                }
+              });
           };
 
           // filter the report by client or the created month 
@@ -983,7 +1000,7 @@ define(
             }
 
             $scope.report = {
-              title: $rootScope.ui.teamupnewReport,
+              title: $rootScope.ui.teamup.newReport,
               creationTime: new Date().getTime(),
               clientUuid: $scope.currentCLient,
               body: null,
@@ -1024,36 +1041,53 @@ define(
               });
           };
 
+          $scope._report = {};
+
+          $scope.confirmDeleteReport = function (report)
+          {
+            $timeout(
+              function ()
+              {
+                $scope._report = report;
+
+                angular.element('#confirmReportModal').modal('show');
+              }
+            );
+          };
+
           $scope.removeReport = function (report)
           {
-            if (window.confirm($rootScope.ui.teamup.deleteConfirm))
-            {
-              $rootScope.statusBar.display($rootScope.ui.teamup.loading);
+            $rootScope.statusBar.display($rootScope.ui.teamup.loading);
 
-              TeamUp._(
-                'clientReportDelete',
+            $scope._report = {};
+
+            angular.element('#confirmReportModal').modal('hide');
+
+            TeamUp._(
+              'clientReportDelete',
+              {
+                second: report.clientUuid,
+                reportId: report.uuid
+              }
+            ).then(
+              function (result)
+              {
+                if (result.result == 'ok')
                 {
-                  second: report.clientUuid,
-                  reportId: report.uuid
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
+                  loadGroupReports();
+
+                  if ($scope.views.viewClient == true)
+                  {
+                    loadReports();
+                  }
                 }
-              ).then(
-                function (result)
+                else
                 {
-                  if (result.result == 'ok')
-                  {
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                    loadGroupReports();
-                    if ($scope.views.viewClient == true)
-                    {
-                      loadReports();
-                    }
-                  }
-                  else
-                  {
-                    $rootScope.notifier.error(result.error);
-                  }
-                }, function (error) { console.log(error) });
-            }
+                  $rootScope.notifier.error(result.error);
+                }
+              }, function (error) { console.log(error) });
           };
 
           $scope.editImg = function ()
