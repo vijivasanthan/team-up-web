@@ -13,7 +13,7 @@ aria-hidden='true')
 				| {{ui.teamup.confirms.deleteClient}}
 			.modal-footer
 				button.btn.btn-default(type='button',
-				data-dismiss='modal') Annuleren
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
 				ng-click='deleteClient(_clientId)') Verwijderen
 
@@ -32,9 +32,9 @@ aria-hidden='true')
 				| {{ui.teamup.confirms.deleteClientGroup}}
 			.modal-footer
 				button.btn.btn-default(type='button',
-				data-dismiss='modal') Annuleren
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteClientGroup()') Verwijderen
+				ng-click='deleteClientGroup()') {{ui.teamup.confirms.remove}}
 
 #confirmReportModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -51,9 +51,9 @@ aria-hidden='true')
 				| {{ui.teamup.confirms.deleteReport}}
 			.modal-footer
 				button.btn.btn-default(type='button',
-				data-dismiss='modal') Annuleren
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='removeReport(_report)') Verwijderen
+				ng-click='removeReport(_report)') {{ui.teamup.confirms.remove}}
 
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
 	h2.nullable {{ui.teamup.clients}}

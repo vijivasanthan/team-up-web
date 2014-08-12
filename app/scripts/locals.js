@@ -381,12 +381,14 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
-            deleteMemberTitle: 'Weet u zeker dat u het lid wilt verwijderen?',
+            deleteMemberTitle: 'Verwijderen lid',
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
             deleteClientGroup: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
             deleteTeamConfirmTitle: 'Verwijderen team',
-            deleteTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.'
+            deleteTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
+            remove: 'Verwijderen',
+            cancel: 'Annuleren'
           },
           deletingTeam: 'Team verwijderen...',
           deletingMember: 'Lid verwijderen ...',

@@ -13,9 +13,9 @@ aria-hidden='true')
 				| {{ui.teamup.confirms.deleteProfile}}
 			.modal-footer
 				button.btn.btn-default(type='button',
-				data-dismiss='modal') Annuleren
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteProfile()') Verwijderen
+				ng-click='deleteProfile()') {{ui.teamup.confirms.remove}}
 
 section#profile
 	.page-header: h2 {{data.name}}
