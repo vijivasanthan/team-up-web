@@ -143,7 +143,8 @@ define(
 
           $scope.changeClientGroup = function (cGroupId)
           {
-            console.log('client group id', cGroupId);
+            // console.log('client group id', cGroupId);
+
             $scope.groupAffectClient(cGroupId);
           };
 
@@ -161,7 +162,7 @@ define(
           // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
-            console.log($scope.curentClient);
+            // console.log($scope.curentClient);
 
             // fileds should not be empty
             if (! task || ! task.start || ! task.end)
@@ -205,8 +206,8 @@ define(
             }
 
             // should assign a client
-            console.log($scope.curentClient);
-            console.log(task.client);
+            // console.log($scope.curentClient);
+            // console.log(task.client);
 
             if (! task.client || task.client == null)
             {
@@ -405,7 +406,7 @@ define(
 
           function resetViews ()
           {
-            console.log('resetViews ->', $scope.views);
+            // console.log('resetViews ->', $scope.views);
 
             $scope.views = {
               myTasks: false,
@@ -416,7 +417,7 @@ define(
 
           var setView = function (hash)
           {
-            console.log('setView -> ', hash);
+            // console.log('setView -> ', hash);
 
             resetViews();
 
@@ -425,7 +426,7 @@ define(
 
           $scope.setViewTo = function (hash)
           {
-            console.log('setViewTo ->', hash);
+            // console.log('setViewTo ->', hash);
 
             $scope.$watch(
               hash,
@@ -451,7 +452,8 @@ define(
             ).then(
               function (result)
               {
-                console.log(result);
+                // console.log(result);
+
                 if (result.error)
                 {
                   if (result.error.data.result)
@@ -466,7 +468,8 @@ define(
                 }
                 else
                 {
-                  console.log(result);
+                  // console.log(result);
+
                   $scope.reloadAndSaveTask(result.result, 'assign');
                 }
 
@@ -485,7 +488,8 @@ define(
             ).then(
               function (result)
               {
-                console.log(result);
+                // console.log(result);
+
                 if (result.error)
                 {
                   if (result.error.data)
@@ -500,7 +504,8 @@ define(
                 }
                 else
                 {
-                  console.log(result);
+                  // console.log(result);
+
                   $scope.reloadAndSaveTask(result.result, 'unAssign');
                 }
 
@@ -522,7 +527,8 @@ define(
             ).then(
               function (result)
               {
-                console.log("after delete action , ", result);
+                // console.log("after delete action , ", result);
+
                 if (result.error)
                 {
                   if (result.error.data)
@@ -589,7 +595,7 @@ define(
             '$viewContentLoaded',
             function ()
             {
-              console.log("$viewContentLoaded");
+              // console.log("$viewContentLoaded");
 
               $("#task-map .angular-google-map-container").height(500);
               google.maps.event.trigger($("#task-map"), "resize");
@@ -607,8 +613,8 @@ define(
 
           $scope.changeClient = function (clientId)
           {
+            // console.log("latlong " + $filter('getObjAttr')(clientId, 'client', 'latlong'));
 
-            console.log("latlong " + $filter('getObjAttr')(clientId, 'client', 'latlong'));
             var str_ll = $filter('getObjAttr')(clientId, 'client', 'latlong');
             var ll = str_ll.split(",");
 
@@ -635,7 +641,9 @@ define(
                 {
                   return i.plannedEndVisitTime;
                 }).join(', ');
-              console.log('update', logEntry);
+
+              // console.log('update', logEntry);
+
               //$scope.sortingLog.push('Update: ' + logEntry);
             },
             stop: function (e, ui)
@@ -646,12 +654,14 @@ define(
                 {
                   return i.plannedEndVisitTime;
                 }).join(', ');
-              console.log('stop', logEntry);
+
+              // console.log('stop', logEntry);
+
               //$scope.sortingLog.push('Stop: ' + logEntry);
             },
             cancel: function (e, ui)
             {
-              console(e, ui);
+              // console(e, ui);
             }
           };
           //--------------- end the sortable function ----------//
@@ -738,7 +748,8 @@ define(
           // Refresh the task list manually
           $scope.refreshTask = function (tab)
           {
-            console.log(tab);
+            // console.log(tab);
+
             $rootScope.statusBar.display($rootScope.ui.task.refreshTask);
             if (tab == 'my')
             {

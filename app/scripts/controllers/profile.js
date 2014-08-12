@@ -19,7 +19,9 @@ define(
         'Dater',
         '$filter',
         'TeamUp',
-        function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams, Dater, $filter, TeamUp)
+        '$timeout',
+        function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
+                  Dater, $filter, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
 
@@ -254,50 +256,59 @@ define(
             $scope.setViewTo('editImg');
           };
 
+          $scope.confirmDeleteProfile = function ()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmProfileModal').modal('show');
+              }
+            );
+          };
+
           // Remove a profile completely
           $scope.deleteProfile = function ()
           {
-            if (window.confirm($rootScope.ui.teamup.confirms.deleteProfile))
-            {
-              $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+            angular.element('#confirmProfileModal').modal('hide');
 
-              TeamUp._(
-                'memberDelete',
-                { third: $scope.profilemeta.uuid }
-              ).then(
-                function (result)
+            $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
+
+            TeamUp._(
+              'memberDelete',
+              { third: $scope.profilemeta.uuid }
+            ).then(
+              function (result)
+              {
+                if (result.uuid)
                 {
-                  if (result.uuid)
-                  {
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                    angular.forEach(
-                      $scope.profilemeta.teamUuids, function (teamId, i)
-                      {
-                        $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                  angular.forEach(
+                    $scope.profilemeta.teamUuids, function (teamId, i)
+                    {
+                      $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                        Teams.query(
-                          false,
-                          { 'uuid': teamId }
-                        ).then(
-                          function () { $rootScope.statusBar.off() }
-                        );
-                      });
+                      Teams.query(
+                        false,
+                        { 'uuid': teamId }
+                      ).then(
+                        function () { $rootScope.statusBar.off() }
+                      );
+                    });
 
-                    TeamUp._('teamMemberFree')
-                      .then(
-                      function (result)
-                      {
-                        Store('app').save('members', result);
+                  TeamUp._('teamMemberFree')
+                    .then(
+                    function (result)
+                    {
+                      Store('app').save('members', result);
 
-                        $rootScope.statusBar.off();
-                      },
-                      function (error) { console.log(error) }
-                    );
-                  }
-                }, function (error) { console.log(error) }
-              );
-            }
+                      $rootScope.statusBar.off();
+                    },
+                    function (error) { console.log(error) }
+                  );
+                }
+              }, function (error) { console.log(error) }
+            );
           };
         }
       ]

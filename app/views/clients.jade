@@ -17,6 +17,25 @@ aria-hidden='true')
 				button.btn.btn-primary(type='button',
 				ng-click='deleteClient(_clientId)') Verwijderen
 
+#confirmClientGroupModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmClientGroupModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmClientGroupModalLabel.modal-title {{ui.teamup.confirms.deleteClientGroupTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteClientGroup}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') Annuleren
+				button.btn.btn-primary(type='button',
+				ng-click='deleteClientGroup()') Verwijderen
+
 #confirmReportModal.modal.fade(tabindex='-1',
 role='dialog',
 aria-labelledby='confirmReportModalLabel',
@@ -89,7 +108,7 @@ aria-hidden='true')
 			.tab-header(ng-hide='views.editClientGroup')
 				h3.pull-left {{clientGroup.name}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
-				ng-click='deleteClientGroup()') {{ui.teamup.del}}
+				ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
 				button.btn.pull-right.btn-info(type='button',
 				ng-click='editClientGroup(clientGroup)') {{ui.teamup.edit}}
 			.tab-header(ng-show='views.editClientGroup')

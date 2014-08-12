@@ -134,7 +134,7 @@ define(
                                result[1][0] == 'u') ? [] : result
                           );
 
-                          console.log('clientGroup ->', result);
+                          // console.log('clientGroup ->', result);
 
                           data.groups[team.uuid] = [];
 

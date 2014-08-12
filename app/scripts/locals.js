@@ -370,8 +370,8 @@ define(
           writenBy: 'Geschreven door',
           noSharedStates: 'Geen gedeelde status',
           savingContacts: 'Contactpersonen oplsaan',
-          delClientGroupConfirm: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
-          delTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
+          // delClientGroupConfirm: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
+          // delTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
           deletingClientGroup: 'Groep verwijderen... ',
           //deleteConfirm: 'Druk op OK om door te gaan.',
           confirms: {
@@ -382,7 +382,11 @@ define(
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
             deleteMemberTitle: 'Weet u zeker dat u het lid wilt verwijderen?',
-            deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?'
+            deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
+            deleteClientGroupTitle: 'Verwijder cliëntengroep',
+            deleteClientGroup: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
+            deleteTeamConfirmTitle: 'Verwijderen team',
+            deleteTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.'
           },
           deletingTeam: 'Team verwijderen...',
           deletingMember: 'Lid verwijderen ...',

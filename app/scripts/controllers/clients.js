@@ -19,8 +19,8 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store,
-                  Dater, $filter, $modal, TeamUp, $timeout)
+        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater,
+                  $filter, $modal, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
 
@@ -708,46 +708,55 @@ define(
             );
           };
 
+          $scope.confirmDeleteClientGroup = function ()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmClientGroupModal').modal('show');
+              }
+            );
+          };
+
           $scope.deleteClientGroup = function ()
           {
-            if (window.confirm($rootScope.ui.teamup.delClientGroupConfirm))
-            {
-              $rootScope.statusBar.display($rootScope.ui.teamup.deletingClientGroup);
+            angular.element('#confirmClientGroupModal').modal('hide');
 
-              TeamUp._(
-                'clientGroupDelete',
-                { second: $scope.current }
-              ).then(
-                function (result)
+            $rootScope.statusBar.display($rootScope.ui.teamup.deletingClientGroup);
+
+            TeamUp._(
+              'clientGroupDelete',
+              { second: $scope.current }
+            ).then(
+              function (result)
+              {
+                if (result.id)
                 {
-                  if (result.id)
-                  {
-                    Clients.query(
-                      true,
-                      {}
-                    ).then(
-                      function (clientGroups)
-                      {
-                        $scope.requestClientGroup(clientGroups[0].id);
+                  Clients.query(
+                    true,
+                    {}
+                  ).then(
+                    function (clientGroups)
+                    {
+                      $scope.requestClientGroup(clientGroups[0].id);
 
-                        angular.forEach(
-                          $scope.clientGroups,
-                          function (clientGroup, i)
+                      angular.forEach(
+                        $scope.clientGroups,
+                        function (clientGroup, i)
+                        {
+                          if (clientGroup.id == result.id)
                           {
-                            if (clientGroup.id == result.id)
-                            {
-                              $scope.clientGroups.splice(i, 1);
-                            }
+                            $scope.clientGroups.splice(i, 1);
                           }
-                        );
-                      }, function (error) { console.log(error) });
+                        }
+                      );
+                    }, function (error) { console.log(error) });
 
-                  }
+                }
 
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  $rootScope.statusBar.off();
-                }, function (error) { console.log(error) });
-            }
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+              }, function (error) { console.log(error) });
           };
 
           $scope._clientId = {};
@@ -1101,7 +1110,7 @@ define(
           $scope.$on(
             '$locationChangeSuccess', function (event, currentURL, preURL)
             {
-              console.log("event ", event);
+              // console.log("event ", event);
               var currentScope = event.currentScope;
               if ($location.hash() == "reports")
               {
