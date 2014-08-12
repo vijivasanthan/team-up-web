@@ -385,8 +385,10 @@ define(
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
             deleteClientGroup: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
-            deleteTeamConfirmTitle: 'Verwijderen team',
-            deleteTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
+            deleteTeamTitle: 'Verwijderen team',
+            deleteTeam: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
+            deleteTaskTitle: 'Verwijderen taak',
+            deleteTask: 'Weet u zeker dat u het taak wilt verwijderen?',
             remove: 'Verwijderen',
             cancel: 'Annuleren'
           },

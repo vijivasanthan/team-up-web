@@ -16,7 +16,9 @@ define(
         'TeamUp',
         '$filter',
         '$route',
-        function ($rootScope, $scope, $location, Store, Teams, Clients, Dater, TeamUp, $filter, $route)
+        '$timeout',
+        function ($rootScope, $scope, $location, Store, Teams, Clients, Dater, TeamUp,
+                  $filter, $route, $timeout)
         {
           $rootScope.fixStyles();
 
@@ -513,13 +515,27 @@ define(
             );
           };
 
+          $scope._task = {};
+
+          $scope.confirmDeleteTask = function (task)
+          {
+            $timeout(
+              function ()
+              {
+                $scope._task = task;
+
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+          };
+
           // Remove a task
           $scope.deleteTask = function (task)
           {
-            if (! confirm($rootScope.ui.task.deleteTaskConfirm))
-            {
-              return;
-            }
+            $scope._task = {};
+
+            angular.element('#confirmTaskModal').modal('hide');
+
             TeamUp._(
               'taskDelete',
               { second: task.uuid },

@@ -1,3 +1,22 @@
+#confirmTaskModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmTaskModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteTask}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='deleteTask(_task)') {{ui.teamup.confirms.remove}}
+
 .page-header
 	h2.nullable
 		| Taken
@@ -77,16 +96,18 @@
 							td
 								dl
 									span.taskIcon.icon-time(aria-hidden='true')
-									span.taskInfo(ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
-									span.taskInfo(ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+									span.taskInfo(ng-show="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+									span.taskInfo(ng-hide="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
 							td
 								.pull-right
 									a(href='#')
-									button.btn-primary.btn-mini(type='button' ng-click='unassignYourself(task)')
+									button.btn-primary.btn-mini(type='button',
+									ng-click='unassignYourself(task)')
 										i.icon-minus
 									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
 									//- 	i.icon-edit
-									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
+									button.btn-primary.btn-mini(type='button',
+									ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 									a.noteLink(ng-click="toggleMyDesc(task.uuid)")
 										p {{ui.task.description}}
@@ -157,11 +178,14 @@
 								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(type='button' ng-hide='task.assignedTeamMemberUuid' ng-click="assignYourself(task)")
+									button.btn-primary.btn-mini(type='button',
+									ng-hide='task.assignedTeamMemberUuid',
+									ng-click="assignYourself(task)")
 										i.icon-plus
 									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
 									//- 	i.icon-edit
-									button.btn-primary.btn-mini(type='button' ng-click='deleteTask(task)')
+									button.btn-primary.btn-mini(type='button',
+									ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 									a.noteLink(ng-click="toggleAllDesc(task.uuid)")
 										p {{ui.task.description}}
