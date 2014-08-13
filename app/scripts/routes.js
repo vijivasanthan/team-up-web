@@ -30,6 +30,13 @@ define(
             })
 
             .when(
+            '/tasks2',
+            {
+              templateUrl: 'views/tasks2.html',
+              controller: 'tasks2Ctrl'
+            })
+
+            .when(
             '/team',
             {
               templateUrl: 'views/teams.html',
@@ -208,7 +215,42 @@ define(
 
             .otherwise({ redirectTo: '/login' });
 
-          $httpProvider.interceptors.push('Interceptor');
+          $httpProvider.interceptors.push(
+            [
+              '$q', 'Log', '$location' ,
+              function ($q, Log, $location)
+              {
+                return {
+                  request: function (config)
+                  {
+                    return config || $q.when(config);
+                  },
+                  requestError: function (rejection)
+                  {
+                    // console.warn('request error ->', rejection);
+                    Log.error(rejection);
+                    return $q.reject(rejection);
+                  },
+                  response: function (response)
+                  {
+                    return response || $q.when(response);
+                  },
+                  responseError: function (rejection)
+                  {
+                    // console.warn('response error ->', rejection);
+                    if (rejection.status == 403)
+                    {
+                      localStorage.setItem('sessionTimeout', '');
+                      $location.path('/logout');
+                      window.location.href = 'logout.html';
+                    }
+
+                    // Log.error(rejection);
+                    return $q.reject(rejection);
+                  }
+                };
+              }
+            ]);
         }
       ]);
   }

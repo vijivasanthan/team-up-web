@@ -527,55 +527,78 @@ define(
             if (usertype == 'client')
             {
               var client = $rootScope.getClientByID(id);
+
               if (client == null || typeof client == 'undefined')
               {
-                return "";
+                return '';
               }
 
               if (itemName == 'name')
               {
-                return client.firstName + ' ' + client.lastName;
+                return client.firstName +
+                       ' ' +
+                       client.lastName;
               }
               else if (itemName == 'address')
               {
-                return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ' + client.address.city;
+                return client.address.street +
+                       ' ' +
+                       client.address.no +
+                       ', ' +
+                       client.address.zip +
+                       ' ' +
+                       client.address.city;
               }
               else if (itemName == 'latlong')
               {
-                if (typeof client.address.latitude == 'undefined' || typeof client.address.longitude == 'undefined' ||
-                    (client.address.longitude == 0 && client.address.latitude == 0))
+                if (typeof client.address.latitude == 'undefined' ||
+                    typeof client.address.longitude == 'undefined' ||
+                    (client.address.longitude == 0 && client.address.latitude == 0)
+                  )
                 {
-                  return client.address.street + ' ' + client.address.no + ', ' + client.address.zip + ' ,' + client.address.city;
+                  return client.address.street +
+                         ' ' +
+                         client.address.no +
+                         ', ' +
+                         client.address.zip +
+                         ' ,' +
+                         client.address.city;
                 }
                 else
                 {
-                  return client.address.latitude + ',' + client.address.longitude;
+                  return client.address.latitude +
+                         ',' +
+                         client.address.longitude;
                 }
               }
             }
-            else if (usertype == "member")
+            else if (usertype == 'member')
             {
               if (id == null)
               {
-                return "";
+                return '';
               }
+
               var member = $rootScope.getTeamMemberById(id);
+
               if (itemName == 'name')
               {
-                return member.firstName + ' ' + member.lastName;
+                return member.firstName +
+                       ' ' +
+                       member.lastName;
               }
               else if (itemName == 'states')
               {
                 return member.states;
               }
-
             }
             else if (usertype == 'clientGroup')
             {
               if (id == null)
               {
-                return "";
+                return '';
               }
+
               if (itemName == 'name')
               {
                 return $rootScope.getClientGroupName(id);
@@ -583,7 +606,7 @@ define(
             }
             else
             {
-              return "no name";
+              return 'no name';
             }
 
           }

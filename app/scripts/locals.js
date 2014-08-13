@@ -418,7 +418,8 @@ define(
             'working': 'Aan het werk',
             'offline': 'Offline'
           },
-          reportNotExists: 'Rapport bestaat niet.'
+          reportNotExists: 'Rapport bestaat niet.',
+          sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'
         },
         task: {
           information: 'Informatie',

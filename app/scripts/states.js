@@ -145,6 +145,10 @@ define(
                 $location.path('/tasks').search({}).hash('');
                 break;
 
+              case 'tasks2':
+                $location.path('/tasks2').search({}).hash('');
+                break;
+
               case 'team':
                 $location.path('/team').search({local: 'true'}).hash('team');
                 break;

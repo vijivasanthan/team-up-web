@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'tasksCtrl', [
+      'tasks2Ctrl', [
         '$rootScope',
         '$scope',
         '$location',

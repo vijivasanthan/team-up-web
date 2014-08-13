@@ -13,7 +13,7 @@ define(
     'angular-route',
     'angular-strap',
     'ui-bootstrap',
-    'ng-vis',
+    // 'ng-vis',
     'angular-google-maps',
     // 'angular-dragdrop',
     // 'ui-sortable',        
@@ -33,7 +33,7 @@ define(
         // 'mgcrea.ngStrap'
         '$strap.directives',
         'ui.bootstrap.modal',
-        'NgVis',
+        // 'NgVis',
         'google-maps',
         // 'ngDragDrop',
         // 'ui.sortable',   

@@ -782,68 +782,31 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
 
-            // client lost the client group ID, remove this client from the group first
-            angular.forEach(
-              $scope.clients,
-              function (client)
+
+            TeamUp._(
+              'clientDelete',
+              { second: clientId }
+            ).then(
+              function ()
               {
-                if (client.uuid == clientId)
-                {
-                  var clientGroupId = client.clientGroupUuid;
-
-                  if (clientGroupId == null || clientGroupId == '')
+                TeamUp._(
+                  'clientsQuery'
+                ).then(
+                  function (clients)
                   {
-                    clientGroupId = $scope.clientGroup.id;
-                  }
+                    Store('app').save('clients', clients);
 
-                  var changes = {},
-                      clientIds = [],
-                      emptyAddIds = [];
-
-                  clientIds.push(clientId);
-
-                  // TODO: More readable property names
-                  changes[clientGroupId] = {
-                    a: emptyAddIds,
-                    r: clientIds
-                  };
-
-                  if (clientGroupId != null && clientGroupId != '' && clientGroupId != $scope.clientGroup.id)
-                  {
-                    changes[$scope.clientGroup.id] = {a: emptyAddIds, r: clientIds};
-                  }
-
-                  Clients.manage(changes).then(
-                    function ()
+                    if ($scope.views.viewClient == true)
                     {
-                      TeamUp._(
-                        'clientDelete',
-                        { second: clientId }
-                      ).then(
-                        function ()
-                        {
-                          TeamUp._(
-                            'clientsQuery'
-                          ).then(
-                            function (clients)
-                            {
-                              Store('app').save('clients', clients);
-
-                              if ($scope.views.viewClient == true)
-                              {
-                                $scope.setViewTo('client');
-                              }
-                              else
-                              {
-                                $route.reload();
-                              }
-                            }
-                          );
-                        }, function (error) { console.log(error) });
-                    });
-
-                }
-              });
+                      $scope.setViewTo('client');
+                    }
+                    else
+                    {
+                      $route.reload();
+                    }
+                  }
+                );
+              }, function (error) { console.log(error) });
           };
 
           // filter the report by client or the created month 

@@ -19,7 +19,8 @@ define(
         'TeamUp',
         'Dater',
         '$filter',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter)
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store,
+                  $routeParams, TeamUp, Dater, $filter)
         {
           // TODO: Soon not needed!
           Dater.registerPeriods();
@@ -208,8 +209,7 @@ define(
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
           {
-            TeamUp._('teamMemberFree')
-              .then(
+            TeamUp._('teamMemberFree').then(
               function (result) { Store('app').save('members', result) }
             );
           }
@@ -219,14 +219,15 @@ define(
           {
             // query my tasks
             TeamUp._("taskMineQuery").then(
-              function (result)
-              {
-                Store('app').save('myTasks', result);
-              });
+              function (result) { Store('app').save('myTasks', result) }
+            );
+
             // query unassigned tasks from each team
             var allTasks = [];
+
             angular.forEach(
-              teams, function (team_obj)
+              teams,
+              function (team_obj)
               {
                 TeamUp._(
                   "taskByTeam",
@@ -235,19 +236,48 @@ define(
                   function (result)
                   {
                     angular.forEach(
-                      result, function (taskObj)
+                      result,
+                      function (taskObj)
                       {
                         var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
+
                         if (foundTask == null)
                         {
                           allTasks.push(taskObj);
                         }
-                      });
+                      }
+                    );
+
                     Store('app').save('allTasks', allTasks);
-                  });
-              });
+                  }
+                );
+              }
+            );
+          }
 
+          function enhanceTasks ()
+          {
+            var taskGroups = ['myTasks', 'allTasks'];
 
+            angular.forEach(
+              taskGroups,
+              function (label)
+              {
+                var group = Store('app').get(label);
+
+                angular.forEach(
+                  group,
+                  function (task)
+                  {
+                    var client = $rootScope.getClientByID(task.relatedClientUuid);
+
+                    task.relatedClientName = client.firstName + ' ' + client.lastName;
+                  }
+                );
+
+                Store('app').save(label, group);
+              }
+            );
           }
 
           var preLoader = function ()
@@ -283,6 +313,7 @@ define(
                       queryMembersNotInTeams();
 
                       queryTasks(teams);
+
                       if (teams.error)
                       {
                         console.warn('error ->', teams);
@@ -308,6 +339,8 @@ define(
                                 function ()
                                 {
                                   progress(100, $rootScope.ui.login.loading_everything);
+
+                                  enhanceTasks();
 
                                   Teams.query()
                                     .then(
@@ -358,6 +391,19 @@ define(
 
             angular.element('#preloader span').text(message);
           };
+
+          if (localStorage.hasOwnProperty('sessionTimeout'))
+          {
+            localStorage.removeItem('sessionTimeout');
+
+            $scope.alert = {
+              login: {
+                display: true,
+                type: 'alert-error',
+                message: $rootScope.ui.teamup.sessionTimeout
+              }
+            };
+          }
         }
       ]);
   }
