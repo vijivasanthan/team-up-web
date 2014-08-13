@@ -115,6 +115,7 @@ require(
     'services/teams',
     'services/googleGEO',
     'directives/widgets',
+    'modals/task',
     // 'directives/treegrid',
     'filters/avatars',
     'controllers/clients',

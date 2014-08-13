@@ -72,17 +72,9 @@ define(
           }
 
           angular.element('.navbar').hide();
-
           angular.element('#footer').hide();
-
           angular.element('#watermark').hide();
-
-          angular.element('body')
-            .css(
-            {
-              'backgroundColor': '#1dc8b6'
-            }
-          );
+          angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
 
           var loginData = Store('app').get('loginData');
 
@@ -352,13 +344,7 @@ define(
                                         function ()
                                         {
                                           angular.element('.navbar').show();
-
-                                          angular.element('body')
-                                            .css(
-                                            {
-                                              'background': 'url(../images/bg.jpg) repeat'
-                                            }
-                                          );
+                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
 
                                           if (! $rootScope.browser.mobile)
                                           {
@@ -382,13 +368,7 @@ define(
 
           var progress = function (ratio, message)
           {
-            angular.element('#preloader .progress .bar')
-              .css(
-              {
-                width: ratio + '%'
-              }
-            );
-
+            angular.element('#preloader .progress .bar').css({ width: ratio + '%' });
             angular.element('#preloader span').text(message);
           };
 

@@ -636,8 +636,10 @@ define(
 
     // Date reversing
     filters.filter(
-      'dateReverse', [
-        '$filter', function ($filter)
+      'dateReverse',
+      [
+        '$filter',
+        function ($filter)
         {
           return function (date, pattern)
           {
@@ -648,5 +650,79 @@ define(
         }
       ]
     );
+
+
+    // Nicely format task duration period
+    filters.filter(
+      'formatTaskDuration',
+      [
+        '$filter',
+        function ($filter)
+        {
+          return function (task)
+          {
+            var delta = (task.plannedEndVisitTime - task.plannedStartVisitTime) / 1000 / 60 / 60;
+
+            if (delta <= 24)
+            {
+              return $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                     ' ' +
+                     $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                     ' ' +
+                     $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                     ' - ' +
+                     $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                     ' uur';
+            }
+            else
+            {
+              return $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                     ' ' +
+                     $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                     ' ' +
+                     $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                     ' uur - ' +
+                     $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                     ' ' +
+                     $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                     ' ' +
+                     $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                     ' uur';
+            }
+          };
+        }
+      ]
+    );
+
+
+    // Date reversing
+    filters.filter(
+      'formatTaskAddress',
+      [
+        function ()
+        {
+          return function (address)
+          {
+            return address.street +
+                   ' ' +
+                   address.no +
+                   ', ' +
+                   address.zip +
+                   ' ' +
+                   address.city;
+          }
+        }
+      ]
+    );
+
+
+
+
+
+
+
+
+
+
   }
 );
