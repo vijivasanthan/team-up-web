@@ -25,11 +25,11 @@ define(
                     tasks,
                     function (task)
                     {
-                      var client = $rootScope.getClientByID(task.relatedClientUuid);
+                      task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
 
-                      task.relatedClientName = client.firstName + ' ' + client.lastName;
-
-                      task.relatedClientAddress = client.address;
+                      task.relatedClient.fullName = task.relatedClient.firstName +
+                                                    ' ' +
+                                                    task.relatedClient.lastName;
                     }.bind(this)
                   );
 

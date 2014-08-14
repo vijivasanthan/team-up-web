@@ -206,6 +206,8 @@ define(
               };
             }
 
+            console.log('member ->', member);
+
             return member;
           };
 

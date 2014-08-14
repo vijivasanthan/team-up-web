@@ -57,12 +57,12 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
-				// pre: small {{tasks.mine.list | json}}
+				pre: small {{tasks.mine.list | json}}
 
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
 						tr
-							th(colspan='2')
+							th(colspan='1')
 							th
 								a {{ui.task.clientName}}
 									i.icon-sort
@@ -70,27 +70,24 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 							th
 								a {{ui.task.planningTime}}
 									i.icon-sort
-							th
+							th(colspan='1')
 
 					tbody
 						tr(ng-repeat='task in tasks.mine.list')
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
 							td
-								a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
-									| {{task.relatedClientName }}
+								small
+									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+										| {{task.relatedClient.fullName }}
 							td
 								table
 									tr
-										td some more text
 										td: span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
 										td
 											small
-												| {{task.relatedClientAddress.street}} {{task.relatedClientAddress.no}}
-												| {{task.relatedClientAddress.zip}} {{task.relatedClientAddress.city}}
-												| &nbsp;
-												a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}',
-												target= '_blank') {{ui.teamup.map}}
+												| {{task.relatedClient.address.street}} {{task.relatedClient.address.no}}
+												| {{task.relatedClient.address.zip}} {{task.relatedClient.address.city}}
 							td
 								table
 									tr
@@ -98,17 +95,11 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 										td: small {{task | formatTaskDuration}}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(type='button', ng-click='unassignYourself(task)')
-										i.icon-minus
-									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
-										i.icon-trash
-									//small
-									//	a.noteLink(ng-click="toggleMyDesc(task.uuid)")
-									//		| {{ui.task.description}}
-									//		i.icon-arrow-down2
-						//div(id='myTaskdesc_{{task.uuid}}' ) {{task.description}} Some more text
+									button.btn-primary.btn-mini(type='button'): i.icon-info
+									button.btn-primary.btn-mini(type='button'): i.icon-minus
+									button.btn-primary.btn-mini(type='button'): i.icon-trash
 				span.muted.pull-right
-					small: i {{myTasks.length | i18n_spec:'groups.memberCount'}}
+					small: i {{tasks.mine.list.length | i18n_spec:'groups.memberCount'}}
 
 
 
