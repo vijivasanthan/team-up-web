@@ -1,3 +1,48 @@
+<div id="confirmClientModal" tabindex="-1" role="dialog" aria-labelledby="confirmClientModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmClientModalLabel" class="modal-title">{{ui.teamup.confirms.deleteClientTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteClient}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteClient(_clientId)" class="btn btn-primary">Verwijderen</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirmClientGroupModal" tabindex="-1" role="dialog" aria-labelledby="confirmClientGroupModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmClientGroupModalLabel" class="modal-title">{{ui.teamup.confirms.deleteClientGroupTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteClientGroup}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteClientGroup()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirmReportModal" tabindex="-1" role="dialog" aria-labelledby="confirmReportModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmReportModalLabel" class="modal-title">{{ui.teamup.confirms.deleteReportTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteReport}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="removeReport(_report)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div ng-hide="views.viewClient || views.editClient || views.newClientGroup" class="page-header">
   <h2 class="nullable">{{ui.teamup.clients}}</h2>
   <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
@@ -15,7 +60,7 @@
     <div id="viewClientTab" class="tab-pane {{(views.client==true) &amp;&amp; 'active'}}">
       <div ng-hide="views.editClientGroup" class="tab-header">
         <h3 class="pull-left">{{clientGroup.name}}</h3>
-        <button type="button" ng-click="deleteClientGroup()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" ng-click="confirmDeleteClientGroup()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
         <button type="button" ng-click="editClientGroup(clientGroup)" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
       </div>
       <div ng-show="views.editClientGroup" class="tab-header">
@@ -45,12 +90,27 @@
               <td>
                 <div class="pull-right"><a href="#/clientProfile/{{client.uuid}}#editClient">
                     <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
-                  <button type="submit" ng-click="deleteClient(client.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                  <button type="submit" ng-click="confirmDeleteClient(client.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
+        </table>
+        <div id="confirmClientModal" tabindex="-1" role="dialog" aria-labelledby="confirmClientModalLabel" aria-hidden="true" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 id="confirmClientModalLabel" class="modal-title">{{ui.teamup.confirms.deleteClientTitle}}</h4>
+              </div>
+              <div class="modal-body">{{ui.teamup.confirms.deleteClient}}</div>
+              <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Annuleren</button>
+                <button type="button" ng-click="deleteClient(_clientId)" class="btn btn-primary">Verwijderen</button>
+              </div>
+            </div>
+          </div>
+        </div><span class="muted pull-right"><small><i>{{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
       </div>
     </div>
     <div id="newClientGroupTab" class="tab-pane {{(views.newClientGroup==true) &amp;&amp; 'active'}}">
@@ -179,7 +239,7 @@
     <div id="viewClientTab" ng-show="views.viewClient" class="tab-pane {{(views.viewClient==true) &amp;&amp; 'active'}}">
       <div class="tab-header">
         <h3 class="pull-left">{{client.firstName}} {{client.lastName}}</h3>
-        <button type="button" ng-click="deleteClient(client.uuid)" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" ng-click="confirmDeleteClient(client.uuid)" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
         <button type="button" ng-click="setViewTo(&quot;editClient&quot;)" class="btn pull-right btn-info">{{ui.profile.edit}}</button>
       </div>
       <hr>
@@ -287,7 +347,7 @@
               <td>
                 <div class="pull-right"><a>
                     <button ng-click="editReport(report)" class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
-                  <button ng-click="removeReport(report)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                  <button ng-click="confirmDeleteReport(report)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>

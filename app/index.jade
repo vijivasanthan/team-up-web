@@ -200,13 +200,14 @@ block footer
 	#footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
 		.container-fluid
 			#copyrights
-				span.muted(ng-style='(!config.profile.mobileApp.status) && "right:0"')
-					small Ask Community Systems, 2013
+				span.muted
+					small Ask Community Systems, 2014
 						br
 						i
 							| TeamUp&nbsp;
-							a(href='version.html',
-							target='_blank') v{{config.app.version}}
+							a(href='versions.html',
+								title='{{"Released: %RELEASED%"}}',
+								target='_blank') v{{config.app.version}}
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')
 				small

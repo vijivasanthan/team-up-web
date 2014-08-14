@@ -206,7 +206,7 @@ define(
               };
             }
 
-            console.log('member ->', member);
+            // console.log('member ->', member);
 
             return member;
           };

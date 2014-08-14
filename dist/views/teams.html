@@ -1,3 +1,33 @@
+<div id="confirmTeamModal" tabindex="-1" role="dialog" aria-labelledby="confirmTeamModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTeamModalLabel" class="modal-title">{{ui.teamup.confirms.deleteTeamTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteTeam}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteTeam()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirmMemberModal" tabindex="-1" role="dialog" aria-labelledby="confirmMemberModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmMemberModalLabel" class="modal-title">{{ui.teamup.confirms.deleteMemberTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteMember}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteMember(_memberId)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div ng-hide="views.newTeam || views.newMember" class="page-header">
   <h2 class="nullable">{{ui.teamup.teams}}</h2>
   <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
@@ -15,7 +45,7 @@
       <div ng-hide="views.editTeam" class="tab-header">
         <h3 class="pull-left">{{team.name}}</h3>
         <h4 ng-show="(team.phone != &quot;&quot; &amp;&amp; team.phone != null)" class="pull-left">({{team.phone}})</h4>
-        <button type="button" ng-click="deleteTeam()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" ng-click="confirmDeleteTeam()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
         <button type="button" ng-click="editTeam(team)" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
       </div>
       <div ng-show="views.editTeam" class="tab-header">
@@ -47,7 +77,7 @@
               <td>
                 <div class="pull-right"><a href="#/profile/{{member.uuid}}#edit" ng-click="editProfile(member.uuid,team.uuid)">
                     <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
-                  <button type="submit" ng-click="deleteMember(member.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                  <button type="submit" ng-click="confirmDeleteMember(member.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>
