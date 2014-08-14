@@ -1,0 +1,19 @@
+{
+  "name": "web-lib-vis",
+  "description": "AngularJS wrapper for Almende/VisJS",
+  "homepage": "https://github.com/askcs/web-lib-vis",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "vis": "~0.7.1"
+  },
+  "_release": "4b350e459a",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "4b350e459a7d980355194dabee6b4cbb9028ddff"
+  },
+  "_source": "https://github.com/askcs/web-lib-vis.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/askcs/web-lib-vis.git"
+}

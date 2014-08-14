@@ -1,0 +1,256 @@
+#timeline {
+}
+
+div.timeline-frame {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+div.timeline-axis {
+  background-color: $brown;
+  color: #fff;
+  border: 1px #ddd;
+  border-top-style: solid;
+}
+
+div.timeline-axis-grid {
+  border-left-style: solid;
+  border-width: 1px;
+}
+
+div.timeline-axis-grid-minor {
+  border-color: #e5e5e5;
+  background-color: #e5e5e5;
+}
+
+/*striped background*/
+//div.timeline-frame div:nth-child(1) {
+//  div.timeline-axis-grid-minor:nth-child(2n) {
+//    border-bottom: 70px solid $offwhite;
+//  }
+//}
+//
+//div.timeline-groups-axis {
+//  div.timeline-axis-grid-minor:nth-child(4n) {
+//    border-bottom: 70px solid $offwhite;
+//  }
+//}
+/*end striped background*/
+
+div.timeline-axis-grid-major {
+  border-color: #bfbfbf;
+}
+
+div.timeline-axis-text {
+  color: #f5f4ee;
+  padding: 3px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+div.timeline-axis-text-minor {
+}
+
+div.timeline-axis-text-major {
+}
+
+div.timeline-event {
+  display: inline-block;
+  padding: 10px 0;
+  height: 20px;
+  background-color: $orange;
+  margin-top: 12px !important;
+}
+
+div.timeline-event-selected {
+  border-color: #FFC200;
+  opacity: .7;
+  z-index: 999;
+}
+
+div.timeline-event-cluster {
+  /* TODO: use another color or pattern? */
+  background: #97B0F8 url('../images/timeline/cluster_bg.png');
+  color: white;
+}
+
+div.timeline-event-cluster div.timeline-event-dot {
+  border-color: #D5DDF6;
+}
+
+div.timeline-event-box {
+  text-align: center;
+  border-radius: 5px;
+  -moz-border-radius: 5px; /* For Firefox 3.6 and older */
+}
+
+div.timeline-event-dot {
+  border: 5px solid;
+  border-radius: 5px;
+  -moz-border-radius: 5px; /* For Firefox 3.6 and older */
+}
+
+div.timeline-event-range {
+  height: 40px;
+}
+
+div.timeline-event-range-drag-left {
+  cursor: w-resize;
+  z-index: 1000;
+}
+
+div.timeline-event-range-drag-right {
+  cursor: e-resize;
+  z-index: 1000;
+}
+
+div.timeline-event-line {
+  border-left: 1px solid;
+}
+
+div.timeline-event-content {
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  color: $white;
+  font-weight: 800;
+}
+
+div.timeline-groups-axis {
+  border: 1px #BEBEBE;
+}
+
+div.timeline-groups-text {
+  color: $brown;
+  padding-left: 10px;
+  padding-right: 10px;
+  div {
+    font-size: 12px !important;
+    margin: 6px 0 !important;
+  }
+  div:nth-child(2) {
+    margin: 22px 0 0 10px !important;
+  }
+}
+
+div.timeline-currenttime {
+  background-color: #FF7F6E;
+  width: 2px;
+  z-index: 150;
+}
+
+div.timeline-customtime {
+  background-color: #6E94FF;
+  width: 2px;
+  cursor: move;
+  z-index: 150;
+}
+
+div.timeline-navigation-delete {
+  padding: 0px 0px 0px 5px;
+  /*background: url('images/img/16/delete.png') no-repeat center;*/
+  display: inline-block;
+  margin-top: 4px;
+  margin-left: -7px;
+  width: 14px;
+  height: 14px;
+  /*background-position: -10px 1px;*/
+  vertical-align: text-top;
+  line-height: 14px;
+  *margin-right: .3em;
+  background: url("../images/glyphicons-halflings.png") no-repeat -48px -97px;
+  z-index: 10000;
+}
+
+div.timeline-navigation-delete:hover {
+  cursor: pointer
+}
+
+div.timeline-navigation-move-left {
+  background: url('../images/timeline/16/moveleft.png') no-repeat center;
+}
+
+div.timeline-navigation-move-right {
+  background: url('../images/timeline/16/moveright.png') no-repeat center;
+}
+
+div.timeline-event.state-available {
+  margin: 0;
+  background-color: #f5a962;
+}
+
+div.timeline-event.state-unreached {
+  margin: 0;
+  background-color: #65619b;
+}
+
+div.timeline-event.state-unavailable {
+  margin: 0;
+  background-color: #a93232;
+}
+
+div.timeline-event div.timeline-event-content {
+  font-size: 12px;
+  top: 0;
+  left: 0;
+}
+
+.state-loading-left {
+  margin: 0;
+  background-color: #ddd;
+  border-bottom: 10px solid #ddd;
+  text-align: right;
+}
+
+.state-loading-right {
+  margin: 0;
+  background-color: #ddd;
+  border-bottom: 10px solid #ddd;
+  text-align: left;
+}
+
+div.timeline-event-range {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+}
+
+.timeline-frame .bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border: none;
+  color: white;
+  /* height and color is set for each individual bar */
+  text-align: center;
+}
+
+.timeline-frame .requirement {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 2px solid gray;
+  background: #e5e5e5;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.changeTimeSlot {
+  padding-right: 30px;
+  padding-top: 10px;
+  position: fixed;
+  z-index: 10000;
+  form {
+    //    border: 1px solid $graytu;
+  }
+}
+
+.timeline-footer-text {
+  font-style: italic;
+}

@@ -1,0 +1,45 @@
+<div class="page-header timeline vis">
+  <div style="float:right" class="text-right">
+    <!--#timeline-controls.pull-right(style='text-align: right')-->
+    <!--  h4(style='font-weight: normal; padding-right: 40px;') {{timeline.info.first}}-->
+    <!--  h4(style='font-weight: normal; padding-right: 40px;') {{timeline.info.second}}-->
+    <!--    br-->
+    <!--    div(style='font-size: 15px; font-weight: lighter')-->
+    <!--      span {{timeline.info.third}}-->
+    <time-board timeline="timeline" class="timeline-periode">
+      <h4>{{timeline.info.first}}</h4>
+      <h4>{{timeline.info.second}}</h4>
+      <h5><em>{{timeline.info.third}}</em></h5>
+    </time-board>
+  </div>
+</div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="{{(views.teams==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="teams" class="tab-pane {{(views.teams==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">Timeline</h3>
+        <time-nav timeline="timeline"></time-nav>
+        <div ng-show="timeline.scope.custom" class="btn-group pull-right">
+          <button disabled="disabled" class="btn btn-info">&lt;</button>
+          <button disabled="disabled" class="btn btn-info">&gt;</button>
+        </div>
+        <div ng-hide="timeline.scope.custom" class="btn-group pull-right">
+          <button ng-click="timeline.stepScope(-1)" class="btn btn-info">&lt;</button>
+          <button ng-click="timeline.stepScope(1)" class="btn btn-info">&gt;</button>
+        </div>
+        <div style="margin-right: 15px" class="btn-group pull-right">
+          <button ng-click="timeline.setScope(&quot;day&quot;)" class="btn btn-info {{(timeline.scope.day) &amp;&amp; &quot;active&quot;}}">Day</button>
+          <button ng-click="timeline.setScope(&quot;week&quot;)" class="btn btn-info {{(timeline.scope.week) &amp;&amp; &quot;active&quot;}}">Week</button>
+          <button ng-click="timeline.setScope(&quot;month&quot;)" class="btn btn-info {{(timeline.scope.month) &amp;&amp; &quot;active&quot;}}">Month</button>
+          <button ng-click="timeline.setScope(&quot;year&quot;)" class="btn btn-info {{(timeline.scope.year) &amp;&amp; &quot;active&quot;}}">Year</button>
+          <button ng-click="timeline.setScope(&quot;custom&quot;)" class="btn btn-info {{(timeline.scope.custom) &amp;&amp; &quot;active&quot;}}">Custom</button>
+        </div>
+      </div>
+      <hr>
+      <time-line items="items" timeline="timeline"></time-line>
+    </div>
+  </div>
+</div>

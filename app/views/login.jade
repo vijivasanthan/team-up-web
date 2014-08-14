@@ -1,0 +1,30 @@
+#welcomeLogo
+#welcomeArrow
+#welcome
+	#preloader
+		h4 {{ui.login.setting_up_app}}
+		.progress.progress-striped.active
+			.bar
+		span.muted
+	#login.boxed
+		form(ng-submit='login()')
+			.alert(class='{{alert.login.type}}',
+			ng-show='alert.login.display')
+				button.close(type='button',
+				ng-click='alert.login=false') ×
+				| {{alert.login.message}}
+			input(type='text',
+			ng-model='loginData.username',
+			placeholder='{{ui.login.ph_username}}',
+			autofocus='')
+			input(type='password',
+			ng-model='loginData.password',
+			placeholder='{{ui.login.ph_password}}')
+			label.checkbox.span3
+				input(type='checkbox',
+				ng-model='loginData.remember')
+				| {{ui.login.label_rememberMe}}
+			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
+			span.version
+				//TODO: Create a version file later on or disable the link
+				a(href='index.html') v{{config.app.version}}
