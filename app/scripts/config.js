@@ -29,10 +29,10 @@ define(
         }
       },
 
-      // host: "http://test.ask-cs.com/",
-      host: "http://dev.ask-cs.com/",
-      // namespace: "teamup-test",
-      namespace: "teamup-dev",
+      host: "http://test.ask-cs.com/",
+      // host: "http://dev.ask-cs.com/",
+      namespace: "teamup-test",
+      // namespace: "teamup-dev",
 
       formats: {
         date: 'dd-MM-yyyy',
