@@ -262,8 +262,10 @@ define(
                   function (task)
                   {
                     var client = $rootScope.getClientByID(task.relatedClientUuid);
-
-                    task.relatedClientName = client.firstName + ' ' + client.lastName;
+                    if(client!=null) {
+                        console.log(client);
+                        task.relatedClientName = client.firstName + ' ' + client.lastName;
+                    }
                   }
                 );
 
