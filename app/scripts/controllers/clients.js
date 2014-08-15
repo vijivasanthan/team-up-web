@@ -904,34 +904,6 @@ define(
                 ).then(
                   function (result)
                   {
-                    // send the message to team that new report created
-                    var current = new Date();
-
-                    var messageBody = {"reportUuid": result.result,
-                      "reportTitle": report.title,
-                      "clientUuid": report.client.uuid,
-                      "authorUuid": report.author.uuid,
-                      "creationTime": report.creationTime};
-                    TeamUp._(
-                      'message',
-                      {},
-                      {
-                        title: 'Nieuw rapport over ' + report.client.firstName + " " + report.client.lastName,
-                        body: JSON.stringify(messageBody),
-                        sendTime: current.getTime(),
-                        type: 'REPORT_NEW'
-                      }).then(
-                      function (msgResult)
-                      {
-                        console.log("new report message : " + msgResult);
-                      },
-                      function (error)
-                      {
-                        $rootScope.notifier.error(error);
-                        $rootScope.statusBar.off();
-                      }
-                    );
-
                     $modalInstance.close(report);
 
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
