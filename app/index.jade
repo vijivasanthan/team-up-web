@@ -206,7 +206,7 @@ block footer
 						i
 							| TeamUp&nbsp;
 							a(href='versions.html',
-								title='{{"Released: %RELEASED%"}}',
+								title="{{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}",
 								target='_blank') v{{config.app.version}}
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')

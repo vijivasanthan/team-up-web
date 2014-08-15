@@ -375,8 +375,7 @@ module.exports = (grunt) ->
           variables:
             version: '<%= pkg.version %>'
             released: grunt.template.today('dddd, mmmm dS, yyyy, h:MM:ss TT')
-
-        prefix: '@@'
+          prefix: '@@'
         files: [
           expand: true
           flatten: true
@@ -417,6 +416,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'server', [
     'serve'
+    'replace'
   ]
 
   grunt.registerTask 'test', [

@@ -332,6 +332,7 @@ define(
                                 {
                                   progress(100, $rootScope.ui.login.loading_everything);
 
+                                  // TODO: Blend it in the modal!
                                   enhanceTasks();
 
                                   Teams.query()

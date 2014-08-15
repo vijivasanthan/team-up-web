@@ -85,6 +85,15 @@ define(
                 /**
                  * Tasks
                  */
+                // get list of all tasks
+                tasksAll: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    second: 'tasks'
+                  },
+                  isArray: true
+                },
                 // get list
                 taskQuery: {
                   method: 'GET',

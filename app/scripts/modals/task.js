@@ -1,45 +1,145 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services', 'config'],
+  function (services, config)
   {
     'use strict';
 
     services.factory(
       'Task',
       [
-        '$rootScope', 'Store', 'TeamUp',
-        function ($rootScope, Store, TeamUp)
+        '$rootScope',
+        '$resource',
+        '$q',
+        '$filter',
+        'Store',
+        'TeamUp',
+        function ($rootScope, $resource, $q, $filter, Store, TeamUp)
         {
-          return {
-//            period : function (task)
-//            {
-//              return Math.abs((task.plannedEndVisitTime - task.plannedStartVisitTime) / 1000);
-//            },
-            queryMine: function ()
-            {
-              return TeamUp._("taskMineQuery")
-                .then(
-                function (tasks)
-                {
-                  angular.forEach(
-                    tasks,
-                    function (task)
+          var Task = $resource();
+
+          var processTasks = function (tasks)
+          {
+            _.each(
+              tasks,
+              function (task)
+              {
+                task.status = {
+                  id: task.status,
+                  label: config.app.taskStates[task.status]
+                };
+
+                task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+
+                task.relatedClient.fullName = task.relatedClient.firstName +
+                                              ' ' +
+                                              task.relatedClient.lastName;
+
+                task.relatedClient.fullAddress = task.relatedClient.address.street +
+                                                 ' ' +
+                                                 task.relatedClient.address.no +
+                                                 ', ' +
+                                                 task.relatedClient.address.city;
+
+                var delta = (task.plannedEndVisitTime - task.plannedStartVisitTime) / 1000 / 60 / 60;
+
+                task.plannedDuration = (delta <= 24) ?
+                                       $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                                       ' ' +
+                                       $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                                       ' ' +
+                                       $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                                       ' - ' +
+                                       $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                                       ' uur' :
+                                       $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                                       ' ' +
+                                       $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                                       ' ' +
+                                       $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                                       ' uur - ' +
+                                       $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                                       ' ' +
+                                       $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                                       ' ' +
+                                       $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                                       ' uur';
+              }
+            );
+          };
+
+          Task.prototype.queryMine = function ()
+          {
+            return TeamUp._('taskMineQuery')
+              .then(
+              function (tasks)
+              {
+                processTasks(tasks);
+
+                Store('app').save('myTasks2', tasks);
+
+                return tasks;
+              }.bind(this)
+            );
+          };
+
+          Task.prototype.queryAll = function ()
+          {
+            var deferred = $q.defer(),
+                calls = [],
+                bulks = {};
+
+            _.each(
+              Store('app').get('teams'),
+              function (team)
+              {
+                calls.push(
+                  TeamUp._(
+                    'taskByTeam',
+                    { fourth: team.uuid }
+                  ).then(
+                    function (tasks) { bulks[team.uuid] = tasks }
+                  )
+                );
+              }
+            );
+
+            $q.all(calls)
+              .then(
+              function ()
+              {
+                var basket = [];
+
+                _.each(
+                  bulks,
+                  function (tasks)
+                  {
+                    if (tasks.length > 0)
                     {
-                      task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                      _.each(
+                        tasks,
+                        function (task) { basket.push(task) }
+                      );
+                    }
+                  }
+                );
 
-                      task.relatedClient.fullName = task.relatedClient.firstName +
-                                                    ' ' +
-                                                    task.relatedClient.lastName;
-                    }.bind(this)
-                  );
+                var tasks = _.map(
+                  _.indexBy(basket, function (node) { return node.uuid }),
+                  function (task) { return task }
+                );
 
-                  Store('app').save('myTasks', tasks);
+                processTasks(tasks);
 
-                  return tasks;
-                }.bind(this)
-              );
-            }
-          }
+                Store('app').save('allTasks2', tasks);
+
+                deferred.resolve(tasks);
+              }.bind(bulks)
+            );
+
+            return deferred.promise;
+          };
+
+          return new Task;
         }
       ]
     );

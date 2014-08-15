@@ -14,7 +14,9 @@ define(
     'angular-strap',
     'ui-bootstrap',
     // 'ng-vis',
-    'angular-google-maps',
+
+    // 'angular-google-maps',
+
     // 'angular-dragdrop',
     // 'ui-sortable',        
     'ui.bootstrap.pagination'
@@ -28,16 +30,23 @@ define(
         'services',
         'filters',
         'directives',
+
         'ngResource',
         'ngRoute',
+
         // 'mgcrea.ngStrap'
+
         '$strap.directives',
         'ui.bootstrap.modal',
+
         // 'NgVis',
-        'google-maps',
+
+        // 'google-maps',
+
         // 'ngDragDrop',
         // 'ui.sortable',   
-        // 'collapse',        
+        // 'collapse',
+
         'ui.bootstrap.pagination'
       ]);
   }

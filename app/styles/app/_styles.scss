@@ -193,6 +193,8 @@ dl {
 //   display: none;
 // }
 
+
+//TODO: Check whether they are used!
 #scheaduler-pane {
   margin-top: 15px;
   padding: 15px;
@@ -292,3 +294,11 @@ dl {
     }
   }
 }
+
+
+.text-turq    { color: $turq }
+.text-orange  { color: $orange }
+.text-brown   { color: $brown }
+.text-beige   { color: $beige }
+.text-graytu  { color: $graytu }
+.text-red     { color: $red }

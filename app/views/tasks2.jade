@@ -16,6 +16,73 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 					| {{ui.teamup.confirms.remove}}
 
 
+#taskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='taskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#taskModalLabel.modal-title
+					| {{task.relatedClient.fullName}} - {{task.plannedDuration}}
+			.modal-body
+				//pre: small {{task | json}}
+
+				//h4.pull-right Taakinformatie
+				dl
+					dt Status
+						dd {{task.status | formatTaskState}}
+					dt Tijdsbestek
+						dd {{task.plannedDuration}}
+					dt Beschrijving
+						dd {{task.description}}
+					dt Gemaakt door
+						dd
+							a(href='#')
+								| {{task.authorUuid}}
+
+				hr
+
+				//h4.pull-right Cliëntinformatie
+				dl
+					dt Cliënt
+						dd
+							a(href='#')
+								| {{task.relatedClient.fullName}}
+					dt Cliëntgroep
+						dd
+							a(href='#')
+								| {{task.clientGroupUuid}}
+					dt Adres
+						dd
+							a(href='#')
+								| {{task.relatedClient.address.street}} {{task.relatedClient.address.no}},
+								| {{task.relatedClient.address.zip}} {{task.relatedClient.address.city}}
+					dt Telefoon
+						dd {{task.relatedClient.phone}}
+
+				hr
+
+				//h4.pull-right Lid-informatie
+				dl
+					dt Naam
+						dd
+							a(href='#')
+								| {{task.assignedTeamMemberUuid}}
+					dt Team
+						dd
+							a(href='#')
+								| {{task.assignedTeamUuid}}
+
+
+			//.modal-footer
+			//	button.btn.btn-default(type='button', data-dismiss='modal')
+			//		| {{ui.teamup.confirms.cancel}}
+			//	button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')
+			//		| {{ui.teamup.confirms.remove}}
+
+
 
 .page-header
 	h2.nullable
@@ -55,11 +122,74 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 
 			article(ng-hide='tasks.mine.loading')
 
+				// pre: small {{tasks.mine.list | json}}
+
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
-				pre: small {{tasks.mine.list | json}}
-
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
+					thead
+						tr
+							th(colspan='2')
+							th
+								a {{ui.task.clientName}}
+									i.icon-sort
+							th: a {{ui.task.information}}
+							th
+								a {{ui.task.planningTime}}
+									i.icon-sort
+							th(colspan='1')
+
+					tbody
+						tr(ng-repeat='task in tasks.mine.list')
+							td
+								span.label.label-warning {{task.status.label}}
+							td
+								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
+							td
+								small
+									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+										| {{task.relatedClient.fullName}}
+							td
+								table
+									tr
+										td: span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+										td: small {{task.relatedClient.fullAddress}}
+							td
+								table
+									tr
+										td: span.taskIcon.icon-time(aria-hidden='true')
+										td: small {{task.plannedDuration}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button'): i.icon-minus
+									button.btn-primary.btn-mini(type='button'): i.icon-trash
+				span.muted.pull-right
+					small: i {{tasks.mine.list.length | i18n_spec:'groups.memberCount'}}
+
+
+
+
+
+
+
+
+		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ui.task.allTasks}}
+			hr
+
+			article(ng-show='tasks.all.loading')
+				p Loading tasks.. (All)
+
+			article(ng-hide='tasks.all.loading')
+
+				p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
+
+				// pre: small {{tasks.all.list | json}}
+
+				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 					thead
 						tr
 							th(colspan='1')
@@ -73,42 +203,37 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 							th(colspan='1')
 
 					tbody
-						tr(ng-repeat='task in tasks.mine.list')
+						tr(ng-repeat='task in tasks.all.list')
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
 							td
 								small
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
-										| {{task.relatedClient.fullName }}
+										| {{task.relatedClient.fullName}}
 							td
 								table
 									tr
 										td: span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-										td
-											small
-												| {{task.relatedClient.address.street}} {{task.relatedClient.address.no}}
-												| {{task.relatedClient.address.zip}} {{task.relatedClient.address.city}}
+										td: small {{task.relatedClient.fullAddress}}
 							td
 								table
 									tr
 										td: span.taskIcon.icon-time(aria-hidden='true')
-										td: small {{task | formatTaskDuration}}
+										td: small {{task.plannedDuration}}
 							td
 								.pull-right
 									button.btn-primary.btn-mini(type='button'): i.icon-info
 									button.btn-primary.btn-mini(type='button'): i.icon-minus
 									button.btn-primary.btn-mini(type='button'): i.icon-trash
 				span.muted.pull-right
-					small: i {{tasks.mine.list.length | i18n_spec:'groups.memberCount'}}
+					small: i {{tasks.all.list.length | i18n_spec:'groups.memberCount'}}
 
 
 
 
 
-		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
-			.tab-header
-				h3.pull-left {{ui.task.allTasks}}
-			hr
+
+
 
 		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}",
 		ng-hide="app.resources.role > 1")

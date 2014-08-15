@@ -124,7 +124,7 @@
     </div>
     <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak">
       <div class="container-fluid">
-        <div id="copyrights"><span class="muted"><small>Ask Community Systems, 2014<br><i>TeamUp&nbsp;<a href="versions.html" title="{{&quot;Released: %RELEASED%&quot;}}" target="_blank">v{{config.app.version}}</a></i></small></span></div>
+        <div id="copyrights"><span class="muted"><small>Ask Community Systems, 2014<br><i>TeamUp&nbsp;<a href="versions.html" title="{{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}" target="_blank">v{{config.app.version}}</a></i></small></span></div>
         <p ng-show="loading.status" class="muted"><img src="images/ca504260.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>

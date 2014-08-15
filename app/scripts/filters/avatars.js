@@ -616,12 +616,15 @@ define(
 
     // Get a target out of a collection based on the id
     filters.filter(
-      'getByUuid', function ()
+      'getByUuid',
+      function ()
       {
         return function (input, uuid)
         {
           var i = 0;
+
           var len = input.length;
+
           for (; i < len; i ++)
           {
             if (input[i].uuid == uuid)
@@ -629,6 +632,7 @@ define(
               return input[i];
             }
           }
+
           return null;
         }
       }
@@ -644,52 +648,9 @@ define(
           return function (date, pattern)
           {
             var timestamp = new Date(date).getTime();
-            var ret = $filter('date')(timestamp, pattern);
-            return ret;
+
+            return $filter('date')(timestamp, pattern);
           }
-        }
-      ]
-    );
-
-
-    // Nicely format task duration period
-    filters.filter(
-      'formatTaskDuration',
-      [
-        '$filter',
-        function ($filter)
-        {
-          return function (task)
-          {
-            var delta = (task.plannedEndVisitTime - task.plannedStartVisitTime) / 1000 / 60 / 60;
-
-            if (delta <= 24)
-            {
-              return $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                     ' ' +
-                     $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                     ' ' +
-                     $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                     ' - ' +
-                     $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                     ' uur';
-            }
-            else
-            {
-              return $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                     ' ' +
-                     $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                     ' ' +
-                     $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                     ' uur - ' +
-                     $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                     ' ' +
-                     $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                     ' ' +
-                     $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                     ' uur';
-            }
-          };
         }
       ]
     );
@@ -697,31 +658,36 @@ define(
 
     // Date reversing
     filters.filter(
-      'formatTaskAddress',
+      'formatTaskState',
       [
         function ()
         {
-          return function (address)
+          return function (state)
           {
-            return address.street +
-                   ' ' +
-                   address.no +
-                   ', ' +
-                   address.zip +
-                   ' ' +
-                   address.city;
+            if (state)
+            {
+              return config.app.taskStates[state];
+            }
           }
         }
       ]
     );
 
 
+    filters.filter(
+      'interpolate',
+      [
+        function ()
+        {
+          return function (text)
+          {
+            text = String(text).replace(/\%RELEASED\%/mg, config.app.released);
 
-
-
-
-
-
+            return String(text).replace(/\%VERSION\%/mg, config.app.version);
+          }
+        }
+      ]
+    );
 
 
   }

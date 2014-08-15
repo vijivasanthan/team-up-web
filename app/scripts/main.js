@@ -13,44 +13,59 @@ require.config(
       jquery: '../vendors/jquery/dist/jquery.min',
       plugins: 'plugins',
       domReady: '../vendors/requirejs-domready/domReady',
+
       // bootstrap: '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
+
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
+
       // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap': 'removables/angular-strap.min',
       'ui-bootstrap': 'removables/ui-bootstrap-custom', // TODO: Remove later
+
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
       moment: '../vendors/momentjs/min/moment.min',
+
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
+
       // treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
       treegrid: 'removables/treegrid',
+
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
       datepicker: 'removables/datepicker.min',
+
       // datepicker:         '../vendors/angular-ui-bootstrap/src/datepicker/datepicker',
       // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
+
       timepicker: 'removables/timepicker.min',
       underscore: '../vendors/underscore/underscore',
       md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       offline: '../vendors/web-lib-offline/dist/offline',
+
       // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
+
       log: '../vendors/web-lib-log/dist/log',
       _moment: '../vendors/web-lib-moment/dist/moment',
       session: '../vendors/web-lib-session/dist/session',
+
       // vis: '../vendors/vis/dist/vis.min',
       // 'ng-vis': '../vendors/web-lib-vis/public/dist/ng-vis',
+
       'jquery-form': '../vendors/jquery-form/jquery.form',
+
       //'async':            '../vendors/requirejs-plugins/src/async',
-      'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
+      // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'lodash': '../vendors/lodash/dist/lodash.underscore.min',
+
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
-      'locale_nl': 'i18n/angular-locale_nl',
+      'locale_nl': 'i18n/angular-locale_nl'
     },
     shim: {
       date: { deps: [], exports: 'date' },
@@ -72,20 +87,27 @@ require.config(
       underscore: { exports: 'underscore'},
       store: { deps: ['angular', 'underscore']},
       offline: { deps: ['angular'] },
+
       // interceptor: { deps: ['angular'] },
+
       log: { deps: ['angular'] },
       _moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
+
       // vis: { exports: 'vis' },
       // 'ng-vis': { deps: ['angular', 'vis'], exports: 'ng-vis' },
+
       'jquery-form': { deps: ['jquery'], exports: 'jquery-form' },
-      'angular-google-maps': { deps: ['angular'] },
+
+      // 'angular-google-maps': { deps: ['angular'] },
       lodash: { deps: [], exports: 'lodash' },
+
       // 'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
+
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      'locale_nl': { deps: ['angular'] },
+      'locale_nl': { deps: ['angular'] }
     }
   }
 );
@@ -102,22 +124,29 @@ require(
     'angular-route',
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
+
     'locals',
     'config',
     'app',
     'run',
     'routes',
     'states',
+
     'services/browsers',
     'services/teamup',
     'services/clients',
     'services/dater', // TODO: Remove later on
     'services/teams',
-    'services/googleGEO',
+
+    // 'services/googleGEO',
+
     'directives/widgets',
-    'modals/task',
     // 'directives/treegrid',
+
+    'modals/task',
+
     'filters/avatars',
+
     'controllers/clients',
     'controllers/login',
     'controllers/manage',
@@ -132,6 +161,7 @@ require(
     'controllers/timeline',
     'controllers/timeline-navigation',
     'controllers/treegrid',
+
     'bootstrap',
     'lawnchair',
     'dom',
@@ -151,8 +181,10 @@ require(
     // 'vis',
     // 'ng-vis',
     'jquery-form',
+
     'lodash',
-    'angular-google-maps',
+    // 'angular-google-maps',
+
     // 'jquery-ui',
     // 'angular-dragdrop',
     // 'ui-sortable',  
