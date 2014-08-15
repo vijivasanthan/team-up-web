@@ -101,6 +101,7 @@ define(
                   var client = $rootScope.getClientByID(msgBody.clientUuid);
                   angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
                   msg.body = msgBody;
+                  msg.title = $scope.ui.message.reportMessage+" "+client.firstName+" "+client.lastName;
                 }
 
                 $scope.messages.push(msg);

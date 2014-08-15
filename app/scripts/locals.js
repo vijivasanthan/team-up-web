@@ -144,6 +144,7 @@ define(
           restoreSelected: 'Geselecteerde berichten terugplaatsen',
           loadingMessage: 'Bericht laden...',
           escalation: 'Escalatiebericht',
+          reportMessage: 'Nieuw raport van',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Er is een tekort van ' +
