@@ -36,6 +36,10 @@ define(
               allTasks: false,
               newTask: false
             };
+
+            $scope.reversed = true;
+
+            $scope.order = 'status.label';
           }
 
           var setView = function (hash)
@@ -148,6 +152,13 @@ define(
             $scope.task = task;
 
             angular.element('#taskModal').modal('show');
+          };
+
+          $scope.orderBy = function (ordered)
+          {
+            $scope.ordered = ordered;
+
+            $scope.reversed = !$scope.reversed;
           }
 
 

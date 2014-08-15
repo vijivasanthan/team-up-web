@@ -40,29 +40,31 @@ define(
                                                  ', ' +
                                                  task.relatedClient.address.city;
 
-                var delta = (task.plannedEndVisitTime - task.plannedStartVisitTime) / 1000 / 60 / 60;
+                task.plannedTaskDuration = {
+                  difference: task.plannedEndVisitTime - task.plannedStartVisitTime
+                };
 
-                task.plannedDuration = (delta <= 24) ?
-                                       $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                       ' ' +
-                                       $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                       ' ' +
-                                       $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                       ' - ' +
-                                       $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                       ' uur' :
-                                       $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                       ' ' +
-                                       $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                       ' ' +
-                                       $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                       ' uur - ' +
-                                       $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                                       ' ' +
-                                       $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                                       ' ' +
-                                       $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                       ' uur';
+                task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
+                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                                                 ' - ' +
+                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                                                 ' uur' :
+                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                                                 ' uur - ' +
+                                                 $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                                                 ' ' +
+                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                                                 ' uur';
               }
             );
           };

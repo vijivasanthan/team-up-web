@@ -181,10 +181,10 @@ define(
         'com.ask-cs.State.Unreached'
       ],
 
-      //      1 - active - Task is being executed by a team member (a team member can have only 1 active task at a time)
-      //      2 - planning - task is in planning and can be picked up by a team member
-      //      3 - finished - task has been executed by a team member and cannot be picked up anymore
-      //      4 - cancelled - task is cancelled and cannot be picked up anymore by any team member
+      // 1 - active - Task is being executed by a team member (a team member can have only 1 active task at a time)
+      // 2 - planning - task is in planning and can be picked up by a team member
+      // 3 - finished - task has been executed by a team member and cannot be picked up anymore
+      // 4 - cancelled - task is cancelled and cannot be picked up anymore by any team member
 
       taskStates: {
         1: 'Active',

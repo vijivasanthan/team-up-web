@@ -25,7 +25,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only Close
 				h4#taskModalLabel.modal-title
-					| {{task.relatedClient.fullName}} - {{task.plannedDuration}}
+					span.text-turq {{task.relatedClient.fullName}}
+					br
+					| {{task.plannedTaskDuration.label}}
 			.modal-body
 				//pre: small {{task | json}}
 
@@ -34,7 +36,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					dt Status
 						dd {{task.status | formatTaskState}}
 					dt Tijdsbestek
-						dd {{task.plannedDuration}}
+						dd {{task.plannedTaskDuration.label}}
 					dt Beschrijving
 						dd {{task.description}}
 					dt Gemaakt door
@@ -56,9 +58,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								| {{task.clientGroupUuid}}
 					dt Adres
 						dd
-							a(href='#')
-								| {{task.relatedClient.address.street}} {{task.relatedClient.address.no}},
-								| {{task.relatedClient.address.zip}} {{task.relatedClient.address.city}}
+							a(href='#') {{task.relatedClient.fullAddress}}
 					dt Telefoon
 						dd {{task.relatedClient.phone}}
 
@@ -129,20 +129,22 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
 						tr
-							th(colspan='2')
 							th
-								a {{ui.task.clientName}}
+								a(ng-click='orderBy("status.label")') Status
 									i.icon-sort
-							th: a {{ui.task.information}}
 							th
-								a {{ui.task.planningTime}}
+							th
+								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
+									i.icon-sort
+							th {{ui.task.information}}
+							th
+								a(ng-click='orderBy("plannedTaskDuration.difference")') {{ui.task.planningTime}}
 									i.icon-sort
 							th(colspan='1')
 
 					tbody
-						tr(ng-repeat='task in tasks.mine.list')
-							td
-								span.label.label-warning {{task.status.label}}
+						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
+							td: span.label.label-warning {{task.status.label}}
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
 							td
@@ -150,15 +152,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								table
-									tr
-										td: span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-										td: small {{task.relatedClient.fullAddress}}
+								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								small {{task.relatedClient.fullAddress}}
 							td
-								table
-									tr
-										td: span.taskIcon.icon-time(aria-hidden='true')
-										td: small {{task.plannedDuration}}
+								span.taskIcon.icon-time(aria-hidden='true')
+								small {{task.plannedTaskDuration.label}}
 							td
 								.pull-right
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
@@ -178,6 +176,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
+				div.pull-right(style='margin-top: 10px')
+					input(type='checkbox')
+					label(style='font-weight: normal'): small Toon onbeschikbare taken
 			hr
 
 			article(ng-show='tasks.all.loading')
@@ -192,18 +193,22 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 					thead
 						tr
-							th(colspan='1')
 							th
-								a {{ui.task.clientName}}
+								a(ng-click='orderBy("status.label")') Status
+									i.icon-sort
+							th
+							th
+								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
 							th: a {{ui.task.information}}
 							th
-								a {{ui.task.planningTime}}
-									i.icon-sort
+								| {{ui.task.planningTime}}
+								i.icon-sort
 							th(colspan='1')
 
 					tbody
 						tr(ng-repeat='task in tasks.all.list')
+							td: span.label.label-warning {{task.status.label}}
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
 							td
@@ -211,15 +216,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								table
-									tr
-										td: span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
-										td: small {{task.relatedClient.fullAddress}}
+								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								small {{task.relatedClient.fullAddress}}
 							td
-								table
-									tr
-										td: span.taskIcon.icon-time(aria-hidden='true')
-										td: small {{task.plannedDuration}}
+								span.taskIcon.icon-time(aria-hidden='true')
+								small {{task.plannedTaskDuration.label}}
 							td
 								.pull-right
 									button.btn-primary.btn-mini(type='button'): i.icon-info
