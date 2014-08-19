@@ -237,6 +237,11 @@ aria-hidden='true')
 						.controls
 							input.span4(type='text',
 							ng-model='clientForm.clientProfileUrl')
+					.control-group
+						label.control-label Extra Info
+						.controls
+							textarea.span8(style='height: 150px',
+							ng-model='clientForm.extraInfo.description')
 				hr
 				.form-actions
 					button.btn.btn-success(type='submit',
@@ -322,6 +327,10 @@ aria-hidden='true')
 							| {{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}
 						dt {{ui.teamup.clientProfileUrl}}
 						dd {{client.clientProfileUrl}}
+						dt Extra Info
+						dd: pre {{client.extraInfo.description || '-'}}
+						// pre: small {{client | json}}
+
 				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
 					.roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
 					div
@@ -412,6 +421,8 @@ aria-hidden='true')
 				span.muted.pull-right
 					small
 						i {{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+
+
 		.tab-pane(ng-show='views.editClient',
 		class="{{(views.editClient==true) && 'active'}}")
 			div(style='overflow: hidden; height: 35px')
@@ -474,6 +485,11 @@ aria-hidden='true')
 							input.span4(type='text',
 							value='{{client.clientProfileUrl}}',
 							ng-model='clientmeta.clientProfileUrl')
+					.control-group
+						label.control-label Extra Info
+						.controls
+							textarea.span8(style='height: 150px',
+							ng-model='clientmeta.extraInfo.description')
 					.form-actions
 						button.btn.btn-success(type='submit',
 						ng-click='clientChange(clientmeta)') {{ui.teamup.saveClient}}
