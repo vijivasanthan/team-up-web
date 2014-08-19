@@ -80,6 +80,8 @@ define(
               .then(
               function (tasks)
               {
+                tasks = _.sortBy(tasks, 'status');
+
                 processTasks(tasks);
 
                 Store('app').save('myTasks2', tasks);
@@ -134,6 +136,8 @@ define(
                   _.indexBy(basket, function (node) { return node.uuid }),
                   function (task) { return task }
                 );
+
+                tasks = _.sortBy(tasks, 'status.id');
 
                 processTasks(tasks);
 

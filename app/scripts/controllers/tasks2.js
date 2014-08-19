@@ -39,7 +39,7 @@ define(
 
             $scope.reversed = true;
 
-            $scope.order = 'status.label';
+            $scope.order = 'status.id';
           }
 
           var setView = function (hash)
@@ -66,7 +66,7 @@ define(
                     list: myTasks
                   };
 
-                  delay = 2000;
+                  delay = 250;
                 }
 
                 $timeout(function () { queryMine() }, delay);
@@ -83,7 +83,7 @@ define(
                   };
                 }
 
-                $timeout(function () { queryAll() }, 1000);
+                $timeout(function () { queryAll() }, 250);
                 break;
 
               case 'newTask':

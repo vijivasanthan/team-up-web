@@ -215,6 +215,39 @@ define(
               'background-size': 'cover'
             });
         };
-      });
+      }
+    );
+
+
+    directives.directive(
+      'linkIconHovered',
+      function ()
+      {
+        return {
+          link: function (scope, element, attrs)
+          {
+            element.parent().bind(
+              'mouseenter',
+              function ()
+              {
+                element.removeClass('icon-link');
+                element.addClass('icon-link2');
+              }
+            );
+
+            element.parent().bind(
+              'mouseleave',
+              function ()
+              {
+                element.removeClass('icon-link2');
+                element.addClass('icon-link');
+              }
+            );
+          }
+        };
+      }
+    );
+
+
   }
 );
