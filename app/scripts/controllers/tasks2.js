@@ -18,19 +18,19 @@ define(
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash();
 
-          $scope.tasks = {
-            mine: {
-              loading: true,
-              list: []
-            },
-            all: {
-              loading: true,
-              list: []
-            }
-          };
-
           function resetViews ()
           {
+            $scope.tasks = {
+              mine: {
+                loading: true,
+                list: []
+              },
+              all: {
+                loading: true,
+                list: []
+              }
+            };
+
             $scope.views = {
               myTasks: false,
               allTasks: false,
@@ -59,7 +59,7 @@ define(
 
                 var delay = 0;
 
-                if (myTasks)
+                if (myTasks.length > 0)
                 {
                   $scope.tasks.mine = {
                     loading: false,
@@ -73,14 +73,13 @@ define(
                 break;
 
               case 'allTasks':
-
                 var allTasks = Store('app').get('allTasks2');
 
-                if (allTasks)
+                if (allTasks.on || allTasks.off)
                 {
                   $scope.tasks.all = {
                     loading: false,
-                    list: allTasks
+                    list: allTasks.on
                   };
                 }
 
@@ -123,7 +122,6 @@ define(
 //                  function ()
 //                  {
 //                    angular.element('#taskModal').modal('show');
-//
 //                    $scope.task = tasks[0];
 //                  }, 25
 //                );
@@ -141,11 +139,30 @@ define(
               {
                 $scope.tasks.all = {
                   loading: false,
-                  list: tasks
+                  list: tasks.on
                 };
               }
             );
           }
+
+          $scope.showAllTasks = false;
+
+          $scope.$watch(
+            'showAllTasks',
+            function (toggle)
+            {
+              var allTasks = Store('app').get('allTasks2');
+
+              if (toggle)
+              {
+                $scope.tasks.all.list = allTasks['on'].concat(allTasks['off']);
+              }
+              else
+              {
+                $scope.tasks.all.list = allTasks.on;
+              }
+            }
+          );
 
           $scope.openTask = function (task)
           {

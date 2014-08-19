@@ -65,6 +65,11 @@ define(
                                                  ' ' +
                                                  $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
                                                  ' uur';
+
+                if (task.assignedTeamMemberUuid != '')
+                {
+                  task.assignedTeamMember = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
+                }
               }
             );
           };
@@ -132,9 +137,15 @@ define(
 
                 processTasks(tasks);
 
-                Store('app').save('allTasks2', tasks);
+                var grouped = _.groupBy(tasks, function (task) { return task.status.id }),
+                    merged = {
+                      on: grouped[1].concat(grouped[2]),
+                      off: grouped[3].concat(grouped[4])
+                    };
 
-                deferred.resolve(tasks);
+                Store('app').save('allTasks2', merged);
+
+                deferred.resolve(merged);
               }.bind(bulks)
             );
 

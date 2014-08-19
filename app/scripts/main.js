@@ -60,7 +60,7 @@ require.config(
 
       //'async':            '../vendors/requirejs-plugins/src/async',
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
-      'lodash': '../vendors/lodash/dist/lodash.underscore.min',
+      'lodash': '../vendors/lodash/dist/lodash.min',
 
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      

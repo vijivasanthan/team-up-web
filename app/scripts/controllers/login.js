@@ -19,8 +19,9 @@ define(
         'TeamUp',
         'Dater',
         '$filter',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store,
-                  $routeParams, TeamUp, Dater, $filter)
+        function (
+          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter
+          )
         {
           // TODO: Soon not needed!
           Dater.registerPeriods();
@@ -262,9 +263,11 @@ define(
                   function (task)
                   {
                     var client = $rootScope.getClientByID(task.relatedClientUuid);
-                    if(client!=null) {
-                        console.log(client);
-                        task.relatedClientName = client.firstName + ' ' + client.lastName;
+
+                    if (client != null)
+                    {
+                      // console.log(client);
+                      task.relatedClientName = client.firstName + ' ' + client.lastName;
                     }
                   }
                 );

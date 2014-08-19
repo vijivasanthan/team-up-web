@@ -29,6 +29,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					br
 					| {{task.plannedTaskDuration.label}}
 			.modal-body
+
 				//pre: small {{task | json}}
 
 				//h4.pull-right Taakinformatie
@@ -117,12 +118,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				h3.pull-left {{ui.task.myTask}}
 			hr
 
-			article(ng-show='tasks.mine.loading')
-				p Loading tasks.. (Mine)
+			article(ng-show='tasks.mine.loading'): p Eigen taken aan het laden..
 
 			article(ng-hide='tasks.mine.loading')
-
-				// pre: small {{tasks.mine.list | json}}
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
@@ -164,7 +162,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									button.btn-primary.btn-mini(type='button'): i.icon-minus
 									button.btn-primary.btn-mini(type='button'): i.icon-trash
 				span.muted.pull-right
-					small: i {{tasks.mine.list.length | i18n_spec:'groups.memberCount'}}
+					small: i Er zijn {{tasks.mine.list.length}} taken.
 
 
 
@@ -177,18 +175,18 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
 				div.pull-right(style='margin-top: 10px')
-					input(type='checkbox')
-					label(style='font-weight: normal'): small Toon onbeschikbare taken
+					label
+						input(type='checkbox', ng-model='showAllTasks')
+						small &nbsp;Toon onbeschikbare taken
 			hr
 
-			article(ng-show='tasks.all.loading')
-				p Loading tasks.. (All)
+			article(ng-show='tasks.all.loading'): p Taken aan het laden..
 
 			article(ng-hide='tasks.all.loading')
 
 				p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
 
-				// pre: small {{tasks.all.list | json}}
+				//pre: small {{tasks.all.list[0] | json}}
 
 				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 					thead
@@ -200,17 +198,20 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							th
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
-							th: a {{ui.task.information}}
+							th {{ui.task.information}}
 							th
-								| {{ui.task.planningTime}}
-								i.icon-sort
-							th(colspan='1')
+							th
+								a(ng-click='orderBy("assignedTeamMember.fullName")') Lid
+									i.icon-sort
+							th
 
 					tbody
-						tr(ng-repeat='task in tasks.all.list')
+						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed')
 							td: span.label.label-warning {{task.status.label}}
 							td
-								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.relatedClientUuid |  avatar:"client":"80"}}'
+								)
 							td
 								small
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
@@ -218,16 +219,25 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							td
 								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
-							td
+								br
 								span.taskIcon.icon-time(aria-hidden='true')
 								small {{task.plannedTaskDuration.label}}
 							td
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
+									ng-show='task.assignedTeamMember'
+								)
+							td
+								a(href='')
+									| {{task.assignedTeamMember.fullName}}
+							td
 								.pull-right
-									button.btn-primary.btn-mini(type='button'): i.icon-info
+									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+										i.icon-info(style='margin-top:1px')
 									button.btn-primary.btn-mini(type='button'): i.icon-minus
 									button.btn-primary.btn-mini(type='button'): i.icon-trash
 				span.muted.pull-right
-					small: i {{tasks.all.list.length | i18n_spec:'groups.memberCount'}}
+					small: i Er zijn {{tasks.all.list.length}} taken.
 
 
 

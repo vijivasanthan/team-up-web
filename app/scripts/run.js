@@ -177,6 +177,11 @@ define(
           // Get team member by id (shared)
           $rootScope.getTeamMemberById = function (memberId)
           {
+            if (memberId == null)
+            {
+              return null;
+            }
+
             var member;
 
             angular.forEach(
@@ -206,7 +211,9 @@ define(
               };
             }
 
-            // console.log('member ->', member);
+            member.fullName = member.firstName +
+                              ' ' +
+                              member.lastName;
 
             return member;
           };
