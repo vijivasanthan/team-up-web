@@ -17,16 +17,14 @@ define(
         {
           var Task = $resource();
 
+
           var processTasks = function (tasks)
           {
             _.each(
               tasks,
               function (task)
               {
-                task.status = {
-                  id: task.status,
-                  label: config.app.taskStates[task.status]
-                };
+                task.statusLabel = config.app.taskStates[task.status];
 
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
 
@@ -74,6 +72,7 @@ define(
             );
           };
 
+
           Task.prototype.queryMine = function ()
           {
             return TeamUp._('taskMineQuery')
@@ -90,6 +89,7 @@ define(
               }.bind(this)
             );
           };
+
 
           Task.prototype.queryAll = function ()
           {
@@ -137,11 +137,11 @@ define(
                   function (task) { return task }
                 );
 
-                tasks = _.sortBy(tasks, 'status.id');
+                tasks = _.sortBy(tasks, 'status');
 
                 processTasks(tasks);
 
-                var grouped = _.groupBy(tasks, function (task) { return task.status.id }),
+                var grouped = _.groupBy(tasks, function (task) { return task.status }),
                     merged = {
                       on: grouped[1].concat(grouped[2]),
                       off: grouped[3].concat(grouped[4])
@@ -155,6 +155,34 @@ define(
 
             return deferred.promise;
           };
+
+
+          var strip = function (task)
+          {
+            var eliminated = [
+              'assignedTeamMemberUuid',
+              'plannedEndVisitTime',
+              'realizedStartTravelLocation',
+              'realizedStartVisitTime',
+              'authorUuid',
+              'assignedTeamUuid',
+              'realizedEndVisitTime',
+              'relatedClientUuid'
+            ];
+
+            return task;
+          };
+
+
+          Task.prototype.update = function (task)
+          {
+            return TeamUp._(
+              'taskUpdate',
+              { second: task.uuid },
+              strip(task)
+            );
+          };
+
 
           return new Task;
         }

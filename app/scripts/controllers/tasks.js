@@ -906,18 +906,18 @@ define(
             }
           };
 
-          // TODO: Check whether it is workign properly!
-          // Description toggle
-          $scope.toggleMyDesc = function (taskId)
-          {
-            $('#myTaskdesc_' + taskId).toggle()
-          };
-
-          // Description toggle
-          $scope.toggleAllDesc = function (taskId)
-          {
-            $('#allTaskdesc_' + taskId).toggle()
-          };
+//          // TODO: Check whether it is workign properly!
+//          // Description toggle
+//          $scope.toggleMyDesc = function (taskId)
+//          {
+//            $('#myTaskdesc_' + taskId).toggle()
+//          };
+//
+//          // Description toggle
+//          $scope.toggleAllDesc = function (taskId)
+//          {
+//            $('#allTaskdesc_' + taskId).toggle()
+//          };
         }
       ]
     );

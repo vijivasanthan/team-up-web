@@ -11,8 +11,9 @@ define(
         '$location',
         '$timeout',
         'Store',
+        'TeamUp',
         'Task',
-        function ($rootScope, $scope, $location, $timeout, Store, Task)
+        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task)
         {
           $rootScope.fixStyles();
 
@@ -107,7 +108,7 @@ define(
 
           setView(view);
 
-          function queryMine()
+          function queryMine ()
           {
             Task.queryMine()
               .then(
@@ -117,21 +118,13 @@ define(
                   loading: false,
                   list: tasks
                 };
-
-//                $timeout(
-//                  function ()
-//                  {
-//                    angular.element('#taskModal').modal('show');
-//                    $scope.task = tasks[0];
-//                  }, 25
-//                );
               }
             );
 
             queryAll();
           }
 
-          function queryAll()
+          function queryAll ()
           {
             Task.queryAll()
               .then(
@@ -175,8 +168,154 @@ define(
           {
             $scope.ordered = ordered;
 
-            $scope.reversed = !$scope.reversed;
-          }
+            $scope.reversed = ! $scope.reversed;
+          };
+
+
+          /**
+           * ******************************************************************************
+           */
+
+
+            // Assign any task to logged in user (Plus sign)
+          $scope.assignTask = function (task)
+          {
+
+            task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
+
+            TeamUp._(
+              'taskUpdate',
+              { second: task.uuid },
+              task
+            ).then(
+              function (result)
+              {
+                // console.log(result);
+
+                if (result.error)
+                {
+                  if (result.error.data.result)
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                  }
+                  else
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error));
+                  }
+                  task.assignedTeamMemberUuid = null;
+                }
+                else
+                {
+                  // console.log(result);
+
+                  // $scope.reloadAndSaveTask(result.result, 'assign');
+
+                  queryAll();
+                }
+
+              }
+            );
+
+          };
+
+
+          // Un-assign a task for logged in user
+          $scope.unAssignTask = function (task)
+          {
+            task.assignedTeamMemberUuid = null;
+
+            TeamUp._(
+              'taskUpdate',
+              { second: task.uuid },
+              task
+            ).then(
+              function (result)
+              {
+                // console.log(result);
+
+                if (result.error)
+                {
+                  if (result.error.data)
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                  }
+                  else
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error));
+                  }
+                  task.assignedTeamMemberUuid = null;
+                }
+                else
+                {
+                  // console.log(result);
+
+                  // $scope.reloadAndSaveTask(result.result, 'unAssign');
+
+                  queryMine();
+                }
+
+              }
+            );
+          };
+
+
+          /**
+           * ******************************************************************************
+           */
+
+
+          $scope._task = {};
+
+          $scope.confirmDeleteTask = function (task)
+          {
+            $timeout(
+              function ()
+              {
+                $scope._task = task;
+
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+          };
+
+          // Remove a task
+          $scope.deleteTask = function (task)
+          {
+            $scope._task = {};
+
+            angular.element('#confirmTaskModal').modal('hide');
+
+            TeamUp._(
+              'taskDelete',
+              { second: task.uuid },
+              task
+            ).then(
+              function (result)
+              {
+                // console.log("after delete action , ", result);
+
+                if (result.error)
+                {
+                  if (result.error.data)
+                  {
+                    $rootScope.notifier.error(result.error.data);
+                  }
+                  else
+                  {
+                    $rootScope.notifier.error(result.error);
+                  }
+                }
+                else
+                {
+                  $rootScope.notifier.success($rootScope.ui.task.taskDeleted);
+                  // $scope.reloadAndSaveTask(result.uuid, 'delete');
+
+                  queryMine();
+                }
+
+              }
+            );
+          };
 
 
         }

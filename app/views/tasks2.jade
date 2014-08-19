@@ -35,7 +35,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				//h4.pull-right Taakinformatie
 				dl
 					dt Status
-						dd {{task.status | formatTaskState}}
+						dd {{task.statusLabel}}
 					dt Tijdsbestek
 						dd {{task.plannedTaskDuration.label}}
 					dt Beschrijving
@@ -128,7 +128,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					thead
 						tr
 							th
-								a(ng-click='orderBy("status.label")') Status
+								a(ng-click='orderBy("status")') Status
 									i.icon-sort
 							th
 							th
@@ -142,7 +142,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 					tbody
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
-							td: span.label(class='label-task-state-{{task.status.id}}') {{task.status.label}}
+							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
 							td
@@ -157,10 +157,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								small {{task.plannedTaskDuration.label}}
 							td
 								.pull-right
+									button.btn-primary.btn-mini(type='button', ng-click='unAssignTask(task)')
+										i.icon-minus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button'): i.icon-minus
-									button.btn-primary.btn-mini(type='button'): i.icon-trash
+									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
+										i.icon-trash
 				span.muted.pull-right
 					small: i Er zijn {{tasks.mine.list.length}} taken.
 
@@ -192,7 +194,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					thead
 						tr
 							th
-								a(ng-click='orderBy("status.label")') Status
+								a(ng-click='orderBy("status")') Status
 									i.icon-sort
 							th
 							th
@@ -207,7 +209,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 					tbody
 						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed')
-							td: span.label(class='label-task-state-{{task.status.id}}') {{task.status.label}}
+							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
 								.roundedPicSmall.memberStateBusy(
 								back-img='{{task.relatedClientUuid |  avatar:"client":"80"}}'
@@ -237,10 +239,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									| {{task.assignedTeamMember.fullName}}
 							td
 								.pull-right
+									button.btn-primary.btn-mini(type='button',
+									ng-hide='task.assignedTeamMember',
+									ng-click='assignTask(task)')
+										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button', ng-hide='task.assignedTeamMember')
-										i.icon-plus
 									button.btn-primary.btn-mini(type='button'): i.icon-trash
 				span.muted.pull-right
 					small: i Er zijn {{tasks.all.list.length}} taken.
@@ -336,7 +340,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							.control-group
 								label.control-label {{ui.task.description}}
 								.controls
-									textarea.span4(ng-model='task.description')
+									textarea.span8(style='height: 150px', ng-model='task.description')
 
 					.span6
 						fieldset
