@@ -13,7 +13,9 @@ define(
         'Store',
         'TeamUp',
         'Task',
-        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task)
+        'Teams',
+        'Clients',
+        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task, Teams, Clients)
         {
           $rootScope.fixStyles();
 
@@ -40,7 +42,7 @@ define(
 
             $scope.reversed = true;
 
-            $scope.order = 'status.id';
+            $scope.order = 'plannedStartVisitTime';
           }
 
           var setView = function (hash)
@@ -180,7 +182,6 @@ define(
             // Assign any task to logged in user (Plus sign)
           $scope.assignTask = function (task)
           {
-
             task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
 
             TeamUp._(
@@ -317,6 +318,108 @@ define(
             );
           };
 
+
+          /**
+           * ******************************************************************************
+           */
+
+
+          // prepare the teams, members, client groups and clients
+          var teamsLocal = Teams.queryLocal();
+          console.log('teamsLocal ->', teamsLocal);
+
+          var clientLocal = Clients.queryLocal();
+          console.log('clientLocal ->', clientLocal);
+
+          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+          console.log('teamClientLocal ->', teamClientLocal);
+
+          $scope.teams = teamsLocal.teams;
+
+          if ($scope.currentTeam == null || typeof $scope.currentTeam == 'undefined')
+          {
+            $scope.currentTeam = teamsLocal.teams[0].uuid;
+          }
+
+          $scope.members = teamsLocal.members[$scope.currentTeam];
+
+          $scope.groups = [];
+          $scope.clients = [];
+
+
+
+          // Related to chain of drop-downs of teams and client groups
+          $scope.teamAffectGroup = function ()
+          {
+            angular.forEach(
+              clientLocal.clientGroups,
+              function (cg)
+              {
+                if ($scope.currentGroup == cg.id)
+                {
+                  $scope.groups = [];
+                  $scope.groups.push(cg);
+                }
+              }
+            );
+
+            $scope.groupAffectClient($scope.currentGroup);
+          };
+
+          // Related to chain of dropd-owns of groups and clients
+          $scope.groupAffectClient = function (groupId)
+          {
+            $scope.clients = clientLocal.clients[groupId];
+
+            if (( $scope.curentClient == null || typeof $scope.curentClient == 'undefined' )
+                  && $scope.clients && $scope.clients.length > 0)
+            {
+              $scope.curentClient = $scope.clients[0].uuid;
+            }
+            else
+            {
+              $scope.curentClient = null;
+            }
+
+            if ($scope.task && $scope.task.client)
+            {
+              $scope.task.client = $scope.curentClient;
+            }
+          };
+
+          if (typeof teamClientLocal[$scope.currentTeam] == 'undefined')
+          {
+            $scope.currentGroup = null;
+          }
+          else
+          {
+            $scope.currentGroup = teamClientLocal[$scope.currentTeam];
+            $scope.teamAffectGroup();
+
+            $scope.groupAffectClient($scope.currentGroup);
+          }
+
+          $scope.changeClientGroup = function (cGroupId)
+          {
+            // console.log('client group id', cGroupId);
+
+            $scope.groupAffectClient(cGroupId);
+          };
+
+          $scope.changeTeam = function (teamUuid)
+          {
+            $scope.members = teamsLocal.members[teamUuid];
+            $scope.currentGroup = teamClientLocal[teamUuid];
+
+            $scope.teamAffectGroup();
+
+            // load team member's locations
+          };
+
+
+          console.log('scope ->', $scope);
+
+          Task.chains();
 
         }
       ]

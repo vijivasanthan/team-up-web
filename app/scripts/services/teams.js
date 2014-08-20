@@ -176,20 +176,19 @@ define(
           };
 
           // Get local data of links between client groups and teams
-          TeamsService.prototype.queryLocalClientGroup = function (teamsLocal)
+          TeamsService.prototype.queryLocalClientGroup = function (teams)
           {
             var groupIds = [];
-            var grps = Store('app').get('ClientGroups');
 
             angular.forEach(
-              grps,
-              function (grp) { groupIds.push(grp.id) }
+              Store('app').get('ClientGroups'),
+              function (group) { groupIds.push(group.id) }
             );
 
             var returnValue = {};
 
             angular.forEach(
-              teamsLocal,
+              teams,
               function (team)
               {
                 var flag = true;

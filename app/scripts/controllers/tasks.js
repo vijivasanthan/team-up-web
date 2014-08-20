@@ -92,6 +92,10 @@ define(
 
 
 
+
+
+
+
           // prepare the teams, members, client groups and clients
           var teamsLocal = Teams.queryLocal();
           var clientLocal = Clients.queryLocal();
@@ -176,6 +180,24 @@ define(
 
             // load team member's locations
           };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           // Validation of the task form
           $scope.validateTaskForm = function (task)
@@ -411,6 +433,12 @@ define(
           };
           //
 
+
+
+
+
+
+
           var view;
 
           if (! $location.hash())
@@ -458,6 +486,13 @@ define(
           };
 
           setView(view);
+
+
+
+
+
+
+
 
           // Assign any task to logged in user (Plus sign)
           $scope.assignYourself = function (task)
@@ -530,6 +565,11 @@ define(
               }
             );
           };
+
+
+
+
+
 
           $scope._task = {};
 

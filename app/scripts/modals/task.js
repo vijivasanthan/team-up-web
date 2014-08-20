@@ -13,7 +13,9 @@ define(
         '$filter',
         'Store',
         'TeamUp',
-        function ($rootScope, $resource, $q, $filter, Store, TeamUp)
+        'Teams',
+        'Clients',
+        function ($rootScope, $resource, $q, $filter, Store, TeamUp, Teams, Clients)
         {
           var Task = $resource();
 
@@ -79,7 +81,7 @@ define(
               .then(
               function (tasks)
               {
-                tasks = _.sortBy(tasks, 'status');
+                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 
@@ -137,7 +139,7 @@ define(
                   function (task) { return task }
                 );
 
-                tasks = _.sortBy(tasks, 'status');
+                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 
@@ -181,6 +183,38 @@ define(
               { second: task.uuid },
               strip(task)
             );
+          };
+
+
+          // TODO: Move this dat compiler to a central place later on
+          Task.prototype.chains = function ()
+          {
+            var data = {},
+                teams = Store('app').get('teams'),
+                clients = Store('app').get('clients'),
+                clientGroups = Store('app').get('ClientGroups');
+
+            var group;
+
+            _.each(
+              teams,
+              function (team)
+              {
+                group = Store('app').get('teamGroup_' + team.uuid)[0];
+
+                // console.log('group ->', group);
+
+                data[team.uuid] = {
+                  team: team,
+                  members: Store('app').get(team.uuid)
+                };
+
+                // if (_.isDe)
+              }
+            );
+
+            // console.log('data ->', data);
+
           };
 
 

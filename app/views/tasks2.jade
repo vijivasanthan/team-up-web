@@ -179,7 +179,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				div.pull-right(style='margin-top: 10px')
 					label
 						input(type='checkbox', ng-model='showAllTasks')
-						small &nbsp;Toon onbeschikbare taken
+						small &nbsp;Toon gearchiveerde taken
 			hr
 
 			article(ng-show='tasks.all.loading'): p Taken aan het laden..
@@ -275,14 +275,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									select(ng-model='currentGroup',
 									ng-options='g.id as g.name for g in groups | orderBy:"name"',
 									ng-selected='currentGroup',
-									ng-change='changeClientGroup(currentGroup)'
-									)
+									ng-change='changeClientGroup(currentGroup)')
 										option(value='') Cliëntengroep
 									select(ng-model='task.client',
 									ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in clients | orderBy:"lastName" ',
 									ng-selected='currentClient',
-									ng-change='changeClient(task.client)'
-									)
+									ng-change='changeClient(task.client)')
 										option(value='') Cliënt
 
 							.control-group
@@ -291,14 +289,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									select(ng-model='task.team',
 									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 									ng-selected='currentTeam',
-									ng-change='changeTeam(task.team)'
-									)
+									ng-change='changeTeam(task.team)')
 										option(value='') Team
 									select(ng-model='task.member',
 									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
-									ng-selected='currentMember',
-									ng-change=''
-									)
+									ng-selected='currentMember')
 										option(value='') Lid
 
 						fieldset
