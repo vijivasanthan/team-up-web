@@ -85,6 +85,8 @@ define(
                   '$rootScope', '$route',
                   function ($rootScope, $route)
                   {
+                    angular.element('.navbar #clientMenu').addClass('active');
+
                     return { clientId: $route.current.params.clientId };
                   }
                 ]

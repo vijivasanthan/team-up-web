@@ -155,6 +155,8 @@ define(
 
               case 'client':
                 $location.path('/client').search({local: 'true'}).hash('client');
+
+                console.log('it is coming from here');
                 break;
 
               case 'planboard':

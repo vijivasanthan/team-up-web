@@ -55,7 +55,7 @@ block navbar
 							a(ng-click='nav("tasks2")') Taken2
 						li(data-match-route='/team')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
-						li(data-match-route='/client')
+						li#clientMenu(data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
 						li(data-match-route='/manage',
 						ng-hide='app.resources.role > 1')

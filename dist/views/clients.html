@@ -260,12 +260,8 @@
             <dd>{{client.phone}}</dd>
             <dt>{{ui.profile.address}}</dt>
             <dd>{{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
-            <dt>{{ui.teamup.clientProfileUrl}}</dt>
-            <dd>{{client.clientProfileUrl}}</dd>
-            <dt>Extra Info</dt>
-            <dd>
-              <pre>{{client.extraInfo.basic || '-'}}</pre>
-            </dd>
+            <dt ng-show="client.clientProfileUrl">{{ui.teamup.clientProfileUrl}}</dt>
+            <dd ng-show="client.clientProfileUrl">{{client.clientProfileUrl}}</dd>
             <!-- pre: small {{client | json}}-->
           </dl>
         </div>
@@ -276,6 +272,13 @@
             <button type="submit" ng-click="removeImg(client.uuid)" class="btn btn-mini btn-primary"><i class="icon-trash"></i></button>
           </div>
         </div>
+      </div>
+      <div ng-show="client.extraInfo.basic">
+        <div class="tab-header">
+          <h3 class="pull-left">Cliënt Informatie</h3>
+        </div>
+        <hr>
+        <pre>{{client.extraInfo.basic || '-'}}</pre><br>
       </div>
       <div class="tab-header">
         <h3 class="pull-left">{{ui.teamup.contacts}}</h3>
