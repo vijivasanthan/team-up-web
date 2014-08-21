@@ -16,10 +16,9 @@ define(
         'Store',
         'Dater',
         'TeamUp',
-        'GoogleGEO',
         '$timeout',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, GoogleGEO, $timeout)
+                  TeamUp, $timeout)
         {
           $rootScope.fixStyles();
 

@@ -75,6 +75,22 @@ define(
           };
 
 
+          var strip = function (task)
+          {
+            _.each(
+              [
+                'statusLabel',
+                'relatedClient',
+                'plannedTaskDuration',
+                'assignedTeamMember'
+              ],
+              function (eliminated) { delete task[eliminated] }
+            );
+
+            return task;
+          };
+
+
           Task.prototype.queryMine = function ()
           {
             return TeamUp._('taskMineQuery')
@@ -106,7 +122,7 @@ define(
                 calls.push(
                   TeamUp._(
                     'taskByTeam',
-                    { fourth: team.uuid }
+                    { fourth: team.uuid } // statuses: '1, 2, 3, 4'
                   ).then(
                     function (tasks) { bulks[team.uuid] = tasks }
                   )
@@ -159,34 +175,16 @@ define(
           };
 
 
-          var strip = function (task)
-          {
-            var eliminated = [
-              'assignedTeamMemberUuid',
-              'plannedEndVisitTime',
-              'realizedStartTravelLocation',
-              'realizedStartVisitTime',
-              'authorUuid',
-              'assignedTeamUuid',
-              'realizedEndVisitTime',
-              'relatedClientUuid'
-            ];
-
-            return task;
-          };
-
-
           Task.prototype.update = function (task)
           {
             return TeamUp._(
               'taskUpdate',
               { second: task.uuid },
-              strip(task)
+              strip(_.clone(task))
             );
           };
 
 
-          // TODO: Move this dat compiler to a central place later on
           Task.prototype.chains = function ()
           {
             var data = {},

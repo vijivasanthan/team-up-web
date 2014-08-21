@@ -40,9 +40,15 @@ define(
               newTask: false
             };
 
+            $scope.showAllTasks = false;
+
+            $scope.showOnlyAvailable = true;
+
             $scope.reversed = true;
 
             $scope.order = 'plannedStartVisitTime';
+
+            // $scope.filtered = { assignedTeamMemberUuid: null };
           }
 
           var setView = function (hash)
@@ -110,7 +116,7 @@ define(
 
           setView(view);
 
-          function queryMine ()
+          function queryMine (only)
           {
             Task.queryMine()
               .then(
@@ -123,7 +129,7 @@ define(
               }
             );
 
-            queryAll();
+            only || queryAll();
           }
 
           function queryAll ()
@@ -139,8 +145,6 @@ define(
               }
             );
           }
-
-          $scope.showAllTasks = false;
 
           $scope.$watch(
             'showAllTasks',
@@ -158,6 +162,32 @@ define(
               }
             }
           );
+
+//          $scope.$watch(
+//            'showOnlyAvailable',
+//            function (toggle)
+//            {
+//              console.log('coming in here?');
+//
+//              $scope.filtered = !$scope.filtered;
+//
+////              if (toggle)
+////              {
+////                 = { assignedTeamMemberUuid: null };
+////              }
+////              else
+////              {
+////                $scope.filtered = { assignedTeamMemberUuid: null };
+////              }
+//            }
+//          );
+
+//          $scope.filterFn = function (task)
+//          {
+//            return ($scope.showOnlyAvailable && task.assignedTeamMemberUuid != null) ?
+//                   true :
+//                   false;
+//          };
 
           $scope.openTask = function (task)
           {
@@ -179,90 +209,47 @@ define(
            */
 
 
-            // Assign any task to logged in user (Plus sign)
+          function updateTask (task)
+          {
+            Task.update(task)
+              .then(
+              function (result)
+              {
+                if (result.error)
+                {
+                  $rootScope.notifier.error(
+                    $rootScope.transError(
+                      (result.error.data) ? result.error.data.result : result.error
+                    )
+                  );
+
+                  task.assignedTeamMemberUuid = null;
+
+                  return;
+                }
+
+                queryMine();
+              }
+            );
+          }
+
           $scope.assignTask = function (task)
           {
             task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
 
-            TeamUp._(
-              'taskUpdate',
-              { second: task.uuid },
-              task
-            ).then(
-              function (result)
-              {
-                // console.log(result);
+            updateTask(task);
 
-                if (result.error)
-                {
-                  if (result.error.data.result)
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
-                  }
-                  else
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error));
-                  }
-                  task.assignedTeamMemberUuid = null;
-                }
-                else
-                {
-                  // console.log(result);
-
-                  // $scope.reloadAndSaveTask(result.result, 'assign');
-
-                  queryAll();
-                }
-
-              }
-            );
-
+            setView('myTasks');
           };
 
 
-          // Un-assign a task for logged in user
           $scope.unAssignTask = function (task)
           {
             task.assignedTeamMemberUuid = null;
+            task.assignedTeamUuid = null;
 
-            TeamUp._(
-              'taskUpdate',
-              { second: task.uuid },
-              task
-            ).then(
-              function (result)
-              {
-                // console.log(result);
-
-                if (result.error)
-                {
-                  if (result.error.data)
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
-                  }
-                  else
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error));
-                  }
-                  task.assignedTeamMemberUuid = null;
-                }
-                else
-                {
-                  // console.log(result);
-
-                  // $scope.reloadAndSaveTask(result.result, 'unAssign');
-
-                  queryMine();
-                }
-
-              }
-            );
+            updateTask(task);
           };
-
-
-          /**
-           * ******************************************************************************
-           */
 
 
           $scope._task = {};
@@ -326,13 +313,13 @@ define(
 
           // prepare the teams, members, client groups and clients
           var teamsLocal = Teams.queryLocal();
-          console.log('teamsLocal ->', teamsLocal);
+          // console.log('teamsLocal ->', teamsLocal);
 
           var clientLocal = Clients.queryLocal();
-          console.log('clientLocal ->', clientLocal);
+          // console.log('clientLocal ->', clientLocal);
 
           var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-          console.log('teamClientLocal ->', teamClientLocal);
+          // console.log('teamClientLocal ->', teamClientLocal);
 
           $scope.teams = teamsLocal.teams;
 
@@ -417,7 +404,7 @@ define(
           };
 
 
-          console.log('scope ->', $scope);
+          // console.log('scope ->', $scope);
 
           Task.chains();
 

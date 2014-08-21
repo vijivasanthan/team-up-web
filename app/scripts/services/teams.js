@@ -17,67 +17,77 @@ define(
           {
             var deferred = $q.defer();
 
-            // Get the list of teams
-            TeamUp._('teamQuery')
-              .then(
-              function (teams)
+            // Get the list of own teams
+            TeamUp._(
+              'teamQuery',
+              { strict: true }
+            ).then(
+              function (own)
               {
-                Store('app').save('teams', teams);
+                Store('teams').save('own', own);
 
-                if (! only)
-                {
-                  var calls = [],
-                      data = {
-                        teams: teams,
-                        members: {}
-                      };
+                // Get the list of teams
+                TeamUp._('teamQuery')
+                  .then(
+                  function (teams)
+                  {
+                    Store('app').save('teams', teams);
 
-                  // Walk through the team list
-                  angular.forEach(
-                    teams,
-                    function (team)
+                    if (! only)
                     {
-                      if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
-                      {
-                        calls.push(
-                          (function (team, data, Store)
+                      var calls = [],
+                          data = {
+                            teams: teams,
+                            members: {}
+                          };
+
+                      // Walk through the team list
+                      angular.forEach(
+                        teams,
+                        function (team)
+                        {
+                          if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
                           {
-                            // Get the list of members of that particular team
-                            TeamUp._(
-                              'teamStatusQuery',
-                              { third: team.uuid },
-                              null,
+                            calls.push(
+                              (function (team, data, Store)
                               {
-                                success: function (results)
-                                {
-                                  Store('app').save(team.uuid, results);
+                                // Get the list of members of that particular team
+                                TeamUp._(
+                                  'teamStatusQuery',
+                                  { third: team.uuid },
+                                  null,
+                                  {
+                                    success: function (results)
+                                    {
+                                      Store('app').save(team.uuid, results);
 
-                                  data.members[team.uuid] = [];
+                                      data.members[team.uuid] = [];
 
-                                  data.members[team.uuid] = results;
-                                }
-                              }
-                            )
-                          })(team, data, Store)
-                        );
-                      }
-                      else
-                      {
-                        data.members[team.uuid] = Store('app').get(team.uuid);
-                      }
+                                      data.members[team.uuid] = results;
+                                    }
+                                  }
+                                )
+                              })(team, data, Store)
+                            );
+                          }
+                          else
+                          {
+                            data.members[team.uuid] = Store('app').get(team.uuid);
+                          }
+                        }
+                      );
+
+                      $q.all(calls)
+                        .then(function () { deferred.resolve(data) });
+
                     }
-                  );
+                    else
+                    {
+                      deferred.resolve(teams);
+                    }
+                  }
+                );
 
-                  $q.all(calls)
-                    .then(
-                    function () { deferred.resolve(data) }
-                  );
-
-                }
-                else
-                {
-                  deferred.resolve(teams);
-                }
               }
             );
 

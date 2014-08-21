@@ -176,10 +176,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
-				div.pull-right(style='margin-top: 10px')
-					label
-						input(type='checkbox', ng-model='showAllTasks')
-						small &nbsp;Toon gearchiveerde taken
 			hr
 
 			article(ng-show='tasks.all.loading'): p Taken aan het laden..
@@ -189,6 +185,14 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
 
 				//pre: small {{tasks.all.list[0] | json}}
+
+				.well(style='padding-top: 25px')
+					label(style='margin-right: 15px')
+						input(type='checkbox', ng-model='showOnlyAvailable')
+						small &nbsp;Toon alleen beschikbaare taken
+					label
+						input(type='checkbox', ng-model='showAllTasks')
+						small &nbsp;Toon gearchiveerde taken
 
 				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 					thead
@@ -201,13 +205,15 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
 							th {{ui.task.information}}
-							th(colspan='1')
+							th(colspan='2')
 							th
 								a(ng-click='orderBy("assignedTeamMember.fullName")') Lid
 									i.icon-sort
-							th(colspan='2')
+							th(colspan='1')
 
 					tbody
+						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
+						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
 						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
@@ -245,7 +251,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button'): i.icon-trash
+									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
+										i.icon-trash
 				span.muted.pull-right
 					small: i Er zijn {{tasks.all.list.length}} taken.
 
