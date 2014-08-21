@@ -327,8 +327,6 @@ aria-hidden='true')
 							| {{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}
 						dt {{ui.teamup.clientProfileUrl}}
 						dd {{client.clientProfileUrl}}
-						dt Extra Info
-						dd: pre {{client.extraInfo.basic || '-'}}
 						// pre: small {{client | json}}
 
 				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
@@ -340,6 +338,14 @@ aria-hidden='true')
 						button.btn.btn-mini.btn-primary(type='submit',
 						ng-click='removeImg(client.uuid)')
 							i.icon-trash
+
+			div(ng-show='client.extraInfo.basic')
+				.tab-header
+					h3.pull-left Cliënt Informatie
+				hr
+				pre {{client.extraInfo.basic || '-'}}
+				br
+
 			.tab-header
 				h3.pull-left {{ui.teamup.contacts}}
 			hr

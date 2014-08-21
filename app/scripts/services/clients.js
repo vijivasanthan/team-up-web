@@ -107,7 +107,8 @@ define(
                         }
 
                         deferred.resolve(data);
-                      });
+                      }
+                    );
                   }
                   else
                   {
@@ -222,7 +223,8 @@ define(
 
                 $q.all(queryCalls)
                   .then(function () { deferred.resolve(data) });
-              });
+              }
+            );
 
             return deferred.promise;
           };

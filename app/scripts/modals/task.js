@@ -34,11 +34,28 @@ define(
                                               ' ' +
                                               task.relatedClient.lastName;
 
-                task.relatedClient.fullAddress = task.relatedClient.address.street +
-                                                 ' ' +
-                                                 task.relatedClient.address.no +
-                                                 ', ' +
-                                                 task.relatedClient.address.city;
+                if (task.relatedClient.address != null)
+                {
+                  task.relatedClient.fullAddress = task.relatedClient.address.street +
+                                                   ' ' +
+                                                   task.relatedClient.address.no +
+                                                   ', ' +
+                                                   task.relatedClient.address.city;
+                }
+                else
+                {
+                  task.relatedClient.address = {
+                    'address': {
+                      'street': null,
+                      'no': null,
+                      'zip': null,
+                      'city': null,
+                      'country': null,
+                      'latitude': 0,
+                      'longitude': 0
+                    }
+                  };
+                }
 
                 task.plannedTaskDuration = {
                   difference: task.plannedEndVisitTime - task.plannedStartVisitTime
