@@ -241,7 +241,7 @@ aria-hidden='true')
 						label.control-label Extra Info
 						.controls
 							textarea.span8(style='height: 150px',
-							ng-model='clientForm.extraInfo.description')
+							ng-model='clientForm.extraInfo.basic')
 				hr
 				.form-actions
 					button.btn.btn-success(type='submit',
@@ -328,7 +328,7 @@ aria-hidden='true')
 						dt {{ui.teamup.clientProfileUrl}}
 						dd {{client.clientProfileUrl}}
 						dt Extra Info
-						dd: pre {{client.extraInfo.description || '-'}}
+						dd: pre {{client.extraInfo.basic || '-'}}
 						// pre: small {{client | json}}
 
 				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
@@ -489,7 +489,7 @@ aria-hidden='true')
 						label.control-label Extra Info
 						.controls
 							textarea.span8(style='height: 150px',
-							ng-model='clientmeta.extraInfo.description')
+							ng-model='clientmeta.extraInfo.basic')
 					.form-actions
 						button.btn.btn-success(type='submit',
 						ng-click='clientChange(clientmeta)') {{ui.teamup.saveClient}}

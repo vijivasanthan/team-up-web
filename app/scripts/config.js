@@ -30,8 +30,9 @@ define(
       },
 
       host: "http://test.ask-cs.com/",
-      // host: "http://dev.ask-cs.com/",
       namespace: "teamup-test",
+
+      // host: "http://dev.ask-cs.com/",
       // namespace: "teamup-dev",
 
       formats: {

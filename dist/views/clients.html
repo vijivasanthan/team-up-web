@@ -189,7 +189,7 @@
           <div class="control-group">
             <label class="control-label">Extra Info</label>
             <div class="controls">
-              <textarea style="height: 150px" ng-model="clientForm.extraInfo.description" class="span8"></textarea>
+              <textarea style="height: 150px" ng-model="clientForm.extraInfo.basic" class="span8"></textarea>
             </div>
           </div>
         </fieldset>
@@ -264,7 +264,7 @@
             <dd>{{client.clientProfileUrl}}</dd>
             <dt>Extra Info</dt>
             <dd>
-              <pre>{{client.extraInfo.description || '-'}}</pre>
+              <pre>{{client.extraInfo.basic || '-'}}</pre>
             </dd>
             <!-- pre: small {{client | json}}-->
           </dl>
@@ -426,7 +426,7 @@
           <div class="control-group">
             <label class="control-label">Extra Info</label>
             <div class="controls">
-              <textarea style="height: 150px" ng-model="clientmeta.extraInfo.description" class="span8"></textarea>
+              <textarea style="height: 150px" ng-model="clientmeta.extraInfo.basic" class="span8"></textarea>
             </div>
           </div>
           <div class="form-actions">
