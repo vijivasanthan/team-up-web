@@ -186,6 +186,12 @@
               <input type="text" ng-model="clientForm.clientProfileUrl" class="span4">
             </div>
           </div>
+          <div class="control-group">
+            <label class="control-label">Extra Info</label>
+            <div class="controls">
+              <textarea style="height: 150px" ng-model="clientForm.extraInfo.description" class="span8"></textarea>
+            </div>
+          </div>
         </fieldset>
         <hr>
         <div class="form-actions">
@@ -256,6 +262,11 @@
             <dd>{{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
             <dt>{{ui.teamup.clientProfileUrl}}</dt>
             <dd>{{client.clientProfileUrl}}</dd>
+            <dt>Extra Info</dt>
+            <dd>
+              <pre>{{client.extraInfo.description || '-'}}</pre>
+            </dd>
+            <!-- pre: small {{client | json}}-->
           </dl>
         </div>
         <div class="widget profilePic {{(!browser.mobile) &amp;&amp; 'span3' || 'span12'}}">
@@ -410,6 +421,12 @@
             <label class="control-label">{{ui.teamup.clientProfileUrl}}</label>
             <div class="controls">
               <input type="text" value="{{client.clientProfileUrl}}" ng-model="clientmeta.clientProfileUrl" class="span4">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Extra Info</label>
+            <div class="controls">
+              <textarea style="height: 150px" ng-model="clientmeta.extraInfo.description" class="span8"></textarea>
             </div>
           </div>
           <div class="form-actions">

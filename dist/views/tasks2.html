@@ -13,6 +13,65 @@
     </div>
   </div>
 </div>
+<div id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="taskModalLabel" class="modal-title"><span class="text-turq">{{task.relatedClient.fullName}}</span><br>{{task.plannedTaskDuration.label}}</h4>
+      </div>
+      <div class="modal-body">
+        <!--pre: small {{task | json}}-->
+        <!--h4.pull-right Taakinformatie-->
+        <dl>
+          <dt>Status
+            <dd>{{task.statusLabel}}</dd>
+          </dt>
+          <dt>Tijdsbestek
+            <dd>{{task.plannedTaskDuration.label}}</dd>
+          </dt>
+          <dt>Beschrijving
+            <dd>{{task.description}}</dd>
+          </dt>
+          <dt>Gemaakt door
+            <dd><a href="#">{{task.authorUuid}}</a></dd>
+          </dt>
+        </dl>
+        <hr>
+        <!--h4.pull-right Cliëntinformatie-->
+        <dl>
+          <dt>Cliënt
+            <dd><a href="#">{{task.relatedClient.fullName}}</a></dd>
+          </dt>
+          <dt>Cliëntgroep
+            <dd><a href="#">{{task.clientGroupUuid}}</a></dd>
+          </dt>
+          <dt>Adres
+            <dd><a href="#">{{task.relatedClient.fullAddress}}</a></dd>
+          </dt>
+          <dt>Telefoon
+            <dd>{{task.relatedClient.phone}}</dd>
+          </dt>
+        </dl>
+        <hr>
+        <!--h4.pull-right Lid-informatie-->
+        <dl>
+          <dt>Naam
+            <dd><a href="#">{{task.assignedTeamMemberUuid}}</a></dd>
+          </dt>
+          <dt>Team
+            <dd><a href="#">{{task.assignedTeamUuid}}</a></dd>
+          </dt>
+        </dl>
+      </div>
+      <!--.modal-footer-->
+      <!--	button.btn.btn-default(type='button', data-dismiss='modal')-->
+      <!--		| {{ui.teamup.confirms.cancel}}-->
+      <!--	button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')-->
+      <!--		| {{ui.teamup.confirms.remove}}-->
+    </div>
+  </div>
+</div>
 <div class="page-header">
   <h2 class="nullable">{{ui.task.tasks}}</h2>
 </div>
@@ -29,55 +88,40 @@
       </div>
       <hr>
       <article ng-show="tasks.mine.loading">
-        <p>Loading tasks.. (Mine)</p>
+        <p>Eigen taken aan het laden..</p>
       </article>
       <article ng-hide="tasks.mine.loading">
         <p ng-hide="tasks.mine.list.length &gt; 0">{{ui.task.noTasks}}</p>
-        <pre><small>{{tasks.mine.list | json}}</small></pre>
         <table ng-show="tasks.mine.list.length &gt; 0" class="table table-striped taskTable">
           <thead>
             <tr>
-              <th colspan="1"></th>
-              <th><a>{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
-              <th><a>{{ui.task.information}}</a></th>
-              <th><a>{{ui.task.planningTime}}<i class="icon-sort"></i></a></th>
+              <th><a ng-click="orderBy(&quot;status&quot;)">Status<i class="icon-sort"></i></a></th>
+              <th></th>
+              <th><a ng-click="orderBy(&quot;relatedClient.fullName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th>{{ui.task.information}}</th>
+              <th><a ng-click="orderBy(&quot;plannedTaskDuration.difference&quot;)">{{ui.task.planningTime}}<i class="icon-sort"></i></a></th>
               <th colspan="1"></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="task in tasks.mine.list">
+            <tr ng-repeat="task in tasks.mine.list | orderBy:ordered : reversed">
+              <td><span class="label label-task-state-{{task.status}}">{{task.statusLabel}}</span></td>
               <td>
                 <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
-              <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName }}</a></small></td>
-              <td>
-                <table>
-                  <tr>
-                    <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span></td>
-                    <td><small>
-                        {{task.relatedClient.address.street}} {{task.relatedClient.address.no}}
-                        {{task.relatedClient.address.zip}} {{task.relatedClient.address.city}}</small></td>
-                  </tr>
-                </table>
-              </td>
-              <td>
-                <table>
-                  <tr>
-                    <td><span aria-hidden="true" class="taskIcon icon-time"></span></td>
-                    <td><small>{{task | formatTaskDuration}}</small></td>
-                  </tr>
-                </table>
-              </td>
+              <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
+              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small></td>
+              <td><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
               <td>
                 <div class="pull-right">
-                  <button type="button" class="btn-primary btn-mini"><i class="icon-info"></i></button>
-                  <button type="button" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
-                  <button type="button" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                  <button type="button" ng-click="unAssignTask(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
+                  <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{tasks.mine.list.length | i18n_spec:'groups.memberCount'}}</i></small></span>
+        </table><span class="muted pull-right"><small><i>Er zijn {{tasks.mine.list.length}} taken.</i></small></span>
       </article>
     </div>
     <div id="allTasks" class="tab-pane {{(views.allTasks==true) &amp;&amp; 'active'}}">
@@ -85,6 +129,58 @@
         <h3 class="pull-left">{{ui.task.allTasks}}</h3>
       </div>
       <hr>
+      <article ng-show="tasks.all.loading">
+        <p>Taken aan het laden..</p>
+      </article>
+      <article ng-hide="tasks.all.loading">
+        <p ng-hide="tasks.all.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <!--pre: small {{tasks.all.list[0] | json}}-->
+        <div style="padding-top: 25px" class="well">
+          <label style="margin-right: 15px">
+            <input type="checkbox" ng-model="showOnlyAvailable"><small>&nbsp;Toon alleen niet toegewezen taken</small>
+          </label>
+          <label>
+            <input type="checkbox" ng-model="showAllTasks"><small>&nbsp;Toon gearchiveerde taken</small>
+          </label>
+        </div>
+        <table ng-show="tasks.all.list.length &gt; 0" class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th><a ng-click="orderBy(&quot;status&quot;)">Status<i class="icon-sort"></i></a></th>
+              <th></th>
+              <th><a ng-click="orderBy(&quot;relatedClient.fullName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th>{{ui.task.information}}</th>
+              <th colspan="2"></th>
+              <th><a ng-click="orderBy(&quot;assignedTeamMember.fullName&quot;)">Lid<i class="icon-sort"></i></a></th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')-->
+            <!-- tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')-->
+            <tr ng-repeat="task in tasks.all.list | orderBy:ordered : reversed">
+              <td><span class="label label-task-state-{{task.status}}">{{task.statusLabel}}</span></td>
+              <td>
+                <div back-img="{{task.relatedClientUuid |  avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
+              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small><br><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
+              <td><a href="" class="taskAssignIcon"><span link-icon-hovered="" aria-hidden="true" ng-show="task.assignedTeamMember" class="icomoon icon-link"></span></a></td>
+              <td>
+                <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-show="task.assignedTeamMember" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><a href="">{{task.assignedTeamMember.fullName}}</a></td>
+              <td>
+                <div class="pull-right">
+                  <button type="button" ng-hide="task.assignedTeamMember" ng-click="assignTask(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
+                  <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>Er zijn {{tasks.all.list.length}} taken.</i></small></span>
+      </article>
     </div>
     <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
       <div class="tab-header">
@@ -112,7 +208,7 @@
                   <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
                     <option value="">Team</option>
                   </select>
-                  <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember" ng-change="">
+                  <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember">
                     <option value="">Lid</option>
                   </select>
                 </div>
@@ -136,7 +232,7 @@
               <div class="control-group">
                 <label class="control-label">{{ui.task.description}}</label>
                 <div class="controls">
-                  <textarea ng-model="task.description" class="span4"></textarea>
+                  <textarea style="height: 150px" ng-model="task.description" class="span8"></textarea>
                 </div>
               </div>
             </fieldset>

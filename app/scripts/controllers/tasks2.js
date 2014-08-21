@@ -129,7 +129,10 @@ define(
               }
             );
 
-            only || queryAll();
+            if (! only)
+            {
+              queryAll();
+            }
           }
 
           function queryAll ()
@@ -209,7 +212,7 @@ define(
            */
 
 
-          function updateTask (task)
+          function updateTask (task, only)
           {
             Task.update(task)
               .then(
@@ -228,7 +231,7 @@ define(
                   return;
                 }
 
-                queryMine();
+                queryMine(only);
               }
             );
           }
@@ -237,7 +240,7 @@ define(
           {
             task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
 
-            updateTask(task);
+            updateTask(task, true);
 
             setView('myTasks');
           };

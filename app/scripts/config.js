@@ -1,7 +1,8 @@
 define(
   {
     app: {
-      version: '@@version',
+      // version: '@@version',
+      version: '0.5.0-SNAPSHOT',
       released: '@@released',
 
       title: 'TeamUp',
