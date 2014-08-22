@@ -1,0 +1,1 @@
+define(["angular","controllers/controllers","services/services","filters/filters","directives/directives","angular-resource","angular-route","angular-strap","ui-bootstrap","ui.bootstrap.pagination"],function(e){return e.module("TeamUp",["controllers","services","filters","directives","ngResource","ngRoute","$strap.directives","ui.bootstrap.modal","ui.bootstrap.pagination"])});

@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-interceptor",
+  "version": "1.0.0",
+  "homepage": "https://github.com/askcs/web-lib-interceptor",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "REST calls interceptor.",
+  "main": "dist/interceptor.js",
+  "keywords": [
+    "interceptor",
+    "REST",
+    "angular"
+  ],
+  "license": "MIT",
+  "private": true
+}

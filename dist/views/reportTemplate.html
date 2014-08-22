@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 ng-hide="view.newReport == true" class="reportTitle">{{report.title}}</h4>
+  <h4 ng-hide="view.newReport == false" class="reportTitle">{{ui.teamup.newReport}}</h4>
+  <button type="button" ng-click="close()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
+</div>
+<div class="modal-body">
+  <table>
+    <thead>
+      <tr>
+        <th>{{ui.teamup.date}}</th>
+        <th>{{ui.teamup.writenBy}}</th>
+        <th>Cliënt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{report.creationTime|nicelyDate}}</td>
+        <td>{{report.author.firstName}} {{report.author.lastName}}</td>
+        <td>{{report.client.firstName}} {{report.client.lastName}}</td>
+      </tr>
+      <tr ng-show="report.media.length &gt; 0">
+        <div class="row">
+          <div ng-repeat="media in report.media" class="col-md-3"><a ng-href="{{config.app.host}}/images/{{media.path}}" target="_blank" class="thumbnail"><img ng-src="{{media.path | avatar:&quot;avatar&quot;:&quot;171&quot;}}"></a></div>
+        </div>
+      </tr>
+      <tr ng-hide="view.viewReport == false">
+        <td colspan="3"><br>{{report.body}}</td>
+      </tr>
+      <tr ng-show="view.newReport || view.editReport ">
+        <td colspan="3"><br>
+          <label class="control-label">{{ui.teamup.reportTitle}}</label>
+          <div class="controls">
+            <input type="text" ng-model="report.title" class="span4">
+          </div>
+          <label class="control-label">{{ui.teamup.report}}</label>
+          <div class="controls">
+            <textarea ng-model="report.body" class="span4"></textarea>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button ng-show="view.newReport || view.editReport" type="button" ng-click="saveReport(report)" class="btn btn-success">{{ui.teamup.saveReport}}</button>
+</div>

@@ -1,0 +1,318 @@
+#confirmTaskModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmTaskModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteTask}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='deleteTask(_task)') {{ui.teamup.confirms.remove}}
+
+.page-header
+	h2.nullable
+		| Taken
+
+.tabbable.tabs-left
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{(views.myTasks==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("myTasks")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Mijn Taken
+		li(class="{{(views.allTasks==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("allTasks")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Alle Taken
+		li(class="{{(views.newTask==true) && 'active'}}" ng-hide="app.resources.role > 1")
+			a(data-toggle='tab',
+			ng-click='setViewTo("newTask")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Nieuwe Taak
+
+	.tab-content
+
+		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
+			.tab-header.hide
+				h3.pull-left {{ui.task.myTask}}
+				select.pull-right(ng-model='currentOrder',
+				ng-options='order.id as order.name for order in orders',
+				ng-selected='currentOrder',
+				ng-change='tasksOrderBy(currentOrder)')
+				span.pull-right {{ui.task.orderby}}
+			.tab-header.hide
+				input.pull-left(type='text')
+				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
+			div
+				pagination(total-items="myTasks.length",
+				page="myTaskCurrentPage",
+				items-per-page="tasksPerPage",
+				max-size="maxSize",
+				class="pagination-sm",
+				boundary-links="true",
+				rotate="false",
+				num-pages="numPages",
+				previous-text="{{ui.teamup.pagePrevious}}",
+				next-text="{{ui.teamup.pageNext}}",
+				first-text="{{ui.teamup.pageFirst}}",
+				last-text="{{ui.teamup.pageLast}}")
+				button.btn.pull-right.btn-info.marginLeftTen(type='button',
+				ng-click="refreshTask('my')",
+				style="margin-top : 20px") {{ui.teamup.refresh}}
+			hr
+			p(ng-hide='myTasks.length > 0') {{ui.task.noTasks}}
+			div(ng-show='myTasks.length > 0')
+				table.table.table-striped.taskTable
+					thead
+						tr
+							th
+							th
+							th
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
+									i.icon-sort
+							th
+								a {{ui.task.information}}
+							th
+								a(ng-click = 'resort("plannedEndVisitTime")') {{ui.task.planningTime}}
+									i.icon-sort
+							th
+
+
+
+					//pre: small {{currentTasks | json }}
+
+
+					//pre: small {{orderItem}}
+
+
+
+
+					tbody(ui-sortable="sortableOptions")
+						tr(ng-repeat='task in currentTasks|orderBy:orderItem:reverse')
+							td
+								.dragIcon
+							td
+								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
+							td
+								a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+									| {{task.relatedClientName }}
+							td
+								dl
+									span.taskIcon.icon-location4(aria-hidden='true',
+									data-icon='')
+									span.taskInfo  {{task.relatedClientUuid | getObjAttr:"client":"address"}}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')
+											| {{ui.teamup.map}}
+								dl
+									dd
+										div(id='myTaskdesc_{{task.uuid}}' ) {{task.description}}
+							td
+								dl
+									span.taskIcon.icon-time(aria-hidden='true')
+									span.taskInfo(ng-show="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+									span.taskInfo(ng-hide="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+							td
+								.pull-right
+									a(href='#')
+									button.btn-primary.btn-mini(type='button',
+									ng-click='unassignYourself(task)')
+										i.icon-minus
+									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
+									//- 	i.icon-edit
+									button.btn-primary.btn-mini(type='button',
+									ng-click='confirmDeleteTask(task)')
+										i.icon-trash
+									a.noteLink(ng-click="toggleMyDesc(task.uuid)")
+										p {{ui.task.description}}
+											i.icon-arrow-down2
+				span.muted.pull-right
+					small
+						i
+							| {{myTasks.length | i18n_spec:'groups.memberCount'}}
+
+
+		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
+			.tab-header.hide
+				h3.pull-left {{ui.task.allTasks}}
+				select.pull-right(ng-model='currentOrder',
+				ng-options='order.id as order.name for order in orders',
+				ng-selected='currentOrder',
+				ng-change='tasksOrderBy(currentOrder)')
+				span.pull-right {{ui.task.orderby}}
+			.tab-header.hide
+				input.pull-left(type='text')
+				button.btn.pull-right.btn-info.marginLeftTen(type='reset') {{ui.teamup.cancel}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button') {{ui.teamup.save}}
+			div
+				pagination(total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage"  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}")
+				button.btn.pull-right.btn-info.marginLeftTen(type='button' ng-click="refreshTask('all')" style="margin-top : 20px") {{ui.teamup.refresh}}
+			//pre Page: {{allTaskCurrentPage}} / {{numPages}}
+			hr
+			p(ng-hide='allTasks.length || allTasks.length > 0') {{ui.task.noTasks}}
+			div(ng-show='allTasks.length || allTasks.length > 0')
+				table.table.table-striped.taskTable
+					thead
+						tr
+							th
+							th
+								a(ng-click = 'resort("clientName")') {{ui.task.clientName}}
+									i.icon-sort
+							th
+								a {{ui.task.information}}
+							th
+							th
+								a(ng-click = 'resort("memberName")') {{ui.task.memberName}}
+									i.icon-sort
+							th
+					tbody
+						tr(ng-repeat='task in currentTasks | orderBy:orderItem:reverse ' )
+							td
+								.roundedPicSmall.memberStateBusy(back-img = '{{task.relatedClientUuid | avatar:"client":"80"}}')
+							td
+								a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient') {{task.relatedClientUuid | getObjAttr:"client":"name" }}
+							td
+								dl
+									span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+									span.taskInfo {{task.relatedClientUuid | getObjAttr:"client":"address"}}
+										a(href='http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:"client":"latlong" }}')  {{ui.teamup.map}}
+								dl
+									span.taskIcon.icon-time(aria-hidden='true')
+									span.taskInfo(ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+									span.taskInfo(ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) <= 24 && ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) >= 0 }}")  {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur
+								dl
+									dd
+										div(id = 'allTaskdesc_{{task.uuid}}' ) {{task.description}}
+							td
+								.roundedPicSmall(class='{{task.assignedTeamMemberUuid | getObjAttr:"member":"states" | stateColor}}',
+								back-img = '{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
+								ng-hide='task.assignedTeamMemberUuid == null')
+							// FIXME: Check this upper line!
+							td
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile') {{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(type='button',
+									ng-hide='task.assignedTeamMemberUuid',
+									ng-click="assignYourself(task)")
+										i.icon-plus
+									//- button.btn-primary.btn-mini(type='button' ng-click='editTask(task)')
+									//- 	i.icon-edit
+									button.btn-primary.btn-mini(type='button',
+									ng-click='confirmDeleteTask(task)')
+										i.icon-trash
+									a.noteLink(ng-click="toggleAllDesc(task.uuid)")
+										p {{ui.task.description}}
+											i.icon-arrow-down2
+				span.muted.pull-right
+					small
+						i
+							| {{allTasks.length | i18n_spec:'groups.memberCount'}}
+
+
+		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}" ng-hide="app.resources.role > 1")
+			.tab-header
+				h3.pull-left Nieuwe taak
+			hr
+			form
+				.row
+					.span6
+						fieldset
+							.control-group
+								label.control-label Cliënt
+								.controls
+									select(ng-model='currentGroup',
+									ng-options='g.id as g.name for g in groups | orderBy:"name"',
+									ng-selected='currentGroup',
+									ng-change='changeClientGroup(currentGroup)'
+									)
+										option(value='') Cliëntengroep
+									select(ng-model='task.client',
+									ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in clients | orderBy:"lastName" ',
+									ng-selected='currentClient',
+									ng-change='changeClient(task.client)'
+									)
+										option(value='') Cliënt
+							.control-group
+								label.control-label Verzorger
+								.controls
+									select(ng-model='task.team',
+									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+									ng-selected='currentTeam',
+									ng-change='changeTeam(task.team)'
+									)
+										option(value='') Team
+									select(ng-model='task.member',
+									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
+									ng-selected='currentMember',
+									ng-change=''
+									)
+										option(value='') Lid
+						fieldset
+							.control-group.dater
+								label.control-label {{ui.planboard.from}}
+								.controls
+									input(name='date-start',
+									type='text',
+									ng-model='task.start.date',
+									data-date-format='dd-mm-yyyy',
+									bs-datepicker='',
+									ng-change='changeDate(date)')
+									i.icon-calendar
+									input(name='time-start',
+									type='text',
+									ng-model='task.start.time',
+									ng-change='changeTime(time)',
+									bs-timepicker='')
+									i.icon-time
+							.control-group.dater
+								label.control-label {{ui.planboard.till}}
+								.controls
+									input(name='date-end',
+									type='text',
+									ng-model='task.end.date',
+									data-date-format='dd-mm-yyyy',
+									bs-datepicker='',
+									ng-change='changeDate(date)')
+									i.icon-calendar
+									input(name='time-end',
+									type='text',
+									ng-model='task.end.time',
+									ng-change='changeTime(time)',
+									bs-timepicker='')
+									i.icon-time
+							.control-group
+								label.control-label {{ui.task.description}}
+								.controls
+									textarea.span4(ng-model='task.description')
+
+					.span6
+						fieldset
+							.control-group
+							//google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+								marker(coords = 'clientCoords')
+								markers(models = 'memberMarkers' )
+
+				hr
+				.form-actions
+					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
+				hr
+				// FIXME: It needs some attention
+				// div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}}
+				div
+				div
+				div
+				div

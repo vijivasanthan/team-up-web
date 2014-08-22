@@ -3,7 +3,7 @@ package com.askcs.webpaigebase.servlet;
 public class Pipe extends javax.servlet.http.HttpServlet
 {
 	private static final long serialVersionUID = -5775479483142835835L;
-	String destination_host = "http://teamup.acs-services.appspot.com/";
+	String destination_host = "http://3rc2.ask-services.appspot.com";
 
 		
 	public void service(
@@ -86,6 +86,7 @@ public class Pipe extends javax.servlet.http.HttpServlet
 			//return it 
 			res.setContentType( connection.getContentType() );
 			res.setStatus( responseCode );
+			res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			
 			if( responseCode != 200 )
 			{
@@ -99,7 +100,7 @@ public class Pipe extends javax.servlet.http.HttpServlet
 		}
 		catch( java.io.IOException ioe)
 		{
-			System.out.println("# connection to `"+ destination_host +"` `"+ path +"` failed "+ioe.toString() );
+			System.out.println("# connection to "+ destination_host + path +" failed");
 			res.setStatus( 503 );
 			res.sendError( 503 );
 			return;

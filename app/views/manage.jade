@@ -1,0 +1,83 @@
+.page-header
+	h2.nullable Teams - Cliënten
+
+
+.tabbable.tabs-left
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+
+		li(class="{{(views.teamClients==true) && 'active'}}")
+			a(ng-click='setViewTo("teamClients")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Teams & Cliënten
+
+		li(class="{{(views.teams==true) && 'active'}}")
+			a(ng-click='setViewTo("teams")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Teams
+
+		li(class="{{(views.clients==true) && 'active'}}")
+			a(ng-click='setViewTo("clients")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Cliënten
+
+
+
+	.tab-content.treegrid-container(ng-controller='treegrid')
+
+
+		#viewTeamClientTab.tab-pane(class="{{(views.teamClients==true) && 'active'}}")
+			.row-fluid
+				.span6
+					h3
+						span.titleIcon.icon-heart7
+						| {{ui.teamup.clientGroups}}
+					hr
+					#teamClients_left
+				.span6
+					h3
+						span.titleIcon.icon-users
+						| {{ui.teamup.teams_Cap}}
+					hr
+					#teamClients_right
+			hr
+			button.btn.btn-success(ng-click='save.teamClients()') Opslaan
+
+
+		#viewTeamsTab.tab-pane(class="{{(views.teams==true) && 'active'}}")
+			.row-fluid
+				.span6
+					h3
+						span.titleIcon.icon-user0
+						| Leden
+					hr
+					#teams_left
+				.span6
+					h3
+						span.titleIcon.icon-users
+						| Teams
+					hr
+					#teams_right
+			hr
+			button.btn.btn-success(ng-click='save.teams()') Opslaan
+
+
+		#viewClientsTab.tab-pane(class="{{(views.clients==true) && 'active'}}")
+			.row-fluid
+				.span6
+					h3
+						span.titleIcon.icon-heart7
+						| Cliënten
+					hr
+					#clients_left
+				.span6
+					h3
+						span.titleIcon.icon-users
+						| Groepen
+					hr
+					#clients_right
+			hr
+			button.btn.btn-success(ng-click='save.clients()') Opslaan

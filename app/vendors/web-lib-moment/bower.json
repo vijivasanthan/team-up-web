@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-moment",
+  "version": "1.0.0",
+  "homepage": "https://github.com/askcs/web-lib-moment",
+  "authors": [
+    "Cengizism <culusoy@ask-cs.com>"
+  ],
+  "description": "A MomentJS service wrapper with some handy date/time related functionality.",
+  "main": "store.js",
+  "keywords": [
+    "momentJS",
+    "date",
+    "time"
+  ],
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,258 @@
+<div id="confirmTaskModal" tabindex="-1" role="dialog" aria-labelledby="confirmTaskModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTaskModalLabel" class="modal-title">{{ui.teamup.confirms.deleteTaskTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteTask}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteTask(_task)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="taskModalLabel" class="modal-title"><span class="text-turq">{{task.relatedClient.fullName}}</span><br>{{task.plannedTaskDuration.label}}</h4>
+      </div>
+      <div class="modal-body">
+        <!--pre: small {{task | json}}-->
+        <!--h4.pull-right Taakinformatie-->
+        <dl>
+          <dt>Status
+            <dd>{{task.statusLabel}}</dd>
+          </dt>
+          <dt>Tijdsbestek
+            <dd>{{task.plannedTaskDuration.label}}</dd>
+          </dt>
+          <dt>Beschrijving
+            <dd>{{task.description}}</dd>
+          </dt>
+          <dt>Gemaakt door
+            <dd><a href="#">{{task.authorUuid}}</a></dd>
+          </dt>
+        </dl>
+        <hr>
+        <!--h4.pull-right Cliëntinformatie-->
+        <dl>
+          <dt>Cliënt
+            <dd><a href="#">{{task.relatedClient.fullName}}</a></dd>
+          </dt>
+          <dt>Cliëntgroep
+            <dd><a href="#">{{task.clientGroupUuid}}</a></dd>
+          </dt>
+          <dt>Adres
+            <dd><a href="#">{{task.relatedClient.fullAddress}}</a></dd>
+          </dt>
+          <dt>Telefoon
+            <dd>{{task.relatedClient.phone}}</dd>
+          </dt>
+        </dl>
+        <hr>
+        <!--h4.pull-right Lid-informatie-->
+        <dl>
+          <dt>Naam
+            <dd><a href="#">{{task.assignedTeamMemberUuid}}</a></dd>
+          </dt>
+          <dt>Team
+            <dd><a href="#">{{task.assignedTeamUuid}}</a></dd>
+          </dt>
+        </dl>
+      </div>
+      <!--.modal-footer-->
+      <!--	button.btn.btn-default(type='button', data-dismiss='modal')-->
+      <!--		| {{ui.teamup.confirms.cancel}}-->
+      <!--	button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')-->
+      <!--		| {{ui.teamup.confirms.remove}}-->
+    </div>
+  </div>
+</div>
+<div class="page-header">
+  <h2 class="nullable">{{ui.task.tasks}}</h2>
+</div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.myTask}}</a></li>
+    <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
+    <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="myTasks" class="tab-pane {{(views.myTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">{{ui.task.myTask}}</h3>
+      </div>
+      <hr>
+      <article ng-show="tasks.mine.loading">
+        <p>Eigen taken aan het laden..</p>
+      </article>
+      <article ng-hide="tasks.mine.loading">
+        <p ng-hide="tasks.mine.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <table ng-show="tasks.mine.list.length &gt; 0" class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th><a ng-click="orderBy(&quot;status&quot;)">Status<i class="icon-sort"></i></a></th>
+              <th></th>
+              <th><a ng-click="orderBy(&quot;relatedClient.fullName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th>{{ui.task.information}}</th>
+              <th><a ng-click="orderBy(&quot;plannedTaskDuration.difference&quot;)">{{ui.task.planningTime}}<i class="icon-sort"></i></a></th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="task in tasks.mine.list | orderBy:ordered : reversed">
+              <td><span class="label label-task-state-{{task.status}}">{{task.statusLabel}}</span></td>
+              <td>
+                <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
+              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small></td>
+              <td><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
+              <td>
+                <div class="pull-right">
+                  <button type="button" ng-click="unAssignTask(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
+                  <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>Er zijn {{tasks.mine.list.length}} taken.</i></small></span>
+      </article>
+    </div>
+    <div id="allTasks" class="tab-pane {{(views.allTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">{{ui.task.allTasks}}</h3>
+      </div>
+      <hr>
+      <article ng-show="tasks.all.loading">
+        <p>Taken aan het laden..</p>
+      </article>
+      <article ng-hide="tasks.all.loading">
+        <p ng-hide="tasks.all.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <!--pre: small {{tasks.all.list[0] | json}}-->
+        <div style="padding-top: 25px" class="well">
+          <label style="margin-right: 15px; display: none">
+            <input type="checkbox" ng-model="showOnlyAvailable"><small>&nbsp;Toon alleen niet toegewezen taken</small>
+          </label>
+          <label>
+            <input type="checkbox" ng-model="showAllTasks"><small>&nbsp;Toon gearchiveerde taken</small>
+          </label>
+        </div>
+        <table ng-show="tasks.all.list.length &gt; 0" class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th><a ng-click="orderBy(&quot;status&quot;)">Status<i class="icon-sort"></i></a></th>
+              <th></th>
+              <th><a ng-click="orderBy(&quot;relatedClient.fullName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th>{{ui.task.information}}</th>
+              <th colspan="2"></th>
+              <th><a ng-click="orderBy(&quot;assignedTeamMember.fullName&quot;)">Lid<i class="icon-sort"></i></a></th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')-->
+            <!-- tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')-->
+            <tr ng-repeat="task in tasks.all.list | orderBy:ordered : reversed">
+              <td><span class="label label-task-state-{{task.status}}">{{task.statusLabel}}</span></td>
+              <td>
+                <div back-img="{{task.relatedClientUuid |  avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
+              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small><br><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
+              <td><a href="" class="taskAssignIcon"><span link-icon-hovered="" aria-hidden="true" ng-show="task.assignedTeamMember" class="icomoon icon-link"></span></a></td>
+              <td>
+                <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-show="task.assignedTeamMember" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><a href="">{{task.assignedTeamMember.fullName}}</a></td>
+              <td>
+                <div class="pull-right">
+                  <button type="button" ng-hide="task.assignedTeamMember" ng-click="assignTask(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
+                  <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>Er zijn {{tasks.all.list.length}} taken.</i></small></span>
+      </article>
+    </div>
+    <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">{{ui.task.newTask}}</h3>
+      </div>
+      <hr>
+      <form>
+        <div class="row">
+          <div class="span6">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label">Cliënt</label>
+                <div class="controls">
+                  <select ng-model="currentGroup" ng-options="g.id as g.name for g in groups | orderBy:&quot;name&quot;" ng-selected="currentGroup" ng-change="changeClientGroup(currentGroup)">
+                    <option value="">Cliëntengroep</option>
+                  </select>
+                  <select ng-model="task.client" ng-options="c.uuid as (c.firstName + &quot; &quot; + c.lastName) for c in clients | orderBy:&quot;lastName&quot; " ng-selected="currentClient" ng-change="changeClient(task.client)">
+                    <option value="">Cliënt</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Verzorger</label>
+                <div class="controls">
+                  <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
+                    <option value="">Team</option>
+                  </select>
+                  <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember">
+                    <option value="">Lid</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="control-group dater">
+                <label class="control-label">{{ui.planboard.from}}</label>
+                <div class="controls">
+                  <input name="date-start" type="text" ng-model="task.start.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="changeDate(date)"><i class="icon-calendar"></i>
+                  <input name="time-start" type="text" ng-model="task.start.time" ng-change="changeTime(time)" bs-timepicker=""><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group dater">
+                <label class="control-label">{{ui.planboard.till}}</label>
+                <div class="controls">
+                  <input name="date-end" type="text" ng-model="task.end.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="changeDate(date)"><i class="icon-calendar"></i>
+                  <input name="time-end" type="text" ng-model="task.end.time" ng-change="changeTime(time)" bs-timepicker=""><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">{{ui.task.description}}</label>
+                <div class="controls">
+                  <textarea style="height: 150px" ng-model="task.description" class="span8"></textarea>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="span6">
+            <fieldset>
+              <div class="control-group"></div>
+              <!--google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+              marker(coords = 'clientCoords')
+              markers(models = 'memberMarkers' )
+              
+              -->
+            </fieldset>
+          </div>
+        </div>
+        <hr>
+        <div class="form-actions">
+          <button type="button" ng-click="createTask(task)" class="btn btn-success">{{ui.teamup.saveMember}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

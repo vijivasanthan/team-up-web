@@ -1,0 +1,17 @@
+{
+  "name": "web-lib-offline",
+  "version": "1.0.0",
+  "description": "Offline detector for making web apps more offline capable.",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askcs/web-lib-offline.git"
+  },
+  "author": "Cengiz Ulusoy",
+  "license": "BSD"
+}
