@@ -303,6 +303,7 @@ define(
           $scope.processReports = function (reports)
           {
             var _reports = [];
+
             angular.forEach(
               reports,
               function (report)
@@ -314,6 +315,7 @@ define(
                     creationTime: report.creationTime,
                     clientUuid: report.clientUuid,
                     body: report.body,
+                    media: report.media || [],
                     author: $scope.$root.getTeamMemberById(report.authorUuid),
                     client: $scope.$root.getClientByID(report.clientUuid),
                     filtered: 'false'
@@ -931,7 +933,8 @@ define(
                 resolve: {
                   report: function () { return $scope.report }
                 }
-              });
+              }
+            );
           };
 
           $scope.newReport = function ()

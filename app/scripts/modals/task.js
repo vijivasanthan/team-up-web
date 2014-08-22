@@ -13,9 +13,7 @@ define(
         '$filter',
         'Store',
         'TeamUp',
-        'Teams',
-        'Clients',
-        function ($rootScope, $resource, $q, $filter, Store, TeamUp, Teams, Clients)
+        function ($rootScope, $resource, $q, $filter, Store, TeamUp)
         {
           var Task = $resource();
 

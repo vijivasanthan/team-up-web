@@ -478,37 +478,60 @@ define(
                 case 'client':
                   path = '/client/';
                   break;
+
+                case 'avatar':
+                  path = '/images/';
+                  break;
+
+                case 'image':
+                  path = '/images/';
+                  break;
               }
 
               var avatarChanged = function (id)
               {
-
                 var changedTimes = 0;
 
-                var list = Store('app').get('avatarChangeRecord');
-
                 angular.forEach(
-                  list, function (avatarId)
+                  Store('app').get('avatarChangeRecord'),
+                  function (avatarId)
                   {
                     if (avatarId == id)
                     {
                       changedTimes ++;
                     }
-                  });
+                  }
+                );
 
                 return parseInt(changedTimes, 10);
               };
 
               // TODO: Better use a special parameter to specify the avatar is changed.
-
               var newsize = parseInt(size, 10) + parseInt(avatarChanged(id), 10);
 
-              return config.app.host +
-                     config.app.namespace +
-                     path +
-                     id +
-                     '/photo?width=' + newsize + '&height=' + newsize + '&sid=' +
-                     session;
+              if (type == 'avatar' || type == 'image')
+              {
+                var _url = config.app.host +
+                           path +
+                           id +
+                           '?sid=' + session;
+
+//                if (type == 'avatar')
+//                {
+//                  _url += '&width=' + newsize + '&height=' + newsize;
+//                }
+
+                return _url;
+              }
+              else
+              {
+                return config.app.host +
+                       config.app.namespace +
+                       path +
+                       id +
+                       '/photo?width=' + newsize + '&height=' + newsize + '&sid=' +
+                       session;
+              }
             }
           }
         }

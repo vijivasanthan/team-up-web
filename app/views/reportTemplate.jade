@@ -3,23 +3,31 @@
 	h4.reportTitle(ng-hide='view.newReport == false') {{ui.teamup.newReport}}
 	button.btn.pull-right.btn-primary.marginLeftTen(type='button',
 	ng-click='close()') {{ui.groups.close}}
-hr
+
 .modal-body
 	table
 		thead
 			tr
 				th {{ui.teamup.date}}
 				th {{ui.teamup.writenBy}}
-				th {{ui.teamup.client}}
+				th Cliënt
 		tbody
 			tr
 				td {{report.creationTime|nicelyDate}}
 				td {{report.author.firstName}} {{report.author.lastName}}
 				td {{report.client.firstName}} {{report.client.lastName}}
+
+			tr(ng-show='report.media.length > 0')
+				.row
+					.col-md-3(ng-repeat='media in report.media')
+						a.thumbnail(ng-href='{{config.app.host}}/images/{{media.path}}', target='_blank')
+							img(ng-src='{{media.path | avatar:"avatar":"171"}}')
+
 			tr(ng-hide='view.viewReport == false')
 				td(colspan='3')
 					br
 					| {{report.body}}
+
 			tr(ng-show='view.newReport || view.editReport ')
 				td(colspan='3')
 					br

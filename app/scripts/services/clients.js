@@ -1,6 +1,6 @@
 define(
-  ['services/services', 'config'],
-  function (services, config)
+  ['services/services'],
+  function (services)
   {
     'use strict';
 

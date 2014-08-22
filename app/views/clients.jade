@@ -301,6 +301,9 @@ aria-hidden='true')
 						i {{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
 
 
+
+
+
 		#viewClientTab.tab-pane(ng-show='views.viewClient',
 		class="{{(views.viewClient==true) && 'active'}}")
 			.tab-header
@@ -353,24 +356,20 @@ aria-hidden='true')
 			.control-group
 				label.control-label {{ui.profile.firstName}}
 				.controls
-					input.span4(type='text',
-					ng-model='contactForm.firstName')
+					input.span4(type='text', ng-model='contactForm.firstName')
 				label.control-label {{ui.profile.lastName}}
 				.controls
-					input.span4(type='text',
-					ng-model='contactForm.lastName')
+					input.span4(type='text', ng-model='contactForm.lastName')
 				label.control-label {{ui.teamup.func}}
 				.controls
-					input.span4(type='text',
-					ng-model='contactForm.function')
+					input.span4(type='text', ng-model='contactForm.function')
 				label.control-label {{ui.profile.phone}}
 				.controls
-					input.span4(type='text',
-					ng-model='contactForm.phone')
-				button.btn.btn-info(type='reset',
-				ng-click='addContacts()') {{ui.teamup.addContact}}
-			p(ng-hide='contacts.length > 0')
-				| {{ui.teamup.noContacts}}
+					input.span4(type='text', ng-model='contactForm.phone')
+				button.btn.btn-info(type='reset', ng-click='addContacts()') {{ui.teamup.addContact}}
+
+			p(ng-hide='contacts.length > 0') {{ui.teamup.noContacts}}
+
 			div(ng-show='contacts.length > 0')
 				table.table.table-striped
 					thead
@@ -394,11 +393,12 @@ aria-hidden='true')
 								button.btn.btn-success.ng-binding(type='submit',
 								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
 				span.muted.pull-right
-					small
-						i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+					small: i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+
 			.tab-header
 				h3.pull-left {{ui.teamup.reports}}
 			hr
+
 			div(ng-show='reports.length > 0')
 				table.table.table-striped
 					thead
@@ -406,10 +406,11 @@ aria-hidden='true')
 							th
 							th {{ui.teamup.writenBy}}
 							th {{ui.teamup.name}}
+							th
 							th {{ui.teamup.datetime}}
 							th
 					tbody
-						tr(ng-repeat='report in reports|orderBy:"creationTime":"reverse"')
+						tr(ng-repeat='report in reports | orderBy:"creationTime":"reverse"')
 							td
 								.roundedPicSmall(back-img = '{{report.author.uuid | avatar:"team":"80"}}',
 								class='{{report.author.states|stateColor}}')
@@ -417,6 +418,9 @@ aria-hidden='true')
 								| {{report.author.firstName}} {{report.author.lastName}}
 							td
 								a(ng-click='openReport(report)') {{report.title}}
+							td
+								i.icon-picture(ng-show='report.media.length > 0')
+								//pre: small {{report | json}}
 							td {{report.creationTime|nicelyDate}}
 							td
 								.pull-right
