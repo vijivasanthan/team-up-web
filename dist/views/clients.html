@@ -346,17 +346,21 @@
               <th></th>
               <th>{{ui.teamup.writenBy}}</th>
               <th>{{ui.teamup.name}}</th>
+              <th></th>
               <th>{{ui.teamup.datetime}}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="report in reports|orderBy:&quot;creationTime&quot;:&quot;reverse&quot;">
+            <tr ng-repeat="report in reports | orderBy:&quot;creationTime&quot;:&quot;reverse&quot;">
               <td>
                 <div back-img="{{report.author.uuid | avatar:&quot;team&quot;:&quot;80&quot;}}" class="roundedPicSmall {{report.author.states|stateColor}}"></div>
               </td>
               <td>{{report.author.firstName}} {{report.author.lastName}}</td>
               <td><a ng-click="openReport(report)">{{report.title}}</a></td>
+              <td><i ng-show="report.media.length &gt; 0" class="icon-picture"></i>
+                <!--pre: small {{report | json}}-->
+              </td>
               <td>{{report.creationTime|nicelyDate}}</td>
               <td>
                 <div class="pull-right"><a>

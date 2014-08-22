@@ -3,14 +3,13 @@
   <h4 ng-hide="view.newReport == false" class="reportTitle">{{ui.teamup.newReport}}</h4>
   <button type="button" ng-click="close()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
 </div>
-<hr>
 <div class="modal-body">
   <table>
     <thead>
       <tr>
         <th>{{ui.teamup.date}}</th>
         <th>{{ui.teamup.writenBy}}</th>
-        <th>{{ui.teamup.client}}</th>
+        <th>Cliënt</th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +17,11 @@
         <td>{{report.creationTime|nicelyDate}}</td>
         <td>{{report.author.firstName}} {{report.author.lastName}}</td>
         <td>{{report.client.firstName}} {{report.client.lastName}}</td>
+      </tr>
+      <tr ng-show="report.media.length &gt; 0">
+        <div class="row">
+          <div ng-repeat="media in report.media" class="col-md-3"><a ng-href="{{config.app.host}}/images/{{media.path}}" target="_blank" class="thumbnail"><img ng-src="{{media.path | avatar:&quot;avatar&quot;:&quot;171&quot;}}"></a></div>
+        </div>
       </tr>
       <tr ng-hide="view.viewReport == false">
         <td colspan="3"><br>{{report.body}}</td>
