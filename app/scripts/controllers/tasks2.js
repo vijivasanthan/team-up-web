@@ -117,7 +117,7 @@ define(
 
           setView(view);
 
-          function queryMine (only)
+          function queryMine (only, callback)
           {
             Task.queryMine()
               .then(
@@ -127,6 +127,8 @@ define(
                   loading: false,
                   list: tasks
                 };
+
+                (callback && callback.call(this, tasks));
               }
             );
 
@@ -136,8 +138,10 @@ define(
             }
           }
 
-          function queryAll ()
+          function queryAll (callback)
           {
+            queryMine(true);
+
             Task.queryAll()
               .then(
               function (tasks)
@@ -146,6 +150,8 @@ define(
                   loading: false,
                   list: tasks.on
                 };
+
+                (callback && callback.call(this, tasks));
               }
             );
           }
@@ -406,7 +412,6 @@ define(
             // load team member's locations
           };
 
-
           // console.log('scope ->', $scope);
 
           Task.chains();
@@ -417,8 +422,7 @@ define(
            */
 
 
-
-            // Validation of the task form
+          // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
             // console.log($scope.currentClient);
@@ -519,17 +523,29 @@ define(
                 }
                 else
                 {
-                  $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+                  if (task.member == $rootScope.app.resources.uuid)
+                  {
+                    queryMine(
+                      true,
+                      function ()
+                      {
+                        setView('myTasks');
 
-                  // refresh the tasks in that team and
-                  // forward user to the task overview page.
-                  // 1> forward to my task page if the task is assigned to the login member
-                  // 2> forward to all task page if the task is assigned to other member or nobody
+                        $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+                      }
+                    );
+                  }
+                  else
+                  {
+                    queryAll(
+                      function ()
+                      {
+                        setView('allTasks');
 
-                  // result is the taskId
-                  // $scope.reloadAndSaveTask(result.result, 'add');
-
-                  setView('allTasks');
+                        $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+                      }
+                    );
+                  }
                 }
               }
             );

@@ -192,17 +192,6 @@
           <div class="span6">
             <fieldset>
               <div class="control-group">
-                <label class="control-label">Cliënt</label>
-                <div class="controls">
-                  <select ng-model="currentGroup" ng-options="g.id as g.name for g in groups | orderBy:&quot;name&quot;" ng-selected="currentGroup" ng-change="changeClientGroup(currentGroup)">
-                    <option value="">Cliëntengroep</option>
-                  </select>
-                  <select ng-model="task.client" ng-options="c.uuid as (c.firstName + &quot; &quot; + c.lastName) for c in clients | orderBy:&quot;lastName&quot; " ng-selected="currentClient" ng-change="changeClient(task.client)">
-                    <option value="">Cliënt</option>
-                  </select>
-                </div>
-              </div>
-              <div class="control-group">
                 <label class="control-label">Verzorger</label>
                 <div class="controls">
                   <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
@@ -210,6 +199,17 @@
                   </select>
                   <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember">
                     <option value="">Lid</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Cliënt</label>
+                <div class="controls">
+                  <select ng-model="currentGroup" ng-options="g.id as g.name for g in groups | orderBy:&quot;name&quot;" ng-selected="currentGroup" ng-change="changeClientGroup(currentGroup)">
+                    <option value="">Cliëntengroep</option>
+                  </select>
+                  <select ng-model="task.client" ng-options="c.uuid as (c.firstName + &quot; &quot; + c.lastName) for c in clients | orderBy:&quot;lastName&quot; " ng-selected="currentClient" ng-change="changeClient(task.client)">
+                    <option value="">Cliënt</option>
                   </select>
                 </div>
               </div>
