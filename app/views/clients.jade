@@ -1,0 +1,518 @@
+#confirmClientModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmClientModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteClient}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='deleteClient(_clientId)') Verwijderen
+
+#confirmClientGroupModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmClientGroupModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmClientGroupModalLabel.modal-title {{ui.teamup.confirms.deleteClientGroupTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteClientGroup}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='deleteClientGroup()') {{ui.teamup.confirms.remove}}
+
+#confirmReportModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmReportModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmReportModalLabel.modal-title {{ui.teamup.confirms.deleteReportTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteReport}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='removeReport(_report)') {{ui.teamup.confirms.remove}}
+
+.page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
+	h2.nullable {{ui.teamup.clients}}
+	.selectGroup
+		span.selectTitle
+			| Selecteer groep
+		select(ng-model='current',
+		ng-options='c.id as c.name for c in clientGroups',
+		ng-selected='current',
+		ng-change='requestClientGroup(current)')
+
+
+
+.tabbable.tabs-left
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+
+		li(class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("client")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| {{ui.teamup.clients}}
+
+		li(class="{{(views.newClientGroup==true) && 'active'}}",ng-hide="app.resources.role > 1")
+			a(data-toggle='tab',
+			ng-click='setViewTo("newClientGroup")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| {{ui.teamup.newClientGroup}}
+
+		li(class="{{(views.newClient==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("newClient")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| {{ui.teamup.newClient}}
+
+		li(class="{{(views.reports==true) && 'active'}}")
+			a(data-toggle='tab',
+			ng-click='setViewTo("reports")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| {{ui.teamup.reports}}
+
+
+
+	.tab-content
+
+
+		#viewClientTab.tab-pane(class="{{(views.client==true) && 'active'}}")
+			.tab-header(ng-hide='views.editClientGroup')
+				h3.pull-left {{clientGroup.name}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button',
+				ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
+				button.btn.pull-right.btn-info(type='button',
+				ng-click='editClientGroup(clientGroup)') {{ui.teamup.edit}}
+			.tab-header(ng-show='views.editClientGroup')
+				input.pull-left(type='text',
+				ng-model='cGroupEditForm.name')
+				button.btn.pull-right.btn-info.marginLeftTen(type='reset',
+				ng-click='cancelClientGroupEdit(clientGroup)') {{ui.teamup.cancel}}
+				button.btn.pull-right.btn-info(type='button',
+				ng-click='changeClientGroup(cGroupEditForm)') {{ui.teamup.save}}
+			hr
+			p(ng-hide='(data.clients[clientGroup.id]).length > 0')
+				| {{ui.teamup.noClients}}
+			div(ng-show='(data.clients[clientGroup.id]).length > 0')
+				table.table.table-striped
+					thead
+						tr
+							th
+							th: a(ng-click='sorter="name"') {{ui.teamup.name}}
+							th: a {{ui.profile.address}}
+							th
+					tbody
+						tr(ng-repeat='client in data.clients[clientGroup.id]|orderBy:lastName')
+							td
+								.roundedPicSmall.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"80"}}')
+							td
+								a(href='#/clientProfile/{{client.uuid}}#viewClient')
+									| {{client.firstName}} {{client.lastName}}
+							td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
+							td
+								.pull-right
+									a(href='#/clientProfile/{{client.uuid}}#editClient')
+										button.btn-primary.btn-mini
+											i.icon-edit
+									button.btn-primary.btn-mini(type='submit',
+									ng-click='confirmDeleteClient(client.uuid)')
+										i.icon-trash
+				#confirmClientModal.modal.fade(tabindex='-1',
+				role='dialog',
+				aria-labelledby='confirmClientModalLabel',
+				aria-hidden='true')
+					.modal-dialog
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal')
+									span(aria-hidden='true') ×
+									span.sr-only Close
+								h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
+							.modal-body
+								| {{ui.teamup.confirms.deleteClient}}
+							.modal-footer
+								button.btn.btn-default(type='button',
+								data-dismiss='modal') Annuleren
+								button.btn.btn-primary(type='button',
+								ng-click='deleteClient(_clientId)') Verwijderen
+				span.muted.pull-right
+					small
+						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+
+
+		#newClientGroupTab.tab-pane(class="{{(views.newClientGroup==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ui.teamup.newClientGroup}}
+			hr
+			form.form
+				.control-group
+					input.input-xlarge.search-query.controls(type='text',
+					placeholder='{{ui.teamup.cGroupName}}',
+					ng-model='cGroupForm.name')
+				.control-group
+					button.btn.btn-success.confirmButton.controls(type='button',
+					ng-click='cGroupSubmit(cGroupForm)') {{ui.teamup.createClientGroup}}
+
+
+		#newClientTab.tab-pane(class="{{(views.newClient==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ui.teamup.newClient}}
+			hr
+			form
+				fieldset
+					.control-group
+						label.control-label {{ui.profile.firstName}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.firstName')
+					.control-group
+						label.control-label {{ui.profile.lastName}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.lastName')
+					.control-group
+						label.control-label {{ui.profile.birthday}}
+						.controls
+							.control-group.dater(style='')
+								input.ng-pristine.ng-valid(name='date-start',
+								type='text',
+								ng-model='clientForm.birthDate',
+								data-date-format='dd-mm-yyyy',
+								bs-datepicker='',
+								data-toggle='datepicker')
+								i.icon-calendar
+					.control-group
+						label.control-label {{ui.teamup.phone}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.phone')
+					.control-group
+						label.control-label {{ui.teamup.street}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.address.street')
+						label.control-label {{ui.teamup.Number}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.address.no')
+					.control-group
+						label.control-label {{ui.teamup.postCode}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.address.zip')
+						label.control-label {{ui.teamup.city}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.address.city')
+					.control-group
+						label.control-label {{ui.teamup.clientProfileUrl}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientForm.clientProfileUrl')
+					.control-group
+						label.control-label Extra Info
+						.controls
+							textarea.span8(style='height: 150px',
+							ng-model='clientForm.extraInfo.basic')
+				hr
+				.form-actions
+					button.btn.btn-success(type='submit',
+					ng-click='clientSubmit(clientForm)') {{ui.teamup.saveClient}}
+
+
+		#reportsTab.tab-pane(class="{{(views.reports==true) && 'active'}}")
+			.tab-header
+				| {{ui.teamup.clients}}:
+				// ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients"
+				select(ng-init='currentCLient=0',
+				ng-model='currentCLient',
+				ng-selected='currentCLient',
+				ng-change='requestReportsByFilter()')
+					option(value='0') {{ui.teamup.selectClient}}
+					option(ng-repeat='client in clients',
+					value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
+
+				| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
+				select(ng-init='currentMonth=0',
+				ng-model='currentMonth',
+				ng-selected='currentMonth',
+				ng-change='requestReportsByFilter()')
+					option(ng-repeat='month in Months|orderBy:number',
+					value='{{month.number}}') {{month.name}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button',
+				ng-click='newReport()') {{ui.teamup.newReport}}
+			hr
+			div(ng-show='groupReports.length > 0')
+				table.table.table-striped
+					thead
+						tr
+							th
+							th {{ui.teamup.writenBy}}
+							th {{ui.teamup.name}}
+							th {{ui.teamup.datetime}}
+							th
+					tbody
+						tr(ng-repeat='report in groupReports | filter:{filtered:"false"} | orderBy:"creationTime":"reverse" ')
+							td
+								.roundedPicSmall(class='{{report.author.states|stateColor}}',
+								back-img = '{{report.author.uuid | avatar:"team":"80"}}')
+							td
+								| {{report.author.firstName}} {{report.author.lastName}}
+							td
+								a(ng-click='openReport(report)') {{report.title}}
+							td {{report.creationTime|nicelyDate}}
+							td
+								.pull-right
+									a
+										button.btn-primary.btn-mini(ng-click='editReport(report)')
+											i.icon-edit
+									button.btn-primary.btn-mini(ng-click='removeReport(report)')
+										i.icon-trash
+				span.muted.pull-right
+					small
+						i {{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+
+
+
+
+
+		#viewClientTab.tab-pane(ng-show='views.viewClient',
+		class="{{(views.viewClient==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{client.firstName}} {{client.lastName}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button',
+				ng-click='confirmDeleteClient(client.uuid)') {{ui.teamup.del}}
+				button.btn.pull-right.btn-info(type='button',
+				ng-click='setViewTo("editClient")') {{ui.profile.edit}}
+			hr
+			.row-fluid
+				.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
+					dl
+						dt {{ui.teamup.group}}
+						dd
+							span(ng-hide='app.resources.role > 1')
+								a(href='#/client?uuid={{client.clientGroupUuid}}#client')
+									| {{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}
+						dt {{ui.profile.birthday}}
+						dd {{client.birthDate}}
+						dt {{ui.teamup.phone}}
+						dd {{client.phone}}
+						dt {{ui.profile.address}}
+						dd
+							| {{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}
+
+						dt(ng-show='client.clientProfileUrl') {{ui.teamup.clientProfileUrl}}
+						dd(ng-show='client.clientProfileUrl') {{client.clientProfileUrl}}
+						// pre: small {{client | json}}
+
+				.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
+					.roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
+					div
+						a(href='#/clientProfile/{{client.uuid}}#editImg')
+							button.btn.btn-mini.btn-primary(ng-click='editImg()')
+								i.icon-edit
+						button.btn.btn-mini.btn-primary(type='submit',
+						ng-click='removeImg(client.uuid)')
+							i.icon-trash
+
+			div(ng-show='client.extraInfo.basic')
+				.tab-header
+					h3.pull-left Cliënt Informatie
+				hr
+				pre {{client.extraInfo.basic || '-'}}
+				br
+
+			.tab-header
+				h3.pull-left {{ui.teamup.contacts}}
+			hr
+			.control-group
+				label.control-label {{ui.profile.firstName}}
+				.controls
+					input.span4(type='text', ng-model='contactForm.firstName')
+				label.control-label {{ui.profile.lastName}}
+				.controls
+					input.span4(type='text', ng-model='contactForm.lastName')
+				label.control-label {{ui.teamup.func}}
+				.controls
+					input.span4(type='text', ng-model='contactForm.function')
+				label.control-label {{ui.profile.phone}}
+				.controls
+					input.span4(type='text', ng-model='contactForm.phone')
+				button.btn.btn-info(type='reset', ng-click='addContacts()') {{ui.teamup.addContact}}
+
+			p(ng-hide='contacts.length > 0') {{ui.teamup.noContacts}}
+
+			div(ng-show='contacts.length > 0')
+				table.table.table-striped
+					thead
+						tr
+							th {{ui.teamup.name}}
+							th {{ui.teamup.func}}
+							th {{ui.teamup.phone}}
+							th
+					tbody
+						tr(ng-repeat='contact in contacts|orderBy:lastName')
+							td {{contact.firstName}} {{contact.lastName}}
+							td {{contact.function}}
+							td {{contact.phone}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='removeContact(contact)')
+										i.icon-trash
+					tfoot
+						tr
+							th
+								button.btn.btn-success.ng-binding(type='submit',
+								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
+				span.muted.pull-right
+					small: i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+
+			.tab-header
+				h3.pull-left {{ui.teamup.reports}}
+			hr
+
+			div(ng-show='reports.length > 0')
+				table.table.table-striped
+					thead
+						tr
+							th
+							th {{ui.teamup.writenBy}}
+							th {{ui.teamup.name}}
+							th
+							th {{ui.teamup.datetime}}
+							th
+					tbody
+						tr(ng-repeat='report in reports | orderBy:"creationTime":"reverse"')
+							td
+								.roundedPicSmall(back-img = '{{report.author.uuid | avatar:"team":"80"}}',
+								class='{{report.author.states|stateColor}}')
+							td
+								| {{report.author.firstName}} {{report.author.lastName}}
+							td
+								a(ng-click='openReport(report)') {{report.title}}
+							td
+								i.icon-picture(ng-show='report.media.length > 0')
+								//pre: small {{report | json}}
+							td {{report.creationTime|nicelyDate}}
+							td
+								.pull-right
+									a
+										button.btn-primary.btn-mini(ng-click='editReport(report)')
+											i.icon-edit
+									button.btn-primary.btn-mini(ng-click="confirmDeleteReport(report)")
+										i.icon-trash
+				span.muted.pull-right
+					small
+						i {{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+
+
+		.tab-pane(ng-show='views.editClient',
+		class="{{(views.editClient==true) && 'active'}}")
+			div(style='overflow: hidden; height: 35px')
+				h3.pull-left(style='margin-top: 0;') {{ui.teamup.editClient}}
+			hr
+			.row-fluid
+				form.form-vertical
+					.control-group
+						label.control-label {{ui.profile.firstName}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientmeta.firstName',
+							value='sd')
+					.control-group
+						label.control-label {{ui.profile.lastName}}
+						.controls
+							input.span4(type='text',
+							ng-model='clientmeta.lastName')
+					.control-group
+						label.control-label {{ui.profile.birthday}}
+						.control-group.dater(style='')
+							input.ng-pristine.ng-valid(name='date-start',
+							type='text',
+							ng-model='clientmeta.birthDate',
+							data-date-format='dd-mm-yyyy',
+							bs-datepicker='',
+							data-toggle='datepicker')
+							i.icon-calendar
+					.control-group
+						label.control-label {{ui.profile.phone}}
+						.controls
+							input.span3(type='text',
+							ng-model='clientmeta.phone',
+							value='{{client.phone}}')
+					.control-group
+						label.control-label {{ui.teamup.street}}
+						.controls
+							input.span4(type='text',
+							value='{{client.address.street}}',
+							ng-model='clientmeta.address.street')
+						label.control-label {{ui.teamup.Number}}
+						.controls
+							input.span4(type='text',
+							value='{{client.address.no}}',
+							ng-model='clientmeta.address.no')
+					.control-group
+						label.control-label {{ui.teamup.postCode}}
+						.controls
+							input.span4(type='text',
+							value='{{client.address.zip}}',
+							ng-model='clientmeta.address.zip')
+						label.control-label {{ui.teamup.city}}
+						.controls
+							input.span4(type='text',
+							value='{{client.address.city}}',
+							ng-model='clientmeta.address.city')
+					.control-group
+						label.control-label {{ui.teamup.clientProfileUrl}}
+						.controls
+							input.span4(type='text',
+							value='{{client.clientProfileUrl}}',
+							ng-model='clientmeta.clientProfileUrl')
+					.control-group
+						label.control-label Extra Info
+						.controls
+							textarea.span8(style='height: 150px',
+							ng-model='clientmeta.extraInfo.basic')
+					.form-actions
+						button.btn.btn-success(type='submit',
+						ng-click='clientChange(clientmeta)') {{ui.teamup.saveClient}}
+
+
+		#editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
+			div(style='overflow: hidden; height: 35px')
+				h3.pull-left(style='margin-top: 0;')
+					| {{ui.teamup.editClientImg}} : {{client.firstName}} {{client.lastName}}
+			hr
+			div.roundedPicLarge.memberStateBusy(back-img = '{{client.uuid | avatar:"client":"368" }}')
+				//img(ng-src='{{avatarURL}}')
+			#uploadImgModule
+				form.form-vertical(enctype='multipart/form-data')
+					uploader(action='{{uploadURL}}')

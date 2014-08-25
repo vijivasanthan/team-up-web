@@ -1,0 +1,24 @@
+<div id="welcomeLogo"></div>
+<div id="welcomeArrow"></div>
+<div id="welcome">
+  <div id="preloader">
+    <h4>{{ui.login.setting_up_app}}</h4>
+    <div class="progress progress-striped active">
+      <div class="bar"></div>
+    </div><span class="muted"></span>
+  </div>
+  <div id="login" class="boxed">
+    <form ng-submit="login()">
+      <div ng-show="alert.login.display" class="alert {{alert.login.type}}">
+        <button type="button" ng-click="alert.login=false" class="close">×</button>{{alert.login.message}}
+      </div>
+      <input type="text" ng-model="loginData.username" placeholder="{{ui.login.ph_username}}" autofocus="">
+      <input type="password" ng-model="loginData.password" placeholder="{{ui.login.ph_password}}">
+      <label class="checkbox span3">
+        <input type="checkbox" ng-model="loginData.remember">{{ui.login.label_rememberMe}}
+      </label>
+      <button type="submit" class="btn btn-large btn-block btn-primary">{{ui.login.button_login}}</button><span class="version">
+        <!--TODO: Create a version file later on or disable the link--><a href="index.html">v{{config.app.version}}</a></span>
+    </form>
+  </div>
+</div>

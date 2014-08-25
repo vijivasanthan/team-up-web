@@ -1,0 +1,10 @@
+<div class="uploader">
+  <input type="file" name="file" style="display:none" onchange="$(this).scope().sendFile(this)">
+  <div class="fake-uploader">
+    <label for="uploader">{{uploadLabel}}</label>
+    <input type="text" readonly="readonly" ng-model="avatar">
+  </div>
+  <div ng-show="progress!=0" class="progress">
+    <div style="width:{{progress}}%" class="bar"></div>
+  </div>
+</div>

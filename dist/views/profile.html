@@ -1,0 +1,114 @@
+<div id="confirmProfileModal" tabindex="-1" role="dialog" aria-labelledby="confirmProfileModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmProfileModalLabel" class="modal-title">{{ui.teamup.confirms.deleteProfileTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteProfile}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteProfile()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<section id="profile">
+  <div class="page-header">
+    <h2>{{data.name}}</h2>
+  </div>
+  <div class="row-fluid">
+    <div class="tabbable tabs-left">
+      <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+        <li class="{{(views.profile==true || views.edit==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="fixTabHeight(&quot;profileTab&quot;); setViewTo(&quot;profile&quot;)"><span class="entypo">👤</span>{{ui.profile.profile}}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="profileTab" class="tab-pane {{(views.profile==true) &amp;&amp; 'active'}}">
+          <div class="tab-header">
+            <h3 class="pull-left">{{data.firstName}} {{data.lastName}}</h3>
+            <button type="button" ng-click="confirmDeleteProfile()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+            <button type="button" ng-click="editProfile()" class="btn pull-right btn-info">{{ui.profile.edit}}</button>
+          </div>
+          <hr>
+          <div class="row-fluid">
+            <div class="widget {{(!browser.mobile) &amp;&amp; 'span9' || 'span12'}}">
+              <dl>
+                <dt>{{ui.teamup.teams}}</dt>
+                <dd><span ng-repeat="team in teams"><span ng-hide="app.resources.role &gt; 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}}</a></span><span ng-hide="{{((teams.length-1) == $index)}}">,</span><span ng-show="app.resources.role &gt; 1">{{team.name}}</span></span></dd>
+                <dt>{{ui.teamup.role}}</dt>
+                <dd>{{data.role|translateRole}}</dd>
+                <dt>{{ui.profile.phone}}</dt>
+                <dd>{{data.phone}}</dd>
+                <dt>{{ui.teamup.func}}</dt>
+                <dd>{{data.function|translateFunc}}</dd>
+                <dt>{{ui.profile.birthday}}</dt>
+                <dd>{{data.birthDate|nicelyDate}}</dd>
+              </dl>
+            </div>
+            <div class="widget profilePic {{(!browser.mobile) &amp;&amp; 'span3' || 'span12'}}">
+              <div back-img="{{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }}" class="roundedPicLarge {{data.states|stateColor}}"></div>
+              <div><a href="#/profile/{{data.uuid}}#editImg">
+                  <button ng-click="editImg()" class="btn btn-mini btn-primary"><i class="icon-edit"></i></button></a>
+                <button type="submit" ng-click="removeImg(data.uuid)" class="btn btn-mini btn-primary"><i class="icon-trash"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="editTab" class="tab-pane {{(views.edit==true) &amp;&amp; 'active'}}">
+          <div style="overflow: hidden; height: 35px">
+            <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfile}}</h3>
+          </div>
+          <hr>
+          <form class="form-vertical">
+            <div class="control-group">
+              <label class="control-label">{{ui.profile.firstName}}</label>
+              <div class="controls">
+                <input type="text" ng-model="profilemeta.firstName" value="{{data.firstName}}" class="span4">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">{{ui.profile.lastName}}</label>
+              <div class="controls">
+                <input type="text" ng-model="profilemeta.lastName" value="{{data.lastName}}" class="span4">
+              </div>
+            </div>
+            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profilemeta.uuid != app.resources.uuid) || (currentRole &gt; 1 &amp;&amp;  profilemeta.uuid == app.resources.uuid)" class="control-group">
+              <label class="control-label">{{ui.teamup.role}}</label>
+              <div class="controls">
+                <select ng-model="profilemeta.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">{{ui.profile.phone}}</label>
+              <div class="controls">
+                <input type="text" ng-model="profilemeta.phone" value="{{data.phone}}" class="span3">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">{{ui.teamup.func}}</label>
+              <div class="controls">
+                <select ng-model="profilemeta.function" ng-options="f.id as f.label for f in mfuncs" ng-selected="profilemeta.function">{{ui.profile.birthday}}</select>
+                <input name="date-start" type="text" ng-model="profilemeta.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" ng-click="save(profilemeta)" class="btn btn-success">{{ui.profile.saveProfile}}</button>
+            </div>
+          </form>
+        </div>
+        <div id="editImgTab" class="tab-pane {{(views.editImg==true) &amp;&amp; 'active'}}">
+          <div style="overflow: hidden; height: 35px">
+            <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}</h3>
+          </div>
+          <hr>
+          <div back-img="{{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }}" class="roundedPicLarge"></div>
+          <div id="uploadImgModule">
+            <form enctype="multipart/form-data" class="form-vertical">
+              <uploader action="{{uploadURL}}"></uploader>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

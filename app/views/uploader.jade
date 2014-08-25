@@ -1,0 +1,15 @@
+div.uploader
+
+	input(type='file',
+	name='file',
+	style='display:none;',
+	onchange='$(this).scope().sendFile(this);')
+
+	div.fake-uploader
+		label(for='uploader') {{uploadLabel}}
+		input(type='text',
+		readonly='readonly',
+		ng-model='avatar')
+
+	div.progress(ng-show='progress!=0')
+		div.bar(style='width:{{progress}}%;')

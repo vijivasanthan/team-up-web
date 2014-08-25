@@ -1,0 +1,229 @@
+<div id="confirmTaskModal" tabindex="-1" role="dialog" aria-labelledby="confirmTaskModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTaskModalLabel" class="modal-title">{{ui.teamup.confirms.deleteTaskTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteTask}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteTask(_task)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-header">
+  <h2 class="nullable">Taken</h2>
+</div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Mijn Taken</a></li>
+    <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Alle Taken</a></li>
+    <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Nieuwe Taak</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="myTasks" class="tab-pane {{(views.myTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header hide">
+        <h3 class="pull-left">{{ui.task.myTask}}</h3>
+        <select ng-model="currentOrder" ng-options="order.id as order.name for order in orders" ng-selected="currentOrder" ng-change="tasksOrderBy(currentOrder)" class="pull-right"></select><span class="pull-right">{{ui.task.orderby}}</span>
+      </div>
+      <div class="tab-header hide">
+        <input type="text" class="pull-left">
+        <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
+      </div>
+      <div>
+        <pagination total-items="myTasks.length" page="myTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"></pagination>
+        <button type="button" ng-click="refreshTask('my')" style="margin-top : 20px" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.refresh}}</button>
+      </div>
+      <hr>
+      <p ng-hide="myTasks.length &gt; 0">{{ui.task.noTasks}}</p>
+      <div ng-show="myTasks.length &gt; 0">
+        <table class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th><a ng-click="resort(&quot;clientName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th><a>{{ui.task.information}}</a></th>
+              <th><a ng-click="resort(&quot;plannedEndVisitTime&quot;)">{{ui.task.planningTime}}<i class="icon-sort"></i></a></th>
+              <th></th>
+            </tr>
+          </thead>
+          <!--pre: small {{currentTasks | json }}-->
+          <!--pre: small {{orderItem}}-->
+          <tbody ui-sortable="sortableOptions">
+            <tr ng-repeat="task in currentTasks|orderBy:orderItem:reverse">
+              <td>
+                <div class="dragIcon"></div>
+              </td>
+              <td>
+                <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClientName }}</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo"> {{task.relatedClientUuid | getObjAttr:"client":"address"}}<a href="http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:&quot;client&quot;:&quot;latlong&quot; }}">{{ui.teamup.map}}</a></span></dl>
+                <dl>
+                  <dd>
+                    <div id="myTaskdesc_{{task.uuid}}">{{task.description}}</div>
+                  </dd>
+                </dl>
+              </td>
+              <td>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span ng-show="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span><span ng-hide="((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span></dl>
+              </td>
+              <td>
+                <div class="pull-right"><a href="#"></a>
+                  <button type="button" ng-click="unassignYourself(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a ng-click="toggleMyDesc(task.uuid)" class="noteLink">
+                    <p>{{ui.task.description}}<i class="icon-arrow-down2"></i></p></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>{{myTasks.length | i18n_spec:'groups.memberCount'}}</i></small></span>
+      </div>
+    </div>
+    <div id="allTasks" class="tab-pane {{(views.allTasks==true) &amp;&amp; 'active'}}">
+      <div class="tab-header hide">
+        <h3 class="pull-left">{{ui.task.allTasks}}</h3>
+        <select ng-model="currentOrder" ng-options="order.id as order.name for order in orders" ng-selected="currentOrder" ng-change="tasksOrderBy(currentOrder)" class="pull-right"></select><span class="pull-right">{{ui.task.orderby}}</span>
+      </div>
+      <div class="tab-header hide">
+        <input type="text" class="pull-left">
+        <button type="reset" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
+        <button type="button" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
+      </div>
+      <div>
+        <pagination total-items="allTasks.length" page="allTaskCurrentPage" items-per-page="tasksPerPage" max-size="maxSize" boundary-links="true" rotate="false" num-pages="numPages" previous-text="{{ui.teamup.pagePrevious}}" next-text="{{ui.teamup.pageNext}}" first-text="{{ui.teamup.pageFirst}}" last-text="{{ui.teamup.pageLast}}" class="pagination-sm"></pagination>
+        <button type="button" ng-click="refreshTask('all')" style="margin-top : 20px" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.refresh}}</button>
+      </div>
+      <!--pre Page: {{allTaskCurrentPage}} / {{numPages}}-->
+      <hr>
+      <p ng-hide="allTasks.length || allTasks.length &gt; 0">{{ui.task.noTasks}}</p>
+      <div ng-show="allTasks.length || allTasks.length &gt; 0">
+        <table class="table table-striped taskTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th><a ng-click="resort(&quot;clientName&quot;)">{{ui.task.clientName}}<i class="icon-sort"></i></a></th>
+              <th><a>{{ui.task.information}}</a></th>
+              <th></th>
+              <th><a ng-click="resort(&quot;memberName&quot;)">{{ui.task.memberName}}<i class="icon-sort"></i></a></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="task in currentTasks | orderBy:orderItem:reverse ">
+              <td>
+                <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
+              </td>
+              <td><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClientUuid | getObjAttr:"client":"name" }}</a></td>
+              <td>
+                <dl><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><span class="taskInfo">{{task.relatedClientUuid | getObjAttr:"client":"address"}}<a href="http://maps.google.com/?q={{task.relatedClientUuid | getObjAttr:&quot;client&quot;:&quot;latlong&quot; }}"> {{ui.teamup.map}}</a></span></dl>
+                <dl><span aria-hidden="true" class="taskIcon icon-time"></span><span ng-show="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0 }}" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} - {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span><span ng-hide="{{((task.plannedEndVisitTime - task.plannedStartVisitTime)/1000/60/60) &lt;= 24 &amp;&amp; ((task.plannedEndVisitTime | date:'H') - (task.plannedStartVisitTime | date:'H')) &gt;= 0 }}" class="taskInfo"> {{task.plannedStartVisitTime | date:'d MMM y'}} {{task.plannedStartVisitTime | date:'EEEE'}} {{task.plannedStartVisitTime | date:'HH:mm'}} uur - {{task.plannedEndVisitTime | date:'d MMM y'}} {{task.plannedEndVisitTime | date:'EEEE'}} {{task.plannedEndVisitTime | date:'HH:mm'}} uur</span></dl>
+                <dl>
+                  <dd>
+                    <div id="allTaskdesc_{{task.uuid}}">{{task.description}}</div>
+                  </dd>
+                </dl>
+              </td>
+              <td>
+                <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-hide="task.assignedTeamMemberUuid == null" class="roundedPicSmall {{task.assignedTeamMemberUuid | getObjAttr:&quot;member&quot;:&quot;states&quot; | stateColor}}"></div>
+              </td>
+              <!-- FIXME: Check this upper line!-->
+              <td><a href="index.html#/profile/{{task.assignedTeamMemberUuid}}#profile">{{task.assignedTeamMemberUuid | getObjAttr:"member":"name" }}</a></td>
+              <td>
+                <div class="pull-right">
+                  <button type="button" ng-hide="task.assignedTeamMemberUuid" ng-click="assignYourself(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
+                  <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button><a ng-click="toggleAllDesc(task.uuid)" class="noteLink">
+                    <p>{{ui.task.description}}<i class="icon-arrow-down2"></i></p></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>{{allTasks.length | i18n_spec:'groups.memberCount'}}</i></small></span>
+      </div>
+    </div>
+    <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">Nieuwe taak</h3>
+      </div>
+      <hr>
+      <form>
+        <div class="row">
+          <div class="span6">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label">Cliënt</label>
+                <div class="controls">
+                  <select ng-model="currentGroup" ng-options="g.id as g.name for g in groups | orderBy:&quot;name&quot;" ng-selected="currentGroup" ng-change="changeClientGroup(currentGroup)">
+                    <option value="">Cliëntengroep</option>
+                  </select>
+                  <select ng-model="task.client" ng-options="c.uuid as (c.firstName + &quot; &quot; + c.lastName) for c in clients | orderBy:&quot;lastName&quot; " ng-selected="currentClient" ng-change="changeClient(task.client)">
+                    <option value="">Cliënt</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Verzorger</label>
+                <div class="controls">
+                  <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
+                    <option value="">Team</option>
+                  </select>
+                  <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember" ng-change="">
+                    <option value="">Lid</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="control-group dater">
+                <label class="control-label">{{ui.planboard.from}}</label>
+                <div class="controls">
+                  <input name="date-start" type="text" ng-model="task.start.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="changeDate(date)"><i class="icon-calendar"></i>
+                  <input name="time-start" type="text" ng-model="task.start.time" ng-change="changeTime(time)" bs-timepicker=""><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group dater">
+                <label class="control-label">{{ui.planboard.till}}</label>
+                <div class="controls">
+                  <input name="date-end" type="text" ng-model="task.end.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="changeDate(date)"><i class="icon-calendar"></i>
+                  <input name="time-end" type="text" ng-model="task.end.time" ng-change="changeTime(time)" bs-timepicker=""><i class="icon-time"></i>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">{{ui.task.description}}</label>
+                <div class="controls">
+                  <textarea ng-model="task.description" class="span4"></textarea>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="span6">
+            <fieldset>
+              <div class="control-group"></div>
+              <!--google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+              marker(coords = 'clientCoords')
+              markers(models = 'memberMarkers' )
+              
+              -->
+            </fieldset>
+          </div>
+        </div>
+        <hr>
+        <div class="form-actions">
+          <button type="button" ng-click="createTask(task)" class="btn btn-success">{{ui.teamup.saveMember}}</button>
+        </div>
+        <hr>
+        <!-- FIXME: It needs some attention-->
+        <!-- div{{currentGroup}} = {{currentClient}} ||  {{currentTeam}} = {{currentMember}}-->
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+{
+  "name": "web-lib-md5",
+  "version": "1.0.0",
+  "description": "Web application library for md5 parsing.",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.4.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askcs/web-lib-md5.git"
+  },
+  "author": "Cengiz Ulusoy",
+  "license": "BSD"
+}

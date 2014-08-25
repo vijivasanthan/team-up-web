@@ -1,0 +1,110 @@
+<section id="planboard" ng-controller="timeline">
+  <div class="page-header timeline">
+    <h2 class="nullable">{{ui.planboard.planboard}}</h2><span ng-show="views.teams" class="nullable pull-left">
+      <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+        <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
+      </div></span><span ng-show="views.clients" class="nullable pull-left">
+      <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
+        <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select>
+      </div></span>
+    <!--br-->
+    <!--a(class='btn btn-primary', ng-click='getTeamID()') get team id-->
+    <!--span team: {{currentTeamID}}-->
+    <div id="timeline-controls" ng-controller="timeline-navigation" style="text-align: right" class="pull-right">
+      <h4 style="font-weight: normal">{{timeline.range | rangeMainFilter }}<br>
+        <div style="font-size: 15px; font-weight: lighter"><span>{{timeline | rangeInfoFilter}}</span></div>
+      </h4>
+    </div>
+  </div>
+  <div ng-show="views.slot.add || views.slot.edit" class="row-fluid changeTimeSlot">
+    <form class="form-inline form-toggled well">
+      <button ng-click="resetInlineForms()" class="close">×</button>
+      <h4 ng-show="views.slot.add">{{ui.teamup.newTask}}</h4>
+      <h4 ng-show="views.slot.edit">{{ui.teamup.updateTask}}</h4>
+      <hr>
+      <div ng-show="browser.mobile" class="form-elements-group">
+        <label>{{ui.planboard.from}}</label>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group dater-mobile">
+          <input name="date-start" type="datetime" ng-model="slot.start.datetime">
+        </div>
+        <div ng-show="views.group || views.member" class="control-group dater-mobile">
+          <input name="date-start" type="datetime" ng-model="slot.start.datetime" disabled="disabled">
+        </div>
+      </div>
+      <div ng-hide="browser.mobile" class="form-elements-group">
+        <label>{{ui.planboard.from}}</label>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group dater">
+          <input name="date-start" type="text" ng-model="slot.start.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="redrawSlot(slot)"><i class="icon-calendar"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="control-group dater">
+          <input name="date-start" type="text" ng-model="slot.start.date" disabled="disabled"><i class="icon-calendar"></i>
+        </div>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group timer">
+          <input name="time-start" type="text" ng-model="slot.start.time" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="control-group timer">
+          <input name="time-start" type="text" ng-model="slot.start.time" disabled="disabled"><i class="icon-time"></i>
+        </div>
+      </div>
+      <div ng-show="browser.mobile" class="form-elements-group">
+        <label>{{ui.planboard.from}}</label>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group dater-mobile">
+          <input name="date-start" type="datetime" ng-model="slot.end.datetime">
+        </div>
+        <div ng-show="views.group || views.member" class="control-group dater-mobile">
+          <input name="date-start" type="datetime" ng-model="slot.end.datetime" disabled="disabled">
+        </div>
+      </div>
+      <div ng-hide="browser.mobile" class="form-elements-group">
+        <label>{{ui.planboard.till}}</label>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group dater">
+          <input name="date-end" type="text" ng-model="slot.end.date" data-date-format="dd-mm-yyyy" ng-change="redrawSlot(slot)" bs-datepicker=""><i class="icon-calendar"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="control-group dater">
+          <input name="date-end" type="text" ng-model="slot.end.date" disabled="disabled"><i class="icon-calendar"></i>
+        </div>
+        <div ng-show="views.slot.add || views.slot.edit" class="control-group timer">
+          <input name="time-end" type="text" ng-model="slot.end.time" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="control-group timer">
+          <input name="time-end" type="text" ng-model="slot.end.time" disabled="disabled"><i class="icon-time"></i>
+        </div>
+      </div>
+      <!-- TODO: Look at to this later on!-->
+      <!--div(ng-show='relatedUsers.length > 0')-->
+      <div ng-show="views.slot.add || views.slot.edit || views.member" class="form-elements-group">
+        <label>{{relatedUserLabel}}</label>
+        <select ng-model="slot.relatedUser" ng-options="r.uuid as r.name for r in relatedUsers" ng-change="redrawSlot(slot)" ng-show="views.slot.add || views.slot.edit"></select>
+        <select ng-model="slot.relatedUser" disabled="disabled" ng-options="r.uuid as r.name for r in relatedUsers" ng-show="views.member"></select>
+      </div>
+      <div class="form-elements-actions pull-right">
+        <div ng-show="views.slot.add">
+          <button type="button" ng-click="timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.planboard.add}}</button>
+        </div>
+        <div ng-show="views.slot.edit">
+          <button type="button" ng-click="timelineOnRemove(slot)" style="margin-right: 5px" class="btn btn-danger">{{ui.planboard.del}}</button>
+          <button type="button" ng-click="timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.planboard.change}}</button>
+        </div>
+      </div>
+    </form>
+  </div><br>
+  <div class="tabbable tabs-left">
+    <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
+      <li class="{{(views.teams==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.teams}}</a></li>
+      <li class="{{(views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.clients}}</a></li>
+    </ul>
+    <div ng-controller="treegrid" class="tab-content treegrid-container">
+      <div id="viewTeamsTab" class="tab-pane {{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}">
+        <div class="tab-header">
+          <h3 class="pull-left">{{currentName}}</h3>
+        </div>
+        <hr>
+        <div id="timeline">
+          <div id="mainTimeline"></div>
+        </div>
+        <hr>
+        <p><small class="pull-left"><span class="timeline-footer-text">{{ui.planboard.lastSyncTime}}</span><span class="timeline-footer-text">{{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="timeline-footer-text">{{ui.planboard.dataRangeStart}}</span><span class="timeline-footer-text">{{data.periods.start | nicelyDate}}</span>|<span class="timeline-footer-text">{{ui.planboard.dataRangeEnd}}</span><span class="timeline-footer-text">{{data.periods.end | nicelyDate}}</span></small></p>
+      </div>
+    </div>
+  </div>
+</section>

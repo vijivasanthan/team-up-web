@@ -1,0 +1,191 @@
+section#planboard(ng-controller='timeline')
+
+	.page-header.timeline
+		h2.nullable {{ui.planboard.planboard}}
+
+		span.nullable.pull-left(ng-show='views.teams')
+			.selectGroup
+				span.selectTitle
+					| Selecteer team
+				select(ng-model='currentTeam',
+				ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
+				ng-change='changeCurrent(currentTeam)')
+
+		span.nullable.pull-left(ng-show='views.clients')
+			.selectGroup
+				span.selectTitle
+					| Selecteer groep
+				select(ng-model='currentClientGroup',
+				ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
+				ng-change='changeCurrent(currentClientGroup)')
+
+		//br
+		//a(class='btn btn-primary', ng-click='getTeamID()') get team id
+		//span team: {{currentTeamID}}
+
+		#timeline-controls.pull-right(ng-controller='timeline-navigation',
+		style='text-align: right')
+			h4(style='font-weight: normal;') {{timeline.range | rangeMainFilter }}
+				br
+				div(style='font-size: 15px; font-weight: lighter')
+					span {{timeline | rangeInfoFilter}}
+
+	.row-fluid(ng-show='views.slot.add || views.slot.edit').changeTimeSlot
+
+		form.form-inline.form-toggled.well
+
+			button.close(ng-click='resetInlineForms()') ×
+			h4(ng-show='views.slot.add') {{ui.teamup.newTask}}
+			h4(ng-show='views.slot.edit') {{ui.teamup.updateTask}}
+			hr
+
+			.form-elements-group(ng-show='browser.mobile')
+				label {{ui.planboard.from}}
+				.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
+					input(name='date-start', type='datetime',
+					ng-model='slot.start.datetime')
+				.control-group.dater-mobile(ng-show='views.group || views.member')
+					input(name='date-start',
+					type='datetime',
+					ng-model='slot.start.datetime',
+					disabled='')
+
+			.form-elements-group(ng-hide='browser.mobile')
+				label {{ui.planboard.from}}
+				.control-group.dater(ng-show='views.slot.add || views.slot.edit')
+					input(name='date-start',
+					type='text',
+					ng-model='slot.start.date',
+					data-date-format='dd-mm-yyyy',
+					bs-datepicker='',
+					ng-change='redrawSlot(slot)')
+					i.icon-calendar
+				.control-group.dater(ng-show='views.group || views.member')
+					input(name='date-start',
+					type='text',
+					ng-model='slot.start.date',
+					disabled='')
+					i.icon-calendar
+				.control-group.timer(ng-show='views.slot.add || views.slot.edit')
+					input(name='time-start',
+					type='text',
+					ng-model='slot.start.time',
+					ng-change='redrawSlot(slot)',
+					bs-timepicker='')
+					i.icon-time
+				.control-group.timer(ng-show='views.group || views.member')
+					input(name='time-start',
+					type='text',
+					ng-model='slot.start.time',
+					disabled='')
+					i.icon-time
+
+			.form-elements-group(ng-show='browser.mobile')
+				label {{ui.planboard.from}}
+				.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
+					input(name='date-start',
+					type='datetime',
+					ng-model='slot.end.datetime')
+				.control-group.dater-mobile(ng-show='views.group || views.member')
+					input(name='date-start',
+					type='datetime',
+					ng-model='slot.end.datetime',
+					disabled='')
+
+			.form-elements-group(ng-hide='browser.mobile')
+				label {{ui.planboard.till}}
+				.control-group.dater(ng-show='views.slot.add || views.slot.edit')
+					input(name='date-end',
+					type='text',
+					ng-model='slot.end.date',
+					data-date-format='dd-mm-yyyy',
+					ng-change='redrawSlot(slot)',
+					bs-datepicker='')
+					i.icon-calendar
+				.control-group.dater(ng-show='views.group || views.member')
+					input(name='date-end',
+					type='text',
+					ng-model='slot.end.date',
+					disabled='')
+					i.icon-calendar
+				.control-group.timer(ng-show='views.slot.add || views.slot.edit')
+					input(name='time-end',
+					type='text',
+					ng-model='slot.end.time',
+					ng-change='redrawSlot(slot)',
+					bs-timepicker='')
+					i.icon-time
+				.control-group.timer(ng-show='views.group || views.member')
+					input(name='time-end',
+					type='text',
+					ng-model='slot.end.time',
+					disabled='')
+					i.icon-time
+
+			// TODO: Look at to this later on!
+			//div(ng-show='relatedUsers.length > 0')
+			.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+				label {{relatedUserLabel}}
+				select(ng-model='slot.relatedUser',
+				ng-options='r.uuid as r.name for r in relatedUsers',
+				ng-change='redrawSlot(slot)',
+				ng-show='views.slot.add || views.slot.edit')
+				select(ng-model='slot.relatedUser',
+				disabled='',
+				ng-options='r.uuid as r.name for r in relatedUsers',
+				ng-show='views.member')
+
+			.form-elements-actions.pull-right
+				div(ng-show='views.slot.add')
+					button.btn.btn-success(type='button',
+					ng-click='timelineOnAdd("true", slot)') {{ui.planboard.add}}
+				div(ng-show='views.slot.edit')
+					button.btn.btn-danger(type='button',
+					ng-click='timelineOnRemove(slot)',
+					style='margin-right: 5px') {{ui.planboard.del}}
+					button.btn.btn-success(type='button',
+					ng-click='timelineOnChange("true", original, slot)') {{ui.planboard.change}}
+
+
+
+	br
+	.tabbable.tabs-left
+
+
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+
+			li(class="{{(views.teams==true) && 'active'}}")
+				a(data-toggle='tab',
+				ng-click='setViewTo(current,"teams")')
+					span.icomoon(data-icon='',
+					aria-hidden='true')
+					| {{ui.teamup.teams}}
+
+			li(class="{{(views.clients==true) && 'active'}}")
+				a(data-toggle='tab',
+				ng-click='setViewTo(current,"clients")')
+					span.icomoon(data-icon='',
+					aria-hidden='true')
+					| {{ui.teamup.clients}}
+
+
+		.tab-content.treegrid-container(ng-controller='treegrid')
+
+
+			#viewTeamsTab.tab-pane(class="{{(views.teams==true || views.clients==true) && 'active'}}")
+				.tab-header
+					h3.pull-left {{currentName}}
+				hr
+				#timeline
+					#mainTimeline
+				hr
+				p
+					small.pull-left
+						span.timeline-footer-text {{ui.planboard.lastSyncTime}}
+						span.timeline-footer-text {{data.synced | nicelyDate}}
+					small.pull-right
+						span.timeline-footer-text {{ui.planboard.dataRangeStart}}
+						span.timeline-footer-text {{data.periods.start | nicelyDate}}
+						| |
+						span.timeline-footer-text {{ui.planboard.dataRangeEnd}}
+						span.timeline-footer-text {{data.periods.end | nicelyDate}}

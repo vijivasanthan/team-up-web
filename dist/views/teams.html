@@ -1,0 +1,194 @@
+<div id="confirmTeamModal" tabindex="-1" role="dialog" aria-labelledby="confirmTeamModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTeamModalLabel" class="modal-title">{{ui.teamup.confirms.deleteTeamTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteTeam}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteTeam()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirmMemberModal" tabindex="-1" role="dialog" aria-labelledby="confirmMemberModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmMemberModalLabel" class="modal-title">{{ui.teamup.confirms.deleteMemberTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteMember}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteMember(_memberId)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div ng-hide="views.newTeam || views.newMember" class="page-header">
+  <h2 class="nullable">{{ui.teamup.teams}}</h2>
+  <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+    <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
+  </div>
+</div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="{{(views.team==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;team&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.teams}}</a></li>
+    <li class="{{(views.newTeam==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTeam&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newTeam}}</a></li>
+    <li class="{{(views.newMember==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newMember&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newMember}}</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="viewTeamTab" class="tab-pane {{(views.team==true) &amp;&amp; 'active'}}">
+      <div ng-hide="views.editTeam" class="tab-header">
+        <h3 class="pull-left">{{team.name}}</h3>
+        <h4 ng-show="(team.phone != &quot;&quot; &amp;&amp; team.phone != null)" class="pull-left">({{team.phone}})</h4>
+        <button type="button" ng-click="confirmDeleteTeam()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+        <button type="button" ng-click="editTeam(team)" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+      </div>
+      <div ng-show="views.editTeam" class="tab-header">
+        <input type="text" ng-model="teamEditForm.name" class="pull-left">
+        <button type="reset" ng-click="cancelTeamEdit(team)" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.cancel}}</button>
+        <button type="button" ng-click="changeTeam(teamEditForm)" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.save}}</button>
+      </div>
+      <hr>
+      <p ng-hide="(data.members[team.uuid]).length &gt; 0">{{ui.teamup.noMembers}}</p>
+      <div ng-show="(data.members[team.uuid]).length &gt; 0">
+        <table class="table table-striped teamsTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th><a ng-click="sorter=&quot;name&quot;">{{ui.teamup.name}}</a></th>
+              <th><a>{{ui.teamup.states}}</a></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="member in data.members[team.uuid]|orderBy:&quot;lastName&quot;">
+              <td>
+                <div back-img="{{member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicSmall {{member.states|stateColor}}"></div>
+              </td>
+              <td><a href="#/profile/{{member.uuid|lowercase}}#profile" ng-click="editProfile(member.uuid,team.uuid)">{{member.firstName}} {{member.lastName}}</a></td>
+              <td><span ng-show="noSharedStates(member.states)" class="states">{{ui.teamup.noSharedStates}}</span>
+                <dl ng-repeat="state in member.states | filter:share=true " class="states"><span data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span><span ng-show="(state.name == &quot;Location&quot;)" class="stateValue">{{member.address.street}} {{member.address.no}}, {{member.address.zip}} {{member.address.city}}</span><span ng-show="(state.name != &quot;Location&quot;)" class="stateValue">{{state.value | i18n_spec:'teamup.stateValue'}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}"> {{ui.teamup.map}}</a></span></dl>
+              </td>
+              <td>
+                <div class="pull-right"><a href="#/profile/{{member.uuid}}#edit" ng-click="editProfile(member.uuid,team.uuid)">
+                    <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
+                  <button type="submit" ng-click="confirmDeleteMember(member.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
+      </div>
+    </div>
+    <div id="newTeamTab" class="tab-pane {{(views.newTeam==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">{{ui.teamup.newTeam}}</h3>
+      </div>
+      <hr>
+      <form class="form">
+        <div class="control-group">
+          <input type="text" placeholder="{{ui.teamup.teamName}}" ng-model="teamForm.name" class="input-xlarge search-query controls">
+        </div>
+        <div class="control-group">
+          <button type="button" ng-click="teamSubmit(teamForm)" class="btn btn-success confirmButton controls">{{ui.teamup.createTeam}}</button>
+        </div>
+      </form>
+    </div>
+    <div id="newMemberTab" class="tab-pane {{(views.newMember==true) &amp;&amp; 'active'}}">
+      <div class="tab-header">
+        <h3 class="pull-left">{{ui.teamup.newMember}}</h3>
+      </div>
+      <hr>
+      <form>
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label">{{ui.teamup.teams}}</label>
+            <div class="controls">
+              <select ng-model="memberForm.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;">
+                <option value="">{{ui.teamup.chooseTeam}}</option>
+              </select>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="span6">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label">{{ui.profile.firstName}}</label>
+                  <div class="controls">
+                    <input type="text" ng-model="memberForm.firstName" class="span4">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.profile.lastName}}</label>
+                  <div class="controls">
+                    <input type="text" ng-model="memberForm.lastName" class="span4">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.teamup.role}}</label>
+                  <div class="controls">
+                    <select ng-model="memberForm.role" ng-options="r.id as r.label for r in roles">
+                      <option value="">{{ui.teamup.chooseRole}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.teamup.phone}}</label>
+                  <div class="controls">
+                    <input type="text" ng-model="memberForm.phone" class="span3">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.teamup.func}}</label>
+                  <div class="controls">
+                    <select ng-model="memberForm.function" ng-options="f.id as f.label for f in mfuncs">
+                      <option value="">{{ui.teamup.chooseFunction}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group dater">
+                  <label class="control-label">{{ui.profile.birthday}}</label>
+                  <div class="controls">
+                    <input name="date-start" type="text" ng-model="memberForm.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="span6">
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label">{{ui.profile.username}}</label>
+                  <div class="controls">
+                    <input type="text" ng-blur="convertUserName()" ng-model="memberForm.username" class="span3">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.profile.password}}</label>
+                  <div class="controls">
+                    <input type="password" ng-model="memberForm.password" class="span3">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">{{ui.profile.retypePassword}}</label>
+                  <div class="controls">
+                    <input type="password" ng-model="memberForm.reTypePassword" class="span3">
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <hr>
+          <div class="form-actions">
+            <button type="submit" ng-click="memberSubmit(memberForm)" class="btn btn-success">{{ui.teamup.saveMember}}</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>

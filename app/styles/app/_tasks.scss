@@ -1,0 +1,56 @@
+#taskModal {
+  h5 {
+    color: $brown;
+  }
+
+  dl {
+    dt {
+      font-weight: bold;
+    }
+
+    dd {
+    }
+  }
+}
+
+.taskAssignIcon {
+  span {
+    font-size: 2em;
+    color: #dcdcdc;
+    margin-right: 1em;
+    margin-top: -5px;
+  }
+}
+
+#myTasks, #allTasks {
+  table {
+    tr {
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+}
+
+.label-task-state-1 {
+  background-color: $orange;
+}
+
+.label-task-state-2 {
+  background-color: $turq;
+}
+
+.label-task-state-3 {
+  background-color: $graytu;
+}
+
+.label-task-state-4 {
+  background-color: $graytu;
+}
+
+pre {
+  color: $textColor;
+  margin: 0;
+  padding: 0;
+  font-family: $baseFontFamily;
+}
