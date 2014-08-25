@@ -18,8 +18,9 @@ define(
         'Browsers',
         'Dater',
         'TeamUp',
-        function ($rootScope, $location, $timeout, Session, Store, $window, Teams, Offline,
-                  States, Browsers, Dater, TeamUp)
+        function (
+          $rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp
+          )
         {
           // TODO: Remove later on (Needed for timeline info filters)
           if (! Dater.getPeriods())

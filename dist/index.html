@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="TeamUp Web Application">
     <meta name="viewport" content="width=device-width">
-    <title>TeamUp v0.3.0-alpha-1.4</title>
+    <title>TeamUp</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="styles/67d55de3.main.css">
@@ -29,8 +29,9 @@
           </button><a ng-click="nav(&quot;tasks&quot;)" class="navbar-brand">TeamUp</a>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li data-match-route="/tasks"><a ng-click="nav(&quot;tasks&quot;)">Taken</a></li>
-              <li data-match-route="/tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken2</a></li>
+              <!-- li(data-match-route='/tasks')// a(ng-click='nav("tasks")') Taken
+              -->
+              <li data-match-route="/tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
               <li data-match-route="/team"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
               <li id="clientMenu" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>

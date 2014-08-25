@@ -238,7 +238,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							td
 								.roundedPicSmall.memberStateBusy(
 								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
-									ng-show='task.assignedTeamMember'
+								ng-show='task.assignedTeamMember'
 								)
 							td
 								a(href='')
@@ -277,6 +277,19 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						fieldset
 
 							.control-group
+								label.control-label Verzorger
+								.controls
+									select(ng-model='task.team',
+									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+									ng-selected='currentTeam',
+									ng-change='changeTeam(task.team)')
+										option(value='') Team
+									select(ng-model='task.member',
+									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
+									ng-selected='currentMember')
+										option(value='') Lid
+
+							.control-group
 								label.control-label Cliënt
 								.controls
 									select(ng-model='currentGroup',
@@ -289,19 +302,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-selected='currentClient',
 									ng-change='changeClient(task.client)')
 										option(value='') Cliënt
-
-							.control-group
-								label.control-label Verzorger
-								.controls
-									select(ng-model='task.team',
-									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
-									ng-selected='currentTeam',
-									ng-change='changeTeam(task.team)')
-										option(value='') Team
-									select(ng-model='task.member',
-									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
-									ng-selected='currentMember')
-										option(value='') Lid
 
 						fieldset
 
