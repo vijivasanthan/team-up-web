@@ -166,31 +166,31 @@ define(
             }
           );
 
-//          $scope.$watch(
-//            'showOnlyAvailable',
-//            function (toggle)
-//            {
-//              console.log('coming in here?');
-//
-//              $scope.filtered = !$scope.filtered;
-//
-////              if (toggle)
-////              {
-////                 = { assignedTeamMemberUuid: null };
-////              }
-////              else
-////              {
-////                $scope.filtered = { assignedTeamMemberUuid: null };
-////              }
-//            }
-//          );
+          //          $scope.$watch(
+          //            'showOnlyAvailable',
+          //            function (toggle)
+          //            {
+          //              console.log('coming in here?');
+          //
+          //              $scope.filtered = !$scope.filtered;
+          //
+          ////              if (toggle)
+          ////              {
+          ////                 = { assignedTeamMemberUuid: null };
+          ////              }
+          ////              else
+          ////              {
+          ////                $scope.filtered = { assignedTeamMemberUuid: null };
+          ////              }
+          //            }
+          //          );
 
-//          $scope.filterFn = function (task)
-//          {
-//            return ($scope.showOnlyAvailable && task.assignedTeamMemberUuid != null) ?
-//                   true :
-//                   false;
-//          };
+          //          $scope.filterFn = function (task)
+          //          {
+          //            return ($scope.showOnlyAvailable && task.assignedTeamMemberUuid != null) ?
+          //                   true :
+          //                   false;
+          //          };
 
           $scope.openTask = function (task)
           {
@@ -337,7 +337,6 @@ define(
           $scope.clients = [];
 
 
-
           // Related to chain of drop-downs of teams and client groups
           $scope.teamAffectGroup = function ()
           {
@@ -410,6 +409,128 @@ define(
           // console.log('scope ->', $scope);
 
           Task.chains();
+
+
+          /**
+           * ******************************************************************************
+           */
+
+
+
+            // Validation of the task form
+          $scope.validateTaskForm = function (task)
+          {
+            // console.log($scope.curentClient);
+
+            // fileds should not be empty
+            if (! task || ! task.start || ! task.end)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.filltheTime);
+              return false;
+            }
+
+            if (task.start.date == "" || task.start.time == "" || ! task.start.time)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startTimeEmpty);
+              return false;
+            }
+
+            if (task.end.date == "" || task.end.time == "" || ! task.end.time)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.endTimeEmpty);
+              return false;
+            }
+
+            $scope.task.startTime = ($rootScope.browser.mobile) ?
+                                    new Date(task.start.date).getTime() :
+                                    Dater.convert.absolute(task.start.date, task.start.time, false);
+
+            $scope.task.endTime = ($rootScope.browser.mobile) ?
+                                  new Date(task.end.date).getTime() :
+                                  Dater.convert.absolute(task.end.date, task.end.time, false);
+
+            // start time and end time should be in the future
+            // end time should later than start time
+            if ($scope.task.startTime <= Date.now().getTime() || $scope.task.endTime <= Date.now().getTime())
+            {
+              $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
+              return false;
+            }
+
+            if ($scope.task.startTime >= $scope.task.endTime)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return false;
+            }
+
+            // should assign a client
+            // console.log($scope.curentClient);
+            // console.log(task.client);
+
+            if (! task.client || task.client == null)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.specifyClient);
+              return false;
+            }
+            // description should not be empty
+
+            return true;
+          };
+
+
+          // Create a new task
+          $scope.createTask = function (task)
+          {
+            if (! $scope.validateTaskForm(task))
+            {
+              return;
+            }
+
+            var values = {
+              uuid: "",
+              status: 2,
+              plannedStartVisitTime: $scope.task.startTime,
+              plannedEndVisitTime: $scope.task.endTime,
+              relatedClientUuid: task.client,
+              assignedTeamUuid: task.team,
+              description: task.description,
+              assignedTeamMemberUuid: task.member
+            };
+
+            TeamUp._(
+              'taskAdd',
+              null,
+              values
+            ).then(
+              function (result)
+              {
+                if (result.error)
+                {
+                  if (result.error.data)
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                  }
+                  else
+                  {
+                    $rootScope.notifier.error($rootScope.transError(result.error));
+                  }
+                }
+                else
+                {
+                  $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+
+                  // refresh the tasks in that team and
+                  // forward user to the task overview page.
+                  // 1> forward to my task page if the task is assgined to the login mebmer
+                  // 2> forward to all task page if the task is assgined to other member or nobody
+
+                  // result is the taskId
+                  $scope.reloadAndSaveTask(result.result, 'add');
+
+                }
+              });
+
+          };
 
         }
       ]
