@@ -15,7 +15,8 @@ define(
         'Task',
         'Teams',
         'Clients',
-        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task, Teams, Clients)
+        'Dater', // remove later
+        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task, Teams, Clients, Dater)
         {
           $rootScope.fixStyles();
 
@@ -420,9 +421,9 @@ define(
             // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
-            // console.log($scope.curentClient);
+            // console.log($scope.currentClient);
 
-            // fileds should not be empty
+            // fields should not be empty
             if (! task || ! task.start || ! task.end)
             {
               $rootScope.notifier.error($rootScope.ui.task.filltheTime);
@@ -464,7 +465,7 @@ define(
             }
 
             // should assign a client
-            // console.log($scope.curentClient);
+            // console.log($scope.currentClient);
             // console.log(task.client);
 
             if (! task.client || task.client == null)
@@ -472,6 +473,7 @@ define(
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
               return false;
             }
+
             // description should not be empty
 
             return true;
@@ -487,7 +489,7 @@ define(
             }
 
             var values = {
-              uuid: "",
+              uuid: '',
               status: 2,
               plannedStartVisitTime: $scope.task.startTime,
               plannedEndVisitTime: $scope.task.endTime,
@@ -521,14 +523,16 @@ define(
 
                   // refresh the tasks in that team and
                   // forward user to the task overview page.
-                  // 1> forward to my task page if the task is assgined to the login mebmer
-                  // 2> forward to all task page if the task is assgined to other member or nobody
+                  // 1> forward to my task page if the task is assigned to the login member
+                  // 2> forward to all task page if the task is assigned to other member or nobody
 
                   // result is the taskId
-                  $scope.reloadAndSaveTask(result.result, 'add');
+                  // $scope.reloadAndSaveTask(result.result, 'add');
 
+                  setView('allTasks');
                 }
-              });
+              }
+            );
 
           };
 

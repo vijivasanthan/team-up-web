@@ -344,7 +344,7 @@ define(
                                     .then(
                                     function ()
                                     {
-                                      $location.path('/tasks');
+                                      $location.path('/tasks2');
 
                                       setTimeout(
                                         function ()
