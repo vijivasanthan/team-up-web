@@ -2,7 +2,7 @@ define(
   {
     app: {
       // version: '@@version',
-      version: '0.5.0-SNAPSHOT',
+      version: '0.5.0',
       released: '@@released',
 
       title: 'TeamUp',
@@ -29,8 +29,11 @@ define(
         }
       },
 
-      host: "http://test.ask-cs.com/",
-      namespace: "teamup-test",
+      // host: "http://test.ask-cs.com/",
+      // namespace: "teamup-test",
+
+      host: "http://askpack.ask-cs.com/",
+      namespace: "teamup-demo",
 
       // host: "http://dev.ask-cs.com/",
       // namespace: "teamup-dev",
