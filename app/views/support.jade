@@ -1,0 +1,44 @@
+.page-header
+	h2.nullable Support
+
+
+.tabbable.tabs-left
+
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{(views.web==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("web")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| Web
+		li(class="{{(views.ios==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("ios")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| IOS
+		li(class="{{(views.android==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("android")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| Android
+
+
+	.tab-content
+
+
+		#web.tab-pane(class="{{(views.web==true) && 'active'}}")
+			.tab-header
+				h3.pull-left Web
+			hr
+			article: p Web content..
+
+
+		#ios.tab-pane(class="{{(views.ios==true) && 'active'}}")
+			.tab-header
+				h3.pull-left IOS
+			hr
+			article: p IOS content..
+
+
+		#android.tab-pane(class="{{(views.android==true) && 'active'}}")
+			.tab-header
+				h3.pull-left Android
+			hr
+			article: p Android content..

@@ -36,6 +36,7 @@
               <li id="clientMenu" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>
               <li data-match-route="/planboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;planboard&quot;)">Agenda</a></li>
+              <li data-match-route="/support"><a ng-click="nav(&quot;support&quot;)">Support</a></li>
               <!--li(data-match-route='/planboard',-->
               <!--ng-hide='app.resources.role > 1')-->
               <!--	a(ng-click='nav("vis")') Vis-->
@@ -129,6 +130,6 @@
         <p ng-show="loading.status" class="muted"><img src="images/ca504260.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>
-    <script data-main="scripts/1c940853.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/7cb021c0.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

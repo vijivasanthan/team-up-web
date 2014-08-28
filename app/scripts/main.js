@@ -161,6 +161,7 @@ require(
     'controllers/timeline',
     'controllers/timeline-navigation',
     'controllers/treegrid',
+    'controllers/support',
 
     'bootstrap',
     'lawnchair',
