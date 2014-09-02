@@ -146,6 +146,15 @@ define(
               }
             }
 
+            if(resources.newpass!=null && resources.newpass!=resources.newpassrepeat) {
+                $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
+                return;
+            } else if(resources.newpass!=null) {
+                resources.passwordHash = MD5.parse(resources.newpass);
+                delete resources.newpass;
+                delete resources.newpassrepeat;
+            }
+
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             // deal with birthday

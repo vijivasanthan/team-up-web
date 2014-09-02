@@ -39,6 +39,9 @@ define(
       host: "http://dev.ask-cs.com/",
       namespace: "teamup-dev",
 
+      // host: "http://localhost:9000/",
+      // namespace: "teamup-sven",
+
       formats: {
         date: 'dd-MM-yyyy',
         time: 'HH:mm',

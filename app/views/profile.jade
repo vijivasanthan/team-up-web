@@ -113,6 +113,15 @@ section#profile
 								bs-datepicker='',
 								data-toggle='datepicker')
 								i.icon-calendar
+						.control-group(ng-hide='(app.resources.role > 1 && profilemeta.uuid != app.resources.uuid)')
+							label.control-label {{ui.profile.newPass}}
+							.controls
+							input.span3(type='password',
+							ng-model='profilemeta.newpass')
+							label.control-label {{ui.profile.newPassRepeat}}
+							.controls
+							input.span3(type='password',
+							ng-model='profilemeta.newpassrepeat')
 						.form-actions
 							button.btn.btn-success(type='submit',
 							ng-click='save(profilemeta)') {{ui.profile.saveProfile}}
