@@ -112,9 +112,12 @@ module.exports = function (grunt)
           style: 'compressed'
         },
         files: {
-          'war/dist/bootstrap.css':   'sass/bootstrap.scss',
-          'war/dist/responsive.css':  'sass/responsive.scss',
-          'war/dist/app.css':         'sass/app.scss'
+          'promo/css/bootstrap.min.css':   'sass/bootstrap.scss',
+          'promo/css/responsive.min.css':  'sass/responsive.scss',
+          'promo/css/app.min.css':         'sass/app.scss'
+//          'war/dist/bootstrap.css':   'sass/bootstrap.scss',
+//          'war/dist/responsive.css':  'sass/responsive.scss',
+//          'war/dist/app.css':         'sass/app.scss'
         }
       },
       dev: {
@@ -122,9 +125,12 @@ module.exports = function (grunt)
           style: 'expanded' // nested (default), compact, compressed, or expanded
         },
         files: {
-          'war/css/bootstrap.css':   'sass/bootstrap.scss',
-          'war/css/responsive.css':  'sass/responsive.scss',
-          'war/css/app.css':         'sass/app.scss'
+          'promo/css/bootstrap.css':   'sass/bootstrap.scss',
+          'promo/css/responsive.css':  'sass/responsive.scss',
+          'promo/css/app.css':         'sass/app.scss'
+//          'war/css/bootstrap.css':   'sass/bootstrap.scss',
+//          'war/css/responsive.css':  'sass/responsive.scss',
+//          'war/css/app.css':         'sass/app.scss'
         }
       }
     },

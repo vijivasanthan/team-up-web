@@ -17,6 +17,8 @@ sass/.sass-cache/
 todos/
 
 .idea/
+.sass-cache
+.tmp
 
 # war/dist/
 # war/css/
