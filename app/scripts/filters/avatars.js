@@ -480,7 +480,7 @@ define(
                   break;
 
                 case 'avatar':
-                  path = '/images/';
+                  path = 'images/';
                   break;
 
                 case 'image':
