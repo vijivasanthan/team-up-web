@@ -165,6 +165,10 @@ define(
                 $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;
 
+              case 'support':
+                $location.path('/support').search({}).hash('');
+                break;
+
               case 'profile':
                 $location.path('/profile').search({local: 'true'}).hash('');
                 break;

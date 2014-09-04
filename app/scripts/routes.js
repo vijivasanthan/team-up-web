@@ -215,6 +215,14 @@ define(
               reloadOnSearch: false
             })
 
+            .when(
+            '/support',
+            {
+              templateUrl: 'views/support.html',
+              controller: 'supportCtrl',
+              reloadOnSearch: false
+            })
+
             .otherwise({ redirectTo: '/login' });
 
           $httpProvider.interceptors.push(

@@ -20,7 +20,7 @@
 			tr(ng-show='report.media.length > 0')
 				.row
 					.col-md-3(ng-repeat='media in report.media')
-						a.thumbnail(ng-href='{{config.app.host}}/images/{{media.path}}', target='_blank')
+						a.thumbnail(ng-href='{{config.app.host}}images/{{media.path}}', target='_blank')
 							img(ng-src='{{media.path | avatar:"avatar":"171"}}')
 
 			tr(ng-hide='view.viewReport == false')

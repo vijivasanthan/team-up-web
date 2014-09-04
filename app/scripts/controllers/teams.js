@@ -93,13 +93,13 @@ define(
                   member.states,
                   function (state)
                   {
-                    if (state.name == 'Location')
-                    {
-                      state.value_rscoded = 'loading address';
-
-                      var coordinates = state.value.split(','),
-                          latitude = parseFloat(coordinates[0]),
-                          longitude = parseFloat(coordinates[1]);
+                    if (state.name == 'Location') {
+                        state.value_rscoded = 'loading address';
+                        if (state.value != null) {
+                            var coordinates = state.value.split(','),
+                                latitude = parseFloat(coordinates[0]),
+                                longitude = parseFloat(coordinates[1]);
+                        }
 
                       // GoogleGEO.geocode(
                       //   {
