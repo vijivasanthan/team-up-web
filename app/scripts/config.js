@@ -39,7 +39,7 @@ define(
       // host: "http://dev.ask-cs.com/",
       // namespace: "teamup-dev",
 
-      host: "https://backend.ask-cs.nl",
+      host: "https://backend.ask-cs.nl/",
       namespace: "teamup-zinzorg",
 
       // host: "http://localhost:9000/",
