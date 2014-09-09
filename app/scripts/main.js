@@ -162,6 +162,7 @@ require(
     'controllers/timeline-navigation',
     'controllers/treegrid',
     'controllers/support',
+    'controllers/upload',
 
     'bootstrap',
     'lawnchair',

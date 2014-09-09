@@ -37,6 +37,13 @@ define(
             })
 
             .when(
+            '/upload',
+            {
+              templateUrl: 'views/upload.html',
+              controller: 'uploadCtrl'
+            })
+
+            .when(
             '/team',
             {
               templateUrl: 'views/teams.html',
