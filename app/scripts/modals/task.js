@@ -177,11 +177,13 @@ define(
                 if (tasks.length > 0 ) {
                    var grouped = _.groupBy(tasks, function (task) {
                             return task.status
-                        }),
-                       merged = {
-                            on: grouped[1].concat(grouped[2]),
-                            off: grouped[3].concat(grouped[4])
-                        };
+                        });
+                   if(grouped[1]!=null && grouped[2]!=null) {
+                       merged = { on: grouped[1].concat(grouped[2]) };
+                   }
+                   if(grouped[3]!=null && grouped[4]!=null) {
+                       merged = { off: grouped[3].concat(grouped[4]) };
+                   }
                 }
 
                 Store('app').save('allTasks2', merged);
