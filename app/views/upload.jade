@@ -1,1 +1,47 @@
-| Upload comes here
+.page-header
+	h2 Upload
+.tabbable.tabs-left
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li.active
+			a(data-toggle='tab')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| Upload
+	.tab-content
+		#upload.tab-pane.active
+			.tab-header
+				h3.pull-left TeamUp Spreadsheet Uploader
+			hr
+
+			#UploadProgressBar
+				p#breadcrumb
+					| Bestand kiezen
+			#UploadStepSelectFile
+				div(style='display:none;')
+					| Output Format:
+					select(name='format')
+						option(value='csv', selected='')  CSV
+						option(value='json')  JSON
+						option(value='form', selected='')  FORMULAE
+					br
+				p
+					| Bestand kiezen:
+					input#xlf(type='file', name='xlfile')
+				#drop Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.
+				div(style='display:none;')
+					| Advanced Demo Options:
+					// br
+					// | Use Web Workers: (when available)
+					// input(type='checkbox', name='useworker', checked='')
+					br
+					| Use Transferrables: (when available)
+					input(type='checkbox', name='xferable', checked='')
+					br
+					| Use readAsBinaryString: (when available)
+					input(type='checkbox', name='userabs', checked='')
+					br
+			#UploadStepSelectSheet(style='display:none;')
+			#UploadStepCheckResult(style='display:none;width:2000px;')
+				#UploadStepShowErrors
+				#UploadStepShowRoutes
+			pre#out.
+			br
