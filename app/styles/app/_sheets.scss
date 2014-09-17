@@ -1,0 +1,56 @@
+.SheetDiv {
+  display:inline-block;
+  border:1px solid gray;
+  width:200px;
+  padding:10px;
+  background-color:#e3e3e3;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  margin:1px;
+}
+
+.SheetDiv:hover {
+  background-color:#c3c3c3;
+}
+
+.SheetDayDiv {
+  border:1px solid green;
+  float:left;
+  margin:3px;
+}
+
+.SheetDayDiv h2 {
+  text-align:center;
+}
+
+.SheetRouteDiv {
+  border:1px solid blue;
+  margin:3px;
+}
+
+.SheetRouteDiv h3 {
+  text-align:center;
+}
+
+.SheetTaskDiv {
+  border:1px solid red;
+  margin:2px;
+  height:20px;
+}
+
+.SheetTaskStartDiv {
+  float:left;
+  width:50px;
+}
+
+.SheetTaskClientDiv {
+  float:left;
+  width:150px;
+}
+
+.SheetTaskDurationDiv {
+  float:left;
+  width:30px;
+  text-align:right;
+}

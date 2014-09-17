@@ -65,7 +65,10 @@ require.config(
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
-      'locale_nl': 'i18n/angular-locale_nl'
+      'locale_nl': 'i18n/angular-locale_nl',
+
+      // jszip: '../vendors/js-xlsx/jszip',
+      // xlsx: '../vendors/js-xlsx/xlsx'
     },
     shim: {
       date: { deps: [], exports: 'date' },
@@ -107,7 +110,10 @@ require.config(
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      'locale_nl': { deps: ['angular'] }
+      'locale_nl': { deps: ['angular'] },
+
+      // jszip: { exports: 'jszip' },
+      // xlsx: { deps: ['jszip'], exports: 'xlsx' }
     }
   }
 );
@@ -191,6 +197,9 @@ require(
     // 'angular-dragdrop',
     // 'ui-sortable',  
     'locale_nl',
+
+    // 'jszip',
+    // 'xlsx'
   ],
   function (angular, domReady)
   {

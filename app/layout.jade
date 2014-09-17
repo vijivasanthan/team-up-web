@@ -31,4 +31,6 @@ html.no-js(lang='en')
 			.container-fluid(ng-view='')
 			#push
 		block footer
+		script(src='vendors/js-xlsx/jszip.js')
+		script(src='vendors/js-xlsx/xlsx.js')
 		script(data-main='scripts/main', src='vendors/requirejs/require.js')
