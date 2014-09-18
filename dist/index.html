@@ -16,7 +16,7 @@
     <title>TeamUp</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/3a401851.main.css">
+    <link rel="stylesheet" href="styles/255e5bcc.main.css">
     <!-- block iestuff-->
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
@@ -37,6 +37,7 @@
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>
               <li data-match-route="/planboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;planboard&quot;)">Agenda</a></li>
               <li data-match-route="/support"><a ng-click="nav(&quot;support&quot;)">Support</a></li>
+              <li data-match-route="/upload"><a ng-click="nav(&quot;upload&quot;)">Upload</a></li>
               <!--li(data-match-route='/planboard',-->
               <!--ng-hide='app.resources.role > 1')-->
               <!--	a(ng-click='nav("vis")') Vis-->
@@ -130,6 +131,8 @@
         <p ng-show="loading.status" class="muted"><img src="images/ca504260.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>
-    <script data-main="scripts/7cb021c0.main" src="vendors/requirejs/require.js"></script>
+    <script src="vendors/js-xlsx/jszip.js"></script>
+    <script src="vendors/js-xlsx/xlsx.js"></script>
+    <script data-main="scripts/ee62a8bc.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>
