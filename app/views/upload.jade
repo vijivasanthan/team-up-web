@@ -39,9 +39,20 @@
 					| Use readAsBinaryString: (when available)
 					input(type='checkbox', name='userabs', checked='')
 					br
+			#UploadStepCheckNames(style='display:none')
+				#UploadStepCheckTeamMemberNames
+					h4 Team Leden
+					form
+						fieldset
+				#UploadStepCheckClientNames
+					h4 Cli&euml;nten
+					form
+						fieldset
 			#UploadStepSelectSheet(style='display:none;')
-			#UploadStepCheckResult(style='display:none;width:2000px;')
+			#UploadStepCheckStructure(style='display:none;width:2000px;')
 				#UploadStepShowErrors
+					h3 Fouten
+				button#checkStructureProceed(style='width:200px') Verder gaan
 				#UploadStepShowRoutes
 			pre#out.
 			br

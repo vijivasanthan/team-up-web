@@ -16,41 +16,80 @@
 
 .SheetDayDiv {
   border:1px solid green;
+  background-color:#1dc8b6;
+  color:white;
   float:left;
   margin:3px;
 }
 
-.SheetDayDiv h2 {
+.SheetDayDiv h3 {
   text-align:center;
+  text-transform:capitalize;
+  line-height:normal;
+  margin:2px;
+}
+
+.SheetDayDateDiv {
+  text-align:center;
+  font-size:11px;
+  line-height:normal;
 }
 
 .SheetRouteDiv {
-  border:1px solid blue;
-  margin:3px;
+  padding:1px;
+  margin:2px;
+  background-color:white;
+  min-height:200px;
+  max-width:240px;
+  color:#833c11;
 }
 
-.SheetRouteDiv h3 {
+.SheetRouteDiv h4 {
   text-align:center;
+  text-transform:capitalize;
 }
 
 .SheetTaskDiv {
-  border:1px solid red;
   margin:2px;
-  height:20px;
+  width:100%;
+  overflow:auto;
 }
 
 .SheetTaskStartDiv {
+  //display:inline-block;
   float:left;
   width:50px;
 }
 
 .SheetTaskClientDiv {
+  //display:inline-block;
   float:left;
   width:150px;
+  background-color:#eeeeee;
+}
+
+#UploadStepShowErrors p span {
+  color:red;
 }
 
 .SheetTaskDurationDiv {
-  float:left;
+  display:inline-block;
   width:30px;
   text-align:right;
+}
+
+#UploadStepCheckTeamMemberNames form fieldset div label {
+  width:200px;
+}
+
+#UploadStepCheckTeamMemberNames form fieldset div select {
+  width:300px;
+}
+
+#UploadStepCheckClientNames form fieldset div label {
+  width:200px;
+}
+
+#UploadStepCheckClientNames form fieldset div select {
+  width:300px;
 }

@@ -26,7 +26,7 @@ require.config(
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      moment: '../vendors/momentjs/min/moment.min',
+      moment: '../vendors/momentjs/min/moment-with-langs.min',
 
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
@@ -69,6 +69,7 @@ require.config(
 
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
+      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
     },
     shim: {
       date: { deps: [], exports: 'date' },
@@ -114,6 +115,7 @@ require.config(
 
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
+
     }
   }
 );
@@ -200,6 +202,7 @@ require(
 
     // 'jszip',
     // 'xlsx'
+    'clj-fuzzy',
   ],
   function (angular, domReady)
   {

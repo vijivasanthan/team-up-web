@@ -5,10 +5,6 @@ define(
     'use strict';
 
 
-
-
-
-
     var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
     if(!rABS) {
       document.getElementsByName("userabs")[0].disabled = true;
@@ -71,7 +67,7 @@ define(
         if(rABS) reader.readAsBinaryString(f);
         else reader.readAsArrayBuffer(f);
         $('#UploadStepSelectFile').hide();
-        addBreadcrumb('Verwerken');
+        addBreadcrumb('Verwerken', 'file');
       }
     }
 
@@ -92,10 +88,10 @@ define(
 //      }
 
 
-      var xlf = document.getElementById('xlf');
-      if(xlf.addEventListener)
-        xlf.addEventListener('change', handleFile, false);
-    }, 500);
+	var xlf = document.getElementById('xlf');
+	if(xlf.addEventListener)
+		xlf.addEventListener('change', handleFile, false);
+	}, 1500);
 
 
 
@@ -228,10 +224,13 @@ define(
       var wb = XLSX.read(tarea.value, {type: 'base64',WTF:wtf_mode});
       process_wb(wb);
     }
-
-    function addBreadcrumb(nextText) {
+    
+    function addBreadcrumb(nextText, urlPath) {
       var breadcrumb = $('#breadcrumb');
-      var lastCrumb = breadcrumb.contents().last().wrap('<a href="#">');
+      var href = '#/upload';
+      if(urlPath)
+        href = '#/upload#' + urlPath;
+      var lastCrumb = breadcrumb.contents().last().wrap('<a href="' + href  + '">');
       breadcrumb.append(nextText);
 
     }
@@ -243,21 +242,67 @@ define(
       var sheetName;
       for (sheetName in workbook.Sheets)  {
         $("<div class='SheetDiv'>").append(sheetName).appendTo(selectSheetDiv).click(sheetName, function (eventData) {
-          $('#UploadStepSelectSheet').hide();
-          addBreadcrumb('Controleren');
-          process_sheet(workbook.Sheets[eventData.data]);
-          $('#UploadStepCheckResult').show();
+          var tuSheet = new TeamUpSpreadsheet(workbook.Sheets[eventData.data]);
+          tuSheet.matchTeamMembers();
+          tuSheet.matchClients();
+          uploadStepCheckStructure(tuSheet);
         });
       }
     }
 
-    function process_sheet(sheet) {
-      console.log(sheet);
-      var tuSheet;
+    function uploadStepCheckStructure(tuSheet) {
+      $('#UploadStepSelectSheet').hide();
+      addBreadcrumb('Routes controleren');
+      showRoutes(tuSheet);
+      $('#UploadStepCheckStructure').show();
+      $('#checkStructureProceed').on('click', tuSheet, uploadStepCheckNames);
+    }
+
+    function uploadStepCheckNames(event) {
+      var tuSheet = event.data;
+      $('#UploadStepCheckStructure').hide();
+      addBreadcrumb('Namen controleren');
+      showNameAlternatives(tuSheet.matchedTeamMemberForName, '#UploadStepCheckTeamMemberNames');
+      showNameAlternatives(tuSheet.matchedClientForName, '#UploadStepCheckClientNames');
+      $('#UploadStepCheckNames').show();
+    }
+
+    function showNameAlternatives(matchedPersons, parentDivId) {
+      	var orderedMatches = [];
+        for(var matchedPersonIndex in matchedPersons) {
+          var matchedPerson = matchedPersons[matchedPersonIndex];
+          matchedPerson.originalName = matchedPersonIndex;
+	  orderedMatches.push(matchedPerson);
+	}
+
+	orderedMatches.sort(function(first, second) {
+          return first.score - second.score;
+	});
+
+	for(var orderedIndex = 0; orderedIndex < orderedMatches.length; orderedIndex++) {
+          var matchedPerson = orderedMatches[orderedIndex];
+	  var selectInput = $("<select>");
+          var alternativeArray = matchedPerson.alternatives;
+	  for(var altIndex = 0; altIndex < alternativeArray.length; altIndex++) {
+            var alternative = alternativeArray[altIndex];
+            var score = (alternative.score * 100).toFixed();
+	    var option = $("<option>" + alternative.person.firstName + " " + alternative.person.lastName + " (" + score  + "%)</option>");
+            if(matchedPerson.person === alternative.person)
+              option.prop('selected', true);
+            option.appendTo(selectInput);
+	  }
+          var span = selectInput.wrap($("<span>"));
+          var div = $("<div><label>" + matchedPerson.originalName  + "</label></div>").appendTo($(parentDivId + ' form fieldset'));
+          div.append(span);
+        }
+    }
+
+    function showRoutes(tuSheet) {
       try {
-        tuSheet = new TeamUpSpreadsheet(sheet);
+        var moment = require('moment');
+        moment.lang('nl');
         for(var c = 0; c < tuSheet.errors.length; c++) {
-          $("#UploadStepShowErrors").append("<p>" + tuSheet.errors[c].code + ": "  + tuSheet.errors[c].text  + "</p>");
+          $("#UploadStepShowErrors").append("<p>Foutcode " + tuSheet.errors[c].code + ": <span>"  + tuSheet.errors[c].text  + "</span></p>");
         }
         var currentStartDate = null;
         var currentDayDiv;
@@ -265,36 +310,61 @@ define(
           var currentRoute = tuSheet.routes[routeIndex];
           if(currentStartDate === null || currentStartDate != currentRoute.startDate) {
             currentStartDate = currentRoute.startDate;
-            currentDayDiv = $("<div class='SheetDayDiv'><h2>" + getWeekdayName(currentStartDate)  + "</h2></div>").appendTo($("#UploadStepShowRoutes"));
+            currentDayDiv = $("<div class='SheetDayDiv'></div>").appendTo($("#UploadStepShowRoutes"));
+            $("<h3>" + moment(currentStartDate).format('dddd')  + "</h3>").appendTo(currentDayDiv);
+            $("<div class='SheetDayDateDiv'>" + moment(currentStartDate).format('LL') + "</div>").appendTo(currentDayDiv);
           }
-          var currentRouteDiv = $("<div class='SheetRouteDiv'><h3>" + currentRoute.name  + "</h3></div>").appendTo(currentDayDiv);
+          var currentRouteDiv = $("<div class='SheetRouteDiv'><h4>" + currentRoute.name  + "</h4></div>").appendTo(currentDayDiv);
+          var teamMemberName = currentRoute.teamMemberName;
+          if(teamMemberName == null)
+            teamMemberName = "<span style='color:red'>niemand</span>";
+          else {
+            if(currentRoute.teamMember == null)
+              //teamMemberName = "<span style='text-transform:none'>geen match (" + currentRoute.teamMemberName + ")</span>";
+              teamMemberName = currentRoute.teamMemberName;
+            else {
+              var score = ((currentRoute.teamMemberScore) * 100).toFixed();
+              teamMemberName = currentRoute.teamMember.firstName + " (" + score  + "% " + teamMemberName + ")";
+            }
+          }
+          var assignedTeamMember = "Teamlid: " + teamMemberName;
+          $("<span>" + assignedTeamMember  + "</span>").appendTo(currentRouteDiv);
           var tasks = tuSheet.routes[routeIndex].tasks;
           for(var taskIndex = 0; taskIndex < tasks.length; taskIndex++) {
             var currentTask = tasks[taskIndex];
             var currentTaskDiv = $("<div class='SheetTaskDiv'>").appendTo(currentRouteDiv);
-            var startTime = currentTask.startTime;
-            if(startTime === null)
-              console.log("Start time is null");
-            currentTaskDiv.append("<div class='SheetTaskStartDiv'>" +  startTime.getHours() + ":" + startTime.getMinutes() + "</div>");
-            currentTaskDiv.append("<div class='SheetTaskClientDiv'>" + currentTask.clientName + "</div>");
+            var moment = require('moment');
+            var startTimeString = moment(currentTask.startTime).format("HH:mm");
+            currentTaskDiv.append("<div class='SheetTaskStartDiv'>" +  startTimeString + "</div>");
+            var clientName = currentTask.clientName;
+            if(clientName == null)
+              clientName = "niemand";
+            else {
+              if(currentTask.client == null) {
+                //clientName = "geen match (" + clientName + ")";
+              }
+              else {
+                var score = ((currentTask.clientScore) * 100).toFixed();
+                clientName = currentTask.client.firstName + " " + currentTask.client.lastName + " (" + score + "%)";
+              }
+            }
+            currentTaskDiv.append("<div class='SheetTaskClientDiv'>" + clientName + "</div>");
             currentTaskDiv.append("<div class='SheetTaskDurationDiv'>" + currentTask.duration + "</div>");
           }
         }
       }
       catch(error) {
         console.log(error);
+        console.log(error.stack);
+
       }
+
     }
+
 
     function TeamUpTimeWindow(startTime, endTime) {
       this.startTime = startTime;
       this.endTime = endTime;
-    }
-
-    var weekdayNames = [ "Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag" ];
-    function getWeekdayName(date) {
-      var weekdayIndex = date.getDay();
-      return weekdayNames[weekdayIndex];
     }
 
     function getDateFromCell(cell) {
@@ -327,7 +397,7 @@ define(
     function getCellValue(cell) {
       var value = null;
       if(cell.v)
-        value = cell.v.toLowerCase().trim();
+        value = cell.v.trim();
       else
         console.log("Trying to read wrong value");
       return value;
@@ -352,7 +422,7 @@ define(
       var value = null;
       if(typeof cell !== "undefined") {
         if(cell.t === "s" || cell.t === "str") {
-          value = cell.v.toLowerCase().trim();
+          value = cell.v.trim();
         }
       }
       return value;
@@ -366,6 +436,7 @@ define(
       this.nofColumnsPerPeriod = 3;
       this.firstPeriodColumn = 0;
       this.periodHeaderRow = 1;
+      this.minimalMatchScore = 0.1;
       this.maxRange = XLSX.utils.decode_range(sheet['!ref']);
       this.dayparts = [ "ochtend", "namiddag", "avond", "middag", "nacht" ] ;
       this.periodHeaderRows = {};
@@ -373,6 +444,87 @@ define(
       this.teamMemberNames = [];
       this.routes = [];
       this.errors = [];
+      this.matchedTeamMemberForName = {};
+      this.matchedClientForName = {};
+      this.nofUnassignedRoutes = 0;
+
+      function matchClients() {
+        var myTeamUuid = JSON.parse(localStorage['teams.own']).value[0].uuid;
+        var myTeamClientGroupId = JSON.parse(localStorage['app.teamGroup_' + myTeamUuid]).value[0].id;
+	var myTeamClients = JSON.parse(localStorage['app.' + myTeamClientGroupId]).value;
+        //var myTeamClients = 
+	for(var routeIndex = 0; routeIndex < this.routes.length; routeIndex++) {
+          var currentRoute = this.routes[routeIndex];
+          for(var taskIndex = 0; taskIndex < currentRoute.tasks.length; taskIndex++) {
+            var currentTask = currentRoute.tasks[taskIndex];
+            var sheetClientName = currentTask.clientName;
+            if(typeof this.matchedClientForName[sheetClientName] === "undefined") {
+              var alternatives = [];
+              var bestMatch = null;
+              var lowercaseName = sheetClientName.toLowerCase();
+              for(var clientIndex in myTeamClients) {
+                var testClient = myTeamClients[clientIndex];
+                //var testClientFullname = testClient.firstName.toLowerCase() + " " + testClient.lastName.toLowerCase();
+                var testClientFullname = testClient.lastName.toLowerCase();
+                var score = clj_fuzzy.metrics.jaro_winkler(testClientFullname, lowercaseName);
+                console.log("Score for " + lowercaseName + " vs. " + testClientFullname + ": " + score);
+                if(score > this.minimalMatchScore) {
+                  var match = { score:score, person:testClient };
+                  if(bestMatch == null ||  score > bestMatch.score)
+                    bestMatch = match;
+                  alternatives.push(match);
+                }
+              }
+              if(bestMatch !== null) {
+                alternatives.sort(function(first, second) {
+                    return second.score - first.score;
+                });
+                bestMatch.alternatives = alternatives;
+                this.matchedClientForName[sheetClientName] = bestMatch;
+              }
+            }
+          }
+	}
+      }
+      this.matchClients = matchClients;
+
+      function matchTeamMembers() {
+	var myTeamUuid = JSON.parse(localStorage['teams.own']).value[0].uuid;
+	var myTeamMembers = JSON.parse(localStorage["app." + myTeamUuid]).value;
+	//var allTeamMembers = JSON.parse(localStorage['app.members']).value;
+
+	for(var routeIndex = 0; routeIndex < this.routes.length; routeIndex++) {
+	  var currentRoute = this.routes[routeIndex];
+	  var sheetTeamMemberName = currentRoute.teamMemberName;
+	  if(sheetTeamMemberName == null)
+	    continue;
+	  if(typeof this.matchedTeamMemberForName[sheetTeamMemberName] === "undefined") {
+	    var alternatives = [];
+	    var bestMatch = null;
+            var lowercaseName = sheetTeamMemberName.toLowerCase();
+	    for(var memberIndex in myTeamMembers) {
+	      var testTeamMember = myTeamMembers[memberIndex];
+	      var testFirstName = testTeamMember.firstName.toLowerCase();
+	      var score = clj_fuzzy.metrics.jaro_winkler(testFirstName, lowercaseName);
+	      console.log("Score for " + sheetTeamMemberName + " vs. " +  testFirstName + ": " + score);
+	      if(score > this.minimalMatchScore) {
+		var match = { score:score, person:testTeamMember };
+		if(bestMatch == null || score > bestMatch.score)
+		  bestMatch = match;
+		alternatives.push(match);
+	      }
+	    }
+	    if(bestMatch !== null) {
+              alternatives.sort(function(first, second) {
+                  return second.score - first.score;
+              });
+	      bestMatch.alternatives = alternatives;
+	      this.matchedTeamMemberForName[sheetTeamMemberName] = bestMatch;
+	    }
+	  }
+	}
+      }
+      this.matchTeamMembers = matchTeamMembers;
 
       function parseSheet(sheet) {
         for(var colNo = 0; colNo < this.maxRange.e.c; colNo++) {
@@ -397,13 +549,13 @@ define(
             for(var rowNo = firstRowNo; rowNo < this.maxRange.e.r; rowNo++) {
               if(typeof this.periodHeaderRows[rowNo] !== "undefined")
                 break;
-              if(currentRoute.teamMemberName === null) {
+              if(currentRoute.teamMemberName === null && rowNo === firstRowNo) {
                 // Read the assigned team member
                 for(var subColNo = - 1; subColNo <= 1; subColNo++) {
                   var finalColNo = parseInt(colNo) + subColNo;
-                  var cell = getSheetCell(sheet, colNo, rowNo);
+                  var cell = getSheetCell(sheet, finalColNo, rowNo);
                   var cellValue = getCellStringValue(cell);
-                  if(cellValue !== null) {
+                  if(cellValue !== null && cellValue.length > 0) {
                     currentRoute.teamMemberName = cellValue;
                   }
                 }
@@ -469,10 +621,14 @@ define(
                   currentRoute.tasks.push(currentTask);
               }
             }
+            if(currentRoute.teamMemberName === null && currentRoute.tasks.length > 0)
+              this.nofUnassignedRoutes++;
             this.routes.push(currentRoute);
           }
           //console.log(this.routes);
         }
+        if(this.nofUnassignedRoutes > 0)
+          this.errors.push({ code:1009, text:"Er zijn " + this.nofUnassignedRoutes + " routes waaraan nog geen teamlid is toegekend." });
       }
       this.parseSheet = parseSheet;
 
@@ -491,6 +647,7 @@ define(
               var cellValue = getCellStringValue(cell);
               if(cellValue === null || cellValue.length == 0)
                 continue;
+              cellValue = cellValue.toLowerCase();
               if(cellValue.indexOf("fbpz") >= 0)
                 break; // Next row
               if(this.dayparts.indexOf(cellValue) >= 0) {
@@ -500,8 +657,11 @@ define(
                 var downCell = getSheetCell(sheet, finalColNo, rowNo + 1);
                 if(downCell) {
                   var downCellValue = getCellStringValue(downCell);
-                  if(downCellValue !== null && downCellValue.indexOf("route") >= 0) {
-                    nextRowIsRoute = true;
+                  if(downCellValue !== null) {
+                    downCellValue = downCellValue.toLowerCase();
+                    if(downCellValue.indexOf("route") >= 0) {
+                      nextRowIsRoute = true;
+                    }
                   }
                 }
                 if(nextRowIsRoute === false) {
@@ -522,6 +682,7 @@ define(
               }
             }
             catch(error) {
+	      this.errors.push({ code:1008, text:"Er is een onbekende fout opgetreden: " + error});
               console.log(error);
               console.log(error.stack);
               return periodHeaders;
@@ -583,3 +744,4 @@ define(
     );
   }
 );
+
