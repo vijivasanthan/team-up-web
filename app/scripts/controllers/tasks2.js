@@ -10,17 +10,48 @@ define(
         '$scope',
         '$location',
         '$timeout',
+        '$filter',
         'Store',
         'TeamUp',
         'Task',
         'Teams',
         'Clients',
         'Dater', // remove later
-        function ($rootScope, $scope, $location, $timeout, Store, TeamUp, Task, Teams, Clients, Dater)
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater)
         {
           $rootScope.fixStyles();
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash();
+
+          var formatDateTime = function(date, dateFormat) {
+                return $filter('date')(date, dateFormat);
+          };
+
+          var updateTime = function(date, minutes) {
+                var roundMinutes = formatDateTime(date, 'm');
+                roundMinutes = (roundMinutes % 15);
+                var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
+
+                return formatDateTime(updatedTime, "H:mm");
+          };
+
+          var date = new Date();
+          var currentDay =  formatDateTime(date, "dd-MM-yyyy");
+          //round current minutes by 15 and add minutes so the default time is always in the future
+          var currentStartTime = updateTime(date, 15);
+          var currentEndTime = updateTime(date, 30);
+
+
+          $scope.task = {
+              start: {
+                date: currentDay,
+                time: currentStartTime
+              },
+              end: {
+                  date: currentDay,
+                  time: currentEndTime
+              }
+          };
 
           function resetViews ()
           {
@@ -412,6 +443,8 @@ define(
             // load team member's locations
           };
 
+
+
           // console.log('scope ->', $scope);
 
           Task.chains();
@@ -503,6 +536,8 @@ define(
               assignedTeamMemberUuid: task.member
             };
 
+              console.log(values);
+
             TeamUp._(
               'taskAdd',
               null,
@@ -551,7 +586,6 @@ define(
             );
 
           };
-
         }
       ]
     );
