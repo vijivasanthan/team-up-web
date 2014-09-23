@@ -25,6 +25,10 @@ define(
           $scope.members = data.members;
           $scope.teams = data.teams;
 
+          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+          var teamsLocal = Teams.queryLocal();
+          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+
           var params = $location.search();
 
           $scope.search = { query: '' };
@@ -38,27 +42,47 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
+          //set default team by last visited team
+          $scope.memberForm = getMemberForm();
+
+          function getMemberForm() {
+              var memberForm = {};
+                  memberForm.team = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : '';
+
+              return memberForm;
+          };
+
+          var lastVisitedTeamClientGroup = function(teamId) {
+            var clientGroupId = teamClientLocal[teamId];
+
+            Store('app').save(
+                'currentTeamClientGroup',{
+                    team: teamId,
+                    clientGroup: clientGroupId
+                });
+          };
+
           var uuid,
               view;
 
           if (! params.uuid && ! $location.hash())
           {
-            uuid = data.teams[0].uuid;
-            view = 'team';
+               uuid = data.teams[0].uuid;
+               view = 'team';
 
-            $location.search({ uuid: data.teams[0].uuid }).hash('team');
+               $location.search({ uuid: data.teams[0].uuid }).hash('team');
           }
           else if (! params.uuid)
           {
-            uuid = data.teams[0].uuid;
-            view = $location.hash();
+               uuid = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : data.teams[0].uuid;
+               view = $location.hash();
 
-            $location.search({ uuid: data.teams[0].uuid });
+               $location.search({ uuid: uuid });
           }
           else
           {
-            uuid = params.uuid;
-            view = $location.hash();
+               uuid = params.uuid;
+               view = $location.hash();
           }
 
           setTeamView(uuid);
@@ -135,11 +159,11 @@ define(
             );
 
             $scope.current = id;
-
           }
 
           $scope.requestTeam = function (current, switched)
           {
+            lastVisitedTeamClientGroup(current);
             setTeamView(current);
 
             $scope.$watch(
@@ -462,7 +486,7 @@ define(
           {
             $scope.teamForm = {};
 
-            $scope.memberForm = {};
+            $scope.memberForm = getMemberForm();
 
             $scope.setViewTo('team');
           };
@@ -523,7 +547,6 @@ define(
                     function (teams)
                     {
                       $scope.requestTeam(teams[0].uuid);
-
                       // locally refresh
                       angular.forEach(
                         $scope.teams,

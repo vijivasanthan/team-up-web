@@ -16,13 +16,16 @@ define(
         'Task',
         'Teams',
         'Clients',
-        'Dater', // remove later
+        'Dater',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater)
         {
           $rootScope.fixStyles();
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash();
+          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
 
+
+          //TODO add following date methods to Dater
           var formatDateTime = function(date, dateFormat) {
                 return $filter('date')(date, dateFormat);
           };
@@ -41,8 +44,16 @@ define(
           var currentStartTime = updateTime(date, 15);
           var currentEndTime = updateTime(date, 30);
 
+          // prepare the teams, members, client groups and clients
+          var teamsLocal = Teams.queryLocal();
+          var clientLocal = Clients.queryLocal();
+          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+
+          $scope.teams = teamsLocal.teams;
+          $scope.currentTeam = $scope.teams[0].uuid;
 
           $scope.task = {
+              team: $scope.teams[0].uuid,
               start: {
                 date: currentDay,
                 time: currentStartTime
@@ -52,6 +63,12 @@ define(
                   time: currentEndTime
               }
           };
+
+          //check if a team of clientgroup is visited lately
+          if(currentTeamClientGroup.team) {
+              $scope.task.team = currentTeamClientGroup.team;
+              $scope.currentTeam = currentTeamClientGroup.team;
+          }
 
           function resetViews ()
           {
@@ -351,24 +368,6 @@ define(
            * ******************************************************************************
            */
 
-
-          // prepare the teams, members, client groups and clients
-          var teamsLocal = Teams.queryLocal();
-          // console.log('teamsLocal ->', teamsLocal);
-
-          var clientLocal = Clients.queryLocal();
-          // console.log('clientLocal ->', clientLocal);
-
-          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-          // console.log('teamClientLocal ->', teamClientLocal);
-
-          $scope.teams = teamsLocal.teams;
-
-          if ($scope.currentTeam == null || typeof $scope.currentTeam == 'undefined')
-          {
-            $scope.currentTeam = teamsLocal.teams[0].uuid;
-          }
-
           $scope.members = teamsLocal.members[$scope.currentTeam];
 
           $scope.groups = [];
@@ -442,10 +441,8 @@ define(
 
             // load team member's locations
           };
-
-
-
-          // console.log('scope ->', $scope);
+          //change team depends on the default team
+          $scope.changeTeam($scope.currentTeam);
 
           Task.chains();
 
@@ -458,8 +455,6 @@ define(
           // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
-            // console.log($scope.currentClient);
-
             // fields should not be empty
             if (! task || ! task.start || ! task.end)
             {
@@ -501,10 +496,6 @@ define(
               return false;
             }
 
-            // should assign a client
-            // console.log($scope.currentClient);
-            // console.log(task.client);
-
             if (! task.client || task.client == null)
             {
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
@@ -535,8 +526,6 @@ define(
               description: task.description,
               assignedTeamMemberUuid: task.member
             };
-
-              console.log(values);
 
             TeamUp._(
               'taskAdd',
