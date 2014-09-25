@@ -268,7 +268,8 @@ define(
           username: 'Gebruikersnaam',
           retypePassword: 'Herhaal wachtwoord',
           roleChangePrompt: 'Je verandert je eigen rol. Het systeem zal hierdoor automatisch uitloggen. Druk op "Ok" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
-          specifyTeam: 'Selecteer een team voor deze gebruiker.'//'You need to sepcify a team to this user'
+          specifyTeam: 'Selecteer een team voor deze gebruiker.',//'You need to sepcify a team to this user'
+		  authorInfo: 'Auteurinfo laden...'
         },
         settings: {
           settings: 'Instellingen',

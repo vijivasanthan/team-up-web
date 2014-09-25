@@ -250,7 +250,12 @@ define(
           $scope.openTask = function (task)
           {
             $scope.task = task;
+		  	task.assignedTeamFullName = (_.where(teamsLocal.teams, {
+												uuid: task.assignedTeamUuid
+											})
+										)[0].name;
 
+			getAuthorInfo(task.authorUuid);
             angular.element('#taskModal').modal('show');
           };
 
@@ -323,6 +328,20 @@ define(
               }
             );
           };
+
+		  //todo create a profile service
+		  function getAuthorInfo(authorId)
+	      {
+			  TeamUp._(
+				  'profileGet',
+				  { third: authorId },
+				  null
+			  ).then(
+				  function(result) {
+					  $scope.author = result.firstName + ' ' + result.lastName;
+				  }
+			  );
+		  }
 
           // Remove a task
           $scope.deleteTask = function (task)
