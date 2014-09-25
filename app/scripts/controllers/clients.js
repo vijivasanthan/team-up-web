@@ -106,7 +106,11 @@ define(
           }
           else if (! params.uuid)
           {
-            uuid = (currentTeamClientGroup.clientGroup) ? currentTeamClientGroup.clientGroup : data.clientGroups[0].id;
+			  if(! currentTeamClientGroup.clientGroup) {
+				  saveLastVisitedClientGroup(data.clientGroups[0].id);
+			  }
+
+            uuid = currentTeamClientGroup.clientGroup;
 
             view = $location.hash();
 

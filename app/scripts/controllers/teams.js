@@ -74,7 +74,10 @@ define(
           }
           else if (! params.uuid)
           {
-               uuid = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : data.teams[0].uuid;
+			  if(! currentTeamClientGroup.team) {
+				  lastVisitedTeamClientGroup(data.teams[0].uuid);
+			  }
+               uuid = currentTeamClientGroup.team;
                view = $location.hash();
 
                $location.search({ uuid: uuid });
