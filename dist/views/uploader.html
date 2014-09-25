@@ -5,6 +5,6 @@
     <input type="text" readonly="readonly" ng-model="avatar">
   </div>
   <div ng-show="progress!=0" class="progress">
-    <div style="width:{{progress}}%" class="bar"></div>
+    <div ng-style="{ 'width': progress }" class="bar"></div>
   </div>
 </div>

@@ -12,4 +12,4 @@ div.uploader
 		ng-model='avatar')
 
 	div.progress(ng-show='progress!=0')
-		div.bar(style='width:{{progress}}%;')
+		div.bar(ng-style="{ 'width': progress }")

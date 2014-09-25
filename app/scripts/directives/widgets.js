@@ -45,7 +45,7 @@ define(
               '$scope', '$rootScope', 'Session' ,
               function ($scope, $rootScope, Session)
               {
-                $scope.progress = 0;
+                $scope.progress = 0 + '%';
                 $scope.avatar = '';
                 $scope.uploadLabel = $rootScope.ui.profile.click2upload;
 
@@ -68,7 +68,7 @@ define(
                   $form.attr('action', $scope.action);
 
                   $scope.$apply(
-                    function () { $scope.progress = 0 }
+                    function () { $scope.progress = 0 + '%' }
                   );
 
                   $form.ajaxSubmit(
@@ -80,7 +80,9 @@ define(
                       uploadProgress: function (event, position, total, percentComplete)
                       {
                         $scope.$apply(
-                          function () { $scope.progress = percentComplete;}
+                          function () {
+							  $scope.progress = percentComplete + '%';
+						  }
                         );
                       },
                       error: function (event, statusText, responseText, form)
@@ -128,6 +130,7 @@ define(
                             var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
 
                             $('.roundedPicLarge').attr('style', newStyle);
+							$rootScope.notifier.success($rootScope.ui.profile.profileImgSuccessfullyUploaded);
                           }
                         );
                       }
@@ -208,6 +211,9 @@ define(
       {
         return function (scope, element, attrs)
         {
+//			console.log(element.parent('a'));
+//			console.log('attrs-> ', attrs);
+//			console.log('attrs->backImg-> ', attrs.backImg);
           var url = attrs.backImg;
           element.css(
             {

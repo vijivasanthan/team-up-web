@@ -262,6 +262,7 @@ define(
           firstName: 'Voornaam',
           lastName: 'Achternaam',
           editProfileImg: 'Profielfoto wijzigen',
+		  'profileImgSuccessfullyUploaded': 'Je profielfoto is succesvol geüpload.',
           loadUploadURL: 'Foto upload URL laden',
           click2upload: 'Klik hier om te uploaden',
           birthday: 'Geboortedatum',
