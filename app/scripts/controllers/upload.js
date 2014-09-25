@@ -6,22 +6,22 @@ define(
 
 
     var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
-    if(!rABS) {
-      document.getElementsByName("userabs")[0].disabled = true;
-      document.getElementsByName("userabs")[0].checked = false;
-    }
-
-    var use_worker = typeof Worker !== 'undefined';
-    if(!use_worker) {
-      document.getElementsByName("useworker")[0].disabled = true;
-      document.getElementsByName("useworker")[0].checked = false;
-    }
-
-    var transferable = use_worker;
-    if(!transferable) {
-      document.getElementsByName("xferable")[0].disabled = true;
-      document.getElementsByName("xferable")[0].checked = false;
-    }
+//    if(!rABS) {
+//      document.getElementsByName("userabs")[0].disabled = true;
+//      document.getElementsByName("userabs")[0].checked = false;
+//    }
+//
+//    var use_worker = typeof Worker !== 'undefined';
+//    if(!use_worker) {
+//      document.getElementsByName("useworker")[0].disabled = true;
+//      document.getElementsByName("useworker")[0].checked = false;
+//    }
+//
+//    var transferable = use_worker;
+//    if(!transferable) {
+//      document.getElementsByName("xferable")[0].disabled = true;
+//      document.getElementsByName("xferable")[0].checked = false;
+//    }
 
     var wtf_mode = false;
 
@@ -89,7 +89,7 @@ define(
 
 
 	var xlf = document.getElementById('xlf');
-	if(xlf.addEventListener)
+	if(xlf && xlf.addEventListener)
 		xlf.addEventListener('change', handleFile, false);
 	}, 1500);
 
