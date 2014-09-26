@@ -12,6 +12,7 @@ define(
         'Session',
         'Store',
         '$window',
+        '$filter',
         'Teams',
         'Offline',
         'States',
@@ -19,7 +20,7 @@ define(
         'Dater',
         'TeamUp',
         function (
-          $rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp
+          $rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp
           )
         {
           // TODO: Remove later on (Needed for timeline info filters)
@@ -433,6 +434,16 @@ define(
                 }
               }
             );
+          };
+
+          $rootScope.showCurrentUserAvatar = function() {
+            var url = $rootScope.app.resources.uuid,
+                url = $filter('avatar')(url, 'team', '80');
+
+            angular.element('#account div').css({
+                'background': 'url(' + url + ')',
+                'background-size': 'cover'
+            });
           };
 
           // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
