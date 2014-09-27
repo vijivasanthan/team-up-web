@@ -253,12 +253,12 @@ define(
           $scope.openTask = function (task)
           {
             $scope.task = task;
-		  	task.assignedTeamFullName = (_.where(teamsLocal.teams, {
-												uuid: task.assignedTeamUuid
-											})
-										)[0].name;
+    		  	task.assignedTeamFullName = (_.where(teamsLocal.teams, {
+    												uuid: task.assignedTeamUuid
+    											})
+    										)[0].name;
 
-			getAuthorInfo(task.authorUuid);
+			      getAuthorInfo(task.authorUuid);
             angular.element('#taskModal').modal('show');
           };
 

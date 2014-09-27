@@ -42,8 +42,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{task.description}}
 					dt Gemaakt door
 						dd
-							a(href='#')
-								| {{task.authorUuid}}
+							span(ng-hide="author") {{ui.profile.authorInfo}}
+							a(href='index.html#/profile/{{task.authorUuid}}#profile')
+								| {{author}}
 
 				hr
 
@@ -58,8 +59,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							a(href='#')
 								| {{task.clientGroupUuid}}
 					dt Adres
-						dd
-							a(href='#') {{task.relatedClient.fullAddress}}
+						dd {{task.relatedClient.fullAddress}}
 					dt Telefoon
 						dd {{task.relatedClient.phone}}
 
@@ -69,12 +69,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				dl
 					dt Naam
 						dd
-							a(href='#')
-								| {{task.assignedTeamMemberUuid}}
+							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
+									| {{task.assignedTeamMember.fullName}}
 					dt Team
 						dd
-							a(href='#')
-								| {{task.assignedTeamUuid}}
+							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
+								| {{task.assignedTeamFullName}}
 
 
 			//.modal-footer
@@ -241,7 +241,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								ng-show='task.assignedTeamMember'
 								)
 							td
-								a(href='')
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
 									| {{task.assignedTeamMember.fullName}}
 							td
 								.pull-right
