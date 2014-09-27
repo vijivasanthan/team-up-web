@@ -25,7 +25,6 @@ define(
           $scope.members = data.members;
           $scope.teams = data.teams;
 
-          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
           var teamsLocal = Teams.queryLocal();
           var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
@@ -42,16 +41,7 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          //set default team by last visited team
-          $scope.memberForm = getMemberForm();
-
-          function getMemberForm() {
-              var memberForm = {};
-                  memberForm.team = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : '';
-
-              return memberForm;
-          };
-
+          
           var lastVisitedTeamClientGroup = function(teamId) {
             var clientGroupId = teamClientLocal[teamId];
 
@@ -61,6 +51,15 @@ define(
                     clientGroup: clientGroupId
                 });
           };
+
+          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+
+          if(! currentTeamClientGroup.team) 
+          {
+              lastVisitedTeamClientGroup(data.teams[0].uuid);
+
+              currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+          }
 
           var uuid,
               view;
@@ -73,10 +72,7 @@ define(
                $location.search({ uuid: data.teams[0].uuid }).hash('team');
           }
           else if (! params.uuid)
-          {
-			  if(! currentTeamClientGroup.team) {
-				  lastVisitedTeamClientGroup(data.teams[0].uuid);
-			  }
+          {   
                uuid = currentTeamClientGroup.team;
                view = $location.hash();
 
@@ -89,6 +85,16 @@ define(
           }
 
           setTeamView(uuid);
+
+          //set default team by last visited team
+          $scope.memberForm = getMemberForm();
+
+          function getMemberForm() {
+              var memberForm = {};
+                  memberForm.team = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : '';
+
+              return memberForm;
+          };
 
           $scope.views = {
             team: true,
@@ -529,9 +535,7 @@ define(
 
           $scope.deleteTeam = function ()
           {
-            // console.log($scope.current);
-
-            angular.element('#confirmTeamModal').modal('show');
+            angular.element('#confirmTeamModal').modal('hide');
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
