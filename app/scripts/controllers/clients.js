@@ -582,11 +582,6 @@ define(
 
               return;
             }
-            else if (client.phone.length != 10)
-            {
-                $rootScope.notifier.error($rootScope.ui.teamup.maxCharactersPhone(10));
-                return;
-            }
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
@@ -632,6 +627,17 @@ define(
           // update client infomation
           $scope.clientChange = function (client)
           {
+			if(client.address) {
+				if
+				(
+					! client.address.city && ! client.address.country && ! client.address.latitude && ! client.address.longitude
+					&& ! client.address.street && ! client.address.zip
+				)
+				{
+					client.address = null;
+				}
+			}
+
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
             try
