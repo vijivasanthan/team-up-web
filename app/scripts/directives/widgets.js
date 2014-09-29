@@ -131,6 +131,7 @@ define(
 
                             $('.roundedPicLarge').attr('style', newStyle);
 							$rootScope.notifier.success($rootScope.ui.profile.profileImgSuccessfullyUploaded);
+							$rootScope.showCurrentUserAvatar();
                           }
                         );
                       }
