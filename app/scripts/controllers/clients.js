@@ -627,7 +627,8 @@ define(
           // update client infomation
           $scope.clientChange = function (client)
           {
-			if(client.address) {
+			//todo client address must be required in the client form
+		  	if(client.address) {
 				if
 				(
 					! client.address.city && ! client.address.country && ! client.address.latitude && ! client.address.longitude

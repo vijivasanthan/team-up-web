@@ -115,7 +115,7 @@ define(
                 }
               }
             );
-
+			//todo fix bug that id is undefined after refresh
             $scope.members = data.members[id];
 
             angular.forEach(
@@ -124,15 +124,21 @@ define(
               {
                 angular.forEach(
                   member.states,
-                  function (state)
+                  function (state, i)
                   {
+					//console.log(state);
                     if (state.name == 'Location') {
                         state.value_rscoded = 'loading address';
-                        if (state.value != null) {
+                        if (state.value && member.address && member.address.street) {
                             var coordinates = state.value.split(','),
                                 latitude = parseFloat(coordinates[0]),
                                 longitude = parseFloat(coordinates[1]);
                         }
+						else
+						{
+							//remove state location if there is no address available on the given coordinates
+							member.states.splice(i, 1);
+						}
 
                       // GoogleGEO.geocode(
                       //   {

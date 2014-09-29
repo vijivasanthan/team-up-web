@@ -110,7 +110,7 @@
                 <div back-img="{{task.relatedClientUuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
-              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small></td>
+              <td><span ng-show="task.relatedClient.fullAddress" aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small></td>
               <td><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
               <td>
                 <div class="pull-right">
@@ -164,7 +164,7 @@
                 <div back-img="{{task.relatedClientUuid |  avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
-              <td><span aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small><br><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
+              <td><span ng-show="task.relatedClient.fullAddress" aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small><br><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
               <td><a href="" class="taskAssignIcon"><span link-icon-hovered="" aria-hidden="true" ng-show="task.assignedTeamMember" class="icomoon icon-link"></span></a></td>
               <td>
                 <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-show="task.assignedTeamMember" class="roundedPicSmall memberStateBusy"></div>

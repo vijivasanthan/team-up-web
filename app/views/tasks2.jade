@@ -150,7 +150,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress'  aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 							td
 								span.taskIcon.icon-time(aria-hidden='true')
@@ -225,7 +225,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 								br
 								span.taskIcon.icon-time(aria-hidden='true')
