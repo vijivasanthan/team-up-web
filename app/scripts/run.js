@@ -436,15 +436,33 @@ define(
             );
           };
 
-          $rootScope.showCurrentUserAvatar = function() {
-            var url = $rootScope.app.resources.uuid,
-                url = $filter('avatar')(url, 'team', '80');
+		//todo prevent team members from changing eachothers picture
+		$rootScope.showChangedAvatar = function(type, id)
+		 {
+			var url = $filter('avatar')(id, type, '80'),
+				elements = [];
 
-            angular.element('#account div').css({
-                'background': 'url(' + url + ')',
-                'background-size': 'cover'
-            });
-          };
+			if(type == 'team')
+			{
+				//check if id is equal with the logged user id
+				if(id == $rootScope.app.resources.uuid)
+				{
+					elements.push('.profile-avatar');
+				}
+				elements.push('.team-avatar');
+			}
+			else
+			{
+				elements.push('.client-avatar');
+			}
+
+			angular.forEach(elements, function(element, i) {
+				angular.element(element).css({
+					'background': 'url(' + url + ')',
+					'background-size': 'cover'
+				});
+			});
+		  };
 
           // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
           // Trick browser for avatar url change against caching

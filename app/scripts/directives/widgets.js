@@ -89,7 +89,7 @@ define(
                       {
                         $form.removeAttr('action');
 
-                        console.log('response : ', responseText);
+                        //console.log('response : ', responseText);
                       },
                       success: function (responseText, statusText, xhr, form)
                       {
@@ -102,36 +102,44 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
+							  var avatarType = '';
+							  var avatarTagStyle = $('.roundedPicLarge').attr('style');
+							  var size = 0,
+								  id,
+								  type,
+								  message;
 
-                            console.log($scope, $scope.$parent.data.uuid);
+							  try
+							  {
+								  size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
+							  }
+							  catch (e)
+							  {
+								  console.log(e);
+							  }
 
-                            if ($scope.$parent.data.clientId)
-                            {
-                              $scope.$parent.$root.avatarChange($scope.$parent.data.clientId);
-                            }
-                            else if ($scope.$parent.data.uuid)
-                            {
-                              $scope.$parent.$root.avatarChange($scope.$parent.data.uuid);
-                            }
+							  if ($scope.$parent.data.clientId)
+                              {
+							    id = $scope.$parent.data.clientId;
+							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+                              	type = 'client';
 
-                            var avatarType = '';
-                            var avatarTagStyle = $('.roundedPicLarge').attr('style');
-                            var size = 0;
-                            try
-                            {
-                              size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
-                            }
-                            catch (e)
-                            {
-                              console.log(e);
-                            }
+                              }
+                              else if ($scope.$parent.data.uuid)
+                              {
+						        id = $scope.$parent.data.uuid;
+							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+							    type = 'team';
+                              }
 
-                            var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes($scope.$parent.data.uuid);
-                            var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+							  $scope.$parent.$root.avatarChange(id);
+							  $rootScope.notifier.success(message);
+							  $rootScope.showChangedAvatar(type, id);
 
-                            $('.roundedPicLarge').attr('style', newStyle);
-							$rootScope.notifier.success($rootScope.ui.profile.profileImgSuccessfullyUploaded);
-							$rootScope.showCurrentUserAvatar();
+							  var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes(id);
+                              var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+
+                              $('.roundedPicLarge').attr('style', newStyle);
                           }
                         );
                       }

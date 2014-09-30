@@ -22,7 +22,7 @@ define(
           $rootScope.fixStyles();
 
 
-          $rootScope.showCurrentUserAvatar();
+          $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash();
           var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
