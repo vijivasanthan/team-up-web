@@ -17,15 +17,6 @@ define(
           {
             var deferred = $q.defer();
 
-            // Get the list of own teams
-            TeamUp._(
-              'teamQuery',
-              { strict: true }
-            ).then(
-              function (own)
-              {
-                Store('teams').save('own', own);
-
                 // Get the list of teams
                 TeamUp._('teamQuery')
                   .then(
@@ -49,25 +40,19 @@ define(
                           if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
                           {
                             calls.push(
-                              (function (team, data, Store)
-                              {
-                                // Get the list of members of that particular team
-                                TeamUp._(
-                                  'teamStatusQuery',
-                                  { third: team.uuid },
-                                  null,
-                                  {
-                                    success: function (results)
-                                    {
-                                      Store('app').save(team.uuid, results);
-
-                                      data.members[team.uuid] = [];
-
-                                      data.members[team.uuid] = results;
-                                    }
-                                  }
-                                )
-                              })(team, data, Store)
+								TeamUp._(
+									'teamStatusQuery',
+									{ third: team.uuid },
+									null,
+									{
+										success: function (results)
+										{
+											Store('app').save(team.uuid, results);
+											data.members[team.uuid] = [];
+											data.members[team.uuid] = results;
+										}
+									}
+								)
                             );
                           }
                           else
@@ -78,8 +63,9 @@ define(
                       );
 
                       $q.all(calls)
-                        .then(function () { deferred.resolve(data) });
-
+                        .then(function () {
+							  deferred.resolve(data)
+					  	});
                     }
                     else
                     {
@@ -87,9 +73,6 @@ define(
                     }
                   }
                 );
-
-              }
-            );
 
             return deferred.promise;
           };

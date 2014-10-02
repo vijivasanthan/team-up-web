@@ -26,6 +26,7 @@ define(
           $scope.teams = data.teams;
 
           var teamsLocal = Teams.queryLocal();
+
           var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
           var params = $location.search();
@@ -72,7 +73,7 @@ define(
                $location.search({ uuid: data.teams[0].uuid }).hash('team');
           }
           else if (! params.uuid)
-          {   
+          {
                uuid = currentTeamClientGroup.team;
                view = $location.hash();
 
@@ -115,8 +116,15 @@ define(
                 }
               }
             );
+			  console.log(Object.keys($scope.data.members));
+
+
+
 			//todo fix bug that id is undefined after refresh
+//			  console.log(Object.keys(data.members).length);
+//			  console.log('members van team_> ' + id + ' zijn ', data.members[id]);
             $scope.members = data.members[id];
+			  console.log($scope.members);
 
             angular.forEach(
               $scope.members,
@@ -340,7 +348,7 @@ define(
 
                         $scope.data = queries;
 
-                        // also refresh the team-client group links cache 
+                        // also refresh the team-client group links cache
                         Teams.queryClientGroups(queries.teams).then(
                           function (res)
                           {
@@ -411,6 +419,8 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
+
+
             TeamUp._(
               'memberAdd',
               null,
@@ -429,6 +439,7 @@ define(
             ).then(
               function (result)
               {
+                console.log(result);
                 // change the REST return to json.
                 if (result.error)
                 {
@@ -476,7 +487,7 @@ define(
                                   }
                                 });
 
-                              $scope.members = data.members[team.uuid];
+                              $scope.members = $scope.data.members[team.uuid];
 
                               $scope.current = team.uuid;
 
@@ -508,7 +519,7 @@ define(
 
           $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId) };
 
-          // give a special flag to member if there is no states being shared 
+          // give a special flag to member if there is no states being shared
           $scope.noSharedStates = function (states)
           {
             var flag = true,
@@ -607,8 +618,6 @@ define(
 
           $scope.deleteMember = function (memberId)
           {
-            $scope._memberId = {};
-
             angular.element('#confirmMemberModal').modal('hide');
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
@@ -616,6 +625,8 @@ define(
             // lower case of the id :
             // TODO : we should also fix the issue in the backend.
             memberId = angular.lowercase(memberId);
+
+			 console.log('start delete members', $scope.members);
 
             TeamUp._(
               'memberDelete',
@@ -632,6 +643,8 @@ define(
                     $scope.members,
                     function (member)
                     {
+					  console.log('member', member);
+
                       if (member.uuid == memberId)
                       {
                         angular.forEach(
@@ -641,37 +654,19 @@ define(
                             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                             var routePara = {'uuid': teamId};
-
-                            Teams.query(false, routePara)
+							  console.log('refreshing', member);
+							  Teams.query(false, routePara)
                               .then(
-                              function () { $rootScope.statusBar.off() }
-                            );
-
-                            angular.forEach(
-                              data.members[teamId],
-                              function (member, i)
-                              {
-                                if (member.uuid == memberId)
-                                {
-                                  data.members[teamId].splice(i, 1);
-                                }
-                              }
+                              function () {
+								  console.log('status off', member);
+								  $rootScope.statusBar.off();
+								  $scope.data.members[teamId].splice(member.uui, 1);
+							  }
                             );
                           }
                         );
                       }
                     });
-
-                  TeamUp._('teamMemberFree')
-                    .then(
-                    function (result)
-                    {
-                      Store('app').save('members', result);
-
-                      $rootScope.statusBar.off();
-                    },
-                    function (error) { console.log(error) }
-                  );
                 }
               }, function (error) { console.log(error) }
             );
@@ -684,7 +679,7 @@ define(
             {
               console.log("teams : viewContentLoaded");
 
-              // make sure the loading of the 
+              // make sure the loading of the
               if (! $rootScope.taskVisit)
               {
                 $rootScope.$broadcast('taskFinishLoading');
@@ -697,7 +692,6 @@ define(
           {
             $scope.memberForm.username = angular.lowercase($scope.memberForm.username);
           }
-
         }
       ]
     );
