@@ -3,9 +3,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-        <h4 id="confirmProfileModalLabel" class="modal-title">{{ui.teamup.confirms.deleteProfileTitle}}</h4>
+        <h4 id="confirmProfileModalLabel" class="modal-title">{{ui.teamup.confirms.deleteMemberFromTeamTitle}}</h4>
       </div>
-      <div class="modal-body">{{ui.teamup.confirms.deleteProfile}}</div>
+      <div class="modal-body">{{ui.teamup.confirms.deleteMemberFromTeam}}</div>
       <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
         <button type="button" ng-click="deleteProfile()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
@@ -26,7 +26,7 @@
         <div id="profileTab" class="tab-pane {{(views.profile==true) &amp;&amp; 'active'}}">
           <div class="tab-header">
             <h3 class="pull-left">{{data.firstName}} {{data.lastName}}</h3>
-            <button type="button" ng-click="confirmDeleteProfile()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+            <button type="button" ng-click="confirmDeleteProfile()" ng-hide="teams.length == 0" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
             <button type="button" ng-click="editProfile()" class="btn pull-right btn-info">{{ui.profile.edit}}</button>
           </div>
           <hr>
@@ -34,6 +34,7 @@
             <div class="widget {{(!browser.mobile) &amp;&amp; 'span9' || 'span12'}}">
               <dl>
                 <dt>{{ui.teamup.teams}}</dt>
+                <dd ng-show="teams.length == 0">Geen team geselecteerd</dd>
                 <dd><span ng-repeat="team in teams"><span ng-hide="app.resources.role &gt; 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}}</a></span><span ng-hide="{{((teams.length-1) == $index)}}">,</span><span ng-show="app.resources.role &gt; 1">{{team.name}}</span></span></dd>
                 <dt>{{ui.teamup.role}}</dt>
                 <dd>{{data.role|translateRole}}</dd>
