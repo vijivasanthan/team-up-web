@@ -8,9 +8,9 @@ aria-hidden='true')
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
 					span.sr-only Close
-				h4#confirmProfileModalLabel.modal-title {{ui.teamup.confirms.deleteProfileTitle}}
+				h4#confirmProfileModalLabel.modal-title {{ui.teamup.confirms.deleteMemberFromTeamTitle}}
 			.modal-body
-				| {{ui.teamup.confirms.deleteProfile}}
+				| {{ui.teamup.confirms.deleteMemberFromTeam}}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
@@ -37,7 +37,8 @@ section#profile
 					.tab-header
 						h3.pull-left {{data.firstName}} {{data.lastName}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-						ng-click='confirmDeleteProfile()') {{ui.teamup.del}}
+						ng-click='confirmDeleteProfile()',
+						ng-hide='teams.length == 0') {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
 						ng-click='editProfile()') {{ui.profile.edit}}
 					hr
@@ -45,6 +46,7 @@ section#profile
 						.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 							dl
 								dt {{ui.teamup.teams}}
+								dd(ng-show='teams.length == 0') Geen team geselecteerd
 								dd
 									span(ng-repeat='team in teams')
 										span(ng-hide='app.resources.role > 1')

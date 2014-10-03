@@ -384,6 +384,8 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
+			deleteMemberFromTeamTitle: 'Ontkoppel het profiel van het team',
+			deleteMemberFromTeam: 'Weet u zeker dat u het profiel van het team wilt ontkoppelen',
             deleteMemberTitle: 'Verwijderen lid',
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',

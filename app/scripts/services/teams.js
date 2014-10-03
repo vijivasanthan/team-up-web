@@ -77,6 +77,20 @@ define(
             return deferred.promise;
           };
 
+	      // Update localStorage with all members including members which do not belong to any teams
+		  TeamsService.prototype.updateMembersLocal = function ()
+		  {
+				TeamUp._('teamMemberFree')
+					.then(
+					function (result)
+					{
+						Store('app').save('members', result);
+					},
+					function (error) { console.log(error) }
+				);
+		  };
+
+
           // Get teams data from localStorage
           TeamsService.prototype.queryLocal = function ()
           {
@@ -126,8 +140,6 @@ define(
                                result[0][0] == 'n' &&
                                result[1][0] == 'u') ? [] : result
                           );
-
-                          // console.log('clientGroup ->', result);
 
                           data.groups[team.uuid] = [];
 

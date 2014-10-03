@@ -116,15 +116,8 @@ define(
                 }
               }
             );
-			  console.log(Object.keys($scope.data.members));
 
-
-
-			//todo fix bug that id is undefined after refresh
-//			  console.log(Object.keys(data.members).length);
-//			  console.log('members van team_> ' + id + ' zijn ', data.members[id]);
             $scope.members = data.members[id];
-			  console.log($scope.members);
 
             angular.forEach(
               $scope.members,
@@ -134,7 +127,6 @@ define(
                   member.states,
                   function (state, i)
                   {
-					//console.log(state);
                     if (state.name == 'Location') {
                         state.value_rscoded = 'loading address';
                         if (state.value && member.address && member.address.street) {
@@ -439,7 +431,6 @@ define(
             ).then(
               function (result)
               {
-                console.log(result);
                 // change the REST return to json.
                 if (result.error)
                 {
@@ -625,51 +616,48 @@ define(
             // lower case of the id :
             // TODO : we should also fix the issue in the backend.
             memberId = angular.lowercase(memberId);
+			var changes = [];
+			changes.push(memberId);
 
-			 console.log('start delete members', $scope.members);
+			  //console.log($scope.data.members[$scope.team.uuid]);
 
-            TeamUp._(
-              'memberDelete',
-              { third: memberId }
-            ).then(
-              function (result)
-              {
-                if (result.uuid)
-                {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+			  //$scope.data.members[teamId].splice(member.uui, 1);
 
-                  // refresh the teams that contains  this user
-                  angular.forEach(
-                    $scope.members,
-                    function (member)
-                    {
-					  console.log('member', member);
+			  TeamUp._(
+				  'teamMemberDelete',
+				  { second: $scope.team.uuid },
+				  { ids: changes }
+			  ).then(
+				  function() {
+					  // refresh the teams that contains  this user
+					  angular.forEach(
+						  $scope.members,
+						  function (member, index)
+						  {
+							  if (member.uuid == memberId)
+							  {
+								  angular.forEach(
+									  member.teamUuids,
+									  function (teamId)
+									  {
+										  var routePara = {'uuid': teamId};
 
-                      if (member.uuid == memberId)
-                      {
-                        angular.forEach(
-                          member.teamUuids,
-                          function (teamId)
-                          {
-                            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                            var routePara = {'uuid': teamId};
-							  console.log('refreshing', member);
-							  Teams.query(false, routePara)
-                              .then(
-                              function () {
-								  console.log('status off', member);
-								  $rootScope.statusBar.off();
-								  $scope.data.members[teamId].splice(member.uui, 1);
+										  Teams.query(false, routePara)
+											  .then(
+											  function () {
+												  $rootScope.statusBar.off();
+												  Teams.updateMembersLocal();
+												  $scope.data.members[teamId].splice(index, 1);
+												  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+											  }
+										  );
+									  }
+								  );
 							  }
-                            );
-                          }
-                        );
-                      }
-                    });
-                }
-              }, function (error) { console.log(error) }
-            );
+						  });
+				  }
+			  ), function (error) { console.log(error) };
+
           };
 
           // TODO: Investigate on this!
