@@ -7,6 +7,7 @@ if (window.location.port == '8080')
 
 require.config(
   {
+    waitSeconds: 100,
     paths: {
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',

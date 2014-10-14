@@ -111,6 +111,11 @@ define(
             }
           }
 
+	//var xlf = document.getElementById('xlf');
+	//if(xlf && xlf.addEventListener)
+		//xlf.addEventListener('change', handleFile, false);
+	//}, 1500);
+
           function handleDragover(e) {
             e.stopPropagation();
             e.preventDefault();

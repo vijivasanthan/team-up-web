@@ -25,6 +25,10 @@ define(
           $scope.members = data.members;
           $scope.teams = data.teams;
 
+          var teamsLocal = Teams.queryLocal();
+
+          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+
           var params = $location.search();
 
           $scope.search = { query: '' };
@@ -38,30 +42,60 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
+          
+          var lastVisitedTeamClientGroup = function(teamId) {
+            var clientGroupId = teamClientLocal[teamId];
+
+            Store('app').save(
+                'currentTeamClientGroup',{
+                    team: teamId,
+                    clientGroup: clientGroupId
+                });
+          };
+
+          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+
+          if(! currentTeamClientGroup.team) 
+          {
+              lastVisitedTeamClientGroup(data.teams[0].uuid);
+
+              currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+          }
+
           var uuid,
               view;
 
           if (! params.uuid && ! $location.hash())
           {
-            uuid = data.teams[0].uuid;
-            view = 'team';
+               uuid = data.teams[0].uuid;
+               view = 'team';
 
-            $location.search({ uuid: data.teams[0].uuid }).hash('team');
+               $location.search({ uuid: data.teams[0].uuid }).hash('team');
           }
           else if (! params.uuid)
           {
-            uuid = data.teams[0].uuid;
-            view = $location.hash();
+               uuid = currentTeamClientGroup.team;
+               view = $location.hash();
 
-            $location.search({ uuid: data.teams[0].uuid });
+               $location.search({ uuid: uuid });
           }
           else
           {
-            uuid = params.uuid;
-            view = $location.hash();
+               uuid = params.uuid;
+               view = $location.hash();
           }
 
           setTeamView(uuid);
+
+          //set default team by last visited team
+          $scope.memberForm = getMemberForm();
+
+          function getMemberForm() {
+              var memberForm = {};
+                  memberForm.team = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : '';
+
+              return memberForm;
+          };
 
           $scope.views = {
             team: true,
@@ -91,15 +125,20 @@ define(
               {
                 angular.forEach(
                   member.states,
-                  function (state)
+                  function (state, i)
                   {
                     if (state.name == 'Location') {
                         state.value_rscoded = 'loading address';
-                        if (state.value != null) {
+                        if (state.value && member.address && member.address.street) {
                             var coordinates = state.value.split(','),
                                 latitude = parseFloat(coordinates[0]),
                                 longitude = parseFloat(coordinates[1]);
                         }
+						else
+						{
+							//remove state location if there is no address available on the given coordinates
+							member.states.splice(i, 1);
+						}
 
                       // GoogleGEO.geocode(
                       //   {
@@ -135,11 +174,11 @@ define(
             );
 
             $scope.current = id;
-
           }
 
           $scope.requestTeam = function (current, switched)
           {
+            lastVisitedTeamClientGroup(current);
             setTeamView(current);
 
             $scope.$watch(
@@ -301,7 +340,7 @@ define(
 
                         $scope.data = queries;
 
-                        // also refresh the team-client group links cache 
+                        // also refresh the team-client group links cache
                         Teams.queryClientGroups(queries.teams).then(
                           function (res)
                           {
@@ -372,6 +411,8 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
+
+
             TeamUp._(
               'memberAdd',
               null,
@@ -437,7 +478,7 @@ define(
                                   }
                                 });
 
-                              $scope.members = data.members[team.uuid];
+                              $scope.members = $scope.data.members[team.uuid];
 
                               $scope.current = team.uuid;
 
@@ -462,14 +503,14 @@ define(
           {
             $scope.teamForm = {};
 
-            $scope.memberForm = {};
+            $scope.memberForm = getMemberForm();
 
             $scope.setViewTo('team');
           };
 
           $scope.editProfile = function (memberId, teamId) { sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId) };
 
-          // give a special flag to member if there is no states being shared 
+          // give a special flag to member if there is no states being shared
           $scope.noSharedStates = function (states)
           {
             var flag = true,
@@ -502,9 +543,7 @@ define(
 
           $scope.deleteTeam = function ()
           {
-            // console.log($scope.current);
-
-            angular.element('#confirmTeamModal').modal('show');
+            angular.element('#confirmTeamModal').modal('hide');
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
@@ -523,7 +562,6 @@ define(
                     function (teams)
                     {
                       $scope.requestTeam(teams[0].uuid);
-
                       // locally refresh
                       angular.forEach(
                         $scope.teams,
@@ -571,8 +609,6 @@ define(
 
           $scope.deleteMember = function (memberId)
           {
-            $scope._memberId = {};
-
             angular.element('#confirmMemberModal').modal('hide');
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
@@ -580,65 +616,48 @@ define(
             // lower case of the id :
             // TODO : we should also fix the issue in the backend.
             memberId = angular.lowercase(memberId);
+			var changes = [];
+			changes.push(memberId);
 
-            TeamUp._(
-              'memberDelete',
-              { third: memberId }
-            ).then(
-              function (result)
-              {
-                if (result.uuid)
-                {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+			  //console.log($scope.data.members[$scope.team.uuid]);
 
-                  // refresh the teams that contains  this user
-                  angular.forEach(
-                    $scope.members,
-                    function (member)
-                    {
-                      if (member.uuid == memberId)
-                      {
-                        angular.forEach(
-                          member.teamUuids,
-                          function (teamId)
-                          {
-                            $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+			  //$scope.data.members[teamId].splice(member.uui, 1);
 
-                            var routePara = {'uuid': teamId};
+			  TeamUp._(
+				  'teamMemberDelete',
+				  { second: $scope.team.uuid },
+				  { ids: changes }
+			  ).then(
+				  function() {
+					  // refresh the teams that contains  this user
+					  angular.forEach(
+						  $scope.members,
+						  function (member, index)
+						  {
+							  if (member.uuid == memberId)
+							  {
+								  angular.forEach(
+									  member.teamUuids,
+									  function (teamId)
+									  {
+										  var routePara = {'uuid': teamId};
 
-                            Teams.query(false, routePara)
-                              .then(
-                              function () { $rootScope.statusBar.off() }
-                            );
+										  Teams.query(false, routePara)
+											  .then(
+											  function () {
+												  $rootScope.statusBar.off();
+												  Teams.updateMembersLocal();
+												  $scope.data.members[teamId].splice(index, 1);
+												  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+											  }
+										  );
+									  }
+								  );
+							  }
+						  });
+				  }
+			  ), function (error) { console.log(error) };
 
-                            angular.forEach(
-                              data.members[teamId],
-                              function (member, i)
-                              {
-                                if (member.uuid == memberId)
-                                {
-                                  data.members[teamId].splice(i, 1);
-                                }
-                              }
-                            );
-                          }
-                        );
-                      }
-                    });
-
-                  TeamUp._('teamMemberFree')
-                    .then(
-                    function (result)
-                    {
-                      Store('app').save('members', result);
-
-                      $rootScope.statusBar.off();
-                    },
-                    function (error) { console.log(error) }
-                  );
-                }
-              }, function (error) { console.log(error) }
-            );
           };
 
           // TODO: Investigate on this!
@@ -648,7 +667,7 @@ define(
             {
               console.log("teams : viewContentLoaded");
 
-              // make sure the loading of the 
+              // make sure the loading of the
               if (! $rootScope.taskVisit)
               {
                 $rootScope.$broadcast('taskFinishLoading');
@@ -661,7 +680,6 @@ define(
           {
             $scope.memberForm.username = angular.lowercase($scope.memberForm.username);
           }
-
         }
       ]
     );

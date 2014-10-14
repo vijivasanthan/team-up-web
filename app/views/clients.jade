@@ -325,9 +325,9 @@ aria-hidden='true')
 						dd {{client.birthDate}}
 						dt {{ui.teamup.phone}}
 						dd {{client.phone}}
-						dt {{ui.profile.address}}
-						dd
-							| {{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}
+						dt(ng-show="client.address") {{ui.profile.address}}
+						dd(ng-show="client.address")
+							| {{client.address.street}} {{client.address.no}} {{client.address.zip}} {{client.address.city}} {{client.address.land}}
 
 						dt(ng-show='client.clientProfileUrl') {{ui.teamup.clientProfileUrl}}
 						dd(ng-show='client.clientProfileUrl') {{client.clientProfileUrl}}

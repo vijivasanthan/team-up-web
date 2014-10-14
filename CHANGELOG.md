@@ -1,3 +1,16 @@
+<a name="0.3.0-alpha-2"></a>
+### 0.3.0-alpha-2 (2014-09-24)
+
+
+#### Bug Fixes
+
+* loading groups if there are none ([ee5ee618](askcs/team-up-web/commit/ee5ee61896ef5cbef284991e1d9b3ed5d8f52fce))
+* exception when there are no tasks ([f95c435b](askcs/team-up-web/commit/f95c435bfce885f40f53efc9b2144fa7e7d2f055))
+* google maps over https ([8fe40b6a](askcs/team-up-web/commit/8fe40b6addef818c57eadd9679498de82e4714c2))
+* screencast under https ([e90cad7c](askcs/team-up-web/commit/e90cad7c7bd35bd51d8ccbddc2fad2ead5191497))
+* screencast under https ([e4fadd03](askcs/team-up-web/commit/e4fadd038145529da1193e100ede7300997df42b))
+
+
 <a name="v1.0.2"></a>
 ### v1.0.2 (2013-08-13)
 

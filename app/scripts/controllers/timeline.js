@@ -166,7 +166,7 @@ define(
 
                           var slotContent = '';
 
-                          if (typeof relatedUser != 'undefined')
+                          if (relatedUser != null)
                           {
                             slotContent = relatedUser.firstName + ' ' + relatedUser.lastName;
                           }

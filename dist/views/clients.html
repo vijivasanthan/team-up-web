@@ -258,8 +258,8 @@
             <dd>{{client.birthDate}}</dd>
             <dt>{{ui.teamup.phone}}</dt>
             <dd>{{client.phone}}</dd>
-            <dt>{{ui.profile.address}}</dt>
-            <dd>{{client.address.street}} {{client.address.no}}, {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
+            <dt ng-show="client.address">{{ui.profile.address}}</dt>
+            <dd ng-show="client.address">{{client.address.street}} {{client.address.no}} {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
             <dt ng-show="client.clientProfileUrl">{{ui.teamup.clientProfileUrl}}</dt>
             <dd ng-show="client.clientProfileUrl">{{client.clientProfileUrl}}</dd>
             <!-- pre: small {{client | json}}-->
