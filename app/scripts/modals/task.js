@@ -27,10 +27,10 @@ define(
                 task.statusLabel = config.app.taskStates[task.status];
 
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                if(task.relatedClient == null)
+                  task.relatedClient = { firstName:"*", lastName: "Niet gevonden" };
 
-                task.relatedClient.fullName = task.relatedClient.firstName +
-                                              ' ' +
-                                              task.relatedClient.lastName;
+                task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
 
                 if (task.relatedClient.address != null)
                 {
