@@ -98,7 +98,7 @@ define ['services/services'], (services) ->
             collection[key]
           else
             d = {}
-            idGetter.assign d, key
+#            idGetter.assign d, key
             d
 
         collection = {}
@@ -174,7 +174,7 @@ define ['services/services'], (services) ->
                   value = _.map(value, (_value) ->
                     _value
                   )
-                  value.pop()
+#                  value.pop()
                 callback value if callback
                 return
               return

@@ -102,7 +102,6 @@
               return collection[key];
             } else {
               d = {};
-              idGetter.assign(d, key);
               return d;
             }
           };
@@ -173,7 +172,6 @@
                     value = _.map(value, function(_value) {
                       return _value;
                     });
-                    value.pop();
                   }
                   if (callback) {
                     callback(value);
