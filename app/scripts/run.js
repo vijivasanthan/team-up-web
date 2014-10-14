@@ -248,7 +248,7 @@ define(
                     Store('app').get(group.id),
                     function (client)
                     {
-                      if (client.uuid = clientId)
+                      if (client.uuid == clientId)
                       {
                         result = client;
 
