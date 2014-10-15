@@ -1,3 +1,22 @@
+#confirmContactModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmClientModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteContactTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteContact}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='removeContact(_contact)') Verwijderen
+
 #confirmClientModal.modal.fade(tabindex='-1',
 role='dialog',
 aria-labelledby='confirmClientModalLabel',
@@ -385,7 +404,7 @@ aria-hidden='true')
 							td {{contact.phone}}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(ng-click='removeContact(contact)')
+									button.btn-primary.btn-mini(ng-click='confirmationRemoveContact(contact)')
 										i.icon-trash
 					tfoot
 						tr
