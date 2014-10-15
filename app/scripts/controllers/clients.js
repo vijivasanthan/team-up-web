@@ -739,6 +739,7 @@ define(
                     contact.phone == _contact.phone)
                 {
                   $scope.contacts.splice(i, 1);
+				  angular.element('#confirmContactModal').modal('hide');
                 }
               }
             );
@@ -753,6 +754,18 @@ define(
               }
             );
           };
+
+		  $scope.confirmationRemoveContact = function(contact) {
+			  $timeout(
+				  function ()
+				  {
+					  $scope._contact = contact;
+
+					  angular.element('#confirmContactModal').modal('show');
+				  }
+			  );
+		  }
+
 
           $scope.deleteClientGroup = function ()
           {

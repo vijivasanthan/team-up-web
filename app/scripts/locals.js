@@ -393,7 +393,9 @@ define(
             deleteTeamTitle: 'Verwijderen team',
             deleteTeam: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
             deleteTaskTitle: 'Verwijderen taak',
-            deleteTask: 'Weet u zeker dat u het taak wilt verwijderen?',
+            deleteTask: 'Weet u zeker dat u de taak wilt verwijderen?',
+			deleteContactTitle: 'Verwijder contact',
+		    deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
             cancel: 'Annuleren'
           },
