@@ -20,7 +20,9 @@ define(
           var params = $location.search();
 
           var teams = Store('app').get('teams'),
-              clients = Store('app').get('ClientGroups');
+              clients = Store('app').get('ClientGroups'),
+			  teamClientLocal = Teams.queryLocalClientGroup(teams),
+			  currentTeamClientGroup = '';
 
           $scope.data = {
             teams: {
@@ -164,6 +166,16 @@ define(
               }
             }
           );
+
+
+		 //todo if user switch from team, switch the clientgroup also and save localStorage
+	     if(Store('app').get('currentTeamClientGroup'))
+		 {
+			 var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+
+			 $scope.currentTeam =  (currentTeamClientGroup.team) ? currentTeamClientGroup.team : $scope.data.teams.list[0].uuid;
+			 $scope.currentClientGroup = (currentTeamClientGroup.clientGroup) ? currentTeamClientGroup.clientGroup : $scope.data.clients.list[0].uuid;
+		 }
 
           // switch agenda (timeline) between Team view or Client view 
           function switchData ()

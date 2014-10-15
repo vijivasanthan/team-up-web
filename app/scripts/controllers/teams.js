@@ -53,15 +53,6 @@ define(
                 });
           };
 
-          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
-
-          if(! currentTeamClientGroup.team) 
-          {
-              lastVisitedTeamClientGroup(data.teams[0].uuid);
-
-              currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
-          }
-
           var uuid,
               view;
 
@@ -74,10 +65,15 @@ define(
           }
           else if (! params.uuid)
           {
-               uuid = currentTeamClientGroup.team;
-               view = $location.hash();
+			  if(! (Store('app').get('currentTeamClientGroup')).team)
+			  {
+				  lastVisitedTeamClientGroup(data.teams[0].uuid);
+			  }
 
-               $location.search({ uuid: uuid });
+			  uuid = (Store('app').get('currentTeamClientGroup')).team;
+              view = $location.hash();
+
+              $location.search({ uuid: uuid });
           }
           else
           {
@@ -88,14 +84,8 @@ define(
           setTeamView(uuid);
 
           //set default team by last visited team
-          $scope.memberForm = getMemberForm();
-
-          function getMemberForm() {
-              var memberForm = {};
-                  memberForm.team = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : '';
-
-              return memberForm;
-          };
+          $scope.memberForm = {};
+		  $scope.memberForm.team = uuid;
 
           $scope.views = {
             team: true,
@@ -183,7 +173,8 @@ define(
 
             $scope.$watch(
               $location.search(),
-              function () { $location.search({ uuid: current }) }
+              function () { $location.search({ uuid: current }) },
+			  $scope.memberForm.team = current
             );
 
             if (switched)

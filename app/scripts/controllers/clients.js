@@ -91,9 +91,6 @@ define(
 
           $scope.data = data;
 
-          //check the link between team and clientGroup and set the clientGroup
-          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
-
           var uuid,
               view;
 
@@ -106,11 +103,12 @@ define(
           }
           else if (! params.uuid)
           {
-			  if(! currentTeamClientGroup.clientGroup) {
+			  //check the link between team and clientGroup and set the clientGroup
+			  if(! (Store('app').get('currentTeamClientGroup')).clientGroup) {
 				  saveLastVisitedClientGroup(data.clientGroups[0].id);
 			  }
 
-            uuid = currentTeamClientGroup.clientGroup;
+            uuid = (Store('app').get('currentTeamClientGroup')).clientGroup;
 
             view = $location.hash();
 
