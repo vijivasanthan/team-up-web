@@ -27,32 +27,51 @@ define(
           // $rootScope.notifier.success('test message');
           if (data.clientId)
           {
-            data.clientGroups = Store('app').get('ClientGroups');
-            data.clients = {};
+			  var clientHasClientGroup = false;
 
-            angular.forEach(
-              data.clientGroups,
-              function (clientGroup)
-              {
-                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+			  data.clientGroups = Store('app').get('ClientGroups');
+			  data.clients = {};
 
-                angular.forEach(
-                  data.clients[clientGroup.id],
-                  function (client)
-                  {
-                    if (client.uuid == data.clientId)
-                    {
-                      $scope.client = client;
-                      $scope.contacts = client.contacts;
+			  angular.forEach(
+				  data.clientGroups,
+				  function (clientGroup)
+				  {
+					  data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
 
-                      // deal with the date thing for editing
-                      client.birthDate = $filter('nicelyDate')(client.birthDate);
-                      $scope.clientmeta = client;
-                    }
-                  }
-                );
-              }
-            );
+					  angular.forEach(
+						  data.clients[clientGroup.id],
+						  function (client)
+						  {
+							  if (client.uuid == data.clientId)
+							  {
+								  $scope.client = client;
+								  $scope.contacts = client.contacts;
+
+								  // deal with the date thing for editing
+								  client.birthDate = $filter('nicelyDate')(client.birthDate);
+								  $scope.clientmeta = client;
+								  clientHasClientGroup = true;
+							  }
+						  }
+					  );
+				  }
+			  );
+
+			  if(! clientHasClientGroup)
+			  {
+				  data.clients = Store('app').get('clients');
+				  data.client =  (
+					  _.where(data.clients,
+						  {
+							  uuid: data.clientId
+						  })
+					  )[0];
+
+				  $scope.client = data.client;
+				  $scope.contacts = data.client.contacts;
+				  data.client.birthDate = $filter('nicelyDate')(data.client.birthDate);
+				  $scope.clientmeta = data.client;
+			  }
           }
 
           // TODO: Check if it is use!
@@ -164,6 +183,8 @@ define(
           // Load reports list for client profile view
           var loadReports = function ()
           {
+			  console.log('loadReports-> ', $scope.client);
+
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
             TeamUp._(
@@ -671,7 +692,10 @@ define(
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                  reloadGroup({ 'uuid': result.clientGroupUuid });
+
+				  //todo redirect to the clientprofile how was edited
+				  var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
+				  reloadGroup({ 'uuid': clientGroupId });
                 }
               }
             );

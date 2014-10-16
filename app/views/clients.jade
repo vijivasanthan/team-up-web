@@ -335,7 +335,7 @@ aria-hidden='true')
 			.row-fluid
 				.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 					dl
-						dt {{ui.teamup.group}}
+						dt(ng-show='client.clientGroupUuid') {{ui.teamup.group}}
 						dd
 							span(ng-hide='app.resources.role > 1')
 								a(href='#/client?uuid={{client.clientGroupUuid}}#client')
