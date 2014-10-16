@@ -56,8 +56,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								| {{task.relatedClient.fullName}}
 					dt Cliëntgroep
 						dd
-							a(href='#')
-								| {{task.clientGroupUuid}}
+							a(href='index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client')
+								| {{task.relatedClient.clientGroupName}}
 					dt Adres
 						dd {{task.relatedClient.fullAddress}}
 					dt Telefoon
