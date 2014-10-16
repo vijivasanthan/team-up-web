@@ -64,44 +64,44 @@
             <div class="control-group">
               <label class="control-label">{{ui.profile.firstName}}</label>
               <div class="controls">
-                <input type="text" ng-model="profilemeta.firstName" value="{{data.firstName}}" class="span4">
+                <input type="text" ng-model="profile.firstName" value="{{data.firstName}}" class="span4">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">{{ui.profile.lastName}}</label>
               <div class="controls">
-                <input type="text" ng-model="profilemeta.lastName" value="{{data.lastName}}" class="span4">
+                <input type="text" ng-model="profile.lastName" value="{{data.lastName}}" class="span4">
               </div>
             </div>
-            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profilemeta.uuid != app.resources.uuid) || (currentRole &gt; 1 &amp;&amp;  profilemeta.uuid == app.resources.uuid)" class="control-group">
+            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid) || (currentRole &gt; 1 &amp;&amp;  profile.uuid == app.resources.uuid)" class="control-group">
               <label class="control-label">{{ui.teamup.role}}</label>
               <div class="controls">
-                <select ng-model="profilemeta.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
+                <select ng-model="profile.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">{{ui.profile.phone}}</label>
               <div class="controls">
-                <input type="text" ng-model="profilemeta.phone" value="{{data.phone}}" class="span3">
+                <input type="text" ng-model="profile.phone" value="{{data.phone}}" class="span3">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">{{ui.teamup.func}}</label>
               <div class="controls">
-                <select ng-model="profilemeta.function" ng-options="f.id as f.label for f in mfuncs" ng-selected="profilemeta.function">{{ui.profile.birthday}}</select>
-                <input name="date-start" type="text" ng-model="profilemeta.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+                <select ng-model="profile.function" ng-options="f.id as f.label for f in mfuncs" ng-selected="profile.function">{{ui.profile.birthday}}</select>
+                <input name="date-start" type="text" ng-model="profile.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
               </div>
             </div>
-            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profilemeta.uuid != app.resources.uuid)" class="control-group">
+            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="control-group">
               <label class="control-label">{{ui.profile.newPass}}</label>
               <div class="controls"></div>
-              <input type="password" ng-model="profilemeta.newpass" class="span3">
+              <input type="password" ng-model="profile.newpass" class="span3">
               <label class="control-label">{{ui.profile.newPassRepeat}}</label>
               <div class="controls"></div>
-              <input type="password" ng-model="profilemeta.newpassrepeat" class="span3">
+              <input type="password" ng-model="profile.newpassrepeat" class="span3">
             </div>
             <div class="form-actions">
-              <button type="submit" ng-click="save(profilemeta)" class="btn btn-success">{{ui.profile.saveProfile}}</button>
+              <button type="submit" ng-click="save(profile)" class="btn btn-success">{{ui.profile.saveProfile}}</button>
             </div>
           </form>
         </div>

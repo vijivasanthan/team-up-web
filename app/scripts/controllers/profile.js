@@ -38,6 +38,9 @@ define(
           $scope.profilemeta = data;
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
 
+		  //temp userdata will be saved after pressing save
+		  $scope.profile = angular.copy($scope.profilemeta);
+
           $scope.currentRole = $scope.profilemeta.role;
 
           // TODO: Investigate whether they are in use!
@@ -74,7 +77,6 @@ define(
                 if (team.uuid == sessionStorage.getItem(data.uuid + '_team'))
                 {
                   teams.push(team);
-					console.log(teams);
                 }
               }
             );
@@ -219,6 +221,11 @@ define(
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
+
+						$scope.profileMeta = angular.copy(resources);
+
+						$rootScope.app.resources.firstName = $scope.profileMeta.firstName;
+						$rootScope.app.resources.lastName = $scope.profileMeta.lastName;
 
                         $scope.data = data;
 
