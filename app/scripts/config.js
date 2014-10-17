@@ -2,7 +2,7 @@ define(
   {
     app: {
       // version: '@@version',
-      version: '1.1.0-snapshot',
+      version: '1.2.0-snapshot',
       // version: '0.5.2',
       released: '@@released',
 
