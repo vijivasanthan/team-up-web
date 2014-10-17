@@ -660,14 +660,16 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
+			//temp var, so the user should't see the date changing
+			var changedClient = angular.copy(client);
+
             try
             {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+				//convert birthdate into miliseconds for saving
+				changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
             }
             catch (error)
             {
-              // console.log(error);
-
               $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
 
               return;
@@ -678,7 +680,7 @@ define(
             TeamUp._(
               'clientUpdate',
               { second: client.uuid },
-              client
+				changedClient
             ).then(
               function (result)
               {
@@ -688,7 +690,9 @@ define(
                 }
                 else
                 {
-                  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+
+
+					$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
@@ -745,7 +749,6 @@ define(
                     { 'uuid': result.clientGroupUuid }
                   ).then(function (queryRs) {});
                 }
-
                 $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
               }
             );
