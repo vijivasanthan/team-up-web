@@ -124,6 +124,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
+				.well(style='padding-top: 25px')
+					label
+						input(type='checkbox', ng-model='showFinishedTasks')
+						small &nbsp;Toon gearchiveerde taken
+
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
 						tr

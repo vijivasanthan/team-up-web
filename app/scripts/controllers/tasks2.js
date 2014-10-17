@@ -25,7 +25,8 @@ define(
           $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash();
-          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
+			  myCurrenttasks;
 
 
           //TODO add following date methods to Dater
@@ -68,7 +69,8 @@ define(
           };
 
           //check if a team of clientgroup is visited lately
-          if(currentTeamClientGroup.team) {
+          if(currentTeamClientGroup.team)
+		  {
               $scope.task.team = currentTeamClientGroup.team;
               $scope.currentTeam = currentTeamClientGroup.team;
           }
@@ -120,7 +122,7 @@ define(
 
                 var delay = 0;
 
-                if (myTasks.length > 0)
+                if (myTasks.length > 0 && myTasks.on || myTasks.off)
                 {
                   $scope.tasks.mine = {
                     loading: false,
@@ -176,7 +178,7 @@ define(
               {
                 $scope.tasks.mine = {
                   loading: false,
-                  list: tasks
+                  list: tasks.on
                 };
 
                 (callback && callback.call(this, tasks));
@@ -206,6 +208,16 @@ define(
               }
             );
           }
+
+		  $scope.$watch(
+			  'showFinishedTasks',
+			  function(toggle)
+			  {
+				  var myTasks = Store('app').get('myTasks2');
+
+				  $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
+			  }
+		  );
 
           $scope.$watch(
             'showAllTasks',
@@ -253,24 +265,34 @@ define(
           $scope.openTask = function (task)
           {
             $scope.task = task;
-			  
-			task.assignedTeamFullName = (
-						_.where(teamsLocal.teams,
+
+			if(task.assignedTeamUuid)
+			{
+				task.assignedTeamFullName = (
+					_.where(teamsLocal.teams,
 						{
 							uuid: task.assignedTeamUuid
 						})
-						)[0].name;
-			 task.relatedClient.clientGroupName = (
-				  		_.where(clientLocal.clientGroups,
-				  		{
-					  		id: task.relatedClient.clientGroupUuid
-				 		})
-				  		)[0].name;
+					)[0].name;
+			}
+
+			if(task.relatedClient.clientGroupUuid)
+			{
+				task.relatedClient.clientGroupName = (
+					_.where(clientLocal.clientGroups,
+						{
+							id: task.relatedClient.clientGroupUuid
+						})
+					)[0].name;
+			}
 
 			getAuthorInfo(task.authorUuid);
 
             angular.element('#taskModal').modal('show');
           };
+
+		  //default filtering by status
+		  //$scope.ordered = '-status';
 
           $scope.orderBy = function (ordered)
           {
@@ -370,8 +392,6 @@ define(
             ).then(
               function (result)
               {
-                // console.log("after delete action , ", result);
-
                 if (result.error)
                 {
                   if (result.error.data)
@@ -459,8 +479,6 @@ define(
 
           $scope.changeClientGroup = function (cGroupId)
           {
-            // console.log('client group id', cGroupId);
-
             $scope.groupAffectClient(cGroupId);
           };
 

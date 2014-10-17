@@ -116,9 +116,11 @@ define(
 
                 processTasks(tasks);
 
-                Store('app').save('myTasks2', tasks);
+				var merged = mergeOnStatus(tasks);
 
-                return tasks;
+                Store('app').save('myTasks2', merged);
+
+                return merged;
               }.bind(this)
             );
           };
@@ -174,26 +176,7 @@ define(
 
                 processTasks(tasks);
 
-                var merged = {on: [], off: []};
-                if (tasks.length > 0 ) {
-                   var grouped = _.groupBy(tasks, function (task) {
-                            return task.status
-                        });
-
-                   if(grouped[1]!=null)  {
-                        merged.on = merged.on.concat(grouped[1]);
-                   }
-                   if(grouped[2]!=null) {
-                        merged.on = merged.on.concat(grouped[2]);
-                   }
-
-                   if(grouped[3]!=null) {
-                        merged.off = merged.off.concat(grouped[3]);
-                   }
-                   if(grouped[4]!=null) {
-                        merged.off = merged.off.concat(grouped[4]);
-                   }
-                }
+				var merged = mergeOnStatus(tasks);
 
                 Store('app').save('allTasks2', merged);
 
@@ -203,6 +186,32 @@ define(
 
             return deferred.promise;
           };
+
+		  function mergeOnStatus(tasks)
+		  {
+			  var merged = {on: [], off: []};
+			  if (tasks.length > 0 ) {
+				  var grouped = _.groupBy(tasks, function (task) {
+					  return task.status
+				  });
+
+				  if(grouped[1]!=null)  {
+					  merged.on = merged.on.concat(grouped[1]);
+				  }
+				  if(grouped[2]!=null) {
+					  merged.on = merged.on.concat(grouped[2]);
+				  }
+
+				  if(grouped[3]!=null) {
+					  merged.off = merged.off.concat(grouped[3]);
+				  }
+				  if(grouped[4]!=null) {
+					  merged.off = merged.off.concat(grouped[4]);
+				  }
+			  }
+
+			  return merged;
+		  }
 
 
           Task.prototype.update = function (task)

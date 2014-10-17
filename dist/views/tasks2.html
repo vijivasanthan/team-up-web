@@ -92,6 +92,11 @@
       </article>
       <article ng-hide="tasks.mine.loading">
         <p ng-hide="tasks.mine.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <div style="padding-top: 25px" class="well">
+          <label>
+            <input type="checkbox" ng-model="showFinishedTasks"><small>&nbsp;Toon gearchiveerde taken</small>
+          </label>
+        </div>
         <table ng-show="tasks.mine.list.length &gt; 0" class="table table-striped taskTable">
           <thead>
             <tr>
