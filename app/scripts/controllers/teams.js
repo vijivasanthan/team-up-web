@@ -494,7 +494,8 @@ define(
           {
             $scope.teamForm = {};
 
-            $scope.memberForm = getMemberForm();
+            $scope.memberForm = {};
+			$scope.memberForm.team = uuid;
 
             $scope.setViewTo('team');
           };
