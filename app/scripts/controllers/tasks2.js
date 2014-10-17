@@ -68,6 +68,19 @@ define(
               }
           };
 
+		  //change endTime by changing the startTime
+			$scope.$watch(function() {
+				return $scope.task.start.time;
+			}, function(newTime) {
+				$scope.task.end.time = updateTime(Date.parse(newTime), 15);
+			});
+
+			$scope.$watch(function() {
+				return $scope.task.start.date;
+			}, function(newDate) {
+				$scope.task.end.date = newDate;
+			});
+
           //check if a team of clientgroup is visited lately
           if(currentTeamClientGroup.team)
 		  {
@@ -122,7 +135,7 @@ define(
 
                 var delay = 0;
 
-                if (myTasks.length > 0 && myTasks.on || myTasks.off)
+                if (myTasks.on || myTasks.off)
                 {
                   $scope.tasks.mine = {
                     loading: false,
