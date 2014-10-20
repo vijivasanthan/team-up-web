@@ -36,7 +36,9 @@ define(
           //check if a team of clientgroup is visited lately
           if(currentTeamClientGroup.team)
 		  {
-              $scope.task.team = currentTeamClientGroup.team;
+			  $scope.task = {
+				 team: currentTeamClientGroup.team
+			  };
               $scope.currentTeam = currentTeamClientGroup.team;
           }
 
@@ -223,17 +225,33 @@ define(
 			var currentStartTime = updateTime(date, 15);
 			var currentEndTime = updateTime(date, 30);
 
-			$scope.task = {
-				team: $scope.teams[0].uuid,
-				start: {
-					date: currentDay,
-					time: currentStartTime
-				},
-				end: {
-					date: currentDay,
-					time: currentEndTime
-				}
+			if(! $scope.task)
+			{
+				$scope.task = {};
+			}
+
+			$scope.task.team = $scope.teams[0].uuid;
+			$scope.task.start = {
+			 		date: currentDay,
+				 	time: currentStartTime
+		 	};
+			$scope.task.end = {
+				 date: currentDay,
+					 time: currentEndTime
 			};
+
+
+//			$scope.task = {
+//				team: $scope.teams[0].uuid,
+//				start: {
+//					date: currentDay,
+//					time: currentStartTime
+//				},
+//				end: {
+//					date: currentDay,
+//					time: currentEndTime
+//				}
+//			};
 
 			//change endTime by changing the startTime
 			$scope.$watch(function() {
@@ -277,6 +295,7 @@ define(
 
           $scope.openTask = function (task)
           {
+			console.log(task);
             $scope.task = task;
 
 			if(task.assignedTeamUuid)

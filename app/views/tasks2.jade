@@ -65,9 +65,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				hr
 
-				//h4.pull-right Lid-informatie
 				dl
-					dt Naam
+					dt(ng-show='task.assignedTeamMember') Naam
 						dd
 							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
 									| {{task.assignedTeamMember.fullName}}
