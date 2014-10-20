@@ -42,8 +42,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{task.description}}
 					dt Gemaakt door
 						dd
-							a(href='#')
-								| {{task.authorUuid}}
+							span(ng-hide="author") {{ui.profile.authorInfo}}
+							a(href='index.html#/profile/{{task.authorUuid}}#profile')
+								| {{author}}
 
 				hr
 
@@ -55,11 +56,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								| {{task.relatedClient.fullName}}
 					dt Cliëntgroep
 						dd
-							a(href='#')
-								| {{task.clientGroupUuid}}
+							a(href='index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client')
+								| {{task.relatedClient.clientGroupName}}
 					dt Adres
-						dd
-							a(href='#') {{task.relatedClient.fullAddress}}
+						dd {{task.relatedClient.fullAddress}}
 					dt Telefoon
 						dd {{task.relatedClient.phone}}
 
@@ -69,12 +69,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				dl
 					dt Naam
 						dd
-							a(href='#')
-								| {{task.assignedTeamMemberUuid}}
+							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
+									| {{task.assignedTeamMember.fullName}}
 					dt Team
 						dd
-							a(href='#')
-								| {{task.assignedTeamUuid}}
+							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
+								| {{task.assignedTeamFullName}}
 
 
 			//.modal-footer
@@ -150,7 +150,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress'  aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 							td
 								span.taskIcon.icon-time(aria-hidden='true')
@@ -225,7 +225,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								span.taskIcon.icon-location4(aria-hidden='true', data-icon='')
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 								br
 								span.taskIcon.icon-time(aria-hidden='true')
@@ -241,7 +241,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								ng-show='task.assignedTeamMember'
 								)
 							td
-								a(href='')
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
 									| {{task.assignedTeamMember.fullName}}
 							td
 								.pull-right

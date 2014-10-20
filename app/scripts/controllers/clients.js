@@ -10,6 +10,7 @@ define(
         '$scope',
         '$location',
         'Clients',
+        'Teams',
         'data',
         '$route',
         '$routeParams',
@@ -19,13 +20,11 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $scope, $location, Clients, data, $route, $routeParams, Store, Dater,
+        function ($rootScope, $scope, $location, Clients, Teams, data, $route, $routeParams, Store, Dater,
                   $filter, $modal, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
-
           // $rootScope.notifier.success('test message');
-
           if (data.clientId)
           {
             data.clientGroups = Store('app').get('ClientGroups');
@@ -104,11 +103,16 @@ define(
           }
           else if (! params.uuid)
           {
-            uuid = data.clientGroups[0].id;
+			  //check the link between team and clientGroup and set the clientGroup
+			  if(! (Store('app').get('currentTeamClientGroup')).clientGroup) {
+				  saveLastVisitedClientGroup(data.clientGroups[0].id);
+			  }
+
+            uuid = (Store('app').get('currentTeamClientGroup')).clientGroup;
 
             view = $location.hash();
 
-            $location.search({ uuid: data.clientGroups[0].id });
+            $location.search({ uuid: uuid });
           }
           else
           {
@@ -277,9 +281,25 @@ define(
             }
           }
 
+          var teamsLocal = Teams.queryLocal();
+          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+
+          //save the last visited clientgroup - team by id, so that it will be the default
+          function saveLastVisitedClientGroup(clientGroupId)
+          {
+              var teamId = (_.invert(teamClientLocal))[clientGroupId];
+
+              Store('app').save(
+                  'currentTeamClientGroup',{
+                      team: teamId,
+                      clientGroup: clientGroupId
+                  });
+          };
+
           $scope.requestClientGroup = function (current, switched)
           {
             setClientView(current);
+            saveLastVisitedClientGroup(current);
 
             $scope.$watch(
               $location.search(),
@@ -605,6 +625,18 @@ define(
           // update client infomation
           $scope.clientChange = function (client)
           {
+			//todo client address must be required in the client form
+		  	if(client.address) {
+				if
+				(
+					! client.address.city && ! client.address.country && ! client.address.latitude && ! client.address.longitude
+					&& ! client.address.street && ! client.address.zip
+				)
+				{
+					client.address = null;
+				}
+			}
+
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
             try
@@ -619,6 +651,8 @@ define(
 
               return;
             }
+
+
 
             TeamUp._(
               'clientUpdate',
@@ -705,6 +739,7 @@ define(
                     contact.phone == _contact.phone)
                 {
                   $scope.contacts.splice(i, 1);
+				  angular.element('#confirmContactModal').modal('hide');
                 }
               }
             );
@@ -719,6 +754,18 @@ define(
               }
             );
           };
+
+		  $scope.confirmationRemoveContact = function(contact) {
+			  $timeout(
+				  function ()
+				  {
+					  $scope._contact = contact;
+
+					  angular.element('#confirmContactModal').modal('show');
+				  }
+			  );
+		  }
+
 
           $scope.deleteClientGroup = function ()
           {
@@ -869,7 +916,6 @@ define(
             // add new report, send systemm message at the same time. 
             $scope.saveReport = function (report)
             {
-              console.log(report);
               if (report.editMode)
               {
 

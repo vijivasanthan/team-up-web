@@ -1,0 +1,180 @@
+.SheetDiv {
+  display:inline-block;
+  border:1px solid gray;
+  width:200px;
+  padding:10px;
+  background-color:#e3e3e3;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  margin:1px;
+  cursor:pointer;
+}
+
+#drop {
+  border:2px dashed #bbb;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  padding-top:100px;
+  padding-bottom:100px;
+  text-align:center;
+  font:20pt bold,"Vollkorn";
+  color:#bbb;
+}
+
+.SheetDiv:hover {
+  background-color:#c3c3c3;
+}
+
+.SheetDayDiv {
+  border:1px solid green;
+  background-color:#1dc8b6;
+  color:white;
+  float:left;
+  margin:3px;
+}
+
+.SheetDayDiv h3 {
+  text-align:center;
+  text-transform:capitalize;
+  line-height:normal;
+  margin:2px;
+}
+
+.SheetDayDateDiv {
+  text-align:center;
+  font-size:11px;
+  line-height:normal;
+}
+
+.SheetRouteDiv {
+  padding:1px;
+  margin:2px;
+  background-color:white;
+  min-height:200px;
+  max-width:240px;
+  color:#833c11;
+}
+
+.SheetRouteDiv h4 {
+  text-align:center;
+  text-transform:capitalize;
+}
+
+.SheetTaskDiv {
+  width:100%;
+  overflow:auto;
+}
+
+.SheetTaskStartDiv {
+  //display:inline-block;
+  float:left;
+  width:50px;
+}
+
+.SheetTaskClientDiv {
+  //display:inline-block;
+  float:left;
+  width:134px;
+  background-color:#eeeeee;
+}
+
+#UploadStepShowErrors p span {
+  color:red;
+}
+
+.SheetTaskDurationDiv {
+  display:inline-block;
+  width:30px;
+  text-align:right;
+  min-height:10px;
+}
+
+.SheetRouteTeamMemberDiv {
+  width:100%;
+	min-height:10px;
+}
+
+.SheetRouteTeamMemberNameDiv {
+	float:left;
+	width:190px;
+}
+
+.SheetTaskToggleDiv {
+  float:right;
+  width:16px;
+  text-align:center;
+}
+
+.SheetRouteTeamMemberToggleDiv {
+  float:right;
+  width:16px;
+  text-align:center;
+}
+
+.proceedButton {
+  width:200px
+}
+
+#UploadStepCheckStructure {
+  width:2000px;
+}
+
+#UploadStepCheckTeamMemberNames form fieldset div label {
+  width:200px;
+}
+
+#UploadStepCheckTeamMemberNames form fieldset div select {
+  width:300px;
+}
+
+#UploadStepCheckClientNames form fieldset div label {
+  width:200px;
+}
+
+#UploadStepCheckClientNames form fieldset div select {
+  width:300px;
+}
+
+#UploadStepTaskCreateResult form fieldset input {
+  width:20px;
+}
+
+.dayRow {
+	border:1px solid;
+}
+
+.routeRow {
+	margin-left:20px;
+	border:1px solid;
+	min-height:20px;
+}
+
+.taskRowUploadStatus {
+	width:50px;
+	float:left;
+	min-height:10px;
+}
+
+.taskRowUploadStatus.taskFailed {
+	color:red;
+}
+
+.taskRowUploadStatus.taskSuccess {
+  	color:green;
+}
+
+.taskRowStart {
+	width:50px;
+	float:left;
+}
+
+.taskRowEnd {
+	width:50px;
+	float:left;
+}
+
+.taskRowClient {
+	min-height:20px;
+}

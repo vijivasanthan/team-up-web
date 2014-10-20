@@ -212,7 +212,9 @@ define(
           {
             // query my tasks
             TeamUp._("taskMineQuery").then(
-              function (result) { Store('app').save('myTasks', result) }
+                function (result) { 
+                  Store('app').save('myTasks', result) 
+                }
             );
 
             // query unassigned tasks from each team

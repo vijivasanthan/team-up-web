@@ -38,6 +38,9 @@ define(
           $scope.profilemeta = data;
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
 
+		  //temp userdata will be saved after pressing save
+		  $scope.profile = angular.copy($scope.profilemeta);
+
           $scope.currentRole = $scope.profilemeta.role;
 
           // TODO: Investigate whether they are in use!
@@ -70,6 +73,7 @@ define(
               $scope.selectTeams,
               function (team)
               {
+				//remove the temp session storage
                 if (team.uuid == sessionStorage.getItem(data.uuid + '_team'))
                 {
                   teams.push(team);
@@ -218,6 +222,11 @@ define(
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
+						$scope.profileMeta = angular.copy(resources);
+
+						$rootScope.app.resources.firstName = $scope.profileMeta.firstName;
+						$rootScope.app.resources.lastName = $scope.profileMeta.lastName;
+
                         $scope.data = data;
 
                         $rootScope.statusBar.off();
@@ -282,43 +291,56 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-            TeamUp._(
-              'memberDelete',
-              { third: $scope.profilemeta.uuid }
-            ).then(
-              function (result)
-              {
-                if (result.uuid)
-                {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+			var currentTeam;
 
-                  angular.forEach(
-                    $scope.profilemeta.teamUuids, function (teamId, i)
-                    {
-                      $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+			angular.forEach($scope.teams , function(team) {
 
-                      Teams.query(
-                        false,
-                        { 'uuid': teamId }
-                      ).then(
-                        function () { $rootScope.statusBar.off() }
-                      );
-                    });
+				TeamUp._(
+				  'teamMemberDelete',
+				  { second: team.uuid },
+				  { ids: [$scope.profilemeta.uuid] }
+				).then(
+					  function (result)
+					  {
+						  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                  TeamUp._('teamMemberFree')
-                    .then(
-                    function (result)
-                    {
-                      Store('app').save('members', result);
+						  angular.forEach($scope.profilemeta.teamUuids, function(teamId , i)
+						  {
+							  if(team.uuid == teamId)
+							  {
+								  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                      $rootScope.statusBar.off();
-                    },
-                    function (error) { console.log(error) }
-                  );
-                }
-              }, function (error) { console.log(error) }
-            );
+								  Teams.query(
+									  false,
+									  { 'uuid': teamId }
+								  ).then(
+									  function () { $rootScope.statusBar.off() }
+								  );
+
+								  $scope.profilemeta.teamUuids.splice(i, 1);
+								  $scope.teams.splice(i, 1);
+								  sessionStorage.removeItem(data.uuid + '_team');
+								  Teams.updateMembersLocal();
+							  }
+						  });
+					  }, function (error) { console.log(error) }
+				  );
+
+				//update list of members
+				TeamUp._('teamMemberFree')
+					.then(
+					function (result)
+					{
+						Store('app').save('members', result);
+
+						$rootScope.statusBar.off();
+					},
+					function (error) { console.log(error) }
+				);
+
+			});
           };
+
         }
       ]
     );

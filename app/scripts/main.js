@@ -7,6 +7,7 @@ if (window.location.port == '8080')
 
 require.config(
   {
+    waitSeconds: 100,
     paths: {
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
@@ -26,7 +27,7 @@ require.config(
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      moment: '../vendors/momentjs/min/moment.min',
+      moment: '../vendors/momentjs/min/moment-with-langs.min',
 
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
@@ -65,7 +66,11 @@ require.config(
       // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
       // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
-      'locale_nl': 'i18n/angular-locale_nl'
+      'locale_nl': 'i18n/angular-locale_nl',
+
+      // jszip: '../vendors/js-xlsx/jszip',
+      // xlsx: '../vendors/js-xlsx/xlsx'
+      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
     },
     shim: {
       date: { deps: [], exports: 'date' },
@@ -107,7 +112,11 @@ require.config(
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      'locale_nl': { deps: ['angular'] }
+      'locale_nl': { deps: ['angular'] },
+
+      // jszip: { exports: 'jszip' },
+      // xlsx: { deps: ['jszip'], exports: 'xlsx' }
+
     }
   }
 );
@@ -162,6 +171,7 @@ require(
     'controllers/timeline-navigation',
     'controllers/treegrid',
     'controllers/support',
+    'controllers/upload',
 
     'bootstrap',
     'lawnchair',
@@ -190,6 +200,10 @@ require(
     // 'angular-dragdrop',
     // 'ui-sortable',  
     'locale_nl',
+
+    // 'jszip',
+    // 'xlsx'
+    'clj-fuzzy',
   ],
   function (angular, domReady)
   {

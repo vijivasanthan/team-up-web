@@ -1,0 +1,128 @@
+<div class="page-header">
+  <h2>Upload</h2>
+</div>
+<div class="tabbable tabs-left">
+  <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+    <li class="active"><a data-toggle="tab"><span data-icon="" aria-hidden="true" class="icomoon"></span>Upload</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="upload" class="tab-pane active">
+      <div id="UploadProgressBar">
+        <p id="breadcrumb">Bestand kiezen</p>
+      </div>
+      <div id="UploadStepSelectFile" ng-show="step === &quot;SelectFile&quot;">
+        <div class="tab-header">
+          <h3 class="pull-left">Bestand kiezen	</h3>
+        </div>
+        <hr>
+        <div style="display:none">Output Format:
+          <select name="format">
+            <option value="csv" selected="selected"> CSV</option>
+            <option value="json"> JSON</option>
+            <option value="form" selected="selected"> FORMULAE</option>
+          </select><br>
+        </div>
+        <p>Bestand kiezen:
+          <input id="xlf" type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)">
+        </p>
+        <div id="drop" ondragover="angular.element(this).scope().handleDragover(event)" ondragenter="angular.element(this).scope().handleDragenter(event)" ondrop="angular.element(this).scope().handleDrop(event)">Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.</div>
+        <div style="display:none">Advanced Demo Options:
+          <!-- br-->
+          <!-- | Use Web Workers: (when available)-->
+          <!-- input(type='checkbox', name='useworker', checked='')--><br>Use Transferrables: (when available)
+          <input type="checkbox" name="xferable" checked="checked"><br>Use readAsBinaryString: (when available)
+          <input type="checkbox" name="userabs" checked="checked"><br>
+        </div>
+      </div>
+      <div id="UploadStepCheckNames" ng-show="step === &quot;CheckNames&quot;">
+        <div class="tab-header">
+          <h3 class="pull-left">Namen controleren</h3>
+        </div>
+        <hr>
+        <button ng-click="uploadStepConfirmNames()" class="proceedButton">Verder gaan</button>
+        <div id="UploadStepCheckTeamMemberNames">
+          <h4>Team Leden</h4>
+          <form>
+            <fieldset>
+              <div ng-repeat="matchedPerson in matchedTeamMembersByName">
+                <label>{{ matchedPerson.originalName }}</label><span>
+                  <select ng-model="matchedPerson.person" ng-options="alternative.person as alternative.person.fullName + ' (' + (alternative.score * 100).toFixed() + '%)' for alternative in matchedPerson.alternatives"></select></span>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div id="UploadStepCheckClientNames">
+          <h4>Cli&euml;nten</h4>
+          <form>
+            <fieldset>
+              <div ng-repeat="matchedPerson in matchedClientsByName">
+                <label>{{ matchedPerson.originalName }}</label><span>
+                  <select ng-model="matchedPerson.person" ng-options="alternative.person as alternative.person.fullName + ' (' + (alternative.score * 100).toFixed() + '%)' for alternative in matchedPerson.alternatives"></select></span>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+      <div id="UploadStepSelectSheet" ng-show="step === &quot;SelectSheet&quot;">
+        <div class="tab-header">
+          <h3 class="pull-left">Week kiezen</h3>
+        </div>
+        <hr>
+        <div ng-repeat="sheetName in sheetNames" ng-click="selectSheet(sheetName)" class="SheetDiv">{{ sheetName }}</div>
+      </div>
+      <div id="UploadStepCheckStructure" ng-show="step === &quot;CheckStructure&quot;">
+        <div class="tab-header">
+          <h3 class="pull-left">Routes controleren</h3>
+        </div>
+        <hr>
+        <button ng-click="uploadStepCheckNames()" class="proceedButton">Verder gaan</button>
+        <div id="UploadStepShowErrors" ng-show="tuSheet.errors.length &gt; 0">
+          <h3>Fouten</h3>
+          <p ng-repeat="error in tuSheet.errors">Foutcode {{ error.code + ": "}}<span>{{ error.text }}</span></p>
+        </div>
+        <div id="UploadStepShowRoutes">
+          <div ng-repeat="day in tuSheet.days" class="SheetDayDiv">
+            <h3>{{ day.startDate | date: 'EEEE' }}</h3>
+            <div class="SheetDayDateDiv">{{ day.startDate | date: 'longDate' }}</div>
+            <div ng-repeat="route in day.routes" class="SheetRouteDiv">
+              <h4>{{ route.name }}</h4>
+              <div class="SheetRouteTeamMemberDiv">
+                <div class="SheetRouteTeamMemberNameDiv"><span>Teamlid: <span>{{ route.teamMemberName ? route.teamMemberName : "niemand" }}</span></span></div>
+                <div class="SheetRouteTeamMemberToggleDiv">
+                  <input type="checkbox" ng-model="route.doInsert" ng-change="toggleRouteInsert()">
+                </div>
+              </div>
+              <div ng-repeat="task in route.tasks" class="SheetTaskDiv">
+                <div class="SheetTaskStartDiv">{{ task.backendTask.plannedStartVisitTime | date: 'shortTime'  }}</div>
+                <div class="SheetTaskClientDiv">{{ task.clientName ? ( task.client ? ( task.client.fullName + " (" + (task.clientScore * 100).toFixed() + "%)" ) : task.clientName ) : "niemand" }}</div>
+                <div class="SheetTaskDurationDiv">{{ task.duration }}</div>
+                <div class="SheetTaskToggleDiv">
+                  <input type="checkbox" ng-model="task.doInsert">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="UploadStepCreateTasks" ng-show="step === &quot;CreateTasks&quot;">
+        <div class="tab-header">
+          <h3 class="pull-left">Taken aanmaken</h3>
+        </div>
+        <hr>
+        <div ng-repeat="day in tuSheet.days" class="dayRow">{{ day.startDate | date: 'fullDate' }}
+          <div ng-repeat="route in day.routes | filter: { doInsert: true }" class="routeRow">{{ route.teamMember.firstName }}
+            <div ng-repeat="task in route.tasks | filter: { doInsert: true }" class="taskRow">
+              <div ng-class="{ taskFailed: task.uploadStatus === 'failed' , taskSuccess: task.uploadStatus === 'success' }" class="taskRowUploadStatus">{{ textForTaskUploadStatus(task.uploadStatus) }}</div>
+              <div class="taskRowStart">{{ task.backendTask.plannedStartVisitTime | date: 'shortTime' }}</div>
+              <div class="taskRowEnd">{{ task.backendTask.plannedEndVisitTime | date: 'shortTime' }}</div>
+              <div class="taskRowClient">{{ task.client.fullName }}</div>
+            </div>
+          </div>
+        </div>
+        <h3>Fouten</h3>
+        <p ng-repeat="error in taskCreateErrors">Foutcode {{ error.code + ": "}}<span>{{ error.text }}</span></p>
+      </div>
+      <pre id="out"></pre><br>
+    </div>
+  </div>
+</div>

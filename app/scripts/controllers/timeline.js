@@ -6,8 +6,8 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$route', '$window', 'Dater', 'TeamUp', 'Store',
-        function ($rootScope, $scope, $q, $location, $route, $window, Dater, TeamUp, Store)
+        '$rootScope', '$scope', '$q', '$location', '$timeout', '$route', '$window', 'Dater', 'TeamUp', 'Store',
+        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store)
         {
           var range, diff;
 
@@ -109,7 +109,7 @@ define(
             getRange: function () { $scope.timelineGetRange() },
 
             onAdd: function () { $scope.timelineOnAdd() },
-
+			//todo remove after confirmation, (removes the row already before the confirmation ended)
             onRemove: function () { $scope.timelineOnRemove() },
 
             onChange: function () { $scope.timelineChanging() },
@@ -166,7 +166,7 @@ define(
 
                           var slotContent = '';
 
-                          if (typeof relatedUser != 'undefined')
+                          if (relatedUser != null)
                           {
                             slotContent = relatedUser.firstName + ' ' + relatedUser.lastName;
                           }
@@ -1064,11 +1064,24 @@ define(
             );
           };
 
+
+		  $scope.confirmDeleteTask = function ()
+			{
+				$timeout(
+					function ()
+					{
+						angular.element('#confirmTaskModal').modal('show');
+					}
+				);
+		  };
+
           $scope.timelineOnRemove = function ()
           {
             $rootScope.planboardSync.clear();
 
-            if ($scope.timeliner.isAdded() > 0)
+			angular.element('#confirmTaskModal').modal('hide');
+
+			if ($scope.timeliner.isAdded() > 0)
             {
               $scope.self.timeline.cancelAdd();
 
@@ -1078,6 +1091,7 @@ define(
             }
             else
             {
+			  console.log($scope.self.timeline.getSelection());
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                   content = $scope.getSlotContentJSON(selected.content),
                   memberId = angular.element(selected.group).attr('memberId');

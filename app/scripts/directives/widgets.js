@@ -45,7 +45,7 @@ define(
               '$scope', '$rootScope', 'Session' ,
               function ($scope, $rootScope, Session)
               {
-                $scope.progress = 0;
+                $scope.progress = 0 + '%';
                 $scope.avatar = '';
                 $scope.uploadLabel = $rootScope.ui.profile.click2upload;
 
@@ -68,7 +68,7 @@ define(
                   $form.attr('action', $scope.action);
 
                   $scope.$apply(
-                    function () { $scope.progress = 0 }
+                    function () { $scope.progress = 0 + '%' }
                   );
 
                   $form.ajaxSubmit(
@@ -80,14 +80,16 @@ define(
                       uploadProgress: function (event, position, total, percentComplete)
                       {
                         $scope.$apply(
-                          function () { $scope.progress = percentComplete;}
+                          function () {
+							  $scope.progress = percentComplete + '%';
+						  }
                         );
                       },
                       error: function (event, statusText, responseText, form)
                       {
                         $form.removeAttr('action');
 
-                        console.log('response : ', responseText);
+                        //console.log('response : ', responseText);
                       },
                       success: function (responseText, statusText, xhr, form)
                       {
@@ -100,34 +102,44 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
+							  var avatarType = '';
+							  var avatarTagStyle = $('.roundedPicLarge').attr('style');
+							  var size = 0,
+								  id,
+								  type,
+								  message;
 
-                            console.log($scope, $scope.$parent.data.uuid);
+							  try
+							  {
+								  size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
+							  }
+							  catch (e)
+							  {
+								  console.log(e);
+							  }
 
-                            if ($scope.$parent.data.clientId)
-                            {
-                              $scope.$parent.$root.avatarChange($scope.$parent.data.clientId);
-                            }
-                            else if ($scope.$parent.data.uuid)
-                            {
-                              $scope.$parent.$root.avatarChange($scope.$parent.data.uuid);
-                            }
+							  if ($scope.$parent.data.clientId)
+                              {
+							    id = $scope.$parent.data.clientId;
+							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+                              	type = 'client';
 
-                            var avatarType = '';
-                            var avatarTagStyle = $('.roundedPicLarge').attr('style');
-                            var size = 0;
-                            try
-                            {
-                              size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
-                            }
-                            catch (e)
-                            {
-                              console.log(e);
-                            }
+                              }
+                              else if ($scope.$parent.data.uuid)
+                              {
+						        id = $scope.$parent.data.uuid;
+							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+							    type = 'team';
+                              }
 
-                            var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes($scope.$parent.data.uuid);
-                            var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+							  $scope.$parent.$root.avatarChange(id);
+							  $rootScope.notifier.success(message);
+							  $rootScope.showChangedAvatar(type, id);
 
-                            $('.roundedPicLarge').attr('style', newStyle);
+							  var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes(id);
+                              var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+
+                              $('.roundedPicLarge').attr('style', newStyle);
                           }
                         );
                       }
@@ -208,6 +220,9 @@ define(
       {
         return function (scope, element, attrs)
         {
+//			console.log(element.parent('a'));
+//			console.log('attrs-> ', attrs);
+//			console.log('attrs->backImg-> ', attrs.backImg);
           var url = attrs.backImg;
           element.css(
             {

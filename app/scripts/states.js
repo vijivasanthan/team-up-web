@@ -169,6 +169,10 @@ define(
                 $location.path('/support').search({}).hash('');
                 break;
 
+              case 'upload':
+                $location.path('/upload').search({}).hash('');
+                break
+
               case 'profile':
                 $location.path('/profile').search({local: 'true'}).hash('');
                 break;

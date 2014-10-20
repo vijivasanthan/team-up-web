@@ -27,10 +27,10 @@ define(
                 task.statusLabel = config.app.taskStates[task.status];
 
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                if(task.relatedClient == null)
+                  task.relatedClient = { firstName:"*", lastName: "Niet gevonden" };
 
-                task.relatedClient.fullName = task.relatedClient.firstName +
-                                              ' ' +
-                                              task.relatedClient.lastName;
+                task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
 
                 if (task.relatedClient.address != null)
                 {
@@ -173,16 +173,25 @@ define(
                 tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
-                var merged = {on: {}, off: {}};
+
+                var merged = {on: [], off: []};
                 if (tasks.length > 0 ) {
                    var grouped = _.groupBy(tasks, function (task) {
                             return task.status
                         });
-                   if(grouped[1]!=null && grouped[2]!=null) {
-                       merged = { on: grouped[1].concat(grouped[2]) };
+
+                   if(grouped[1]!=null)  {
+                        merged.on = merged.on.concat(grouped[1]);
                    }
-                   if(grouped[3]!=null && grouped[4]!=null) {
-                       merged = { off: grouped[3].concat(grouped[4]) };
+                   if(grouped[2]!=null) {
+                        merged.on = merged.on.concat(grouped[2]);
+                   }
+
+                   if(grouped[3]!=null) {
+                        merged.off = merged.off.concat(grouped[3]);
+                   }
+                   if(grouped[4]!=null) {
+                        merged.off = merged.off.concat(grouped[4]);
                    }
                 }
 

@@ -262,13 +262,15 @@ define(
           firstName: 'Voornaam',
           lastName: 'Achternaam',
           editProfileImg: 'Profielfoto wijzigen',
+		  profileImgSuccessfullyUploaded: 'De profielfoto is succesvol geüpload.',
           loadUploadURL: 'Foto upload URL laden',
           click2upload: 'Klik hier om te uploaden',
           birthday: 'Geboortedatum',
           username: 'Gebruikersnaam',
           retypePassword: 'Herhaal wachtwoord',
           roleChangePrompt: 'Je verandert je eigen rol. Het systeem zal hierdoor automatisch uitloggen. Druk op "Ok" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
-          specifyTeam: 'Selecteer een team voor deze gebruiker.'//'You need to sepcify a team to this user'
+          specifyTeam: 'Selecteer een team voor deze gebruiker.',//'You need to sepcify a team to this user'
+		      authorInfo: 'Auteurinfo laden...'
         },
         settings: {
           settings: 'Instellingen',
@@ -382,6 +384,8 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
+			deleteMemberFromTeamTitle: 'Ontkoppel het profiel van het team',
+			deleteMemberFromTeam: 'Weet u zeker dat u het profiel van het team wilt ontkoppelen',
             deleteMemberTitle: 'Verwijderen lid',
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
@@ -389,7 +393,9 @@ define(
             deleteTeamTitle: 'Verwijderen team',
             deleteTeam: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
             deleteTaskTitle: 'Verwijderen taak',
-            deleteTask: 'Weet u zeker dat u het taak wilt verwijderen?',
+            deleteTask: 'Weet u zeker dat u de taak wilt verwijderen?',
+			deleteContactTitle: 'Verwijder contact',
+		    deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
             cancel: 'Annuleren'
           },

@@ -12,6 +12,7 @@ define(
         'Session',
         'Store',
         '$window',
+        '$filter',
         'Teams',
         'Offline',
         'States',
@@ -19,7 +20,7 @@ define(
         'Dater',
         'TeamUp',
         function (
-          $rootScope, $location, $timeout, Session, Store, $window, Teams, Offline, States, Browsers, Dater, TeamUp
+          $rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp
           )
         {
           // TODO: Remove later on (Needed for timeline info filters)
@@ -248,7 +249,7 @@ define(
                     Store('app').get(group.id),
                     function (client)
                     {
-                      if (client.uuid = clientId)
+                      if (client.uuid == clientId)
                       {
                         result = client;
 
@@ -434,6 +435,34 @@ define(
               }
             );
           };
+
+		//todo prevent team members from changing eachothers picture
+		$rootScope.showChangedAvatar = function(type, id)
+		 {
+			var url = $filter('avatar')(id, type, '80'),
+				elements = [];
+
+			if(type == 'team')
+			{
+				//check if id is equal with the logged user id
+				if(id == $rootScope.app.resources.uuid)
+				{
+					elements.push('.profile-avatar');
+				}
+				elements.push('.team-avatar');
+			}
+			else
+			{
+				elements.push('.client-avatar');
+			}
+
+			angular.forEach(elements, function(element, i) {
+				angular.element(element).css({
+					'background': 'url(' + url + ')',
+					'background-size': 'cover'
+				});
+			});
+		  };
 
           // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
           // Trick browser for avatar url change against caching
