@@ -657,7 +657,8 @@ define(
 
             function ownTeamUuid () {
               //JSON.parse(localStorage['teams.own']).value[0].uuid;
-              return JSON.parse(localStorage['teams.own']).value[0].uuid;
+              //return JSON.parse(localStorage['teams.own']).value[0].uuid;
+              return '88adfa02-e242-4564-890c-b20192ea6c1a_team';
             };
 
             this.matchTeamMembers = function matchTeamMembers() {
