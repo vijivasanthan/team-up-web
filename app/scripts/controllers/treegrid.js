@@ -10,6 +10,7 @@ define(
         '$rootScope', '$scope', '$window',
         function ($rootScope, $scope, $window)
         {
+		  var lastSelected = null;
           $scope.treeGrid = {
 
             options: {
@@ -81,7 +82,10 @@ define(
               links.events.addListener(
                 this.grids[key],
                 'select',
-                function (properties) { console.log('selecting ->', key, properties) }
+                function (properties) {
+					console.log('selecting ->', key, properties);
+					lastSelected = properties.items[0];
+				}
               );
 
               links.events.addListener(
@@ -275,10 +279,25 @@ define(
                 {
                   angular.forEach(
                     _this.stores[key].data,
-                    function (data) { data._parent = key }
+                    function (data) {
+						data._parent = key;
+					}
                   );
 
                   _this.caches[key] = _this.stores[key].data;
+
+				  //temp solution so a client or teammember can't be in two teams or clientgroups
+				  if(lastSelected != null)
+				  {
+					  var currentView = ($scope.views.clients) ? 'clients_left' : 'teams_left';
+					  _this.stores[currentView].data.splice
+					  (
+						  _this.stores[currentView].data.indexOf(lastSelected)
+						  , 1
+					  );
+
+					  lastSelected = null;
+				  }
                 }
               );
 
@@ -474,7 +493,7 @@ define(
               $scope.treeGrid.type = arguments[2];
               $scope.treeGrid.data = arguments[3];
               $scope.treeGrid.connections = arguments[4];
-
+				console.log();
               (function ($scope)
               {
                 setTimeout(

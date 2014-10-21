@@ -332,6 +332,8 @@ define(
                                 _parent: section + key
                               }
                             );
+							//temp solution so a client or teammember can't be in two teams or clientgroups
+							data.splice(node, 1);
                           }
                         }
                       );
@@ -356,7 +358,7 @@ define(
             {
               this.connections.clients = {};
 
-              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_');
+              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_')
 
               return this.connections;
             }
