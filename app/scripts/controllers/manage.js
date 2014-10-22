@@ -305,7 +305,7 @@ define(
               return this.connections;
             },
 
-            populate: function (connections, data, section)
+            populate: function (connections, currentData, section)
             {
               var population = {};
 
@@ -320,7 +320,7 @@ define(
                     function (kid)
                     {
                       angular.forEach(
-                        data,
+						currentData,
                         function (node)
                         {
                           if (node.id == kid)
@@ -332,8 +332,6 @@ define(
                                 _parent: section + key
                               }
                             );
-							//temp solution so a client or teammember can't be in two teams or clientgroups
-							data.splice(node, 1);
                           }
                         }
                       );
@@ -341,7 +339,6 @@ define(
                   );
                 }
               );
-
               return population;
             },
 
@@ -357,7 +354,7 @@ define(
             clients: function ()
             {
               this.connections.clients = {};
-
+				//console.log('clients', data.clients);
               this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_')
 
               return this.connections;
