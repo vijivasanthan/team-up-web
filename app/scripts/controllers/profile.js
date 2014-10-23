@@ -36,6 +36,7 @@ define(
           $scope.noImgURL = config.app.noImgURL;
 
           $scope.profilemeta = data;
+
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
 
 		  //temp userdata will be saved after pressing save
@@ -50,37 +51,7 @@ define(
           var teams = [];
           $scope.selectTeams = Store('app').get('teams');
 
-          angular.forEach(
-            $scope.profilemeta.teamUuids,
-            function (teamId)
-            {
-              angular.forEach(
-                $scope.selectTeams,
-                function (team)
-                {
-                  if (team.uuid == teamId)
-                  {
-                    teams.push(team);
-                  }
-                }
-              );
-            }
-          );
-
-          if (teams.length == 0)
-          {
-            angular.forEach(
-              $scope.selectTeams,
-              function (team)
-              {
-				//remove the temp session storage
-                if (team.uuid == sessionStorage.getItem(data.uuid + '_team'))
-                {
-                  teams.push(team);
-                }
-              }
-            );
-          }
+		  var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
 
           $scope.teams = teams;
 

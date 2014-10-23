@@ -306,9 +306,12 @@ define(
           };
 
 		  TeamsService.prototype.checkLoggedUserTeamsLocal = function(changedUsers, teamId) {
+
 			 angular.forEach(changedUsers, function(user) {
+
 				 if(user == $rootScope.app.resources.uuid)
 				 {
+
 				 	var userResources = Store('app').get('resources'),
 						indexTeam = userResources.teamUuids.indexOf(teamId);
 

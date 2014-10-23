@@ -76,7 +76,6 @@ define(
             off: function () { $rootScope.loading.status = false }
           };
 
-
           /**
            * Notification
            */
@@ -219,6 +218,37 @@ define(
 
             return member;
           };
+
+		  // Get teams of a member
+		  $rootScope.getTeamsofMembers = function (memberId)
+		  {
+			if (memberId == null)
+			{
+				return null;
+			}
+
+			var currentTeams = [];
+
+			angular.forEach(
+				Store('app').get('teams'),
+				function (team)
+				{
+					angular.forEach(
+						Store('app').get(team.uuid),
+						function (_member)
+						{
+							console.log(_member);
+							if (_member.uuid == memberId)
+							{
+								currentTeams.push(team);
+							}
+						}
+					);
+				}
+			);
+
+			return currentTeams;
+		  };
 
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
@@ -525,7 +555,6 @@ define(
 
             return ret;
           };
-
         }
       ]
     );
