@@ -1,0 +1,1509 @@
+{
+  "application": {
+    "resources": {
+      "resource": [
+        {
+          "-path": "/team",
+          "method": {
+            "-name": "POST",
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{team_uuid}/tasks",
+          "method": {
+            "-name": "GET",
+            "doc": "get the team's tasks",
+            "request": {
+              "param": [
+                {
+                  "-name": "team_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Task> team.getTasksByTeamId;"
+        },
+        {
+          "-path": "/team/tasks",
+          "method": {
+            "-name": "GET",
+            "doc": "get the team's tasks",
+            "request": {
+              "param": [
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Task> team.getTeamTasks;"
+        },
+        {
+          "-path": "/team/tasks",
+          "method": {
+            "-name": "DELETE",
+            "doc": "get the team's tasks",
+            "request": {
+              "param": [
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          },
+          "acs-dev": "java.util.Set<java.lang.String> team.deleteAllTasks;"
+        },
+        {
+          "-path": "/team/member",
+          "method": {
+            "-name": "POST",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member",
+          "method": {
+            "-name": "PUT",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/member/{memberId}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": [
+                {
+                  "-name": "teamId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "memberId",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member",
+          "method": {
+            "-name": "GET",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/{memberId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "memberId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/{memberId}",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": {
+                "-name": "memberId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/status/{teamId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/{memberId}/photo",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": [
+                {
+                  "-name": "memberId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "square",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/{memberId}/photo",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "memberId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "width",
+                  "-style": "query",
+                  "-type": "String"
+                },
+                {
+                  "-name": "height",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/{memberId}/photourl",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "memberId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/callTeam/{memberId}",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "memberId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/teamMessage",
+          "method": {
+            "-name": "POST",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/teamMessage/{teamId}",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/teamMessage/{teamId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "teamId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "since",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/teamMessage",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "namespace",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/phone/{phone}",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": [
+                {
+                  "-name": "teamId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "phone",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/phone",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/member/",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/removeMember/",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/unAssignClientGroups/",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/clientGroups",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/clientGroups",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/updateClientGroups",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}/updateMembers",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/teams",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "strict",
+                "-style": "query",
+                "-type": "boolean"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/{teamId}",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "strict",
+                "-style": "query",
+                "-type": "boolean"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/members",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "namespace",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/team/member/tasks/{memberId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "memberId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clientGroup/{clientGroupId}/teams",
+          "method": {
+            "-name": "GET",
+            "doc": "getTeams",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.Set<java.lang.String> clientGroup.getTeamsAssignedToGroup;"
+        },
+        {
+          "-path": "/clientGroup/{clientGroupId}",
+          "method": {
+            "-name": "GET",
+            "doc": "get the client group by client group ID",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "class com.askcs.commons.entity.teamup.ClientGroup clientGroup.getClientGroupById;"
+        },
+        {
+          "-path": "/clientGroup/{clientGroupId}/reports",
+          "method": {
+            "-name": "GET",
+            "doc": "get All the reports from specific client",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientGroupId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "limit",
+                  "-style": "query",
+                  "-type": "Integer"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.List<com.askcs.commons.entity.teamup.Report> clientGroup.getReportsByClientId;"
+        },
+        {
+          "-path": "/clientGroup/{clientGroupId}/tasks",
+          "method": {
+            "-name": "GET",
+            "doc": "get Tasks By Client GroupId",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientGroupId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "long"
+                },
+                {
+                  "-name": "type",
+                  "-style": "query",
+                  "-type": "int"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Task> clientGroup.getTasksByClientGroupId;"
+        },
+        {
+          "-path": "/clientGroup/{clientGroupId}",
+          "method": {
+            "-name": "DELETE",
+            "doc": "delete the client group by ID",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clientGroup",
+          "method": {
+            "-name": "POST",
+            "doc": "create client group. TODO: inspect logic on this one",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/callClient/{clientId}",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{clientId}/reports",
+          "method": {
+            "-name": "GET",
+            "doc": "get All the reports from specific client",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "limit",
+                  "-style": "query",
+                  "-type": "Integer"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Report> client.getReportsByClientId;"
+        },
+        {
+          "-path": "/client/clientGroups",
+          "method": {
+            "-name": "GET",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client",
+          "method": {
+            "-name": "POST",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/clientGroup/{clientGroupId}/clients",
+          "method": {
+            "-name": "GET",
+            "doc": "get clients by client groupID",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Client> client.getClientByGroup;"
+        },
+        {
+          "-path": "/client/{clientId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/{clientId}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/{clientId}",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/clientGroup/{clientGroupId}/clients",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/clientGroup/{clientGroupId}/removeClients",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "clientGroupId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/{filed}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "filed",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/{filed}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "filed",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/media",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/media",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "media_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "media_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/team/{teamId}",
+          "method": {
+            "-name": "GET",
+            "doc": "get clients by teamId",
+            "request": {
+              "param": {
+                "-name": "teamId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Client> client.getClientsByTeamId;"
+        },
+        {
+          "-path": "/client/callRelationOfClient/{phonenumber}",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "phonenumber",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/{clientId}/photo",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "square",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/{clientId}/photo",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "width",
+                  "-style": "query",
+                  "-type": "String"
+                },
+                {
+                  "-name": "height",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/{clientId}/photourl",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{clientId}/reports",
+          "method": {
+            "-name": "POST",
+            "request": {
+              "param": {
+                "-name": "clientId",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{clientId}/reports",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/clients/{client_uuid}/reports/{reportId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "client_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "reportId",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/clients",
+          "method": {
+            "-name": "GET",
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/client/tasks/{clientId}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "clientId",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "long"
+                },
+                {
+                  "-name": "type",
+                  "-style": "query",
+                  "-type": "int"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "*/*" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/team/{team_uuid}",
+          "method": {
+            "-name": "GET",
+            "doc": "get the team's tasks",
+            "request": {
+              "param": [
+                {
+                  "-name": "team_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Task> task.getTasksByTeamId;"
+        },
+        {
+          "-path": "/tasks/mine",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/{task_uuid}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": {
+                "-name": "task_uuid",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/{task_uuid}/{fieldName}",
+          "method": {
+            "-name": "GET",
+            "request": {
+              "param": [
+                {
+                  "-name": "task_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "fieldName",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/{task_uuid}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": {
+                "-name": "task_uuid",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/{task_uuid}/{fieldName}",
+          "method": {
+            "-name": "PUT",
+            "request": {
+              "param": [
+                {
+                  "-name": "task_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "fieldName",
+                  "-style": "path",
+                  "-type": "String"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/{task_uuid}",
+          "method": {
+            "-name": "DELETE",
+            "request": {
+              "param": {
+                "-name": "task_uuid",
+                "-style": "path",
+                "-type": "String"
+              }
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        },
+        {
+          "-path": "/tasks/team/{team_uuid}/{member_uuid}",
+          "method": {
+            "-name": "GET",
+            "doc": "get personal tasks ",
+            "request": {
+              "param": [
+                {
+                  "-name": "team_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "member_uuid",
+                  "-style": "path",
+                  "-type": "String"
+                },
+                {
+                  "-name": "statuses",
+                  "-style": "query",
+                  "-type": "String"
+                },
+                {
+                  "-name": "from",
+                  "-style": "query",
+                  "-type": "Long"
+                },
+                {
+                  "-name": "to",
+                  "-style": "query",
+                  "-type": "Long"
+                }
+              ]
+            },
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          },
+          "acs-dev": "java.util.Set<com.askcs.commons.entity.teamup.Task> task.getTeamMemberTasks;"
+        },
+        {
+          "-path": "/tasks",
+          "method": {
+            "-name": "POST",
+            "response": {
+              "representation": { "-mediaType": "application/json" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

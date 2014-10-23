@@ -1,0 +1,14 @@
+.page-header
+	h2 Admin
+
+.tabbable.tabs-left
+	select(ng-model="resourceType" ng-options="value.label for value in resourceTypes" ng-change="changedResourceType()")
+	select(ng-model="resourceType.action" ng-options="action.func for action in resourceType.actions" ng-change="changedAction()")
+	.resources(ng-repeat="resource in resources")
+		.resource
+			.resourceUuid {{ resource.uuid }}
+			.resourceName {{ resource.name }}
+
+	.singleResource(ng-repeat="(propertyKey, propertyValue) in resource")
+		.propertyName {{ propertyKey }}
+		.propertyValue {{ propertyValue }}

@@ -1,0 +1,36 @@
+.resource {
+	clear:both;
+}
+
+.resource div {
+	float:left;
+	border:1px solid black;
+}
+
+.resourceUuid {
+	width:320px;
+}
+
+.resourceName {
+	width:200px;
+}
+
+.singleResource {
+  clear:both;
+}
+
+.singleResource div {
+	float:left;
+	border:1px solid black;
+}
+
+.propertyName {
+	width:200px;
+}
+
+.propertyValue {
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space: nowrap;
+	max-width:400px;
+}

@@ -154,6 +154,12 @@ require(
 
     'modals/task',
 
+    'resources/ClientResource',
+    'resources/TeamMessageResource',
+    'resources/TeamResource',
+    'resources/TaskResource',
+    'resources/ClientGroupResource',
+
     'filters/avatars',
 
     'controllers/clients',
@@ -172,6 +178,7 @@ require(
     'controllers/treegrid',
     'controllers/support',
     'controllers/upload',
+    'controllers/admin',
 
     'bootstrap',
     'lawnchair',
