@@ -12,7 +12,9 @@ define(['services/services', 'config'],
                        },
                        "getTasks": {
                            "url": hostUrl + "/team/:teamUuid/tasks",
-                           "method": "GET"
+                           "method": "GET",
+                           isArray:true,
+                           uuidDestinationType:"Task"
                        },
                        "action0": {
                            "url": hostUrl + "/team/tasks",

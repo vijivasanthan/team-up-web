@@ -66,7 +66,7 @@ define(['controllers/controllers'], function(controllers) {
                 label: "/team",
                 value: 'team',
                 resource:TeamResource,
-                actions:[ ],
+                actions:[ ]
             };
             addActionsToOption($rootScope.teamResourceActions, teamOption);
 
@@ -85,10 +85,12 @@ define(['controllers/controllers'], function(controllers) {
                     fn({}, function (data) {
                         if (typeof data.unshift === "function") {
                             $scope.resources = data;
+                            $scope.uuidDestinationType = action.uuidDestinationType;
                             $scope.resource = null;
                         }
                         else {
                             $scope.resources = null;
+                            $scope.uuidDestinationType = action.uuidDestinationType;
                             $scope.resource = data;
                         }
                     });

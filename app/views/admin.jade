@@ -4,11 +4,15 @@
 .tabbable.tabs-left
 	select(ng-model="resourceType" ng-options="value.label for value in resourceTypes" ng-change="changedResourceType()")
 	select(ng-model="resourceType.action" ng-options="action.func for action in resourceType.actions" ng-change="changedAction()")
+	input(type="text" ng-model="parameter1")
 	.resources(ng-repeat="resource in resources")
 		.resource
-			.resourceUuid {{ resource.uuid }}
+			.resourceUuid
+				.plainUuid   {{ resource.uuid }}
+				a.linkedUuid(ng-show="uuidDestinationType") {{ resource.uuid }}
 			.resourceName {{ resource.name }}
 
 	.singleResource(ng-repeat="(propertyKey, propertyValue) in resource")
 		.propertyName {{ propertyKey }}
 		.propertyValue {{ propertyValue }}
+
