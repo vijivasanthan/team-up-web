@@ -5,14 +5,30 @@
 	select(ng-model="resourceType" ng-options="value.label for value in resourceTypes" ng-change="changedResourceType()")
 	select(ng-model="resourceType.action" ng-options="action.func for action in resourceType.actions" ng-change="changedAction()")
 	input(type="text" ng-model="parameter1")
-	.resources(ng-repeat="resource in resources")
+	button(ng-show="parameter1",
+			ng-click="parameter1 = ''") empty
+	p(ng-hide="resources.length > 0") loading resources
+	.resources(ng-hide="parameter1" ng-repeat="resource in resources")
 		.resource
 			.resourceUuid
-				.plainUuid   {{ resource.uuid }}
+				a.plainUuid(ng-click="showSingleResource(resource)")   {{ resource.uuid }}
 				a.linkedUuid(ng-show="uuidDestinationType") {{ resource.uuid }}
 			.resourceName {{ resource.name }}
+	hr
+	form(ng-show="parameter1")
+		.row
+			.span6
 
-	.singleResource(ng-repeat="(propertyKey, propertyValue) in resource")
-		.propertyName {{ propertyKey }}
-		.propertyValue {{ propertyValue }}
+				fieldset
+					.control-group(ng-repeat="(propertyKey, propertyValue) in resource")
+						label.control-label {{propertyKey}}
+						.controls
+							input.span4(type='text',
+							ng-model='resource[propertyKey]')
+							button(ng-click='resource[propertyKey] = null') make NULL
+					hr
+					.form-actions
+						button.btn.btn-success(type='submit',
+						ng-click='updateResource(resource)') {{ui.teamup.saveMember}}
+
 

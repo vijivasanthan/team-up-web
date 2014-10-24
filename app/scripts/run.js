@@ -237,7 +237,6 @@ define(
 						Store('app').get(team.uuid),
 						function (_member)
 						{
-							console.log(_member);
 							if (_member.uuid == memberId)
 							{
 								currentTeams.push(team);
@@ -341,7 +340,7 @@ define(
            * 2> find the groups belong to this team,
            * 3> get all the clients under the group
            */
-            // TODO: It is only called from planboard controller. Maybe move it to there?
+            // TODO: TODO change the clients.push FullName and name is the same
             // FIXME: It breaks down when the selected groups has no clientGroup on adding slot on timeline
           $rootScope.getClientsByTeam = function (teamIds)
           {
@@ -356,6 +355,7 @@ define(
                   Store('app').get('teamGroup_' + teamId),
                   function (teamGroup)
                   {
+
                     var members = Store('app').get(teamGroup.id);
 
                     if (members.length > 0)
@@ -373,6 +373,9 @@ define(
                             clients.push(
                               {
                                 uuid: member.uuid,
+								firstName: member.firstName,
+								lastName: member.lastName,
+								fullName: member.firstName + ' ' + member.lastName,
                                 name: member.firstName + ' ' + member.lastName
                               }
                             );

@@ -21,7 +21,6 @@ define(
         {
           $rootScope.fixStyles();
 
-
           $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash(),
@@ -228,9 +227,9 @@ define(
 			if(! $scope.task)
 			{
 				$scope.task = {};
+				$scope.task.team = $scope.teams[0].uuid;
 			}
 
-			$scope.task.team = $scope.teams[0].uuid;
 			$scope.task.start = {
 			 		date: currentDay,
 				 	time: currentStartTime
@@ -240,20 +239,7 @@ define(
 					 time: currentEndTime
 			};
 
-
-//			$scope.task = {
-//				team: $scope.teams[0].uuid,
-//				start: {
-//					date: currentDay,
-//					time: currentStartTime
-//				},
-//				end: {
-//					date: currentDay,
-//					time: currentEndTime
-//				}
-//			};
-
-			//change endTime by changing the startTime
+			//change endTime by changing the startTime TODO change watch in angular change methods
 			$scope.$watch(function() {
 				return $scope.task.start.time;
 			}, function(newTime) {
@@ -295,7 +281,6 @@ define(
 
           $scope.openTask = function (task)
           {
-			console.log(task);
             $scope.task = task;
 
 			if(task.assignedTeamUuid)

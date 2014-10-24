@@ -254,7 +254,7 @@ define(
                     pieces = item._parent.split('_'),
                     section = pieces[0],
                     last = pieces[pieces.length - 1];
-				//console.log(pieces, section);
+
                 angular.forEach(
                   _this.connections[section][last],
                   function (connection)
@@ -290,6 +290,7 @@ define(
 
 						//temp solution so a client or teammember can't be in two teams or clientgroups
 						var keyParent = key.split('_')[0];
+
 						if(keyParent == 'clients' || keyParent == 'teams')
 						{
 							var leftSide = keyParent + '_left',

@@ -258,6 +258,7 @@ define(
 
 			userResources.teamUuids = teamsUser;
 
+			$rootScope.app.resources = userResources;
 			Store('app').save('resources', userResources);
 		  }
 
@@ -282,6 +283,10 @@ define(
 						if(client != null)
 						{
 							task.relatedClientName = client.firstName + ' ' + client.lastName;
+						}
+						else
+						{
+							console.log('client ', task.relatedClientUuid, task);
 						}
 					}
                   }

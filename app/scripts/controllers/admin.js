@@ -17,7 +17,8 @@ define(['controllers/controllers'], function(controllers) {
         'TeamMessageResource',
 
         function($rootScope, $scope, $q, $location, $route, $routeParams, $filter, $modal, $timeout, ClientResource, TeamResource, TaskResource, ClientGroupResource, TeamMessageResource) {
-            $scope.resourceTypes = [
+
+			$scope.resourceTypes = [
                 //{ "label": "/avatar", "value": 'avatar', actions:["query"],},
                 //{ "label": "/client", "value": 'client', actions:["query"], },
                 {
@@ -79,6 +80,9 @@ define(['controllers/controllers'], function(controllers) {
 
             $scope.changedAction = function() {
                 var action = $scope.resourceType.action;
+				$scope.parameter1 = null;
+				$scope.resources = null;
+
                 if(action.method == "GET") {
                     var fn = $scope.resourceType.resource[action.func];
                     //$scope.resources = $scope.resourceType.resource.query();
@@ -96,6 +100,32 @@ define(['controllers/controllers'], function(controllers) {
                     });
                 }
             };
+
+			$scope.showSingleResource = function(resource)
+			{
+				$scope.resource = resource;
+				$scope.parameter1 = resource.uuid;
+			}
+
+			$scope.updateResource = function(resource)
+			{
+				$scope.resource = angular.copy(resource);
+				resource.$save({taskUuid: resource.uuid}, successResult, errorResult);
+				$scope.parameter1 = null;
+			}
+
+			function successResult(success)
+			{
+				$rootScope.notifier.success('succesresultaat ' + success.result);
+				console.log('success-> ', success);
+				console.log('resources ', $scope.resources);
+			}
+
+			function errorResult(error)
+			{
+				$rootScope.notifier.error('foutresultaat ' + error.result);
+				console.log('error-> ', error);
+			}
 
             $scope.changedResourceType();
         }
