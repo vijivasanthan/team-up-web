@@ -12,7 +12,7 @@
       </div>
       <div id="UploadStepSelectFile" ng-show="step === &quot;SelectFile&quot;">
         <div class="tab-header">
-          <h3 class="pull-left">Bestand kiezen	</h3>
+          <h3>Bestand kiezen</h3>
         </div>
         <hr>
         <div style="display:none">Output Format:
@@ -23,7 +23,7 @@
           </select><br>
         </div>
         <p>Bestand kiezen:
-          <input id="xlf" type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)">
+          <input id="xlf" type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)" class="file-input btn btn-primary btn-file">
         </p>
         <div id="drop" ondragover="angular.element(this).scope().handleDragover(event)" ondragenter="angular.element(this).scope().handleDragenter(event)" ondrop="angular.element(this).scope().handleDrop(event)">Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.</div>
         <div style="display:none">Advanced Demo Options:

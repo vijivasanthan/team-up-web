@@ -14,7 +14,7 @@
 
 			#UploadStepSelectFile(ng-show='step === "SelectFile"')
 				.tab-header
-					h3.pull-left Bestand kiezen	
+					h3 Bestand kiezen
 				hr
 				div(style='display:none;')
 					| Output Format:
@@ -25,7 +25,7 @@
 					br
 				p
 					| Bestand kiezen:
-					input#xlf(type='file', name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)')
+					input#xlf(type='file', name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class="file-input btn btn-primary btn-file")
 				#drop(ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
 					|Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.
 				div(style='display:none;')
