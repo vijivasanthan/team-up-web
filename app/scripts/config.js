@@ -30,13 +30,14 @@ define(
         }
       },
 
-       host: "http://test.ask-cs.com/", namespace: "teamup-test",
-      // host: "http://askpack.ask-cs.com/", namespace: "teamup-demo",
-      //host: "http://dev.ask-cs.com/", namespace: "teamup-dev",
-      // host: "https://backend.ask-cs.nl/", namespace: "teamup-zinzorg",
+      namespace: "",
+      // host: "http://dev.ask-cs.com/", // Development
+      host: "http://test.ask-cs.com/",  // Test
+      // host: "http://askpack.ask-cs.com/", // Demo and acceptance
+      // host: "https://backend.ask-cs.nl/", // Live
 
-      // host: "http://localhost:9000/",
-      // namespace: "teamup-sven",
+     // host: "http://localhost:9000/",
+     // namespace: "teamup-sven",
 
       formats: {
         date: 'dd-MM-yyyy',
