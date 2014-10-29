@@ -85,8 +85,14 @@
 						span {{ error.text }}
 				#UploadStepShowRoutes
 					.SheetDayDiv(ng-repeat="day in tuSheet.days")
-						h3 {{ day.startDate | date: 'EEEE' }}
-						.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
+						.SheetDayDivHead
+							h3 {{ day.startDate | date: 'EEEE' }}
+							.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
+							.sheetDayDivHandler(ng-show="day.taskExist")
+								.SheetDayNameDiv
+									span Taken:#{' '} {{ day.startDate | date: 'EEEE' }}
+								.SheetDayNameToggleDiv
+									input(type='checkbox', ng-model='day.doInsert', ng-change="toggleDayInsert(day)")
 						.SheetRouteDiv(ng-repeat="route in day.routes")
 							h4 {{ route.name }}
 							.SheetRouteTeamMemberDiv
@@ -95,10 +101,10 @@
 										| Teamlid:#{' '}
 										span {{ route.teamMemberName ? route.teamMemberName : "niemand" }}
 								.SheetRouteTeamMemberToggleDiv
-									input(type='checkbox', ng-model='route.doInsert', ng-change="toggleRouteInsert()")
+									input(type='checkbox', ng-show='route.teamMemberName', ng-model='route.doInsert', ng-change="toggleRouteInsert()")
 							.SheetTaskDiv(ng-repeat="task in route.tasks")
 								.SheetTaskStartDiv {{ task.backendTask.plannedStartVisitTime | date: 'shortTime'  }}
-								.SheetTaskClientDiv 
+								.SheetTaskClientDiv
 									| {{ task.clientName ? ( task.client ? ( task.client.fullName + " (" + (task.clientScore * 100).toFixed() + "%)" ) : task.clientName ) : "niemand" }}
 								.SheetTaskDurationDiv {{ task.duration }}
 								.SheetTaskToggleDiv
@@ -108,13 +114,10 @@
 				.tab-header
 					h3.pull-left Taken aanmaken
 				hr
-				div(ng-show='taskCreateErrors.length > 0')
-				h5 De volgende taken konden niet geupload worden
+				div.taskErrors(ng-show='taskCreateErrors.length > 0')
+					h5 De volgende taken konden niet geupload worden
 					ul
-						li(ng-repeat='task in taskCreateErrors',
-							class='has-error'
-						)
-							Op de datum {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }} staat al een taak in de agenda.
+						li(ng-repeat='task in taskCreateErrors' class='has-error') {{ task.error.result  }} {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }}
 
 				hr
 				.dayRow(ng-repeat="day in tuSheet.days")

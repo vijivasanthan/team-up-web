@@ -691,9 +691,12 @@ define(
                 return TeamUp._('taskAdd', null, foundTask.backendTask)
                   .then(function (result)
                   {
+                    console.log(result);
+                    console.log('error ', result.error.data);
                     if (result.error)
                     {
                       console.log('error for ' + foundTask.clientName);
+                      foundTask.error = result.error.data;
                       $scope.taskCreateErrors.push(foundTask);
                       foundTask.uploadStatus = 'failed';
                     }
@@ -931,7 +934,7 @@ define(
                   {
                     this.periodHeaderRows = this.findPeriodHeaders(sheet, colNo, this.periodHeaderRow + 1);
                   }
-                  this.days.push({ col: colNo, startDate: startDate, routes: [] });
+                  this.days.push({ col: colNo, startDate: startDate, routes: [], doInsert: true });
                 }
               }
 
@@ -951,7 +954,7 @@ define(
                     teamMemberName: null,
                     tasks: [],
                     name: this.periodHeaderRows[firstRowName],
-                    doInsert: false,
+                    doInsert: false
                   };
                   for (var rowNo = firstRowNo; rowNo < this.maxRange.e.r; rowNo++)
                   {
@@ -1111,6 +1114,7 @@ define(
                     else
                     {
                       currentRoute.doInsert = true;
+                      day.taskExist = (currentRoute.tasks.length > 0) ? true : false;
                     }
                   }
                   this.routes.push(currentRoute);
@@ -1129,13 +1133,24 @@ define(
 
             this.parseSheet = parseSheet;
 
+            $scope.toggleDayInsert = function(day)
+            {
+              angular.forEach(day.routes, function(route) {
+                route.doInsert = day.doInsert;
+
+                angular.forEach(route.tasks, function(task) {
+                    task.doInsert = day.doInsert;
+                });
+              });
+            };
+
             $scope.toggleRouteInsert = function ()
             {
               for (var c = 0; c < this.route.tasks.length; c++)
               {
                 this.route.tasks[c].doInsert = this.route.doInsert;
               }
-            }
+            };
 
             function findPeriodHeaders(sheet, middleColNo, firstRowNo)
             {
