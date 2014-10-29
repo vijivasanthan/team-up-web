@@ -108,6 +108,15 @@
 				.tab-header
 					h3.pull-left Taken aanmaken
 				hr
+				div(ng-show='taskCreateErrors.length > 0')
+				h5 De volgende taken konden niet geupload worden
+					ul
+						li(ng-repeat='task in taskCreateErrors',
+							class='has-error'
+						)
+							Op de datum {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }} staat al een taak in de agenda.
+
+				hr
 				.dayRow(ng-repeat="day in tuSheet.days")
 					{{ day.startDate | date: 'fullDate' }}
 					.routeRow(ng-repeat="route in day.routes | filter: { doInsert: true }")
@@ -117,11 +126,8 @@
 							.taskRowStart {{ task.backendTask.plannedStartVisitTime | date: 'shortTime' }}
 							.taskRowEnd {{ task.backendTask.plannedEndVisitTime | date: 'shortTime' }}
 							.taskRowClient {{ task.client.fullName }}
-					
-				h3 Fouten
-				p(ng-repeat="error in taskCreateErrors")
-					| Foutcode {{ error.code + ": "}}
-					span {{ error.text }}
+
+
 
 			pre#out.
 			br

@@ -109,6 +109,15 @@
           <h3 class="pull-left">Taken aanmaken</h3>
         </div>
         <hr>
+        <div ng-show="taskCreateErrors.length &gt; 0"></div>
+        <h5>De volgende taken konden niet geupload worden
+          <ul>
+            <li ng-repeat="task in taskCreateErrors" class="has-error">
+              <op>de datum {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }} staat al een taak in de agenda.</op>
+            </li>
+          </ul>
+        </h5>
+        <hr>
         <div ng-repeat="day in tuSheet.days" class="dayRow">{{ day.startDate | date: 'fullDate' }}
           <div ng-repeat="route in day.routes | filter: { doInsert: true }" class="routeRow">{{ route.teamMember.firstName }}
             <div ng-repeat="task in route.tasks | filter: { doInsert: true }" class="taskRow">
@@ -119,8 +128,6 @@
             </div>
           </div>
         </div>
-        <h3>Fouten</h3>
-        <p ng-repeat="error in taskCreateErrors">Foutcode {{ error.code + ": "}}<span>{{ error.text }}</span></p>
       </div>
       <pre id="out"></pre><br>
     </div>

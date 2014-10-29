@@ -116,7 +116,7 @@ define(
 
                 processTasks(tasks);
 
-				var merged = mergeOnStatus(tasks);
+                var merged = mergeOnStatus(tasks);
 
                 Store('app').save('myTasks2', merged);
 
@@ -141,7 +141,9 @@ define(
                     'taskByTeam',
                     { fourth: team.uuid } // statuses: '1, 2, 3, 4'
                   ).then(
-                    function (tasks) { bulks[team.uuid] = tasks }
+                    function (tasks) {
+						bulks[team.uuid] = tasks;
+					}
                   )
                 );
               }
@@ -186,6 +188,47 @@ define(
 
             return deferred.promise;
           };
+
+			/**
+			 * Get the tasks for a single team
+			 * @param teamId The id of the team
+			 * @returns {*} tasks promises
+			 */
+			Task.prototype.queryByTeam = function(teamId)
+			{
+				return TeamUp._(
+					'taskByTeam',
+					{ fourth: teamId }
+				).then(
+					function (tasks)
+					{
+						return tasks;
+					}.bind(this)
+				);
+			};
+
+		  /**
+		  * Get the tasks of a week
+		  * @param teamId the id of the team
+		  * @param weekNumber the number of the week
+		  * @returns {*} tasks promises
+		  */
+      Task.prototype.getWeek = function (teamId, weekNumber, year)
+      {
+        return this.queryByTeam(teamId)
+          .then(
+          function (tasks)
+          {
+
+            tasks = _.filter(tasks, function(task) {
+              var taskStartTime = moment(task.plannedStartVisitTime);
+              return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
+            });
+
+            return tasks;
+          }.bind(this)
+        );
+      };
 
 		  function mergeOnStatus(tasks)
 		  {
