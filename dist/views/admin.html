@@ -6,6 +6,12 @@
   <select ng-model="resourceType.action" ng-options="action.func for action in resourceType.actions" ng-change="changedAction()"></select>
   <input type="text" ng-model="parameter1">
   <button ng-show="parameter1" ng-click="parameter1 = ''">empty</button>
+  <button ng-click="changedParameter()">run</button>
+  <div ng-show="resourceType.action.documentation">
+    <h2>Documentation</h2>
+    <p>{{ resourceType.action.documentation }}</p>
+    <hr>
+  </div>
   <p ng-hide="resources.length &gt; 0">loading resources</p>
   <div ng-hide="parameter1" ng-repeat="resource in resources" class="resources">
     <div class="resource">

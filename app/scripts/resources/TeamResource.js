@@ -8,7 +8,8 @@ define(['services/services', 'config'],
                    $rootScope.teamResourceActions = {
                        "create": {
                            "url": hostUrl + "/team",
-                           "method": "POST"
+                           "method": "POST",
+						   "documentation": ""
                        },
                        "getTasks": {
                            "url": hostUrl + "/team/:teamUuid/tasks",

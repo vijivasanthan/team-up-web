@@ -6,18 +6,22 @@ define(['services/services', 'config'],
 				function ($rootScope, $resource, $q, $filter) {
 				   var hostUrl = config.app.host + config.app.namespace;
                     $rootScope.taskResourceActions = {
-                        "action0": {
+                        "getByTeam": {
                             "url": hostUrl + "/tasks/team/:teamUuid",
-                            "method": "GET"
+                            "method": "GET",
+							firstParameter:"teamUuid",
+							isArray:true
                         },
                         "mine": {
                             "url": hostUrl + "/tasks/mine",
                             "method": "GET",
-                            isArray:true,
+                            isArray:true
                         },
                         "get": {
                             "url": hostUrl + "/tasks/:taskUuid",
-                            "method": "GET"
+                            "method": "GET",
+							documentation:"Not broken on the backend. ;-)",
+							firstParameter:"taskUuid"
                         },
                         "getField": {
                             "url": hostUrl + "/tasks/:taskUuid/:fieldName",
@@ -25,7 +29,8 @@ define(['services/services', 'config'],
                         },
                         "save": {
                             "url": hostUrl + "/tasks/:taskUuid",
-                            "method": "PUT"
+                            "method": "PUT",
+							isSave:true
                         },
                         "saveField": {
                             "url": hostUrl + "/tasks/:taskUuid/:fieldName",

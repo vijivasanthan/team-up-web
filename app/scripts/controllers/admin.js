@@ -16,7 +16,16 @@ define(['controllers/controllers'], function(controllers) {
         'ClientGroupResource',
         'TeamMessageResource',
 
-        function($rootScope, $scope, $q, $location, $route, $routeParams, $filter, $modal, $timeout, ClientResource, TeamResource, TaskResource, ClientGroupResource, TeamMessageResource) {
+        function($rootScope, $scope, $q, $location, $route, $routeParams, $filter, $modal, $timeout, ClientResource, TeamResource, TaskResource, ClientGroupResource, TeamMessageResource)
+        {
+
+          $scope.name = "Ari";
+          $scope.sayHello = function ()
+          {
+            $scope.greeting = "Hello " + $scope.name;
+          }
+
+
 
 			$scope.resourceTypes = [
                 //{ "label": "/avatar", "value": 'avatar', actions:["query"],},
@@ -25,14 +34,15 @@ define(['controllers/controllers'], function(controllers) {
                     label: "/client",
                     value: 'clients',
                     resource:ClientResource,
-                    actions:[ { func:"query", isArray:true }, ],
-                },
+                    actions:[ { func:"query", isArray:true } ]
+                }
             ];
 
             function addActionsToOption(actions, option) {
                 Object.keys(actions).forEach(function(key) {
                     var action = actions[key];
-                    option.actions.push({func:key, method:action.method });
+					action.func = key;
+                    option.actions.push(action);
                 });
 
                 $scope.resourceTypes.push(option);
@@ -79,27 +89,42 @@ define(['controllers/controllers'], function(controllers) {
             };
 
             $scope.changedAction = function() {
-                var action = $scope.resourceType.action;
 				$scope.parameter1 = null;
 				$scope.resources = null;
-
-                if(action.method == "GET") {
-                    var fn = $scope.resourceType.resource[action.func];
-                    //$scope.resources = $scope.resourceType.resource.query();
-                    fn({}, function (data) {
-                        if (typeof data.unshift === "function") {
-                            $scope.resources = data;
-                            $scope.uuidDestinationType = action.uuidDestinationType;
-                            $scope.resource = null;
-                        }
-                        else {
-                            $scope.resources = null;
-                            $scope.uuidDestinationType = action.uuidDestinationType;
-                            $scope.resource = data;
-                        }
-                    });
-                }
+				$scope.changedParameter();
             };
+
+			$scope.changedParameter = function() {
+				fireBackendCall();
+			};
+
+			function fireBackendCall() {
+				var action = $scope.resourceType.action;
+				if(action.method == "GET") {
+					var backendFunctionCall = $scope.resourceType.resource[action.func];
+					var backendCallUrlParameters = {};
+					if(action.firstParameter)
+						backendCallUrlParameters[action.firstParameter] = $scope.parameter1;
+					//$scope.resources = $scope.resourceType.resource.query();
+					backendFunctionCall(backendCallUrlParameters, function (data) {
+
+						console.log($scope.resourceType.resource);
+						console.log($scope.resourceType.action);
+						console.log(backendCallUrlParameters);
+						if (typeof data.unshift === "function") {
+							console.log(data);
+							$scope.resources = data;
+							$scope.uuidDestinationType = action.uuidDestinationType;
+							$scope.resource = null;
+						}
+						else {
+							$scope.resources = null;
+							$scope.uuidDestinationType = action.uuidDestinationType;
+							$scope.resource = data;
+						}
+					});
+				}
+			};
 
 			$scope.showSingleResource = function(resource)
 			{
@@ -128,6 +153,95 @@ define(['controllers/controllers'], function(controllers) {
 			}
 
             $scope.changedResourceType();
+
+			var scenarioData = {
+				team: 'team_123',
+				clientGroup: '',
+				member: {
+					username: 'member_username_123',
+					firstName: 'member_firstName_123',
+					lastName: 'member_lastName_123',
+					phone: '1234567890',
+					role: 'coordinator',
+					birthDate: 545097600,
+					function: 'doctor'
+				}
+			};
+
+			$scope.createTeam = function()
+			{
+				var teamName = {name: scenarioData.team},
+					deffered = $q.defer();
+
+				teamOption.resource.create({name: scenarioData.team}, function(result) {
+					deffered.resolve(result);
+				});
+
+				return deffered.promise;
+			}
+
+			$scope.unassign = function()
+			{
+				var currentTeam;
+
+				$scope.createTeam()
+					.then(
+						function(team) {
+							console.log('team ', team);
+							$scope.getTeam(team.uuid);
+							//$scope.deleteTeam(team.uuid);
+						}
+					);
+			};
+
+			$scope.getTeam = function(teamId)
+			{
+				var deffered = $q.defer();
+
+				teamOption.resource.get({teamId: teamId})
+					.then(
+						function(team) {
+							console.log('get Team ', team);
+							deffered.resolve(team);
+						}
+				);
+
+				return deffered.promise;
+			};
+
+			$scope.deleteTeam = function(teamId)
+			{
+				//http://test.ask-cs.com/teamup-test/team/83a6b6d0-0024-4c3a-9d9d-c6ad959
+				teamOption.resource.delete({teamId: teamId});
+			};
+
+			//$scope.unassign();
+
+			$scope.addMember = function()
+			{
+				//				uuid: member.username,
+//					userName: member.username,
+//				passwordHash: MD5.parse(member.password),
+//				firstName: member.firstName,
+//				lastName: member.lastName,
+//				phone: member.phone,
+//				teamUuids: [member.team],
+//				role: member.role,
+//				birthDate: Dater.convert.absolute(member.birthDate, 0),
+//				function: member.function
+
+			}
+
+			$scope.createClient = function()
+			{
+
+			}
+
+			$scope.deleteScenarioData = function()
+			{
+				//deleteClient
+
+			}
         }
     ]);
 });

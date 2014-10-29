@@ -7,6 +7,11 @@
 	input(type="text" ng-model="parameter1")
 	button(ng-show="parameter1",
 			ng-click="parameter1 = ''") empty
+	button(ng-click='changedParameter()') run
+	div(ng-show="resourceType.action.documentation")
+		h2 Documentation
+		p {{ resourceType.action.documentation }}
+		hr
 	p(ng-hide="resources.length > 0") loading resources
 	.resources(ng-hide="parameter1" ng-repeat="resource in resources")
 		.resource
