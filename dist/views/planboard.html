@@ -1,19 +1,4 @@
 <section id="planboard" ng-controller="timeline">
-  <div id="confirmTaskModal" tabindex="-1" role="dialog" aria-labelledby="confirmTaskModalLabel" aria-hidden="true" class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-          <h4 id="confirmTaskModalLabel" class="modal-title">{{ui.teamup.confirms.deleteTaskTitle}}</h4>
-        </div>
-        <div class="modal-body">{{ui.teamup.confirms.deleteTask}}</div>
-        <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
-          <button type="button" ng-click="timelineOnRemove()" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="page-header timeline">
     <h2 class="nullable">{{ui.planboard.planboard}}</h2><span ng-show="views.teams" class="nullable pull-left">
       <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
@@ -97,7 +82,7 @@
           <button type="button" ng-click="timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.planboard.add}}</button>
         </div>
         <div ng-show="views.slot.edit">
-          <button type="button" ng-click="confirmDeleteTask(slot)" style="margin-right: 5px" class="btn btn-danger">{{ui.planboard.del}}</button>
+          <button type="button" ng-click="timelineOnRemove(slot)" style="margin-right: 5px" class="btn btn-danger">{{ui.planboard.del}}</button>
           <button type="button" ng-click="timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.planboard.change}}</button>
         </div>
       </div>

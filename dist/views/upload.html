@@ -82,14 +82,22 @@
         </div>
         <div id="UploadStepShowRoutes">
           <div ng-repeat="day in tuSheet.days" class="SheetDayDiv">
-            <h3>{{ day.startDate | date: 'EEEE' }}</h3>
-            <div class="SheetDayDateDiv">{{ day.startDate | date: 'longDate' }}</div>
+            <div class="SheetDayDivHead">
+              <h3>{{ day.startDate | date: 'EEEE' }}</h3>
+              <div class="SheetDayDateDiv">{{ day.startDate | date: 'longDate' }}</div>
+              <div ng-show="day.taskExist" class="sheetDayDivHandler">
+                <div class="SheetDayNameDiv"><span>Taken:  {{ day.startDate | date: 'EEEE' }}</span></div>
+                <div class="SheetDayNameToggleDiv">
+                  <input type="checkbox" ng-model="day.doInsert" ng-change="toggleDayInsert(day)">
+                </div>
+              </div>
+            </div>
             <div ng-repeat="route in day.routes" class="SheetRouteDiv">
               <h4>{{ route.name }}</h4>
               <div class="SheetRouteTeamMemberDiv">
                 <div class="SheetRouteTeamMemberNameDiv"><span>Teamlid: <span>{{ route.teamMemberName ? route.teamMemberName : "niemand" }}</span></span></div>
                 <div class="SheetRouteTeamMemberToggleDiv">
-                  <input type="checkbox" ng-model="route.doInsert" ng-change="toggleRouteInsert()">
+                  <input type="checkbox" ng-show="route.teamMemberName" ng-model="route.doInsert" ng-change="toggleRouteInsert()">
                 </div>
               </div>
               <div ng-repeat="task in route.tasks" class="SheetTaskDiv">
@@ -109,14 +117,12 @@
           <h3 class="pull-left">Taken aanmaken</h3>
         </div>
         <hr>
-        <div ng-show="taskCreateErrors.length &gt; 0"></div>
-        <h5>De volgende taken konden niet geupload worden
+        <div ng-show="taskCreateErrors.length &gt; 0" class="taskErrors">
+          <h5>De volgende taken konden niet geupload worden</h5>
           <ul>
-            <li ng-repeat="task in taskCreateErrors" class="has-error">
-              <op>de datum {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }} staat al een taak in de agenda.</op>
-            </li>
+            <li ng-repeat="task in taskCreateErrors" class="has-error">{{ task.error.result  }} {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }}</li>
           </ul>
-        </h5>
+        </div>
         <hr>
         <div ng-repeat="day in tuSheet.days" class="dayRow">{{ day.startDate | date: 'fullDate' }}
           <div ng-repeat="route in day.routes | filter: { doInsert: true }" class="routeRow">{{ route.teamMember.firstName }}
