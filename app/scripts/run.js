@@ -345,7 +345,7 @@ define(
           $rootScope.getClientsByTeam = function (teamIds)
           {
             var clients = [],
-                clientIds = [];
+              clientIds = [];
 
             angular.forEach(
               teamIds,
@@ -366,16 +366,16 @@ define(
                         {
                           // console.log('member ->', member);
 
-                          if (clientIds.indexOf(member.uuid) == - 1)
+                          if (clientIds.indexOf(member.uuid) == -1)
                           {
                             clientIds.push(member.uuid);
 
                             clients.push(
                               {
                                 uuid: member.uuid,
-								firstName: member.firstName,
-								lastName: member.lastName,
-								fullName: member.firstName + ' ' + member.lastName,
+                                firstName: member.firstName,
+                                lastName: member.lastName,
+                                fullName: member.firstName + ' ' + member.lastName,
                                 name: member.firstName + ' ' + member.lastName
                               }
                             );

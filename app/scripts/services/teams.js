@@ -232,7 +232,7 @@ define(
           TeamsService.prototype.manage = function (changes)
           {
             var deferred = $q.defer(),
-                calls = [];
+              calls = [];
 
             angular.forEach(
               changes,
@@ -279,49 +279,60 @@ define(
               function ()
               {
                 var queryCalls = [],
-                    data = {};
+                  data = {};
 
                 angular.forEach(
                   changes,
                   function (change, teamId)
                   {
-					  // queryCalls.push(
-					  //   TeamUp._(
-					  //     'teamStatusQuery',
-					  //     { third: teamId }
-					  //   )
-					  // );
+                    // queryCalls.push(
+                    //   TeamUp._(
+                    //     'teamStatusQuery',
+                    //     { third: teamId }
+                    //   )
+                    // );
                     var routeParam = {uuid: teamId};
-					TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
+                    TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
                     queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
 
                 $q.all(queryCalls)
-                  .then(function () {deferred.resolve(data) });
+                  .then(function ()
+                  {
+                    deferred.resolve(data)
+                  });
               }
             );
 
             return deferred.promise;
           };
 
-		  TeamsService.prototype.checkLoggedUserTeamsLocal = function(changedUsers, teamId) {
+          /**
+           * Update the localStorage of the logged user by changing from team
+           * @param changedUsers
+           * @param teamId
+           */
+          TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
+          {
+            //var team = _.filter(Store('app').get('teams'), function(team){ return team.uuid == teamId; });
+            angular.forEach(changedUsers, function (user)
+            {
 
-			 angular.forEach(changedUsers, function(user) {
+              if (user == $rootScope.app.resources.uuid)
+              {
 
-				 if(user == $rootScope.app.resources.uuid)
-				 {
+                var userResources = Store('app').get('resources'),
+                  indexTeam = userResources.teamUuids.indexOf(teamId);
 
-				 	var userResources = Store('app').get('resources'),
-						indexTeam = userResources.teamUuids.indexOf(teamId);
+                (indexTeam < 0) ? userResources.teamUuids.push(teamId) : userResources.teamUuids.splice(indexTeam, 1);
 
-					(indexTeam < 0) ? userResources.teamUuids.push(teamId) : userResources.teamUuids.splice(indexTeam, 1);
-
-					Store('app').save('resources', userResources);
-					return;
-				 }
-			 });
-		  };
+                Store('app').save('resources', userResources);
+                $rootScope.app.resources = userResources;
+                return;
+              }
+            });
+          };
 
           // Manage 1:1 relations between teams and client groups
           TeamsService.prototype.manageGroups = function (changes)

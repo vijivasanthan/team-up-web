@@ -250,17 +250,19 @@ define(
             );
           }
 
-		  //add teams to member localStorage
-		  function updateLoggedUserTeams()
-		  {
-			  var userResources =  Store('app').get('resources'),
-				  teamsUser = $scope.$root.getTeamsofMembers(userResources.uuid);
+          /**
+           * add teams to the logged user localStorage
+           */
+          function updateLoggedUserTeams()
+          {
+            var userResources = Store('app').get('resources'),
+                teamsUser = _.pluck($scope.$root.getTeamsofMembers(userResources.uuid), 'uuid');
 
-			userResources.teamUuids = teamsUser;
+            userResources.teamUuids = teamsUser;
 
-			$rootScope.app.resources = userResources;
-			Store('app').save('resources', userResources);
-		  }
+            $rootScope.app.resources = userResources;
+            Store('app').save('resources', userResources);
+          }
 
           function enhanceTasks ()
           {
@@ -319,7 +321,7 @@ define(
                 {
                   $rootScope.app.resources = resources;
 
-                  Store('app').save('resources', resources);
+                  Store('app').save('resources', $rootScope.app.resources);
 
                   progress(40, $rootScope.ui.login.loading_Teams);
 

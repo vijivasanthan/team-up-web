@@ -28,7 +28,8 @@ define(
           $scope.matchedTeamMembersByName = {};
           $scope.matchedClientsByName = {};
           $scope.taskCreateErrors = [];
-          var currentTeamsUser = _.pluck($rootScope.app.resources.teamUuids, 'uuid'),
+
+          var currentTeam = $rootScope.app.resources.teamUuids[0],
             tasksSheet = [];
 
           $scope.handleFile = function (files)
@@ -561,10 +562,8 @@ define(
               return "";
             }
 
-            this.myTeamUuid = currentTeamsUser[0];
+            this.myTeamUuid = currentTeam;
             this.myTeamClientGroupId = Store('app').get('teamGroup_' + this.myTeamUuid);
-
-
             this.nofColumnsPerPeriod = 3;
             this.firstPeriodColumn = 0;
             this.periodHeaderRow = 1;
@@ -712,7 +711,7 @@ define(
               //TODO the user can't pick the team he likes to upload the sheet
               var sheetFirstDate = moment($scope.tuSheet.days[0].startDate);
 
-              Task.getWeek(currentTeamsUser[0], sheetFirstDate.week(), moment().get('year'))
+              Task.getWeek(currentTeam, sheetFirstDate.week(), moment().get('year'))
                 .then(
                 function (tasks)
                 {
@@ -771,7 +770,8 @@ define(
 
             this.matchClients = function matchClients()
             {
-              var myTeamClients = $rootScope.getClientsByTeam(currentTeamsUser);
+              var myTeamClients = $rootScope.getClientsByTeam([currentTeam]);
+              console.log('myTeamClients ', myTeamClients);
 
               for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++)
               {
@@ -838,31 +838,29 @@ define(
 
             this.matchTeamMembers = function matchTeamMembers()
             {
-              var myTeamMembers = Store('app').get(currentTeamsUser[0]);
-
-              console.log(myTeamMembers);
+              var myTeamMembers = Store('app').get(currentTeam);
 
               angular.forEach(myTeamMembers, function (teamMember)
               {
-                teamMember.fullName = '';
-                if (teamMember.firstName)
-                {
-                  teamMember.fullName += teamMember.firstName;
-                }
-                if (teamMember.firstName && teamMember.lastName)
-                {
-                  teamMember.fullName += ' ';
-                }
-                if (teamMember.lastName)
-                {
-                  teamMember.fullName += teamMember.lastName;
-                }
+                  teamMember.fullName = '';
+                  if (teamMember.firstName)
+                  {
+                      teamMember.fullName += teamMember.firstName;
+                  }
+                  if (teamMember.firstName && teamMember.lastName)
+                  {
+                      teamMember.fullName += ' ';
+                  }
+                  if (teamMember.lastName)
+                  {
+                      teamMember.fullName += teamMember.lastName;
+                  }
               });
 
               for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++)
               {
                 var currentRoute = this.routes[routeIndex],
-                  sheetTeamMemberName = currentRoute.teamMemberName;
+                    sheetTeamMemberName = currentRoute.teamMemberName;
 
                 if (currentRoute.doInsert === false)
                 {
