@@ -30,7 +30,7 @@ define(
               {
                 $scope.teamName = $rootScope.getTeamName($rootScope.app.resources.teamUuids[0]);
 
-                $scope.chatTeamId = $rootScope.app.resources.teamUuids[0];
+                $scope.chatTeamId = $rootScope.app.resources.teamUuids[0].uuid;
 
                 if ($scope.chatTeamId && ! $scope.toggleChat)
                 {
@@ -247,7 +247,7 @@ define(
             $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $rootScope.app.resources.teamUuids;
-            $scope.chatTeamId = teamIds[0];
+            $scope.chatTeamId = teamIds[0].uuid;
 
             var msgs = $filter('orderBy')($scope.messages, 'sendTime');
             var latestMsgTime = 0;
