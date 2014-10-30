@@ -11,7 +11,6 @@ define(
         '$q',
         '$location',
         'Clients',
-        'Task',
         '$route',
         '$routeParams',
         'Store',
@@ -20,7 +19,7 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $scope, $q, $location, Clients, Task, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp, $timeout)
+        function ($rootScope, $scope, $q, $location, Clients, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp, $timeout)
         {
           $scope.step = 'SelectFile';
           $scope.workbook = {};
@@ -42,6 +41,7 @@ define(
             evnt.stopPropagation();
             evnt.preventDefault();
             //console.log("Dragover: " + files);
+            //angular.element('#drop').addClass('sheetEntering');
             evnt.dataTransfer.dropEffect = 'copy';
           }
 
@@ -336,6 +336,7 @@ define(
           {
             $scope.step = "CheckNames";
             addBreadcrumb('Namen controleren', 'checkNames');
+            //TODO check check check
             $scope.tuSheet.matchTeamMembers();
             $scope.tuSheet.matchClients();
             $scope.matchedTeamMembersByName = orderMatches($scope.tuSheet.matchedTeamMemberForName);
@@ -774,7 +775,6 @@ define(
             this.matchClients = function matchClients()
             {
               var myTeamClients = $rootScope.getClientsByTeam([currentTeam]);
-              console.log('myTeamClients ', myTeamClients);
 
               for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++)
               {
@@ -860,6 +860,7 @@ define(
                   }
               });
 
+              console.log('routes ', this.routes);
               for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++)
               {
                 var currentRoute = this.routes[routeIndex],
@@ -1114,13 +1115,12 @@ define(
                     else
                     {
                       currentRoute.doInsert = true;
-                      day.taskExist = (currentRoute.tasks.length > 0) ? true : false;
+                      day.taskExist = true;
                     }
                   }
                   this.routes.push(currentRoute);
                   day.routes.push(currentRoute);
                 }
-                //console.log(this.routes);
               }
               if (this.nofUnassignedRoutes > 0)
               {

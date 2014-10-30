@@ -25,8 +25,12 @@
 					br
 				p
 					| Bestand kiezen:
-					input#xlf(type='file', name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class="file-input btn btn-primary btn-file")
-				#drop(ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
+					div(id='uploadSheetPicker')
+						p(class="btn btn-primary") Upload spreadsheet...
+						input(type="file", name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class='uploadSheetButton')
+
+
+				#drop(drag-enter-leave='sheetEntering' ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
 					|Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.
 				div(style='display:none;')
 					| Advanced Demo Options:
@@ -45,7 +49,7 @@
 				.tab-header
 					h3.pull-left Namen controleren
 				hr
-				button.proceedButton(ng-click="uploadStepConfirmNames()") Verder gaan
+				button(ng-click="uploadStepConfirmNames()", class='btn btn-primary') Verder gaan
 				#UploadStepCheckTeamMemberNames
 					h4 Team Leden
 					form
@@ -77,7 +81,7 @@
 				.tab-header
 					h3.pull-left Routes controleren
 				hr
-				button.proceedButton(ng-click="uploadStepCheckNames()") Verder gaan
+				button(ng-click="uploadStepCheckNames()", class='btn btn-primary') Verder gaan
 				#UploadStepShowErrors(ng-show="tuSheet.errors.length > 0")
 					h3 Fouten
 					p(ng-repeat="error in tuSheet.errors")
@@ -88,10 +92,10 @@
 						.SheetDayDivHead
 							h3 {{ day.startDate | date: 'EEEE' }}
 							.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
-							.sheetDayDivHandler(ng-show="day.taskExist")
-								.SheetDayNameDiv
-									span Taken:#{' '} {{ day.startDate | date: 'EEEE' }}
-								.SheetDayNameToggleDiv
+							.sheetDayDivHandler
+								.SheetDayNameDiv(ng-show="day.taskExist")
+									span Taken:#{' '} {{ day.doInsert ? 'aan' : 'uit' }}
+								.SheetDayNameToggleDiv(ng-show="day.taskExist")
 									input(type='checkbox', ng-model='day.doInsert', ng-change="toggleDayInsert(day)")
 						.SheetRouteDiv(ng-repeat="route in day.routes")
 							h4 {{ route.name }}

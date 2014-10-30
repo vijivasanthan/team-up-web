@@ -263,6 +263,39 @@ define(
       }
     );
 
+    directives.directive(
+      'dragEnterLeave',
+      function()
+      {
+        return {
+          link: function (scope, element, attrs)
+          {
+            var className = attrs.dragEnterLeave,
+                defaultText = element.text();
+
+            element.bind(
+              'dragenter',
+              function ()
+              {
+                element
+                  .addClass(className)
+                  .text('Drop de spreadsheet.');
+              }
+            );
+            element.bind(
+              'dragleave',
+              function ()
+              {
+                element
+                  .removeClass(className)
+                  .text(defaultText);
+              }
+            );
+          }
+        };
+      }
+    );
+
 
   }
 );

@@ -23,9 +23,12 @@
           </select><br>
         </div>
         <p>Bestand kiezen:
-          <input id="xlf" type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)" class="file-input btn btn-primary btn-file">
+          <div id="uploadSheetPicker">
+            <p class="btn btn-primary">Upload spreadsheet...</p>
+            <input type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)" class="uploadSheetButton">
+          </div>
         </p>
-        <div id="drop" ondragover="angular.element(this).scope().handleDragover(event)" ondragenter="angular.element(this).scope().handleDragenter(event)" ondrop="angular.element(this).scope().handleDrop(event)">Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.</div>
+        <div id="drop" drag-enter-leave="sheetEntering" ondragover="angular.element(this).scope().handleDragover(event)" ondragenter="angular.element(this).scope().handleDragenter(event)" ondrop="angular.element(this).scope().handleDrop(event)">Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.</div>
         <div style="display:none">Advanced Demo Options:
           <!-- br-->
           <!-- | Use Web Workers: (when available)-->
@@ -39,7 +42,7 @@
           <h3 class="pull-left">Namen controleren</h3>
         </div>
         <hr>
-        <button ng-click="uploadStepConfirmNames()" class="proceedButton">Verder gaan</button>
+        <button ng-click="uploadStepConfirmNames()" class="btn btn-primary">Verder gaan</button>
         <div id="UploadStepCheckTeamMemberNames">
           <h4>Team Leden</h4>
           <form>
@@ -75,7 +78,7 @@
           <h3 class="pull-left">Routes controleren</h3>
         </div>
         <hr>
-        <button ng-click="uploadStepCheckNames()" class="proceedButton">Verder gaan</button>
+        <button ng-click="uploadStepCheckNames()" class="btn btn-primary">Verder gaan</button>
         <div id="UploadStepShowErrors" ng-show="tuSheet.errors.length &gt; 0">
           <h3>Fouten</h3>
           <p ng-repeat="error in tuSheet.errors">Foutcode {{ error.code + ": "}}<span>{{ error.text }}</span></p>
@@ -85,9 +88,9 @@
             <div class="SheetDayDivHead">
               <h3>{{ day.startDate | date: 'EEEE' }}</h3>
               <div class="SheetDayDateDiv">{{ day.startDate | date: 'longDate' }}</div>
-              <div ng-show="day.taskExist" class="sheetDayDivHandler">
-                <div class="SheetDayNameDiv"><span>Taken:  {{ day.startDate | date: 'EEEE' }}</span></div>
-                <div class="SheetDayNameToggleDiv">
+              <div class="sheetDayDivHandler">
+                <div ng-show="day.taskExist" class="SheetDayNameDiv"><span>Taken:  {{ day.doInsert ? 'aan' : 'uit' }}</span></div>
+                <div ng-show="day.taskExist" class="SheetDayNameToggleDiv">
                   <input type="checkbox" ng-model="day.doInsert" ng-change="toggleDayInsert(day)">
                 </div>
               </div>
