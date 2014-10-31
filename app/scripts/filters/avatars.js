@@ -30,35 +30,24 @@ define(
           {
             var result = config.app.stateColors.none;
 
-            angular.forEach(
-              states,
-              function (state)
+            var stateValues = _.pluck(states, 'value');
+            //console.log('stateValues-> ', stateValues);
+            if(stateValues.indexOf('available') >= 0)
+            {
+              result = config.app.stateColors.availalbe;
+              if(stateValues.indexOf('on_the_phone') >= 0 || stateValues.indexOf('not_reachable') >= 0)
               {
-                /**
-                 *    WORKING
-                 *    OFFLINE
-                 *    AVAILABLE
-                 *    UNAVAILABLE
-                 *    UNKNOWN
-                 */
-                if (angular.lowercase(state.name) == 'availability' && state.share)
-                {
-                  if (angular.lowercase(state.value) == 'available' ||
-                      angular.lowercase(state.value) == 'working')
-                  {
-                    result = config.app.stateColors.availalbe;
-                  }
-                  else if (angular.lowercase(state.value) == 'unavailable')
-                  {
-                    result = config.app.stateColors.busy;
-                  }
-                  else if (angular.lowercase(state.value) == 'offline')
-                  {
-                    result = config.app.stateColors.offline;
-                  }
-                }
+                result = config.app.stateColors.busy;
               }
-            );
+            }
+            else if (stateValues.indexOf('unavailable') >= 0 || stateValues.indexOf('working') >= 0)
+            {
+              result = config.app.stateColors.busy;
+            }
+            else if(stateValues.indexOf('offline') >= 0)
+            {
+              result = config.app.stateColors.offline;
+            }
 
             return result;
           }

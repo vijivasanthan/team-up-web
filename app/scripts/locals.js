@@ -423,7 +423,10 @@ define(
             'reachable': 'Bereikbaar',
             'available': 'Beschikbaar',
             'working': 'Aan het werk',
-            'offline': 'Offline'
+            'offline': 'Offline',
+            'not_reachable': 'Niet bereikbaar',
+            'on_the_phone': 'Aan de telefoon',
+            'unknown': 'Onbekend'
           },
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'

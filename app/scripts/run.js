@@ -469,33 +469,38 @@ define(
             );
           };
 
-		//todo prevent team members from changing eachothers picture
-		$rootScope.showChangedAvatar = function(type, id)
-		 {
-			var url = $filter('avatar')(id, type, '80'),
-				elements = [];
+          /**
+           * Changed avatarpic after a change
+           * @param type The parent of the avatarpic team/profile/client
+           * @param id The uuid of the user
+           */
+          $rootScope.showChangedAvatar = function (type, id)
+          {
+            var url = $filter('avatar')(id, type, '80'),
+              elements = [];
 
-			if(type == 'team')
-			{
-				//check if id is equal with the logged user id
-				if(id == $rootScope.app.resources.uuid)
-				{
-					elements.push('.profile-avatar');
-				}
-				elements.push('.team-avatar');
-			}
-			else
-			{
-				elements.push('.client-avatar');
-			}
+            if (type == 'team')
+            {
+              //check if id is equal with the logged user id
+              if (id == $rootScope.app.resources.uuid)
+              {
+                elements.push('.profile-avatar');
+              }
+              elements.push('.team-avatar');
+            }
+            else
+            {
+              elements.push('.client-avatar');
+            }
 
-			angular.forEach(elements, function(element, i) {
-				angular.element(element).css({
-					'background': 'url(' + url + ')',
-					'background-size': 'cover'
-				});
-			});
-		  };
+            angular.forEach(elements, function (element, i)
+            {
+              angular.element(element).css({
+                'background': 'url(' + url + ')',
+                'background-size': 'cover'
+              });
+            });
+          };
 
           // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
           // Trick browser for avatar url change against caching

@@ -48,6 +48,11 @@ define(
                controller: 'adminCtrl'
             })
 
+            .when('/scenarios', {
+              templateUrl: 'views/scenarios.html',
+              controller: 'adminCtrl'
+            })
+
             .when(
             '/team',
             {

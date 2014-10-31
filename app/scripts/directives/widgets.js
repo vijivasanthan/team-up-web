@@ -80,9 +80,10 @@ define(
                       uploadProgress: function (event, position, total, percentComplete)
                       {
                         $scope.$apply(
-                          function () {
-							  $scope.progress = percentComplete + '%';
-						  }
+                          function ()
+                          {
+                            $scope.progress = percentComplete + '%';
+                          }
                         );
                       },
                       error: function (event, statusText, responseText, form)
@@ -102,44 +103,44 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
-							  var avatarType = '';
-							  var avatarTagStyle = $('.roundedPicLarge').attr('style');
-							  var size = 0,
-								  id,
-								  type,
-								  message;
+                            var avatarType = '';
+                            var avatarTagStyle = $('.roundedPicLarge').attr('style');
+                            var size = 0,
+                              id,
+                              type,
+                              message;
 
-							  try
-							  {
-								  size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
-							  }
-							  catch (e)
-							  {
-								  console.log(e);
-							  }
+                            try
+                            {
+                              size = parseInt(avatarTagStyle.split('?')[1].split('&')[0].split('=')[1], 10);
+                            }
+                            catch (e)
+                            {
+                              console.log(e);
+                            }
 
-							  if ($scope.$parent.data.clientId)
-                              {
-							    id = $scope.$parent.data.clientId;
-							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
-                              	type = 'client';
+                            if ($scope.$parent.data.clientId)
+                            {
+                              id = $scope.$parent.data.clientId;
+                              message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+                              type = 'client';
 
-                              }
-                              else if ($scope.$parent.data.uuid)
-                              {
-						        id = $scope.$parent.data.uuid;
-							    message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
-							    type = 'team';
-                              }
+                            }
+                            else if ($scope.$parent.data.uuid)
+                            {
+                              id = $scope.$parent.data.uuid;
+                              message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
+                              type = 'team';
+                            }
 
-							  $scope.$parent.$root.avatarChange(id);
-							  $rootScope.notifier.success(message);
-							  $rootScope.showChangedAvatar(type, id);
+                            $scope.$parent.$root.avatarChange(id);
+                            $rootScope.notifier.success(message);
+                            $rootScope.showChangedAvatar(type, id);
 
-							  var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes(id);
-                              var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
+                            var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes(id);
+                            var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
 
-                              $('.roundedPicLarge').attr('style', newStyle);
+                            $('.roundedPicLarge').attr('style', newStyle);
                           }
                         );
                       }

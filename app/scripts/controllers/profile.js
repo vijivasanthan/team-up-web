@@ -195,7 +195,7 @@ define(
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
                         $scope.data = data;
-						$scope.profileMeta = angular.copy(resources);
+                        $scope.profileMeta = angular.copy(resources);
 
                         $rootScope.statusBar.off();
 
@@ -204,21 +204,22 @@ define(
                         // put back the birthday for display after update the member.
                         resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
-						if($rootScope.app.resources.uuid == $route.current.params.userId)
-						{
-							$rootScope.app.resources.firstName = $scope.profileMeta.firstName;
-							$rootScope.app.resources.lastName = $scope.profileMeta.lastName;
+                        if ($rootScope.app.resources.uuid == $route.current.params.userId)
+                        {
+                          $rootScope.app.resources.firstName = $scope.profileMeta.firstName;
+                          $rootScope.app.resources.lastName = $scope.profileMeta.lastName;
 
-							// will logout if the role is changed for the user him/her-self.
-							if ($scope.currentRole != resources.role)
-							{
-								$rootScope.nav("logout");
-							}
-						}
+                          // will logout if the role is changed for the user him/her-self.
+                          if ($scope.currentRole != resources.role)
+                          {
+                            $rootScope.nav("logout");
+                          }
+                        }
 
 
                         // refresh the teams in the background
-                        angular.forEach(
+                        angular.forEach
+                        (
                           resources.teamUuids, function (teamId)
                           {
                             // FIXME: Message is not absent in localization file so turned off
@@ -228,7 +229,10 @@ define(
                               false,
                               { uuid: teamId }
                             ).then(
-                              function () { $rootScope.statusBar.off() }
+                              function ()
+                              {
+                                $rootScope.statusBar.off()
+                              }
                             );
                           }
                         );

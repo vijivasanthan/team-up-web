@@ -113,10 +113,12 @@ define(
               $scope.members,
               function (member)
               {
+                console.log(member);
                 angular.forEach(
                   member.states,
                   function (state, i)
                   {
+
                     if (state.name == 'Location') {
                         state.value_rscoded = 'loading address';
                         if (state.value && member.address && member.address.street) {
@@ -608,8 +610,8 @@ define(
             // lower case of the id :
             // TODO : we should also fix the issue in the backend.
             memberId = angular.lowercase(memberId);
-			var changes = [];
-			changes.push(memberId);
+            var changes = [];
+            changes.push(memberId);
 
 			  //console.log($scope.data.members[$scope.team.uuid]);
 
