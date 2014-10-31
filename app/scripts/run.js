@@ -314,6 +314,20 @@ define(
             return ret;
           };
 
+          /**
+           * Update the states of the logged user localStorage
+           * @param member
+           */
+          $rootScope.checkUpdatedStatesLoggedUser = function(member)
+          {
+            if($rootScope.app.resources.uuid == member.uuid
+              && ! _.isEqual($rootScope.app.resources.states, member.states))
+            {
+              $rootScope.app.resources.states = member.states;
+              Store('app').save('resources', $rootScope.app.resources);
+            }
+          }
+
           // Get team name by id (shared)
           $rootScope.getTeamName = function (teamId)
           {

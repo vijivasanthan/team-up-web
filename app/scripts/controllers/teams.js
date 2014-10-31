@@ -113,24 +113,27 @@ define(
               $scope.members,
               function (member)
               {
-                console.log(member);
+                //check if the state of the logged user is equal
+                $rootScope.checkUpdatedStatesLoggedUser(member);
+
                 angular.forEach(
                   member.states,
                   function (state, i)
                   {
-
-                    if (state.name == 'Location') {
-                        state.value_rscoded = 'loading address';
-                        if (state.value && member.address && member.address.street) {
-                            var coordinates = state.value.split(','),
-                                latitude = parseFloat(coordinates[0]),
-                                longitude = parseFloat(coordinates[1]);
-                        }
-						else
-						{
-							//remove state location if there is no address available on the given coordinates
-							member.states.splice(i, 1);
-						}
+                    if (state.name == 'Location')
+                    {
+                      state.value_rscoded = 'loading address';
+                      if (state.value && member.address && member.address.street)
+                      {
+                        var coordinates = state.value.split(','),
+                          latitude = parseFloat(coordinates[0]),
+                          longitude = parseFloat(coordinates[1]);
+                      }
+                      else
+                      {
+                        //remove state location if there is no address available on the given coordinates
+                        member.states.splice(i, 1);
+                      }
 
                       // GoogleGEO.geocode(
                       //   {

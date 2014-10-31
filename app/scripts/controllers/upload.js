@@ -320,7 +320,6 @@ define(
             $q.when(processSheet())
               .then(function ()
               {
-                console.log($scope.tuSheet.days[0]);
                 $scope.uploadStepCheckStructure();
               });
           };
@@ -858,7 +857,6 @@ define(
                   }
               });
 
-              console.log('routes ', this.routes);
               for (var routeIndex = 0; routeIndex < this.routes.length; routeIndex++)
               {
                 var currentRoute = this.routes[routeIndex],
