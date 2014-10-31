@@ -692,8 +692,6 @@ define(
                 return TeamUp._('taskAdd', null, foundTask.backendTask)
                   .then(function (result)
                   {
-                    console.log(result);
-                    console.log('error ', result.error.data);
                     if (result.error)
                     {
                       console.log('error for ' + foundTask.clientName);
