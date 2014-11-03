@@ -238,7 +238,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a.taskAssignIcon(href='')
 									span.icomoon.icon-link(link-icon-hovered='',
 									aria-hidden='true',
-									ng-show='task.assignedTeamMember')
+									ng-show='task.assignedTeamMember',
+									ng-click='unAssignTask(task)')
 							td
 								.roundedPicSmall.memberStateBusy(
 								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
