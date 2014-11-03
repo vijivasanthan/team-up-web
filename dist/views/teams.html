@@ -37,16 +37,18 @@
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.team==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;team&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.teams}}</a></li>
-    <li class="{{(views.newTeam==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTeam&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newTeam}}</a></li>
-    <li class="{{(views.newMember==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newMember&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newMember}}</a></li>
+    <li ng-show="app.resources.role == 1" class="{{(views.newTeam==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTeam&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newTeam}}</a></li>
+    <li ng-show="app.resources.role == 1" class="{{(views.newMember==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newMember&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newMember}}</a></li>
   </ul>
   <div class="tab-content">
     <div id="viewTeamTab" class="tab-pane {{(views.team==true) &amp;&amp; 'active'}}">
       <div ng-hide="views.editTeam" class="tab-header">
         <h3 class="pull-left">{{team.name}}</h3>
         <h4 ng-show="(team.phone != &quot;&quot; &amp;&amp; team.phone != null)" class="pull-left">({{team.phone}})</h4>
-        <button type="button" ng-click="confirmDeleteTeam()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
-        <button type="button" ng-click="editTeam(team)" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+        <div ng-show="app.resources.role == 1">
+          <button type="button" ng-click="confirmDeleteTeam()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+          <button type="button" ng-click="editTeam(team)" class="btn pull-right btn-info">{{ui.teamup.edit}}</button>
+        </div>
       </div>
       <div ng-show="views.editTeam" class="tab-header">
         <input type="text" ng-model="teamEditForm.name" class="pull-left">
@@ -75,9 +77,9 @@
                 <dl ng-repeat="state in member.states | filter:share=true " class="states"><span data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span><span ng-show="(state.name == &quot;Location&quot;)" class="stateValue">{{member.address.street}} {{member.address.no}}, {{member.address.zip}} {{member.address.city}}</span><span ng-show="(state.name != &quot;Location&quot;)" class="stateValue">{{state.value | i18n_spec:'teamup.stateValue'}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}"> {{ui.teamup.map}}</a></span></dl>
               </td>
               <td>
-                <div class="pull-right"><a href="#/profile/{{member.uuid}}#edit" ng-click="editProfile(member.uuid,team.uuid)">
+                <div class="pull-right"><a href="#/profile/{{member.uuid}}#edit" ng-click="editProfile(member.uuid,team.uuid)" ng-show="app.resources.role == 1 || app.resources.uuid == member.uuid">
                     <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
-                  <button type="submit" ng-click="confirmDeleteMember(member.uuid)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
+                  <button type="submit" ng-click="confirmDeleteMember(member.uuid)" ng-show="app.resources.role == 1" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>

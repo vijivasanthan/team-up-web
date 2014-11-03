@@ -65,7 +65,8 @@ block navbar
 							a(ng-click='nav("planboard")') Agenda
 						li(data-match-route='/support')
 							a(ng-click='nav("support")') Support
-						li(data-match-route='/upload')
+						li(data-match-route='/upload',
+							ng-hide='app.resources.role > 1')
 							a(ng-click='nav("upload")') Upload
 						//li(data-match-route='/planboard',
 						//ng-hide='app.resources.role > 1')

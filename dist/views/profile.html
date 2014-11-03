@@ -26,7 +26,7 @@
         <div id="profileTab" class="tab-pane {{(views.profile==true) &amp;&amp; 'active'}}">
           <div class="tab-header">
             <h3 class="pull-left">{{data.firstName}} {{data.lastName}}</h3>
-            <button type="button" ng-click="confirmDeleteProfile()" ng-hide="teams.length == 0" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+            <button type="button" ng-click="confirmDeleteProfile()" ng-hide="app.resources.role &gt; 1 || teams.length == 0" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
             <button type="button" ng-click="editProfile()" class="btn pull-right btn-info">{{ui.profile.edit}}</button>
           </div>
           <hr>
