@@ -85,7 +85,7 @@ define(
 
           //set default team by last visited team
           $scope.memberForm = {};
-		  $scope.memberForm.team = uuid;
+          $scope.memberForm.team = uuid;
 
           $scope.views = {
             team: true,
@@ -179,7 +179,7 @@ define(
             $scope.$watch(
               $location.search(),
               function () { $location.search({ uuid: current }) },
-			  $scope.memberForm.team = current
+              $scope.memberForm.team = current
             );
 
             if (switched)

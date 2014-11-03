@@ -24,13 +24,13 @@ define(
                   {
                     Store('app').save('teams', teams);
 
-                    if (! only)
+                    if (!only)
                     {
                       var calls = [],
-                          data = {
-                            teams: teams,
-                            members: {}
-                          };
+                        data = {
+                          teams: teams,
+                          members: {}
+                        };
 
                       // Walk through the team list
                       angular.forEach(
@@ -40,19 +40,19 @@ define(
                           if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
                           {
                             calls.push(
-								TeamUp._(
-									'teamStatusQuery',
-									{ third: team.uuid },
-									null,
-									{
-										success: function (results)
-										{
-											Store('app').save(team.uuid, results);
-											data.members[team.uuid] = [];
-											data.members[team.uuid] = results;
-										}
-									}
-								)
+                              TeamUp._(
+                                'teamStatusQuery',
+                                { third: team.uuid },
+                                null,
+                                {
+                                  success: function (results)
+                                  {
+                                    Store('app').save(team.uuid, results);
+                                    data.members[team.uuid] = [];
+                                    data.members[team.uuid] = results;
+                                  }
+                                }
+                              )
                             );
                           }
                           else
@@ -63,9 +63,10 @@ define(
                       );
 
                       $q.all(calls)
-                        .then(function () {
-							  deferred.resolve(data)
-					  	});
+                        .then(function ()
+                        {
+                          deferred.resolve(data)
+                        });
                     }
                     else
                     {
