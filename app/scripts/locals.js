@@ -347,6 +347,7 @@ define(
           Number: 'Nummer',
           clientProfileUrl: 'URL Cliëntenprofiel',
           addContact: 'Contactpersoon toevoegen',
+          editContact: 'Contactpersoon wijzigen',
           saveClient: 'Opslaan',
           group: 'Groep',
           errorSaveClientGroup: 'Opslaan wijzigingen cliëntengroep mislukt.',

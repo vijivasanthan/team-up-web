@@ -316,7 +316,8 @@
         <div class="controls">
           <input type="text" ng-model="contactForm.phone" class="span4">
         </div>
-        <button type="reset" ng-click="addContacts()" class="btn btn-info">{{ui.teamup.addContact}}</button>
+        <button ng-click="contactForm = null" ng-show="contactForm.index &gt;= 0" class="btn btn-primary">annuleren</button>
+        <button ng-click="changeContacts(contactForm.index)" class="btn btn-info">{{contactForm.index >= 0 ? ui.teamup.editContact : ui.teamup.addContact}}</button>
       </div>
       <p ng-hide="contacts.length &gt; 0">{{ui.teamup.noContacts}}</p>
       <div ng-show="contacts.length &gt; 0">
@@ -336,16 +337,17 @@
               <td>{{contact.phone}}</td>
               <td>
                 <div class="pull-right">
+                  <button ng-click="editContact(contact, $index)" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
                   <button ng-click="confirmationRemoveContact(contact)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
             </tr>
           </tbody>
-          <tfoot>
+          <tfoot class="contactsListEnd">
             <tr>
-              <th>
+              <td class="contactSaveButton">
                 <button type="submit" ng-click="saveContacts(contacts)" class="btn btn-success ng-binding">{{ui.teamup.saveContacts}}</button>
-              </th>
+              </td>
             </tr>
           </tfoot>
         </table><span class="muted pull-right"><small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small></span>

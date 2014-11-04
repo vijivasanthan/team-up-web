@@ -385,7 +385,8 @@ aria-hidden='true')
 				label.control-label {{ui.profile.phone}}
 				.controls
 					input.span4(type='text', ng-model='contactForm.phone')
-				button.btn.btn-info(type='reset', ng-click='addContacts()') {{ui.teamup.addContact}}
+				button.btn.btn-primary(ng-click="contactForm = null", ng-show='contactForm.index >= 0') annuleren
+				button.btn.btn-info(ng-click='changeContacts(contactForm.index)') {{contactForm.index >= 0 ? ui.teamup.editContact : ui.teamup.addContact}}
 
 			p(ng-hide='contacts.length > 0') {{ui.teamup.noContacts}}
 
@@ -404,11 +405,13 @@ aria-hidden='true')
 							td {{contact.phone}}
 							td
 								.pull-right
+									button.btn-primary.btn-mini(ng-click='editContact(contact, $index)')
+										i.icon-edit
 									button.btn-primary.btn-mini(ng-click='confirmationRemoveContact(contact)')
 										i.icon-trash
-					tfoot
+					tfoot.contactsListEnd
 						tr
-							th
+							td.contactSaveButton
 								button.btn.btn-success.ng-binding(type='submit',
 								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
 				span.muted.pull-right

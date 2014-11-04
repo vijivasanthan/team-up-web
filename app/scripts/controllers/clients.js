@@ -558,7 +558,7 @@ define(
 
           // This function only push new contact into a scope array, need to submit to save the contact
           // TODO: design a way to save the contact directly
-          $scope.addContacts = function ()
+          $scope.changeContacts = function(contactIndex)
           {
             if (typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == '')
             {
@@ -567,30 +567,41 @@ define(
               return;
             }
 
-            var contactPerson = {
-              firstName: '',
-              lastName: '',
-              function: '',
-              phone: ''
-            };
-
-            contactPerson.firstName = $scope.contactForm.firstName;
-            contactPerson.lastName = $scope.contactForm.lastName;
-            contactPerson.function = $scope.contactForm.function;
-            contactPerson.phone = $scope.contactForm.phone;
-
-            if (typeof $scope.contacts == 'undefined')
+            if(! _.isNumber(contactIndex))
             {
-              $scope.contacts = [];
+                var contactPerson = {
+                  firstName: '',
+                  lastName: '',
+                  function: '',
+                  phone: ''
+                };
+
+                contactPerson.firstName = $scope.contactForm.firstName;
+                contactPerson.lastName = $scope.contactForm.lastName;
+                contactPerson.function = $scope.contactForm.function;
+                contactPerson.phone = $scope.contactForm.phone;
+
+                if (typeof $scope.contacts == 'undefined')
+                {
+                  $scope.contacts = [];
+                }
+
+                if ($scope.contacts == null)
+                {
+                  $scope.contacts = [];
+                }
+
+                $scope.contacts.push(contactPerson);
             }
 
-            if ($scope.contacts == null)
-            {
-              $scope.contacts = [];
-            }
+            $scope.contactForm = null;
+          }
 
-            $scope.contacts.push(contactPerson);
-          };
+          $scope.editContact = function(contact, index)
+          {
+            $scope.contactForm = contact;
+            $scope.contactForm.index = index;
+          }
 
           // create a new client
           $scope.clientSubmit = function (client)
@@ -636,6 +647,7 @@ define(
                 }
                 else
                 {
+                  $scope.contactForm = null;
                   reloadGroup({ 'uuid': result.clientGroupUuid });
                 }
               }
@@ -742,7 +754,6 @@ define(
                 {
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   $rootScope.statusBar.off();
-
                   // TODO: Nothing has been done with the result of query!!!
                   Clients.query(
                     false,
@@ -753,21 +764,24 @@ define(
               }
             );
           };
+
           // after people remove the contacts, you still need to save it to make it work.
           $scope.removeContact = function (contact)
           {
             // TODO: Contact has only been removed from list also from backend?!
-            angular.forEach(
-              $scope.contacts,
-              function (_contact, i)
+            var indexContact = $scope.contacts.indexOf(contact);
+            $scope.contacts.splice(indexContact, 1);
+            angular.element('#confirmContactModal').modal('hide');
+          };
+
+          $scope.confirmationRemoveContact = function (contact)
+          {
+            $timeout(
+              function ()
               {
-                if (contact.name == _contact.name &&
-                    contact.func == _contact.func &&
-                    contact.phone == _contact.phone)
-                {
-                  $scope.contacts.splice(i, 1);
-				  angular.element('#confirmContactModal').modal('hide');
-                }
+                $scope._contact = contact;
+
+                angular.element('#confirmContactModal').modal('show');
               }
             );
           };
@@ -781,18 +795,6 @@ define(
               }
             );
           };
-
-		  $scope.confirmationRemoveContact = function(contact) {
-			  $timeout(
-				  function ()
-				  {
-					  $scope._contact = contact;
-
-					  angular.element('#confirmContactModal').modal('show');
-				  }
-			  );
-		  }
-
 
           $scope.deleteClientGroup = function ()
           {
