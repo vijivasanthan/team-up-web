@@ -22,12 +22,10 @@
             <option value="form" selected="selected"> FORMULAE</option>
           </select><br>
         </div>
-        <p>Bestand kiezen:
-          <div id="uploadSheetPicker">
-            <p class="btn btn-primary">Upload spreadsheet...</p>
-            <input type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)" class="uploadSheetButton">
-          </div>
-        </p>
+        <div id="uploadSheetPicker">
+          <button class="btn btn-primary">Upload spreadsheet...</button>
+          <input type="file" name="xlfile" onchange="angular.element(this).scope().handleFile(this.files)" class="uploadSheetButton">
+        </div>
         <div id="drop" drag-enter-leave="sheetEntering" ondragover="angular.element(this).scope().handleDragover(event)" ondragenter="angular.element(this).scope().handleDragenter(event)" ondrop="angular.element(this).scope().handleDrop(event)">Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.</div>
         <div style="display:none">Advanced Demo Options:
           <!-- br-->

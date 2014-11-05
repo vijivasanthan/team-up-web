@@ -23,11 +23,10 @@
 						option(value='json')  JSON
 						option(value='form', selected='')  FORMULAE
 					br
-				p
-					| Bestand kiezen:
-					div(id='uploadSheetPicker')
-						p(class="btn btn-primary") Upload spreadsheet...
-						input(type="file", name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class='uploadSheetButton')
+
+				div(id='uploadSheetPicker')
+					button(class="btn btn-primary") Upload spreadsheet...
+					input(type="file", name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class='uploadSheetButton')
 
 
 				#drop(drag-enter-leave='sheetEntering' ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')

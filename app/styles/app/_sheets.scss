@@ -3,12 +3,13 @@
   border:1px solid gray;
   width:200px;
   padding:10px;
-  background-color:#e3e3e3;
+  background-color:#1dc8b6;
   text-overflow:ellipsis;
   white-space:nowrap;
   overflow:hidden;
   margin:1px;
   cursor:pointer;
+  color: #fff;
 }
 
 #drop {
@@ -24,7 +25,7 @@
 }
 
 .SheetDiv:hover {
-  background-color:#c3c3c3;
+  color: #833c11;
 }
 
 .SheetDayDiv {
@@ -40,6 +41,29 @@
   text-transform:capitalize;
   line-height:normal;
   margin:2px;
+}
+
+#uploadSheetPicker {
+  position: relative;
+  margin-bottom: 15px;
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 175px;
+    -moz-opacity: 0;
+    filter: alpha(opacity= 0);
+    opacity: 0;
+  }
+  button {
+    color: #833c11;
+    cursor: pointer;
+  }
+}
+
+.sheetEntering {
+  border: 2px dashed #f5a962 !important;
+  color: #f5a962 !important;
 }
 
 .SheetDayDateDiv {
