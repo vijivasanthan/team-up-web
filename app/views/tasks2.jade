@@ -105,6 +105,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			a(data-toggle='tab', ng-click='setViewTo("newTask")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
+		li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
+					ng-hide="app.resources.role > 1",
+					data-match-route='/tasks2')
+			a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| Agenda
 
 
 	.tab-content

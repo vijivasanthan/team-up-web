@@ -25,20 +25,20 @@ define(
 
           var view = (! $location.hash()) ? 'myTasks' : $location.hash(),
           	  currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
-			  teamsLocal = Teams.queryLocal(),
-		  	  clientLocal = Clients.queryLocal(),
-		      teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+              teamsLocal = Teams.queryLocal(),
+              clientLocal = Clients.queryLocal(),
+              teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
-		  $scope.teams = teamsLocal.teams;
-		  $scope.currentTeam = $scope.teams[0].uuid;
+          $scope.teams = teamsLocal.teams;
+		      $scope.currentTeam = $scope.teams[0].uuid;
 
           //check if a team of clientgroup is visited lately
           if(currentTeamClientGroup.team)
-		  {
-			  $scope.task = {
-				 team: currentTeamClientGroup.team
-			  };
-              $scope.currentTeam = currentTeamClientGroup.team;
+          {
+            $scope.task = {
+              team: currentTeamClientGroup.team
+            };
+            $scope.currentTeam = currentTeamClientGroup.team;
           }
 
           function resetViews ()
@@ -117,7 +117,6 @@ define(
 
               case 'newTask':
                 break;
-
             }
           };
 
@@ -175,15 +174,15 @@ define(
             );
           }
 
-		  $scope.$watch(
-			  'showFinishedTasks',
-			  function(toggle)
-			  {
-				  var myTasks = Store('app').get('myTasks2');
+          $scope.$watch(
+            'showFinishedTasks',
+            function (toggle)
+            {
+              var myTasks = Store('app').get('myTasks2');
 
-				  $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
-			  }
-		  );
+              $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
+            }
+          );
 
           $scope.$watch(
             'showAllTasks',
@@ -202,56 +201,56 @@ define(
             }
           );
 
-		 //date and time methods if a new task is creating
-		 if($scope.views.newTask == true)
-		 {
-			//TODO add following date methods to Dater
-			var formatDateTime = function(date, dateFormat) {
-				return $filter('date')(date, dateFormat);
-			};
+         //date and time methods if a new task is creating
+         if($scope.views.newTask == true)
+         {
+          //TODO add following date methods to Dater
+          var formatDateTime = function(date, dateFormat) {
+            return $filter('date')(date, dateFormat);
+          };
 
-			var updateTime = function(date, minutes) {
-				var roundMinutes = formatDateTime(date, 'm');
-				roundMinutes = (roundMinutes % 15);
-				var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
+          var updateTime = function(date, minutes) {
+            var roundMinutes = formatDateTime(date, 'm');
+            roundMinutes = (roundMinutes % 15);
+            var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
 
-				return formatDateTime(updatedTime, "H:mm");
-			};
+            return formatDateTime(updatedTime, "H:mm");
+          };
 
-			var date = new Date();
-			var currentDay =  formatDateTime(date, "dd-MM-yyyy");
-			//round current minutes by 15 and add minutes so the default time is always in the future
-			var currentStartTime = updateTime(date, 15);
-			var currentEndTime = updateTime(date, 30);
+          var date = new Date();
+          var currentDay =  formatDateTime(date, "dd-MM-yyyy");
+          //round current minutes by 15 and add minutes so the default time is always in the future
+          var currentStartTime = updateTime(date, 15);
+          var currentEndTime = updateTime(date, 30);
 
-			if(! $scope.task)
-			{
-				$scope.task = {};
-				$scope.task.team = $scope.teams[0].uuid;
-			}
+          if(! $scope.task)
+          {
+            $scope.task = {};
+            $scope.task.team = $scope.teams[0].uuid;
+          }
 
-			$scope.task.start = {
-			 		date: currentDay,
-				 	time: currentStartTime
-		 	};
-			$scope.task.end = {
-				 date: currentDay,
-					 time: currentEndTime
-			};
+          $scope.task.start = {
+              date: currentDay,
+              time: currentStartTime
+          };
+          $scope.task.end = {
+             date: currentDay,
+               time: currentEndTime
+          };
 
-			//change endTime by changing the startTime TODO change watch in angular change methods
-			$scope.$watch(function() {
-				return $scope.task.start.time;
-			}, function(newTime) {
-				$scope.task.end.time = updateTime(Date.parse(newTime), 15);
-			});
+          //change endTime by changing the startTime TODO change watch in angular change methods
+          $scope.$watch(function() {
+            return $scope.task.start.time;
+          }, function(newTime) {
+            $scope.task.end.time = updateTime(Date.parse(newTime), 15);
+          });
 
-			$scope.$watch(function() {
-				return $scope.task.start.date;
-			}, function(newDate) {
-				$scope.task.end.date = newDate;
-			});
-		 }
+          $scope.$watch(function() {
+            return $scope.task.start.date;
+          }, function(newDate) {
+            $scope.task.end.date = newDate;
+          });
+         }
 
           //          $scope.$watch(
           //            'showOnlyAvailable',
@@ -283,18 +282,18 @@ define(
           {
             $scope.task = task;
 
-			if(task.assignedTeamUuid)
-			{
-				task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);
-			}
+            if (task.assignedTeamUuid)
+            {
+              task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);
+            }
 
-			if(task.relatedClient.clientGroupUuid)
-			{
-				task.relatedClient.clientGroupName = $scope.$root.getClientGroupName(task.relatedClient.clientGroupUuid);
-			}
+            if (task.relatedClient.clientGroupUuid)
+            {
+              task.relatedClient.clientGroupName = $scope.$root.getClientGroupName(task.relatedClient.clientGroupUuid);
+            }
 
-		    var author = $scope.$root.getTeamMemberById(task.authorUuid);
-			$scope.author = author.firstName + ' ' + author.lastName;
+            var author = $scope.$root.getTeamMemberById(task.authorUuid);
+            $scope.author = author.firstName + ' ' + author.lastName;
 
             angular.element('#taskModal').modal('show');
           };

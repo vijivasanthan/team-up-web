@@ -157,8 +157,20 @@ define(
                 $location.path('/client').search({local: 'true'}).hash('client');
                 break;
 
-              case 'planboard':
-                $location.path('/planboard').search({local: 'true'}).hash('teams');
+//              case 'planboard':
+//                $location.path('/planboard').search({local: 'true'}).hash('teams');
+//                break;
+
+              case 'tasks2/alltasks':
+                $location.path('/tasks2').search({}).hash('allTasks');
+                break;
+
+              case 'tasks2/newtask':
+                $location.path('/tasks2').search({}).hash('newTask');
+                break;
+
+              case 'tasks2/planboard':
+                $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
                 break;
 
               case 'vis':

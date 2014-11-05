@@ -48,10 +48,10 @@ define(
                controller: 'adminCtrl'
             })
 
-            .when('/scenarios', {
-              templateUrl: 'views/scenarios.html',
-              controller: 'adminCtrl'
-            })
+			.when('/scenarios', {
+				  templateUrl: 'views/scenarios.html',
+				  controller: 'adminCtrl'
+			})
 
             .when(
             '/team',
@@ -157,12 +157,20 @@ define(
             })
 
             .when(
-            '/planboard',
+            '/tasks2/planboard',
             {
               templateUrl: 'views/planboard.html',
               controller: 'planboard',
               reloadOnSearch: false
             })
+
+//            .when(
+//            '/planboard',
+//            {
+//              templateUrl: 'views/planboard.html',
+//              controller: 'planboard',
+//              reloadOnSearch: false
+//            })
 
             .when(
             '/messages',

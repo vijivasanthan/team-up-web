@@ -1,8 +1,8 @@
 section#planboard(ng-controller='timeline')
 
 	.page-header.timeline
-		h2.nullable {{ui.planboard.planboard}}
-
+		h2.nullable {{ui.task.tasks}}
+		//{{ui.planboard.planboard}}
 		span.nullable.pull-left(ng-show='views.teams')
 			.selectGroup
 				span.selectTitle
@@ -154,20 +154,22 @@ section#planboard(ng-controller='timeline')
 
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
 
-			li(class="{{(views.teams==true) && 'active'}}")
-				a(data-toggle='tab',
-				ng-click='setViewTo(current,"teams")')
-					span.icomoon(data-icon='',
-					aria-hidden='true')
-					| {{ui.teamup.teams}}
-
-			li(class="{{(views.clients==true) && 'active'}}")
-				a(data-toggle='tab',
-				ng-click='setViewTo(current,"clients")')
-					span.icomoon(data-icon='',
-					aria-hidden='true')
-					| {{ui.teamup.clients}}
-
+			li(class="{{(views.myTasks==true) && 'active'}}")
+				a(data-toggle='tab', ng-click='nav("tasks2")')
+					span.icomoon(data-icon='', aria-hidden='true')
+					| {{ui.task.myTask}}
+			li(class="{{(views.allTasks==true) && 'active'}}")
+				a(data-toggle='tab', ng-click='nav("tasks2/alltasks")')
+					span.icomoon(data-icon='', aria-hidden='true')
+					| {{ui.task.allTasks}}
+			li(class="{{(views.newTask==true) && 'active'}}", ng-hide="app.resources.role > 1")
+				a(data-toggle='tab', ng-click='nav("tasks2/newtask")')
+					span.icomoon(data-icon='', aria-hidden='true')
+					| {{ui.task.newTask}}
+			li(class="{{(views.teams==true || views.clients==true) && 'active'}}", ng-hide="app.resources.role > 1")
+				a(data-toggle='tab', ng-click='setViewTo(current,"teams")')
+					span.icomoon(data-icon='', aria-hidden='true')
+					| Agenda
 
 		.tab-content.treegrid-container(ng-controller='treegrid')
 
@@ -175,6 +177,21 @@ section#planboard(ng-controller='timeline')
 			#viewTeamsTab.tab-pane(class="{{(views.teams==true || views.clients==true) && 'active'}}")
 				.tab-header
 					h3.pull-left {{currentName}}
+					div(ng-show='app.resources.role == 1')
+					button.btn.pull-right.btn-info.marginLeftTen(type='button',
+					class="{{(views.clients==true) && 'active'}}",
+					data-toggle='tab',
+					ng-click='setViewTo(current,"clients")')
+						span.icomoon(data-icon='',
+						aria-hidden='true')
+						|  Clienten
+					button.btn.pull-right.btn-info(type='button',
+					class="{{(views.teams==true) && 'active'}}",
+					data-toggle='tab',
+					ng-click='setViewTo(current,"teams")')
+						span.icomoon(data-icon='',
+						aria-hidden='true')
+						| Teams
 				hr
 				#timeline
 					#mainTimeline

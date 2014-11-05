@@ -20,9 +20,9 @@ define(
           var params = $location.search();
 
           var teams = Store('app').get('teams'),
-              clients = Store('app').get('ClientGroups'),
-			  teamClientLocal = Teams.queryLocalClientGroup(teams),
-			  currentTeamClientGroup = '';
+            clients = Store('app').get('ClientGroups'),
+            teamClientLocal = Teams.queryLocalClientGroup(teams),
+            currentTeamClientGroup = '';
 
           $scope.data = {
             teams: {
@@ -170,12 +170,12 @@ define(
 
 		 //todo if user switch from team, switch the clientgroup also and save localStorage
 	     if(Store('app').get('currentTeamClientGroup'))
-		 {
-			 currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+       {
+         currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
 
-			 $scope.currentTeam =  (currentTeamClientGroup.team) ? currentTeamClientGroup.team : $scope.data.teams.list[0].uuid;
-			 $scope.currentClientGroup = (currentTeamClientGroup.clientGroup) ? currentTeamClientGroup.clientGroup : $scope.data.clients.list[0].uuid;
-		 }
+         $scope.currentTeam =  (currentTeamClientGroup.team) ? currentTeamClientGroup.team : $scope.data.teams.list[0].uuid;
+         $scope.currentClientGroup = (currentTeamClientGroup.clientGroup) ? currentTeamClientGroup.clientGroup : $scope.data.clients.list[0].uuid;
+       }
 
           // switch agenda (timeline) between Team view or Client view 
           function switchData ()
@@ -224,8 +224,6 @@ define(
                   {
                     found = true;
 
-                    console.log('key ->', key, $scope.currentClientGroup);
-
                     return key;
                   }
                 }
@@ -240,102 +238,102 @@ define(
           // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
-            angular.forEach(
-              $scope.data[$scope.section].list,
-              function (node)
-              {
-                if (node.uuid == current)
-                {
-                  $scope.currentName = node.name;
-                }
-              }
-            );
-
-            if ($scope.section == 'teams')
-            {
-              $scope.currentTeam = current;
-              $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
-            }
-            else if ($scope.section == 'clients')
-            {
-              $scope.currentClientGroup = current;
-              $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
-            }
-
-            $scope.data.section = $scope.section;
-
-            // try to loading the slots from here
-            // TODO: Find a better way of handling this!
-            var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
-                endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
-
-            var storeTask = function (tasks, startTime, endTime)
-            {
-              // clear the array to keep tasks sync with sever side after changing
-              $scope.data[$scope.section].tasks = [];
-
               angular.forEach(
-                tasks,
-                function (task)
+                $scope.data[$scope.section].list,
+                function (node)
                 {
-                  if (task != null)
+                  if (node.uuid == current)
                   {
-                    var memberId = '';
-
-                    if ($scope.section == 'teams')
-                    {
-                      memberId = task.assignedTeamMemberUuid;
-                    }
-
-                    if ($scope.section == 'clients')
-                    {
-                      memberId = task.relatedClientUuid;
-                    }
-
-                    if (typeof $scope.data[$scope.section].tasks[memberId] == 'undefined')
-                    {
-                      $scope.data[$scope.section].tasks[memberId] = [];
-                    }
-
-                    $scope.data[$scope.section].tasks[memberId].push(task);
+                    $scope.currentName = node.name;
                   }
                 }
               );
 
-              $rootScope.$broadcast(
-                'timeliner',
-                (periods) ? periods : { start: startTime, end: endTime }
-              );
-            };
+              if ($scope.section == 'teams')
+              {
+                $scope.currentTeam = current;
+                $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+              }
+              else if ($scope.section == 'clients')
+              {
+                $scope.currentClientGroup = current;
+                $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+              }
 
-            if ($scope.data.section == 'teams')
-            {
-              $location.search({ uuid: $scope.currentTeam }).hash('teams');
+              $scope.data.section = $scope.section;
 
-              TeamUp._(
-                'teamTaskQuery',
-                {
-                  second: $scope.currentTeam,
-                  from: startTime,
-                  to: endTime
-                }
-              ).then(
-                function (tasks) { storeTask(tasks, startTime, endTime) }
-              );
-            }
-            else if ($scope.data.section == 'clients')
-            {
-              $location.search({ uuid: $scope.currentClientGroup }).hash('clients');
+              // try to loading the slots from here
+              // TODO: Find a better way of handling this!
+              var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
+                  endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 
-              TeamUp._(
-                'clientGroupTasksQuery',
-                {
-                  second: $scope.currentClientGroup,
-                  from: startTime,
-                  to: endTime
-                }
-              ).then(function (tasks) { storeTask(tasks, startTime, endTime) });
-            }
+              var storeTask = function (tasks, startTime, endTime)
+              {
+                // clear the array to keep tasks sync with sever side after changing
+                $scope.data[$scope.section].tasks = [];
+
+                angular.forEach(
+                  tasks,
+                  function (task)
+                  {
+                    if (task != null)
+                    {
+                      var memberId = '';
+
+                      if ($scope.section == 'teams')
+                      {
+                        memberId = task.assignedTeamMemberUuid;
+                      }
+
+                      if ($scope.section == 'clients')
+                      {
+                        memberId = task.relatedClientUuid;
+                      }
+
+                      if (typeof $scope.data[$scope.section].tasks[memberId] == 'undefined')
+                      {
+                        $scope.data[$scope.section].tasks[memberId] = [];
+                      }
+
+                      $scope.data[$scope.section].tasks[memberId].push(task);
+                    }
+                  }
+                );
+
+                $rootScope.$broadcast(
+                  'timeliner',
+                  (periods) ? periods : { start: startTime, end: endTime }
+                );
+              };
+
+              if ($scope.data.section == 'teams')
+              {
+                $location.search({ uuid: $scope.currentTeam }).hash('teams');
+
+                TeamUp._(
+                  'teamTaskQuery',
+                  {
+                    second: $scope.currentTeam,
+                    from: startTime,
+                    to: endTime
+                  }
+                ).then(
+                  function (tasks) { storeTask(tasks, startTime, endTime) }
+                );
+              }
+              else if ($scope.data.section == 'clients')
+              {
+                $location.search({ uuid: $scope.currentClientGroup }).hash('clients');
+
+                TeamUp._(
+                  'clientGroupTasksQuery',
+                  {
+                    second: $scope.currentClientGroup,
+                    from: startTime,
+                    to: endTime
+                  }
+                ).then(function (tasks) { storeTask(tasks, startTime, endTime) });
+              }
           };
 
           function setView (hash)
@@ -532,6 +530,9 @@ define(
               $scope.changeCurrent($scope.currentClientGroup);
             }
           };
+
+          //make headnav tab tasks active
+          angular.element('.tasks2').addClass('active');
         }
       ]
     );

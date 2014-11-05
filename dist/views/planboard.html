@@ -1,6 +1,7 @@
 <section id="planboard" ng-controller="timeline">
   <div class="page-header timeline">
-    <h2 class="nullable">{{ui.planboard.planboard}}</h2><span ng-show="views.teams" class="nullable pull-left">
+    <h2 class="nullable">{{ui.task.tasks}}</h2>
+    <!--{{ui.planboard.planboard}}--><span ng-show="views.teams" class="nullable pull-left">
       <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
         <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
       </div></span><span ng-show="views.clients" class="nullable pull-left">
@@ -90,13 +91,18 @@
   </div><br>
   <div class="tabbable tabs-left">
     <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
-      <li class="{{(views.teams==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.teams}}</a></li>
-      <li class="{{(views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.clients}}</a></li>
+      <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.myTask}}</a></li>
+      <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/alltasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
+      <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/newtask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
+      <li ng-hide="app.resources.role &gt; 1" class="{{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Agenda</a></li>
     </ul>
     <div ng-controller="treegrid" class="tab-content treegrid-container">
       <div id="viewTeamsTab" class="tab-pane {{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">{{currentName}}</h3>
+          <div ng-show="app.resources.role == 1"></div>
+          <button type="button" data-toggle="tab" ng-click="setViewTo(current,&quot;clients&quot;)" class="btn pull-right btn-info marginLeftTen {{(views.clients==true) &amp;&amp; 'active'}}"><span data-icon="" aria-hidden="true" class="icomoon"></span> Clienten</button>
+          <button type="button" data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)" class="btn pull-right btn-info {{(views.teams==true) &amp;&amp; 'active'}}"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams</button>
         </div>
         <hr>
         <div id="timeline">

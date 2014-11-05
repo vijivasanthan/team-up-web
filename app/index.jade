@@ -51,7 +51,7 @@ block navbar
 					ul.nav.navbar-nav
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
-						li(data-match-route='/tasks2')
+						li.tasks2(data-match-route='/tasks2')
 							a(ng-click='nav("tasks2")') Taken
 						li(data-match-route='/team')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
@@ -60,9 +60,9 @@ block navbar
 						li(data-match-route='/manage',
 						ng-hide='app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
-						li(data-match-route='/planboard',
-						ng-hide='app.resources.role > 1')
-							a(ng-click='nav("planboard")') Agenda
+						//li(data-match-route='/planboard',
+						//ng-hide='app.resources.role > 1')
+						//	a(ng-click='nav("planboard")') Agenda
 						li(data-match-route='/support')
 							a(ng-click='nav("support")') Support
 						li(data-match-route='/upload',

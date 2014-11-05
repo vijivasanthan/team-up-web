@@ -31,11 +31,13 @@
             <ul class="nav navbar-nav">
               <!-- li(data-match-route='/tasks')// a(ng-click='nav("tasks")') Taken
               -->
-              <li data-match-route="/tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
+              <li data-match-route="/tasks2" class="tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
               <li data-match-route="/team"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
               <li id="clientMenu" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>
-              <li data-match-route="/planboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;planboard&quot;)">Agenda</a></li>
+              <!--li(data-match-route='/planboard',-->
+              <!--ng-hide='app.resources.role > 1')-->
+              <!--	a(ng-click='nav("planboard")') Agenda-->
               <li data-match-route="/support"><a ng-click="nav(&quot;support&quot;)">Support</a></li>
               <li data-match-route="/upload" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;upload&quot;)">Upload</a></li>
               <!--li(data-match-route='/planboard',-->
