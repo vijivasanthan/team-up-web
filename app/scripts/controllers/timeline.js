@@ -566,7 +566,7 @@ define(
             );
           };
 
-          // refresh myTasks and alltasks 
+          // refresh myTasks and alltasks
           $scope.refreshTasks = function (taskId, action)
           {
 
@@ -683,8 +683,8 @@ define(
                       time: new Date(values.end).toString(config.app.formats.time),
                       datetime: new Date(values.end).toISOString()
                     },
-                    recursive: (values.group.match(/recursive/)) ? true : false,
-                    state: 'com.ask-cs.State.Available'
+                    recursive: (values.group.match(/recursive/)) ? true : false
+                    //state: 'com.ask-cs.State.Available'
                   };
                 }
               );

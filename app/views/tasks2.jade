@@ -38,7 +38,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{task.statusLabel}}
 					dt Tijdsbestek
 						dd {{task.plannedTaskDuration.label}}
-					dt Beschrijving
+					dt(ng-show='task.description') Beschrijving
 						dd(class="description") {{task.description}}
 					dt Gemaakt door
 						dd
