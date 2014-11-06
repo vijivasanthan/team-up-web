@@ -76,7 +76,6 @@ define(
             off: function () { $rootScope.loading.status = false }
           };
 
-
           /**
            * Notification
            */
@@ -220,6 +219,36 @@ define(
             return member;
           };
 
+		  // Get teams of a member
+		  $rootScope.getTeamsofMembers = function (memberId)
+		  {
+			if (memberId == null)
+			{
+				return null;
+			}
+
+			var currentTeams = [];
+
+			angular.forEach(
+				Store('app').get('teams'),
+				function (team)
+				{
+					angular.forEach(
+						Store('app').get(team.uuid),
+						function (_member)
+						{
+							if (_member.uuid == memberId)
+							{
+								currentTeams.push(team);
+							}
+						}
+					);
+				}
+			);
+
+			return currentTeams;
+		  };
+
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
           {
@@ -285,6 +314,20 @@ define(
             return ret;
           };
 
+          /**
+           * Update the states of the logged user localStorage
+           * @param member
+           */
+          $rootScope.checkUpdatedStatesLoggedUser = function(member)
+          {
+            if($rootScope.app.resources.uuid == member.uuid
+              && ! _.isEqual($rootScope.app.resources.states, member.states))
+            {
+              $rootScope.app.resources.states = member.states;
+              Store('app').save('resources', $rootScope.app.resources);
+            }
+          }
+
           // Get team name by id (shared)
           $rootScope.getTeamName = function (teamId)
           {
@@ -311,12 +354,12 @@ define(
            * 2> find the groups belong to this team,
            * 3> get all the clients under the group
            */
-            // TODO: It is only called from planboard controller. Maybe move it to there?
+            // TODO: TODO change the clients.push FullName and name is the same
             // FIXME: It breaks down when the selected groups has no clientGroup on adding slot on timeline
           $rootScope.getClientsByTeam = function (teamIds)
           {
             var clients = [],
-                clientIds = [];
+              clientIds = [];
 
             angular.forEach(
               teamIds,
@@ -326,6 +369,7 @@ define(
                   Store('app').get('teamGroup_' + teamId),
                   function (teamGroup)
                   {
+
                     var members = Store('app').get(teamGroup.id);
 
                     if (members.length > 0)
@@ -336,13 +380,16 @@ define(
                         {
                           // console.log('member ->', member);
 
-                          if (clientIds.indexOf(member.uuid) == - 1)
+                          if (clientIds.indexOf(member.uuid) == -1)
                           {
                             clientIds.push(member.uuid);
 
                             clients.push(
                               {
                                 uuid: member.uuid,
+                                firstName: member.firstName,
+                                lastName: member.lastName,
+                                fullName: member.firstName + ' ' + member.lastName,
                                 name: member.firstName + ' ' + member.lastName
                               }
                             );
@@ -436,33 +483,38 @@ define(
             );
           };
 
-		//todo prevent team members from changing eachothers picture
-		$rootScope.showChangedAvatar = function(type, id)
-		 {
-			var url = $filter('avatar')(id, type, '80'),
-				elements = [];
+          /**
+           * Changed avatarpic after a change
+           * @param type The parent of the avatarpic team/profile/client
+           * @param id The uuid of the user
+           */
+          $rootScope.showChangedAvatar = function (type, id)
+          {
+            var url = $filter('avatar')(id, type, '80'),
+              elements = [];
 
-			if(type == 'team')
-			{
-				//check if id is equal with the logged user id
-				if(id == $rootScope.app.resources.uuid)
-				{
-					elements.push('.profile-avatar');
-				}
-				elements.push('.team-avatar');
-			}
-			else
-			{
-				elements.push('.client-avatar');
-			}
+            if (type == 'team')
+            {
+              //check if id is equal with the logged user id
+              if (id == $rootScope.app.resources.uuid)
+              {
+                elements.push('.profile-avatar');
+              }
+              elements.push('.team-avatar');
+            }
+            else
+            {
+              elements.push('.client-avatar');
+            }
 
-			angular.forEach(elements, function(element, i) {
-				angular.element(element).css({
-					'background': 'url(' + url + ')',
-					'background-size': 'cover'
-				});
-			});
-		  };
+            angular.forEach(elements, function (element, i)
+            {
+              angular.element(element).css({
+                'background': 'url(' + url + ')',
+                'background-size': 'cover'
+              });
+            });
+          };
 
           // TODO: Remove adding 1 pixel fix from url, implement a session related id in url
           // Trick browser for avatar url change against caching
@@ -525,7 +577,6 @@ define(
 
             return ret;
           };
-
         }
       ]
     );

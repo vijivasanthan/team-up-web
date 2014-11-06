@@ -212,7 +212,7 @@ define(
           {
             // query my tasks
             TeamUp._("taskMineQuery").then(
-                function (result) { 
+                function (result) {
                   Store('app').save('myTasks', result) 
                 }
             );
@@ -250,6 +250,20 @@ define(
             );
           }
 
+          /**
+           * add teams to the logged user localStorage
+           */
+          function updateLoggedUserTeams()
+          {
+            var userResources = Store('app').get('resources'),
+                teamsUser = _.pluck($scope.$root.getTeamsofMembers(userResources.uuid), 'uuid');
+
+            userResources.teamUuids = teamsUser;
+
+            $rootScope.app.resources = userResources;
+            Store('app').save('resources', userResources);
+          }
+
           function enhanceTasks ()
           {
             var taskGroups = ['myTasks', 'allTasks'];
@@ -264,13 +278,19 @@ define(
                   group,
                   function (task)
                   {
-                    var client = $rootScope.getClientByID(task.relatedClientUuid);
+					if(typeof(task) === 'object')
+					{
+						var client = $rootScope.getClientByID(task.relatedClientUuid);
 
-                    if (client != null)
-                    {
-                      // console.log(client);
-                      task.relatedClientName = client.firstName + ' ' + client.lastName;
-                    }
+						if(client != null)
+						{
+							task.relatedClientName = client.firstName + ' ' + client.lastName;
+						}
+						else
+						{
+							console.log('client ', task.relatedClientUuid, task);
+						}
+					}
                   }
                 );
 
@@ -301,7 +321,7 @@ define(
                 {
                   $rootScope.app.resources = resources;
 
-                  Store('app').save('resources', resources);
+                  Store('app').save('resources', $rootScope.app.resources);
 
                   progress(40, $rootScope.ui.login.loading_Teams);
 
@@ -346,7 +366,10 @@ define(
                                     .then(
                                     function ()
                                     {
-                                      $location.path('/tasks2');
+										//update localStorage logged user
+										updateLoggedUserTeams();
+
+										$location.path('/tasks2');
 
                                       setTimeout(
                                         function ()

@@ -14,7 +14,7 @@
 
 			#UploadStepSelectFile(ng-show='step === "SelectFile"')
 				.tab-header
-					h3.pull-left Bestand kiezen	
+					h3 Bestand kiezen
 				hr
 				div(style='display:none;')
 					| Output Format:
@@ -25,8 +25,12 @@
 					br
 				p
 					| Bestand kiezen:
-					input#xlf(type='file', name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)')
-				#drop(ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
+					div(id='uploadSheetPicker')
+						p(class="btn btn-primary") Upload spreadsheet...
+						input(type="file", name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class='uploadSheetButton')
+
+
+				#drop(drag-enter-leave='sheetEntering' ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
 					|Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.
 				div(style='display:none;')
 					| Advanced Demo Options:
@@ -45,7 +49,7 @@
 				.tab-header
 					h3.pull-left Namen controleren
 				hr
-				button.proceedButton(ng-click="uploadStepConfirmNames()") Verder gaan
+				button(ng-click="uploadStepConfirmNames()", class='btn btn-primary') Verder gaan
 				#UploadStepCheckTeamMemberNames
 					h4 Team Leden
 					form
@@ -77,7 +81,7 @@
 				.tab-header
 					h3.pull-left Routes controleren
 				hr
-				button.proceedButton(ng-click="uploadStepCheckNames()") Verder gaan
+				button(ng-click="uploadStepCheckNames()", class='btn btn-primary') Verder gaan
 				#UploadStepShowErrors(ng-show="tuSheet.errors.length > 0")
 					h3 Fouten
 					p(ng-repeat="error in tuSheet.errors")
@@ -85,8 +89,14 @@
 						span {{ error.text }}
 				#UploadStepShowRoutes
 					.SheetDayDiv(ng-repeat="day in tuSheet.days")
-						h3 {{ day.startDate | date: 'EEEE' }}
-						.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
+						.SheetDayDivHead
+							h3 {{ day.startDate | date: 'EEEE' }}
+							.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
+							.sheetDayDivHandler
+								.SheetDayNameDiv(ng-show="day.taskExist")
+									span Taken:#{' '} {{ day.doInsert ? 'aan' : 'uit' }}
+								.SheetDayNameToggleDiv(ng-show="day.taskExist")
+									input(type='checkbox', ng-model='day.doInsert', ng-change="toggleDayInsert(day)")
 						.SheetRouteDiv(ng-repeat="route in day.routes")
 							h4 {{ route.name }}
 							.SheetRouteTeamMemberDiv
@@ -95,10 +105,10 @@
 										| Teamlid:#{' '}
 										span {{ route.teamMemberName ? route.teamMemberName : "niemand" }}
 								.SheetRouteTeamMemberToggleDiv
-									input(type='checkbox', ng-model='route.doInsert', ng-change="toggleRouteInsert()")
+									input(type='checkbox', ng-show='route.teamMemberName', ng-model='route.doInsert', ng-change="toggleRouteInsert()")
 							.SheetTaskDiv(ng-repeat="task in route.tasks")
 								.SheetTaskStartDiv {{ task.backendTask.plannedStartVisitTime | date: 'shortTime'  }}
-								.SheetTaskClientDiv 
+								.SheetTaskClientDiv
 									| {{ task.clientName ? ( task.client ? ( task.client.fullName + " (" + (task.clientScore * 100).toFixed() + "%)" ) : task.clientName ) : "niemand" }}
 								.SheetTaskDurationDiv {{ task.duration }}
 								.SheetTaskToggleDiv
@@ -107,6 +117,12 @@
 			#UploadStepCreateTasks(ng-show='step === "CreateTasks"')
 				.tab-header
 					h3.pull-left Taken aanmaken
+				hr
+				div.taskErrors(ng-show='taskCreateErrors.length > 0')
+					h5 De volgende taken konden niet geupload worden
+					ul
+						li(ng-repeat='task in taskCreateErrors' class='has-error') {{ task.error.result  }} {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }}
+
 				hr
 				.dayRow(ng-repeat="day in tuSheet.days")
 					{{ day.startDate | date: 'fullDate' }}
@@ -117,11 +133,8 @@
 							.taskRowStart {{ task.backendTask.plannedStartVisitTime | date: 'shortTime' }}
 							.taskRowEnd {{ task.backendTask.plannedEndVisitTime | date: 'shortTime' }}
 							.taskRowClient {{ task.client.fullName }}
-					
-				h3 Fouten
-				p(ng-repeat="error in taskCreateErrors")
-					| Foutcode {{ error.code + ": "}}
-					span {{ error.text }}
+
+
 
 			pre#out.
 			br

@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+<resources>
+<resource path="/servers"><method name="GET"><doc>request servers from domainAgent</doc><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/user_exists"><method name="GET"><doc>Checks if a user exists</doc><request><param name="username" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean namespace.user_exists;</acs-dev>
+</resource>
+<resource path="/login"><method name="GET"><doc>login: pass(md5) + uuid + location(optional)</doc><request><param name="namespace" style="path" type="String" /><param name="pass" style="query" type="String" /><param name="uuid" style="query" type="String" /><param name="location" style="query" type="String" /><param name="checkASKFast" style="query" type="Boolean" /><param name="domain" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.String&gt; namespace.domain_login;</acs-dev>
+</resource>
+<resource path="/logout"><method name="GET"><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/register"><method name="GET"><request><param name="namespace" style="path" type="String" /><param name="domain" style="query" type="String" /><param name="direct" style="query" type="boolean" /><param name="module" style="query" type="String" /><param name="name" style="query" type="String" /><param name="phone" style="query" type="String" /><param name="uuid" style="query" type="String" /><param name="pass" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.String namespace.domain_register;</acs-dev>
+</resource>
+<resource path="/passwordReset"><method name="GET"><doc>change password. this call has double functionality (key==null : request new password, key!=null &amp;&amp; pass!=null set a password). $path is a redirect link for webpaige</doc><request><param name="namespace" style="path" type="String" /><param name="path" style="query" type="String" /><param name="uuid" style="query" type="String" /><param name="pass" style="query" type="String" /><param name="key" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean namespace.reset_password_email;</acs-dev>
+</resource>
+<resource path="/p2000guard"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/avatar/{filename}"><method name="GET"><request><param name="filename" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/callTeam/connectphone/{phonenumber}"><method name="GET"><request><param name="phonenumber" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/callClient/connectphone/{phonenumber}"><method name="GET"><request><param name="phonenumber" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/contactMember/"><method name="GET"><request><param name="teamNumber" style="query" type="String" /><param name="responder" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/inboundService/"><method name="GET"><request><param name="responder" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/callnextMember/"><method name="POST"><request><param name="nextNumber" style="query" type="String" /><param name="teamId" style="query" type="String" /><param name="callerId" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/thankyou"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/updateMember"><method name="POST"><request><param name="memberId" style="query" type="String" /><param name="state" style="query" type="String" /><param name="value" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askfast/timeout"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/import_ecare_teamup"><method name="POST"><doc>import userdata from ecare setup</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/import_slots/{UUID}/"><method name="POST"><doc>import timeslots from old knrm setup</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/init_setup"><method name="GET"><doc>init team structure?</doc><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/check_monitors"><method name="POST"><doc>checks three level monitoring?</doc><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/create_night_monitors"><method name="POST"><doc>checks night monitoring?</doc><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/import_users"><method name="POST"><doc>import userdata from old knrm setup</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/network/members"><method name="GET"><doc>TODO: implement</doc><request><param name="namespace" style="path" type="String" /><param name="ields" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List network.my_network_get_members;</acs-dev>
+</resource>
+<resource path="/network/membership"><method name="PUT"><doc>add sessionUser? to multiple groups. payload be [groupIds]. returns array with added groupIds</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.fasterxml.jackson.databind.node.ArrayNode network.network_update_membership;</acs-dev>
+</resource>
+<resource path="/network/{uuid}"><method name="PUT"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/network/searchPaigeUser"><method name="POST"><request><param name="namespace" style="path" type="String" /><param name="fields" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.fasterxml.jackson.databind.node.ArrayNode network.search_users;</acs-dev>
+</resource>
+<resource path="/network/{uuid}"><method name="POST"><doc>create new group ( payload = name ). return new groupID</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.String network.create_group;</acs-dev>
+</resource>
+<resource path="/network/{uuid}"><method name="DELETE"><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List network.remove_group;</acs-dev>
+</resource>
+<resource path="/network/{uuid}/members/{memberUUID}"><method name="POST"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /><param name="memberUUID" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/network/{uuid}/members"><method name="GET"><doc>get all members in given group (+resource optional)</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /><param name="fields" style="query" type="String" /><param name="hack" style="query" type="boolean" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; network.network_get_members;</acs-dev>
+</resource>
+<resource path="/network/{uuid}/members/{memberUUID}"><method name="DELETE"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /><param name="memberUUID" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/network/guard"><method name="GET"><doc>return the slimalarmeren agentIDs</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;java.lang.String&gt; network.network_get_superGuard;</acs-dev>
+</resource>
+<resource path="/network/guard/{uuid}/team"><method name="GET"><doc>return a team proposal (slim alarmeren)</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.String&gt; network.network_get_superGuard;</acs-dev>
+</resource>
+<resource path="/network/guard/{uuid}/status"><method name="GET"><doc>return extended team description (slim alarmeren)</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.fasterxml.jackson.databind.node.ObjectNode network.network_get_superGuard_status;</acs-dev>
+</resource>
+<resource path="/parent"><method name="GET"><doc>get groups this user is in</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.Group&gt; network.get_own_parents;</acs-dev>
+</resource>
+<resource path="/network"><method name="GET"><doc>get members of own network group</doc><request><param name="namespace" style="path" type="String" /><param name="strict" style="query" type="boolean" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; network.get_own_network;</acs-dev>
+</resource>
+<resource path="/network/{UUID}/member/slots2"><method name="GET"><doc>get slots for all people in a group (multiple slots call speedup)</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.util.List&gt; planning.get_group_slots;</acs-dev>
+</resource>
+<resource path="/network/wish"><method name="GET"><doc>shorthand for /network/{sessionUUID}/wish </doc><request><param name="namespace" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; planning.own_get_wish;</acs-dev>
+</resource>
+<resource path="/network/{UUID}/wish"><method name="GET"><doc>get wishes (in a period) for a monitoragent based on given groupID.. </doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; planning.others_get_wish;</acs-dev>
+</resource>
+<resource path="/network/{UUID}/wish"><method name="PUT"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/calc_planning/{UUID}"><method name="GET"><doc>combine wish and (group)plannings into a single numeric timeline</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="stateGroup" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&lt;java.lang.String, java.lang.Object&gt;&gt; planning.others_calc;</acs-dev>
+</resource>
+<resource path="/states"><method name="GET"><doc>get labels to use as states in planning</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.Set planning.get_states;</acs-dev>
+</resource>
+<resource path="/slots"><method name="GET"><doc>shorthand for /askatars/{sessionUUID}/slots </doc><request><param name="namespace" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="type" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; planning.get_own_slots;</acs-dev>
+</resource>
+<resource path="/askatars/{UUID}/slots"><method name="GET"><doc>get "Slots" in the given time-window</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="type" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;java.util.Map&gt; planning.others_getSlots;</acs-dev>
+</resource>
+<resource path="/askatars/{UUID}/slots"><method name="POST"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askatars/{UUID}/slots"><method name="PUT"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="recursive" style="query" type="boolean" /><param name="text" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/slots"><method name="DELETE"><doc>shorthand for /askatars/{sessionUUID}/slots </doc><request><param name="namespace" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="text" style="query" type="String" /><param name="recursive" style="query" type="boolean" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/askatars/{UUID}/slots"><method name="DELETE"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="UUID" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="recursive" style="query" type="boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/resources"><method name="GET"><doc>shorthand for /node/{sessionUid}/resource</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; resource.get_own_resources;</acs-dev>
+</resource>
+<resource path="/resources"><method name="POST"><doc>create resource for self. no return data</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List resource.set_own_resources;</acs-dev>
+</resource>
+<resource path="/node/{uuid}/resource"><method name="GET"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /><param name="tags" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; resource.get_others_resource;</acs-dev>
+</resource>
+<resource path="/node/{uuid}/resource"><method name="PUT"><doc>TODO: fix invalid json response</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/node/{uuid}/role"><method name="GET"><doc>get the role(resource) for a user</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.String resource.getRole;</acs-dev>
+</resource>
+<resource path="/node/{uuid}"><method name="DELETE"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean resource.deleteUser;</acs-dev>
+</resource>
+<resource path="/node/{uuid}/membership"><method name="PUT"><doc>add/remove User to/from multiple groups. payload be [groupIds]. returns array with added groupIds</doc><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.fasterxml.jackson.databind.node.ArrayNode resource.updateGroupMemberShip;</acs-dev>
+</resource>
+<resource path="/node/{uuid}/pincode_exists"><method name="GET"><doc>Checks if a pincode exists</doc><request><param name="uuid" style="path" type="String" /><param name="pincode" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/userdata"><method name="GET"><doc>Get userdata (profile page) of the logged in user</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; resource.get_own_userdata;</acs-dev>
+</resource>
+<resource path="/userdata/{uuid}/"><method name="GET"><doc>Get userdata (profile page) of a user</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; resource.get_userdata;</acs-dev>
+</resource>
+<resource path="/node/{uuid}/role"><method name="PUT"><doc>assign new role to user. payload= [roleNumber]</doc><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean resource.setRole;</acs-dev>
+</resource>
+<resource path="/question"><method name="GET"><doc>get own messages</doc><request><param name="namespace" style="path" type="String" /><param name="0" style="query" type="String" /><param name="limit" style="query" type="int" /><param name="offset" style="query" type="int" /><param name="state" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.fasterxml.jackson.databind.node.ArrayNode message.get_own_questions;</acs-dev>
+</resource>
+<resource path="/question/changeState"><method name="POST"><doc>update message-state. no return data</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List message.update_notification;</acs-dev>
+</resource>
+<resource path="/question/deleteQuestions"><method name="POST"><doc>move message to TRASH. no return data</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List message.empty_trash;</acs-dev>
+</resource>
+<resource path="/alert"><method name="GET"><doc>get own alerts</doc><request><param name="namespace" style="path" type="String" /><param name="since" style="query" type="long" /><param name="state" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/question/sendDirectMessage"><method name="POST"><doc>send a message. payload be {members:[],content:"",subject:"",types:[]}. invalid json response?</doc><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/notification/{qid}"><method name="PUT"><doc>replace on of the messages</doc><request><param name="qid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean notification.updateNotification;</acs-dev>
+</resource>
+<resource path="/notification/{qid}"><method name="DELETE"><doc>remove message</doc><request><param name="qid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean notification.remove_notification;</acs-dev>
+</resource>
+<resource path="/notification"><method name="GET"><doc>read all</doc><request><param name="namespace" style="path" type="String" /><param name="limit" style="query" type="int" /><param name="offset" style="query" type="int" /><param name="state" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List notification.get_own_notifications;</acs-dev>
+</resource>
+<resource path="/notification/{qid}"><method name="GET"><doc>read single</doc><request><param name="qid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.Map notification.get_own_notification;</acs-dev>
+</resource>
+<resource path="/notification"><method name="POST"><doc>create a new notification action (weekly reminder)</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.String notification.create_notification;</acs-dev>
+</resource>
+<resource path="/team"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/team/{team_uuid}/tasks"><method name="GET"><doc>get the team's tasks</doc><request><param name="team_uuid" style="path" type="String" /><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /><param name="statuses" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; team.getTasksByTeamId;</acs-dev>
+</resource>
+<resource path="/team/tasks"><method name="GET"><doc>get the team's tasks</doc><request><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /><param name="statuses" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; team.getTeamTasks;</acs-dev>
+</resource>
+<resource path="/team/tasks"><method name="DELETE"><doc>get the team's tasks</doc><request><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /><param name="statuses" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;java.lang.String&gt; team.deleteAllTasks;</acs-dev>
+</resource>
+<resource path="/team/member"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member"><method name="PUT"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/member/{memberId}"><method name="PUT"><request><param name="teamId" style="path" type="String" /><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}"><method name="GET"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member"><method name="GET"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/{memberId}"><method name="GET"><request><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/{memberId}"><method name="DELETE"><request><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/status/{teamId}"><method name="GET"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/{memberId}/photo"><method name="POST"><request><param name="memberId" style="path" type="String" /><param name="square" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/{memberId}/photo"><method name="GET"><request><param name="memberId" style="path" type="String" /><param name="width" style="query" type="String" /><param name="height" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/{memberId}/photourl"><method name="GET"><request><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/callTeam/{memberId}"><method name="POST"><request><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/teamMessage"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/teamMessage/{teamId}"><method name="POST"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/teamMessage/{teamId}"><method name="GET"><request><param name="teamId" style="path" type="String" /><param name="since" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/teamMessage"><method name="GET"><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/phone/{phone}"><method name="POST"><request><param name="teamId" style="path" type="String" /><param name="phone" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/phone"><method name="GET"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/member/"><method name="POST"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/removeMember/"><method name="PUT"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/unAssignClientGroups/"><method name="PUT"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/clientGroups"><method name="GET"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/clientGroups"><method name="POST"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/updateClientGroups"><method name="PUT"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}/updateMembers"><method name="PUT"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/teams"><method name="GET"><request><param name="strict" style="query" type="boolean" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}"><method name="PUT"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/{teamId}"><method name="DELETE"><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team"><method name="GET"><request><param name="strict" style="query" type="boolean" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/members"><method name="GET"><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/team/member/tasks/{memberId}"><method name="GET"><request><param name="memberId" style="path" type="String" /><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /><param name="statuses" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/geofence"><method name="GET"><doc>get geofence data (for session domain)</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class com.askcs.commons.entity.GeofenceData domain.getGeofence;</acs-dev>
+</resource>
+<resource path="/monitor"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean domain.addMonitor;</acs-dev>
+</resource>
+<resource path="/monitor/{name}"><method name="DELETE"><request><param name="name" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean domain.deleteMonitor;</acs-dev>
+</resource>
+<resource path="/domain/guard"><method name="GET"><doc>return estimated station shortage information </doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; domain.mon_get_virtualGuard;</acs-dev>
+</resource>
+<resource path="/domain/location"><method name="POST"><doc>set a location (for this sessionUser) </doc><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean domain.location_switch;</acs-dev>
+</resource>
+<resource path="/domain/location"><method name="GET"><doc>retrieve current location (for this sessionUser) </doc><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.String domain.location_get;</acs-dev>
+</resource>
+<resource path="/domain/locations"><method name="GET"><doc>retrieve valid locations (for this sessionUser) </doc><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.SortedSet&lt;java.lang.String&gt; domain.location_get_all;</acs-dev>
+</resource>
+<resource path="/ddr"><method name="GET"><doc>return ddr logs of linked askfast account </doc><request><param name="adapterId" style="query" type="String" /><param name="fromAddress" style="query" type="String" /><param name="typeId" style="query" type="String" /><param name="status" style="query" type="String" /><param name="startTime" style="query" type="Long" /><param name="endTime" style="query" type="Long" /><param name="offset" style="query" type="Integer" /><param name="limit" style="query" type="Integer" /><param name="shouldGenerateCosts" style="query" type="Boolean" /><param name="shouldIncludeServiceCosts" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;com.askcs.webserver.model.DDRRecord&gt; domain.getDDRLogs;</acs-dev>
+</resource>
+<resource path="/domain"><method name="GET"><doc>get name of session domain</doc><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.String domain.getDomains;</acs-dev>
+</resource>
+<resource path="/monitors"><method name="GET"><doc>get info for all monitorAgents in the domain</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, com.fasterxml.jackson.databind.JsonNode&gt; domain.getMonitors;</acs-dev>
+</resource>
+<resource path="/groups"><method name="GET"><doc>Get all groups in a domain</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.Group&gt; domain.getGroups;</acs-dev>
+</resource>
+<resource path="/channels"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean domain.addChannel;</acs-dev>
+</resource>
+<resource path="/channels"><method name="GET"><doc>get the askfast channels for session.domain.</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;com.askcs.commons.entity.Channel&gt; domain.getChannels;</acs-dev>
+</resource>
+<resource path="/geofence"><method name="PUT"><doc>create new geofence. payload:{geofencedata} output: [true] </doc><request></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean domain.createGeofence;</acs-dev>
+</resource>
+<resource path="/capcodes"><method name="GET"><doc>get p2000 capcodes (for session domain)</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;java.lang.String&gt; domain.getCapcodes;</acs-dev>
+</resource>
+<resource path="/divisions"><method name="GET"><doc>get list of divisions (for session domain)</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.Division&gt; domain.getDivisions;</acs-dev>
+</resource>
+<resource path="/parent/availability"><method name="GET"><request><param name="namespace" style="path" type="String" /><param name="start" style="query" type="int" /><param name="end" style="query" type="int" /><param name="tags" style="query" type="String" /><param name="stateGroup" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/states"><method name="POST"><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/addresses/"><method name="GET"><request><param name="namespace" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/resources/{uuid}"><method name="PUT"><request><param name="namespace" style="path" type="String" /><param name="uuid" style="path" type="String" /><param name="tags" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/clientGroup/{clientGroupId}/teams"><method name="GET"><doc>getTeams</doc><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.Set&lt;java.lang.String&gt; clientGroup.getTeamsAssignedToGroup;</acs-dev>
+</resource>
+<resource path="/clientGroup/{clientGroupId}"><method name="GET"><doc>get the client group by client group ID</doc><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class com.askcs.commons.entity.teamup.ClientGroup clientGroup.getClientGroupById;</acs-dev>
+</resource>
+<resource path="/clientGroup/{clientGroupId}/reports"><method name="GET"><doc>get All the reports from specific client</doc><request><param name="clientGroupId" style="path" type="String" /><param name="limit" style="query" type="Integer" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.List&lt;com.askcs.commons.entity.teamup.Report&gt; clientGroup.getReportsByClientId;</acs-dev>
+</resource>
+<resource path="/clientGroup/{clientGroupId}/tasks"><method name="GET"><doc>get Tasks By Client GroupId</doc><request><param name="clientGroupId" style="path" type="String" /><param name="from" style="query" type="long" /><param name="to" style="query" type="long" /><param name="type" style="query" type="int" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; clientGroup.getTasksByClientGroupId;</acs-dev>
+</resource>
+<resource path="/clientGroup/{clientGroupId}"><method name="DELETE"><doc>delete the client group by ID</doc><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clientGroup"><method name="POST"><doc>create client group. TODO: inspect logic on this one</doc><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/callClient/{clientId}"><method name="POST"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{clientId}/reports"><method name="GET"><doc>get All the reports from specific client</doc><request><param name="clientId" style="path" type="String" /><param name="limit" style="query" type="Integer" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Report&gt; client.getReportsByClientId;</acs-dev>
+</resource>
+<resource path="/client/clientGroups"><method name="GET"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/clientGroup/{clientGroupId}/clients"><method name="GET"><doc>get clients by client groupID</doc><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Client&gt; client.getClientByGroup;</acs-dev>
+</resource>
+<resource path="/client/{clientId}"><method name="GET"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/{clientId}"><method name="PUT"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/{clientId}"><method name="DELETE"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/clientGroup/{clientGroupId}/clients"><method name="POST"><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/clientGroup/{clientGroupId}/removeClients"><method name="PUT"><request><param name="clientGroupId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/{filed}"><method name="GET"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /><param name="filed" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/{filed}"><method name="PUT"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /><param name="filed" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/media"><method name="GET"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/media"><method name="POST"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}"><method name="GET"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /><param name="media_uuid" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}"><method name="DELETE"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /><param name="media_uuid" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/team/{teamId}"><method name="GET"><doc>get clients by teamId</doc><request><param name="teamId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Client&gt; client.getClientsByTeamId;</acs-dev>
+</resource>
+<resource path="/client/callRelationOfClient/{phonenumber}"><method name="POST"><request><param name="phonenumber" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/{clientId}/photo"><method name="POST"><request><param name="clientId" style="path" type="String" /><param name="square" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/{clientId}/photo"><method name="GET"><request><param name="clientId" style="path" type="String" /><param name="width" style="query" type="String" /><param name="height" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/{clientId}/photourl"><method name="GET"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{clientId}/reports"><method name="POST"><request><param name="clientId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}"><method name="PUT"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{clientId}/reports"><method name="DELETE"><request><param name="clientId" style="path" type="String" /><param name="reportId" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/clients/{client_uuid}/reports/{reportId}"><method name="GET"><request><param name="client_uuid" style="path" type="String" /><param name="reportId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/clients"><method name="GET"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/client/tasks/{clientId}"><method name="GET"><request><param name="clientId" style="path" type="String" /><param name="from" style="query" type="long" /><param name="to" style="query" type="long" /><param name="type" style="query" type="int" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/eventlogs/engine/start"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/engine/stop"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/frequency"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/frequency"><method name="POST"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/eventlogs/dbcredentials"><method name="PUT"><request></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/eventlogs/all/status"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/all/enable"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/all/enable"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/all/locallogsamount"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/search"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/xmpp"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/custom"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/{uuid}/enable"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/{uuid}/disable"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/eventlogs/all/logs"><method name="DELETE"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/mode"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/modealways"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/wish"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/escalationgroup"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/shiftedmonitortime"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/mobilizemedium"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/mobilizationgroup"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/retryinterval"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/askfastagenturl"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/askfastescalationagenturl"><method name="PUT"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}"><method name="GET"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/monitorgroup"><method name="POST"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/monitorgroup/{groupId}"><method name="DELETE"><request><param name="uuid" style="path" type="String" /><param name="groupId" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/start"><method name="POST"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/monitor/{uuid}/stop"><method name="POST"><request><param name="uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/start"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/stop"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/status"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/subscribers"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/subscribe"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/p2000/unsubscribe"><method name="DELETE"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/team/{team_uuid}"><method name="GET"><doc>get the team's tasks</doc><request><param name="team_uuid" style="path" type="String" /><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /><param name="statuses" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; task.getTasksByTeamId;</acs-dev>
+</resource>
+<resource path="/tasks/mine"><method name="GET"><request><param name="statuses" style="query" type="String" /><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/{task_uuid}"><method name="GET"><request><param name="task_uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/{task_uuid}/{fieldName}"><method name="GET"><request><param name="task_uuid" style="path" type="String" /><param name="fieldName" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/{task_uuid}"><method name="PUT"><request><param name="task_uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/{task_uuid}/{fieldName}"><method name="PUT"><request><param name="task_uuid" style="path" type="String" /><param name="fieldName" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/{task_uuid}"><method name="DELETE"><request><param name="task_uuid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/tasks/team/{team_uuid}/{member_uuid}"><method name="GET"><doc>get personal tasks </doc><request><param name="team_uuid" style="path" type="String" /><param name="member_uuid" style="path" type="String" /><param name="statuses" style="query" type="String" /><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; task.getTeamMemberTasks;</acs-dev>
+</resource>
+<resource path="/tasks"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/calendar/{uid}/rule/{rid}"><method name="PUT"><doc>replace/update existing rule</doc><request><param name="uid" style="path" type="String" /><param name="rid" style="path" type="int" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.Map&lt;java.lang.String, java.lang.Object&gt; Calendar.otherCalendar_replaceRule;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/rule/{rid}"><method name="DELETE"><doc>remove a rule by ID</doc><request><param name="uid" style="path" type="String" /><param name="rid" style="path" type="int" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean Calendar.otherCalendar_deleteRule;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/rule/{rid}/above"><method name="PUT"><doc>place rule (somewhere) above other ruleId. payload = otherRuleID</doc><request><param name="uid" style="path" type="String" /><param name="rid" style="path" type="int" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean Calendar.otherCalendar_ruleUp;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/rule/{rid}/below"><method name="PUT"><doc>place rule (somewhere) below other ruleId. payload = otherRuleID</doc><request><param name="uid" style="path" type="String" /><param name="rid" style="path" type="int" /></request><response><representation mediaType="*/*" /></response></method>
+<acs-dev>class java.lang.Boolean Calendar.otherCalendar_ruleDown;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/slots"><method name="GET"><doc>retrieve instances in the previous planning format</doc><request><param name="uid" style="path" type="String" /><param name="from" style="query" type="long" /><param name="to" style="query" type="long" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.String Calendar.otherCalendar_getSlots;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/instances"><method name="GET"><doc>retrieve instances in the new format. returns array of  {id/start/end/value} </doc><request><param name="uid" style="path" type="String" /><param name="type" style="query" type="String[]" /><param name="from" style="query" type="long" /><param name="to" style="query" type="long" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.List&lt;com.askcs.commons.entity.timeline.Slot&gt; Calendar.otherCalendar_getInstances;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/rules"><method name="GET"><doc>get all defined rules for specified user</doc><request><param name="uid" style="path" type="String" /><param name="type" style="query" type="String[]" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>interface java.util.List Calendar.otherCalendar_getRules;</acs-dev>
+</resource>
+<resource path="/calendar/{uid}/rule"><method name="POST"><doc>create a new rule and returns new ruleID.  example json payload =>  {"recurring":"BIWEEKLY","slot":{"value":"available","from":1402650000000,"to":1402653600000},"limit":{"type":"RANGE","from":946684800000},"description":"example", "type":"default" }</doc><request><param name="uid" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Integer Calendar.otherCalendar_createRule;</acs-dev>
+</resource>
+<resource path="/mobile/alerts"><method name="GET"><request><param name="since" style="query" type="Long" /><param name="state" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/alert"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/message"><method name="PUT"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/groupsWithMembers"><method name="GET"><request><param name="keys" style="query" type="List" /><param name="strict" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/monitors"><method name="GET"><request><param name="time" style="query" type="Long" /><param name="strict" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/testversion"><method name="GET"><request><param name="version" style="query" type="String" /><param name="cleanup" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/ssids"><method name="GET"><doc>Get base wifi ssids</doc><request></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.HashMap&lt;java.lang.String, java.lang.String&gt; mobile.getBaseSSIDs;</acs-dev>
+</resource>
+<resource path="/mobile/ssids/{location}"><method name="GET"><doc>Get base wifi ssids filtered for a specific location</doc><request><param name="location" style="path" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>java.util.HashMap&lt;java.lang.String, java.lang.String&gt; mobile.getLocationBaseSSIDs;</acs-dev>
+</resource>
+<resource path="/mobile/presence"><method name="PUT"><doc>Set presence for this user for a specific location</doc><request><param name="presence" style="query" type="boolean" /><param name="ssid" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+<acs-dev>class java.lang.Boolean mobile.setLocationPresence;</acs-dev>
+</resource>
+<resource path="/mobile/current"><method name="GET"><request><param name="start" style="query" type="Long" /><param name="end" style="query" type="Long" /><param name="strict" style="query" type="Boolean" /><param name="excludeAssemble" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/groupsBalance"><method name="GET"><request><param name="start" style="query" type="Long" /><param name="end" style="query" type="Long" /><param name="strict" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/assemblies"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/alert"><method name="PUT"><request><param name="questionId" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/message"><method name="POST"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/messages"><method name="GET"><request><param name="since" style="query" type="String" /><param name="status" style="query" type="String" /><param name="limit" style="query" type="Integer" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/groups"><method name="GET"><request><param name="strict" style="query" type="Boolean" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/slotsCombined"><method name="GET"><request><param name="from" style="query" type="Long" /><param name="to" style="query" type="Long" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/slot"><method name="PUT"><request><param name="startTime" style="query" type="long" /><param name="endTime" style="query" type="long" /><param name="desc" style="query" type="String" /><param name="occurence" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/mobile/states"><method name="GET"><request></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/build"><method name="GET"><request><param name="fetchAll" style="query" type="Boolean" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/build/{scenarioId}"><method name="GET"><request><param name="scenarioId" style="path" type="String" /><param name="scenarioAgentId" style="query" type="String" /></request><response><representation mediaType="application/json" /></response></method>
+</resource>
+<resource path="/build/{scenarioId}"><method name="PUT"><request><param name="scenarioId" style="path" type="String" /><param name="scenarioAgentId" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/build/{scenarioId}"><method name="DELETE"><request><param name="scenarioId" style="path" type="String" /><param name="scenarioAgentId" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/build"><method name="POST"><request><param name="scenarioAgentId" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/user/avatar/{memberId}/photo"><method name="GET"><request><param name="memberId" style="path" type="String" /><param name="width" style="query" type="String" /><param name="height" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/user/avatar/{memberId}/photourl"><method name="GET"><request><param name="memberId" style="path" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+<resource path="/user/avatar/{memberId}/photo"><method name="POST"><request><param name="memberId" style="path" type="String" /><param name="square" style="query" type="String" /></request><response><representation mediaType="*/*" /></response></method>
+</resource>
+</resources>
+</application>

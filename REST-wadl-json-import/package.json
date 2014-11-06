@@ -1,0 +1,13 @@
+{
+  "name": "TeamUp-WADL-parser",
+  "description"   : "This package converts the WADL file from the TeamUp backend to usable AngularJS Resources",
+  "author"        : "Stefan Kroon <skroon@ask-cs.com>",
+  "main"          : "generate.js",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+  },
+  "dependencies": {
+    "change-case": "*"
+  }
+}

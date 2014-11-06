@@ -144,7 +144,7 @@ define(
           restoreSelected: 'Geselecteerde berichten terugplaatsen',
           loadingMessage: 'Bericht laden...',
           escalation: 'Escalatiebericht',
-          reportMessage: 'Nieuw raport van',
+          reportMessage: 'Nieuw rapport van',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Er is een tekort van ' +
@@ -347,6 +347,7 @@ define(
           Number: 'Nummer',
           clientProfileUrl: 'URL Cliëntenprofiel',
           addContact: 'Contactpersoon toevoegen',
+          editContact: 'Contactpersoon wijzigen',
           saveClient: 'Opslaan',
           group: 'Groep',
           errorSaveClientGroup: 'Opslaan wijzigingen cliëntengroep mislukt.',
@@ -423,7 +424,10 @@ define(
             'reachable': 'Bereikbaar',
             'available': 'Beschikbaar',
             'working': 'Aan het werk',
-            'offline': 'Offline'
+            'offline': 'Offline',
+            'not_reachable': 'Niet bereikbaar',
+            'on_the_phone': 'Aan de telefoon',
+            'unknown': 'Onbekend'
           },
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'

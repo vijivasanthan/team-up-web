@@ -21,55 +21,23 @@ define(
         {
           $rootScope.fixStyles();
 
-
           $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
-          var view = (! $location.hash()) ? 'myTasks' : $location.hash();
-          var currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
+          var view = (! $location.hash()) ? 'myTasks' : $location.hash(),
+          	  currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
+			  teamsLocal = Teams.queryLocal(),
+		  	  clientLocal = Clients.queryLocal(),
+		      teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
-
-          //TODO add following date methods to Dater
-          var formatDateTime = function(date, dateFormat) {
-                return $filter('date')(date, dateFormat);
-          };
-
-          var updateTime = function(date, minutes) {
-                var roundMinutes = formatDateTime(date, 'm');
-                roundMinutes = (roundMinutes % 15);
-                var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
-
-                return formatDateTime(updatedTime, "H:mm");
-          };
-
-          var date = new Date();
-          var currentDay =  formatDateTime(date, "dd-MM-yyyy");
-          //round current minutes by 15 and add minutes so the default time is always in the future
-          var currentStartTime = updateTime(date, 15);
-          var currentEndTime = updateTime(date, 30);
-
-          // prepare the teams, members, client groups and clients
-          var teamsLocal = Teams.queryLocal();
-          var clientLocal = Clients.queryLocal();
-          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          $scope.teams = teamsLocal.teams;
-          $scope.currentTeam = $scope.teams[0].uuid;
-
-          $scope.task = {
-              team: $scope.teams[0].uuid,
-              start: {
-                date: currentDay,
-                time: currentStartTime
-              },
-              end: {
-                  date: currentDay,
-                  time: currentEndTime
-              }
-          };
+		  $scope.teams = teamsLocal.teams;
+		  $scope.currentTeam = $scope.teams[0].uuid;
 
           //check if a team of clientgroup is visited lately
-          if(currentTeamClientGroup.team) {
-              $scope.task.team = currentTeamClientGroup.team;
+          if(currentTeamClientGroup.team)
+		  {
+			  $scope.task = {
+				 team: currentTeamClientGroup.team
+			  };
               $scope.currentTeam = currentTeamClientGroup.team;
           }
 
@@ -120,7 +88,7 @@ define(
 
                 var delay = 0;
 
-                if (myTasks.length > 0)
+                if (myTasks.on || myTasks.off)
                 {
                   $scope.tasks.mine = {
                     loading: false,
@@ -176,7 +144,7 @@ define(
               {
                 $scope.tasks.mine = {
                   loading: false,
-                  list: tasks
+                  list: tasks.on
                 };
 
                 (callback && callback.call(this, tasks));
@@ -207,6 +175,16 @@ define(
             );
           }
 
+		  $scope.$watch(
+			  'showFinishedTasks',
+			  function(toggle)
+			  {
+				  var myTasks = Store('app').get('myTasks2');
+
+				  $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
+			  }
+		  );
+
           $scope.$watch(
             'showAllTasks',
             function (toggle)
@@ -223,6 +201,57 @@ define(
               }
             }
           );
+
+		 //date and time methods if a new task is creating
+		 if($scope.views.newTask == true)
+		 {
+			//TODO add following date methods to Dater
+			var formatDateTime = function(date, dateFormat) {
+				return $filter('date')(date, dateFormat);
+			};
+
+			var updateTime = function(date, minutes) {
+				var roundMinutes = formatDateTime(date, 'm');
+				roundMinutes = (roundMinutes % 15);
+				var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
+
+				return formatDateTime(updatedTime, "H:mm");
+			};
+
+			var date = new Date();
+			var currentDay =  formatDateTime(date, "dd-MM-yyyy");
+			//round current minutes by 15 and add minutes so the default time is always in the future
+			var currentStartTime = updateTime(date, 15);
+			var currentEndTime = updateTime(date, 30);
+
+			if(! $scope.task)
+			{
+				$scope.task = {};
+				$scope.task.team = $scope.teams[0].uuid;
+			}
+
+			$scope.task.start = {
+			 		date: currentDay,
+				 	time: currentStartTime
+		 	};
+			$scope.task.end = {
+				 date: currentDay,
+					 time: currentEndTime
+			};
+
+			//change endTime by changing the startTime TODO change watch in angular change methods
+			$scope.$watch(function() {
+				return $scope.task.start.time;
+			}, function(newTime) {
+				$scope.task.end.time = updateTime(Date.parse(newTime), 15);
+			});
+
+			$scope.$watch(function() {
+				return $scope.task.start.date;
+			}, function(newDate) {
+				$scope.task.end.date = newDate;
+			});
+		 }
 
           //          $scope.$watch(
           //            'showOnlyAvailable',
@@ -253,24 +282,25 @@ define(
           $scope.openTask = function (task)
           {
             $scope.task = task;
-			  
-			task.assignedTeamFullName = (
-						_.where(teamsLocal.teams,
-						{
-							uuid: task.assignedTeamUuid
-						})
-						)[0].name;
-			 task.relatedClient.clientGroupName = (
-				  		_.where(clientLocal.clientGroups,
-				  		{
-					  		id: task.relatedClient.clientGroupUuid
-				 		})
-				  		)[0].name;
 
-			getAuthorInfo(task.authorUuid);
+			if(task.assignedTeamUuid)
+			{
+				task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);
+			}
+
+			if(task.relatedClient.clientGroupUuid)
+			{
+				task.relatedClient.clientGroupName = $scope.$root.getClientGroupName(task.relatedClient.clientGroupUuid);
+			}
+
+		    var author = $scope.$root.getTeamMemberById(task.authorUuid);
+			$scope.author = author.firstName + ' ' + author.lastName;
 
             angular.element('#taskModal').modal('show');
           };
+
+		  //default filtering by status
+		  //$scope.ordered = '-status';
 
           $scope.orderBy = function (ordered)
           {
@@ -342,20 +372,6 @@ define(
             );
           };
 
-		  //todo create a profile service
-		  function getAuthorInfo(authorId)
-	      {
-			  TeamUp._(
-				  'profileGet',
-				  { third: authorId },
-				  null
-			  ).then(
-				  function(result) {
-					  $scope.author = result.firstName + ' ' + result.lastName;
-				  }
-			  );
-		  }
-
           // Remove a task
           $scope.deleteTask = function (task)
           {
@@ -370,8 +386,6 @@ define(
             ).then(
               function (result)
               {
-                // console.log("after delete action , ", result);
-
                 if (result.error)
                 {
                   if (result.error.data)
@@ -459,8 +473,6 @@ define(
 
           $scope.changeClientGroup = function (cGroupId)
           {
-            // console.log('client group id', cGroupId);
-
             $scope.groupAffectClient(cGroupId);
           };
 

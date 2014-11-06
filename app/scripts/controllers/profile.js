@@ -36,6 +36,7 @@ define(
           $scope.noImgURL = config.app.noImgURL;
 
           $scope.profilemeta = data;
+
           $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
 
 		  //temp userdata will be saved after pressing save
@@ -50,37 +51,7 @@ define(
           var teams = [];
           $scope.selectTeams = Store('app').get('teams');
 
-          angular.forEach(
-            $scope.profilemeta.teamUuids,
-            function (teamId)
-            {
-              angular.forEach(
-                $scope.selectTeams,
-                function (team)
-                {
-                  if (team.uuid == teamId)
-                  {
-                    teams.push(team);
-                  }
-                }
-              );
-            }
-          );
-
-          if (teams.length == 0)
-          {
-            angular.forEach(
-              $scope.selectTeams,
-              function (team)
-              {
-				//remove the temp session storage
-                if (team.uuid == sessionStorage.getItem(data.uuid + '_team'))
-                {
-                  teams.push(team);
-                }
-              }
-            );
-          }
+		  var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
 
           $scope.teams = teams;
 
@@ -203,6 +174,7 @@ define(
                     null,
                     function (resources)
                     {
+
                       if ($route.current.params.userId == $rootScope.app.resources.uuid)
                       {
                         $rootScope.app.resources = result;
@@ -222,12 +194,8 @@ define(
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
-						$scope.profileMeta = angular.copy(resources);
-
-						$rootScope.app.resources.firstName = $scope.profileMeta.firstName;
-						$rootScope.app.resources.lastName = $scope.profileMeta.lastName;
-
                         $scope.data = data;
+                        $scope.profileMeta = angular.copy(resources);
 
                         $rootScope.statusBar.off();
 
@@ -236,14 +204,22 @@ define(
                         // put back the birthday for display after update the member.
                         resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
-                        // will logout if the role is changed for the user him/her-self.
-                        if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == $route.current.params.userId)
+                        if ($rootScope.app.resources.uuid == $route.current.params.userId)
                         {
-                          $rootScope.nav("logout");
+                          $rootScope.app.resources.firstName = $scope.profileMeta.firstName;
+                          $rootScope.app.resources.lastName = $scope.profileMeta.lastName;
+
+                          // will logout if the role is changed for the user him/her-self.
+                          if ($scope.currentRole != resources.role)
+                          {
+                            $rootScope.nav("logout");
+                          }
                         }
 
+
                         // refresh the teams in the background
-                        angular.forEach(
+                        angular.forEach
+                        (
                           resources.teamUuids, function (teamId)
                           {
                             // FIXME: Message is not absent in localization file so turned off
@@ -253,7 +229,10 @@ define(
                               false,
                               { uuid: teamId }
                             ).then(
-                              function () { $rootScope.statusBar.off() }
+                              function ()
+                              {
+                                $rootScope.statusBar.off()
+                              }
                             );
                           }
                         );

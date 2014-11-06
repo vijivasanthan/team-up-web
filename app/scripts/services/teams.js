@@ -24,13 +24,13 @@ define(
                   {
                     Store('app').save('teams', teams);
 
-                    if (! only)
+                    if (!only)
                     {
                       var calls = [],
-                          data = {
-                            teams: teams,
-                            members: {}
-                          };
+                        data = {
+                          teams: teams,
+                          members: {}
+                        };
 
                       // Walk through the team list
                       angular.forEach(
@@ -40,19 +40,19 @@ define(
                           if (typeof routeParams == "undefined" || team.uuid == routeParams.uuid)
                           {
                             calls.push(
-								TeamUp._(
-									'teamStatusQuery',
-									{ third: team.uuid },
-									null,
-									{
-										success: function (results)
-										{
-											Store('app').save(team.uuid, results);
-											data.members[team.uuid] = [];
-											data.members[team.uuid] = results;
-										}
-									}
-								)
+                              TeamUp._(
+                                'teamStatusQuery',
+                                { third: team.uuid },
+                                null,
+                                {
+                                  success: function (results)
+                                  {
+                                    Store('app').save(team.uuid, results);
+                                    data.members[team.uuid] = [];
+                                    data.members[team.uuid] = results;
+                                  }
+                                }
+                              )
                             );
                           }
                           else
@@ -63,9 +63,10 @@ define(
                       );
 
                       $q.all(calls)
-                        .then(function () {
-							  deferred.resolve(data)
-					  	});
+                        .then(function ()
+                        {
+                          deferred.resolve(data)
+                        });
                     }
                     else
                     {
@@ -232,7 +233,7 @@ define(
           TeamsService.prototype.manage = function (changes)
           {
             var deferred = $q.defer(),
-                calls = [];
+              calls = [];
 
             angular.forEach(
               changes,
@@ -279,7 +280,7 @@ define(
               function ()
               {
                 var queryCalls = [],
-                    data = {};
+                  data = {};
 
                 angular.forEach(
                   changes,
@@ -292,16 +293,46 @@ define(
                     //   )
                     // );
                     var routeParam = {uuid: teamId};
+                    TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
                     queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
 
                 $q.all(queryCalls)
-                  .then(function () { deferred.resolve(data) });
+                  .then(function ()
+                  {
+                    deferred.resolve(data)
+                  });
               }
             );
 
             return deferred.promise;
+          };
+
+          /**
+           * Update the localStorage of the logged user by changing from team
+           * @param changedUsers
+           * @param teamId
+           */
+          TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
+          {
+            //var team = _.filter(Store('app').get('teams'), function(team){ return team.uuid == teamId; });
+            angular.forEach(changedUsers, function (user)
+            {
+
+              if (user == $rootScope.app.resources.uuid)
+              {
+
+                var userResources = Store('app').get('resources'),
+                  indexTeam = userResources.teamUuids.indexOf(teamId);
+
+                (indexTeam < 0) ? userResources.teamUuids.push(teamId) : userResources.teamUuids.splice(indexTeam, 1);
+
+                Store('app').save('resources', userResources);
+                $rootScope.app.resources = userResources;
+                return;
+              }
+            });
           };
 
           // Manage 1:1 relations between teams and client groups

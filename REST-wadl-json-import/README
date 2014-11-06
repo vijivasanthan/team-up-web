@@ -1,0 +1,11 @@
+1. Downloaded the wadl from:
+	http://dev.ask-cs.com/application.wadl
+
+2. XML indented with xmllint:
+	> xmllint application.wadl.xml --format > application.teamup.wadl.xml
+
+3. XML to JSON with http://www.utilities-online.info/xmltojson/
+
+
+
+

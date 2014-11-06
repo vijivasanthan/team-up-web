@@ -116,9 +116,11 @@ define(
 
                 processTasks(tasks);
 
-                Store('app').save('myTasks2', tasks);
+                var merged = mergeOnStatus(tasks);
 
-                return tasks;
+                Store('app').save('myTasks2', merged);
+
+                return merged;
               }.bind(this)
             );
           };
@@ -139,7 +141,9 @@ define(
                     'taskByTeam',
                     { fourth: team.uuid } // statuses: '1, 2, 3, 4'
                   ).then(
-                    function (tasks) { bulks[team.uuid] = tasks }
+                    function (tasks) {
+						bulks[team.uuid] = tasks;
+					}
                   )
                 );
               }
@@ -174,26 +178,7 @@ define(
 
                 processTasks(tasks);
 
-                var merged = {on: [], off: []};
-                if (tasks.length > 0 ) {
-                   var grouped = _.groupBy(tasks, function (task) {
-                            return task.status
-                        });
-
-                   if(grouped[1]!=null)  {
-                        merged.on = merged.on.concat(grouped[1]);
-                   }
-                   if(grouped[2]!=null) {
-                        merged.on = merged.on.concat(grouped[2]);
-                   }
-
-                   if(grouped[3]!=null) {
-                        merged.off = merged.off.concat(grouped[3]);
-                   }
-                   if(grouped[4]!=null) {
-                        merged.off = merged.off.concat(grouped[4]);
-                   }
-                }
+				var merged = mergeOnStatus(tasks);
 
                 Store('app').save('allTasks2', merged);
 
@@ -203,6 +188,73 @@ define(
 
             return deferred.promise;
           };
+
+			/**
+			 * Get the tasks for a single team
+			 * @param teamId The id of the team
+			 * @returns {*} tasks promises
+			 */
+			Task.prototype.queryByTeam = function(teamId)
+			{
+				return TeamUp._(
+					'taskByTeam',
+					{ fourth: teamId }
+				).then(
+					function (tasks)
+					{
+						return tasks;
+					}.bind(this)
+				);
+			};
+
+		  /**
+		  * Get the tasks of a week
+		  * @param teamId the id of the team
+		  * @param weekNumber the number of the week
+		  * @returns {*} tasks promises
+		  */
+      Task.prototype.getWeek = function (teamId, weekNumber, year)
+      {
+        return this.queryByTeam(teamId)
+          .then(
+          function (tasks)
+          {
+
+            tasks = _.filter(tasks, function(task) {
+              var taskStartTime = moment(task.plannedStartVisitTime);
+              return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
+            });
+
+            return tasks;
+          }.bind(this)
+        );
+      };
+
+		  function mergeOnStatus(tasks)
+		  {
+			  var merged = {on: [], off: []};
+			  if (tasks.length > 0 ) {
+				  var grouped = _.groupBy(tasks, function (task) {
+					  return task.status
+				  });
+
+				  if(grouped[1]!=null)  {
+					  merged.on = merged.on.concat(grouped[1]);
+				  }
+				  if(grouped[2]!=null) {
+					  merged.on = merged.on.concat(grouped[2]);
+				  }
+
+				  if(grouped[3]!=null) {
+					  merged.off = merged.off.concat(grouped[3]);
+				  }
+				  if(grouped[4]!=null) {
+					  merged.off = merged.off.concat(grouped[4]);
+				  }
+			  }
+
+			  return merged;
+		  }
 
 
           Task.prototype.update = function (task)

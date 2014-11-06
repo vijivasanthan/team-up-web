@@ -81,7 +81,9 @@ define(
               links.events.addListener(
                 this.grids[key],
                 'select',
-                function (properties) { console.log('selecting ->', key, properties) }
+                function (properties) {
+					console.log('selecting ->', key, properties);
+				}
               );
 
               links.events.addListener(
@@ -89,7 +91,15 @@ define(
                 'remove',
                 function (event)
                 {
-                  var items = event.items;
+					//temp solution so a client or teammember can't be in two teams or clientgroups
+					var items = event.items,
+						user = items[0];
+
+				  _this.stores[(user._parent.split('_')[0]) + '_left'].data.push({
+						name: user.name,
+						_id: user._id,
+						_parent: user._parent
+				  });
 
                   for (var i = 0; i < items.length; i ++)
                   {
@@ -275,7 +285,34 @@ define(
                 {
                   angular.forEach(
                     _this.stores[key].data,
-                    function (data) { data._parent = key }
+                    function (data) {
+						data._parent = key;
+
+						//temp solution so a client or teammember can't be in two teams or clientgroups
+						var keyParent = key.split('_')[0];
+
+						if(keyParent == 'clients' || keyParent == 'teams')
+						{
+							var leftSide = keyParent + '_left',
+								changedData = (
+								  _.where
+								  (
+									  _this.stores[leftSide].data,
+									  {
+										  _id: data._id
+									  }
+								  )
+								  )[0];
+							if(changedData)
+							{
+								_this.stores[leftSide].data.splice
+								(
+									_this.stores[leftSide].data.indexOf(changedData)
+									, 1
+								);
+							}
+						}
+					}
                   );
 
                   _this.caches[key] = _this.stores[key].data;
@@ -335,7 +372,6 @@ define(
                                 }
                               ]
                             };
-
                             _this.stores['teamClients_right'].update();
                           }
                         }
@@ -474,7 +510,7 @@ define(
               $scope.treeGrid.type = arguments[2];
               $scope.treeGrid.data = arguments[3];
               $scope.treeGrid.connections = arguments[4];
-
+				console.log();
               (function ($scope)
               {
                 setTimeout(

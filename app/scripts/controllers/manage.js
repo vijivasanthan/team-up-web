@@ -305,7 +305,7 @@ define(
               return this.connections;
             },
 
-            populate: function (connections, data, section)
+            populate: function (connections, currentData, section)
             {
               var population = {};
 
@@ -320,7 +320,7 @@ define(
                     function (kid)
                     {
                       angular.forEach(
-                        data,
+						currentData,
                         function (node)
                         {
                           if (node.id == kid)
@@ -339,7 +339,6 @@ define(
                   );
                 }
               );
-
               return population;
             },
 
@@ -355,8 +354,8 @@ define(
             clients: function ()
             {
               this.connections.clients = {};
-
-              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_');
+				//console.log('clients', data.clients);
+              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_')
 
               return this.connections;
             }

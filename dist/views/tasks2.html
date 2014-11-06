@@ -31,7 +31,7 @@
             <dd>{{task.plannedTaskDuration.label}}</dd>
           </dt>
           <dt>Beschrijving
-            <dd>{{task.description}}</dd>
+            <dd class="description">{{task.description}}</dd>
           </dt>
           <dt>Gemaakt door
             <dd><span ng-hide="author">{{ui.profile.authorInfo}}</span><a href="index.html#/profile/{{task.authorUuid}}#profile">{{author}}</a></dd>
@@ -41,7 +41,7 @@
         <!--h4.pull-right Cliëntinformatie-->
         <dl>
           <dt>Cliënt
-            <dd><a href="#">{{task.relatedClient.fullName}}</a></dd>
+            <dd><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></dd>
           </dt>
           <dt>Cliëntgroep
             <dd><a href="index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client">{{task.relatedClient.clientGroupName}}</a></dd>
@@ -54,9 +54,8 @@
           </dt>
         </dl>
         <hr>
-        <!--h4.pull-right Lid-informatie-->
         <dl>
-          <dt>Naam
+          <dt ng-show="task.assignedTeamMember">Naam
             <dd><a href="index.html#/profile/{{task.assignedTeamMemberUuid}}#profile">{{task.assignedTeamMember.fullName}}</a></dd>
           </dt>
           <dt>Team
@@ -69,6 +68,8 @@
       <!--		| {{ui.teamup.confirms.cancel}}-->
       <!--	button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')-->
       <!--		| {{ui.teamup.confirms.remove}}-->
+      
+      
     </div>
   </div>
 </div>
@@ -92,6 +93,11 @@
       </article>
       <article ng-hide="tasks.mine.loading">
         <p ng-hide="tasks.mine.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <div style="padding-top: 25px" class="well">
+          <label>
+            <input type="checkbox" ng-model="showFinishedTasks"><small>&nbsp;Toon gearchiveerde taken</small>
+          </label>
+        </div>
         <table ng-show="tasks.mine.list.length &gt; 0" class="table table-striped taskTable">
           <thead>
             <tr>
@@ -165,7 +171,7 @@
               </td>
               <td><small><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{task.relatedClient.fullName}}</a></small></td>
               <td><span ng-show="task.relatedClient.fullAddress" aria-hidden="true" data-icon="" class="taskIcon icon-location4"></span><small>{{task.relatedClient.fullAddress}}</small><br><span aria-hidden="true" class="taskIcon icon-time"></span><small>{{task.plannedTaskDuration.label}}</small></td>
-              <td><a href="" class="taskAssignIcon"><span link-icon-hovered="" aria-hidden="true" ng-show="task.assignedTeamMember" class="icomoon icon-link"></span></a></td>
+              <td><a href="" class="taskAssignIcon"><span link-icon-hovered="" aria-hidden="true" ng-show="task.assignedTeamMember" ng-click="unAssignTask(task)" class="icomoon icon-link"></span></a></td>
               <td>
                 <div back-img="{{task.assignedTeamMemberUuid | avatar:&quot;team&quot;:&quot;80&quot;}}" ng-show="task.assignedTeamMember" class="roundedPicSmall memberStateBusy"></div>
               </td>

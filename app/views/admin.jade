@@ -1,0 +1,39 @@
+.page-header
+	h2 Admin
+
+.tabbable.tabs-left
+	select(ng-model="resourceType" ng-options="value.label for value in resourceTypes" ng-change="changedResourceType()")
+	select(ng-model="resourceType.action" ng-options="action.func for action in resourceType.actions" ng-change="changedAction()")
+	input(type="text" ng-model="parameter1")
+	button(ng-show="parameter1",
+			ng-click="parameter1 = ''") empty
+	button(ng-click='changedParameter()') run
+	div(ng-show="resourceType.action.documentation")
+		h2 Documentation
+		p {{ resourceType.action.documentation }}
+		hr
+	p(ng-hide="resources.length > 0") loading resources
+	.resources(ng-hide="parameter1" ng-repeat="resource in resources")
+		.resource
+			.resourceUuid
+				a.plainUuid(ng-click="showSingleResource(resource)")   {{ resource.uuid }}
+				a.linkedUuid(ng-show="uuidDestinationType") {{ resource.uuid }}
+			.resourceName {{ resource.name }}
+	hr
+	form(ng-show="parameter1")
+		.row
+			.span6
+
+				fieldset
+					.control-group(ng-repeat="(propertyKey, propertyValue) in resource")
+						label.control-label {{propertyKey}}
+						.controls
+							input.span4(type='text',
+							ng-model='resource[propertyKey]')
+							button(ng-click='resource[propertyKey] = null') make NULL
+					hr
+					.form-actions
+						button.btn.btn-success(type='submit',
+						ng-click='updateResource(resource)') {{ui.teamup.saveMember}}
+
+

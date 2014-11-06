@@ -2,7 +2,7 @@ define(
   {
     app: {
       // version: '@@version',
-      version: '1.1.0',
+      version: '1.2.0-snapshot',
       // version: '0.5.2',
       released: '@@released',
 
@@ -30,13 +30,11 @@ define(
         }
       },
 
-      // host: "http://test.ask-cs.com/", namespace: "teamup-test",
-      // host: "http://askpack.ask-cs.com/", namespace: "teamup-demo",
-      //host: "http://dev.ask-cs.com/", namespace: "teamup-dev",
-      // host: "https://backend.ask-cs.nl/", namespace: "teamup-zinzorg",
-
-      host: "http://localhost:9000/",
-      namespace: "teamup-sven",
+      namespace: "",
+      // host: "http://dev.ask-cs.com/", // Development
+      host: "http://test.ask-cs.com/",  // Test
+      // host: "http://askpack.ask-cs.com/", // Demo and acceptance
+      // host: "https://backend.ask-cs.nl/", // Live
 
       formats: {
         date: 'dd-MM-yyyy',

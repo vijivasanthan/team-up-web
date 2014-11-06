@@ -55,6 +55,7 @@
   min-height:200px;
   max-width:240px;
   color:#833c11;
+  clear: both;
 }
 
 .SheetRouteDiv h4 {
@@ -101,6 +102,11 @@
 	width:190px;
 }
 
+.SheetDayNameDiv {
+  float:left;
+  width:190px;
+}
+
 .SheetTaskToggleDiv {
   float:right;
   width:16px;
@@ -108,6 +114,12 @@
 }
 
 .SheetRouteTeamMemberToggleDiv {
+  float:right;
+  width:16px;
+  text-align:center;
+}
+
+.SheetDayNameToggleDiv {
   float:right;
   width:16px;
   text-align:center;
@@ -177,4 +189,14 @@
 
 .taskRowClient {
 	min-height:20px;
+}
+
+.taskErrors {
+  ul {
+    padding: 0;
+  }
+  li{
+    list-style: none;
+    color: red;
+  }
 }

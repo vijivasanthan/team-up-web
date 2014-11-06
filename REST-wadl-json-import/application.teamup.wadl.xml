@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <resources>
+    <resource path="/team">
+      <method name="POST">
+        <request/>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{team_uuid}/tasks">
+      <method name="GET">
+        <doc>get the team's tasks</doc>
+        <request>
+          <param name="team_uuid" style="path" type="String"/>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+          <param name="statuses" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; team.getTasksByTeamId;</acs-dev>
+    </resource>
+    <resource path="/team/tasks">
+      <method name="GET">
+        <doc>get the team's tasks</doc>
+        <request>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+          <param name="statuses" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; team.getTeamTasks;</acs-dev>
+    </resource>
+    <resource path="/team/tasks">
+      <method name="DELETE">
+        <doc>get the team's tasks</doc>
+        <request>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+          <param name="statuses" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;java.lang.String&gt; team.deleteAllTasks;</acs-dev>
+    </resource>
+    <resource path="/team/member">
+      <method name="POST">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member">
+      <method name="PUT">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/member/{memberId}">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+          <param name="memberId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}">
+      <method name="GET">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member">
+      <method name="GET">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/{memberId}">
+      <method name="GET">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/{memberId}">
+      <method name="DELETE">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/status/{teamId}">
+      <method name="GET">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/{memberId}/photo">
+      <method name="POST">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+          <param name="square" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/{memberId}/photo">
+      <method name="GET">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+          <param name="width" style="query" type="String"/>
+          <param name="height" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/{memberId}/photourl">
+      <method name="GET">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/callTeam/{memberId}">
+      <method name="POST">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/teamMessage">
+      <method name="POST">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/teamMessage/{teamId}">
+      <method name="POST">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/teamMessage/{teamId}">
+      <method name="GET">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+          <param name="since" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/teamMessage">
+      <method name="GET">
+        <request>
+          <param name="namespace" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/phone/{phone}">
+      <method name="POST">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+          <param name="phone" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/phone">
+      <method name="GET">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/member/">
+      <method name="POST">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/removeMember/">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/unAssignClientGroups/">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/clientGroups">
+      <method name="GET">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/clientGroups">
+      <method name="POST">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/updateClientGroups">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}/updateMembers">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/teams">
+      <method name="GET">
+        <request>
+          <param name="strict" style="query" type="boolean"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}">
+      <method name="PUT">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/{teamId}">
+      <method name="DELETE">
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team">
+      <method name="GET">
+        <request>
+          <param name="strict" style="query" type="boolean"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/members">
+      <method name="GET">
+        <request>
+          <param name="namespace" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/team/member/tasks/{memberId}">
+      <method name="GET">
+        <request>
+          <param name="memberId" style="path" type="String"/>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+          <param name="statuses" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clientGroup/{clientGroupId}/teams">
+      <method name="GET">
+        <doc>getTeams</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;java.lang.String&gt; clientGroup.getTeamsAssignedToGroup;</acs-dev>
+    </resource>
+    <resource path="/clientGroup/{clientGroupId}">
+      <method name="GET">
+        <doc>get the client group by client group ID</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>class com.askcs.commons.entity.teamup.ClientGroup clientGroup.getClientGroupById;</acs-dev>
+    </resource>
+    <resource path="/clientGroup/{clientGroupId}/reports">
+      <method name="GET">
+        <doc>get All the reports from specific client</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+          <param name="limit" style="query" type="Integer"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.List&lt;com.askcs.commons.entity.teamup.Report&gt; clientGroup.getReportsByClientId;</acs-dev>
+    </resource>
+    <resource path="/clientGroup/{clientGroupId}/tasks">
+      <method name="GET">
+        <doc>get Tasks By Client GroupId</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+          <param name="from" style="query" type="long"/>
+          <param name="to" style="query" type="long"/>
+          <param name="type" style="query" type="int"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; clientGroup.getTasksByClientGroupId;</acs-dev>
+    </resource>
+    <resource path="/clientGroup/{clientGroupId}">
+      <method name="DELETE">
+        <doc>delete the client group by ID</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clientGroup">
+      <method name="POST">
+        <doc>create client group. TODO: inspect logic on this one</doc>
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/callClient/{clientId}">
+      <method name="POST">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{clientId}/reports">
+      <method name="GET">
+        <doc>get All the reports from specific client</doc>
+        <request>
+          <param name="clientId" style="path" type="String"/>
+          <param name="limit" style="query" type="Integer"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Report&gt; client.getReportsByClientId;</acs-dev>
+    </resource>
+    <resource path="/client/clientGroups">
+      <method name="GET">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client">
+      <method name="POST">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/clientGroup/{clientGroupId}/clients">
+      <method name="GET">
+        <doc>get clients by client groupID</doc>
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Client&gt; client.getClientByGroup;</acs-dev>
+    </resource>
+    <resource path="/client/{clientId}">
+      <method name="GET">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/{clientId}">
+      <method name="PUT">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/{clientId}">
+      <method name="DELETE">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/clientGroup/{clientGroupId}/clients">
+      <method name="POST">
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/clientGroup/{clientGroupId}/removeClients">
+      <method name="PUT">
+        <request>
+          <param name="clientGroupId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/{filed}">
+      <method name="GET">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+          <param name="filed" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/{filed}">
+      <method name="PUT">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+          <param name="filed" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/media">
+      <method name="GET">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/media">
+      <method name="POST">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}">
+      <method name="GET">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+          <param name="media_uuid" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}/media/{media_uuid}">
+      <method name="DELETE">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+          <param name="media_uuid" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/team/{teamId}">
+      <method name="GET">
+        <doc>get clients by teamId</doc>
+        <request>
+          <param name="teamId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Client&gt; client.getClientsByTeamId;</acs-dev>
+    </resource>
+    <resource path="/client/callRelationOfClient/{phonenumber}">
+      <method name="POST">
+        <request>
+          <param name="phonenumber" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/{clientId}/photo">
+      <method name="POST">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+          <param name="square" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/{clientId}/photo">
+      <method name="GET">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+          <param name="width" style="query" type="String"/>
+          <param name="height" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/{clientId}/photourl">
+      <method name="GET">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{clientId}/reports">
+      <method name="POST">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}">
+      <method name="PUT">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{clientId}/reports">
+      <method name="DELETE">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+          <param name="reportId" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/clients/{client_uuid}/reports/{reportId}">
+      <method name="GET">
+        <request>
+          <param name="client_uuid" style="path" type="String"/>
+          <param name="reportId" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/clients">
+      <method name="GET">
+        <request/>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/client/tasks/{clientId}">
+      <method name="GET">
+        <request>
+          <param name="clientId" style="path" type="String"/>
+          <param name="from" style="query" type="long"/>
+          <param name="to" style="query" type="long"/>
+          <param name="type" style="query" type="int"/>
+        </request>
+        <response>
+          <representation mediaType="*/*"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/team/{team_uuid}">
+      <method name="GET">
+        <doc>get the team's tasks</doc>
+        <request>
+          <param name="team_uuid" style="path" type="String"/>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+          <param name="statuses" style="query" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; task.getTasksByTeamId;</acs-dev>
+    </resource>
+    <resource path="/tasks/mine">
+      <method name="GET">
+        <request>
+          <param name="statuses" style="query" type="String"/>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/{task_uuid}">
+      <method name="GET">
+        <request>
+          <param name="task_uuid" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/{task_uuid}/{fieldName}">
+      <method name="GET">
+        <request>
+          <param name="task_uuid" style="path" type="String"/>
+          <param name="fieldName" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/{task_uuid}">
+      <method name="PUT">
+        <request>
+          <param name="task_uuid" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/{task_uuid}/{fieldName}">
+      <method name="PUT">
+        <request>
+          <param name="task_uuid" style="path" type="String"/>
+          <param name="fieldName" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/{task_uuid}">
+      <method name="DELETE">
+        <request>
+          <param name="task_uuid" style="path" type="String"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+    <resource path="/tasks/team/{team_uuid}/{member_uuid}">
+      <method name="GET">
+        <doc>get personal tasks </doc>
+        <request>
+          <param name="team_uuid" style="path" type="String"/>
+          <param name="member_uuid" style="path" type="String"/>
+          <param name="statuses" style="query" type="String"/>
+          <param name="from" style="query" type="Long"/>
+          <param name="to" style="query" type="Long"/>
+        </request>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+      <acs-dev>java.util.Set&lt;com.askcs.commons.entity.teamup.Task&gt; task.getTeamMemberTasks;</acs-dev>
+    </resource>
+    <resource path="/tasks">
+      <method name="POST">
+        <request/>
+        <response>
+          <representation mediaType="application/json"/>
+        </response>
+      </method>
+    </resource>
+  </resources>
+</application>

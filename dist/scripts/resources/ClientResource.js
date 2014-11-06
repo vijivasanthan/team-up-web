@@ -1,0 +1,1 @@
+define(["services/services","config"],function(e,t){e.factory("ClientResource",["$rootScope","$resource","$q","$filter",function(e,n,r,i){var s=t.app.host+t.app.namespace,o=n(s+"/client/:clientUuid/team/:teamUuid");return o}])});

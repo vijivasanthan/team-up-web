@@ -85,7 +85,7 @@ define(
 
           //set default team by last visited team
           $scope.memberForm = {};
-		  $scope.memberForm.team = uuid;
+          $scope.memberForm.team = uuid;
 
           $scope.views = {
             team: true,
@@ -113,22 +113,27 @@ define(
               $scope.members,
               function (member)
               {
+                //check if the state of the logged user is equal
+                $rootScope.checkUpdatedStatesLoggedUser(member);
+
                 angular.forEach(
                   member.states,
                   function (state, i)
                   {
-                    if (state.name == 'Location') {
-                        state.value_rscoded = 'loading address';
-                        if (state.value && member.address && member.address.street) {
-                            var coordinates = state.value.split(','),
-                                latitude = parseFloat(coordinates[0]),
-                                longitude = parseFloat(coordinates[1]);
-                        }
-						else
-						{
-							//remove state location if there is no address available on the given coordinates
-							member.states.splice(i, 1);
-						}
+                    if (state.name == 'Location')
+                    {
+                      state.value_rscoded = 'loading address';
+                      if (state.value && member.address && member.address.street)
+                      {
+                        var coordinates = state.value.split(','),
+                          latitude = parseFloat(coordinates[0]),
+                          longitude = parseFloat(coordinates[1]);
+                      }
+                      else
+                      {
+                        //remove state location if there is no address available on the given coordinates
+                        member.states.splice(i, 1);
+                      }
 
                       // GoogleGEO.geocode(
                       //   {
@@ -174,7 +179,7 @@ define(
             $scope.$watch(
               $location.search(),
               function () { $location.search({ uuid: current }) },
-			  $scope.memberForm.team = current
+              $scope.memberForm.team = current
             );
 
             if (switched)
@@ -494,7 +499,8 @@ define(
           {
             $scope.teamForm = {};
 
-            $scope.memberForm = getMemberForm();
+            $scope.memberForm = {};
+			$scope.memberForm.team = uuid;
 
             $scope.setViewTo('team');
           };
@@ -607,8 +613,8 @@ define(
             // lower case of the id :
             // TODO : we should also fix the issue in the backend.
             memberId = angular.lowercase(memberId);
-			var changes = [];
-			changes.push(memberId);
+            var changes = [];
+            changes.push(memberId);
 
 			  //console.log($scope.data.members[$scope.team.uuid]);
 

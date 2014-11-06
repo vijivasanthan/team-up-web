@@ -39,7 +39,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					dt Tijdsbestek
 						dd {{task.plannedTaskDuration.label}}
 					dt Beschrijving
-						dd {{task.description}}
+						dd(class="description") {{task.description}}
 					dt Gemaakt door
 						dd
 							span(ng-hide="author") {{ui.profile.authorInfo}}
@@ -52,7 +52,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				dl
 					dt Cliënt
 						dd
-							a(href='#')
+							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 								| {{task.relatedClient.fullName}}
 					dt Cliëntgroep
 						dd
@@ -65,9 +65,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				hr
 
-				//h4.pull-right Lid-informatie
 				dl
-					dt Naam
+					dt(ng-show='task.assignedTeamMember') Naam
 						dd
 							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
 									| {{task.assignedTeamMember.fullName}}
@@ -123,6 +122,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			article(ng-hide='tasks.mine.loading')
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
+
+				.well(style='padding-top: 25px')
+					label
+						input(type='checkbox', ng-model='showFinishedTasks')
+						small &nbsp;Toon gearchiveerde taken
 
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
@@ -234,7 +238,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a.taskAssignIcon(href='')
 									span.icomoon.icon-link(link-icon-hovered='',
 									aria-hidden='true',
-									ng-show='task.assignedTeamMember')
+									ng-show='task.assignedTeamMember',
+									ng-click='unAssignTask(task)')
 							td
 								.roundedPicSmall.memberStateBusy(
 								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',

@@ -43,6 +43,16 @@ define(
               controller: 'uploadCtrl'
             })
 
+            .when('/admin', {
+               templateUrl: 'views/admin.html',
+               controller: 'adminCtrl'
+            })
+
+            .when('/scenarios', {
+              templateUrl: 'views/scenarios.html',
+              controller: 'adminCtrl'
+            })
+
             .when(
             '/team',
             {
