@@ -48,10 +48,10 @@ define(
                controller: 'adminCtrl'
             })
 
-			.when('/scenarios', {
-				  templateUrl: 'views/scenarios.html',
-				  controller: 'adminCtrl'
-			})
+            .when('/scenarios', {
+              templateUrl: 'views/scenarios.html',
+              controller: 'adminCtrl'
+            })
 
             .when(
             '/team',
@@ -212,7 +212,8 @@ define(
                 ]
               }
             })
-
+            //TODO this routing is not needed anymore and not well configured, the profile controller is already
+            // loaded before the location path will change by the logged user
             .when(
             '/profile',
             {
@@ -286,6 +287,8 @@ define(
                 };
               }
             ]);
+
+          $locationProvider.html5Mode(true);
         }
       ]);
   }

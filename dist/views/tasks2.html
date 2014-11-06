@@ -79,7 +79,7 @@
     <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.myTask}}</a></li>
     <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
     <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
-    <li ng-hide="app.resources.role &gt; 1" data-match-route="/tasks2" class="{{(views.agenda==true || views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/planboard&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Agenda</a></li>
+    <li ng-hide="app.resources.role &gt; 1" data-match-route="/tasks2" class="{{(views.agenda==true || views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/planboard&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Agenda</a></li>
   </ul>
   <div class="tab-content">
     <div id="myTasks" class="tab-pane {{(views.myTasks==true) &amp;&amp; 'active'}}">

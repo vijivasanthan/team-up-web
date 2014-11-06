@@ -184,9 +184,9 @@ define(
               case 'upload':
                 $location.path('/upload').search({}).hash('');
                 break
-
+              //profile tab links to the logged user profile
               case 'profile':
-                $location.path('/profile').search({local: 'true'}).hash('');
+                $location.path('/profile/'+ $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile');
                 break;
 
               case 'logout':
