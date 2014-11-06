@@ -287,8 +287,6 @@ define(
                 };
               }
             ]);
-
-          $locationProvider.html5Mode(true);
         }
       ]);
   }
