@@ -1,0 +1,78 @@
+div.widget
+	div.head
+		h4 {{ui.dashboard.overview}}
+		button#dashboardPopoverBtn.btn.btn-default.btn-sm(type='button'
+		data-placement='{{(browser.mobile) && "left" || "bottom"}}',
+		data-title='Overzicht instellingen',
+		data-content-template="views/dashboard/summary-manager.html",
+		data-target='#dashboardPopoverBtn'
+		bs-popover='')
+			i.glyphicon.glyphicon-cog
+	hr
+	p(ng-hide='loading.pies || !checkAnyPies()',
+	ng-show='checkAnyPies()') Er zijn geen groepen geselecteerd.
+	p(ng-show='loadingPies') {{ui.dashboard.groupOverviews}}
+	ul#pies(ng-hide='loadingPies || checkAnyPies()')
+		li(ng-repeat='pie in pies')
+			header
+				h4
+					| {{pie.name}}
+					span(ng-show='(pie.division != "both")')  ({{ pie.division | translateDivision }})
+			.blocks
+				.col-sm-4
+					.block
+						.icon
+							.scoreboard(class='{{pie.state.cls}}')
+								span.state {{pie.state.diff + pie.state.wish}}
+								span.seperator /
+								span.wish {{pie.state.wish}}
+						.body
+							h3 {{ui.dashboard.currentState}}
+							hr
+							h5 {{pie.state.start}}
+							small.text-muted &nbsp;van
+							br
+							h5 {{pie.state.end}}
+							small.text-muted &nbsp;tot
+				.col-sm-4
+					.block
+						.icon
+							.pie(id='weeklyPieCurrent-{{pie.id}}-{{pie.division}}')
+						.body
+							h3 {{ui.dashboard.thisWeek}}
+							hr
+							small.text-muted {{pie.weeks.current.start.date}} / {{pie.weeks.current.end.date}}
+							br
+							h5 {{pie.weeks.current.ratios.more}}%
+							small.text-muted &nbsp;{{ui.dashboard.statMore}}
+							| &nbsp;,
+							h5 {{pie.weeks.current.ratios.even}}%
+							small.text-muted &nbsp;{{ui.dashboard.statEven}}
+							| &nbsp;,
+							h5 {{pie.weeks.current.ratios.less}}%
+							small.text-muted &nbsp;{{ui.dashboard.statLess}}
+				.col-sm-4
+					.block
+						.icon
+							.pie(id='weeklyPieNext-{{pie.id}}-{{pie.division}}')
+						.body
+							h3 {{ui.dashboard.nextWeek}}
+							hr
+							small.text-muted {{pie.weeks.next.start.date}} / {{pie.weeks.next.end.date}}
+							br
+							h5 {{pie.weeks.next.ratios.more}}%
+							small.text-muted &nbsp;{{ui.dashboard.statMore}}
+							| &nbsp;,
+							h5 {{pie.weeks.next.ratios.even}}%
+							small.text-muted &nbsp;{{ui.dashboard.statEven}}
+							| &nbsp;,
+							h5 {{pie.weeks.next.ratios.less}}%
+							small.text-muted &nbsp;{{ui.dashboard.statLess}}
+	hr.lastline(ng-hide='loadingPies || checkAnyPies()')
+	p(ng-hide='loadingPies || checkAnyPies()')
+		small.pull-right
+			span.text-warning {{ui.dashboard.periods}}:
+			span.text-muted
+				| {{periods.start}}
+				| &nbsp;|&nbsp;
+				| {{periods.end}}

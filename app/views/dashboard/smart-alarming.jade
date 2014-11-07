@@ -1,0 +1,100 @@
+.row
+	.sa.widget.col-md-12(ng-show='StandBy.config.profile.smartAlarm')
+		.head
+			h4 SlimAlarmeren
+
+			div.pull-right.sa-state
+				small(ng-show='StandBy.guard.currentState')
+					i.glyphicon.glyphicon-fire
+					| &nbsp;Status
+				| &nbsp;&nbsp;
+
+				span.label.label-default(ng-show="StandBy.guard.currentState=='available' || StandBy.guard.currentState=='Beschikbaar'",
+				style='background-color: #6cad6c;') BESCHIKBAAR
+				span.label.label-default(ng-show="StandBy.guard.currentState=='noplanning' || StandBy.guard.currentState=='Mogelijk inzetbaar'",
+				style='background-color: #a0a0a0;') GEEN PLANNING
+				span.label.label-default(ng-show="StandBy.guard.currentState=='unavailable' || StandBy.guard.currentState=='Niet Beschikbaar'",
+				style='background-color: #d34545;') NIET BESCHIKBAAR
+				span.label.label-inverse(style='margin-left: 5px;') {{app.guard.role.toUpperCase()}}
+
+				.btn-group(style='margin: -10px 0 0 8px;')
+					button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown')
+						| Nieuwe beschikbaarheid&nbsp;
+						span.caret
+					ul.dropdown-menu.pull-right.fast-availability(style='font-size: 10px;')
+						li
+							a(ng-click='setPrefixedAvailability(true, 1)')
+								.square.available
+								| Beschikbaar (1 uur)
+						li
+							a(ng-click='setPrefixedAvailability(true, 6)')
+								.square.available
+								| Beschikbaar (6 uur)
+						li
+							a(ng-click='setPrefixedAvailability(true, 24)')
+								.square.available
+								| Beschikbaar (24 uur)
+						li.divider
+						li
+							a(ng-click='setPrefixedAvailability(false, 1)')
+								.square.unavailable
+								| Niet beschikbaar (1 uur)
+						li
+							a(ng-click='setPrefixedAvailability(false, 6)')
+								.square.unavailable
+								| Niet beschikbaar (6 uur)
+						li
+							a(ng-click='setPrefixedAvailability(false, 24)')
+								.square.unavailable
+								| Niet beschikbaar (24 uur)
+		hr
+
+		p(ng-show='loading.smartAlarm') Indeling SlimAlarmeren lijst laden...
+
+		ul.sa-setup(ng-hide='loading.smartAlarm')
+			li.sa-truck
+				.sa-member(ng-repeat='trucker in saMembers.truck | orderBy:"rank"')
+					span.sa-member-icon(class='{{(trucker.class) && trucker.class}}')
+						strong {{trucker.icon}}
+					.sa-member-card
+						h5
+							a(href='#/profile/{{trucker.uuid}}#profile', ng-show='trucker.uuid')
+								| {{trucker.name}}
+							span(ng-hide='trucker.uuid') {{trucker.name}}
+						hr
+						span {{trucker.role}}
+			li.sa-reserves(ng-show='toggleReserves')
+				.sa-member(ng-repeat='reserve in saMembers.reserves.available')
+					span.sa-member-icon.sa-icon-reserve-available
+						strong B{{$index+1}}
+					.sa-member-card
+						h5
+							a(href='#/profile/{{reserve.id}}#profile') {{reserve.name}}
+						hr
+						span Beschikbaar
+				.sa-member(ng-repeat='reserve in saMembers.reserves.unavailable')
+					span.sa-member-icon.sa-icon-reserve-unavailable
+						strong N{{$index+1}}
+					.sa-member-card
+						h5
+							a(href='#/profile/{{reserve.id}}#profile') {{reserve.name}}
+						hr
+						span Niet beschikbaar
+			li.sa-reserves(ng-show='toggleReserves')
+				.sa-member(ng-repeat='reserve in saMembers.reserves.noplanning')
+					span.sa-member-icon.sa-icon-reserve-noplanning
+						strong {{$index+1}}
+					.sa-member-card
+						h5
+							a(href='#/profile/{{reserve.id}}#profile') {{reserve.name}}
+						hr
+						span Mogelijk inzetbaar
+
+		p(ng-hide='loading.smartAlarm', style='margin-top: 10px;')
+			small.pull-left
+				span.text-warning {{ui.planboard.lastSyncTime}}
+				span.text-muted &nbsp; {{saSynced | nicelyDate}}
+
+		button.btn.btn-default.btn-xs.pull-right(ng-click='toggleReserves=!toggleReserves', ng-hide='loading.smartAlarm')
+			span(ng-hide='toggleReserves') Toon reserves
+			span(ng-show='toggleReserves') Verberg reserves

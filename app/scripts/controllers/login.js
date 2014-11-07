@@ -18,9 +18,13 @@ define(
         '$routeParams',
         'TeamUp',
         'Dater',
+        'Profile',
+        'User',
+        'Environment',
+        'Network',
         '$filter',
         function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter
+          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, Profile, User, Environment, Network, $filter
           )
         {
           // TODO: Soon not needed!
@@ -83,6 +87,9 @@ define(
 
           $scope.login = function ()
           {
+            var periods = Store('app').get('periods');
+            var periodsNext = Store('app').get('periodsNext');
+
             angular.element('#alertDiv').hide();
 
             if (! $scope.loginData || ! $scope.loginData.username || ! $scope.loginData.password)
@@ -105,6 +112,9 @@ define(
             angular.element('#login button[type=submit]')
               .text($rootScope.ui.login.button_loggingIn)
               .attr('disabled', 'disabled');
+
+            Store('app').save('periods', periods);
+            Store('app').save('periodsNext', periodsNext);
 
             Store('app').save(
               'loginData',
@@ -213,7 +223,7 @@ define(
             // query my tasks
             TeamUp._("taskMineQuery").then(
                 function (result) {
-                  Store('app').save('myTasks', result) 
+                  Store('app').save('myTasks', result)
                 }
             );
 
@@ -362,28 +372,36 @@ define(
                                   // TODO: Blend it in the modal!
                                   enhanceTasks();
 
-                                  Teams.query()
+
+                                  standbyLogin()
                                     .then(
                                     function ()
                                     {
-										//update localStorage logged user
-										updateLoggedUserTeams();
 
-										$location.path('/tasks2');
-
-                                      setTimeout(
+                                      Teams.query()
+                                        .then(
                                         function ()
                                         {
-                                          angular.element('.navbar').show();
-                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+                        //update localStorage logged user
+                        updateLoggedUserTeams();
 
-                                          if (! $rootScope.browser.mobile)
-                                          {
-                                            angular.element('#footer').show();
-                                          }
-                                        }, 100);
+                        $location.path('/tasks2');
+
+                                          setTimeout(
+                                            function ()
+                                            {
+                                              angular.element('.navbar').show();
+                                              angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+
+                                              if (! $rootScope.browser.mobile)
+                                              {
+                                                angular.element('#footer').show();
+                                              }
+                                            }, 100);
+                                        }
+                                      );
                                     }
-                                  );
+                                  )
                                 }
                               );
                             }
@@ -396,6 +414,170 @@ define(
               }
             );
           };
+
+          function standbyLogin(){
+            var deferred = $q.defer();
+            console.log("about to get user resources");
+            User.resources().then(function (resources) {
+              console.log(resources);
+              console.log("about to setup env");
+              Environment.setup().then(function () {
+                console.log("about to get groups");
+                Network.groups().then(function (groups) {
+                  console.log(groups);
+                  console.log("about to get population");
+                  Network.population().then(function () {
+                    deferred.resolve();
+                    configure(resources, groups);
+                  });
+                });
+              });
+            });
+
+            return deferred.promise;
+          }
+
+          function configure(resources, groups) {
+            var settings = angular.fromJson(resources.settingsWebPaige) || {},
+              sync = false,
+              parenting = false,
+              defaults = $rootScope.StandBy.config.defaults.settingsWebPaige;
+
+            var _groups = function (groups) {
+              var _groups = {};
+              _.each(groups, function (group) {
+                _groups[group.uuid] = {
+                  status: true,
+                  divisions: false
+                };
+              });
+
+              return _groups;
+            };
+
+            if (settings != null || settings != undefined) {
+              if (settings.user) {
+                if (settings.user.language) {
+                  $rootScope.changeLanguage(angular.fromJson(resources.settingsWebPaige).user.language);
+                  defaults.user.language = settings.user.language;
+                } else {
+                  $rootScope.changeLanguage($rootScope.StandBy.config.defaults.settingsWebPaige.user.language);
+                  sync = true;
+                }
+              } else {
+                sync = true;
+              }
+
+              if (settings.app) {
+                if (settings.app.widgets) {
+                  if (settings.app.widgets.groups) {
+                    var oldGroupSetup = false;
+
+                    if (!jQuery.isEmptyObject(settings.app.widgets.groups)) {
+                      _.each(settings.app.widgets.groups, function (value) {
+                        if (typeof value !== 'object' || value == {})
+                          oldGroupSetup = true;
+                      });
+                    } else {
+                      oldGroupSetup = true;
+                    }
+
+                    if (oldGroupSetup) {
+                      defaults.app.widgets.groups = _groups(groups);
+                      sync = true;
+                    } else {
+                      defaults.app.widgets.groups = settings.app.widgets.groups;
+                    }
+                  } else {
+                    defaults.app.widgets.groups = _groups(groups);
+                    sync = true;
+                  }
+                } else {
+                  defaults.app.widgets = { groups: _groups(groups) };
+                  sync = true;
+                }
+
+                if (settings.app.group && settings.app.group != undefined) {
+                  var exists = true;
+
+                  _.each(groups, function (_group) {
+                    var firstGroup = new RegExp(settings.app.group);
+
+                    if (!firstGroup.test(_group.uuid)) {
+                      if (!exists) exists = false;
+                    } else {
+                      exists = true;
+                    }
+                  });
+
+                  if (!exists) sync = true;
+                } else {
+                  parenting = true;
+                  sync = true;
+                }
+              } else {
+                defaults.app = {
+                  widgets: {
+                    groups: _groups(groups)
+                  }
+                };
+
+                sync = true;
+              }
+            } else {
+              defaults = {
+                user: $rootScope.StandBy.config.defaults.settingsWebPaige.user,
+                app: {
+                  widgets: {
+                    groups: _groups(groups)
+                  },
+                  group: groups[0].uuid
+                }
+              };
+              sync = true;
+            }
+
+            if (sync) {
+              if (parenting) {
+                Groups.parents().then(function (_parent) {
+                  if (_parent != null) {
+                    defaults.app.group = _parent;
+                  }
+                  else {
+                    defaults.app.group = groups[0].uuid;
+                  }
+
+                  Settings.save(resources.uuid, defaults).then(function () {
+                    User.resources().then(function (got) {
+                      $rootScope.StandBy.resources = got;
+                      finalize();
+                    });
+                  });
+                });
+              } else {
+                defaults.app.group = groups[0].uuid;
+
+                Settings.save(resources.uuid, defaults).then(function () {
+                  User.resources().then(function (got) {
+                    $rootScope.StandBy.resources = got;
+                    finalize();
+                  });
+                });
+              }
+            } else {
+              try {
+                ga('send', 'pageview', {
+                  'dimension1': resources.uuid,
+                  'dimension2': $rootScope.StandBy.environment.domain
+                });
+
+                ga('send', 'event', 'Login', resources.uuid);
+              } catch (err) {
+                // console.warn('Google analytics library!', err);
+              }
+
+            }
+          }
 
           var progress = function (ratio, message)
           {

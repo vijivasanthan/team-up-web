@@ -1,0 +1,34 @@
+div.widget
+	div.head
+		h4 {{ui.dashboard.announcements}}
+	hr
+	p(ng-show='loading.alerts') {{ui.dashboard.loadingP2000}}
+	ul#announcements(ng-hide='loading.alerts')
+		li(ng-show='alarms.list.length < 1') {{ui.dashboard.noP2000}}
+		li(ng-repeat='alarm in alarms.list')
+			table
+				tr
+					td.first
+						span.prio.label.label-danger(ng-show='alarm.prio["1"]') PRIO 1
+						span.prio.label.label-warning(ng-show='alarm.prio["2"]') PRIO 2
+						span.prio.label.label-info(ng-show='alarm.prio["3"]') PRIO 3
+						span.prio.label.label-inverse(ng-show='alarm.prio.test') PROEFALARM
+					td.last
+						span.label.label-natural(style='margin-bottom: 7px;') {{alarm.day}} {{alarm.time}}
+						br
+						| {{alarm.body}}
+				tr
+					td(colspan='2')
+						small
+							i.glyphicon.glyphicon-bullhorn(style='margin-top: -2px; color: #a0a0a0 !important;')
+							i {{alarm.msgCode}}
+	hr.lastline(ng-hide='loading.alerts')
+	p(ng-hide='loading.alerts')
+		small.pull-left
+			span.text-warning {{ui.planboard.lastSyncTime}}
+			span.text-muted {{synced.alarms | nicelyDate}}
+		br
+		small.pull-left
+			span.text-warning Capcode(s):
+			span.text-muted {{capcodes}}
+			span.text-muted(ng-hide='capcodes') {{StandBy.config.profile.p2000.codes}}

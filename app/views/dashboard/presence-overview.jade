@@ -1,0 +1,49 @@
+.row(ng-show='StandBy.config.profile.presence')
+	#availabilities
+		#present.sa.widget.col-md-6
+			div.head
+				h4
+					| {{ui.presence.present}}
+			div(ng-show='loadingPresence')
+				hr
+				p {{ui.presence.loading}}
+			section(ng-hide='loadingPresence')
+				div(ng-repeat="group in present")
+					hr
+					ul.sa-setup.presence
+						li.sa-truck
+							.sa-member(ng-repeat='member in group')
+								.media
+									.pull-left
+										.roundedPicMedium(profile-img='{{member.uuid | avatar:"user":"100":member.resources.avatarPhotoId }}',
+											class='{{member.availabilityClass || "memberStateNone"}}')
+									.sa-member-card.media-body
+										h5
+											a(href='#/profile/{{member.uuid}}#profile')
+												| {{member.name | toTitleCase}}
+										hr
+										span(ng-repeat='group in member.resources.groups') {{group.name}}
+		#absent.sa.widget.col-md-6
+			div.head
+				h4
+					| {{ui.presence.absent}}
+			div(ng-show='loadingPresence')
+				hr
+				p {{ui.presence.loading}}
+			section(ng-hide='loadingPresence')
+				div(ng-repeat="group in absent")
+					hr
+					ul.sa-setup.presence
+						li.sa-truck
+							.sa-member(ng-repeat='member in group')
+								.media
+									.pull-left
+										.roundedPicMedium(profile-img='{{member.uuid | avatar:"user":"100":member.resources.avatarPhotoId }}',
+											class='{{member.availabilityClass || "memberStateNone"}}')
+									.sa-member-card.media-body
+										h5
+											a(href='#/profile/{{member.uuid}}#profile')
+												| {{member.name | toTitleCase}}
+										hr
+										span(ng-repeat='group in member.resources.groups') {{group.name}}
+	

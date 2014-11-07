@@ -1,0 +1,18 @@
+section#widget-pies
+	form
+		fieldset
+			.form-group
+					ul
+						li(ng-repeat='group in popover.groups', style='margin-top: 8px;')
+							label
+								input(type='checkbox', ng-model='popover.selection[group.uuid].status')
+								| {{group.name}}
+							label(ng-show='popover.selection[group.uuid].status && popover.divisions', style='margin-left: 20px;')
+								input(type='checkbox', ng-model='popover.selection[group.uuid].divisions', style='margin-top: 0;')
+								span(style='margin: 0 0 0 5px;')
+									i Divisies
+								br
+		hr
+		.actions
+			button.btn.btn-default.btn-sm(type='button', ng-click='dismiss()') {{ui.dashboard.widgetCancel}}
+			button.btn.btn-primary.btn-sm(type='button', ng-click='saveOverviewWidget(popover.selection); dismiss()') {{ui.dashboard.widgetSave}}

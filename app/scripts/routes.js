@@ -181,6 +181,13 @@ define(
             })
 
             .when(
+            '/dashboard',
+            {
+              templateUrl: 'views/dashboard.html',
+              controller: 'dashboard'
+            })
+
+            .when(
             '/profile/:userId',
             {
               templateUrl: 'views/profile.html',
