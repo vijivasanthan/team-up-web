@@ -48,7 +48,7 @@ module.exports = (grunt) ->
           expand: true
           cwd: '<%= paths.app %>'
           dest: '.tmp'
-          src: 'views/**/*.jade'
+          src: 'views/*.jade'
           ext: '.html'
         ]
 

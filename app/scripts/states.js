@@ -181,10 +181,6 @@ define(
                 $location.path('/support').search({}).hash('');
                 break;
 
-              case 'dashboard':
-                $location.path('/dashboard').search({}).hash('');
-                break;
-
               case 'upload':
                 $location.path('/upload').search({}).hash('');
                 break

@@ -47,18 +47,6 @@ define(
 
           Session.check();
 
-          $rootScope.StandBy = $rootScope.StandBy ||
-          {
-            config: config,
-            session: {},
-            resources: {},
-            environment: {
-              domain: '',
-              states: [],
-              divisions: []
-            },
-            settings: {}
-          };
 
           $rootScope.config = config;
           $rootScope.ui = locals.ui[config.app.lang];
@@ -588,20 +576,6 @@ define(
               });
 
             return ret;
-          };
-
-          // ----------------------------------------------------------
-
-          // TODO: Make a utilities service for sharing
-
-          $rootScope.unite = function (chunks) {
-            var text = '';
-
-            _.each(chunks, function (chunk) {
-              text += chunk;
-            });
-
-            return text;
           };
         }
       ]
