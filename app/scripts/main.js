@@ -155,6 +155,7 @@ require(
     // 'directives/treegrid',
 
     'modals/task',
+    'modals/dashboard',
     'modals/logs',
 
     'resources/ClientResource',
@@ -170,6 +171,7 @@ require(
     'controllers/manage',
     'controllers/treegridCtrl', // TODO: Remove it later on
     'controllers/messages',
+    'controllers/dashboard',
     'controllers/planboard',
     'controllers/vis',
     'controllers/profile',
