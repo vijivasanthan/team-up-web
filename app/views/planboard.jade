@@ -168,7 +168,7 @@ section#planboard(ng-controller='timeline')
 					| {{ui.task.newTask}}
 			li(class="{{(views.teams==true || views.clients==true) && 'active'}}", ng-hide="app.resources.role > 1")
 				a(data-toggle='tab', ng-click='setViewTo(current,"teams")')
-					span.icomoon(data-icon='', aria-hidden='true')
+					span.entypo &#128340;
 					| Agenda
 
 		.tab-content.treegrid-container(ng-controller='treegrid')

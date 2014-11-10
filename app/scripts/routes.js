@@ -164,13 +164,22 @@ define(
               reloadOnSearch: false
             })
 
-//            .when(
-//            '/planboard',
-//            {
-//              templateUrl: 'views/planboard.html',
-//              controller: 'planboard',
-//              reloadOnSearch: false
-//            })
+            .when(
+            '/logs',
+            {
+              templateUrl: 'views/logs.html',
+              controller: 'logs',
+              resolve: {
+                data: function(Logs)
+                {
+                  return Logs.fetch({
+                    end: new Date.now().getTime(),
+                    start: new Date.today().addDays(- 7).getTime()
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
 
             .when(
             '/messages',

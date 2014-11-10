@@ -1,0 +1,98 @@
+//.page-header
+//  h2.nullable Logs
+//
+//  .tabbable.tabs-left
+//
+//
+//    ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+//      li.active
+//        a
+//          span.icomoon(data-icon='', aria-hidden='true')
+//          | log
+//
+//    .tab-content
+
+.page-header
+  h2 Logs
+.tabbable.tabs-left
+  ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+    li.active
+      a(href='', data-toggle='tab')
+        span.entypo &#59392;
+        | Logs
+  .tab-content
+    #groupTab.tab-pane.active
+      .tab-header
+        .form-group.pull-left.has-feedback
+          input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
+          i.glyphicon.glyphicon-calendar.form-control-feedback
+        .pull-right
+          input.form-control.search-query(type='text', placeholder='Filter logs..', ng-model='filtered')
+      hr
+      p(ng-hide='data.logs.length > 0') Er zijn geen logs.
+      div(ng-show='data.logs.length > 0')
+        table.table.table-striped
+          thead
+            tr
+              th
+                a(ng-click='orderBy("status")') Status
+                span(ng-show='(ordered=="status")')
+                  span(ng-hide='reversed') ▲
+                  span(ng-show='reversed') ▼
+              th
+                a(ng-click='orderBy("from")') From
+                span(ng-show='(ordered=="from")')
+                  span(ng-hide='reversed') ▲
+                  span(ng-show='reversed') ▼
+              th
+                a(ng-click='orderBy("to")') To
+                span(ng-show='(ordered=="to")')
+                  span(ng-hide='reversed') ▲
+                  span(ng-show='reversed') ▼
+              th
+                a(ng-click='orderBy("started.stamp")') Time
+                span(ng-show='(ordered=="started.stamp")')
+                  span(ng-hide='reversed') ▲
+                  span(ng-show='reversed') ▼
+              th
+                a(ng-click='orderBy("duration.stamp")') Duration
+                span(ng-show='(ordered=="duration.stamp")')
+                  span(ng-hide='reversed') ▲
+                  span(ng-show='reversed') ▼
+          tbody
+            tr(ng-repeat='log in data.logs | filter: filtered | orderBy:ordered : reversed')
+              td
+                span.label.label-inverse(class='log-{{log.status}}') {{log.status}}
+                span(ng-show='log.records.length > 0')
+                  span(ng-repeat='record in log.records')
+                    br
+                    | ∟
+                    span.label.label-inverse(class='log-{{record.status}}') {{record.status}}
+              td
+                // <pre><small>{{log | json}}</small></pre>
+                | {{log.from}}
+                span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+                  br
+                  | {{record.from}}
+              td
+                | {{log.to}}
+                span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+                  br
+                  | {{record.to}}
+              td
+                | {{log.started.date}}
+              td
+                | {{log.duration.presentation}}
+      hr
+      small.pull-left
+        span.text-warning {{ui.planboard.lastSyncTime}}
+        span.text-muted &nbsp;{{data.synced | date: 'medium'}}
+        br
+        span.text-warning {{ui.planboard.dataRangeStart}}
+        span.text-muted &nbsp;{{data.periods.start | date: 'medium'}}
+        | &nbsp;|
+        span.text-warning {{ui.planboard.dataRangeEnd}}
+        span.text-muted {{data.periods.end | date: 'medium'}}
+      small.text-muted.pull-right(ng-show='data.logs.length > 0')
+        br
+        i Er zijn {{(data.logs|filter:filtered).length}} logs getoond.

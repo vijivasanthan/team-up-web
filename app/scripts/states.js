@@ -157,9 +157,9 @@ define(
                 $location.path('/client').search({local: 'true'}).hash('client');
                 break;
 
-//              case 'planboard':
-//                $location.path('/planboard').search({local: 'true'}).hash('teams');
-//                break;
+              case 'logs':
+                $location.path('/logs').search({}).hash('');
+                break;
 
               case 'tasks2/alltasks':
                 $location.path('/tasks2').search({}).hash('allTasks');
