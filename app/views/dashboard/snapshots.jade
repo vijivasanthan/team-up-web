@@ -1,0 +1,71 @@
+.row
+	#availabilities.sa.widget.col-md-12
+		div.head
+			h4
+				| Overzicht beschikbaarheid{{current.group | groupIdToName:true | toTitleCase}}
+				span(ng-show='(current.division != "all")') ({{current.division | divisionIdToName}})
+			.pull-right(ng-hide='loadingAvailability')
+				select(ng-model='current.group',
+				ng-options='group.uuid as group.name for group in groups',
+				ng-selected='current.group',
+				ng-change='getGroupAvailability()',
+				style='width: 160px;')
+				select(ng-model='current.division',
+				ng-options='division.id as division.label for division in divisions',
+				ng-selected='current.division',
+				ng-change='getDivisionAvailability()',
+				ng-show='divisions.length > 0 && current.group != "all"',
+				style="margin-left: 15px; width:160px")
+		div(ng-show='loadingAvailability')
+			hr
+			p Overzicht beschikbaarheid aan het laden...
+		section(ng-hide='loadingAvailability')
+			div(ng-show='availability.members.available.length > 0')
+				hr
+				ul.sa-setup
+					li.sa-truck
+						.sa-member(ng-repeat='member in availability.members.available')
+							span.sa-member-icon(class='{{member.style}}')
+								strong {{member.label}}{{$index+1}}
+							.sa-member-card
+								h5
+									a(href='#/profile/{{member.id}}#profile')
+										| {{member.name | toTitleCase}}
+								hr
+								span {{states[member.state].label}}
+								br
+								small
+									strong {{member.end | calculateDeltaTime}}
+			div(ng-show='availability.members.unavailable.length > 0')
+				hr
+				ul.sa-setup
+					li.sa-truck
+						.sa-member(ng-repeat='member in availability.members.unavailable',
+						ng-show='(member.state != "no-state")')
+							span.sa-member-icon.sa-icon-reserve-unavailable
+								strong {{member.label}}{{$index+1}}
+							.sa-member-card
+								h5
+									a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
+								hr
+								span {{states[member.state].label}}
+								br
+								small
+									strong {{member.end | calculateDeltaTime}}
+			div(ng-show='availability.members.possible.length > 0')
+				hr
+				ul.sa-setup
+					li.sa-truck
+						.sa-member(ng-repeat='member in availability.members.possible')
+							span.sa-member-icon.sa-icon-reserve-noplanning
+								strong {{member.label}}{{$index+1}}
+							.sa-member-card
+								h5
+									a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
+								hr
+								span {{states[member.state].label}}
+		p
+			hr
+			small.pull-left(style='margin-top: -10px;', ng-hide='loadingAvailability')
+				span.text-warning {{ui.planboard.lastSyncTime}}
+				span.text-muted &nbsp; {{availability.synced | nicelyDate}}
