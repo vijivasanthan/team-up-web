@@ -27,8 +27,6 @@ require.config(
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      moment: '../vendors/momentjs/min/moment-with-langs.min',
-
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
 
@@ -47,11 +45,12 @@ require.config(
       md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       offline: '../vendors/web-lib-offline/dist/offline',
-
+      daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
+      moment: '../vendors/moment/moment',
+      //moment: '../vendors/momentjs/min/moment-with-langs.min',
       // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
 
       log: '../vendors/web-lib-log/dist/log',
-      _moment: '../vendors/web-lib-moment/dist/moment',
       session: '../vendors/web-lib-session/dist/session',
 
       // vis: '../vendors/vis/dist/vis.min',
@@ -83,8 +82,9 @@ require.config(
       bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
       lawnchair: { deps: [], exports: 'lawnchair' },
       dom: { deps: ['lawnchair'], exports: 'dom' },
-      moment: { deps: [], exports: 'moment' },
       timeline: { deps: [], exports: 'timeline' },
+      daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
+      //moment: { deps: [], exports: 'moment' },
       treegrid: { deps: [], exports: 'treegrid' },
       datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
@@ -96,7 +96,7 @@ require.config(
       // interceptor: { deps: ['angular'] },
 
       log: { deps: ['angular'] },
-      _moment: { deps: ['angular', 'moment'] },
+      //_moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
 
       // vis: { exports: 'vis' },
@@ -112,7 +112,7 @@ require.config(
       // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      'locale_nl': { deps: ['angular'] },
+      'locale_nl': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
@@ -150,6 +150,8 @@ require(
     // 'services/googleGEO',
 
     'directives/widgets',
+    'directives/date-range-picker',
+    'directives/log-ranger',
     // 'directives/treegrid',
 
     'modals/task',
@@ -185,8 +187,9 @@ require(
     'bootstrap',
     'lawnchair',
     'dom',
-    'moment',
     'timeline',
+    'daterangepicker',
+    //'moment',
     'treegrid',
     'datepicker',
     'timepicker',
@@ -196,7 +199,7 @@ require(
     'offline',
     // 'interceptor',
     'log',
-    '_moment',
+    //'_moment',
     'session',
     // 'vis',
     // 'ng-vis',
