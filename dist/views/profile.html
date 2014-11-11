@@ -82,7 +82,9 @@
             <div class="control-group">
               <label class="control-label">{{ui.profile.phone}}</label>
               <div class="controls">
-                <input type="text" ng-model="profile.phone" value="{{data.phone}}" class="span3">
+                <input type="text" ng-model="profile.phone" ng-change="parsePhoneNumber(profile.phone)" value="{{data.phone}}" class="span3 form-control inputPhoneNumber">
+                <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+                <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
               </div>
             </div>
             <div class="control-group">

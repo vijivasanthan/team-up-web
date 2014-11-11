@@ -22,6 +22,9 @@ define(
         {
           $rootScope.fixStyles();
 
+          //TODO get this from a service
+          $rootScope.resetPhoneNumberChecker();
+
           $scope.members = data.members;
           $scope.teams = data.teams;
 
@@ -42,7 +45,7 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          
+
           var lastVisitedTeamClientGroup = function(teamId) {
             var clientGroupId = teamClientLocal[teamId];
 
@@ -384,8 +387,11 @@ define(
 
           $scope.memberSubmit = function (member)
           {
+            console.log(member);
+
             if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword || ! member.birthDate)
             {
+              //angular.element
               $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
 
               return;
@@ -405,9 +411,18 @@ define(
               return;
             }
 
+            if($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+
+              return;
+            }
+            else if($rootScope.phoneNumberParsed.result == true)
+            {
+              member.phone = $rootScope.phoneNumberParsed.format;
+            }
+
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
-
-
 
             TeamUp._(
               'memberAdd',
@@ -488,6 +503,7 @@ define(
                       }
 
                       $rootScope.statusBar.off();
+                      $rootScope.resetPhoneNumberChecker();
                     }
                   );
                 }
@@ -500,7 +516,7 @@ define(
             $scope.teamForm = {};
 
             $scope.memberForm = {};
-			$scope.memberForm.team = uuid;
+            $scope.memberForm.team = uuid;
 
             $scope.setViewTo('team');
           };

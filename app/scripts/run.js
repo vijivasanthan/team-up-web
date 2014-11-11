@@ -578,6 +578,109 @@ define(
 
             return ret;
           };
+
+          //TODO add to service
+          $rootScope.resetPhoneNumberChecker = function ()
+          {
+            $rootScope.phoneNumberParsed = {};
+          };
+
+          $rootScope.resetPhoneNumberChecker();
+
+          $rootScope.parsePhoneNumber = function (checked) {
+            if (checked != '') {
+              if (checked && checked.length > 0)
+              {
+                var result, all;
+
+                result = all = phoneNumberParser(checked, 'NL');
+
+                $rootScope.phoneNumberParsed.result = true;
+
+                if (result)
+                {
+                  var error = $rootScope.ui.validation.phone.notValid,
+                    invalidCountry = $rootScope.ui.validation.phone.invalidCountry,
+                    message;
+
+                  if (result.error)
+                  {
+                    $rootScope.phoneNumberParsed = {
+                      result: false,
+                      message: error
+                    };
+                  }
+                  else
+                  {
+                    if (!result.validation.isPossibleNumber)
+                    {
+                      switch (result.validation.isPossibleNumberWithReason)
+                      {
+                        case 'INVALID_COUNTRY_CODE':
+                          message = invalidCountry;
+                          break;
+                        case 'TOO_SHORT':
+                          message = error + $rootScope.ui.validation.phone.tooShort;
+                          break;
+                        case 'TOO_LONG':
+                          message = error + $rootScope.ui.validation.phone.tooLong;
+                          break;
+                      }
+
+                      $rootScope.phoneNumberParsed = {
+                        result: false,
+                        message: message
+                      };
+                    }
+                    else
+                    {
+                      if (!result.validation.isValidNumber)
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result: false,
+                          message: error
+                        };
+                      }
+                      else
+                      {
+                        if (!result.validation.isValidNumberForRegion)
+                        {
+                          $rootScope.phoneNumberParsed = {
+                            result: false,
+                            message: invalidCountry
+                          };
+                        }
+                        else
+                        {
+                          $rootScope.phoneNumberParsed = {
+                            result: true,
+                            message: $rootScope.ui.validation.phone.message +
+                            result.validation.phoneNumberRegion +
+                            $rootScope.ui.validation.phone.as +
+                            result.validation.getNumberType,
+                            format: result.formatting.e164
+                          };
+
+                          angular.element('.inputPhoneNumber')
+                              .val(result.formatting.e164)
+                              .removeClass('error');
+                        }
+                      }
+                    }
+                  }
+                }
+
+                $rootScope.phoneNumberParsed.all = all;
+              } else {
+                $rootScope.phoneNumberParsed.result = true;
+
+                delete $rootScope.phoneNumberParsed.message;
+
+                angular.element('.inputPhoneNumber')
+                    .removeClass('error');
+              }
+            }
+          };
         }
       ]
     );

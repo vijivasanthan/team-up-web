@@ -120,19 +120,19 @@
           <div class="row">
             <div class="span6">
               <fieldset>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.firstName}}</label>
                   <div class="controls">
                     <input type="text" ng-model="memberForm.firstName" class="span4">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.lastName}}</label>
                   <div class="controls">
                     <input type="text" ng-model="memberForm.lastName" class="span4">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.teamup.role}}</label>
                   <div class="controls">
                     <select ng-model="memberForm.role" ng-options="r.id as r.label for r in roles">
@@ -140,13 +140,13 @@
                     </select>
                   </div>
                 </div>
-                <div class="control-group">
+                <div ng-class="{'has-error': phoneNumberParsed.result == false}" class="form-group">
                   <label class="control-label">{{ui.teamup.phone}}</label>
                   <div class="controls">
-                    <input type="text" ng-model="memberForm.phone" class="span3">
+                    <input type="text" ng-model="memberForm.phone" ng-change="parsePhoneNumber(memberForm.phone)" class="span3 form-control inputPhoneNumber"><span class="help-block"><small><i>{{phoneNumberParsed.message}}</i></small></span>
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.teamup.func}}</label>
                   <div class="controls">
                     <select ng-model="memberForm.function" ng-options="f.id as f.label for f in mfuncs">
@@ -154,7 +154,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="control-group dater">
+                <div class="form-group dater">
                   <label class="control-label">{{ui.profile.birthday}}</label>
                   <div class="controls">
                     <input name="date-start" type="text" ng-model="memberForm.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
@@ -164,19 +164,19 @@
             </div>
             <div class="span6">
               <fieldset>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.username}}</label>
                   <div class="controls">
                     <input type="text" ng-blur="convertUserName()" ng-model="memberForm.username" class="span3">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.password}}</label>
                   <div class="controls">
                     <input type="password" ng-model="memberForm.password" class="span3">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.retypePassword}}</label>
                   <div class="controls">
                     <input type="password" ng-model="memberForm.reTypePassword" class="span3">

@@ -47,6 +47,7 @@ require.config(
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/moment',
+      phone: '../vendors/web-lib-phonenumber/libphonenumber',
       //moment: '../vendors/momentjs/min/moment-with-langs.min',
       // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
 
@@ -96,6 +97,7 @@ require.config(
       // interceptor: { deps: ['angular'] },
 
       log: { deps: ['angular'] },
+      phone: { deps: ['angular'] },
       //_moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
 
@@ -153,6 +155,7 @@ require(
     'services/stats',
     'services/strings',
     'services/teams',
+    'services/phone',
 
     // 'services/googleGEO',
 
@@ -215,6 +218,7 @@ require(
     'offline',
     // 'interceptor',
     'log',
+    'phone',
     //'_moment',
     'session',
     // 'vis',

@@ -172,7 +172,9 @@
           <div class="control-group">
             <label class="control-label">{{ui.teamup.phone}}</label>
             <div class="controls">
-              <input type="text" ng-model="clientForm.phone" class="span4">
+              <input type="text" ng-model="clientForm.phone" ng-change="parsePhoneNumber(clientForm.phone)" class="span4 form-control inputPhoneNumber">
+              <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+              <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>
           </div>
           <div class="control-group">
@@ -314,7 +316,9 @@
         </div>
         <label class="control-label">{{ui.profile.phone}}</label>
         <div class="controls">
-          <input type="text" ng-model="contactForm.phone" class="span4">
+          <input type="text" ng-model="contactForm.phone" ng-change="parsePhoneNumber(contactForm.phone)" value="{{client.phone}}" class="span4 form-control inputPhoneNumber">
+          <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+          <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
         </div>
         <button ng-click="contactForm = null" ng-show="contactForm.index &gt;= 0" class="btn btn-primary">annuleren</button>
         <button ng-click="changeContacts(contactForm.index)" class="btn btn-info">{{contactForm.index >= 0 ? ui.teamup.editContact : ui.teamup.addContact}}</button>
@@ -418,7 +422,9 @@
           <div class="control-group">
             <label class="control-label">{{ui.profile.phone}}</label>
             <div class="controls">
-              <input type="text" ng-model="clientmeta.phone" value="{{client.phone}}" class="span3">
+              <input type="text" ng-model="clientmeta.phone" ng-change="parsePhoneNumber(clientmeta.phone)" value="{{client.phone}}" class="span3 form-control inputPhoneNumber">
+              <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+              <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>
           </div>
           <div class="control-group">
