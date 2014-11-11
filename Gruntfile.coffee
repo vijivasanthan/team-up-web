@@ -48,13 +48,13 @@ module.exports = (grunt) ->
           expand: true
           cwd: '<%= paths.app %>'
           dest: '.tmp'
-          src: 'views/*.jade'
+          src: 'views/{,**/}*.jade'
           ext: '.html'
         ]
 
     watch:
       jade:
-        files: ['<%= paths.app %>/{,*/}*.jade']
+        files: ['<%= paths.app %>/{,**/}*.jade']
         tasks: ['jade']
       coffee:
         files: ['<%= paths.app %>/scripts/{,*/}*.coffee']
