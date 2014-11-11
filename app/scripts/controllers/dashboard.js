@@ -26,20 +26,26 @@ define(['controllers/controllers'], function (controllers) {
      * TODO: Check somewhere that user-settings widget-groups are synced with the
      * real groups list and if a group is missing in settings-groups add by default!
      */
-    var groups = Store('network').get('groups');
+    // var groups = Store('network').get('groups');
+    var teams = Store('app').get('teams');
 
     var selection = {};
 
-    var settings = angular.fromJson(Store('user').get('resources').settingsWebPaige);
+    // var settings = angular.fromJson(Store('user').get('resources').settingsWebPaige);
+    var settings = angular.fromJson(Store('app').get('resources').settingsWebPaige);
+
+    if (typeof settings == 'undefined'){
+      settings = $rootScope.config.app.defaults.settingsWebPaige;
+    }
 
     _.each(settings.app.widgets.groups, function (value, group) {
       selection[group] = value
     });
 
-    _.each(groups, function (group) {
+    _.each(teams, function (group) {
       if (!selection[group.uuid]) {
         selection[group.uuid] = {
-          divisions: ($rootScope.StandBy.config.timeline.config.divisions.length > 0),
+          divisions: false,
           status: false
         };
       }
@@ -47,153 +53,153 @@ define(['controllers/controllers'], function (controllers) {
 
     var filteredGroups = [];
 
-    _.each(groups, function (group) {
+    _.each(teams, function (group) {
       if (group.uuid != 'all') {
         filteredGroups.push(group);
       }
     });
 
 
-    $scope.loadingPresence = true;
+    // $scope.loadingPresence = true;
 
-    var presencePerGroup = function (present) {
-      var presentGroups = {},
-          sortedGroups = [],
-          otherGroups = [];
+    // var presencePerGroup = function (present) {
+    //   var presentGroups = {},
+    //       sortedGroups = [],
+    //       otherGroups = [];
 
-      var groupOrder = ["Hoofd BHV","BHV Ploegleider","BHV'er","EHBO'er"];
+    //   var groupOrder = ["Hoofd BHV","BHV Ploegleider","BHV'er","EHBO'er"];
 
-      _.each(present, function (member){
-        if (!member.resources.groups) {
-            if (typeof presentGroups["ungrouped"] == 'undefined'){
-              presentGroups["ungrouped"] = [];
-            }
+    //   _.each(present, function (member){
+    //     if (!member.resources.groups) {
+    //         if (typeof presentGroups["ungrouped"] == 'undefined'){
+    //           presentGroups["ungrouped"] = [];
+    //         }
 
-            presentGroups["ungrouped"].push(member);
-        }
-        else {
-          _.each(groups, function (group){
-            if (member.resources.groups[0].uuid === group.uuid){
-              if (typeof presentGroups[group.name] == 'undefined'){
-                presentGroups[group.name] = [];
-              }
+    //         presentGroups["ungrouped"].push(member);
+    //     }
+    //     else {
+    //       _.each(groups, function (group){
+    //         if (member.resources.groups[0].uuid === group.uuid){
+    //           if (typeof presentGroups[group.name] == 'undefined'){
+    //             presentGroups[group.name] = [];
+    //           }
 
-              member.resources.groups[0].name = group.name;
+    //           member.resources.groups[0].name = group.name;
 
-              presentGroups[group.name].push(member);
-            }
-          });
-        }
-      });
+    //           presentGroups[group.name].push(member);
+    //         }
+    //       });
+    //     }
+    //   });
 
-      _.each(presentGroups, function (group, name){
-        if (groupOrder.indexOf(name) !== -1) {
-          sortedGroups[groupOrder.indexOf(name)] = group;
-        }
-        else {
-          otherGroups.push(group);
-        }
-      });
+    //   _.each(presentGroups, function (group, name){
+    //     if (groupOrder.indexOf(name) !== -1) {
+    //       sortedGroups[groupOrder.indexOf(name)] = group;
+    //     }
+    //     else {
+    //       otherGroups.push(group);
+    //     }
+    //   });
 
-      otherGroups.sort();
+    //   otherGroups.sort();
 
-      _.each(otherGroups, function (group){
-        sortedGroups.push(group);
-      });
+    //   _.each(otherGroups, function (group){
+    //     sortedGroups.push(group);
+    //   });
 
-      sortedGroups = _.compact(sortedGroups);
+    //   sortedGroups = _.compact(sortedGroups);
 
-      return sortedGroups;
-    }
+    //   return sortedGroups;
+    // }
 
-    var presencePerAvailability = function (present) {
-      var sortedGroups = [],
-          i;
+    // var presencePerAvailability = function (present) {
+    //   var sortedGroups = [],
+    //       i;
 
-      var stateClasses = ['memberStateAvailable', 'memberStateOffline', 'memberStateBusy'];
+    //   var stateClasses = ['memberStateAvailable', 'memberStateOffline', 'memberStateBusy'];
 
-      _.each(present, function (member){
-        _.each($scope.availability.members, function (list, availability) {
-          switch(availability){
-            case 'available':
-            i = 0;
-            break;
-            case 'possible':
-            i = 1;
-            break;
-            case 'unavailable':
-            i = 2;
-            break;
-          }
-          _.each(list, function (_member) {
-            if (member.uuid === _member.id) {
-              if(typeof sortedGroups[i] == 'undefined'){
-                sortedGroups[i] = []
-              }
-              member.availabilityClass = stateClasses[i];
-              sortedGroups[i].push(member);
-            };
-          })
-        });
-      });
+    //   _.each(present, function (member){
+    //     _.each($scope.availability.members, function (list, availability) {
+    //       switch(availability){
+    //         case 'available':
+    //         i = 0;
+    //         break;
+    //         case 'possible':
+    //         i = 1;
+    //         break;
+    //         case 'unavailable':
+    //         i = 2;
+    //         break;
+    //       }
+    //       _.each(list, function (_member) {
+    //         if (member.uuid === _member.id) {
+    //           if(typeof sortedGroups[i] == 'undefined'){
+    //             sortedGroups[i] = []
+    //           }
+    //           member.availabilityClass = stateClasses[i];
+    //           sortedGroups[i].push(member);
+    //         };
+    //       })
+    //     });
+    //   });
 
-      return sortedGroups;
-    }
+    //   return sortedGroups;
+    // }
 
-    $scope.checkPresence = function () {
-      var members = Store('network').get('unique');
-      var present = [],
-          absent = [];
+    // $scope.checkPresence = function () {
+    //   var members = Store('network').get('unique');
+    //   var present = [],
+    //       absent = [];
 
-      _.each(members, function(member){
-        if (member.resources){
+    //   _.each(members, function(member){
+    //     if (member.resources){
 
-          member.resources.groups = Groups.getMemberGroups(member.uuid);
+    //       member.resources.groups = Groups.getMemberGroups(member.uuid);
 
-          if (member.resources.groups && member.resources.groups.length > 1) {
+    //       if (member.resources.groups && member.resources.groups.length > 1) {
 
-            member.resources.groups.sort(function (a, b) {
-              if (a.name.toUpperCase() > b.name.toUpperCase()) {
-                return 1;
-              }
-              if (a.name.toUpperCase() < b.name.toUpperCase()) {
-                return -1;
-              }
-              return 0;
-            });
+    //         member.resources.groups.sort(function (a, b) {
+    //           if (a.name.toUpperCase() > b.name.toUpperCase()) {
+    //             return 1;
+    //           }
+    //           if (a.name.toUpperCase() < b.name.toUpperCase()) {
+    //             return -1;
+    //           }
+    //           return 0;
+    //         });
 
-            member.resources.groups = member.resources.groups.slice(0,1);
-          }
+    //         member.resources.groups = member.resources.groups.slice(0,1);
+    //       }
 
-          if (member.resources.currentPresence){
-            present.push(member);
-          }
-          else {
-            absent.push(member);
-          }
-        }
-      });
+    //       if (member.resources.currentPresence){
+    //         present.push(member);
+    //       }
+    //       else {
+    //         absent.push(member);
+    //       }
+    //     }
+    //   });
 
-      // TODO: check config from profile?
-      $scope.present = presencePerAvailability(present);
-      $scope.absent = presencePerAvailability(absent);
-      $scope.loadingPresence = false;
-    };
+    //   // TODO: check config from profile?
+    //   $scope.present = presencePerAvailability(present);
+    //   $scope.absent = presencePerAvailability(absent);
+    //   $scope.loadingPresence = false;
+    // };
 
-    $rootScope.intervals = [];
+    // $rootScope.intervals = [];
 
-    $rootScope.intervals.push(
-      $window.setInterval(
-        function () {
-          Network.population().then($scope.checkPresence);
-      }, $rootScope.StandBy.config.timers.ALARM_SYNC)
-    );
+    // $rootScope.intervals.push(
+    //   $window.setInterval(
+    //     function () {
+    //       Network.population().then($scope.checkPresence);
+    //   }, $rootScope.StandBy.config.timers.ALARM_SYNC)
+    // );
 
-    $scope.popover = {
-      groups: filteredGroups,
-      selection: selection,
-      divisions: ($rootScope.StandBy.environment.divisions.length > 0)
-    };
+    // $scope.popover = {
+    //   groups: filteredGroups,
+    //   selection: selection,
+    //   divisions: ($rootScope.environment.divisions.length > 0)
+    // };
 
     $scope.checkAnyPies = function () {
       var ret = true;
@@ -254,12 +260,12 @@ define(['controllers/controllers'], function (controllers) {
 
                 pie.weeks.current.state.start = (pie.weeks.current.state.start !== undefined) ?
                   new Date(pie.weeks.current.state.start * 1000)
-                    .toString($rootScope.StandBy.config.formats.datetime) :
+                    .toString($rootScope.config.app.formats.datetime) :
                   $rootScope.ui.dashboard.possiblyAvailable;
 
                 pie.weeks.current.state.end = (pie.weeks.current.state.end !== undefined) ?
                   new Date(pie.weeks.current.state.end * 1000)
-                    .toString($rootScope.StandBy.config.formats.datetime) :
+                    .toString($rootScope.config.app.formats.datetime) :
                   $rootScope.ui.dashboard.possiblyAvailable;
 
                 pie.shortages = {
@@ -336,7 +342,7 @@ define(['controllers/controllers'], function (controllers) {
                 console.warn(' Raphael error ->', e);
               }
 
-            }, $rootScope.StandBy.config.timers.TICKER);
+            }, $rootScope.config.app.timers.TICKER);
           }
         });
       } else {
@@ -348,157 +354,178 @@ define(['controllers/controllers'], function (controllers) {
       getOverviews()
     }, 25);
 
-    function prepareSaMembers(setup) {
-      var cached = Store('smartAlarm').get('guard');
+    // function prepareSaMembers(setup) {
+    //   var cached = Store('smartAlarm').get('guard');
 
-      $scope.saMembers = {
-        truck: [],
-        reserves: []
-      };
+    //   $scope.saMembers = {
+    //     truck: [],
+    //     reserves: []
+    //   };
 
-      $scope.saSynced = cached.synced;
+    //   $scope.saSynced = cached.synced;
 
-      _.each(setup.selection, function (selection) {
-        function translateName(user) {
-          return (user !== null) ?
-            setup.users[user].name :
-            $rootScope.ui.dashboard.notAssigned
-        }
+    //   _.each(setup.selection, function (selection) {
+    //     function translateName(user) {
+    //       return (user !== null) ?
+    //         setup.users[user].name :
+    //         $rootScope.ui.dashboard.notAssigned
+    //     }
 
-        var saClass = (selection.user==null ? 'sa-icon-not-assigned' : null);
+    //     var saClass = (selection.user==null ? 'sa-icon-not-assigned' : null);
 
-        switch (selection.role) {
-          case 'bevelvoerder':
-            $scope.saMembers.truck.push({
-              rank: 1,
-              icon: $rootScope.ui.dashboard.alarmRoles.commanderInitial,
-              role: $rootScope.ui.dashboard.alarmRoles.commander,
-              class: (selection.user==null ? 'sa-icon-not-assigned' : 'sa-icon-commander'),
-              name: translateName(selection.user),
-              uuid: selection.user
-            });
-            break;
+    //     switch (selection.role) {
+    //       case 'bevelvoerder':
+    //         $scope.saMembers.truck.push({
+    //           rank: 1,
+    //           icon: $rootScope.ui.dashboard.alarmRoles.commanderInitial,
+    //           role: $rootScope.ui.dashboard.alarmRoles.commander,
+    //           class: (selection.user==null ? 'sa-icon-not-assigned' : 'sa-icon-commander'),
+    //           name: translateName(selection.user),
+    //           uuid: selection.user
+    //         });
+    //         break;
 
-          case 'chauffeur':
-            $scope.saMembers.truck.push({
-              rank: 0,
-              icon: $rootScope.ui.dashboard.alarmRoles.driverInitial,
-              role: $rootScope.ui.dashboard.alarmRoles.driver,
-              class: (selection.user==null ? 'sa-icon-not-assigned' : 'sa-icon-driver'),
-              name: translateName(selection.user),
-              uuid: selection.user
-            });
-            break;
+    //       case 'chauffeur':
+    //         $scope.saMembers.truck.push({
+    //           rank: 0,
+    //           icon: $rootScope.ui.dashboard.alarmRoles.driverInitial,
+    //           role: $rootScope.ui.dashboard.alarmRoles.driver,
+    //           class: (selection.user==null ? 'sa-icon-not-assigned' : 'sa-icon-driver'),
+    //           name: translateName(selection.user),
+    //           uuid: selection.user
+    //         });
+    //         break;
 
-          case 'manschap.1':
-            $scope.saMembers.truck.push({
-              rank: 2,
-              icon: 'M1',
-              role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 1',
-              name: translateName(selection.user),
-              uuid: selection.user,
-              class : saClass
-            });
-            break;
+    //       case 'manschap.1':
+    //         $scope.saMembers.truck.push({
+    //           rank: 2,
+    //           icon: 'M1',
+    //           role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 1',
+    //           name: translateName(selection.user),
+    //           uuid: selection.user,
+    //           class : saClass
+    //         });
+    //         break;
 
-          case 'manschap.2':
-            $scope.saMembers.truck.push({
-              rank: 3,
-              icon: 'M2',
-              role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 2',
-              name: translateName(selection.user),
-              uuid: selection.user,
-              class : saClass
-            });
-            break;
+    //       case 'manschap.2':
+    //         $scope.saMembers.truck.push({
+    //           rank: 3,
+    //           icon: 'M2',
+    //           role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 2',
+    //           name: translateName(selection.user),
+    //           uuid: selection.user,
+    //           class : saClass
+    //         });
+    //         break;
 
-          case 'manschap.3':
-            $scope.saMembers.truck.push({
-              rank: 4,
-              icon: 'M3',
-              role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 3',
-              name: translateName(selection.user),
-              uuid: selection.user,
-              class : saClass
-            });
-            break;
+    //       case 'manschap.3':
+    //         $scope.saMembers.truck.push({
+    //           rank: 4,
+    //           icon: 'M3',
+    //           role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 3',
+    //           name: translateName(selection.user),
+    //           uuid: selection.user,
+    //           class : saClass
+    //         });
+    //         break;
 
-          case 'manschap.4':
-            $scope.saMembers.truck.push({
-              rank: 5,
-              icon: 'M4',
-              role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 4',
-              name: translateName(selection.user),
-              uuid: selection.user,
-              class : saClass
-            });
-            break;
-        }
+    //       case 'manschap.4':
+    //         $scope.saMembers.truck.push({
+    //           rank: 5,
+    //           icon: 'M4',
+    //           role: $rootScope.ui.dashboard.alarmRoles.manpower + ' 4',
+    //           name: translateName(selection.user),
+    //           uuid: selection.user,
+    //           class : saClass
+    //         });
+    //         break;
+    //     }
 
-        $rootScope.StandBy.guard.role = setup.role;
+    //     $rootScope.StandBy.guard.role = setup.role;
 
-        if (setup.users[$rootScope.StandBy.resources.uuid]) {
-          $rootScope.StandBy.guard.currentState = setup.users[$rootScope.StandBy.resources.uuid].state;
-        } else {
-          Slots.currentState().then(function (state) {
-            $rootScope.StandBy.guard.currentState = state.label
-          });
-        }
+    //     if (setup.users[$rootScope.StandBy.resources.uuid]) {
+    //       $rootScope.StandBy.guard.currentState = setup.users[$rootScope.StandBy.resources.uuid].state;
+    //     } else {
+    //       Slots.currentState().then(function (state) {
+    //         $rootScope.StandBy.guard.currentState = state.label
+    //       });
+    //     }
 
-        var reserves = {};
+    //     var reserves = {};
 
-        // TODO: Kind of duplicate purpose with states
-        var states = ['available', 'unavailable', 'noplanning'];
+    //     // TODO: Kind of duplicate purpose with states
+    //     var states = ['available', 'unavailable', 'noplanning'];
 
-        _.each(states, function (state) {
-          reserves[state] = [];
-          _.each(setup.reserves[state], function (member) {
-            _.each(member, function (meta, userID) {
-              if (meta.role != 0) {
-                reserves[state].push({
-                  id: userID,
-                  name: meta.name,
-                  state: meta.state
-                });
-              }
-            });
-          });
-        });
+    //     _.each(states, function (state) {
+    //       reserves[state] = [];
+    //       _.each(setup.reserves[state], function (member) {
+    //         _.each(member, function (meta, userID) {
+    //           if (meta.role != 0) {
+    //             reserves[state].push({
+    //               id: userID,
+    //               name: meta.name,
+    //               state: meta.state
+    //             });
+    //           }
+    //         });
+    //       });
+    //     });
 
-        $scope.saMembers.reserves = reserves;
+    //     $scope.saMembers.reserves = reserves;
 
-        $scope.loading.smartAlarm = false;
+    //     $scope.loading.smartAlarm = false;
+    //   });
+    // }
+
+    // if ($rootScope.StandBy.config.profile.smartAlarm) {
+    //   if (Store('smartAlarm').get('guard').selection) {
+    //     $scope.loading.smartAlarm = false;
+
+    //     prepareSaMembers(Store('smartAlarm').get('guard'));
+    //   }
+
+    //   Groups.guardMonitor().then(function () {
+    //     Groups.guardRole().then(function (setup) {
+    //       prepareSaMembers(setup)
+    //     });
+    //   });
+    // }
+
+    // var members = Store('network').get('unique');
+    var filter = function (result) {
+      return result.role > 0 && result.role < 4;
+    };
+
+    var unique = function (collection) {
+
+      return _.indexBy(_.filter(
+        _.map(_.indexBy(collection, function (node) {
+            return node.uuid;
+          }),
+          function (member) {
+            return member;
+          }
+        ),
+        filter
+      ), function (member) {
+        return member.uuid;
       });
-    }
+    };
 
-    if ($rootScope.StandBy.config.profile.smartAlarm) {
-      if (Store('smartAlarm').get('guard').selection) {
-        $scope.loading.smartAlarm = false;
-
-        prepareSaMembers(Store('smartAlarm').get('guard'));
-      }
-
-      Groups.guardMonitor().then(function () {
-        Groups.guardRole().then(function (setup) {
-          prepareSaMembers(setup)
-        });
-      });
-    }
-
-    var members = Store('network').get('unique');
+    var members = unique(Store('app').get('members'));
 
     var initGroup;
 
-    groups.unshift({
-      'name': $rootScope.ui.dashboard.everyone,
-      'uuid': 'all'
-    });
+    // groups.unshift({
+    //   'name': $rootScope.ui.dashboard.everyone,
+    //   'uuid': 'all'
+    // });
 
     initGroup = 'all';
 
-    $scope.groups = groups;
+    $scope.groups = teams;
 
-    $scope.states = $rootScope.StandBy.config.timeline.config.states;
+    $scope.states = $rootScope.config.app.timeline.config.states;
 
     $scope.states['no-state'] = {
       className: 'no-state',
@@ -508,16 +535,16 @@ define(['controllers/controllers'], function (controllers) {
       display: false
     };
 
-    $scope.divisions = $rootScope.StandBy.environment.divisions || [];
+    // $scope.divisions = $rootScope.environment.divisions || [];
 
-    if ($scope.divisions.length > 0) {
-      if ($scope.divisions[0].id !== 'all') {
-        $scope.divisions.unshift({
-          id: 'all',
-          label: $rootScope.ui.dashboard.allDivisions
-        });
-      }
-    }
+    // if ($scope.divisions.length > 0) {
+    //   if ($scope.divisions[0].id !== 'all') {
+    //     $scope.divisions.unshift({
+    //       id: 'all',
+    //       label: $rootScope.ui.dashboard.allDivisions
+    //     });
+    //   }
+    // }
 
     $scope.current = {
       group: initGroup,
@@ -537,12 +564,12 @@ define(['controllers/controllers'], function (controllers) {
         divisionID = $scope.current.division;
       }
 
-      Slots.getMemberAvailabilities(groupID, divisionID).then(function (results) {
+      Slots.users(members).then(function (results) {
         var ordered = {};
 
         _.each(angular.fromJson(angular.toJson(results.members)), function (slots, id) {
           if (members[id] &&
-            (members[id].resources.role != 0 && members[id].resources.role != 4)) {
+            (members[id].role != 0 && members[id].role != 4)) {
             var _member = {
               id: id,
               state: (slots.length > 0) ? slots[0].state : 'no-state',
@@ -551,7 +578,7 @@ define(['controllers/controllers'], function (controllers) {
                 slots[0].end * 1000 :
                 $rootScope.ui.dashboard.possiblyAvailable,
               name: (members && members[id]) ?
-                members[id].resources.firstName + ' ' + members[id].resources.lastName :
+                members[id].firstName + ' ' + members[id].lastName :
                 id
             };
 
@@ -677,7 +704,7 @@ define(['controllers/controllers'], function (controllers) {
       $scope.getAvailability($scope.current.group, $scope.current.division);
     };
 
-    if ($rootScope.StandBy.config.profile.presence) {
+    if ($rootScope.config.app.presence) {
       $q.all([$scope.getGroupAvailability(), Network.population()])
       .then(function(){
         $scope.checkPresence();
@@ -703,10 +730,10 @@ define(['controllers/controllers'], function (controllers) {
         }
       });
 
-      Settings.save($rootScope.StandBy.resources.uuid, {
-        user: angular.fromJson(Store('user').get('resources').settingsWebPaige).user,
+      Settings.save($rootScope.resources.uuid, {
+        user: angular.fromJson(Store('app').get('resources').settingsWebPaige).user,
         app: {
-          group: angular.fromJson(Store('user').get('resources').settingsWebPaige).app.group,
+          group: angular.fromJson(Store('app').get('resources').settingsWebPaige).app.group,
           widgets: {
             groups: selection
           }
@@ -714,149 +741,149 @@ define(['controllers/controllers'], function (controllers) {
       }).then(function () {
         $rootScope.statusBar.display($rootScope.ui.dashboard.refreshGroupOverviews);
 
-        Profile.get($rootScope.StandBy.resources.uuid, true).then(function () {
+        Profile.get($rootScope.app.resources.uuid, true).then(function () {
           getOverviews()
         });
       });
     };
 
-    $scope.getP2000 = function () {
-      Dashboard.p2000().then(function (result) {
-        $scope.loading.alerts = false;
+    // $scope.getP2000 = function () {
+    //   Dashboard.p2000().then(function (result) {
+    //     $scope.loading.alerts = false;
 
-        $scope.alarms = result.alarms;
+    //     $scope.alarms = result.alarms;
 
-        $scope.alarms.list = $scope.alarms.short;
+    //     $scope.alarms.list = $scope.alarms.short;
 
-        $scope.synced.alarms = result.synced;
-      });
-    };
-
-    $rootScope.alarmSync = {
-      start: function () {
-        this.id = $window.setInterval(
-          function () {
-            if ($location.path() == '/dashboard') {
-              $scope.$apply(function (scope) {
-                scope.getP2000();
-
-                if ($rootScope.StandBy.config.profile.smartAlarm) {
-                  if (Store('smartAlarm').get('guard').selection) {
-                    console.log('Guard', Store('smartAlarm').get('guard').selection);
-                    prepareSaMembers(Store('smartAlarm').get('guard'));
-                  }
-
-                  Groups.guardRole().then(function (setup) {
-                    prepareSaMembers(setup);
-                  });
-                } else {
-                  scope.getAvailability(scope.current.group);
-                }
-              });
-            }
-          }, $rootScope.StandBy.config.timers.ALARM_SYNC);
-        $rootScope.intervals.push(this.id);
-      },
-      clear: function () {
-        $window.clearInterval(this.id);
-      },
-      id: ''
-    };
-
-    $rootScope.alarmSync.start();
-
-    $scope.toggle = function (more) {
-      $scope.alarms.list = (more) ? $scope.alarms.short : $scope.alarms.long;
-
-      $scope.more.text = (more) ?
-        $rootScope.ui.dashboard.showMore :
-        $rootScope.ui.dashboard.showLess;
-
-      $scope.more.status = !$scope.more.status;
-    };
-
-    // $scope.fixPopoverPos = function () {
-    //   setTimeout(function () {
-    //     var spanWidth = $('#dashboard .span9').css('width'),
-    //       popWidth = $('#dashboard .popover').css('width');
-
-    //     $('.popover').css({
-    //       top: $('#dashboardPopoverBtn').css('top'),
-    //       left: ((spanWidth.substring(0, spanWidth.length - 2) - popWidth.substring(0, popWidth.length - 2) / 2) + 4)
-    //         + 'px'
-    //     });
-    //   }, $rootScope.StandBy.config.timers.TICKER);
+    //     $scope.synced.alarms = result.synced;
+    //   });
     // };
 
-    if ($rootScope.StandBy.config.profile.smartAlarm) {
-      $.ajax({
-        url: $rootScope.StandBy.config.profile.p2000.url,
-        dataType: 'json',
-        success: function (results) {
-          $rootScope.statusBar.off();
+    // $rootScope.alarmSync = {
+    //   start: function () {
+    //     this.id = $window.setInterval(
+    //       function () {
+    //         if ($location.path() == '/dashboard') {
+    //           $scope.$apply(function (scope) {
+    //             scope.getP2000();
 
-          var processed = Announcer.process(results, true);
+    //             if ($rootScope.StandBy.config.profile.smartAlarm) {
+    //               if (Store('smartAlarm').get('guard').selection) {
+    //                 console.log('Guard', Store('smartAlarm').get('guard').selection);
+    //                 prepareSaMembers(Store('smartAlarm').get('guard'));
+    //               }
 
-          var result = {
-            alarms: processed,
-            synced: new Date().getTime()
-          };
+    //               Groups.guardRole().then(function (setup) {
+    //                 prepareSaMembers(setup);
+    //               });
+    //             } else {
+    //               scope.getAvailability(scope.current.group);
+    //             }
+    //           });
+    //         }
+    //       }, $rootScope.StandBy.config.timers.ALARM_SYNC);
+    //     $rootScope.intervals.push(this.id);
+    //   },
+    //   clear: function () {
+    //     $window.clearInterval(this.id);
+    //   },
+    //   id: ''
+    // };
 
-          $scope.$apply(function () {
-            $scope.loading.alerts = false;
+    // $rootScope.alarmSync.start();
 
-            $scope.alarms = result.alarms;
+    // $scope.toggle = function (more) {
+    //   $scope.alarms.list = (more) ? $scope.alarms.short : $scope.alarms.long;
 
-            $scope.alarms.list = $scope.alarms.short;
+    //   $scope.more.text = (more) ?
+    //     $rootScope.ui.dashboard.showMore :
+    //     $rootScope.ui.dashboard.showLess;
 
-            $scope.synced.alarms = result.synced;
-          });
-        },
-        error: function () {
-          console.log('ERROR with getting p2000 for the first time!');
-        }
-      });
-    } else {
-      Dashboard.getCapcodes().then(function (capcodes) {
-        var _capcodes = '';
+    //   $scope.more.status = !$scope.more.status;
+    // };
 
-        capcodes = capcodes.sort();
+    // // $scope.fixPopoverPos = function () {
+    // //   setTimeout(function () {
+    // //     var spanWidth = $('#dashboard .span9').css('width'),
+    // //       popWidth = $('#dashboard .popover').css('width');
 
-        _.each(capcodes, function (code) {
-          _capcodes += code + ', '
-        });
+    // //     $('.popover').css({
+    // //       top: $('#dashboardPopoverBtn').css('top'),
+    // //       left: ((spanWidth.substring(0, spanWidth.length - 2) - popWidth.substring(0, popWidth.length - 2) / 2) + 4)
+    // //         + 'px'
+    // //     });
+    // //   }, $rootScope.StandBy.config.timers.TICKER);
+    // // };
 
-        $scope.capcodes = _capcodes.substring(0, _capcodes.length - 2);
+    // if ($rootScope.StandBy.config.profile.smartAlarm) {
+    //   $.ajax({
+    //     url: $rootScope.StandBy.config.profile.p2000.url,
+    //     dataType: 'json',
+    //     success: function (results) {
+    //       $rootScope.statusBar.off();
 
-        $.ajax({
-          url: $rootScope.StandBy.config.profile.p2000.url + '?code=' + capcodes,
-          dataType: 'jsonp',
-          success: function (results) {
-            $rootScope.statusBar.off();
+    //       var processed = Announcer.process(results, true);
 
-            var processed = Announcer.process(results);
+    //       var result = {
+    //         alarms: processed,
+    //         synced: new Date().getTime()
+    //       };
 
-            var result = {
-              alarms: processed,
-              synced: new Date().getTime()
-            };
+    //       $scope.$apply(function () {
+    //         $scope.loading.alerts = false;
 
-            $scope.$apply(function () {
-              $scope.loading.alerts = false;
+    //         $scope.alarms = result.alarms;
 
-              $scope.alarms = result.alarms;
+    //         $scope.alarms.list = $scope.alarms.short;
 
-              $scope.alarms.list = $scope.alarms.short;
+    //         $scope.synced.alarms = result.synced;
+    //       });
+    //     },
+    //     error: function () {
+    //       console.log('ERROR with getting p2000 for the first time!');
+    //     }
+    //   });
+    // } else {
+    //   Dashboard.getCapcodes().then(function (capcodes) {
+    //     var _capcodes = '';
 
-              $scope.synced.alarms = result.synced;
-            });
-          },
-          error: function () {
-            console.log('ERROR with getting p2000 for the first time!');
-          }
-        });
-      });
-    }
+    //     capcodes = capcodes.sort();
+
+    //     _.each(capcodes, function (code) {
+    //       _capcodes += code + ', '
+    //     });
+
+    //     $scope.capcodes = _capcodes.substring(0, _capcodes.length - 2);
+
+    //     $.ajax({
+    //       url: $rootScope.StandBy.config.profile.p2000.url + '?code=' + capcodes,
+    //       dataType: 'jsonp',
+    //       success: function (results) {
+    //         $rootScope.statusBar.off();
+
+    //         var processed = Announcer.process(results);
+
+    //         var result = {
+    //           alarms: processed,
+    //           synced: new Date().getTime()
+    //         };
+
+    //         $scope.$apply(function () {
+    //           $scope.loading.alerts = false;
+
+    //           $scope.alarms = result.alarms;
+
+    //           $scope.alarms.list = $scope.alarms.short;
+
+    //           $scope.synced.alarms = result.synced;
+    //         });
+    //       },
+    //       error: function () {
+    //         console.log('ERROR with getting p2000 for the first time!');
+    //       }
+    //     });
+    //   });
+    // }
 
     $scope.setPrefixedAvailability = function (availability, period) {
       Store('environment').save('setPrefixedAvailability', {

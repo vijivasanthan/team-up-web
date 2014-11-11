@@ -400,3 +400,149 @@
   font-weight: bold;
 }
 
+.sa {
+
+  position: relative;
+
+  .sa-state {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+  }
+
+  ul.sa-setup {
+    margin: 0;
+    padding: 0;
+    margin-top: -20px;
+    list-style: none;
+
+    li {
+      border-bottom: 1px solid #ddd;
+      overflow: hidden;
+      height: 100%;
+
+      &:nth-child(odd) {
+        background-color: #f2f1ed;
+      }
+
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .sa-member {
+        display: inline;
+        float: left;
+        padding: 15px;
+        min-width: 263px;
+        margin-right: 15px;
+
+        .sa-member-icon {
+          margin-right: 15px;
+          float: left;
+          display: block;
+          min-width: 54px;
+          height: 54px;
+          text-align: center;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+          color: #fff;
+          margin-bottom: 5px;
+          padding-top: 18px;
+          line-height: 20px;
+          // background-color: #415e6b;
+          background-color: #6cad6c;
+
+          strong {
+            font-size: 24px;
+          }
+        }
+
+        .sa-icon-not-assigned {
+          background-color: #d24545
+        }
+
+        .sa-icon-driver {
+          // background-color: #253943;
+          background-color: #f6e500;
+        }
+
+        .sa-icon-commander {
+          // background-color: #ba6a24;
+          background-color: #648ea0;
+        }
+
+        .sa-icon-reserve-available {
+          background-color: #6cad6c;
+        }
+
+        .sa-icon-reserve-available-north {
+          background-color: #242424;
+        }
+
+        .sa-icon-reserve-available-south {
+          background-color: #8a85c7;
+        }
+
+        .sa-icon-reserve-available-schipper {
+          background-color: #f6e500;
+        }
+
+        .sa-icon-reserve-unavailable {
+          background-color: #d34545;
+        }
+
+        // TODO: Depreciated!
+        .sa-icon-reserve-unreached {
+          background-color: #65619b;
+        }
+
+        .sa-icon-reserve-noplanning {
+          background-color: #a0a0a0;
+          // background-color: #ececec;
+        }
+
+        .sa-member-card {
+          float: left;
+
+          h5 {
+            margin-top: 0px;
+            margin-bottom: 5px;
+
+            a {
+              color: $textColor;
+            }
+          }
+
+          hr {
+            margin: 0;
+            padding: 0;
+            margin-bottom: 5px;
+          }
+
+          span {
+            font-size: 13px;
+          }
+        }
+      }
+
+    }
+
+    li.sa-truck {
+      margin-top: 25px;
+    }
+
+    li.sa-reserves {
+
+    }
+  }
+
+  button {
+    margin-top: 10px;
+  }
+
+}

@@ -2,7 +2,7 @@ define(['services/services', 'config'], function (services, config) {
   'use strict';
 
   services.factory('Slots', function ($rootScope, $resource, $q, Dater, Sloter, Stats, Store) {
-    var Slots = $resource(config.host + '/askatars/:user/slots', {user: ''}, {
+    var Slots = $resource(config.app.host + '/askatars/:user/slots', {user: ''}, {
       query: {
         method: 'GET',
         params: {start: '', end: ''},
@@ -22,7 +22,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    var Aggs = $resource(config.host + '/calc_planning/:id', {}, {
+    var Aggs = $resource(config.app.host + '/calc_planning/:id', {}, {
       query: {
         method: 'GET',
         params: {id: '', start: '', end: ''},
@@ -30,7 +30,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    var Wishes = $resource(config.host + '/network/:id/wish', {}, {
+    var Wishes = $resource(config.app.host + '/network/:id/wish', {}, {
       query: {
         method: 'GET',
         params: {id: '', start: '', end: ''},
@@ -42,7 +42,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    var MemberSlots = $resource(config.host + '/network/:id/member/slots2', {}, {
+    var MemberSlots = $resource(config.app.host + '/network/:id/member/slots2', {}, {
       query: {
         method: 'GET',
         params: {id: '', start: '', end: ''}
@@ -528,6 +528,45 @@ define(['services/services', 'config'], function (services, config) {
           deferred.resolve({error: error});
         }
       );
+
+      return deferred.promise;
+    };
+
+    Slots.prototype.users = function (members) {
+      var deferred = $q.defer(),
+          memDeferred = [];
+
+      var now = Math.floor(Date.now().getTime() / 1000);
+
+      _.each(members, function (member){
+        var memberDeferred = $q.defer();
+        memDeferred.push(memberDeferred.promise);
+
+        Slots.query(
+          {
+            user: member.uuid,
+            start: now,
+            end: now + 1000
+          },
+          function (result) {
+            memberDeferred.resolve({uuid: member.uuid, content: result});
+          },
+          function (error) {
+            memberDeferred.resolve({error: error});
+          }
+        );
+      });
+
+      $q.all(memDeferred).then(function (results){
+        var success = {};
+        _.each(results, function (result) {
+          if (!result.error){
+            success[result.uuid] = result.content;
+          }
+        });
+
+        deferred.resolve({members: success, synced: now});
+      });
 
       return deferred.promise;
     };

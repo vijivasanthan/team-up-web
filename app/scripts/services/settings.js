@@ -6,7 +6,8 @@ define(['services/services'], function (services) {
 
     Settings.prototype.get = function () {
       // return angular.fromJson(Storage.get('resources')).settingsWebPaige || {};
-      return angular.fromJson(Store('user').get('resources').settingsWebPaige) || {};
+      // return angular.fromJson(Store('user').get('resources').settingsWebPaige) || {};
+      return angular.fromJson(Store('app').get('resources').settingsWebPaige) || {};
     };
 
     Settings.prototype.save = function (id, settings) {
