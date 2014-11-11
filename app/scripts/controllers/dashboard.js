@@ -1,7 +1,7 @@
 define(['controllers/controllers'], function (controllers) {
   'use strict';
 
-  controllers.controller('dashboard', function ($scope, $rootScope, $q, $window, $location, Dashboard, Slots, Dater, Settings, Profile, Groups, Announcer, Network, $timeout, Store) {
+  controllers.controller('dashboard', function ($scope, $rootScope, $q, $window, $location, Dashboard, Slots, Dater, Settings, Profile, Teams, Groups, Announcer, Network, $timeout, Store) {
     $rootScope.notification.status = false;
 
     $rootScope.fixStyles();
@@ -516,10 +516,10 @@ define(['controllers/controllers'], function (controllers) {
 
     var initGroup;
 
-    // groups.unshift({
-    //   'name': $rootScope.ui.dashboard.everyone,
-    //   'uuid': 'all'
-    // });
+    teams.unshift({
+      'name': $rootScope.ui.dashboard.everyone,
+      'uuid': 'all'
+    });
 
     initGroup = 'all';
 
@@ -555,6 +555,7 @@ define(['controllers/controllers'], function (controllers) {
 
     $scope.getAvailability = function (groupID, divisionID) {
       var deferred = $q.defer();
+      var queriedTeams = Teams.query();
 
       if (!groupID) {
         groupID = $scope.current.group;
@@ -564,123 +565,133 @@ define(['controllers/controllers'], function (controllers) {
         divisionID = $scope.current.division;
       }
 
-      Slots.users(members).then(function (results) {
-        var ordered = {};
+      queriedTeams.then(function(teams){
 
-        _.each(angular.fromJson(angular.toJson(results.members)), function (slots, id) {
-          if (members[id] &&
-            (members[id].role != 0 && members[id].role != 4)) {
-            var _member = {
-              id: id,
-              state: (slots.length > 0) ? slots[0].state : 'no-state',
-              label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
-              end: (slots.length > 0 && slots[0].end !== undefined) ?
-                slots[0].end * 1000 :
-                $rootScope.ui.dashboard.possiblyAvailable,
-              name: (members && members[id]) ?
-                members[id].firstName + ' ' + members[id].lastName :
-                id
-            };
+        if(groupID == 'all'){
+          members = unique(Store('app').get('members'));
+        }
+        else if(typeof teams.members[groupID] != 'undefined') {
+          members = unique(teams.members[groupID]);
+        }
 
-            if (slots.length > 0) {
-              if (!ordered.available)
-                ordered.available = [];
+        Slots.users(members).then(function (results) {
+          var ordered = {};
 
-              if (!ordered.unavailable)
-                ordered.unavailable = [];
+          _.each(angular.fromJson(angular.toJson(results.members)), function (slots, id) {
+            if (members[id] &&
+              (members[id].role != 0 && members[id].role != 4)) {
+              var _member = {
+                id: id,
+                state: (slots.length > 0) ? slots[0].state : 'no-state',
+                label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
+                end: (slots.length > 0 && slots[0].end !== undefined) ?
+                  slots[0].end * 1000 :
+                  $rootScope.ui.dashboard.possiblyAvailable,
+                name: (members && members[id]) ?
+                  members[id].firstName + ' ' + members[id].lastName :
+                  id
+              };
 
-              if (slots[0].state == 'com.ask-cs.State.Unreached') {
-                ordered.unavailable.push(_member);
-              } else if (slots[0].state == 'com.ask-cs.State.Unavailable') {
-                ordered.unavailable.push(_member);
+              if (slots.length > 0) {
+                if (!ordered.available)
+                  ordered.available = [];
+
+                if (!ordered.unavailable)
+                  ordered.unavailable = [];
+
+                if (slots[0].state == 'com.ask-cs.State.Unreached') {
+                  ordered.unavailable.push(_member);
+                } else if (slots[0].state == 'com.ask-cs.State.Unavailable') {
+                  ordered.unavailable.push(_member);
+                } else {
+                  if (slots[0].state == 'com.ask-cs.State.Available') {
+                    _member.style = 'sa-icon-reserve-available';
+                  }
+
+                  if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarNoord') {
+                    _member.style = 'sa-icon-reserve-available-north';
+                  }
+
+                  if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarZuid') {
+                    _member.style = 'sa-icon-reserve-available-south';
+                  }
+
+                  if (slots[0].state == 'com.ask-cs.State.KNRM.SchipperVanDienst') {
+                    _member.style = 'sa-icon-reserve-available-schipper';
+                  }
+
+                  ordered.available.push(_member);
+                }
               } else {
-                if (slots[0].state == 'com.ask-cs.State.Available') {
-                  _member.style = 'sa-icon-reserve-available';
+                if (!ordered.possible) {
+                  ordered.possible = [];
                 }
 
-                if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarNoord') {
-                  _member.style = 'sa-icon-reserve-available-north';
-                }
-
-                if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarZuid') {
-                  _member.style = 'sa-icon-reserve-available-south';
-                }
-
-                if (slots[0].state == 'com.ask-cs.State.KNRM.SchipperVanDienst') {
-                  _member.style = 'sa-icon-reserve-available-schipper';
-                }
-
-                ordered.available.push(_member);
+                ordered.possible.push(_member);
               }
-            } else {
-              if (!ordered.possible) {
-                ordered.possible = [];
-              }
-
-              ordered.possible.push(_member);
             }
+          });
+
+          $scope.loadingAvailability = false;
+
+          var sortByEnd = function (a, b) {
+            if (a.end < b.end) {
+              return -1;
+            }
+
+            if (a.end > b.end) {
+              return 1;
+            }
+
+            return 0;
+          };
+
+          if (ordered.hasOwnProperty('available')) {
+            ordered.available.sort(sortByEnd);
           }
+
+          if (ordered.hasOwnProperty('unavailable')) {
+            ordered.unavailable.sort(sortByEnd);
+          }
+
+          var _availables = [];
+
+          _.each(ordered.available, function (available) {
+            if (available.state == 'com.ask-cs.State.KNRM.SchipperVanDienst') {
+              _availables.push(available);
+            }
+          });
+
+          _.each(ordered.available, function (available) {
+            if (available.state == 'com.ask-cs.State.Available') {
+              _availables.push(available);
+            }
+          });
+
+          _.each(ordered.available, function (available) {
+            if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarNoord') {
+              _availables.push(available);
+            }
+          });
+
+          _.each(ordered.available, function (available) {
+            if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarZuid') {
+              _availables.push(available);
+            }
+          });
+
+          ordered.available = _availables;
+
+          $scope.availability = {
+            members: ordered,
+            synced: results.synced * 1000
+          };
+
+          deferred.resolve($scope.availability);
+        },
+        function (results) {
+          deferred.reject(results);
         });
-
-        $scope.loadingAvailability = false;
-
-        var sortByEnd = function (a, b) {
-          if (a.end < b.end) {
-            return -1;
-          }
-
-          if (a.end > b.end) {
-            return 1;
-          }
-
-          return 0;
-        };
-
-        if (ordered.hasOwnProperty('available')) {
-          ordered.available.sort(sortByEnd);
-        }
-
-        if (ordered.hasOwnProperty('unavailable')) {
-          ordered.unavailable.sort(sortByEnd);
-        }
-
-        var _availables = [];
-
-        _.each(ordered.available, function (available) {
-          if (available.state == 'com.ask-cs.State.KNRM.SchipperVanDienst') {
-            _availables.push(available);
-          }
-        });
-
-        _.each(ordered.available, function (available) {
-          if (available.state == 'com.ask-cs.State.Available') {
-            _availables.push(available);
-          }
-        });
-
-        _.each(ordered.available, function (available) {
-          if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarNoord') {
-            _availables.push(available);
-          }
-        });
-
-        _.each(ordered.available, function (available) {
-          if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarZuid') {
-            _availables.push(available);
-          }
-        });
-
-        ordered.available = _availables;
-
-        $scope.availability = {
-          members: ordered,
-          synced: results.synced * 1000
-        };
-
-        deferred.resolve($scope.availability);
-      },
-      function (results) {
-        deferred.reject(results);
       });
 
       return deferred.promise;

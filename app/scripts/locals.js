@@ -38,6 +38,7 @@ define(
         dashboard: {
           thisWeek: 'Deze week',
           welcome: 'Welkom',
+          everyone: 'Iedereen',
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
