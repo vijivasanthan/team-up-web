@@ -24,6 +24,7 @@ define(
                   Dater, $filter, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
+          $rootScope.resetPhoneNumberChecker();
 
           $scope.self = this;
 
@@ -130,6 +131,19 @@ define(
                 delete resources.newpassrepeat;
             }
 
+            console.log($rootScope.phoneNumberParsed);
+
+            if($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+
+              return;
+            }
+            else if($rootScope.phoneNumberParsed.result == true)
+            {
+              resources.phone = $rootScope.phoneNumberParsed.format;
+            }
+
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             // deal with birthday
@@ -193,6 +207,7 @@ define(
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
+                        $rootScope.resetPhoneNumberChecker();
 
                         $scope.data = data;
                         $scope.profileMeta = angular.copy(resources);

@@ -24,54 +24,55 @@ define(
                   $filter, $modal, TeamUp, $timeout)
         {
           $rootScope.fixStyles();
+          $rootScope.resetPhoneNumberChecker();
           // $rootScope.notifier.success('test message');
           if (data.clientId)
           {
-			  var clientHasClientGroup = false;
+            var clientHasClientGroup = false;
 
-			  data.clientGroups = Store('app').get('ClientGroups');
-			  data.clients = {};
+            data.clientGroups = Store('app').get('ClientGroups');
+            data.clients = {};
 
-			  angular.forEach(
-				  data.clientGroups,
-				  function (clientGroup)
-				  {
-					  data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+            angular.forEach(
+              data.clientGroups,
+              function (clientGroup)
+              {
+                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
 
-					  angular.forEach(
-						  data.clients[clientGroup.id],
-						  function (client)
-						  {
-							  if (client.uuid == data.clientId)
-							  {
-								  $scope.client = client;
-								  $scope.contacts = client.contacts;
+                angular.forEach(
+                  data.clients[clientGroup.id],
+                  function (client)
+                  {
+                    if (client.uuid == data.clientId)
+                    {
+                      $scope.client = client;
+                      $scope.contacts = client.contacts;
 
-								  // deal with the date thing for editing
-								  client.birthDate = $filter('nicelyDate')(client.birthDate);
-								  $scope.clientmeta = client;
-								  clientHasClientGroup = true;
-							  }
-						  }
-					  );
-				  }
-			  );
+                      // deal with the date thing for editing
+                      client.birthDate = $filter('nicelyDate')(client.birthDate);
+                      $scope.clientmeta = client;
+                      clientHasClientGroup = true;
+                    }
+                  }
+                );
+              }
+            );
 
-			  if(! clientHasClientGroup)
-			  {
-				  data.clients = Store('app').get('clients');
-				  data.client =  (
-					  _.where(data.clients,
-						  {
-							  uuid: data.clientId
-						  })
-					  )[0];
+            if (!clientHasClientGroup)
+            {
+              data.clients = Store('app').get('clients');
+              data.client = (
+                _.where(data.clients,
+                  {
+                    uuid: data.clientId
+                  })
+              )[0];
 
-				  $scope.client = data.client;
-				  $scope.contacts = data.client.contacts;
-				  data.client.birthDate = $filter('nicelyDate')(data.client.birthDate);
-				  $scope.clientmeta = data.client;
-			  }
+              $scope.client = data.client;
+              $scope.contacts = data.client.contacts;
+              data.client.birthDate = $filter('nicelyDate')(data.client.birthDate);
+              $scope.clientmeta = data.client;
+            }
           }
 
           // TODO: Check if it is use!
@@ -104,34 +105,35 @@ define(
 
           var params = $location.search();
 
-          $scope.search = { query: '' };
+          $scope.search = {query: ''};
 
           $scope.selection = {};
 
           $scope.data = data;
 
           var uuid,
-              view;
+            view;
 
-          if (! params.uuid && ! $location.hash())
+          if (!params.uuid && !$location.hash())
           {
             uuid = data.clientGroups[0].id;
             view = 'client';
 
-            $location.search({ uuid: data.clientGroups[0].id }).hash('client');
+            $location.search({uuid: data.clientGroups[0].id}).hash('client');
           }
-          else if (! params.uuid)
+          else if (!params.uuid)
           {
-			  //check the link between team and clientGroup and set the clientGroup
-			  if(! (Store('app').get('currentTeamClientGroup')).clientGroup) {
-				  saveLastVisitedClientGroup(data.clientGroups[0].id);
-			  }
+            //check the link between team and clientGroup and set the clientGroup
+            if (!(Store('app').get('currentTeamClientGroup')).clientGroup)
+            {
+              saveLastVisitedClientGroup(data.clientGroups[0].id);
+            }
 
             uuid = (Store('app').get('currentTeamClientGroup')).clientGroup;
 
             view = $location.hash();
 
-            $location.search({ uuid: uuid });
+            $location.search({uuid: uuid});
           }
           else
           {
@@ -183,16 +185,19 @@ define(
           // Load reports list for client profile view
           var loadReports = function ()
           {
-			  console.log('loadReports-> ', $scope.client);
+            console.log('loadReports-> ', $scope.client);
 
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
             TeamUp._(
               'clientReportsQuery',
-              { second: $scope.client.uuid },
+              {second: $scope.client.uuid},
               null,
               {
-                success: function (reports) { Store('app').save('reports_' + $scope.client.uuid, reports) }
+                success: function (reports)
+                {
+                  Store('app').save('reports_' + $scope.client.uuid, reports)
+                }
               }
             ).then(
               function (reports)
@@ -209,7 +214,10 @@ define(
                 //                  }
                 //                );
 
-              }, function (error) { console.log(error) });
+              }, function (error)
+              {
+                console.log(error)
+              });
           };
 
           // Get the list of reports for certain client group for reports tab
@@ -218,7 +226,7 @@ define(
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
             // get the groupId from the url
-            if (! $scope.clientGroup)
+            if (!$scope.clientGroup)
             {
               $scope.clientGroup = data.clientGroups[0];
             }
@@ -266,7 +274,10 @@ define(
                   $scope.openReport(report_modal);
                 }
 
-              }, function (error) { console.log(error) });
+              }, function (error)
+              {
+                console.log(error)
+              });
 
           };
 
@@ -274,7 +285,7 @@ define(
 
           setClientView(uuid);
 
-          function setClientView (id)
+          function setClientView(id)
           {
             angular.forEach(
               data.clientGroups,
@@ -308,13 +319,13 @@ define(
           //save the last visited clientgroup - team by id, so that it will be the default
           function saveLastVisitedClientGroup(clientGroupId)
           {
-              var teamId = (_.invert(teamClientLocal))[clientGroupId];
+            var teamId = (_.invert(teamClientLocal))[clientGroupId];
 
-              Store('app').save(
-                  'currentTeamClientGroup',{
-                      team: teamId,
-                      clientGroup: clientGroupId
-                  });
+            Store('app').save(
+              'currentTeamClientGroup', {
+                team: teamId,
+                clientGroup: clientGroupId
+              });
           };
 
           $scope.requestClientGroup = function (current, switched)
@@ -326,7 +337,7 @@ define(
               $location.search(),
               function ()
               {
-                $location.search({ uuid: current });
+                $location.search({uuid: current});
               });
 
             if (switched)
@@ -374,14 +385,14 @@ define(
               hash,
               function ()
               {
-                if (! $scope.clientGroup)
+                if (!$scope.clientGroup)
                 {
                   $scope.clientGroup = $scope.clientGroups[0]
                 }
 
                 if (($location.hash() == 'viewClient' ||
-                     $location.hash() == 'editClient' ||
-                     $location.hash() == 'editImg') && hash == 'client')
+                  $location.hash() == 'editClient' ||
+                  $location.hash() == 'editImg') && hash == 'client')
                 {
                   $location.path('/client').search({uuid: $scope.clientGroup.id});
                 }
@@ -428,7 +439,7 @@ define(
 
             TeamUp._(
               'clientGroupUpdate',
-              { second: clientGroup.id },
+              {second: clientGroup.id},
               clientGroup.id
             ).then(
               function (result)
@@ -457,8 +468,8 @@ define(
             );
           };
 
-          // Refresh the clients in the certain group after adding , updating or removing client. 
-          // forward user to the client view if the group is successfully refreshed. 
+          // Refresh the clients in the certain group after adding , updating or removing client.
+          // forward user to the client view if the group is successfully refreshed.
           var reloadGroup = function (result)
           {
             Clients.query(false, result)
@@ -541,7 +552,7 @@ define(
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                  reloadGroup({ 'uuid': result.id });
+                  reloadGroup({'uuid': result.id});
                 }
               }
             );
@@ -558,46 +569,59 @@ define(
 
           // This function only push new contact into a scope array, need to submit to save the contact
           // TODO: design a way to save the contact directly
-          $scope.changeContacts = function(contactIndex)
+          $scope.changeContacts = function (contactIndex)
           {
-            if (typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == '')
+            if (typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == ''
+              || $scope.contactForm.name != null)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt2);
 
               return;
             }
 
-            if(! _.isNumber(contactIndex))
+            if($rootScope.phoneNumberParsed.result == false)
             {
-                var contactPerson = {
-                  firstName: '',
-                  lastName: '',
-                  function: '',
-                  phone: ''
-                };
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
-                contactPerson.firstName = $scope.contactForm.firstName;
-                contactPerson.lastName = $scope.contactForm.lastName;
-                contactPerson.function = $scope.contactForm.function;
-                contactPerson.phone = $scope.contactForm.phone;
+              return;
+            }
+            else if($rootScope.phoneNumberParsed.result == true)
+            {
+              $scope.contactForm.phone = $rootScope.phoneNumberParsed.format;
+            }
 
-                if (typeof $scope.contacts == 'undefined')
-                {
-                  $scope.contacts = [];
-                }
+            if (!_.isNumber(contactIndex))
+            {
+              var contactPerson = {
+                firstName: '',
+                lastName: '',
+                function: '',
+                phone: ''
+              };
 
-                if ($scope.contacts == null)
-                {
-                  $scope.contacts = [];
-                }
+              contactPerson.firstName = $scope.contactForm.firstName;
+              contactPerson.lastName = $scope.contactForm.lastName;
+              contactPerson.function = $scope.contactForm.function;
+              contactPerson.phone = $scope.contactForm.phone;
 
-                $scope.contacts.push(contactPerson);
+              if (typeof $scope.contacts == 'undefined')
+              {
+                $scope.contacts = [];
+              }
+
+              if ($scope.contacts == null)
+              {
+                $scope.contacts = [];
+              }
+
+              $scope.contacts.push(contactPerson);
             }
 
             $scope.contactForm = null;
+            $rootScope.resetPhoneNumberChecker();
           }
 
-          $scope.editContact = function(contact, index)
+          $scope.editContact = function (contact, index)
           {
             $scope.contactForm = contact;
             $scope.contactForm.index = index;
@@ -606,7 +630,7 @@ define(
           // create a new client
           $scope.clientSubmit = function (client)
           {
-            if (typeof client == 'undefined' || ! client.firstName || ! client.lastName || ! client.phone)
+            if (typeof client == 'undefined' || !client.firstName || !client.lastName || !client.phone)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.clinetInfoFill);
 
@@ -629,6 +653,17 @@ define(
               return;
             }
 
+            if($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+
+              return;
+            }
+            else if($rootScope.phoneNumberParsed.result == true)
+            {
+              client.phone = $rootScope.phoneNumberParsed.format;
+            }
+
             client.clientGroupUuid = $scope.clientGroup.id;
 
             TeamUp._(
@@ -636,7 +671,10 @@ define(
               null,
               client,
               {
-                success: function (result) { Store('app').save(result.id, result) }
+                success: function (result)
+                {
+                  Store('app').save(result.id, result)
+                }
               }
             ).then(
               function (result)
@@ -648,7 +686,8 @@ define(
                 else
                 {
                   $scope.contactForm = null;
-                  reloadGroup({ 'uuid': result.clientGroupUuid });
+                  $rootScope.resetPhoneNumberChecker();
+                  reloadGroup({'uuid': result.clientGroupUuid});
                 }
               }
             );
@@ -658,27 +697,39 @@ define(
           // update client infomation
           $scope.clientChange = function (client)
           {
-			//todo client address must be required in the client form
-		  	if(client.address) {
-				if
-				(
-					! client.address.city && ! client.address.country && ! client.address.latitude && ! client.address.longitude
-					&& ! client.address.street && ! client.address.zip
-				)
-				{
-					client.address = null;
-				}
-			}
+            //todo client address must be required in the client form
+            if (client.address)
+            {
+              if
+              (
+                !client.address.city && !client.address.country && !client.address.latitude && !client.address.longitude
+                && !client.address.street && !client.address.zip
+              )
+              {
+                client.address = null;
+              }
+            }
+
+            if($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+
+              return;
+            }
+            else if($rootScope.phoneNumberParsed.result == true)
+            {
+              client.phone = $rootScope.phoneNumberParsed.format;
+            }
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
-			//temp var, so the user should't see the date changing
-			var changedClient = angular.copy(client);
+            //temp var, so the user should't see the date changing
+            var changedClient = angular.copy(client);
 
             try
             {
-				//convert birthdate into miliseconds for saving
-				changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              //convert birthdate into miliseconds for saving
+              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
             }
             catch (error)
             {
@@ -688,11 +739,10 @@ define(
             }
 
 
-
             TeamUp._(
               'clientUpdate',
-              { second: client.uuid },
-				changedClient
+              {second: client.uuid},
+              changedClient
             ).then(
               function (result)
               {
@@ -702,16 +752,15 @@ define(
                 }
                 else
                 {
-
-
-					$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                  $rootScope.resetPhoneNumberChecker();
+                  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
 
-				  //todo redirect to the clientprofile how was edited
-				  var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
-				  reloadGroup({ 'uuid': clientGroupId });
+                  //todo redirect to the clientprofile how was edited
+                  var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
+                  reloadGroup({'uuid': clientGroupId});
                 }
               }
             );
@@ -741,7 +790,7 @@ define(
 
             TeamUp._(
               'clientUpdate',
-              { second: client.uuid },
+              {second: client.uuid},
               client
             ).then(
               function (result)
@@ -757,8 +806,10 @@ define(
                   // TODO: Nothing has been done with the result of query!!!
                   Clients.query(
                     false,
-                    { 'uuid': result.clientGroupUuid }
-                  ).then(function (queryRs) {});
+                    {'uuid': result.clientGroupUuid}
+                  ).then(function (queryRs)
+                    {
+                    });
                 }
                 $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
               }
@@ -804,7 +855,7 @@ define(
 
             TeamUp._(
               'clientGroupDelete',
-              { second: $scope.current }
+              {second: $scope.current}
             ).then(
               function (result)
               {
@@ -828,13 +879,19 @@ define(
                           }
                         }
                       );
-                    }, function (error) { console.log(error) });
+                    }, function (error)
+                    {
+                      console.log(error)
+                    });
 
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
-              }, function (error) { console.log(error) });
+              }, function (error)
+              {
+                console.log(error)
+              });
           };
 
           $scope._clientId = {};
@@ -863,7 +920,7 @@ define(
 
             TeamUp._(
               'clientDelete',
-              { second: clientId }
+              {second: clientId}
             ).then(
               function ()
               {
@@ -884,10 +941,13 @@ define(
                     }
                   }
                 );
-              }, function (error) { console.log(error) });
+              }, function (error)
+              {
+                console.log(error)
+              });
           };
 
-          // filter the report by client or the created month 
+          // filter the report by client or the created month
           $scope.requestReportsByFilter = function ()
           {
             angular.forEach(
@@ -928,8 +988,8 @@ define(
             $scope.report = report;
 
             $scope.view = {
-              editReport: ! ! (report.editMode),
-              viewReport: (! (report.editMode || typeof report.uuid == 'undefined')),
+              editReport: !!(report.editMode),
+              viewReport: (!(report.editMode || typeof report.uuid == 'undefined')),
               newReport: (typeof report.uuid == 'undefined')
             };
 
@@ -942,7 +1002,7 @@ define(
               }
             };
 
-            // add new report, send systemm message at the same time. 
+            // add new report, send systemm message at the same time.
             $scope.saveReport = function (report)
             {
               if (report.editMode)
@@ -950,8 +1010,10 @@ define(
 
                 TeamUp._(
                   'clientReportUpdate',
-                  { second: report.clientUuid,
-                    fourth: report.uuid},
+                  {
+                    second: report.clientUuid,
+                    fourth: report.uuid
+                  },
                   {
                     uuid: report.uuid,
                     title: report.title,
@@ -971,7 +1033,7 @@ define(
               {
                 TeamUp._(
                   'clientReportAdd',
-                  { second: report.clientUuid },
+                  {second: report.clientUuid},
                   {
                     uuid: report.uuid,
                     title: report.title,
@@ -991,8 +1053,8 @@ define(
             };
           };
 
-          // open a report by using the modal plug-in , here you need to use inject function to inject 
-          // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript 
+          // open a report by using the modal plug-in , here you need to use inject function to inject
+          // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript
 
           ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', 'report'];
 
@@ -1006,7 +1068,10 @@ define(
                 templateUrl: './views/reportTemplate.html',
                 controller: ModalInstanceCtrl,
                 resolve: {
-                  report: function () { return $scope.report }
+                  report: function ()
+                  {
+                    return $scope.report
+                  }
                 }
               }
             );
@@ -1036,15 +1101,24 @@ define(
                 templateUrl: 'views/reportTemplate.html',
                 controller: ModalInstanceCtrl,
                 resolve: {
-                  report: function () { return $scope.report },
+                  report: function ()
+                  {
+                    return $scope.report
+                  },
                   editMode: false
                 }
               }
             );
 
             modalInstance.result.then(
-              function () { loadGroupReports() },
-              function () { console.log('Modal dismissed at: ' + new Date()) });
+              function ()
+              {
+                loadGroupReports()
+              },
+              function ()
+              {
+                console.log('Modal dismissed at: ' + new Date())
+              });
           };
 
           $scope.editReport = function (report)
@@ -1058,7 +1132,10 @@ define(
                 templateUrl: './views/reportTemplate.html',
                 controller: ModalInstanceCtrl,
                 resolve: {
-                  report: function () { return $scope.report }
+                  report: function ()
+                  {
+                    return $scope.report
+                  }
                 }
               });
           };
@@ -1109,7 +1186,10 @@ define(
                 {
                   $rootScope.notifier.error(result.error);
                 }
-              }, function (error) { console.log(error) });
+              }, function (error)
+              {
+                console.log(error)
+              });
           };
 
           $scope.editImg = function ()
@@ -1118,7 +1198,7 @@ define(
             $scope.setViewTo('editImg');
           };
 
-          // open report from the link ( from the chat message ) 
+          // open report from the link ( from the chat message )
           // there will be a link URL changing when opening a report from other views , need to do some special process
           $scope.$on(
             '$locationChangeSuccess', function (event, currentURL, preURL)
