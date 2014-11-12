@@ -549,6 +549,10 @@ define(['services/services', 'config'], function (services, config) {
             end: now + 1000
           },
           function (result) {
+            _.each(result, function(member){
+              member.state = member.text;
+              member.text = null;
+            })
             memberDeferred.resolve({uuid: member.uuid, content: result});
           },
           function (error) {
