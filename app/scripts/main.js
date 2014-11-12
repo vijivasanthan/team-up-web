@@ -147,11 +147,8 @@ require(
     'services/teamup',
     'services/clients',
     'services/dater', // TODO: Remove later on
-    'services/announcer',
     'services/md5',
-    'services/settings',
     'services/sloter',
-    'services/standby',
     'services/stats',
     'services/strings',
     'services/teams',
@@ -161,17 +158,12 @@ require(
 
     'directives/widgets',
     'directives/dashboard/snapshots',
-    'directives/dashboard/summaries',
     'directives/date-range-picker',
     'directives/log-ranger',
     // 'directives/treegrid',
 
     'modals/task',
-    'modals/dashboard',
-    'modals/network',
     'modals/slots',
-    'modals/profile',
-    'modals/groups',
     'modals/logs',
 
     'resources/ClientResource',

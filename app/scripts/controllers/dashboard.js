@@ -1,26 +1,26 @@
 define(['controllers/controllers'], function (controllers) {
   'use strict';
 
-  controllers.controller('dashboard', function ($scope, $rootScope, $q, $window, $location, Dashboard, Slots, Dater, Settings, Profile, Teams, Groups, Announcer, Network, $timeout, Store) {
+  controllers.controller('dashboard', function ($scope, $rootScope, $q, $window, $location, Slots, Teams, $timeout, Store) {
     $rootScope.notification.status = false;
 
     $rootScope.fixStyles();
 
-    $scope.loading = {
-      pies: true,
-      alerts: true,
-      smartAlarm: true
-    };
+    // $scope.loading = {
+    //   pies: true,
+    //   alerts: true,
+    //   smartAlarm: true
+    // };
 
-    $scope.more = {
-      status: false,
-      text: $rootScope.ui.dashboard.showMore
-    };
+    // $scope.more = {
+    //   status: false,
+    //   text: $rootScope.ui.dashboard.showMore
+    // };
 
-    $scope.synced = {
-      alarms: new Date().getTime(),
-      pies: new Date().getTime()
-    };
+    // $scope.synced = {
+    //   alarms: new Date().getTime(),
+    //   pies: new Date().getTime()
+    // };
 
     /**
      * TODO: Check somewhere that user-settings widget-groups are synced with the
@@ -29,35 +29,35 @@ define(['controllers/controllers'], function (controllers) {
     // var groups = Store('network').get('groups');
     var teams = Store('app').get('teams');
 
-    var selection = {};
+    // var selection = {};
 
-    // var settings = angular.fromJson(Store('user').get('resources').settingsWebPaige);
-    var settings = angular.fromJson(Store('app').get('resources').settingsWebPaige);
+    // // var settings = angular.fromJson(Store('user').get('resources').settingsWebPaige);
+    // // var settings = angular.fromJson(Store('app').get('resources').settingsWebPaige);
 
-    if (typeof settings == 'undefined'){
-      settings = $rootScope.config.app.defaults.settingsWebPaige;
-    }
+    // if (typeof settings == 'undefined'){
+    //   settings = $rootScope.config.app.defaults.settingsWebPaige;
+    // }
 
-    _.each(settings.app.widgets.groups, function (value, group) {
-      selection[group] = value
-    });
+    // _.each(settings.app.widgets.groups, function (value, group) {
+    //   selection[group] = value
+    // });
 
-    _.each(teams, function (group) {
-      if (!selection[group.uuid]) {
-        selection[group.uuid] = {
-          divisions: false,
-          status: false
-        };
-      }
-    });
+    // _.each(teams, function (group) {
+    //   if (!selection[group.uuid]) {
+    //     selection[group.uuid] = {
+    //       divisions: false,
+    //       status: false
+    //     };
+    //   }
+    // });
 
-    var filteredGroups = [];
+    // var filteredGroups = [];
 
-    _.each(teams, function (group) {
-      if (group.uuid != 'all') {
-        filteredGroups.push(group);
-      }
-    });
+    // _.each(teams, function (group) {
+    //   if (group.uuid != 'all') {
+    //     filteredGroups.push(group);
+    //   }
+    // });
 
 
     // $scope.loadingPresence = true;
@@ -201,158 +201,158 @@ define(['controllers/controllers'], function (controllers) {
     //   divisions: ($rootScope.environment.divisions.length > 0)
     // };
 
-    $scope.checkAnyPies = function () {
-      var ret = true;
+    // $scope.checkAnyPies = function () {
+    //   var ret = true;
 
-      $scope.loading.pies = false;
+    //   $scope.loading.pies = false;
 
-      _.each(settings.app.widgets.groups, function (group) {
-        if (group.status === true) {
-          ret = false;
-        }
-      });
+    //   _.each(settings.app.widgets.groups, function (group) {
+    //     if (group.status === true) {
+    //       ret = false;
+    //     }
+    //   });
 
-      return ret;
-    };
+    //   return ret;
+    // };
 
-    $scope.loadingPies = true;
+    // $scope.loadingPies = true;
 
-    function getOverviews() {
-      $scope.loadingPies = true;
+    // function getOverviews() {
+    //   $scope.loadingPies = true;
 
-      if (!$scope.checkAnyPies()) {
-        Dashboard.pies().then(function (pies) {
-          $scope.loadingPies = false;
+    //   if (!$scope.checkAnyPies()) {
+    //     Dashboard.pies().then(function (pies) {
+    //       $scope.loadingPies = false;
 
-          if (pies.error) {
-            $rootScope.notifier.error($rootScope.ui.errors.dashboard.getOverviews);
-            console.warn('error ->', pies.error);
-          } else {
-            $scope.shortageHolders = {};
+    //       if (pies.error) {
+    //         $rootScope.notifier.error($rootScope.ui.errors.dashboard.getOverviews);
+    //         console.warn('error ->', pies.error);
+    //       } else {
+    //         $scope.shortageHolders = {};
 
-            $scope.loading.pies = false;
+    //         $scope.loading.pies = false;
 
-            $scope.periods = {
-              start: pies[0].weeks.current.start.date,
-              end: pies[0].weeks.next.end.date
-            };
+    //         $scope.periods = {
+    //           start: pies[0].weeks.current.start.date,
+    //           end: pies[0].weeks.next.end.date
+    //         };
 
-            _.each(pies, function (pie) {
-                // Check whether if it is an array what data processor gives back
-                if (pie.weeks.current.state instanceof Array) {
-                  pie.weeks.current.state = pie.weeks.current.state[0];
-                }
+    //         _.each(pies, function (pie) {
+    //             // Check whether if it is an array what data processor gives back
+    //             if (pie.weeks.current.state instanceof Array) {
+    //               pie.weeks.current.state = pie.weeks.current.state[0];
+    //             }
 
-                if (pie.weeks.current.state.diff === null) pie.weeks.current.state.diff = 0;
-                if (pie.weeks.current.state.wish === null) pie.weeks.current.state.wish = 0;
+    //             if (pie.weeks.current.state.diff === null) pie.weeks.current.state.diff = 0;
+    //             if (pie.weeks.current.state.wish === null) pie.weeks.current.state.wish = 0;
 
-                if (pie.weeks.current.state.wish == 0) {
-                  pie.weeks.current.state.cls = 'disabled';
-                } else {
-                  if (pie.weeks.current.state.diff > 0) {
-                    pie.weeks.current.state.cls = 'more';
-                  } else if (pie.weeks.current.state.diff === 0) {
-                    pie.weeks.current.state.cls = 'even';
-                  } else if (pie.weeks.current.state.diff < 0) {
-                    pie.weeks.current.state.cls = 'less';
-                  }
-                }
+    //             if (pie.weeks.current.state.wish == 0) {
+    //               pie.weeks.current.state.cls = 'disabled';
+    //             } else {
+    //               if (pie.weeks.current.state.diff > 0) {
+    //                 pie.weeks.current.state.cls = 'more';
+    //               } else if (pie.weeks.current.state.diff === 0) {
+    //                 pie.weeks.current.state.cls = 'even';
+    //               } else if (pie.weeks.current.state.diff < 0) {
+    //                 pie.weeks.current.state.cls = 'less';
+    //               }
+    //             }
 
-                pie.weeks.current.state.start = (pie.weeks.current.state.start !== undefined) ?
-                  new Date(pie.weeks.current.state.start * 1000)
-                    .toString($rootScope.config.app.formats.datetime) :
-                  $rootScope.ui.dashboard.possiblyAvailable;
+    //             pie.weeks.current.state.start = (pie.weeks.current.state.start !== undefined) ?
+    //               new Date(pie.weeks.current.state.start * 1000)
+    //                 .toString($rootScope.config.app.formats.datetime) :
+    //               $rootScope.ui.dashboard.possiblyAvailable;
 
-                pie.weeks.current.state.end = (pie.weeks.current.state.end !== undefined) ?
-                  new Date(pie.weeks.current.state.end * 1000)
-                    .toString($rootScope.config.app.formats.datetime) :
-                  $rootScope.ui.dashboard.possiblyAvailable;
+    //             pie.weeks.current.state.end = (pie.weeks.current.state.end !== undefined) ?
+    //               new Date(pie.weeks.current.state.end * 1000)
+    //                 .toString($rootScope.config.app.formats.datetime) :
+    //               $rootScope.ui.dashboard.possiblyAvailable;
 
-                pie.shortages = {
-                  current: pie.weeks.current.shortages,
-                  next: pie.weeks.next.shortages,
-                  total: pie.weeks.current.shortages.length + pie.weeks.next.shortages.length
-                };
+    //             pie.shortages = {
+    //               current: pie.weeks.current.shortages,
+    //               next: pie.weeks.next.shortages,
+    //               total: pie.weeks.current.shortages.length + pie.weeks.next.shortages.length
+    //             };
 
-                pie.state = pie.weeks.current.state;
+    //             pie.state = pie.weeks.current.state;
 
-                delete(pie.weeks.current.shortages);
-                delete(pie.weeks.current.state);
+    //             delete(pie.weeks.current.shortages);
+    //             delete(pie.weeks.current.state);
 
-                $scope.shortageHolders['shortages-' + pie.id] = false;
-              }
-            );
+    //             $scope.shortageHolders['shortages-' + pie.id] = false;
+    //           }
+    //         );
 
-            $scope.pies = pies;
-          }
-        }).then(function () {
-          _.each($scope.pies, function (pie) {
-            pieMaker('weeklyPieCurrent-', pie.id + '-' + pie.division, pie.weeks.current.ratios);
-            pieMaker('weeklyPieNext-', pie.id + '-' + pie.division, pie.weeks.next.ratios);
-          });
+    //         $scope.pies = pies;
+    //       }
+    //     }).then(function () {
+    //       _.each($scope.pies, function (pie) {
+    //         pieMaker('weeklyPieCurrent-', pie.id + '-' + pie.division, pie.weeks.current.ratios);
+    //         pieMaker('weeklyPieNext-', pie.id + '-' + pie.division, pie.weeks.next.ratios);
+    //       });
 
-          function pieMaker($id, id, _ratios) {
-            $timeout(function () {
-              if ($.browser.msie && $.browser.version == '8.0') {
-                $('#' + $id + id).html('');
-              } else {
-                if (document.getElementById($id + id)) {
-                  document.getElementById($id + id).innerHTML = '';
-                }
-              }
+    //       function pieMaker($id, id, _ratios) {
+    //         $timeout(function () {
+    //           if ($.browser.msie && $.browser.version == '8.0') {
+    //             $('#' + $id + id).html('');
+    //           } else {
+    //             if (document.getElementById($id + id)) {
+    //               document.getElementById($id + id).innerHTML = '';
+    //             }
+    //           }
 
-              var ratios = [],
-                colorMap = {
-                  more: '#6cad6c',
-                  even: '#e09131',
-                  less: '#d34545'
-                },
-                colors = [],
-                xratios = [];
+    //           var ratios = [],
+    //             colorMap = {
+    //               more: '#6cad6c',
+    //               even: '#e09131',
+    //               less: '#d34545'
+    //             },
+    //             colors = [],
+    //             xratios = [];
 
-              _.each(_ratios, function (ratio, index) {
-                if (ratio !== 0) {
-                  ratios.push({
-                    ratio: ratio,
-                    color: colorMap[index]
-                  });
-                }
-              });
+    //           _.each(_ratios, function (ratio, index) {
+    //             if (ratio !== 0) {
+    //               ratios.push({
+    //                 ratio: ratio,
+    //                 color: colorMap[index]
+    //               });
+    //             }
+    //           });
 
-              ratios = ratios.sort(function (a, b) {
-                return b.ratio - a.ratio
-              });
+    //           ratios = ratios.sort(function (a, b) {
+    //             return b.ratio - a.ratio
+    //           });
 
-              _.each(ratios, function (ratio) {
-                colors.push(ratio.color);
-                xratios.push(ratio.ratio);
-              });
+    //           _.each(ratios, function (ratio) {
+    //             colors.push(ratio.color);
+    //             xratios.push(ratio.ratio);
+    //           });
 
-              try {
-                new Raphael($id + id)
-                  .piechart(
-                  40, 40, 40,
-                  xratios,
-                  {
-                    colors: colors,
-                    stroke: 'white'
-                  }
-                );
-              } catch (e) {
-                console.warn(' Raphael error ->', e);
-              }
+    //           try {
+    //             new Raphael($id + id)
+    //               .piechart(
+    //               40, 40, 40,
+    //               xratios,
+    //               {
+    //                 colors: colors,
+    //                 stroke: 'white'
+    //               }
+    //             );
+    //           } catch (e) {
+    //             console.warn(' Raphael error ->', e);
+    //           }
 
-            }, $rootScope.config.app.timers.TICKER);
-          }
-        });
-      } else {
-        $rootScope.statusBar.off();
-      }
-    }
+    //         }, $rootScope.config.app.timers.TICKER);
+    //       }
+    //     });
+    //   } else {
+    //     $rootScope.statusBar.off();
+    //   }
+    // }
 
-    $timeout(function () {
-      getOverviews()
-    }, 25);
+    // $timeout(function () {
+    //   getOverviews()
+    // }, 25);
 
     // function prepareSaMembers(setup) {
     //   var cached = Store('smartAlarm').get('guard');
@@ -732,31 +732,31 @@ define(['controllers/controllers'], function (controllers) {
     }
 
 
-    $scope.saveOverviewWidget = function (selection) {
-      $rootScope.statusBar.display($rootScope.ui.settings.saving);
+    // $scope.saveOverviewWidget = function (selection) {
+    //   $rootScope.statusBar.display($rootScope.ui.settings.saving);
 
-      _.each(selection, function (selected) {
-        if (!selected.status) {
-          selected.divisions = false;
-        }
-      });
+    //   _.each(selection, function (selected) {
+    //     if (!selected.status) {
+    //       selected.divisions = false;
+    //     }
+    //   });
 
-      Settings.save($rootScope.resources.uuid, {
-        user: angular.fromJson(Store('app').get('resources').settingsWebPaige).user,
-        app: {
-          group: angular.fromJson(Store('app').get('resources').settingsWebPaige).app.group,
-          widgets: {
-            groups: selection
-          }
-        }
-      }).then(function () {
-        $rootScope.statusBar.display($rootScope.ui.dashboard.refreshGroupOverviews);
+    //   Settings.save($rootScope.resources.uuid, {
+    //     user: angular.fromJson(Store('app').get('resources').settingsWebPaige).user,
+    //     app: {
+    //       group: angular.fromJson(Store('app').get('resources').settingsWebPaige).app.group,
+    //       widgets: {
+    //         groups: selection
+    //       }
+    //     }
+    //   }).then(function () {
+    //     $rootScope.statusBar.display($rootScope.ui.dashboard.refreshGroupOverviews);
 
-        Profile.get($rootScope.app.resources.uuid, true).then(function () {
-          getOverviews()
-        });
-      });
-    };
+    //     Profile.get($rootScope.app.resources.uuid, true).then(function () {
+    //       getOverviews()
+    //     });
+    //   });
+    // };
 
     // $scope.getP2000 = function () {
     //   Dashboard.p2000().then(function (result) {
