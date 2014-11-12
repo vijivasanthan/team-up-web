@@ -459,21 +459,21 @@ define(
     //   ])
 
 
-    // /**
-    //  * Convert timeStamps to dates
-    //  */
-    //   .filter(
-    //   'nicelyDate',
-    //   [
-    //     '$rootScope',
-    //     function ($rootScope) {
-    //       return function (date) {
-    //         if (typeof date == 'string') date = Number(date);
+    /**
+     * Convert timeStamps to dates
+     */
+      .filter(
+      'nicelyDate',
+      [
+        '$rootScope',
+        function ($rootScope) {
+          return function (date) {
+            if (typeof date == 'string') date = Number(date);
 
-    //         return new Date(date).toString($rootScope.StandBy.config.formats.datetimefull);
-    //       };
-    //     }
-    //   ])
+            return new Date(date).toString($rootScope.config.app.formats.datetimefull);
+          };
+        }
+      ])
 
 
     // /**
