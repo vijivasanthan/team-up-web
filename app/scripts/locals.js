@@ -42,6 +42,13 @@ define(
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
+          possiblyAvailable: 'Mogelijk Inzetbaar',
+          noPlanning: 'Geen Planning',
+          time: {
+            days: 'd',
+            hours: 'u',
+            minutes: 'm'
+          },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',
           noP2000: 'Er zijn geen alarmberichten.'
