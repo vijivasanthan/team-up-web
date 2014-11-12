@@ -165,6 +165,13 @@ define(
             })
 
             .when(
+            '/dashboard',
+            {
+              templateUrl: 'views/dashboard.html',
+              controller: 'dashboard'
+            })
+
+            .when(
             '/logs',
             {
               templateUrl: 'views/logs.html',
