@@ -1,0 +1,121 @@
+div#statisticsTab.tab-pane
+	#timeline-toolbar
+		.pull-left
+			select.form-control(ng-model='timeline.current.group',
+			ng-options='group.uuid as group.name for group in groups',
+			ng-selected='timeline.current.group',
+			ng-change='requestTimeline()')
+			select.form-control(ng-model='timeline.current.division',
+			ng-options='division.id as division.label for division in divisions',
+			ng-selected='timeline.current.division',
+			ng-change='changeDivision()',
+			ng-show='divisions.length > 0')
+		.pull-right
+			.btn-group
+				button.btn.btn-default(type='button',
+				class="{{(timeline.current.layouts.group==true) && 'active'}}"
+				ng-model='timeline.current.layouts.group',
+				ng-click='requestTimeline("group")') {{ui.planboard.group}}
+				button.btn.btn-default(type='button',
+				class="{{(timeline.current.layouts.members==true) && 'active'}}",
+				ng-model='timeline.current.layouts.members',
+				ng-click='requestTimeline("members")',
+				ng-show='(StandBy.resources.role < 3) || timeline.config.layouts.members') {{ui.planboard.members}}
+	hr
+	.legenda
+		.legenda-row
+			strong {{ui.planboard.members}}
+			ul
+				li(ng-repeat='(key, value) in timeline.config.states',
+				class="legenda-{{value.className}}")
+					label
+						.square
+						| {{value.label}}
+		.legenda-row.last-legenda-row
+			strong {{ui.planboard.groups}}
+			ul
+				li.legenda-more
+					label
+						.square
+						| {{ui.planboard.legendaLabels.morePeople}}
+				li.legenda-even
+					label
+						.square
+						| {{ui.planboard.legendaLabels.enoughPeople}}
+				li.legenda-less
+					label
+						.square
+						| {{ui.planboard.legendaLabels.lessPeople}}
+		hr
+	#stats
+		#groupStats(ng-repeat='agg in data.aggs')
+			div(ng-show='groupPieHide[agg.division.id] || (timeline.current.division == "all")')
+				.groupPies(id="groupPie-{{agg.division.id}}")
+				.groupStatInfo
+					h3
+						| {{agg.id | groupIdToName | toTitleCase}}
+						span(ng-hide='!agg.division.label')   ({{ agg.division.label }})
+					hr
+					ul
+						li
+							.ratios.more
+								span.ratio {{agg.ratios.more}}
+								span.percentage %
+							.info
+								h4 {{ui.planboard.statPeopleMore}}
+								h5 {{agg.durations.more | calculateTimeInDays}}
+								small.text-muted {{ui.planboard.statDays}}
+								| ,
+								h5 {{agg.durations.more | calculateTimeInHours}}
+								small.text-muted {{ui.planboard.statHours}}
+								| ,
+								h5 {{agg.durations.more | calculateTimeInMinutes}}
+								small.text-muted {{ui.planboard.statMinutes}}
+						li
+							.ratios.even
+								span.ratio {{agg.ratios.even}}
+								span.percentage %
+							.info
+								h4 {{ui.planboard.statPeopleEven}}
+								h5 {{agg.durations.even | calculateTimeInDays}}
+								small.text-muted {{ui.planboard.statDays}}
+								| ,
+								h5 {{agg.durations.even | calculateTimeInHours}}
+								small.text-muted {{ui.planboard.statHours}}
+								| ,
+								h5 {{agg.durations.even | calculateTimeInMinutes}}
+								small.text-muted {{ui.planboard.statMinutes}}
+						li
+							.ratios.less
+								span.ratio {{agg.ratios.less}}
+								span.percentage %
+							.info
+								h4 {{ui.planboard.statPeopleLess}}
+								h5 {{agg.durations.less | calculateTimeInDays}}
+								small.text-muted {{ui.planboard.statDays}}
+								| ,
+								h5 {{agg.durations.less | calculateTimeInHours}}
+								small.text-muted {{ui.planboard.statHours}}
+								| ,
+								h5 {{agg.durations.less | calculateTimeInMinutes}}
+								small.text-muted {{ui.planboard.statMinutes}}
+		#memberBars
+			ul
+				li(ng-repeat='member in data.members')
+					h4 {{member.id | convertUserIdToName}}
+					.progress
+						.progress-bar(ng-repeat='stat in member.stats',
+						ng-style='{ "width": stat.ratio + "%" }',
+						class="{{stat.state}}")
+					small.text-muted {{member.stats | convertRatios}}
+	hr
+	p
+		small.pull-left
+			span.text-warning {{ui.planboard.lastSyncTime}}
+			span.text-muted {{data.synced | nicelyDate}}
+		small.pull-right
+			span.text-warning {{ui.planboard.dataRangeStart}}
+			span.text-muted {{data.periods.start | nicelyDate}}
+			| |
+			span.text-warning {{ui.planboard.dataRangeEnd}}
+			span.text-muted {{data.periods.end | nicelyDate}}

@@ -1,0 +1,31 @@
+div#timeline-controls(ng-controller='timeline-navigation')
+	.pull-left(style='margin-top: 10px;')
+
+		.form-group.has-feedback.pull-left.dateranger
+			input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
+			i.glyphicon.glyphicon-calendar.form-control-feedback
+
+		.btn-group.pull-left(style='margin-right: 5px;')
+			button.btn.btn-default(type='button', ng-model='timeline.scope.day', ng-click='timelineScoper("day")', class="{{(timeline.scope.day==true) && 'active'}}")
+				| {{ui.planboard.day}}
+			button.btn.btn-default(type='button', ng-model='timeline.scope.week', ng-click='timelineScoper("week")', class="{{(timeline.scope.week==true) && 'active'}}")
+				| {{ui.planboard.week}}
+			button.btn.btn-default(type='button', ng-model='timeline.scope.month', ng-click='timelineScoper("month")', class="{{(timeline.scope.month==true) && 'active'}}")
+				| {{ui.planboard.month}}
+
+		.btn-group.pull-left(style='margin-right: 5px;')
+			button#timelineBeforeBtn.btn.btn-default(type='button', ng-click='timelineBefore(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-left
+			button#timelineZoomInBtn.btn.btn-default(type='button', ng-click='timelineZoomIn()')
+				i.glyphicon.glyphicon-zoom-in
+			button#timelineZoomOutBtn.btn.btn-default(type='button', ng-click='timelineZoomOut()')
+				i.glyphicon.glyphicon-zoom-out
+			button#timelineAfterBtn.btn.btn-default(type='button', ng-click='timelineAfter(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-right
+
+	div(class="{{ (browser.mobile) &&  'pull-left' || 'pull-right' }}", style="text-align: {{(browser.mobile) &&  'left' || 'right' }}")
+		h4(style='font-weight: normal;')
+			| {{timeline.range | rangeMainFilter}}
+			br
+			div(style='font-size: 15px; font-weight: lighter;')
+				span {{timeline | rangeInfoFilter}}

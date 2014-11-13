@@ -1,0 +1,133 @@
+div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views.member')
+	form.form-inline.form-toggled.well
+		button.close(ng-click='resetInlineForms()') ×
+		h4(ng-show='views.slot.add') {{ui.planboard.newAvail}}
+		h4(ng-show='views.slot.edit') {{ui.planboard.updateAvail}}
+		h4(ng-show='views.group') {{slot.group|stripHtml}}
+		h4(ng-show='views.wish') {{slot.group|stripHtml}} (Wishes)
+		h4(ng-show='views.member') {{slot.member|convertUserIdToName}}
+		hr
+		.form-elements-group(ng-show='browser.mobile')
+			label {{ui.planboard.from}}
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.start.datetime')
+			.form-group.dater-mobile(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='date-start',
+				type='datetime-local',
+				ng-model='slot.start.datetime',
+				disabled='disabled')
+		.form-elements-group(ng-hide='browser.mobile')
+			label {{ui.planboard.from}}
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='date-start',
+				type='text',
+				ng-model='slot.start.date',
+				data-date-type='string',
+				data-date-format='dd-MM-yyyy',
+				data-icon-left='glyphicon glyphicon-arrow-left',
+				data-icon-right='glyphicon glyphicon-arrow-right',
+				bs-datepicker='')
+				i.glyphicon.glyphicon-calendar.form-control-feedback
+			.form-group.has-feedback.dater(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='date-start', type='text', ng-model='slot.start.date', disabled='disabled')
+				i.glyphicon.glyphicon-calendar.form-control-feedback
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='time-start',
+				type='text',
+				ng-model='slot.start.time',
+				data-length='3',
+				data-time-type="string",
+				data-time-format="HH:mm",
+				bs-timepicker='')
+				i.glyphicon.glyphicon-time.form-control-feedback
+			.form-group.has-feedback.timer(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='time-start', type='text', ng-model='slot.start.time', disabled='disabled')
+				i.glyphicon.glyphicon-time.form-control-feedback
+		.form-elements-group(ng-show='browser.mobile')
+			label {{ui.planboard.till}}
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.end.datetime')
+			.form-group.dater-mobile(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='date-start',
+				type='datetime-local',
+				ng-model='slot.end.datetime',
+				disabled='disabled')
+			br
+			br
+		.form-elements-group(ng-hide='browser.mobile')
+			label {{ui.planboard.till}}
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='date-end',
+				type='text',
+				ng-model='slot.end.date',
+				data-date-type='string',
+				data-date-format='dd-MM-yyyy',
+				data-icon-left='glyphicon glyphicon-arrow-left',
+				data-icon-right='glyphicon glyphicon-arrow-right',
+				bs-datepicker='')
+				i.glyphicon.glyphicon-calendar.form-control-feedback
+			.form-group.has-feedback.dater(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='date-end', type='text', ng-model='slot.end.date', disabled='disabled')
+				i.glyphicon.glyphicon-calendar.form-control-feedback
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
+				input.form-control.input-sm(name='time-end',
+				type='text',
+				ng-model='slot.end.time',
+				data-length='3',
+				data-time-type="string",
+				data-time-format="HH:mm",
+				bs-timepicker='')
+				i.glyphicon.glyphicon-time.form-control-feedback
+			.form-group.has-feedback.timer(ng-show='views.group || views.member')
+				input.form-control.input-sm(name='time-end', type='text', ng-model='slot.end.time', disabled='disabled')
+				i.glyphicon.glyphicon-time.form-control-feedback
+		.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+			label {{ui.planboard.state}}
+			select.form-control(ng-model='slot.state',
+			ng-options='option as value for (option, value) in states',
+			ng-change='modifySlot(slot)',
+			ng-show='views.slot.add || views.slot.edit')
+			select.form-control(ng-model='slot.state',
+			disabled='disabled',
+			ng-options='option as value for (option, value) in states',
+			ng-show='views.member')
+		.form-elements-group.rightest(ng-show='views.slot.add')
+			label {{ui.planboard.reoccuring}}
+			input(type='checkbox', ng-model='slot.recursive')
+		.form-elements-group(ng-show='views.group')
+			small
+				i(ng-show="(slot.diff < 0)") {{slot.diff | i18n_spec:'planboard.lessPeople'}}
+				i(ng-show="(slot.diff == 0)") {{ui.planboard.samePeople}}
+				i(ng-show="(slot.diff > 0)") {{slot.diff | i18n_spec:'planboard.morePeople'}}
+		.form-elements-group(ng-show='views.wish')
+			label {{ui.planboard.wished}}
+			input.input-mini(name='wish-count',
+			type='text',
+			ng-model='slot.wish',
+			ng-hide='StandBy.resources.role > 1')
+			input.input-mini(name='wish-count',
+			type='text',
+			ng-model='slot.wish',
+			disabled='disabled',
+			ng-show='StandBy.resources.role > 1')
+		.form-elements-group(ng-show='views.member')
+			small: i {{ui.planboard.combine_reoccuring}}
+		.form-elements-actions.pull-right
+			div(ng-show='(slot.diff < 0)')
+				button.btn.btn-success(type='button',
+				ng-click='sendShortageMessage(slot)',
+				ng-hide='StandBy.resources.role > 1') {{ui.planboard.sendMsgToMember}}
+			div(ng-show='views.slot.add')
+				button.btn.btn-success(type='button',
+				ng-click='timelineOnAdd("true", slot)') {{ui.planboard.add}}
+			div(ng-show='views.slot.edit')
+				button.btn.btn-danger(type='button',
+				ng-click='timelineOnRemove()',
+				style='margin-right: 5px;') {{ui.planboard.del}}
+				button.btn.btn-success(type='button',
+				ng-click='timelineOnChange("true", original, slot)') {{ui.planboard.change}}
+			div(ng-show='views.wish')
+				button.btn.btn-success(type='button',
+				ng-click='wisher(slot)',
+				ng-hide='StandBy.resources.role > 1')
+					| {{ui.planboard.setWish}}
