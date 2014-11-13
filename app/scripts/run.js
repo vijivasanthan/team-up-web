@@ -700,6 +700,26 @@ define(
               }
             }
           };
+
+          $rootScope.unique = function (collection) {
+            var filter = function (result) {
+              return result.role > 0 && result.role < 4;
+            };
+
+            return _.indexBy(_.filter(
+              _.map(_.indexBy(collection, function (node) {
+                  return node.uuid;
+                }),
+                function (member) {
+                  return member;
+                }
+              ),
+              filter
+            ), function (member) {
+              return member.uuid;
+            });
+          };
+
         }
       ]
     );
