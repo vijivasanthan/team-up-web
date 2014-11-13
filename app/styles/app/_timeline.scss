@@ -5,11 +5,11 @@
 Timeline agenda
 **/
 
-.agenda-timeline {
-  width: 98%;
+.agenda-timeline, .page-header{
   min-height: 50px;
   border-bottom: 1px solid #c6c3b6;
-  overflow: inherit;
+  overflow: hidden;
+  position: relative;
   .btn-group {
     padding-top: 30px;
     button {

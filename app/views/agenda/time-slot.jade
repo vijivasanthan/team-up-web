@@ -18,7 +18,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				disabled='disabled')
 		.form-elements-group(ng-hide='browser.mobile')
 			label {{ui.agenda.from}}
-			.form-group.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='date-start',
 				type='text',
 				ng-model='slot.start.date',
@@ -28,10 +28,10 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				data-icon-right='glyphicon glyphicon-arrow-right',
 				bs-datepicker='')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.dater(ng-show='views.group || views.member')
+			.form-group.has-feedback.dater(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='date-start', type='text', ng-model='slot.start.date', disabled='disabled')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='time-start',
 				type='text',
 				ng-model='slot.start.time',
@@ -40,7 +40,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				data-time-format="HH:mm",
 				bs-timepicker='')
 				i.glyphicon.glyphicon-time.form-control-feedback
-			.form-group.timer(ng-show='views.group || views.member')
+			.form-group.has-feedback.timer(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='time-start', type='text', ng-model='slot.start.time', disabled='disabled')
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='browser.mobile')
@@ -56,7 +56,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 			br
 		.form-elements-group(ng-hide='browser.mobile')
 			label {{ui.agenda.till}}
-			.form-group.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='date-end',
 				type='text',
 				ng-model='slot.end.date',
@@ -66,10 +66,10 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				data-icon-right='glyphicon glyphicon-arrow-right',
 				bs-datepicker='')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.dater(ng-show='views.group || views.member')
+			.form-group.has-feedback.dater(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='date-end', type='text', ng-model='slot.end.date', disabled='disabled')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='time-end',
 				type='text',
 				ng-model='slot.end.time',
@@ -78,7 +78,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				data-time-format="HH:mm",
 				bs-timepicker='')
 				i.glyphicon.glyphicon-time.form-control-feedback
-			.form-group.timer(ng-show='views.group || views.member')
+			.form-group.has-feedback.timer(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='time-end', type='text', ng-model='slot.end.time', disabled='disabled')
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
