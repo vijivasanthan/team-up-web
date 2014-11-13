@@ -1,0 +1,1 @@
+define(["services/services","config"],function(e,t){e.factory("Strings",function(){return{truncate:function(e,t,n){var r=e.length>t,i=r?e.substr(0,t-1):e,i=n&&r?i.substr(0,i.lastIndexOf(" ")):i;return r?i+"..":i},toTitleCase:function(e){if(e)return e.replace(/\w\S*/g,function(e){return e.charAt(0).toUpperCase()+e.substr(1).toLowerCase()})}}})});
