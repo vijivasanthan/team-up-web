@@ -5,18 +5,16 @@
 Timeline agenda
 **/
 
-.agenda-timeline, .page-header{
+.agenda-timeline.page-header{
   min-height: 50px;
   border-bottom: 1px solid #c6c3b6;
   overflow: hidden;
   position: relative;
   .btn-group {
+    position: fixed;
+    top: 75px;
+    right: 15px;
     padding-top: 30px;
-    button {
-      .carret {
-
-      }
-    }
   }
 }
 
@@ -411,6 +409,11 @@ div.timeline-event div.timeline-event-content {
   left: 0;
 }
 
+div.timeline-event div.timeline-event-content span.secret {
+  font-size: 0px !important;
+  text-indent: -9999px !important;
+}
+
 .state-loading-left {
   margin: 0;
   background-color: #ddd;
@@ -762,4 +765,143 @@ div.timeline-event-range {
 
 .daterangepicker th.month {
   width: auto;
+}
+
+// https://github.com/mgcrea/bootstrap-additions
+// Using for angular-strap
+/*
+ * Datepicker element
+ */
+.datepicker.dropdown-menu {
+  width: 250px;
+  height: 270px;
+}
+.datepicker.dropdown-menu button {
+  outline: none;
+  border: 0px;
+}
+.datepicker.dropdown-menu tbody {
+  height: 180px;
+}
+.datepicker.dropdown-menu tbody button {
+  padding: 6px;
+}
+.datepicker.dropdown-menu.datepicker-mode-1 tbody button,
+.datepicker.dropdown-menu.datepicker-mode-2 tbody button {
+  height: 65px;
+}
+.modal.center .modal-dialog {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  min-width: 320px;
+  max-width: 630px;
+  width: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+/*
+ * Popovers corner placement
+ *
+ * Inherit exotic positionning from basic ones & fix arrow placement
+ */
+.popover.top-left {
+  margin-top: -10px;
+}
+.popover.top-left .arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-bottom-width: 0;
+  border-top-color: #999999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  bottom: -11px;
+  left: 10%;
+}
+.popover.top-left .arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -10px;
+  border-bottom-width: 0;
+  border-top-color: #ffffff;
+}
+.popover.top-right {
+  margin-top: -10px;
+}
+.popover.top-right .arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-bottom-width: 0;
+  border-top-color: #999999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  bottom: -11px;
+  left: 90%;
+}
+.popover.top-right .arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -10px;
+  border-bottom-width: 0;
+  border-top-color: #ffffff;
+}
+.popover.bottom-left {
+  margin-top: 10px;
+}
+.popover.bottom-left .arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  top: -11px;
+  left: 10%;
+}
+.popover.bottom-left .arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -10px;
+  border-top-width: 0;
+  border-bottom-color: #ffffff;
+}
+.popover.bottom-right {
+  margin-top: 10px;
+}
+.popover.bottom-right .arrow {
+  left: 50%;
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  top: -11px;
+  left: 90%;
+}
+.popover.bottom-right .arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -10px;
+  border-top-width: 0;
+  border-bottom-color: #ffffff;
+}
+/*
+ * Timepicker element
+ */
+.timepicker.dropdown-menu {
+  padding: 0 4px;
+}
+.timepicker.dropdown-menu button {
+  outline: none;
+  border: 0px;
+}
+.timepicker.dropdown-menu tbody button {
+  padding: 6px;
+}
+
+.time-tip {
+  z-index: 100000;
+  background-color: transparent;
+  display: inline-block;
+  padding: 4px 0;
+  width: 100%;
+  height: 100%;
+  text-indent: -9999px;
 }
