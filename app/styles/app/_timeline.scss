@@ -1,6 +1,220 @@
 #timeline {
 }
 
+/**
+Timeline agenda
+**/
+
+.agenda-timeline {
+  width: 98%;
+  min-height: 50px;
+  border-bottom: 1px solid #c6c3b6;
+  overflow: inherit;
+  .btn-group {
+    padding-top: 30px;
+    button {
+      .carret {
+
+      }
+    }
+  }
+}
+
+.btn-success.active, .open > .btn-success.dropdown-toggle {
+  color: #833c11;
+  background-color: #1dc8b6;
+  border-color: #398439;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active {
+  background-color: #1dc8b6;
+  color: #833c11;
+}
+
+.btn-success {
+  color: #fff;
+}
+
+#timeline-controls {
+  overflow: hidden;
+  padding-bottom: 9px;
+}
+
+#timeline-toolbar {
+  overflow: hidden;
+  padding: 0 0 0 0;
+  height: 35px;
+
+  select {
+    margin: 0;
+    padding: 0;
+    width: 160px;
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+
+  .btn-group {
+    margin-left: 10px;
+  }
+}
+
+/*legenda*/
+.legenda {
+  background-color: #f5f4ee;
+  padding-top: 10px;
+  margin-top: -20px;
+}
+
+.legenda-row {
+  overflow: hidden;
+  display: block;
+  margin: 10px 20px;
+
+  strong {
+    width: 90px;
+    display: inline;
+    float: left;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
+    margin-top: 5px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      float: left;
+      margin-right: 15px;
+      border-right: 1px solid #ddd;
+      padding-right: 15px;
+      min-width: 135px;
+      font-size: 11px;
+
+      &:last-child {
+        margin-right: 0;
+        border-right: none;
+        padding-right: 0;
+      }
+
+      label {
+        font-size: 11px;
+
+        &:hover {
+          cursor: pointer;
+          color: #65619b;
+        }
+      }
+
+      input {
+        margin: -2px 4px 0 0;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .square {
+    display: block;
+    height: 12px;
+    width: 12px;
+    // margin-top: 4px;
+  }
+}
+
+.fast-availability .square {
+  margin-top: 5px;
+  width: 10px;
+  height: 10px;
+}
+.fast-availability .available {
+  background-color: #406940;
+}
+.fast-availability .unavailable {
+  background-color: #8f2b2b;
+}
+
+.last-legenda-row {
+  margin-bottom: -5px;
+}
+
+.legenda-row .legenda-no-state .square {
+  background-color: #6cad6c;
+}
+
+.legenda-row .legenda-state-available .square {
+  background-color: #6cad6c;
+}
+
+.legenda-row .legenda-state-available-north .square {
+  background-color: #242424;
+}
+
+.legenda-row .legenda-state-available-south .square {
+  // background-color: #8a85c7;
+  background-color: #8a85c7;
+}
+
+.legenda-row .legenda-state-unavailable .square {
+  background-color: #d34545;
+}
+
+.legenda-row .legenda-state-schipper-service .square {
+  background-color: #f6e500;
+}
+
+//.legenda-row .legenda-state-unreached .square {
+//  background-color: #65619b;
+//}
+
+.legenda-row .legenda-more .square {
+  // background-color: #415e6b;
+  background-color: #6cad6c;
+}
+
+.legenda-row .legenda-even .square {
+  background-color: #e09131;
+}
+
+.legenda-row .legenda-less .square {
+  // background-color: #a0a0a0;
+  background-color: #d34545;
+}
+
+#legends {
+  display: block;
+  overflow: hidden;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+
+  ul {
+    margin-left: 1px;
+    list-style: none;
+
+    li {
+      display: inline;
+      float: left;
+      margin-right: 25px;
+      list-style-image: none;
+    }
+  }
+}
+
+.square {
+  float: left;
+  margin-top: 1px;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+}
+
+div.bar span {
+  font-size: 9px;
+}
+
+
 div.timeline-frame {
   border: 1px solid #ddd;
   background-color: #fff;

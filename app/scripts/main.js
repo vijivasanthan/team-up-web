@@ -20,6 +20,7 @@ require.config(
 
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
+      'angular-md5': '../vendors/angular-md5/angular-md5.min',
 
       // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap': 'removables/angular-strap.min',
@@ -42,7 +43,7 @@ require.config(
 
       timepicker: 'removables/timepicker.min',
       underscore: '../vendors/underscore/underscore',
-      md5: '../vendors/web-lib-md5/md5.min',
+      //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
@@ -79,6 +80,7 @@ require.config(
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'], exports: 'angular-strap' },
+      'angular-md5': { deps: ['angular'] },
       'ui-bootstrap': { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
       bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
       lawnchair: { deps: [], exports: 'lawnchair' },
@@ -89,7 +91,7 @@ require.config(
       treegrid: { deps: [], exports: 'treegrid' },
       datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
-      md5: { exports: 'md5'},
+      //md5: { exports: 'md5'},
       underscore: { exports: 'underscore'},
       store: { deps: ['angular', 'underscore']},
       offline: { deps: ['angular'] },
@@ -133,6 +135,7 @@ require(
     'plugins',
     'angular-resource',
     'angular-route',
+    'angular-md5',
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
 
@@ -149,6 +152,10 @@ require(
     'services/dater', // TODO: Remove later on
     'services/teams',
     'services/phone',
+    'services/sloter',
+    'services/md5',
+    'services/storage',
+    'services/stats',
 
     // 'services/googleGEO',
 
@@ -159,6 +166,9 @@ require(
 
     'modals/task',
     'modals/logs',
+    'modals/agenda',
+    'modals/slots',
+    'modals/profile',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',
@@ -181,11 +191,14 @@ require(
     'controllers/tasks2',
     'controllers/timeline',
     'controllers/timeline-navigation',
+    'controllers/agenda-timeline',
+    'controllers/agenda-timeline-navigation',
     'controllers/treegrid',
     'controllers/support',
     'controllers/upload',
     'controllers/admin',
     'controllers/logs',
+    'controllers/agenda',
 
     'bootstrap',
     'lawnchair',
@@ -196,7 +209,7 @@ require(
     'treegrid',
     'datepicker',
     'timepicker',
-    'md5',
+    //'md5',
     'underscore',
     'store',
     'offline',

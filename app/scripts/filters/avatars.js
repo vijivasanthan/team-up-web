@@ -701,6 +701,52 @@ define(
       ]
     );
 
+    /**
+     * Strip html tags
+     */
+    filters.filter(
+      'stripHtml',
+      [
+
+        function ()
+        {
+          return function (string)
+          {
+            if (string)
+            {
+              return string.split('>')[1].split('<')[0];
+            }
+          }
+        }
+      ]
+    );
+
+    /**
+     * Convert user uuid to name
+     */
+    filters.filter(
+      'convertUserIdToName',
+      [
+        'Store',
+        function (Store)
+        {
+          var members = Store('network').get('unique');
+
+          return function (id)
+          {
+            if (members == null || typeof members[id] == "undefined")
+            {
+              return id;
+            }
+            else
+            {
+              return members[id].resources.firstName + ' ' + members[id].resources.lastName;
+            }
+          };
+        }
+      ]
+    );
+
 
   }
 );

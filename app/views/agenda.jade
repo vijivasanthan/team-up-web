@@ -1,0 +1,57 @@
+div(ng-controller='agenda-timeline')
+  .page-header.agenda-timeline
+    h2.nullable {{ui.planboard.planboard}}
+    include agenda/time-quick-availability.jade
+  include agenda/time-travel.jade
+  include agenda/time-slot.jade
+
+
+  .tabbable.tabs-left
+    ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+      li.active
+        a(href='planboard#timelineTab', data-toggle='tab', ng-click='destroy.statistics();')
+          span.entypo &#128340;
+          | {{ui.agenda.timeline}}
+
+    .tab-content
+
+        // timeline
+        div#timelineTab.tab-pane.active
+          #timeline
+            include agenda/time-toolbar.jade
+            hr
+            // alert-window
+            div.alert.alert-warning(ng-show='registeredNotifications.timeLineDragging')
+              button.close(type='button',
+              ng-click='registerNotification("timeLineDragging", false)',
+              data-dismiss='alert') ×
+              small
+                | U kunt ook uw
+                strong
+                  i beschikbaarheid wijzigen
+                | door te
+                | dubbelklikken op reeds bestaande blokken of
+                strong
+                  i door te slepen
+                | met uw muis met de linkermuisknop en de
+                strong SHIFT (Mac)
+                | of
+                strong CTRL (Windows)
+                | knop tegelijkertijd ingedrukt.
+
+            div(ng-show='timeline.config.legendarer')
+              //include agenda/time-legends.jade
+            #mainTimeline
+          hr
+          p
+            small.pull-left
+              span.text-warning {{ui.agenda.lastSyncTime}}
+              span.text-muted &nbsp; {{data.synced | nicelyDate}}
+            small.pull-right
+              span.text-warning {{ui.agenda.dataRangeStart}}
+              span.text-muted {{data.periods.start | nicelyDate}}
+              | &nbsp;&nbsp;| &nbsp;
+              span.text-warning {{ui.agenda.dataRangeEnd}}
+              span.text-muted {{data.periods.end | nicelyDate}}
+          hr
+          //include agenda/time-legends.jade

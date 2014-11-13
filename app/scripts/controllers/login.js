@@ -19,8 +19,9 @@ define(
         'TeamUp',
         'Dater',
         '$filter',
+        'MD5',
         function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter
+          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5
           )
         {
           // TODO: Soon not needed!
@@ -115,7 +116,7 @@ define(
               }
             );
 
-            auth($scope.loginData.username, MD5.parse($scope.loginData.password));
+            auth($scope.loginData.username, MD5($scope.loginData.password));
           };
 
           var auth = function (uuid, pass)
@@ -213,7 +214,7 @@ define(
             // query my tasks
             TeamUp._("taskMineQuery").then(
                 function (result) {
-                  Store('app').save('myTasks', result) 
+                  Store('app').save('myTasks', result)
                 }
             );
 

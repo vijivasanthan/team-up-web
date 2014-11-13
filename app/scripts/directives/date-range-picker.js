@@ -65,11 +65,11 @@ define(
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
                 new Date.today(),
-                new Date.create().addDays(3)
+                moment().add(3, 'day').toDate(),
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
                 new Date.today(),
-                new Date.create().addDays(7)
+                moment().add(7, 'day').toDate(),
               ];
 
               element.daterangepicker(

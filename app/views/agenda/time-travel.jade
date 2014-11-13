@@ -1,4 +1,4 @@
-div#timeline-controls(ng-controller='timeline-navigation')
+div#timeline-controls(ng-controller='agenda-timeline-navigation')
 	.pull-left(style='margin-top: 10px;')
 
 		.form-group.has-feedback.pull-left.dateranger
@@ -7,11 +7,11 @@ div#timeline-controls(ng-controller='timeline-navigation')
 
 		.btn-group.pull-left(style='margin-right: 5px;')
 			button.btn.btn-default(type='button', ng-model='timeline.scope.day', ng-click='timelineScoper("day")', class="{{(timeline.scope.day==true) && 'active'}}")
-				| {{ui.planboard.day}}
+				| {{ui.agenda.day}}
 			button.btn.btn-default(type='button', ng-model='timeline.scope.week', ng-click='timelineScoper("week")', class="{{(timeline.scope.week==true) && 'active'}}")
-				| {{ui.planboard.week}}
+				| {{ui.agenda.week}}
 			button.btn.btn-default(type='button', ng-model='timeline.scope.month', ng-click='timelineScoper("month")', class="{{(timeline.scope.month==true) && 'active'}}")
-				| {{ui.planboard.month}}
+				| {{ui.agenda.month}}
 
 		.btn-group.pull-left(style='margin-right: 5px;')
 			button#timelineBeforeBtn.btn.btn-default(type='button', ng-click='timelineBefore(timeline.scope)')

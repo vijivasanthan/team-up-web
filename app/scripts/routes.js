@@ -156,6 +156,39 @@ define(
               }
             })
 
+            .when('/agenda', {
+              templateUrl: 'views/agenda.html',
+              controller: 'agenda',
+              resolve: {
+                data: function ($route, Slots, Storage, Dater, Store) {
+
+
+                  var periods = Store('app').get('periods'),
+                    //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
+                    groups = Store('app').get('teams'),
+                    groupId = groups[0].uuid;
+
+                  return  Slots.all({
+                    groupId: groupId,
+                    stamps: (Dater.current.today() > 360) ? {
+                      start: periods.days[358].last.timeStamp,
+                      end: periods.days[365].last.timeStamp
+                    } : {
+                      start: periods.days[Dater.current.today() - 1].last.timeStamp,
+                      end: periods.days[Dater.current.today() + 6].last.timeStamp
+                    },
+                    month: Dater.current.month(),
+                    layouts: {
+                      user: true,
+                      group: true,
+                      members: false
+                    }
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
+
             .when(
             '/tasks2/planboard',
             {

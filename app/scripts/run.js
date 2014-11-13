@@ -19,12 +19,10 @@ define(
         'Browsers',
         'Dater',
         'TeamUp',
-        function (
-          $rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp
-          )
+        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp)
         {
           // TODO: Remove later on (Needed for timeline info filters)
-          if (! Dater.getPeriods())
+          if (!Dater.getPeriods())
           {
             Dater.registerPeriods();
           }
@@ -36,12 +34,18 @@ define(
             function ()
             {
               console.log(
-                (! arguments[1]) ?
+                (!arguments[1]) ?
                 'connection restored :]' + Date.now() :
                 'connection lost :[' + Date.now()
               );
             }
           );
+
+          // TODO: Lose this later onw with VisJS/MomentJS navigation
+          if (Store('app').get('periods') == null || Store('app').get('periods').value == null)
+          {
+            Dater.registerPeriods();
+          }
 
           angular.element('#notification').css({display: 'block'});
 
@@ -51,9 +55,17 @@ define(
           $rootScope.config = config;
           $rootScope.ui = locals.ui[config.app.lang];
 
-
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
+
+          /**
+           * Timeline states
+           */
+          if (_.isEmpty($rootScope.config.app.timeline.states))
+          {
+            $rootScope.config.app.timeline.config.states = $rootScope.config.app.statesall;
+            delete $rootScope.config.app.timeline.config.states['com.ask-cs.State.Unreached'];
+          }
 
           /**
            * Status-Bar
@@ -73,7 +85,10 @@ define(
               };
             },
 
-            off: function () { $rootScope.loading.status = false }
+            off: function ()
+            {
+              $rootScope.loading.status = false
+            }
           };
 
           /**
@@ -109,14 +124,14 @@ define(
             {
               this.init(true, 'alert-success', message);
 
-              if (! permanent) this.destroy();
+              if (!permanent) this.destroy();
             },
 
             error: function (message, permanent)
             {
               this.init(true, 'alert-danger', message);
 
-              if (! permanent) this.destroy();
+              if (!permanent) this.destroy();
             },
 
             destroy: function ()
@@ -145,7 +160,7 @@ define(
               function ()
               {
                 var $this = angular.element(this).attr('id'),
-                    contentHeight = angular.element('.tabs-left .tab-content #' + $this).height();
+                  contentHeight = angular.element('.tabs-left .tab-content #' + $this).height();
 
                 if (tabHeight > contentHeight)
                 {
@@ -213,41 +228,41 @@ define(
             }
 
             member.fullName = member.firstName +
-                              ' ' +
-                              member.lastName;
+            ' ' +
+            member.lastName;
 
             return member;
           };
 
-		  // Get teams of a member
-		  $rootScope.getTeamsofMembers = function (memberId)
-		  {
-			if (memberId == null)
-			{
-				return null;
-			}
+          // Get teams of a member
+          $rootScope.getTeamsofMembers = function (memberId)
+          {
+            if (memberId == null)
+            {
+              return null;
+            }
 
-			var currentTeams = [];
+            var currentTeams = [];
 
-			angular.forEach(
-				Store('app').get('teams'),
-				function (team)
-				{
-					angular.forEach(
-						Store('app').get(team.uuid),
-						function (_member)
-						{
-							if (_member.uuid == memberId)
-							{
-								currentTeams.push(team);
-							}
-						}
-					);
-				}
-			);
+            angular.forEach(
+              Store('app').get('teams'),
+              function (team)
+              {
+                angular.forEach(
+                  Store('app').get(team.uuid),
+                  function (_member)
+                  {
+                    if (_member.uuid == memberId)
+                    {
+                      currentTeams.push(team);
+                    }
+                  }
+                );
+              }
+            );
 
-			return currentTeams;
-		  };
+            return currentTeams;
+          };
 
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
@@ -318,10 +333,10 @@ define(
            * Update the states of the logged user localStorage
            * @param member
            */
-          $rootScope.checkUpdatedStatesLoggedUser = function(member)
+          $rootScope.checkUpdatedStatesLoggedUser = function (member)
           {
-            if($rootScope.app.resources.uuid == member.uuid
-              && ! _.isEqual($rootScope.app.resources.states, member.states))
+            if ($rootScope.app.resources.uuid == member.uuid
+              && !_.isEqual($rootScope.app.resources.states, member.states))
             {
               $rootScope.app.resources.states = member.states;
               Store('app').save('resources', $rootScope.app.resources);
@@ -414,7 +429,7 @@ define(
           $rootScope.getMembersByClient = function (clientGroup)
           {
             var members = [],
-                memberIds = [];
+              memberIds = [];
 
             angular.forEach(
               Store('app').get('teams'),
@@ -430,7 +445,7 @@ define(
                         Store('app').get(team.uuid),
                         function (member)
                         {
-                          if (memberIds.indexOf(member.uuid) == - 1)
+                          if (memberIds.indexOf(member.uuid) == -1)
                           {
                             memberIds.push(member.uuid);
 
@@ -522,7 +537,7 @@ define(
           {
             var list = Store('app').get('avatarChangeRecord');
 
-            if (! angular.isArray(list))
+            if (!angular.isArray(list))
             {
               list = [];
             }
@@ -544,7 +559,7 @@ define(
               {
                 if (avatarId == id)
                 {
-                  changedTimes ++;
+                  changedTimes++;
                 }
               });
             return changedTimes;
@@ -563,12 +578,12 @@ define(
               arr,
               function (word)
               {
-                if (word.indexOf('_cg') > - 1)
+                if (word.indexOf('_cg') > -1)
                 {
                   // might be the group id , try to search it , replace it with name if we found it
                   ret = ret.replace(word, $rootScope.getClientGroupName(word));
                 }
-                else if (word.indexOf('_team') > - 1)
+                else if (word.indexOf('_team') > -1)
                 {
                   // might be the team id , try to search it , replace it with name if we found it
                   ret = ret.replace(word, $rootScope.getTeamName(word));
@@ -586,8 +601,10 @@ define(
 
           $rootScope.resetPhoneNumberChecker();
 
-          $rootScope.parsePhoneNumber = function (checked) {
-            if (checked != '') {
+          $rootScope.parsePhoneNumber = function (checked)
+          {
+            if (checked != '')
+            {
               if (checked && checked.length > 0)
               {
                 var result, all;
@@ -661,8 +678,8 @@ define(
                           };
 
                           angular.element('.inputPhoneNumber')
-                              .val(result.formatting.e164)
-                              .removeClass('error');
+                            .val(result.formatting.e164)
+                            .removeClass('error');
                         }
                       }
                     }
@@ -670,13 +687,15 @@ define(
                 }
 
                 $rootScope.phoneNumberParsed.all = all;
-              } else {
+              }
+              else
+              {
                 $rootScope.phoneNumberParsed.result = true;
 
                 delete $rootScope.phoneNumberParsed.message;
 
                 angular.element('.inputPhoneNumber')
-                    .removeClass('error');
+                  .removeClass('error');
               }
             }
           };

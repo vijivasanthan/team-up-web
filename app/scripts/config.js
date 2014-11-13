@@ -200,11 +200,24 @@ define(
         4: 'Cancelled'
       },
 
+      timers: {
+        TICKER: 100,
+        NOTIFICATION_DELAY: 5000,
+        MEMBER_TIMELINE_RENDER: 2000,
+        ALARM_SYNC: 60000,
+        PLANBOARD_SYNC: 60000,
+        TV_SYNC: 60000
+      },
+
       init: function ()
       {
         angular.forEach(
           this.states,
-          (function (state) { this.timeline.config.states[state] = this.statesall[state] }).bind(this)
+          (function (state)
+          {
+            console.log(state);
+            this.timeline.config.states[state] = this.statesall[state]
+          }).bind(this)
         );
       }
     }

@@ -5,11 +5,11 @@ div#timeline-toolbar
 		ng-selected='timeline.current.group',
 		ng-change='requestTimeline()',
 		ng-show='timeline.current.layouts.group')
-		//select.form-control(ng-model='timeline.current.division',
-		//ng-options='division.id as division.label for division in divisions',
-		//ng-selected='timeline.current.division',
-		//ng-change='changeDivision()',
-		//ng-show='divisions.length > 0')
+		select.form-control(ng-model='timeline.current.division',
+		ng-options='division.id as division.label for division in divisions',
+		ng-selected='timeline.current.division',
+		ng-change='changeDivision()',
+		ng-show='divisions.length > 0')
 	br(ng-show='browser.mobile')
 	br(ng-show='browser.mobile')
 	div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
@@ -18,24 +18,24 @@ div#timeline-toolbar
 			button.btn.btn-default(type='button',
 			class="{{(timeline.config.legendarer==true) && 'active'}}",
 			ng-click='showLegenda()',
-			ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}
+			ng-model='timeline.config.legendarer') {{ui.planboard.legenda}}
 		.btn-group(ng-show='timeline.current.layouts.group')
 			button.btn.btn-default(type='button',
 			class="{{(timeline.config.bar==true) && 'active'}}",
 			ng-click='barCharts()',
-			ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
+			ng-model='timeline.config.bar') {{ui.planboard.barCharts}}
 		.btn-group(ng-show='timeline.current.layouts.group')
 			button.btn.btn-default(type='button',
 			class="{{(timeline.config.wishes==true) && 'active'}}",
 			ng-click='groupWishes()',
-			ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
+			ng-model='timeline.config.wishes') {{ui.planboard.wishes}}
 		.btn-group
 			button.btn.btn-default(type='button',
 			class="{{(timeline.current.layouts.group==true) && 'active'}}",
 			ng-model='timeline.current.layouts.group',
-			ng-click='requestTimeline("group")') {{ui.agenda.group}}
+			ng-click='requestTimeline("group")') {{ui.planboard.group}}
 			button.btn.btn-default(type='button',
 			class="{{(timeline.current.layouts.members==true) && 'active'}}",
 			ng-model='timeline.current.layouts.members',
 			ng-click='requestTimeline("members")',
-			ng-show='(app.resources.role < 3) || timeline.config.layouts.members') {{ui.agenda.members}}
+			ng-show='(StandBy.resources.role < 3) || timeline.config.layouts.members') {{ui.planboard.members}}

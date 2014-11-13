@@ -173,6 +173,10 @@ define(
                 $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
                 break;
 
+              case 'agenda':
+                $location.path('/agenda').search({local: 'true'}).hash('teams');
+                break;
+
               case 'vis':
                 $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;
