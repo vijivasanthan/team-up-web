@@ -150,6 +150,10 @@ require(
     'services/teamup',
     'services/clients',
     'services/dater', // TODO: Remove later on
+    'services/md5',
+    'services/sloter',
+    'services/stats',
+    'services/strings',
     'services/teams',
     'services/phone',
     'services/sloter',
@@ -160,11 +164,13 @@ require(
     // 'services/googleGEO',
 
     'directives/widgets',
+    'directives/dashboard/snapshots',
     'directives/date-range-picker',
     'directives/log-ranger',
     // 'directives/treegrid',
 
     'modals/task',
+    'modals/slots',
     'modals/logs',
     'modals/agenda',
     'modals/slots',
@@ -177,12 +183,14 @@ require(
     'resources/ClientGroupResource',
 
     'filters/avatars',
+    'filters/all-filters',
 
     'controllers/clients',
     'controllers/login',
     'controllers/manage',
     'controllers/treegridCtrl', // TODO: Remove it later on
     'controllers/messages',
+    'controllers/dashboard',
     'controllers/planboard',
     'controllers/vis',
     'controllers/profile',

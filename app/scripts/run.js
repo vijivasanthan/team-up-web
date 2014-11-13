@@ -53,6 +53,7 @@ define(
 
 
           $rootScope.config = config;
+          $rootScope.config.app.init();
           $rootScope.ui = locals.ui[config.app.lang];
 
           $rootScope.app = $rootScope.app || {};

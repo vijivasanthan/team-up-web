@@ -37,13 +37,11 @@ define(['services/services', 'config'],
             }
           },
 
-          wrapper: function (rank)
-          {
+          wrapper: function (rank) {
             return '<span style="display:none;">' + rank + '</span>'
           },
 
-          secret: function (content)
-          {
+          secret: function (content) {
             return '<span class="secret">' + content + '</span>'
           },
 

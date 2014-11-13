@@ -157,6 +157,10 @@ define(
                 $location.path('/client').search({local: 'true'}).hash('client');
                 break;
 
+              case 'dashboard':
+                $location.path('/dashboard').search({}).hash('');
+                break;
+
               case 'logs':
                 $location.path('/logs').search({}).hash('');
                 break;
