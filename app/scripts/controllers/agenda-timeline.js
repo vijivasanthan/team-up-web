@@ -880,7 +880,7 @@ define(
 
                 if (result.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.agenda.add);
+                  $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
                   console.warn('error ->', result);
                 }
                 else
@@ -1049,7 +1049,7 @@ define(
 
                       if (result.error)
                       {
-                        $rootScope.notifier.error($rootScope.ui.agenda.add);
+                        $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
                         console.warn('error ->', result);
                       }
                       else
@@ -1190,7 +1190,7 @@ define(
                   callback(
                     result,
                     {
-                      error: $rootScope.ui.agenda.change,
+                      error: $rootScope.ui.agenda.errorChange,
                       success: $rootScope.ui.agenda.slotChanged
                     },
                     added
@@ -1210,7 +1210,7 @@ define(
                   callback(
                     result,
                     {
-                      error: $rootScope.ui.agenda.add,
+                      error: $rootScope.ui.agenda.errorAdd,
                       success: $rootScope.ui.agenda.slotChanged
                     }
                   );
