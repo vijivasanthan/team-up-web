@@ -492,27 +492,8 @@ define(['controllers/controllers'], function (controllers) {
     // }
 
     // var members = Store('network').get('unique');
-    var filter = function (result) {
-      return result.role > 0 && result.role < 4;
-    };
 
-    var unique = function (collection) {
-
-      return _.indexBy(_.filter(
-        _.map(_.indexBy(collection, function (node) {
-            return node.uuid;
-          }),
-          function (member) {
-            return member;
-          }
-        ),
-        filter
-      ), function (member) {
-        return member.uuid;
-      });
-    };
-
-    var members = unique(Store('app').get('members'));
+    var members = $rootScope.unique(Store('app').get('members'));
 
     var initGroup;
 
@@ -568,10 +549,10 @@ define(['controllers/controllers'], function (controllers) {
       queriedTeams.then(function(teams){
 
         if(groupID == 'all'){
-          members = unique(Store('app').get('members'));
+          members = $rootScope.unique(Store('app').get('members'));
         }
         else if(typeof teams.members[groupID] != 'undefined') {
-          members = unique(teams.members[groupID]);
+          members = $rootScope.unique(teams.members[groupID]);
         }
 
         Slots.users(members).then(function (results) {

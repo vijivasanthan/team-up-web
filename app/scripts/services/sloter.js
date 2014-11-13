@@ -25,11 +25,11 @@ define(['services/services', 'config'],
             {
               var members = {};
 
-              _.each(Store('network').get('unique'), function (member)
+              _.each($rootScope.unique(Store('app').get('members')), function (member)
               {
                 if (member != null && member.uuid != null)
                 {
-                  members[member.uuid] = member.resources.firstName + ' ' + member.resources.lastName;
+                  members[member.uuid] = member.firstName + ' ' + member.lastName;
                 }
               });
 

@@ -13,7 +13,8 @@ define(['services/services', 'config'],
         'Sloter',
         'Store',
         'Stats',
-        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats)
+        'Teams',
+        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams)
         {
           var Slots = $resource(config.app.host + '/askatars/:user/slots', {user: ''}, {
             query: {
@@ -422,7 +423,7 @@ define(['services/services', 'config'],
                       var allMembers = Store('app').get(options.groupId),
                         calls = [];
 
-                      MemberSlots.query({
+                      Slots.prototype.memberSlots2.query({
                           id: options.groupId,
                           start: params.start,
                           end: params.end,
@@ -446,8 +447,8 @@ define(['services/services', 'config'],
                               if (member != null) {
                                 mems.push({
                                   id: index,
-                                  lastName: member.resources.lastName,
-                                  role: member.resources.role,
+                                  lastName: member.lastName,
+                                  role: member.role,
                                   data: mdata,
                                   stats: Stats.member(mdata, params.start, params.end)
                                 });
@@ -524,6 +525,69 @@ define(['services/services', 'config'],
 
             return deferred.promise;
           };
+
+          Slots.prototype.memberSlots2 = {
+            query: function (options, callbackSuccess, callbackError) {
+
+              var memDeferred = [],
+                  members = [],
+                  queriedTeams = Teams.query();
+
+              queriedTeams.then(function (teams){
+
+                if(options.id == 'all'){
+                  members = $rootScope.unique(Store('app').get('members'));
+                }
+                else if(typeof teams.members[options.id] != 'undefined') {
+                  members = $rootScope.unique(teams.members[options.id]);
+                }
+
+                _.each(members, function (member){
+                  var memberDeferred = $q.defer(),
+                      _options;
+                  memDeferred.push(memberDeferred.promise);
+
+                  _options = {
+                    user: member.uuid,
+                    start: options.start,
+                    end: options.end
+                  }
+
+                  if (options.type) {
+                    _options.type = options.type;
+                  }
+
+                  Slots.query(
+                    _options,
+                    function (result) {
+                      _.each(result, function(member){
+                        member.state = member.text;
+                        member.text = null;
+                      })
+                      memberDeferred.resolve({uuid: member.uuid, content: result});
+                    },
+                    function (error) {
+                      memberDeferred.resolve({error: error});
+                    }
+                  );
+                });
+
+                $q.all(memDeferred).then(function (results){
+                  var success = {};
+                  _.each(results, function (result) {
+                    if (!result.error){
+                      success[result.uuid] = result.content;
+                    } else {
+                      console.log(result.error);
+                    }
+                  });
+
+                  callbackSuccess(success);
+
+                });
+              });
+            }
+          }
 
           Slots.prototype.user = function (params) {
             var deferred = $q.defer();
