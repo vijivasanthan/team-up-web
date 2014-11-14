@@ -289,7 +289,7 @@ module.exports = (grunt) ->
             '.htaccess'
             'vendors/**/*'
             'images/{,*/}*.{gif,webp}'
-            'fonts/*'
+            'fonts/**/*'
           ]
         ,
           expand: true
