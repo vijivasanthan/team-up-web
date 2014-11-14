@@ -1,0 +1,21 @@
+<div id="timeline-toolbar">
+  <div class="pull-left">
+    <select ng-model="timeline.current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="timeline.current.group" ng-change="requestTimeline()" ng-show="timeline.current.layouts.group" class="form-control"></select>
+    <select ng-model="timeline.current.division" ng-options="division.id as division.label for division in divisions" ng-selected="timeline.current.division" ng-change="changeDivision()" ng-show="divisions.length &gt; 0" class="form-control"></select>
+  </div><br ng-show="browser.mobile"><br ng-show="browser.mobile">
+  <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
+    <div class="btn-group">
+      <button type="button" ng-click="showLegenda()" ng-model="timeline.config.legendarer" class="btn btn-default {{(timeline.config.legendarer==true) &amp;&amp; 'active'}}">{{ui.planboard.legenda}}</button>
+    </div>
+    <div ng-show="timeline.current.layouts.group" class="btn-group">
+      <button type="button" ng-click="barCharts()" ng-model="timeline.config.bar" class="btn btn-default {{(timeline.config.bar==true) &amp;&amp; 'active'}}">{{ui.planboard.barCharts}}</button>
+    </div>
+    <div ng-show="timeline.current.layouts.group" class="btn-group">
+      <button type="button" ng-click="groupWishes()" ng-model="timeline.config.wishes" class="btn btn-default {{(timeline.config.wishes==true) &amp;&amp; 'active'}}">{{ui.planboard.wishes}}</button>
+    </div>
+    <div class="btn-group">
+      <button type="button" ng-model="timeline.current.layouts.group" ng-click="requestTimeline(&quot;group&quot;)" class="btn btn-default {{(timeline.current.layouts.group==true) &amp;&amp; 'active'}}">{{ui.planboard.group}}</button>
+      <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(StandBy.resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-default {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}">{{ui.planboard.members}}</button>
+    </div>
+  </div>
+</div>

@@ -48,7 +48,7 @@ module.exports = (grunt) ->
           expand: true
           cwd: '<%= paths.app %>'
           dest: '.tmp'
-          src: 'views/{,**/}*.jade'
+          src: 'views/**/*.jade'
           ext: '.html'
         ]
 
@@ -272,7 +272,7 @@ module.exports = (grunt) ->
           cwd: '.tmp'
           src: [
             '*.html'
-            'views/*.html'
+            'views/**/*.html'
           ]
           dest: '<%= paths.dist %>'
         ]
