@@ -15,7 +15,7 @@ define(['services/services', 'config'],
           console.log('logModal loaded');
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
           var Logs = $resource(
-            config.app.host + '/ddr',
+            config.app.host + 'ddr',
             {},
             {
               get: {
@@ -25,8 +25,6 @@ define(['services/services', 'config'],
               }
             }
           );
-
-          //console.log(config.app.host);
 
           var normalize = function (logs)
           {
@@ -201,7 +199,6 @@ define(['services/services', 'config'],
                 start: new Date.today().addDays(-7).getTime()
               }
             }
-
             Logs.get(
               {
                 startTime: periods.start,

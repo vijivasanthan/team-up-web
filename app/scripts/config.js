@@ -32,7 +32,7 @@ define(
 
       namespace: "",
       host: "http://dev.ask-cs.com/", // Development
-//      host: "http://test.ask-cs.com/",  // Test
+      //host: "http://test.ask-cs.com/",  // Test
       // host: "http://askpack.ask-cs.com/", // Demo and acceptance
       // host: "https://backend.ask-cs.nl/", // Live
 
@@ -137,18 +137,18 @@ define(
           legendarer: false,
           states: {},
           divisions: [
-            {
-              id: 'all',
-              label: 'All divisions'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarNoord',
-              label: 'Noord'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarZuid',
-              label: 'Zuid'
-            }
+            //{
+            //  id: 'all',
+            //  label: 'All divisions'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarNoord',
+            //  label: 'Noord'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarZuid',
+            //  label: 'Zuid'
+            //}
           ],
           densities: {
             less: '#a0a0a0',
@@ -215,7 +215,6 @@ define(
           this.states,
           (function (state)
           {
-            console.log(state);
             this.timeline.config.states[state] = this.statesall[state]
           }).bind(this)
         );
