@@ -156,6 +156,39 @@ define(
               }
             })
 
+            .when('/agenda', {
+              templateUrl: 'views/agenda.html',
+              controller: 'agenda',
+              resolve: {
+                data: function ($route, Slots, Storage, Dater, Store) {
+
+
+                  var periods = Store('app').get('periods'),
+                    //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
+                    groups = Store('app').get('teams'),
+                    groupId = groups[0].uuid;
+
+                  return  Slots.all({
+                    groupId: groupId,
+                    stamps: (Dater.current.today() > 360) ? {
+                      start: periods.days[358].last.timeStamp,
+                      end: periods.days[365].last.timeStamp
+                    } : {
+                      start: periods.days[Dater.current.today() - 1].last.timeStamp,
+                      end: periods.days[Dater.current.today() + 6].last.timeStamp
+                    },
+                    month: Dater.current.month(),
+                    layouts: {
+                      user: true,
+                      group: true,
+                      members: false
+                    }
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
+
             .when(
             '/tasks2/planboard',
             {
@@ -164,13 +197,57 @@ define(
               reloadOnSearch: false
             })
 
-//            .when(
-//            '/planboard',
-//            {
-//              templateUrl: 'views/planboard.html',
-//              controller: 'planboard',
-//              reloadOnSearch: false
-//            })
+            .when(
+            '/dashboard',
+            {
+              templateUrl: 'views/dashboard.html',
+              controller: 'dashboard',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', 'Slots', '$route',
+                  function (Teams, Slots, $route)
+                  {
+                    //var data = {},
+                    //  deferred = $q.defer();
+                    //
+                    //  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
+                    //    ? Teams.queryLocal()
+                    //    : Teams.query(false, $route.current.params);
+                    //
+                    //teamsMembers
+                    //  .then(function(teamsMembers) {
+                    //    data.teamsMembers = teamsMembers;
+                    //
+                    //
+                    //  });
+
+
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
+                      Teams.queryLocal() :
+                      Teams.query(false, $route.current.params);
+                    //return =
+                  }
+                ]
+              }
+            })
+
+            .when(
+            '/logs',
+            {
+              templateUrl: 'views/logs.html',
+              controller: 'logs',
+              resolve: {
+                data: function(Logs)
+                {
+                  return Logs.fetch({
+                    end: new Date.now().getTime(),
+                    start: new Date.today().addDays(- 7).getTime()
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
 
             .when(
             '/messages',

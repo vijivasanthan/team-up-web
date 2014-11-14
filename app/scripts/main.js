@@ -20,6 +20,7 @@ require.config(
 
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
+      'angular-md5': '../vendors/angular-md5/angular-md5.min',
 
       // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap': 'removables/angular-strap.min',
@@ -27,8 +28,6 @@ require.config(
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      moment: '../vendors/momentjs/min/moment-with-langs.min',
-
       // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
 
@@ -44,14 +43,16 @@ require.config(
 
       timepicker: 'removables/timepicker.min',
       underscore: '../vendors/underscore/underscore',
-      md5: '../vendors/web-lib-md5/md5.min',
+      //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       offline: '../vendors/web-lib-offline/dist/offline',
-
+      daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
+      moment: '../vendors/moment/moment',
+      phone: '../vendors/web-lib-phonenumber/libphonenumber',
+      //moment: '../vendors/momentjs/min/moment-with-langs.min',
       // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
 
       log: '../vendors/web-lib-log/dist/log',
-      _moment: '../vendors/web-lib-moment/dist/moment',
       session: '../vendors/web-lib-session/dist/session',
 
       // vis: '../vendors/vis/dist/vis.min',
@@ -63,8 +64,8 @@ require.config(
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'lodash': '../vendors/lodash/dist/lodash.min',
 
-      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',      
-      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',      
+      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       'locale_nl': 'i18n/angular-locale_nl',
 
@@ -79,16 +80,18 @@ require.config(
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'], exports: 'angular-strap' },
+      'angular-md5': { deps: ['angular'] },
       'ui-bootstrap': { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
       bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
       lawnchair: { deps: [], exports: 'lawnchair' },
       dom: { deps: ['lawnchair'], exports: 'dom' },
-      moment: { deps: [], exports: 'moment' },
       timeline: { deps: [], exports: 'timeline' },
+      daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
+      //moment: { deps: [], exports: 'moment' },
       treegrid: { deps: [], exports: 'treegrid' },
       datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
-      md5: { exports: 'md5'},
+      //md5: { exports: 'md5'},
       underscore: { exports: 'underscore'},
       store: { deps: ['angular', 'underscore']},
       offline: { deps: ['angular'] },
@@ -96,7 +99,8 @@ require.config(
       // interceptor: { deps: ['angular'] },
 
       log: { deps: ['angular'] },
-      _moment: { deps: ['angular', 'moment'] },
+      phone: { deps: ['angular'] },
+      //_moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
 
       // vis: { exports: 'vis' },
@@ -109,10 +113,10 @@ require.config(
 
       // 'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },      
+      // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
-      'locale_nl': { deps: ['angular'] },
+      'locale_nl': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
@@ -131,6 +135,7 @@ require(
     'plugins',
     'angular-resource',
     'angular-route',
+    'angular-md5',
     'angular-strap',
     'ui-bootstrap', // TODO: Remove later on
 
@@ -145,14 +150,31 @@ require(
     'services/teamup',
     'services/clients',
     'services/dater', // TODO: Remove later on
+    'services/md5',
+    'services/sloter',
+    'services/stats',
+    'services/strings',
     'services/teams',
+    'services/phone',
+    'services/sloter',
+    'services/md5',
+    'services/storage',
+    'services/stats',
 
     // 'services/googleGEO',
 
     'directives/widgets',
+    'directives/dashboard/snapshots',
+    'directives/date-range-picker',
+    'directives/log-ranger',
     // 'directives/treegrid',
 
     'modals/task',
+    'modals/slots',
+    'modals/logs',
+    'modals/agenda',
+    'modals/slots',
+    'modals/profile',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',
@@ -161,12 +183,14 @@ require(
     'resources/ClientGroupResource',
 
     'filters/avatars',
+    'filters/all-filters',
 
     'controllers/clients',
     'controllers/login',
     'controllers/manage',
     'controllers/treegridCtrl', // TODO: Remove it later on
     'controllers/messages',
+    'controllers/dashboard',
     'controllers/planboard',
     'controllers/vis',
     'controllers/profile',
@@ -175,26 +199,32 @@ require(
     'controllers/tasks2',
     'controllers/timeline',
     'controllers/timeline-navigation',
+    'controllers/agenda-timeline',
+    'controllers/agenda-timeline-navigation',
     'controllers/treegrid',
     'controllers/support',
     'controllers/upload',
     'controllers/admin',
+    'controllers/logs',
+    'controllers/agenda',
 
     'bootstrap',
     'lawnchair',
     'dom',
-    'moment',
     'timeline',
+    'daterangepicker',
+    //'moment',
     'treegrid',
     'datepicker',
     'timepicker',
-    'md5',
+    //'md5',
     'underscore',
     'store',
     'offline',
     // 'interceptor',
     'log',
-    '_moment',
+    'phone',
+    //'_moment',
     'session',
     // 'vis',
     // 'ng-vis',
@@ -205,7 +235,7 @@ require(
 
     // 'jquery-ui',
     // 'angular-dragdrop',
-    // 'ui-sortable',  
+    // 'ui-sortable',
     'locale_nl',
 
     // 'jszip',

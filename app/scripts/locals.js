@@ -38,12 +38,104 @@ define(
         dashboard: {
           thisWeek: 'Deze week',
           welcome: 'Welkom',
+          everyone: 'Iedereen',
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
+          possiblyAvailable: 'Mogelijk Inzetbaar',
+          noPlanning: 'Geen Planning',
+          time: {
+            days: 'd',
+            hours: 'u',
+            minutes: 'm'
+          },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',
           noP2000: 'Er zijn geen alarmberichten.'
+        },
+        agenda: {
+          newAvail: 'Nieuwe beschikbaarheid',
+          day: 'Dag',
+          week: 'Week',
+          month: 'Maand',
+          updateAvail: 'Update Beschikbaarheid',
+          from: 'Vanaf',
+          till: 'Tot',
+          state: 'Status',
+          selectAState: 'Selecteer een status',
+          reoccuring: 'Re-occuring',
+          lessPeople: 'There $v less people than needed!',
+          samePeople: 'There are just as many peopleas needed.',
+          morePeople: 'There are $v more people than needed!',
+          wished: 'Wished',
+          combine_reoccuring: 'This is a combined row of planning with re-occuring rows.',
+          sendMsgToMember: 'Send Message To Members',
+          add: 'Toevoegen',
+          del: 'Verwijderen',
+          change: 'Wijzigen',
+          setWish: 'Set Wish',
+          timeline: 'Tijdlijn',
+          statistics: 'Statistics',
+          barCharts: 'Bar charts',
+          wishes: 'Wishes',
+          legenda: 'Legenda',
+          group: 'Team',
+          groups: 'Team',
+          members: 'Members',
+          bothAvailable: 'Both available',
+          northAavailable: 'available North',
+          southAvailable: 'available South',
+          skipperOutService: 'Skipper Of Service',
+          notAvailable: 'Not Available', // Niet Beschikbaar
+          notachieve: 'Not Achieved',
+          legendaLabels: {
+            morePeople: 'Meer mensen benodigd',
+            enoughPeople: 'Precies genoeg mensen',
+            lessPeople: 'Te weinig mensen'
+          },
+          lastSyncTime: 'Last sync time:',
+          dataRangeStart: 'Data range start: ',
+          DataRangeEnd: 'Data range end: ',
+          loadingTimeline: 'Tijdlijn laden...',
+          addTimeSlot: 'Tijdslot toevoegen...',
+          slotAdded: 'Nieuw tijdslot is succesvol toegevoegd',
+          changingSlot: 'Tijdslot wijzigen...',
+          slotChanged: 'Tijdslot succesvol gewijzigd.',
+          changingWish: 'Changing wish value...',
+          wishChanged: 'Wish value changed successfully.',
+          deletingTimeslot: 'Tijdslot verwijderen...',
+          timeslotDeleted: 'Tijdslot is succesvol verwijderd.',
+          refreshTimeline: 'Tijdlijn refreshen...',
+          preCompilingStortageMessage: 'Pre-compiling shortage message',
+          weeklyPlanning: 'Weekelijkse planninng',
+          planning: 'Planning',
+          minNumber: 'Minimum aantal benodigden',
+          statDays: 'dagen',
+          statHours: 'uren',
+          statMinutes: 'minuten',
+          statPeopleLess: 'Less people than expected',
+          statPeopleEven: 'Just enough people as expected',
+          statPeopleMore: 'More people than expected',
+          getWishes: 'Getting minimum required value...',
+          daterangerToday: 'Vandaag',
+          daterangerTomorrow: 'Morgen',
+          daterangerYesterday: 'Gisteren',
+          daterangerNext3Days: 'Volgende 3 dagen',
+          daterangerNext7Days: 'Volgende 7 dagen',
+          rangeInfoTotalSelectedDays: 'Totaal geselecteerde dagen: ',
+          rangeInfoTime: 'Tijd: ',
+          rangeInfoWeekNumber: 'Weeknummer: ',
+          rangeInfoMonth: 'Maand: ',
+          rangeInfoTotalDays: ', Totaal aantal dagen: ',
+          query: 'There has been some problems with syncing planboard information. Please refresh your browser for getting the latest planboard information.',
+          pastAdding: 'Het is niet mogelijk in het verleden te plannen!',
+          errorAdd: 'Error with adding a new planning!',
+          errorChange: 'Error with changing planning!',
+          pastChanging: 'Changing planning of past is not allowed!',
+          pastDeleting: 'Removing a past planning is not allowed!',
+          remove: 'Error with removing planning!',
+          wisher: 'Error with changing wish value!',
+          notAuth: 'It is not allowed to alter someone else\'s planning unless you do have a planning role. As a administrator/planner you can change the planning of others by clicking on their name from the list of members. You are then directed to another page for changing the planning of that member.'
         },
         planboard: {
           planboard: 'Agenda',
@@ -89,7 +181,17 @@ define(
           lastSyncTime: 'Laatste synchronisatietijd:',
           dataRangeStart: 'Begin gegevensscala: ',
           DataRangeEnd: 'Eind gegevensscala: ',
+          daterangerToday: 'Today',
+          daterangerTomorrow: 'Tomorrow',
+          daterangerYesterday: 'Yesterday',
+          daterangerNext3Days: 'Next 3 days',
+          daterangerNext7Days: 'Next 7 days',
           loadingTimeline: 'Tijdlijn laden...',
+          rangeInfoTotalSelectedDays: 'Totaal aantal geselecteerde dagen: ',
+          rangeInfoTime: 'Tijd: ',
+          rangeInfoWeekNumber: 'Weeknummer: ',
+          rangeInfoMonth: 'Maand: ',
+          rangeInfoTotalDays: ', Totaal aantal dagen: ',
           addTimeSlot: 'Tijdslot toevoegen...',
           slotAdded: 'Tijdslot succesvol toegevoegd.',
           changingSlot: 'Tijdslot wijzigen...',
@@ -148,13 +250,13 @@ define(
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Er is een tekort van ' +
-                   diff +
-                   ' mensen tussen ' +
-                   startDate + ' ' +
-                   startTime + ' en ' +
-                   endDate + ' ' +
-                   endTime + '. ' +
-                   'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
+              diff +
+              ' mensen tussen ' +
+              startDate + ' ' +
+              startTime + ' en ' +
+              endDate + ' ' +
+              endTime + '. ' +
+              'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
           },
           removed: 'Bericht succesvol verwijderd.',
           removing: 'Bericht verwijderen...',
@@ -262,7 +364,7 @@ define(
           firstName: 'Voornaam',
           lastName: 'Achternaam',
           editProfileImg: 'Profielfoto wijzigen',
-		  profileImgSuccessfullyUploaded: 'De profielfoto is succesvol geüpload.',
+          profileImgSuccessfullyUploaded: 'De profielfoto is succesvol geüpload.',
           loadUploadURL: 'Foto upload URL laden',
           click2upload: 'Klik hier om te uploaden',
           birthday: 'Geboortedatum',
@@ -270,7 +372,7 @@ define(
           retypePassword: 'Herhaal wachtwoord',
           roleChangePrompt: 'Je verandert je eigen rol. Het systeem zal hierdoor automatisch uitloggen. Druk op "Ok" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
           specifyTeam: 'Selecteer een team voor deze gebruiker.',//'You need to sepcify a team to this user'
-		      authorInfo: 'Auteurinfo laden...'
+          authorInfo: 'Auteurinfo laden...'
         },
         settings: {
           settings: 'Instellingen',
@@ -385,8 +487,8 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
-			deleteMemberFromTeamTitle: 'Ontkoppel het profiel van het team',
-			deleteMemberFromTeam: 'Weet u zeker dat u het profiel van het team wilt ontkoppelen',
+            deleteMemberFromTeamTitle: 'Ontkoppel het profiel van het team',
+            deleteMemberFromTeam: 'Weet u zeker dat u het profiel van het team wilt ontkoppelen',
             deleteMemberTitle: 'Verwijderen lid',
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
@@ -395,8 +497,8 @@ define(
             deleteTeam: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
             deleteTaskTitle: 'Verwijderen taak',
             deleteTask: 'Weet u zeker dat u de taak wilt verwijderen?',
-			deleteContactTitle: 'Verwijder contact',
-		    deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
+            deleteContactTitle: 'Verwijder contact',
+            deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
             cancel: 'Annuleren'
           },
@@ -456,6 +558,17 @@ define(
           taskDeleted: 'Taak verwijderd.',
           planningTime: 'Tijdsbestek',
           refreshTask: 'Het herladen van de taken'
+        },
+        validation: {
+          phone: {
+            notValid: 'Geen valide telefoonnummer!',
+            invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
+            tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
+            tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
+            notValidOnSubmit: 'Vul alstublieft een geldig telefoonnummer in om op te slaan.',
+            message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
+            as: ' als '
+          }
         }
       }
     }

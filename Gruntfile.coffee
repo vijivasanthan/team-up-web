@@ -48,13 +48,28 @@ module.exports = (grunt) ->
           expand: true
           cwd: '<%= paths.app %>'
           dest: '.tmp'
-          src: 'views/*.jade'
+          src: 'views/{,**/}*.jade'
           ext: '.html'
         ]
 
+    validation:
+      options: [
+        charset: 'utf-8',
+        doctype: 'HTML5',
+        failHard: true,
+        reset: true,
+        relaxerror: [
+          'Bad value X-UA-Compatible for attribute http-equiv on element meta.',
+          'Element img is missing required attribute src.'
+        ]
+      ]
+      files: [
+        src: '_gh_pages/**/*.html'
+      ]
+
     watch:
       jade:
-        files: ['<%= paths.app %>/{,*/}*.jade']
+        files: ['<%= paths.app %>/{,**/}*.jade']
         tasks: ['jade']
       coffee:
         files: ['<%= paths.app %>/scripts/{,*/}*.coffee']

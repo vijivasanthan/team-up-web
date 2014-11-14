@@ -14,7 +14,8 @@ define(
             current: {
               today: function () { return Date.today().getDayOfYear() + 1 },
               week: function () { return Date.today().getWeekOfYear() },
-              month: function () { return new Date().getMonth() + 1 }
+              month: function () { return new Date().getMonth() + 1 },
+              year: function() {return new Date().toString('yyyy') }
             },
 
             readable: {

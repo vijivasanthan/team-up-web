@@ -32,7 +32,7 @@ define(
 
       namespace: "",
       host: "http://dev.ask-cs.com/", // Development
-//      host: "http://test.ask-cs.com/",  // Test
+      //host: "http://test.ask-cs.com/",  // Test
       // host: "http://askpack.ask-cs.com/", // Demo and acceptance
       // host: "https://backend.ask-cs.nl/", // Live
 
@@ -134,18 +134,18 @@ define(
           legendarer: false,
           states: {},
           divisions: [
-            {
-              id: 'all',
-              label: 'All divisions'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarNoord',
-              label: 'Noord'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarZuid',
-              label: 'Zuid'
-            }
+            //{
+            //  id: 'all',
+            //  label: 'All divisions'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarNoord',
+            //  label: 'Noord'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarZuid',
+            //  label: 'Zuid'
+            //}
           ],
           densities: {
             less: '#a0a0a0',
@@ -197,11 +197,23 @@ define(
         4: 'Cancelled'
       },
 
+      timers: {
+        TICKER: 100,
+        NOTIFICATION_DELAY: 5000,
+        MEMBER_TIMELINE_RENDER: 2000,
+        ALARM_SYNC: 60000,
+        PLANBOARD_SYNC: 60000,
+        TV_SYNC: 60000
+      },
+
       init: function ()
       {
         angular.forEach(
           this.states,
-          (function (state) { this.timeline.config.states[state] = this.statesall[state] }).bind(this)
+          (function (state)
+          {
+            this.timeline.config.states[state] = this.statesall[state]
+          }).bind(this)
         );
       }
     }

@@ -11,13 +11,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-ngdocs');
+  grunt.loadNpmTasks('grunt-ddescribe-iit');
 
   // Project configuration.
   grunt.util.linefeed = '\n';
 
   grunt.initConfig({
-    ngversion: '1.2.8',
-    bsversion: '3.0.3',
+    ngversion: '1.2.16',
+    bsversion: '3.1.1',
     modules: [],//to be filled in by build task
     pkg: grunt.file.readJSON('package.json'),
     dist: 'dist',
@@ -27,7 +28,7 @@ module.exports = function(grunt) {
       modules: 'angular.module("ui.bootstrap", [<%= srcModules %>]);',
       tplmodules: 'angular.module("ui.bootstrap.tpls", [<%= tplModules %>]);',
       all: 'angular.module("ui.bootstrap", ["ui.bootstrap.tpls", <%= srcModules %>]);',
-      banner: ['/*', 
+      banner: ['/*',
                ' * <%= pkg.name %>',
                ' * <%= pkg.homepage %>\n',
                ' * Version: <%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
@@ -73,18 +74,18 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          src: ["**/*.html"],
-          cwd: "misc/demo/",
-          dest: "dist/"
+          src: ['**/*.html'],
+          cwd: 'misc/demo/',
+          dest: 'dist/'
         }]
       },
       demoassets: {
         files: [{
           expand: true,
           //Don't re-copy html files, we process those
-          src: ["**/**/*", "!**/*.html"],
-          cwd: "misc/demo",
-          dest: "dist/"
+          src: ['**/**/*', '!**/*.html'],
+          cwd: 'misc/demo',
+          dest: 'dist/'
         }]
       }
     },
@@ -117,16 +118,7 @@ module.exports = function(grunt) {
     jshint: {
       files: ['Gruntfile.js','src/**/*.js'],
       options: {
-        curly: true,
-        immed: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        boss: true,
-        eqnull: true,
-        globals: {
-          angular: true
-        }
+        jshintrc: '.jshintrc'
       }
     },
     karma: {
@@ -143,10 +135,11 @@ module.exports = function(grunt) {
         singleRun: true,
         colors: false,
         reporters: ['dots', 'junit'],
-        browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'Opera', '/Users/jenkins/bin/safari.sh', '/Users/jenkins/bin/ie9.sh', '/Users/jenkins/bin/ie10.sh', '/Users/jenkins/bin/ie11.sh']
+        browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'Opera', '/Users/jenkins/bin/safari.sh']
       },
       travis: {
         singleRun: true,
+        reporters: ['dots'],
         browsers: ['Firefox']
       },
       coverage: {
@@ -195,15 +188,20 @@ module.exports = function(grunt) {
         html5Mode: false
       },
       api: {
-        src: ["src/**/*.js", "src/**/*.ngdoc"],
-        title: "API Documentation"
+        src: ['src/**/*.js', 'src/**/*.ngdoc'],
+        title: 'API Documentation'
       }
+    },
+    'ddescribe-iit': {
+      files: [
+        'src/**/*.spec.js'
+      ]
     }
   });
 
   //register before and after test tasks so we've don't have to change cli
   //options on the goole's CI server
-  grunt.registerTask('before-test', ['enforce', 'jshint', 'html2js']);
+  grunt.registerTask('before-test', ['enforce', 'ddescribe-iit', 'jshint', 'html2js']);
   grunt.registerTask('after-test', ['build', 'copy']);
 
   //Rename our watch task to 'delta', then make actual 'watch'
@@ -246,18 +244,18 @@ module.exports = function(grunt) {
       name: name,
       moduleName: enquote('ui.bootstrap.' + name),
       displayName: ucwords(breakup(name, ' ')),
-      srcFiles: grunt.file.expand("src/"+name+"/*.js"),
-      tplFiles: grunt.file.expand("template/"+name+"/*.html"),
-      tpljsFiles: grunt.file.expand("template/"+name+"/*.html.js"),
-      tplModules: grunt.file.expand("template/"+name+"/*.html").map(enquote),
+      srcFiles: grunt.file.expand('src/'+name+'/*.js'),
+      tplFiles: grunt.file.expand('template/'+name+'/*.html'),
+      tpljsFiles: grunt.file.expand('template/'+name+'/*.html.js'),
+      tplModules: grunt.file.expand('template/'+name+'/*.html').map(enquote),
       dependencies: dependenciesForModule(name),
       docs: {
-        md: grunt.file.expand("src/"+name+"/docs/*.md")
-          .map(grunt.file.read).map(markdown).join("\n"),
-        js: grunt.file.expand("src/"+name+"/docs/*.js")
-          .map(grunt.file.read).join("\n"),
-        html: grunt.file.expand("src/"+name+"/docs/*.html")
-          .map(grunt.file.read).join("\n")
+        md: grunt.file.expand('src/'+name+'/docs/*.md')
+          .map(grunt.file.read).map(markdown).join('\n'),
+        js: grunt.file.expand('src/'+name+'/docs/*.js')
+          .map(grunt.file.read).join('\n'),
+        html: grunt.file.expand('src/'+name+'/docs/*.html')
+          .map(grunt.file.read).join('\n')
       }
     };
     module.dependencies.forEach(findModule);

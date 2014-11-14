@@ -1,0 +1,250 @@
+<section id="planboard" ng-controller="agenda-timeline">
+  <div class="agenda-timeline page-header">
+    <h2 class="nullable">{{ui.planboard.planboard}}</h2>
+    <div class="btn-group pull-right">
+      <button type="submit" ng-click="toggleSlotForm()" class="btn btn-success {{(views.slot.add==true) &amp;&amp; 'active'}}">{{ui.agenda.newAvail}}</button>
+      <button data-toggle="dropdown" class="btn btn-success dropdown-toggle"><span class="caret"></span></button>
+      <ul style="right: 0; font-size: 13px" class="dropdown-menu fast-availability">
+        <li><a ng-click="setAvailability(true, 1)">
+            <div class="square available"></div>Beschikbaar (1 uur)</a></li>
+        <li><a ng-click="setAvailability(true, 6)">
+            <div class="square available"></div>Beschikbaar (6 uur)</a></li>
+        <li><a ng-click="setAvailability(true, 24)">
+            <div class="square available"></div>Beschikbaar (24 uur)</a></li>
+        <li class="divider"></li>
+        <li><a ng-click="setAvailability(false, 1)">
+            <div class="square unavailable"></div>Niet beschikbaar (1 uur)</a></li>
+        <li><a ng-click="setAvailability(false, 6)">
+            <div class="square unavailable"></div>Niet beschikbaar (6 uur)</a></li>
+        <li><a ng-click="setAvailability(false, 24)">
+            <div class="square unavailable"></div>Niet beschikbaar (24 uur)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="timeline-controls" ng-controller="agenda-timeline-navigation">
+    <div style="margin-top: 10px" class="pull-left">
+      <div class="form-group has-feedback pull-left dateranger">
+        <input type="text" name="daterange" ng-model="daterange" daterangepicker="" class="form-control"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+      </div>
+      <div style="margin-right: 5px" class="btn-group pull-left">
+        <button type="button" ng-model="timeline.scope.day" ng-click="timelineScoper(&quot;day&quot;)" class="btn btn-default {{(timeline.scope.day==true) &amp;&amp; 'active'}}">{{ui.agenda.day}}</button>
+        <button type="button" ng-model="timeline.scope.week" ng-click="timelineScoper(&quot;week&quot;)" class="btn btn-default {{(timeline.scope.week==true) &amp;&amp; 'active'}}">{{ui.agenda.week}}</button>
+        <button type="button" ng-model="timeline.scope.month" ng-click="timelineScoper(&quot;month&quot;)" class="btn btn-default {{(timeline.scope.month==true) &amp;&amp; 'active'}}">{{ui.agenda.month}}</button>
+      </div>
+      <div style="margin-right: 5px" class="btn-group pull-left">
+        <button id="timelineBeforeBtn" type="button" ng-click="timelineBefore(timeline.scope)" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i></button>
+        <button id="timelineZoomInBtn" type="button" ng-click="timelineZoomIn()" class="btn btn-default"><i class="glyphicon glyphicon-zoom-in"></i></button>
+        <button id="timelineZoomOutBtn" type="button" ng-click="timelineZoomOut()" class="btn btn-default"><i class="glyphicon glyphicon-zoom-out"></i></button>
+        <button id="timelineAfterBtn" type="button" ng-click="timelineAfter(timeline.scope)" class="btn btn-default"><i class="glyphicon glyphicon-arrow-right"></i></button>
+      </div>
+    </div>
+    <div style="text-align: {{(browser.mobile) &amp;&amp;  'left' || 'right' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
+      <h4 style="font-weight: normal">{{timeline.range | rangeMainFilter}}<br>
+        <div style="font-size: 15px; font-weight: lighter"><span>{{timeline | rangeInfoFilter}}</span></div>
+      </h4>
+    </div>
+  </div>
+  <div ng-show="views.slot.add || views.slot.edit || views.group || views.wish || views.member">
+    <form class="form-inline form-toggled well">
+      <button ng-click="resetInlineForms()" class="close">×</button>
+      <h4 ng-show="views.slot.add">{{ui.agenda.newAvail}}</h4>
+      <h4 ng-show="views.slot.edit">{{ui.agenda.updateAvail}}</h4>
+      <h4 ng-show="views.group">{{slot.group|stripHtml}}</h4>
+      <h4 ng-show="views.wish">{{slot.group|stripHtml}} (Wishes)</h4>
+      <h4 ng-show="views.member">{{slot.member|convertUserIdToName}}</h4>
+      <hr>
+      <div ng-show="browser.mobile" class="form-elements-group">
+        <label>{{ui.agenda.from}}</label>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group dater-mobile">
+          <input name="date-start" type="datetime-local" ng-model="slot.start.datetime" class="form-control input-sm">
+        </div>
+        <div ng-show="views.group || views.member" class="form-group dater-mobile">
+          <input name="date-start" type="datetime-local" ng-model="slot.start.datetime" disabled="disabled" class="form-control input-sm">
+        </div>
+      </div>
+      <div ng-hide="browser.mobile" class="form-elements-group">
+        <label>{{ui.agenda.from}}</label>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group has-feedback dater">
+          <input name="date-start" type="text" ng-model="slot.start.date" data-date-type="string" data-date-format="dd-MM-yyyy" data-icon-left="glyphicon glyphicon-arrow-left" data-icon-right="glyphicon glyphicon-arrow-right" bs-datepicker="" class="form-control input-sm"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="form-group has-feedback dater">
+          <input name="date-start" type="text" ng-model="slot.start.date" disabled="disabled" class="form-control input-sm"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+        </div>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group has-feedback timer">
+          <input name="time-start" type="text" ng-model="slot.start.time" data-length="3" data-time-type="string" data-time-format="HH:mm" bs-timepicker="" class="form-control input-sm"><i class="glyphicon glyphicon-time form-control-feedback"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="form-group has-feedback timer">
+          <input name="time-start" type="text" ng-model="slot.start.time" disabled="disabled" class="form-control input-sm"><i class="glyphicon glyphicon-time form-control-feedback"></i>
+        </div>
+      </div>
+      <div ng-show="browser.mobile" class="form-elements-group">
+        <label>{{ui.agenda.till}}</label>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group dater-mobile">
+          <input name="date-start" type="datetime-local" ng-model="slot.end.datetime" class="form-control input-sm">
+        </div>
+        <div ng-show="views.group || views.member" class="form-group dater-mobile">
+          <input name="date-start" type="datetime-local" ng-model="slot.end.datetime" disabled="disabled" class="form-control input-sm">
+        </div><br><br>
+      </div>
+      <div ng-hide="browser.mobile" class="form-elements-group">
+        <label>{{ui.agenda.till}}</label>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group has-feedback dater">
+          <input name="date-end" type="text" ng-model="slot.end.date" data-date-type="string" data-date-format="dd-MM-yyyy" data-icon-left="glyphicon glyphicon-arrow-left" data-icon-right="glyphicon glyphicon-arrow-right" bs-datepicker="" class="form-control input-sm"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="form-group has-feedback dater">
+          <input name="date-end" type="text" ng-model="slot.end.date" disabled="disabled" class="form-control input-sm"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+        </div>
+        <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group has-feedback timer">
+          <input name="time-end" type="text" ng-model="slot.end.time" data-length="3" data-time-type="string" data-time-format="HH:mm" bs-timepicker="" class="form-control input-sm"><i class="glyphicon glyphicon-time form-control-feedback"></i>
+        </div>
+        <div ng-show="views.group || views.member" class="form-group has-feedback timer">
+          <input name="time-end" type="text" ng-model="slot.end.time" disabled="disabled" class="form-control input-sm"><i class="glyphicon glyphicon-time form-control-feedback"></i>
+        </div>
+      </div>
+      <div ng-show="views.slot.add || views.slot.edit || views.member" class="form-elements-group">
+        <label>{{ui.agenda.state}}</label>
+        <select ng-model="slot.state" ng-options="option as value for (option, value) in states" ng-change="modifySlot(slot)" ng-show="views.slot.add || views.slot.edit" class="form-control"></select>
+        <select ng-model="slot.state" disabled="disabled" ng-options="option as value for (option, value) in states" ng-show="views.member" class="form-control"></select>
+      </div>
+      <div ng-show="views.slot.add" class="form-elements-group rightest">
+        <label>{{ui.agenda.reoccuring}}</label>
+        <input type="checkbox" ng-model="slot.recursive">
+      </div>
+      <div ng-show="views.group" class="form-elements-group"><small><i ng-show="(slot.diff &lt; 0)">{{slot.diff | i18n_spec:'planboard.lessPeople'}}</i><i ng-show="(slot.diff == 0)">{{ui.agenda.samePeople}}</i><i ng-show="(slot.diff &gt; 0)">{{slot.diff | i18n_spec:'planboard.morePeople'}}</i></small></div>
+      <div ng-show="views.wish" class="form-elements-group">
+        <label>{{ui.agenda.wished}}</label>
+        <input name="wish-count" type="text" ng-model="slot.wish" ng-hide="StandBy.resources.role &gt; 1" class="input-mini">
+        <input name="wish-count" type="text" ng-model="slot.wish" disabled="disabled" ng-show="StandBy.resources.role &gt; 1" class="input-mini">
+      </div>
+      <div ng-show="views.member" class="form-elements-group"><small><i>{{ui.agenda.combine_reoccuring}}</i></small></div>
+      <div class="form-elements-actions pull-right">
+        <div ng-show="(slot.diff &lt; 0)">
+          <button type="button" ng-click="sendShortageMessage(slot)" ng-hide="app.resources.role &gt; 1" class="btn btn-success">{{ui.agenda.sendMsgToMember}}</button>
+        </div>
+        <div ng-show="views.slot.add">
+          <button type="button" ng-click="timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.agenda.add}}</button>
+        </div>
+        <div ng-show="views.slot.edit">
+          <button type="button" ng-click="timelineOnRemove()" style="margin-right: 5px" class="btn btn-danger">{{ui.agenda.del}}</button>
+          <button type="button" ng-click="timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.agenda.change}}</button>
+        </div>
+        <div ng-show="views.wish">
+          <button type="button" ng-click="wisher(slot)" ng-hide="app.resources.role &gt; 1" class="btn btn-success">{{ui.agenda.setWish}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="agenda-timeline-tabs tabbable tabs-left">
+    <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
+      <li class="active"><a href="planboard#timelineTab" data-toggle="tab" ng-click="destroy.statistics();"><span class="entypo">&#128340;</span>{{ui.agenda.timeline}}</a></li>
+    </ul>
+    <div class="tab-content">
+      <!-- timeline-->
+      <div id="timelineTab" class="tab-pane active">
+        <div id="timeline">
+          <!--include agenda/time-toolbar.jade-->
+          <div id="timeline-toolbar">
+            <div class="pull-left">
+              <select ng-model="timeline.current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="timeline.current.group" ng-change="requestTimeline()" ng-show="timeline.current.layouts.group" class="form-control"></select>
+              <!--select.form-control(ng-model='timeline.current.division',-->
+              <!--ng-options='division.id as division.label for division in divisions',-->
+              <!--ng-selected='timeline.current.division',-->
+              <!--ng-change='changeDivision()',-->
+              <!--ng-show='divisions.length > 0')-->
+            </div><br ng-show="browser.mobile"><br ng-show="browser.mobile">
+            <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
+              <div class="btn-group">
+                <button type="button" ng-click="showLegenda()" ng-model="timeline.config.legendarer" class="btn btn-default {{(timeline.config.legendarer==true) &amp;&amp; 'active'}}">{{ui.agenda.legenda}}</button>
+              </div>
+              <div ng-show="timeline.current.layouts.group" class="btn-group">
+                <button type="button" ng-click="barCharts()" ng-model="timeline.config.bar" class="btn btn-default {{(timeline.config.bar==true) &amp;&amp; 'active'}}">{{ui.agenda.barCharts}}</button>
+              </div>
+              <div ng-show="timeline.current.layouts.group" class="btn-group">
+                <button type="button" ng-click="groupWishes()" ng-model="timeline.config.wishes" class="btn btn-default {{(timeline.config.wishes==true) &amp;&amp; 'active'}}">{{ui.agenda.wishes}}</button>
+              </div>
+              <div class="btn-group">
+                <button type="button" ng-model="timeline.current.layouts.group" ng-click="requestTimeline(&quot;group&quot;)" class="btn btn-default {{(timeline.current.layouts.group==true) &amp;&amp; 'active'}}">{{ui.agenda.group}}</button>
+                <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(app.resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-default {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}"> {{ui.agenda.members}}</button>
+                <!--.icomoon-->
+                <!--data-icon='',-->
+                <!--aria-hidden='true',-->
+              </div>
+            </div>
+          </div>
+          <hr>
+          <!-- alert-window-->
+          <div ng-show="registeredNotifications.timeLineDragging" class="alert alert-warning">
+            <button type="button" ng-click="registerNotification(&quot;timeLineDragging&quot;, false)" data-dismiss="alert" class="close">×</button><small>U kunt ook uw<strong><i>beschikbaarheid wijzigen</i></strong>door te
+              dubbelklikken op reeds bestaande blokken of<strong><i>door te slepen</i></strong>met uw muis met de linkermuisknop en de<strong>SHIFT (Mac)</strong>of<strong>CTRL (Windows)</strong>knop tegelijkertijd ingedrukt.</small>
+          </div>
+          <div ng-show="timeline.config.legendarer" class="legends-agenda">
+            <div class="legenda">
+              <div class="legenda-row"><strong>{{ui.planboard.members}}</strong>
+                <ul>
+                  <li ng-repeat="(key, value) in timeline.config.states" class="legenda-{{value.className}}">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda[key]">{{value.label}}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <div class="legenda-row last-legenda-row"><strong>{{ui.agenda.groups}}</strong>
+                <ul>
+                  <li class="legenda-more">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.more">{{ui.agenda.legendaLabels.morePeople}}
+                    </label>
+                  </li>
+                  <li class="legenda-even">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.even">{{ui.agenda.legendaLabels.enoughPeople}}
+                    </label>
+                  </li>
+                  <li class="legenda-less">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.less">{{ui.agenda.legendaLabels.lessPeople}}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <hr>
+            </div>
+            <!--div.legenda-->
+            <!--	.legenda-row-->
+            <!--		strong {{ui.planboard.members}}-->
+            <!--		ul-->
+            <!--			li(ng-repeat='(key, value) in timeline.config.states',-->
+            <!--			class="legenda-{{value.className}}")-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{value.label}}-->
+            <!--	.legenda-row.last-legenda-row-->
+            <!--		strong {{ui.planboard.groups}}-->
+            <!--		ul-->
+            <!--			li.legenda-more-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.morePeople}}-->
+            <!--			li.legenda-even-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.enoughPeople}}-->
+            <!--			li.legenda-less-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.lessPeople}}//-->
+          </div>
+          <div id="mainTimeline"></div>
+        </div>
+        <hr>
+        <p><small class="pull-left"><span class="text-warning">{{ui.agenda.lastSyncTime}}</span><span class="text-muted">&nbsp; {{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="text-warning">{{ui.agenda.dataRangeStart}}</span><span class="text-muted">{{data.periods.start | nicelyDate}}</span>&nbsp;&nbsp;| &nbsp;<span class="text-warning">{{ui.agenda.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | nicelyDate}}</span></small></p>
+        <hr>
+        <!--include agenda/time-legends.jade-->
+      </div>
+    </div>
+  </div>
+</section>
