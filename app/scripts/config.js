@@ -31,8 +31,8 @@ define(
       },
 
       namespace: "",
-      host: "http://dev.ask-cs.com/", // Development
-      //host: "http://test.ask-cs.com/",  // Test
+      // host: "http://dev.ask-cs.com/", // Development
+      host: "http://test.ask-cs.com/",  // Test
       // host: "http://askpack.ask-cs.com/", // Demo and acceptance
       // host: "https://backend.ask-cs.nl/", // Live
 
