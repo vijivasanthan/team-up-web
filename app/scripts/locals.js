@@ -89,16 +89,16 @@ define(
           notAvailable: 'Not Available', // Niet Beschikbaar
           notachieve: 'Not Achieved',
           legendaLabels: {
-            morePeople: 'More people',
-            enoughPeople: 'Just enough people',
-            lessPeople: 'Less people'
+            morePeople: 'Meer mensen benodigd',
+            enoughPeople: 'Precies genoeg mensen',
+            lessPeople: 'Te weinig mensen'
           },
           lastSyncTime: 'Last sync time:',
           dataRangeStart: 'Data range start: ',
           DataRangeEnd: 'Data range end: ',
           loadingTimeline: 'Tijdlijn laden...',
           addTimeSlot: 'Tijdslot toevoegen...',
-          slotAdded: 'New timeslot added successfully.',
+          slotAdded: 'Nieuw tijdslot is succesvol toegevoegd',
           changingSlot: 'Tijdslot wijzigen...',
           slotChanged: 'Tijdslot succesvol gewijzigd.',
           changingWish: 'Changing wish value...',

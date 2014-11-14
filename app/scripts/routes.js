@@ -201,7 +201,35 @@ define(
             '/dashboard',
             {
               templateUrl: 'views/dashboard.html',
-              controller: 'dashboard'
+              controller: 'dashboard',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', 'Slots', '$route',
+                  function (Teams, Slots, $route)
+                  {
+                    //var data = {},
+                    //  deferred = $q.defer();
+                    //
+                    //  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
+                    //    ? Teams.queryLocal()
+                    //    : Teams.query(false, $route.current.params);
+                    //
+                    //teamsMembers
+                    //  .then(function(teamsMembers) {
+                    //    data.teamsMembers = teamsMembers;
+                    //
+                    //
+                    //  });
+
+
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
+                      Teams.queryLocal() :
+                      Teams.query(false, $route.current.params);
+                    //return =
+                  }
+                ]
+              }
             })
 
             .when(

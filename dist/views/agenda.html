@@ -164,7 +164,10 @@
               </div>
               <div class="btn-group">
                 <button type="button" ng-model="timeline.current.layouts.group" ng-click="requestTimeline(&quot;group&quot;)" class="btn btn-default {{(timeline.current.layouts.group==true) &amp;&amp; 'active'}}">{{ui.agenda.group}}</button>
-                <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(app.resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-default {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}">{{ui.agenda.members}}</button>
+                <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(app.resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-default {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}"> {{ui.agenda.members}}</button>
+                <!--.icomoon-->
+                <!--data-icon='',-->
+                <!--aria-hidden='true',-->
               </div>
             </div>
           </div>
@@ -174,8 +177,66 @@
             <button type="button" ng-click="registerNotification(&quot;timeLineDragging&quot;, false)" data-dismiss="alert" class="close">×</button><small>U kunt ook uw<strong><i>beschikbaarheid wijzigen</i></strong>door te
               dubbelklikken op reeds bestaande blokken of<strong><i>door te slepen</i></strong>met uw muis met de linkermuisknop en de<strong>SHIFT (Mac)</strong>of<strong>CTRL (Windows)</strong>knop tegelijkertijd ingedrukt.</small>
           </div>
-          <div ng-show="timeline.config.legendarer">
-            <!--include agenda/time-legends.jade-->
+          <div ng-show="timeline.config.legendarer" class="legends-agenda">
+            <div class="legenda">
+              <div class="legenda-row"><strong>{{ui.planboard.members}}</strong>
+                <ul>
+                  <li ng-repeat="(key, value) in timeline.config.states" class="legenda-{{value.className}}">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda[key]">{{value.label}}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <div class="legenda-row last-legenda-row"><strong>{{ui.agenda.groups}}</strong>
+                <ul>
+                  <li class="legenda-more">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.more">{{ui.agenda.legendaLabels.morePeople}}
+                    </label>
+                  </li>
+                  <li class="legenda-even">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.even">{{ui.agenda.legendaLabels.enoughPeople}}
+                    </label>
+                  </li>
+                  <li class="legenda-less">
+                    <label>
+                      <div class="square"></div>
+                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.less">{{ui.agenda.legendaLabels.lessPeople}}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <hr>
+            </div>
+            <!--div.legenda-->
+            <!--	.legenda-row-->
+            <!--		strong {{ui.planboard.members}}-->
+            <!--		ul-->
+            <!--			li(ng-repeat='(key, value) in timeline.config.states',-->
+            <!--			class="legenda-{{value.className}}")-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{value.label}}-->
+            <!--	.legenda-row.last-legenda-row-->
+            <!--		strong {{ui.planboard.groups}}-->
+            <!--		ul-->
+            <!--			li.legenda-more-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.morePeople}}-->
+            <!--			li.legenda-even-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.enoughPeople}}-->
+            <!--			li.legenda-less-->
+            <!--				label-->
+            <!--					.square-->
+            <!--					| {{ui.planboard.legendaLabels.lessPeople}}//-->
           </div>
           <div id="mainTimeline"></div>
         </div>

@@ -58,8 +58,10 @@ section#planboard(ng-controller='agenda-timeline')
 								class="{{(timeline.current.layouts.members==true) && 'active'}}",
 								ng-model='timeline.current.layouts.members',
 								ng-click='requestTimeline("members")',
-								ng-show='(app.resources.role < 3) || timeline.config.layouts.members') {{ui.agenda.members}}
-								
+								ng-show='(app.resources.role < 3) || timeline.config.layouts.members')  {{ui.agenda.members}}
+								//.icomoon
+								//data-icon='',
+								//aria-hidden='true',
 								
 					hr
 					// alert-window
@@ -81,8 +83,8 @@ section#planboard(ng-controller='agenda-timeline')
 							strong CTRL (Windows)
 							| knop tegelijkertijd ingedrukt.
 
-					div(ng-show='timeline.config.legendarer')
-						//include agenda/time-legends.jade
+					div.legends-agenda(ng-show='timeline.config.legendarer')
+						include agenda/time-legends.jade
 					#mainTimeline
 				hr
 				p
