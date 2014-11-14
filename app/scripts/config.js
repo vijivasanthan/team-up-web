@@ -36,9 +36,6 @@ define(
       // host: "http://askpack.ask-cs.com/", // Demo and acceptance
       // host: "https://backend.ask-cs.nl/", // Live
 
-      // host: "http://localhost:9000/",
-      // namespace: "teamup-sven",
-
       formats: {
         date: 'dd-MM-yyyy',
         time: 'HH:mm',
