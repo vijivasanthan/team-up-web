@@ -9,6 +9,7 @@ require.config(
   {
     waitSeconds: 100,
     paths: {
+      profile: 'profiles/dev/profile',
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
       jquery: '../vendors/jquery/dist/jquery.min',
@@ -74,6 +75,8 @@ require.config(
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
     },
     shim: {
+      profile: {deps: ['jquery'], exports: 'profile' },
+      config: {deps: ['profile'], exports: 'config' },
       date: { deps: [], exports: 'date' },
       plugins: { deps: ['jquery'], exports: 'plugins' },
       angular: { deps: ['jquery'], exports: 'angular' },
@@ -140,6 +143,7 @@ require(
     'ui-bootstrap', // TODO: Remove later on
 
     'locals',
+    'profile',
     'config',
     'app',
     'run',

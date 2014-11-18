@@ -60,7 +60,7 @@ define(['controllers/controllers'], function(controllers) {
                 label: "/tasks",
                 value: 'tasks',
                 resource:TaskResource,
-                actions:[ ],
+                actions:[ ]
             };
             addActionsToOption($rootScope.taskResourceActions, taskOption);
 

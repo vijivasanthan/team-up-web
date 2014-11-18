@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -24,6 +24,8 @@ define(
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5
           )
         {
+          console.log(config.app.tabs);
+
           // TODO: Soon not needed!
           Dater.registerPeriods();
 

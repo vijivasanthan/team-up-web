@@ -6,32 +6,15 @@ define(
       // version: '0.5.2',
       released: '@@released',
 
-      title: 'TeamUp',
-      lang: 'nl',
+      title: profile.title,
+      lang: profile.lang,
 
-      statesall: {
-        'com.ask-cs.State.Available': {
-          className: 'state-available',
-          label: 'Beschikbaar',
-          color: '#4f824f',
-          type: 'Beschikbaar'
-        },
-        'com.ask-cs.State.Unavailable': {
-          className: 'state-unavailable',
-          label: 'Niet Beschikbaar',
-          color: '#a93232',
-          type: 'Niet Beschikbaar'
-        },
-        'com.ask-cs.State.Unreached': {
-          className: 'state-unreached',
-          label: 'Niet Bereikt',
-          color: '#65619b',
-          type: 'Niet Beschikbaar'
-        }
-      },
+      statesall: profile.statesall,
+
+      tabs: profile.tabs,
 
       namespace: "",
-      host: "http://dev.ask-cs.com/", // Development
+      host: profile.host,
       //host: "http://test.ask-cs.com/",  // Test
       // host: "http://askpack.ask-cs.com/", // Demo and acceptance
       // host: "https://backend.ask-cs.nl/", // Live
@@ -46,20 +29,7 @@ define(
         datetimefull: 'dd-MM-yyyy HH:mm'
       },
 
-      roles: [
-        {
-          id: '1',
-          label: 'coordinator'
-        },
-        {
-          id: '2',
-          label: 'team_member'
-        },
-        {
-          id: '3',
-          label: 'client'
-        }
-      ],
+      roles: profile.roles,
 
       mfunctions: [
         {
@@ -200,14 +170,7 @@ define(
         4: 'Cancelled'
       },
 
-      timers: {
-        TICKER: 100,
-        NOTIFICATION_DELAY: 5000,
-        MEMBER_TIMELINE_RENDER: 2000,
-        ALARM_SYNC: 60000,
-        PLANBOARD_SYNC: 60000,
-        TV_SYNC: 60000
-      },
+      timers: profile.timers,
 
       init: function ()
       {
