@@ -57,7 +57,8 @@ define(
             $scope.views = {
               myTasks: false,
               allTasks: false,
-              newTask: false
+              newTask: false,
+              upload: false
             };
 
             $scope.showAllTasks = false;
@@ -116,6 +117,8 @@ define(
                 break;
 
               case 'newTask':
+                break;
+              case 'upload':
                 break;
             }
           };

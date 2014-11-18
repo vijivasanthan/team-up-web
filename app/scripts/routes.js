@@ -36,13 +36,6 @@ define(
               controller: 'tasks2Ctrl'
             })
 
-            .when(
-            '/upload',
-            {
-              templateUrl: 'views/upload.html',
-              controller: 'uploadCtrl'
-            })
-
             .when('/admin', {
                templateUrl: 'views/admin.html',
                controller: 'adminCtrl'

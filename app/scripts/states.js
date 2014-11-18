@@ -173,6 +173,10 @@ define(
                 $location.path('/tasks2').search({}).hash('newTask');
                 break;
 
+              case 'tasks2/upload':
+                $location.path('/tasks2').search({}).hash('upload');
+                break;
+
               case 'tasks2/planboard':
                 $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
                 break;
@@ -189,9 +193,6 @@ define(
                 $location.path('/support').search({}).hash('');
                 break;
 
-              case 'upload':
-                $location.path('/upload').search({}).hash('');
-                break
               //profile tab links to the logged user profile
               case 'profile':
                 $location.path('/profile/'+ $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile');

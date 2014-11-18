@@ -105,6 +105,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			a(data-toggle='tab', ng-click='setViewTo("newTask")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
+		li(class="{{(views.upload==true) && 'active'}}", ng-hide="app.resources.role > 1")
+			a(data-toggle='tab', ng-click='setViewTo("upload")')
+				span.entypo &#59213;
+				| {{ui.task.upload}}
 		li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
 					ng-hide="app.resources.role > 1",
 					data-match-route='/tasks2')
@@ -272,7 +276,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 
 
-
+		
 
 		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}",
 		ng-hide="app.resources.role > 1")
@@ -365,3 +369,17 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				hr
 				.form-actions
 					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
+					
+					
+		
+					
+					
+				
+					
+					
+		
+		#upload.tab-pane(class="{{(views.upload==true) && 'active'}}",
+		ng-hide="app.resources.role > 1",
+		ng-controller='uploadCtrl')
+			include upload/upload.jade
+			

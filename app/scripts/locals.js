@@ -557,7 +557,8 @@ define(
           deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
           taskDeleted: 'Taak verwijderd.',
           planningTime: 'Tijdsbestek',
-          refreshTask: 'Het herladen van de taken'
+          refreshTask: 'Het herladen van de taken',
+          upload: 'Upload taken'
         },
         validation: {
           phone: {
