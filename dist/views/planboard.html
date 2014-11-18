@@ -1,4 +1,4 @@
-<section id="planboard" ng-controller="timeline">
+<section id="planboard" ng-controller="timeline as taskPlanboard">
   <div class="page-header timeline">
     <h2 class="nullable">{{ui.task.tasks}}</h2>
     <!--include planboard/time-slot.jade--><span ng-show="views.teams" class="nullable pull-left">
@@ -17,6 +17,7 @@
       </h4>
     </div>
   </div>
+  <!--include planboard/time-slot.jade-->
   <div ng-show="views.slot.add || views.slot.edit" class="row-fluid changeTimeSlot">
     <form class="form-inline form-toggled well">
       <button ng-click="resetInlineForms()" class="close">×</button>

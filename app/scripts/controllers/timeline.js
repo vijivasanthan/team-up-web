@@ -6,7 +6,15 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$timeout', '$route', '$window', 'Dater', 'TeamUp', 'Store',
+        '$rootScope',
+        '$scope',
+        '$q', '$location',
+        '$timeout',
+        '$route',
+        '$window',
+        'Dater',
+        'TeamUp',
+        'Store',
         function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store)
         {
           var range, diff;
@@ -334,7 +342,7 @@ define(
 
             redraw: function () { $scope.self.timeline.redraw() },
 
-            isAdded: function () { return angular.element('.state-new').length },
+            isAdded: function () { return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw') ? true : false },
 
             cancelAdd: function () { $scope.self.timeline.cancelAdd() }
           };
@@ -683,8 +691,8 @@ define(
                       time: new Date(values.end).toString(config.app.formats.time),
                       datetime: new Date(values.end).toISOString()
                     },
-                    recursive: (values.group.match(/recursive/)) ? true : false
-                    //state: 'com.ask-cs.State.Available'
+                    recursive: (values.group.match(/recursive/)) ? true : false,
+                    state: 'com.ask-cs.State.Available'
                   };
                 }
               );
@@ -722,7 +730,6 @@ define(
                   // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
 
                   // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
-                  console.log('currentTeam ->', $scope.currentClientGroup);
                 }
 
                 slot.relatedUser = null;
@@ -1064,95 +1071,95 @@ define(
             );
           };
 
-
-		  $scope.confirmDeleteTask = function ()
-			{
-				$timeout(
-					function ()
-					{
-						angular.element('#confirmTaskModal').modal('show');
-					}
-				);
-		  };
+          $scope.confirmDeleteTask = function ()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+          };
 
           $scope.timelineOnRemove = function ()
           {
-            $rootScope.planboardSync.clear();
+              $rootScope.planboardSync.clear();
 
-			angular.element('#confirmTaskModal').modal('hide');
+              angular.element('#confirmTaskModal').modal('hide');
 
-			if ($scope.timeliner.isAdded() > 0)
-            {
-              $scope.self.timeline.cancelAdd();
+              if ($scope.timeliner.isAdded() > 0)
+              {
+                $scope.self.timeline.cancelAdd();
 
-              $scope.$apply(
-                function () { $scope.resetInlineForms() }
-              );
-            }
-            else
-            {
-			  console.log($scope.self.timeline.getSelection());
-              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                $scope.$apply(
+                  function ()
+                  {
+                    $scope.resetInlineForms()
+                  }
+                );
+              }
+              else
+              {
+                var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                   content = $scope.getSlotContentJSON(selected.content),
                   memberId = angular.element(selected.group).attr('memberId');
 
-              if (typeof content == 'undefined')
-              {
-                $scope.timeliner.refresh();
-                return;
-              }
-
-              if (typeof content.id == 'undefined')
-              {
-                // console.log('Nothing to delete');
-                return;
-              }
-
-              $rootScope.statusBar.display($rootScope.ui.planboard.deletingTimeslot);
-
-              TeamUp._(
-                'taskDelete',
-                { second: content.id }
-              ).then(
-                function (result)
+                if (typeof content == 'undefined')
                 {
-                  $rootScope.$broadcast('resetPlanboardViews');
-
-                  if (result.error)
-                  {
-                    $rootScope.notifier.error(result.error.data.result);
-                    // console.warn('error ->', result);
-                  }
-                  else
-                  {
-                    $rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
-
-                    if ($scope.section == 'teams')
-                    {
-                      $scope.changeCurrent(
-                        $scope.currentTeam, {
-                          start: $scope.timeline.range.start,
-                          end: $scope.timeline.range.end
-                        });
-                    }
-                    else if ($scope.section == 'clients')
-                    {
-                      $scope.changeCurrent(
-                        $scope.currentClientGroup, {
-                          start: $scope.timeline.range.start,
-                          end: $scope.timeline.range.end
-                        });
-                    }
-                  }
-
-                  // $scope.timeliner.refresh();
-                  $scope.refreshTasks(result.result, "delete");
-
-                  $rootScope.statusBar.off();
-                  $rootScope.planboardSync.start();
+                  $scope.timeliner.refresh();
+                  return;
                 }
-              );
-            }
+
+                if (typeof content.id == 'undefined')
+                {
+                  return;
+                }
+
+                $rootScope.statusBar.display($rootScope.ui.planboard.deletingTimeslot);
+
+                TeamUp._(
+                  'taskDelete',
+                  {second: content.id}
+                ).then(
+                  function (result)
+                  {
+                    $rootScope.$broadcast('resetPlanboardViews');
+
+                    if (result.error)
+                    {
+                      $rootScope.notifier.error(result.error.data.result);
+                      // console.warn('error ->', result);
+                    }
+                    else
+                    {
+                      $rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
+
+                      if ($scope.section == 'teams')
+                      {
+                        $scope.changeCurrent(
+                          $scope.currentTeam, {
+                            start: $scope.timeline.range.start,
+                            end: $scope.timeline.range.end
+                          });
+                      }
+                      else if ($scope.section == 'clients')
+                      {
+                        $scope.changeCurrent(
+                          $scope.currentClientGroup, {
+                            start: $scope.timeline.range.start,
+                            end: $scope.timeline.range.end
+                          });
+                      }
+                    }
+
+                    // $scope.timeliner.refresh();
+                    $scope.refreshTasks(result.result, "delete");
+
+                    $rootScope.statusBar.off();
+                    $rootScope.planboardSync.start();
+                  }
+                );
+              }
           };
 
           if ($scope.timeline && $scope.timeline.main)
