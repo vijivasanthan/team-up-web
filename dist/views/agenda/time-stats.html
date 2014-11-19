@@ -1,0 +1,98 @@
+<div id="statisticsTab" class="tab-pane">
+  <div id="timeline-toolbar">
+    <div class="pull-left">
+      <select ng-model="timeline.current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="timeline.current.group" ng-change="requestTimeline()" class="form-control"></select>
+      <select ng-model="timeline.current.division" ng-options="division.id as division.label for division in divisions" ng-selected="timeline.current.division" ng-change="changeDivision()" ng-show="divisions.length &gt; 0" class="form-control"></select>
+    </div>
+    <div class="pull-right">
+      <div class="btn-group">
+        <button type="button" ng-model="timeline.current.layouts.group" ng-click="requestTimeline(&quot;group&quot;)" class="btn btn-default {{(timeline.current.layouts.group==true) &amp;&amp; 'active'}}">{{ui.agenda.group}}</button>
+        <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-default {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}">{{ui.agenda.members}}</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="legenda">
+    <div class="legenda-row"><strong>{{ui.agenda.members}}</strong>
+      <ul>
+        <li ng-repeat="(key, value) in timeline.config.states" class="legenda-{{value.className}}">
+          <label>
+            <div class="square"></div>{{value.label}}
+          </label>
+        </li>
+      </ul>
+    </div>
+    <div class="legenda-row last-legenda-row"><strong>{{ui.agenda.groups}}</strong>
+      <ul>
+        <li class="legenda-more">
+          <label>
+            <div class="square"></div>{{ui.agenda.legendaLabels.morePeople}}
+          </label>
+        </li>
+        <li class="legenda-even">
+          <label>
+            <div class="square"></div>{{ui.agenda.legendaLabels.enoughPeople}}
+          </label>
+        </li>
+        <li class="legenda-less">
+          <label>
+            <div class="square"></div>{{ui.agenda.legendaLabels.lessPeople}}
+          </label>
+        </li>
+      </ul>
+    </div>
+    <hr>
+  </div>
+  <div id="stats">
+    <div id="groupStats" ng-repeat="agg in data.aggs">
+      <div ng-show="groupPieHide[agg.division.id] || (timeline.current.division == &quot;all&quot;)">
+        <div id="groupPie-{{agg.division.id}}" class="groupPies"></div>
+        <div class="groupStatInfo">
+          <h3>{{agg.id | groupIdToName | toTitleCase}}<span ng-hide="!agg.division.label">  ({{ agg.division.label }})</span></h3>
+          <hr>
+          <ul>
+            <li>
+              <div class="ratios more"><span class="ratio">{{agg.ratios.more}}</span><span class="percentage">%</span></div>
+              <div class="info">
+                <h4>{{ui.agenda.statPeopleMore}}</h4>
+                <h5>{{agg.durations.more | calculateTimeInDays}}</h5><small class="text-muted">{{ui.agenda.statDays}}</small>,
+                <h5>{{agg.durations.more | calculateTimeInHours}}</h5><small class="text-muted">{{ui.agenda.statHours}}</small>,
+                <h5>{{agg.durations.more | calculateTimeInMinutes}}</h5><small class="text-muted">{{ui.agenda.statMinutes}}</small>
+              </div>
+            </li>
+            <li>
+              <div class="ratios even"><span class="ratio">{{agg.ratios.even}}</span><span class="percentage">%</span></div>
+              <div class="info">
+                <h4>{{ui.agenda.statPeopleEven}}</h4>
+                <h5>{{agg.durations.even | calculateTimeInDays}}</h5><small class="text-muted">{{ui.agenda.statDays}}</small>,
+                <h5>{{agg.durations.even | calculateTimeInHours}}</h5><small class="text-muted">{{ui.agenda.statHours}}</small>,
+                <h5>{{agg.durations.even | calculateTimeInMinutes}}</h5><small class="text-muted">{{ui.agenda.statMinutes}}</small>
+              </div>
+            </li>
+            <li>
+              <div class="ratios less"><span class="ratio">{{agg.ratios.less}}</span><span class="percentage">%</span></div>
+              <div class="info">
+                <h4>{{ui.agenda.statPeopleLess}}</h4>
+                <h5>{{agg.durations.less | calculateTimeInDays}}</h5><small class="text-muted">{{ui.agenda.statDays}}</small>,
+                <h5>{{agg.durations.less | calculateTimeInHours}}</h5><small class="text-muted">{{ui.agenda.statHours}}</small>,
+                <h5>{{agg.durations.less | calculateTimeInMinutes}}</h5><small class="text-muted">{{ui.agenda.statMinutes}}</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="memberBars">
+      <ul>
+        <li ng-repeat="member in data.members">
+          <h4>{{member.id | convertUserIdToName}}</h4>
+          <div class="progress">
+            <div ng-repeat="stat in member.stats" ng-style="{ &quot;width&quot;: stat.ratio + &quot;%&quot; }" class="progress-bar {{stat.state}}"></div>
+          </div><small class="text-muted">{{member.stats | convertRatios}}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr>
+  <p><small class="pull-left"><span class="text-warning">{{ui.agenda.lastSyncTime}}</span><span class="text-muted">{{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="text-warning">{{ui.agenda.dataRangeStart}}</span><span class="text-muted">{{data.periods.start | nicelyDate}}</span>|<span class="text-warning">{{ui.agenda.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | nicelyDate}}</span></small></p>
+</div>

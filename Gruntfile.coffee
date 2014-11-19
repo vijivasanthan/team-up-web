@@ -48,7 +48,7 @@ module.exports = (grunt) ->
           expand: true
           cwd: '<%= paths.app %>'
           dest: '.tmp'
-          src: 'views/{,**/}*.jade'
+          src: 'views/**/*.jade'
           ext: '.html'
         ]
 
@@ -98,7 +98,7 @@ module.exports = (grunt) ->
 
     connect:
       options:
-        port: 9000
+        port: 3000
         hostname: '0.0.0.0' #'localhost'
       livereload:
         options:
@@ -272,7 +272,7 @@ module.exports = (grunt) ->
           cwd: '.tmp'
           src: [
             '*.html'
-            'views/*.html'
+            'views/**/*.html'
           ]
           dest: '<%= paths.dist %>'
         ]
@@ -289,13 +289,18 @@ module.exports = (grunt) ->
             '.htaccess'
             'vendors/**/*'
             'images/{,*/}*.{gif,webp}'
-            'fonts/*'
+            'fonts/**/*'
           ]
         ,
           expand: true
           cwd: '.tmp/images'
           dest: '<%= paths.dist %>/images'
           src: ['generated/*']
+        ,
+          expand: true
+          cwd: '<%= paths.app %>/scripts'
+          dest: '.tmp/scripts'
+          src: "{,**/}*"
         ]
       styles:
         expand: true
@@ -339,23 +344,26 @@ module.exports = (grunt) ->
         configFile: 'karma-e2e.conf.js'
         singleRun: false
 
-    ngmin:
+    ngAnnotate:
       dist:
         files: [
           expand: true
-          cwd: '<%= paths.dist %>/scripts'
-          src: '**/*.js'
-          dest: '<%= paths.dist %>/scripts'
+          cwd: '.tmp/scripts'
+          src: [
+            '{,**/}*.js'
+            '!libs/{,**/}*'
+          ]
+          dest: '.tmp/scripts'
         ]
 
     requirejs:
       compile:
         options:
-          appDir: '<%= paths.app %>/scripts/'
+          appDir: '.tmp/scripts/'
           baseUrl: '.'
           dir: '<%= paths.dist %>/scripts/'
           optimize: 'uglify'
-          mainConfigFile: './<%= paths.app %>/scripts/main.js'
+          mainConfigFile: '.tmp/scripts/main.js'
           logLevel: 0
           findNestedDependencies: true
           fileExclusionRegExp: /^\./
@@ -453,14 +461,15 @@ module.exports = (grunt) ->
 #    'svgmin'
     'htmlmin'
     'concat'
-    'copy'
-    'ngmin'
+    'copy:dist'
+    'copy:styles'
+    'ngAnnotate'
+    'copy:rest'
     'cssmin'
     'requirejs'
     'rev'
     'usemin'
     'replace'
-    'copy:rest'
     'clean:rest'
   ]
 

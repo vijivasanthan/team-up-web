@@ -14,13 +14,8 @@ define(
       tabs: profile.tabs,
 
       namespace: "",
-      host: profile.host,
-      //host: "http://test.ask-cs.com/",  // Test
-      // host: "http://askpack.ask-cs.com/", // Demo and acceptance
-      // host: "https://backend.ask-cs.nl/", // Live
 
-      // host: "http://localhost:9000/",
-      // namespace: "teamup-sven",
+      host: profile.host,
 
       formats: {
         date: 'dd-MM-yyyy',
