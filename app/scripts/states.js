@@ -181,8 +181,16 @@ define(
                 $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
                 break;
 
-              case 'agenda':
-                $location.path('/agenda').search({local: 'true'}).hash('teams');
+              case 'team-telefoon/agenda':
+                $location.path('/team-telefoon').search({local: 'true'}).hash('agenda');
+                break;
+
+              case 'team-telefoon/logs':
+                $location.path('/team-telefoon').search({local: 'true'}).hash('logs');
+                break;
+
+              case 'team-telefoon/status':
+                $location.path('/team-telefoon').search({local: 'true'}).hash('status');
                 break;
 
               case 'vis':

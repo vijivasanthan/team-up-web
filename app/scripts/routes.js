@@ -149,19 +149,24 @@ define(
               }
             })
 
-            .when('/agenda', {
+            .when('/team-telefoon', {
               templateUrl: 'views/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function ($route, Slots, Storage, Dater, Store) {
-
-
+                logsData: function (Logs) {
+                    return Logs.fetch({
+                      end: new Date.now().getTime(),
+                      start: new Date.today().addDays(- 7).getTime()
+                    });
+                },
+                slotsData: function($route, Slots, Storage, Dater, Store)
+                {
                   var periods = Store('app').get('periods'),
-                    //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
+                  //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
                     groups = Store('app').get('teams'),
                     groupId = groups[0].uuid;
 
-                  return  Slots.all({
+                  return Slots.all({
                     groupId: groupId,
                     stamps: (Dater.current.today() > 360) ? {
                       start: periods.days[358].last.timeStamp,
@@ -181,6 +186,23 @@ define(
               },
               reloadOnSearch: false
             })
+
+            //.when(
+            //'/logs',
+            //{
+            //  templateUrl: 'views/logs.html',
+            //  controller: 'logs',
+            //  resolve: {
+            //    data: function(Logs)
+            //    {
+            //      return Logs.fetch({
+            //        end: new Date.now().getTime(),
+            //        start: new Date.today().addDays(- 7).getTime()
+            //      });
+            //    }
+            //  },
+            //  reloadOnSearch: false
+            //})
 
             .when(
             '/tasks2/planboard',
@@ -223,23 +245,6 @@ define(
                   }
                 ]
               }
-            })
-
-            .when(
-            '/logs',
-            {
-              templateUrl: 'views/logs.html',
-              controller: 'logs',
-              resolve: {
-                data: function(Logs)
-                {
-                  return Logs.fetch({
-                    end: new Date.now().getTime(),
-                    start: new Date.today().addDays(- 7).getTime()
-                  });
-                }
-              },
-              reloadOnSearch: false
             })
 
             .when(
