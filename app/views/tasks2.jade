@@ -87,6 +87,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
+	.selectGroup(ng-show='views.allTasks && app.resources.role == 1')
+		span.selectTitle
+			| Selecteer team
+		select(ng-model='task.team',
+		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+		ng-selected='currentTeam',
+		ng-change='changeTeam(task.team)')
 
 
 .tabbable.tabs-left
@@ -125,6 +132,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.myTask}}
+				
 			hr
 
 			article(ng-show='tasks.mine.loading'): p Eigen taken aan het laden..
@@ -196,11 +204,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 			article(ng-hide='tasks.all.loading')
 
-				p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
-
+				//p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
+				p(ng-hide='(tasks.all.list | filter: task.team ).length > 0') {{ui.task.noTasks}}
 				//pre: small {{tasks.all.list[0] | json}}
 
-				.well(style='padding-top: 25px')
+				.well(style='padding-top: 25px', ng-show='(tasks.all.list | filter: task.team ).length > 0')
 					label(style='margin-right: 15px; display: none')
 						input(type='checkbox', ng-model='showOnlyAvailable')
 						small &nbsp;Toon alleen niet toegewezen taken
@@ -208,7 +216,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						input(type='checkbox', ng-model='showAllTasks')
 						small &nbsp;Toon gearchiveerde taken
 
-				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				table.table.table-striped.taskTable(ng-show='(tasks.all.list | filter: task.team ).length > 0')
 					thead
 						tr
 							th
@@ -228,7 +237,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					tbody
 						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
 						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
-						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed')
+						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed | filter: task.team')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
 								.roundedPicSmall.memberStateBusy(
@@ -269,7 +278,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
-					small: i Er zijn {{tasks.all.list.length}} taken.
+					//small: i Er zijn {{tasks.all.list.length}} taken.
+					small: i Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.
 
 
 

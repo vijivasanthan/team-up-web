@@ -73,6 +73,9 @@
 </div>
 <div class="page-header">
   <h2 class="nullable">{{ui.task.tasks}}</h2>
+  <div ng-show="views.allTasks &amp;&amp; app.resources.role == 1" class="selectGroup"><span class="selectTitle">Selecteer team</span>
+    <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)"></select>
+  </div>
 </div>
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
@@ -139,9 +142,10 @@
         <p>Taken aan het laden..</p>
       </article>
       <article ng-hide="tasks.all.loading">
-        <p ng-hide="tasks.all.list.length &gt; 0">{{ui.task.noTasks}}</p>
+        <!--p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}-->
+        <p ng-hide="(tasks.all.list | filter: task.team ).length &gt; 0">{{ui.task.noTasks}}</p>
         <!--pre: small {{tasks.all.list[0] | json}}-->
-        <div style="padding-top: 25px" class="well">
+        <div style="padding-top: 25px" ng-show="(tasks.all.list | filter: task.team ).length &gt; 0" class="well">
           <label style="margin-right: 15px; display: none">
             <input type="checkbox" ng-model="showOnlyAvailable"><small>&nbsp;Toon alleen niet toegewezen taken</small>
           </label>
@@ -149,7 +153,8 @@
             <input type="checkbox" ng-model="showAllTasks"><small>&nbsp;Toon gearchiveerde taken</small>
           </label>
         </div>
-        <table ng-show="tasks.all.list.length &gt; 0" class="table table-striped taskTable">
+        <!--table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')-->
+        <table ng-show="(tasks.all.list | filter: task.team ).length &gt; 0" class="table table-striped taskTable">
           <thead>
             <tr>
               <th><a ng-click="orderBy(&quot;status&quot;)">Status<i class="icon-sort"></i></a></th>
@@ -164,7 +169,7 @@
           <tbody>
             <!-- tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')-->
             <!-- tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')-->
-            <tr ng-repeat="task in tasks.all.list | orderBy:ordered : reversed">
+            <tr ng-repeat="task in tasks.all.list | orderBy:ordered : reversed | filter: task.team">
               <td><span class="label label-task-state-{{task.status}}">{{task.statusLabel}}</span></td>
               <td>
                 <div back-img="{{task.relatedClientUuid |  avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
@@ -185,7 +190,8 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>Er zijn {{tasks.all.list.length}} taken.</i></small></span>
+        </table><span class="muted pull-right">
+          <!--small: i Er zijn {{tasks.all.list.length}} taken.--><small><i>Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.</i></small></span>
       </article>
     </div>
     <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true) &amp;&amp; 'active'}}">

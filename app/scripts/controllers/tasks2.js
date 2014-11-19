@@ -41,6 +41,9 @@ define(
             $scope.currentTeam = currentTeamClientGroup.team;
           }
 
+          $scope.task = {};
+          $scope.task.team = $scope.currentTeam;
+
           function resetViews ()
           {
             $scope.tasks = {
@@ -225,12 +228,6 @@ define(
           //round current minutes by 15 and add minutes so the default time is always in the future
           var currentStartTime = updateTime(date, 15);
           var currentEndTime = updateTime(date, 30);
-
-          if(! $scope.task)
-          {
-            $scope.task = {};
-            $scope.task.team = $scope.teams[0].uuid;
-          }
 
           $scope.task.start = {
               date: currentDay,

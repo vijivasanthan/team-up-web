@@ -165,61 +165,57 @@ define(
                  * All tasks of a team
                  * @type {Array}
                  */
-                var teamTasks = bulks[$rootScope.app.resources.teamUuids[0]];
-
-                if (teamTasks.length > 0)
-                {
-                  _.each(
-                    teamTasks,
-                    function (task)
-                    {
-                      basket.push(task);
-                    }
-                  );
-                }
+                //var teamTasks = bulks[$rootScope.app.resources.teamUuids[0]];
+                //
+                //if (teamTasks.length > 0)
+                //{
+                //  _.each(
+                //    teamTasks,
+                //    function (task)
+                //    {
+                //      basket.push(task);
+                //    }
+                //  );
+                //}
 
                 /**
-                 * All tasks
-                 * @type {Array}
-                 */
-                //_.each(
-                //  bulks,
-                //  function (tasks)
-                //  {
-                //    if (tasks.length > 0)
-                //    {
-                //      _.each(
-                //        tasks,
-                //        function (task)
-                //        {
-                //          basket.push(task);
-                //        }
-                //      );
-                //    }
-                //  }
-                //);
+                * All tasks
+                * @type {Array}
+                */
+                _.each(
+                  bulks,
+                  function (tasks)
+                  {
+                    if (tasks.length > 0)
+                    {
+                      _.each(
+                        tasks,
+                        function (task)
+                        {
+                          basket.push(task);
+                        }
+                      );
+                    }
+                  }
+                );
 
                 var tasks = _.map(
                   _.indexBy(basket, function (node)
                   {
-                    console.log('tasks', node);
                     return node.uuid
                   }),
                   function (task)
                   {
-                    //console.log('tasks', task);
                     return task
                   }
                 );
-
-                console.log('tasks', tasks);
 
                 tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 
                 var merged = mergeOnStatus(tasks);
-                console.log('merged', merged);
+
                 Store('app').save('allTasks2', merged);
 
                 deferred.resolve(merged);
