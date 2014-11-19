@@ -27,18 +27,20 @@ define(
                 task.statusLabel = config.app.taskStates[task.status];
 
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
-                if(task.relatedClient == null)
-                  task.relatedClient = { firstName:"*", lastName: "Niet gevonden" };
+                if (task.relatedClient == null)
+                {
+                  task.relatedClient = {firstName: "*", lastName: "Niet gevonden"};
+                }
 
                 task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
 
                 if (task.relatedClient.address != null)
                 {
                   task.relatedClient.fullAddress = task.relatedClient.address.street +
-                                                   ' ' +
-                                                   task.relatedClient.address.no +
-                                                   ', ' +
-                                                   task.relatedClient.address.city;
+                  ' ' +
+                  task.relatedClient.address.no +
+                  ', ' +
+                  task.relatedClient.address.city;
                 }
                 else
                 {
@@ -60,26 +62,26 @@ define(
                 };
 
                 task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
-                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                                 ' - ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                                 ' uur' :
-                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                                 ' uur - ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                                 ' uur';
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' - ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur' :
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' uur - ' +
+                $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur';
 
                 if (task.assignedTeamMemberUuid != '')
                 {
@@ -99,7 +101,10 @@ define(
                 'plannedTaskDuration',
                 'assignedTeamMember'
               ],
-              function (eliminated) { delete task[eliminated] }
+              function (eliminated)
+              {
+                delete task[eliminated]
+              }
             );
 
             return task;
@@ -129,8 +134,8 @@ define(
           Task.prototype.queryAll = function ()
           {
             var deferred = $q.defer(),
-                calls = [],
-                bulks = {};
+              calls = [],
+              bulks = {};
 
             _.each(
               Store('app').get('teams'),
@@ -139,11 +144,12 @@ define(
                 calls.push(
                   TeamUp._(
                     'taskByTeam',
-                    { fourth: team.uuid } // statuses: '1, 2, 3, 4'
+                    {fourth: team.uuid} // statuses: '1, 2, 3, 4'
                   ).then(
-                    function (tasks) {
-						bulks[team.uuid] = tasks;
-					}
+                    function (tasks)
+                    {
+                      bulks[team.uuid] = tasks;
+                    }
                   )
                 );
               }
@@ -155,31 +161,65 @@ define(
               {
                 var basket = [];
 
-                _.each(
-                  bulks,
-                  function (tasks)
-                  {
-                    if (tasks.length > 0)
+                /**
+                 * All tasks of a team
+                 * @type {Array}
+                 */
+                var teamTasks = bulks[$rootScope.app.resources.teamUuids[0]];
+
+                if (teamTasks.length > 0)
+                {
+                  _.each(
+                    teamTasks,
+                    function (task)
                     {
-                      _.each(
-                        tasks,
-                        function (task) { basket.push(task) }
-                      );
+                      basket.push(task);
                     }
+                  );
+                }
+
+                /**
+                 * All tasks
+                 * @type {Array}
+                 */
+                //_.each(
+                //  bulks,
+                //  function (tasks)
+                //  {
+                //    if (tasks.length > 0)
+                //    {
+                //      _.each(
+                //        tasks,
+                //        function (task)
+                //        {
+                //          basket.push(task);
+                //        }
+                //      );
+                //    }
+                //  }
+                //);
+
+                var tasks = _.map(
+                  _.indexBy(basket, function (node)
+                  {
+                    console.log('tasks', node);
+                    return node.uuid
+                  }),
+                  function (task)
+                  {
+                    //console.log('tasks', task);
+                    return task
                   }
                 );
 
-                var tasks = _.map(
-                  _.indexBy(basket, function (node) { return node.uuid }),
-                  function (task) { return task }
-                );
+                console.log('tasks', tasks);
 
                 tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 
-				var merged = mergeOnStatus(tasks);
-
+                var merged = mergeOnStatus(tasks);
+                console.log('merged', merged);
                 Store('app').save('allTasks2', merged);
 
                 deferred.resolve(merged);
@@ -189,79 +229,86 @@ define(
             return deferred.promise;
           };
 
-			/**
-			 * Get the tasks for a single team
-			 * @param teamId The id of the team
-			 * @returns {*} tasks promises
-			 */
-			Task.prototype.queryByTeam = function(teamId)
-			{
-				return TeamUp._(
-					'taskByTeam',
-					{ fourth: teamId }
-				).then(
-					function (tasks)
-					{
-						return tasks;
-					}.bind(this)
-				);
-			};
-
-		  /**
-		  * Get the tasks of a week
-		  * @param teamId the id of the team
-		  * @param weekNumber the number of the week
-		  * @returns {*} tasks promises
-		  */
-      Task.prototype.getWeek = function (teamId, weekNumber, year)
-      {
-        return this.queryByTeam(teamId)
-          .then(
-          function (tasks)
+          /**
+           * Get the tasks for a single team
+           * @param teamId The id of the team
+           * @returns {*} tasks promises
+           */
+          Task.prototype.queryByTeam = function (teamId)
           {
+            return TeamUp._(
+              'taskByTeam',
+              {fourth: teamId}
+            ).then(
+              function (tasks)
+              {
+                return tasks;
+              }.bind(this)
+            );
+          };
 
-            tasks = _.filter(tasks, function(task) {
-              var taskStartTime = moment(task.plannedStartVisitTime);
-              return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
-            });
+          /**
+           * Get the tasks of a week
+           * @param teamId the id of the team
+           * @param weekNumber the number of the week
+           * @returns {*} tasks promises
+           */
+          Task.prototype.getWeek = function (teamId, weekNumber, year)
+          {
+            return this.queryByTeam(teamId)
+              .then(
+              function (tasks)
+              {
 
-            return tasks;
-          }.bind(this)
-        );
-      };
+                tasks = _.filter(tasks, function (task)
+                {
+                  var taskStartTime = moment(task.plannedStartVisitTime);
+                  return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
+                });
 
-		  function mergeOnStatus(tasks)
-		  {
-			  var merged = {on: [], off: []};
-			  if (tasks.length > 0 ) {
-				  var grouped = _.groupBy(tasks, function (task) {
-					  return task.status
-				  });
+                return tasks;
+              }.bind(this)
+            );
+          };
 
-				  if(grouped[1]!=null)  {
-					  merged.on = merged.on.concat(grouped[1]);
-				  }
-				  if(grouped[2]!=null) {
-					  merged.on = merged.on.concat(grouped[2]);
-				  }
+          function mergeOnStatus(tasks)
+          {
+            var merged = {on: [], off: []};
+            if (tasks.length > 0)
+            {
+              var grouped = _.groupBy(tasks, function (task)
+              {
+                return task.status
+              });
 
-				  if(grouped[3]!=null) {
-					  merged.off = merged.off.concat(grouped[3]);
-				  }
-				  if(grouped[4]!=null) {
-					  merged.off = merged.off.concat(grouped[4]);
-				  }
-			  }
+              if (grouped[1] != null)
+              {
+                merged.on = merged.on.concat(grouped[1]);
+              }
+              if (grouped[2] != null)
+              {
+                merged.on = merged.on.concat(grouped[2]);
+              }
 
-			  return merged;
-		  }
+              if (grouped[3] != null)
+              {
+                merged.off = merged.off.concat(grouped[3]);
+              }
+              if (grouped[4] != null)
+              {
+                merged.off = merged.off.concat(grouped[4]);
+              }
+            }
+
+            return merged;
+          }
 
 
           Task.prototype.update = function (task)
           {
             return TeamUp._(
               'taskUpdate',
-              { second: task.uuid },
+              {second: task.uuid},
               strip(_.clone(task))
             );
           };
@@ -270,9 +317,9 @@ define(
           Task.prototype.chains = function ()
           {
             var data = {},
-                teams = Store('app').get('teams'),
-                clients = Store('app').get('clients'),
-                clientGroups = Store('app').get('ClientGroups');
+              teams = Store('app').get('teams'),
+              clients = Store('app').get('clients'),
+              clientGroups = Store('app').get('ClientGroups');
 
             var group;
 
