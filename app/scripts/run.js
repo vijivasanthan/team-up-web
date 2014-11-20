@@ -342,7 +342,24 @@ define(
               $rootScope.app.resources.states = member.states;
               Store('app').save('resources', $rootScope.app.resources);
             }
+          };
+
+          var registeredNotifications = Store('app').get('registeredNotifications');
+
+          if (registeredNotifications)
+          {
+            $rootScope.registeredNotifications = registeredNotifications;
           }
+          else
+          {
+            Store('app').save('registeredNotifications', {timeLineDragging: true});
+          }
+
+          $rootScope.registerNotification = function (setting, value) {
+            $rootScope.registeredNotifications[setting] = value;
+
+            Store('notifications').save('registeredNotifications', $rootScope.registeredNotifications);
+          };
 
           // Get team name by id (shared)
           $rootScope.getTeamName = function (teamId)

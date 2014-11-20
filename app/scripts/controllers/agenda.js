@@ -31,17 +31,7 @@ define(
           $scope.data = data;
 
           var groups = Store('app').get('teams'),//Store('network').get('groups')
-            //settings = angular.fromJson(Store('user').get('resources').settingsWebPaige),
-            groupId = groups[0].uuid;
-            //validGroup = false;
-
-          //_.each(groups, function (_group) {
-          //  if (_group.uuid == settings.app.group) {
-          //    validGroup = true
-          //  }
-          //});
-
-          groupId = //(validGroup) ? settings.app.group : groups[0].uuid;
+              groupId = groups[0].uuid;
 
           $scope.current = {
             layouts: {
@@ -62,7 +52,6 @@ define(
 
           $scope.slot = {};
 
-
           var stamps = (Dater.current.today() > 360) ? {
             start: $scope.periods.days[358].last.timeStamp,
             end: $scope.periods.days[365].last.timeStamp
@@ -70,8 +59,6 @@ define(
             start: $scope.periods.days[Dater.current.today() - 1].last.timeStamp,
             end: $scope.periods.days[Dater.current.today() + 6].last.timeStamp
           };
-
-          console.log('stamps', stamps);
 
           var timelineCfg = config.app.timeline;
 

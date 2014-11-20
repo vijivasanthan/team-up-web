@@ -33,21 +33,28 @@ define(
 
           $rootScope.$on('getLogRange', function ()
           {
-            $timeout(function ()
-            {
-              $rootScope.statusBar.display('Logs aan het laden..')
-            });
-
             var periods = arguments[1];
 
-            Logs.fetch(periods)
+            fetchLogs(periods);
+          });
+
+          function fetchLogs(dataRange)
+          {
+            $timeout(function ()
+            {
+              $rootScope.statusBar.display('Logs laden..')
+              $scope.loadLogs = true;
+            });
+
+            Logs.fetch(dataRange)
               .then(function (data)
               {
+                $scope.loadLogs = false;
                 $scope.data = data;
 
                 $rootScope.statusBar.off();
               });
-          });
+          }
         }
       ]
     );

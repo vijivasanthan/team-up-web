@@ -714,10 +714,30 @@ define(
                 {
                   $scope.timeliner.redraw();
                 },
-                config.timers.app.TICKER);
+                config.app.timers.TICKER);
             }
           };
 
+          //$scope.$emit(
+          //  'destroy',
+          //  {
+          //    timeline: function ()
+          //    {
+          //      // Not working !! :(
+          //      // Sloter.pies($scope.data);
+          //    },
+          //    statistics: function ()
+          //    {
+          //      console.log('destroy');
+          //      setTimeout(
+          //        function ()
+          //        {
+          //          $scope.timeliner.redraw();
+          //        },
+          //        config.app.timers.TICKER);
+          //    }
+          //  }
+          //);
 
           /**
           * Change division
@@ -827,6 +847,7 @@ define(
           */
           $scope.showLegenda = function ()
           {
+            console.log(123);
             $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
           };
 

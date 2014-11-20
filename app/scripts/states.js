@@ -182,15 +182,15 @@ define(
                 break;
 
               case 'team-telefoon/agenda':
-                $location.path('/team-telefoon').search({local: 'true'}).hash('agenda');
+                $location.path('/team-telefoon/agenda').search({}).hash('');
                 break;
 
               case 'team-telefoon/logs':
-                $location.path('/team-telefoon').search({local: 'true'}).hash('logs');
+                $location.path('/team-telefoon/logs').search({}).hash('');
                 break;
 
               case 'team-telefoon/status':
-                $location.path('/team-telefoon').search({local: 'true'}).hash('status');
+                $location.path('/team-telefoon/status').search({}).hash('');
                 break;
 
               case 'vis':

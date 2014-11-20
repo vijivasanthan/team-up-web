@@ -530,9 +530,6 @@ define(
               $scope.changeCurrent($scope.currentClientGroup);
             }
           };
-
-          //make headnav tab tasks active
-          angular.element('.tasks2').addClass('active');
         }
       ]
     );

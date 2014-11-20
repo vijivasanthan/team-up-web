@@ -61,11 +61,11 @@
     </div>
     <div class="form-elements-actions pull-right">
       <div ng-show="views.slot.add">
-        <button type="button" ng-click="timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.planboard.add}}</button>
+        <button type="button" ng-click="timeline.timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.planboard.add}}</button>
       </div>
       <div ng-show="views.slot.edit">
-        <button type="button" ng-click="timelineOnRemove(slot)" style="margin-right: 5px" class="btn btn-danger">{{ui.planboard.del}}</button>
-        <button type="button" ng-click="timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.planboard.change}}</button>
+        <button type="button" ng-click="timeline.timelineOnRemove(slot)" style="margin-right: 5px" class="btn btn-danger">{{ui.planboard.del}}</button>
+        <button type="button" ng-click="timeline.timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.planboard.change}}</button>
       </div>
     </div>
   </form>

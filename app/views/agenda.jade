@@ -4,17 +4,14 @@ section#planboard(ng-controller='agenda-timeline')
 		include agenda/time-quick-availability.jade
 	include agenda/time-travel.jade
 	include agenda/time-slot.jade
-
+		
 	.agenda-timeline-tabs.tabbable.tabs-left
-		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
-			li.active
-				a(href='planboard#timelineTab', data-toggle='tab', ng-click='destroy.statistics();')
-					span.entypo &#128340;
-					| {{ui.agenda.timeline}}
-
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include agenda/tabs.jade
+		
 		.tab-content
-
-			// timeline
+		
+			// timeline(class="{{( ! views.agenda==true) && 'active'}}")
 			div#timelineTab.tab-pane.active
 				#timeline
 					//include agenda/time-toolbar.jade
@@ -82,7 +79,7 @@ section#planboard(ng-controller='agenda-timeline')
 							| of
 							strong CTRL (Windows)
 							| knop tegelijkertijd ingedrukt.
-
+		
 					div.legends-agenda(ng-show='timeline.config.legendarer')
 						include agenda/time-legends.jade
 					#mainTimeline
@@ -99,3 +96,85 @@ section#planboard(ng-controller='agenda-timeline')
 						span.text-muted {{data.periods.end | nicelyDate}}
 				hr
 				//include agenda/time-legends.jade
+			
+		//	//#status.tab-pane(class="{{(views.status==true) && 'active'}}")
+		//	//	h1 status
+		//		
+			//#groupTab.tab-pane(class="{{(views.logs==true) && 'active'}}",
+			//ng-controller='logs')
+			//	.tab-header
+			//		.form-group.pull-left.has-feedback
+			//			input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
+			//			i.glyphicon.glyphicon-calendar.form-control-feedback
+			//		.pull-right
+			//			input.form-control.search-query(type='text', placeholder='Filter logs..', ng-model='filtered')
+			//	hr
+			//	p(ng-hide='! loadLogs && data.logs.length > 0') Er zijn geen logs.
+			//	p(ng-show='loadLogs') Logs laden...
+			//	div(ng-show='data.logs.length > 0')
+			//		table.table.table-striped
+			//			thead
+			//				tr
+			//					th
+			//						a(ng-click='orderBy("status")') Status
+			//						span(ng-show='(ordered=="status")')
+			//							span(ng-hide='reversed') ▲
+			//							span(ng-show='reversed') ▼
+			//					th
+			//						a(ng-click='orderBy("from")') From
+			//						span(ng-show='(ordered=="from")')
+			//							span(ng-hide='reversed') ▲
+			//							span(ng-show='reversed') ▼
+			//					th
+			//						a(ng-click='orderBy("to")') To
+			//						span(ng-show='(ordered=="to")')
+			//							span(ng-hide='reversed') ▲
+			//							span(ng-show='reversed') ▼
+			//					th
+			//						a(ng-click='orderBy("started.stamp")') Time
+			//						span(ng-show='(ordered=="started.stamp")')
+			//							span(ng-hide='reversed') ▲
+			//							span(ng-show='reversed') ▼
+			//					th
+			//						a(ng-click='orderBy("duration.stamp")') Duration
+			//						span(ng-show='(ordered=="duration.stamp")')
+			//							span(ng-hide='reversed') ▲
+			//							span(ng-show='reversed') ▼
+			//			tbody
+			//				tr(ng-repeat='log in data.logs | filter: filtered | orderBy:ordered : reversed')
+			//					td
+			//						span.label.label-inverse(class='log-{{log.status}}') {{log.status}}
+			//						span(ng-show='log.records.length > 0')
+			//							span(ng-repeat='record in log.records')
+			//								br
+			//								| ∟
+			//								span.label.label-inverse(class='log-{{record.status}}') {{record.status}}
+			//					td
+			//						// <pre><small>{{log | json}}</small></pre>
+			//						| {{log.from}}
+			//						span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+			//							br
+			//							| {{record.from}}
+			//					td
+			//						| {{log.to}}
+			//						span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+			//							br
+			//							| {{record.to}}
+			//					td
+			//						| {{log.started.date}}
+			//					td
+			//						| {{log.duration.presentation}}
+			//
+			//	hr
+			//	small.pull-left
+			//		span.text-warning {{ui.planboard.lastSyncTime}}
+			//		span.text-muted &nbsp;{{data.synced | date: 'medium'}}
+			//		br
+			//		span.text-warning {{ui.planboard.dataRangeStart}}
+			//		span.text-muted &nbsp;{{data.periods.start | date: 'medium'}}
+			//		| &nbsp;|
+			//		span.text-warning {{ui.planboard.dataRangeEnd}}
+			//		span.text-muted {{data.periods.end | date: 'medium'}}
+			//	small.text-muted.pull-right(ng-show='data.logs.length > 0')
+			//		br
+			//		i Er zijn {{(data.logs|filter:filtered).length}} logs getoond.

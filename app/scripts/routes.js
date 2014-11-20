@@ -149,17 +149,17 @@ define(
               }
             })
 
-            .when('/team-telefoon', {
+            .when('/team-telefoon/agenda', {
               templateUrl: 'views/agenda.html',
               controller: 'agenda',
               resolve: {
-                logsData: function (Logs) {
-                    return Logs.fetch({
-                      end: new Date.now().getTime(),
-                      start: new Date.today().addDays(- 7).getTime()
-                    });
-                },
-                slotsData: function($route, Slots, Storage, Dater, Store)
+                //logsData: function (Logs) {
+                //    return Logs.fetch({
+                //      end: new Date.now().getTime(),
+                //      start: new Date.today().addDays(- 7).getTime()
+                //    });
+                //},
+                data: function($route, Slots, Storage, Dater, Store)
                 {
                   var periods = Store('app').get('periods'),
                   //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
@@ -187,22 +187,31 @@ define(
               reloadOnSearch: false
             })
 
-            //.when(
-            //'/logs',
-            //{
-            //  templateUrl: 'views/logs.html',
-            //  controller: 'logs',
-            //  resolve: {
-            //    data: function(Logs)
-            //    {
-            //      return Logs.fetch({
-            //        end: new Date.now().getTime(),
-            //        start: new Date.today().addDays(- 7).getTime()
-            //      });
-            //    }
-            //  },
-            //  reloadOnSearch: false
-            //})
+            .when(
+            '/team-telefoon/logs',
+            {
+              templateUrl: 'views/logs.html',
+              controller: 'logs',
+              resolve: {
+                data: function(Logs)
+                {
+                  return Logs.fetch({
+                    end: new Date.now().getTime(),
+                    start: new Date.today().addDays(- 7).getTime()
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
+
+            .when(
+            '/team-telefoon',
+            {
+              redirectTo: function(route, path, search)
+              {
+                return path + '/agenda';
+              }
+            })
 
             .when(
             '/tasks2/planboard',
@@ -213,7 +222,7 @@ define(
             })
 
             .when(
-            '/dashboard',
+            '/team-telefoon/status',
             {
               templateUrl: 'views/dashboard.html',
               controller: 'dashboard',

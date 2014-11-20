@@ -31,14 +31,12 @@
             <ul class="nav navbar-nav">
               <!-- li(data-match-route='/tasks')// a(ng-click='nav("tasks")') Taken
               -->
-              <li ng-show="config.app.tabs.tasks2" data-match-route="/tasks2" class="tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
+              <li ng-show="config.app.tabs.tasks2" data-match-route="/tasks2.*" class="tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
               <li ng-show="config.app.tabs.team" data-match-route="/team"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
               <li id="clientMenu" ng-show="config.app.tabs.client" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1 || ! config.app.tabs.manage"><a href="#manage">{{ui.teamup.manage}}</a></li>
-              <li data-match-route="/team-telefoon" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;team-telefoon/agenda&quot;)">Team-telefoon</a></li>
+              <li data-match-route="/team-telefoon.*" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;team-telefoon/agenda&quot;)">Team-telefoon</a></li>
               <li ng-show="config.app.tabs.support" data-match-route="/support"><a ng-click="nav(&quot;support&quot;)">Support</a></li>
-              <li data-match-route="/dashboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;dashboard&quot;)">Dashboard</a></li>
-              <li data-match-route="/logs" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;logs&quot;)">Logs</a></li>
             </ul>
             <ul ng-hide="browser.mobile" class="nav pull-right">
               <!--Disabled temporarily till the functionailty exists-->
