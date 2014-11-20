@@ -168,7 +168,6 @@ require(
     // 'services/googleGEO',
 
     'directives/widgets',
-    'directives/dashboard/snapshots',
     'directives/date-range-picker',
     'directives/log-ranger',
     // 'directives/treegrid',
@@ -194,7 +193,7 @@ require(
     'controllers/manage',
     'controllers/treegridCtrl', // TODO: Remove it later on
     'controllers/messages',
-    'controllers/dashboard',
+    'controllers/status',
     'controllers/planboard',
     'controllers/vis',
     'controllers/profile',

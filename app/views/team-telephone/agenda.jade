@@ -1,13 +1,13 @@
 section#planboard(ng-controller='agenda-timeline')
 	.agenda-timeline.page-header
 		h2.nullable {{ui.planboard.planboard}}
-		include agenda/time-quick-availability.jade
-	include agenda/time-travel.jade
-	include agenda/time-slot.jade
+		include ../agenda/time-quick-availability
+	include ../agenda/time-travel
+	include ../agenda/time-slot
 		
 	.agenda-timeline-tabs.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
-			include agenda/tabs.jade
+			include ../agenda/tabs
 		
 		.tab-content
 		
@@ -81,7 +81,7 @@ section#planboard(ng-controller='agenda-timeline')
 							| knop tegelijkertijd ingedrukt.
 		
 					div.legends-agenda(ng-show='timeline.config.legendarer')
-						include agenda/time-legends.jade
+						include ../agenda/time-legends
 					#mainTimeline
 				hr
 				p

@@ -3,7 +3,7 @@ define(['controllers/controllers'], function (controllers)
   'use strict';
 
   controllers.controller(
-    'dashboard',
+    'status',
     [
       '$scope',
       '$rootScope',

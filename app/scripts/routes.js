@@ -150,15 +150,9 @@ define(
             })
 
             .when('/team-telefoon/agenda', {
-              templateUrl: 'views/agenda.html',
+              templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                //logsData: function (Logs) {
-                //    return Logs.fetch({
-                //      end: new Date.now().getTime(),
-                //      start: new Date.today().addDays(- 7).getTime()
-                //    });
-                //},
                 data: function($route, Slots, Storage, Dater, Store)
                 {
                   var periods = Store('app').get('periods'),
@@ -190,7 +184,7 @@ define(
             .when(
             '/team-telefoon/logs',
             {
-              templateUrl: 'views/logs.html',
+              templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs',
               resolve: {
                 data: function(Logs)
@@ -224,8 +218,8 @@ define(
             .when(
             '/team-telefoon/status',
             {
-              templateUrl: 'views/dashboard.html',
-              controller: 'dashboard',
+              templateUrl: 'views/team-telephone/status.html',
+              controller: 'status',
               reloadOnSearch: false,
               resolve: {
                 data: [
