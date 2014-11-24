@@ -1,1 +1,0 @@
-define(["directives/directives"],function(e){e.directive("snapshots",function(){return{restrict:"EA",templateUrl:"views/dashboard/snapshots.html",link:function(e,t,n){}}})});

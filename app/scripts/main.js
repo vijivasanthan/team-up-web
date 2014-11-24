@@ -23,8 +23,9 @@ require.config(
       'angular-route': '../vendors/angular-route/angular-route.min',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
 
-      // 'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
-      'angular-strap': 'removables/angular-strap.min',
+      'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
+      //'angular-strap': 'removables/angular-strap.min',
+      'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'ui-bootstrap': 'removables/ui-bootstrap-custom', // TODO: Remove later
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
@@ -36,13 +37,13 @@ require.config(
       treegrid: 'removables/treegrid',
 
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      datepicker: 'removables/datepicker.min',
+      //datepicker: 'removables/datepicker.min',
 
       // datepicker:         '../vendors/angular-ui-bootstrap/src/datepicker/datepicker',
       // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
 
-      timepicker: 'removables/timepicker.min',
+      //timepicker: 'removables/timepicker.min',
       underscore: '../vendors/underscore/underscore',
       //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
@@ -72,7 +73,7 @@ require.config(
 
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
-      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
+      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy'
     },
     shim: {
       profile: {deps: ['jquery'], exports: 'profile' },
@@ -83,6 +84,7 @@ require.config(
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'], exports: 'angular-strap' },
+      'angular-strap-tpl': { deps: ['angular','angular-strap'] },
       'angular-md5': { deps: ['angular'] },
       'ui-bootstrap': { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
       bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
@@ -92,8 +94,8 @@ require.config(
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       //moment: { deps: [], exports: 'moment' },
       treegrid: { deps: [], exports: 'treegrid' },
-      datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
-      timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
+      //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
+      //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       //md5: { exports: 'md5'},
       underscore: { exports: 'underscore'},
       store: { deps: ['angular', 'underscore']},
@@ -140,6 +142,7 @@ require(
     'angular-route',
     'angular-md5',
     'angular-strap',
+    'angular-strap-tpl',
     'ui-bootstrap', // TODO: Remove later on
 
     'locals',
@@ -218,8 +221,8 @@ require(
     'daterangepicker',
     //'moment',
     'treegrid',
-    'datepicker',
-    'timepicker',
+    //'datepicker',
+    //'timepicker',
     //'md5',
     'underscore',
     'store',

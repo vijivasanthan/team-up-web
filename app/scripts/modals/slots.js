@@ -64,6 +64,7 @@ define(['services/services', 'config'],
           });
 
           Slots.prototype.wishes = function (options) {
+
             var deferred = $q.defer(),
               params = {
                 id: options.id,
@@ -74,9 +75,11 @@ define(['services/services', 'config'],
             Wishes.query(
               params,
               function (result) {
+                console.log('result', result);
                 deferred.resolve(result);
               },
               function (error) {
+                console.log('error', error);
                 deferred.resolve({error: error});
               }
             );

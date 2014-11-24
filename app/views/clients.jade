@@ -293,8 +293,7 @@ aria-hidden='true')
         ng-change='requestReportsByFilter()')
           option(ng-repeat='month in Months|orderBy:number',
           value='{{month.number}}') {{month.name}}
-        button.btn.pull-right.btn-info.marginLeftTen(type='button',
-        ng-click='newReport()') {{ui.teamup.newReport}}
+        button.btn.pull-right.btn-info.marginLeftTen(type='button', data-ng-click='newReport()') {{ui.teamup.newReport}}
       hr
       div(ng-show='groupReports.length > 0')
         table.table.table-striped

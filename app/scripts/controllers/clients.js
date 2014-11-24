@@ -1077,14 +1077,41 @@ define(
             );
           };
 
+
+
+
           $scope.newReport = function ()
           {
-            if ($scope.currentCLient == 0)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+            //if ($scope.currentCLient == 0)
+            //{
+            //  $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+            //
+            //  return;
+            //}
 
-              return;
-            }
+            //var reportModal = $modal(
+            //  {
+            //    title: $rootScope.ui.teamup.newReport,
+            //    scope: $scope,
+            //    template: "views/reportTemplate.html",
+            //    contentTemplate: false,
+            //    html: true
+            //  });
+
+
+            //reportModal.$promise.then(function()
+            //  {
+            //    reportModal.show();
+            //  }
+            //);
+
+
+            //if ($scope.currentCLient == 0)
+            //{
+            //  $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+            //
+            //  return;
+            //}
 
             $scope.report = {
               title: $rootScope.ui.teamup.newReport,
@@ -1096,9 +1123,9 @@ define(
               editMode: false
             };
 
-            var modalInstance = $modal.open(
+            var modalInstance = $modal(
               {
-                templateUrl: 'views/reportTemplate.html',
+                template: 'views/reportTemplate.html',
                 controller: ModalInstanceCtrl,
                 resolve: {
                   report: function ()
@@ -1110,7 +1137,7 @@ define(
               }
             );
 
-            modalInstance.result.then(
+            modalInstance.$promise.then(
               function ()
               {
                 loadGroupReports()
@@ -1119,6 +1146,50 @@ define(
               {
                 console.log('Modal dismissed at: ' + new Date())
               });
+
+            //
+            //$scope.report = {
+            //  title: $rootScope.ui.teamup.newReport,
+            //  creationTime: new Date().getTime(),
+            //  clientUuid: $scope.currentCLient,
+            //  body: null,
+            //  author: $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
+            //  client: $scope.$root.getClientByID($scope.currentCLient),
+            //  editMode: false
+            //};
+            //
+            //
+            //
+            //var modalInstance = $modal(
+            //  {
+            //    template: 'views/reportTemplate.html',
+            //    controller: ModalInstanceCtrl,
+            //    resolve: {
+            //      report: function ()
+            //      {
+            //        return $scope.report
+            //      },
+            //      editMode: false
+            //    }
+            //  }
+            //);
+            ////
+            ////$scope.reportModal = modalInstance;
+            //
+            //
+            //
+            //modalInstance.$promise.then(
+            //  function ()
+            //  {
+            //    loadGroupReports()
+            //  },
+            //  function ()
+            //  {
+            //    console.log('Modal dismissed at: ' + new Date())
+            //  });
+            //
+
+
           };
 
           $scope.editReport = function (report)

@@ -31,7 +31,94 @@ define(
           $scope.data = data;
 
           var groups = Store('app').get('teams'),//Store('network').get('groups')
-              groupId = groups[0].uuid;
+            groupId = groups[0].uuid;
+
+
+          function wisher(id)
+          {
+            $scope.wished = false;
+
+            wish(id)
+              .then(
+              function (wish)
+              {
+                $scope.wished = true;
+
+                $scope.wish = wish.count;
+
+                $scope.popover = {
+                  id: id,
+                  wish: wish.count
+                };
+              }
+            );
+          };
+
+          wisher(groupId);
+
+          /**
+           *
+           * @param id teamId
+           * @param wish wish amount
+           */
+          $scope.saveWish = function (id, wish)
+          {
+            $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
+
+            Slots.setWish({
+              id: id,
+              start: 255600,
+              end: 860400,
+              recursive: true,
+              wish: wish
+            }).then(function (result)
+            {
+              $rootScope.statusBar.off();
+
+              if (result.error)
+              {
+                $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
+
+                console.warn('error ->', result);
+              }
+              else
+              {
+                $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
+              }
+
+              wisher(id);
+            });
+
+          };
+
+          function wish (id) {
+            var deferred = $q.defer(),
+              count = 0;
+
+            Slots.wishes(
+              {
+                id: id,
+                start: 255600,
+                end: 860400
+              }).then(
+              function (results) {
+                angular.forEach(
+                  results,
+                  function (slot) {
+                    if (slot.start == 255600 &&
+                      slot.end == 860400 &&
+                      slot.count != null) {
+                      count = slot.count;
+                    }
+                  }
+                );
+
+                deferred.resolve({ count: count });
+              }
+            );
+
+            return deferred.promise;
+          };
 
           $scope.current = {
             layouts: {
@@ -97,7 +184,16 @@ define(
             }
           };
 
-          if ($.browser.msie && $.browser.version == '8.0') {
+          $scope.$watch(function() {
+            return $scope.timeline.current.group;
+          },
+          function(currentTeamId)
+          {
+            wisher(currentTeamId);
+          });
+
+          if ($.browser.msie && $.browser.version == '8.0')
+          {
             $scope.timeline.options = {
               start: $scope.periods.days[Dater.current.today()].last.timeStamp,
               end: $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
@@ -106,7 +202,8 @@ define(
             };
           }
 
-          _.each(config.app.statesall, function (state, index) {//$rootScope.StandBy.config.timeline.config.states
+          _.each(config.app.statesall, function (state, index)
+          {//$rootScope.StandBy.config.timeline.config.states
             $scope.timeline.config.legenda[index] = true
           });
 
@@ -119,10 +216,12 @@ define(
           $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
           Dater.readable.date($scope.timeline.range.end);
 
-          $timeout(function () {
+          $timeout(function ()
+          {
             $scope.states = {};
 
-            _.each($scope.timeline.config.states, function (state, key) {
+            _.each($scope.timeline.config.states, function (state, key)
+            {
               $scope.states[key] = state.label;
             });
           });
@@ -133,7 +232,8 @@ define(
 
           if ($scope.timeline.config.divisions.length > 0)
           {
-            if ($scope.divisions[0].id !== 'all') {
+            if ($scope.divisions[0].id !== 'all')
+            {
               $scope.divisions.unshift({
                 id: 'all',
                 label: 'Alle divisies'
@@ -142,13 +242,15 @@ define(
 
             $scope.groupPieHide = {};
 
-            _.each($scope.divisions, function (division) {
+            _.each($scope.divisions, function (division)
+            {
               $scope.groupPieHide[division.id] = false
             });
           }
 
 
-          $scope.resetViews = function () {
+          $scope.resetViews = function ()
+          {
             $scope.views = {
               slot: {
                 add: false,
@@ -162,11 +264,13 @@ define(
 
           $scope.resetViews();
 
-          $rootScope.$on('resetPlanboardViews', function () {
+          $rootScope.$on('resetPlanboardViews', function ()
+          {
             $scope.resetViews()
           });
 
-          $scope.toggleSlotForm = function () {
+          $scope.toggleSlotForm = function ()
+          {
             if ($scope.views.slot.add)
             {
               $rootScope.planboardSync.start();
@@ -185,7 +289,8 @@ define(
             }
           };
 
-          $scope.resetInlineForms = function () {
+          $scope.resetInlineForms = function ()
+          {
             $scope.slot = {};
 
             $scope.original = {};

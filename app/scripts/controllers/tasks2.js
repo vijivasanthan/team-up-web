@@ -23,17 +23,17 @@ define(
 
           $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
-          var view = (! $location.hash()) ? 'myTasks' : $location.hash(),
-          	  currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
-              teamsLocal = Teams.queryLocal(),
-              clientLocal = Clients.queryLocal(),
-              teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+          var view = (!$location.hash()) ? 'myTasks' : $location.hash(),
+            currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
+            teamsLocal = Teams.queryLocal(),
+            clientLocal = Clients.queryLocal(),
+            teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
           $scope.teams = teamsLocal.teams;
-		      $scope.currentTeam = $scope.teams[0].uuid;
+          $scope.currentTeam = $scope.teams[0].uuid;
 
           //check if a team of clientgroup is visited lately
-          if(currentTeamClientGroup.team)
+          if (currentTeamClientGroup.team)
           {
             $scope.task = {
               team: currentTeamClientGroup.team
@@ -44,7 +44,7 @@ define(
           $scope.task = {};
           $scope.task.team = $scope.currentTeam;
 
-          function resetViews ()
+          function resetViews()
           {
             $scope.tasks = {
               mine: {
@@ -102,7 +102,10 @@ define(
                   delay = 250;
                 }
 
-                $timeout(function () { queryMine() }, delay);
+                $timeout(function ()
+                {
+                  queryMine()
+                }, delay);
                 break;
 
               case 'allTasks':
@@ -116,7 +119,10 @@ define(
                   };
                 }
 
-                $timeout(function () { queryAll() }, 250);
+                $timeout(function ()
+                {
+                  queryAll()
+                }, 250);
                 break;
 
               case 'newTask':
@@ -141,7 +147,7 @@ define(
 
           setView(view);
 
-          function queryMine (only, callback)
+          function queryMine(only, callback)
           {
             Task.queryMine()
               .then(
@@ -156,13 +162,13 @@ define(
               }
             );
 
-            if (! only)
+            if (!only)
             {
               queryAll();
             }
           }
 
-          function queryAll (callback)
+          function queryAll(callback)
           {
             queryMine(true);
 
@@ -207,50 +213,65 @@ define(
             }
           );
 
-         //date and time methods if a new task is creating
-         if($scope.views.newTask == true)
-         {
+          //date and time methods if a new task is creating
+          if ($scope.views.newTask == true)
+          {
+            var currentStartTime = updateTime(new Date(), 15);
+            var currentEndTime = updateTime(new Date(), 30);
+
+            if (!$scope.task)
+            {
+              $scope.task = {};
+              $scope.task.start = {};
+              $scope.task.end = {};
+            }
+            $scope.task.start = {
+              date: new Date(),
+              time: currentStartTime
+            };
+            $scope.task.end = {
+              date: new Date(),
+              time: currentEndTime
+            };
+          }
+
           //TODO add following date methods to Dater
-          var formatDateTime = function(date, dateFormat) {
+          function formatDateTime(date, dateFormat)
+          {
             return $filter('date')(date, dateFormat);
           };
 
-          var updateTime = function(date, minutes) {
+          function updateTime(date, minutes)
+          {
             var roundMinutes = formatDateTime(date, 'm');
             roundMinutes = (roundMinutes % 15);
-            var updatedTime = new Date(date.getTime() - (roundMinutes*60000) + (minutes*60000));
 
-            return formatDateTime(updatedTime, "H:mm");
+            var updatedTime = new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
+
+            return updatedTime//formatDateTime(updatedTime, "H:mm");
           };
 
-          var date = new Date();
-          var currentDay =  formatDateTime(date, "dd-MM-yyyy");
-          //round current minutes by 15 and add minutes so the default time is always in the future
-          var currentStartTime = updateTime(date, 15);
-          var currentEndTime = updateTime(date, 30);
+          //$scope.$watch(function() {
+          //  return $scope.task.start.time;
+          //}, function(newTime) {
+          //  $scope.task.end.time = updateTime(newTime, 15);
+          //});
 
-          $scope.task.start = {
-              date: currentDay,
-              time: currentStartTime
-          };
-          $scope.task.end = {
-             date: currentDay,
-               time: currentEndTime
-          };
+          $scope.newTime = function(newTime)
+          {
+            $scope.task.end.time = updateTime(newTime, 15);
+          }
 
-          //change endTime by changing the startTime TODO change watch in angular change methods
-          $scope.$watch(function() {
-            return $scope.task.start.time;
-          }, function(newTime) {
-            $scope.task.end.time = updateTime(Date.parse(newTime), 15);
-          });
-
-          $scope.$watch(function() {
-            return $scope.task.start.date;
-          }, function(newDate) {
+          $scope.newDate = function(newDate)
+          {
             $scope.task.end.date = newDate;
-          });
-         }
+          }
+
+          //$scope.$watch(function() {
+          //  return $scope.task.start.date;
+          //}, function(newDate) {
+          //  $scope.task.end.date = newDate;
+          //});
 
           //          $scope.$watch(
           //            'showOnlyAvailable',
@@ -281,6 +302,7 @@ define(
           $scope.openTask = function (task)
           {
             $scope.task = task;
+            $scope.task.team = task.assignedTeamUuid;
 
             if (task.assignedTeamUuid)
             {
@@ -298,23 +320,17 @@ define(
             angular.element('#taskModal').modal('show');
           };
 
-		  //default filtering by status
-		  //$scope.ordered = '-status';
+          //default filtering by status
+          //$scope.ordered = '-status';
 
           $scope.orderBy = function (ordered)
           {
             $scope.ordered = ordered;
 
-            $scope.reversed = ! $scope.reversed;
+            $scope.reversed = !$scope.reversed;
           };
 
-
-          /**
-           * ******************************************************************************
-           */
-
-
-          function updateTask (task, only)
+          function updateTask(task, only)
           {
             Task.update(task)
               .then(
@@ -380,7 +396,7 @@ define(
 
             TeamUp._(
               'taskDelete',
-              { second: task.uuid },
+              {second: task.uuid},
               task
             ).then(
               function (result)
@@ -407,11 +423,6 @@ define(
               }
             );
           };
-
-
-          /**
-           * ******************************************************************************
-           */
 
           $scope.members = teamsLocal.members[$scope.currentTeam];
 
@@ -443,7 +454,7 @@ define(
             $scope.clients = clientLocal.clients[groupId];
 
             if (( $scope.curentClient == null || typeof $scope.curentClient == 'undefined' )
-                  && $scope.clients && $scope.clients.length > 0)
+              && $scope.clients && $scope.clients.length > 0)
             {
               $scope.curentClient = $scope.clients[0].uuid;
             }
@@ -495,35 +506,35 @@ define(
            */
 
 
-          // Validation of the task form
+            // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
             // fields should not be empty
-            if (! task || ! task.start || ! task.end)
+            if (!task || !task.start || !task.end)
             {
               $rootScope.notifier.error($rootScope.ui.task.filltheTime);
               return false;
             }
 
-            if (task.start.date == "" || task.start.time == "" || ! task.start.time)
+            if (task.start.date == "" || task.start.time == "" || !task.start.time)
             {
               $rootScope.notifier.error($rootScope.ui.task.startTimeEmpty);
               return false;
             }
 
-            if (task.end.date == "" || task.end.time == "" || ! task.end.time)
+            if (task.end.date == "" || task.end.time == "" || !task.end.time)
             {
               $rootScope.notifier.error($rootScope.ui.task.endTimeEmpty);
               return false;
             }
 
             $scope.task.startTime = ($rootScope.browser.mobile) ?
-                                    new Date(task.start.date).getTime() :
-                                    Dater.convert.absolute(task.start.date, task.start.time, false);
+              new Date(task.start.date).getTime() :
+              Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yy'), formatDateTime(task.start.time, 'HH:mm'), false);
 
             $scope.task.endTime = ($rootScope.browser.mobile) ?
-                                  new Date(task.end.date).getTime() :
-                                  Dater.convert.absolute(task.end.date, task.end.time, false);
+              new Date(task.end.date).getTime() :
+              Dater.convert.absolute(formatDateTime(task.end.date, 'dd-MM-yy'), formatDateTime(task.end.time, 'HH:mm'), false);
 
             // start time and end time should be in the future
             // end time should later than start time
@@ -539,7 +550,7 @@ define(
               return false;
             }
 
-            if (! task.client || task.client == null)
+            if (!task.client || task.client == null)
             {
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
               return false;
@@ -554,10 +565,12 @@ define(
           // Create a new task
           $scope.createTask = function (task)
           {
-            if (! $scope.validateTaskForm(task))
+            if (!$scope.validateTaskForm(task))
             {
               return;
             }
+
+            $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
 
             var values = {
               uuid: '',
@@ -587,6 +600,7 @@ define(
                   {
                     $rootScope.notifier.error($rootScope.transError(result.error));
                   }
+                  $rootScope.statusBar.off();
                 }
                 else
                 {
@@ -613,6 +627,7 @@ define(
                       }
                     );
                   }
+                  $rootScope.statusBar.off();
                 }
               }
             );

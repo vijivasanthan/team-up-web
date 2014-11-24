@@ -54,6 +54,7 @@ define(
           noP2000: 'Er zijn geen alarmberichten.'
         },
         agenda: {
+          requiredPeople: 'Behoefte',
           newAvail: 'Nieuwe beschikbaarheid',
           day: 'Dag',
           week: 'Week',
@@ -553,6 +554,7 @@ define(
           planTaskInFuture: 'U kunt geen taak in het verleden aanmaken. Selecteer een start- en eindtijd in de toekomst.',
           startLaterThanEnd: 'Beginttijd moet eerder zijn dan de eindtijd.',
           specifyClient: 'Selecteer een cliënt voor deze taak.',
+          creatingTask: 'Taak wordt aangemaakt',
           taskSaved: 'Taak is aangemaakt.',
           deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
           taskDeleted: 'Taak verwijderd.',

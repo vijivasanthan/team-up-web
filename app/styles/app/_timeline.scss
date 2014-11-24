@@ -23,7 +23,7 @@ Timeline agenda
   background: #fff;
 }
 
-.timeline-toolbar {
+.timeline-toolbar, #planboard {
   select {
     color: #833c11 !important;
   }
@@ -46,6 +46,15 @@ Timeline agenda
 .btn-success:hover, .btn-success:focus, .btn-success:active {
   background-color: #1dc8b6;
   color: #833c11;
+}
+
+.form-control:focus {
+  border-color: rgba(103, 97, 83, 0.6);
+  outline: 0;
+  outline: thin dotted \9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 2px rgba(103, 97, 83, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 2px rgba(103, 97, 83, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 2px rgba(103, 97, 83, 0.6);
 }
 
 .btn-success {
@@ -96,6 +105,13 @@ Timeline agenda
     float: left;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
     margin-top: 5px;
+  }
+
+  /**
+  Wish
+  **/
+  .popover {
+    max-width: 300px !important;
   }
 
   ul {
@@ -504,6 +520,8 @@ div.timeline-event-range {
   font-style: italic;
 }
 
+
+
 /*!
  * Stylesheet for the Date Range Picker, for use with Bootstrap 3.x
  *
@@ -513,7 +531,6 @@ div.timeline-event-range {
  *
  * Built for http://www.improvely.com
  */
-
 .daterangepicker.dropdown-menu {
   max-width: none;
   z-index: 3000;
@@ -794,15 +811,16 @@ div.timeline-event-range {
 }
 
 /* Buttons */
-.btn-default {
-  color: #fff;
-  background-color: $brown;
-}
-
-.btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
-  color: $orange;
-  background-color: $brown;
-  border-color: #adadad;
+#timeline-controls, #timeline-toolbar {
+  .btn-default {
+    color: #fff;
+    background-color: $brown;
+  }
+  .btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
+    color: $orange;
+    background-color: $brown;
+    border-color: #adadad;
+  }
 }
 
 // https://github.com/mgcrea/bootstrap-additions
@@ -814,26 +832,52 @@ div.timeline-event-range {
 }
 
 /*
- * Datepicker element
- */
+* Datepicker element
+*/
 .datepicker.dropdown-menu {
   width: 250px;
-  height: 270px;
+  height: 250px;
+  button {
+    outline: none;
+    border: 0px;
+  }
+  thead {
+    th {
+      :hover {
+        background-color: #fff;
+      }
+    }
+    button {
+      color: $brown;
+      :hover {
+        background-color: #fff;
+        .btn-primary {
+          color: #fff;
+        }
+      }
+    }
+  }
+  tbody {
+    height: 180px;
+    button {
+      padding: 6px;
+      margin: 0;
+      font-weight: 100;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+  }
+  tbody button {
+    padding: 6px;
+  }
+  &.datepicker-mode-1, &.datepicker-mode-2 {
+    tbody button {
+      height: 65px;
+    }
+  }
 }
-.datepicker.dropdown-menu button {
-  outline: none;
-  border: 0px;
-}
-.datepicker.dropdown-menu tbody {
-  height: 180px;
-}
-.datepicker.dropdown-menu tbody button {
-  padding: 6px;
-}
-.datepicker.dropdown-menu.datepicker-mode-1 tbody button,
-.datepicker.dropdown-menu.datepicker-mode-2 tbody button {
-  height: 65px;
-}
+
 .modal.center .modal-dialog {
   position: fixed;
   top: 40%;
@@ -931,14 +975,39 @@ div.timeline-event-range {
  */
 .timepicker.dropdown-menu {
   padding: 0 4px;
+  button {
+    color: $brown;
+    outline: none;
+    border: 0px;
+  }
+  thead, tfoot {
+    background-color: #fff;
+    button {
+      background-color: #fff;
+    }
+  }
+  tbody {
+    button {
+      padding: 6px;
+      margin: 0;
+      font-weight: 100;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+    }
+  }
 }
-.timepicker.dropdown-menu button {
-  outline: none;
-  border: 0px;
-}
-.timepicker.dropdown-menu tbody button {
-  padding: 6px;
-}
+
+//.timepicker.dropdown-menu {
+//  padding: 0 4px;
+//}
+//.timepicker.dropdown-menu button {
+//  outline: none;
+//  border: 0px;
+//}
+//.timepicker.dropdown-menu tbody button {
+//  padding: 6px;
+//}
 
 .time-tip {
   z-index: 100000;
