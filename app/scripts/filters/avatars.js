@@ -31,7 +31,7 @@ define(
             var result = config.app.stateColors.none;
 
             var stateValues = _.pluck(states, 'value');
-            //console.log('stateValues-> ', stateValues);
+
             if(stateValues.indexOf('available') >= 0)
             {
               result = config.app.stateColors.availalbe;

@@ -152,7 +152,15 @@
             <!--ng-selected='timeline.current.division',-->
             <!--ng-change='changeDivision()',-->
             <!--ng-show='divisions.length > 0')-->
-            <button type="button" style="margin: 3px 10px; 0 0" data-content-template="views/agenda/groups-wish.html" data-placement="bottom" bs-popover="" data-title="Behoefte wijzigen" class="btn btn-default pull-left"><span ng-show="wished" class="badge badge-inset">{{wish}}</span>&nbsp;{{ui.agenda.requiredPeople}}</button><br ng-show="browser.mobile"><br ng-show="browser.mobile">
+            <!--button.btn.btn-default.pull-left(type='button',-->
+            <!--	style='margin: 3px 10px; 0 0',-->
+            <!--	data-content-template='views/agenda/groups-wish.html',-->
+            <!--	data-placement='bottom',-->
+            <!--	bs-popover='',-->
+            <!--	data-title='Behoefte wijzigen')-->
+            <!--		span.badge.badge-inset(ng-show='wished')-->
+            <!--			| {{wish}}-->
+            <!--		| &nbsp;{{ui.agenda.requiredPeople}}--><br ng-show="browser.mobile"><br ng-show="browser.mobile">
             <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
               <div class="btn-group">
                 <button type="button" ng-click="showLegenda()" ng-model="timeline.config.legendarer" class="btn btn-default {{(timeline.config.legendarer==true) &amp;&amp; 'active'}}">{{ui.agenda.legenda}}</button>

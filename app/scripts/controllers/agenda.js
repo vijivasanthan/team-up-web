@@ -54,7 +54,7 @@ define(
             );
           };
 
-          wisher(groupId);
+          //wisher(groupId);
 
           /**
            *
