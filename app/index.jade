@@ -54,7 +54,7 @@ block navbar
 						li.tasks2(ng-show='config.app.tabs.tasks2',
 							data-match-route='/tasks2.*')
 							a(ng-click='nav("tasks2")') Taken
-						li(ng-show='config.app.tabs.team',
+						li#teamMenu(ng-show='config.app.tabs.team',
 							data-match-route='/team')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
 						li#clientMenu(ng-show='config.app.tabs.client',

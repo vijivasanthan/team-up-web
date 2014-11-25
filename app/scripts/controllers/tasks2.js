@@ -98,9 +98,10 @@ define(
                     loading: false,
                     list: myTasks
                   };
-
+                  //console.log($scope.tasks.mine);
                   delay = 250;
                 }
+
 
                 $timeout(function ()
                 {

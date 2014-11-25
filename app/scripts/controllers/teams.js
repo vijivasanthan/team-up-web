@@ -69,15 +69,15 @@ define(
           }
           else if (! params.uuid)
           {
-			  if(! (Store('app').get('currentTeamClientGroup')).team)
-			  {
-				  lastVisitedTeamClientGroup(data.teams[0].uuid);
-			  }
+            if(! (Store('app').get('currentTeamClientGroup')).team)
+            {
+              lastVisitedTeamClientGroup(data.teams[0].uuid);
+            }
 
-			  uuid = (Store('app').get('currentTeamClientGroup')).team;
-              view = $location.hash();
+            uuid = (Store('app').get('currentTeamClientGroup')).team;
+                  view = $location.hash();
 
-              $location.search({ uuid: uuid });
+                  $location.search({ uuid: uuid });
           }
           else
           {
@@ -388,8 +388,7 @@ define(
 
           $scope.memberSubmit = function (member)
           {
-            console.log(member);
-
+            //TODO finish angular validation //http://www.ng-newsletter.com/posts/validations.html
             if (typeof member == 'undefined' || ! member.username || ! member.password || ! member.reTypePassword || ! member.birthDate)
             {
               //angular.element
@@ -403,6 +402,11 @@ define(
               $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
 
               return;
+            }
+
+            if(member.password.length < 8 || member.password.length > 20)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
             }
 
             if (! member.team)
@@ -425,91 +429,91 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-            TeamUp._(
-              'memberAdd',
-              null,
-              {
-                uuid: member.username,
-                userName: member.username,
-                passwordHash: MD5(member.password),
-                firstName: member.firstName,
-                lastName: member.lastName,
-                phone: member.phone,
-                teamUuids: [member.team],
-                role: member.role,
-                birthDate: Dater.convert.absolute(member.birthDate, 0),
-                function: member.function
-              }
-            ).then(
-              function (result)
-              {
-                // change the REST return to json.
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + ' : ' + result.error);
-                }
-                else
-                {
-                  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                  // TODO: Repetitive code!
-                  Teams.query(
-                    false,
-                    { 'uuid': result.teamId }
-                  ).then(
-                    function (queries)
-                    {
-                      if (queries.error)
-                      {
-                        $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
-                        console.warn('error ->', queries);
-                      }
-                      else
-                      {
-                        $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                        $scope.closeTabs();
-
-                        $scope.data = queries;
-                        var routePara = {'uuid': result.teamId};
-
-                        angular.forEach(
-                          queries.teams,
-                          function (team)
-                          {
-                            if (team.uuid == routePara.uuid)
-                            {
-                              $scope.teams = queries.teams;
-
-                              angular.forEach(
-                                queries.teams,
-                                function (_team)
-                                {
-                                  if (_team.uuid == team.uuid)
-                                  {
-                                    $scope.team = _team;
-                                  }
-                                });
-
-                              $scope.members = $scope.data.members[team.uuid];
-
-                              $scope.current = team.uuid;
-
-                              $scope.$watch(
-                                $location.search(),
-                                function () { $location.search({ uuid: team.uuid }) }
-                              );
-                            }
-                          }
-                        );
-                      }
-
-                      $rootScope.statusBar.off();
-                      $rootScope.resetPhoneNumberChecker();
-                    }
-                  );
-                }
-              }
-            );
+            //TeamUp._(
+            //  'memberAdd',
+            //  null,
+            //  {
+            //    uuid: member.username,
+            //    userName: member.username,
+            //    passwordHash: MD5(member.password),
+            //    firstName: member.firstName,
+            //    lastName: member.lastName,
+            //    phone: member.phone,
+            //    teamUuids: [member.team],
+            //    role: member.role,
+            //    birthDate: Dater.convert.absolute(member.birthDate, 0),
+            //    function: member.function
+            //  }
+            //).then(
+            //  function (result)
+            //  {
+            //    // change the REST return to json.
+            //    if (result.error)
+            //    {
+            //      $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + ' : ' + result.error);
+            //    }
+            //    else
+            //    {
+            //      $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+            //
+            //      // TODO: Repetitive code!
+            //      Teams.query(
+            //        false,
+            //        { 'uuid': result.teamId }
+            //      ).then(
+            //        function (queries)
+            //        {
+            //          if (queries.error)
+            //          {
+            //            $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
+            //            console.warn('error ->', queries);
+            //          }
+            //          else
+            //          {
+            //            $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            //            $scope.closeTabs();
+            //
+            //            $scope.data = queries;
+            //            var routePara = {'uuid': result.teamId};
+            //
+            //            angular.forEach(
+            //              queries.teams,
+            //              function (team)
+            //              {
+            //                if (team.uuid == routePara.uuid)
+            //                {
+            //                  $scope.teams = queries.teams;
+            //
+            //                  angular.forEach(
+            //                    queries.teams,
+            //                    function (_team)
+            //                    {
+            //                      if (_team.uuid == team.uuid)
+            //                      {
+            //                        $scope.team = _team;
+            //                      }
+            //                    });
+            //
+            //                  $scope.members = $scope.data.members[team.uuid];
+            //
+            //                  $scope.current = team.uuid;
+            //
+            //                  $scope.$watch(
+            //                    $location.search(),
+            //                    function () { $location.search({ uuid: team.uuid }) }
+            //                  );
+            //                }
+            //              }
+            //            );
+            //          }
+            //
+            //          $rootScope.statusBar.off();
+            //          $rootScope.resetPhoneNumberChecker();
+            //        }
+            //      );
+            //    }
+            //  }
+            //);
           };
 
           $scope.closeTabs = function ()

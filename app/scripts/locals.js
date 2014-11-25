@@ -571,6 +571,17 @@ define(
             notValidOnSubmit: 'Vul alstublieft een geldig telefoonnummer in om op te slaan.',
             message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
             as: ' als '
+          },
+          password: {
+            amountMinChars: function(chars)
+            {
+              return ' en dient uit minimaal ' + chars + ' teken(s) te bestaan'
+            },
+            amountMaxChars: function(chars)
+            {
+              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+            },
+            required: 'Een wachtwoord is verplicht'
           }
         }
       }

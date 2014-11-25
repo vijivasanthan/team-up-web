@@ -60,7 +60,7 @@
             <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfile}}</h3>
           </div>
           <hr>
-          <form class="form-vertical">
+          <form name="profileForm" novalidate="novalidate" class="form-vertical">
             <div class="control-group">
               <label class="control-label">{{ui.profile.firstName}}</label>
               <div class="controls">
@@ -94,13 +94,17 @@
                 <input name="date-start" type="text" ng-model="profile.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
               </div>
             </div>
-            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="control-group">
+            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" ng-class="{ 'has-error' : profileForm.password.$invalid &amp;&amp; !profileForm.password.$pristine }" class="form-group">
               <label class="control-label">{{ui.profile.newPass}}</label>
-              <div class="controls"></div>
-              <input type="password" ng-model="profile.newpass" class="span3">
+              <div class="controls">
+                <input type="password" ng-model="profile.newpass" name="password" required="required" ng-minlength="8" ng-maxlength="20" class="span3 form-control"><span ng-show="profileForm.password.$invalid &amp;&amp; !profileForm.password.$pristine" class="help-block"><small><i></i>{{ ui.validation.password.required }}</small><small ng-show="profileForm.password.$error.minlength"><i></i>{{ ui.validation.password.amountMinChars(8) }} </small><small ng-show="profileForm.password.$error.maxlength"><i></i>{{ ui.validation.password.amountMaxChars(20) }}</small></span>
+              </div>
+            </div>
+            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="form-group">			
               <label class="control-label">{{ui.profile.newPassRepeat}}</label>
-              <div class="controls"></div>
-              <input type="password" ng-model="profile.newpassrepeat" class="span3">
+              <div class="controls">
+                <input type="password" ng-model="profile.newpassrepeat" class="span3">
+              </div>
             </div>
             <div class="form-actions">
               <button type="submit" ng-click="save(profile)" class="btn btn-success">{{ui.profile.saveProfile}}</button>

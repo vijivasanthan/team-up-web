@@ -155,8 +155,11 @@ define(
               resolve: {
                 data: function($route, Slots, Storage, Dater, Store)
                 {
+                  //remove active class TODO create a directive to solve the bug
+                  removeActiveClass('#teamMenu');
+
                   var periods = Store('app').get('periods'),
-                  //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
+                    //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
                     groups = Store('app').get('teams'),
                     groupId = groups[0].uuid;
 
@@ -189,6 +192,7 @@ define(
               resolve: {
                 data: function(Logs)
                 {
+                  removeActiveClass('#teamMenu');
                   return Logs.fetch({
                     end: new Date.now().getTime(),
                     start: new Date.today().addDays(- 7).getTime()
@@ -226,6 +230,7 @@ define(
                   'Teams', 'Slots', '$route',
                   function (Teams, Slots, $route)
                   {
+                    removeActiveClass('#teamMenu');
                     //var data = {},
                     //  deferred = $q.defer();
                     //
@@ -365,6 +370,11 @@ define(
                 };
               }
             ]);
+
+          function removeActiveClass(divId)
+          {
+            angular.element(divId).removeClass('active');
+          }
         }
       ]);
   }
