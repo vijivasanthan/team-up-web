@@ -298,3 +298,15 @@ input[type="submit"].btn {
 .cancelButton {
 
 }
+
+// Add style to radio btn-group without data-toggle=buttons
+#order {
+  .btn-group > .btn {
+    input[type="radio"],
+    input[type="checkbox"] {
+      position: absolute;
+      clip: rect(0,0,0,0);
+      pointer-events: none;
+    }
+  }
+}

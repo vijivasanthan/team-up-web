@@ -81,6 +81,26 @@ define(
                   }
                 },
 
+                /**
+                 * TeamTelephone call order per group
+                 */
+                callOrderGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'network',
+                    third: 'orderedMembers', //Second: team uuid
+                    isTeam: true //Tells server to look for teamAgent instead of groupAgent
+                  }
+                },
+
+                callOrderSave: {
+                  method: 'PUT',
+                  params: {
+                    first: 'network',
+                    third: 'orderedMembers', //Second: team uuid
+                    isTeam: true //Tells server to look for teamAgent instead of groupAgent
+                  }
+                },
 
                 /**
                  * Tasks
@@ -567,7 +587,7 @@ define(
             }
             catch (err)
             {
-              // Log.error(err)               
+              // Log.error(err)
             }
 
             return deferred.promise;

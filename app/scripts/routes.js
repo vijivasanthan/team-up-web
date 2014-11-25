@@ -256,6 +256,14 @@ define(
             })
 
             .when(
+            '/team-telefoon/order',
+            {
+              templateUrl: 'views/team-telephone/order.html',
+              controller: 'order',
+              reloadOnSearch: false
+            })
+
+            .when(
             '/messages',
             {
               templateUrl: 'views/messages.html',
