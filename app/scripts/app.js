@@ -14,7 +14,7 @@ define(
     'angular-route',
     'angular-md5',
     'angular-strap',
-    'ui-bootstrap',
+    //'ui-bootstrap',
     // 'ng-vis',
 
     // 'angular-google-maps',
@@ -36,7 +36,7 @@ define(
         'ngResource',
         'ngRoute',
         'ngMd5',
-        'ui.bootstrap.modal',
+        //'ui.bootstrap.modal',
         'mgcrea.ngStrap',
         //'$strap.directives',
 

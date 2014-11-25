@@ -38,10 +38,10 @@ define(
 
           $scope.profilemeta = data;
 
-          $scope.profilemeta.birthday = $filter('nicelyDate')(data.birthDate);
+          $scope.profilemeta.birthDate = formatDate($scope.profilemeta.birthDate);
 
-		  //temp userdata will be saved after pressing save
-		  $scope.profile = angular.copy($scope.profilemeta);
+          //temp userdata will be saved after pressing save
+          $scope.profile = angular.copy($scope.profilemeta);
 
           $scope.currentRole = $scope.profilemeta.role;
 
@@ -52,7 +52,7 @@ define(
           var teams = [];
           $scope.selectTeams = Store('app').get('teams');
 
-		  var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
+		      var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
 
           $scope.teams = teams;
 
@@ -74,6 +74,7 @@ define(
             $scope.views[hash] = true;
 
             $scope.views.user = (($rootScope.app.resources.uuid == $route.current.params.userId));
+
           }
 
           $scope.setViewTo = function (hash)
@@ -131,8 +132,6 @@ define(
                 delete resources.newpassrepeat;
             }
 
-            console.log($rootScope.phoneNumberParsed);
-
             if($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
@@ -149,7 +148,8 @@ define(
             // deal with birthday
             try
             {
-              resources.birthDate = Dater.convert.absolute(resources.birthday, 0);
+              resources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
+              console.log(resources.birthDate);
             }
             catch (error)
             {
@@ -210,14 +210,16 @@ define(
                         $rootScope.resetPhoneNumberChecker();
 
                         $scope.data = data;
-                        $scope.profileMeta = angular.copy(resources);
+                        $scope.data.birthDate = formatDate($scope.data.birthDate);
+
+                        $scope.profile = angular.copy($scope.data);
 
                         $rootScope.statusBar.off();
 
                         $scope.setViewTo('profile');
 
                         // put back the birthday for display after update the member.
-                        resources.birthday = $filter('nicelyDate')(resources.birthDate);
+                        //resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
                         if ($rootScope.app.resources.uuid == $route.current.params.userId)
                         {
@@ -258,6 +260,11 @@ define(
               }
             );
           };
+
+          function formatDate(date)
+          {
+            return moment(date).format('DD-MM-YYYY');
+          }
 
           $scope.editProfile = function () { setView('edit') };
 

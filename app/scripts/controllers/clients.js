@@ -48,8 +48,8 @@ define(
                       $scope.client = client;
                       $scope.contacts = client.contacts;
 
-                      // deal with the date thing for editing
-                      client.birthDate = $filter('nicelyDate')(client.birthDate);
+                      client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
+                      //console.log(moment(client.birthDate, "DD-MM-YYYYTHH:mm:ssZ").toDate());
                       $scope.clientmeta = client;
                       clientHasClientGroup = true;
                     }
@@ -70,7 +70,7 @@ define(
 
               $scope.client = data.client;
               $scope.contacts = data.client.contacts;
-              data.client.birthDate = $filter('nicelyDate')(data.client.birthDate);
+              data.client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
               $scope.clientmeta = data.client;
             }
           }

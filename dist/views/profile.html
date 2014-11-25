@@ -43,7 +43,7 @@
                 <dt>{{ui.teamup.func}}</dt>
                 <dd>{{data.function|translateFunc}}</dd>
                 <dt>{{ui.profile.birthday}}</dt>
-                <dd>{{data.birthDate|nicelyDate}}</dd>
+                <dd>{{data.birthDate}}</dd>
               </dl>
             </div>
             <div class="widget profilePic {{(!browser.mobile) &amp;&amp; 'span3' || 'span12'}}">
@@ -91,7 +91,7 @@
               <label class="control-label">{{ui.teamup.func}}</label>
               <div class="controls">
                 <select ng-model="profile.function" ng-options="f.id as f.label for f in mfuncs" ng-selected="profile.function">{{ui.profile.birthday}}</select>
-                <input name="date-start" type="text" ng-model="profile.birthday" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+                <input name="date-start" type="text" ng-model="profile.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
               </div>
             </div>
             <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="control-group">

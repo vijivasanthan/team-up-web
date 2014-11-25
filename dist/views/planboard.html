@@ -36,13 +36,13 @@
       <div ng-hide="browser.mobile" class="form-elements-group">
         <label>{{ui.planboard.from}}</label>
         <div ng-show="views.slot.add || views.slot.edit" class="control-group dater">
-          <input name="date-start" type="text" ng-model="slot.start.date" data-date-format="dd-mm-yyyy" bs-datepicker="" ng-change="redrawSlot(slot)"><i class="icon-calendar"></i>
+          <input name="date-start" type="text" ng-model="slot.start.date" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" ng-change="redrawSlot(slot)"><i class="icon-calendar"></i>
         </div>
         <div ng-show="views.group || views.member" class="control-group dater">
           <input name="date-start" type="text" ng-model="slot.start.date" disabled="disabled"><i class="icon-calendar"></i>
         </div>
         <div ng-show="views.slot.add || views.slot.edit" class="control-group timer">
-          <input name="time-start" type="text" ng-model="slot.start.time" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
+          <input name="time-start" type="text" ng-model="slot.start.time" data-length="3" data-time-type="string" data-time-format="HH:mm" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
         </div>
         <div ng-show="views.group || views.member" class="control-group timer">
           <input name="time-start" type="text" ng-model="slot.start.time" disabled="disabled"><i class="icon-time"></i>
@@ -60,13 +60,13 @@
       <div ng-hide="browser.mobile" class="form-elements-group">
         <label>{{ui.planboard.till}}</label>
         <div ng-show="views.slot.add || views.slot.edit" class="control-group dater">
-          <input name="date-end" type="text" ng-model="slot.end.date" data-date-format="dd-mm-yyyy" ng-change="redrawSlot(slot)" bs-datepicker=""><i class="icon-calendar"></i>
+          <input name="date-end" type="text" ng-model="slot.end.date" data-date-type="string" data-date-format="dd-MM-yyyy" ng-change="redrawSlot(slot)" bs-datepicker=""><i class="icon-calendar"></i>
         </div>
         <div ng-show="views.group || views.member" class="control-group dater">
           <input name="date-end" type="text" ng-model="slot.end.date" disabled="disabled"><i class="icon-calendar"></i>
         </div>
         <div ng-show="views.slot.add || views.slot.edit" class="control-group timer">
-          <input name="time-end" type="text" ng-model="slot.end.time" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
+          <input name="time-end" type="text" ng-model="slot.end.time" data-length="3" data-time-type="string" data-time-format="HH:mm" ng-change="redrawSlot(slot)" bs-timepicker=""><i class="icon-time"></i>
         </div>
         <div ng-show="views.group || views.member" class="control-group timer">
           <input name="time-end" type="text" ng-model="slot.end.time" disabled="disabled"><i class="icon-time"></i>
