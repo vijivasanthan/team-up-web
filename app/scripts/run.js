@@ -137,7 +137,7 @@ define(
 
             destroy: function ()
             {
-              setTimeout(
+              $timeout(
                 function ()
                 {
                   $rootScope.notification.status = false;
