@@ -66,8 +66,8 @@ require.config(
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'lodash': '../vendors/lodash/dist/lodash.min',
 
-      // 'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      // 'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       'locale_nl': 'i18n/angular-locale_nl',
 
@@ -116,9 +116,9 @@ require.config(
       // 'angular-google-maps': { deps: ['angular'] },
       lodash: { deps: [], exports: 'lodash' },
 
-      // 'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      // 'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
+      'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
       'locale_nl': { deps: ['angular'] }
@@ -212,6 +212,7 @@ require(
     'controllers/upload',
     'controllers/admin',
     'controllers/logs',
+    'controllers/order',
     'controllers/agenda',
 
     'bootstrap',
@@ -239,9 +240,9 @@ require(
     'lodash',
     // 'angular-google-maps',
 
-    // 'jquery-ui',
+    'jquery-ui',
     // 'angular-dragdrop',
-    // 'ui-sortable',
+    'ui-sortable',
     'locale_nl',
 
     // 'jszip',

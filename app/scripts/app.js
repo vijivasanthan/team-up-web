@@ -20,7 +20,7 @@ define(
     // 'angular-google-maps',
 
     // 'angular-dragdrop',
-    // 'ui-sortable',
+    'ui-sortable',
     'ui.bootstrap.pagination'
   ],
   function (angular)
@@ -45,7 +45,7 @@ define(
         // 'google-maps',
 
         // 'ngDragDrop',
-        // 'ui.sortable',
+        'ui.sortable',
         // 'collapse',
 
         'ui.bootstrap.pagination'
