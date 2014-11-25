@@ -168,7 +168,7 @@ define(
                   angular.element('.tabs-left .tab-content #' + $this)
                     .css(
                     {
-                      height: angular.element('.tabs-left .nav-tabs').height() + 6
+                      minHeight: angular.element('.tabs-left .nav-tabs').height() + 6
                     }
                   );
                 }
