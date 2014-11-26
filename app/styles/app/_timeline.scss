@@ -810,19 +810,6 @@ div.timeline-event-range {
   width: auto;
 }
 
-/* Buttons */
-#timeline-controls, #timeline-toolbar {
-  .btn-default {
-    color: #fff;
-    background-color: $brown;
-  }
-  .btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
-    color: $orange;
-    background-color: $brown;
-    border-color: #adadad;
-  }
-}
-
 // https://github.com/mgcrea/bootstrap-additions
 // Using for angular-strap
 
@@ -887,6 +874,17 @@ div.timeline-event-range {
   width: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
+}
+
+/*
+sortable
+*/
+.unsortable {
+  background-color: #EEE !important;
+  -moz-opacity: 0.60;
+  -khtml-opacity: 0.60;
+  opacity: 0.60;
+  cursor: not-allowed !important;
 }
 
 /*

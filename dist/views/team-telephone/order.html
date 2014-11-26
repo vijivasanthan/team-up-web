@@ -1,0 +1,65 @@
+<section>
+  <div class="page-header agenda-timeline">
+    <h2 class="nullable">Volgorde</h2>
+  </div>
+  <div style="margin-top: 20px"></div>
+  <div class="form-group has-feedback pull-left">
+    <!--input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')-->
+    <label class="control-label">Selecteer team</label>
+    <div class="controls">
+      <select ng-model="current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="current.group" ng-change="getOrder()"></select>
+    </div>
+  </div>
+  <div class="tabbable tabs-left">
+    <ul style="margin-right: 0px" bs-navbar="bs-navbar" class="nav nav-tabs nav-tabs-app">
+      <li data-match-route="/team-telefoon/agenda"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/agenda&quot;)"><span class="entypo">&#128340;</span>{{ui.agenda.timeline}}</a></li>
+      <li data-match-route="/team-telefoon/status"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/status&quot;)"><span class="entypo">&#59249;</span>Status</a></li>
+      <li data-match-route="/team-telefoon/order"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/order&quot;)"><span class="entypo">&#57349;</span>Volgorde</a></li>
+      <li data-match-route="/team-telefoon/logs"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/logs&quot;)"><span class="entypo">&#59392;</span>Logs</a></li>
+    </ul>
+    <div class="tab-content">
+      <div id="order" class="tab-pane {{(views.order==true) &amp;&amp; 'active'}}">
+        <div ng-show="current.group === &quot;&quot;">Er is geen team geselecteerd</div>
+        <div ng-show="orderedMembers.length &gt; 0">
+          <div class="btn-group">
+            <label class="btn btn-primary {{(orderType == &quot;FIXED&quot;) &amp;&amp; &quot;active&quot;}}">
+              <input type="radio" ng-model="orderType" value="FIXED" ng-change="orderTypePreview()">Eigen volgorde
+            </label>
+            <label class="btn btn-primary {{(orderType == &quot;RANDOM&quot;) &amp;&amp; &quot;active&quot;}}">
+              <input type="radio" ng-model="orderType" value="RANDOM" ng-change="orderTypePreview()">Willekeurige
+            </label>
+          </div>
+          <table class="table table-striped orderTable">
+            <thead>
+              <tr>
+                <th><a>{{ui.tasks.orderType1}}</a></th>
+                <th></th>
+                <th></th>
+                <th><a>{{ui.teamup.name}}</a></th>
+                <th><a>{{ui.teamup.phone}}</a></th>
+              </tr>
+            </thead>
+            <tbody ui-sortable="sortableOptions" ng-model="orderedMembers">
+              <tr ng-repeat="member in orderedMembers" ng-class="{unsortable: orderType=='RANDOM'}">
+                <td>
+                  <div class="orderNumber">{{member.originalPosition + 1}}</div>
+                </td>
+                <td>
+                  <div class="dragIcon"></div>
+                </td>
+                <td>
+                  <div back-img="{{member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicSmall {{member.states|stateColor}}"></div>
+                </td>
+                <td><a href="index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient">{{member.firstName}} {{member.lastName}}</a></td>
+                <td>{{member.phoneE164}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 20px">
+            <button type="button" ng-click="confirmOrder()" class="btn btn-info">Bevestig Keuze</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

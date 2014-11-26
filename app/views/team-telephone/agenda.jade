@@ -42,26 +42,26 @@ section#planboard(ng-controller='agenda-timeline')
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
 							.btn-group
-								button.btn.btn-default(type='button',
+								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.legendarer==true) && 'active'}}",
 								ng-click='showLegenda()',
 								ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}
 							.btn-group(ng-show='timeline.current.layouts.group')
-								button.btn.btn-default(type='button',
+								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.bar==true) && 'active'}}",
 								ng-click='barCharts()',
 								ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
 							.btn-group(ng-show='timeline.current.layouts.group')
-								button.btn.btn-default(type='button',
+								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.wishes==true) && 'active'}}",
 								ng-click='groupWishes()',
 								ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
 							.btn-group
-								button.btn.btn-default(type='button',
+								button.btn.btn-primary(type='button',
 								class="{{(timeline.current.layouts.group==true) && 'active'}}",
 								ng-model='timeline.current.layouts.group',
 								ng-click='requestTimeline("group")') {{ui.agenda.group}}
-								button.btn.btn-default(type='button',
+								button.btn.btn-primary(type='button',
 								class="{{(timeline.current.layouts.members==true) && 'active'}}",
 								ng-model='timeline.current.layouts.members',
 								ng-click='requestTimeline("members")',

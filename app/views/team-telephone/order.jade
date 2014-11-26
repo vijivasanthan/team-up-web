@@ -23,12 +23,18 @@ section
 				div(ng-show='orderedMembers.length > 0')
 					div.btn-group
 						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
-							input(type='radio', ng-model='orderType', value='FIXED')
-							| Vaste Volgorde
+							input(type='radio', 
+								ng-model='orderType', 
+								value='FIXED', 
+								ng-change='orderTypePreview()')
+							| Eigen volgorde
 						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
-							input(type='radio', ng-model='orderType', value='RANDOM')
-							| Willekeurig
-					table.table.table-striped.orderTable(ng-show='orderType == "FIXED"')
+							input(type='radio', 
+								ng-model='orderType', 
+								value='RANDOM', 
+								ng-change='orderTypePreview()')
+							| Willekeurige
+					table.table.table-striped.orderTable
 						thead
 							tr
 								th
@@ -40,7 +46,7 @@ section
 								th
 									a {{ui.teamup.phone}}
 						tbody(ui-sortable="sortableOptions", ng-model="orderedMembers")
-							tr(ng-repeat='member in orderedMembers')
+							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")
 								td
 									.orderNumber
 										| {{member.originalPosition + 1}}
