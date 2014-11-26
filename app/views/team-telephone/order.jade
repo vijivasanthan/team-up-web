@@ -27,13 +27,13 @@ section
 								ng-model='orderType', 
 								value='FIXED', 
 								ng-change='orderTypePreview()')
-							| Eigen volgorde
+							| {{ ui.order.fixedOrder }}
 						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
 							input(type='radio', 
 								ng-model='orderType', 
 								value='RANDOM', 
 								ng-change='orderTypePreview()')
-							| Willekeurige
+							| {{ ui.order.randomOrder }}
 					table.table.table-striped.orderTable
 						thead
 							tr
@@ -63,4 +63,4 @@ section
 					
 					div(style='margin-top: 20px;')
 						button.btn.btn-info(type='button', ng-click='confirmOrder()')
-							| Bevestig Keuze
+							| {{ ui.order.confirmation }}

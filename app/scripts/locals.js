@@ -406,6 +406,7 @@ define(
         },
         teamup: {
           teams: 'Teams',
+          selectTeam: 'Selecteer team',
           clients: 'Cliënten',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
@@ -460,7 +461,7 @@ define(
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
           passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
           savingMember: 'Lid aan het opslaan...',
-          selectTeam: 'Selecteer een team a.u.b.',
+          selectTeam: 'Selecteer een team',
           clinetInfoFill: 'Vul de cliëntinformatie (naam en telefoon) in a.u.b.',
           savingClient: 'Cliënt aan het opslaan...',
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
@@ -561,6 +562,11 @@ define(
           planningTime: 'Tijdsbestek',
           refreshTask: 'Het herladen van de taken',
           upload: 'Upload taken'
+        },
+        order: {
+          randomOrder: 'Willekeurige',
+          fixedOrder: 'Eigen volgorde',
+          confirmation: 'Bevestig Keuze'
         },
         validation: {
           phone: {

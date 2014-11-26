@@ -260,6 +260,12 @@ define(
             {
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
+              resolve: {
+                data: function()
+                {
+                  removeActiveClass('#teamMenu');
+                }
+              },
               reloadOnSearch: false
             })
 

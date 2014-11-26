@@ -30,7 +30,7 @@
 </div>
 <div ng-hide="views.newTeam || views.newMember" class="page-header">
   <h2 class="nullable">{{ui.teamup.teams}}</h2>
-  <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+  <div class="selectGroup"><span class="selectTitle">{{ ui.teamup.selectTeam }}</span>
     <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
   </div>
 </div>

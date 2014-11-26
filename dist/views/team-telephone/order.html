@@ -23,10 +23,10 @@
         <div ng-show="orderedMembers.length &gt; 0">
           <div class="btn-group">
             <label class="btn btn-primary {{(orderType == &quot;FIXED&quot;) &amp;&amp; &quot;active&quot;}}">
-              <input type="radio" ng-model="orderType" value="FIXED" ng-change="orderTypePreview()">Eigen volgorde
+              <input type="radio" ng-model="orderType" value="FIXED" ng-change="orderTypePreview()">{{ ui.order.fixedOrder }}
             </label>
             <label class="btn btn-primary {{(orderType == &quot;RANDOM&quot;) &amp;&amp; &quot;active&quot;}}">
-              <input type="radio" ng-model="orderType" value="RANDOM" ng-change="orderTypePreview()">Willekeurige
+              <input type="radio" ng-model="orderType" value="RANDOM" ng-change="orderTypePreview()">{{ ui.order.randomOrder }}
             </label>
           </div>
           <table class="table table-striped orderTable">
@@ -56,7 +56,7 @@
             </tbody>
           </table>
           <div style="margin-top: 20px">
-            <button type="button" ng-click="confirmOrder()" class="btn btn-info">Bevestig Keuze</button>
+            <button type="button" ng-click="confirmOrder()" class="btn btn-info">{{ ui.order.confirmation }}</button>
           </div>
         </div>
       </div>

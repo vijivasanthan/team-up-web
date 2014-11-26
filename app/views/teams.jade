@@ -40,7 +40,7 @@ aria-hidden='true')
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup
 		span.selectTitle
-			| Selecteer team
+			| {{ ui.teamup.selectTeam }}
 		select(ng-model='current',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
 		ng-selected='current',
