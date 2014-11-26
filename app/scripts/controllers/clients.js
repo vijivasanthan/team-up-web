@@ -25,7 +25,8 @@ define(
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
-          // $rootScope.notifier.success('test message');
+          var modalInstance;
+
           if (data.clientId)
           {
             var clientHasClientGroup = false;
@@ -579,13 +580,13 @@ define(
               return;
             }
 
-            if($rootScope.phoneNumberParsed.result == false)
+            if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
               return;
             }
-            else if($rootScope.phoneNumberParsed.result == true)
+            else if ($rootScope.phoneNumberParsed.result == true)
             {
               $scope.contactForm.phone = $rootScope.phoneNumberParsed.format;
             }
@@ -653,13 +654,13 @@ define(
               return;
             }
 
-            if($rootScope.phoneNumberParsed.result == false)
+            if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
               return;
             }
-            else if($rootScope.phoneNumberParsed.result == true)
+            else if ($rootScope.phoneNumberParsed.result == true)
             {
               client.phone = $rootScope.phoneNumberParsed.format;
             }
@@ -710,13 +711,13 @@ define(
               }
             }
 
-            if($rootScope.phoneNumberParsed.result == false)
+            if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
               return;
             }
-            else if($rootScope.phoneNumberParsed.result == true)
+            else if ($rootScope.phoneNumberParsed.result == true)
             {
               client.phone = $rootScope.phoneNumberParsed.format;
             }
@@ -981,137 +982,105 @@ define(
             );
           };
 
-          var ModalInstanceCtrl = function ($scope, $modalInstance, report)
+          $scope.getView = function (report)
           {
-            // console.log(' ModalInstanceCtrl ->', $scope, $modalInstance, report);
-
-            $scope.report = report;
-
-            $scope.view = {
-              editReport: !!(report.editMode),
-              viewReport: (!(report.editMode || typeof report.uuid == 'undefined')),
-              newReport: (typeof report.uuid == 'undefined')
-            };
-
-            $scope.close = function ()
+            if(! $scope.view)
             {
-              $modalInstance.dismiss();
-              if ($location.search().reportUuid)
-              {
-                $location.search('reportUuid', null);
-              }
-            };
-
-            // add new report, send systemm message at the same time.
-            $scope.saveReport = function (report)
-            {
-              if (report.editMode)
-              {
-
-                TeamUp._(
-                  'clientReportUpdate',
-                  {
-                    second: report.clientUuid,
-                    fourth: report.uuid
-                  },
-                  {
-                    uuid: report.uuid,
-                    title: report.title,
-                    body: report.body,
-                    creationTime: report.creationTime
-                  }
-                ).then(
-                  function (result)
-                  {
-                    $modalInstance.close(report);
-
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  }
-                );
-              }
-              else
-              {
-                TeamUp._(
-                  'clientReportAdd',
-                  {second: report.clientUuid},
-                  {
-                    uuid: report.uuid,
-                    title: report.title,
-                    body: report.body,
-                    creationTime: report.creationTime
-                  }
-                ).then(
-                  function (result)
-                  {
-                    $modalInstance.close(report);
-
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  }
-                );
-              }
-
-            };
+              $scope.view = {};
+            }
+            $scope.view.editReport = !!(report.editMode);
+            $scope.view.viewReport = (!(report.editMode || typeof report.uuid == 'undefined'));
+            $scope.view.newReport = (typeof report.uuid == 'undefined');
           };
+
+          $scope.close = function ()
+          {
+            if ($location.search().reportUuid)
+            {
+              $location.search('reportUuid', null);
+            }
+
+            modalInstance.hide();
+          };
+
+          // add new report, send systemm message at the same time.
+          $scope.saveReport = function (report)
+          {
+            if (report.editMode)
+            {
+
+              TeamUp._(
+                'clientReportUpdate',
+                {
+                  second: report.clientUuid,
+                  fourth: report.uuid
+                },
+                {
+                  uuid: report.uuid,
+                  title: report.title,
+                  body: report.body,
+                  creationTime: report.creationTime
+                }
+              ).then(
+                function (result)
+                {
+                  $scope.close(report);
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  loadGroupReports();
+                }
+              );
+            }
+            else
+            {
+              TeamUp._(
+                'clientReportAdd',
+                {second: report.clientUuid},
+                {
+                  uuid: report.uuid,
+                  title: report.title,
+                  body: report.body,
+                  creationTime: report.creationTime
+                }
+              ).then(
+                function (result)
+                {
+                  $scope.close(report);
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  loadGroupReports();
+                }
+              );
+            }
+
+          };
+
+          function getModal()
+          {
+            return $modal(
+              {
+                template: 'views/reportTemplate.html',
+                scope: $scope
+              }
+            );
+          }
 
           // open a report by using the modal plug-in , here you need to use inject function to inject
           // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', 'report'];
-
           $scope.openReport = function (report)
           {
             $scope.report = report;
             $scope.report.editMode = false;
 
-            $modal.open(
-              {
-                templateUrl: './views/reportTemplate.html',
-                controller: ModalInstanceCtrl,
-                resolve: {
-                  report: function ()
-                  {
-                    return $scope.report
-                  }
-                }
-              }
-            );
+            modalInstance = getModal();
           };
-
-
-
 
           $scope.newReport = function ()
           {
-            //if ($scope.currentCLient == 0)
-            //{
-            //  $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
-            //
-            //  return;
-            //}
+            if ($scope.currentCLient == 0)
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
 
-            //var reportModal = $modal(
-            //  {
-            //    title: $rootScope.ui.teamup.newReport,
-            //    scope: $scope,
-            //    template: "views/reportTemplate.html",
-            //    contentTemplate: false,
-            //    html: true
-            //  });
-
-
-            //reportModal.$promise.then(function()
-            //  {
-            //    reportModal.show();
-            //  }
-            //);
-
-
-            //if ($scope.currentCLient == 0)
-            //{
-            //  $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
-            //
-            //  return;
-            //}
+              return;
+            }
 
             $scope.report = {
               title: $rootScope.ui.teamup.newReport,
@@ -1123,73 +1092,9 @@ define(
               editMode: false
             };
 
-            var modalInstance = $modal(
-              {
-                template: 'views/reportTemplate.html',
-                controller: ModalInstanceCtrl,
-                resolve: {
-                  report: function ()
-                  {
-                    return $scope.report
-                  },
-                  editMode: false
-                }
-              }
-            );
+            $scope.getView($scope.report);
 
-            modalInstance.$promise.then(
-              function ()
-              {
-                loadGroupReports()
-              },
-              function ()
-              {
-                console.log('Modal dismissed at: ' + new Date())
-              });
-
-            //
-            //$scope.report = {
-            //  title: $rootScope.ui.teamup.newReport,
-            //  creationTime: new Date().getTime(),
-            //  clientUuid: $scope.currentCLient,
-            //  body: null,
-            //  author: $scope.$root.getTeamMemberById($rootScope.app.resources.uuid),
-            //  client: $scope.$root.getClientByID($scope.currentCLient),
-            //  editMode: false
-            //};
-            //
-            //
-            //
-            //var modalInstance = $modal(
-            //  {
-            //    template: 'views/reportTemplate.html',
-            //    controller: ModalInstanceCtrl,
-            //    resolve: {
-            //      report: function ()
-            //      {
-            //        return $scope.report
-            //      },
-            //      editMode: false
-            //    }
-            //  }
-            //);
-            ////
-            ////$scope.reportModal = modalInstance;
-            //
-            //
-            //
-            //modalInstance.$promise.then(
-            //  function ()
-            //  {
-            //    loadGroupReports()
-            //  },
-            //  function ()
-            //  {
-            //    console.log('Modal dismissed at: ' + new Date())
-            //  });
-            //
-
-
+            modalInstance = getModal();
           };
 
           $scope.editReport = function (report)
@@ -1197,18 +1102,9 @@ define(
             $scope.report = report;
             $scope.report.editMode = true;
 
-            // var modalInstance = $modal.open(
-            $modal.open(
-              {
-                templateUrl: './views/reportTemplate.html',
-                controller: ModalInstanceCtrl,
-                resolve: {
-                  report: function ()
-                  {
-                    return $scope.report
-                  }
-                }
-              });
+            $scope.getView($scope.report);
+
+            modalInstance = getModal();
           };
 
           $scope._report = {};

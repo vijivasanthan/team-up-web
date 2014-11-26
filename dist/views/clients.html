@@ -226,7 +226,7 @@
         <select ng-init="currentMonth=0" ng-model="currentMonth" ng-selected="currentMonth" ng-change="requestReportsByFilter()">
           <option ng-repeat="month in Months|orderBy:number" value="{{month.number}}">{{month.name}}</option>
         </select>
-        <button type="button" data-ng-click="newReport()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.newReport}}</button>
+        <button type="button" data-animation="" data-ng-click="newReport()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.newReport}}</button>
       </div>
       <hr>
       <div ng-show="groupReports.length &gt; 0">
