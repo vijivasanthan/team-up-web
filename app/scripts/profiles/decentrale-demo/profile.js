@@ -18,6 +18,7 @@ var profile = {
     team: true,
     client: true,
     manage: true,
+    teamtelefoon: true,
     support: true
   },
 

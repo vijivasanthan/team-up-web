@@ -7,7 +7,7 @@ var profile = {
 
   own: true,
 
-  title: 'Dev-TeamUp',
+  title: 'Test-TeamUp',
 
   lang: 'nl',
 
@@ -18,6 +18,7 @@ var profile = {
     team: true,
     client: true,
     manage: true,
+    teamtelefoon: true,
     support: true
   },
 
@@ -42,7 +43,7 @@ var profile = {
     }
   },
 
-  host: "http://askpack.ask-cs.com/",
+  host: "http://test.ask-cs.com/",
 
   states: [
     'com.ask-cs.State.Available',
