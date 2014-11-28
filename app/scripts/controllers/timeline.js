@@ -18,6 +18,7 @@ define(
         function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store)
         {
           var range, diff;
+          $scope.removeTasksRange;
 
           $scope.$watch(
             function ()
@@ -60,6 +61,7 @@ define(
 
                 $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
                                    Dater.readable.date($scope.timeline.range.end);
+
               }
               else if ($route.current.params.userId != $rootScope.app.resources.uuid)
               {
@@ -225,20 +227,20 @@ define(
                           {
                             start: data.periods.end,
                             end: 1577836800000,
-                            group: row,
-                            content: 'loading',
-                            className: 'state-loading-right',
-                            editable: false
+                            group: row
+                            //content: 'loading',
+                            //className: 'state-loading-right',
+                            //editable: false
                           });
 
                         timedata.push(
                           {
                             start: 0,
                             end: data.periods.start,
-                            group: row,
-                            content: 'loading',
-                            className: 'state-loading-left',
-                            editable: false
+                            group: row
+                            //content: 'loading',
+                            //className: 'state-loading-left',
+                            //editable: false
                           });
                       });
 

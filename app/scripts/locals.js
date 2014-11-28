@@ -209,7 +209,19 @@ define(
           time: 'Time: ',
           weekNumber: 'Weeknummer: ',
           monthNumber: 'Maand nummer: ',
-          totalDays: 'Totaal dagen: '
+          totalDays: 'Totaal dagen: ',
+          removeTasksRange: function(options)
+          {
+            if(! _.isUndefined(options))
+            {
+              var html = 'Weet u zeker dat u de taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' wilt verwijderen?';
+            }
+
+            return html;
+          },
+          removeTasksTitle: 'Verwijderen taken'
         },
         message: {
           messages: 'Berichten',
@@ -561,12 +573,14 @@ define(
           taskDeleted: 'Taak verwijderd.',
           planningTime: 'Tijdsbestek',
           refreshTask: 'Het herladen van de taken',
-          upload: 'Upload taken'
+          upload: 'Upload taken',
+          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?'
         },
         order: {
           randomOrder: 'Willekeurige',
           fixedOrder: 'Eigen volgorde',
-          confirmation: 'Bevestig Keuze'
+          confirmation: 'Bevestig Keuze',
+          randomFeedback: 'Een willekeurige volgorde wordt bepaald.'
         },
         validation: {
           phone: {

@@ -1,3 +1,20 @@
+#confirmTaskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmTaskModalLabel.modal-title {{ui.planboard.removeTasksTitle}}
+			.modal-body
+				| {{ ui.planboard.removeTasksRange(removeTaskOptions) }}
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal')
+					| {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button', ng-click='deleteTasks(removeTaskOptions)')
+					| {{ui.teamup.confirms.remove}}
+
 section#planboard(ng-controller='timeline as taskPlanboard')
 
 	.page-header.timeline
@@ -157,7 +174,7 @@ section#planboard(ng-controller='timeline as taskPlanboard')
 
 
 	br
-	.tabbable.tabs-left
+	.tabbable.tabs-left.task-agenda
 
 
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
@@ -204,6 +221,17 @@ section#planboard(ng-controller='timeline as taskPlanboard')
 						span.icomoon(data-icon='',
 						aria-hidden='true')
 						| Teams
+					.form-group.has-feedback.pull-left.dateranger.marginLeftTen
+						input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
+						i.glyphicon.glyphicon-calendar.form-control-feedback
+					div.btn-group.pull-left
+						button.btn.pull-left.btn-danger.marginLeftTen(type='button',
+						class="",
+						data-toggle='dropdown',
+						ng-click='confirmDeleteTasks(timeline.range)')
+							span.glyphicon.glyphicon-trash
+							|  Verwijder taken
+					
 				hr
 				#timeline
 					//include planboard/time-toolbar.jade

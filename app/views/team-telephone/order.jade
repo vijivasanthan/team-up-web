@@ -34,7 +34,8 @@ section
 								value='RANDOM', 
 								ng-change='orderTypePreview()')
 							| {{ ui.order.randomOrder }}
-					table.table.table-striped.orderTable
+					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
+					table.table.table-striped.orderTable(ng-show='orderType == "FIXED"')
 						thead
 							tr
 								th

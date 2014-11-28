@@ -818,6 +818,28 @@ div.timeline-event-range {
   margin-right: 10px;
 }
 
+//#viewTeamsTab .dateranger{
+//  margin: 6px 0 0 10px;
+//}
+
+#viewTeamsTab {
+  .popover {
+    width: 360px;
+  }
+  .dater .icon-calendar, .dater .icon-time {
+    position: relative;
+    margin: 2px 6px 0 -21px;
+  }
+  .btn-group{
+    position: fixed;
+    z-index: 151;
+  }
+}
+
+//.task-agenda .tab-header {
+//  height: 45px;
+//}
+
 /*
 * Datepicker element
 */
@@ -1006,6 +1028,13 @@ sortable
 //.timepicker.dropdown-menu tbody button {
 //  padding: 6px;
 //}
+
+/*
+Order
+*/
+#order p {
+  margin-top: 15px;
+}
 
 .time-tip {
   z-index: 100000;

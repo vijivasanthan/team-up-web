@@ -15,7 +15,8 @@ define(
         'Clients',
         'TeamUp',
         'Session',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session)
+        '$timeout',
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, $timeout)
         {
           var params = $location.search();
 
@@ -152,7 +153,7 @@ define(
                                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
                                member.firstName +
                                ' ' +
-                               member.lastName +
+                               member.lastName + 123
                                '</div>';
 
                     $scope.data.clients.members[client.id].push(
@@ -416,6 +417,7 @@ define(
           Dater.registerPeriods();
 
           $scope.periods = Dater.getPeriods();
+          $scope.periodsNext = Dater.getPeriods(true);
 
           $scope.slot = {};
 
@@ -530,6 +532,52 @@ define(
               $scope.changeCurrent($scope.currentClientGroup);
             }
           };
+
+          $scope.confirmDeleteTasks = function(range)
+          {
+
+            if($location.hash() == 'clients')
+            {
+              $scope.removeTaskOptions = {
+                uuid: $scope.currentClientGroup,
+                name: $scope.currentName,
+                group: 'clientgroep',
+                range: {}
+              };
+            }
+            else
+            {
+              $scope.removeTaskOptions = {
+                uuid: $scope.currentTeam,
+                name: $scope.currentName,
+                group: 'team',
+                range: {}
+              };
+            }
+
+            if(! _.isUndefined(range))
+            {
+              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
+              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM. YYYY");
+            }
+            //moment.createFromInputFallback = function(config) {
+            //  // your favorite unreliable string magic, or
+            //  config._d = new Date(config._i);
+            //};
+
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+          };
+
+          $scope.deleteTasks = function(options)
+          {
+            console.log(options);
+            //get all tasks by team or clientgroup by range
+          }
         }
       ]
     );

@@ -30,6 +30,8 @@ define(
 
           $scope.data = data;
 
+          console.log(data);
+
           var groups = Store('app').get('teams'),//Store('network').get('groups')
             groupId = groups[0].uuid;
 

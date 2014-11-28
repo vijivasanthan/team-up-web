@@ -29,7 +29,8 @@
               <input type="radio" ng-model="orderType" value="RANDOM" ng-change="orderTypePreview()">{{ ui.order.randomOrder }}
             </label>
           </div>
-          <table class="table table-striped orderTable">
+          <p ng-show="orderType == &quot;RANDOM&quot;">{{ ui.order.randomFeedback }}</p>
+          <table ng-show="orderType == &quot;FIXED&quot;" class="table table-striped orderTable">
             <thead>
               <tr>
                 <th><a>{{ui.tasks.orderType1}}</a></th>

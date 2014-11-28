@@ -1,3 +1,18 @@
+<div id="confirmTaskModal" tabindex="-1" role="dialog" aria-labelledby="confirmTaskModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTaskModalLabel" class="modal-title">{{ui.planboard.removeTasksTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ ui.planboard.removeTasksRange(removeTaskOptions) }}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">{{ui.teamup.confirms.cancel}}</button>
+        <button type="button" ng-click="deleteTasks(removeTaskOptions)" class="btn btn-primary">{{ui.teamup.confirms.remove}}</button>
+      </div>
+    </div>
+  </div>
+</div>
 <section id="planboard" ng-controller="timeline as taskPlanboard">
   <div class="page-header timeline">
     <h2 class="nullable">{{ui.task.tasks}}</h2>
@@ -90,7 +105,7 @@
       </div>
     </form>
   </div><br>
-  <div class="tabbable tabs-left">
+  <div class="tabbable tabs-left task-agenda">
     <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
       <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.myTask}}</a></li>
       <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/alltasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
@@ -105,6 +120,12 @@
           <div ng-show="app.resources.role == 1"></div>
           <button type="button" data-toggle="tab" ng-click="setViewTo(current,&quot;clients&quot;)" class="btn pull-right btn-info marginLeftTen {{(views.clients==true) &amp;&amp; 'active'}}"><span data-icon="" aria-hidden="true" class="icomoon"></span> Clienten</button>
           <button type="button" data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)" class="btn pull-right btn-info {{(views.teams==true) &amp;&amp; 'active'}}"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams</button>
+          <div class="form-group has-feedback pull-left dateranger marginLeftTen">
+            <input type="text" name="daterange" ng-model="daterange" daterangepicker="" class="form-control"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+          </div>
+          <div class="btn-group pull-left">
+            <button type="button" data-toggle="dropdown" ng-click="confirmDeleteTasks(timeline.range)" class="btn pull-left btn-danger marginLeftTen"><span class="glyphicon glyphicon-trash"></span> Verwijder taken</button>
+          </div>
         </div>
         <hr>
         <div id="timeline">
