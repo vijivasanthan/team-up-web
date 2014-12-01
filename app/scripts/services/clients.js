@@ -12,7 +12,7 @@ define(
         {
           var ClientsService = $resource();
 
-          // Get the list of clients
+          // List of client groups
           ClientsService.prototype.query = function (only, routeParams)
           {
             var deferred = $q.defer();
@@ -105,7 +105,7 @@ define(
                         {
                           data.clientGroups = {};
                         }
-
+                        console.log(data);
                         deferred.resolve(data);
                       }
                     );
@@ -123,12 +123,89 @@ define(
             return deferred.promise;
           };
 
+          //ClientsService.prototype.query = function (only, routeParams)
+          //{
+          //  var deferred = $q.defer();
+          //
+          //  var data = {};
+
+            //  TeamUp._(
+          //    'clientGroupsQuery',
+          //    null,
+          //    null,
+          //    {
+          //      success: function (clientGroups)
+          //      {
+          //        Store('app').save('ClientGroups', clientGroups);
+          //
+          //        if (! only)
+          //        {
+          //
+          //          data.clients = {};
+          //
+          //          data.clientGroups = (typeof data.clientGroups != 'undefined') ? clientGroups : {};
+          //
+          //          var clientGroupIds = _.pluck(clientGroups, 'id');
+          //
+          //          var calls = [];
+          //
+          //          if (!routeParams.uuid || clientGroupIds.indexOf(routeParams.uuid) >= 0)
+          //          {
+          //            console.log('door', routeParams.uuid);
+          //            angular.forEach(
+          //              clientGroups,
+          //              function (clientGroup)
+          //              {
+          //                data.clients[clientGroup.id] = [];
+          //                // For each client group get the list of clients
+          //                calls.push(
+          //                  TeamUp._(
+          //                    'clientsByGroupIDQuery',
+          //                    {third: clientGroup.id},
+          //                    null,
+          //                    {
+          //                      success: function (result)
+          //                      {
+          //                        //var resultData = (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result
+          //
+          //                        Store('app').save(
+          //                          clientGroup.id,
+          //                          result
+          //                        );
+          //
+          //                        data.clients[clientGroup.id] = result;
+          //                      }
+          //                    }
+          //                  )
+          //                );
+          //              });
+          //          }
+          //
+          //          $q.all(calls)
+          //            .then(
+          //            function (results)
+          //            {
+          //              deferred.resolve(data);
+          //            }
+          //          );
+          //        }
+          //        else
+          //        {
+          //          deferred.resolve(clientGroups);
+          //        }
+          //
+          //      },
+          //      error: function (error) { deferred.resolve({ error: error }) }
+          //    }
+          //  );
+          //
+          //  return deferred.promise;
+          //};
+
 
           // Manage 1:n relations between clients and client groups
           ClientsService.prototype.manage = function (changes)
           {
-            console.log('ClientsService.prototype.manage');
-
             var deferred = $q.defer(),
                 calls = [];
 

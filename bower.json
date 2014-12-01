@@ -15,7 +15,6 @@
     "json3": "~3.3.1",
     "momentjs": "~2.6.0",
     "chap-links-library": "https://github.com/almende/chap-links-library.git",
-    "web-lib-md5": "https://github.com/askcs/web-lib-md5.git",
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
     "web-lib-offline": "https://github.com/askcs/web-lib-offline.git",
     "web-lib-interceptor": "https://github.com/askcs/web-lib-interceptor.git",

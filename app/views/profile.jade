@@ -25,7 +25,7 @@ section#profile
 		.tabbable.tabs-left
 
 			ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
-				li(class="{{(views.profile==true || views.edit==true) && 'active'}}")
+				li(class="{{(views.profile==true || views.edit==true || views.editImg==true || views.editPassword==true) && 'active'}}")
 					a(data-toggle='tab',
 					ng-click='fixTabHeight("profileTab"); setViewTo("profile")')
 						span.entypo 👤
@@ -75,6 +75,8 @@ section#profile
 				#editTab.tab-pane(class="{{(views.edit==true) && 'active'}}")
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;') {{ui.profile.editProfile}}
+						button.btn.pull-right.btn-info(type='button',
+						ng-click='editPassword()') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
 						.control-group
@@ -114,38 +116,41 @@ section#profile
 								select(ng-model='profile.function',
 								ng-options='f.id as f.label for f in mfuncs',
 								ng-selected='profile.function')
-									| {{ui.profile.birthday}}
-								input.ng-pristine.ng-valid(name='date-start',
+						.form-group.dater
+							label.control-label {{ui.profile.birthday}}
+							.controls
+								input(name='date-start',
 								type='text',
-								ng-model='profile.birthDate', data-date-type='string',
+								ng-model='profile.birthDate', 
+								data-date-type='string',
 								data-date-format='dd-MM-yyyy',
 								bs-datepicker='',
 								data-toggle='datepicker')
 								i.icon-calendar
-						.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)', ng-class="{ 'has-error' : profileForm.password.$invalid && !profileForm.password.$pristine }")
-							label.control-label {{ui.profile.newPass}}
-							.controls
-								input.span3.form-control(type='password',
-								ng-model='profile.newpass',
-								name='password',
-								required,
-								ng-minlength="8",
-								ng-maxlength="20")
-								span.help-block(ng-show='profileForm.password.$invalid && !profileForm.password.$pristine')
-									small
-										i
-										| {{ ui.validation.password.required }}
-									small(ng-show="profileForm.password.$error.minlength")
-										i
-										| {{ ui.validation.password.amountMinChars(8) }} 
-									small(ng-show="profileForm.password.$error.maxlength")
-										i
-										| {{ ui.validation.password.amountMaxChars(20) }}
-						.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')			
-							label.control-label {{ui.profile.newPassRepeat}}
-							.controls
-								input.span3(type='password',
-								ng-model='profile.newpassrepeat')
+						//.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)', ng-class="{ 'has-error' : profileForm.password.$invalid && !profileForm.password.$pristine }")
+						//	label.control-label {{ui.profile.newPass}}
+						//	.controls
+						//		input.span3.form-control(type='password',
+						//		ng-model='profile.newpass',
+						//		name='password',
+						//		required,
+						//		ng-minlength="8",
+						//		ng-maxlength="20")
+						//		span.help-block(ng-show='profileForm.password.$invalid && !profileForm.password.$pristine')
+						//			small
+						//				i
+						//				| {{ ui.validation.password.required }}
+						//			small(ng-show="profileForm.password.$error.minlength")
+						//				i
+						//				| {{ ui.validation.password.amountMinChars(8) }} 
+						//			small(ng-show="profileForm.password.$error.maxlength")
+						//				i
+						//				| {{ ui.validation.password.amountMaxChars(20) }}
+						//.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')			
+						//	label.control-label {{ui.profile.newPassRepeat}}
+						//	.controls
+						//		input.span3(type='password',
+						//		ng-model='profile.newpassrepeat')
 						.form-actions
 							button.btn.btn-success(type='submit',
 							ng-click='save(profile)') {{ui.profile.saveProfile}}
@@ -159,3 +164,43 @@ section#profile
 					#uploadImgModule
 						form.form-vertical(enctype='multipart/form-data')
 							uploader(action='{{uploadURL}}')
+							
+				#editPasswordTab.tab-pane(class="{{(views.editPassword==true) && 'active'}}")
+					div(style='overflow: hidden; height: 35px')
+						h3.pull-left(style='margin-top: 0;')
+							| {{ui.profile.changePassWord}}
+					hr
+					form.form-vertical(name='passWordForm', novalidate)
+						fieldset
+							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+								label.control-label {{ui.profile.oldPassword}}
+								.controls
+									input.span3(type='password',
+									ng-model='profile.oldpass')
+							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)', ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
+								label.control-label {{ui.profile.newPass}}
+								.controls
+									input.span3.form-control(type='password',
+									ng-model='profile.newpass',
+									name='password',
+									required,
+									ng-minlength="8",
+									ng-maxlength="20")
+									span.help-block(ng-show='passWordForm.password.$invalid && !passWordForm.password.$pristine')
+										small
+											i
+											| {{ ui.validation.password.required }}
+										small(ng-show="passWordForm.password.$error.minlength")
+											i
+											| {{ ui.validation.password.amountMinChars(8) }} 
+										small(ng-show="passWordForm.password.$error.maxlength")
+											i
+											| {{ ui.validation.password.amountMaxChars(20) }}
+							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+								label.control-label {{ui.profile.newPassRepeat}}
+								.controls
+									input.span3(type='password',
+									ng-model='profile.newpassrepeat')
+							.form-actions
+								button.btn.btn-success(type='submit',
+									ng-click='savePassword(profile)') {{ui.profile.safePassword}}

@@ -20,8 +20,9 @@ define(
         '$filter',
         'TeamUp',
         '$timeout',
+        'MD5',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout)
+                  Dater, $filter, TeamUp, $timeout, MD5)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
@@ -52,7 +53,7 @@ define(
           var teams = [];
           $scope.selectTeams = Store('app').get('teams');
 
-		      var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
+          var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
 
           $scope.teams = teams;
 
@@ -63,18 +64,18 @@ define(
 
           setView($location.hash());
 
-          function setView (hash)
+          function setView(hash)
           {
             $scope.views = {
               profile: false,
               edit: false,
-              editImg: false
+              editImg: false,
+              editPassword: false
             };
 
             $scope.views[hash] = true;
 
             $scope.views.user = (($rootScope.app.resources.uuid == $route.current.params.userId));
-
           }
 
           $scope.setViewTo = function (hash)
@@ -96,7 +97,7 @@ define(
             // let user know that user need to re-relogin if the login-user's role is changed.
             if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
             {
-              if (! confirm($rootScope.ui.profile.roleChangePrompt))
+              if (!confirm($rootScope.ui.profile.roleChangePrompt))
               {
                 return;
               }
@@ -123,22 +124,13 @@ define(
               }
             }
 
-            if(resources.newpass!=null && resources.newpass!=resources.newpassrepeat) {
-                $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
-                return;
-            } else if(resources.newpass!=null) {
-                resources.passwordHash = MD5.parse(resources.newpass);
-                delete resources.newpass;
-                delete resources.newpassrepeat;
-            }
-
-            if($rootScope.phoneNumberParsed.result == false)
+            if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
               return;
             }
-            else if($rootScope.phoneNumberParsed.result == true)
+            else if ($rootScope.phoneNumberParsed.result == true)
             {
               resources.phone = $rootScope.phoneNumberParsed.format;
             }
@@ -149,7 +141,6 @@ define(
             try
             {
               resources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
-              console.log(resources.birthDate);
             }
             catch (error)
             {
@@ -223,8 +214,8 @@ define(
 
                         if ($rootScope.app.resources.uuid == $route.current.params.userId)
                         {
-                          $rootScope.app.resources.firstName = $scope.profileMeta.firstName;
-                          $rootScope.app.resources.lastName = $scope.profileMeta.lastName;
+                          $rootScope.app.resources.firstName = $scope.profile.firstName;
+                          $rootScope.app.resources.lastName = $scope.profile.lastName;
 
                           // will logout if the role is changed for the user him/her-self.
                           if ($scope.currentRole != resources.role)
@@ -232,7 +223,6 @@ define(
                             $rootScope.nav("logout");
                           }
                         }
-
 
                         // refresh the teams in the background
                         angular.forEach
@@ -244,7 +234,7 @@ define(
 
                             Teams.query(
                               false,
-                              { uuid: teamId }
+                              {uuid: teamId}
                             ).then(
                               function ()
                               {
@@ -266,7 +256,15 @@ define(
             return moment(date).format('DD-MM-YYYY');
           }
 
-          $scope.editProfile = function () { setView('edit') };
+          $scope.editProfile = function ()
+          {
+            setView('edit');
+          };
+
+          $scope.editPassword = function()
+          {
+            setView('editPassword');
+          }
 
           // Change an avatar
           $scope.editImg = function ()
@@ -285,6 +283,37 @@ define(
             );
           };
 
+          $scope.savePassword = function(resources)
+          {
+            //copy data so the user can't see real-life changes causing by two way binding
+            var formData = angular.copy(resources);
+
+            if (! formData.oldpass || ! formData.newpass || ! formData.newpassrepeat)
+            {
+              $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
+              return;
+            }
+            else if (formData.newpass != null && formData.newpass != formData.newpassrepeat)
+            {
+              $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
+              return;
+            }
+            else if(MD5(formData.oldpass) !== $scope.profile.passwordHash)
+            {
+              $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
+              return;
+            }
+            else if (formData.newpass != null)
+            {
+              $scope.data.passwordHash = MD5(formData.newpass);
+              delete formData.oldpass;
+              delete formData.newpass;
+              delete formData.newpassrepeat;
+            }
+
+            $scope.save($scope.data);
+          }
+
           // Remove a profile completely
           $scope.deleteProfile = function ()
           {
@@ -292,54 +321,64 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-			var currentTeam;
+            var currentTeam;
 
-			angular.forEach($scope.teams , function(team) {
+            angular.forEach($scope.teams, function (team)
+            {
 
-				TeamUp._(
-				  'teamMemberDelete',
-				  { second: team.uuid },
-				  { ids: [$scope.profilemeta.uuid] }
-				).then(
-					  function (result)
-					  {
-						  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              TeamUp._(
+                'teamMemberDelete',
+                {second: team.uuid},
+                {ids: [$scope.profilemeta.uuid]}
+              ).then(
+                function (result)
+                {
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-						  angular.forEach($scope.profilemeta.teamUuids, function(teamId , i)
-						  {
-							  if(team.uuid == teamId)
-							  {
-								  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+                  angular.forEach($scope.profilemeta.teamUuids, function (teamId, i)
+                  {
+                    if (team.uuid == teamId)
+                    {
+                      $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-								  Teams.query(
-									  false,
-									  { 'uuid': teamId }
-								  ).then(
-									  function () { $rootScope.statusBar.off() }
-								  );
+                      Teams.query(
+                        false,
+                        {'uuid': teamId}
+                      ).then(
+                        function ()
+                        {
+                          $rootScope.statusBar.off()
+                        }
+                      );
 
-								  $scope.profilemeta.teamUuids.splice(i, 1);
-								  $scope.teams.splice(i, 1);
-								  sessionStorage.removeItem(data.uuid + '_team');
-								  Teams.updateMembersLocal();
-							  }
-						  });
-					  }, function (error) { console.log(error) }
-				  );
+                      $scope.profilemeta.teamUuids.splice(i, 1);
+                      $scope.teams.splice(i, 1);
+                      sessionStorage.removeItem(data.uuid + '_team');
+                      Teams.updateMembersLocal();
+                    }
+                  });
+                }, function (error)
+                {
+                  console.log(error)
+                }
+              );
 
-				//update list of members
-				TeamUp._('teamMemberFree')
-					.then(
-					function (result)
-					{
-						Store('app').save('members', result);
+              //update list of members
+              TeamUp._('teamMemberFree')
+                .then
+                (
+                  function (result)
+                  {
+                    Store('app').save('members', result);
 
-						$rootScope.statusBar.off();
-					},
-					function (error) { console.log(error) }
-				);
-
-			});
+                    $rootScope.statusBar.off();
+                  },
+                  function (error)
+                  {
+                    console.log(error)
+                  }
+                );
+            });
           };
 
         }

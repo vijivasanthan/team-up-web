@@ -44,7 +44,7 @@ define(
             {
               result = config.app.stateColors.busy;
             }
-            else if(stateValues.indexOf('offline') >= 0)
+            else if(stateValues.indexOf('offline') >= 0 || stateValues.indexOf('unknown') >= 0)
             {
               result = config.app.stateColors.offline;
             }

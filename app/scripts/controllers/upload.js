@@ -707,56 +707,56 @@ define(
               });
             }
 
-            $scope.deleteWeek = function ()
-            {
-              //TODO the user can't pick the team he likes to upload the sheet
-              var sheetFirstDate = moment($scope.tuSheet.days[0].startDate);
-
-              Task.getWeek(currentTeam, sheetFirstDate.week(), moment().get('year'))
-                .then(
-                function (tasks)
-                {
-                  deleteExistingTasksOnSheetDate(tasks)
-                    .then(
-                    function (tasks)
-                    {
-                      console.log('Deze taken zijn verwijdered ', tasks);
-                      //upload sheet tasks again
-                      //$q.all(uploadTasksSheet(tasksSheet));
-                    }
-                  );
-                }
-              );
-            };
-
-            //check if there are already tasks on the dates of the uploaded sheet
-            function deleteExistingTasksOnSheetDate(tasks)
-            {
-
-              var tasksByWeek = [];
-
-              angular.forEach(tasks, function (task)
-              {
-                tasksByWeek.push(TeamUp._(
-                    'taskDelete',
-                    { second: task.uuid },
-                    task
-                  ).then(
-                    function (result)
-                    {
-                      if (result.error)
-                      {
-                        console.log('failed ', task);
-                      }
-
-                      return result;
-                    }
-                  )
-                );
-              });
-
-              return $q.all(tasksByWeek);
-            }
+            //$scope.deleteWeek = function ()
+            //{
+            //  //TODO the user can't pick the team he likes to upload the sheet
+            //  var sheetFirstDate = moment($scope.tuSheet.days[0].startDate);
+            //
+            //  Task.getWeek(currentTeam, sheetFirstDate.week(), moment().get('year'))
+            //    .then(
+            //    function (tasks)
+            //    {
+            //      deleteExistingTasksOnSheetDate(tasks)
+            //        .then(
+            //        function (tasks)
+            //        {
+            //          console.log('Deze taken zijn verwijdered ', tasks);
+            //          //upload sheet tasks again
+            //          //$q.all(uploadTasksSheet(tasksSheet));
+            //        }
+            //      );
+            //    }
+            //  );
+            //};
+            //
+            ////check if there are already tasks on the dates of the uploaded sheet
+            //function deleteExistingTasksOnSheetDate(tasks)
+            //{
+            //
+            //  var tasksByWeek = [];
+            //
+            //  angular.forEach(tasks, function (task)
+            //  {
+            //    tasksByWeek.push(TeamUp._(
+            //        'taskDelete',
+            //        { second: task.uuid },
+            //        task
+            //      ).then(
+            //        function (result)
+            //        {
+            //          if (result.error)
+            //          {
+            //            console.log('failed ', task);
+            //          }
+            //
+            //          return result;
+            //        }
+            //      )
+            //    );
+            //  });
+            //
+            //  return $q.all(tasksByWeek);
+            //}
 
             this.addConfirmedClient = function (originalName, clientUuid)
             {

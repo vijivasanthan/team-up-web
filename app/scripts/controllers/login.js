@@ -289,10 +289,6 @@ define(
 						{
 							task.relatedClientName = client.firstName + ' ' + client.lastName;
 						}
-						else
-						{
-							console.log('client ', task.relatedClientUuid, task);
-						}
 					}
                   }
                 );
@@ -326,7 +322,7 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  progress(40, $rootScope.ui.login.loading_Teams);
+                  progress(40, $rootScope.ui.login.loading_teams);
 
                   Teams.query(true, {})
                     .then(
@@ -341,7 +337,7 @@ define(
                         console.warn('error ->', teams);
                       }
 
-                      progress(60, $rootScope.ui.login.loading_clientGroups);
+                      progress(60, $rootScope.ui.login.loading_teams);
 
                       Teams.queryClientGroups(teams)
                         .then(
@@ -369,10 +365,10 @@ define(
                                     .then(
                                     function ()
                                     {
-										//update localStorage logged user
-										updateLoggedUserTeams();
+                                      //update localStorage logged user
+                                      updateLoggedUserTeams();
 
-										$location.path('/tasks2');
+                                      $location.path('/tasks2');
 
                                       setTimeout(
                                         function ()

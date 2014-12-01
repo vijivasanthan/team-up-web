@@ -16,7 +16,7 @@
     <title ng-bind="config.app.title"></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/08b8f0b8.main.css">
+    <link rel="stylesheet" href="styles/b85cd6c0.main.css">
     <!-- block iestuff-->
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
@@ -43,7 +43,7 @@
               <!--li.navbar-btn-->
               <!--	a(href='#search')-->
               <!--		i.icon-search-->
-              <li><a id="account" ng-click="nav(&quot;profile&quot;)">
+              <li data-match-route="/profile"><a id="account" ng-click="nav(&quot;profile&quot;)">
                   <div back-img="{{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicxSmall {{app.resources.states|stateColor}} profile-avatar"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
               <li class="navbar-btn"><a ng-click="nav(&quot;logout&quot;)"><i class="icon-off"></i></a></li>
             </ul>
@@ -129,6 +129,6 @@
     </div>
     <script src="vendors/js-xlsx/jszip.js"></script>
     <script src="vendors/js-xlsx/xlsx.js"></script>
-    <script data-main="scripts/d687bbbe.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/e64def4e.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

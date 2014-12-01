@@ -33,7 +33,10 @@ define(
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
           loading: 'Laden..',
-          loading_clientGroups: 'Cliëntengroepen laden...'
+          loading_clientGroups: 'Cliëntengroepen laden...',
+          loading_clients: 'Clienten laden',
+          loading_teams: 'Teams laden...',
+          loading_tasks: 'Taken laden...'
         },
         dashboard: {
           thisWeek: 'Deze week',
@@ -371,6 +374,7 @@ define(
           changingPass: 'Wachtwoord wijzigen...',
           passChanged: 'Wachtwoord succesvol gewijzigd.',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
+          currentPassWrong: 'Het ingevulde oude wachtwoord komt niet overeen met het huidige! Probeer opnieuw.',
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
@@ -385,7 +389,10 @@ define(
           retypePassword: 'Herhaal wachtwoord',
           roleChangePrompt: 'Je verandert je eigen rol. Het systeem zal hierdoor automatisch uitloggen. Druk op "Ok" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
           specifyTeam: 'Selecteer een team voor deze gebruiker.',//'You need to sepcify a team to this user'
-          authorInfo: 'Auteurinfo laden...'
+          authorInfo: 'Auteurinfo laden...',
+          changePassWord: 'Wachtwoord wijzigen',
+          safePassword: 'Wachtwoord opslaan',
+          oldPassword: 'Oud wachtwoord'
         },
         settings: {
           settings: 'Instellingen',

@@ -267,6 +267,25 @@ define(
             );
           };
 
+          /**
+           * Get all tasks from a date range
+           * @param range Date range
+           * @returns {*} Promise of tasks
+           */
+          //TODO Leon is creating some backend calls for deleting tasks by client/clientgroup/team/member
+          Task.prototype.byRange = function (range)
+          {
+            return TeamUp._(
+              'taskQuery',
+              {fourth: teamId}
+            ).then(
+              function (tasks)
+              {
+                return tasks;
+              }.bind(this)
+            );
+          };
+
           function mergeOnStatus(tasks)
           {
             var merged = {on: [], off: []};
