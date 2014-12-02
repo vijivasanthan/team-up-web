@@ -105,7 +105,7 @@ define(
                         {
                           data.clientGroups = {};
                         }
-                        console.log(data);
+
                         deferred.resolve(data);
                       }
                     );

@@ -38,7 +38,7 @@ aria-hidden='true')
 
 .page-header(ng-hide='views.newTeam || views.newMember')
 	h2.nullable {{ui.teamup.teams}}
-	.selectGroup
+	.selectGroup(ng-show="app.resources.role == 1")
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
 		select(ng-model='current',
@@ -195,12 +195,12 @@ aria-hidden='true')
 										span.help-block
 											small
 												i {{phoneNumberParsed.message}}
-								.form-group
-									label.control-label {{ui.teamup.func}}
-									.controls
-										select(ng-model='memberForm.function',
-										ng-options='f.id as f.label for f in mfuncs')
-											option(value='') {{ui.teamup.chooseFunction}}
+								//.form-group
+								//	label.control-label {{ui.teamup.func}}
+								//	.controls
+								//		select(ng-model='memberForm.function',
+								//		ng-options='f.id as f.label for f in mfuncs')
+								//			option(value='') {{ui.teamup.chooseFunction}}
 						.span6
 							fieldset
 								.form-group.dater

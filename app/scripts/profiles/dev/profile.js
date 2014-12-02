@@ -60,7 +60,7 @@ var profile = {
     },
     {
       id: '2',
-      label: 'team_member'
+      label: 'team member'
     },
     {
       id: '3',

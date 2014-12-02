@@ -57,8 +57,8 @@ section#profile
 								dd {{data.role|translateRole}}
 								dt {{ui.profile.phone}}
 								dd {{data.phone}}
-								dt {{ui.teamup.func}}
-								dd {{data.function|translateFunc}}
+								//dt {{ui.teamup.func}}
+								//dd {{data.function|translateFunc}}
 								dt {{ui.profile.birthday}}
 								dd {{data.birthDate}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
@@ -110,12 +110,12 @@ section#profile
 								p.text-success(ng-show='phoneNumberParsed.result')
 									small
 										i {{phoneNumberParsed.message}}
-						.control-group
-							label.control-label {{ui.teamup.func}}
-							.controls
-								select(ng-model='profile.function',
-								ng-options='f.id as f.label for f in mfuncs',
-								ng-selected='profile.function')
+						//.control-group
+						//	label.control-label {{ui.teamup.func}}
+						//	.controls
+						//		select(ng-model='profile.function',
+						//		ng-options='f.id as f.label for f in mfuncs',
+						//		ng-selected='profile.function')
 						.form-group.dater
 							label.control-label {{ui.profile.birthday}}
 							.controls
@@ -127,30 +127,6 @@ section#profile
 								bs-datepicker='',
 								data-toggle='datepicker')
 								i.icon-calendar
-						//.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)', ng-class="{ 'has-error' : profileForm.password.$invalid && !profileForm.password.$pristine }")
-						//	label.control-label {{ui.profile.newPass}}
-						//	.controls
-						//		input.span3.form-control(type='password',
-						//		ng-model='profile.newpass',
-						//		name='password',
-						//		required,
-						//		ng-minlength="8",
-						//		ng-maxlength="20")
-						//		span.help-block(ng-show='profileForm.password.$invalid && !profileForm.password.$pristine')
-						//			small
-						//				i
-						//				| {{ ui.validation.password.required }}
-						//			small(ng-show="profileForm.password.$error.minlength")
-						//				i
-						//				| {{ ui.validation.password.amountMinChars(8) }} 
-						//			small(ng-show="profileForm.password.$error.maxlength")
-						//				i
-						//				| {{ ui.validation.password.amountMaxChars(20) }}
-						//.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')			
-						//	label.control-label {{ui.profile.newPassRepeat}}
-						//	.controls
-						//		input.span3(type='password',
-						//		ng-model='profile.newpassrepeat')
 						.form-actions
 							button.btn.btn-success(type='submit',
 							ng-click='save(profile)') {{ui.profile.saveProfile}}

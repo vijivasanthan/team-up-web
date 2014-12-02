@@ -441,8 +441,8 @@ define(
                 phone: member.phone,
                 teamUuids: [member.team],
                 role: member.role,
-                birthDate: Dater.convert.absolute(member.birthDate, 0),
-                function: member.function
+                birthDate: Dater.convert.absolute(member.birthDate, 0)
+                //function: member.function
               }
             ).then(
               function (result)

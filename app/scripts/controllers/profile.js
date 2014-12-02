@@ -44,6 +44,8 @@ define(
           //temp userdata will be saved after pressing save
           $scope.profile = angular.copy($scope.profilemeta);
 
+          console.log('profile', $scope.profile);
+
           $scope.currentRole = $scope.profilemeta.role;
 
           // TODO: Investigate whether they are in use!
