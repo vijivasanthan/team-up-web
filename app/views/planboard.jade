@@ -205,32 +205,50 @@ section#planboard(ng-controller='timeline as taskPlanboard')
 
 			#viewTeamsTab.tab-pane(class="{{(views.teams==true || views.clients==true) && 'active'}}")
 				.tab-header
-					h3.pull-left {{currentName}}
+					//h3.pull-left {{currentName}}
 					div(ng-show='app.resources.role == 1')
-					button.btn.pull-right.btn-info.marginLeftTen(type='button',
-					class="{{(views.clients==true) && 'active'}}",
+					button.btn.pull-right.btn-danger.marginLeftTen(type='button',
+					class="",
 					data-toggle='tab',
-					ng-click='setViewTo(current,"clients")')
-						span.icomoon(data-icon='',
-						aria-hidden='true')
-						|  Clienten
-					button.btn.pull-right.btn-info(type='button',
-					class="{{(views.teams==true) && 'active'}}",
-					data-toggle='tab',
-					ng-click='setViewTo(current,"teams")')
-						span.icomoon(data-icon='',
-						aria-hidden='true')
-						| Teams
-					.form-group.has-feedback.pull-left.dateranger.marginLeftTen
-						input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
-						i.glyphicon.glyphicon-calendar.form-control-feedback
-					div.btn-group.pull-left
-						button.btn.pull-left.btn-danger.marginLeftTen(type='button',
-						class="",
-						data-toggle='dropdown',
-						ng-click='confirmDeleteTasks(timeline.range)')
-							span.glyphicon.glyphicon-trash
-							|  Verwijder taken
+					ng-click='confirmDeleteTasks(timeline.range)')
+						span.glyphicon.glyphicon-trash
+						|  Verwijder taken
+					.btn-group.pull-right
+						button.btn.btn-primary(type='button',
+						class="{{(views.clients==true) && 'active'}}",
+						data-toggle='tab',
+						ng-click='setViewTo(current,"clients")')
+							span.icomoon(data-icon='',
+							aria-hidden='true')
+							|  Clienten
+						button.btn.btn-primary(type='button',
+						class="{{(views.teams==true) && 'active'}}",
+						data-toggle='tab',
+						ng-click='setViewTo(current,"teams")')
+							span.icomoon(data-icon='',
+							aria-hidden='true')
+							| Teams
+					div#timeline-controls(ng-controller='timeline-navigation')
+						.form-group.has-feedback.pull-left.dateranger.marginLeftTen
+							input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
+							i.glyphicon.glyphicon-calendar.form-control-feedback
+							
+						.btn-group.pull-left(style='margin-right: 5px;')
+							button.btn.btn-primary(type='button', ng-model='timeline.scope.day', ng-click='timelineScoper("day")', class="{{(timeline.scope.day==true) && 'active'}}")
+								| {{ui.agenda.day}}
+							button.btn.btn-primary(type='button', ng-model='timeline.scope.week', ng-click='timelineScoper("week")', class="{{(timeline.scope.week==true) && 'active'}}")
+								| {{ui.agenda.week}}
+							button.btn.btn-primary(type='button', ng-model='timeline.scope.month', ng-click='timelineScoper("month")', class="{{(timeline.scope.month==true) && 'active'}}")
+								| {{ui.agenda.month}}
+							.btn-group.pull-left(style='margin-right: 5px;')
+							button#timelineBeforeBtn.btn.btn-primary(type='button', ng-click='timelineBefore(timeline.scope)')
+								i.glyphicon.glyphicon-arrow-left
+							button#timelineZoomInBtn.btn.btn-primary(type='button', ng-click='timelineZoomIn()')
+								i.glyphicon.glyphicon-zoom-in
+							button#timelineZoomOutBtn.btn.btn-primary(type='button', ng-click='timelineZoomOut()')
+								i.glyphicon.glyphicon-zoom-out
+							button#timelineAfterBtn.btn.btn-primary(type='button', ng-click='timelineAfter(timeline.scope)')
+								i.glyphicon.glyphicon-arrow-right
 					
 				hr
 				#timeline

@@ -286,7 +286,6 @@ define(
 
             if (result == null)
             {
-              console.log('clientgroups', Store('app').get('ClientGroups'));
               angular.forEach(
                 Store('app').get('ClientGroups'),
                 function (group)
@@ -295,7 +294,6 @@ define(
                     Store('app').get(group.id),
                     function (client)
                     {
-                      console.log('client ', client);
                       if (client.uuid == clientId)
                       {
                         result = client;

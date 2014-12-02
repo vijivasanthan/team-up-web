@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -16,6 +16,9 @@ define(
             $scope.timeline.current.week = $scope.current.week;
             $scope.timeline.current.month = $scope.current.month;
 
+            $scope.timeline.current.year = Number(new Date().toString('yyyy'));
+            console.log('$scope.timeline', $scope.timeline);
+
             switch (period)
             {
               case 'day':
@@ -25,7 +28,7 @@ define(
                   month: false
                 };
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
                     end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
@@ -39,7 +42,7 @@ define(
                   month: false
                 };
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
                     end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
@@ -53,7 +56,7 @@ define(
                   month: true
                 };
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
                     end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
@@ -70,7 +73,7 @@ define(
               {
                 $scope.timeline.current.day --;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
                     end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
@@ -83,7 +86,7 @@ define(
               {
                 $scope.timeline.current.week --;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
                     end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
@@ -96,7 +99,7 @@ define(
               {
                 $scope.timeline.current.month --;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
                     end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
@@ -113,7 +116,7 @@ define(
               {
                 $scope.timeline.current.day ++;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
                     end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
@@ -126,7 +129,7 @@ define(
               {
                 $scope.timeline.current.week ++;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
                     end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
@@ -139,7 +142,7 @@ define(
               {
                 $scope.timeline.current.month ++;
 
-                $scope.timeliner.load(
+                $scope.timeliner.render(
                   {
                     start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
                     end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
@@ -152,7 +155,7 @@ define(
           {
             if ($scope.timeline.current.week != new Date().getWeek())
             {
-              $scope.timeliner.load(
+              $scope.timeliner.render(
                 {
                   start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,
                   end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp
@@ -171,7 +174,7 @@ define(
             {
               $scope.timeline.current.week --;
 
-              $scope.timeliner.load(
+              $scope.timeliner.render(
                 {
                   start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
                   end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
@@ -190,7 +193,7 @@ define(
             {
               $scope.timeline.current.week ++;
 
-              $scope.timeliner.load(
+              $scope.timeliner.render(
                 {
                   start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
                   end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp

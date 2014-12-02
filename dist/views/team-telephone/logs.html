@@ -25,10 +25,10 @@
             <thead>
               <tr>
                 <th><a ng-click="orderBy(&quot;status&quot;)">Status</a><span ng-show="(ordered==&quot;status&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
-                <th><a ng-click="orderBy(&quot;from&quot;)">From</a><span ng-show="(ordered==&quot;from&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
-                <th><a ng-click="orderBy(&quot;to&quot;)">To</a><span ng-show="(ordered==&quot;to&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
-                <th><a ng-click="orderBy(&quot;started.stamp&quot;)">Time</a><span ng-show="(ordered==&quot;started.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
-                <th><a ng-click="orderBy(&quot;duration.stamp&quot;)">Duration</a><span ng-show="(ordered==&quot;duration.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;from&quot;)">{{ui.teamup.from}}</a><span ng-show="(ordered==&quot;from&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;to&quot;)">{{ui.teamup.to }}</a><span ng-show="(ordered==&quot;to&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;started.stamp&quot;)">{{ui.teamup.time }} </a><span ng-show="(ordered==&quot;started.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;duration.stamp&quot;)">{{ui.teamup.duration }} </a><span ng-show="(ordered==&quot;duration.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
               </tr>
             </thead>
             <tbody>

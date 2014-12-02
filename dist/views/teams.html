@@ -30,7 +30,7 @@
 </div>
 <div ng-hide="views.newTeam || views.newMember" class="page-header">
   <h2 class="nullable">{{ui.teamup.teams}}</h2>
-  <div class="selectGroup"><span class="selectTitle">{{ ui.teamup.selectTeam }}</span>
+  <div ng-show="app.resources.role == 1" class="selectGroup"><span class="selectTitle">{{ ui.teamup.selectTeam }}</span>
     <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
   </div>
 </div>
@@ -146,14 +146,12 @@
                     <input type="text" ng-model="memberForm.phone" ng-change="parsePhoneNumber(memberForm.phone)" class="span3 form-control inputPhoneNumber"><span class="help-block"><small><i>{{phoneNumberParsed.message}}</i></small></span>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="control-label">{{ui.teamup.func}}</label>
-                  <div class="controls">
-                    <select ng-model="memberForm.function" ng-options="f.id as f.label for f in mfuncs">
-                      <option value="">{{ui.teamup.chooseFunction}}</option>
-                    </select>
-                  </div>
-                </div>
+                <!--.form-group-->
+                <!--	label.control-label {{ui.teamup.func}}-->
+                <!--	.controls-->
+                <!--		select(ng-model='memberForm.function',-->
+                <!--		ng-options='f.id as f.label for f in mfuncs')-->
+                <!--			option(value='') {{ui.teamup.chooseFunction}}-->
               </fieldset>
             </div>
             <div class="span6">

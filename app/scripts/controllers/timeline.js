@@ -225,22 +225,22 @@ define(
                       {
                         timedata.push(
                           {
-                            start: data.periods.end,
+                            start: 1577836800000,//data.periods.end,
                             end: 1577836800000,
-                            group: row
-                            //content: 'loading',
-                            //className: 'state-loading-right',
-                            //editable: false
+                            group: row,
+                            content: 'loading',
+                            className: 'state-loading-right',
+                            editable: false
                           });
 
                         timedata.push(
                           {
-                            start: 0,
-                            end: data.periods.start,
-                            group: row
-                            //content: 'loading',
-                            //className: 'state-loading-left',
-                            //editable: false
+                            start: 0,//data.periods.start,
+                            end: 0,
+                            group: row,
+                            content: 'loading',
+                            className: 'state-loading-left',
+                            editable: false
                           });
                       });
 
@@ -258,6 +258,8 @@ define(
             {
               var start,
                   end;
+
+              console.log('options', options);
 
               if ($scope.timeline.range)
               {
@@ -336,8 +338,8 @@ define(
 
               this.render(
                 {
-                  start: $scope.data.periods.start,
-                  end: $scope.data.periods.end
+                  start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,//$scope.data.periods.start,
+                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp //$scope.data.periods.end
                 }, true
               );
             },
