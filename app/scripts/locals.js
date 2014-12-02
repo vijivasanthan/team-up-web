@@ -80,8 +80,8 @@ define(
           setWish: 'Set Wish',
           timeline: 'Tijdlijn',
           statistics: 'Statistics',
-          barCharts: 'Bar charts',
-          wishes: 'Wishes',
+          barCharts: 'Staafdiagrammen',
+          wishes: 'Behoefte',
           legenda: 'Legenda',
           group: 'Team',
           groups: 'Team',
@@ -185,11 +185,12 @@ define(
           lastSyncTime: 'Laatste synchronisatietijd:',
           dataRangeStart: 'Begin gegevensscala: ',
           DataRangeEnd: 'Eind gegevensscala: ',
-          daterangerToday: 'Today',
-          daterangerTomorrow: 'Tomorrow',
-          daterangerYesterday: 'Yesterday',
-          daterangerNext3Days: 'Next 3 days',
-          daterangerNext7Days: 'Next 7 days',
+          daterangerToday: 'Vandaag',
+          daterangerTomorrow: 'Morgen',
+          daterangerLast7Days: 'Laatste 7 dagen',
+          daterangerYesterday: 'Gisteren',
+          daterangerNext3Days: 'Volgende 3 dagen',
+          daterangerNext7Days: 'Volgende 7 dagen',
           loadingTimeline: 'Tijdlijn laden...',
           rangeInfoTotalSelectedDays: 'Totaal aantal geselecteerde dagen: ',
           rangeInfoTime: 'Tijd: ',
@@ -500,6 +501,12 @@ define(
           // delClientGroupConfirm: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
           // delTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
           deletingClientGroup: 'Groep verwijderen... ',
+          from: 'Van',
+          to: 'Tot',
+          time: 'Tijd',
+          duration: 'Duur',
+
+
           //deleteConfirm: 'Druk op OK om door te gaan.',
           confirms: {
             deleteClientTitle: 'Verwijder client',
@@ -521,7 +528,25 @@ define(
             deleteContactTitle: 'Verwijder contact',
             deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
-            cancel: 'Annuleren'
+            cancel: 'Annuleren',
+            day: {
+              sunday: 'zondag',
+              monday: 'maandag',
+              tuesday: 'donderdag',
+              wednesday: 'woensdag',
+              thursday: 'donderdag',
+              friday: 'vrijdag',
+              saturday: 'zaterdag'
+            },
+            shortDay: {
+             su: "zo",
+              mo: "ma",
+              tu: "di",
+              we: "wo",
+              th: "do",
+              fr: "vr",
+              su: "za"
+            }
           },
           deletingTeam: 'Team verwijderen...',
           deletingMember: 'Lid verwijderen ...',

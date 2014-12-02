@@ -25,22 +25,22 @@ section#logs
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼
 								th
-									a(ng-click='orderBy("from")') From
+									a(ng-click='orderBy("from")') {{ui.teamup.from}}
 									span(ng-show='(ordered=="from")')
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼
 								th
-									a(ng-click='orderBy("to")') To
+									a(ng-click='orderBy("to")') {{ui.teamup.to }}
 									span(ng-show='(ordered=="to")')
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼
 								th
-									a(ng-click='orderBy("started.stamp")') Time
+									a(ng-click='orderBy("started.stamp")') {{ui.teamup.time }} 
 									span(ng-show='(ordered=="started.stamp")')
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼
 								th
-									a(ng-click='orderBy("duration.stamp")') Duration
+									a(ng-click='orderBy("duration.stamp")') {{ui.teamup.duration }} 
 									span(ng-show='(ordered=="duration.stamp")')
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼

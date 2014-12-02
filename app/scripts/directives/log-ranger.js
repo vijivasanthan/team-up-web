@@ -25,6 +25,8 @@ define(
               showDropdowns:  false,
               dateLimit:      false,
               locale: {
+                //todayLabel:     $rootScope.ui.planboard.daterangerToday,
+                //yesterdayLabel: $rootScope.ui.planboard.daterangerYesterday,
                 applyLabel:     'Toepassen',
                 cancelLabel:    'Annuleren',
                 fromLabel:      'van',
@@ -48,7 +50,7 @@ define(
               new Date.today()
             ];
 
-            options.ranges['Laatste 7 dagen'] = [
+            options.ranges[$rootScope.ui.planboard.daterangerLast7Days] = [
               moment().subtract(7, 'day').toDate(),
               new Date.today()
             ];
