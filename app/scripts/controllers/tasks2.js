@@ -529,13 +529,13 @@ define(
               return false;
             }
 
-            $scope.task.startTime = ($rootScope.browser.mobile) ?
+            $scope.task.startTime =  ($rootScope.browser.mobile) ?
               new Date(task.start.date).getTime() :
-              Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yy'), formatDateTime(task.start.time, 'HH:mm'), false);
+              Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yyyy'), formatDateTime(task.start.time, 'HH:mm'), false);
 
-            $scope.task.endTime = ($rootScope.browser.mobile) ?
+            $scope.task.endTime =  ($rootScope.browser.mobile) ?
               new Date(task.end.date).getTime() :
-              Dater.convert.absolute(formatDateTime(task.end.date, 'dd-MM-yy'), formatDateTime(task.end.time, 'HH:mm'), false);
+              Dater.convert.absolute(formatDateTime(task.end.date, 'dd-MM-yyyy'), formatDateTime(task.end.time, 'HH:mm'), false);
 
             // start time and end time should be in the future
             // end time should later than start time

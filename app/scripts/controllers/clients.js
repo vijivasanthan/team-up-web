@@ -1058,7 +1058,8 @@ define(
             return $modal(
               {
                 template: 'views/reportTemplate.html',
-                scope: $scope
+                scope: $scope,
+                animation: 'am-fade'
               }
             );
           }
