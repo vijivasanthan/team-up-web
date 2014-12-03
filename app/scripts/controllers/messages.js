@@ -99,9 +99,11 @@ define(
                 {
                   var msgBody = JSON.parse(message.body);
                   var client = $rootScope.getClientByID(msgBody.clientUuid);
-                  angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
-                  msg.body = msgBody;
-                  msg.title = $scope.ui.message.reportMessage+" "+client.firstName+" "+client.lastName;
+                  if(client!=null) {
+                    angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
+                    msg.body = msgBody;
+                    msg.title = $scope.ui.message.reportMessage + " " + client.firstName + " " + client.lastName;
+                  }
                 }
 
                 $scope.messages.push(msg);
@@ -247,7 +249,8 @@ define(
             $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $rootScope.app.resources.teamUuids;
-            $scope.chatTeamId = teamIds[0].uuid;
+            console.log(teamIds);
+            $scope.chatTeamId = teamIds[0];
 
             var msgs = $filter('orderBy')($scope.messages, 'sendTime');
             var latestMsgTime = 0;
