@@ -16,8 +16,7 @@ define(
         'TeamUp',
         'Session',
         '$timeout',
-        'Task',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, $timeout, Task)
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, $timeout)
         {
           var params = $location.search();
 
@@ -549,102 +548,34 @@ define(
             }
           };
 
-          $scope.confirmDeleteTasks = function (range)
-          {
-
-            if ($location.hash() == 'clients')
-            {
-              $scope.removeTaskOptions = {
-                uuid: $scope.currentClientGroup,
-                name: $scope.currentName,
-                group: 'clientgroep',
-                range: {}
-              };
-            }
-            else
-            {
-              $scope.removeTaskOptions = {
-                uuid: $scope.currentTeam,
-                name: $scope.currentName,
-                group: 'team',
-                range: {}
-              };
-            }
-
-            if (!_.isUndefined(range))
-            {
-              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
-              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM. YYYY");
-            }
-            //moment.createFromInputFallback = function(config) {
-            //  // your favorite unreliable string magic, or
-            //  config._d = new Date(config._i);
-            //};
-
-            $timeout(
-              function ()
-              {
-                angular.element('#confirmTaskModal').modal('show');
-              }
-            );
-          };
-
-          $scope.deleteTasks = function (options)
-          {
-            console.log(options);
-            //get all tasks by team or clientgroup by range
-          }
-
-          $scope.byRange = function ()
-          {
-            //TODO the user can't pick the team he likes to upload the sheet
-            //var sheetFirstDate = moment($scope.tuSheet.days[0].startDate);
-            //
-            //Task.getWeek(currentTeam, sheetFirstDate.week(), moment().get('year'))
-            //  .then(
-            //  function (tasks)
-            //  {
-            //    deleteExistingTasksOnSheetDate(tasks)
-            //      .then(
-            //      function (tasks)
-            //      {
-            //        console.log('Deze taken zijn verwijdered ', tasks);
-            //        //upload sheet tasks again
-            //        //$q.all(uploadTasksSheet(tasksSheet));
-            //      }
-            //    );
-            //  }
-            //);
-          };
-
           //check if there are already tasks on the dates of the uploaded sheet
-          function deleteExistingTasksOnSheetDate(tasks)
-          {
-
-            var tasksByWeek = [];
-
-            angular.forEach(tasks, function (task)
-            {
-              tasksByWeek.push(TeamUp._(
-                  'taskDelete',
-                  {second: task.uuid},
-                  task
-                ).then(
-                  function (result)
-                  {
-                    if (result.error)
-                    {
-                      console.log('failed ', task);
-                    }
-
-                    return result;
-                  }
-                )
-              );
-            });
-
-            return $q.all(tasksByWeek);
-          }
+          //function deleteExistingTasksOnSheetDate(tasks)
+          //{
+          //
+          //
+          //
+          //  angular.forEach(tasks, function (task)
+          //  {
+          //    tasksByWeek.push(TeamUp._(
+          //        'taskDelete',
+          //        {second: task.uuid},
+          //        task
+          //      ).then(
+          //        function (result)
+          //        {
+          //          if (result.error)
+          //          {
+          //            console.log('failed ', task);
+          //          }
+          //
+          //          return result;
+          //        }
+          //      )
+          //    );
+          //  });
+          //
+          //  return $q.all(tasksByWeek);
+          //}
         }
       ]
     );

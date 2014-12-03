@@ -189,6 +189,28 @@ define(
             return deferred.promise;
           };
 
+          /**
+           *
+           * @param options team uuid, start and end date
+           * @returns tasks of the given range
+           */
+          TeamsService.prototype.getTasksRange = function (options)
+          {
+            return TeamUp._(
+              'teamTaskQuery',
+              {
+                second: options.groupId,
+                from: new Date(options.range.start).getTime(),
+                to: new Date(options.range.end).getTime()
+              }
+            ).then(
+              function (tasks)
+              {
+                return tasks;
+              }.bind(this)
+            );
+          };
+
           // Get local data of links between client groups and teams
           TeamsService.prototype.queryLocalClientGroup = function (teams)
           {

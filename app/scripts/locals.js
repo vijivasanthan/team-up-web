@@ -225,6 +225,18 @@ define(
 
             return html;
           },
+          tasksDeleted: function(options)
+          {
+            if(! _.isUndefined(options))
+            {
+              var html = 'De taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' zijn verwijderd.';
+            }
+
+            return html;
+          },
+          noTasksFounded: 'Geen taken gevonden in de opegegeven range.',
           removeTasksTitle: 'Verwijderen taken'
         },
         message: {
