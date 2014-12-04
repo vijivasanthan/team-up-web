@@ -541,6 +541,202 @@ define(['controllers/controllers'], function (controllers)
         //   }
         // }
 
+        //$scope.getAvailability = function (groupID, divisionID)
+        //{
+        //    var deferred = $q.defer(),
+        //        queriedTeams = Teams.query();
+        //
+        //    if (!groupID)
+        //    {
+        //      groupID = $scope.current.group;
+        //    }
+        //
+        //    if (!divisionID)
+        //    {
+        //      divisionID = $scope.current.division;
+        //    }
+        //
+        //
+        //    if (groupID == 'all')
+        //    {
+        //      members = $rootScope.unique(Store('app').get('members'));
+        //
+        //      Slots.getAllMemberAvailabilities(teams)
+        //        .then(
+        //          function(result)
+        //          {
+        //            console.log('result', result);
+        //            checkSlots(result);
+        //          }
+        //        );
+        //
+        //    }
+        //    else
+        //    {
+        //      members = $rootScope.unique(data.members[groupID]);
+        //
+        //      Slots.getMemberAvailabilitiesPerTeam(groupID, divisionID)
+        //        .then(
+        //          function(result)
+        //          {
+        //            checkSlots(result);
+        //          }
+        //        );
+        //    }
+        //
+        //    Slots.users(members)
+        //      .then(function(results) {
+        //        console.log('Slots.users', results);
+        //    });
+        //
+        //    var checkSlots = function(result)
+        //    {
+        //      var ordered = {};
+        //
+        //      _.each(angular.fromJson(angular.toJson(result.members)), function (slots, id)
+        //      {
+        //        if (members[id] &&
+        //          (members[id].role != 0 && members[id].role != 4))
+        //        {
+        //          var _member = {
+        //            id: id,
+        //            state: (slots.length > 0) ? slots[0].state : 'no-state',
+        //            label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
+        //            end: (slots.length > 0 && slots[0].end !== undefined) ?
+        //            slots[0].end * 1000 :
+        //              $rootScope.ui.dashboard.possiblyAvailable,
+        //            name: (members && members[id]) ?
+        //            members[id].firstName + ' ' + members[id].lastName :
+        //              id
+        //          };
+        //
+        //          if (slots.length > 0)
+        //          {
+        //            if (!ordered.available)
+        //            {
+        //              ordered.available = [];
+        //            }
+        //
+        //            if (!ordered.unavailable)
+        //            {
+        //              ordered.unavailable = [];
+        //            }
+        //
+        //            if (slots[0].state == 'com.ask-cs.State.Unreached')
+        //            {
+        //              ordered.unavailable.push(_member);
+        //            }
+        //            else if (slots[0].state == 'com.ask-cs.State.Unavailable')
+        //            {
+        //              ordered.unavailable.push(_member);
+        //            }
+        //            else
+        //            {
+        //              if (slots[0].state == 'com.ask-cs.State.Available')
+        //              {
+        //                _member.style = 'sa-icon-reserve-available';
+        //              }
+        //
+        //              //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
+        //              //{
+        //              //  _member.style = 'sa-icon-reserve-available-north';
+        //              //}
+        //              //
+        //              //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
+        //              //{
+        //              //  _member.style = 'sa-icon-reserve-available-south';
+        //              //}
+        //              //
+        //              //if (slots[0].state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
+        //              //{
+        //              //  _member.style = 'sa-icon-reserve-available-schipper';
+        //              //}
+        //
+        //              ordered.available.push(_member);
+        //            }
+        //          }
+        //          else
+        //          {
+        //            if (!ordered.possible)
+        //            {
+        //              ordered.possible = [];
+        //            }
+        //
+        //            ordered.possible.push(_member);
+        //          }
+        //        }
+        //      });
+        //
+        //      $scope.loadingAvailability = false;
+        //
+        //      var sortByEnd = function (a, b)
+        //      {
+        //        if (a.end < b.end)
+        //        {
+        //          return -1;
+        //        }
+        //
+        //        if (a.end > b.end)
+        //        {
+        //          return 1;
+        //        }
+        //
+        //        return 0;
+        //      };
+        //
+        //      if (ordered.hasOwnProperty('available'))
+        //      {
+        //        ordered.available.sort(sortByEnd);
+        //      }
+        //
+        //      if (ordered.hasOwnProperty('unavailable'))
+        //      {
+        //        ordered.unavailable.sort(sortByEnd);
+        //      }
+        //
+        //      var _availables = [];
+        //
+        //      _.each(ordered.available, function (available)
+        //      {
+        //        if (available.state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
+        //        {
+        //          _availables.push(available);
+        //        }
+        //      });
+        //
+        //      _.each(ordered.available, function (available)
+        //      {
+        //        if (available.state == 'com.ask-cs.State.Available')
+        //        {
+        //          _availables.push(available);
+        //        }
+        //      });
+        //
+        //      _.each(ordered.available, function (available)
+        //      {
+        //        if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
+        //        {
+        //          _availables.push(available);
+        //        }
+        //      });
+        //
+        //      _.each(ordered.available, function (available)
+        //      {
+        //        if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
+        //        {
+        //          _availables.push(available);
+        //        }
+        //      });
+        //
+        //      ordered.available = _availables;
+        //
+        //      $scope.availability = {
+        //        members: ordered,
+        //        synced: result.synced * 1000
+        //      };
+        //    };
+        //};
+
         $scope.current = {
           group: initGroup,
           division: 'all'
@@ -548,203 +744,208 @@ define(['controllers/controllers'], function (controllers)
 
         $scope.loadingAvailability = true;
 
+        //TODO resolve the availibilities of the member in the routing
         $scope.getAvailability = function (groupID, divisionID)
         {
-            var deferred = $q.defer();
-            var queriedTeams = Teams.query();
+          var deferred = $q.defer();
 
-            if (!groupID)
+          if (!groupID)
+          {
+            groupID = $scope.current.group;
+          }
+
+          if (!divisionID)
+          {
+            divisionID = $scope.current.division;
+          }
+
+
+          if (groupID == 'all')
+          {
+            members = $rootScope.unique(Store('app').get('members'));
+          }
+          else if (typeof data.members[groupID] != 'undefined')
+          {
+            members = $rootScope.unique(data.members[groupID]);
+          }
+
+          Slots.getAllMemberAvailabilities(data.teams)//.users(members)
+            .then(
+            function (results)
             {
-              groupID = $scope.current.group;
-            }
+              var ordered = {};
 
-            if (!divisionID)
-            {
-              divisionID = $scope.current.division;
-            }
-
-
-            if (groupID == 'all')
-            {
-              members = $rootScope.unique(Store('app').get('members'));
-            }
-            else if (typeof data.members[groupID] != 'undefined')
-            {
-              members = $rootScope.unique(data.members[groupID]);
-            }
-
-            Slots.users(members)
-              .then(
-              function (results)
+              _.each(results.members, function (slots, id) //angular.fromJson(angular.toJson(results.members))
               {
-                console.log('geladen');
-                var ordered = {};
-
-                _.each(angular.fromJson(angular.toJson(results.members)), function (slots, id)
+                if (members[id] &&
+                  (members[id].role != 0 && members[id].role != 4))
                 {
-                  if (members[id] &&
-                    (members[id].role != 0 && members[id].role != 4))
+                  var _member = {
+                    id: id,
+                    state: (slots.length > 0) ? slots[0].state : 'no-state',
+                    label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
+                    end: (slots.length > 0 && slots[0].end !== undefined) ?
+                    slots[0].end * 1000 :
+                      $rootScope.ui.dashboard.possiblyAvailable,
+                    name: (members && members[id]) ?
+                    members[id].firstName + ' ' + members[id].lastName :
+                      id
+                  };
+
+                  if (slots.length > 0)
                   {
-                    var _member = {
-                      id: id,
-                      state: (slots.length > 0) ? slots[0].state : 'no-state',
-                      label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
-                      end: (slots.length > 0 && slots[0].end !== undefined) ?
-                      slots[0].end * 1000 :
-                        $rootScope.ui.dashboard.possiblyAvailable,
-                      name: (members && members[id]) ?
-                      members[id].firstName + ' ' + members[id].lastName :
-                        id
-                    };
-
-                    if (slots.length > 0)
+                    if (!ordered.available)
                     {
-                      if (!ordered.available)
-                      {
-                        ordered.available = [];
-                      }
+                      ordered.available = [];
+                    }
 
-                      if (!ordered.unavailable)
-                      {
-                        ordered.unavailable = [];
-                      }
+                    if (!ordered.unavailable)
+                    {
+                      ordered.unavailable = [];
+                    }
 
-                      if (slots[0].state == 'com.ask-cs.State.Unreached')
-                      {
-                        ordered.unavailable.push(_member);
-                      }
-                      else if (slots[0].state == 'com.ask-cs.State.Unavailable')
-                      {
-                        ordered.unavailable.push(_member);
-                      }
-                      else
-                      {
-                        if (slots[0].state == 'com.ask-cs.State.Available')
-                        {
-                          _member.style = 'sa-icon-reserve-available';
-                        }
-
-                        //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
-                        //{
-                        //  _member.style = 'sa-icon-reserve-available-north';
-                        //}
-                        //
-                        //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
-                        //{
-                        //  _member.style = 'sa-icon-reserve-available-south';
-                        //}
-                        //
-                        //if (slots[0].state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
-                        //{
-                        //  _member.style = 'sa-icon-reserve-available-schipper';
-                        //}
-
-                        ordered.available.push(_member);
-                      }
+                    if (slots[0].state == 'com.ask-cs.State.Unreached')
+                    {
+                      ordered.unavailable.push(_member);
+                    }
+                    else if (slots[0].state == 'com.ask-cs.State.Unavailable')
+                    {
+                      ordered.unavailable.push(_member);
                     }
                     else
                     {
-                      if (!ordered.possible)
+                      if (slots[0].state == 'com.ask-cs.State.Available')
                       {
-                        ordered.possible = [];
+                        _member.style = 'sa-icon-reserve-available';
                       }
 
-                      ordered.possible.push(_member);
+                      //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
+                      //{
+                      //  _member.style = 'sa-icon-reserve-available-north';
+                      //}
+                      //
+                      //if (slots[0].state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
+                      //{
+                      //  _member.style = 'sa-icon-reserve-available-south';
+                      //}
+                      //
+                      //if (slots[0].state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
+                      //{
+                      //  _member.style = 'sa-icon-reserve-available-schipper';
+                      //}
+
+                      ordered.available.push(_member);
                     }
                   }
-                });
-
-                $scope.loadingAvailability = false;
-
-                var sortByEnd = function (a, b)
-                {
-                  if (a.end < b.end)
+                  else
                   {
-                    return -1;
+                    if (!ordered.possible)
+                    {
+                      ordered.possible = [];
+                    }
+
+                    ordered.possible.push(_member);
                   }
-
-                  if (a.end > b.end)
-                  {
-                    return 1;
-                  }
-
-                  return 0;
-                };
-
-                if (ordered.hasOwnProperty('available'))
-                {
-                  ordered.available.sort(sortByEnd);
                 }
-
-                if (ordered.hasOwnProperty('unavailable'))
-                {
-                  ordered.unavailable.sort(sortByEnd);
-                }
-
-                var _availables = [];
-
-                _.each(ordered.available, function (available)
-                {
-                  if (available.state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
-                  {
-                    _availables.push(available);
-                  }
-                });
-
-                _.each(ordered.available, function (available)
-                {
-                  if (available.state == 'com.ask-cs.State.Available')
-                  {
-                    _availables.push(available);
-                  }
-                });
-
-                _.each(ordered.available, function (available)
-                {
-                  if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
-                  {
-                    _availables.push(available);
-                  }
-                });
-
-                _.each(ordered.available, function (available)
-                {
-                  if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
-                  {
-                    _availables.push(available);
-                  }
-                });
-
-                ordered.available = _availables;
-
-                $scope.availability = {
-                  members: ordered,
-                  synced: results.synced * 1000
-                };
-
-                deferred.resolve($scope.availability);
-              },
-              function (results)
-              {
-                deferred.reject(results);
               });
 
-            return deferred.promise;
+              $scope.loadingAvailability = false;
+
+              var sortByEnd = function (a, b)
+              {
+                if (a.end < b.end)
+                {
+                  return -1;
+                }
+
+                if (a.end > b.end)
+                {
+                  return 1;
+                }
+
+                return 0;
+              };
+
+              if (ordered.hasOwnProperty('available'))
+              {
+                ordered.available.sort(sortByEnd);
+              }
+
+              if (ordered.hasOwnProperty('unavailable'))
+              {
+                ordered.unavailable.sort(sortByEnd);
+              }
+
+              var _availables = [];
+
+              _.each(ordered.available, function (available)
+              {
+                if (available.state == 'com.ask-cs.State.KNRM.SchipperVanDienst')
+                {
+                  _availables.push(available);
+                }
+              });
+
+              _.each(ordered.available, function (available)
+              {
+                if (available.state == 'com.ask-cs.State.Available')
+                {
+                  _availables.push(available);
+                }
+              });
+
+              _.each(ordered.available, function (available)
+              {
+                if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarNoord')
+                {
+                  _availables.push(available);
+                }
+              });
+
+              _.each(ordered.available, function (available)
+              {
+                if (available.state == 'com.ask-cs.State.KNRM.BeschikbaarZuid')
+                {
+                  _availables.push(available);
+                }
+              });
+
+              ordered.available = _availables;
+
+              $scope.availability = {
+                members: ordered,
+                synced: results.synced * 1000
+              };
+
+              deferred.resolve($scope.availability);
+            },
+            function (results)
+            {
+              deferred.reject(results);
+            });
+
+          return deferred.promise;
         };
+
 
         $scope.getGroupAvailability = function ()
         {
           var deferred = $q.defer();
           $scope.current.division = 'all';
+          $scope.loadGroup = $rootScope.ui.dashboard.load;
+          $rootScope.statusBar.display($scope.current.group);
 
           $scope.getAvailability($scope.current.group, $scope.current.division)
             .then(function (results)
             {
               deferred.resolve(results);
+              $scope.loadGroup = '';
+              $rootScope.statusBar.off();
             },
             function (results)
             {
               deferred.reject(results);
+              $rootScope.statusBar.off();
             });
           return deferred.promise;
         };
@@ -754,26 +955,28 @@ define(['controllers/controllers'], function (controllers)
           $scope.getAvailability($scope.current.group, $scope.current.division);
         };
 
-        if ($rootScope.config.app.presence)
-        {
-          $q.all([$scope.getGroupAvailability(), Network.population()])
-            .then(function ()
-            {
-              $scope.checkPresence();
-            },
-            function ()
-            {
-              // Only getGroupAvailability would reject, try once more
-              $scope.getGroupAvailability().then(function ()
-              {
-                $scope.checkPresence();
-              })
-            });
-        }
-        else
-        {
-          $scope.getGroupAvailability();
-        }
+        $scope.getGroupAvailability();
+
+        //if ($rootScope.config.app.presence)
+        //{
+        //  $q.all([$scope.getGroupAvailability(), Network.population()])
+        //    .then(function ()
+        //    {
+        //      $scope.checkPresence();
+        //    },
+        //    function ()
+        //    {
+        //      // Only getGroupAvailability would reject, try once more
+        //      $scope.getGroupAvailability().then(function ()
+        //      {
+        //        $scope.checkPresence();
+        //      })
+        //    });
+        //}
+        //else
+        //{
+        //  $scope.getGroupAvailability();
+        //}
 
 
         // $scope.saveOverviewWidget = function (selection) {

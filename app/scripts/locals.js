@@ -47,6 +47,7 @@ define(
           loadingPie: 'Cirkeldiagrammen laden...',
           possiblyAvailable: 'Mogelijk Inzetbaar',
           noPlanning: 'Geen Planning',
+          load: 'laden...',
           time: {
             days: 'd',
             hours: 'u',

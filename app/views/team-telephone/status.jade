@@ -19,7 +19,7 @@ section#dashboard
 			#availabilities.sa.widget
 				div.head
 					h4
-						| Overzicht beschikbaarheid{{current.group | groupIdToName:true | toTitleCase}}
+						| Overzicht beschikbaarheid{{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
 						span(ng-show='(current.division != "all")') ({{current.division | divisionIdToName}})
 					.pull-right(ng-hide='loadingAvailability')
 						//select(ng-model='current.group',

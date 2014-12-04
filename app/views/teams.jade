@@ -36,9 +36,10 @@ aria-hidden='true')
 				button.btn.btn-primary(type='button',
 				ng-click='deleteMember(_memberId)') {{ui.teamup.confirms.remove}}
 
-.page-header(ng-hide='views.newTeam || views.newMember')
+.page-header
 	h2.nullable {{ui.teamup.teams}}
-	.selectGroup(ng-show="app.resources.role == 1")
+	.selectGroup(ng-show="app.resources.role == 1",
+		ng-hide='views.newTeam || views.newMember')
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
 		select(ng-model='current',

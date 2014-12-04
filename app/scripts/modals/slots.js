@@ -60,6 +60,16 @@ define(['services/services', 'config'],
             query: {
               method: 'GET',
               params: {id: '', start: '', end: ''}
+            },
+            get: {
+              method: 'GET',
+              params: {id: '', start: '', end: ''},
+              interceptor: {
+                response: function(response) {
+                  // expose response
+                  return response;
+                }
+              }
             }
           });
 
@@ -505,26 +515,78 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.getMemberAvailabilities = function (groupID, divisionID) {
-            var deferred = $q.defer();
+          Slots.prototype.getMemberAvailabilitiesPerTeam = function (groupID, divisionID)
+          {
+            var deferred = $q.defer(),
+                now = Math.floor(Date.now().getTime() / 1000);
 
-            var now = Math.floor(Date.now().getTime() / 1000);
-
-            MemberSlots.query({
+            MemberSlots.get({
                 id: groupID,
                 type: divisionID,
                 start: now,
                 end: now + 1000
-              },
-              function (members) {
+              },function (response) {
                 deferred.resolve({
-                  members: members,
+                  members: response.data,
                   synced: now
                 });
               },
               function (error) {
                 deferred.reject({error: error});
               });
+
+            return deferred.promise;
+          };
+
+          Slots.prototype.getAllMemberAvailabilities = function (teams, divisionID)
+          {
+            var deferred = $q.defer(),
+              teamDeferred = [];
+
+            var now = Math.floor(Date.now().getTime() / 1000);
+
+            _.each(teams, function (team)
+            {
+              var membersDeferred = $q.defer();
+              teamDeferred.push(membersDeferred.promise);
+
+              MemberSlots.get
+              (
+                {
+                  id: team.uuid,
+                  type: divisionID,
+                  start: now,
+                  end: now + 1000
+                },
+                function(response)
+                {
+                  membersDeferred.resolve(response.data);
+                }
+              )
+            });
+
+            $q.all(teamDeferred)
+              .then(
+              function (teams)
+              {
+                var allMembers = {};
+
+                angular.forEach(teams, function(team) {
+                  angular.forEach(team, function(memberData, memberId) {
+                    allMembers[memberId] = memberData;
+                  });
+                });
+
+                deferred.resolve({
+                  members: allMembers,
+                  synced: now
+                });
+              },
+              function (error)
+              {
+                deferred.resolve({error: error});
+              }
+            );
 
             return deferred.promise;
           };
@@ -612,13 +674,15 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.users = function (members) {
+          Slots.prototype.users = function (members)
+          {
             var deferred = $q.defer(),
               memDeferred = [];
 
             var now = Math.floor(Date.now().getTime() / 1000);
 
-            _.each(members, function (member){
+            _.each(members, function (member)
+            {
               var memberDeferred = $q.defer();
               memDeferred.push(memberDeferred.promise);
 
