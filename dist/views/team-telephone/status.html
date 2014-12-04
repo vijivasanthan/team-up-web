@@ -21,7 +21,7 @@
     <div class="tab-content">
       <div id="availabilities" class="sa widget">
         <div class="head">
-          <h4>Overzicht beschikbaarheid{{current.group | groupIdToName:true | toTitleCase}}<span ng-show="(current.division != &quot;all&quot;)">({{current.division | divisionIdToName}})</span></h4>
+          <h4>Overzicht beschikbaarheid{{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}<span ng-show="(current.division != &quot;all&quot;)">({{current.division | divisionIdToName}})</span></h4>
           <div ng-hide="loadingAvailability" class="pull-right">
             <!--select(ng-model='current.group',-->
             <!--ng-options='group.uuid as group.name for group in groups',-->
