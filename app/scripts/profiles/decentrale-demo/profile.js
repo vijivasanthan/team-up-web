@@ -3,24 +3,15 @@
  */
 var profile = {
 
-  meta: 'decentrale-demo',
+  meta: 'teamup',
 
   own: true,
 
-  title: 'Team telefoon',
+  title: 'Team-telefoon',
 
   lang: 'nl',
 
   showBackground: false,
-
-  tabs: {
-    tasks2: false,
-    team: true,
-    client: true,
-    manage: true,
-    teamtelefoon: true,
-    support: true
-  },
 
   statesall: {
     'com.ask-cs.State.Available': {
@@ -43,7 +34,7 @@ var profile = {
     }
   },
 
-  host: 'http://dev.ask-cs.com',
+  host: "http://dev.ask-cs.com/",
 
   states: [
     'com.ask-cs.State.Available',
@@ -64,22 +55,27 @@ var profile = {
 
   roles: [
     {
-      id: 1,
-      label: 'Planner'
+      id: '1',
+      label: 'coordinator'
     },
     {
-      id: 2,
-      label: 'Team leider'
+      id: '2',
+      label: 'team member'
     },
     {
-      id: 3,
-      label: 'Standaard'
-    },
-    {
-      id: 4,
-      label: 'Viewer'
+      id: '3',
+      label: 'client'
     }
   ],
+
+  tabs: {
+    tasks2: true,
+    team: true,
+    client: true,
+    manage: true,
+    teamtelefoon: true,
+    support: true
+  },
 
   p2000: {
     status: true,
