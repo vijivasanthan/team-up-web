@@ -15,7 +15,7 @@ define(['services/services', 'config'],
           console.log('logModal loaded');
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
           var Logs = $resource(
-            config.app.host + 'ddr',
+            config.app.host + '/ddr',
             {},
             {
               get: {
