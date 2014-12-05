@@ -7,14 +7,14 @@ var profile = {
 
   own: true,
 
-  title: 'Decentrale Demo',
+  title: 'Team telefoon',
 
   lang: 'nl',
 
   showBackground: false,
 
   tabs: {
-    tasks2: true,
+    tasks2: false,
     team: true,
     client: true,
     manage: true,

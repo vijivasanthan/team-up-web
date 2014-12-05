@@ -63,6 +63,8 @@ define(
            */
           $scope.saveWish = function (id, wish)
           {
+            console.log('wish', wish);
+            console.log('id', id);
             $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
 
             Slots.setWish({

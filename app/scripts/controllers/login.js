@@ -368,7 +368,18 @@ define(
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
 
-                                      $location.path('/tasks2');
+                                      //TODO create a permission scenario
+                                      _.each(config.app.tabs, function(val, key) {
+                                          if(key == 'tasks2' && val == true)
+                                          {
+                                            $location.path('/tasks2');
+                                          }
+                                          else if(key == 'teamtelefoon' && val == true)
+                                          {
+                                            $location.path('/team-telefoon');
+                                          }
+                                      });
+
 
                                       setTimeout(
                                         function ()

@@ -4,7 +4,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 		h4(ng-show='views.slot.add') {{ui.agenda.newAvail}}
 		h4(ng-show='views.slot.edit') {{ui.agenda.updateAvail}}
 		h4(ng-show='views.group') {{slot.group|stripHtml}}
-		h4(ng-show='views.wish') {{slot.group|stripHtml}} (Wishes)
+		h4(ng-show='views.wish') {{slot.group|stripHtml}} (Behoefte)
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}}
 		hr
 		.form-elements-group(ng-show='browser.mobile')
@@ -113,10 +113,10 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 		.form-elements-group(ng-show='views.member')
 			small: i {{ui.agenda.combine_reoccuring}}
 		.form-elements-actions.pull-right
-			div(ng-show='(slot.diff < 0)')
-				button.btn.btn-success(type='button',
-				ng-click='sendShortageMessage(slot)',
-				ng-hide='app.resources.role > 1') {{ui.agenda.sendMsgToMember}}
+			//div(ng-show='(slot.diff < 0)')
+			//	button.btn.btn-success(type='button',
+			//	ng-click='sendShortageMessage(slot)',
+			//	ng-hide='app.resources.role > 1') {{ui.agenda.sendMsgToMember}}
 			div(ng-show='views.slot.add')
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnAdd("true", slot)') {{ui.agenda.add}}
@@ -128,6 +128,6 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
 			div(ng-show='views.wish')
 				button.btn.btn-success(type='button',
-				ng-click='wisher(slot)',
+				ng-click='saveWish(slot.groupId, slot.wish)',
 				ng-hide='app.resources.role > 1')
 					| {{ui.agenda.setWish}}
