@@ -769,7 +769,7 @@ define(['controllers/controllers'], function (controllers)
             members = $rootScope.unique(data.members[groupID]);
           }
 
-          Slots.getAllMemberAvailabilities(data.teams)//.users(members)
+          Slots.users(members)//.getAllMemberAvailabilities(data.teams)//.users(members)
             .then(
             function (results)
             {

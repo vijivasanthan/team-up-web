@@ -151,7 +151,6 @@ define(['services/services', 'config'],
 
             profile: function (data, config)
             {
-              console.log(data, config);
               var _this = this,
                 timedata = [];
 
@@ -210,8 +209,6 @@ define(['services/services', 'config'],
               var groups = this.get.groups(),
                 name = groups[agg.id];
 
-              console.log('agg', agg);
-              console.log('privilage', privilage);
               console.log('name ', name);
 
               name = name.charAt(0).toUpperCase() + name.slice(1);
@@ -490,8 +487,6 @@ define(['services/services', 'config'],
 
             members: function (data, timedata, config, privilage)
             {
-              console.log('members', members);
-
               var _this = this,
                 members = this.get.members(),
                 filtered = [];

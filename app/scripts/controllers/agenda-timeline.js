@@ -1464,6 +1464,95 @@ define(
             }
           };
 
+          function wisher(id)
+          {
+            $scope.wished = false;
+
+            wish(id)
+              .then(
+              function (wish)
+              {
+                $scope.wished = true;
+
+                $scope.wish = wish.count;
+
+                $scope.popover = {
+                  id: id,
+                  wish: wish.count
+                };
+
+                $rootScope.$broadcast('resetPlanboardViews');
+                $scope.timeliner.refresh();
+              }
+            );
+          };
+
+          /**
+           *
+           * @param id teamId
+           * @param wish wish amount
+           */
+          $scope.saveWish = function (id, wish)
+          {
+            console.log('wish', wish);
+            console.log('id', id);
+            $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
+
+            Slots.setWish({
+              id: id,
+              start: 255600,
+              end: 860400,
+              recursive: true,
+              wish: wish
+            }).then(function (result)
+            {
+              $rootScope.statusBar.off();
+
+              if (result.error)
+              {
+                $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
+
+                console.warn('error ->', result);
+              }
+              else
+              {
+                $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
+              }
+
+              wisher(id);
+            });
+
+          };
+
+          function wish (id)
+          {
+            var deferred = $q.defer(),
+              count = 0;
+
+            Slots.wishes(
+              {
+                id: id,
+                start: 255600,
+                end: 860400
+              }).then(
+              function (results) {
+                angular.forEach(
+                  results,
+                  function (slot) {
+                    if (slot.start == 255600 &&
+                      slot.end == 860400 &&
+                      slot.count != null) {
+                      count = slot.count;
+                    }
+                  }
+                );
+
+                deferred.resolve({ count: count });
+              }
+            );
+
+            return deferred.promise;
+          };
 
           /**
           * Set wish
@@ -1504,6 +1593,13 @@ define(
             );
           };
 
+          $scope.$watch(function() {
+              return $scope.timeline.current.group;
+            },
+            function(currentTeamId)
+            {
+              wisher(currentTeamId);
+            });
 
           /**
           * TODO: Stress-test this!
@@ -1536,7 +1632,7 @@ define(
                   /**
                    * Update planboard only in planboard is selected
                    */
-                  if ($location.path() == '/agenda')
+                  if ($location.path() == '/team-telefoon')
                   {
                     $scope.slot = {};
 

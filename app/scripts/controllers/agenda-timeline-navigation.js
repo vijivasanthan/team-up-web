@@ -13,6 +13,7 @@ define(
           /**
            * Day & Week & Month toggle actions
            */
+
           $scope.timelineScoper = function (period)
           {
             $scope.timeline.current.day = $scope.current.day;

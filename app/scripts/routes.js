@@ -161,7 +161,8 @@ define(
                   var periods = Store('app').get('periods'),
                     //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
                     groups = Store('app').get('teams'),
-                    groupId = groups[0].uuid;
+                    lastVisited = Store('app').get('currentTeamClientGroup'),
+                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team) ? lastVisited.team : groups[0].uuid;
 
                   return Slots.all({
                     groupId: groupId,

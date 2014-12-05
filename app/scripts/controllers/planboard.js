@@ -420,8 +420,8 @@ define(
               group: false,
               members: false
             },
-            day: Dater.current.today() + 1,
-            week: Dater.current.week(),
+            day: moment().format('DDD'),
+            week: moment().week(),
             month: Dater.current.month(),
             division: 'all'
           };
