@@ -630,7 +630,7 @@ define(
         },
         validation: {
           phone: {
-            notValid: 'Geen valide telefoonnummer!',
+            notValid: 'Voer een valide telefoonnummer in!',
             invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
             tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
             tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
@@ -648,6 +648,10 @@ define(
               return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
             required: 'Een wachtwoord is verplicht'
+          },
+          email: {
+            notValid: 'Voer een valide e-mailadres in!',
+            required: 'Een e-mail is verplicht'
           }
         }
       }

@@ -187,6 +187,17 @@ aria-hidden='true')
 										select(ng-model='memberForm.role',
 										ng-options='r.id as r.label for r in roles')
 											option(value='') {{ui.teamup.chooseRole}}
+								.form-group(ng-class="{ 'has-error' : teamMemberForm.email.$invalid && !teamMemberForm.email.$pristine }")
+									label.control-label E-mail
+									.controls
+										input.span3.form-control(type='email',
+										name='email',
+										required,
+										ng-model='memberForm.email')
+										span.help-block(ng-show='teamMemberForm.email.$invalid && !teamMemberForm.email.$pristine')
+											small(ng-show="teamMemberForm.$error.email")
+												i
+												| {{ ui.validation.email.notValid }}
 								.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
 									label.control-label {{ui.teamup.phone}}
 									.controls

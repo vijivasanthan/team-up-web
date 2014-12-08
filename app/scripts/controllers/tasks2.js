@@ -21,8 +21,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-
           var view = (!$location.hash()) ? 'myTasks' : $location.hash(),
             currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
             teamsLocal = Teams.queryLocal(),

@@ -775,8 +775,10 @@ define(['controllers/controllers'], function (controllers)
             .then(
             function (results)
             {
-
+              console.log('results', results);
             });
+
+
           Slots.users(members)//.getAllMemberAvailabilities(data.teams)//.users(members)
             .then(
             function (results)

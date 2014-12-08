@@ -409,6 +409,12 @@ define(
               $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
             }
 
+            if (_.isUndefined(member.email) || member.email == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+              return;
+            }
+
             if (! member.team)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
@@ -439,6 +445,7 @@ define(
                 firstName: member.firstName,
                 lastName: member.lastName,
                 phone: member.phone,
+                email: member.email,
                 teamUuids: [member.team],
                 role: member.role,
                 birthDate: Dater.convert.absolute(member.birthDate, 0)

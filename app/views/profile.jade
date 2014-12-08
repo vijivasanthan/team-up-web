@@ -55,6 +55,8 @@ section#profile
 										span(ng-show = 'app.resources.role > 1') {{team.name}}
 								dt {{ui.teamup.role}}
 								dd {{data.role|translateRole}}
+								dt E-mail
+								dd {{data.email }}
 								dt {{ui.profile.phone}}
 								dd {{data.phone}}
 								//dt {{ui.teamup.func}}
@@ -97,11 +99,25 @@ section#profile
 								select(ng-model='profile.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
-						.control-group
+						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
+							label.control-label E-mail
+							.controls
+								input.span3.form-control(type='email',
+								name='email',
+								required,
+								ng-model='profile.email')
+								span.help-block(ng-show='profileForm.email.$invalid && !profileForm.email.$pristine')
+									small(ng-show="profileForm.$error.email")
+										i
+										| {{ ui.validation.email.notValid }}
+									
+						.form-group(ng-class="{ 'has-error' : profileForm.phone.$invalid && !profileForm.phone.$pristine }")
 							label.control-label {{ui.profile.phone}}
 							.controls
 								input.span3.form-control.inputPhoneNumber(type='text',
+								name='phone',
 								ng-model='profile.phone',
+								required,
 								ng-change='parsePhoneNumber(profile.phone)',
 								value='{{data.phone}}')
 								p.text-danger(ng-hide='phoneNumberParsed.result')

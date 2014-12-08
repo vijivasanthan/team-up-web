@@ -126,6 +126,12 @@ define(
               }
             }
 
+            if (_.isUndefined(resources.email) || resources.email == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+              return;
+            }
+
             if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);

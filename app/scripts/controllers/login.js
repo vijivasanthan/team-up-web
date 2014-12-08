@@ -368,6 +368,9 @@ define(
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
 
+                                      //update the avatar once, because the resources were not set when the directive was loaded
+                                      $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
+
                                       //TODO create a permission scenario
                                       _.each(config.app.tabs, function(val, key) {
                                           if(key == 'tasks2' && val == true)

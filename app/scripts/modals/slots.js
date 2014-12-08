@@ -558,6 +558,27 @@ define(['services/services', 'config'],
             //    },
             //    function(response)
             //    {
+            //      console.log(response);
+            //      membersDeferred.resolve(response.data);
+            //    }
+            //  )
+            //});
+
+            //_.each(teams, function (team)
+            //{
+            //  var membersDeferred = $q.defer();
+            //  teamDeferred.push(membersDeferred.promise);
+            //
+            //  MemberSlots.get
+            //  (
+            //    {
+            //      id: team.uuid,
+            //      type: divisionID,
+            //      start: now,
+            //      end: now + 1000
+            //    },
+            //    function(response)
+            //    {
             //      membersDeferred.resolve(response.data);
             //    }
             //  )
