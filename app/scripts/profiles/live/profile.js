@@ -68,7 +68,7 @@ var profile = {
     },
     {
       id: '2',
-      label: 'team member'
+      label: 'team lid'
     },
     {
       id: '3',

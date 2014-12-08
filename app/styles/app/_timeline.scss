@@ -6,18 +6,24 @@ Timeline agenda
 **/
 
 .agenda-timeline.page-header{
-  min-height: 50px;
+  min-height: 75px;
   border-bottom: 1px solid #c6c3b6;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 2;
   .btn-group {
-    position: fixed;
-    top: 75px;
+    position: absolute;
+    top: 25px;
     right: 15px;
-    padding-top: 30px;
   }
 }
+
+//div.timeline-groups-text {
+//  color: $brown;
+//  padding-left: 10px;
+//  padding-right: 10px;
+//  font-size: 11px;
+//}
 
 .legends-agenda{
   background: #fff;
@@ -155,6 +161,10 @@ Timeline agenda
     width: 12px;
     // margin-top: 4px;
   }
+}
+
+div.bar span {
+  font-size: 9px;
 }
 
 .fast-availability .square {
@@ -1270,6 +1280,30 @@ sortable
       -moz-border-radius: 3px;
       border-radius: 3px;
     }
+  }
+}
+
+.bars-more {
+  background-color: #6cad6c;
+
+  &:hover {
+    background-color: lighten(#6cad6c, 10%);
+  }
+}
+
+.bars-less {
+  background-color: #d34545;
+
+  &:hover {
+    background-color: lighten(#d34545, 10%);
+  }
+}
+
+.bars-even {
+  background-color: #e09131;
+
+  &:hover {
+    background-color: lighten(#e09131, 10%);
   }
 }
 
