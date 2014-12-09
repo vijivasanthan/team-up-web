@@ -120,15 +120,14 @@ define(
           $scope.getOrder = function ()
           {
             var groupID = $scope.current.group;
-            console.log('groupID', groupID);
+
             if (groupID !== '')
             {
               TeamUp._('callOrderGet', {second: groupID})
                 .then(function (result)
                 {
                   $scope.orderType = result.sortBy;
-                  console.log($scope.orderType);
-                  console.log('', result.order);
+
                   showOrder(result.order);
                 });
             }
