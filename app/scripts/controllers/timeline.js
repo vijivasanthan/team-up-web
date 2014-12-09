@@ -862,6 +862,16 @@ define(
                     recursive: (values.group.match(/recursive/)) ? true : false,
                     state: 'com.ask-cs.State.Available'
                   };
+
+                  $scope.original = {
+                    start: new Date(values.start),
+                    end: new Date(values.end),
+                    content: {
+                      recursive: $scope.slot.recursive,
+                      state: $scope.slot.state
+                    }
+                  };
+
                 }
               );
             }
