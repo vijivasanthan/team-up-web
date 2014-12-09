@@ -958,10 +958,13 @@ define(
              */
             if (!form)
             {
+
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 
               var element = angular.element(values.content),
                 secret = angular.fromJson(element.html());
+
+              console.log('secret', secret);
 
               if (secret.recursive ||
                 (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
@@ -1420,6 +1423,8 @@ define(
               };
 
               var now = Date.now().getTime();
+
+              console.log('$scope.original', $scope.original);
 
               if ($scope.original.end.getTime() <= now && $scope.original.content.recursive == false)
               {

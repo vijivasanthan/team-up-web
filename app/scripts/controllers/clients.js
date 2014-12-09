@@ -50,7 +50,6 @@ define(
                       $scope.contacts = client.contacts;
 
                       client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
-                      //console.log(moment(client.birthDate, "DD-MM-YYYYTHH:mm:ssZ").toDate());
                       $scope.clientmeta = client;
                       clientHasClientGroup = true;
                     }

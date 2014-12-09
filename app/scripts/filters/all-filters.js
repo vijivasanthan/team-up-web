@@ -14,6 +14,21 @@ define(
       ])
 
 
+    //filter array on empty values and seperate the values by a comma and create a string of the array
+    filters.filter
+    (
+      'commaSeperated',
+      [
+        function ()
+        {
+          return function (arr)
+          {
+            return _.compact(arr).join(', ');
+          }
+        }
+      ]
+    )
+
     // /**
     //  * Translate roles
     //  */

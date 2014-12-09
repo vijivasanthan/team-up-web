@@ -303,6 +303,8 @@ define(
             $scope.task = task;
             $scope.task.team = task.assignedTeamUuid;
 
+            console.log(task);
+
             if (task.assignedTeamUuid)
             {
               task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);

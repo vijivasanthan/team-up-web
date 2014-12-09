@@ -101,7 +101,7 @@
                 <div back-img="{{client.uuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.firstName}} {{client.lastName}}</a></td>
-              <td>{{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}</td>
+              <td>{{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}</td>
               <td>
                 <div class="pull-right"><a href="#/clientProfile/{{client.uuid}}#editClient">
                     <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
@@ -276,7 +276,7 @@
             <dt>{{ui.teamup.phone}}</dt>
             <dd>{{client.phone}}</dd>
             <dt ng-show="client.address">{{ui.profile.address}}</dt>
-            <dd ng-show="client.address">{{client.address.street}} {{client.address.no}} {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
+            <dd ng-show="client.address">{{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}</dd>
             <dt ng-show="client.clientProfileUrl">{{ui.teamup.clientProfileUrl}}</dt>
             <dd ng-show="client.clientProfileUrl">{{client.clientProfileUrl}}</dd>
             <!-- pre: small {{client | json}}-->
