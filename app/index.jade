@@ -36,26 +36,27 @@ block iestuff
 block navbar
 	.navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
 	ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
-	bs-navbar='')
+	bs-navbar='',
+	role="navigation")
 		.navbar-inner
 			.container-fluid
 				button.navbar-toggle(type='button',
 				data-toggle='collapse',
-				data-target='.bs-navbar-collapse')
+				data-target='#main-navbar')
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
 					// span.icon-bar {{ui.message.messages}}
 				a.navbar-brand(ng-click='nav("tasks2")') TeamUp
-				.navbar-collapse.collapse
-					ul.nav.navbar-nav
+				#main-navbar.navbar-collapse.collapse
+					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
 						li.tasks2(ng-show='config.app.tabs.tasks2',
 							data-match-route='/tasks2.*')
 							a(ng-click='nav("tasks2")') Taken
-						li#teamMenu(ng-show='config.app.tabs.team',
-							data-match-route='/team')
+						li.teamMenu(ng-show='config.app.tabs.team',
+							data-match-route='/team.?')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
 						li#clientMenu(ng-show='config.app.tabs.client',
 							data-match-route='/(:?client)')
@@ -84,19 +85,58 @@ block navbar
 						li.navbar-btn
 							a(ng-click='nav("logout")')
 								i.icon-off
-					ul.nav.pull-right(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
+					ul.nav.pull-right.mobile-nav-bar(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
 						li
-							a(href='#profile')
-								i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Profile
-						li
-							a(href='#settings')
-								i.icon-wrench.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Settings
+							.dropdown
+								button.btn.btn-default.dropdown-toggle(type="button",
+									id="dropdownMenu1",
+									data-toggle="dropdown",
+									aria-expanded="true",
+									style='margin-right: 10px;') Menu
+									span.caret
+								ul.dropdown-menu(role='menu',
+								aria-labelledby="dropdownMenu1")
+									li(role="presentation",
+										ng-show='config.app.tabs.tasks2',
+										data-match-route='/tasks2.*')
+										a(role="menuitem",
+											tabindex="-1",
+											ng-click='nav("tasks2")') Taken
+									li.teamMenu(role="presentation",
+										ng-show='config.app.tabs.team',
+										data-match-route='/team')
+										a(role="menuitem",
+											tabindex="-1",
+											ng-click='nav("team")') {{ui.teamup.teams}}
+									li(role="presentation",
+									ng-show='config.app.tabs.tasks2',
+									data-match-route='/(:?client)')
+										a(role="menuitem",
+										tabindex="-1",
+										ng-click='nav("client")') {{ui.teamup.clients}}
+									li(role="presentation",
+										data-match-route='/manage',
+										ng-hide='app.resources.role > 1 || ! config.app.tabs.manage')
+										a(href='#manage',
+											tabindex="-1",) {{ui.teamup.manage}}
+									li(role="presentation",
+										data-match-route='/team-telefoon.*',
+										ng-show='config.app.tabs.teamtelefoon',
+										ng-hide='app.resources.role > 1')
+										a(ng-click='nav("team-telefoon/agenda")',
+											tabindex="-1",) Team-telefoon
+									li(role="presentation",
+										ng-show='config.app.tabs.support',
+										data-match-route='/support')
+										a(ng-click='nav("support")',
+											tabindex="-1",) Support
+							
+						li(data-match-route='/profile')
+							a(ng-click='nav("profile")')
+								i.icon-user.icon-white
 						li
 							a(href='#logout')
-								i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Logout
+								i.icon-off.icon-white
 
 
 
@@ -156,7 +196,7 @@ block notifications
 
 
 block chat
-	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
+	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile',
 	ng-controller='messagesCtrl')
 		#chat-btn(ng-click='openChat()')
 			span CHAT {{newCountShow}}

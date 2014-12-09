@@ -156,7 +156,7 @@ define(
                 data: function($route, Slots, Storage, Dater, Store)
                 {
                   //remove active class TODO create a directive to solve the bug
-                  removeActiveClass('#teamMenu');
+                  removeActiveClass('.teamMenu');
 
                   var periods = Store('app').get('periods'),
                     //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
@@ -193,7 +193,7 @@ define(
               resolve: {
                 data: function(Logs)
                 {
-                  removeActiveClass('#teamMenu');
+                  removeActiveClass('.teamMenu');
                   return Logs.fetch({
                     end: new Date.now().getTime(),
                     start: new Date.today().addDays(- 7).getTime()
@@ -231,7 +231,7 @@ define(
                   'Teams', 'Slots', '$route',
                   function (Teams, Slots, $route)
                   {
-                    removeActiveClass('#teamMenu');
+                    removeActiveClass('.teamMenu');
                     //var data = {},
                     //  deferred = $q.defer();
                     //
@@ -264,7 +264,7 @@ define(
               resolve: {
                 data: function()
                 {
-                  removeActiveClass('#teamMenu');
+                  removeActiveClass('.teamMenu');
                 }
               },
               reloadOnSearch: false

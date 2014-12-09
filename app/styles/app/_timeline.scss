@@ -321,7 +321,7 @@ div.timeline-event {
   padding: 10px 0;
   height: 20px;
   background-color: $orange;
-  margin-top: 12px !important;
+  //margin-top: 5px !important;
 }
 
 div.timeline-event-selected {
@@ -353,7 +353,7 @@ div.timeline-event-dot {
 }
 
 div.timeline-event-range {
-  height: 40px;
+  height: 33px;
 }
 
 div.timeline-event-range-drag-left {

@@ -29,6 +29,8 @@ define(
             );
           }
 
+          console.log($.browser);
+
           if ($rootScope.browser.ios)
           {
             angular.extend(

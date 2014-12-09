@@ -140,6 +140,12 @@
                     </select>
                   </div>
                 </div>
+                <div ng-class="{ 'has-error' : teamMemberForm.email.$invalid &amp;&amp; !teamMemberForm.email.$pristine }" class="form-group">
+                  <label class="control-label">E-mail</label>
+                  <div class="controls">
+                    <input type="email" name="email" required="required" ng-model="memberForm.email" class="span3 form-control"><span ng-show="teamMemberForm.email.$invalid &amp;&amp; !teamMemberForm.email.$pristine" class="help-block"><small ng-show="teamMemberForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
+                  </div>
+                </div>
                 <div ng-class="{'has-error': phoneNumberParsed.result == false}" class="form-group">
                   <label class="control-label">{{ui.teamup.phone}}</label>
                   <div class="controls">

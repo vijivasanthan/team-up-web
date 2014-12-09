@@ -1,6 +1,43 @@
 /* Lastly, apply responsive CSS fixes as necessary */
 
 @media (min-width: 768px) and (max-width: 979px) {
+  .navbar-inverse .nav > li {
+    margin-left: 0;
+  }
+
+  .navbar .nav .dropdown-toggle {
+    color: $brown;
+    .caret {
+      margin-top: 1px;
+      margin-left: 6px;
+      border-top-color: $orange;
+      border-bottom-color: $orange;
+    }
+  }
+
+  .navbar-inverse .dropdown-menu > li a {
+    color: $brown;
+    text-shadow: none;
+    font-weight: bold;
+  }
+
+  .navbar-inverse .dropdown-menu {
+      .active > a {
+        color: $orange;
+        background-color: #fff !important;
+      }
+      li {
+      a.active, a:hover, a:focus {
+        color: $orange;
+        background-color: #fff !important;
+      }
+  }
+  }
+
+  .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+
+  }
+
 }
 
 @media (max-width: 767px) {

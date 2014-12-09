@@ -38,6 +38,8 @@
                 <dd><span ng-repeat="team in teams"><span ng-hide="app.resources.role &gt; 1"><a href="#/team?uuid={{team.uuid}}#team">{{team.name}}</a></span><span ng-hide="{{((teams.length-1) == $index)}}">,</span><span ng-show="app.resources.role &gt; 1">{{team.name}}</span></span></dd>
                 <dt>{{ui.teamup.role}}</dt>
                 <dd>{{data.role|translateRole}}</dd>
+                <dt>E-mail</dt>
+                <dd>{{data.email }}</dd>
                 <dt>{{ui.profile.phone}}</dt>
                 <dd>{{data.phone}}</dd>
                 <!--dt {{ui.teamup.func}}-->
@@ -80,10 +82,16 @@
                 <select ng-model="profile.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
               </div>
             </div>
-            <div class="control-group">
+            <div ng-class="{ 'has-error' : profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine }" class="form-group">
+              <label class="control-label">E-mail</label>
+              <div class="controls">
+                <input type="email" name="email" required="required" ng-model="profile.email" class="span3 form-control"><span ng-show="profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine" class="help-block"><small ng-show="profileForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
+              </div>
+            </div>
+            <div ng-class="{ 'has-error' : profileForm.phone.$invalid &amp;&amp; !profileForm.phone.$pristine }" class="form-group">
               <label class="control-label">{{ui.profile.phone}}</label>
               <div class="controls">
-                <input type="text" ng-model="profile.phone" ng-change="parsePhoneNumber(profile.phone)" value="{{data.phone}}" class="span3 form-control inputPhoneNumber">
+                <input type="text" name="phone" ng-model="profile.phone" required="required" ng-change="parsePhoneNumber(profile.phone)" value="{{data.phone}}" class="span3 form-control inputPhoneNumber">
                 <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
                 <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
               </div>
