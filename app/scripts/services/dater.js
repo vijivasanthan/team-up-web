@@ -54,7 +54,7 @@ define(
               for (var i = 0; i < 12; i ++)
               {
                 var firstDay = new Date(year, i).moveToFirstDayOfMonth(),
-                    lastDay = new Date(year, i).moveToLastDayOfMonth(),
+                    lastDay = new Date(year, i).moveToLastDayOfMonth().addDays(1),
                     month = {
                       first: {
                         day: firstDay,
