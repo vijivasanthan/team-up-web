@@ -65,8 +65,7 @@ block navbar
 							ng-hide='app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
 						li(data-match-route='/team-telefoon.*',
-							ng-show='app.domainPermission.teamTelefoon',
-							ng-hide='app.resources.role > 1')
+							ng-show='app.domainPermission.teamTelephone')
 							a(ng-click='nav("team-telefoon/agenda")') Team-telefoon
 						li(data-match-route='/support')
 							a(ng-click='nav("support")') Support

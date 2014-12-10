@@ -16,7 +16,8 @@ section#planboard(ng-controller='agenda-timeline')
 				#timeline
 					//include agenda/time-toolbar.jade
 					div#timeline-toolbar
-						select.form-control.pull-left(ng-model='timeline.current.group',
+						select.form-control.pull-left(ng-hide='app.resources.role > 1',
+							ng-model='timeline.current.group',
 							ng-options='group.uuid as group.name for group in groups',
 							ng-selected='timeline.current.group',
 							ng-change='requestTimeline()',
@@ -31,7 +32,8 @@ section#planboard(ng-controller='agenda-timeline')
 							data-content-template='views/agenda/groups-wish.html',
 							data-placement='bottom',
 							bs-popover='',
-							data-title='Behoefte wijzigen')
+							data-title='Behoefte wijzigen',
+							ng-hide='app.resources.role > 1')
 								span.badge.badge-inset(ng-show='wished')
 									| {{wish}}
 								| &nbsp;{{ui.agenda.requiredPeople}}
@@ -51,7 +53,8 @@ section#planboard(ng-controller='agenda-timeline')
 								class="{{(timeline.config.bar==true) && 'active'}}",
 								ng-click='barCharts()',
 								ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
-							.btn-group(ng-show='timeline.current.layouts.group')
+							.btn-group(ng-show='timeline.current.layouts.group',
+								ng-hide='app.resources.role > 1')
 								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.wishes==true) && 'active'}}",
 								ng-click='groupWishes()',

@@ -209,8 +209,6 @@ define(['services/services', 'config'],
               var groups = this.get.groups(),
                 name = groups[agg.id];
 
-              console.log('name ', name);
-
               name = name.charAt(0).toUpperCase() + name.slice(1);
 
               var link = '<a href="#/team?uuid=' +

@@ -303,6 +303,7 @@ define(
           {
             Permission.getProfile()
               .then(function(permissionProfile) {
+                $rootScope.app.domainPermission = permissionProfile;
                 var location = '';
 
                 if(_.has(permissionProfile, 'tasks'))
