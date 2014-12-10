@@ -180,6 +180,7 @@ require(
     'modals/agenda',
     'modals/slots',
     'modals/profile',
+    'modals/permission',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',

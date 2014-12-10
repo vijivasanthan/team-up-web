@@ -111,7 +111,7 @@ aria-hidden='true')
         aria-hidden='true')
         | {{ui.teamup.newClient}}
 
-    li(class="{{(views.reports==true) && 'active'}}")
+    li(ng-show='app.domainPermission.clientReports', class="{{(views.reports==true) && 'active'}}")
       a(data-toggle='tab',
       ng-click='setViewTo("reports")')
         span.icomoon(data-icon='',

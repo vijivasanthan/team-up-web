@@ -20,12 +20,11 @@ define(
         'Dater',
         '$filter',
         'MD5',
+        'Permission',
         function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5
-          )
+          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
+          Permission)
         {
-          console.log(config.app.tabs);
-
           // TODO: Soon not needed!
           Dater.registerPeriods();
 
@@ -298,6 +297,31 @@ define(
             );
           }
 
+
+          //TODO compare permission names with routenames
+          function getPermissionProfile()
+          {
+            Permission.getProfile()
+              .then(function(permissionProfile) {
+                var location = '';
+
+                if(_.has(permissionProfile, 'tasks'))
+                {
+                  location = '/tasks2';
+                }
+                else if(_.has(permissionProfile, 'teamTelephone'))
+                {
+                  location = '/team-telefoon';
+                }
+                else
+                {
+                  location = '/team';
+                }
+
+                $location.path(location);
+              });
+          };
+
           var preLoader = function ()
           {
             angular.element('#login').hide();
@@ -371,18 +395,10 @@ define(
                                       //update the avatar once, because the resources were not set when the directive was loaded
                                       $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
 
-                                      //TODO create a permission scenario
-                                      _.each(config.app.tabs, function(val, key) {
-                                          if(key == 'tasks2' && val == true)
-                                          {
-                                            $location.path('/tasks2');
-                                          }
-                                          else if(key == 'teamtelefoon' && val == true)
-                                          {
-                                            $location.path('/team-telefoon');
-                                          }
-                                      });
+                                      //TODO for testpurposes only
+                                      //Permission.saveProfile();
 
+                                      getPermissionProfile();
 
                                       setTimeout(
                                         function ()

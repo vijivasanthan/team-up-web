@@ -19,7 +19,8 @@ define(
         'Browsers',
         'Dater',
         'TeamUp',
-        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp)
+        'Permission',
+        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp, Permission)
         {
           // TODO: Remove later on (Needed for timeline info filters)
           if (!Dater.getPeriods())
@@ -58,6 +59,7 @@ define(
 
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
+          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
 
           /**
            * Timeline states
