@@ -4,7 +4,7 @@
       <div class="modal-header">
         <button type="button" ng-click="$hide()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
         <h4 ng-show="view.newReport" class="modal-title">{{ ui.teamup.newReport }}</h4>
-        <h4 ng-show="view.editReport" class="modal-title">{{ ui.teamup.editReport }}</h4>
+        <h4 ng-show="view.editReport" class="modal-title">{{ report.title }}</h4>
       </div>
       <div class="modal-body">
         <table>
@@ -41,6 +41,7 @@
                 </div>
               </td>
             </tr>
+            <!--tr(ng-show='view.newReport || view.editReport')-->
           </tbody>
         </table>
       </div>

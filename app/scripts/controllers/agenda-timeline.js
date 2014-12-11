@@ -992,16 +992,18 @@ define(
                       start: {
                         date: new Date(values.start).toString(config.app.formats.date),
                         time: new Date(values.start).toString(config.app.formats.time),
-                        datetime: new Date(values.start).toISOString()
+                        datetime: convertDateTimeToLocal(values.start)
                       },
                       end: {
                         date: new Date(values.end).toString(config.app.formats.date),
                         time: new Date(values.end).toString(config.app.formats.time),
-                        datetime: new Date(values.end).toISOString()
+                        datetime: convertDateTimeToLocal(values.end)
                       },
                       recursive: (values.group.match(/recursive/)) ? true : false,
                       state: 'com.ask-cs.State.Available'
                     };
+
+                    console.log($scope.slot);
 
                     $scope.original = {
                       start: new Date(values.start),
@@ -1102,6 +1104,14 @@ define(
             }
           };
 
+          var convertDateTimeToLocal = function (d)
+          {
+            var d1 = new Date(d);
+
+            d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+
+            return d1.toISOString().replace("Z", "");
+          };
 
           /**
           * Timeline on changing
@@ -1116,15 +1126,6 @@ define(
                 end: values.end,
                 content: angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
               };
-
-            var convertDateTimeToLocal = function (d)
-            {
-              var d1 = new Date(d);
-
-              d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
-              return d1.toISOString().replace("Z", "");
-            };
 
             $scope.$apply(
               function ()

@@ -95,7 +95,7 @@
         </div>
       </div>
       <div ng-show="browser.mobile" class="form-elements-group">
-        <label>{{ui.agenda.till}}</label>
+        <label>{{ui.agenda.till}} </label>
         <div ng-show="views.slot.add || views.slot.edit || views.wish" class="form-group dater-mobile">
           <input name="date-start" type="datetime-local" ng-model="slot.end.datetime" class="form-control input-sm">
         </div>
@@ -193,9 +193,8 @@
           </div>
           <hr>
           <!-- alert-window-->
-          <div ng-show="registeredNotifications.timeLineDragging" class="alert alert-warning">
-            <button type="button" ng-click="registerNotification(&quot;timeLineDragging&quot;, false)" data-dismiss="alert" class="close">×</button><small>U kunt ook uw<strong><i>beschikbaarheid wijzigen</i></strong>door te
-              dubbelklikken op reeds bestaande blokken of<strong><i>door te slepen</i></strong>met uw muis met de linkermuisknop en de<strong>SHIFT (Mac)</strong>of<strong>CTRL (Windows)</strong>knop tegelijkertijd ingedrukt.</small>
+          <div ng-show="infoAvailibility.info" class="alert alert-warning">
+            <button type="button" ng-click="disableInfoAvailibility()" data-dismiss="alert" class="close">×</button><small>U kunt uw<strong><i> beschikbaarheid toevoegen</i></strong> door te<strong><i> dubbelklikken. </i></strong><strong><i> Sleep</i></strong> de beschikbaarheid om het tijdstip te<strong><i> wijzigen.</i></strong></small>
           </div>
           <div ng-show="timeline.config.legendarer" class="legends-agenda">
             <div class="legenda">

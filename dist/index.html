@@ -52,12 +52,12 @@
                 <div class="dropdown">
                   <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="margin-right: 10px" class="btn btn-default dropdown-toggle">Menu<span class="caret"></span></button>
                   <ul role="menu" aria-labelledby="dropdownMenu1" class="dropdown-menu">
-                    <li role="presentation" ng-show="config.app.tabs.tasks2" data-match-route="/tasks2.*"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
-                    <li role="presentation" ng-show="config.app.tabs.team" data-match-route="/team" class="teamMenu"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
+                    <li role="presentation" ng-show="app.domainPermission.tasks" data-match-route="/tasks2.*"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
+                    <li role="presentation" ng-show="app.domainPermission.teams" data-match-route="/team" class="teamMenu"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
                     <li role="presentation" ng-show="config.app.tabs.tasks2" data-match-route="/(:?client)"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
-                    <li role="presentation" data-match-route="/manage" ng-hide="app.resources.role &gt; 1 || ! config.app.tabs.manage"><a href="#manage" tabindex="-1">{{ui.teamup.manage}}</a></li>
-                    <li role="presentation" data-match-route="/team-telefoon.*" ng-show="config.app.tabs.teamtelefoon" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;team-telefoon/agenda&quot;)" tabindex="-1">Team-telefoon</a></li>
-                    <li role="presentation" ng-show="config.app.tabs.support" data-match-route="/support"><a ng-click="nav(&quot;support&quot;)" tabindex="-1">Support</a></li>
+                    <li role="presentation" data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage" tabindex="-1">{{ui.teamup.manage}}</a></li>
+                    <li role="presentation" data-match-route="/team-telefoon.*" ng-show="app.domainPermission.teamTelephone"><a ng-click="nav(&quot;team-telefoon/agenda&quot;)" tabindex="-1">Team-telefoon</a></li>
+                    <li role="presentation" data-match-route="/support"><a ng-click="nav(&quot;support&quot;)" tabindex="-1">Support</a></li>
                   </ul>
                 </div>
               </li>

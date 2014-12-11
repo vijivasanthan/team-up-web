@@ -983,13 +983,13 @@ define(
 
           $scope.getView = function (report)
           {
-            if(! $scope.view)
-            {
-              $scope.view = {};
-            }
+            $scope.view = $scope.view || {};
+
             $scope.view.editReport = !!(report.editMode);
             $scope.view.viewReport = (!(report.editMode || typeof report.uuid == 'undefined'));
             $scope.view.newReport = (typeof report.uuid == 'undefined');
+
+            console.log($scope.view);
           };
 
           $scope.close = function ()
@@ -1069,6 +1069,8 @@ define(
           {
             $scope.report = report;
             $scope.report.editMode = false;
+
+            console.log($scope.view);
 
             modalInstance = getModal();
           };

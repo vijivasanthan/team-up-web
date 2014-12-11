@@ -44,7 +44,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				input.form-control.input-sm(name='time-start', type='text', ng-model='slot.start.time', disabled='disabled')
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='browser.mobile')
-			label {{ui.agenda.till}}
+			label {{ui.agenda.till}} 
 			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.end.datetime')
 			.form-group.dater-mobile(ng-show='views.group || views.member')

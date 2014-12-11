@@ -49,6 +49,19 @@ define(
           $scope.periods = Dater.getPeriods();
           $scope.periodsNext = Dater.getPeriods(true);
 
+          $rootScope.infoAvailibility = Store('app').get('infoAvail') || {};
+
+          if(_.isUndefined($rootScope.infoAvailibility.info))
+          {
+            Store('app').save('infoAvail', {info: true});
+            $rootScope.infoAvailibility.info = true;
+          }
+
+          $rootScope.disableInfoAvailibility = function() {
+            Store('app').save('infoAvail', {info: false});
+            $rootScope.infoAvailibility.info = false;
+          };
+
           $scope.slot = {};
 
           var stamps = (Dater.current.today() > 360) ? {

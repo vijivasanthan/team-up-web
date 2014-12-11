@@ -7,7 +7,7 @@
 				h4(class="modal-title",
 					ng-show='view.newReport') {{ ui.teamup.newReport }}
 				h4(class="modal-title",
-					ng-show='view.editReport') {{ ui.teamup.editReport }}
+					ng-show='view.editReport') {{ report.title }}
 			.modal-body
 				table
 					thead
@@ -42,6 +42,7 @@
 								label.control-label {{ui.teamup.report}}
 								.controls
 									textarea.span4(ng-model='report.body')
+						//tr(ng-show='view.newReport || view.editReport')
 			.modal-footer
 				button.btn.btn-success(ng-show='view.newReport || view.editReport',
 					type='button',

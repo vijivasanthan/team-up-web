@@ -75,23 +75,22 @@ section#planboard(ng-controller='agenda-timeline')
 								
 					hr
 					// alert-window
-					div.alert.alert-warning(ng-show='registeredNotifications.timeLineDragging')
+					div.alert.alert-warning(ng-show='infoAvailibility.info')
 						button.close(type='button',
-						ng-click='registerNotification("timeLineDragging", false)',
+						ng-click='disableInfoAvailibility()',
 						data-dismiss='alert') ×
 						small
-							| U kunt ook uw
+							| U kunt uw
 							strong
-								i beschikbaarheid wijzigen
-							| door te
-							| dubbelklikken op reeds bestaande blokken of
+								i  beschikbaarheid toevoegen
+							|  door te
 							strong
-								i door te slepen
-							| met uw muis met de linkermuisknop en de
-							strong SHIFT (Mac)
-							| of
-							strong CTRL (Windows)
-							| knop tegelijkertijd ingedrukt.
+								i  dubbelklikken. 
+							strong
+								i  Sleep
+							|  de beschikbaarheid om het tijdstip te
+							strong
+								i  wijzigen.
 		
 					div.legends-agenda(ng-show='timeline.config.legendarer')
 						include ../agenda/time-legends
