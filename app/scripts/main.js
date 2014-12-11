@@ -9,7 +9,7 @@ require.config(
   {
     waitSeconds: 100,
     paths: {
-      profile: 'profiles/test/profile',
+      profile: 'profiles/dev/profile',
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
       jquery: '../vendors/jquery/dist/jquery.min',

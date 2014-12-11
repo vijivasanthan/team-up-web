@@ -11,7 +11,7 @@ define(
         function ($scope, $rootScope, $q, $location, $route, $filter, Teams, TeamUp)
         {
           // TODO: Move this to config
-          // TODO: Find a better way for refreshing chat messages          
+          // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 2000; // * 60;
           var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000; // * 60;
           var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
@@ -74,7 +74,7 @@ define(
                   senderUuid: message.senderUuid,
                   uuid: message.uuid,
                   type: message.type,
-                  title: message.title,
+                  title: message.title
                 };
 
                 var member = $rootScope.getTeamMemberById(message.senderUuid);
@@ -99,6 +99,7 @@ define(
                 {
                   var msgBody = JSON.parse(message.body);
                   var client = $rootScope.getClientByID(msgBody.clientUuid);
+
                   if(client!=null) {
                     angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
                     msg.body = msgBody;
@@ -148,8 +149,8 @@ define(
                 $scope.formatMessage(messages);
 
                 // scroll to the bottom of the chat window
-                // TODO: Is this a handy way of doing this? 
-                // try to do it only once. 
+                // TODO: Is this a handy way of doing this?
+                // try to do it only once.
 
                 if ($scope.moveToBottom)
                 {
@@ -159,7 +160,7 @@ define(
                       angular.element('#chat-content #messageField').focus();
                       angular.element('#chat-content .mainContent').scrollTop(angular.element('#chat-content .mainContent')[0].scrollHeight);
                       $scope.moveToBottom = false;
-                    }, 1000); // FIXME: Temporarily made it longer till there is a better solution 
+                    }, 1000); // FIXME: Temporarily made it longer till there is a better solution
                 }
 
 
@@ -249,7 +250,6 @@ define(
             $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $rootScope.app.resources.teamUuids;
-            console.log(teamIds);
             $scope.chatTeamId = teamIds[0];
 
             var msgs = $filter('orderBy')($scope.messages, 'sendTime');

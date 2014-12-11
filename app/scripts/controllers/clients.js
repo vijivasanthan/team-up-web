@@ -988,8 +988,6 @@ define(
             $scope.view.editReport = !!(report.editMode);
             $scope.view.viewReport = (!(report.editMode || typeof report.uuid == 'undefined'));
             $scope.view.newReport = (typeof report.uuid == 'undefined');
-
-            console.log($scope.view);
           };
 
           $scope.close = function ()
@@ -1005,6 +1003,12 @@ define(
           // add new report, send systemm message at the same time.
           $scope.saveReport = function (report)
           {
+            if(_.isEmpty(report.title) || _.isEmpty(report.body))
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.reportEmpty);
+              return;
+            }
+
             if (report.editMode)
             {
 
@@ -1054,6 +1058,8 @@ define(
 
           function getModal()
           {
+            $scope.getView($scope.report);
+
             return $modal(
               {
                 template: 'views/reportTemplate.html',
@@ -1069,8 +1075,6 @@ define(
           {
             $scope.report = report;
             $scope.report.editMode = false;
-
-            console.log($scope.view);
 
             modalInstance = getModal();
           };
@@ -1094,8 +1098,6 @@ define(
               editMode: false
             };
 
-            $scope.getView($scope.report);
-
             modalInstance = getModal();
           };
 
@@ -1103,8 +1105,6 @@ define(
           {
             $scope.report = report;
             $scope.report.editMode = true;
-
-            $scope.getView($scope.report);
 
             modalInstance = getModal();
           };

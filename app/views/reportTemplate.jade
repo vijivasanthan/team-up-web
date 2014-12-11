@@ -7,7 +7,7 @@
 				h4(class="modal-title",
 					ng-show='view.newReport') {{ ui.teamup.newReport }}
 				h4(class="modal-title",
-					ng-show='view.editReport') {{ report.title }}
+					ng-show='view.editReport || view.viewReport') {{ report.title }}
 			.modal-body
 				table
 					thead
@@ -35,13 +35,43 @@
 						tr(ng-show='view.newReport || view.editReport')
 							td(colspan='3')
 								br
-								label.control-label {{ui.teamup.reportTitle}}
-								.controls
-									input.span4(type='text',
-									ng-model='report.title')
-								label.control-label {{ui.teamup.report}}
-								.controls
-									textarea.span4(ng-model='report.body')
+								form(name='reportForm', novalidate)
+									.form-group(ng-class="{ 'has-error' : reportForm.title.$invalid && !reportForm.title.$pristine }")
+										label.control-label {{ui.teamup.reportTitle}}
+										.controls
+											input.span4.form-control(type='text',
+											name='title',
+											ng-model='report.title',
+											ng-minlength=4,
+											ng-maxlength=30,
+											required)
+											span.help-block(ng-show='reportForm.title.$invalid && !reportForm.title.$pristine')
+												small(ng-show="reportForm.title.$error.required")
+													i {{ui.teamup.reportTitleRequired}}
+												small(ng-show="reportForm.title.$error.minlength")
+													i {{ui.teamup.reportTitleMinChars}}
+												small(ng-show="reportForm.title.$error.maxlength")
+													i {{ui.teamup.reportTitleMaxChars}}	
+													//ng-show='reportForm.title.$invalid && !reportForm.title.$pristine'
+									.form-group(ng-class="{ 'has-error' : reportForm.description.$invalid && !reportForm.description.$pristine }")
+										label.control-label {{ui.teamup.reportBody}}
+										.controls
+											textarea.span4.form-control(ng-model='report.body',
+												name='description',
+												rows="5",
+												cols="30"
+												ng-required="true"
+												ng-minlength=8,
+												ng-maxlength=150)
+											span.help-block(ng-show='reportForm.description.$invalid && !reportForm.description.$pristine')
+												small(ng-show="reportForm.description.$error.required")
+													i {{ui.teamup.reportBodyRequired}}
+												small(ng-show="reportForm.description.$error.minlength")
+													i {{ui.teamup.reportBodyMinChars}} 
+												small(ng-show="reportForm.description.$error.maxlength")
+													i {{ui.teamup.reportBodyMaxChars}}
+														
+														//ng-show='reportForm.description.$invalid && !reportForm.description.$pristine'
 						//tr(ng-show='view.newReport || view.editReport')
 			.modal-footer
 				button.btn.btn-success(ng-show='view.newReport || view.editReport',
