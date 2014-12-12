@@ -37,9 +37,6 @@ require.config(
       treegrid: 'removables/treegrid',
 
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      //datepicker: 'removables/datepicker.min',
-
-      // datepicker:         '../vendors/angular-ui-bootstrap/src/datepicker/datepicker',
       // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
 
