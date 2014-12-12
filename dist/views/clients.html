@@ -360,7 +360,7 @@
         <h3 class="pull-left">{{ui.teamup.reports}}</h3>
       </div>
       <hr>
-      <div ng-show="reports.length &gt; 0">
+      <div ng-show="reports.length &gt; 0 &amp;&amp; app.domainPermission.clientReports">
         <table class="table table-striped">
           <thead>
             <tr>

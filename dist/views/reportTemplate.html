@@ -4,7 +4,7 @@
       <div class="modal-header">
         <button type="button" ng-click="$hide()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
         <h4 ng-show="view.newReport" class="modal-title">{{ ui.teamup.newReport }}</h4>
-        <h4 ng-show="view.editReport" class="modal-title">{{ report.title }}</h4>
+        <h4 ng-show="view.editReport || view.viewReport" class="modal-title">{{ report.title }}</h4>
       </div>
       <div class="modal-body">
         <table>
@@ -31,14 +31,22 @@
             </tr>
             <tr ng-show="view.newReport || view.editReport">
               <td colspan="3"><br>
-                <label class="control-label">{{ui.teamup.reportTitle}}</label>
-                <div class="controls">
-                  <input type="text" ng-model="report.title" class="span4">
-                </div>
-                <label class="control-label">{{ui.teamup.report}}</label>
-                <div class="controls">
-                  <textarea ng-model="report.body" class="span4"></textarea>
-                </div>
+                <form name="reportForm" novalidate="novalidate">
+                  <div ng-class="{ 'has-error' : reportForm.title.$invalid &amp;&amp; !reportForm.title.$pristine }" class="form-group">
+                    <label class="control-label">{{ui.teamup.reportTitle}}</label>
+                    <div class="controls">
+                      <input type="text" name="title" ng-model="report.title" ng-minlength="4" ng-maxlength="30" required="required" class="span4 form-control"><span ng-show="reportForm.title.$invalid &amp;&amp; !reportForm.title.$pristine" class="help-block"><small ng-show="reportForm.title.$error.required"><i>{{ui.teamup.reportTitleRequired}}</i></small><small ng-show="reportForm.title.$error.minlength"><i>{{ui.teamup.reportTitleMinChars}}</i></small><small ng-show="reportForm.title.$error.maxlength"><i>{{ui.teamup.reportTitleMaxChars}}	</i>
+                          <!--ng-show='reportForm.title.$invalid && !reportForm.title.$pristine'--></small></span>
+                    </div>
+                  </div>
+                  <div ng-class="{ 'has-error' : reportForm.description.$invalid &amp;&amp; !reportForm.description.$pristine }" class="form-group">
+                    <label class="control-label">{{ui.teamup.reportBody}}</label>
+                    <div class="controls">
+                      <textarea ng-model="report.body" name="description" rows="5" cols="30" ng-required="true" ng-minlength="8" ng-maxlength="150" class="span4 form-control"></textarea><span ng-show="reportForm.description.$invalid &amp;&amp; !reportForm.description.$pristine" class="help-block"><small ng-show="reportForm.description.$error.required"><i>{{ui.teamup.reportBodyRequired}}</i></small><small ng-show="reportForm.description.$error.minlength"><i>{{ui.teamup.reportBodyMinChars}} </i></small><small ng-show="reportForm.description.$error.maxlength"><i>{{ui.teamup.reportBodyMaxChars}}
+                            <!--ng-show='reportForm.description.$invalid && !reportForm.description.$pristine'--></i></small></span>
+                    </div>
+                  </div>
+                </form>
               </td>
             </tr>
             <!--tr(ng-show='view.newReport || view.editReport')-->
