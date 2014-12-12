@@ -436,7 +436,7 @@ aria-hidden='true')
         h3.pull-left {{ui.teamup.reports}}
       hr
 
-      div(ng-show='reports.length > 0')
+      div(ng-show='reports.length > 0 && app.domainPermission.clientReports')
         table.table.table-striped
           thead
             tr

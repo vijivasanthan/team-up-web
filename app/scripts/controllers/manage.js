@@ -253,7 +253,18 @@ define(
             );
           };
 
-          $scope.setViewTo('teamClients');
+          var accessTo;
+
+          if($rootScope.app.domainPermission.clients)
+          {
+            accessTo = 'teamClients';
+          }
+          else
+          {
+            accessTo = 'teams';
+          }
+
+          $scope.setViewTo(accessTo);
 
           $scope.connector = {
             data: connections,
