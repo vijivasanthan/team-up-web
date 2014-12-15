@@ -123,7 +123,7 @@ aria-hidden='true')
 									aria-hidden='true',
 									class="{{state.name|stateDataIcon:'class_name'}}")
 									span.stateValue(ng-show='(state.name == "Location")') {{[member.address.street, member.address.no, member.address.zip, member.address.city] | commaSeperated}}
-									span.stateValue(ng-show='(state.name != "Location")') {{state.value | i18n_spec:'teamup.stateValue'}}
+									span.stateValue(ng-show='(state.name == "Availability" || state.name == "Reachability")') {{state.value | i18n_spec:'teamup.stateValue'}}
 										a(ng-show='(state.name == "Location")',
 										href='http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}')  {{ui.teamup.map}}
 							td

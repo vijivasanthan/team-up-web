@@ -45,7 +45,7 @@ define(
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
-          possiblyAvailable: 'Mogelijk Inzetbaar',
+          possiblyReachable: 'Mogelijk bereikbaar',
           noPlanning: 'Geen Planning',
           load: 'laden...',
           time: {
@@ -55,15 +55,18 @@ define(
           },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',
-          noP2000: 'Er zijn geen alarmberichten.'
+          noP2000: 'Er zijn geen alarmberichten.',
+          accessibilityStatement: 'Overzicht bereikbaarheid',
+          loading: 'aan het laden...',
+          accessible: 'bereikbaar'
         },
         agenda: {
           requiredPeople: 'Benodigd',
-          newAvail: 'Nieuwe beschikbaarheid',
+          newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
           month: 'Maand',
-          updateAvail: 'Update Beschikbaarheid',
+          updateAvail: 'Update bereikbaarheid',
           from: 'Vanaf',
           till: 'Tot',
           state: 'Status',
@@ -91,7 +94,7 @@ define(
           northAavailable: 'available North',
           southAvailable: 'available South',
           skipperOutService: 'Skipper Of Service',
-          notAvailable: 'Niet beschikbaar', // Niet Beschikbaar
+          notAvailable: 'Niet bereikbaar', // Niet Beschikbaar
           notachieve: 'Niet gearchieveerd',
           legendaLabels: {
             morePeople: 'Mensen nodig',
@@ -145,11 +148,11 @@ define(
         },
         planboard: {
           planboard: 'Agenda',
-          newAvail: 'Nieuwe beschikbaarheid',
+          newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
           month: 'Maand',
-          updateAvail: 'Update beschikbaarheid',
+          updateAvail: 'Update bereikbaarheid',
           from: 'Van',
           till: 'Tot',
           state: 'Status',
@@ -173,11 +176,11 @@ define(
           group: 'Groep',
           groups: 'Groepen',
           members: 'Leden',
-          bothAvailable: 'Beide beschikbaar',
+          bothAvailable: 'Beide bereikbaar',
           northAavailable: 'Beschikbaar Noord',
           southAvailable: 'Beschikbaar Zuid',
           skipperOutService: 'Schipper van dienst',
-          notAvailable: 'Niet beschikbaar',
+          notAvailable: 'Niet bereikbaar',
           notachieve: 'Niet behaald',
           legendaLabels: {
             morePeople: 'Meer mensen',
@@ -287,7 +290,7 @@ define(
               startTime + ' en ' +
               endDate + ' ' +
               endTime + '. ' +
-              'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
+              'Zet uzelf a.u.b. op bereikbaar indien u bereikbaar bent voor die periode';
           },
           removed: 'Bericht succesvol verwijderd.',
           removing: 'Bericht verwijderen...',
@@ -380,7 +383,7 @@ define(
           newPass: 'Nieuw wachtwoord',
           newPassRepeat: 'Herhaal nieuw wachtwoord',
           changePass: 'Wachtwoord wijzigen',
-          newAvail: 'Nieuwe beschikbaarheid',
+          newAvail: 'Nieuwe bereikbaarheid',
           // saveProfile: 'Profielinformatie opslaan...',
           refreshing: 'Profielinformatie vernieuwen...',
           dataChanged: 'Profielgegevens succesvol gewijzigd.',
@@ -466,7 +469,7 @@ define(
           save: 'Opslaan',
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',
-          teamSubmitError: 'Fouten tijdens aanmaken van het team.',
+          teamSubmitError: 'Fouten tijdens het aanmaken: ',
           queryTeamError: 'Fouten tijdens het opzoeken van de teams.',
           teamNamePrompt1: 'Vul een teamnaam in.',
           teamNamePrompt2: 'Voeg contactdata toe a.u.b.',
@@ -594,12 +597,16 @@ define(
           refresh: 'Verversen',
           stateValue: {
             'reachable': 'Bereikbaar',
-            'available': 'Beschikbaar',
+            'available': 'Bereikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline',
             'not_reachable': 'Niet bereikbaar',
             'on_the_phone': 'Aan de telefoon',
-            'unknown': 'Onbekend'
+            'unknown': 'Onbekend',
+            'reachable': 'Bereikbaar',
+            'possibly_reachable': 'Mogelijk bereikbaar',
+            'unreachable': 'Niet bereikbaar',
+            'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'

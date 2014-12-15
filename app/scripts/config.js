@@ -147,9 +147,8 @@ define(
       },
 
       states: [
-        'com.ask-cs.State.Available',
-        'com.ask-cs.State.Unavailable',
-        'com.ask-cs.State.Unreached'
+        'reachable',
+        'unreachable'//com.ask-cs.State.U
       ],
 
       // 1 - active - Task is being executed by a team member (a team member can have only 1 active task at a time)

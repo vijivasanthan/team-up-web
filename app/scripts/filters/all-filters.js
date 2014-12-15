@@ -81,7 +81,6 @@ define(
         }
       ])
 
-
     // /**
     //  * Main range filter
     //  */

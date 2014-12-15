@@ -141,6 +141,7 @@ define(
             {
               $scope.states[key] = state.label;
             });
+
           });
 
           $scope.groups = groups;

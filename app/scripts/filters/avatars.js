@@ -377,6 +377,8 @@ define(
         {
           return function (string, type)
           {
+
+
             var types = type.split('.');
             var ret;
             if (types[1] == 'stateValue')
@@ -392,7 +394,6 @@ define(
                 });
               return ret;
             }
-
             ret = ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
             if (typeof ret == 'undefined')
             {

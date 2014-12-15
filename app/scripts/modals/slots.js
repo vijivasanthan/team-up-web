@@ -536,7 +536,7 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.getAllMemberAvailabilities = function (teams, divisionID)
+          Slots.prototype.getAllMemberReachabilities = function (teams, divisionID)
           {
             var deferred = $q.defer(),
               teamDeferred = [],

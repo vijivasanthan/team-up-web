@@ -44,7 +44,7 @@ define(
                   time: new Date().addHours(1).toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
-                state: 'com.ask-cs.State.Available',
+                state: 'reachable',//com.ask-cs.State.
                 recursive: false,
                 id: ''
               };
@@ -569,8 +569,9 @@ define(
 
             if (selection = $scope.self.timeline.getSelection()[0])
             {
+
               var values = $scope.self.timeline.getItem(selection.row),
-                content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
+                  content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
 
               $scope.original = {
                 start: values.start,
@@ -847,7 +848,6 @@ define(
           */
           $scope.showLegenda = function ()
           {
-            console.log(123);
             $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
           };
 
@@ -879,7 +879,7 @@ define(
             var periods = {
               start: now,
               end: Number(now + period * hour),
-              state: (availability) ? 'com.ask-cs.State.Available' : 'com.ask-cs.State.Unavailable'
+              state: (availability) ? 'reachable' : 'unreachable'
             };
 
             var values = {
@@ -964,8 +964,6 @@ define(
               var element = angular.element(values.content),
                 secret = angular.fromJson(element.html());
 
-              console.log('secret', secret);
-
               if (secret.recursive ||
                 (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
               {
@@ -1000,10 +998,8 @@ define(
                         datetime: convertDateTimeToLocal(values.end)
                       },
                       recursive: (values.group.match(/recursive/)) ? true : false,
-                      state: 'com.ask-cs.State.Available'
+                      state: 'reachable'
                     };
-
-                    console.log($scope.slot);
 
                     $scope.original = {
                       start: new Date(values.start),
@@ -1435,8 +1431,6 @@ define(
 
               var now = Date.now().getTime();
 
-              console.log('$scope.original', $scope.original);
-
               if ($scope.original.end.getTime() <= now && $scope.original.content.recursive == false)
               {
                 $rootScope.notifier.error($rootScope.ui.agenda.pastDeleting);
@@ -1510,8 +1504,6 @@ define(
            */
           $scope.saveWish = function (id, wish)
           {
-            console.log('wish', wish);
-            console.log('id', id);
             $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
 
             Slots.setWish({

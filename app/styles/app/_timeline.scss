@@ -187,20 +187,20 @@ div.bar span {
   background-color: #6cad6c;
 }
 
-.legenda-row .legenda-state-available .square {
+.legenda-row .legenda-state-reachable .square {
   background-color: #6cad6c;
 }
 
-.legenda-row .legenda-state-available-north .square {
+.legenda-row .legenda-state-reachable-north .square {
   background-color: #242424;
 }
 
-.legenda-row .legenda-state-available-south .square {
+.legenda-row .legenda-state-reachable-south .square {
   // background-color: #8a85c7;
   background-color: #8a85c7;
 }
 
-.legenda-row .legenda-state-unavailable .square {
+.legenda-row .legenda-state-unreachable .square {
   background-color: #d34545;
 }
 
@@ -436,13 +436,13 @@ div.timeline-navigation-move-right {
   background: url('../../images/timeline/16/moveright.png') no-repeat center;
 }
 
-div.timeline-event.state-available {
+div.timeline-event.state-reachable {
   margin: 0;
   background-color: #f5a962;
 }
 
 .agenda-timeline-tabs {
-  div.timeline-event.state-available {
+  div.timeline-event.state-reachable {
     background-color: $green;
   }
 }
@@ -452,7 +452,7 @@ div.timeline-event.state-unreached {
   background-color: #65619b;
 }
 
-div.timeline-event.state-unavailable {
+div.timeline-event.state-unreachable {
   margin: 0;
   background-color: #a93232;
 }
