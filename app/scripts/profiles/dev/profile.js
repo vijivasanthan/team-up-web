@@ -13,26 +13,47 @@ var profile = {
 
   showBackground: false,
 
+  //statesall: {
+  //  reachable: {
+  //    className: 'state-reachable',
+  //    label: 'Bereikbaar',
+  //    color: '#4f824f',
+  //    type: 'Bereikbaar'
+  //  },
+  //  unreachable: {
+  //    className: 'state-unreachable',
+  //    label: 'Niet bereikbaar',
+  //    color: '#65619b',
+  //    type: 'Niet Bereikbaar'
+  //  }
+  //},
+
   statesall: {
-    reachable: {
-      className: 'state-reachable',
-      label: 'Bereikbaar',
+    'com.ask-cs.State.Available': {
+      className: 'state-available',
+      label: 'Beschikbaar',
       color: '#4f824f',
-      type: 'Bereikbaar'
+      type: 'Beschikbaar'
     },
-    unreachable: {
-      className: 'state-unreachable',
-      label: 'Niet bereikbaar',
+    'com.ask-cs.State.Unavailable': {
+      className: 'state-unavailable',
+      label: 'Niet Beschikbaar',
+      color: '#a93232',
+      type: 'Niet Beschikbaar'
+    },
+    'com.ask-cs.State.Unreached': {
+      className: 'state-unreached',
+      label: 'Niet Bereikt',
       color: '#65619b',
-      type: 'Niet Bereikbaar'
+      type: 'Niet Beschikbaar'
     }
   },
 
   host: "http://dev.ask-cs.com/",
 
   states: [
-    'reachable',
-    'unreachable'
+    'com.ask-cs.State.Available',
+    'com.ask-cs.State.Unavailable'
   ],
 
   timeline: {

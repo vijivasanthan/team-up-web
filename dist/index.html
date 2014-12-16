@@ -16,7 +16,7 @@
     <title ng-bind="config.app.title"></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/6ae8da82.main.css">
+    <link rel="stylesheet" href="styles/686e6771.main.css">
     <!-- block iestuff-->
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
@@ -44,7 +44,7 @@
               <!--	a(href='#search')-->
               <!--		i.icon-search-->
               <li data-match-route="/profile"><a id="account" ng-click="nav(&quot;profile&quot;)">
-                  <div back-img="{{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicxSmall {{app.resources.states|stateColor}} profile-avatar"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
+                  <div back-img="{{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicxSmall {{app.resources.states|stateColor}} profile-avatar"></div><span id="show-name">{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
               <li class="navbar-btn"><a ng-click="nav(&quot;logout&quot;)"><i class="icon-off"></i></a></li>
             </ul>
             <ul ng-show="browser.mobile" style="{{(browser.landscape) &amp;&amp; &quot;margin-right:-20px&quot;}}" class="nav pull-right mobile-nav-bar">

@@ -1073,6 +1073,8 @@ define(
           // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript
           $scope.openReport = function (report)
           {
+            console.log('report', report);
+            
             $scope.report = report;
             $scope.report.editMode = false;
 

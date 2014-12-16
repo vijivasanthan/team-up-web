@@ -199,11 +199,11 @@
         <h3 class="pull-left">{{ui.task.newTask}}</h3>
       </div>
       <hr>
-      <form>
+      <form name="taskForm" novalidate="novalidate" ng-submit="createTask(task)">
         <div class="row">
           <div class="span6">
             <fieldset>
-              <div class="control-group">
+              <div class="form-group">
                 <label class="control-label">Verzorger</label>
                 <div class="controls">
                   <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
@@ -214,7 +214,7 @@
                   </select>
                 </div>
               </div>
-              <div class="control-group">
+              <div class="form-group">
                 <label class="control-label">Cliënt</label>
                 <div class="controls">
                   <select ng-model="currentGroup" ng-options="g.id as g.name for g in groups | orderBy:&quot;name&quot;" ng-selected="currentGroup" ng-change="changeClientGroup(currentGroup)">
@@ -227,24 +227,24 @@
               </div>
             </fieldset>
             <fieldset>
-              <div class="control-group dater">
+              <div class="form-group dater">
                 <label class="control-label">{{ui.planboard.from}}</label>
                 <div class="controls">
                   <input name="date-start" type="text" ng-model="task.start.date" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" ng-change="newDate(task.start.date)"><i class="icon-calendar"></i>
                   <input name="time-start" type="text" ng-model="task.start.time" ng-change="newTime(task.start.time)" bs-timepicker="" data-date-type="string" data-time-format="HH:mm" data-length="1" data-minute-step="15" data-arrow-behavior="picker"><i class="icon-time"></i>
                 </div>
               </div>
-              <div class="control-group dater">
+              <div class="form-group dater">
                 <label class="control-label">{{ui.planboard.till}}</label>
                 <div class="controls">
                   <input name="date-end" type="text" ng-model="task.end.date" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker=""><i class="icon-calendar"></i>
                   <input name="time-end" type="text" ng-model="task.end.time" bs-timepicker="" data-date-type="string" data-time-format="HH:mm" data-length="1" data-minute-step="15" data-arrow-behavior="picker"><i class="icon-time"></i>
                 </div>
               </div>
-              <div class="control-group">
+              <div ng-class="{ 'has-error' : taskForm.description.$invalid &amp;&amp; !taskForm.description.$pristine }" class="form-group">
                 <label class="control-label">{{ui.task.description}}</label>
                 <div class="controls">
-                  <textarea style="height: 150px" ng-model="task.description" class="span8"></textarea>
+                  <textarea style="height: 150px" ng-model="task.description" name="description" ng-minlength="8" ng-maxlength="500" class="span8 form-control"></textarea><span ng-show="taskForm.description.$invalid &amp;&amp; !taskForm.description.$pristine" class="help-block"><small ng-show="taskForm.description.$error.minlength"><i>{{ui.task.taskDescriptionMinChars}} </i></small><small ng-show="taskForm.description.$error.maxlength"><i>{{ui.task.taskDescriptionMaxChars}}</i></small></span>
                 </div>
               </div>
             </fieldset>
@@ -262,7 +262,7 @@
         </div>
         <hr>
         <div class="form-actions">
-          <button type="button" ng-click="createTask(task)" class="btn btn-success">{{ui.teamup.saveMember}}</button>
+          <button type="submit" class="btn btn-success">{{ui.teamup.saveMember}}</button>
         </div>
       </form>
     </div>

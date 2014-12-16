@@ -82,6 +82,12 @@
                 <select ng-model="profile.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
               </div>
             </div>
+            <div class="form-group dater">
+              <label class="control-label">{{ui.profile.birthday}}</label>
+              <div class="controls">
+                <input name="date-start" type="text" ng-model="profile.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker"><i class="icon-calendar"></i>
+              </div>
+            </div>
             <div ng-class="{ 'has-error' : profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine }" class="form-group">
               <label class="control-label">E-mail</label>
               <div class="controls">
@@ -102,12 +108,6 @@
             <!--		select(ng-model='profile.function',-->
             <!--		ng-options='f.id as f.label for f in mfuncs',-->
             <!--		ng-selected='profile.function')-->
-            <div class="form-group dater">
-              <label class="control-label">{{ui.profile.birthday}}</label>
-              <div class="controls">
-                <input name="date-start" type="text" ng-model="profile.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker"><i class="icon-calendar"></i>
-              </div>
-            </div>
             <div class="form-actions">
               <button type="submit" ng-click="save(profile)" class="btn btn-success">{{ui.profile.saveProfile}}</button>
             </div>

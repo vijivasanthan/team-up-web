@@ -75,10 +75,9 @@ Timeline agenda
 #timeline-toolbar {
   overflow: hidden;
   padding: 0 0 0 0;
-  height: 35px;
 
   select {
-    margin: 0;
+    margin-bottom: 10px;
     padding: 0;
     width: 220px;
     color: $brown;
@@ -89,7 +88,7 @@ Timeline agenda
   }
 
   .btn-group {
-    margin-left: 10px;
+    margin: 6px 0 0 10px;
   }
 }
 
@@ -187,20 +186,20 @@ div.bar span {
   background-color: #6cad6c;
 }
 
-.legenda-row .legenda-state-reachable .square {
+.legenda-row .legenda-state-available .square {
   background-color: #6cad6c;
 }
 
-.legenda-row .legenda-state-reachable-north .square {
+.legenda-row .legenda-state-available-north .square {
   background-color: #242424;
 }
 
-.legenda-row .legenda-state-reachable-south .square {
+.legenda-row .legenda-state-available-south .square {
   // background-color: #8a85c7;
   background-color: #8a85c7;
 }
 
-.legenda-row .legenda-state-unreachable .square {
+.legenda-row .legenda-state-unavailable .square {
   background-color: #d34545;
 }
 
@@ -436,23 +435,23 @@ div.timeline-navigation-move-right {
   background: url('../../images/timeline/16/moveright.png') no-repeat center;
 }
 
-div.timeline-event.state-reachable {
+div.timeline-event.state-available {
   margin: 0;
   background-color: #f5a962;
 }
 
 .agenda-timeline-tabs {
-  div.timeline-event.state-reachable {
+  div.timeline-event.state-available {
     background-color: $green;
   }
 }
 
-div.timeline-event.state-unreached {
+div.timeline-event.state-unavailable {
   margin: 0;
   background-color: #65619b;
 }
 
-div.timeline-event.state-unreachable {
+div.timeline-event.state-unavailable {
   margin: 0;
   background-color: #a93232;
 }
@@ -647,104 +646,120 @@ div.timeline-event.wishes-even {
   }
 }
 
-div.timeline-event.wishes-1 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #415e6b;
-  /*border:1px solid #415e6b;*/
-  /*border-bottom: 10px solid #415e6b;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
+//div.timeline-event.wishes-1 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #415e6b;
+//  /*border:1px solid #415e6b;*/
+//  /*border-bottom: 10px solid #415e6b;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
+//div.timeline-event.wishes-2 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #3d5865;
+//  /*border:1px solid #3d5865;*/
+//  /*border-bottom: 10px solid #3d5865;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
+//div.timeline-event.wishes-3 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #344c58;
+//  /*border:1px solid #344c58;*/
+//  /*border-bottom: 10px solid #344c58;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
+//div.timeline-event.wishes-4 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #2f4550;
+//  /*border:1px solid #2f4550;*/
+//  /*border-bottom: 10px solid #2f4550;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
+//div.timeline-event.wishes-5 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #2c424c;
+//  /*border:1px solid #2c424c;*/
+//  /*border-bottom: 10px solid #2c424c;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
+//div.timeline-event.wishes-6 {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #253943;
+//  /*border:1px solid #253943;*/
+//  /*border-bottom: 10px solid #253943;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+//
 
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
+//
+//div.timeline-event.wishes-more {
+//  margin: 0;
+//  background-color: #648ea0;
+//  // background-color: #486877;
+//  /*border:1px solid #486877;*/
+//  /*border-bottom: 10px solid #486877;*/
+//  /*text-indent: -9999px;*/
+//  text-align: center;
+//
+//  &:hover {
+//    background-color: lighten(#648ea0, 10%);
+//  }
+//}
+
+//@function set-wishes-background-color($amount) {
+//  darken(#a4cee0, #{$amount});
+//}
+
+$wishMax: 20;
+
+@for $i from 1 through $wishMax{
+  div.timeline-event.wishes-#{$i} {
+    background-color: darken(#b1dbed, (3 * $i));
+    &:hover {
+      background-color: darken(#b1dbed, ((3 * $i) - 3));
+    }
   }
 }
-
-div.timeline-event.wishes-2 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #3d5865;
-  /*border:1px solid #3d5865;*/
-  /*border-bottom: 10px solid #3d5865;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
-div.timeline-event.wishes-3 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #344c58;
-  /*border:1px solid #344c58;*/
-  /*border-bottom: 10px solid #344c58;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
-div.timeline-event.wishes-4 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #2f4550;
-  /*border:1px solid #2f4550;*/
-  /*border-bottom: 10px solid #2f4550;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
-div.timeline-event.wishes-5 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #2c424c;
-  /*border:1px solid #2c424c;*/
-  /*border-bottom: 10px solid #2c424c;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
-div.timeline-event.wishes-6 {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #253943;
-  /*border:1px solid #253943;*/
-  /*border-bottom: 10px solid #253943;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
-div.timeline-event.wishes-more {
-  margin: 0;
-  background-color: #648ea0;
-  // background-color: #486877;
-  /*border:1px solid #486877;*/
-  /*border-bottom: 10px solid #486877;*/
-  /*text-indent: -9999px;*/
-  text-align: center;
-
-  &:hover {
-    background-color: lighten(#648ea0, 10%);
-  }
-}
-
 /* End Wish */
 
 .timeline-frame .bar {

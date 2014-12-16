@@ -388,7 +388,7 @@ define(['services/services', 'config'],
               Slots.query(params, function (result) {
                 deferred.resolve(
                   (result.length > 0) ?
-                    $rootScope.StandBy.config.statesall[result[0]['text']] :
+                    $rootScope.config.app.statesall[result[0]['text']] :
                   {
                     color: 'gray',
                     label: 'Mogelijk inzetbaar'
@@ -429,7 +429,8 @@ define(['services/services', 'config'],
                     month: options.month
                   };
 
-                  Slots.prototype.aggs(groupParams).then(function (aggs) {
+                  Slots.prototype.aggs(groupParams).then(function (aggs)
+                  {
                     if (options.layouts.members) {
                       var allMembers = Store('app').get(options.groupId),
                         calls = [];

@@ -112,13 +112,13 @@ define(['controllers/controllers'], function (controllers)
                       ordered.unreachable = [];
                     }
 
-                    if (slots[0].state == 'unreachable')
+                    if (slots[0].state == 'com.ask-cs.State.Unavailable')
                     {
                       ordered.unreachable.push(_member);
                     }
                     else
                     {
-                      if (slots[0].state == 'reachable')
+                      if (slots[0].state == 'com.ask-cs.State.Available')
                       {
                         _member.style = 'sa-icon-reserve-available';
                       }
@@ -169,7 +169,7 @@ define(['controllers/controllers'], function (controllers)
 
               _.each(ordered.reachable, function (reachable)
               {
-                if (reachable.state == 'reachable')
+                if (reachable.state == 'com.ask-cs.State.Available')
                 {
                   _reachables.push(reachable);
                 }

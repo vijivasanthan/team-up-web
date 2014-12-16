@@ -433,7 +433,7 @@ define(['services/services', 'config'],
 
               var groups = this.get.groups(),
                 name = groups[data.aggs[0].id],
-                link = '<a href="#/groups?uuid=' +
+                link = '<a href="#/teams?uuid=' +
                   data.aggs[0].id +
                   '#view">' +
                   name +
@@ -448,11 +448,7 @@ define(['services/services', 'config'],
                 {
                   var cn;
 
-                  if (wish.count >= 7)
-                  {
-                    cn = 'wishes-more';
-                  }
-                  else if (wish.count == 0)
+                  if (wish.count == 0)
                   {
                     cn = 'wishes-even';
                   }

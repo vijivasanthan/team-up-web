@@ -44,7 +44,7 @@ define(
                   time: new Date().addHours(1).toString(config.app.formats.time),
                   datetime: new Date().toISOString()
                 },
-                state: 'reachable',//com.ask-cs.State.
+                state: 'com.ask-cs.State.Available',
                 recursive: false,
                 id: ''
               };
@@ -879,7 +879,7 @@ define(
             var periods = {
               start: now,
               end: Number(now + period * hour),
-              state: (availability) ? 'reachable' : 'unreachable'
+              state: (availability) ? 'com.ask-cs.State.Available' : 'com.ask-cs.State.Unavailable'
             };
 
             var values = {
@@ -998,7 +998,7 @@ define(
                         datetime: convertDateTimeToLocal(values.end)
                       },
                       recursive: (values.group.match(/recursive/)) ? true : false,
-                      state: 'reachable'
+                      state: 'com.ask-cs.State.Available'
                     };
 
                     $scope.original = {

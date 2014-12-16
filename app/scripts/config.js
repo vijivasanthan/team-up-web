@@ -146,9 +146,15 @@ define(
         }
       },
 
+      //states: [
+      //  'reachable',
+      //  'unreachable'//com.ask-cs.State.U
+      //],
+
       states: [
-        'reachable',
-        'unreachable'//com.ask-cs.State.U
+        'com.ask-cs.State.Available',
+        'com.ask-cs.State.Unavailable',
+        'com.ask-cs.State.Unreached'
       ],
 
       // 1 - active - Task is being executed by a team member (a team member can have only 1 active task at a time)
