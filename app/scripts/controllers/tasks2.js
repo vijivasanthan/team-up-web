@@ -529,6 +529,12 @@ define(
               return false;
             }
 
+            if(! $scope.taskForm.$valid)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.taskFormValide);
+              return;
+            }
+
             $scope.task.startTime =  ($rootScope.browser.mobile) ?
               new Date(task.start.date).getTime() :
               Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yyyy'), formatDateTime(task.start.time, 'HH:mm'), false);

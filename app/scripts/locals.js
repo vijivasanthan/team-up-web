@@ -637,7 +637,10 @@ define(
           planningTime: 'Tijdsbestek',
           refreshTask: 'Het herladen van de taken',
           upload: 'Upload taken',
-          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?'
+          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?',
+          taskDescriptionMinChars: 'Opmerkingen moeten uit minimaal 8 karakters bestaan.',
+          taskDescriptionMaxChars: 'Het maximaal aantal karakters voor opmerkingen is 500.',
+          taskFormValide: 'De nieuwe taak is niet valide, ga eisen onder elk veld na.'
         },
         order: {
           randomOrder: 'Willekeurige',

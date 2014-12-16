@@ -295,13 +295,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 			hr
 
-			form
+			form(name='taskForm', novalidate, ng-submit='createTask(task)')
 				.row
 					.span6
 
 						fieldset
 
-							.control-group
+							.form-group
 								label.control-label Verzorger
 								.controls
 									select(ng-model='task.team',
@@ -314,7 +314,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-selected='currentMember')
 										option(value='') Lid
 
-							.control-group
+							.form-group
 								label.control-label Cliënt
 								.controls
 									select(ng-model='currentGroup',
@@ -330,7 +330,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 						fieldset
 
-							.control-group.dater
+							.form-group.dater
 								label.control-label {{ui.planboard.from}}
 								.controls
 									input(name='date-start',
@@ -353,7 +353,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									data-arrow-behavior="picker")
 									i.icon-time
 
-							.control-group.dater
+							.form-group.dater
 								label.control-label {{ui.planboard.till}}
 								.controls
 									input(name='date-end',
@@ -374,10 +374,20 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									data-arrow-behavior="picker")
 									i.icon-time
 
-							.control-group
+							.form-group(ng-class="{ 'has-error' : taskForm.description.$invalid && !taskForm.description.$pristine }")
 								label.control-label {{ui.task.description}}
 								.controls
-									textarea.span8(style='height: 150px', ng-model='task.description')
+									textarea.span8.form-control(
+										style='height: 150px', 
+										ng-model='task.description',
+										name='description',
+										ng-minlength=8,
+										ng-maxlength=500)
+									span.help-block(ng-show='taskForm.description.$invalid && !taskForm.description.$pristine')
+										small(ng-show="taskForm.description.$error.minlength")
+											i {{ui.task.taskDescriptionMinChars}} 
+										small(ng-show="taskForm.description.$error.maxlength")
+											i {{ui.task.taskDescriptionMaxChars}}
 
 					.span6
 						fieldset
@@ -388,7 +398,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				hr
 				.form-actions
-					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
+					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
 					
 					
 		

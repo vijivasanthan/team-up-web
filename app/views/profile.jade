@@ -99,6 +99,17 @@ section#profile
 								select(ng-model='profile.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
+						.form-group.dater
+							label.control-label {{ui.profile.birthday}}
+							.controls
+								input(name='date-start',
+								type='text',
+								ng-model='profile.birthDate',
+								data-date-type='string',
+								data-date-format='dd-MM-yyyy',
+								bs-datepicker='',
+								data-toggle='datepicker')
+								i.icon-calendar
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
 							label.control-label E-mail
 							.controls
@@ -132,17 +143,6 @@ section#profile
 						//		select(ng-model='profile.function',
 						//		ng-options='f.id as f.label for f in mfuncs',
 						//		ng-selected='profile.function')
-						.form-group.dater
-							label.control-label {{ui.profile.birthday}}
-							.controls
-								input(name='date-start',
-								type='text',
-								ng-model='profile.birthDate', 
-								data-date-type='string',
-								data-date-format='dd-MM-yyyy',
-								bs-datepicker='',
-								data-toggle='datepicker')
-								i.icon-calendar
 						.form-actions
 							button.btn.btn-success(type='submit',
 							ng-click='save(profile)') {{ui.profile.saveProfile}}

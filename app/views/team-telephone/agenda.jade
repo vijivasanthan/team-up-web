@@ -53,8 +53,7 @@ section#planboard(ng-controller='agenda-timeline')
 								class="{{(timeline.config.bar==true) && 'active'}}",
 								ng-click='barCharts()',
 								ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
-							.btn-group(ng-show='timeline.current.layouts.group',
-								ng-hide='app.resources.role > 1')
+							.btn-group(ng-show='timeline.current.layouts.group')
 								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.wishes==true) && 'active'}}",
 								ng-click='groupWishes()',
