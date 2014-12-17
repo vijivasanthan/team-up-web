@@ -103,7 +103,8 @@ define(
 
           $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
 
-          var params = $location.search();
+          var params = $location.search(),
+            reportUuid = params.reportUuid;
 
           $scope.search = {query: ''};
 
@@ -174,7 +175,7 @@ define(
               loadReports();
             }
 
-            if (hash == 'reports')
+            if (hash == 'reports' && _.isUndefined(reportUuid))
             {
               loadGroupReports();
             }
@@ -1073,8 +1074,13 @@ define(
           // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript
           $scope.openReport = function (report)
           {
-            console.log('report', report);
-            
+            if(!_.isUndefined(reportUuid))
+            {
+              $scope.currentCLient = report.clientUuid;
+              $scope.currentMonth = moment(report.creationTime).format('M');
+              $scope.requestReportsByFilter();
+            }
+
             $scope.report = report;
             $scope.report.editMode = false;
 
@@ -1174,7 +1180,6 @@ define(
           $scope.$on(
             '$locationChangeSuccess', function (event, currentURL, preURL)
             {
-              // console.log("event ", event);
               var currentScope = event.currentScope;
               if ($location.hash() == "reports")
               {
@@ -1218,6 +1223,7 @@ define(
                         }
                         return;
                       }
+
                       currentScope.openReport(report_obj);
                     }
                   }

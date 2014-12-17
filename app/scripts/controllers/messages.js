@@ -97,7 +97,6 @@ define(
                 // parse the message body if necessary
                 if (msg.type == 'REPORT_NEW')
                 {
-                  console.log('msg', msg);
                   var msgBody = JSON.parse(message.body);
                   var client = $rootScope.getClientByID(msgBody.clientUuid);
 
