@@ -441,8 +441,6 @@ define(
               }
             });
 
-
-
           /**
           * Init timeline
           */
@@ -451,6 +449,13 @@ define(
             $scope.timeliner.init();
           }
 
+          $scope.$watch(function() {
+              return $scope.timeline.current.group;
+            },
+            function(currentTeamId)
+            {
+              wisher(currentTeamId);
+            });
 
           /**
           * Timeliner listener
@@ -765,7 +770,6 @@ define(
               }
             );
           };
-
 
           /**
           * Group aggs barCharts toggler
@@ -1485,6 +1489,7 @@ define(
                 $scope.wished = true;
 
                 $scope.wish = wish.count;
+                $rootScope.groupWish = $scope.wish;
 
                 $scope.popover = {
                   id: id,
@@ -1601,14 +1606,6 @@ define(
             );
           };
 
-          $scope.$watch(function() {
-              return $scope.timeline.current.group;
-            },
-            function(currentTeamId)
-            {
-              wisher(currentTeamId);
-            });
-
           /**
           * TODO: Stress-test this!
           * Hot fix against not-dom-ready problem for timeline
@@ -1623,7 +1620,6 @@ define(
               config.app.timers.TICKER
             );
           }
-
 
           /**
           * Background sync in every 60 sec

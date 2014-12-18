@@ -245,12 +245,13 @@ define(['services/services', 'config'],
 
                 _.each(agg.data, function (slot)
                 {
+
                   if (slot.wish > maxh)
                   {
                     maxh = slot.wish;
                   }
                 });
-
+                console.log('slot', maxh);
                 _.each(agg.data, function (slot)
                 {
                   var maxNum = maxh,
@@ -258,7 +259,7 @@ define(['services/services', 'config'],
                     xwish = num,
                     height = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
                     minHeight = height,
-                    style = 'height:' + height + 'px;',
+                    style = 'height:' + 100 + 'px;',//height
                     requirement = '<div class="requirement" style="' +
                       style +
                       '" ' +

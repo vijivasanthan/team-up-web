@@ -317,9 +317,11 @@ div.timeline-axis-text-major {
 
 div.timeline-event {
   display: inline-block;
+  //background-color: #ddd;
+  background-color: #f5a962;
 //  padding: 10px 0;
 //  height: 20px;
-  background-color: $orange;
+  //background-color: $orange;
 //  margin-top: 3px !important;
 }
 
@@ -370,11 +372,11 @@ div.timeline-event-line {
 }
 
 div.timeline-event-content {
-  margin-left: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  color: $white;
-  font-weight: 800;
+//  margin-left: 10px;
+//  white-space: nowrap;
+//  overflow: hidden;
+//  color: $white;
+//  font-weight: 800;
 }
 
 div.timeline-groups-axis {
@@ -457,9 +459,9 @@ div.timeline-event.state-unavailable {
 }
 
 div.timeline-event div.timeline-event-content {
-  font-size: 12px;
-  top: 0;
-  left: 0;
+//  font-size: 12px;
+//  top: 0;
+//  left: 0;
 }
 
 div.timeline-event div.timeline-event-content span.secret {
@@ -750,13 +752,14 @@ div.timeline-event.wishes-even {
 //  darken(#a4cee0, #{$amount});
 //}
 
-$wishMax: 20;
+$wishMax: 15;
+$step: 3;
 
 @for $i from 1 through $wishMax{
   div.timeline-event.wishes-#{$i} {
-    background-color: darken(#b1dbed, (3 * $i));
+    background-color: darken(#b1dbed, ($step * $i));
     &:hover {
-      background-color: darken(#b1dbed, ((3 * $i) - 3));
+      background-color: darken(#b1dbed, (($step * $i) - $step));
     }
   }
 }
