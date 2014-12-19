@@ -495,7 +495,7 @@ define(
           noContacts: 'Er zijn geen contactpersonen gedefinieerd.',
           noReports: 'Er zijn geen rapporten voor deze cliënt.',
           contactCount: 'Er zijn $v contactpersonen.',
-          reportCount: 'Er zijn $v rapporteren.',
+          reportCount: 'Er zijn $v rapporten.',
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
           passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
           savingMember: 'Lid aan het opslaan...',

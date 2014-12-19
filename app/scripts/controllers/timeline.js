@@ -112,6 +112,9 @@ define(
               links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
               links.events.addListener($scope.self.timeline, 'add', this.onAdd);
               links.events.addListener($scope.self.timeline, 'delete', this.onRemove);
+
+              //links.events.addListener($scope.self.timeline, 'delete', this.onRemove);
+
               links.events.addListener($scope.self.timeline, 'change', this.onChange);
               links.events.addListener($scope.self.timeline, 'select', this.onSelect);
 
@@ -707,7 +710,7 @@ define(
               $scope.removeTaskOptions.userId = user.uuid;
             }
 
-            //als de range een dag is de datum is doe dan van 0:00 - 23:59
+            //TODO als de range een dag is de datum is doe dan van 0:00 - 23:59
             if (!_.isUndefined(range))
             {
               $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
@@ -751,7 +754,7 @@ define(
                 console.log('client');
                 break;
               default:
-                console.log("Voor het verwijderen van taken is geen team, clientgroep, client of member geselecteert");
+                console.log("Voor het verwijderen van taken is geen team, clientgroep, client of member geselecteert.");
             }
           };
 
@@ -768,7 +771,6 @@ define(
             Teams.getTasksRange(options)
               .then(function (tasks)
               {
-                console.log('tasks', tasks);
                 if(tasks.length == 0)
                 {
                   $rootScope.notifier.error($rootScope.ui.planboard.noTasksFounded);

@@ -323,7 +323,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+						i {{(groupReports|filter:false).length | i18n_spec:'teamup.reportCount'}}
 
 
 
