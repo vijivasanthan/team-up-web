@@ -137,10 +137,19 @@ aria-hidden='true')
 									ng-click='confirmDeleteMember(member.uuid)',
 									ng-show='app.resources.role == 1')
 										i.icon-trash
+				ul#teams-legenda
+					li
+						div(class='roundedPicxSmall memberStateNone')
+						p {{ ui.teamup.noSharedStates }}
+					li
+						div(class='roundedPicxSmall memberStateBusy')
+						p {{ ui.teamup.stateValue.unavailable }}
+					li
+						div(class='roundedPicxSmall memberStateAvailalbe')
+						p {{ ui.teamup.stateValue.available }}
 				span.muted.pull-right
 					small
 						i {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
-
 
 		#newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")
 			.tab-header

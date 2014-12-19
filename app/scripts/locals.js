@@ -493,6 +493,7 @@ define(
           group: 'Groep',
           errorSaveClientGroup: 'Opslaan wijzigingen cliëntengroep mislukt.',
           noContacts: 'Er zijn geen contactpersonen gedefinieerd.',
+          noReports: 'Er zijn geen rapporten voor deze cliënt.',
           contactCount: 'Er zijn $v contactpersonen.',
           reportCount: 'Er zijn $v rapporteren.',
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
@@ -597,7 +598,7 @@ define(
           refresh: 'Verversen',
           stateValue: {
             'reachable': 'Bereikbaar',
-            'available': 'Bereikbaar',
+            'available': 'Beschikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline',
             'not_reachable': 'Niet bereikbaar',
@@ -606,6 +607,7 @@ define(
             'reachable': 'Bereikbaar',
             'possibly_reachable': 'Mogelijk bereikbaar',
             'unreachable': 'Niet bereikbaar',
+            'unavailable': 'Niet beschikbaar',
             'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',

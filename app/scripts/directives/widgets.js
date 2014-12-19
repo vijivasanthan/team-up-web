@@ -192,28 +192,28 @@ define(
 
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
-      'ngenter',
-      function ()
+    'ngenter',
+    function ()
+    {
+      return function (scope, element, attrs)
       {
-        return function (scope, element, attrs)
-        {
-          element.bind(
-            'keydown keypress',
-            function (event)
+        element.bind(
+          'keydown keypress',
+          function (event)
+          {
+            if (event.which === 13)
             {
-              if (event.which === 13)
-              {
-                scope.$apply(
-                  function () { scope.$eval(attrs.ngenter) }
-                );
+              scope.$apply(
+                function () { scope.$eval(attrs.ngenter) }
+              );
 
-                event.preventDefault();
-              }
+              event.preventDefault();
             }
-          );
-        };
-      }
-    );
+          }
+        );
+      };
+    }
+  );
 
     // Setup the background image
     directives.directive(

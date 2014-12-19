@@ -206,7 +206,7 @@ block chat
 						span {{message.date}}
 						hr
 					.chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
-						a(href='#/client?uuid={{message.body.clientGroupId}}&reportUuid={{message.body.reportUuid}}#reports')
+						a(ng-click='directToChatLink("#/client?uuid=" + message.body.clientGroupId + "&reportUuid=" + message.body.reportUuid + "#reports")')
 							span {{message.title}}
 							hr
 					.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')

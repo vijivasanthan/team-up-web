@@ -10,10 +10,8 @@ define(['services/services', 'config'],
         '$rootScope',
         '$resource',
         '$q',
-        'Dater',
         'Store',
-        'Teams',
-        function ($rootScope, $resource, $q, Dater, Store)
+        function ($rootScope, $resource, $q, Store)
         {
           var Permission = $resource(config.app.host + '/acl', {}, {
             get: {

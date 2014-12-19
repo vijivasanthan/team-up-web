@@ -87,7 +87,6 @@ define(['controllers/controllers'], function (controllers)
                 if (members[id] &&
                   (members[id].role != 0 && members[id].role != 4))
                 {
-
                   var _member = {
                     id: id,
                     state: (slots.length > 0) ? slots[0].state : 'no-state',

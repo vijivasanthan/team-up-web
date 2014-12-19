@@ -20,12 +20,13 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
+        '$window',
         function ($rootScope, $scope, $location, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout)
+                  $filter, $modal, TeamUp, $timeout, $window)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
-          var modalInstance;
+          var modalInstance = null;
 
           if (data.clientId)
           {
@@ -1177,60 +1178,65 @@ define(
 
           // open report from the link ( from the chat message )
           // there will be a link URL changing when opening a report from other views , need to do some special process
-          $scope.$on(
-            '$locationChangeSuccess', function (event, currentURL, preURL)
-            {
-              var currentScope = event.currentScope;
-              if ($location.hash() == "reports")
-              {
-                var param_clientGroup = $location.search().uuid;
-                var param_report = $location.search().reportUuid;
-
-                if (param_clientGroup)
-                {
-                  if (param_clientGroup != currentScope.clientGroup.id)
-                  {
-                    angular.forEach(
-                      currentScope.data.clientGroups, function (cGrp)
-                      {
-                        if (cGrp.id == param_clientGroup)
-                        {
-                          currentScope.clientGroup = cGrp;
-                        }
-                      });
-                    currentScope.setViewTo('reports');
-                  }
-                  else
-                  {
-                    if (param_report)
-                    {
-                      var report_obj = null;
-                      angular.forEach(
-                        $scope.groupReports, function (rpt)
-                        {
-                          if (rpt.uuid == param_report)
-                          {
-                            report_obj = rpt;
-                          }
-                        });
-                      if (report_obj == null)
-                      {
-                        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                        // clear the url param
-                        if ($location.search().reportUuid)
-                        {
-                          $location.search('reportUuid', null);
-                        }
-                        return;
-                      }
-
-                      currentScope.openReport(report_obj);
-                    }
-                  }
-                }
-              }
-
-            });
+          //$scope.$on(
+          //  '$locationChangeSuccess', function (event, currentURL, preURL)
+          //  {
+          //    var currentScope = event.currentScope;
+          //
+          //    if ($location.hash() == "reports")
+          //    {
+          //      var param_clientGroup = $location.search().uuid,
+          //         param_report = $location.search().reportUuid;
+          //      console.log('param_clientgroup', param_clientGroup);
+          //      console.log('param_clientgroup', currentURL);
+          //      console.log('param_report', $location.search());
+          //
+          //      if (param_clientGroup)
+          //      {
+          //          angular.forEach(
+          //            currentScope.data.clientGroups, function (cGrp)
+          //            {
+          //              if (cGrp.id == param_clientGroup)
+          //              {
+          //                currentScope.clientGroup = cGrp;
+          //              }
+          //            });
+          //        console.log('currentScope.clientGroup', param_report);
+          //          currentScope.setViewTo('reports');
+          //          findReport(currentScope, param_report);
+          //      }
+          //    }
+          //  });
+          //
+          //  var findReport = function(currentScope, param_report)
+          //  {
+          //    console.log('123', param_report);
+          //
+          //    if (param_report)
+          //    {
+          //      var report_obj = null;
+          //      angular.forEach(
+          //        $scope.groupReports, function (rpt)
+          //        {
+          //          if (rpt.uuid == param_report)
+          //          {
+          //            report_obj = rpt;
+          //          }
+          //        });
+          //      if (report_obj == null)
+          //      {
+          //        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+          //        // clear the url param
+          //        if ($location.search().reportUuid)
+          //        {
+          //          $location.search('reportUuid', null);
+          //        }
+          //        return;
+          //      }
+          //
+          //      currentScope.openReport(report_obj);
+          //    }
+          //  }
 
         }
       ]

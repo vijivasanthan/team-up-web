@@ -31,21 +31,21 @@ var profile = {
   statesall: {
     'com.ask-cs.State.Available': {
       className: 'state-available',
-      label: 'Beschikbaar',
+      label: 'Bereikbaar',
       color: '#4f824f',
-      type: 'Beschikbaar'
+      type: 'Bereikbaar'
     },
     'com.ask-cs.State.Unavailable': {
       className: 'state-unavailable',
-      label: 'Niet Beschikbaar',
+      label: 'Niet bereikbaar',
       color: '#a93232',
-      type: 'Niet Beschikbaar'
+      type: 'Niet bereikbaar'
     },
     'com.ask-cs.State.Unreached': {
       className: 'state-unreached',
-      label: 'Niet Bereikt',
+      label: 'Niet bereikbaar',
       color: '#65619b',
-      type: 'Niet Beschikbaar'
+      type: 'Niet bereikbaar'
     }
   },
 

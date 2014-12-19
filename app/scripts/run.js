@@ -20,7 +20,8 @@ define(
         'Dater',
         'TeamUp',
         'Permission',
-        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp, Permission)
+        '$route',
+        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp, Permission, $route)
         {
           // TODO: Remove later on (Needed for timeline info filters)
           if (!Dater.getPeriods())
@@ -701,6 +702,13 @@ define(
                   .removeClass('error');
               }
             }
+          };
+
+          //force route to reload even if the new url is equal as the current url
+          $rootScope.directToChatLink = function(url)
+          {
+              $window.location.href = url;
+              $route.reload();
           };
 
           $rootScope.unique = function (collection) {
