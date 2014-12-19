@@ -84,7 +84,21 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>| </i><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span><a style="margin-right: 3px" data-content-template="views/agenda/teams-legenda.html" data-placement="top" bs-popover="" data-title="Behoefte wijzigen" class="pull-right teams-legenda"><span><small><i>Legenda </i></small></span></a>
+        </table>
+        <ul id="teams-legenda">
+          <li>
+            <div class="roundedPicxSmall memberStateNone"></div>
+            <p>{{ ui.teamup.noSharedStates }}</p>
+          </li>
+          <li>
+            <div class="roundedPicxSmall memberStateBusy"></div>
+            <p>{{ ui.teamup.stateValue.unavailable }}</p>
+          </li>
+          <li>
+            <div class="roundedPicxSmall memberStateAvailalbe"></div>
+            <p>{{ ui.teamup.stateValue.available }}</p>
+          </li>
+        </ul><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
       </div>
     </div>
     <div id="newTeamTab" class="tab-pane {{(views.newTeam==true) &amp;&amp; 'active'}}">

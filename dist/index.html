@@ -16,7 +16,7 @@
     <title ng-bind="config.app.title"></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/27662e39.main.css">
+    <link rel="stylesheet" href="styles/730f90d6.main.css">
     <!-- block iestuff-->
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
@@ -106,7 +106,7 @@
             <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
               <hr>
             </div>
-            <div ng-show="(message.type == &quot;REPORT_NEW&quot;)" class="chat-separator reportLink"><a href="#/client?uuid={{message.body.clientGroupId}}&amp;reportUuid={{message.body.reportUuid}}#reports"><span>{{message.title}}</span>
+            <div ng-show="(message.type == &quot;REPORT_NEW&quot;)" class="chat-separator reportLink"><a ng-click="directToChatLink(&quot;#/client?uuid=&quot; + message.body.clientGroupId + &quot;&amp;reportUuid=&quot; + message.body.reportUuid + &quot;#reports&quot;)"><span>{{message.title}}</span>
                 <hr></a></div>
             <div ng-show="(message.type == &quot;CHAT&quot; || message.type == null)" class="message {{message.msgRole}}">
               <div back-img="{{message.member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"></div>
