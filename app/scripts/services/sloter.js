@@ -236,42 +236,30 @@ define(['services/services', 'config'],
 
             bars: function (data, timedata, config, privilage, current)
             {
-              var _this = this,
-                maxh = 0;
+              var _this = this;
 
               _.each(_this.filtered(data, current), function (agg)
               {
-                var name = _this.namer(agg, privilage);
+
+                var aggData = _.pluck(agg.data, 'diff'),
+                  minDiff = _.min(aggData),
+                  maxDiff = _.max(aggData),
+                  diffRangeData = (maxDiff - minDiff),
+                  diffRangeDraw = (diffRangeData / 0.8), // a percentage, with a lower bound on 20%
+                  drawDataDiff = (diffRangeDraw - diffRangeData);
+
 
                 _.each(agg.data, function (slot)
                 {
-
-                  if (slot.wish > maxh)
-                  {
-                    maxh = slot.wish;
-                  }
-                });
-                console.log('slot', maxh);
-                _.each(agg.data, function (slot)
-                {
-                  var maxNum = maxh,
-                    num = slot.wish,
-                    xwish = num,
-                    height = Math.round(num / maxNum * 80 + 20), // a percentage, with a lower bound on 20%
-                    minHeight = height,
-                    style = 'height:' + 100 + 'px;',//height
+                  var num = slot.diff,
+                    height = Math.round((((num - minDiff) + drawDataDiff) / diffRangeDraw) * 100),
+                    style = 'height: 100px;',
                     requirement = '<div class="requirement" style="' +
                       style +
                       '" ' +
                       'title="' + 'Minimum aantal benodigden' + ': ' +
                       num +
                       ' personen"></div>';
-
-                  num = slot.wish + slot.diff;
-
-                  var xcurrent = num;
-
-                  height = Math.round(num / maxNum * 80 + 20);
 
                   if (slot.diff >= 0 && slot.diff < 7)
                   {
@@ -312,8 +300,6 @@ define(['services/services', 'config'],
                   }
 
                   var span = '<span class="badge badge-inverse">' + slot.diff + '</span>';
-
-                  if (xcurrent > xwish) height = minHeight;
 
                   style = 'height:' + height + 'px;';
 
