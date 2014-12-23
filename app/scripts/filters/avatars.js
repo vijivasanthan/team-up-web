@@ -462,11 +462,11 @@ define(
               switch (type)
               {
                 case 'team':
-                  path = '/team/member/';
+                  path = 'team/member/';
                   break;
 
                 case 'client':
-                  path = '/client/';
+                  path = 'client/';
                   break;
 
                 case 'avatar':
@@ -474,7 +474,7 @@ define(
                   break;
 
                 case 'image':
-                  path = '/images/';
+                  path = 'images/';
                   break;
               }
 

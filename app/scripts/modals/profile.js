@@ -2,7 +2,7 @@ define(['services/services', 'config'], function (services, config) {
   'use strict';
 
   services.factory('Profile', function ($rootScope, $resource, $q, Groups, Slots, MD5, Store) {
-    var Profile = $resource(config.app.host + '/node/:id/:section', {}, {
+    var Profile = $resource(config.app.host + 'node/:id/:section', {}, {
       get: {
         method: 'GET',
         params: { id: '', section: 'resource' }
@@ -28,7 +28,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    //var Register = $resource(config.app.host + '/register', {direct: 'true', module: 'default'}, {
+    //var Register = $resource(config.app.host + 'register', {direct: 'true', module: 'default'}, {
     //  profile: {
     //    method: 'GET',
     //    params: {uuid: '', pass: '', name: '', phone: ''},
@@ -36,21 +36,21 @@ define(['services/services', 'config'], function (services, config) {
     //  }
     //});
     //
-    //var UserExists = $resource(config.app.host + '/user_exists', {}, {
+    //var UserExists = $resource(config.app.host + 'user_exists', {}, {
     //  check: {
     //    method: 'GET',
     //    params: {username: ''}
     //  }
     //});
     //
-    //var PincodeExists = $resource(config.app.host + '/node/:id/pincode_exists', {}, {
+    //var PincodeExists = $resource(config.app.host + 'node/:id/pincode_exists', {}, {
     //  check: {
     //    method: 'GET',
     //    params: {}
     //  }
     //});
 
-    var Resources = $resource(config.app.host + '/resources', {}, {
+    var Resources = $resource(config.app.host + 'resources', {}, {
       get: {
         method: 'GET',
         params: {}

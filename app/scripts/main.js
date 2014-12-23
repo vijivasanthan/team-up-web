@@ -211,6 +211,7 @@ require(
     'controllers/logs',
     'controllers/order',
     'controllers/agenda',
+    'controllers/home',
 
     'bootstrap',
     'lawnchair',

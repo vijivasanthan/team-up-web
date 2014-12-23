@@ -13,21 +13,6 @@ var profile = {
 
   showBackground: false,
 
-  //statesall: {
-  //  reachable: {
-  //    className: 'state-reachable',
-  //    label: 'Bereikbaar',
-  //    color: '#4f824f',
-  //    type: 'Bereikbaar'
-  //  },
-  //  unreachable: {
-  //    className: 'state-unreachable',
-  //    label: 'Niet bereikbaar',
-  //    color: '#65619b',
-  //    type: 'Niet Bereikbaar'
-  //  }
-  //},
-
   statesall: {
     'com.ask-cs.State.Available': {
       className: 'state-available',

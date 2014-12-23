@@ -16,7 +16,7 @@ define(['services/services', 'config'],
         'Teams',
         function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams)
         {
-          var Slots = $resource(config.app.host + '/askatars/:user/slots', {user: ''}, {
+          var Slots = $resource(config.app.host + 'askatars/:user/slots', {user: ''}, {
             query: {
               method: 'GET',
               params: {start: '', end: ''},
@@ -36,7 +36,7 @@ define(['services/services', 'config'],
             }
           });
 
-          var Aggs = $resource(config.app.host + '/calc_planning/:id', {}, {
+          var Aggs = $resource(config.app.host + 'calc_planning/:id', {}, {
             query: {
               method: 'GET',
               params: {id: '', start: '', end: ''},
@@ -44,7 +44,7 @@ define(['services/services', 'config'],
             }
           });
 
-          var Wishes = $resource(config.app.host + '/network/:id/wish', {}, {
+          var Wishes = $resource(config.app.host + 'network/:id/wish', {}, {
             query: {
               method: 'GET',
               params: {id: '', start: '', end: ''},
@@ -56,7 +56,7 @@ define(['services/services', 'config'],
             }
           });
 
-          var MemberSlots = $resource(config.app.host + '/network/:id/member/slots2', {}, {
+          var MemberSlots = $resource(config.app.host + 'network/:id/member/slots2', {}, {
             query: {
               method: 'GET',
               params: {id: '', start: '', end: ''}

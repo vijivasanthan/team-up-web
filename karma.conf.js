@@ -5,8 +5,7 @@ module.exports = function (karma)
   karma.set({
     frameworks: ['jasmine', 'requirejs'],
     files: [
-      //{pattern: 'app/vendors/**/*.js',        included: false},
-      {pattern: 'app/vendors/angular/angular.js',        included: false},
+      {pattern: 'app/vendors/**/*.js',        included: false},
       {pattern: 'app/scripts/*.js',           included: false},
       {pattern: 'app/scripts/**/*.js',        included: false},
       {pattern: 'test/spec/controllers/*.js', included: false},

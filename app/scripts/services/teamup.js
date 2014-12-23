@@ -11,7 +11,7 @@ define(
         function ($resource, $q, $location, $rootScope, Log)
         {
           var TeamUp = $resource(
-              config.app.host + config.app.namespace + '/:first/:second/:third/:fourth',
+              config.app.host + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
                 /**

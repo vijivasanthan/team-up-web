@@ -89,7 +89,7 @@ define(
                       'style="float: left; background-image: url(' +
                       config.app.host +
                       config.app.namespace +
-                      '/team/member/' +
+                      'team/member/' +
                       member.uuid +
                       '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
                       Session.get() +
@@ -141,7 +141,7 @@ define(
                       'style="float: left; background-image: url(' +
                       config.app.host +
                       config.app.namespace +
-                      '/client/' +
+                      'client/' +
                       member.uuid +
                       '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
                       Session.get() +

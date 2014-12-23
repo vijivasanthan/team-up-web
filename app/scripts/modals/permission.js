@@ -13,7 +13,7 @@ define(['services/services', 'config'],
         'Store',
         function ($rootScope, $resource, $q, Store)
         {
-          var Permission = $resource(config.app.host + '/acl', {}, {
+          var Permission = $resource(config.app.host + 'acl', {}, {
             get: {
               method: 'GET',
               interceptor: {
