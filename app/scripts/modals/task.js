@@ -244,6 +244,24 @@ define(
           };
 
           /**
+           * Get a single task by id
+           * @param taskId
+           * @returns {*} the questioned task
+           */
+          Task.prototype.byId = function (taskId)
+          {
+            return TeamUp._(
+              'taskById',
+              {second: taskId}
+            ).then(
+              function (task)
+              {
+                return task;
+              }.bind(this)
+            );
+          };
+
+          /**
            * Get the tasks of a week
            * @param teamId the id of the team
            * @param weekNumber the number of the week
@@ -318,7 +336,11 @@ define(
             return merged;
           }
 
-
+          /**
+           * Update a task
+           * @param The editable task
+           * @returns {*} promise after updating the task
+           */
           Task.prototype.update = function (task)
           {
             return TeamUp._(

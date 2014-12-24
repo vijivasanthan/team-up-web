@@ -183,18 +183,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-minus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button', ng-click='modifyTask(task)')
+										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
 					small: i Er zijn {{tasks.mine.list.length}} taken.
-
-
-
-
-
-
-
-
+					
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
@@ -275,27 +270,22 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button', ng-click='modifyTask(task)')
+										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
 					//small: i Er zijn {{tasks.all.list.length}} taken.
 					small: i Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.
 
-
-
-
-
-
-		
-
-		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}",
+		#newTask.tab-pane(class="{{(views.newTask==true || views.editTask==true) && 'active'}}",
 		ng-hide="app.resources.role > 1")
 			.tab-header
-				h3.pull-left {{ui.task.newTask}}
-
+				h3.pull-left(ng-hide='task.uuid') {{ui.task.newTask}}
+				h3.pull-Left(ng-show='task.uuid') {{ui.teamup.updateTask}}
 			hr
 
-			form(name='taskForm', novalidate, ng-submit='createTask(task)')
+			form(name='taskForm', novalidate, ng-submit='saveTask(task)')
 				.row
 					.span6
 
@@ -405,4 +395,3 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		ng-hide="app.resources.role > 1",
 		ng-controller='uploadCtrl')
 			include upload/upload.jade
-			

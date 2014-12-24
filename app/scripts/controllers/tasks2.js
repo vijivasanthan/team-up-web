@@ -30,6 +30,21 @@ define(
           $scope.teams = teamsLocal.teams;
           $scope.currentTeam = $scope.teams[0].uuid;
 
+          //if(data.taskId)
+          //{
+          //  Task.getId(data.taskId)
+          //    .then(function(task) {
+          //      if(_.isUndefined(task))
+          //      {
+          //        console.log('error afhandeling zet query mine');
+          //      }
+          //      else
+          //      {
+          //        //vergeet niet de hask er al achter te zette
+          //      }
+          //    });
+          //}
+
           //check if a team of clientgroup is visited lately
           if (currentTeamClientGroup.team)
           {
@@ -59,6 +74,7 @@ define(
               myTasks: false,
               allTasks: false,
               newTask: false,
+              editTask: false,
               upload: false
             };
 
@@ -96,7 +112,7 @@ define(
                     loading: false,
                     list: myTasks
                   };
-                  //console.log($scope.tasks.mine);
+
                   delay = 250;
                 }
 
@@ -123,7 +139,8 @@ define(
                   queryAll()
                 }, 250);
                 break;
-
+              case 'editTask':
+                break;
               case 'newTask':
                 break;
               case 'upload':
@@ -145,6 +162,36 @@ define(
           };
 
           setView(view);
+
+          /**
+           * Mody a task and prepare the form with the right values
+           * @param task
+           */
+          $scope.modifyTask = function (task)
+          {
+            $scope.changeTeam(task.assignedTeamUuid);
+
+            $scope.task = {
+              uuid: task.uuid,
+              team: task.assignedTeamUuid,
+              member: task.assignedTeamMemberUuid,
+              client: task.relatedClientUuid,
+              start: {
+                date: new Date(task.plannedStartVisitTime),
+                time: task.plannedStartVisitTime
+              },
+              end: {
+                date: new Date(task.plannedEndVisitTime),
+                time: task.plannedEndVisitTime
+              },
+              description: task.description
+            };
+
+            $scope.views.allTasks = false;
+            $scope.views.myTasks = false;
+            $scope.views.newTask = false;
+            $scope.views.editTask = true;
+          };
 
           function queryMine(only, callback)
           {
@@ -256,12 +303,12 @@ define(
           //  $scope.task.end.time = updateTime(newTime, 15);
           //});
 
-          $scope.newTime = function(newTime)
+          $scope.newTime = function (newTime)
           {
             $scope.task.end.time = updateTime(newTime, 15);
           }
 
-          $scope.newDate = function(newDate)
+          $scope.newDate = function (newDate)
           {
             $scope.task.end.date = newDate;
           }
@@ -302,8 +349,6 @@ define(
           {
             $scope.task = task;
             $scope.task.team = task.assignedTeamUuid;
-
-            console.log(task);
 
             if (task.assignedTeamUuid)
             {
@@ -454,19 +499,19 @@ define(
           {
             $scope.clients = clientLocal.clients[groupId];
 
-            if (( $scope.curentClient == null || typeof $scope.curentClient == 'undefined' )
+            if (( $scope.currentClient == null || typeof $scope.currentClient == 'undefined' )
               && $scope.clients && $scope.clients.length > 0)
             {
-              $scope.curentClient = $scope.clients[0].uuid;
+              $scope.currentClient = $scope.clients[0].uuid;
             }
             else
             {
-              $scope.curentClient = null;
+              $scope.currentClient = null;
             }
 
             if ($scope.task && $scope.task.client)
             {
-              $scope.task.client = $scope.curentClient;
+              $scope.task.client = $scope.currentClient;
             }
           };
 
@@ -529,17 +574,17 @@ define(
               return false;
             }
 
-            if(! $scope.taskForm.$valid)
+            if (!$scope.taskForm.$valid)
             {
               $rootScope.notifier.error($rootScope.ui.task.taskFormValide);
               return;
             }
 
-            $scope.task.startTime =  ($rootScope.browser.mobile) ?
+            $scope.task.startTime = ($rootScope.browser.mobile) ?
               new Date(task.start.date).getTime() :
               Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yyyy'), formatDateTime(task.start.time, 'HH:mm'), false);
 
-            $scope.task.endTime =  ($rootScope.browser.mobile) ?
+            $scope.task.endTime = ($rootScope.browser.mobile) ?
               new Date(task.end.date).getTime() :
               Dater.convert.absolute(formatDateTime(task.end.date, 'dd-MM-yyyy'), formatDateTime(task.end.time, 'HH:mm'), false);
 
@@ -568,19 +613,19 @@ define(
             return true;
           };
 
-
-          // Create a new task
-          $scope.createTask = function (task)
+          /**
+           * Save a task, this could be creating or editing.
+           * @param task Save the task values from the form
+           */
+          $scope.saveTask = function (task)
           {
             if (!$scope.validateTaskForm(task))
             {
               return;
             }
 
-            $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
-
             var values = {
-              uuid: '',
+              uuid: (task.uuid) ? task.uuid : '',
               status: 2,
               plannedStartVisitTime: $scope.task.startTime,
               plannedEndVisitTime: $scope.task.endTime,
@@ -590,56 +635,119 @@ define(
               assignedTeamMemberUuid: task.member
             };
 
-            TeamUp._(
-              'taskAdd',
-              null,
-              values
-            ).then(
-              function (result)
-              {
-                if (result.error)
+            if (! _.isEmpty(task.uuid))
+            {
+              editTask(values);
+            }
+            else
+            {
+              createTask(values);
+            }
+          };
+
+          /**
+           * Create a task
+           * @param task
+           */
+          var createTask = function (task)
+            {
+              $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
+
+              TeamUp._(
+                'taskAdd',
+                null,
+                task
+              ).then(function (result)
                 {
-                  if (result.error.data)
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error.data.result));
-                  }
-                  else
-                  {
-                    $rootScope.notifier.error($rootScope.transError(result.error));
-                  }
-                  $rootScope.statusBar.off();
+                  handleResultTask(result, task);
+                });
+            },
+            editTask = function (task)//Edit a task
+            {
+              $rootScope.statusBar.display($rootScope.ui.task.editingTask);
+
+              Task.update(task)
+                .then(
+                function (result)
+                {
+                  handleResultTask(result, task);
+                }
+              );
+
+            },
+            handleResultTask = function (result, task)//Handle result after saving the task
+            {
+              if (result.error)
+              {
+                if (result.error.data)
+                {
+                  $rootScope.notifier.error($rootScope.transError(result.error.data.result));
                 }
                 else
                 {
-                  if (task.member == $rootScope.app.resources.uuid)
-                  {
-                    queryMine(
-                      true,
-                      function ()
-                      {
-                        setView('myTasks');
-
-                        $rootScope.notifier.success($rootScope.ui.task.taskSaved);
-                      }
-                    );
-                  }
-                  else
-                  {
-                    queryAll(
-                      function ()
-                      {
-                        setView('allTasks');
-
-                        $rootScope.notifier.success($rootScope.ui.task.taskSaved);
-                      }
-                    );
-                  }
-                  $rootScope.statusBar.off();
+                  $rootScope.notifier.error($rootScope.transError(result.error));
                 }
+                $rootScope.statusBar.off();
               }
-            );
+              else
+              {
+                if (task.assignedTeamMemberUuid == $rootScope.app.resources.uuid)
+                {
+                  queryMine(
+                    true,
+                    function ()
+                    {
+                      setView('myTasks');
 
-          };
+                      $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+                    }
+                  );
+                }
+                else
+                {
+                  queryAll(
+                    function ()
+                    {
+                      setView('allTasks');
+
+                      $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+                    }
+                  );
+                }
+                $rootScope.statusBar.off();
+              }
+            };
+
+
+          // Create a new task
+          //$scope.createTask = function (task)
+          //{
+          //  if (!$scope.validateTaskForm(task))
+          //  {
+          //    return;
+          //  }
+          //
+          //  $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
+          //
+          //  var values = {
+          //    uuid: '',
+          //    status: 2,
+          //    plannedStartVisitTime: $scope.task.startTime,
+          //    plannedEndVisitTime: $scope.task.endTime,
+          //    relatedClientUuid: task.client,
+          //    assignedTeamUuid: task.team,
+          //    description: task.description,
+          //    assignedTeamMemberUuid: task.member
+          //  };
+          //
+          //  TeamUp._(
+          //    'taskAdd',
+          //    null,
+          //    values
+          //  ).then(function(result){
+          //      handleResultTask(result, task)
+          //  });
+          //};
         }
       ]
     );

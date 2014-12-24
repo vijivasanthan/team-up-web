@@ -95,6 +95,11 @@
           <select ng-model="slot.relatedUser" ng-options="r.uuid as r.name for r in relatedUsers" ng-change="redrawSlot(slot)" ng-show="views.slot.add || views.slot.edit"></select>
           <select ng-model="slot.relatedUser" disabled="disabled" ng-options="r.uuid as r.name for r in relatedUsers" ng-show="views.member"></select>
         </div>
+        <div ng-show="views.slot.add || views.slot.edit || views.member" class="form-elements-group">
+          <label>{{ui.task.description}}</label>
+          <textarea ng-model="slot.description" ng-change="redrawSlot(slot)" ng-show="views.slot.add || views.slot.edit"></textarea>
+          <textarea ng-model="slot.description" disabled="disabled" ng-show="views.member"></textarea>
+        </div>
         <div class="form-elements-actions pull-right">
           <div ng-show="views.slot.add">
             <button type="button" ng-click="timelineOnAdd(&quot;true&quot;, slot)" class="btn btn-success">{{ui.planboard.add}}</button>

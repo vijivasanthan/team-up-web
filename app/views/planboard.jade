@@ -162,6 +162,15 @@ div(ng-controller='timeline as taskPlanboard')
 					disabled='',
 					ng-options='r.uuid as r.name for r in relatedUsers',
 					ng-show='views.member')
+					
+				.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+					label {{ui.task.description}}
+					textarea(ng-model='slot.description',
+						ng-change='redrawSlot(slot)',
+						ng-show='views.slot.add || views.slot.edit')
+					textarea(ng-model='slot.description',
+						disabled='',
+						ng-show='views.member')
 			
 				.form-elements-actions.pull-right
 					div(ng-show='views.slot.add')

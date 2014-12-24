@@ -215,7 +215,7 @@ define(
                                 type: 'slot',
                                 id: task.uuid,
                                 mid: task.authorUuid,
-                                state: task.description,
+                                description: task.description,
                                 clientUuid: task.relatedClientUuid,
                                 memberId: task.assignedTeamMemberUuid
                               }
@@ -557,7 +557,8 @@ define(
                   memberId: content.memberId,
                   mid: content.mid,
                   clientUuid: content.clientUuid,
-                  relatedUser: relatedUserId
+                  relatedUser: relatedUserId,
+                  description: content.description
                 };
 
                 if ($scope.timeline.main)
@@ -596,6 +597,7 @@ define(
             $scope.$apply(
               function ()
               {
+                console.log(' $scope.selectedSlot();',  $scope.selectedSlot());
                 $scope.selectedOriginal = $scope.selectedSlot();
 
                 // make the slot movable (editable)
@@ -893,7 +895,7 @@ define(
                 endTime: ($rootScope.browser.mobile) ?
                   new Date(slot.end.datetime).getTime() :
                   Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description: (typeof slot.state == 'undefined') ? '' : slot.state,
+                description: (typeof slot.description == 'undefined') ? '' : slot.description,
                 relatedUserId: slot.relatedUser
               };
 
@@ -1162,6 +1164,8 @@ define(
 
           $scope.timelineOnChange = function (direct, original, slot)
           {
+
+            //add description
             $rootScope.planboardSync.clear();
 
             var options,
@@ -1174,7 +1178,7 @@ define(
               options = {
                 startTime: selected.start,
                 endTime: selected.end,
-                description: '',
+                description: slot.description,
                 relatedUserId: slot.relatedUser,
                 uuid: content.id,
                 memberId: memberId
@@ -1189,7 +1193,7 @@ define(
                 endTime: ($rootScope.browser.mobile) ?
                   new Date(slot.end.datetime).getTime() :
                   Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description: '',
+                description: slot.description,
                 relatedUserId: slot.relatedUser,
                 uuid: content.id,
                 memberId: memberId
