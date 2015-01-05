@@ -48,14 +48,12 @@ define(
           //check if a team of clientgroup is visited lately
           if (currentTeamClientGroup.team)
           {
-            $scope.task = {
-              team: currentTeamClientGroup.team
-            };
             $scope.currentTeam = currentTeamClientGroup.team;
           }
 
-          $scope.task = {};
-          $scope.task.team = $scope.currentTeam;
+          $scope.task = $scope.task || {
+            team: $scope.currentTeam
+          };
 
           function resetViews()
           {
@@ -110,7 +108,8 @@ define(
                 {
                   $scope.tasks.mine = {
                     loading: false,
-                    list: myTasks
+                    list: myTasks,
+                    archieve: (myTasks.off.length > 0) ? true : false
                   };
 
                   delay = 250;
@@ -140,6 +139,7 @@ define(
                 }, 250);
                 break;
               case 'editTask':
+                console.log('$scope.task', $scope.task);
                 break;
               case 'newTask':
                 break;
@@ -187,9 +187,8 @@ define(
               description: task.description
             };
 
-            $scope.views.allTasks = false;
-            $scope.views.myTasks = false;
-            $scope.views.newTask = false;
+            resetViews();
+
             $scope.views.editTask = true;
           };
 
@@ -201,7 +200,8 @@ define(
               {
                 $scope.tasks.mine = {
                   loading: false,
-                  list: tasks.on
+                  list: tasks.on,
+                  archieve: (tasks.off.length > 0) ? true : false
                 };
 
                 (callback && callback.call(this, tasks));
@@ -294,14 +294,8 @@ define(
 
             var updatedTime = new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
 
-            return updatedTime//formatDateTime(updatedTime, "H:mm");
+            return updatedTime;
           };
-
-          //$scope.$watch(function() {
-          //  return $scope.task.start.time;
-          //}, function(newTime) {
-          //  $scope.task.end.time = updateTime(newTime, 15);
-          //});
 
           $scope.newTime = function (newTime)
           {

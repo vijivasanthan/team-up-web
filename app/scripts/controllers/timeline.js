@@ -597,7 +597,6 @@ define(
             $scope.$apply(
               function ()
               {
-                console.log(' $scope.selectedSlot();',  $scope.selectedSlot());
                 $scope.selectedOriginal = $scope.selectedSlot();
 
                 // make the slot movable (editable)
@@ -1137,7 +1136,8 @@ define(
                     memberId: content.memberId,
                     mid: content.mid,
                     clientUuid: content.clientUuid,
-                    relatedUser: $scope.slot.relatedUser
+                    relatedUser: $scope.slot.relatedUser,
+                    description: content.description
                   };
                 }
               );

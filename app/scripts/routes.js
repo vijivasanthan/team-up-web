@@ -409,7 +409,7 @@ define(
               }
             ]);
 
-          function removeActiveClass(divId)
+          var removeActiveClass = function(divId)
           {
             angular.element(divId).removeClass('active');
           }

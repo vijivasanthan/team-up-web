@@ -141,7 +141,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
-				.well(style='padding-top: 25px')
+				.well(style='padding-top: 25px',
+					ng-show='tasks.mine.archieve')
 					label
 						input(type='checkbox', ng-model='showFinishedTasks')
 						small &nbsp;Toon gearchiveerde taken
@@ -183,7 +184,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-minus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button', ng-click='modifyTask(task)')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)',
+										ng-hide='app.resources.role > 1')
 										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
@@ -270,7 +273,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button', ng-click='modifyTask(task)')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)',
+										ng-hide='app.resources.role > 1')
 										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
