@@ -96,7 +96,7 @@
       </article>
       <article ng-hide="tasks.mine.loading">
         <p ng-hide="tasks.mine.list.length &gt; 0">{{ui.task.noTasks}}</p>
-        <div style="padding-top: 25px" class="well">
+        <div style="padding-top: 25px" ng-show="tasks.mine.archieve" class="well">
           <label>
             <input type="checkbox" ng-model="showFinishedTasks"><small>&nbsp;Toon gearchiveerde taken</small>
           </label>
@@ -125,7 +125,7 @@
                 <div class="pull-right">
                   <button type="button" ng-click="unAssignTask(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
                   <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
-                  <button type="button" ng-click="modifyTask(task)" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
+                  <button type="button" ng-click="modifyTask(task)" ng-hide="app.resources.role &gt; 1" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
                   <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
@@ -186,7 +186,7 @@
                 <div class="pull-right">
                   <button type="button" ng-hide="task.assignedTeamMember" ng-click="assignTask(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
                   <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
-                  <button type="button" ng-click="modifyTask(task)" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
+                  <button type="button" ng-click="modifyTask(task)" ng-hide="app.resources.role &gt; 1" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
                   <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>

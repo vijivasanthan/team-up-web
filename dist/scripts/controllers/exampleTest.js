@@ -1,0 +1,1 @@
+define(["controllers/controllers"],function(e){e.controller("exampleTestCtrl",["$rootScope","$scope",function(e,t){t.exampleTestString="Controller testing works"}])});

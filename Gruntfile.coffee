@@ -338,11 +338,11 @@ module.exports = (grunt) ->
     karma:
       unit:
         configFile: 'karma.conf.js'
-        singleRun: false
+        singleRun: true
 
-      end:
-        configFile: 'karma-e2e.conf.js'
-        singleRun: false
+#      end:
+#        configFile: 'karma-e2e.conf.js'
+#        singleRun: false
 
     ngAnnotate:
       dist:

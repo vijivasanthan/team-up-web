@@ -1,1 +1,0 @@
-define(["controllers/controllers"],function(e){e.controller("home",["$rootScope","$scope",function(e,t){}])});
