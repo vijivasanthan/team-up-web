@@ -17,13 +17,14 @@
   <section id="planboard">
     <div class="page-header timeline">
       <h2 class="nullable">{{ui.task.tasks}}</h2>
-      <!--include planboard/time-slot.jade--><span ng-show="views.teams" class="nullable pull-left">
-        <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
-          <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
-        </div></span><span ng-show="views.clients" class="nullable pull-left">
-        <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
-          <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select>
-        </div></span>
+      <!--include planboard/time-slot.jade-->
+      <div ng-hide="app.resources.role &gt; 1"><span ng-show="views.teams" class="nullable pull-left">
+          <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+            <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
+          </div></span><span ng-show="views.clients" class="nullable pull-left">
+          <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
+            <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select>
+          </div></span></div>
       <!--br-->
       <!--a(class='btn btn-primary', ng-click='getTeamID()') get team id-->
       <!--span team: {{currentTeamID}}-->
@@ -117,7 +118,7 @@
         <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/alltasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
         <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/newtask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
         <li ng-hide="app.resources.role &gt; 1" class="{{(views.upload==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/upload&quot;)"><span class="entypo">&#59213;</span>{{ui.task.upload}}</a></li>
-        <li ng-hide="app.resources.role &gt; 1" class="{{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)"><span class="entypo">&#128340;</span>Agenda</a></li>
+        <li class="{{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(current,&quot;teams&quot;)"><span class="entypo">&#128340;</span>Agenda</a></li>
       </ul>
       <div ng-controller="treegrid" class="tab-content treegrid-container">
         <div id="viewTeamsTab" class="tab-pane {{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}">
