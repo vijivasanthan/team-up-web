@@ -178,6 +178,7 @@ require(
     'modals/slots',
     'modals/profile',
     'modals/permission',
+    'modals/TestModal',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',

@@ -153,7 +153,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   return false;
@@ -169,7 +169,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   return false;
@@ -185,7 +185,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   console.log("Pay attention, this might caused by the Log module");

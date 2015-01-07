@@ -17,8 +17,15 @@ define(
         'Teams',
         'Clients',
         'Dater',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater)
+        'TestModal',
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater, TestModal)
         {
+          //For testpurposes only
+          //TestModal.getPermissionProfile()
+          //  .then(function(result) {
+          //    console.log('TestModal', result);
+          //  });
+
           $rootScope.fixStyles();
 
           var view = (!$location.hash()) ? 'myTasks' : $location.hash(),

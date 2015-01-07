@@ -72,6 +72,14 @@ define(
 
               if (members && members.length > 0)
               {
+                //TODO remove dirty fix
+                //if($rootScope.app.resources.role > 1)
+                //{
+                //  members = _.where(
+                //      members,
+                //      {uuid: $rootScope.app.resources.uuid}
+                //      );
+                //}
                 $scope.data.teams.list.push(
                   {
                     uuid: team.uuid,

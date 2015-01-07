@@ -117,7 +117,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				span.entypo &#59213;
 				| {{ui.task.upload}}
 		li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
-					ng-hide="app.resources.role > 1",
 					data-match-route='/tasks2')
 			a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
 				span.entypo &#128340;

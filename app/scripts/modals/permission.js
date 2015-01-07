@@ -27,7 +27,7 @@ define(['services/services', 'config'],
               method: 'PUT',
               params: {}
             }
-          }),
+          }),//Only for test purposes
           profile = {
             teams: true,
             clients: true,
