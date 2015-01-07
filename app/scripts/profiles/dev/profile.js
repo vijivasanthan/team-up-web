@@ -13,6 +13,15 @@ var profile = {
 
   showBackground: false,
 
+  tabs: {
+    tasks2: true,
+    team: true,
+    client: true,
+    manage: true,
+    teamtelefoon: true,
+    support: true
+  },
+
   statesall: {
     reachable: {
       className: 'state-reachable',
@@ -60,15 +69,6 @@ var profile = {
       label: 'client'
     }
   ],
-
-  tabs: {
-    tasks2: true,
-    team: true,
-    client: true,
-    manage: true,
-    teamtelefoon: true,
-    support: true
-  },
 
   p2000: {
     status: true,

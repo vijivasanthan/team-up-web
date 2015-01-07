@@ -7,7 +7,7 @@ var profile = {
 
   own: true,
 
-  title: 'Dev-TeamUp',
+  title: 'TeamUp',
 
   lang: 'nl',
 
@@ -18,6 +18,7 @@ var profile = {
     team: true,
     client: true,
     manage: true,
+    teamtelefoon: true,
     support: true
   },
 
