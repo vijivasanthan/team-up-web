@@ -43,22 +43,30 @@
 @media (max-width: 767px) {
 }
 
-@media (min-width: 1200px) {
-}
-
 @media (max-width: 1200px) {
   #show-name {
     display: none;
   }
+
+  #viewTeamsTab .tab-header {
+    height: 100px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+  #viewTeamsTab .tab-header {
+    height: 130px;
+  }
 }
 
 @media (max-width: 767px) {
   .navbar-fixed-top {
     position: absolute;
     margin-bottom: 0;
+  }
+
+  #viewTeamsTab .tab-header {
+    height: 160px;
   }
 
   .navbar {

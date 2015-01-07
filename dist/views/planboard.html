@@ -124,7 +124,7 @@
         <div id="viewTeamsTab" class="tab-pane {{(views.teams==true || views.clients==true) &amp;&amp; 'active'}}">
           <div class="tab-header">
             <!--h3.pull-left {{currentName}}-->
-            <div ng-show="app.resources.role == 1"></div>
+            <!--div(ng-show='app.resources.role == 1')-->
             <button type="button" data-toggle="tab" ng-show="views.teams" ng-click="confirmDeleteTasks(timeline.range)" class="btn pull-right btn-danger marginLeftTen"><span class="glyphicon glyphicon-trash"></span> Verwijder taken</button>
             <div class="btn-group pull-right">
               <button type="button" data-toggle="tab" ng-click="setViewTo(current,&quot;clients&quot;)" class="btn btn-primary {{(views.clients==true) &amp;&amp; 'active'}}"><span data-icon="" aria-hidden="true" class="icomoon"></span> Clienten</button>
