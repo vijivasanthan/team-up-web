@@ -65,7 +65,8 @@ define(['services/services', 'config'],
               method: 'GET',
               params: {id: '', start: '', end: ''},
               interceptor: {
-                response: function(response) {
+                response: function (response)
+                {
                   // expose response
                   return response;
                 }
@@ -73,7 +74,8 @@ define(['services/services', 'config'],
             }
           });
 
-          Slots.prototype.wishes = function (options) {
+          Slots.prototype.wishes = function (options)
+          {
 
             var deferred = $q.defer(),
               params = {
@@ -84,10 +86,12 @@ define(['services/services', 'config'],
 
             Wishes.query(
               params,
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -95,7 +99,8 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.setWish = function (options) {
+          Slots.prototype.setWish = function (options)
+          {
             var deferred = $q.defer(),
               params = {
                 start: options.start,
@@ -106,10 +111,12 @@ define(['services/services', 'config'],
 
             Wishes.save(
               {id: options.id}, params,
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -117,13 +124,17 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.aggs = function (options) {
+          Slots.prototype.aggs = function (options)
+          {
             var deferred = $q.defer(),
               calls = [];
 
-            if (config.app.timeline.config.divisions.length > 0) {
-              _.each(config.app.timeline.config.divisions, function (division) {
-                if (division.id !== 'all') {
+            if (config.app.timeline.config.divisions.length > 0)
+            {
+              _.each(config.app.timeline.config.divisions, function (division)
+              {
+                if (division.id !== 'all')
+                {
                   var params = {
                     id: options.id,
                     start: options.start,
@@ -138,7 +149,9 @@ define(['services/services', 'config'],
                   calls.push(Slots.prototype.agg(params));
                 }
               });
-            } else {
+            }
+            else
+            {
               calls.push(
                 Slots.prototype.agg(
                   {
@@ -148,19 +161,22 @@ define(['services/services', 'config'],
                   }));
             }
 
-            $q.all(calls).then(function (result) {
+            $q.all(calls).then(function (result)
+            {
               deferred.resolve(result);
             });
 
             return deferred.promise;
           };
 
-          Slots.prototype.agg = function (options) {
+          Slots.prototype.agg = function (options)
+          {
             var deferred = $q.defer();
 
             Aggs.query(
               options,
-              function (result) {
+              function (result)
+              {
                 var stats = Stats.aggs(result, options.start, options.end);
 
                 deferred.resolve(
@@ -172,14 +188,16 @@ define(['services/services', 'config'],
                     durations: stats.durations
                   });
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               });
 
             return deferred.promise;
           };
 
-          Slots.prototype.pie = function (options) {
+          Slots.prototype.pie = function (options)
+          {
             var deferred = $q.defer(),
               now = Math.floor(Date.now().getTime() / 1000),
               periods = Dater.getPeriods(),
@@ -207,26 +225,34 @@ define(['services/services', 'config'],
 
             Aggs.query(
               params,
-              function (results) {
+              function (results)
+              {
                 deferred.resolve(processPies(results));
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
 
-            function processPies(results) {
+            function processPies(results)
+            {
               var state;
 
-              if (results.length > 1) {
-                _.each(results, function (slot) {
+              if (results.length > 1)
+              {
+                _.each(results, function (slot)
+                {
                   // Fish out the current
                   if (now >= slot.start && now <= slot.end) state = slot;
 
                   // Slice from end of first week
-                  if (slicer <= slot.start * 1000) {
+                  if (slicer <= slot.start * 1000)
+                  {
                     weeks.next.data.push(slot);
-                  } else if (slicer >= slot.start * 1000) {
+                  }
+                  else if (slicer >= slot.start * 1000)
+                  {
                     weeks.current.data.push(slot)
                   }
                 });
@@ -242,7 +268,8 @@ define(['services/services', 'config'],
 
                 // if there is a leak to next week adjust the last one of current
                 // week and add new slot to next week with same values
-                if (difference > 0) {
+                if (difference > 0)
+                {
                   weeks.next.data.unshift(
                     {
                       diff: last.diff,
@@ -254,7 +281,8 @@ define(['services/services', 'config'],
 
                 // shortages and back-end gives more than asked sometimes, with returning
                 // values out of the range which being asked !
-                _.each(weeks.current.data, function (slot) {
+                _.each(weeks.current.data, function (slot)
+                {
                   if (slot.end - slot.start > 0) currents.push(slot);
 
                   // add to shortages
@@ -265,7 +293,8 @@ define(['services/services', 'config'],
                 currents[0].start = weeks.current.period.first.timeStamp / 1000;
 
                 // add to shortages
-                _.each(weeks.next.data, function (slot) {
+                _.each(weeks.next.data, function (slot)
+                {
                   if (slot.diff < 0) weeks.next.shortages.push(slot);
                 });
 
@@ -303,7 +332,9 @@ define(['services/services', 'config'],
                     }
                   }
                 }
-              } else {
+              }
+              else
+              {
                 if (results[0].diff == null) results[0].diff = 0;
                 if (results[0].wish == null) results[0].wish = 0;
 
@@ -368,11 +399,13 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.currentState = function () {
+          Slots.prototype.currentState = function ()
+          {
             var deferred = $q.defer(),
               resources = Store('user').get('resources');
 
-            if (resources) {
+            if (resources)
+            {
               // TODO: Use mathematical formula to calculate it
               var now;
 
@@ -385,7 +418,8 @@ define(['services/services', 'config'],
                 end: now + 1
               };
 
-              Slots.query(params, function (result) {
+              Slots.query(params, function (result)
+              {
                 deferred.resolve(
                   (result.length > 0) ?
                     $rootScope.config.app.statesall[result[0]['text']] :
@@ -395,18 +429,21 @@ define(['services/services', 'config'],
                   }
                 );
               });
-            } else {
+            }
+            else
+            {
               deferred.resolve([]);
             }
 
             return deferred.promise;
           };
 
-          Slots.prototype.all = function (options) {
+          Slots.prototype.all = function (options)
+          {
             var deferred = $q.defer(),
               periods = Dater.getPeriods(),
               params = {
-                user: Store('app').get('resources').uuid,
+                user: options.user, //options.user, //Store('app').get('resources').uuid,
                 start: options.stamps.start / 1000,
                 end: options.stamps.end / 1000
               },
@@ -414,14 +451,18 @@ define(['services/services', 'config'],
 
             Slots.query(
               params,
-              function (user) {
-                _.each(user, function (slot) {
-                  if (!slot.recursive) {
+              function (user)
+              {
+                _.each(user, function (slot)
+                {
+                  if (!slot.recursive)
+                  {
                     slot.recursive = false;
                   }
                 });
 
-                if (options.layouts.group) {
+                if (options.layouts.group)
+                {
                   var groupParams = {
                     id: options.groupId,
                     start: params.start,
@@ -429,9 +470,11 @@ define(['services/services', 'config'],
                     month: options.month
                   };
 
-                  Slots.prototype.aggs(groupParams).then(function (aggs)
+                  Slots.prototype.aggs(groupParams)
+                    .then(function (aggs)
                   {
-                    if (options.layouts.members) {
+                    if (options.layouts.members)
+                    {
                       var allMembers = Store('app').get(options.groupId),
                         calls = [];
 
@@ -441,22 +484,28 @@ define(['services/services', 'config'],
                           end: params.end,
                           type: 'both'
                         },
-                        function (members) {
+                        function (members)
+                        {
                           var mems = [];
-                          _.each(members, function (mdata, index) {
-                              _.each(mdata, function (tslot) {
+                          _.each(members, function (mdata, index)
+                            {
+                              _.each(mdata, function (tslot)
+                              {
                                 tslot.text = tslot.state
                               });
 
                               var member;
 
-                              _.each(allMembers, function (mem) {
-                                if (index == mem.uuid) {
+                              _.each(allMembers, function (mem)
+                              {
+                                if (index == mem.uuid)
+                                {
                                   member = mem;
                                 }
                               });
 
-                              if (member != null) {
+                              if (member != null)
+                              {
                                 mems.push({
                                   id: index,
                                   lastName: member.lastName,
@@ -480,10 +529,13 @@ define(['services/services', 'config'],
                             }
                           });
                         },
-                        function (error) {
+                        function (error)
+                        {
                           deferred.resolve({error: error})
                         });
-                    } else {
+                    }
+                    else
+                    {
                       deferred.resolve({
                         user: user,
                         groupId: options.groupId,
@@ -496,7 +548,9 @@ define(['services/services', 'config'],
                       });
                     }
                   });
-                } else {
+                }
+                else
+                {
                   deferred.resolve({
                     user: user,
                     synced: new Date().getTime(),
@@ -507,7 +561,8 @@ define(['services/services', 'config'],
                   });
                 }
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               });
 
@@ -517,20 +572,22 @@ define(['services/services', 'config'],
           Slots.prototype.getMemberAvailabilitiesPerTeam = function (groupID, divisionID)
           {
             var deferred = $q.defer(),
-                now = Math.floor(Date.now().getTime() / 1000);
+              now = Math.floor(Date.now().getTime() / 1000);
 
             MemberSlots.get({
                 id: groupID,
                 type: divisionID,
                 start: now,
                 end: now + 1000
-              },function (response) {
+              }, function (response)
+              {
                 deferred.resolve({
                   members: response.data,
                   synced: now
                 });
               },
-              function (error) {
+              function (error)
+              {
                 deferred.reject({error: error});
               });
 
@@ -556,7 +613,7 @@ define(['services/services', 'config'],
                   start: now,
                   end: now + 1000
                 },
-                function(response)
+                function (response)
                 {
                   membersDeferred.resolve(response.data);
                 }
@@ -569,8 +626,10 @@ define(['services/services', 'config'],
               {
                 var allMembers = {};
 
-                angular.forEach(teams, function(team) {
-                  angular.forEach(team, function(memberData, memberId) {
+                angular.forEach(teams, function (team)
+                {
+                  angular.forEach(team, function (memberData, memberId)
+                  {
                     allMembers[memberId] = memberData;
                   });
                 });
@@ -590,24 +649,29 @@ define(['services/services', 'config'],
           };
 
           Slots.prototype.memberSlots2 = {
-            query: function (options, callbackSuccess, callbackError) {
+            query: function (options, callbackSuccess, callbackError)
+            {
 
               var memDeferred = [],
-                  members = [],
-                  queriedTeams = Teams.query();
+                members = [],
+                queriedTeams = Teams.query();
 
-              queriedTeams.then(function (teams){
+              queriedTeams.then(function (teams)
+              {
 
-                if(options.id == 'all'){
+                if (options.id == 'all')
+                {
                   members = $rootScope.unique(Store('app').get('members'));
                 }
-                else if(typeof teams.members[options.id] != 'undefined') {
+                else if (typeof teams.members[options.id] != 'undefined')
+                {
                   members = $rootScope.unique(teams.members[options.id]);
                 }
 
-                _.each(members, function (member){
+                _.each(members, function (member)
+                {
                   var memberDeferred = $q.defer(),
-                      _options;
+                    _options;
                   memDeferred.push(memberDeferred.promise);
 
                   _options = {
@@ -616,31 +680,40 @@ define(['services/services', 'config'],
                     end: options.end
                   }
 
-                  if (options.type) {
+                  if (options.type)
+                  {
                     _options.type = options.type;
                   }
 
                   Slots.query(
                     _options,
-                    function (result) {
-                      _.each(result, function(member){
+                    function (result)
+                    {
+                      _.each(result, function (member)
+                      {
                         member.state = member.text;
                         member.text = null;
                       })
                       memberDeferred.resolve({uuid: member.uuid, content: result});
                     },
-                    function (error) {
+                    function (error)
+                    {
                       memberDeferred.resolve({error: error});
                     }
                   );
                 });
 
-                $q.all(memDeferred).then(function (results){
+                $q.all(memDeferred).then(function (results)
+                {
                   var success = {};
-                  _.each(results, function (result) {
-                    if (!result.error){
+                  _.each(results, function (result)
+                  {
+                    if (!result.error)
+                    {
                       success[result.uuid] = result.content;
-                    } else {
+                    }
+                    else
+                    {
                       console.log(result.error);
                     }
                   });
@@ -652,19 +725,22 @@ define(['services/services', 'config'],
             }
           }
 
-          Slots.prototype.user = function (params) {
+          Slots.prototype.user = function (params)
+          {
             var deferred = $q.defer();
 
             Slots.query(
               params,
-              function (result) {
+              function (result)
+              {
                 deferred.resolve({
                   id: params.user,
                   data: result,
                   stats: Stats.member(result, params.start, params.end)
                 });
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -690,23 +766,29 @@ define(['services/services', 'config'],
                   start: now,
                   end: now + 1000
                 },
-                function (result) {
-                  _.each(result, function(member){
+                function (result)
+                {
+                  _.each(result, function (member)
+                  {
                     member.state = member.text;
                     member.text = null;
                   })
                   memberDeferred.resolve({uuid: member.uuid, content: result});
                 },
-                function (error) {
+                function (error)
+                {
                   memberDeferred.resolve({error: error});
                 }
               );
             });
 
-            $q.all(memDeferred).then(function (results){
+            $q.all(memDeferred).then(function (results)
+            {
               var success = {};
-              _.each(results, function (result) {
-                if (!result.error){
+              _.each(results, function (result)
+              {
+                if (!result.error)
+                {
                   success[result.uuid] = result.content;
                 }
               });
@@ -717,11 +799,13 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.local = function () {
+          Slots.prototype.local = function ()
+          {
             return Store('user').get('slots');
           };
 
-          Slots.prototype.add = function (slot, user) {
+          Slots.prototype.add = function (slot, user)
+          {
             var deferred = $q.defer();
 
             // Always reset to 0 seconds
@@ -730,10 +814,12 @@ define(['services/services', 'config'],
 
             Slots.save(
               {user: user}, slot,
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -741,15 +827,18 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.change = function (original, changed, user) {
+          Slots.prototype.change = function (original, changed, user)
+          {
             var deferred = $q.defer();
 
             Slots.change(
               angular.extend(naturalize(changed), {user: user}), naturalize(original),
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -757,15 +846,18 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.remove = function (slot, user) {
+          Slots.prototype.remove = function (slot, user)
+          {
             var deferred = $q.defer();
 
             Slots.remove(
               angular.extend(naturalize(slot), {user: user}),
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               }
             );
@@ -773,7 +865,8 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          function naturalize(slot) {
+          function naturalize(slot)
+          {
             var content = angular.fromJson(slot.content);
 
             return {

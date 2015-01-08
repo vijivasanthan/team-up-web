@@ -130,8 +130,7 @@
       <div ng-show="views.group" class="form-elements-group"><small><i ng-show="(slot.diff &lt; 0)">{{slot.diff | i18n_spec:'planboard.lessPeople'}}</i><i ng-show="(slot.diff == 0)">{{ui.agenda.samePeople}}</i><i ng-show="(slot.diff &gt; 0)">{{slot.diff | i18n_spec:'planboard.morePeople'}}</i></small></div>
       <div ng-show="views.wish" class="form-elements-group">
         <label>{{ui.agenda.wished}}</label>
-        <input name="wish-count" type="text" ng-model="slot.wish" ng-hide="app.resources.role &gt; 1" class="input-mini">
-        <input name="wish-count" type="text" ng-model="slot.wish" disabled="disabled" ng-show="app.resources.role &gt; 1" class="input-mini">
+        <input name="wish-count" type="text" ng-model="slot.wish" class="input-mini">
       </div>
       <div ng-show="views.member" class="form-elements-group"><small><i>{{ui.agenda.combine_reoccuring}}</i></small></div>
       <div class="form-elements-actions pull-right">
@@ -147,7 +146,7 @@
           <button type="button" ng-click="timelineOnChange(&quot;true&quot;, original, slot)" class="btn btn-success">{{ui.agenda.change}}</button>
         </div>
         <div ng-show="views.wish">
-          <button type="button" ng-click="wisher(slot)" ng-hide="app.resources.role &gt; 1" class="btn btn-success">{{ui.agenda.setWish}}</button>
+          <button type="button" ng-click="wisher(slot)" class="btn btn-success">{{ui.agenda.setWish}}</button>
         </div>
       </div>
     </form>
@@ -193,6 +192,16 @@
           </div>
           <hr>
           <!-- alert-window-->
+          <!--div.alert.alert-warning(-->
+          <!--	ng-show='timeline.user.id != app.resources.uuid')-->
+          <!--	button.close(type='button',-->
+          <!--	data-dismiss='alert') ×-->
+          <!--	small-->
+          <!--		| U bekijkt de tijdlijn van -->
+          <!--		strong-->
+          <!--			i  {{timeline.user.fullName}}-->
+          <!--		|  druk op annuleren om terug te gaan naar uw tijdlijn.-->
+          <!--	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren-->
           <div ng-show="infoAvailibility.info" class="alert alert-warning">
             <button type="button" ng-click="disableInfoAvailibility()" data-dismiss="alert" class="close">×</button><small>U kunt uw<strong><i> bereikbaarheid toevoegen</i></strong> door te<strong><i> dubbelklikken. </i></strong><strong><i> Sleep</i></strong> de bereikbaarheid om het tijdstip te<strong><i> wijzigen.</i></strong></small>
           </div>

@@ -304,6 +304,14 @@ input[type="submit"].btn {
 
 }
 
+.btn-primary-reverse {
+  background-color: $brown;
+  color: $orange;
+  &:hover {
+    color: #fff;
+  }
+}
+
 // Add style to radio btn-group without data-toggle=buttons
 #order {
   .btn-group > .btn {

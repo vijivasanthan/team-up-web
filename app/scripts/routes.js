@@ -172,37 +172,67 @@ define(
               }
             })
 
-            .when('/team-telefoon/agenda', {
+            .when('/team-telefoon/agenda/:userId?', {
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function($route, Slots, Storage, Dater, Store)
+                data: function($route, Slots, Storage, Dater, Store, TeamUp, $q, $rootScope, $location)
                 {
-                  //remove active class TODO create a directive to solve the bug
+                  if(_.isUndefined($route.current.params.userId))
+                  {
+                    $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                  }
+
+                  //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
 
-                  var periods = Store('app').get('periods'),
-                    //settings = angular.fromJson(Store('app').get('resources').settingsWebPaige),
-                    groups = Store('app').get('teams'),
-                    lastVisited = Store('app').get('currentTeamClientGroup'),
-                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team) ? lastVisited.team : groups[0].uuid;
+                  var deferred = $q.defer();
+                  var getAllSlots = function(userId)
+                  {
+                    var periods = Store('app').get('periods'),
+                      groups = Store('app').get('teams'),
+                      lastVisited = Store('app').get('currentTeamClientGroup'),
+                      groupId = (! _.isUndefined(lastVisited) && lastVisited.team) ? lastVisited.team : groups[0].uuid;
 
-                  return Slots.all({
-                    groupId: groupId,
-                    stamps: (Dater.current.today() > 360) ? {
-                      start: periods.days[358].last.timeStamp,
-                      end: periods.days[365].last.timeStamp
-                    } : {
-                      start: periods.days[Dater.current.today() - 1].last.timeStamp,
-                      end: periods.days[Dater.current.today() + 6].last.timeStamp
+                    return Slots.all({
+                      groupId: groupId,
+                      stamps: (Dater.current.today() > 360) ? {
+                        start: periods.days[358].last.timeStamp,
+                        end: periods.days[365].last.timeStamp
+                      } : {
+                        start: periods.days[Dater.current.today() - 1].last.timeStamp,
+                        end: periods.days[Dater.current.today() + 6].last.timeStamp
+                      },
+                      month: Dater.current.month(),
+                      layouts: {
+                        user: true,
+                        group: true,
+                        members: false
+                      },
+                      user: userId
+                    });
+                  };
+
+                  TeamUp._(
+                    'profileGet',
+                    {
+                      third: $route.current.params.userId
                     },
-                    month: Dater.current.month(),
-                    layouts: {
-                      user: true,
-                      group: true,
-                      members: false
+                    null,
+                    {
+                      success: function (userData) {
+                        getAllSlots(userData.uuid)
+                          .then(function(timelineData) {
+                            deferred.resolve({
+                              timelineData: timelineData,
+                              userData: userData
+                            });
+                          });
+                      }
                     }
-                  });
+                  );
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false

@@ -28,7 +28,7 @@ define(
 
           $scope.self = this;
 
-          $scope.data = data;
+          $scope.data = data.timelineData;
 
           var groups = Store('app').get('teams');
 
@@ -36,7 +36,7 @@ define(
             layouts: {
               user: true,
               group: true,
-              members: false
+              members: true
             },
             day: moment().format('DDD'),
             week: moment().week(),
@@ -78,8 +78,9 @@ define(
             id: 'mainTimeline',
             main: true,
             user: {
-              id: $rootScope.app.resources.uuid,
-              role: $rootScope.app.resources.role
+              id: data.userData.uuid,//$rootScope.app.resources.uuid,
+              role: data.userData.role,//$rootScope.app.resources.role,
+              fullName: data.userData.fullName
             },
             current: $scope.current,
             options: {
@@ -215,6 +216,11 @@ define(
 
             $scope.resetViews();
           };
+
+          $scope.redirectOwnTimeline = function()
+          {
+            $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+          }
 
           //$scope.sendShortageMessage = function (slot)
           //{

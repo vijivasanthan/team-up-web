@@ -81,8 +81,8 @@
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.myTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;myTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.myTask}}</a></li>
     <li class="{{(views.allTasks==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;allTasks&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.allTasks}}</a></li>
-    <li ng-hide="app.resources.role &gt; 1" class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
-    <li ng-hide="app.resources.role &gt; 1" class="{{(views.upload==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;upload&quot;)"><span class="entypo">&#59213;</span>{{ui.task.upload}}</a></li>
+    <li class="{{(views.newTask==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newTask&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.task.newTask}}</a></li>
+    <li class="{{(views.upload==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;upload&quot;)"><span class="entypo">&#59213;</span>{{ui.task.upload}}</a></li>
     <li data-match-route="/tasks2" class="{{(views.agenda==true || views.teams==true || views.clients==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="nav(&quot;tasks2/planboard&quot;)"><span class="entypo">&#128340;</span>Agenda</a></li>
   </ul>
   <div class="tab-content">
@@ -125,7 +125,7 @@
                 <div class="pull-right">
                   <button type="button" ng-click="unAssignTask(task)" class="btn-primary btn-mini"><i class="icon-minus"></i></button>
                   <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
-                  <button type="button" ng-click="modifyTask(task)" ng-hide="app.resources.role &gt; 1" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
+                  <button type="button" ng-click="modifyTask(task)" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
                   <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
@@ -186,7 +186,7 @@
                 <div class="pull-right">
                   <button type="button" ng-hide="task.assignedTeamMember" ng-click="assignTask(task)" class="btn-primary btn-mini"><i class="icon-plus"></i></button>
                   <button type="button" ng-click="openTask(task)" class="btn-primary btn-mini"><i style="margin-top:1px" class="icon-info"></i></button>
-                  <button type="button" ng-click="modifyTask(task)" ng-hide="app.resources.role &gt; 1" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
+                  <button type="button" ng-click="modifyTask(task)" class="btn-primary btn-mini"><i class="icon-edit"></i></button>
                   <button type="button" ng-click="confirmDeleteTask(task)" class="btn-primary btn-mini"><i class="icon-trash"></i></button>
                 </div>
               </td>
@@ -196,7 +196,7 @@
           <!--small: i Er zijn {{tasks.all.list.length}} taken.--><small><i>Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.</i></small></span>
       </article>
     </div>
-    <div id="newTask" ng-hide="app.resources.role &gt; 1" class="tab-pane {{(views.newTask==true || views.editTask==true) &amp;&amp; 'active'}}">
+    <div id="newTask" class="tab-pane {{(views.newTask==true || views.editTask==true) &amp;&amp; 'active'}}">
       <div class="tab-header">
         <h3 ng-hide="task.uuid" class="pull-left">{{ui.task.newTask}}</h3>
         <h3 ng-show="task.uuid" class="pull-Left">{{ui.teamup.updateTask}}</h3>
@@ -269,7 +269,7 @@
         </div>
       </form>
     </div>
-    <div id="upload" ng-hide="app.resources.role &gt; 1" ng-controller="uploadCtrl" class="tab-pane {{(views.upload==true) &amp;&amp; 'active'}}">
+    <div id="upload" ng-controller="uploadCtrl" class="tab-pane {{(views.upload==true) &amp;&amp; 'active'}}">
       <div id="UploadProgressBar">
         <p id="breadcrumb">Bestand kiezen</p>
       </div>

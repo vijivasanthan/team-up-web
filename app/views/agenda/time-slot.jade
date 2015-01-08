@@ -103,13 +103,7 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 			label {{ui.agenda.wished}}
 			input.input-mini(name='wish-count',
 			type='text',
-			ng-model='slot.wish',
-			ng-hide='app.resources.role > 1')
-			input.input-mini(name='wish-count',
-			type='text',
-			ng-model='slot.wish',
-			disabled='disabled',
-			ng-show='app.resources.role > 1')
+			ng-model='slot.wish')
 		.form-elements-group(ng-show='views.member')
 			small: i {{ui.agenda.combine_reoccuring}}
 		.form-elements-actions.pull-right
@@ -128,6 +122,5 @@ div(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || v
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
 			div(ng-show='views.wish')
 				button.btn.btn-success(type='button',
-				ng-click='wisher(slot)',
-				ng-hide='app.resources.role > 1')
+				ng-click='wisher(slot)')
 					| {{ui.agenda.setWish}}

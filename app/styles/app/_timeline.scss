@@ -67,6 +67,14 @@ Timeline agenda
   color: #fff;
 }
 
+.timeline-groups-text {
+  width: 100%;
+  .edit-timeline-icon {
+    float: right;
+    margin-right: 4px;
+  }
+}
+
 #timeline-controls {
   overflow: hidden;
   padding-bottom: 9px;
@@ -1357,3 +1365,33 @@ Order
   height: 100%;
   text-indent: -9999px;
 }
+
+#timeline-controls {
+  .btn-primary.disabled,
+  .btn-primary.disabled:hover,
+  .btn-primary.disabled:focus,
+  .btn-primary.disabled.focus,
+  .btn-primary.disabled:active,
+  .btn-primary.disabled.active,
+  .btn-primary[disabled],
+  .btn-primary[disabled]:hover,
+  .btn-primary[disabled]:focus,
+  .btn-primary[disabled].focus,
+  .btn-primary[disabled]:active,
+  .btn-primary[disabled].active,
+  fieldset[disabled]
+  .btn-primary,
+    fieldset[disabled]
+  .btn-primary:hover,
+    fieldset[disabled]
+  .btn-primary:focus,
+    fieldset[disabled]
+  .btn-primary.focus,
+    fieldset[disabled]
+  .btn-primary:active,
+    fieldset[disabled]
+  .btn-primary.active {
+    background-color: $orange;
+  }
+}
+

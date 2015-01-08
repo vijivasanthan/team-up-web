@@ -162,8 +162,11 @@ define(
                     $scope.data,
                     $scope.timeline.config,
                     $scope.divisions,
+                    $scope.timeline.user.id,
                     $scope.timeline.user.role,
-                    $scope.timeline.current
+                    $scope.timeline.user.fullName,
+                    $scope.timeline.current,
+                    $rootScope.app.resources.uuid
                   ),
                   $scope.timeline.options
                 );
@@ -206,17 +209,20 @@ define(
 
               if ($scope.timeline.main)
               {
+                //TODO load and render at the same time, two times the same call
                 Slots.all(
                   {
                     groupId: $scope.timeline.current.group,
                     division: $scope.timeline.current.division,
                     layouts: $scope.timeline.current.layouts,
                     month: $scope.timeline.current.month,
-                    stamps: stamps
+                    stamps: stamps,
+                    user: $route.current.params.userId
                   }
                 ).then(
                   function (data)
                   {
+                    console.log('data slots ', data);
                     if (data.error)
                     {
                       $rootScope.notifier.error($rootScope.ui.agenda.query);
@@ -240,6 +246,7 @@ define(
               }
               else
               {
+                //TODO is this ever used?
                 Profile.getSlots(
                   $scope.timeline.user.id,
                   stamps
@@ -698,7 +705,7 @@ define(
             $scope.$apply(
               function ()
               {
-                $scope.selectedOriginal = $scope.selectedSlot()
+                $scope.selectedOriginal = $scope.selectedSlot();
               }
             );
           };
@@ -1218,7 +1225,7 @@ define(
               Slots.change(
                 $scope.original,
                 changed,
-                $scope.timeline.user.id
+                (slot && slot.member) ? slot.member : $scope.timeline.user.id
               ).then(
                 function (result)
                 {
@@ -1397,8 +1404,10 @@ define(
           /**
           * Timeline on remove
           */
-          $scope.timelineOnRemove = function ()
+          $scope.timelineOnRemove = function (slot)
           {
+            console.log('slot', slot);
+
             $rootScope.planboardSync.clear();
 
             if ($scope.timeliner.isAdded() > 0)
@@ -1433,7 +1442,8 @@ define(
                 $rootScope.planboardSync.start();
               };
 
-              var now = Date.now().getTime();
+              var now = Date.now().getTime(),
+                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id;
 
               if ($scope.original.end.getTime() <= now && $scope.original.content.recursive == false)
               {
@@ -1455,7 +1465,7 @@ define(
                       state: $scope.original.content.state
                     }
                   },
-                  $scope.timeline.user.id
+                  currentSlotUser
                 ).then(
                   function (result)
                   {
@@ -1467,7 +1477,7 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.agenda.deletingTimeslot);
 
-                Slots.remove($scope.original, $scope.timeline.user.id)
+                Slots.remove($scope.original, currentSlotUser)
                   .then(
                   function (result)
                   {

@@ -109,9 +109,17 @@ define(['services/services', 'config'],
               return '<div class="time-tip" title="' + content + '">' + content + '</div>'
             },
 
-            user: function (data, timedata, config)
+            user: function (data, timedata, config, routeUserId, routeUserFullName, loggedUserId)
             {
-              var _this = this;
+              var _this = this,
+                planning = $rootScope.ui.planboard.planning,
+                weekPlanning = $rootScope.ui.planboard.weeklyPlanning;
+
+              if(routeUserId != loggedUserId)
+              {
+                planning = $rootScope.ui.planboard.planningOf + routeUserFullName;
+                weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + routeUserFullName;
+              }
 
               _.each(data.user, function (slot, index)
               {
@@ -123,8 +131,8 @@ define(['services/services', 'config'],
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),
                       group: (slot.recursive) ?
-                      _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
-                      _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
+                      _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
+                      _this.wrapper('a') + planning + _this.wrapper('planning'),
                       content: this.tooltip({start: slot.start, end: slot.end}) +
                       _this.secret(
                         angular.toJson({
@@ -142,8 +150,8 @@ define(['services/services', 'config'],
               }.bind(this));
 
               timedata = _this.addLoading(data, timedata, [
-                _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
-                _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning')
+                _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
+                _this.wrapper('a') + planning + _this.wrapper('planning')
               ]);
 
               return timedata;
@@ -466,7 +474,7 @@ define(['services/services', 'config'],
               return timedata;
             },
 
-            members: function (data, timedata, config, privilage)
+            members: function (data, timedata, config, privilage, routeUserId, loggedUserId)
             {
               var _this = this,
                 members = this.get.members(),
@@ -502,15 +510,14 @@ define(['services/services', 'config'],
 
               _.each(data.members, function (member)
                 {
-                  var link = (privilage <= 1) ?
-                  _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
+                  var link = _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
                   '<a href="#/profile/' +
                   member.id +
                   '#profile">' +
                   members[member.id] +
-                  '</a>' :
-                  _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
-                  members[member.id];
+                  '</a>';
+
+                  link += '<a class="edit-timeline-icon" href="' + '#/team-telefoon/agenda/' + member.id + '"><i class="icon-edit"></a>';
 
                   _.each(member.data, function (slot)
                   {
@@ -652,14 +659,14 @@ define(['services/services', 'config'],
               return filtered;
             },
 
-            process: function (data, _config, divisions, privilage, current)
+            process: function (data, _config, divisions, routeUserId, privilage, routeUserFullName, current, loggedUserId)
             {
               var _this = this,
                 timedata = [];
 
               if (data.user)
               {
-                timedata = _this.user(data, timedata, _config);
+                timedata = _this.user(data, timedata, _config, routeUserId, routeUserFullName, loggedUserId);
               }
 
               if (data.aggs)
@@ -682,7 +689,7 @@ define(['services/services', 'config'],
 
               if (data.members)
               {
-                timedata = _this.members(data, timedata, _config, privilage);
+                timedata = _this.members(data, timedata, _config, privilage, routeUserId, loggedUserId);
               }
 
               //if (data.aggs)

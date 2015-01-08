@@ -74,6 +74,17 @@ section#planboard(ng-controller='agenda-timeline')
 								
 					hr
 					// alert-window
+					//div.alert.alert-warning(
+					//	ng-show='timeline.user.id != app.resources.uuid')
+					//	button.close(type='button',
+					//	data-dismiss='alert') ×
+					//	small
+					//		| U bekijkt de tijdlijn van 
+					//		strong
+					//			i  {{timeline.user.fullName}}
+					//		|  druk op annuleren om terug te gaan naar uw tijdlijn.
+					//	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren
+					
 					div.alert.alert-warning(ng-show='infoAvailibility.info')
 						button.close(type='button',
 						ng-click='disableInfoAvailibility()',
