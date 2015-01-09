@@ -137,9 +137,9 @@ section#profile
 								p.text-success(ng-show='phoneNumberParsed.result')
 									small
 										i {{phoneNumberParsed.message}}
-										
+
 						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
-							ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
+							ng-show='(app.resources.role == 1) || (profile.uuid == app.resources.uuid)')
 							label.control-label {{ui.profile.pincode}}
 							.controls
 								input.span2.form-control(type='text',

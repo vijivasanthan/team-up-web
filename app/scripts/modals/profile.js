@@ -261,7 +261,8 @@ define(['services/services', 'config'], function (services, config) {
     };
 
     Profile.prototype.local = function () {
-      return Store('app').get('resources');
+      return Store('app').get('res' +
+      'ources');
     };
 
     Profile.prototype.save = function (id, resources) {
