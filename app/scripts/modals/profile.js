@@ -1,7 +1,7 @@
 define(['services/services', 'config'], function (services, config) {
   'use strict';
 
-  services.factory('Profile', function ($rootScope, $resource, $q, Groups, Slots, MD5, Store) {
+  services.factory('Profile', function ($rootScope, $resource, $q, Slots, MD5, Store) {
     var Profile = $resource(config.app.host + 'node/:id/:section', {}, {
       get: {
         method: 'GET',
@@ -43,12 +43,12 @@ define(['services/services', 'config'], function (services, config) {
     //  }
     //});
     //
-    //var PincodeExists = $resource(config.app.host + 'node/:id/pincode_exists', {}, {
-    //  check: {
-    //    method: 'GET',
-    //    params: {}
-    //  }
-    //});
+    var PincodeExists = $resource(config.app.host + 'node/:id/pincode_exists', {}, {
+      check: {
+        method: 'GET',
+        params: {}
+      }
+    });
 
     var Resources = $resource(config.app.host + 'resources', {}, {
       get: {
@@ -129,24 +129,25 @@ define(['services/services', 'config'], function (services, config) {
       return deferred.promise;
     };
 
-    //Profile.prototype.pincodeExists = function (id, pincode) {
-    //  var deferred = $q.defer();
-    //
-    //  if (pincode != '' || pincode.length > 0) {
-    //    PincodeExists.check({
-    //        id: id,
-    //        pincode: pincode
-    //      },
-    //      function () {
-    //        deferred.resolve(true)
-    //      },
-    //      function () {
-    //        deferred.resolve(false)
-    //      });
-    //  }
-    //
-    //  return deferred.promise;
-    //};
+    Profile.prototype.pincodeExists = function (id, pincode) {
+      var deferred = $q.defer();
+
+      if (pincode != '' || pincode.length > 0)
+      {
+        PincodeExists.check({
+            id: id,
+            pincode: pincode
+          },
+          function () {
+            deferred.resolve(true)
+          },
+          function () {
+            deferred.resolve(false)
+          });
+      }
+
+      return deferred.promise;
+    };
 
     Profile.prototype.role = function (id, role) {
       var deferred = $q.defer();
@@ -193,19 +194,26 @@ define(['services/services', 'config'], function (services, config) {
     Profile.prototype.get = function (id, localize) {
       var deferred = $q.defer();
 
-      Profile.get({id: id}, function (result) {
-        result.role = (result.role || result.role == 0) ? result.role : 3;
-
-        if (id == $rootScope.StandBy.resources.uuid)
-          $rootScope.StandBy.resources = result;
-
-        if (localize)
-          Store('user').save('resources', result);
-
-        deferred.resolve({resources: result});
-      });
+      Profile.get({id: id},
+          function(result)
+          {
+            deferred.resolve(result);
+          });
 
       return deferred.promise;
+
+      //Standby way
+      //Profile.get({id: id}, function (result) {
+      //  result.role = (result.role || result.role == 0) ? result.role : 3;
+      //
+      //  if (id == $rootScope.StandBy.resources.uuid)
+      //    $rootScope.StandBy.resources = result;
+      //
+      //  if (localize)
+      //    Store('user').save('resources', result);
+      //
+      //  deferred.resolve({resources: result});
+      //});
     };
 
     Profile.prototype.getWithSlots = function (id, localize, params) {

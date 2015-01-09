@@ -21,10 +21,13 @@ define(
         'TeamUp',
         '$timeout',
         'MD5',
+        'Profile',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
-          $rootScope.fixStyles();
+          var profileResource = null;
+
+            $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
 
           $scope.self = this;
@@ -43,6 +46,23 @@ define(
 
           //temp userdata will be saved after pressing save
           $scope.profile = angular.copy($scope.profilemeta);
+
+          var getProfileResource = function(userId, flag)
+          {
+            Profile.get(userId, flag)
+              .then(
+              function(profileData)
+              {
+                console.log('profileData', profileData);
+                profileResource = profileData;
+                $scope.profile.pincode = (profileResource.pincode)
+                  ? profileResource.pincode
+                  : '';
+              }
+            );
+          };
+
+          getProfileResource($scope.profilemeta.uuid);
 
           $scope.currentRole = $scope.profilemeta.role;
 
@@ -91,9 +111,70 @@ define(
             );
           };
 
+          var CHECK_PINCODE_DELAY = 250;
+
+          $scope.pincodeExistsValidation = true;
+
+          $scope.pincodeExists = function ()
+          {
+            if (!angular.isDefined($scope.profile.pincode) ||
+              $scope.profile.pincode == '')
+            {
+              $scope.pincodeExistsValidation = false;
+              $scope.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeNotValid;
+            }
+            else
+            {
+              if (angular.isDefined($scope.profile.pincode))
+              {
+                if ($scope.checkPincode)
+                {
+                  clearTimeout($scope.checkPincode);
+
+                  $scope.checkPincode = null;
+                }
+
+                $scope.checkPincode = setTimeout(function ()
+                {
+                  $scope.checkPincode = null;
+
+                  Profile.pincodeExists($scope.profilemeta.uuid, $scope.profile.pincode)
+                    .then(
+                    function (result)
+                    {
+                      $scope.pincodeExistsValidation = result;
+                      $scope.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeInUse;
+                    }
+                  );
+                }, CHECK_PINCODE_DELAY);
+              }
+            }
+          };
+
+          $scope.checkPincode = null;
           // Save a profile
           $scope.save = function (resources)
           {
+            //check pincode
+            if (!angular.isDefined($scope.profile.pincode) ||
+              $scope.profile.pincode == '' || !$scope.pincodeExistsValidation)
+            {
+              $rootScope.notifier.error($rootScope.ui.profile.pincodeCorrect);
+
+              $rootScope.statusBar.off();
+
+              return false;
+            }
+
+            if (!$scope.pincodeExistsValidation)
+            {
+              $rootScope.notifier.error($rootScope.ui.profile.pincodeInUse);
+
+              $rootScope.statusBar.off();
+
+              return false;
+            }
+
             // let user know that user need to re-relogin if the login-user's role is changed.
             if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
             {
@@ -156,8 +237,34 @@ define(
               return;
             }
 
-            delete resources.birthday;
+            //add pincode to profile resource
+            profileResource.pincode = resources.pincode;
 
+            delete resources.birthday;
+            delete resources.fullName;
+            //delete resources.pincode
+            delete resources.pincode;
+
+            //save profileresource
+            Profile.save($route.current.params.userId, profileResource)
+              .then(
+              function(result)
+              {
+                if (result.error)
+                {
+                  $rootScope.notifier.error($rootScope.ui.errors.profile.save);
+                  console.warn('error ->', result);
+                }
+                else
+                {
+                  saveProfile(resources);
+                }
+              }
+            );
+          };
+
+          var saveProfile = function(resources)
+          {
             TeamUp._(
               'profileSave',
               {
@@ -185,7 +292,6 @@ define(
                     null,
                     function (resources)
                     {
-
                       if ($route.current.params.userId == $rootScope.app.resources.uuid)
                       {
                         $rootScope.app.resources = result;
@@ -210,13 +316,13 @@ define(
                         $scope.data.birthDate = formatDate($scope.data.birthDate);
 
                         $scope.profile = angular.copy($scope.data);
+                        getProfileResource(
+                          $route.current.params.userId,
+                          ($route.current.params.userId == $rootScope.app.resources.uuid)
+                        );
 
                         $rootScope.statusBar.off();
-
                         $scope.setViewTo('profile');
-
-                        // put back the birthday for display after update the member.
-                        //resources.birthday = $filter('nicelyDate')(resources.birthDate);
 
                         if ($rootScope.app.resources.uuid == $route.current.params.userId)
                         {
@@ -255,7 +361,7 @@ define(
                 }
               }
             );
-          };
+          }
 
           function formatDate(date)
           {
@@ -267,7 +373,7 @@ define(
             setView('edit');
           };
 
-          $scope.editPassword = function()
+          $scope.editPassword = function ()
           {
             setView('editPassword');
           }
@@ -289,12 +395,12 @@ define(
             );
           };
 
-          $scope.savePassword = function(resources)
+          $scope.savePassword = function (resources)
           {
             //copy data so the user can't see real-life changes causing by two way binding
             var formData = angular.copy(resources);
 
-            if (! formData.oldpass || ! formData.newpass || ! formData.newpassrepeat)
+            if (!formData.oldpass || !formData.newpass || !formData.newpassrepeat)
             {
               $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
               return;
@@ -304,7 +410,7 @@ define(
               $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
               return;
             }
-            else if(MD5(formData.oldpass) !== $scope.profile.passwordHash)
+            else if (MD5(formData.oldpass) !== $scope.profile.passwordHash)
             {
               $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
               return;
@@ -372,21 +478,20 @@ define(
               //update list of members
               TeamUp._('teamMemberFree')
                 .then
-                (
-                  function (result)
-                  {
-                    Store('app').save('members', result);
+              (
+                function (result)
+                {
+                  Store('app').save('members', result);
 
-                    $rootScope.statusBar.off();
-                  },
-                  function (error)
-                  {
-                    console.log(error)
-                  }
-                );
+                  $rootScope.statusBar.off();
+                },
+                function (error)
+                {
+                  console.log(error)
+                }
+              );
             });
           };
-
         }
       ]
     );

@@ -413,7 +413,13 @@ define(
           authorInfo: 'Auteurinfo laden...',
           changePassWord: 'Wachtwoord wijzigen',
           safePassword: 'Wachtwoord opslaan',
-          oldPassword: 'Oud wachtwoord'
+          oldPassword: 'Oud wachtwoord',
+          pincode: 'Pincode',
+          pincodeInUse: 'Deze pincode is in gebruik. Kies een andere.',
+          pincodeNotValid: 'Vul a.u.b. een geldige pincode van 4 cijfers in!',
+          pincodeCorrect: 'Deze pincode is in gebruik of niet geldig! Vul a.u.b. een geldige pincode.',
+          pincodeInfo: 'De bovenstaande pincode gebruikt u voor Team-telefoon Inbellen en heeft u alleen nodig als Team-telefoon uw nummer niet herkent.',
+          duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.'
         },
         settings: {
           settings: 'Instellingen',

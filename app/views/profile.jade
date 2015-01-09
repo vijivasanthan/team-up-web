@@ -93,7 +93,7 @@ section#profile
 								input.span4(type='text',
 								ng-model='profile.lastName',
 								value='{{data.lastName}}')
-						.control-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid) || (currentRole > 1 &&  profile.uuid == app.resources.uuid)')
+						.control-group(ng-hide='(app.resources.role > 1)')
 							label.control-label {{ui.teamup.role}}
 							.controls
 								select(ng-model='profile.role',
@@ -137,6 +137,23 @@ section#profile
 								p.text-success(ng-show='phoneNumberParsed.result')
 									small
 										i {{phoneNumberParsed.message}}
+										
+						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
+							ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
+							label.control-label {{ui.profile.pincode}}
+							.controls
+								input.span2.form-control(type='text',
+								ng-model='profile.pincode',
+								ui-mask='9999',
+								ng-change='pincodeExists()',
+								name='pincode')
+								p.text-danger(ng-hide='pincodeExistsValidation')
+									small
+										i {{pincodeExistsValidationMessage}}
+								span.help-block(style='margin-top: -5px;')
+									small
+										i {{ui.profile.pincodeInfo}}
+							
 						//.control-group
 						//	label.control-label {{ui.teamup.func}}
 						//	.controls
@@ -164,12 +181,13 @@ section#profile
 					hr
 					form.form-vertical(name='passWordForm', novalidate)
 						fieldset
-							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
 								label.control-label {{ui.profile.oldPassword}}
 								.controls
 									input.span3(type='password',
 									ng-model='profile.oldpass')
-							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)', ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
+							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)', 
+								ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
 								label.control-label {{ui.profile.newPass}}
 								.controls
 									input.span3.form-control(type='password',
@@ -188,7 +206,7 @@ section#profile
 										small(ng-show="passWordForm.password.$error.maxlength")
 											i
 											| {{ ui.validation.password.amountMaxChars(20) }}
-							.form-group(ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
 								label.control-label {{ui.profile.newPassRepeat}}
 								.controls
 									input.span3(type='password',

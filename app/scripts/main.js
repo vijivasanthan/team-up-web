@@ -9,7 +9,7 @@ require.config(
   {
     waitSeconds: 100,
     paths: {
-      profile: 'profiles/test/profile',
+      profile: 'profiles/dev/profile',
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
       jquery: '../vendors/jquery/dist/jquery.min',
@@ -70,7 +70,8 @@ require.config(
 
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
-      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy'
+      'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
+      mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
     shim: {
       profile: {deps: ['jquery'], exports: 'profile' },
@@ -95,6 +96,7 @@ require.config(
       //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       //md5: { exports: 'md5'},
       underscore: { exports: 'underscore'},
+      mask: { deps: ['angular'] },
       store: { deps: ['angular', 'underscore']},
       offline: { deps: ['angular'] },
 
@@ -176,9 +178,9 @@ require(
     'modals/logs',
     'modals/agenda',
     'modals/slots',
-    'modals/profile',
     'modals/permission',
     'modals/testModal',
+    'modals/profile',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',
@@ -222,6 +224,7 @@ require(
     //'moment',
     'treegrid',
     'underscore',
+    'mask',
     'store',
     'offline',
     'log',

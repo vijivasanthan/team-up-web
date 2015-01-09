@@ -76,7 +76,7 @@
                 <input type="text" ng-model="profile.lastName" value="{{data.lastName}}" class="span4">
               </div>
             </div>
-            <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid) || (currentRole &gt; 1 &amp;&amp;  profile.uuid == app.resources.uuid)" class="control-group">
+            <div ng-hide="(app.resources.role &gt; 1)" class="control-group">
               <label class="control-label">{{ui.teamup.role}}</label>
               <div class="controls">
                 <select ng-model="profile.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
@@ -100,6 +100,13 @@
                 <input type="text" name="phone" ng-model="profile.phone" required="required" ng-change="parsePhoneNumber(profile.phone)" value="{{data.phone}}" class="span3 form-control inputPhoneNumber">
                 <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
                 <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+              </div>
+            </div>
+            <div ng-class="{ 'has-error' : profileForm.pincode.$invalid &amp;&amp; !profileForm.pincode.$pristine }" ng-hide="(app.resources.role &gt; 1 || profile.uuid != app.resources.uuid)" class="form-group">
+              <label class="control-label">{{ui.profile.pincode}}</label>
+              <div class="controls">
+                <input type="text" ng-model="profile.pincode" ui-mask="9999" ng-change="pincodeExists()" name="pincode" class="span2 form-control">
+                <p ng-hide="pincodeExistsValidation" class="text-danger"><small><i>{{pincodeExistsValidationMessage}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfo}}</i></small></span>
               </div>
             </div>
             <!--.control-group-->
@@ -132,19 +139,19 @@
           <hr>
           <form name="passWordForm" novalidate="novalidate" class="form-vertical">
             <fieldset>
-              <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="form-group">
+              <div ng-hide="(app.resources.role &gt; 1 || profile.uuid != app.resources.uuid)" class="form-group">
                 <label class="control-label">{{ui.profile.oldPassword}}</label>
                 <div class="controls">
                   <input type="password" ng-model="profile.oldpass" class="span3">
                 </div>
               </div>
-              <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" ng-class="{ 'has-error' : passWordForm.password.$invalid &amp;&amp; !passWordForm.password.$pristine }" class="form-group">
+              <div ng-hide="(app.resources.role &gt; 1 || profile.uuid != app.resources.uuid)" ng-class="{ 'has-error' : passWordForm.password.$invalid &amp;&amp; !passWordForm.password.$pristine }" class="form-group">
                 <label class="control-label">{{ui.profile.newPass}}</label>
                 <div class="controls">
                   <input type="password" ng-model="profile.newpass" name="password" required="required" ng-minlength="8" ng-maxlength="20" class="span3 form-control"><span ng-show="passWordForm.password.$invalid &amp;&amp; !passWordForm.password.$pristine" class="help-block"><small><i></i>{{ ui.validation.password.required }}</small><small ng-show="passWordForm.password.$error.minlength"><i></i>{{ ui.validation.password.amountMinChars(8) }} </small><small ng-show="passWordForm.password.$error.maxlength"><i></i>{{ ui.validation.password.amountMaxChars(20) }}</small></span>
                 </div>
               </div>
-              <div ng-hide="(app.resources.role &gt; 1 &amp;&amp; profile.uuid != app.resources.uuid)" class="form-group">
+              <div ng-hide="(app.resources.role &gt; 1 || profile.uuid != app.resources.uuid)" class="form-group">
                 <label class="control-label">{{ui.profile.newPassRepeat}}</label>
                 <div class="controls">
                   <input type="password" ng-model="profile.newpassrepeat" class="span3">

@@ -1,8 +1,5 @@
 'use strict';
 
-// TODO: 'ui.bootstrap.modal', 'mgcrea.ngStrap.modals',
-//http://plnkr.co/edit/?p=preview, http://plnkr.co/edit/xevoqZ4QOZC9T1Tx0LB1?p=preview
-
 define(
   [
     'angular',
@@ -14,14 +11,12 @@ define(
     'angular-route',
     'angular-md5',
     'angular-strap',
-    //'ui-bootstrap',
-    // 'ng-vis',
-
-    // 'angular-google-maps',
-
-    // 'angular-dragdrop',
     'ui-sortable',
     'ui.bootstrap.pagination'
+    //'ui-bootstrap',
+    // 'ng-vis',
+    // 'angular-google-maps',
+    // 'angular-dragdrop',
   ],
   function (angular)
   {
@@ -36,19 +31,16 @@ define(
         'ngResource',
         'ngRoute',
         'ngMd5',
-        //'ui.bootstrap.modal',
         'mgcrea.ngStrap',
-        //'$strap.directives',
-
-        // 'NgVis',
-
-        // 'google-maps',
-
-        // 'ngDragDrop',
         'ui.sortable',
+        'ui.bootstrap.pagination',
+        'ui.mask'
+        //'$strap.directives',
+        //'ui.bootstrap.modal',
+        // 'NgVis',
+        // 'google-maps',
+        // 'ngDragDrop',
         // 'collapse',
-
-        'ui.bootstrap.pagination'
       ]);
   }
 );
