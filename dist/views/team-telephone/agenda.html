@@ -1,4 +1,4 @@
-<section id="planboard" ng-controller="agenda-timeline">
+<section id="planboard" ng-controller="agenda-timeline" scroll="scroll">
   <div class="agenda-timeline page-header">
     <h2 class="nullable">{{ui.planboard.planboard}}</h2>
     <div class="btn-group pull-right">
@@ -61,7 +61,7 @@
       </div>
     </div>
   </div>
-  <div ng-show="views.slot.add || views.slot.edit || views.group || views.wish || views.member" class="fixedModal">
+  <div ng-show="views.slot.add || views.slot.edit || views.group || views.wish || views.member" class="time-slot-form">
     <form class="form-inline form-toggled well">
       <button ng-click="resetInlineForms()" class="close">×</button>
       <h4 ng-show="views.slot.add">{{ui.agenda.newAvail}}</h4>
@@ -266,7 +266,7 @@
             <!--					.square-->
             <!--					| {{ui.planboard.legendaLabels.lessPeople}}//-->
           </div>
-          <div id="mainTimeline"></div>
+          <div id="mainTimeline" ng-click="setPositionSingleClick($event)" ng-dblclick="setPositionDblClick($event)"></div>
         </div>
         <hr>
         <p><small class="pull-left"><span class="text-warning">{{ui.agenda.lastSyncTime}}</span><span class="text-muted">&nbsp; {{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="text-warning">{{ui.agenda.dataRangeStart}}</span><span class="text-muted">{{data.periods.start | nicelyDate}}</span>&nbsp;&nbsp;| &nbsp;<span class="text-warning">{{ui.agenda.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | nicelyDate}}</span></small></p>

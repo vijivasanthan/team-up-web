@@ -344,7 +344,7 @@ define(
 
               if ($scope.timeline.main)
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
               else
               {
@@ -384,7 +384,7 @@ define(
           }
 
           $rootScope.$on(
-            'timeliner',
+            'timelinerTasks',
             function ()
             {
               $scope.timeliner.render(
@@ -482,7 +482,7 @@ define(
 
               if ($scope.timeline.main && values.content != 'Nieuw')
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
               else if (values.content != 'Nieuw')
               {
@@ -839,7 +839,7 @@ define(
                 {
                   if ($scope.timeline.main)
                   {
-                    $rootScope.$broadcast('resetPlanboardViews');
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                     $scope.views.slot.add = true;
                   }
@@ -941,7 +941,7 @@ define(
               ).then(
                 function (result)
                 {
-                  $rootScope.$broadcast('resetPlanboardViews');
+                  $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                   if (result.error)
                   {
@@ -1209,7 +1209,7 @@ define(
             ).then(
               function (result)
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                 if (result.error)
                 {
@@ -1307,7 +1307,7 @@ define(
               ).then(
                 function (result)
                 {
-                  $rootScope.$broadcast('resetPlanboardViews');
+                  $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                   if (result.error)
                   {
@@ -1366,7 +1366,7 @@ define(
                   {
                     $scope.slot = {};
 
-                    $rootScope.$broadcast('resetPlanboardViews');
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                     $scope.timeliner.render(
                       {

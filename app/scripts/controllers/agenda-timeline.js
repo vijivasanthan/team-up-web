@@ -938,6 +938,90 @@ define(
             $scope.setAvailability(options.availability, options.period);
           }
 
+          /**
+           * set the form near the added or editable slot
+           * @param ev event
+           */
+          var setPositionSlotForm = function(ev)
+          {
+            var footer = angular.element('#footer').height(),
+              modal = 160,
+              slot = 100,
+              clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+              currentScreen = $window.innerHeight,
+              minNeededHeight = (modal + slot),
+              heightToBottom = ($window.outerHeight - clickY) + minNeededHeight;
+            //$scope.clientY = ev.clientY;
+
+            //TODO FIx position bottom
+            //The height needed for the modal is less then the height in the current view
+            var position = (minNeededHeight > ev.clientY)
+              ? clickY
+              : (clickY - minNeededHeight);
+
+            angular.element('.time-slot-form').css({
+              top: position + 'px'
+            });
+          };
+
+          /**
+           * Change current height of slotform on scrollbar height
+           * @param scrollTopHeight
+           */
+          //$scope.currentScroll = function(scrollTopHeight)
+          //{
+          //
+          //  if($scope.views.slot.add == true ||
+          //    $scope.views.slot.edit == true ||
+          //    $scope.views.member == true ||
+          //    $scope.views.group == true ||
+          //    $scope.views.wish == true)
+          //  {
+          //    var timeSlotForm = angular.element('.time-slot-form'),
+          //      minNeededHeight = (160 + 100),
+          //      position = ($scope.clientY + scrollTopHeight);
+          //    position = (minNeededHeight > position)
+          //      ? position
+          //      : (position - minNeededHeight);
+          //
+          //    timeSlotForm.css('top', position + 'px');
+          //  }
+          //};
+
+          /**
+           * Event by adding a slot
+           * @param event
+           */
+          $scope.setPositionDblClick = function(event)
+          {
+            setPositionSlotForm(event);
+          };
+
+          /**
+           * Event by editing a slot
+           * @param event
+           */
+          $scope.setPositionSingleClick = function(event)
+          {
+            //check if the slot already exist, otherwise it's a backdrop
+            var targetDiv = angular.element(event.target);
+
+            if(targetDiv.hasClass('time-tip') ||
+              targetDiv.hasClass('timeline-event-content'))
+            {
+              setPositionSlotForm(event);
+            }
+            else
+            {
+              $scope.views.slot.add = false;
+              $scope.views.slot.edit = false;
+              $scope.views.member = false;
+              $scope.views.group = false;
+              $scope.views.wish = false;
+              $scope.clientY = null;
+            }
+
+          };
 
           var getDateTimeFromPicker = function (date)
           {

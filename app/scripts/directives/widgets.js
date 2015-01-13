@@ -297,6 +297,19 @@ define(
       }
     );
 
-
+    //directives.directive(
+    //  'scroll',
+    //  function($window)
+    //  {
+    //    return function(scope, element, attrs) {
+    //      angular.element($window).bind("scroll", function()
+    //      {
+    //        //TODO check if there is a collision between slot and form
+    //        //scope.currentScroll(this.pageYOffset);
+    //        //scope.$apply();
+    //      });
+    //    };
+    //  }
+    //);
   }
 );

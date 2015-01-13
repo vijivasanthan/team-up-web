@@ -1,4 +1,4 @@
-section#planboard(ng-controller='agenda-timeline')
+section#planboard(ng-controller='agenda-timeline', scroll)
 	.agenda-timeline.page-header
 		h2.nullable {{ui.planboard.planboard}}
 		include ../agenda/time-quick-availability
@@ -104,7 +104,8 @@ section#planboard(ng-controller='agenda-timeline')
 		
 					div.legends-agenda(ng-show='timeline.config.legendarer')
 						include ../agenda/time-legends
-					#mainTimeline
+					#mainTimeline(ng-click='setPositionSingleClick($event)',
+						ng-dblClick='setPositionDblClick($event)')
 				hr
 				p
 					small.pull-left

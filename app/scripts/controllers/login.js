@@ -205,7 +205,10 @@ define(
           function queryMembersNotInTeams ()
           {
             TeamUp._('teamMemberFree').then(
-              function (result) { Store('app').save('members', result) }
+              function (result) {
+                console.log('result', 123);
+                Store('app').save('members', result)
+              }
             );
           }
 

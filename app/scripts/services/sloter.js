@@ -510,6 +510,8 @@ define(['services/services', 'config'],
 
               _.each(data.members, function (member)
                 {
+
+                  console.log('data.members', members);
                   var link = _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
                   '<a href="#/profile/' +
                   member.id +

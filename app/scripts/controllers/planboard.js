@@ -313,7 +313,7 @@ define(
               );
 
               $rootScope.$broadcast(
-                'timeliner',
+                'timelinerTasks',
                 (periods) ? periods : {start: startTime, end: endTime}
               );
             };
@@ -395,7 +395,7 @@ define(
           };
 
           $rootScope.$on(
-            'resetPlanboardViews',
+            'resetPlanboardViewsTasks',
             function ()
             {
               $scope.resetViews()

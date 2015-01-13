@@ -795,16 +795,6 @@ $step: 3;
   opacity: 0.5;
 }
 
-.changeTimeSlot {
-  padding-right: 30px;
-  padding-top: 10px;
-  position: fixed;
-  z-index: 9999;
-  form {
-    //    border: 1px solid $graytu;
-  }
-}
-
 #planboard {
   #confirmTaskModal {
     z-index: 10000;
@@ -1333,10 +1323,12 @@ sortable
   }
 }
 
-.fixedModal {
+.time-slot-form {
+//  padding-right: 30px;
+//  padding-top: 10px;
+  width: 100%;
+  position: absolute;
   z-index: 9999;
-  width: 98%;
-  position: fixed;
   background-color: #fff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -1344,6 +1336,11 @@ sortable
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
   outline: 0;
+  form {
+    //    border: 1px solid $graytu;
+    background-color: $white;
+    margin-bottom: 0;
+  }
 }
 
 //.timepicker.dropdown-menu {
