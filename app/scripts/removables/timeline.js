@@ -2979,7 +2979,8 @@ links.Timeline.prototype.onMouseDown = function (event)
     /**
      * MODIFIED for task and availibility planboard
      */
-    // console.log('group from timeline 2 ->', this.getGroupName(group));
+    var group = this.getGroupFromHeight(y);
+
     if(this.getGroupName(group).match(/task-planboard/))
     {
       var content = 'Nieuw';

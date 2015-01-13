@@ -555,7 +555,7 @@ define(
           $scope.selectedSlot = function ()
           {
             var selection;
-
+            console.log('$scope.timeliner.isAdded()', $scope.self.timeline.getSelection()[0]);
             // if ($scope.mode == 'edit')
             // {
             // 	console.log('in edit mode');
@@ -584,7 +584,6 @@ define(
 
               var values = $scope.self.timeline.getItem(selection.row),
                   content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
-
               $scope.original = {
                 start: values.start,
                 end: values.end,
@@ -691,6 +690,10 @@ define(
               }
 
               return values;
+            }
+            else
+            {
+              hideSlotForm();
             }
           };
 
@@ -989,38 +992,21 @@ define(
           //};
 
           /**
-           * Event by adding a slot
-           * @param event
-           */
-          $scope.setPositionDblClick = function(event)
-          {
-            setPositionSlotForm(event);
-          };
-
-          /**
            * Event by editing a slot
            * @param event
            */
           $scope.setPositionSingleClick = function(event)
           {
-            //check if the slot already exist, otherwise it's a backdrop
-            var targetDiv = angular.element(event.target);
+            setPositionSlotForm(event);
+          };
 
-            if(targetDiv.hasClass('time-tip') ||
-              targetDiv.hasClass('timeline-event-content'))
-            {
-              setPositionSlotForm(event);
-            }
-            else
-            {
-              $scope.views.slot.add = false;
-              $scope.views.slot.edit = false;
-              $scope.views.member = false;
-              $scope.views.group = false;
-              $scope.views.wish = false;
-              $scope.clientY = null;
-            }
-
+          var hideSlotForm = function()
+          {
+            $scope.views.slot.add = false;
+            $scope.views.slot.edit = false;
+            $scope.views.member = false;
+            $scope.views.group = false;
+            $scope.views.wish = false;
           };
 
           var getDateTimeFromPicker = function (date)
