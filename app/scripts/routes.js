@@ -178,9 +178,38 @@ define(
               resolve: {
                 data: function($route, Slots, Storage, Dater, Store, TeamUp, $q, $rootScope, $location)
                 {
+                  var periods = Store('app').get('periods'),
+                    groups = Store('app').get('teams'),
+                    lastVisited = Store('app').get('currentTeamClientGroup'),
+                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team)
+                      ? lastVisited.team
+                      : groups[0].uuid,
+                    redirectLocationLoggedUser = function()
+                    {
+                      $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                    }
+
+                  //Check if there is a userId in the url
                   if(_.isUndefined($route.current.params.userId))
                   {
-                    $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                    redirectLocationLoggedUser();
+                  }
+                  //Get the teams of the userId in url
+                  var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
+
+                  //check if userId belongs to the same team as the logged user (teammember role only)
+                  if($rootScope.app.resources.role > 1)
+                  {
+                    var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
+
+                    if(_.isEmpty(userTeam))
+                    {
+                      redirectLocationLoggedUser();
+                    }
+                  }
+                  else
+                  {
+                    groupId = currentTeamsRouteUser[0].uuid;
                   }
 
                   //remove active class TODO create a directive to solve this bug
@@ -189,11 +218,6 @@ define(
                   var deferred = $q.defer();
                   var getAllSlots = function(userId)
                   {
-                    var periods = Store('app').get('periods'),
-                      groups = Store('app').get('teams'),
-                      lastVisited = Store('app').get('currentTeamClientGroup'),
-                      groupId = (! _.isUndefined(lastVisited) && lastVisited.team) ? lastVisited.team : groups[0].uuid;
-
                     return Slots.all({
                       groupId: groupId,
                       stamps: (Dater.current.today() > 360) ? {
