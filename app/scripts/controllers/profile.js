@@ -53,7 +53,6 @@ define(
               .then(
               function(profileData)
               {
-                console.log('profileData', profileData);
                 profileResource = profileData;
                 $scope.profile.pincode = (profileResource.pincode)
                   ? profileResource.pincode

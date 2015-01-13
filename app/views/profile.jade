@@ -37,10 +37,12 @@ section#profile
 					.tab-header
 						h3.pull-left {{data.firstName}} {{data.lastName}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-						ng-click='confirmDeleteProfile()',
-						ng-hide='app.resources.role > 1 || teams.length == 0') {{ui.teamup.del}}
+							ng-click='confirmDeleteProfile()',
+							ng-hide='app.resources.role > 1 || teams.length == 0 || profile.uuid != app.resources.uuid') 
+							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
-						ng-click='editProfile()') {{ui.profile.edit}}
+							ng-click='editProfile()',
+							ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)') {{ui.profile.edit}}
 					hr
 					.row-fluid
 						.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
@@ -67,10 +69,13 @@ section#profile
 							.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}' class='{{data.states|stateColor}}')
 							div
 								a(href='#/profile/{{data.uuid}}#editImg')
-									button.btn.btn-mini.btn-primary(ng-click='editImg()')
+									button.btn.btn-mini.btn-primary(
+										ng-click='editImg()',
+										ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
 										i.icon-edit
 								button.btn.btn-mini.btn-primary(type='submit',
-								ng-click='removeImg(data.uuid)')
+									ng-click='removeImg(data.uuid)',
+									ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
 									i.icon-trash
 
 
@@ -78,6 +83,7 @@ section#profile
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;') {{ui.profile.editProfile}}
 						button.btn.pull-right.btn-info(type='button',
+						ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)',
 						ng-click='editPassword()') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
@@ -181,13 +187,12 @@ section#profile
 					hr
 					form.form-vertical(name='passWordForm', novalidate)
 						fieldset
-							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
+							.form-group
 								label.control-label {{ui.profile.oldPassword}}
 								.controls
 									input.span3(type='password',
 									ng-model='profile.oldpass')
-							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)', 
-								ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
+							.form-group(ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
 								label.control-label {{ui.profile.newPass}}
 								.controls
 									input.span3.form-control(type='password',
@@ -206,7 +211,7 @@ section#profile
 										small(ng-show="passWordForm.password.$error.maxlength")
 											i
 											| {{ ui.validation.password.amountMaxChars(20) }}
-							.form-group(ng-hide='(app.resources.role > 1 || profile.uuid != app.resources.uuid)')
+							.form-group
 								label.control-label {{ui.profile.newPassRepeat}}
 								.controls
 									input.span3(type='password',

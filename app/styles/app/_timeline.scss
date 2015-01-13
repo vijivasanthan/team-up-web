@@ -429,7 +429,7 @@ div.timeline-navigation-delete {
   vertical-align: text-top;
   line-height: 14px;
   *margin-right: .3em;
-  background: url("../../images/glyphicons-halflings.png") no-repeat -48px -97px;
+  background: url("../images/glyphicons-halflings.png") no-repeat -48px -97px;
   z-index: 10000;
 }
 
@@ -438,11 +438,11 @@ div.timeline-navigation-delete:hover {
 }
 
 div.timeline-navigation-move-left {
-  background: url('../../images/timeline/16/moveleft.png') no-repeat center;
+  background: url('../images/timeline/16/moveleft.png') no-repeat center;
 }
 
 div.timeline-navigation-move-right {
-  background: url('../../images/timeline/16/moveright.png') no-repeat center;
+  background: url('../images/timeline/16/moveright.png') no-repeat center;
 }
 
 div.timeline-event.state-available {
