@@ -118,12 +118,19 @@ define(
                 if (msg.type == 'REPORT_NEW')
                 {
                   var msgBody = JSON.parse(message.body);
-                  var client = $rootScope.getClientByID(msgBody.clientUuid);
 
-                  if(client!=null) {
-                    angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
-                    msg.body = msgBody;
-                    msg.title = $scope.ui.message.reportMessage + " " + client.firstName + " " + client.lastName;
+                  if(msgBody && msgBody.clientUuid != null)
+                  {
+                    console.log('msgBody.clientUuid', msgBody.clientUuid);
+                    var client = $rootScope.getClientByID(msgBody.clientUuid);
+
+                    if(client != null)
+                    {
+                      angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
+                      msg.body = msgBody;
+                      msg.title = $scope.ui.message.reportMessage + " " + client.firstName + " " + client.lastName;
+                    }
+
                   }
                 }
                 else
