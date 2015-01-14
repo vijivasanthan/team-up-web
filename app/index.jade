@@ -198,7 +198,9 @@ block chat
 			span CHAT {{newCountShow}}
 		#chat-content(ng-show='toggleChat')
 			.chatHeader
-				h4 {{teamName}}
+				button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
+					i(class="icon-facetime-video white")
+				//h4 {{teamName}}
 			.mainContent
 				p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
 				div(ng-repeat='message in messagesShow')
@@ -216,7 +218,8 @@ block chat
 						.chatCloud
 							h5.name {{message.senderName}}
 							h5.time {{message.sendTime|nicelyTime}}
-							div: p {{message.body}}
+							div: p(ng-bind-html='message.body | trusted_html')
+							
 						.arrow(ng-hide='(message.role == "other")')
 
 			.input-area

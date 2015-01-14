@@ -53,13 +53,13 @@
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     background-color: $chatBg;
-    padding-bottom: 70px;
+    padding-bottom: 51px; //70px;
     -moz-box-shadow: 0 0 0 3px $brown;
     -webkit-box-shadow: 0 0 0 3px $brown;
     box-shadow: 0 0 0 3px $brown;
 
     .chatHeader {
-      height: 20px;
+      height: 0px;//20px;
       border-top-left-radius: 10px;
       background-color: $offwhite;
       position: absolute;
@@ -76,7 +76,7 @@
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
-      margin-top: 20px;
+      margin-top: 0px;//20px;
     }
     .noMessages {
       padding: 0 10px;
@@ -224,6 +224,32 @@
 
     button {
       margin: 0 0 0 10px;
+    }
+  }
+
+  .web-rtc-button {
+    -moz-border-radius-topleft: 0px;
+    -webkit-border-top-left-radius: 0px;
+    border-top-left-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    -webkit-border-top-right-radius: 0px;
+    border-top-right-radius: 0px;
+    -moz-border-radius-bottomright: 15px;
+    -webkit-border-bottom-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    i.white {
+      background-image: url("../images/glyphicons-halflings-white.png");
+//      &:hover {
+//        background-image: url("../images/glyphicons-halflings.png")
+//      }
+    }
+    &:hover {
+      i.white {
+        background-image: url("../images/glyphicons-halflings.png");
+      }
     }
   }
 

@@ -44,7 +44,27 @@ define(
           // Prepare message for view
           $scope.formatMessage = function (messages)
           {
-            var chatMembers = [];
+            var chatMembers = [],
+              urlify = function(text)
+              {
+                var urlRegex = /(https?:\/\/[^\s]+)/g,
+                  result = null;
+                if(urlRegex.test(text))
+                {
+                  result = text.replace(urlRegex, function(url) {
+                    return '<a href="' + url + '" target="_blank">' + 'Klik' + '</a>';
+                  });
+                }
+                else
+                {
+                  result = text;
+                }
+
+                return result;
+
+              };
+
+
             angular.forEach(
               messages,
               function (message, i)
@@ -106,6 +126,13 @@ define(
                     msg.title = $scope.ui.message.reportMessage + " " + client.firstName + " " + client.lastName;
                   }
                 }
+                else
+                {
+                  //Check if there is a url and parse the url to a anchor tag
+                  msg.body = urlify(msg.body);
+                }
+
+                //Maak als er hhtp in de body staat er een anchor link vab
 
                 $scope.messages.push(msg);
 
@@ -284,6 +311,44 @@ define(
             {
               console.log("login user doesn't belong to any team.")
             }
+          };
+
+          $scope.openVideo = function()
+          {
+            var getRandomString = function()
+            {
+              return Math.random()// Generate random number, eg: 0.123456
+                .toString(36)// Convert  to base-36 : "0.4fzyo82mvyr"
+                .slice(-8);// Cut off last 8 characters : "yo82mvyr"
+            },
+              random = getRandomString(),
+              current = new Date(),
+              url = ' http://webrtc.ask-fast.com/?room=' + getRandomString(),
+              message = $rootScope.ui.message.webTRCWebLink + url;
+
+            $rootScope.statusBar.display($rootScope.ui.message.sending);
+
+            TeamUp._(
+              'message',
+              {},
+              {
+                title: 'Van: TeamUp' + current.toString(config.app.formats.date),
+                body: message,
+                sendTime: current.getTime()
+              }).then(
+              function ()
+              {
+                $rootScope.statusBar.off();
+                $scope.moveToBottom = true;
+
+                window.open(url, '_blank');
+              },
+              function (error)
+              {
+                $rootScope.notifier.error(error);
+                $rootScope.statusBar.off();
+              }
+            );
           };
 
           // Send a chat message

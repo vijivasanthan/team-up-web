@@ -555,15 +555,6 @@ define(
           $scope.selectedSlot = function ()
           {
             var selection;
-            console.log('$scope.timeliner.isAdded()', $scope.self.timeline.getSelection()[0]);
-            // if ($scope.mode == 'edit')
-            // {
-            // 	console.log('in edit mode');
-            // }
-            // else
-            // {
-            // 	console.log('not in editing mode');
-            // }
 
             /**
              * TODO (Not working!!)
@@ -1476,8 +1467,6 @@ define(
           */
           $scope.timelineOnRemove = function (slot)
           {
-            console.log('slot', slot);
-
             $rootScope.planboardSync.clear();
 
             if ($scope.timeliner.isAdded() > 0)

@@ -3017,7 +3017,7 @@ links.Timeline.prototype.onMouseDown = function (event)
         'end': xend,
         'content': '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
         'group': this.getGroupName(group),
-        'className': 'state-new'
+        'className': 'state-available'
       });
     }
 

@@ -145,7 +145,6 @@ define(
           remove: 'Fout(en) met het verwijderen van de planning!',
           wisher: 'Fout(en) met het wijzigen van de behoefte',
           notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coordinator. Als coordinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.'
-
         },
         planboard: {
           planboard: 'Agenda',
@@ -260,6 +259,7 @@ define(
           sms: 'SMS',
           email: 'Email',
           receviers: 'Ontvanger(s)',
+          webTRCWebLink: 'Een video conferentie is geopend doe mee!',
           // troubled
           // chooseRecept: 'Ontvanger(s) selecteren',
           //
@@ -541,8 +541,6 @@ define(
           to: 'Tot',
           time: 'Tijd',
           duration: 'Duur',
-
-
           //deleteConfirm: 'Druk op OK om door te gaan.',
           confirms: {
             deleteClientTitle: 'Verwijder client',
