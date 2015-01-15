@@ -1026,8 +1026,8 @@ define(
               nowStamp = Math.abs(Math.floor(now / 1000));
 
             /**
-             * Make view for new slot
-             */
+            * Make view for new slot
+            */
             if (!form)
             {
 
@@ -1035,6 +1035,8 @@ define(
 
               var element = angular.element(values.content),
                 secret = angular.fromJson(element.html());
+
+              //console.log('values', values);
 
               if (secret.recursive ||
                 (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
@@ -1098,8 +1100,8 @@ define(
               }
             }
             /**
-             * Add new slot through the form
-             */
+            * Add new slot through the form
+            */
             else
             {
               var start = ($rootScope.browser.mobile) ?
@@ -1168,7 +1170,6 @@ define(
                   );
                 }
               }
-
             }
           };
 

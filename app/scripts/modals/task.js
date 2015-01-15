@@ -146,9 +146,9 @@ define(
                     'taskByTeam',
                     {fourth: team.uuid} // statuses: '1, 2, 3, 4'
                   ).then(
-                    function (tasks)
+                    function (allTasks)
                     {
-                      bulks[team.uuid] = tasks;
+                      bulks[team.uuid] = allTasks;
                     }
                   )
                 );
@@ -160,7 +160,6 @@ define(
               function ()
               {
                 var basket = [];
-
                 /**
                  * All tasks of a team
                  * @type {Array}
@@ -209,8 +208,6 @@ define(
                     return task
                   }
                 );
-
-                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 

@@ -519,7 +519,9 @@ define(['services/services', 'config'],
                   members[member.id] +
                   '</a>';
 
-                  link += '<a class="edit-timeline-icon" href="' + '#/team-telefoon/agenda/' + member.id + '"><i class="icon-edit"></a>';
+                  link += '<a title="' + $rootScope.ui.agenda.editTimeline + members[member.id] + '"';
+                  link +=  'class="edit-timeline-icon" href="' + '#/team-telefoon/agenda/' + member.id + '"'
+                  link += '><i class="icon-edit"></a>';
 
                   _.each(member.data, function (slot)
                   {

@@ -144,6 +144,7 @@ define(
           pastDeleting: 'Het verwijderen van een planning in het verleden is niet mogelijk!',
           remove: 'Fout(en) met het verwijderen van de planning!',
           wisher: 'Fout(en) met het wijzigen van de behoefte',
+          editTimeline: 'Wijzig tijdlijn van ',
           notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coordinator. Als coordinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.'
         },
         planboard: {

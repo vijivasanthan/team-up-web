@@ -2979,7 +2979,10 @@ links.Timeline.prototype.onMouseDown = function (event)
     /**
      * MODIFIED for task and availibility planboard
      */
-    var group = this.getGroupFromHeight(y);
+    var group = this.getGroupFromHeight(y);   // (group may be undefined)
+      groupName = this.getGroupName(group),
+      recursive = (groupName.match(/recursive/)) ? 'true' : 'false',
+      urlRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/g;
 
     if(this.getGroupName(group).match(/task-planboard/))
     {
@@ -2993,12 +2996,13 @@ links.Timeline.prototype.onMouseDown = function (event)
           'group': this.getGroupName(group),
           'className': 'state-new'
         });
-    }
-    else
-    {
-      var group = this.getGroupFromHeight(y);   // (group may be undefined)
-      var recursive = (this.getGroupName(group).match(/recursive/)) ? 'true' : 'false';
 
+      params.itemIndex = (this.items.length - 1);
+      this.selectItem(params.itemIndex);
+      params.itemDragRight = true;
+    }
+    else if(! groupName.match(urlRegex))
+    {
       // push into the bulk
       if (typeof window.slotsbulk === 'undefined')
       {
@@ -3019,15 +3023,17 @@ links.Timeline.prototype.onMouseDown = function (event)
         'group': this.getGroupName(group),
         'className': 'state-available'
       });
+
+      params.itemIndex = (this.items.length - 1);
+      this.selectItem(params.itemIndex);
+      params.itemDragRight = true;
     }
 
 
 
     //
 
-    params.itemIndex = (this.items.length - 1);
-    this.selectItem(params.itemIndex);
-    params.itemDragRight = true;
+
   }
 
   var item = this.items[params.itemIndex];
@@ -3473,8 +3479,9 @@ links.Timeline.prototype.onDblClick = function (event)
        */
       // var content = "New";
       var group = this.getGroupFromHeight(y);   // (group may be undefined)
-
-      //console.log('group from timeline 3 ->', this.getGroupName(group).match(/task-planboard/));
+        groupName = this.getGroupName(group),
+        recursive = (groupName.match(/recursive/)) ? 'true' : 'false',
+        urlRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/g;
 
       if(this.getGroupName(group).match(/task-planboard/))
       {
@@ -3488,11 +3495,25 @@ links.Timeline.prototype.onDblClick = function (event)
             'group': this.getGroupName(group),
             'className': 'state-new'
           });
-      }
-      else
-      {
-        var recursive = (this.getGroupName(group).match(/recursive/)) ? 'true' : 'false';
 
+        params.itemIndex = (this.items.length - 1);
+        this.selectItem(params.itemIndex);
+
+        this.applyAdd = true;
+
+        // fire an add event.
+        // Note that the change can be canceled from within an event listener if
+        // this listener calls the method cancelAdd().
+        this.trigger('add');
+
+        if (!this.applyAdd)
+        {
+          // undo an add
+          this.deleteItem(params.itemIndex);
+        }
+      }
+      else if(! groupName.match(urlRegex))
+      {
         this.addItem({
           'start': xstart,
           'end': xend,
@@ -3500,22 +3521,22 @@ links.Timeline.prototype.onDblClick = function (event)
           'group': this.getGroupName(group),
           'className': 'state-available'
         });
-      }
 
-      params.itemIndex = (this.items.length - 1);
-      this.selectItem(params.itemIndex);
+        params.itemIndex = (this.items.length - 1);
+        this.selectItem(params.itemIndex);
 
-      this.applyAdd = true;
+        this.applyAdd = true;
 
-      // fire an add event.
-      // Note that the change can be canceled from within an event listener if
-      // this listener calls the method cancelAdd().
-      this.trigger('add');
+        // fire an add event.
+        // Note that the change can be canceled from within an event listener if
+        // this listener calls the method cancelAdd().
+        this.trigger('add');
 
-      if (!this.applyAdd)
-      {
-        // undo an add
-        this.deleteItem(params.itemIndex);
+        if (!this.applyAdd)
+        {
+          // undo an add
+          this.deleteItem(params.itemIndex);
+        }
       }
     }
   }
