@@ -449,6 +449,16 @@ define(
                   }
                 },
 
+                /**
+                 * Get the team-telephone number
+                 */
+                teamPhone: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'phone'
+                  }
+                },
 
                 /**
                  * Team-ClientGroup

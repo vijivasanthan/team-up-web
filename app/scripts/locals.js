@@ -614,7 +614,7 @@ define(
             'reachable': 'Bereikbaar',
             'possibly_reachable': 'Mogelijk bereikbaar',
             'unreachable': 'Niet bereikbaar',
-            'unavailable': 'Niet beschikbaar',
+            'unavailable': 'Niet bereikbaar',
             'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',

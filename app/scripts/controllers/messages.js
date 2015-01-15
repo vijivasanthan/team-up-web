@@ -121,7 +121,6 @@ define(
 
                   if(msgBody && msgBody.clientUuid != null)
                   {
-                    console.log('msgBody.clientUuid', msgBody.clientUuid);
                     var client = $rootScope.getClientByID(msgBody.clientUuid);
 
                     if(client != null)
