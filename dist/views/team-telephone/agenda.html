@@ -267,7 +267,7 @@
             <!--					.square-->
             <!--					| {{ui.planboard.legendaLabels.lessPeople}}//-->
           </div>
-          <div id="mainTimeline" ng-click="setPositionSingleClick($event)"></div>
+          <div id="mainTimeline" set-position-slot-form="set-position-slot-form"></div>
         </div>
         <hr>
         <p><small class="pull-left"><span class="text-warning">{{ui.agenda.lastSyncTime}}</span><span class="text-muted">&nbsp; {{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="text-warning">{{ui.agenda.dataRangeStart}}</span><span class="text-muted">{{data.periods.start | nicelyDate}}</span>&nbsp;&nbsp;| &nbsp;<span class="text-warning">{{ui.agenda.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | nicelyDate}}</span></small></p>

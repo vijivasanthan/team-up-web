@@ -105,7 +105,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 		
 					div.legends-agenda(ng-show='timeline.config.legendarer')
 						include ../agenda/time-legends
-					#mainTimeline(ng-click='setPositionSingleClick($event)')
+					#mainTimeline(set-position-slot-form)
 				hr
 				p
 					small.pull-left

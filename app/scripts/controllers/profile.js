@@ -25,6 +25,13 @@ define(
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
+          //TODO test Compile directive
+          //$scope.click = function(arg) {
+          //  alert('Clicked ' + arg);
+          //};
+          //
+          //$scope.test = '<a ng-click="click(1)" href="#">Click me</a>';
+
           var profileResource = null;
 
             $rootScope.fixStyles();

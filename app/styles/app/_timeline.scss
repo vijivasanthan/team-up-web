@@ -1327,6 +1327,7 @@ sortable
 //  padding-right: 30px;
 //  padding-top: 10px;
   width: 100%;
+  height: 200px;
   position: absolute;
   z-index: 9999;
   background-color: #fff;
@@ -1340,6 +1341,7 @@ sortable
     //    border: 1px solid $graytu;
     background-color: $white;
     margin-bottom: 0;
+    height: 100%;
   }
 }
 
@@ -1366,6 +1368,68 @@ Order
   margin-top: 15px;
 }
 
+.ui-tooltip, .arrow-tooltip:after {
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.ui-tooltip {
+//  position: absolute;
+//  padding: 10px 20px;
+//  color: white;
+//  border-radius: 20px;
+//  font: bold 14px "Helvetica Neue", Sans-Serif;
+//  text-transform: uppercase;
+//  box-shadow: 0 0 7px black;
+//  z-index: 9999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background-color: #fff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  outline: 0;
+  padding: 15px;
+}
+.arrow-tooltip {
+  width: 70px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  bottom: -16px;
+}
+.arrow-tooltip.top {
+  top: -16px;
+  bottom: auto;
+}
+.arrow-tooltip.left {
+  left: 20%;
+}
+.arrow-tooltip:after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -20px;
+  width: 25px;
+  height: 25px;
+  box-shadow: 6px 5px 9px -9px black;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+}
+.arrow-tooltip.top:after {
+  bottom: -20px;
+  top: auto;
+
+}
+
 .time-tip {
   z-index: 100000;
   background-color: transparent;
@@ -1374,6 +1438,7 @@ Order
   width: 100%;
   height: 100%;
   text-indent: -9999px;
+  position: relative;
 }
 
 #timeline-controls {
@@ -1403,5 +1468,22 @@ Order
   .btn-primary.active {
     background-color: $orange;
   }
+}
+
+.task-planboard {
+  .timeline-event-range {
+    display: block;
+    padding: 15px;
+    font-weight: bold;
+    text-align: center;
+  }
+//  .timeline-event-content {
+//    span {
+//      display: block;
+//      padding: 15px;
+//      font-weight: bold;
+//      text-align: center;
+//    }
+//  }
 }
 

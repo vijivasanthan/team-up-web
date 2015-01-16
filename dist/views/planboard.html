@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  <section id="planboard">
+  <section id="planboard" class="task-planboard">
     <div class="page-header timeline">
       <h2 class="nullable">{{ui.task.tasks}}</h2>
       <!--include planboard/time-slot.jade-->
@@ -35,7 +35,7 @@
       </div>
     </div>
     <!--include planboard/time-slot.jade-->
-    <div ng-show="views.slot.add || views.slot.edit" class="row-fluid changeTimeSlot">
+    <div ng-show="views.slot.add || views.slot.edit" class="row-fluid time-slot-form">
       <form class="form-inline form-toggled well">
         <button ng-click="resetInlineForms()" class="close">×</button>
         <h4 ng-show="views.slot.add">{{ui.teamup.newTask}}</h4>
@@ -149,7 +149,7 @@
           <hr>
           <div id="timeline">
             <!--include planboard/time-toolbar.jade-->
-            <div id="mainTimeline"></div>
+            <div id="mainTimeline" set-position-slot-form="set-position-slot-form"></div>
           </div>
           <hr>
           <p><small class="pull-left"><span class="timeline-footer-text">{{ui.planboard.lastSyncTime}}</span><span class="timeline-footer-text">{{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="timeline-footer-text">{{ui.planboard.dataRangeStart}}</span><span class="timeline-footer-text">{{data.periods.start | nicelyDate}}</span>|<span class="timeline-footer-text">{{ui.planboard.dataRangeEnd}}</span><span class="timeline-footer-text">{{data.periods.end | nicelyDate}}</span></small></p>

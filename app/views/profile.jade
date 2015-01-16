@@ -36,6 +36,7 @@ section#profile
 				#profileTab.tab-pane(class="{{(views.profile==true) && 'active'}}")
 					.tab-header
 						h3.pull-left {{data.firstName}} {{data.lastName}}
+						//div(dynamic='test') {{test}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
 							ng-click='confirmDeleteProfile()',
 							ng-hide='app.resources.role > 1 && teams.length == 0 && profile.uuid != app.resources.uuid') 

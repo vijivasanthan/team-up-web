@@ -297,6 +297,60 @@ define(
       }
     );
 
+    directives.directive(
+      'setPositionSlotForm',
+      function($window)
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            element.bind(
+              'mouseup',
+              function(ev)
+              {
+                var footer = angular.element('#footer').height(),
+                  form = angular.element('.time-slot-form'),
+                  modal = form.height(),
+                  slot = 105,
+                  currentScreen = $window.innerHeight,
+                  minNeededHeight = (modal + slot),
+                  clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+                  heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
+                  position = (minNeededHeight > ev.clientY)
+                    ? clickY
+                    : (clickY - minNeededHeight);
+
+                //TODO FIx position bottom
+                //The height needed for the modal is less then the height in the current view
+                form.css('top', position + 'px');
+              }
+            );
+          }
+        };
+      }
+    );
+
+    directives.directive(
+      'dynamic',
+      function($compile)
+      {
+        return {
+          restrict: 'A',
+          replace: true,
+          link: function (scope, ele, attrs)
+          {
+            console.log('ele', ele);
+            scope.$watch(attrs.dynamic, function(html)
+            {
+              ele.html(html);
+              $compile(ele.contents())(scope);
+            });
+          }
+        };
+      }
+    );
+
     //directives.directive(
     //  'scroll',
     //  function($window)
@@ -304,7 +358,6 @@ define(
     //    return function(scope, element, attrs) {
     //      angular.element($window).bind("scroll", function()
     //      {
-    //        //TODO check if there is a collision between slot and form
     //        //scope.currentScroll(this.pageYOffset);
     //        //scope.$apply();
     //      });

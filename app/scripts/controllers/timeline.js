@@ -112,9 +112,6 @@ define(
               links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
               links.events.addListener($scope.self.timeline, 'add', this.onAdd);
               links.events.addListener($scope.self.timeline, 'delete', this.onRemove);
-
-              //links.events.addListener($scope.self.timeline, 'delete', this.onRemove);
-
               links.events.addListener($scope.self.timeline, 'change', this.onChange);
               links.events.addListener($scope.self.timeline, 'select', this.onSelect);
 
@@ -587,8 +584,7 @@ define(
             }
             else
             {
-              //			$scope.resetInlineForms();
-              // console.log('click the timeline , but not a slot');
+              $scope.resetViews();
             }
           };
 

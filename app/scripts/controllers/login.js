@@ -206,7 +206,6 @@ define(
           {
             TeamUp._('teamMemberFree').then(
               function (result) {
-                console.log('result', 123);
                 Store('app').save('members', result)
               }
             );

@@ -508,8 +508,6 @@ define(['services/services', 'config'],
                 return 0;
               });
 
-              console.log('data.members LEEG', members);
-
               _.each(data.members, function (member)
                 {
                   var link = _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
@@ -519,8 +517,9 @@ define(['services/services', 'config'],
                   members[member.id] +
                   '</a>';
 
-                  link += '<a title="' + $rootScope.ui.agenda.editTimeline + members[member.id] + '"';
-                  link +=  'class="edit-timeline-icon" href="' + '#/team-telefoon/agenda/' + member.id + '"'
+                  link += '<a class="edit-timeline-icon" title="'
+                    + $rootScope.ui.agenda.editTimeline + members[member.id] + '"';
+                  link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"'
                   link += '><i class="icon-edit"></a>';
 
                   _.each(member.data, function (slot)

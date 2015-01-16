@@ -17,7 +17,7 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-click='deleteTasksByRange(removeTaskOptions)')
 						| {{ui.teamup.confirms.remove}}
 	
-	section#planboard
+	section#planboard.task-planboard
 	
 		.page-header.timeline
 			h2.nullable {{ui.task.tasks}}
@@ -51,7 +51,7 @@ div(ng-controller='timeline as taskPlanboard')
 						span {{timeline | rangeInfoFilter}}
 	
 		//include planboard/time-slot.jade
-		.row-fluid(ng-show='views.slot.add || views.slot.edit').changeTimeSlot
+		.row-fluid.time-slot-form(ng-show='views.slot.add || views.slot.edit')
 	
 			form.form-inline.form-toggled.well
 			
@@ -266,7 +266,7 @@ div(ng-controller='timeline as taskPlanboard')
 					hr
 					#timeline
 						//include planboard/time-toolbar.jade
-						#mainTimeline
+						#mainTimeline(set-position-slot-form)
 					hr
 					p
 						small.pull-left

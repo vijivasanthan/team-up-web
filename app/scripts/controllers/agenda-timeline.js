@@ -193,8 +193,20 @@ define(
                   }, timeout);
               }
 
-              // $('.time-tip').tooltip();
-
+              angular.element('.time-tip').tooltip({
+                position: {
+                  my: 'center bottom',
+                  at: 'center top-10',
+                  using: function(position, feedback) {
+                    angular.element(this).css(position);
+                    angular.element("<div>")
+                      .addClass( "arrow-tooltip" )
+                      .addClass(feedback.vertical)
+                      .addClass(feedback.horizontal)
+                      .appendTo(this);
+                  }
+                }
+              });
               $scope.self.timeline.setVisibleChartRange($scope.timeline.options.start, $scope.timeline.options.end);
             },
 
@@ -936,60 +948,37 @@ define(
            * set the form near the added or editable slot
            * @param ev event
            */
-          var setPositionSlotForm = function(ev)
-          {
-            var footer = angular.element('#footer').height(),
-              modal = 160,
-              slot = 100,
-              clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
-              currentScreen = $window.innerHeight,
-              minNeededHeight = (modal + slot),
-              heightToBottom = ($window.outerHeight - clickY) + minNeededHeight;
-            //$scope.clientY = ev.clientY;
-
-            //TODO FIx position bottom
-            //The height needed for the modal is less then the height in the current view
-            var position = (minNeededHeight > ev.clientY)
-              ? clickY
-              : (clickY - minNeededHeight);
-
-            angular.element('.time-slot-form').css({
-              top: position + 'px'
-            });
-          };
-
-          /**
-           * Change current height of slotform on scrollbar height
-           * @param scrollTopHeight
-           */
-          //$scope.currentScroll = function(scrollTopHeight)
+          //var setPositionSlotForm = function(ev)
           //{
+          //  var footer = angular.element('#footer').height(),
+          //    form = angular.element('.time-slot-form'),
+          //    modal = form.height(),
+          //    slot = 100,
+          //    clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+          //    currentScreen = $window.innerHeight,
+          //    minNeededHeight = (modal + slot),
+          //    heightToBottom = ($window.outerHeight - clickY) + minNeededHeight;
+          //  //$scope.clientY = ev.clientY;
           //
-          //  if($scope.views.slot.add == true ||
-          //    $scope.views.slot.edit == true ||
-          //    $scope.views.member == true ||
-          //    $scope.views.group == true ||
-          //    $scope.views.wish == true)
-          //  {
-          //    var timeSlotForm = angular.element('.time-slot-form'),
-          //      minNeededHeight = (160 + 100),
-          //      position = ($scope.clientY + scrollTopHeight);
-          //    position = (minNeededHeight > position)
-          //      ? position
-          //      : (position - minNeededHeight);
+          //  //TODO FIx position bottom
+          //  //The height needed for the modal is less then the height in the current view
+          //  var position = (minNeededHeight > ev.clientY)
+          //    ? clickY
+          //    : (clickY - minNeededHeight);
           //
-          //    timeSlotForm.css('top', position + 'px');
-          //  }
+          //  angular.element('.time-slot-form').css({
+          //    top: position + 'px'
+          //  });
           //};
 
           /**
            * Event by editing a slot
            * @param event
            */
-          $scope.setPositionSingleClick = function(event)
-          {
-            setPositionSlotForm(event);
-          };
+          //$scope.setPositionSingleClick = function(event)
+          //{
+          //  setPositionSlotForm(event);
+          //};
 
           var hideSlotForm = function()
           {
