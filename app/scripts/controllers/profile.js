@@ -243,6 +243,8 @@ define(
               return;
             }
 
+            console.log('resources', resources);
+
             //add pincode to profile resource
             profileResource.pincode = resources.pincode;
 
@@ -250,7 +252,11 @@ define(
             delete resources.fullName;
             //delete resources.pincode
             delete resources.pincode;
-
+            //oldpass
+            if(!_.isUndefined(resources.oldpass))
+            {
+              delete resources.oldpass;
+            }
             //save profileresource
             Profile.save($route.current.params.userId, profileResource)
               .then(
