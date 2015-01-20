@@ -741,33 +741,17 @@ div.timeline-event.wishes-even {
 //}
 //
 
-//
-//div.timeline-event.wishes-more {
-//  margin: 0;
-//  background-color: #648ea0;
-//  // background-color: #486877;
-//  /*border:1px solid #486877;*/
-//  /*border-bottom: 10px solid #486877;*/
-//  /*text-indent: -9999px;*/
-//  text-align: center;
-//
-//  &:hover {
-//    background-color: lighten(#648ea0, 10%);
-//  }
-//}
+//$wishMax: 15;
+//$step: 3;
 
-//@function set-wishes-background-color($amount) {
-//  darken(#a4cee0, #{$amount});
-//}
-
-$wishMax: 15;
-$step: 3;
+$wishMax: 10;
+$step: 7;
 
 @for $i from 1 through $wishMax{
   div.timeline-event.wishes-#{$i} {
     background-color: darken(#b1dbed, ($step * $i));
     &:hover {
-      background-color: darken(#b1dbed, (($step * $i) - $step));
+      background-color: darken(#b1dbed, (($step * $i) - 2));//- $step))
     }
   }
 }

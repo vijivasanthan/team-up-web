@@ -91,9 +91,6 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 			disabled='disabled',
 			ng-options='option as value for (option, value) in states',
 			ng-show='views.member')
-		.form-elements-group.rightest(ng-show='views.slot.add')
-			label {{ui.agenda.reoccuring}}
-			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.group')
 			small
 				i(ng-show="(slot.diff < 0)") {{slot.diff | i18n_spec:'planboard.lessPeople'}}
@@ -104,6 +101,9 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 			input.input-mini(name='wish-count',
 			type='text',
 			ng-model='slot.wish')
+		.form-elements-group.rightest(ng-show='views.slot.add || views.wish')
+			label {{ui.agenda.reoccuring}}
+			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.member')
 			small: i {{ui.agenda.combine_reoccuring}}
 		.form-elements-actions.pull-right

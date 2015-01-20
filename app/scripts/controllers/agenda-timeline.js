@@ -1631,6 +1631,7 @@ define(
           */
           $scope.wisher = function (slot)
           {
+            console.log('slot', slot);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
             Slots.setWish(
@@ -1642,7 +1643,7 @@ define(
                 end: ($rootScope.browser.mobile) ?
                 new Date(slot.end.datetime).getTime() / 1000 :
                   Dater.convert.absolute(slot.end.date, slot.end.time, true),
-                recursive: false,
+                recursive: (! _.isUndefined(slot.recursive)) ? true : false,
                 wish: slot.wish
               })
               .then(

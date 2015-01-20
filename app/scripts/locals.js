@@ -71,7 +71,7 @@ define(
           till: 'Tot',
           state: 'Status',
           selectAState: 'Selecteer een status',
-          reoccuring: 'Re-occuring',
+          reoccuring: 'Herhaling',
           lessPeople: 'Er zijn $v mensen te weinig als nodig.',
           samePeople: 'Er zijn net zoveel mensen als nodig.',
           morePeople: 'Er zijn $v mensen meer als nodig.',
