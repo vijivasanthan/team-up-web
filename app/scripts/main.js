@@ -4,15 +4,39 @@ if (window.location.port == '8080')
 {
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
+ 
+
+require.config({
+    paths: {
+      jquery: '../vendors/jquery/dist/jquery.min',
+      localConfig: 'localConfig',
+    },
+    shim: {
+      localConfig: {deps: ['jquery'], exports: 'localConfig' },
+    }
+});
+
+requirejs([
+    'jquery',
+    'localConfig',
+  ], function ($, localConfig)
+  {
+    'use strict';
+
+    var wantedProfile = localConfig.defaultProfile;
+    var urlHostName = window.location.host;
+    if(urlHostName.indexOf('teamtelefoon') > -1)
+      wantedProfile = 'teamtelefoon';
+    else if(urlHostName.indexOf('teamup') > -1)
+      wantedProfile = 'teamup';
 
 require.config(
   {
     waitSeconds: 100,
     paths: {
-      profile: 'profiles/dev/profile',
+      profile: 'profiles/' + wantedProfile + '/profile',
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
-      jquery: '../vendors/jquery/dist/jquery.min',
       plugins: 'plugins',
       domReady: '../vendors/requirejs-domready/domReady',
 
@@ -75,7 +99,7 @@ require.config(
     },
     shim: {
       profile: {deps: ['jquery'], exports: 'profile' },
-      config: {deps: ['profile'], exports: 'config' },
+      config: {deps: ['profile', 'localConfig'], exports: 'config' },
       date: { deps: [], exports: 'date' },
       plugins: { deps: ['jquery'], exports: 'plugins' },
       angular: { deps: ['jquery'], exports: 'angular' },
@@ -135,7 +159,6 @@ require(
     'angular',
     'domReady',
     'date',
-    'jquery',
     'plugins',
     'angular-resource',
     'angular-route',
@@ -253,3 +276,4 @@ require(
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
+});
