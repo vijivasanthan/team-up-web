@@ -7,7 +7,7 @@ var profile = {
 
   own: true,
 
-  title: 'Test-TeamUp',
+  name: 'TeamUp',
 
   lang: 'nl',
 
@@ -33,8 +33,6 @@ var profile = {
       type: 'Niet bereikbaar'
     }
   },
-
-  host: "http://test.ask-cs.com/",
 
   states: [
     'com.ask-cs.State.Available',

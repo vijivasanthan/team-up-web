@@ -6,8 +6,9 @@ define(
       // version: '0.5.2',
       released: '@@released',
 
-      title: profile.title,
+      title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
       lang: profile.lang,
+      profileName: profile.name,
 
       statesall: profile.statesall,
 
@@ -15,7 +16,7 @@ define(
 
       namespace: "",
 
-      host: profile.host,
+      host: localConfig.host,
 
       formats: {
         date: 'dd-MM-yyyy',

@@ -7,7 +7,7 @@ var profile = {
 
   own: true,
 
-  title: 'Team-telefoon',
+  name: 'Decentrale',
 
   lang: 'nl',
 
@@ -33,8 +33,6 @@ var profile = {
       type: 'Niet bereikbaar'
     }
   },
-
-  host: "http://dev.ask-cs.com/",
 
   states: [
     'com.ask-cs.State.Available',
@@ -66,15 +64,6 @@ var profile = {
       label: 'client'
     }
   ],
-
-  tabs: {
-    tasks2: true,
-    team: true,
-    client: true,
-    manage: true,
-    teamtelefoon: true,
-    support: true
-  },
 
   p2000: {
     status: true,
