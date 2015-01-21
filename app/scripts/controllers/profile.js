@@ -35,7 +35,6 @@ define(
           var profileResource = null;
 
             $rootScope.fixStyles();
-          $rootScope.resetPhoneNumberChecker();
 
           $scope.self = this;
 
@@ -54,6 +53,7 @@ define(
           //temp userdata will be saved after pressing save
           $scope.profile = angular.copy($scope.profilemeta);
 
+          //TODO resolve this one in routing
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)
@@ -64,6 +64,8 @@ define(
                 $scope.profile.pincode = (profileResource.pincode)
                   ? profileResource.pincode
                   : '';
+                $scope.profile.phoneNumbers = profileResource.phones || [];
+                $scope.data.phoneNumbers = $scope.profile.phoneNumbers;
               }
             );
           };
@@ -157,8 +159,44 @@ define(
             }
           };
 
+          $scope.parsedPhoneNumbers = [];
+
+          /**
+           * Reset the parsed phone numbers, get rid of the old result and messages
+           * Current max 3 phone numbers
+           */
+          $scope.resetPhoneNumberCheck = function()
+          {
+            _.each([0, 1, 2],
+              function (_index)
+              {
+                $scope.parsedPhoneNumbers[_index] = {};
+              }
+            );
+          };
+
+          /**
+           * Checks the users phonenumbers
+           * @param phoneNumber
+           * @param index
+           */
+          $scope.checkPhoneNumber = function(phoneNumber, index)
+          {
+            //Checks phone number and adds message to the designatated class by index
+            $rootScope.parsePhoneNumber(phoneNumber, index);
+            //Adds the number parsed result to the specific phone number
+            $scope.parsedPhoneNumbers[index] = $rootScope.phoneNumberParsed;
+            //reset the phonenumber afterwards
+            $rootScope.resetPhoneNumberChecker();
+          };
+
           $scope.checkPincode = null;
-          // Save a profile
+
+          /**
+           * Save the profile data
+           * @param resources Profile data
+           * @returns {boolean}
+           */
           $scope.save = function (resources)
           {
             //check pincode
@@ -186,7 +224,7 @@ define(
             {
               if (!confirm($rootScope.ui.profile.roleChangePrompt))
               {
-                return;
+                return false;
               }
             }
 
@@ -207,28 +245,54 @@ define(
               if (resources.teamUuids[0] == null)
               {
                 $rootScope.notifier.error($rootScope.ui.profile.specifyTeam);
-                return;
+                return false;
               }
             }
 
             if (_.isUndefined(resources.email) || resources.email == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-              return;
+              return false;
             }
 
-            if ($rootScope.phoneNumberParsed.result == false)
+            //Check if there is atleast one phonenumber
+            if (! resources.phoneNumbers[0])
             {
-              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-
-              return;
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValidOnSubmit);
+              return false;
             }
-            else if ($rootScope.phoneNumberParsed.result == true)
+
+            var valid = true;
+
+            _.each(resources.phoneNumbers,
+              function (phone, _index)
+              {
+                if(! _.isEmpty(phone) && ! _.isUndefined(phone)
+                  && ! _.isUndefined($scope.parsedPhoneNumbers[_index])
+                  && $scope.parsedPhoneNumbers[_index].result == true)
+                {
+                  resources.phoneNumbers[_index] = $scope.parsedPhoneNumbers[_index].format;
+                }
+                else if(! _.isEmpty(phone) && ! _.isUndefined(phone)
+                  && ! _.isUndefined($scope.parsedPhoneNumbers[_index])
+                  && $scope.parsedPhoneNumbers[_index].result == false)
+                {
+                  valid = false;
+                }
+              }
+            );
+
+            if(! valid)
             {
-              resources.phone = $rootScope.phoneNumberParsed.format;
+              $rootScope.notifier.error($rootScope.ui.validation.phone.multipleNotvalid);
+              return false;
             }
-
-            $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
+            else
+            {
+              //After validation remove undefined from array
+              resources.phoneNumbers = _.without(resources.phoneNumbers, undefined);
+              $scope.resetPhoneNumberCheck();
+            }
 
             // deal with birthday
             try
@@ -237,19 +301,28 @@ define(
             }
             catch (error)
             {
-              console.log(error);
               $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
 
-              return;
+              return false;
             }
 
-            console.log('resources', resources);
+            $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
+            console.log('resources.phoneNumbers', resources.phoneNumbers);
+            //zet de phonenumbers om
+            profileResource.phones = resources.phoneNumbers;
 
-            //add pincode to profile resource
+            //add first phonenumber to user object
+            resources.phone = resources.phoneNumbers[0];
+
+            //add pincode to profile resource local
             profileResource.pincode = resources.pincode;
+
+            //delete resources phonenumbers
+            delete resources.phoneNumbers;
 
             delete resources.birthday;
             delete resources.fullName;
+
             //delete resources.pincode
             delete resources.pincode;
             //oldpass
@@ -277,6 +350,8 @@ define(
 
           var saveProfile = function(resources)
           {
+            console.log('resources', resources);
+
             TeamUp._(
               'profileSave',
               {
@@ -322,16 +397,19 @@ define(
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
-                        $rootScope.resetPhoneNumberChecker();
 
                         $scope.data = data;
                         $scope.data.birthDate = formatDate($scope.data.birthDate);
 
-                        $scope.profile = angular.copy($scope.data);
+                        //TODO Waarom wordt deze opnieuw opgehaald Local data?
                         getProfileResource(
                           $route.current.params.userId,
                           ($route.current.params.userId == $rootScope.app.resources.uuid)
                         );
+
+                        $scope.data.phoneNumbers = profileResource.phones;
+
+                        $scope.profile = angular.copy($scope.data);
 
                         $rootScope.statusBar.off();
                         $scope.setViewTo('profile');

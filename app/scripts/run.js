@@ -605,10 +605,14 @@ define(
 
           $rootScope.resetPhoneNumberChecker();
 
-          $rootScope.parsePhoneNumber = function (checked)
+          $rootScope.parsePhoneNumber = function (checked, index)
           {
             if (checked != '')
             {
+              var className = (!_.isUndefined(index))
+                ? '.inputPhoneNumber' + index
+                : '.inputPhoneNumber';
+
               if (checked && checked.length > 0)
               {
                 var result, all;
@@ -681,7 +685,8 @@ define(
                             format: result.formatting.e164
                           };
 
-                          angular.element('.inputPhoneNumber')
+                          console.log('className', className);
+                          angular.element(className)
                             .val(result.formatting.e164)
                             .removeClass('error');
                         }
@@ -698,7 +703,7 @@ define(
 
                 delete $rootScope.phoneNumberParsed.message;
 
-                angular.element('.inputPhoneNumber')
+                angular.element(className)
                   .removeClass('error');
               }
             }

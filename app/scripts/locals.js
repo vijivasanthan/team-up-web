@@ -213,7 +213,7 @@ define(
           timeslotDeleted: 'Tijdslot succesvol verwijderd.',
           refreshTimeline: 'Tijdlijn vernieuwen...',
           preCompilingStortageMessage: 'Opstellen tekortbericht',
-          weeklyPlanning: 'Wekelijkse planning',
+          weeklyPlanning: 'Mijn wekelijkse planning',
           weeklyPlanningOf: 'Wekelijkse planning van ',
           planning: 'Mijn planning',
           planningOf: 'Planning van ',
@@ -665,9 +665,10 @@ define(
             invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
             tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
             tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
-            notValidOnSubmit: 'Vul alstublieft een geldig telefoonnummer in om op te slaan.',
+            notValidOnSubmit: 'Vul alstublieft minimaal een geldig telefoonnummer in om op te slaan.',
             message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
-            as: ' als '
+            as: ' als ',
+            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!'
           },
           password: {
             amountMinChars: function(chars)

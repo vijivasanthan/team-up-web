@@ -3,3 +3,46 @@
   text-align: center;
 }
 
+.phones {
+  width: 165px;
+  .label-inverse {
+    float: left;
+    background-color: #f5a962;
+    margin-bottom: 3px;
+  }
+  .phone-description {
+    float: right;
+  }
+}
+
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+  margin-left: -2px;
+}
+
+#editTab .input-group-btn {
+  width: 220px;
+  .btn {
+    &:hover, &:active, &:visited, &:focus {
+      z-index: 0;
+    }
+  }
+}
+
+.input-buttons {
+  border-radius: 4px;
+  line-height: 22px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: $white;
+}
+
+.add-button {
+  background-color: $turq !important;
+}
+
+.remove-button {
+  background-color: $red !important;
+}
+
+
+

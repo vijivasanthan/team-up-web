@@ -60,14 +60,14 @@
       <select ng-model="slot.state" ng-options="option as value for (option, value) in states" ng-change="modifySlot(slot)" ng-show="views.slot.add || views.slot.edit" class="form-control"></select>
       <select ng-model="slot.state" disabled="disabled" ng-options="option as value for (option, value) in states" ng-show="views.member" class="form-control"></select>
     </div>
-    <div ng-show="views.slot.add" class="form-elements-group rightest">
-      <label>{{ui.agenda.reoccuring}}</label>
-      <input type="checkbox" ng-model="slot.recursive">
-    </div>
     <div ng-show="views.group" class="form-elements-group"><small><i ng-show="(slot.diff &lt; 0)">{{slot.diff | i18n_spec:'planboard.lessPeople'}}</i><i ng-show="(slot.diff == 0)">{{ui.agenda.samePeople}}</i><i ng-show="(slot.diff &gt; 0)">{{slot.diff | i18n_spec:'planboard.morePeople'}}</i></small></div>
     <div ng-show="views.wish" class="form-elements-group">
       <label>{{ui.agenda.wished}}</label>
       <input name="wish-count" type="text" ng-model="slot.wish" class="input-mini">
+    </div>
+    <div ng-show="views.slot.add || views.wish" class="form-elements-group rightest">
+      <label>{{ui.agenda.reoccuring}}</label>
+      <input type="checkbox" ng-model="slot.recursive">
     </div>
     <div ng-show="views.member" class="form-elements-group"><small><i>{{ui.agenda.combine_reoccuring}}</i></small></div>
     <div class="form-elements-actions pull-right">

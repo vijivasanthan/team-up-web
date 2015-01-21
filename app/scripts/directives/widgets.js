@@ -338,14 +338,60 @@ define(
         return {
           restrict: 'A',
           replace: true,
-          link: function (scope, ele, attrs)
+          link: function (scope, element, attrs)
           {
-            console.log('ele', ele);
+            console.log('element', element);
             scope.$watch(attrs.dynamic, function(html)
             {
-              ele.html(html);
-              $compile(ele.contents())(scope);
+              element.html(html);
+              $compile(element.contents())(scope);
             });
+          }
+        };
+      }
+    );
+
+    directives.directive(
+      'inputRuleToggle',
+      function()
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            var index = attrs.inputRuleToggle,
+              parentFormGroup = element
+                                    .parents('.form-group');
+
+            element.bind('click',
+              function()
+              {
+                if(element.hasClass('add-button'))
+                {
+                  parentFormGroup.next()
+                    .removeClass('ng-hide');
+                }
+                else
+                {
+                  //empty input value
+                  parentFormGroup
+                    .addClass('ng-hide')
+                    .find('input')
+                    .val('');
+                  //empty error message
+                  parentFormGroup
+                    .find('.text-danger small i')
+                    .text('');
+
+                  //empty model scope value
+                  if(scope.profile.phoneNumbers[index])
+                  {
+                    scope.profile.phoneNumbers.splice(index, 1);
+                    scope.parsedPhoneNumbers[index] = {};
+                  }
+                }
+              }
+            );
           }
         };
       }

@@ -61,7 +61,9 @@ section#profile
 								dt E-mail
 								dd {{data.email }}
 								dt {{ui.profile.phone}}
-								dd {{data.phone}}
+								dd(class='phones', ng-repeat='phone in data.phoneNumbers') 
+									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  
+									span(class='phone-description') {{phone}}
 								//dt {{ui.teamup.func}}
 								//dd {{data.function|translateFunc}}
 								dt {{ui.profile.birthday}}
@@ -129,22 +131,84 @@ section#profile
 										i
 										| {{ ui.validation.email.notValid }}
 									
-						.form-group(ng-class="{ 'has-error' : profileForm.phone.$invalid && !profileForm.phone.$pristine }")
-							label.control-label {{ui.profile.phone}}
+						//.form-group(ng-class="{ 'has-error' : profileForm.phone.$invalid && !profileForm.phone.$pristine }")
+						//	label.control-label {{ui.profile.phone}}
+						//	.controls
+						//		input.span3.form-control.inputPhoneNumber(type='text',
+						//		name='phone',
+						//		ng-model='profile.phone',
+						//		required,
+						//		ng-change='parsePhoneNumber(profile.phone)',
+						//		value='{{data.phone}}')
+						//		p.text-danger(ng-hide='phoneNumberParsed.result')
+						//			small
+						//				i {{phoneNumberParsed.message}}
+						//		p.text-success(ng-show='phoneNumberParsed.result')
+						//			small
+						//				i {{phoneNumberParsed.message}}
+							
+						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
+							label.control-label {{ui.profile.phone}} standaard
 							.controls
-								input.span3.form-control.inputPhoneNumber(type='text',
-								name='phone',
-								ng-model='profile.phone',
-								required,
-								ng-change='parsePhoneNumber(profile.phone)',
-								value='{{data.phone}}')
-								p.text-danger(ng-hide='phoneNumberParsed.result')
+								.input-group
+									input.form-control.inputPhoneNumber0(type='text',
+									name='phone0',
+									ng-model='profile.phoneNumbers[0]',
+									required,
+									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0)',
+									value='{{data.phoneNumbers[0]}}')
+									span(class="input-group-btn")
+										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
+											i(class="glyphicon glyphicon-white glyphicon-plus")
+								p.text-danger(ng-hide='parsedPhoneNumbers[0].result')
 									small
-										i {{phoneNumberParsed.message}}
-								p.text-success(ng-show='phoneNumberParsed.result')
+										i {{parsedPhoneNumbers[0].message}}
+								p.text-success(ng-show='parsedPhoneNumbers[0].result')
 									small
-										i {{phoneNumberParsed.message}}
-
+										i {{parsedPhoneNumbers[0].message}}
+										
+						.form-group(ng-show='profile.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
+							label.control-label {{ui.profile.phone}} extra
+							.controls
+								.input-group
+									input.form-control.inputPhoneNumber1(type='text',
+										name='phone1',
+										ng-model='profile.phoneNumbers[1]',
+										required,
+										ng-change='checkPhoneNumber(profile.phoneNumbers[1], 1)',
+										value='{{data.phoneNumbers[1]}}')
+									span(class="input-group-btn")
+										button(input-rule-toggle='1' class="btn btn-default input-buttons remove-button" type="button")
+											i(class="glyphicon glyphicon-white glyphicon-remove")
+										button(input-rule-toggle='1' class="btn btn-default input-buttons add-button" type="button")
+											i(class="glyphicon glyphicon-white glyphicon-plus")
+								p.text-danger(ng-hide='parsedPhoneNumbers[1].result')
+									small
+										i {{parsedPhoneNumbers[1].message}}
+								p.text-success(ng-show='parsedPhoneNumbers[1].result')
+									small
+										i {{parsedPhoneNumbers[1].message}}
+										
+						.form-group(ng-show='profile.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
+							label.control-label {{ui.profile.phone}} extra
+							.controls
+								.input-group
+									input.form-control.inputPhoneNumber2(type='text',
+									name='phone2',
+									ng-model='profile.phoneNumbers[2]',
+									required,
+									ng-change='checkPhoneNumber(profile.phoneNumbers[2], 2)',
+									value='{{data.phoneNumbers[2]}}')
+									span(class="input-group-btn")
+										button(input-rule-toggle='2' class="btn btn-default input-buttons remove-button" type="button")
+											i(class="glyphicon glyphicon-white glyphicon-remove")
+								p.text-danger(ng-hide='parsedPhoneNumbers[2].result')
+									small
+										i {{parsedPhoneNumbers[2].message}}
+								p.text-success(ng-show='parsedPhoneNumbers[2].result')
+									small
+										i {{parsedPhoneNumbers[2].message}}
+										
 						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
 							ng-show='(app.resources.role == 1) || (profile.uuid == app.resources.uuid)')
 							label.control-label {{ui.profile.pincode}}
