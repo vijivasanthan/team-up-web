@@ -119,6 +119,12 @@ define(
             );
           };
 
+          $scope.$watch(function() {
+            return $scope.profile.pincode;
+          }, function() {
+            $scope.pincodeExists();
+          });
+
           var CHECK_PINCODE_DELAY = 250;
 
           $scope.pincodeExistsValidation = true;
@@ -192,6 +198,25 @@ define(
 
           $scope.checkPincode = null;
 
+          $scope.teamMemberCodeConfirmed = function()
+          {
+            angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('hide');
+            $scope.profile.TeamMemberCodeAsPhone = true;
+            $scope.save($scope.profile);
+          }
+
+          /**
+           * If the user don't have a teamlidcode the last four digits will be the teamlidcode
+           * @param phone
+           */
+          $scope.setTeamMemberCodeAsPhone = function(phone)
+          {
+            if(phone && phone.length >= 12 && profileResource.pincode != $scope.profile.pincode)
+            {
+              $scope.profile.pincode = phone.substr(phone.length - 4)
+            }
+          };
+
           /**
            * Save the profile data
            * @param resources Profile data
@@ -199,23 +224,29 @@ define(
            */
           $scope.save = function (resources)
           {
-            //check pincode
-            if (!angular.isDefined($scope.profile.pincode) ||
-              $scope.profile.pincode == '' || !$scope.pincodeExistsValidation)
+            //Check if there is atleast one phonenumber
+            if (! resources.phoneNumbers[0])
             {
-              $rootScope.notifier.error($rootScope.ui.profile.pincodeCorrect);
-
-              $rootScope.statusBar.off();
-
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValidOnSubmit);
               return false;
             }
 
-            if (!$scope.pincodeExistsValidation)
+            if (! $scope.pincodeExistsValidation)
             {
-              $rootScope.notifier.error($rootScope.ui.profile.pincodeInUse);
+              $rootScope.notifier.error($rootScope.ui.profile.pincodeNotValid);
+              return false;
+            }
 
-              $rootScope.statusBar.off();
-
+            //If the last 4 digits of the phonenumber are equal with the teammember code, the user has to confirm
+            if (resources.pincode == resources.phoneNumbers[0].substr(resources.phoneNumbers[0].length - 4)
+                && ! resources.TeamMemberCodeAsPhone)
+            {
+              $timeout(
+                function ()
+                {
+                  angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('show');
+                }
+              );
               return false;
             }
 
@@ -252,13 +283,6 @@ define(
             if (_.isUndefined(resources.email) || resources.email == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-              return false;
-            }
-
-            //Check if there is atleast one phonenumber
-            if (! resources.phoneNumbers[0])
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.phone.notValidOnSubmit);
               return false;
             }
 
@@ -307,7 +331,6 @@ define(
             }
 
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
-            console.log('resources.phoneNumbers', resources.phoneNumbers);
             //zet de phonenumbers om
             profileResource.phones = resources.phoneNumbers;
 
@@ -322,6 +345,7 @@ define(
 
             delete resources.birthday;
             delete resources.fullName;
+            delete resources.TeamMemberCodeAsPhone;
 
             //delete resources.pincode
             delete resources.pincode;
@@ -350,8 +374,6 @@ define(
 
           var saveProfile = function(resources)
           {
-            console.log('resources', resources);
-
             TeamUp._(
               'profileSave',
               {

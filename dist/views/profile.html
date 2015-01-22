@@ -13,6 +13,21 @@
     </div>
   </div>
 </div>
+<div id="confirmTeamMemberCodeAsPhoneModal" tabindex="-1" role="dialog" aria-labelledby="confirmTeamMemberCodeAsPhone" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 id="confirmTeamMemberCodeAsPhone" class="modal-title">{{ui.teamup.confirms.addTeamMemberCodeAsPhoneTitle}}</h4>
+      </div>
+      <div class="modal-body">{{ui.teamup.confirms.addTeamMemberCodeAsPhone}}</div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default non-capitalize">{{ui.teamup.confirms.no}}</button>
+        <button type="button" ng-click="teamMemberCodeConfirmed()" class="btn btn-primary non-capitalize">{{ui.teamup.confirms.yes}}</button>
+      </div>
+    </div>
+  </div>
+</div>
 <section id="profile">
   <div class="page-header">
     <h2>{{data.name}}</h2>
@@ -95,30 +110,15 @@
                 <input type="email" name="email" required="required" ng-model="profile.email" class="span3 form-control"><span ng-show="profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine" class="help-block"><small ng-show="profileForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
               </div>
             </div>
-            <!--.form-group(ng-class="{ 'has-error' : profileForm.phone.$invalid && !profileForm.phone.$pristine }")-->
-            <!--	label.control-label {{ui.profile.phone}}-->
-            <!--	.controls-->
-            <!--		input.span3.form-control.inputPhoneNumber(type='text',-->
-            <!--		name='phone',-->
-            <!--		ng-model='profile.phone',-->
-            <!--		required,-->
-            <!--		ng-change='parsePhoneNumber(profile.phone)',-->
-            <!--		value='{{data.phone}}')-->
-            <!--		p.text-danger(ng-hide='phoneNumberParsed.result')-->
-            <!--			small-->
-            <!--				i {{phoneNumberParsed.message}}-->
-            <!--		p.text-success(ng-show='phoneNumberParsed.result')-->
-            <!--			small-->
-            <!--				i {{phoneNumberParsed.message}}-->
             <div ng-class="{ 'has-error' : profileForm.phone0.$invalid &amp;&amp; !profileForm.phone0.$pristine }" class="form-group">
               <label class="control-label">{{ui.profile.phone}} standaard</label>
               <div class="controls">
                 <div class="input-group">
-                  <input type="text" name="phone0" ng-model="profile.phoneNumbers[0]" required="required" ng-change="checkPhoneNumber(profile.phoneNumbers[0], 0)" value="{{data.phoneNumbers[0]}}" class="form-control inputPhoneNumber0"><span class="input-group-btn">
+                  <input type="text" name="phone0" ng-model="profile.phoneNumbers[0]" required="required" ng-change="checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(profile.phoneNumbers[0])" value="{{data.phoneNumbers[0]}}" class="form-control inputPhoneNumber0"><span class="input-group-btn">
                     <button input-rule-toggle="0" type="button" class="btn btn-default input-buttons add-button"><i class="glyphicon glyphicon-white glyphicon-plus"></i></button></span>
                 </div>
                 <p ng-hide="parsedPhoneNumbers[0].result" class="text-danger"><small><i>{{parsedPhoneNumbers[0].message}}</i></small></p>
-                <p ng-show="parsedPhoneNumbers[0].result" class="text-success"><small><i>{{parsedPhoneNumbers[0].message}}</i></small></p>
+                <p ng-show="parsedPhoneNumbers[0].result" class="text-success"><small><i>{{parsedPhoneNumbers[0].message}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfoPhone}}</i></small></span>
               </div>
             </div>
             <div ng-show="profile.phoneNumbers[1]" ng-class="{ 'has-error' : profileForm.phone1.$invalid &amp;&amp; !profileForm.phone1.$pristine }" class="form-group">

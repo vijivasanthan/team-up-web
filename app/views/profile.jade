@@ -16,6 +16,25 @@ aria-hidden='true')
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
 				ng-click='deleteProfile()') {{ui.teamup.confirms.remove}}
+				
+#confirmTeamMemberCodeAsPhoneModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmTeamMemberCodeAsPhone',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmTeamMemberCodeAsPhone.modal-title {{ui.teamup.confirms.addTeamMemberCodeAsPhoneTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.addTeamMemberCodeAsPhone}}
+			.modal-footer
+				button.btn.btn-default.non-capitalize(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.no}}
+				button.btn.btn-primary.non-capitalize(type='button',
+				ng-click='teamMemberCodeConfirmed()') {{ui.teamup.confirms.yes}}
 
 section#profile
 	.page-header: h2 {{data.name}}
@@ -130,23 +149,7 @@ section#profile
 									small(ng-show="profileForm.$error.email")
 										i
 										| {{ ui.validation.email.notValid }}
-									
-						//.form-group(ng-class="{ 'has-error' : profileForm.phone.$invalid && !profileForm.phone.$pristine }")
-						//	label.control-label {{ui.profile.phone}}
-						//	.controls
-						//		input.span3.form-control.inputPhoneNumber(type='text',
-						//		name='phone',
-						//		ng-model='profile.phone',
-						//		required,
-						//		ng-change='parsePhoneNumber(profile.phone)',
-						//		value='{{data.phone}}')
-						//		p.text-danger(ng-hide='phoneNumberParsed.result')
-						//			small
-						//				i {{phoneNumberParsed.message}}
-						//		p.text-success(ng-show='phoneNumberParsed.result')
-						//			small
-						//				i {{phoneNumberParsed.message}}
-							
+	
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
 							label.control-label {{ui.profile.phone}} standaard
 							.controls
@@ -155,7 +158,7 @@ section#profile
 									name='phone0',
 									ng-model='profile.phoneNumbers[0]',
 									required,
-									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0)',
+									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(profile.phoneNumbers[0])',
 									value='{{data.phoneNumbers[0]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
@@ -166,6 +169,9 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[0].result')
 									small
 										i {{parsedPhoneNumbers[0].message}}
+								span.help-block(style='margin-top: -5px;')
+									small
+										i {{ui.profile.pincodeInfoPhone}}
 										
 						.form-group(ng-show='profile.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
 							label.control-label {{ui.profile.phone}} extra

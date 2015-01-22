@@ -685,7 +685,6 @@ define(
                             format: result.formatting.e164
                           };
 
-                          console.log('className', className);
                           angular.element(className)
                             .val(result.formatting.e164)
                             .removeClass('error');
