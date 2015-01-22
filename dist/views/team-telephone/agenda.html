@@ -164,7 +164,7 @@
         <div id="timeline">
           <!--include agenda/time-toolbar.jade-->
           <div id="timeline-toolbar">
-            <select ng-hide="app.resources.role &gt; 1" ng-model="timeline.current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="timeline.current.group" ng-change="requestTimeline()" ng-show="timeline.current.layouts.group" class="form-control pull-left"></select>
+            <select ng-hide="app.resources.role &gt; 1" ng-model="timeline.current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="timeline.current.group" ng-change="requestTimeline()" ng-show="timeline.current.layouts.group &amp;&amp; app.resources.role == 0" class="form-control pull-left"></select>
             <!--select.form-control(ng-model='timeline.current.division',-->
             <!--ng-options='division.id as division.label for division in divisions',-->
             <!--ng-selected='timeline.current.division',-->
@@ -172,9 +172,6 @@
             <!--ng-show='divisions.length > 0')-->
             <button type="button" style="margin: 3px 10px; 0 0" data-content-template="views/agenda/groups-wish.html" data-placement="bottom" bs-popover="" data-title="Behoefte wijzigen" ng-hide="app.resources.role &gt; 1" class="btn btn-primary pull-left"><span ng-show="wished" class="badge badge-inset">{{wish}}</span>&nbsp;{{ui.agenda.requiredPeople}}</button><br ng-show="browser.mobile"><br ng-show="browser.mobile">
             <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
-              <div class="btn-group">
-                <button type="button" ng-click="showLegenda()" ng-model="timeline.config.legendarer" class="btn btn-primary {{(timeline.config.legendarer==true) &amp;&amp; 'active'}}">{{ui.agenda.legenda}}</button>
-              </div>
               <div ng-show="timeline.current.layouts.group" class="btn-group">
                 <button type="button" ng-click="barCharts()" ng-model="timeline.config.bar" class="btn btn-primary {{(timeline.config.bar==true) &amp;&amp; 'active'}}">{{ui.agenda.barCharts}}</button>
               </div>
@@ -206,14 +203,14 @@
             <button type="button" ng-click="disableInfoAvailibility()" data-dismiss="alert" class="close">×</button><small>De<strong><i> bereikbaarheid kan gewijzigd worden</i></strong> door te
               dubbelklikken op reeds bestaande blokken of <strong><i> door te slepen </i></strong> met uw muis. Met de linkermuisknop en de<strong> SHIFT (Mac) </strong> of <strong> CTRL (Windows) </strong> knop tegelijkertijd ingedrukt.</small>
           </div>
-          <div ng-show="timeline.config.legendarer" class="legends-agenda">
+          <div id="mainTimeline" set-position-slot-form="set-position-slot-form"></div>
+          <div class="legends-agenda">
             <div class="legenda">
-              <div class="legenda-row"><strong>{{ui.planboard.members}}</strong>
+              <div class="legenda-row"><strong>{{ui.agenda.members}}</strong>
                 <ul>
                   <li ng-repeat="(key, value) in timeline.config.states" class="legenda-{{value.className}}">
                     <label>
-                      <div class="square"></div>
-                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda[key]">{{value.label}}
+                      <div class="square"></div>{{value.label}}
                     </label>
                   </li>
                 </ul>
@@ -222,25 +219,21 @@
                 <ul>
                   <li class="legenda-more">
                     <label>
-                      <div class="square"></div>
-                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.more">{{ui.agenda.legendaLabels.morePeople}}
+                      <div class="square"></div>{{ui.agenda.legendaLabels.morePeople}}
                     </label>
                   </li>
                   <li class="legenda-even">
                     <label>
-                      <div class="square"></div>
-                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.even">{{ui.agenda.legendaLabels.enoughPeople}}
+                      <div class="square"></div>{{ui.agenda.legendaLabels.enoughPeople}}
                     </label>
                   </li>
                   <li class="legenda-less">
                     <label>
-                      <div class="square"></div>
-                      <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.less">{{ui.agenda.legendaLabels.lessPeople}}
+                      <div class="square"></div>{{ui.agenda.legendaLabels.lessPeople}}
                     </label>
                   </li>
                 </ul>
               </div>
-              <hr>
             </div>
             <!--div.legenda-->
             <!--	.legenda-row-->
@@ -267,7 +260,6 @@
             <!--					.square-->
             <!--					| {{ui.planboard.legendaLabels.lessPeople}}//-->
           </div>
-          <div id="mainTimeline" set-position-slot-form="set-position-slot-form"></div>
         </div>
         <hr>
         <p><small class="pull-left"><span class="text-warning">{{ui.agenda.lastSyncTime}}</span><span class="text-muted">&nbsp; {{data.synced | nicelyDate}}</span></small><small class="pull-right"><span class="text-warning">{{ui.agenda.dataRangeStart}}</span><span class="text-muted">{{data.periods.start | nicelyDate}}</span>&nbsp;&nbsp;| &nbsp;<span class="text-warning">{{ui.agenda.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | nicelyDate}}</span></small></p>

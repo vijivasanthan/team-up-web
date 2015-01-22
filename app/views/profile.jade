@@ -79,12 +79,11 @@ section#profile
 								dd {{data.role|translateRole}}
 								dt E-mail
 								dd {{data.email }}
-								dt {{ui.profile.phone}}
+								dt(ng-show='data.phoneNumbers.length > 0') {{ui.profile.phone}}
 								dd(class='phones', ng-repeat='phone in data.phoneNumbers') 
 									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  
 									span(class='phone-description') {{phone}}
-								//dt {{ui.teamup.func}}
-								//dd {{data.function|translateFunc}}
+								//dt {{ui.teamup.func}}                                                                                    //dd {{data.function|translateFunc}}
 								dt {{ui.profile.birthday}}
 								dd {{data.birthDate}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
@@ -141,7 +140,7 @@ section#profile
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
 							label.control-label E-mail
 							.controls
-								input.span3.form-control(type='email',
+								input.span4.form-control(type='email',
 								name='email',
 								required,
 								ng-model='profile.email')
@@ -238,13 +237,17 @@ section#profile
 						//		ng-options='f.id as f.label for f in mfuncs',
 						//		ng-selected='profile.function')
 						.form-actions
+							button.btn.btn-default.btn-color-brown(type="button", 
+								ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
 							button.btn.btn-success(type='submit',
-							ng-click='save(profile)') {{ui.profile.saveProfile}}
+								ng-click='save(profile)') {{ui.profile.saveProfile}}
 
 				#editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
+						button.btn.btn-info.pull-right(type="button",
+							ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
 					hr
 					div.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}')
 					#uploadImgModule
@@ -288,5 +291,7 @@ section#profile
 									input.span3(type='password',
 									ng-model='profile.newpassrepeat')
 							.form-actions
+								button.btn.btn-default.btn-color-brown(type="button",
+									ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
 								button.btn.btn-success(type='submit',
 									ng-click='savePassword(profile)') {{ui.profile.safePassword}}

@@ -8,9 +8,6 @@
     <!--ng-show='divisions.length > 0')-->
   </div><br ng-show="browser.mobile"><br ng-show="browser.mobile">
   <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
-    <div class="btn-group">
-      <button type="button" ng-click="showLegenda()" ng-model="timeline.config.legendarer" class="btn btn-primary {{(timeline.config.legendarer==true) &amp;&amp; 'active'}}">{{ui.agenda.legenda}}</button>
-    </div>
     <div ng-show="timeline.current.layouts.group" class="btn-group">
       <button type="button" ng-click="barCharts()" ng-model="timeline.config.bar" class="btn btn-primary {{(timeline.config.bar==true) &amp;&amp; 'active'}}">{{ui.agenda.barCharts}}</button>
     </div>

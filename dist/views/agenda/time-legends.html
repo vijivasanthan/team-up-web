@@ -1,10 +1,9 @@
 <div class="legenda">
-  <div class="legenda-row"><strong>{{ui.planboard.members}}</strong>
+  <div class="legenda-row"><strong>{{ui.agenda.members}}</strong>
     <ul>
       <li ng-repeat="(key, value) in timeline.config.states" class="legenda-{{value.className}}">
         <label>
-          <div class="square"></div>
-          <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda[key]">{{value.label}}
+          <div class="square"></div>{{value.label}}
         </label>
       </li>
     </ul>
@@ -13,25 +12,21 @@
     <ul>
       <li class="legenda-more">
         <label>
-          <div class="square"></div>
-          <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.more">{{ui.agenda.legendaLabels.morePeople}}
+          <div class="square"></div>{{ui.agenda.legendaLabels.morePeople}}
         </label>
       </li>
       <li class="legenda-even">
         <label>
-          <div class="square"></div>
-          <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.even">{{ui.agenda.legendaLabels.enoughPeople}}
+          <div class="square"></div>{{ui.agenda.legendaLabels.enoughPeople}}
         </label>
       </li>
       <li class="legenda-less">
         <label>
-          <div class="square"></div>
-          <input type="checkbox" ng-click="alterLegenda(timeline.config.legenda)" ng-model="timeline.config.legenda.groups.less">{{ui.agenda.legendaLabels.lessPeople}}
+          <div class="square"></div>{{ui.agenda.legendaLabels.lessPeople}}
         </label>
       </li>
     </ul>
   </div>
-  <hr>
 </div>
 <!--div.legenda-->
 <!--	.legenda-row-->

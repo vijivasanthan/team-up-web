@@ -21,7 +21,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							ng-options='group.uuid as group.name for group in groups',
 							ng-selected='timeline.current.group',
 							ng-change='requestTimeline()',
-							ng-show='timeline.current.layouts.group')
+							ng-show='timeline.current.layouts.group && app.resources.role == 0')
 						//select.form-control(ng-model='timeline.current.division',
 						//ng-options='division.id as division.label for division in divisions',
 						//ng-selected='timeline.current.division',
@@ -43,11 +43,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 						br(ng-show='browser.mobile')
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
-							.btn-group
-								button.btn.btn-primary(type='button',
-								class="{{(timeline.config.legendarer==true) && 'active'}}",
-								ng-click='showLegenda()',
-								ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}
 							.btn-group(ng-show='timeline.current.layouts.group')
 								button.btn.btn-primary(type='button',
 								class="{{(timeline.config.bar==true) && 'active'}}",
@@ -103,9 +98,9 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							strong  CTRL (Windows) 
 							|  knop tegelijkertijd ingedrukt.
 		
-					div.legends-agenda(ng-show='timeline.config.legendarer')
-						include ../agenda/time-legends
 					#mainTimeline(set-position-slot-form)
+					div.legends-agenda
+						include ../agenda/time-legends
 				hr
 				p
 					small.pull-left

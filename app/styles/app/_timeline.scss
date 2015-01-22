@@ -104,7 +104,9 @@ Timeline agenda
 .legenda {
   background-color: $white;//#f5f4ee;
   padding-top: 10px;
+  margin: 0 auto -20px;
   margin-top: -20px;
+  max-width: 600px;
 }
 
 .legenda-row {
@@ -117,7 +119,7 @@ Timeline agenda
     display: inline;
     float: left;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
-    margin-top: 5px;
+    line-height: 16px;
   }
 
   /**
@@ -385,6 +387,7 @@ div.timeline-event-content {
 //  overflow: hidden;
 //  color: $white;
 //  font-weight: 800;
+  text-align: center;
 }
 
 div.timeline-groups-axis {
@@ -1343,6 +1346,15 @@ sortable
 /*Wish*/
 .btn-primary .badge {
   color: $brown;
+}
+
+.badge-slot {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 30px;
 }
 
 /*

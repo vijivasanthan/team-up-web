@@ -863,10 +863,10 @@ define(
           /**
           * Timeline legenda toggler
           */
-          $scope.showLegenda = function ()
-          {
-            $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
-          };
+          //$scope.showLegenda = function ()
+          //{
+          //  $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
+          //};
 
 
           /**

@@ -56,10 +56,9 @@
                 <dd>{{data.role|translateRole}}</dd>
                 <dt>E-mail</dt>
                 <dd>{{data.email }}</dd>
-                <dt>{{ui.profile.phone}}</dt>
+                <dt ng-show="data.phoneNumbers.length &gt; 0">{{ui.profile.phone}}</dt>
                 <dd ng-repeat="phone in data.phoneNumbers" class="phones"><span class="label label-inverse">{{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  </span><span class="phone-description">{{phone}}</span></dd>
-                <!--dt {{ui.teamup.func}}-->
-                <!--dd {{data.function|translateFunc}}-->
+                <!--dt {{ui.teamup.func}}                                                                                    //dd {{data.function|translateFunc}}-->
                 <dt>{{ui.profile.birthday}}</dt>
                 <dd>{{data.birthDate}}</dd>
               </dl>
@@ -107,7 +106,7 @@
             <div ng-class="{ 'has-error' : profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine }" class="form-group">
               <label class="control-label">E-mail</label>
               <div class="controls">
-                <input type="email" name="email" required="required" ng-model="profile.email" class="span3 form-control"><span ng-show="profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine" class="help-block"><small ng-show="profileForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
+                <input type="email" name="email" required="required" ng-model="profile.email" class="span4 form-control"><span ng-show="profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine" class="help-block"><small ng-show="profileForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
               </div>
             </div>
             <div ng-class="{ 'has-error' : profileForm.phone0.$invalid &amp;&amp; !profileForm.phone0.$pristine }" class="form-group">
@@ -158,6 +157,7 @@
             <!--		ng-options='f.id as f.label for f in mfuncs',-->
             <!--		ng-selected='profile.function')-->
             <div class="form-actions">
+              <button type="button" ng-click="setViewTo(&quot;profile&quot;)" class="btn btn-default btn-color-brown">{{ui.teamup.confirms.cancel}}</button>
               <button type="submit" ng-click="save(profile)" class="btn btn-success">{{ui.profile.saveProfile}}</button>
             </div>
           </form>
@@ -165,6 +165,7 @@
         <div id="editImgTab" class="tab-pane {{(views.editImg==true) &amp;&amp; 'active'}}">
           <div style="overflow: hidden; height: 35px">
             <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}</h3>
+            <button type="button" ng-click="setViewTo(&quot;profile&quot;)" class="btn btn-info pull-right">{{ui.teamup.confirms.cancel}}</button>
           </div>
           <hr>
           <div back-img="{{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }}" class="roundedPicLarge"></div>
@@ -200,6 +201,7 @@
                 </div>
               </div>
               <div class="form-actions">
+                <button type="button" ng-click="setViewTo(&quot;profile&quot;)" class="btn btn-default btn-color-brown">{{ui.teamup.confirms.cancel}}</button>
                 <button type="submit" ng-click="savePassword(profile)" class="btn btn-success">{{ui.profile.safePassword}}</button>
               </div>
             </fieldset>

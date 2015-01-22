@@ -254,8 +254,8 @@ define(['services/services', 'config'],
                   maxDiff = _.max(aggData),
                   diffRangeData = (maxDiff - minDiff),
                   diffRangeDraw = (diffRangeData / 0.8), // a percentage, with a lower bound on 20%
-                  drawDataDiff = (diffRangeDraw - diffRangeData);
-
+                  drawDataDiff = (diffRangeDraw - diffRangeData),
+                  name = _this.namer(agg, privilage);
 
                 _.each(agg.data, function (slot)
                 {
@@ -324,6 +324,7 @@ define(['services/services', 'config'],
                     (slot.diff == 0 && config.legenda.groups.even) ||
                     (slot.diff < 0 && config.legenda.groups.less))
                   {
+                    console.log(_this.wrapper('c') + name);
                     timedata.push({
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),
@@ -409,7 +410,7 @@ define(['services/services', 'config'],
                         type: 'group',
                         diff: slot.diff,
                         group: name
-                      })),
+                      }))  + '<span class="badge badge-inverse badge-slot">' + slot.diff + '</span>',
                       className: 'agg-' + cn,
                       editable: false
                     });
@@ -437,7 +438,7 @@ define(['services/services', 'config'],
 
               title = (privilage == 1) ? link : '<span>' + name + '</span>';
 
-              title += ' <span class="label label-default">Behoefte (elke divisie)</span>';
+              title += ' <span class="label label-default">Behoefte</span>';
 
               _.each(data.aggs.wishes, function (wish)
                 {
@@ -462,7 +463,7 @@ define(['services/services', 'config'],
                       wish: wish.count,
                       group: title,
                       groupId: data.aggs[0].id
-                    })),
+                    })) + '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
                     className: cn,
                     editable: false
                   });

@@ -14,11 +14,6 @@ div#timeline-toolbar
 	br(ng-show='browser.mobile')
 	div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 	style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
-		.btn-group
-			button.btn.btn-primary(type='button',
-			class="{{(timeline.config.legendarer==true) && 'active'}}",
-			ng-click='showLegenda()',
-			ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}
 		.btn-group(ng-show='timeline.current.layouts.group')
 			button.btn.btn-primary(type='button',
 			class="{{(timeline.config.bar==true) && 'active'}}",
