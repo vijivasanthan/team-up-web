@@ -20,7 +20,18 @@ define(
 
             .when(
             '/logout',
-            { templateUrl: 'views/logout.html' })
+            {
+              templateUrl: 'views/logout.html',
+              resolve: {
+                data: [
+                  '$rootScope', '$route',
+                  function ($rootScope)
+                  {
+                    $rootScope.logout();
+                  }
+                ]
+              }
+            })
 
             .when(
             '/tasks',

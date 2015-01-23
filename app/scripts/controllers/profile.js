@@ -74,6 +74,11 @@ define(
 
           $scope.currentRole = $scope.profilemeta.role;
 
+          if($rootScope.browser.mobile)
+          {
+            $scope.profile.birthDate = formatDateMobile($scope.profile.birthDate)
+          }
+
           // TODO: Investigate whether they are in use!
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.namespace;
@@ -119,6 +124,9 @@ define(
             );
           };
 
+          /**
+           * Check if pincode change and validate
+           */
           $scope.$watch(function() {
             return $scope.profile.pincode;
           }, function() {
@@ -421,7 +429,17 @@ define(
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
                         $scope.data = data;
-                        $scope.data.birthDate = formatDate($scope.data.birthDate);
+
+                        //TODO get a mobile debugger
+                        if(! $rootScope.browser.mobile)
+                        {
+                          //$scope.data.birthDate = .format('DD-MM-YYYY');
+                          console.log('$scope.data.birthDate', moment($scope.data.birthDate))
+                        }
+                        else
+                        {
+                          $scope.data.birthDate = formatDate($scope.data.birthDate);
+                        }
 
                         //TODO Waarom wordt deze opnieuw opgehaald Local data?
                         getProfileResource(
@@ -478,6 +496,11 @@ define(
           function formatDate(date)
           {
             return moment(date).format('DD-MM-YYYY');
+          }
+
+          function formatDateMobile(date)
+          {
+            return moment(Dater.convert.absolute(date, 0)).format('YYYY-MM-DD');
           }
 
           $scope.editProfile = function ()

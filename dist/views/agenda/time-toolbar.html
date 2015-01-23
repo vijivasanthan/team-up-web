@@ -11,9 +11,11 @@
     <div ng-show="timeline.current.layouts.group" class="btn-group">
       <button type="button" ng-click="barCharts()" ng-model="timeline.config.bar" class="btn btn-primary {{(timeline.config.bar==true) &amp;&amp; 'active'}}">{{ui.agenda.barCharts}}</button>
     </div>
-    <div ng-show="timeline.current.layouts.group" class="btn-group">
-      <button type="button" ng-click="groupWishes()" ng-model="timeline.config.wishes" class="btn btn-primary {{(timeline.config.wishes==true) &amp;&amp; 'active'}}">{{ui.agenda.wishes}}</button>
-    </div>
+    <!--.btn-group(ng-show='timeline.current.layouts.group')-->
+    <!--	button.btn.btn-primary(type='button',-->
+    <!--	class="{{(timeline.config.wishes==true) && 'active'}}",-->
+    <!--	ng-click='groupWishes()',-->
+    <!--	ng-model='timeline.config.wishes') {{ui.agenda.wishes}}-->
     <div class="btn-group">
       <button type="button" ng-model="timeline.current.layouts.group" ng-click="requestTimeline(&quot;group&quot;)" class="btn btn-primary {{(timeline.current.layouts.group==true) &amp;&amp; 'active'}}">{{ui.agenda.group}}</button>
       <button type="button" ng-model="timeline.current.layouts.members" ng-click="requestTimeline(&quot;members&quot;)" ng-show="(app.resources.role &lt; 3) || timeline.config.layouts.members" class="btn btn-primary {{(timeline.current.layouts.members==true) &amp;&amp; 'active'}}">{{ui.agenda.members}}</button>

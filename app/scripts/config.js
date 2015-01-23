@@ -98,7 +98,7 @@ define(
             groups: true,
             members: true
           },
-          wishes: false,
+          wishes: true,
           legenda: {},
           legendarer: false,
           states: {},

@@ -1,36 +1,36 @@
 doctype html
 //if lt IE 7
-    html.no-js.lt-ie9.lt-ie8.lt-ie7
+		html.no-js.lt-ie9.lt-ie8.lt-ie7
 //if IE 7
-    html.no-js.lt-ie9.lt-ie8
+		html.no-js.lt-ie9.lt-ie8
 //if IE 8
-    html.no-js.lt-ie9
+		html.no-js.lt-ie9
 // [if gt IE 8] <!
 html.no-js(lang='en')
-  // <![endif]
-  head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
-    meta(name='description', content='TeamUp Web Application')
-    meta(name='viewport', content='width=device-width')
-    title(ng-bind="config.app.title")
-    block icons
-    // build:css({.tmp,app}) styles/main.css
-    link(rel='stylesheet', href='styles/bootstrap.css')
-    link(rel='stylesheet', href='styles/main.css')
-    // endbuild
-    // block iestuff
-    script(src="https://maps.google.com/maps/api/js?sensor=false")
-  body
-    block navbar
-    block loading
-    block notifications
-    block chat
-    block mobile-status
-    #wrap
-      .container-fluid(ng-view='')
-      #push
-    block footer
-    script(src='vendors/js-xlsx/jszip.js')
-    script(src='vendors/js-xlsx/xlsx.js')
-    script(data-main='scripts/main', src='vendors/requirejs/require.js')
+	// <![endif]
+	head
+		meta(charset='utf-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+		meta(name='description', content='TeamUp Web Application')
+		meta(name='viewport', content='width=device-width')
+		title(ng-bind="config.app.title")
+		block icons
+		// build:css({.tmp,app}) styles/main.css
+		link(rel='stylesheet', href='styles/bootstrap.css')
+		link(rel='stylesheet', href='styles/main.css')
+		// endbuild
+		// block iestuff
+		script(src="https://maps.google.com/maps/api/js?sensor=false")
+	body
+		block navbar
+		block loading
+		block notifications
+		block chat
+		block mobile-status
+		#wrap
+			.container-fluid(ng-view='')
+			#push
+		block footer
+		script(src='vendors/js-xlsx/jszip.js')
+		script(src='vendors/js-xlsx/xlsx.js')
+		script(data-main='scripts/main', src='vendors/requirejs/require.js')

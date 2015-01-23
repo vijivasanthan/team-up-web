@@ -97,10 +97,16 @@
                 <select ng-model="profile.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
               </div>
             </div>
-            <div class="form-group dater">
+            <div ng-hide="browser.mobile" class="form-group dater">
               <label class="control-label">{{ui.profile.birthday}}</label>
               <div class="controls">
                 <input name="date-start" type="text" ng-model="profile.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker"><i class="icon-calendar"></i>
+              </div>
+            </div>
+            <div ng-show="browser.mobile" class="form-elements-group">
+              <label>{{ui.profile.birthday}}</label>
+              <div class="form-group dater-mobile">
+                <input name="date-start" type="date" ng-model="profile.birthDate" class="form-control">
               </div>
             </div>
             <div ng-class="{ 'has-error' : profileForm.email.$invalid &amp;&amp; !profileForm.email.$pristine }" class="form-group">

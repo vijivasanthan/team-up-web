@@ -19,11 +19,11 @@ div#timeline-toolbar
 			class="{{(timeline.config.bar==true) && 'active'}}",
 			ng-click='barCharts()',
 			ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
-		.btn-group(ng-show='timeline.current.layouts.group')
-			button.btn.btn-primary(type='button',
-			class="{{(timeline.config.wishes==true) && 'active'}}",
-			ng-click='groupWishes()',
-			ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
+		//.btn-group(ng-show='timeline.current.layouts.group')
+		//	button.btn.btn-primary(type='button',
+		//	class="{{(timeline.config.wishes==true) && 'active'}}",
+		//	ng-click='groupWishes()',
+		//	ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
 		.btn-group
 			button.btn.btn-primary(type='button',
 			class="{{(timeline.current.layouts.group==true) && 'active'}}",

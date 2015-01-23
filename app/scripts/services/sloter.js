@@ -410,7 +410,7 @@ define(['services/services', 'config'],
                         type: 'group',
                         diff: slot.diff,
                         group: name
-                      }))  + '<span class="badge badge-inverse badge-slot">' + slot.diff + '</span>',
+                      })),
                       className: 'agg-' + cn,
                       editable: false
                     });
@@ -458,12 +458,13 @@ define(['services/services', 'config'],
                     end: Math.round(wish.end * 1000),
                     group: _this.wrapper('c') + title,
                     content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}) +
+                    '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>' +
                     _this.secret(angular.toJson({
                       type: 'wish',
                       wish: wish.count,
                       group: title,
                       groupId: data.aggs[0].id
-                    })) + '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
+                    })),
                     className: cn,
                     editable: false
                   });

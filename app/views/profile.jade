@@ -126,7 +126,7 @@ section#profile
 								select(ng-model='profile.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
-						.form-group.dater
+						.form-group.dater(ng-hide='browser.mobile')
 							label.control-label {{ui.profile.birthday}}
 							.controls
 								input(name='date-start',
@@ -137,6 +137,14 @@ section#profile
 								bs-datepicker='',
 								data-toggle='datepicker')
 								i.icon-calendar
+			
+						.form-elements-group(ng-show='browser.mobile')
+							label {{ui.profile.birthday}}
+							.form-group.dater-mobile
+								input.form-control(name='date-start',
+								type='date',
+								ng-model='profile.birthDate')
+								
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
 							label.control-label E-mail
 							.controls

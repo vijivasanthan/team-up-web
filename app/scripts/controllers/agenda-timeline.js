@@ -863,10 +863,10 @@ define(
           /**
           * Timeline legenda toggler
           */
-          //$scope.showLegenda = function ()
-          //{
-          //  $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
-          //};
+          $scope.showLegenda = function ()
+          {
+            $scope.timeline.config.legendarer = !$scope.timeline.config.legendarer;
+          };
 
 
           /**
@@ -1634,36 +1634,36 @@ define(
             console.log('slot', slot);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
-            Slots.setWish(
-              {
-                id: slot.groupId,
-                start: ($rootScope.browser.mobile) ?
-                new Date(slot.start.datetime).getTime() / 1000 :
-                  Dater.convert.absolute(slot.start.date, slot.start.time, true),
-                end: ($rootScope.browser.mobile) ?
-                new Date(slot.end.datetime).getTime() / 1000 :
-                  Dater.convert.absolute(slot.end.date, slot.end.time, true),
-                recursive: (! _.isUndefined(slot.recursive)) ? true : false,
-                wish: slot.wish
-              })
-              .then(
-              function (result)
-              {
-                $rootScope.$broadcast('resetPlanboardViews');
-
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.agenda.wisher);
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
-                }
-
-                $scope.timeliner.refresh();
-              }
-            );
+            //Slots.setWish(
+            //  {
+            //    id: slot.groupId,
+            //    start: ($rootScope.browser.mobile) ?
+            //    new Date(slot.start.datetime).getTime() / 1000 :
+            //      Dater.convert.absolute(slot.start.date, slot.start.time, true),
+            //    end: ($rootScope.browser.mobile) ?
+            //    new Date(slot.end.datetime).getTime() / 1000 :
+            //      Dater.convert.absolute(slot.end.date, slot.end.time, true),
+            //    recursive: (! isslot.recursive,
+            //    wish: slot.wish
+            //  })
+            //  .then(
+            //  function (result)
+            //  {
+            //    $rootScope.$broadcast('resetPlanboardViews');
+            //
+            //    if (result.error)
+            //    {
+            //      $rootScope.notifier.error($rootScope.ui.agenda.wisher);
+            //      console.warn('error ->', result);
+            //    }
+            //    else
+            //    {
+            //      $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
+            //    }
+            //
+            //    $scope.timeliner.refresh();
+            //  }
+            //);
           };
 
           /**
