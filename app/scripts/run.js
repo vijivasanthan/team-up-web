@@ -110,18 +110,11 @@ define(
             {
               $rootScope.notification.status = true;
 
-              if ($rootScope.browser.mobile && status == true)
-              {
-                $window.alert(message);
-              }
-              else
-              {
-                $rootScope.notification = {
-                  status: status,
-                  type: type,
-                  message: message
-                };
-              }
+              $rootScope.notification = {
+                status: status,
+                type: type,
+                message: message
+              };
             },
 
             success: function (message, permanent)

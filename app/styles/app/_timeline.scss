@@ -104,7 +104,7 @@ Timeline agenda
 .legenda {
   background-color: $white;//#f5f4ee;
   padding-top: 10px;
-  margin: 0 auto -20px;
+  margin: 0 auto 25px;
   margin-top: -20px;
   max-width: 600px;
 }
@@ -137,7 +137,7 @@ Timeline agenda
     li {
       float: left;
       margin-right: 15px;
-      border-right: 1px solid #ddd;
+      //border-right: 1px solid #ddd;
       padding-right: 15px;
       min-width: 135px;
       font-size: 11px;

@@ -25,16 +25,9 @@ define(
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
-          //TODO test Compile directive
-          //$scope.click = function(arg) {
-          //  alert('Clicked ' + arg);
-          //};
-          //
-          //$scope.test = '<a ng-click="click(1)" href="#">Click me</a>';
-
           var profileResource = null;
 
-            $rootScope.fixStyles();
+          $rootScope.fixStyles();
 
           $scope.self = this;
 
@@ -76,7 +69,7 @@ define(
 
           if($rootScope.browser.mobile)
           {
-            $scope.profile.birthDate = formatDateMobile($scope.profile.birthDate)
+            $scope.profile.birthDate = formatDateMobile($scope.profile.birthDate);
           }
 
           // TODO: Investigate whether they are in use!
@@ -326,6 +319,18 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
+            if($rootScope.browser.mobile)
+            {
+              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
+              // to be provided in ISO 8601 (type='date')
+              var tempDate = resources.birthDate,
+                days = tempDate.substr(tempDate.length - 2),
+                months = tempDate.substr(5, 2),
+                years = tempDate.substr(0, 4);
+
+              resources.birthDate = days + '-' + months + '-' + years;
+            }
+
             // deal with birthday
             try
             {
@@ -392,6 +397,7 @@ define(
             ).then(
               function (result)
               {
+                console.log('resources.birthDate', result);
                 if (result.error)
                 {
                   $rootScope.notifier.error('Error with saving profile information.');
@@ -427,19 +433,10 @@ define(
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
-
+                        console.log('data', data);
                         $scope.data = data;
 
-                        //TODO get a mobile debugger
-                        if(! $rootScope.browser.mobile)
-                        {
-                          //$scope.data.birthDate = .format('DD-MM-YYYY');
-                          console.log('$scope.data.birthDate', moment($scope.data.birthDate))
-                        }
-                        else
-                        {
-                          $scope.data.birthDate = formatDate($scope.data.birthDate);
-                        }
+                        $scope.data.birthDate = formatDate($scope.data.birthDate);
 
                         //TODO Waarom wordt deze opnieuw opgehaald Local data?
                         getProfileResource(
@@ -450,6 +447,14 @@ define(
                         $scope.data.phoneNumbers = profileResource.phones;
 
                         $scope.profile = angular.copy($scope.data);
+
+                        console.log('$scope.data', $scope.data.birthDate);
+
+                        //TODO get a mobile debugger
+                        if($rootScope.browser.mobile)
+                        {
+                          $scope.profile.birthDate = formatDateMobile($scope.data.birthDate);
+                        }
 
                         $rootScope.statusBar.off();
                         $scope.setViewTo('profile');

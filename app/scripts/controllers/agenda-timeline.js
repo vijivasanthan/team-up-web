@@ -982,6 +982,8 @@ define(
 
           var hideSlotForm = function()
           {
+            $scope.slot = {};
+
             $scope.views.slot.add = false;
             $scope.views.slot.edit = false;
             $scope.views.member = false;

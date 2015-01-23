@@ -107,7 +107,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 					#mainTimeline(set-position-slot-form)
 					div.legends-agenda
 						include ../agenda/time-legends
-				hr
 				p
 					small.pull-left
 						span.text-warning {{ui.agenda.lastSyncTime}}
@@ -118,5 +117,4 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 						| &nbsp;&nbsp;| &nbsp;
 						span.text-warning {{ui.agenda.dataRangeEnd}}
 						span.text-muted {{data.periods.end | nicelyDate}}
-				hr
 			
