@@ -126,7 +126,7 @@
                 <p ng-show="parsedPhoneNumbers[0].result" class="text-success"><small><i>{{parsedPhoneNumbers[0].message}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfoPhone}}</i></small></span>
               </div>
             </div>
-            <div ng-show="profile.phoneNumbers[1]" ng-class="{ 'has-error' : profileForm.phone1.$invalid &amp;&amp; !profileForm.phone1.$pristine }" class="form-group">
+            <div ng-show="data.phoneNumbers[1]" ng-class="{ 'has-error' : profileForm.phone1.$invalid &amp;&amp; !profileForm.phone1.$pristine }" class="form-group">
               <label class="control-label">{{ui.profile.phone}} extra</label>
               <div class="controls">
                 <div class="input-group">
@@ -138,7 +138,7 @@
                 <p ng-show="parsedPhoneNumbers[1].result" class="text-success"><small><i>{{parsedPhoneNumbers[1].message}}</i></small></p>
               </div>
             </div>
-            <div ng-show="profile.phoneNumbers[2]" ng-class="{ 'has-error' : profileForm.phone2.$invalid &amp;&amp; !profileForm.phone2.$pristine }" class="form-group">
+            <div ng-show="data.phoneNumbers[2]" ng-class="{ 'has-error' : profileForm.phone2.$invalid &amp;&amp; !profileForm.phone2.$pristine }" class="form-group">
               <label class="control-label">{{ui.profile.phone}} extra</label>
               <div class="controls">
                 <div class="input-group">

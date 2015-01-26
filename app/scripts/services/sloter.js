@@ -324,7 +324,6 @@ define(['services/services', 'config'],
                     (slot.diff == 0 && config.legenda.groups.even) ||
                     (slot.diff < 0 && config.legenda.groups.less))
                   {
-                    console.log(_this.wrapper('c') + name);
                     timedata.push({
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),

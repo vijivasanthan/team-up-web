@@ -460,6 +460,7 @@ define(
               }
             });
 
+
           /**
           * Init timeline
           */
@@ -572,7 +573,6 @@ define(
              * TODO (Not working!!)
              */
             // $scope.self.timeline.cancelAdd();
-
             if ($scope.timeliner.isAdded() > 0)
             {
               // console.log('there is one newly added slot');
@@ -584,9 +584,9 @@ define(
 
             if (selection = $scope.self.timeline.getSelection()[0])
             {
-
               var values = $scope.self.timeline.getItem(selection.row),
                   content = angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1]) || null;
+
               $scope.original = {
                 start: values.start,
                 end: values.end,
@@ -696,7 +696,11 @@ define(
             }
             else
             {
-              hideSlotForm();
+              $scope.original = {};
+
+              $scope.slot = {};
+
+              $scope.resetViews();
             }
           };
 
@@ -979,17 +983,6 @@ define(
           //{
           //  setPositionSlotForm(event);
           //};
-
-          var hideSlotForm = function()
-          {
-            $scope.slot = {};
-
-            $scope.views.slot.add = false;
-            $scope.views.slot.edit = false;
-            $scope.views.member = false;
-            $scope.views.group = false;
-            $scope.views.wish = false;
-          };
 
           var getDateTimeFromPicker = function (date)
           {
@@ -1636,37 +1629,42 @@ define(
             console.log('slot', slot);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
-            //Slots.setWish(
-            //  {
-            //    id: slot.groupId,
-            //    start: ($rootScope.browser.mobile) ?
-            //    new Date(slot.start.datetime).getTime() / 1000 :
-            //      Dater.convert.absolute(slot.start.date, slot.start.time, true),
-            //    end: ($rootScope.browser.mobile) ?
-            //    new Date(slot.end.datetime).getTime() / 1000 :
-            //      Dater.convert.absolute(slot.end.date, slot.end.time, true),
-            //    recursive: (! isslot.recursive,
-            //    wish: slot.wish
-            //  })
-            //  .then(
-            //  function (result)
-            //  {
-            //    $rootScope.$broadcast('resetPlanboardViews');
-            //
-            //    if (result.error)
-            //    {
-            //      $rootScope.notifier.error($rootScope.ui.agenda.wisher);
-            //      console.warn('error ->', result);
-            //    }
-            //    else
-            //    {
-            //      $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
-            //    }
-            //
-            //    $scope.timeliner.refresh();
-            //  }
-            //);
+            Slots.setWish(
+              {
+                id: slot.groupId,
+                start: ($rootScope.browser.mobile) ?
+                  new Date(slot.start.datetime).getTime() / 1000 :
+                  Dater.convert.absolute(slot.start.date, slot.start.time, true),
+                end: ($rootScope.browser.mobile) ?
+                  new Date(slot.end.datetime).getTime() / 1000 :
+                  Dater.convert.absolute(slot.end.date, slot.end.time, true),
+                recursive: (!_.isUndefined(slot.recursive)) ? true : false,
+                wish: slot.wish
+              })
+              .then(
+              function (result)
+              {
+                $rootScope.$broadcast('resetPlanboardViews');
+
+                if (result.error)
+                {
+                  $rootScope.notifier.error($rootScope.ui.agenda.wisher);
+                  console.warn('error ->', result);
+                }
+                else
+                {
+                  $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
+                }
+
+                $scope.timeliner.refresh();
+              }
+            );
           };
+
+          $rootScope.$on('resetTimeline', function ()
+          {
+            $scope.timeliner.refresh();
+          });
 
           /**
           * TODO: Stress-test this!
@@ -1722,6 +1720,11 @@ define(
             {
               $window.clearInterval($window.planboardSync)
             }
+          };
+
+          var styleSelectedSlot = function()
+          {
+
           };
 
           /**

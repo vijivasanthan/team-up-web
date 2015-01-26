@@ -180,7 +180,7 @@ section#profile
 									small
 										i {{ui.profile.pincodeInfoPhone}}
 										
-						.form-group(ng-show='profile.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
+						.form-group(ng-show='data.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
 							label.control-label {{ui.profile.phone}} extra
 							.controls
 								.input-group
@@ -202,7 +202,7 @@ section#profile
 									small
 										i {{parsedPhoneNumbers[1].message}}
 										
-						.form-group(ng-show='profile.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
+						.form-group(ng-show='data.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
 							label.control-label {{ui.profile.phone}} extra
 							.controls
 								.input-group

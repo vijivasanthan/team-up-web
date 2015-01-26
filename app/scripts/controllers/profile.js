@@ -57,8 +57,8 @@ define(
                 $scope.profile.pincode = (profileResource.pincode)
                   ? profileResource.pincode
                   : '';
-                $scope.profile.phoneNumbers = profileResource.phones || [];
-                $scope.data.phoneNumbers = $scope.profile.phoneNumbers;
+                $scope.profile.phoneNumbers = profileResource.PhoneAddresses || [];
+                $scope.data.phoneNumbers = angular.copy($scope.profile.phoneNumbers);
               }
             );
           };
@@ -218,6 +218,14 @@ define(
             }
           };
 
+          $scope.checkCurrentValue = function(phone)
+          {
+            if(phone)
+            {
+              console.log('phone', phone);
+            }
+          };
+
           /**
            * Save the profile data
            * @param resources Profile data
@@ -345,7 +353,7 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
             //zet de phonenumbers om
-            profileResource.phones = resources.phoneNumbers;
+            profileResource.PhoneAddresses = resources.phoneNumbers;
 
             //add first phonenumber to user object
             resources.phone = resources.phoneNumbers[0];
@@ -433,22 +441,19 @@ define(
                       else
                       {
                         $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
-                        console.log('data', data);
+
                         $scope.data = data;
 
                         $scope.data.birthDate = formatDate($scope.data.birthDate);
 
-                        //TODO Waarom wordt deze opnieuw opgehaald Local data?
                         getProfileResource(
                           $route.current.params.userId,
                           ($route.current.params.userId == $rootScope.app.resources.uuid)
                         );
 
-                        $scope.data.phoneNumbers = profileResource.phones;
+                        $scope.data.phoneNumbers = profileResource.PhoneAddresses;
 
                         $scope.profile = angular.copy($scope.data);
-
-                        console.log('$scope.data', $scope.data.birthDate);
 
                         //TODO get a mobile debugger
                         if($rootScope.browser.mobile)

@@ -1,6 +1,6 @@
 div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views.member')
 	form.form-inline.form-toggled.well
-		button.close(ng-click='resetInlineForms())') ×
+		button.close(ng-click='refreshCurrentTimeline()') ×
 		h4(ng-show='views.slot.add') {{ui.agenda.newAvail}}
 		h4(ng-show='views.slot.edit') {{ui.agenda.updateAvail}}
 		h4(ng-show='views.group') {{slot.group|stripHtml}}

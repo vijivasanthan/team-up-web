@@ -369,19 +369,28 @@ define(
                 if(element.hasClass('add-button'))
                 {
                   parentFormGroup.next()
-                    .removeClass('ng-hide');
+                    .removeClass('ng-hide')
+                    .find('input')
+                    .focus();
                 }
-                else
+                else if(element.hasClass('remove-button'))
                 {
-                  //empty input value
+                  //empty current input value
                   parentFormGroup
                     .addClass('ng-hide')
                     .find('input')
                     .val('');
+
                   //empty error message
                   parentFormGroup
                     .find('.text-danger small i')
                     .text('');
+
+                  //focus on previous input
+                  var prevElement = angular.element(parentFormGroup[0].previousElementSibling);
+                  prevElement
+                    .find('input')
+                    .focus();
 
                   //empty model scope value
                   if(scope.profile.phoneNumbers[index])

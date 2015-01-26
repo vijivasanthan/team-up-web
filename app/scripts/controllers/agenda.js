@@ -183,11 +183,6 @@ define(
 
           $scope.resetViews();
 
-          $rootScope.$on('resetPlanboardViews', function ()
-          {
-            $scope.resetViews()
-          });
-
           $scope.toggleSlotForm = function ()
           {
             if ($scope.views.slot.add)
@@ -208,11 +203,15 @@ define(
             }
           };
 
+          $scope.refreshCurrentTimeline = function()
+          {
+            $rootScope.$broadcast('resetTimeline');
+            $scope.resetInlineForms();
+          };
+
           $scope.resetInlineForms = function ()
           {
             $scope.slot = {};
-
-            $scope.original = {};
 
             $scope.resetViews();
           };
