@@ -179,29 +179,33 @@ define(
                 //    			messages = $filter('orderBy')(messages,'sendTime','reverse');
                 messages = $filter('orderBy')(messages, 'sendTime');
 
-                $scope.formatMessage(messages);
+                if ($scope.toggleChat)
+                {
+                  if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
+                  {
+                    $scope.moveToBottom = true;
+                  }
+
+                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
+                  setTimeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
+                }
 
                 // scroll to the bottom of the chat window
                 // TODO: Is this a handy way of doing this?
-                // try to do it only once.
-
                 if ($scope.moveToBottom)
                 {
                   setTimeout(
                     function ()
                     {
                       angular.element('#chat-content #messageField').focus();
-                      angular.element('#chat-content .mainContent').scrollTop(angular.element('#chat-content .mainContent')[0].scrollHeight);
+                      angular.element('#chat-content .mainContent').animate({
+                          'scrollTop': angular.element('#chat-content .mainContent')[0].scrollHeight},
+                        'slow');
                       $scope.moveToBottom = false;
-                    }, 1000); // FIXME: Temporarily made it longer till there is a better solution
+                    }, 50); // FIXME: Temporarily made it longer till there is a better solution
                 }
 
-
-                if ($scope.toggleChat)
-                {
-                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
-                  setTimeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
-                }
+                $scope.formatMessage(messages);
 
               },
               function (error) { console.log(error) }
