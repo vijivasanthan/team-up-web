@@ -214,13 +214,13 @@ block chat
 					.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
 						.chatAvatar.roundedPicSmall(back-img = '{{message.member.uuid | avatar:"team":"80" }}',
 						class='{{message.member.states|stateColor}}')
-						.arrow(ng-show='(message.role == "other")')
+						.chat-arrow(ng-show='(message.role == "other")')
 						.chatCloud
 							h5.name {{message.senderName}}
 							h5.time {{message.sendTime|nicelyTime}}
 							div: p(ng-bind-html='message.body | trusted_html')
 							
-						.arrow(ng-hide='(message.role == "other")')
+						.chat-arrow(ng-hide='(message.role == "other")')
 
 			.input-area
 				input#messageField(type='text',
