@@ -55,10 +55,11 @@ define(
               {
                 profileResource = profileData;
                 $scope.profile.pincode = (profileResource.pincode)
-                  ? profileResource.pincode
+                  ? angular.copy(profileResource.pincode)
                   : '';
-                $scope.profile.phoneNumbers = profileResource.PhoneAddresses || [];
-                $scope.data.phoneNumbers = angular.copy($scope.profile.phoneNumbers);
+                $scope.profile.phoneNumbers = angular.copy(profileResource.PhoneAddresses) || [];
+                $scope.data = angular.copy($scope.profile);
+                //
               }
             );
           };
@@ -199,32 +200,43 @@ define(
 
           $scope.checkPincode = null;
 
-          $scope.teamMemberCodeConfirmed = function()
-          {
-            angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('hide');
-            $scope.profile.TeamMemberCodeAsPhone = true;
-            $scope.save($scope.profile);
-          }
-
           /**
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
            * @param phone
            */
-          $scope.setTeamMemberCodeAsPhone = function(phone)
+          $scope.setTeamMemberCodeAsPhone = function(index)
           {
-            if(phone && phone.length >= 12 && profileResource.pincode != $scope.profile.pincode)
+            var phone = $scope.profile.phoneNumbers[index],
+                phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
+
+            if(phone && phone.length >= 10 &&
+              (_.isEmpty($scope.profile.pincode) || profileResource.pincode != $scope.profile.pincode ||
+              getLastFourDigits(profileResource.PhoneAddresses[index]) == profileResource.pincode) &&
+              phoneValidateResult == true)
             {
-              $scope.profile.pincode = phone.substr(phone.length - 4)
+              var inputVal = angular.element('.inputPhoneNumber0').val();
+
+              //current value of the input is different then the $scope data
+              //Will be the same after saving the form
+              $scope.profile.pincode = getLastFourDigits(inputVal);
             }
           };
 
-          $scope.checkCurrentValue = function(phone)
+          var getLastFourDigits = function(phone)
           {
-            if(phone)
-            {
-              console.log('phone', phone);
-            }
+            return phone.substr(phone.length - 4);
           };
+
+          /**
+           * Modal to confirm that a user has a different teammember code then the
+           * last 4 digits of the standard phone-number
+           */
+          //$scope.teamMemberCodeConfirmed = function()
+          //{
+          //  angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('hide');
+          //  $scope.profile.TeamMemberCodeAsPhone = true;
+          //  $scope.save($scope.profile);
+          //}
 
           /**
            * Save the profile data
@@ -240,24 +252,21 @@ define(
               return false;
             }
 
-            if (! $scope.pincodeExistsValidation)
-            {
-              $rootScope.notifier.error($rootScope.ui.profile.pincodeNotValid);
-              return false;
-            }
-
-            //If the last 4 digits of the phonenumber are equal with the teammember code, the user has to confirm
-            if (resources.pincode == resources.phoneNumbers[0].substr(resources.phoneNumbers[0].length - 4)
-                && ! resources.TeamMemberCodeAsPhone)
-            {
-              $timeout(
-                function ()
-                {
-                  angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('show');
-                }
-              );
-              return false;
-            }
+            //If the last 4 digits of the phonenumber aren't equal with the teammember code and
+            //the last time the user made a change they were equal, the user has to confirm
+            //if (! _.isEmpty(resources.pincode)
+            //  && resources.pincode != resources.phoneNumbers[0].substr(resources.phoneNumbers[0].length - 4)
+            //  && ! resources.TeamMemberCodeAsPhone
+            //  && profileResource.pincode == profileResource.PhoneAddresses[0].substr(profileResource.PhoneAddresses[0].length - 4))
+            //{
+            //  $timeout(
+            //    function ()
+            //    {
+            //      angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('show');
+            //    }
+            //  );
+            //  return false;
+            //}
 
             // let user know that user need to re-relogin if the login-user's role is changed.
             if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
@@ -376,7 +385,12 @@ define(
               delete resources.oldpass;
             }
             //save profileresource
-            Profile.save($route.current.params.userId, profileResource)
+            Profile.save($route.current.params.userId,
+              {
+                PhoneAddresses: profileResource.PhoneAddresses,
+                pincode: profileResource.pincode
+              }
+            )
               .then(
               function(result)
               {
@@ -405,7 +419,6 @@ define(
             ).then(
               function (result)
               {
-                console.log('resources.birthDate', result);
                 if (result.error)
                 {
                   $rootScope.notifier.error('Error with saving profile information.');
@@ -451,14 +464,13 @@ define(
                           ($route.current.params.userId == $rootScope.app.resources.uuid)
                         );
 
-                        $scope.data.phoneNumbers = profileResource.PhoneAddresses;
-
-                        $scope.profile = angular.copy($scope.data);
-
-                        //TODO get a mobile debugger
                         if($rootScope.browser.mobile)
                         {
                           $scope.profile.birthDate = formatDateMobile($scope.data.birthDate);
+                        }
+                        else
+                        {
+                          $scope.profile.birthDate = $scope.data.birthDate;
                         }
 
                         $rootScope.statusBar.off();

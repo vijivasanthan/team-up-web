@@ -184,7 +184,7 @@ section#profile
 									name='phone0',
 									ng-model='profile.phoneNumbers[0]',
 									required,
-									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(profile.phoneNumbers[0])',
+									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(0)',
 									value='{{data.phoneNumbers[0]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
@@ -274,7 +274,7 @@ section#profile
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
 						button.btn.btn-info.pull-right(type="button",
-							ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
+							ng-click='setViewTo("profile")') Terug
 					hr
 					div.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}')
 					#uploadImgModule

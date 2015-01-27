@@ -421,7 +421,7 @@ define(
           pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
           pincodeInfo: 'De bovenstaande teamlidcode gebruikt u voor Team-telefoon Inbellen en heeft u alleen nodig als Team-telefoon uw nummer niet herkent.',
           duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',
-          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, mits deze zelf wordt opgegeven.',
+          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, tenzij deze zelf wordt opgegeven.'
         },
         settings: {
           settings: 'Instellingen',
@@ -565,7 +565,7 @@ define(
             deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
             addTeamMemberCodeAsPhoneTitle: 'Teamlidcode wijzigen',
-            addTeamMemberCodeAsPhone: 'Wilt u de laatste vier cijfers van uw standaard telefoonnummer gebruiken als teamlidcode?',
+            addTeamMemberCodeAsPhone: 'Er is een eigen teamlidcode ingevoerd, die niet overeen komt met de laatste vier cijfers van uw standaard telefoonnummer?',
             photoRemoveTitle: 'Profielfoto verwijderen',
             photoRemoveBody: 'Weet u zeker dat u de profielfoto wilt verwijderen?',
             yes: 'Ja, dat wil ik',

@@ -134,7 +134,7 @@
               <label class="control-label">{{ui.profile.phone}} standaard</label>
               <div class="controls">
                 <div class="input-group">
-                  <input type="text" name="phone0" ng-model="profile.phoneNumbers[0]" required="required" ng-change="checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(profile.phoneNumbers[0])" value="{{data.phoneNumbers[0]}}" class="form-control inputPhoneNumber0"><span class="input-group-btn">
+                  <input type="text" name="phone0" ng-model="profile.phoneNumbers[0]" required="required" ng-change="checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(0)" value="{{data.phoneNumbers[0]}}" class="form-control inputPhoneNumber0"><span class="input-group-btn">
                     <button input-rule-toggle="0" type="button" class="btn btn-default input-buttons add-button"><i class="glyphicon glyphicon-white glyphicon-plus"></i></button></span>
                 </div>
                 <p ng-hide="parsedPhoneNumbers[0].result" class="text-danger"><small><i>{{parsedPhoneNumbers[0].message}}</i></small></p>
@@ -186,7 +186,7 @@
         <div id="editImgTab" class="tab-pane {{(views.editImg==true) &amp;&amp; 'active'}}">
           <div style="overflow: hidden; height: 35px">
             <h3 style="margin-top: 0" class="pull-left">{{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}</h3>
-            <button type="button" ng-click="setViewTo(&quot;profile&quot;)" class="btn btn-info pull-right">{{ui.teamup.confirms.cancel}}</button>
+            <button type="button" ng-click="setViewTo(&quot;profile&quot;)" class="btn btn-info pull-right">Terug</button>
           </div>
           <hr>
           <div back-img="{{data.uuid | avatar:&quot;team&quot;:&quot;368&quot; }}" class="roundedPicLarge"></div>
