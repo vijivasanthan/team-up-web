@@ -571,6 +571,17 @@ define(
             $scope.save($scope.data);
           }
 
+          $scope.confirmDeleteAvatar = function()
+          {
+            angular.element('#confirmDeleteAvatar').modal('show');
+          };
+
+          $scope.deleteAvatar = function()
+          {
+            //$data.uuid;
+            angular.element('#confirmDeleteAvatar').modal('hide');
+          };
+
           // Remove a profile completely
           $scope.deleteProfile = function ()
           {

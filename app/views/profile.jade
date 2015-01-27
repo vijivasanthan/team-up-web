@@ -35,6 +35,25 @@ aria-hidden='true')
 				data-dismiss='modal') {{ui.teamup.confirms.no}}
 				button.btn.btn-primary.non-capitalize(type='button',
 				ng-click='teamMemberCodeConfirmed()') {{ui.teamup.confirms.yes}}
+				
+#confirmDeleteAvatar.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmDeleteAvatarLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmDeleteAvatarLabel.modal-title {{ui.teamup.confirms.photoRemoveTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.photoRemoveBody}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='deleteAvatar()') {{ui.teamup.confirms.remove}}
 
 section#profile
 	.page-header: h2 {{data.name}}
@@ -95,7 +114,7 @@ section#profile
 										ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
 										i.icon-edit
 								button.btn.btn-mini.btn-primary(type='submit',
-									ng-click='removeImg(data.uuid)',
+									ng-click='confirmDeleteAvatar()',
 									ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
 									i.icon-trash
 
