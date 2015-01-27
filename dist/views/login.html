@@ -13,7 +13,7 @@
       <div ng-show="alert.login.display" class="alert {{alert.login.type}}">
         <button type="button" ng-click="alert.login=false" class="close">×</button>{{alert.login.message}}
       </div>
-      <input type="text" ng-model="loginData.username" placeholder="{{ui.login.ph_username}}" autofocus="">
+      <input type="text" autocapitalize="none" ng-model="loginData.username" placeholder="{{ui.login.ph_username}}" autofocus="">
       <input type="password" ng-model="loginData.password" placeholder="{{ui.login.ph_password}}">
       <label class="checkbox span3">
         <input type="checkbox" ng-model="loginData.remember">{{ui.login.label_rememberMe}}
