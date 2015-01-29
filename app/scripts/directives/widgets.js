@@ -65,6 +65,8 @@ define(
                     return false;
                   }
 
+                  console.log('angular.element(el).val()', angular.element(el).val());
+
                   $form.attr('action', $scope.action);
 
                   $scope.$apply(
@@ -79,6 +81,8 @@ define(
                       },
                       uploadProgress: function (event, position, total, percentComplete)
                       {
+                        console.log('event', event);
+
                         $scope.$apply(
                           function ()
                           {
@@ -88,16 +92,14 @@ define(
                       },
                       error: function (event, statusText, responseText, form)
                       {
-                        $form.removeAttr('action');
-
-                        //console.log('response : ', responseText);
+                        //$form.removeAttr('action');
                       },
                       success: function (responseText, statusText, xhr, form)
                       {
                         var ar = angular.element(el).val().split('\\'),
                             filename = ar[ar.length - 1];
 
-                        $form.removeAttr('action');
+                        //$form.removeAttr('action');
 
                         $scope.$apply(
                           function ()
@@ -119,16 +121,16 @@ define(
                               console.log(e);
                             }
 
-                            if ($scope.$parent.data.clientId)
+                            if ($scope.$parent.view.clientId)
                             {
-                              id = $scope.$parent.data.clientId;
+                              id = $scope.$parent.view.clientId;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'client';
 
                             }
-                            else if ($scope.$parent.data.uuid)
+                            else if ($scope.$parent.view.uuid)
                             {
-                              id = $scope.$parent.data.uuid;
+                              id = $scope.$parent.view.uuid;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'team';
                             }

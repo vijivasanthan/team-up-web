@@ -4,15 +4,15 @@ if (window.location.port == '8080')
 {
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
- 
+
 
 require.config({
     paths: {
       jquery: '../vendors/jquery/dist/jquery.min',
-      localConfig: 'localConfig',
+      localConfig: 'localConfig'
     },
     shim: {
-      localConfig: {deps: ['jquery'], exports: 'localConfig' },
+      localConfig: {deps: ['jquery'], exports: 'localConfig' }
     }
 });
 

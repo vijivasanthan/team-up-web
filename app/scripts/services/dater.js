@@ -186,6 +186,18 @@ define(
             getPeriods: function ()
             {
               return Store('app').get('periods');
+            },
+
+            formatDate: function(date)
+            {
+              return moment(date)
+                        .format('DD-MM-YYYY');
+            },
+
+            formatDateMobile: function(date)
+            {
+              return moment(this.convert.absolute(date, 0))
+                        .format('YYYY-MM-DD');
             }
           }
         }

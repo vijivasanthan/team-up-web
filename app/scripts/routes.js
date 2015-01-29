@@ -255,14 +255,18 @@ define(
                     },
                     null,
                     {
-                      success: function (userData) {
+                      success: function (userData)
+                      {
                         getAllSlots(userData.uuid)
-                          .then(function(timelineData) {
-                            deferred.resolve({
-                              timelineData: timelineData,
-                              userData: userData
-                            });
-                          });
+                          .then(
+                            function(timelineData)
+                            {
+                              deferred.resolve({
+                                timelineData: timelineData,
+                                userData: userData
+                              });
+                            }
+                          );
                       }
                     }
                   );
@@ -367,53 +371,22 @@ define(
             })
 
             .when(
-            '/profile/:userId',
+            '/profile/:userId?',
             {
               templateUrl: 'views/profile.html',
               controller: 'profileCtrl',
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', '$route', 'TeamUp', 'Store',
-                  function ($rootScope, $route, TeamUp, Store)
+                  '$rootScope', '$route', 'Profile', '$location',
+                  function ($rootScope, $route, Profile, $location)
                   {
-                    return TeamUp._(
-                      'profileGet',
-                      { third: $route.current.params.userId },
-                      null,
-                      {
-                        success: function (resources)
-                        {
-                          // TODO: Move this callback with other identical ones to a central location
-                          if ($route.current.params.userId == $rootScope.app.resources.uuid)
-                          {
-                            $rootScope.app.resources = resources;
-
-                            Store('app').save('resources', resources);
-                          }
-                        }
-                      }
-                    );
-                  }
-                ]
-              }
-            })
-            //TODO this routing is not needed anymore and not well configured, the profile controller is already
-            // loaded before the location path will change by the logged user
-            .when(
-            '/profile',
-            {
-              templateUrl: 'views/profile.html',
-              controller: 'profileCtrl',
-              resolve: {
-                data: [
-                  '$rootScope', '$route', '$location',
-                  function ($rootScope, $route, $location)
-                  {
-                    if (! $route.current.params.userId || ! $location.hash())
+                    if (! $route.current.params.userId)
                     {
                       $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
                     }
+
+                    return Profile.fetchUserData($route.current.params.userId);
                   }
                 ]
               }

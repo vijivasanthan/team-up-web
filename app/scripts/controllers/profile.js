@@ -25,64 +25,45 @@ define(
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
-          var profileResource = null;
-
-          $rootScope.fixStyles();
-
-          $scope.self = this;
-
-          $scope.roles = config.app.roles;
-          $scope.mfuncs = config.app.mfunctions;
-
-          $scope.data = data;
-
-          // TODO: Still needed?
-          $scope.noImgURL = config.app.noImgURL;
-
-          $scope.profilemeta = data;
-
-          $scope.profilemeta.birthDate = formatDate($scope.profilemeta.birthDate);
-
-          //temp userdata will be saved after pressing save
-          $scope.profile = angular.copy($scope.profilemeta);
-
-          //TODO resolve this one in routing
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)
               .then(
               function(profileData)
               {
-                profileResource = profileData;
-                $scope.profile.pincode = (profileResource.pincode)
-                  ? angular.copy(profileResource.pincode)
-                  : '';
-                $scope.profile.phoneNumbers = angular.copy(profileResource.PhoneAddresses) || [];
-                $scope.data = angular.copy($scope.profile);
-                //
+                if(profileData)
+                {
+                  $scope.view.pincode = angular.copy(profileData.pincode) || '';
+                  $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
+                  $scope.edit = angular.copy($scope.view);
+                }
               }
             );
           };
 
-          getProfileResource($scope.profilemeta.uuid);
+          $rootScope.fixStyles();
 
-          $scope.currentRole = $scope.profilemeta.role;
+          $scope.roles = config.app.roles;
+          $scope.mfuncs = config.app.mfunctions;
+
+          $scope.view = data;
+          $scope.view.birthDate = Dater.formatDate($scope.view.birthDate);
+
+          // TODO: Still needed?
+          $scope.noImgURL = config.app.noImgURL;
+
+          $scope.edit = angular.copy($scope.view);
+
+          getProfileResource($scope.view.uuid);
+
+          var currentRole = $scope.view.role;
 
           if($rootScope.browser.mobile)
           {
-            $scope.profile.birthDate = formatDateMobile($scope.profile.birthDate);
+            $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
           }
 
-          // TODO: Investigate whether they are in use!
-          $scope.imgHost = config.app.host;
-          $scope.ns = config.app.namespace;
-
-          var teams = [];
-          $scope.selectTeams = Store('app').get('teams');
-
-          var teams = $scope.$root.getTeamsofMembers($scope.profilemeta.uuid);
-
-          $scope.teams = teams;
+          $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
           $scope.forms = {
             add: false,
@@ -121,27 +102,26 @@ define(
           /**
            * Check if pincode change and validate
            */
-          $scope.$watch(function() {
-            return $scope.profile.pincode;
-          }, function() {
-            $scope.pincodeExists();
-          });
-
-          var CHECK_PINCODE_DELAY = 250;
+          $scope.$watch(function()
+          {
+            return $scope.edit.pincode;
+          }, $scope.pincodeExists);
 
           $scope.pincodeExistsValidation = true;
 
           $scope.pincodeExists = function ()
           {
-            if (!angular.isDefined($scope.profile.pincode) ||
-              $scope.profile.pincode == '')
+            var CHECK_PINCODE_DELAY = 250;
+
+            if (! angular.isDefined($scope.edit.pincode) ||
+              $scope.edit.pincode == '')
             {
               $scope.pincodeExistsValidation = false;
               $scope.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeNotValid;
             }
             else
             {
-              if (angular.isDefined($scope.profile.pincode))
+              if (angular.isDefined($scope.edit.pincode))
               {
                 if ($scope.checkPincode)
                 {
@@ -154,7 +134,7 @@ define(
                 {
                   $scope.checkPincode = null;
 
-                  Profile.pincodeExists($scope.profilemeta.uuid, $scope.profile.pincode)
+                  Profile.pincodeExists($scope.view.uuid, $scope.edit.pincode)
                     .then(
                     function (result)
                     {
@@ -206,19 +186,19 @@ define(
            */
           $scope.setTeamMemberCodeAsPhone = function(index)
           {
-            var phone = $scope.profile.phoneNumbers[index],
+            var phone = $scope.edit.phoneNumbers[index],
                 phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
 
             if(phone && phone.length >= 10 &&
-              (_.isEmpty($scope.profile.pincode) || profileResource.pincode != $scope.profile.pincode ||
-              getLastFourDigits(profileResource.PhoneAddresses[index]) == profileResource.pincode) &&
+              (_.isEmpty($scope.edit.pincode) || $scope.view.pincode != $scope.edit.pincode ||
+              getLastFourDigits($scope.view.phoneNumbers[index]) == $scope.view.pincode) &&
               phoneValidateResult == true)
             {
               var inputVal = angular.element('.inputPhoneNumber0').val();
 
               //current value of the input is different then the $scope data
               //Will be the same after saving the form
-              $scope.profile.pincode = getLastFourDigits(inputVal);
+              $scope.edit.pincode = getLastFourDigits(inputVal);
             }
           };
 
@@ -226,17 +206,6 @@ define(
           {
             return phone.substr(phone.length - 4);
           };
-
-          /**
-           * Modal to confirm that a user has a different teammember code then the
-           * last 4 digits of the standard phone-number
-           */
-          //$scope.teamMemberCodeConfirmed = function()
-          //{
-          //  angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('hide');
-          //  $scope.profile.TeamMemberCodeAsPhone = true;
-          //  $scope.save($scope.profile);
-          //}
 
           /**
            * Save the profile data
@@ -252,24 +221,8 @@ define(
               return false;
             }
 
-            //If the last 4 digits of the phonenumber aren't equal with the teammember code and
-            //the last time the user made a change they were equal, the user has to confirm
-            //if (! _.isEmpty(resources.pincode)
-            //  && resources.pincode != resources.phoneNumbers[0].substr(resources.phoneNumbers[0].length - 4)
-            //  && ! resources.TeamMemberCodeAsPhone
-            //  && profileResource.pincode == profileResource.PhoneAddresses[0].substr(profileResource.PhoneAddresses[0].length - 4))
-            //{
-            //  $timeout(
-            //    function ()
-            //    {
-            //      angular.element('#confirmTeamMemberCodeAsPhoneModal').modal('show');
-            //    }
-            //  );
-            //  return false;
-            //}
-
             // let user know that user need to re-relogin if the login-user's role is changed.
-            if ($scope.currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
+            if (currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
             {
               if (!confirm($rootScope.ui.profile.roleChangePrompt))
               {
@@ -278,7 +231,8 @@ define(
             }
 
             // check if the member is belong to any team, warn user to put his/herself to a team
-            if (resources.teamUuids == null || typeof resources.teamUuids[0] == 'undefined')
+            //TODO Check this part
+            if (_.isNull(resources.teamUuids) || _.isUndefined(resources.teamUuids[0]))
             {
               resources.teamUuids = [];
 
@@ -361,24 +315,14 @@ define(
             }
 
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
-            //zet de phonenumbers om
-            profileResource.PhoneAddresses = resources.phoneNumbers;
 
-            //add first phonenumber to user object
+            //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
-
-            //add pincode to profile resource local
-            profileResource.pincode = resources.pincode;
-
-            //delete resources phonenumbers
-            delete resources.phoneNumbers;
 
             delete resources.birthday;
             delete resources.fullName;
-            delete resources.TeamMemberCodeAsPhone;
+            //delete resources.TeamMemberCodeAsPhone;
 
-            //delete resources.pincode
-            delete resources.pincode;
             //oldpass
             if(!_.isUndefined(resources.oldpass))
             {
@@ -387,8 +331,8 @@ define(
             //save profileresource
             Profile.save($route.current.params.userId,
               {
-                PhoneAddresses: profileResource.PhoneAddresses,
-                pincode: profileResource.pincode
+                PhoneAddresses: resources.phoneNumbers,
+                pincode: resources.pincode
               }
             )
               .then(
@@ -401,129 +345,99 @@ define(
                 }
                 else
                 {
-                  saveProfile(resources);
+                  delete resources.phoneNumbers;
+                  delete resources.pincode;
+
+                  saveUserData(resources);
                 }
               }
             );
           };
 
-          var saveProfile = function(resources)
+          var saveUserData = function(resources)
           {
-            TeamUp._(
-              'profileSave',
-              {
-                second: resources.teamUuids[0],
-                fourth: resources.uuid
-              },
-              resources
-            ).then(
-              function (result)
-              {
-                if (result.error)
+            Profile.saveUserData(resources)
+              .then(
+                function(result)
                 {
-                  $rootScope.notifier.error('Error with saving profile information.');
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  $rootScope.statusBar.display($rootScope.ui.profile.refreshing);
-
-                  TeamUp._(
-                    'profileGet',
-                    {
-                      third: $route.current.params.userId
-                    },
-                    null,
-                    function (resources)
-                    {
-                      if ($route.current.params.userId == $rootScope.app.resources.uuid)
-                      {
-                        $rootScope.app.resources = result;
-
-                        Store('app').save('resources', resources);
-                      }
-                    }
-                  ).then(
-                    function (data)
-                    {
-                      if (data.error)
-                      {
-                        $rootScope.notifier.error('Error with getting profile data.');
-                        console.warn('error ->', data);
-                      }
-                      else
-                      {
-                        $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
-
-                        $scope.data = data;
-
-                        $scope.data.birthDate = formatDate($scope.data.birthDate);
-
-                        getProfileResource(
-                          $route.current.params.userId,
-                          ($route.current.params.userId == $rootScope.app.resources.uuid)
-                        );
-
-                        if($rootScope.browser.mobile)
+                  if (result.error)
+                  {
+                    $rootScope.notifier.error('Error with saving profile information.');
+                    console.warn('error ->', result);
+                  }
+                  else
+                  {
+                    Profile.fetchUserData($route.current.params.userId)
+                      .then(
+                        function(data)
                         {
-                          $scope.profile.birthDate = formatDateMobile($scope.data.birthDate);
-                        }
-                        else
-                        {
-                          $scope.profile.birthDate = $scope.data.birthDate;
-                        }
-
-                        $rootScope.statusBar.off();
-                        $scope.setViewTo('profile');
-
-                        if ($rootScope.app.resources.uuid == $route.current.params.userId)
-                        {
-                          $rootScope.app.resources.firstName = $scope.profile.firstName;
-                          $rootScope.app.resources.lastName = $scope.profile.lastName;
-
-                          // will logout if the role is changed for the user him/her-self.
-                          if ($scope.currentRole != resources.role)
+                          if (data.error)
                           {
-                            $rootScope.nav("logout");
+                            $rootScope.notifier.error('Error with getting profile data.');
+                            console.warn('error ->', data);
                           }
-                        }
-
-                        // refresh the teams in the background
-                        angular.forEach
-                        (
-                          resources.teamUuids, function (teamId)
+                          else
                           {
-                            // FIXME: Message is not absent in localization file so turned off
-                            // $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
+                            $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
-                            Teams.query(
-                              false,
-                              {uuid: teamId}
-                            ).then(
-                              function ()
+                            $scope.view = data;
+                            $scope.view.birthDate = Dater.formatDate($scope.view.birthDate);
+
+                            getProfileResource(
+                              $route.current.params.userId,
+                              ($route.current.params.userId == $rootScope.app.resources.uuid)
+                            );
+
+                            if($rootScope.browser.mobile)
+                            {
+                              $scope.edit.birthDate = Dater.formatDateMobile($scope.view.birthDate);
+                            }
+                            else
+                            {
+                              $scope.edit.birthDate = $scope.view.birthDate;
+                            }
+
+                            $rootScope.statusBar.off();
+                            $scope.setViewTo('profile');
+
+                            if ($rootScope.app.resources.uuid == $route.current.params.userId)
+                            {
+                              $rootScope.app.resources.firstName = $scope.edit.firstName;
+                              $rootScope.app.resources.lastName = $scope.edit.lastName;
+
+                              // will logout if the role is changed for the user him/her-self.
+                              if (currentRole != $scope.view.role)
                               {
-                                $rootScope.statusBar.off()
+                                $rootScope.nav("logout");
+                              }
+                            }
+
+                            // refresh the teams in the background
+                            angular.forEach
+                            (
+                              resources.teamUuids, function (teamId)
+                              {
+                                // FIXME: Message is not absent in localization file so turned off
+                                // $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
+
+                                Teams.query(
+                                  false,
+                                  {uuid: teamId}
+                                ).then(
+                                  function ()
+                                  {
+                                    $rootScope.statusBar.off()
+                                  }
+                                );
                               }
                             );
                           }
-                        );
-                      }
-                    }
-                  );
+                        }
+                      );
+                  }
                 }
-              }
-            );
-          }
-
-          function formatDate(date)
-          {
-            return moment(date).format('DD-MM-YYYY');
-          }
-
-          function formatDateMobile(date)
-          {
-            return moment(Dater.convert.absolute(date, 0)).format('YYYY-MM-DD');
-          }
+              );
+          };
 
           $scope.editProfile = function ()
           {
@@ -538,18 +452,8 @@ define(
           // Change an avatar
           $scope.editImg = function ()
           {
-            $scope.uploadURL = $scope.imgHost + $scope.ns + "/team/member/" + $route.current.params.userId + "/photo?square=true";
+            $scope.uploadURL = config.app.host + config.app.namespace + "/team/member/" + $route.current.params.userId + "/photo?square=true";
             $scope.setViewTo('editImg');
-          };
-
-          $scope.confirmDeleteProfile = function ()
-          {
-            $timeout(
-              function ()
-              {
-                angular.element('#confirmProfileModal').modal('show');
-              }
-            );
           };
 
           $scope.savePassword = function (resources)
@@ -567,25 +471,30 @@ define(
               $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
               return;
             }
-            else if (MD5(formData.oldpass) !== $scope.profile.passwordHash)
+            else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
             {
               $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
               return;
             }
             else if (formData.newpass != null)
             {
-              $scope.data.passwordHash = MD5(formData.newpass);
+              $scope.view.passwordHash = MD5(formData.newpass);
               delete formData.oldpass;
               delete formData.newpass;
               delete formData.newpassrepeat;
             }
 
-            $scope.save($scope.data);
-          }
+            $scope.save($scope.view);
+          };
 
-          $scope.confirmDeleteAvatar = function()
+          $scope.confirmModal = function(id)
           {
-            angular.element('#confirmDeleteAvatar').modal('show');
+            $timeout(
+              function ()
+              {
+                angular.element(id).modal('show');
+              }
+            );
           };
 
           $scope.deleteAvatar = function()
@@ -601,7 +510,24 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-            var currentTeam;
+            //TODO remove TeamUp._('teamMemberDelete',
+            //Teams.removeAllTeamsFromMember(
+            //  $scope.view.uuid,
+            //  $scope.view.teamUuids
+            //)
+            //  .then(
+            //    function(result)
+            //    {
+            //      console.log('scope.teams', $scope.teams);
+            //
+            //      $scope.teams = null;
+            //
+            //      console.log('scope.teams', $scope.teams);
+            //      $scope.view.teamUuids = null;
+            //
+            //      $rootScope.statusBar.off();
+            //    }
+            //  );
 
             angular.forEach($scope.teams, function (team)
             {
@@ -609,13 +535,13 @@ define(
               TeamUp._(
                 'teamMemberDelete',
                 {second: team.uuid},
-                {ids: [$scope.profilemeta.uuid]}
+                {ids: [$scope.view.uuid]}
               ).then(
                 function (result)
                 {
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                  angular.forEach($scope.profilemeta.teamUuids, function (teamId, i)
+                  angular.forEach($scope.view.teamUuids, function (teamId, i)
                   {
                     if (team.uuid == teamId)
                     {
@@ -631,7 +557,7 @@ define(
                         }
                       );
 
-                      $scope.profilemeta.teamUuids.splice(i, 1);
+                      $scope.view.teamUuids.splice(i, 1);
                       $scope.teams.splice(i, 1);
                       sessionStorage.removeItem(data.uuid + '_team');
                       Teams.updateMembersLocal();

@@ -349,13 +349,11 @@ define(
            */
           TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
           {
-            //var team = _.filter(Store('app').get('teams'), function(team){ return team.uuid == teamId; });
             angular.forEach(changedUsers, function (user)
             {
 
               if (user == $rootScope.app.resources.uuid)
               {
-
                 var userResources = Store('app').get('resources'),
                   indexTeam = userResources.teamUuids.indexOf(teamId);
 
@@ -366,6 +364,67 @@ define(
                 return;
               }
             });
+          };
+
+          TeamsService.prototype.removeAllTeamsFromMember = function(userId, userTeams)
+          {
+            var deferred = $q.defer(),
+                teams = $rootScope.getTeamsofMembers(userId),
+                _this = this;
+
+            _.each(teams, function(team)
+            {
+
+              TeamUp._(
+                'teamMemberDelete',
+                {second: team.uuid},
+                {ids: [userId]}
+              ).then(
+                function (result)
+                {
+                  angular.forEach(userTeams, function (teamId, i)
+                  {
+                    if (team.uuid == teamId)
+                    {
+                      _this.query(
+                        false,
+                        {'uuid': teamId}
+                      ).then(
+                        function ()
+                        {
+                          $rootScope.statusBar.off();
+                        }
+                      );
+
+                      userTeams.splice(i, 1);
+                      sessionStorage.removeItem(userId + '_team');
+                      _this.updateMembersLocal();
+                    }
+                  });
+                },
+                function (error)
+                {
+                  console.log(error);
+                }
+              );
+            });
+
+            //update list of members
+            TeamUp._('teamMemberFree')
+              .then
+            (
+              function (result)
+              {
+                Store('app').save('members', result);
+                deferred.resolve(result);
+              },
+              function (error)
+              {
+                console.log(error)
+              }
+            );
+
+            return deferred.promise;
           };
 
           // Manage 1:1 relations between teams and client groups

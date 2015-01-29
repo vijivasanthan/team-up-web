@@ -56,7 +56,7 @@ aria-hidden='true')
 				ng-click='deleteAvatar()') {{ui.teamup.confirms.remove}}
 
 section#profile
-	.page-header: h2 {{data.name}}
+	.page-header: h2 {{view.name}}
 
 	.row-fluid
 
@@ -73,21 +73,21 @@ section#profile
 
 				#profileTab.tab-pane(class="{{(views.profile==true) && 'active'}}")
 					.tab-header
-						h3.pull-left {{data.firstName}} {{data.lastName}}
+						h3.pull-left {{view.firstName}} {{view.lastName}}
 						//div(dynamic='test') {{test}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-							ng-click='confirmDeleteProfile()',
-							ng-hide='app.resources.role > 1 && teams.length == 0 && profile.uuid != app.resources.uuid') 
+							ng-click='confirmModal("#confirmProfileModal")',
+							ng-hide='app.resources.role > 1 && teams.length == 0 && edit.uuid != app.resources.uuid') 
 							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
 							ng-click='editProfile()',
-							ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)') {{ui.profile.edit}}
+							ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)') {{ui.profile.edit}}
 					hr
 					.row-fluid
 						.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 							dl
 								dt {{ui.teamup.teams}}
-								dd(ng-show='teams.length == 0') Geen team geselecteerd
+								dd(ng-show='! teams || teams.length == 0') Geen team geselecteerd
 								dd
 									span(ng-repeat='team in teams')
 										span(ng-hide='app.resources.role > 1')
@@ -95,27 +95,27 @@ section#profile
 										span(ng-hide = '{{((teams.length-1) == $index)}}') ,
 										span(ng-show = 'app.resources.role > 1') {{team.name}}
 								dt {{ui.teamup.role}}
-								dd {{data.role|translateRole}}
+								dd {{view.role|translateRole}}
 								dt E-mail
-								dd {{data.email }}
-								dt(ng-show='data.phoneNumbers.length > 0') {{ui.profile.phone}}
-								dd(class='phones', ng-repeat='phone in data.phoneNumbers') 
+								dd {{view.email }}
+								dt(ng-show='view.phoneNumbers.length > 0') {{ui.profile.phone}}
+								dd(class='phones', ng-repeat='phone in view.phoneNumbers') 
 									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  
 									span(class='phone-description') {{phone}}
-								//dt {{ui.teamup.func}}                                                                                    //dd {{data.function|translateFunc}}
+								//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
 								dt {{ui.profile.birthday}}
-								dd {{data.birthDate}}
+								dd {{view.birthDate}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
-							.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}' class='{{data.states|stateColor}}')
+							.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}' class='{{view.states|stateColor}}')
 							div
-								a(href='#/profile/{{data.uuid}}#editImg')
+								a(href='#/profile/{{view.uuid}}#editImg')
 									button.btn.btn-mini.btn-primary(
 										ng-click='editImg()',
-										ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+										ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
 										i.icon-edit
 								button.btn.btn-mini.btn-primary(type='submit',
-									ng-click='confirmDeleteAvatar()',
-									ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)')
+									ng-click='confirmModal("#confirmDeleteAvatar")',
+									ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
 									i.icon-trash
 
 
@@ -123,7 +123,7 @@ section#profile
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;') {{ui.profile.editProfile}}
 						button.btn.pull-right.btn-info(type='button',
-						ng-hide='(app.resources.role > 1 && profile.uuid != app.resources.uuid)',
+						ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)',
 						ng-click='editPassword()') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
@@ -131,18 +131,18 @@ section#profile
 							label.control-label {{ui.profile.firstName}}
 							.controls
 								input.span4(type='text',
-								ng-model='profile.firstName',
-								value='{{data.firstName}}')
+								ng-model='edit.firstName',
+								value='{{view.firstName}}')
 						.control-group
 							label.control-label {{ui.profile.lastName}}
 							.controls
 								input.span4(type='text',
-								ng-model='profile.lastName',
-								value='{{data.lastName}}')
+								ng-model='edit.lastName',
+								value='{{view.lastName}}')
 						.control-group(ng-hide='(app.resources.role > 1)')
 							label.control-label {{ui.teamup.role}}
 							.controls
-								select(ng-model='profile.role',
+								select(ng-model='edit.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
 						.form-group.dater(ng-hide='browser.mobile')
@@ -150,7 +150,7 @@ section#profile
 							.controls
 								input(name='date-start',
 								type='text',
-								ng-model='profile.birthDate',
+								ng-model='edit.birthDate',
 								data-date-type='string',
 								data-date-format='dd-MM-yyyy',
 								bs-datepicker='',
@@ -162,7 +162,7 @@ section#profile
 							.form-group.dater-mobile
 								input.form-control(name='date-start',
 								type='date',
-								ng-model='profile.birthDate')
+								ng-model='edit.birthDate')
 								
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
 							label.control-label E-mail
@@ -170,7 +170,7 @@ section#profile
 								input.span4.form-control(type='email',
 								name='email',
 								required,
-								ng-model='profile.email')
+								ng-model='edit.email')
 								span.help-block(ng-show='profileForm.email.$invalid && !profileForm.email.$pristine')
 									small(ng-show="profileForm.$error.email")
 										i
@@ -182,10 +182,10 @@ section#profile
 								.input-group
 									input.form-control.inputPhoneNumber0(type='text',
 									name='phone0',
-									ng-model='profile.phoneNumbers[0]',
+									ng-model='edit.phoneNumbers[0]',
 									required,
-									ng-change='checkPhoneNumber(profile.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(0)',
-									value='{{data.phoneNumbers[0]}}')
+									ng-change='checkPhoneNumber(edit.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(0)',
+									value='{{view.phoneNumbers[0]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
 											i(class="glyphicon glyphicon-white glyphicon-plus")
@@ -197,18 +197,18 @@ section#profile
 										i {{parsedPhoneNumbers[0].message}}
 								span.help-block(style='margin-top: -5px;')
 									small
-										i {{ui.profile.pincodeInfoPhone}}
+										i {{ui.edit.pincodeInfoPhone}}
 										
-						.form-group(ng-show='data.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
+						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
 							label.control-label {{ui.profile.phone}} extra
 							.controls
 								.input-group
 									input.form-control.inputPhoneNumber1(type='text',
 										name='phone1',
-										ng-model='profile.phoneNumbers[1]',
+										ng-model='edit.phoneNumbers[1]',
 										required,
-										ng-change='checkPhoneNumber(profile.phoneNumbers[1], 1)',
-										value='{{data.phoneNumbers[1]}}')
+										ng-change='checkPhoneNumber(edit.phoneNumbers[1], 1)',
+										value='{{view.phoneNumbers[1]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='1' class="btn btn-default input-buttons remove-button" type="button")
 											i(class="glyphicon glyphicon-white glyphicon-remove")
@@ -221,16 +221,16 @@ section#profile
 									small
 										i {{parsedPhoneNumbers[1].message}}
 										
-						.form-group(ng-show='data.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
+						.form-group(ng-show='view.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
 							label.control-label {{ui.profile.phone}} extra
 							.controls
 								.input-group
 									input.form-control.inputPhoneNumber2(type='text',
 									name='phone2',
-									ng-model='profile.phoneNumbers[2]',
+									ng-model='edit.phoneNumbers[2]',
 									required,
-									ng-change='checkPhoneNumber(profile.phoneNumbers[2], 2)',
-									value='{{data.phoneNumbers[2]}}')
+									ng-change='checkPhoneNumber(edit.phoneNumbers[2], 2)',
+									value='{{view.phoneNumbers[2]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='2' class="btn btn-default input-buttons remove-button" type="button")
 											i(class="glyphicon glyphicon-white glyphicon-remove")
@@ -242,11 +242,11 @@ section#profile
 										i {{parsedPhoneNumbers[2].message}}
 										
 						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
-							ng-show='(app.resources.role == 1) || (profile.uuid == app.resources.uuid)')
+							ng-show='(app.resources.role == 1) || (edit.uuid == app.resources.uuid)')
 							label.control-label {{ui.profile.pincode}}
 							.controls
 								input.span2.form-control(type='text',
-								ng-model='profile.pincode',
+								ng-model='edit.pincode',
 								ui-mask='9999',
 								ng-change='pincodeExists()',
 								name='pincode')
@@ -260,23 +260,23 @@ section#profile
 						//.control-group
 						//	label.control-label {{ui.teamup.func}}
 						//	.controls
-						//		select(ng-model='profile.function',
+						//		select(ng-model='edit.function',
 						//		ng-options='f.id as f.label for f in mfuncs',
-						//		ng-selected='profile.function')
+						//		ng-selected='edit.function')
 						.form-actions
 							button.btn.btn-default.btn-color-brown(type="button", 
 								ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
 							button.btn.btn-success(type='submit',
-								ng-click='save(profile)') {{ui.profile.saveProfile}}
+								ng-click='save(edit)') {{ui.profile.saveProfile}}
 
 				#editImgTab.tab-pane(class="{{(views.editImg==true) && 'active'}}")
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;')
-							| {{ui.profile.editProfileImg}} : {{data.firstName}} {{data.lastName}}
+							| {{ui.profile.editProfileImg}} : {{view.firstName}} {{view.lastName}}
 						button.btn.btn-info.pull-right(type="button",
 							ng-click='setViewTo("profile")') Terug
 					hr
-					div.roundedPicLarge(back-img = '{{data.uuid | avatar:"team":"368" }}')
+					div.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}')
 					#uploadImgModule
 						form.form-vertical(enctype='multipart/form-data')
 							uploader(action='{{uploadURL}}')
@@ -292,12 +292,12 @@ section#profile
 								label.control-label {{ui.profile.oldPassword}}
 								.controls
 									input.span3(type='password',
-									ng-model='profile.oldpass')
+									ng-model='edit.oldpass')
 							.form-group(ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
 								label.control-label {{ui.profile.newPass}}
 								.controls
 									input.span3.form-control(type='password',
-									ng-model='profile.newpass',
+									ng-model='edit.newpass',
 									name='password',
 									required,
 									ng-minlength="8",
@@ -316,9 +316,9 @@ section#profile
 								label.control-label {{ui.profile.newPassRepeat}}
 								.controls
 									input.span3(type='password',
-									ng-model='profile.newpassrepeat')
+									ng-model='edit.newpassrepeat')
 							.form-actions
 								button.btn.btn-default.btn-color-brown(type="button",
 									ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
 								button.btn.btn-success(type='submit',
-									ng-click='savePassword(profile)') {{ui.profile.safePassword}}
+									ng-click='savePassword(edit)') {{ui.profile.safePassword}}
