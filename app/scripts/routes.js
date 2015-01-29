@@ -200,11 +200,15 @@ define(
                       $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
                     }
 
+
+
                   //Check if there is a userId in the url
                   if(_.isUndefined($route.current.params.userId))
                   {
                     redirectLocationLoggedUser();
+                    return false;
                   }
+                  
                   //Get the teams of the userId in url
                   var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
 

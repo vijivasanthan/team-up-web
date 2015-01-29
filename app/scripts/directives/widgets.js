@@ -352,8 +352,7 @@ define(
         };
       }
     );
-
-    //TODO create a isolate scope, so multiple $scope vars can use this
+    
     directives.directive(
       'inputRuleToggle',
       function()
@@ -399,11 +398,6 @@ define(
                   if(scope.edit.phoneNumbers[index])
                   {
                     scope.edit.phoneNumbers.splice(index, 1);
-                    scope.parsedPhoneNumbers[index] = {};
-                  }
-                  else if(scope.memberForm.phoneNumbers[index])
-                  {
-                    scope.memberForm.phoneNumbers.splice(index, 1);
                     scope.parsedPhoneNumbers[index] = {};
                   }
                 }
