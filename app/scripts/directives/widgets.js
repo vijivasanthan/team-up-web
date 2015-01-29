@@ -395,9 +395,9 @@ define(
                     .focus();
 
                   //empty model scope value
-                  if(scope.profile.phoneNumbers[index])
+                  if(scope.edit.phoneNumbers[index])
                   {
-                    scope.profile.phoneNumbers.splice(index, 1);
+                    scope.edit.phoneNumbers.splice(index, 1);
                     scope.parsedPhoneNumbers[index] = {};
                   }
                 }
