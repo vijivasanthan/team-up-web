@@ -677,6 +677,9 @@ define(
             as: ' als ',
             multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!'
           },
+          pincode: {
+            exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
+          },
           password: {
             amountMinChars: function(chars)
             {

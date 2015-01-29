@@ -163,7 +163,7 @@
                 <div ng-class="{'has-error': phoneNumberParsed.result == false}" class="form-group">
                   <label class="control-label">{{ui.teamup.phone}}</label>
                   <div class="controls">
-                    <input type="text" ng-model="memberForm.phone" ng-change="parsePhoneNumber(memberForm.phone)" class="span3 form-control inputPhoneNumber"><span class="help-block"><small><i>{{phoneNumberParsed.message}}</i></small></span>
+                    <input type="text" ng-model="memberForm.phone" ng-change="parsePhoneNumber(memberForm.phone); changePinToPhone()" class="span3 form-control inputPhoneNumber"><span class="help-block"><small><i>{{phoneNumberParsed.message}}</i></small></span>
                   </div>
                 </div>
                 <!--.form-group-->
@@ -198,6 +198,13 @@
                   <label class="control-label">{{ui.profile.retypePassword}}</label>
                   <div class="controls">
                     <input type="password" ng-model="memberForm.reTypePassword" class="span3">
+                  </div>
+                </div>
+                <div ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid &amp;&amp; !teamMemberForm.pincode.$pristine }" class="form-group">
+                  <label class="control-label">{{ui.profile.pincode}}</label>
+                  <div class="controls">
+                    <input type="text" ng-model="memberForm.pincode" ui-mask="9999" ng-change="pincodeExists(memberForm.pincode)" name="pincode" class="span2 form-control">
+                    <p ng-hide="pincodeExistsValidation" class="text-danger"><small><i>{{pincodeExistsValidationMessage}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfo}}</i></small></span>
                   </div>
                 </div>
               </fieldset>

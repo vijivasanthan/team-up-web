@@ -167,7 +167,7 @@
             <div ng-class="{ 'has-error' : profileForm.pincode.$invalid &amp;&amp; !profileForm.pincode.$pristine }" ng-show="(app.resources.role == 1) || (edit.uuid == app.resources.uuid)" class="form-group">
               <label class="control-label">{{ui.profile.pincode}}</label>
               <div class="controls">
-                <input type="text" ng-model="edit.pincode" ui-mask="9999" ng-change="pincodeExists()" name="pincode" class="span2 form-control">
+                <input type="text" ng-model="edit.pincode" ui-mask="9999" ng-change="pincodeExists(edit.pincode, edit.uuid)" name="pincode" class="span2 form-control">
                 <p ng-hide="pincodeExistsValidation" class="text-danger"><small><i>{{pincodeExistsValidationMessage}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfo}}</i></small></span>
               </div>
             </div>

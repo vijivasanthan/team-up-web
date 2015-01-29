@@ -21,7 +21,9 @@ define(
         'TeamUp',
         'Permission',
         '$route',
-        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp, Permission, $route)
+        'Pincode',
+        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
+                  Dater, TeamUp, Permission, $route, Pincode)
         {
           // TODO: Remove later on (Needed for timeline info filters)
           if (!Dater.getPeriods())
@@ -706,6 +708,23 @@ define(
           {
               $window.location.href = url;
               $route.reload();
+          };
+
+          $rootScope.pincodeExists = function (pincode, userId)
+          {
+            Pincode.pincodeExists(
+              pincode,
+              $rootScope.pincodeExistsValidation,
+              $rootScope.checkPincode,
+              userId
+            ).then(
+              function (data)
+              {
+                $rootScope.pincodeExistsValidation = data.pincodeExistsValidation;
+                $rootScope.pincodeExistsValidationMessage = data.pincodeExistsValidationMessage;
+                $rootScope.checkPincode = data.check;
+              }
+            );
           };
 
           $rootScope.unique = function (collection) {

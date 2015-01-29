@@ -22,8 +22,9 @@ define(
         '$timeout',
         'MD5',
         'Profile',
+        'Pincode',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Pincode)
         {
           var getProfileResource = function(userId, flag)
           {
@@ -105,47 +106,9 @@ define(
           $scope.$watch(function()
           {
             return $scope.edit.pincode;
-          }, $scope.pincodeExists);
-
-          $scope.pincodeExistsValidation = true;
-
-          $scope.pincodeExists = function ()
-          {
-            var CHECK_PINCODE_DELAY = 250;
-
-            if (! angular.isDefined($scope.edit.pincode) ||
-              $scope.edit.pincode == '')
-            {
-              $scope.pincodeExistsValidation = false;
-              $scope.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeNotValid;
-            }
-            else
-            {
-              if (angular.isDefined($scope.edit.pincode))
-              {
-                if ($scope.checkPincode)
-                {
-                  clearTimeout($scope.checkPincode);
-
-                  $scope.checkPincode = null;
-                }
-
-                $scope.checkPincode = setTimeout(function ()
-                {
-                  $scope.checkPincode = null;
-
-                  Profile.pincodeExists($scope.view.uuid, $scope.edit.pincode)
-                    .then(
-                    function (result)
-                    {
-                      $scope.pincodeExistsValidation = result;
-                      $scope.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeInUse;
-                    }
-                  );
-                }, CHECK_PINCODE_DELAY);
-              }
-            }
-          };
+          }, function() {
+            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid);
+          });
 
           $scope.parsedPhoneNumbers = [];
 
@@ -177,8 +140,6 @@ define(
             //reset the phonenumber afterwards
             $rootScope.resetPhoneNumberChecker();
           };
-
-          $scope.checkPincode = null;
 
           /**
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
@@ -218,6 +179,12 @@ define(
             if (! resources.phoneNumbers[0])
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValidOnSubmit);
+              return false;
+            }
+
+            if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
               return false;
             }
 

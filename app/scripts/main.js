@@ -188,6 +188,7 @@ require(
     'services/md5',
     'services/storage',
     'services/stats',
+    'services/pincode',
 
     // 'services/googleGEO',
 
