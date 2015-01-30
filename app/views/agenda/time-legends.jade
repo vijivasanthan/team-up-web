@@ -1,6 +1,6 @@
 div.legenda
 	.legenda-row
-		strong {{ui.agenda.members}}
+		strong {{ui.agenda.teamMembers}}
 		ul
 			li(ng-repeat='(key, value) in timeline.config.states',
 			class="legenda-{{value.className}}")
