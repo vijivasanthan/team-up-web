@@ -87,7 +87,7 @@ define(['services/services', 'config'], function (services, config) {
     {
       var deferred = $q.defer();
 
-      if(resources.length && !_.isUndefined(resources.uuid))
+      if(resources && !_.isUndefined(resources.uuid))
       {
         user.save({
             teamId: resources.teamUuids[0],

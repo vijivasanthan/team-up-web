@@ -417,7 +417,7 @@ define(
           oldPassword: 'Oud wachtwoord',
           pincode: 'Teamlidcode',
           pincodeInUse: 'Deze teamlidcode is in gebruik. Kies een andere.',
-          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van 4 cijfers in!',
+          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van maximaal 8 cijfers in!',
           pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
           pincodeInfo: 'Bovenstaande code kunt u telefonisch gebruiken om u aan te melden als TeamTelefoon uw nummer niet herkent.',
           duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',

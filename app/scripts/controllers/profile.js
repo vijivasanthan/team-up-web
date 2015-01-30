@@ -464,6 +464,12 @@ define(
             );
           };
 
+          $scope.deleteAvatar = function()
+          {
+            //$data.uuid;
+            angular.element('#confirmDeleteAvatar').modal('hide');
+          };
+
           // Remove a profile completely
           $scope.deleteProfile = function ()
           {

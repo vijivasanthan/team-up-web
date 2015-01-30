@@ -247,7 +247,7 @@ section#profile
 							.controls
 								input.span2.form-control(type='text',
 								ng-model='edit.pincode',
-								ui-mask='9999',
+								ui-mask='9999?9999',
 								ng-change='pincodeExists(edit.pincode, edit.uuid)',
 								name='pincode')
 								p.text-danger(ng-hide='pincodeExistsValidation')

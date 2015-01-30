@@ -203,7 +203,7 @@
                 <div ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid &amp;&amp; !teamMemberForm.pincode.$pristine }" class="form-group">
                   <label class="control-label">{{ui.profile.pincode}}</label>
                   <div class="controls">
-                    <input type="text" ng-model="memberForm.pincode" ui-mask="9999" ng-change="pincodeExists(memberForm.pincode)" name="pincode" class="span2 form-control">
+                    <input type="text" ng-model="memberForm.pincode" ui-mask="9999?9999" ng-change="pincodeExists(memberForm.pincode)" name="pincode" class="span2 form-control">
                     <p ng-hide="pincodeExistsValidation" class="text-danger"><small><i>{{pincodeExistsValidationMessage}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfo}}</i></small></span>
                   </div>
                 </div>

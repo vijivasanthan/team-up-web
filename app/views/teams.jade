@@ -272,7 +272,7 @@ aria-hidden='true')
 									.controls
 										input.span2.form-control(type='text',
 										ng-model='memberForm.pincode',
-										ui-mask='9999',
+										ui-mask='9999?9999',
 										ng-change='pincodeExists(memberForm.pincode)',
 										name='pincode')
 										p.text-danger(ng-hide='pincodeExistsValidation')
