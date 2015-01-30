@@ -476,23 +476,25 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-            var pincode = member.pincode;
-            delete member.pincode;
+            //create a temp so the user don't see that the field changing
+            var tempResources = angular.copy(member);
+            var pincode = tempResources.pincode;
+            delete tempResources.pincode;
 
             TeamUp._(
               'memberAdd',
               null,
               {
-                uuid: member.username,
-                userName: member.username,
-                passwordHash: MD5(member.password),
-                firstName: member.firstName,
-                lastName: member.lastName,
-                phone: member.phone,
-                email: member.email,
-                teamUuids: [member.team],
-                role: member.role,
-                birthDate: Dater.convert.absolute(member.birthDate, 0)
+                uuid: tempResources.username,
+                userName: tempResources.username,
+                passwordHash: MD5(tempResources.password),
+                firstName: tempResources.firstName,
+                lastName: tempResources.lastName,
+                phone: tempResources.phone,
+                email: tempResources.email,
+                teamUuids: [tempResources.team],
+                role: tempResources.role,
+                birthDate: Dater.convert.absolute(tempResources.birthDate, 0)
                 //function: member.function
               }
             ).then(
@@ -506,8 +508,6 @@ define(
                 else
                 {
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                  console.log('$scope.memberForm.pincode', $scope.memberForm.pincode);
 
                   Profile.save(result.uuid, {
                     pincode: pincode

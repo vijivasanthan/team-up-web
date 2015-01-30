@@ -57,7 +57,11 @@
           <div class="tab-header">
             <h3 class="pull-left">{{view.firstName}} {{view.lastName}}</h3>
             <!--div(dynamic='test') {{test}}-->
+<<<<<<< HEAD
+            <button type="button" ng-click="confirmModal(&quot;#confirmProfileModal&quot;)" ng-hide="app.resources.role &gt; 1 &amp;&amp; teams.length &amp;&amp; edit.uuid != app.resources.uuid" class="btn pull-right btn-info marginLeftTen">
+=======
             <button type="button" ng-click="confirmModal(&quot;#confirmProfileModal&quot;)" ng-hide="app.resources.role &gt; 1 &amp;&amp; teams.length == 0 &amp;&amp; edit.uuid != app.resources.uuid" class="btn pull-right btn-info marginLeftTen">
+>>>>>>> 29b90c1e0acc8c849ceaaa31c32eda9646af9120
                
               {{ui.teamup.del}}
             </button>

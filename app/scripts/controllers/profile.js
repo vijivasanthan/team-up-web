@@ -269,10 +269,13 @@ define(
               resources.birthDate = days + '-' + months + '-' + years;
             }
 
+            //create a temp so the user don't see that the field changing
+            var tempResources = angular.copy(resources);
+
             // deal with birthday
             try
             {
-              resources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
+              tempResources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
             }
             catch (error)
             {
@@ -286,14 +289,14 @@ define(
             //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
 
-            delete resources.birthday;
-            delete resources.fullName;
+            delete tempResources.birthday;
+            delete tempResources.fullName;
             //delete resources.TeamMemberCodeAsPhone;
 
             //oldpass
             if(!_.isUndefined(resources.oldpass))
             {
-              delete resources.oldpass;
+              delete tempResources.oldpass;
             }
             //save profileresource
             Profile.save($route.current.params.userId,
@@ -312,10 +315,10 @@ define(
                 }
                 else
                 {
-                  delete resources.phoneNumbers;
-                  delete resources.pincode;
+                  delete tempResources.phoneNumbers;
+                  delete tempResources.pincode;
 
-                  saveUserData(resources);
+                  saveUserData(tempResources);
                 }
               }
             );
