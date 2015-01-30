@@ -407,7 +407,7 @@ define(
                                         function ()
                                         {
                                           angular.element('.navbar').show();
-                                          angular.element('body').css({ 'background': 'url(../../images/bg.jpg) repeat' });
+                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
 
                                           if (! $rootScope.browser.mobile)
                                           {
