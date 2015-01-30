@@ -208,7 +208,7 @@ define(
                     redirectLocationLoggedUser();
                     return false;
                   }
-                  
+
                   //Get the teams of the userId in url
                   var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
 
