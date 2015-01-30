@@ -57,7 +57,10 @@
           <div class="tab-header">
             <h3 class="pull-left">{{view.firstName}} {{view.lastName}}</h3>
             <!--div(dynamic='test') {{test}}-->
-            <button type="button" ng-click="confirmModal(&quot;#confirmProfileModal&quot;)" ng-hide="app.resources.role &gt; 1 &amp;&amp; teams.length == 0 &amp;&amp; edit.uuid != app.resources.uuid" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.del}}</button>
+            <button type="button" ng-click="confirmModal(&quot;#confirmProfileModal&quot;)" ng-hide="app.resources.role &gt; 1 &amp;&amp; teams.length &amp;&amp; edit.uuid != app.resources.uuid" class="btn pull-right btn-info marginLeftTen">
+               
+              {{ui.teamup.del}}
+            </button>
             <button type="button" ng-click="editProfile()" ng-hide="(app.resources.role &gt; 1 &amp;&amp; edit.uuid != app.resources.uuid)" class="btn pull-right btn-info">{{ui.profile.edit}}</button>
           </div>
           <hr>
@@ -72,7 +75,7 @@
                 <dt>E-mail</dt>
                 <dd>{{view.email }}</dd>
                 <dt ng-show="view.phoneNumbers.length &gt; 0">{{ui.profile.phone}}</dt>
-                <dd ng-repeat="phone in view.phoneNumbers" class="phones"><span class="label label-inverse">{{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  </span><span class="phone-description">{{phone}}</span></dd>
+                <dd ng-repeat="phone in view.phoneNumbers" class="phones"> <span class="label label-inverse">{{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  </span><span class="phone-description">{{phone}}</span></dd>
                 <!--dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}-->
                 <dt>{{ui.profile.birthday}}</dt>
                 <dd>{{view.birthDate}}</dd>
