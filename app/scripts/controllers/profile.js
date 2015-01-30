@@ -269,6 +269,9 @@ define(
               resources.birthDate = days + '-' + months + '-' + years;
             }
 
+            //add first phonenumber resource to user object
+            resources.phone = resources.phoneNumbers[0];
+
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
@@ -286,9 +289,6 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
-            //add first phonenumber resource to user object
-            resources.phone = resources.phoneNumbers[0];
-
             delete tempResources.birthday;
             delete tempResources.fullName;
             //delete resources.TeamMemberCodeAsPhone;
@@ -302,6 +302,7 @@ define(
             Profile.save($route.current.params.userId,
               {
                 PhoneAddresses: resources.phoneNumbers,
+                PhoneAddress: resources.phone,
                 pincode: resources.pincode
               }
             )

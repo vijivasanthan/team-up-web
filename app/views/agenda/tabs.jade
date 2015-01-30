@@ -1,11 +1,11 @@
-li(data-match-route='/team-telefoon/agenda')
-	a(href='planboard#timelineTab', data-toggle='tab', ng-click='nav("team-telefoon/agenda")')
-		span.entypo &#128340;
-		| {{ui.planboard.planboard}}
 li(data-match-route='/team-telefoon/status')
 	a(href='planboard#timelineTab', data-toggle='tab', ng-click='nav("team-telefoon/status")')
 		span.entypo &#59249;
 		| Status
+li(data-match-route='/team-telefoon/agenda')
+	a(href='planboard#timelineTab', data-toggle='tab', ng-click='nav("team-telefoon/agenda")')
+		span.entypo &#128340;
+		| {{ui.planboard.planboard}}
 li(data-match-route='/team-telefoon/order',
 	ng-hide='app.resources.role > 1')
 	a(href='planboard#timelineTab', data-toggle='tab', ng-click='nav("team-telefoon/order")')

@@ -314,7 +314,7 @@ define(
                 }
                 else if(_.has(permissionProfile, 'teamTelephone'))
                 {
-                  location = '/team-telefoon';
+                  location = '/team-telefoon/status';
                 }
                 else
                 {
