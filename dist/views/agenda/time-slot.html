@@ -65,7 +65,7 @@
       <input type="checkbox" ng-model="slot.recursive">
     </div>
     <div ng-show="views.group" class="form-elements-group"><small><i ng-show="(slot.diff &lt; 0)">{{slot.diff | i18n_spec:'planboard.lessPeople'}}</i><i ng-show="(slot.diff == 0)">{{ui.agenda.samePeople}}</i><i ng-show="(slot.diff &gt; 0)">{{slot.diff | i18n_spec:'planboard.morePeople'}}</i></small></div>
-    <div ng-show="views.wish" class="form-elements-group">
+    <div ng-show="views.wish" class="form-elements-group wish-amount">
       <label>{{ui.agenda.wished}}</label>
       <input name="wish-count" type="text" ng-model="slot.wish" class="input-mini">
     </div>
