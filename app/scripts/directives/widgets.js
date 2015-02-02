@@ -352,7 +352,7 @@ define(
         };
       }
     );
-    
+
     directives.directive(
       'inputRuleToggle',
       function()
@@ -405,6 +405,34 @@ define(
             );
           }
         };
+      }
+    );
+
+    //TODO use this one for date (difference in view and model)
+    directives.directive(
+      'formattedDate',
+      function($filter)
+      {
+        return {
+          link: function (scope, element, attrs, ctrl)
+          {
+            ctrl.$formatters.unshift(
+              function (modelValue)
+              {
+                return $filter('date')(modelValue, 'dd-MM-yyyy');
+              }
+            );
+
+            ctrl.$parsers.unshift(
+              function (viewValue)
+              {
+                return $filter('date')(viewValue, 'dd-MM-yyyy');
+              }
+            );
+          },
+          restrict: 'A',
+          require: 'ngModel'
+        }
       }
     );
 

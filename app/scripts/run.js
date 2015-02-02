@@ -671,12 +671,27 @@ define(
                         }
                         else
                         {
+                          var numberType;
+
+                          switch (result.validation.getNumberType)
+                          {
+                            case 'FIXED_LINE':
+                              numberType = $rootScope.ui.validation.phone.fixedLine;
+                              break;
+                            case 'MOBILE':
+                              numberType = $rootScope.ui.validation.phone.mobile;
+                              break;
+                            case 'FIXED_LINE_OR_MOBILE':
+                              numberType = $rootScope.ui.validation.phone.mobileOrFixedLine;
+                              break;
+                          }
+
                           $rootScope.phoneNumberParsed = {
                             result: true,
                             message: $rootScope.ui.validation.phone.message +
                             result.validation.phoneNumberRegion +
                             $rootScope.ui.validation.phone.as +
-                            result.validation.getNumberType,
+                            numberType,
                             format: result.formatting.e164
                           };
 

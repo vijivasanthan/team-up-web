@@ -115,10 +115,11 @@
                 <select ng-model="edit.role" ng-options="r.id as r.label for r in roles" ng-selected="currentRole"></select>
               </div>
             </div>
-            <div ng-hide="browser.mobile" class="form-group dater">
+            <div ng-class="{ 'has-error' : profileForm.birthdate.$invalid &amp;&amp; !profileForm.birthdate.$pristine }" ng-hide="browser.mobile" class="form-group dater">
               <label class="control-label">{{ui.profile.birthday}}</label>
               <div class="controls">
-                <input name="date-start" type="text" ng-model="edit.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker"><i class="icon-calendar"></i>
+                <input name="birthdate" required="required" type="text" ng-model="edit.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" class="form-control"><i class="icon-calendar"></i>
+                <p ng-show="profileForm.birthdate.$invalid &amp;&amp; !profileForm.birthdate.$pristine" class="text-danger"><small><i>{{ui.validation.birthDate.notValid }}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.exampleBirthDate}}</i></small></span>
               </div>
             </div>
             <div ng-show="browser.mobile" class="form-elements-group">

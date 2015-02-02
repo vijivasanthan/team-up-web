@@ -205,7 +205,7 @@ aria-hidden='true')
 			.tab-header
 				h3.pull-left {{ui.teamup.newClient}}
 			hr
-			form
+			form(name='newClientForm')
 				fieldset
 					.control-group
 						label.control-label {{ui.profile.firstName}}
@@ -217,17 +217,25 @@ aria-hidden='true')
 						.controls
 							input.span4(type='text',
 							ng-model='clientForm.lastName')
-					.control-group
+					.form-group.dater(ng-class="{ 'has-error' : newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine }")
 						label.control-label {{ui.profile.birthday}}
 						.controls
-							.control-group.dater(style='')
-								input.ng-pristine.ng-valid(name='date-start',
-								type='text',
-								ng-model='clientForm.birthDate', data-date-type='string',
+							.control-group
+								input.form-control(type='text',
+								name='birthdate',
+								required,
+								ng-model='clientForm.birthDate', 
+								data-date-type='string',
 								data-date-format='dd-MM-yyyy',
-								bs-datepicker='',
-								data-toggle='datepicker')
+								bs-datepicker='')
 								i.icon-calendar
+								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
+									small
+										i {{ui.validation.birthDate.notValid }}
+								span.help-block(style='margin-top: -5px;')
+									small
+										i {{ui.profile.exampleBirthDate}}
+										
 					.control-group
 						label.control-label {{ui.teamup.phone}}
 						.controls

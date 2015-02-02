@@ -145,17 +145,25 @@ section#profile
 								select(ng-model='edit.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
-						.form-group.dater(ng-hide='browser.mobile')
+						.form-group.dater(
+							ng-class="{ 'has-error' : profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine }",
+							ng-hide='browser.mobile')
 							label.control-label {{ui.profile.birthday}}
 							.controls
-								input(name='date-start',
+								input.form-control(name='birthdate',
+								required,
 								type='text',
 								ng-model='edit.birthDate',
 								data-date-type='string',
 								data-date-format='dd-MM-yyyy',
-								bs-datepicker='',
-								data-toggle='datepicker')
+								bs-datepicker='')
 								i.icon-calendar
+								p.text-danger(ng-show='profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine')
+									small
+										i {{ui.validation.birthDate.notValid }}
+								span.help-block(style='margin-top: -5px;')
+									small
+										i {{ui.profile.exampleBirthDate}}
 			
 						.form-elements-group(ng-show='browser.mobile')
 							label {{ui.profile.birthday}}

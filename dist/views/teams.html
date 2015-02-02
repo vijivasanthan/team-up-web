@@ -176,10 +176,11 @@
             </div>
             <div class="span6">
               <fieldset>
-                <div class="form-group dater">
+                <div ng-class="{ 'has-error' : teamMemberForm.birthdate.$invalid &amp;&amp; !teamMemberForm.birthdate.$pristine }" class="form-group dater">
                   <label class="control-label">{{ui.profile.birthday}}</label>
                   <div class="controls">
-                    <input name="date-start" type="text" ng-model="memberForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+                    <input type="text" name="birthdate" required="required" ng-model="memberForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" class="form-control"><i class="icon-calendar"></i>
+                    <p ng-show="teamMemberForm.birthdate.$invalid &amp;&amp; !teamMemberForm.birthdate.$pristine" class="text-danger"><small><i>{{ui.validation.birthDate.notValid }}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.exampleBirthDate}}</i></small></span>
                   </div>
                 </div>
                 <div class="form-group">

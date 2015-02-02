@@ -402,6 +402,7 @@ define(
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
+          exampleBirthDate: 'Bijvoorbeeld: 01-01-2001',
           firstName: 'Voornaam',
           lastName: 'Achternaam',
           editProfileImg: 'Profielfoto wijzigen',
@@ -677,7 +678,10 @@ define(
             notValidOnSubmit: 'Vul alstublieft minimaal een geldig telefoonnummer in om op te slaan.',
             message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
             as: ' als ',
-            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!'
+            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!',
+            fixedLine: 'een vastnummer',
+            mobile: 'een mobielnummer',
+            mobileOrFixedLine: 'een vast of mobielnummer'
           },
           pincode: {
             exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
@@ -696,6 +700,9 @@ define(
           email: {
             notValid: 'Voer een valide e-mailadres in!',
             required: 'Een e-mail is verplicht'
+          },
+          birthDate: {
+            notValid: 'Voer een valide geboortedatum in!'
           }
         }
       }

@@ -224,17 +224,25 @@ aria-hidden='true')
 								//			option(value='') {{ui.teamup.chooseFunction}}
 						.span6
 							fieldset
-								.form-group.dater
+								.form-group.dater(ng-class="{ 'has-error' : teamMemberForm.birthdate.$invalid && !teamMemberForm.birthdate.$pristine }")
 									label.control-label {{ui.profile.birthday}}
 									.controls
-										input.ng-pristine.ng-valid(name='date-start',
+										input.form-control(
 										type='text',
-										ng-model='memberForm.birthDate',
+										name='birthdate',
+										required,
+										ng-model="memberForm.birthDate",
 										data-date-type='string',
 										data-date-format='dd-MM-yyyy',
-										bs-datepicker='',
-										data-toggle='datepicker')
+										bs-datepicker='')
 										i.icon-calendar
+										p.text-danger(ng-show='teamMemberForm.birthdate.$invalid && !teamMemberForm.birthdate.$pristine')
+											small
+												i {{ui.validation.birthDate.notValid }}
+										span.help-block(style='margin-top: -5px;')
+											small
+												i {{ui.profile.exampleBirthDate}}
+												
 								.form-group
 									label.control-label {{ui.profile.username}}
 									.controls

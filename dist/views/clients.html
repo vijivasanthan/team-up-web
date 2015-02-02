@@ -147,7 +147,7 @@
         <h3 class="pull-left">{{ui.teamup.newClient}}</h3>
       </div>
       <hr>
-      <form>
+      <form name="newClientForm">
         <fieldset>
           <div class="control-group">
             <label class="control-label">{{ui.profile.firstName}}</label>
@@ -161,11 +161,12 @@
               <input type="text" ng-model="clientForm.lastName" class="span4">
             </div>
           </div>
-          <div class="control-group">
+          <div ng-class="{ 'has-error' : newClientForm.birthdate.$invalid &amp;&amp; !newClientForm.birthdate.$pristine }" class="form-group dater">
             <label class="control-label">{{ui.profile.birthday}}</label>
             <div class="controls">
-              <div style="" class="control-group dater">
-                <input name="date-start" type="text" ng-model="clientForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+              <div class="control-group">
+                <input type="text" name="birthdate" required="required" ng-model="clientForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" class="form-control"><i class="icon-calendar"></i>
+                <p ng-show="newClientForm.birthdate.$invalid &amp;&amp; !newClientForm.birthdate.$pristine" class="text-danger"><small><i>{{ui.validation.birthDate.notValid }}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.exampleBirthDate}}</i></small></span>
               </div>
             </div>
           </div>
