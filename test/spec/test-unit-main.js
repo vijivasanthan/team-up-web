@@ -14,6 +14,7 @@ requirejs.config(
     baseUrl: '/base/app/scripts',
 
     paths: {
+      localConfig: 'localConfig',
       config: 'config',
       angular:      '../vendors/angular/angular',
       jquery:       '../vendors/jquery/dist/jquery',
@@ -58,7 +59,6 @@ requirejs.config(
 
 requirejs.config({
   paths: {
-    localConfig: 'localConfig',
     profile: 'profiles/teamup/profile'
   }
 });
