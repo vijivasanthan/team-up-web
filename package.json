@@ -38,6 +38,7 @@
     "karma-firefox-launcher": "*",
     "karma-html2js-preprocessor": "*",
     "karma-jasmine": "*",
+    "karma-junit-reporter": "^0.2.2",
     "karma-ng-scenario": "*",
     "karma-phantomjs-launcher": "*",
     "karma-requirejs": "*",

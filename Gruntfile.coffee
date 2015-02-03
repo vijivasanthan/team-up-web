@@ -339,7 +339,10 @@ module.exports = (grunt) ->
       unit:
         configFile: 'karma.conf.js'
         singleRun: true
-
+      ci:
+        configFile: 'karma.conf.js'
+        singleRun: true,
+        reporters: ['junit']
 #      end:
 #        configFile: 'karma-e2e.conf.js'
 #        singleRun: false
