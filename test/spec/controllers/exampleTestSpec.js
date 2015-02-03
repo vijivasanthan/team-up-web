@@ -92,7 +92,7 @@ define(
             {
               result = reason;
             }
-          );git add
+          );
 
         $httpBackend.flush();
         expect(result.teamTelephone).toBe(true);
