@@ -1,4 +1,3 @@
-
 var tests = [];
 for (var file in window.__karma__.files) {
   if (window.__karma__.files.hasOwnProperty(file)) {
@@ -57,8 +56,7 @@ requirejs.config(
   }
 );
 
-requirejs.config ({
-
+requirejs.config({
   paths: {
     localConfig: 'localConfig',
     profile: 'profiles/teamup/profile'
