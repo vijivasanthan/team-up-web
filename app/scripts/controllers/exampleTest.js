@@ -8,7 +8,7 @@ define(
       $scope
       //TestModal
     ){
-      $scope.exampleTestString = 'Controller testing works!!';
+      $scope.exampleTestString = 'Controller testing works';
 
       //$scope.passWord = 'dasd2135';
       //
