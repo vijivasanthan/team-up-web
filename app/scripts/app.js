@@ -11,8 +11,8 @@ define(
     'angular-route',
     'angular-md5',
     'angular-strap',
-    //'ui-sortable',
-    //'ui.bootstrap.pagination'
+    'ui-sortable',
+    'ui.bootstrap.pagination'
     //'ui-bootstrap',
     // 'ng-vis',
     // 'angular-google-maps',
@@ -32,8 +32,8 @@ define(
         'ngRoute',
         'ngMd5',
         'mgcrea.ngStrap',
-        //'ui.sortable',
-        //'ui.bootstrap.pagination',
+        'ui.sortable',
+        'ui.bootstrap.pagination',
         'ui.mask'
         //'$strap.directives',
         //'ui.bootstrap.modal',

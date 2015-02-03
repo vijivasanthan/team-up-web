@@ -24,6 +24,9 @@ requirejs.config(
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
+      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       domReady:     '../vendors/requirejs-domready/domReady',
       'angular-mocks': '../vendors/angular-mocks/angular-mocks',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
@@ -40,6 +43,9 @@ requirejs.config(
       'angular-md5': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'] },
       'angular-strap-tpl': { deps: ['angular','angular-strap'] },
+      'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
+      'ui.bootstrap.pagination': { deps: ['angular'] },
       angular: {
         deps:    ['jquery'],
         exports: 'angular'
