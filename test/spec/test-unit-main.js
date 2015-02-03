@@ -59,6 +59,7 @@ requirejs.config(
 
 requirejs.config({
   paths: {
+    localConfig: 'localConfig',
     profile: 'profiles/teamup/profile'
   }
 });
