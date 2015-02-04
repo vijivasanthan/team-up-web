@@ -113,6 +113,7 @@ define(
           );
 
         $httpBackend.flush();
+
         expect(result.teamTelephone).toBe(true);
       });
 
