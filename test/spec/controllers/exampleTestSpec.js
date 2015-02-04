@@ -4,7 +4,16 @@ define(
     'app',           // so no need to load angular
     // Add all needed test files below
     'controllers/exampleTest',
-    'modals/testModal'
+    'modals/testModal',
+    'modals/profile',
+    'modals/slots',
+    'services/dater',
+    'services/store',
+    'services/sloter',
+    'services/stats',
+    'services/teams',
+    'services/teamup',
+    'services/md5'
   ],
   function() {
     'use strict';
@@ -23,13 +32,20 @@ define(
         )
       );
 
+      afterEach(inject(function($httpBackend)
+      {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+      }));
+
       var exampleCtrl,
           rootScope,
           scope,
           testModal,
           $q,
           $resource,
-          $httpBackend;
+          $httpBackend,
+          profile;
 
       // Initialize the controller and a mock scope
       beforeEach(
@@ -41,7 +57,8 @@ define(
             _TestModal_,
             _$q_,
             _$resource_,
-            _$httpBackend_
+            _$httpBackend_,
+            _Profile_
           )
           {
             scope = $rootScope.$new();
@@ -53,6 +70,7 @@ define(
             $q = _$q_;
             $resource = _$resource_;
             $httpBackend = _$httpBackend_;
+            profile = _Profile_;
           }
         )
       );
@@ -97,6 +115,38 @@ define(
         $httpBackend.flush();
         expect(result.teamTelephone).toBe(true);
       });
+
+      it("Should check if the logged user can't create a new member with the same teamlid-code",
+        function()
+        {
+          var result = null,
+              userId = 'henkie',
+              pincode = 8701,
+              currentUser = true;
+
+          $httpBackend.expect(
+            'GET',
+            'http://dev.ask-cs.com/node/' + userId + '/pincode_exists' +
+             '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser
+          ).respond(409, 'Conflict');
+
+          profile
+            .pincodeExists(userId, pincode, currentUser)
+            .then(
+            function(checkResult)
+            {
+              result = checkResult;
+            },
+            function(error)
+            {
+              result = error;
+            }
+          );
+
+          $httpBackend.flush();
+          expect(result).toBe(false);
+        }
+      );
     });
   }
 );
