@@ -51,7 +51,8 @@ define(
           time: {
             days: 'd',
             hours: 'u',
-            minutes: 'm'
+            minutes: 'm',
+            seconds: 's'
           },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',

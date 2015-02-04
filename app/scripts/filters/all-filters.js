@@ -1,6 +1,6 @@
 define(
   ['filters/filters', 'config'],
-  function (filters, config) {
+  function (filters) {
     'use strict';
 
     filters.filter(
@@ -8,10 +8,10 @@ define(
       [
         function () {
           return function (date) {
-            return Date(date);
+            return new Date(date);
           }
         }
-      ])
+      ]);
 
 
     //filter array on empty values and seperate the values by a comma and create a string of the array
@@ -27,7 +27,7 @@ define(
           }
         }
       ]
-    )
+    );
 
     filters.filter
     (
@@ -79,7 +79,7 @@ define(
       [
         function () {
           return function (divid) {
-            var filtered;
+            var filtered = null;
 
             angular.forEach(
               $rootScope.config.app.timeline.config.divisions,
@@ -338,11 +338,18 @@ define(
             delta -= hours * 3600;
 
             var minutes = Math.floor(delta / 60) % 60;
+            delta -= minutes * 60;
+
+            var seconds = Math.floor(delta  % 60);
 
             var output = '';
 
             if (days != 0) {
               output += days;
+              if(hours == 0)
+              {
+                output += $rootScope.ui.dashboard.time.days;
+              }
             }
 
             if (hours != 0) {
@@ -351,6 +358,10 @@ define(
               }
 
               output += hours;
+              if (minutes == 0)
+              {
+                output += $rootScope.ui.dashboard.time.hours;
+              }
             }
 
             if (minutes != 0) {
@@ -358,11 +369,11 @@ define(
                 output += $rootScope.ui.dashboard.time.hours + ' : '
               }
 
-              output += minutes + $rootScope.ui.dashboard.time.minutes
+              output += minutes + $rootScope.ui.dashboard.time.minutes;
             }
 
             if (hours == 0 && minutes == 0) {
-              output += ' ' + $rootScope.ui.dashboard.time.days
+              output += seconds + $rootScope.ui.dashboard.time.seconds;
             }
 
             return output;
@@ -658,7 +669,7 @@ define(
             return Strings.toTitleCase(txt);
           }
         }
-      ])
+      ]);
 
 
     // /**
