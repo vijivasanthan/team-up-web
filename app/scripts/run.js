@@ -210,7 +210,7 @@ define(
                     if (_member.uuid == memberId)
                     {
                       member = _member;
-                      return;
+                      return false;
                     }
                   }
                 );
@@ -266,7 +266,7 @@ define(
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
           {
-            var result;
+            var result = null;
 
             angular.forEach(
               Store('app').get('clients'),
@@ -277,7 +277,7 @@ define(
                   result = client;
 
                   // TODO: return is needed here?
-                  return;
+                  return false;
                 }
               }
             );
@@ -297,7 +297,7 @@ define(
                         result = client;
 
                         // TODO: return is needed here?
-                        return;
+                        return false;
                       }
                     }
                   );
@@ -521,7 +521,7 @@ define(
               elements.push('.client-avatar');
             }
 
-            angular.forEach(elements, function (element, i)
+            angular.forEach(elements, function (element)
             {
               angular.element(element).css({
                 'background': 'url(' + url + ')',
@@ -725,13 +725,14 @@ define(
               $route.reload();
           };
 
-          $rootScope.pincodeExists = function (pincode, userId)
+          $rootScope.pincodeExists = function (pincode, userId, assignedId)
           {
             Pincode.pincodeExists(
               pincode,
               $rootScope.pincodeExistsValidation,
               $rootScope.checkPincode,
-              userId
+              userId,
+              assignedId
             ).then(
               function (data)
               {

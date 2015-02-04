@@ -11,7 +11,7 @@ define(
         function ($rootScope, Profile, $q)
         {
           return  {
-            pincodeExists: function (pincode, pincodeExist, checkPincode, userId)
+            pincodeExists: function (pincode, pincodeExist, checkPincode, userId, assignedId)
             {
               var deferred = $q.defer(),
                 _userId = (! userId) ? $rootScope.app.resources.uuid : userId,
@@ -40,10 +40,12 @@ define(
                 {
                   pinValidation.check = null;
 
-                  Profile.pincodeExists(_userId, pincode)
+                  Profile.pincodeExists(_userId, pincode, assignedId)
                     .then(
                     function (result)
                     {
+                      console.log('resultaat pincode', result);
+
                       pinValidation.pincodeExistsValidation = result;
                       pinValidation.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeInUse;
                       deferred.resolve(pinValidation);

@@ -420,7 +420,7 @@ define(
           var lastFourDigits = function(phone)
           {
             return phone.substr(phone.length - 4);
-          }
+          };
 
           $scope.memberSubmit = function (member)
           {
@@ -750,7 +750,8 @@ define(
                     }
                   });
               }
-            ), function (error)
+            ),
+            function (error)
             {
               console.log(error)
             };
@@ -765,7 +766,7 @@ define(
             return $scope.memberForm.pincode;
           }, function ()
           {
-            $rootScope.pincodeExists($scope.memberForm.pincode);
+            $rootScope.pincodeExists($scope.memberForm.pincode, $rootScope.app.resources.uuid, true);
           });
 
           // TODO: Investigate on this!

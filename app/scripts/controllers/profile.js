@@ -24,7 +24,7 @@ define(
         'Profile',
         'Pincode',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Pincode)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
           var getProfileResource = function(userId, flag)
           {
@@ -107,7 +107,7 @@ define(
           {
             return $scope.edit.pincode;
           }, function() {
-            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid);
+            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
           });
 
           $scope.parsedPhoneNumbers = [];
@@ -143,7 +143,7 @@ define(
 
           /**
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
-           * @param phone
+           * @param index index of what phonenumber
            */
           $scope.setTeamMemberCodeAsPhone = function(index)
           {
@@ -418,7 +418,7 @@ define(
           $scope.editPassword = function ()
           {
             setView('editPassword');
-          }
+          };
 
           // Change an avatar
           $scope.editImg = function ()
@@ -508,7 +508,7 @@ define(
                 {second: team.uuid},
                 {ids: [$scope.view.uuid]}
               ).then(
-                function (result)
+                function ()
                 {
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
