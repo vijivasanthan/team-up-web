@@ -59,11 +59,6 @@ define(
 
           var currentRole = $scope.view.role;
 
-          if($rootScope.browser.mobile)
-          {
-            $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
-          }
-
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
           $scope.forms = {
@@ -257,28 +252,28 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
-            if($rootScope.browser.mobile)
-            {
-              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
-              // to be provided in ISO 8601 (type='date')
-              var tempDate = resources.birthDate,
-                days = tempDate.substr(tempDate.length - 2),
-                months = tempDate.substr(5, 2),
-                years = tempDate.substr(0, 4);
-
-              resources.birthDate = days + '-' + months + '-' + years;
-            }
-
             //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
 
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
+            if($rootScope.browser.mobile)
+            {
+              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
+              // to be provided in ISO 8601 (type='date')
+              var tempDate = tempResources.birthDate,
+                days = tempDate.substr(tempDate.length - 2),
+                months = tempDate.substr(5, 2),
+                years = tempDate.substr(0, 4);
+
+              tempResources.birthDate = days + '-' + months + '-' + years;
+            }
+
             // deal with birthday
             try
             {
-              tempResources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
+              tempResources.birthDate = Dater.convert.absolute(tempResources.birthDate, 0);
             }
             catch (error)
             {
@@ -363,10 +358,6 @@ define(
                             {
                               $scope.edit.birthDate = Dater.formatDateMobile($scope.view.birthDate);
                             }
-                            else
-                            {
-                              $scope.edit.birthDate = $scope.view.birthDate;
-                            }
 
                             $rootScope.statusBar.off();
                             $scope.setViewTo('profile');
@@ -412,6 +403,11 @@ define(
 
           $scope.editProfile = function ()
           {
+            if($rootScope.browser.mobile)
+            {
+              $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
+            }
+
             setView('edit');
           };
 
@@ -470,7 +466,6 @@ define(
 
           $scope.deleteAvatar = function()
           {
-            //$data.uuid;
             angular.element('#confirmDeleteAvatar').modal('hide');
           };
 
