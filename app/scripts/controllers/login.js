@@ -46,8 +46,8 @@ define(
             var urlPrivateMode = 'http://support.apple.com/nl-nl/ht6366',
               template = '<p>' + $rootScope.ui.teamup.checkLocalStorage +  '</p>';
 
-            template += "<a href='" + urlPrivateMode + "'><span class='btn btn-block btn-primary'>";
-            template += $rootScope.ui.teamup.readMore +  '</span></a>';
+            template += "<a href='" + urlPrivateMode + "'>";
+            template += urlPrivateMode +  '</a>';
 
             setBackgroundColor();
 
