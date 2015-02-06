@@ -52,7 +52,7 @@ define(['controllers/controllers'], function (controllers)
         $scope.loadingReachability = true;
 
         //TODO resolve the Reachabilities of the member in the routing
-        $scope.getReachability = function (groupID, divisionID)
+        $scope.getReachability = function (groupID)
         {
           var deferred = $q.defer();
 
@@ -60,12 +60,6 @@ define(['controllers/controllers'], function (controllers)
           {
             groupID = $scope.current.group;
           }
-
-          if (!divisionID)
-          {
-            divisionID = $scope.current.division;
-          }
-
 
           if (groupID == 'all')
           {
@@ -197,7 +191,7 @@ define(['controllers/controllers'], function (controllers)
           var deferred = $q.defer();
           $scope.current.division = 'all';
           $scope.loadGroup = $rootScope.ui.dashboard.load;
-          $rootScope.statusBar.display($scope.current.group);
+          $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
           $scope.getReachability($scope.current.group, $scope.current.division)
             .then(function (results)

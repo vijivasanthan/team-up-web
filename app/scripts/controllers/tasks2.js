@@ -18,14 +18,8 @@ define(
         'Clients',
         'Dater',
         'TestModal',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater, TestModal)
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater)
         {
-          //For testpurposes only
-          //TestModal.getPermissionProfile()
-          //  .then(function(result) {
-          //    console.log('TestModal', result);
-          //  });
-
           $rootScope.fixStyles();
 
           var view = (!$location.hash()) ? 'myTasks' : $location.hash(),
@@ -116,7 +110,7 @@ define(
                   $scope.tasks.mine = {
                     loading: false,
                     list: myTasks,
-                    archieve: (myTasks.off.length > 0) ? true : false
+                    archieve: (myTasks.off.length > 0)
                   };
 
                   delay = 250;
@@ -146,7 +140,6 @@ define(
                 }, 250);
                 break;
               case 'editTask':
-                console.log('$scope.task', $scope.task);
                 break;
               case 'newTask':
                 break;
@@ -208,7 +201,7 @@ define(
                 $scope.tasks.mine = {
                   loading: false,
                   list: tasks.on,
-                  archieve: (tasks.off.length > 0) ? true : false
+                  archieve: (tasks.off.length > 0)
                 };
 
                 (callback && callback.call(this, tasks));
@@ -292,27 +285,25 @@ define(
           function formatDateTime(date, dateFormat)
           {
             return $filter('date')(date, dateFormat);
-          };
+          }
 
           function updateTime(date, minutes)
           {
             var roundMinutes = formatDateTime(date, 'm');
             roundMinutes = (roundMinutes % 15);
 
-            var updatedTime = new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
-
-            return updatedTime;
-          };
+            return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
+          }
 
           $scope.newTime = function (newTime)
           {
             $scope.task.end.time = updateTime(newTime, 15);
-          }
+          };
 
           $scope.newDate = function (newDate)
           {
             $scope.task.end.date = newDate;
-          }
+          };
 
           //$scope.$watch(function() {
           //  return $scope.task.start.date;
@@ -480,13 +471,14 @@ define(
           // Related to chain of drop-downs of teams and client groups
           $scope.teamAffectGroup = function ()
           {
+            $scope.groups = [];
+
             angular.forEach(
               clientLocal.clientGroups,
               function (cg)
               {
                 if ($scope.currentGroup == cg.id)
                 {
-                  $scope.groups = [];
                   $scope.groups.push(cg);
                 }
               }

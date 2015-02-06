@@ -503,7 +503,10 @@ define(
                 // change the REST return to json.
                 if (result.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + ' : ' + result.error);
+                  var errorData = result.error.data.error;
+
+                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + errorData);
+                  $rootScope.statusBar.off();
                 }
                 else
                 {

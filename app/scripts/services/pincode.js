@@ -44,8 +44,6 @@ define(
                     .then(
                     function (result)
                     {
-                      console.log('resultaat pincode', result);
-
                       pinValidation.pincodeExistsValidation = result;
                       pinValidation.pincodeExistsValidationMessage = $rootScope.ui.profile.pincodeInUse;
                       deferred.resolve(pinValidation);
