@@ -73,8 +73,7 @@
 				.tab-header
 					h3.pull-left Week kiezen
 				hr
-				div(class="SheetDiv" ng-repeat="sheetName in sheetNames" ng-click="selectSheet(sheetName)")
-					{{ sheetName }}
+				div(class="SheetDiv" ng-repeat="sheetName in sheetNames" ng-click="selectSheet(sheetName)") {{ sheetName }}
 
 			#UploadStepCheckStructure(ng-show='step === "CheckStructure"')
 				.tab-header
@@ -123,10 +122,8 @@
 						li(ng-repeat='task in taskCreateErrors' class='has-error') {{ task.error.result  }} {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }}
 
 				hr
-				.dayRow(ng-repeat="day in tuSheet.days")
-					{{ day.startDate | date: 'fullDate' }}
-					.routeRow(ng-repeat="route in day.routes | filter: { doInsert: true }")
-						{{ route.teamMember.firstName }}
+				.dayRow(ng-repeat="day in tuSheet.days") {{ day.startDate | date: 'fullDate' }}
+					.routeRow(ng-repeat="route in day.routes | filter: { doInsert: true }") {{ route.teamMember.firstName }}
 						.taskRow(ng-repeat="task in route.tasks | filter: { doInsert: true }")
 							.taskRowUploadStatus(ng-class="{ taskFailed: task.uploadStatus === 'failed' , taskSuccess: task.uploadStatus === 'success' }") {{ textForTaskUploadStatus(task.uploadStatus) }}
 							.taskRowStart {{ task.backendTask.plannedStartVisitTime | date: 'shortTime' }}
