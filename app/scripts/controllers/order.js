@@ -124,13 +124,19 @@ define(
 
           $scope.getOrder();
 
+          //$scope.sortableOptions = {
+          //  stop: function (e, ui)
+          //  {
+          //    tempOrder = $scope.orderedMembers;
+          //  },
+          //  cancel: ".unsortable",
+          //  items: "tr:not(.unsortable)"
+          //};
+
           $scope.sortableOptions = {
-            stop: function (e, ui)
-            {
-              tempOrder = $scope.orderedMembers;
-            },
-            cancel: ".unsortable",
-            items: "tr:not(.unsortable)"
+            animation: 150,
+            scroll:false,
+            draggable: 'tr'
           };
 
           $scope.confirmOrder = function ()

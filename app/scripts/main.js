@@ -88,7 +88,9 @@ require.config(
       'lodash': '../vendors/lodash/dist/lodash.min',
 
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
+      'sortable': '../vendors/Sortable/Sortable',
+      'ng-sortable': '../vendors/Sortable/ng-sortable',
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       'locale_nl': 'i18n/angular-locale_nl',
 
@@ -141,7 +143,7 @@ require.config(
 
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
+      //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
       'locale_nl': { deps: ['angular'] }
@@ -263,7 +265,9 @@ require(
 
     'jquery-ui',
     // 'angular-dragdrop',
-    'ui-sortable',
+    //'ui-sortable',
+    //'Sortable',
+    'ng-sortable',
     'locale_nl',
 
     // 'jszip',
