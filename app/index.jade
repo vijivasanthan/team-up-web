@@ -190,8 +190,6 @@ block notifications
 		ng-click='notification.status = false') ×
 		| {{notification.message}}
 
-
-
 block chat
 	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile',
 	ng-controller='messagesCtrl')

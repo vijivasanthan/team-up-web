@@ -25,11 +25,10 @@ define(
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
                   Dater, TeamUp, Permission, $route, Pincode)
         {
-          // TODO: Remove later on (Needed for timeline info filters)
-          if (!Dater.getPeriods())
-          {
-            Dater.registerPeriods();
-          }
+
+
+          var navBar = angular.element('.navbar'),
+              footer = angular.element('#footer');
 
           new Offline();
 
@@ -45,24 +44,43 @@ define(
             }
           );
 
+          Session.check();
+          $rootScope.config = config;
+          $rootScope.config.app.init();
+          $rootScope.ui = locals.ui[config.app.lang];
+
+          /**
+          * test if localStorage is reachable
+          */
+            try
+            {
+              localStorage.test = 'test';
+            }
+            catch (e)
+            {
+              navBar.hide();
+              footer.hide();
+
+              return false;
+            }
+
+          $rootScope.app = $rootScope.app || {};
+          $rootScope.app.resources = Store('app').get('resources');
+          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
+
+          angular.element('#notification').css({display: 'block'});
+
+          // TODO: Remove later on (Needed for timeline info filters)
+          if (!Dater.getPeriods())
+          {
+            Dater.registerPeriods();
+          }
+
           // TODO: Lose this later onw with VisJS/MomentJS navigation
           if (Store('app').get('periods') == null || Store('app').get('periods').value == null)
           {
             Dater.registerPeriods();
           }
-
-          angular.element('#notification').css({display: 'block'});
-
-          Session.check();
-
-
-          $rootScope.config = config;
-          $rootScope.config.app.init();
-          $rootScope.ui = locals.ui[config.app.lang];
-
-          $rootScope.app = $rootScope.app || {};
-          $rootScope.app.resources = Store('app').get('resources');
-          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
 
           /**
            * Timeline states
@@ -469,9 +487,9 @@ define(
           // TODO: Combine login and logout together
           $rootScope.logout = function ()
           {
-            angular.element('.navbar').hide();
+            navBar.hide();
 
-            angular.element('#footer').hide();
+            footer.hide();
 
             var loginData = Store('app').get('loginData');
 

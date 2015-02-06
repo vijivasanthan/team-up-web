@@ -25,10 +25,8 @@ define(
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
           Permission)
         {
-          // TODO: Soon not needed!
-          Dater.registerPeriods();
 
-          if ($location.path() == '/logout')
+          var setBackgroundColor = function()
           {
             angular.element('body')
               .css(
@@ -37,6 +35,37 @@ define(
                 'backgroundImage': 'none'
               }
             );
+          };
+
+          try
+          {
+            localStorage.test = 'test';
+          }
+          catch (e)
+          {
+            var urlPrivateMode = 'http://support.apple.com/nl-nl/ht6366',
+              template = '<p>' + $rootScope.ui.teamup.checkLocalStorage +  '</p>';
+
+            template += "<a href='" + urlPrivateMode + "'><span class='btn btn-block btn-primary'>";
+            template += $rootScope.ui.teamup.readMore +  '</span></a>';
+
+            setBackgroundColor();
+
+            angular.element('#login')
+              .html('')
+              .append(template);
+
+            return false;
+          }
+
+          // TODO: Soon not needed!
+          Dater.registerPeriods();
+
+
+
+          if ($location.path() == '/logout')
+          {
+            setBackgroundColor();
           }
 
           if ($routeParams.uuid && $routeParams.key)

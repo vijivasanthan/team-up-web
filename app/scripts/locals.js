@@ -535,6 +535,8 @@ define(
           reportTitleMinChars: 'De beschrijving moet uit minimaal 4 karakters bestaan!',
           reportBodyMaxChars: 'De beschrijving mag maximaal 150 karakters bestaan!',
           reportTitleMaxChars: 'De titel kan uit maximaal 30 karakters bestaan!',
+          checkLocalStorage: 'De privemodus is ingeschakeld op uw device. Dit wordt niet ondersteund door deze website.',
+          readMore: 'Lees meer',
           date: 'Datum',
           datetime: 'Datum en tijd',
           writenBy: 'Geschreven door',
