@@ -340,7 +340,7 @@ define(
                 {
                   Store('app').save('clients', clients);
                   return clients;
-                }.bind(this)
+                }
               )
           };
 
