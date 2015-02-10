@@ -231,6 +231,29 @@ define(
               $rootScope.statusBar.off();
 
               angular.element('div[ng-view]').show();
+
+
+               //try {
+               //ga('send', 'pageview', {
+               //'dimension1': resources.uuid,
+               //'dimension2': $rootScope.StandBy.environment.domain
+               //});
+               //
+               //ga('send', 'event', 'Login', resources.uuid);
+               //} catch (err) {
+               //console.warn('Google analytics error!', err);
+               ////console.log(resources.uuid);
+               ////console.log($rootScope.StandBy.environment.domain);
+               //}
+
+              try {
+                trackGa('send', 'pageview', {
+                  title: $location.hash(),
+                  page: $rootScope.newLocation
+                });
+              } catch (err) {
+                console.warn('Google analytics error!', err);
+              }
             }
           );
 

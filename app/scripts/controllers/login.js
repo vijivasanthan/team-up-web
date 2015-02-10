@@ -378,6 +378,12 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
+                  try {
+                    trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
+                  } catch (err) {
+                    console.warn('Google analytics error!', err);
+                  }
+
                   progress(40, $rootScope.ui.login.loading_teams);
 
                   Teams.query(true, {})

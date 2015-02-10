@@ -14,6 +14,8 @@ module.exports = function (karma)
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.tpl.min.js', included: false },
       {pattern: 'app/vendors/jquery-ui/ui/jquery-ui.js', included: false },
+      {pattern: 'app/vendors/bootstrap-daterangepicker/daterangepicker.js', included: false },
+      {pattern: 'app/vendors/moment/moment.js', included: false },
       //{pattern: 'app/vendors/angular-ui-sortable/sortable.js', included: false },
       {pattern: 'app/vendors/Sortable/Sortable.js', included: false },
       {pattern: 'app/vendors/Sortable/ng-sortable.js', included: false },

@@ -18,6 +18,11 @@ define(
 
       host: localConfig.host,
 
+      //analytics: {
+      //  status: profile.analytics.status,
+      //  code: profile.analytics.code
+      //},
+
       formats: {
         date: 'dd-MM-yyyy',
         time: 'HH:mm',
