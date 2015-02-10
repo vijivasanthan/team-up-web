@@ -385,6 +385,7 @@ define(
               }).then(
               function ()
               {
+                trackGa('send', 'event', 'Chat', $rootScope.app.resources.uuid, newMessage);
                 // $scope.renderMessage();
 
                 $rootScope.statusBar.off();

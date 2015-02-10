@@ -1076,6 +1076,8 @@ define(
               $scope.requestReportsByFilter();
             }
 
+            trackGa('send', 'event', 'Report-view', $rootScope.app.resources.uuid, $scope.currentCLient, reportUuid);
+
             $scope.report = report;
             $scope.report.editMode = false;
 
@@ -1100,6 +1102,8 @@ define(
               client: $scope.$root.getClientByID($scope.currentCLient),
               editMode: false
             };
+
+            trackGa('send', 'event', 'Report-create', $rootScope.app.resources.uuid, $scope.currentCLient);
 
             modalInstance = getModal();
           };

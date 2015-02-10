@@ -394,6 +394,8 @@ define(
 
           $scope.assignTask = function (task)
           {
+            trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
+
             task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
 
             updateTask(task, true);
@@ -404,6 +406,8 @@ define(
 
           $scope.unAssignTask = function (task)
           {
+            trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
+
             task.assignedTeamMemberUuid = null;
             task.assignedTeamUuid = null;
 
