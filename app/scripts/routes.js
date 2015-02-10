@@ -27,7 +27,7 @@ define(
                   '$rootScope',
                   function ($rootScope)
                   {
-                    trackGa('send', 'event', 'Logout', $rootScope.app.resources.uuid);
+                    trackGa('send', 'event', 'Logout', 'User logout', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
                     $rootScope.logout();
                   }
                 ]

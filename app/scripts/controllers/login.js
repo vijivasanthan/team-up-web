@@ -378,8 +378,6 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
-
                   progress(40, $rootScope.ui.login.loading_teams);
 
                   Teams.query(true, {})
@@ -425,6 +423,9 @@ define(
                                     {
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
+
+                                      //console.log('$rootScope.app.resources.uuid', $rootScope.app.resources);
+                                      trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
                                       //update the avatar once, because the resources were not set when the directive was loaded
                                       $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
