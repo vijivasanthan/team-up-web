@@ -22,12 +22,9 @@ define(
         'Permission',
         '$route',
         'Pincode',
-        'Angularytics',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, Angularytics)
+                  Dater, TeamUp, Permission, $route, Pincode)
         {
-          Angularytics.init();
-
           var navBar = angular.element('.navbar'),
               footer = angular.element('#footer');
 

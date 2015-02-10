@@ -13,8 +13,7 @@ define(
     'angular-strap',
     //'ui-sortable',
     'ui.bootstrap.pagination',
-    'ng-sortable',
-    'angularytics'
+    'ng-sortable'
     //'ui-bootstrap',
     // 'ng-vis',
     // 'angular-google-maps',
@@ -38,8 +37,7 @@ define(
         'ui.bootstrap.pagination',
         'ui.mask',
 
-        'ng-sortable',
-        'angularytics'
+        'ng-sortable'
         //'$strap.directives',
         //'ui.bootstrap.modal',
         // 'NgVis',

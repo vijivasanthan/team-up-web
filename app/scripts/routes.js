@@ -6,11 +6,9 @@ define(
 
     app.config(
       [
-        '$locationProvider', '$routeProvider', '$httpProvider', 'AngularyticsProvider',
-        function ($locationProvider, $routeProvider, $httpProvider, AngularyticsProvider)
+        '$locationProvider', '$routeProvider', '$httpProvider',
+        function ($locationProvider, $routeProvider, $httpProvider)
         {
-          AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
-
           $routeProvider
 
             .when(
@@ -26,11 +24,10 @@ define(
               templateUrl: 'views/logout.html',
               resolve: {
                 data: [
-                  '$rootScope', 'Angularytics',
-                  function ($rootScope, Angularytics)
+                  '$rootScope',
+                  function ($rootScope)
                   {
-                    Angularytics.trackEvent("send", "event", "Logout", $rootScope.app.resources.uuid);
-                    //trackGa('send', 'event', 'Logout', $rootScope.app.resources.uuid);
+                    trackGa('send', 'event', 'Logout', $rootScope.app.resources.uuid);
                     $rootScope.logout();
                   }
                 ]

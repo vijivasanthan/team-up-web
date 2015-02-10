@@ -21,10 +21,9 @@ define(
         '$filter',
         'MD5',
         'Permission',
-        'Angularytics',
         function (
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission, Angularytics)
+          Permission)
         {
 
           var setBackgroundColor = function()
@@ -379,8 +378,7 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  Angularytics.trackEvent("send", "event", "Login", $rootScope.app.resources.uuid);
-                  //trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
+                  trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
 
                   progress(40, $rootScope.ui.login.loading_teams);
 
