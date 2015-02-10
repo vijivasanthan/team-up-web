@@ -246,14 +246,14 @@ define(
                ////console.log($rootScope.StandBy.environment.domain);
                //}
 
-              try {
-                trackGa('send', 'pageview', {
-                  title: $location.hash(),
-                  page: $rootScope.newLocation
-                });
-              } catch (err) {
-                console.warn('Google analytics error!', err);
-              }
+              //try {
+              //  trackGa('send', 'pageview', {
+              //    title: $location.hash(),
+              //    page: $rootScope.newLocation
+              //  });
+              //} catch (err) {
+              //  console.warn('Google analytics error!', err);
+              //}
             }
           );
 

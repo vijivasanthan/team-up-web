@@ -21,9 +21,10 @@ define(
         '$filter',
         'MD5',
         'Permission',
+        'Angularytics',
         function (
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission)
+          Permission, Angularytics)
         {
 
           var setBackgroundColor = function()
@@ -378,11 +379,8 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  try {
-                    trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
-                  } catch (err) {
-                    console.warn('Google analytics error!', err);
-                  }
+                  Angularytics.trackEvent("send", "event", "Login", $rootScope.app.resources.uuid);
+                  //trackGa('send', 'event', 'Login', $rootScope.app.resources.uuid);
 
                   progress(40, $rootScope.ui.login.loading_teams);
 

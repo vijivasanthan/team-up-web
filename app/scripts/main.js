@@ -97,7 +97,8 @@ require.config(
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
-      mask: 'removables/angular-ui-utils/modules/mask/mask'
+      mask: 'removables/angular-ui-utils/modules/mask/mask',
+      angularytics: '../vendors/angularytics/dist/angularytics'
     },
     shim: {
       profile: {deps: ['jquery'], exports: 'profile' },
@@ -146,6 +147,7 @@ require.config(
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },
+      angularytics: { deps: ['angular'] },
       'locale_nl': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
@@ -268,6 +270,7 @@ require(
     //'ui-sortable',
     //'Sortable',
     'ng-sortable',
+    'angularytics',
     'locale_nl',
 
     // 'jszip',
