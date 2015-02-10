@@ -124,12 +124,14 @@ define(
               userId = 'henkie',
               pincode = 8701,
               currentUser = true;
+              //expectedResult = 'pincode not found';
 
           $httpBackend.expect(
             'GET',
             'http://dev.ask-cs.com/node/' + userId + '/pincode_exists' +
-             '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser
-          ).respond(409, 'Conflict');
+             '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser,
+            null
+          ).respond(409);
 
           profile
             .pincodeExists(userId, pincode, currentUser)

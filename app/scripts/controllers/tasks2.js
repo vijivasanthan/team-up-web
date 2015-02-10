@@ -22,7 +22,7 @@ define(
         {
           $rootScope.fixStyles();
 
-          var view = (!$location.hash()) ? 'myTasks' : $location.hash(),
+          var view = $location.hash() || 'myTasks',
             currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
             teamsLocal = Teams.queryLocal(),
             clientLocal = Clients.queryLocal(),

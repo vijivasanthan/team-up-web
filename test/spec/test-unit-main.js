@@ -25,6 +25,8 @@ requirejs.config(
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
+      daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
+      moment: '../vendors/moment/moment',
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
@@ -45,7 +47,9 @@ requirejs.config(
       'angular-md5': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'] },
       'angular-strap-tpl': { deps: ['angular','angular-strap'] },
+      daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      //moment: { deps: [], exports: 'moment' },
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
       'ui.bootstrap.pagination': { deps: ['angular'] },

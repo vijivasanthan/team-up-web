@@ -26,6 +26,8 @@ define(
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
+          $scope.lala = 123;
+
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)
@@ -34,6 +36,7 @@ define(
               {
                 if(profileData)
                 {
+                  console.log('profileData', profileData);
                   $scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
                   $scope.edit = angular.copy($scope.view);
@@ -42,7 +45,7 @@ define(
             );
           };
 
-          $rootScope.fixStyles();
+          //$rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
           $scope.mfuncs = config.app.mfunctions;
@@ -58,7 +61,7 @@ define(
           getProfileResource($scope.view.uuid);
 
           var currentRole = $scope.view.role;
-
+          console.log('rootScope', $rootScope);
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
           $scope.forms = {
