@@ -36,7 +36,6 @@ define(
               {
                 if(profileData)
                 {
-                  console.log('profileData', profileData);
                   $scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
                   $scope.edit = angular.copy($scope.view);
@@ -61,7 +60,7 @@ define(
           getProfileResource($scope.view.uuid);
 
           var currentRole = $scope.view.role;
-          console.log('rootScope', $rootScope);
+
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
           $scope.forms = {

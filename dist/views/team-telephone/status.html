@@ -3,7 +3,7 @@
     <h2 class="nullable">Status</h2>
   </div>
   <div style="margin-top: 20px">
-    <div class="form-group has-feedback pull-left">
+    <div ng-hide="app.resources.role &gt; 1" class="form-group has-feedback pull-left">
       <!--input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')-->
       <label class="control-label">Selecteer team</label>
       <div class="controls">
@@ -40,7 +40,7 @@
             <hr>
             <ul class="sa-setup">
               <li class="sa-truck">
-                <div ng-repeat="member in reachability.members.reachable" class="sa-member"><span class="sa-member-icon {{member.style}}"><strong>{{member.label}}{{$index+1}}</strong></span>
+                <div ng-repeat="member in reachability.members.reachable" class="sa-member"><span back-img="{{member.id | avatar:&quot;client&quot;:&quot;80&quot;}}" class="sa-member-icon {{member.style}} roundedPicSmall sa-icon-reserve-available"></span>
                   <div class="sa-member-card">
                     <h5><a href="#/profile/{{member.id}}#profile">{{member.name | toTitleCase}}</a></h5>
                     <hr><span>{{states[member.state].label}}</span><br><small><strong>{{member.end | calculateDeltaTime}}</strong></small>
@@ -53,7 +53,7 @@
             <hr>
             <ul class="sa-setup">
               <li class="sa-truck">
-                <div ng-repeat="member in reachability.members.unreachable" ng-show="(member.state != &quot;no-state&quot;)" class="sa-member"><span class="sa-member-icon sa-icon-reserve-unavailable"><strong>{{member.label}}{{$index+1}}</strong></span>
+                <div ng-repeat="member in reachability.members.unreachable" ng-show="(member.state != &quot;no-state&quot;)" class="sa-member"><span back-img="{{member.id | avatar:&quot;client&quot;:&quot;80&quot;}}" class="sa-member-icon roundedPicSmall sa-icon-reserve-unavailable"></span>
                   <div class="sa-member-card">
                     <h5><a href="#/profile/{{member.id}}#profile">{{member.name | toTitleCase}}</a></h5>
                     <hr><span>{{states[member.state].label}}</span><br><small><strong>{{member.end | calculateDeltaTime}}</strong></small>
@@ -66,7 +66,7 @@
             <hr>
             <ul class="sa-setup">
               <li class="sa-truck">
-                <div ng-repeat="member in reachability.members.possible" class="sa-member"><span class="sa-member-icon sa-icon-reserve-noplanning"><strong>{{member.label}}{{$index+1}}</strong></span>
+                <div ng-repeat="member in reachability.members.possible" class="sa-member"><span back-img="{{member.id | avatar:&quot;client&quot;:&quot;80&quot;}}" class="sa-member-icon roundedPicSmall sa-icon-reserve-noplanning"></span>
                   <div class="sa-member-card">
                     <h5><a href="#/profile/{{member.id}}#profile">{{member.name | toTitleCase}}</a></h5>
                     <hr><span>{{states[member.state].label}}</span>

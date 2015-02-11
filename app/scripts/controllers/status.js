@@ -22,15 +22,24 @@ define(['controllers/controllers'], function (controllers)
         $rootScope.fixStyles();
 
         var teams = Store('app').get('teams'),
-          members = $rootScope.unique(Store('app').get('members')),
-          initGroup;
+          members = Store('app').get('members'),
+          currentMembers = null,
+          everyoneId = 'all';
+
+        //Check if members already stored locally in case of slow back end call
+        if(! members.length > 0)
+        {
+          members = [];
+          //get all teams members arrays and merge the values to one single array
+          members = _.flatten(_.values(data.members));
+        }
+
+        members = $rootScope.unique(members);
 
         teams.unshift({
           'name': $rootScope.ui.dashboard.everyone,
-          'uuid': 'all'
+          'uuid': everyoneId
         });
-
-        initGroup = 'all';
 
         $scope.groups = teams;
 
@@ -45,8 +54,8 @@ define(['controllers/controllers'], function (controllers)
         };
 
         $scope.current = {
-          group: initGroup,
-          division: 'all'
+          group: everyoneId,
+          division: everyoneId
         };
 
         $scope.loadingReachability = true;
@@ -61,16 +70,16 @@ define(['controllers/controllers'], function (controllers)
             groupID = $scope.current.group;
           }
 
-          if (groupID == 'all')
+          if (groupID == everyoneId)
           {
-            members = $rootScope.unique(Store('app').get('members'));
+            currentMembers = members;
           }
           else if (typeof data.members[groupID] != 'undefined')
           {
-            members = $rootScope.unique(data.members[groupID]);
+            currentMembers = $rootScope.unique(data.members[groupID]);
           }
 
-          Slots.getAllMemberReachabilities(data.teams)//.users(members)
+          Slots.getAllMemberReachabilities(data.teams)
             .then(
             function (results)
             {
@@ -78,8 +87,8 @@ define(['controllers/controllers'], function (controllers)
 
               _.each(results.members, function (slots, id)
               {
-                if (members[id] &&
-                  (members[id].role != 0 && members[id].role != 4))
+                if (currentMembers[id] &&
+                  (currentMembers[id].role != 0 && currentMembers[id].role != 4))
                 {
                   var _member = {
                     id: id,
@@ -88,8 +97,8 @@ define(['controllers/controllers'], function (controllers)
                     end: (slots.length > 0 && slots[0].end !== undefined) ?
                     slots[0].end * 1000 :
                       $rootScope.ui.dashboard.possiblyReachable,
-                    name: (members && members[id]) ?
-                    members[id].firstName + ' ' + members[id].lastName :
+                    name: (currentMembers && currentMembers[id]) ?
+                    currentMembers[id].firstName + ' ' + currentMembers[id].lastName :
                       id
                   };
 
@@ -121,7 +130,7 @@ define(['controllers/controllers'], function (controllers)
                   }
                   else
                   {
-                    if (!ordered.possible)
+                    if (! ordered.possible)
                     {
                       ordered.possible = [];
                     }
@@ -197,6 +206,7 @@ define(['controllers/controllers'], function (controllers)
             .then(function (results)
             {
               deferred.resolve(results);
+
               $scope.loadGroup = '';
               $rootScope.statusBar.off();
             },
