@@ -168,13 +168,13 @@ define(
               resolve: {
                 data: [
                   'Clients', 'Teams', '$location',
-                  function (ClientGroups, Teams, $location)
+                  function (Clients, Teams, $location)
                   {
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
                            {
                              t: Teams.query(),
-                             cg: ClientGroups.query()
+                             cg: Clients.query()
                            } :
                            { local: true };
                   }

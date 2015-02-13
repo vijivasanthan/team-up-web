@@ -257,7 +257,7 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(groupReports|filter:false).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
+        </table><span class="muted pull-right"><small><i>{{(groupReports|filter: {filtered:"false"}).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
       </div>
     </div>
     <div id="viewClientTab" ng-show="views.viewClient" class="tab-pane {{(views.viewClient==true) &amp;&amp; 'active'}}">
@@ -296,7 +296,7 @@
           <h3 class="pull-left">Cliënt Informatie</h3>
         </div>
         <hr>
-        <pre>{{client.extraInfo.basic || '-'}}</pre><br>
+        <p class="description">{{client.extraInfo.basic || '-' }}</p><br>
       </div>
       <div class="tab-header">
         <h3 class="pull-left">{{ui.teamup.contacts}}</h3>
