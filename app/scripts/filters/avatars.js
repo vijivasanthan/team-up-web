@@ -28,16 +28,17 @@ define(
         {
           return function (states)
           {
-            console.log('states', states);
-            
             var result = config.app.stateColors.none;
 
             var stateValues = _.pluck(states, 'value');
+            console.log('states', stateValues);
 
             if(stateValues.indexOf('available') >= 0)
             {
               result = config.app.stateColors.availalbe;
-              if(stateValues.indexOf('on_the_phone') >= 0 || stateValues.indexOf('not_reachable') >= 0)
+              if(stateValues.indexOf('on_the_phone') >= 0
+                || stateValues.indexOf('not_reachable') >= 0
+                || stateValues.indexOf('unreachable') >= 0)
               {
                 result = config.app.stateColors.busy;
               }

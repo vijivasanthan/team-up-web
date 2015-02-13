@@ -146,7 +146,7 @@ aria-hidden='true')
 						p {{ ui.teamup.stateValue.unavailable }}
 					li
 						div(class='roundedPicxSmall memberStateAvailalbe')
-						p {{ ui.teamup.stateValue.available }}
+						p {{ ui.teamup.stateValue.reachable }}
 				span.muted.pull-right
 					small
 						i {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
