@@ -1033,7 +1033,7 @@ define(
             {
               TeamUp._(
                 'clientReportAdd',
-                {second: report.clientUuid},
+                {second: 123},//report.clientUuid
                 {
                   uuid: report.uuid,
                   title: report.title,

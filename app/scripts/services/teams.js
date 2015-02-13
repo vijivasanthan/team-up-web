@@ -102,7 +102,7 @@ define(
               members: {}
             };
 
-            angular.forEach(
+            _.each(
               data.teams,
               function (team)
               {

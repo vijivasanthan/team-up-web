@@ -6,11 +6,32 @@ define(
 
     app.config(
       [
-        '$locationProvider', '$routeProvider', '$httpProvider',
-        function ($locationProvider, $routeProvider, $httpProvider)
+        '$locationProvider', '$routeProvider', '$httpProvider', '$provide',
+        function ($locationProvider, $routeProvider, $httpProvider, $provide)
         {
-          $routeProvider
+          $provide
+            .decorator(
+            "$exceptionHandler",
+            [
+              "$delegate",
+              "$window",
+              function($delegate)
+              {
+                return function (exception, cause)
+                {
+                  trackGa('send', 'exception', {
+                        exDescription: exception.message,
+                        exFatal: false,
+                        exStack: exception.stack
+                      });
 
+                  $delegate(exception, cause);
+                };
+              }
+            ]
+          );
+
+          $routeProvider
             .when(
             '/login',
             {
@@ -325,12 +346,12 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams', '$route',
-                  function (Teams, $route)
+                  'Teams',
+                  function (Teams)
                   {
                     removeActiveClass('.teamMenu');
 
-                    return Teams.query(false, $route.current.params);
+                    return Teams.queryLocal();
                   }
                 ]
               }
@@ -400,7 +421,7 @@ define(
 
           $httpProvider.interceptors.push(
             [
-              '$q', 'Log', '$location' ,
+              '$q', 'Log', '$location',
               function ($q, Log, $location)
               {
                 return {
@@ -410,8 +431,6 @@ define(
                   },
                   requestError: function (rejection)
                   {
-                    // console.warn('request error ->', rejection);
-                    Log.error(rejection);
                     return $q.reject(rejection);
                   },
                   response: function (response)
@@ -420,15 +439,29 @@ define(
                   },
                   responseError: function (rejection)
                   {
-                    // console.warn('response error ->', rejection);
-                    if (rejection.status == 403)
+                    if(rejection.status > 0)
                     {
-                      localStorage.setItem('sessionTimeout', '');
-                      $location.path('/logout');
-                      window.location.href = 'logout.html';
+                      switch (rejection.status)
+                      {
+                        case 403:
+                          localStorage.setItem('sessionTimeout', '');
+                          $location.path('/logout');
+                          window.location.href = 'logout.html';
+                          break;
+                      }
+
+                      trackGa('send', 'exception', {
+                        exDescription: rejection.statusText,
+                        exFatal: false,
+                        exError: 'Response error',
+                        exStatus: rejection.status,
+                        exUrl: rejection.config.url,
+                        exData: rejection.data,
+                        exParams: _.values(rejection.config.params).join() || '',
+                        exMethodData: _.values(rejection.config.data).join() || ''
+                      });
                     }
 
-                    // Log.error(rejection);
                     return $q.reject(rejection);
                   }
                 };

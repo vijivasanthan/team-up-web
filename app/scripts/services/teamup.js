@@ -590,7 +590,6 @@ define(
                 function (result)
                 {
                   ((callback && callback.error)) && callback.error.call(this, result);
-
                   deferred.resolve({error: result});
                 }
               );

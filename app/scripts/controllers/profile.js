@@ -26,8 +26,6 @@ define(
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
-          $scope.lala = 123;
-
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)

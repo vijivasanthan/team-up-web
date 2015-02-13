@@ -344,15 +344,15 @@ define(
 
             if (task.assignedTeamUuid)
             {
-              task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);
+              task.assignedTeamFullName = $rootScope.getTeamName(task.assignedTeamUuid);
             }
 
             if (task.relatedClient.clientGroupUuid)
             {
-              task.relatedClient.clientGroupName = $scope.$root.getClientGroupName(task.relatedClient.clientGroupUuid);
+              task.relatedClient.clientGroupName = $rootScope.getClientGroupName(task.relatedClient.clientGroupUuid);
             }
 
-            var author = $scope.$root.getTeamMemberById(task.authorUuid);
+            var author = $rootScope.getTeamMemberById(task.authorUuid);
             $scope.author = author.firstName + ' ' + author.lastName;
 
             angular.element('#taskModal').modal('show');

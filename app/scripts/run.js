@@ -25,6 +25,20 @@ define(
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
                   Dater, TeamUp, Permission, $route, Pincode)
         {
+          //$window.onerror = function (errorMsg, url, lineNumber)
+          //{
+          //  console.log('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber);
+          //
+          //  var err = new Error();
+          //
+          //  console.log('Error stack ', err);
+          //
+          //  trackGa('send', 'exception', {
+          //    exDescription: errorMsg + ' Script: ' + url + ' Line: ' + lineNumber,
+          //    exFatal: false
+          //  });
+          //};
+
           var navBar = angular.element('.navbar'),
               footer = angular.element('#footer');
 
