@@ -31,7 +31,6 @@ define(
             var result = config.app.stateColors.none;
 
             var stateValues = _.pluck(states, 'value');
-            console.log('states', stateValues);
 
             if(stateValues.indexOf('available') >= 0)
             {
