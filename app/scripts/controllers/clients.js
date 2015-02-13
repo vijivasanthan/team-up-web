@@ -943,6 +943,13 @@ define(
               });
           };
 
+          var filterReport = function(clientId, createDate)
+          {
+            $scope.currentCLient = clientId;
+            $scope.currentMonth = moment(createDate).format('M');
+            $scope.requestReportsByFilter();
+          };
+
           // filter the report by client or the created month
           $scope.requestReportsByFilter = function ()
           {
@@ -1045,10 +1052,10 @@ define(
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   loadGroupReports();
+                  filterReport(report.clientUuid, report.creationTime);
                 }
               );
             }
-
           };
 
           function getModal()
@@ -1070,9 +1077,7 @@ define(
           {
             if(!_.isUndefined(reportUuid))
             {
-              $scope.currentCLient = report.clientUuid;
-              $scope.currentMonth = moment(report.creationTime).format('M');
-              $scope.requestReportsByFilter();
+              filterReport(report.clientUuid, report.creationTime);
             }
 
             trackGa('send', 'event', 'Report', 'User is viewing a report');
@@ -1105,6 +1110,8 @@ define(
             trackGa('send', 'event', 'Report', 'User creates report');
 
             modalInstance = getModal();
+
+
           };
 
           $scope.editReport = function (report)
@@ -1172,69 +1179,6 @@ define(
             $scope.uploadURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo?square=true";
             $scope.setViewTo('editImg');
           };
-
-          // open report from the link ( from the chat message )
-          // there will be a link URL changing when opening a report from other views , need to do some special process
-          //$scope.$on(
-          //  '$locationChangeSuccess', function (event, currentURL, preURL)
-          //  {
-          //    var currentScope = event.currentScope;
-          //
-          //    if ($location.hash() == "reports")
-          //    {
-          //      var param_clientGroup = $location.search().uuid,
-          //         param_report = $location.search().reportUuid;
-          //      console.log('param_clientgroup', param_clientGroup);
-          //      console.log('param_clientgroup', currentURL);
-          //      console.log('param_report', $location.search());
-          //
-          //      if (param_clientGroup)
-          //      {
-          //          angular.forEach(
-          //            currentScope.data.clientGroups, function (cGrp)
-          //            {
-          //              if (cGrp.id == param_clientGroup)
-          //              {
-          //                currentScope.clientGroup = cGrp;
-          //              }
-          //            });
-          //        console.log('currentScope.clientGroup', param_report);
-          //          currentScope.setViewTo('reports');
-          //          findReport(currentScope, param_report);
-          //      }
-          //    }
-          //  });
-          //
-          //  var findReport = function(currentScope, param_report)
-          //  {
-          //    console.log('123', param_report);
-          //
-          //    if (param_report)
-          //    {
-          //      var report_obj = null;
-          //      angular.forEach(
-          //        $scope.groupReports, function (rpt)
-          //        {
-          //          if (rpt.uuid == param_report)
-          //          {
-          //            report_obj = rpt;
-          //          }
-          //        });
-          //      if (report_obj == null)
-          //      {
-          //        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-          //        // clear the url param
-          //        if ($location.search().reportUuid)
-          //        {
-          //          $location.search('reportUuid', null);
-          //        }
-          //        return;
-          //      }
-          //
-          //      currentScope.openReport(report_obj);
-          //    }
-          //  }
-
         }
       ]
     );
