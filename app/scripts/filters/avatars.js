@@ -28,6 +28,8 @@ define(
         {
           return function (states)
           {
+            console.log('states', states);
+            
             var result = config.app.stateColors.none;
 
             var stateValues = _.pluck(states, 'value');

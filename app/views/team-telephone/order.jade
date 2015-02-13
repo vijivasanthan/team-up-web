@@ -42,10 +42,8 @@ section
 									a {{ui.tasks.orderType1}}
 								th 
 								th
-								th
-									a {{ui.teamup.name}}
-								th
-									a {{ui.teamup.phone}}
+								th {{ui.teamup.name}}
+								th {{ui.teamup.phone}}
 						tbody(ng-sortable="sortableOptions",
 							ng-model="orderedMembers")
 							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")

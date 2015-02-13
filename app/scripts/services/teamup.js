@@ -275,20 +275,6 @@ define(
 
 
                 /**
-                 * Client-Reports
-                 */
-                // get the reports of that particular client
-                clientReportsQuery: {
-                  method: 'GET',
-                  isArray: true,
-                  params: {
-                    first: 'clients',
-                    third: 'reports'
-                  }
-                },
-
-
-                /**
                  * Client-Group-Client
                  */
                 // remove the client(s) from the specific group, meant more for management
@@ -298,20 +284,6 @@ define(
                     first: 'client',
                     second: 'clientGroup',
                     fourth: 'removeClients'
-                  }
-                },
-
-
-                /**
-                 * Client-Group-Reports
-                 */
-                // get the reports of a particular client group
-                clientGroupReportsQuery: {
-                  method: 'GET',
-                  isArray: true,
-                  params: {
-                    first: 'clientGroup',
-                    third: 'reports'
                   }
                 },
 
@@ -328,6 +300,32 @@ define(
                     third: 'tasks',
                     from: '',
                     to: ''
+                  }
+                },
+
+                /**
+                 * Client-Reports
+                 */
+                // get the reports of that particular client
+                clientReportsQuery: {
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clients',
+                    third: 'reports'
+                  }
+                },
+
+                /**
+                 * Client-Group-Reports
+                 */
+                // get the reports of a particular client group
+                clientGroupReportsQuery: {
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clientGroup',
+                    third: 'reports'
                   }
                 },
 
@@ -360,7 +358,6 @@ define(
                     reportId: ''
                   }
                 },
-
 
                 /**
                  * Team
