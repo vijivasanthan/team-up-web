@@ -972,7 +972,6 @@ define(
                 {
                   report.filtered = 'false';
                 }
-
               }
             );
           };
@@ -1033,7 +1032,7 @@ define(
             {
               TeamUp._(
                 'clientReportAdd',
-                {second: 123},//report.clientUuid
+                {second: report.clientUuid},
                 {
                   uuid: report.uuid,
                   title: report.title,
