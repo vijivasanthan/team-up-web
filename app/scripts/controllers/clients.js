@@ -20,11 +20,13 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
+        'Report',
         function ($rootScope, $scope, $location, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout)
+                  $filter, $modal, TeamUp, $timeout, Report)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
+
           var modalInstance = null;
 
           if (data.clientId)
@@ -186,39 +188,17 @@ define(
           // Load reports list for client profile view
           var loadReports = function ()
           {
-            console.log('loadReports-> ', $scope.client);
-
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            TeamUp._(
-              'clientReportsQuery',
-              {second: $scope.client.uuid},
-              null,
-              {
-                success: function (reports)
+            Report.all($scope.client.uuid)
+              .then(
+                function(reports)
                 {
-                  Store('app').save('reports_' + $scope.client.uuid, reports)
+                  $rootScope.statusBar.off();
+
+                  $scope.reports = $scope.processReports(reports);
                 }
-              }
-            ).then(
-              function (reports)
-              {
-                $rootScope.statusBar.off();
-
-                $scope.reports = $scope.processReports(reports);
-
-                //                $scope.$watch(
-                //                  $scope.reports, function (rs)
-                //                  {
-                //                    console.log('watcher found ... ', rs);
-                //                    $scope.loadMembersImg();
-                //                  }
-                //                );
-
-              }, function (error)
-              {
-                console.log(error)
-              });
+              );
           };
 
           // Get the list of reports for certain client group for reports tab
@@ -232,54 +212,42 @@ define(
               $scope.clientGroup = data.clientGroups[0];
             }
 
-            TeamUp._(
-              'clientGroupReportsQuery',
-              {
-                second: $scope.clientGroup.id
-              }
-            ).then(
-              function (reports)
-              {
-                $rootScope.statusBar.off();
-
-                $scope.groupReports = $scope.processReports(reports);
-
-                if ($scope.currentCLient != 0)
+            Report.allByClientGroup($scope.clientGroup.id)
+              .then(
+                function(reports)
                 {
-                  $scope.requestReportsByFilter();
-                }
+                  $rootScope.statusBar.off();
 
-                // open the report tab if the there is report Id in the params
-                var reportId = $location.search().reportUuid;
-                var report_modal = null;
-                if (reportId)
-                {
-                  angular.forEach(
-                    $scope.groupReports, function (report)
-                    {
-                      if (report.uuid == reportId)
-                      {
-                        report_modal = report;
-                      }
-                    });
-                  if (report_modal == null)
+                  $scope.groupReports = $scope.processReports(reports);
+
+                  if ($scope.currentCLient != 0)
                   {
-                    // clear the url param
-                    if ($location.search().reportUuid)
-                    {
-                      $location.search('reportUuid', null);
-                    }
-                    $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                    return;
+                    $scope.requestReportsByFilter();
                   }
-                  $scope.openReport(report_modal);
+
+                  // open the report tab if the there is report Id in the params
+                  var reportId = $location
+                                  .search()
+                                  .reportUuid;
+
+                  if (reportId)
+                  {
+                    var report = (_.findWhere($scope.groupReports, {uuid: reportId})) || null;
+
+                    if (report == null)
+                    {
+                      // clear the url param
+                      if ($location.search().reportUuid)
+                      {
+                        $location.search('reportUuid', null);
+                      }
+                      $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                      return;
+                    }
+                    $scope.openReport(report);
+                  }
                 }
-
-              }, function (error)
-              {
-                console.log(error)
-              });
-
+            );
           };
 
           setView(view);
@@ -1013,21 +981,9 @@ define(
 
             if (report.editMode)
             {
-
-              TeamUp._(
-                'clientReportUpdate',
-                {
-                  second: report.clientUuid,
-                  fourth: report.uuid
-                },
-                {
-                  uuid: report.uuid,
-                  title: report.title,
-                  body: report.body,
-                  creationTime: report.creationTime
-                }
-              ).then(
-                function ()
+              Report.update(report)
+                .then(
+                function (result)
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -1037,17 +993,9 @@ define(
             }
             else
             {
-              TeamUp._(
-                'clientReportAdd',
-                {second: report.clientUuid},
-                {
-                  uuid: report.uuid,
-                  title: report.title,
-                  body: report.body,
-                  creationTime: report.creationTime
-                }
-              ).then(
-                function ()
+              Report.save(report)
+                .then(
+                function (result)
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -1144,34 +1092,23 @@ define(
 
             angular.element('#confirmReportModal').modal('hide');
 
-            TeamUp._(
-              'clientReportDelete',
-              {
-                second: report.clientUuid,
-                reportId: report.uuid
-              }
-            ).then(
-              function (result)
-              {
-                if (result.result == 'ok')
+            Report.remove(report.clientUuid, report.uuid)
+              .then(
+                function(result)
                 {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
-                  loadGroupReports();
-
-                  if ($scope.views.viewClient == true)
+                  if (result.result == 'ok')
                   {
-                    loadReports();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
+                    loadGroupReports();
+
+                    if ($scope.views.viewClient == true)
+                    {
+                      loadReports();
+                    }
                   }
                 }
-                else
-                {
-                  $rootScope.notifier.error(result.error);
-                }
-              }, function (error)
-              {
-                console.log(error)
-              });
+            );
           };
 
           $scope.editImg = function ()

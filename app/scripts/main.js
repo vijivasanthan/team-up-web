@@ -207,6 +207,7 @@ require(
     'modals/permission',
     'modals/testModal',
     'modals/profile',
+    'modals/report',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',
