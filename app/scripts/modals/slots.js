@@ -599,8 +599,6 @@ define(['services/services', 'config'],
             var deferred = $q.defer(),
               teamDeferred = [],
               now = Math.floor(Date.now().getTime() / 1000);
-            console.log('now', now);
-            console.log('end', now + 60);
 
             _.each(teams, function (team)
             {

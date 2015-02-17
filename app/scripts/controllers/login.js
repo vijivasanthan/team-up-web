@@ -102,6 +102,15 @@ define(
           {
             Store('app').save('app', '{}');
           }
+          else
+          {
+            var periods = Store('app').get('periods'),
+                loginData = Store('app').get('loginData');
+
+            Store('app').nuke();
+            Store('app').save('periods', periods);
+            Store('app').save('loginData', loginData);
+          }
 
           angular.element('.navbar').hide();
           angular.element('#footer').hide();
