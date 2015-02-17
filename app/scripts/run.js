@@ -318,6 +318,7 @@ define(
                 Store('app').get('ClientGroups'),
                 function (group)
                 {
+                  //console.log('group', group);
                   angular.forEach(
                     Store('app').get(group.id),
                     function (client)

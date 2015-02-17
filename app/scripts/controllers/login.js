@@ -119,7 +119,23 @@ define(
 
           var loginData = Store('app').get('loginData');
 
-          if (loginData && loginData.remember) $scope.loginData = loginData;
+          console.log('loginData', loginData);
+
+          //Check if there is loginData local
+          if (loginData)
+          {
+            //if there is a username, show it
+            $scope.loginData = {};
+            $scope.loginData.username = loginData.username;
+
+            //if there is a local encrypted password, show a random string
+            //and select the remember login
+            if(loginData.password)
+            {
+              $scope.loginData.password = 1234;
+              $scope.loginData.remember = true;
+            }
+          }
 
           $scope.login = function ()
           {
@@ -146,16 +162,24 @@ define(
               .text($rootScope.ui.login.button_loggingIn)
               .attr('disabled', 'disabled');
 
-            Store('app').save(
-              'loginData',
-              {
-                username: $scope.loginData.username,
-                password: $scope.loginData.password,
-                remember: $scope.loginData.remember
-              }
-            );
+            //Checks if there is already a password, otherwise encrypt the given password
+            var password = ($scope.loginData.password == '1234' && loginData.password)
+                ? loginData.password
+                : MD5($scope.loginData.password);
 
-            auth($scope.loginData.username, MD5($scope.loginData.password));
+            var newLoginData = {
+                username: $scope.loginData.username
+              };
+
+            //Check if the user want to save his password and add it to the local storage
+            if($scope.loginData.remember == true)
+            {
+              newLoginData.password = password;
+            }
+
+            Store('app').save('loginData', newLoginData);
+
+            auth($scope.loginData.username, password);
           };
 
           var auth = function (uuid, pass)
