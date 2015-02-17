@@ -236,7 +236,7 @@ require(
     'controllers/agenda-timeline',
     'controllers/agenda-timeline-navigation',
     'controllers/treegrid',
-    'controllers/support',
+    'controllers/help',
     'controllers/upload',
     'controllers/admin',
     'controllers/logs',

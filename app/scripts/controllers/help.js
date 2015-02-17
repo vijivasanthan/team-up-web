@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'supportCtrl', [
+      'helpCtrl', [
         '$rootScope',
         '$scope',
         '$location',

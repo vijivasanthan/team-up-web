@@ -201,8 +201,8 @@ define(
                 $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;
 
-              case 'support':
-                $location.path('/support').search({}).hash('');
+              case 'help':
+                $location.path('/help').search({}).hash('');
                 break;
 
               //profile tab links to the logged user profile

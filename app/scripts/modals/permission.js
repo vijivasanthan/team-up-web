@@ -13,27 +13,30 @@ define(['services/services', 'config'],
         'Store',
         function ($rootScope, $resource, $q, Store)
         {
-          var Permission = $resource(config.app.host + 'acl', {}, {
-            get: {
-              method: 'GET',
-              interceptor: {
-                response: function (response)
-                {
-                  return response;
+          var Permission = $resource(config.app.host + 'acl', {},
+              {
+                get: {
+                  method: 'GET',
+                  interceptor: {
+                    response: function (response)
+                    {
+                      return response;
+                    }
+                  }
+                },
+                save: {
+                  method: 'PUT',
+                  params: {}
                 }
               }
-            },
-            save: {
-              method: 'PUT',
-              params: {}
-            }
-          }),//Only for test purposes
+          ),//Only for test purposes
           profile = {
             teams: true,
             clients: true,
             tasks: true,
             clientReports: true,
-            teamTelephone: true
+            teamTelephone: true,
+            chat: false
           };
 
           Permission.prototype.getProfile = function()
@@ -63,7 +66,7 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          //TODO for testpurposes only
+          //For testpurposes only
           Permission.prototype.saveProfile = function()
           {
             var deferred = $q.defer();

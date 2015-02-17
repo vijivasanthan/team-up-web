@@ -410,10 +410,10 @@ define(
             })
 
             .when(
-            '/support',
+            '/help',
             {
-              templateUrl: 'views/support.html',
-              controller: 'supportCtrl',
+              templateUrl: 'views/help.html',
+              controller: 'helpCtrl',
               reloadOnSearch: false
             })
 
