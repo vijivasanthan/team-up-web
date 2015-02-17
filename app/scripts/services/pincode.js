@@ -14,7 +14,7 @@ define(
             pincodeExists: function (pincode, pincodeExist, checkPincode, userId, assignedId)
             {
               var deferred = $q.defer(),
-                _userId = (! userId) ? $rootScope.app.resources.uuid : userId,
+                _userId = $rootScope.app.resources.uuid || userId,
                 pinValidation = {
                   pincodeExistsValidation : pincodeExist,
                   pincodeExistsValidationMessage : '',

@@ -9,6 +9,7 @@ define(
         '$rootScope',
         '$scope',
         '$location',
+        'Report',
         'Clients',
         'Teams',
         'data',
@@ -20,9 +21,9 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        'Report',
-        function ($rootScope, $scope, $location, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Report)
+        'Reports',
+        function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
+                  $filter, $modal, TeamUp, $timeout, Reports)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
@@ -32,6 +33,7 @@ define(
           if (data.clientId)
           {
             var clientHasClientGroup = false;
+            Reports.clientId = data.clientId;
 
             data.clientGroups = Store('app').get('ClientGroups');
             data.clients = {};
@@ -63,13 +65,9 @@ define(
             if (!clientHasClientGroup)
             {
               data.clients = Store('app').get('clients');
-              data.client = (
-                _.where(data.clients,
-                  {
-                    uuid: data.clientId
-                  })
-              )[0];
+              data.client = _.findWhere(data.clients, {uuid: data.clientId});
 
+              Reports.clientId = $scope.client.uuid;
               $scope.client = data.client;
               $scope.contacts = data.client.contacts;
               data.client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
@@ -226,9 +224,7 @@ define(
                   }
 
                   // open the report tab if the there is report Id in the params
-                  var reportId = $location
-                                  .search()
-                                  .reportUuid;
+                  var reportId = $location.search().reportUuid;
 
                   if (reportId)
                   {
@@ -470,11 +466,6 @@ define(
                         $scope.clientGroup = clientGroup;
 
                         $scope.current = clientGroup.id;
-
-                        // $scope.$watch(
-                        //   $location.search(),
-                        //   function () { $location.search({ id: clientGroup.id }) }
-                        // );
 
                         $location.url('/client?uuid=' + clientGroup.id).hash('client');
                       }

@@ -191,6 +191,7 @@ require(
     'services/storage',
     'services/stats',
     'services/pincode',
+    'services/reports',
 
     // 'services/googleGEO',
 
