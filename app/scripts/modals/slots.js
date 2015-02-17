@@ -599,6 +599,8 @@ define(['services/services', 'config'],
             var deferred = $q.defer(),
               teamDeferred = [],
               now = Math.floor(Date.now().getTime() / 1000);
+            console.log('now', now);
+            console.log('end', now + 60);
 
             _.each(teams, function (team)
             {
@@ -611,7 +613,7 @@ define(['services/services', 'config'],
                   id: team.uuid,
                   type: divisionID,
                   start: now,
-                  end: now + 1000
+                  end: now + 60
                 },
                 function (response)
                 {
