@@ -262,9 +262,10 @@ define(
             )
           };
 
+          //Check if there is a password locally and autologin
           if(localLoginData.password)
           {
-            $scope.login();
+            //$scope.login();
           }
 
           // TODO: Move this to somewhere later on!

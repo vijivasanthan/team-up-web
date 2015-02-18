@@ -421,8 +421,8 @@ define(
 
           $httpProvider.interceptors.push(
             [
-              '$q', 'Log', '$location',
-              function ($q, Log, $location)
+              '$location', 'Store', '$injector', '$q',
+              function ($location, Store, $injector, $q)
               {
                 return {
                   request: function (config)
@@ -439,14 +439,53 @@ define(
                   },
                   responseError: function (rejection)
                   {
+                    console.log('rejection', rejection);
+
                     if(rejection.status > 0)
                     {
                       switch (rejection.status)
                       {
                         case 403:
-                          localStorage.setItem('sessionTimeout', '');
-                          $location.path('/logout');
-                          window.location.href = 'logout.html';
+                          var loginData = Store('app').get('loginData');
+
+                          if(loginData.password)
+                          {
+                            var deferred = $q.defer(),
+                              teamUp = $injector.get('TeamUp'),
+                              session = $injector.get('Session');
+
+                            teamUp._(
+                              'login',
+                              {
+                                uuid: loginData.username,
+                                pass: loginData.password
+                              }
+                            ).then(
+                              function (result)
+                              {
+                                session.set(result['X-SESSION_ID']);
+
+                                var http = $injector.get('$http'),
+                                  config = rejection.config;
+
+                                config.headers = {
+                                  'X-SESSION_ID': session.get()
+                                };
+
+                                deferred.resolve(http(config));
+                              }
+                            );
+
+                            //send the request again with the recovered session
+                            return deferred.promise;
+                          }
+                          else
+                          {
+                            $location.path('/logout');
+                            window.location.href = 'logout.html';
+                            localStorage.setItem('sessionTimeout', '');
+                          }
+
                           break;
                       }
 
@@ -462,6 +501,10 @@ define(
                       });
                     }
 
+                    //$location.path('/logout');
+                    //window.location.href = 'logout.html';
+                    //localStorage.setItem('sessionTimeout', '');
+
                     return $q.reject(rejection);
                   }
                 };
@@ -471,7 +514,7 @@ define(
           var removeActiveClass = function(divId)
           {
             angular.element(divId).removeClass('active');
-          }
+          };
         }
       ]);
   }
