@@ -21,9 +21,10 @@ define(
         '$filter',
         'MD5',
         'Permission',
+        '$window',
         function (
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission)
+          Permission, $window)
         {
 
           var setBackgroundColor = function()
@@ -166,13 +167,15 @@ define(
                 : MD5($scope.loginData.password);
 
             var newLoginData = {
-                username: $scope.loginData.username
+                username: $scope.loginData.username,
+                relogin: false
               };
 
             //Check if the user want to save his password and add it to the local storage
             if($scope.loginData.remember == true)
             {
               newLoginData.password = password;
+              newLoginData.relogin = true;
             }
 
             Store('app').save('loginData', newLoginData);
@@ -260,6 +263,11 @@ define(
               }
             )
           };
+
+          if(localLoginData.relogin)
+          {
+            $scope.login();
+          }
 
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()

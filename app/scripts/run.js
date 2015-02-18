@@ -504,6 +504,7 @@ define(
             footer.hide();
 
             var loginData = Store('app').get('loginData');
+            loginData.relogin = false;
 
             TeamUp._('logout')
               .then(
