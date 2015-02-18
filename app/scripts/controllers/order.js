@@ -18,29 +18,18 @@ define(
 
           var teams = Store('app').get('teams'),
             teamsLocal = Teams.queryLocal(),
+            lastVisited = Store('app').get('currentTeamClientGroup'),
             view,
-            initGroup = '',
             tempOrder = [];
 
           teams.unshift();
-
-          //{
-          //  'name': $rootScope.ui.teamup.selectTeam,
-          //  'uuid': ''
-          //}
 
           $scope.groups = teams;
 
           //default first team
           $scope.current = {
-            group: $scope.groups[0].uuid
+            group: lastVisited.team || $scope.groups[0].uuid
           };
-
-          if ($scope.currentTeam == null || typeof $scope.currentTeam == 'undefined')
-          {
-            $scope.currentTeam = teamsLocal.teams[0].uuid;
-          }
-
 
           if (!$location.hash())
           {
@@ -115,7 +104,7 @@ define(
 
             tempOrder = orderedMembers;
             $scope.orderedMembers = orderedMembers;
-          }
+          };
 
           $scope.getOrder = function ()
           {
@@ -133,21 +122,21 @@ define(
             }
           };
 
-          //TODO add a preview of the random order of a team
-          $scope.orderTypePreview = function()
-          {
-            //console.log('orderType', $scope.orderType);
-          }
-
           $scope.getOrder();
 
+          //$scope.sortableOptions = {
+          //  stop: function (e, ui)
+          //  {
+          //    tempOrder = $scope.orderedMembers;
+          //  },
+          //  cancel: ".unsortable",
+          //  items: "tr:not(.unsortable)"
+          //};
+
           $scope.sortableOptions = {
-            stop: function (e, ui)
-            {
-              tempOrder = $scope.orderedMembers;
-            },
-            cancel: ".unsortable",
-            items: "tr:not(.unsortable)"
+            animation: 150,
+            scroll:false,
+            draggable: 'tr'
           };
 
           $scope.confirmOrder = function ()

@@ -369,8 +369,7 @@ define(
           TeamsService.prototype.removeAllTeamsFromMember = function(userId, userTeams)
           {
             var deferred = $q.defer(),
-                teams = $rootScope.getTeamsofMembers(userId),
-                _this = this;
+                teams = $rootScope.getTeamsofMembers(userId);
 
             _.each(teams, function(team)
             {
@@ -386,7 +385,7 @@ define(
                   {
                     if (team.uuid == teamId)
                     {
-                      _this.query(
+                      this.query(
                         false,
                         {'uuid': teamId}
                       ).then(
@@ -398,10 +397,10 @@ define(
 
                       userTeams.splice(i, 1);
                       sessionStorage.removeItem(userId + '_team');
-                      _this.updateMembersLocal();
+                      this.updateMembersLocal();
                     }
                   });
-                },
+                }.bind(this),
                 function (error)
                 {
                   console.log(error);

@@ -108,7 +108,9 @@ module.exports = function (grunt) {
     karma: {
       unit: testConfig('test/karma.conf.js'),
       server: {configFile: 'test/karma.conf.js'},
-      continuous: {configFile: 'test/karma.conf.js',  background: true }
+      continuous: {configFile: 'test/karma.conf.js',
+      reporters: ['junit']
+      }
     },
 
     concat: {

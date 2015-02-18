@@ -25,10 +25,8 @@ define(
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
           Permission)
         {
-          // TODO: Soon not needed!
-          Dater.registerPeriods();
 
-          if ($location.path() == '/logout')
+          var setBackgroundColor = function()
           {
             angular.element('body')
               .css(
@@ -37,6 +35,37 @@ define(
                 'backgroundImage': 'none'
               }
             );
+          };
+
+          try
+          {
+            localStorage.test = 'test';
+          }
+          catch (e)
+          {
+            var urlPrivateMode = 'http://support.apple.com/nl-nl/ht6366',
+              template = '<p>' + $rootScope.ui.teamup.checkLocalStorage +  '</p>';
+
+            template += "<a href='" + urlPrivateMode + "'>";
+            template += urlPrivateMode +  '</a>';
+
+            setBackgroundColor();
+
+            angular.element('#login')
+              .html('')
+              .append(template);
+
+            return false;
+          }
+
+          // TODO: Soon not needed!
+          Dater.registerPeriods();
+
+
+
+          if ($location.path() == '/logout')
+          {
+            setBackgroundColor();
           }
 
           if ($routeParams.uuid && $routeParams.key)
@@ -394,6 +423,9 @@ define(
                                     {
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
+
+                                      //console.log('$rootScope.app.resources.uuid', $rootScope.app.resources);
+                                      trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
                                       //update the avatar once, because the resources were not set when the directive was loaded
                                       $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);

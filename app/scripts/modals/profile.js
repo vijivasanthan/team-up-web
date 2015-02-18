@@ -120,14 +120,15 @@ define(['services/services', 'config'], function (services, config) {
       return deferred.promise;
     };
 
-    Profile.prototype.pincodeExists = function (id, pincode) {
+    Profile.prototype.pincodeExists = function (id, pincode, assignedId) {
       var deferred = $q.defer();
 
       if (pincode != '' || pincode.length > 0)
       {
         PincodeExists.check({
             id: id,
-            pincode: pincode
+            pincode: pincode,
+            returnExistsWhenAssignedToUuid: assignedId
           },
           function () {
             deferred.resolve(true)

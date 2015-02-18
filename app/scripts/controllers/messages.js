@@ -300,6 +300,7 @@ define(
             {
               if ($scope.toggleChat)
               {
+                trackGa('send', 'event', 'Chat', 'User clicked to view the chat');
 
                 $scope.renderMessage(latestMsgTime);
 

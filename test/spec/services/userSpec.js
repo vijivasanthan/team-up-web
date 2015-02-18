@@ -1,5 +1,10 @@
 define(
-  ['angularMocks', 'services/services', 'services/user'],
+  [
+    'angular-mocks',
+    'app',
+    'controllers/exampleTest',
+    'modals/testModal'
+  ],
   function()
   {
     describe('User Service',

@@ -2,8 +2,14 @@ extends layout
 
 // TODO: Fix icon locations
 block icons
-	link(rel='shortcut icon', href='favicon.ico')
-	link(rel='shortcut icon', href='/favicon.ico')
+	link(ng-show='app.domainPermission.tasks' rel='shortcut', href='favicon_teamup.ico')
+	link(ng-show='app.domainPermission.tasks' rel='shortcut', href='/favicon_teamup.ico')
+	link(ng-show='! app.domainPermission.tasks' rel='shortcut', href='/favicon_teamtelefoon.ico')
+	link(ng-show='! app.domainPermission.tasks' rel='shortcut', href='/favicon_teamtelefoon.ico')
+	link(rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32")
+	link(rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16")
+	link(ng-show='app.domainPermission.tasks' rel='apple-touch-icon', href='apple-touch-icon_teamup.png')
+	link(ng-show='! app.domainPermission.tasks' rel='apple-touch-icon', href='apple-touch-icon_teamtelefoon.png')
 
 
 // Not-used at the moment
@@ -30,6 +36,7 @@ block iestuff
 		script(src='vendors/json3/lib/json3.min.js')
 
 
+		
 
 // TODO: Look for ways to simplify mobile menu view options
 // TODO: Arrange correct styling
@@ -189,8 +196,6 @@ block notifications
 		button.close(type='button',
 		ng-click='notification.status = false') ×
 		| {{notification.message}}
-
-
 
 block chat
 	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile',

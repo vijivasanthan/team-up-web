@@ -25,11 +25,8 @@ define(
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
                   Dater, TeamUp, Permission, $route, Pincode)
         {
-          // TODO: Remove later on (Needed for timeline info filters)
-          if (!Dater.getPeriods())
-          {
-            Dater.registerPeriods();
-          }
+          var navBar = angular.element('.navbar'),
+              footer = angular.element('#footer');
 
           new Offline();
 
@@ -45,24 +42,43 @@ define(
             }
           );
 
+          Session.check();
+          $rootScope.config = config;
+          $rootScope.config.app.init();
+          $rootScope.ui = locals.ui[config.app.lang];
+
+          /**
+          * test if localStorage is reachable
+          */
+            try
+            {
+              localStorage.test = 'test';
+            }
+            catch (e)
+            {
+              navBar.hide();
+              footer.hide();
+
+              return false;
+            }
+
+          $rootScope.app = $rootScope.app || {};
+          $rootScope.app.resources = Store('app').get('resources');
+          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
+
+          angular.element('#notification').css({display: 'block'});
+
+          // TODO: Remove later on (Needed for timeline info filters)
+          if (!Dater.getPeriods())
+          {
+            Dater.registerPeriods();
+          }
+
           // TODO: Lose this later onw with VisJS/MomentJS navigation
           if (Store('app').get('periods') == null || Store('app').get('periods').value == null)
           {
             Dater.registerPeriods();
           }
-
-          angular.element('#notification').css({display: 'block'});
-
-          Session.check();
-
-
-          $rootScope.config = config;
-          $rootScope.config.app.init();
-          $rootScope.ui = locals.ui[config.app.lang];
-
-          $rootScope.app = $rootScope.app || {};
-          $rootScope.app.resources = Store('app').get('resources');
-          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
 
           /**
            * Timeline states
@@ -210,7 +226,7 @@ define(
                     if (_member.uuid == memberId)
                     {
                       member = _member;
-                      return;
+                      return false;
                     }
                   }
                 );
@@ -266,7 +282,7 @@ define(
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
           {
-            var result;
+            var result = null;
 
             angular.forEach(
               Store('app').get('clients'),
@@ -277,7 +293,7 @@ define(
                   result = client;
 
                   // TODO: return is needed here?
-                  return;
+                  return false;
                 }
               }
             );
@@ -297,7 +313,7 @@ define(
                         result = client;
 
                         // TODO: return is needed here?
-                        return;
+                        return false;
                       }
                     }
                   );
@@ -469,9 +485,9 @@ define(
           // TODO: Combine login and logout together
           $rootScope.logout = function ()
           {
-            angular.element('.navbar').hide();
+            navBar.hide();
 
-            angular.element('#footer').hide();
+            footer.hide();
 
             var loginData = Store('app').get('loginData');
 
@@ -521,7 +537,7 @@ define(
               elements.push('.client-avatar');
             }
 
-            angular.forEach(elements, function (element, i)
+            angular.forEach(elements, function (element)
             {
               angular.element(element).css({
                 'background': 'url(' + url + ')',
@@ -725,13 +741,14 @@ define(
               $route.reload();
           };
 
-          $rootScope.pincodeExists = function (pincode, userId)
+          $rootScope.pincodeExists = function (pincode, userId, assignedId)
           {
             Pincode.pincodeExists(
               pincode,
               $rootScope.pincodeExistsValidation,
               $rootScope.checkPincode,
-              userId
+              userId,
+              assignedId
             ).then(
               function (data)
               {

@@ -1,8 +1,8 @@
 {
   "name": "TeamUp",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "TeamUp description",
-  "author": "Cengiz Ulusoy - Micheal Yankun - Leonie van Dinten",
+  "author": "Cengiz Ulusoy - Micheal Yankun - Leonie van Dinten - Henk van Rooijen",
   "dependencies": {
     "grunt-svgmin": "^0.4.0"
   },
@@ -38,6 +38,7 @@
     "karma-firefox-launcher": "*",
     "karma-html2js-preprocessor": "*",
     "karma-jasmine": "*",
+    "karma-junit-reporter": "^0.2.2",
     "karma-ng-scenario": "*",
     "karma-phantomjs-launcher": "*",
     "karma-requirejs": "*",

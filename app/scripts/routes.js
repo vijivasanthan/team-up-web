@@ -24,9 +24,10 @@ define(
               templateUrl: 'views/logout.html',
               resolve: {
                 data: [
-                  '$rootScope', '$route',
+                  '$rootScope',
                   function ($rootScope)
                   {
+                    trackGa('send', 'event', 'Logout', 'User logout', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
                     $rootScope.logout();
                   }
                 ]
@@ -324,29 +325,12 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams', 'Slots', '$route',
-                  function (Teams, Slots, $route)
+                  'Teams', '$route',
+                  function (Teams, $route)
                   {
                     removeActiveClass('.teamMenu');
-                    //var data = {},
-                    //  deferred = $q.defer();
-                    //
-                    //  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
-                    //    ? Teams.queryLocal()
-                    //    : Teams.query(false, $route.current.params);
-                    //
-                    //teamsMembers
-                    //  .then(function(teamsMembers) {
-                    //    data.teamsMembers = teamsMembers;
-                    //
-                    //
-                    //  });
 
-
-                    return ($route.current.params.local && $route.current.params.local == 'true') ?
-                      Teams.queryLocal() :
-                      Teams.query(false, $route.current.params);
-                    //return =
+                    return Teams.query(false, $route.current.params);
                   }
                 ]
               }

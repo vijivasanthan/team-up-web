@@ -448,15 +448,12 @@
           min-width: 54px;
           height: 54px;
           text-align: center;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          border-radius: 5px;
           color: #fff;
           margin-bottom: 5px;
           padding-top: 18px;
           line-height: 20px;
           // background-color: #415e6b;
-          background-color: #6cad6c;
+          //background-color: #6cad6c;
 
           strong {
             font-size: 24px;
@@ -478,7 +475,8 @@
         }
 
         .sa-icon-reserve-available {
-          background-color: #6cad6c;
+          border-style: solid;
+          border-color: $turq;
         }
 
         .sa-icon-reserve-available-north {
@@ -494,7 +492,8 @@
         }
 
         .sa-icon-reserve-unavailable {
-          background-color: #d34545;
+          border-style: solid;
+          border-color: $red;
         }
 
         // TODO: Depreciated!
@@ -503,8 +502,8 @@
         }
 
         .sa-icon-reserve-noplanning {
-          background-color: #a0a0a0;
-          // background-color: #ececec;
+          border-style: solid;
+          border-color: $brown;
         }
 
         .sa-member-card {

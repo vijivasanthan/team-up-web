@@ -1,9 +1,7 @@
 define(
   {
     app: {
-      // version: '@@version',
-      version: '1.6.0',
-      // version: '0.5.2',
+      version: '@@version',
       released: '@@released',
 
       title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
@@ -17,6 +15,11 @@ define(
       namespace: "",
 
       host: localConfig.host,
+
+      //analytics: {
+      //  status: profile.analytics.status,
+      //  code: profile.analytics.code
+      //},
 
       formats: {
         date: 'dd-MM-yyyy',

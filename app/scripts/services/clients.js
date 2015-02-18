@@ -246,7 +246,7 @@ define(
 
                 var getClientFromLocal = function (clientId)
                 {
-                  var result;
+                  var result = null;
 
                   angular.forEach(
                     Store('app').get('ClientGroups'),
@@ -304,6 +304,44 @@ define(
             );
 
             return deferred.promise;
+          };
+
+          /**
+           * Update a single client and update the clients locally
+           * @param client
+           * @returns {*} The updated client
+           */
+          ClientsService.prototype.singleUpdate = function(client)
+          {
+            var deferred = $q.defer(),
+              clientUpdate = TeamUp._('clientUpdate', {second: client.uuid}, client),
+              allClients = this.queryAll();
+
+            $q.all([clientUpdate, allClients])
+                .then(
+                  function(data)
+                  {
+                    deferred.resolve(data[0]);
+                  }
+                );
+
+            return deferred.promise;
+          };
+
+          /**
+           * Query all Client and update them locally
+           * @returns {*} All the clients
+           */
+          ClientsService.prototype.queryAll = function()
+          {
+            return TeamUp._('clientsQuery')
+              .then(
+                function(clients)
+                {
+                  Store('app').save('clients', clients);
+                  return clients;
+                }
+              )
           };
 
           // Get the list local client groups with clients in it

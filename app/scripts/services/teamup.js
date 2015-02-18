@@ -7,8 +7,8 @@ define(
     services.factory(
       'TeamUp',
       [
-        '$resource', '$q', '$location', '$rootScope', 'Log',
-        function ($resource, $q, $location, $rootScope, Log)
+        '$resource', '$q',
+        function ($resource, $q)
         {
           var TeamUp = $resource(
               config.app.host + config.app.namespace + ':first/:second/:third/:fourth',

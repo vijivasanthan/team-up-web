@@ -40,7 +40,7 @@
                 <th><a>{{ui.teamup.phone}}</a></th>
               </tr>
             </thead>
-            <tbody ui-sortable="sortableOptions" ng-model="orderedMembers">
+            <tbody ng-sortable="sortableOptions" ng-model="orderedMembers">
               <tr ng-repeat="member in orderedMembers" ng-class="{unsortable: orderType=='RANDOM'}">
                 <td>
                   <div class="orderNumber">{{member.originalPosition + 1}}</div>
@@ -57,6 +57,8 @@
             </tbody>
           </table>
           <div style="margin-top: 20px">
+            <!--ul(ng-sortable="{animation:150}")-->
+            <!--	li(ng-repeat="item in items") {{item}}-->
             <button type="button" ng-click="confirmOrder()" class="btn btn-info">{{ ui.order.confirmation }}</button>
           </div>
         </div>

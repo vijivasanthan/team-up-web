@@ -24,8 +24,10 @@ define(
         'Profile',
         'Pincode',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Pincode)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
+          $scope.lala = 123;
+
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)
@@ -42,7 +44,7 @@ define(
             );
           };
 
-          $rootScope.fixStyles();
+          //$rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
           $scope.mfuncs = config.app.mfunctions;
@@ -58,11 +60,6 @@ define(
           getProfileResource($scope.view.uuid);
 
           var currentRole = $scope.view.role;
-
-          if($rootScope.browser.mobile)
-          {
-            $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
-          }
 
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
@@ -107,7 +104,7 @@ define(
           {
             return $scope.edit.pincode;
           }, function() {
-            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid);
+            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
           });
 
           $scope.parsedPhoneNumbers = [];
@@ -143,7 +140,7 @@ define(
 
           /**
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
-           * @param phone
+           * @param index index of what phonenumber
            */
           $scope.setTeamMemberCodeAsPhone = function(index)
           {
@@ -257,28 +254,28 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
-            if($rootScope.browser.mobile)
-            {
-              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
-              // to be provided in ISO 8601 (type='date')
-              var tempDate = resources.birthDate,
-                days = tempDate.substr(tempDate.length - 2),
-                months = tempDate.substr(5, 2),
-                years = tempDate.substr(0, 4);
-
-              resources.birthDate = days + '-' + months + '-' + years;
-            }
-
             //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
 
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
+            if($rootScope.browser.mobile)
+            {
+              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
+              // to be provided in ISO 8601 (type='date')
+              var tempDate = tempResources.birthDate,
+                days = tempDate.substr(tempDate.length - 2),
+                months = tempDate.substr(5, 2),
+                years = tempDate.substr(0, 4);
+
+              tempResources.birthDate = days + '-' + months + '-' + years;
+            }
+
             // deal with birthday
             try
             {
-              tempResources.birthDate = Dater.convert.absolute(resources.birthDate, 0);
+              tempResources.birthDate = Dater.convert.absolute(tempResources.birthDate, 0);
             }
             catch (error)
             {
@@ -363,10 +360,6 @@ define(
                             {
                               $scope.edit.birthDate = Dater.formatDateMobile($scope.view.birthDate);
                             }
-                            else
-                            {
-                              $scope.edit.birthDate = $scope.view.birthDate;
-                            }
 
                             $rootScope.statusBar.off();
                             $scope.setViewTo('profile');
@@ -412,13 +405,18 @@ define(
 
           $scope.editProfile = function ()
           {
+            if($rootScope.browser.mobile)
+            {
+              $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
+            }
+
             setView('edit');
           };
 
           $scope.editPassword = function ()
           {
             setView('editPassword');
-          }
+          };
 
           // Change an avatar
           $scope.editImg = function ()
@@ -470,7 +468,6 @@ define(
 
           $scope.deleteAvatar = function()
           {
-            //$data.uuid;
             angular.element('#confirmDeleteAvatar').modal('hide');
           };
 
@@ -508,7 +505,7 @@ define(
                 {second: team.uuid},
                 {ids: [$scope.view.uuid]}
               ).then(
-                function (result)
+                function ()
                 {
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 

@@ -420,7 +420,7 @@ define(
           var lastFourDigits = function(phone)
           {
             return phone.substr(phone.length - 4);
-          }
+          };
 
           $scope.memberSubmit = function (member)
           {
@@ -503,7 +503,10 @@ define(
                 // change the REST return to json.
                 if (result.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + ' : ' + result.error);
+                  var errorData = result.error.data.error;
+
+                  $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + errorData);
+                  $rootScope.statusBar.off();
                 }
                 else
                 {
@@ -750,7 +753,8 @@ define(
                     }
                   });
               }
-            ), function (error)
+            ),
+            function (error)
             {
               console.log(error)
             };
@@ -765,7 +769,7 @@ define(
             return $scope.memberForm.pincode;
           }, function ()
           {
-            $rootScope.pincodeExists($scope.memberForm.pincode);
+            $rootScope.pincodeExists($scope.memberForm.pincode, $rootScope.app.resources.uuid, true);
           });
 
           // TODO: Investigate on this!

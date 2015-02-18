@@ -20,9 +20,11 @@ define(
       $scope.getACL = function()
       {
         TestModal.getPermissionProfile()
-          .then(function(result) {
-            $scope.userId = result;
-          });
+          .then(function(result)
+            {
+              $scope.userId = result;
+            }
+          );
       };
 
     });

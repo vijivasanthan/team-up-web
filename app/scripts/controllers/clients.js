@@ -327,7 +327,7 @@ define(
                 team: teamId,
                 clientGroup: clientGroupId
               });
-          };
+          }
 
           $scope.requestClientGroup = function (current, switched)
           {
@@ -620,13 +620,13 @@ define(
 
             $scope.contactForm = null;
             $rootScope.resetPhoneNumberChecker();
-          }
+          };
 
           $scope.editContact = function (contact, index)
           {
             $scope.contactForm = contact;
             $scope.contactForm.index = index;
-          }
+          };
 
           // create a new client
           $scope.clientSubmit = function (client)
@@ -739,12 +739,8 @@ define(
               return;
             }
 
-
-            TeamUp._(
-              'clientUpdate',
-              {second: client.uuid},
-              changedClient
-            ).then(
+            Clients.singleUpdate(changedClient)
+              .then(
               function (result)
               {
                 if (result.error)
@@ -756,12 +752,11 @@ define(
                   $rootScope.resetPhoneNumberChecker();
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
-
-                  //todo redirect to the clientprofile how was edited
+                  //todo redirect to the clientprofile who was edited
                   var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
                   reloadGroup({'uuid': clientGroupId});
+
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 }
               }
             );
@@ -1026,7 +1021,7 @@ define(
                   creationTime: report.creationTime
                 }
               ).then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -1046,7 +1041,7 @@ define(
                   creationTime: report.creationTime
                 }
               ).then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -1081,6 +1076,8 @@ define(
               $scope.requestReportsByFilter();
             }
 
+            trackGa('send', 'event', 'Report', 'User is viewing a report');
+
             $scope.report = report;
             $scope.report.editMode = false;
 
@@ -1105,6 +1102,8 @@ define(
               client: $scope.$root.getClientByID($scope.currentCLient),
               editMode: false
             };
+
+            trackGa('send', 'event', 'Report', 'User creates report');
 
             modalInstance = getModal();
           };

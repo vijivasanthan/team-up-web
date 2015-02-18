@@ -46,7 +46,8 @@ section
 									a {{ui.teamup.name}}
 								th
 									a {{ui.teamup.phone}}
-						tbody(ui-sortable="sortableOptions", ng-model="orderedMembers")
+						tbody(ng-sortable="sortableOptions",
+							ng-model="orderedMembers")
 							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")
 								td
 									.orderNumber
@@ -63,5 +64,7 @@ section
 									| {{member.phoneE164}}
 					
 					div(style='margin-top: 20px;')
+						//ul(ng-sortable="{animation:150}")
+						//	li(ng-repeat="item in items") {{item}}
 						button.btn.btn-info(type='button', ng-click='confirmOrder()')
 							| {{ ui.order.confirmation }}

@@ -626,9 +626,9 @@ define(['services/services', 'config'],
               {
                 var allMembers = {};
 
-                angular.forEach(teams, function (team)
+                _.each(teams, function (team)
                 {
-                  angular.forEach(team, function (memberData, memberId)
+                  _.each(team, function (memberData, memberId)
                   {
                     allMembers[memberId] = memberData;
                   });

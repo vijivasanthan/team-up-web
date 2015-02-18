@@ -51,7 +51,8 @@ define(
           time: {
             days: 'd',
             hours: 'u',
-            minutes: 'm'
+            minutes: 'm',
+            seconds: 's'
           },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',
@@ -534,6 +535,8 @@ define(
           reportTitleMinChars: 'De beschrijving moet uit minimaal 4 karakters bestaan!',
           reportBodyMaxChars: 'De beschrijving mag maximaal 150 karakters bestaan!',
           reportTitleMaxChars: 'De titel kan uit maximaal 30 karakters bestaan!',
+          checkLocalStorage: 'In deze webbrowser is de privé-modus ingeschakeld. Dit wordt niet ondersteund. Hier vindt u informatie over hoe u de privé-modus kunt uitschakelen:',
+          readMore: 'Lees meer',
           date: 'Datum',
           datetime: 'Datum en tijd',
           writenBy: 'Geschreven door',
