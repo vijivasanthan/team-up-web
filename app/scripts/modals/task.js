@@ -27,18 +27,20 @@ define(
                 task.statusLabel = config.app.taskStates[task.status];
 
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
-                if(task.relatedClient == null)
-                  task.relatedClient = { firstName:"*", lastName: "Niet gevonden" };
+                if (task.relatedClient == null)
+                {
+                  task.relatedClient = {firstName: "*", lastName: "Niet gevonden"};
+                }
 
                 task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
 
                 if (task.relatedClient.address != null)
                 {
                   task.relatedClient.fullAddress = task.relatedClient.address.street +
-                                                   ' ' +
-                                                   task.relatedClient.address.no +
-                                                   ', ' +
-                                                   task.relatedClient.address.city;
+                  ' ' +
+                  task.relatedClient.address.no +
+                  ', ' +
+                  task.relatedClient.address.city;
                 }
                 else
                 {
@@ -60,26 +62,26 @@ define(
                 };
 
                 task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
-                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                                 ' - ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                                 ' uur' :
-                                                 $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                                                 ' uur - ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                                                 ' ' +
-                                                 $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                                                 ' uur';
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' - ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur' :
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' uur - ' +
+                $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur';
 
                 if (task.assignedTeamMemberUuid != '')
                 {
@@ -99,7 +101,10 @@ define(
                 'plannedTaskDuration',
                 'assignedTeamMember'
               ],
-              function (eliminated) { delete task[eliminated] }
+              function (eliminated)
+              {
+                delete task[eliminated]
+              }
             );
 
             return task;
@@ -129,8 +134,8 @@ define(
           Task.prototype.queryAll = function ()
           {
             var deferred = $q.defer(),
-                calls = [],
-                bulks = {};
+              calls = [],
+              bulks = {};
 
             _.each(
               Store('app').get('teams'),
@@ -139,11 +144,12 @@ define(
                 calls.push(
                   TeamUp._(
                     'taskByTeam',
-                    { fourth: team.uuid } // statuses: '1, 2, 3, 4'
+                    {fourth: team.uuid} // statuses: '1, 2, 3, 4'
                   ).then(
-                    function (tasks) {
-						bulks[team.uuid] = tasks;
-					}
+                    function (allTasks)
+                    {
+                      bulks[team.uuid] = allTasks;
+                    }
                   )
                 );
               }
@@ -154,7 +160,27 @@ define(
               function ()
               {
                 var basket = [];
+                /**
+                 * All tasks of a team
+                 * @type {Array}
+                 */
+                //var teamTasks = bulks[$rootScope.app.resources.teamUuids[0]];
+                //
+                //if (teamTasks.length > 0)
+                //{
+                //  _.each(
+                //    teamTasks,
+                //    function (task)
+                //    {
+                //      basket.push(task);
+                //    }
+                //  );
+                //}
 
+                /**
+                * All tasks
+                * @type {Array}
+                */
                 _.each(
                   bulks,
                   function (tasks)
@@ -163,22 +189,29 @@ define(
                     {
                       _.each(
                         tasks,
-                        function (task) { basket.push(task) }
+                        function (task)
+                        {
+                          basket.push(task);
+                        }
                       );
                     }
                   }
                 );
 
                 var tasks = _.map(
-                  _.indexBy(basket, function (node) { return node.uuid }),
-                  function (task) { return task }
+                  _.indexBy(basket, function (node)
+                  {
+                    return node.uuid
+                  }),
+                  function (task)
+                  {
+                    return task
+                  }
                 );
-
-                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
 
                 processTasks(tasks);
 
-				var merged = mergeOnStatus(tasks);
+                var merged = mergeOnStatus(tasks);
 
                 Store('app').save('allTasks2', merged);
 
@@ -189,79 +222,127 @@ define(
             return deferred.promise;
           };
 
-			/**
-			 * Get the tasks for a single team
-			 * @param teamId The id of the team
-			 * @returns {*} tasks promises
-			 */
-			Task.prototype.queryByTeam = function(teamId)
-			{
-				return TeamUp._(
-					'taskByTeam',
-					{ fourth: teamId }
-				).then(
-					function (tasks)
-					{
-						return tasks;
-					}.bind(this)
-				);
-			};
-
-		  /**
-		  * Get the tasks of a week
-		  * @param teamId the id of the team
-		  * @param weekNumber the number of the week
-		  * @returns {*} tasks promises
-		  */
-      Task.prototype.getWeek = function (teamId, weekNumber, year)
-      {
-        return this.queryByTeam(teamId)
-          .then(
-          function (tasks)
+          /**
+           * Get the tasks for a single team
+           * @param teamId The id of the team
+           * @returns {*} tasks promises
+           */
+          Task.prototype.queryByTeam = function (teamId)
           {
+            return TeamUp._(
+              'taskByTeam',
+              {fourth: teamId}
+            ).then(
+              function (tasks)
+              {
+                return tasks;
+              }.bind(this)
+            );
+          };
 
-            tasks = _.filter(tasks, function(task) {
-              var taskStartTime = moment(task.plannedStartVisitTime);
-              return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
-            });
+          /**
+           * Get a single task by id
+           * @param taskId
+           * @returns {*} the questioned task
+           */
+          Task.prototype.byId = function (taskId)
+          {
+            return TeamUp._(
+              'taskById',
+              {second: taskId}
+            ).then(
+              function (task)
+              {
+                return task;
+              }.bind(this)
+            );
+          };
 
-            return tasks;
-          }.bind(this)
-        );
-      };
+          /**
+           * Get the tasks of a week
+           * @param teamId the id of the team
+           * @param weekNumber the number of the week
+           * @returns {*} tasks promises
+           */
+          Task.prototype.getWeek = function (teamId, weekNumber, year)
+          {
+            return this.queryByTeam(teamId)
+              .then(
+              function (tasks)
+              {
 
-		  function mergeOnStatus(tasks)
-		  {
-			  var merged = {on: [], off: []};
-			  if (tasks.length > 0 ) {
-				  var grouped = _.groupBy(tasks, function (task) {
-					  return task.status
-				  });
+                tasks = _.filter(tasks, function (task)
+                {
+                  var taskStartTime = moment(task.plannedStartVisitTime);
+                  return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
+                });
 
-				  if(grouped[1]!=null)  {
-					  merged.on = merged.on.concat(grouped[1]);
-				  }
-				  if(grouped[2]!=null) {
-					  merged.on = merged.on.concat(grouped[2]);
-				  }
+                return tasks;
+              }.bind(this)
+            );
+          };
 
-				  if(grouped[3]!=null) {
-					  merged.off = merged.off.concat(grouped[3]);
-				  }
-				  if(grouped[4]!=null) {
-					  merged.off = merged.off.concat(grouped[4]);
-				  }
-			  }
+          /**
+           * Get all tasks from a date range
+           * @param range Date range
+           * @returns {*} Promise of tasks
+           */
+          //TODO Leon is creating some backend calls for deleting tasks by client/clientgroup/team/member
+          Task.prototype.byRange = function (range)
+          {
+            return TeamUp._(
+              'taskQuery',
+              {fourth: teamId}
+            ).then(
+              function (tasks)
+              {
+                return tasks;
+              }.bind(this)
+            );
+          };
 
-			  return merged;
-		  }
+          function mergeOnStatus(tasks)
+          {
+            var merged = {on: [], off: []};
+            if (tasks.length > 0)
+            {
+              var grouped = _.groupBy(tasks, function (task)
+              {
+                return task.status
+              });
 
+              if (grouped[1] != null)
+              {
+                merged.on = merged.on.concat(grouped[1]);
+              }
+              if (grouped[2] != null)
+              {
+                merged.on = merged.on.concat(grouped[2]);
+              }
 
+              if (grouped[3] != null)
+              {
+                merged.off = merged.off.concat(grouped[3]);
+              }
+              if (grouped[4] != null)
+              {
+                merged.off = merged.off.concat(grouped[4]);
+              }
+            }
+
+            return merged;
+          }
+
+          /**
+           * Update a task
+           * @param The editable task
+           * @returns {*} promise after updating the task
+           */
           Task.prototype.update = function (task)
           {
             return TeamUp._(
               'taskUpdate',
-              { second: task.uuid },
+              {second: task.uuid},
               strip(_.clone(task))
             );
           };
@@ -270,9 +351,9 @@ define(
           Task.prototype.chains = function ()
           {
             var data = {},
-                teams = Store('app').get('teams'),
-                clients = Store('app').get('clients'),
-                clientGroups = Store('app').get('ClientGroups');
+              teams = Store('app').get('teams'),
+              clients = Store('app').get('clients'),
+              clientGroups = Store('app').get('ClientGroups');
 
             var group;
 

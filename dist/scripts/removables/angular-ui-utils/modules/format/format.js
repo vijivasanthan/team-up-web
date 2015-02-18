@@ -1,0 +1,1 @@
+angular.module("ui.format",[]).filter("format",function(){return function(e,t){var n=e;if(angular.isString(n)&&t!==undefined){!angular.isArray(t)&&!angular.isObject(t)&&(t=[t]);if(angular.isArray(t)){var r=t.length,i=function(e,n){return n=parseInt(n,10),n>=0&&n<r?t[n]:e};n=n.replace(/\$([0-9]+)/g,i)}else angular.forEach(t,function(e,t){n=n.split(":"+t).join(e)})}return n}});

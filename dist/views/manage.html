@@ -3,9 +3,9 @@
 </div>
 <div class="tabbable tabs-left">
   <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
-    <li class="{{(views.teamClients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teamClients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams & Cliënten</a></li>
+    <li ng-show="app.domainPermission.clients" class="{{(views.teamClients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teamClients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams & Cliënten</a></li>
     <li class="{{(views.teams==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;teams&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Teams</a></li>
-    <li class="{{(views.clients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Cliënten</a></li>
+    <li ng-show="app.domainPermission.clients" class="{{(views.clients==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;clients&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Cliënten</a></li>
   </ul>
   <div ng-controller="treegrid" class="tab-content treegrid-container">
     <div id="viewTeamClientTab" class="tab-pane {{(views.teamClients==true) &amp;&amp; 'active'}}">

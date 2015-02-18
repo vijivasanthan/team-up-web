@@ -1,0 +1,67 @@
+section
+	.page-header.agenda-timeline
+		h2.nullable
+			| Volgorde
+	div(style='margin-top: 20px;')
+	.form-group.has-feedback.pull-left(ng-show='app.resources.role == 1')
+		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
+		label.control-label Selecteer team
+		.controls
+			select(ng-model='current.group',
+			ng-options='group.uuid as group.name for group in groups',
+			ng-selected='current.group',
+			ng-change='getOrder()')
+
+	.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include ../agenda/tabs
+			
+		.tab-content
+			#order.tab-pane(class="{{(views.order==true) && 'active'}}")
+				div(ng-show='current.group === ""')
+					| Er is geen team geselecteerd
+				div(ng-show='orderedMembers.length > 0')
+					div.btn-group
+						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
+							input(type='radio', 
+								ng-model='orderType', 
+								value='FIXED', 
+								ng-change='orderTypePreview()')
+							| {{ ui.order.fixedOrder }}
+						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
+							input(type='radio', 
+								ng-model='orderType', 
+								value='RANDOM', 
+								ng-change='orderTypePreview()')
+							| {{ ui.order.randomOrder }}
+					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
+					table.table.table-striped.orderTable(ng-show='orderType == "FIXED"')
+						thead
+							tr
+								th
+									a {{ui.tasks.orderType1}}
+								th 
+								th
+								th
+									a {{ui.teamup.name}}
+								th
+									a {{ui.teamup.phone}}
+						tbody(ui-sortable="sortableOptions", ng-model="orderedMembers")
+							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")
+								td
+									.orderNumber
+										| {{member.originalPosition + 1}}
+								td
+									.dragIcon
+								td
+									.roundedPicSmall(class='{{member.states|stateColor}}',
+									back-img = '{{member.uuid | avatar:"team":"80" }}')
+								td
+									a(href='index.html#/profile/{{member.uuid}}#profile')
+										| {{member.firstName}} {{member.lastName}}
+								td
+									| {{member.phoneE164}}
+					
+					div(style='margin-top: 20px;')
+						button.btn.btn-info(type='button', ng-click='confirmOrder()')
+							| {{ ui.order.confirmation }}

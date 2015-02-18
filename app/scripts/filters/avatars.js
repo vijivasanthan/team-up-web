@@ -31,7 +31,7 @@ define(
             var result = config.app.stateColors.none;
 
             var stateValues = _.pluck(states, 'value');
-            //console.log('stateValues-> ', stateValues);
+
             if(stateValues.indexOf('available') >= 0)
             {
               result = config.app.stateColors.availalbe;
@@ -44,7 +44,7 @@ define(
             {
               result = config.app.stateColors.busy;
             }
-            else if(stateValues.indexOf('offline') >= 0)
+            else if(stateValues.indexOf('offline') >= 0 || stateValues.indexOf('unknown') >= 0)
             {
               result = config.app.stateColors.offline;
             }
@@ -377,6 +377,8 @@ define(
         {
           return function (string, type)
           {
+
+
             var types = type.split('.');
             var ret;
             if (types[1] == 'stateValue')
@@ -392,7 +394,6 @@ define(
                 });
               return ret;
             }
-
             ret = ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
             if (typeof ret == 'undefined')
             {
@@ -461,11 +462,11 @@ define(
               switch (type)
               {
                 case 'team':
-                  path = '/team/member/';
+                  path = 'team/member/';
                   break;
 
                 case 'client':
-                  path = '/client/';
+                  path = 'client/';
                   break;
 
                 case 'avatar':
@@ -473,7 +474,7 @@ define(
                   break;
 
                 case 'image':
-                  path = '/images/';
+                  path = 'images/';
                   break;
               }
 
@@ -697,6 +698,52 @@ define(
 
             return String(text).replace(/\%VERSION\%/mg, config.app.version);
           }
+        }
+      ]
+    );
+
+    /**
+     * Strip html tags
+     */
+    filters.filter(
+      'stripHtml',
+      [
+
+        function ()
+        {
+          return function (string)
+          {
+            if (string)
+            {
+              return string.split('>')[1].split('<')[0];
+            }
+          }
+        }
+      ]
+    );
+
+    /**
+     * Convert user uuid to name
+     */
+    filters.filter(
+      'convertUserIdToName',
+      [
+        'Store',
+        function (Store)
+        {
+          var members = Store('network').get('unique');
+
+          return function (id)
+          {
+            if (members == null || typeof members[id] == "undefined")
+            {
+              return id;
+            }
+            else
+            {
+              return members[id].resources.firstName + ' ' + members[id].resources.lastName;
+            }
+          };
         }
       ]
     );

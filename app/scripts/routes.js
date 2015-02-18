@@ -20,7 +20,18 @@ define(
 
             .when(
             '/logout',
-            { templateUrl: 'views/logout.html' })
+            {
+              templateUrl: 'views/logout.html',
+              resolve: {
+                data: [
+                  '$rootScope', '$route',
+                  function ($rootScope)
+                  {
+                    $rootScope.logout();
+                  }
+                ]
+              }
+            })
 
             .when(
             '/tasks',
@@ -34,13 +45,6 @@ define(
             {
               templateUrl: 'views/tasks2.html',
               controller: 'tasks2Ctrl'
-            })
-
-            .when(
-            '/upload',
-            {
-              templateUrl: 'views/upload.html',
-              controller: 'uploadCtrl'
             })
 
             .when('/admin', {
@@ -88,6 +92,29 @@ define(
                            Clients.query(false, $route.current.params);
                   }
                 ]
+              }
+            })
+
+            //TODO make it work so u could redirect to edit a task
+            .when(
+            '/editTask/:taskId',
+            {
+              templateUrl: 'views/tasks2.html',
+              controller: 'tasks2Ctrl',
+              reloadOnSearch: false,
+              resolve: {
+              //  data: [
+              //    '$rootScope', '$route', '$location', 'Task',
+              //    function ($rootScope, $route, $location, Task)
+              //    {
+              //      //angular.element('.navbar .tasks2').addClass('active');
+              //      $location.hash('editTask');
+              //      return Task.getId($route.current.params.taskId);
+              //
+              //
+              //      //return { taskId: $route.current.params.taskId };
+              //    }
+              //  ]
               }
             })
 
@@ -156,11 +183,186 @@ define(
               }
             })
 
+            .when('/team-telefoon/agenda/:userId?', {
+              templateUrl: 'views/team-telephone/agenda.html',
+              controller: 'agenda',
+              resolve: {
+                data: function($route, Slots, Storage, Dater, Store, TeamUp, $q, $rootScope, $location)
+                {
+                  var periods = Store('app').get('periods'),
+                    groups = Store('app').get('teams'),
+                    lastVisited = Store('app').get('currentTeamClientGroup'),
+                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team)
+                      ? lastVisited.team
+                      : groups[0].uuid,
+                    redirectLocationLoggedUser = function()
+                    {
+                      $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                    }
+
+
+
+                  //Check if there is a userId in the url
+                  if(_.isUndefined($route.current.params.userId))
+                  {
+                    redirectLocationLoggedUser();
+                    return false;
+                  }
+
+                  //Get the teams of the userId in url
+                  var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
+
+                  //check if userId belongs to the same team as the logged user (teammember role only)
+                  if($rootScope.app.resources.role > 1)
+                  {
+                    var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
+
+                    if(_.isEmpty(userTeam))
+                    {
+                      redirectLocationLoggedUser();
+                    }
+                  }
+                  else
+                  {
+                    groupId = currentTeamsRouteUser[0].uuid;
+                  }
+
+                  //remove active class TODO create a directive to solve this bug
+                  removeActiveClass('.teamMenu');
+
+                  var deferred = $q.defer();
+                  var getAllSlots = function(userId)
+                  {
+                    return Slots.all({
+                      groupId: groupId,
+                      stamps: (Dater.current.today() > 360) ? {
+                        start: periods.days[358].last.timeStamp,
+                        end: periods.days[365].last.timeStamp
+                      } : {
+                        start: periods.days[Dater.current.today() - 1].last.timeStamp,
+                        end: periods.days[Dater.current.today() + 6].last.timeStamp
+                      },
+                      month: Dater.current.month(),
+                      layouts: {
+                        user: true,
+                        group: true,
+                        members: false
+                      },
+                      user: userId
+                    });
+                  };
+
+                  TeamUp._(
+                    'profileGet',
+                    {
+                      third: $route.current.params.userId
+                    },
+                    null,
+                    {
+                      success: function (userData)
+                      {
+                        getAllSlots(userData.uuid)
+                          .then(
+                            function(timelineData)
+                            {
+                              deferred.resolve({
+                                timelineData: timelineData,
+                                userData: userData
+                              });
+                            }
+                          );
+                      }
+                    }
+                  );
+
+                  return deferred.promise;
+                }
+              },
+              reloadOnSearch: false
+            })
+
             .when(
-            '/planboard',
+            '/team-telefoon/logs',
+            {
+              templateUrl: 'views/team-telephone/logs.html',
+              controller: 'logs',
+              resolve: {
+                data: function(Logs)
+                {
+                  removeActiveClass('.teamMenu');
+                  return Logs.fetch({
+                    end: new Date.now().getTime(),
+                    start: new Date.today().addDays(- 7).getTime()
+                  });
+                }
+              },
+              reloadOnSearch: false
+            })
+
+            .when(
+            '/team-telefoon',
+            {
+              redirectTo: function(route, path, search)
+              {
+                return path + '/agenda';
+              }
+            })
+
+            .when(
+            '/tasks2/planboard',
             {
               templateUrl: 'views/planboard.html',
               controller: 'planboard',
+              reloadOnSearch: false
+            })
+
+            .when(
+            '/team-telefoon/status',
+            {
+              templateUrl: 'views/team-telephone/status.html',
+              controller: 'status',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', 'Slots', '$route',
+                  function (Teams, Slots, $route)
+                  {
+                    removeActiveClass('.teamMenu');
+                    //var data = {},
+                    //  deferred = $q.defer();
+                    //
+                    //  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
+                    //    ? Teams.queryLocal()
+                    //    : Teams.query(false, $route.current.params);
+                    //
+                    //teamsMembers
+                    //  .then(function(teamsMembers) {
+                    //    data.teamsMembers = teamsMembers;
+                    //
+                    //
+                    //  });
+
+
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
+                      Teams.queryLocal() :
+                      Teams.query(false, $route.current.params);
+                    //return =
+                  }
+                ]
+              }
+            })
+
+            .when(
+            '/team-telefoon/order',
+            {
+              templateUrl: 'views/team-telephone/order.html',
+              controller: 'order',
+              resolve: {
+                data: function()
+                {
+                  removeActiveClass('.teamMenu');
+                }
+              },
               reloadOnSearch: false
             })
 
@@ -173,52 +375,22 @@ define(
             })
 
             .when(
-            '/profile/:userId',
+            '/profile/:userId?',
             {
               templateUrl: 'views/profile.html',
               controller: 'profileCtrl',
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', '$route', 'TeamUp', 'Store',
-                  function ($rootScope, $route, TeamUp, Store)
+                  '$rootScope', '$route', 'Profile', '$location',
+                  function ($rootScope, $route, Profile, $location)
                   {
-                    return TeamUp._(
-                      'profileGet',
-                      { third: $route.current.params.userId },
-                      null,
-                      {
-                        success: function (resources)
-                        {
-                          // TODO: Move this callback with other identical ones to a central location
-                          if ($route.current.params.userId == $rootScope.app.resources.uuid)
-                          {
-                            $rootScope.app.resources = resources;
-
-                            Store('app').save('resources', resources);
-                          }
-                        }
-                      }
-                    );
-                  }
-                ]
-              }
-            })
-
-            .when(
-            '/profile',
-            {
-              templateUrl: 'views/profile.html',
-              controller: 'profileCtrl',
-              resolve: {
-                data: [
-                  '$rootScope', '$route', '$location',
-                  function ($rootScope, $route, $location)
-                  {
-                    if (! $route.current.params.userId || ! $location.hash())
+                    if (! $route.current.params.userId)
                     {
                       $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
                     }
+
+                    return Profile.fetchUserData($route.current.params.userId);
                   }
                 ]
               }
@@ -278,6 +450,11 @@ define(
                 };
               }
             ]);
+
+          var removeActiveClass = function(divId)
+          {
+            angular.element(divId).removeClass('active');
+          }
         }
       ]);
   }

@@ -1,0 +1,28 @@
+section#groups-wish
+	form
+		.row
+			.span6
+				fieldset
+					.form-group.dater
+						label.control-label(style='width:127px;') {{ui.planboard.from}} 
+						label.control-label {{ui.planboard.till}}
+						.controls
+							input(name='date-start',
+							type='text',
+							ng-model='tasks.start',
+							data-date-format='dd-MM-yyyy',
+							bs-datepicker='')
+							i.icon-calendar
+							input(name='date-start',
+							type='text',
+							ng-model='tasks.end',
+							data-date-format='dd-MM-yyyy',
+							bs-datepicker='')
+							span
+								i.icon-calendar
+		hr
+		.form-actions
+			button.btn.btn-default.btn-sm(type='button', ng-click='$hide()') {{ui.teamup.cancel}}
+			button.btn.btn-primary.btn-sm(type='button', ng-click='saveWish(popover.id, popover.wish); $hide()') {{ui.teamup.confirms.remove}}
+			
+				

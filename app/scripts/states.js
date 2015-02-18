@@ -157,8 +157,44 @@ define(
                 $location.path('/client').search({local: 'true'}).hash('client');
                 break;
 
-              case 'planboard':
-                $location.path('/planboard').search({local: 'true'}).hash('teams');
+              case 'dashboard':
+                $location.path('/dashboard').search({}).hash('');
+                break;
+
+              case 'logs':
+                $location.path('/logs').search({}).hash('');
+                break;
+
+              case 'tasks2/alltasks':
+                $location.path('/tasks2').search({}).hash('allTasks');
+                break;
+
+              case 'tasks2/newtask':
+                $location.path('/tasks2').search({}).hash('newTask');
+                break;
+
+              case 'tasks2/upload':
+                $location.path('/tasks2').search({}).hash('upload');
+                break;
+
+              case 'tasks2/planboard':
+                $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
+                break;
+
+              case 'team-telefoon/agenda':
+                $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid).search({}).hash('');
+                break;
+
+              case 'team-telefoon/logs':
+                $location.path('/team-telefoon/logs').search({}).hash('');
+                break;
+
+              case 'team-telefoon/status':
+                $location.path('/team-telefoon/status').search({}).hash('');
+                break;
+
+              case 'team-telefoon/order':
+                $location.path('/team-telefoon/order').search({}).hash('');
                 break;
 
               case 'vis':
@@ -169,12 +205,9 @@ define(
                 $location.path('/support').search({}).hash('');
                 break;
 
-              case 'upload':
-                $location.path('/upload').search({}).hash('');
-                break
-
+              //profile tab links to the logged user profile
               case 'profile':
-                $location.path('/profile').search({local: 'true'}).hash('');
+                $location.path('/profile/'+ $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile');
                 break;
 
               case 'logout':

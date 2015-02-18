@@ -1,0 +1,51 @@
+div.legenda
+	.legenda-row
+		strong {{ui.agenda.teamMembers}}
+		ul
+			li(ng-repeat='(key, value) in timeline.config.states',
+			class="legenda-{{value.className}}")
+				label
+					.square
+					| {{value.label}}
+	.legenda-row.last-legenda-row
+		strong {{ui.agenda.groups}}
+		ul
+			li.legenda-more
+				label
+					.square
+					| {{ui.agenda.legendaLabels.morePeople}}
+			li.legenda-even
+				label
+					.square
+					| {{ui.agenda.legendaLabels.enoughPeople}}
+			li.legenda-less
+				label
+					.square
+					| {{ui.agenda.legendaLabels.lessPeople}}
+
+
+
+//div.legenda
+//	.legenda-row
+//		strong {{ui.planboard.members}}
+//		ul
+//			li(ng-repeat='(key, value) in timeline.config.states',
+//			class="legenda-{{value.className}}")
+//				label
+//					.square
+//					| {{value.label}}
+//	.legenda-row.last-legenda-row
+//		strong {{ui.planboard.groups}}
+//		ul
+//			li.legenda-more
+//				label
+//					.square
+//					| {{ui.planboard.legendaLabels.morePeople}}
+//			li.legenda-even
+//				label
+//					.square
+//					| {{ui.planboard.legendaLabels.enoughPeople}}
+//			li.legenda-less
+//				label
+//					.square
+//					| {{ui.planboard.legendaLabels.lessPeople}}//

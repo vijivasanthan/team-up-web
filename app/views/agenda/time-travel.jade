@@ -1,0 +1,60 @@
+div#timeline-controls(ng-controller='agenda-timeline-navigation')
+	.pull-left(style='margin-top: 10px;')
+
+		.form-group.has-feedback.pull-left.dateranger
+			input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
+			i.glyphicon.glyphicon-calendar.form-control-feedback
+
+		.btn-group.pull-left(style='margin-right: 5px;')
+			button.btn.btn-primary(type='button', ng-model='timeline.scope.day', ng-click='timelineScoper("day")', class="{{(timeline.scope.day==true) && 'active'}}")
+				| {{ui.agenda.day}}
+			button.btn.btn-primary(type='button', ng-model='timeline.scope.week', ng-click='timelineScoper("week")', class="{{(timeline.scope.week==true) && 'active'}}")
+				| {{ui.agenda.week}}
+			button.btn.btn-primary(type='button', ng-model='timeline.scope.month', ng-click='timelineScoper("month")', class="{{(timeline.scope.month==true) && 'active'}}")
+				| {{ui.agenda.month}}
+
+		.btn-group.pull-left(style='margin-right: 5px;')
+			button#timelineBeforeBtn.btn.btn-primary(type='button', ng-click='timelineBefore(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-left
+			button#timelineZoomInBtn.btn.btn-primary(type='button', ng-click='timelineZoomIn()')
+				i.glyphicon.glyphicon-zoom-in
+			button#timelineZoomOutBtn.btn.btn-primary(type='button', ng-click='timelineZoomOut()')
+				i.glyphicon.glyphicon-zoom-out
+			button#timelineAfterBtn.btn.btn-primary(type='button', ng-click='timelineAfter(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-right
+
+	div(ng-hide='browser.mobile', class="{{ (browser.mobile) &&  'pull-left' || 'pull-right' }}", style="text-align: {{(browser.mobile) &&  'left' || 'right' }}")
+		h4(style='font-weight: normal;')
+			| {{timeline.range | rangeMainFilter}}
+			br
+			div(style='font-size: 15px; font-weight: lighter;')
+				span {{timeline | rangeInfoFilter}}
+				//
+	//div(ng-show='browser.mobile'
+	//	class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}")
+	//	.btn-group
+	//		button.btn.btn-primary(type='button',
+	//		class="{{(timeline.config.legendarer==true) && 'active'}}",
+	//		ng-click='showLegenda()',
+	//		ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}
+	//	.btn-group(ng-show='timeline.current.layouts.group')
+	//		button.btn.btn-primary(type='button',
+	//		class="{{(timeline.config.bar==true) && 'active'}}",
+	//		ng-click='barCharts()',
+	//		ng-model='timeline.config.bar') {{ui.agenda.barCharts}}
+	//	.btn-group(ng-show='timeline.current.layouts.group',
+	//	ng-hide='app.resources.role > 1')
+	//		button.btn.btn-primary(type='button',
+	//		class="{{(timeline.config.wishes==true) && 'active'}}",
+	//		ng-click='groupWishes()',
+	//		ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
+	//	.btn-group
+	//		button.btn.btn-primary(type='button',
+	//		class="{{(timeline.current.layouts.group==true) && 'active'}}",
+	//		ng-model='timeline.current.layouts.group',
+	//		ng-click='requestTimeline("group")') {{ui.agenda.group}}
+	//		button.btn.btn-primary(type='button',
+	//		class="{{(timeline.current.layouts.members==true) && 'active'}}",
+	//		ng-model='timeline.current.layouts.members',
+	//		ng-click='requestTimeline("members")',
+	//		ng-show='(app.resources.role < 3) || timeline.config.layouts.members')  {{ui.agenda.members}}

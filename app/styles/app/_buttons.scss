@@ -63,6 +63,11 @@
     @include box-shadow(none);
   }
 
+//  .btn-success.disabled {
+//    color: $turq !important;
+//    background-color: $turq !important;
+//  }
+
 }
 
 // Button Sizes
@@ -297,4 +302,32 @@ input[type="submit"].btn {
 
 .cancelButton {
 
+}
+
+.btn-primary-reverse {
+  background-color: $brown;
+  color: $orange;
+  &:hover {
+    color: #fff;
+  }
+}
+
+// Add style to radio btn-group without data-toggle=buttons
+#order {
+  .btn-group > .btn {
+    input[type="radio"],
+    input[type="checkbox"] {
+      position: absolute;
+      clip: rect(0,0,0,0);
+      pointer-events: none;
+    }
+  }
+}
+
+.non-capitalize {
+  text-transform: none;
+}
+
+.btn-color-brown {
+  color: $brown;
 }

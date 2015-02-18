@@ -28,9 +28,9 @@
     </div>
   </div>
 </div>
-<div ng-hide="views.newTeam || views.newMember" class="page-header">
+<div class="page-header">
   <h2 class="nullable">{{ui.teamup.teams}}</h2>
-  <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
+  <div ng-show="app.resources.role == 1 &amp;&amp; views.team" class="selectGroup"><span class="selectTitle">{{ ui.teamup.selectTeam }}</span>
     <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
   </div>
 </div>
@@ -74,7 +74,7 @@
               </td>
               <td><a href="#/profile/{{member.uuid|lowercase}}#profile" ng-click="editProfile(member.uuid,team.uuid)">{{member.firstName}} {{member.lastName}}</a></td>
               <td><span ng-show="noSharedStates(member.states)" class="states">{{ui.teamup.noSharedStates}}</span>
-                <dl ng-repeat="state in member.states | filter:share=true " class="states"><span data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span><span ng-show="(state.name == &quot;Location&quot;)" class="stateValue">{{member.address.street}} {{member.address.no}}, {{member.address.zip}} {{member.address.city}}</span><span ng-show="(state.name != &quot;Location&quot;)" class="stateValue">{{state.value | i18n_spec:'teamup.stateValue'}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}"> {{ui.teamup.map}}</a></span></dl>
+                <dl ng-repeat="state in member.states | filter:share=true " class="states"><span data-icon="{{state.name|stateDataIcon:&quot;data_icon&quot;}}" aria-hidden="true" class="stateIcon {{state.name|stateDataIcon:'class_name'}}"></span><span ng-show="(state.name == &quot;Location&quot;)" class="stateValue">{{[member.address.street, member.address.no, member.address.zip, member.address.city] | commaSeperated}}</span><span ng-show="(state.name == &quot;Availability&quot; || state.name == &quot;Reachability&quot;)" class="stateValue">{{state.value | i18n_spec:'teamup.stateValue'}}<a ng-show="(state.name == &quot;Location&quot;)" href="http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}"> {{ui.teamup.map}}</a></span></dl>
               </td>
               <td>
                 <div class="pull-right"><a href="#/profile/{{member.uuid}}#edit" ng-click="editProfile(member.uuid,team.uuid)" ng-show="app.resources.role == 1 || app.resources.uuid == member.uuid">
@@ -84,7 +84,21 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
+        </table>
+        <ul id="teams-legenda">
+          <li>
+            <div class="roundedPicxSmall memberStateNone"></div>
+            <p>{{ ui.teamup.noSharedStates }}</p>
+          </li>
+          <li>
+            <div class="roundedPicxSmall memberStateBusy"></div>
+            <p>{{ ui.teamup.stateValue.unavailable }}</p>
+          </li>
+          <li>
+            <div class="roundedPicxSmall memberStateAvailalbe"></div>
+            <p>{{ ui.teamup.stateValue.available }}</p>
+          </li>
+        </ul><span class="muted pull-right"><small><i>{{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}</i></small></span>
       </div>
     </div>
     <div id="newTeamTab" class="tab-pane {{(views.newTeam==true) &amp;&amp; 'active'}}">
@@ -106,7 +120,7 @@
         <h3 class="pull-left">{{ui.teamup.newMember}}</h3>
       </div>
       <hr>
-      <form>
+      <form name="teamMemberForm" novalidate="novalidate">
         <fieldset>
           <div class="control-group">
             <label class="control-label">{{ui.teamup.teams}}</label>
@@ -120,19 +134,19 @@
           <div class="row">
             <div class="span6">
               <fieldset>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.firstName}}</label>
                   <div class="controls">
                     <input type="text" ng-model="memberForm.firstName" class="span4">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.lastName}}</label>
                   <div class="controls">
                     <input type="text" ng-model="memberForm.lastName" class="span4">
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.teamup.role}}</label>
                   <div class="controls">
                     <select ng-model="memberForm.role" ng-options="r.id as r.label for r in roles">
@@ -140,46 +154,58 @@
                     </select>
                   </div>
                 </div>
-                <div class="control-group">
+                <div ng-class="{ 'has-error' : teamMemberForm.email.$invalid &amp;&amp; !teamMemberForm.email.$pristine }" class="form-group">
+                  <label class="control-label">E-mail</label>
+                  <div class="controls">
+                    <input type="email" name="email" required="required" ng-model="memberForm.email" class="span3 form-control"><span ng-show="teamMemberForm.email.$invalid &amp;&amp; !teamMemberForm.email.$pristine" class="help-block"><small ng-show="teamMemberForm.$error.email"><i></i>{{ ui.validation.email.notValid }}</small></span>
+                  </div>
+                </div>
+                <div ng-class="{'has-error': phoneNumberParsed.result == false}" class="form-group">
                   <label class="control-label">{{ui.teamup.phone}}</label>
                   <div class="controls">
-                    <input type="text" ng-model="memberForm.phone" class="span3">
+                    <input type="text" ng-model="memberForm.phone" ng-change="parsePhoneNumber(memberForm.phone); changePinToPhone()" class="span3 form-control inputPhoneNumber"><span class="help-block"><small><i>{{phoneNumberParsed.message}}</i></small></span>
                   </div>
                 </div>
-                <div class="control-group">
-                  <label class="control-label">{{ui.teamup.func}}</label>
-                  <div class="controls">
-                    <select ng-model="memberForm.function" ng-options="f.id as f.label for f in mfuncs">
-                      <option value="">{{ui.teamup.chooseFunction}}</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="control-group dater">
-                  <label class="control-label">{{ui.profile.birthday}}</label>
-                  <div class="controls">
-                    <input name="date-start" type="text" ng-model="memberForm.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
-                  </div>
-                </div>
+                <!--.form-group-->
+                <!--	label.control-label {{ui.teamup.func}}-->
+                <!--	.controls-->
+                <!--		select(ng-model='memberForm.function',-->
+                <!--		ng-options='f.id as f.label for f in mfuncs')-->
+                <!--			option(value='') {{ui.teamup.chooseFunction}}-->
               </fieldset>
             </div>
             <div class="span6">
               <fieldset>
-                <div class="control-group">
+                <div ng-class="{ 'has-error' : teamMemberForm.birthdate.$invalid &amp;&amp; !teamMemberForm.birthdate.$pristine }" class="form-group dater">
+                  <label class="control-label">{{ui.profile.birthday}}</label>
+                  <div class="controls">
+                    <input type="text" name="birthdate" required="required" ng-model="memberForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" class="form-control"><i class="icon-calendar"></i>
+                    <p ng-show="teamMemberForm.birthdate.$invalid &amp;&amp; !teamMemberForm.birthdate.$pristine" class="text-danger"><small><i>{{ui.validation.birthDate.notValid }}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.exampleBirthDate}}</i></small></span>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.username}}</label>
                   <div class="controls">
                     <input type="text" ng-blur="convertUserName()" ng-model="memberForm.username" class="span3">
                   </div>
                 </div>
-                <div class="control-group">
+                <div ng-class="{ 'has-error' : teamMemberForm.password.$invalid &amp;&amp; !teamMemberForm.password.$pristine }" class="form-group">
                   <label class="control-label">{{ui.profile.password}}</label>
                   <div class="controls">
-                    <input type="password" ng-model="memberForm.password" class="span3">
+                    <input type="password" ng-model="memberForm.password" name="password" required="required" ng-minlength="8" ng-maxlength="20" class="span3 form-control"><span ng-show="teamMemberForm.password.$invalid &amp;&amp; !teamMemberForm.password.$pristine" class="help-block"><small><i></i>{{ ui.validation.password.required }}</small><small ng-show="teamMemberForm.password.$error.minlength"><i> </i>{{ ui.validation.password.amountMinChars(8) }} </small><small ng-show="teamMemberForm.password.$error.maxlength"><i> </i>{{ ui.validation.password.amountMaxChars(20) }}</small></span>
                   </div>
                 </div>
-                <div class="control-group">
+                <div class="form-group">
                   <label class="control-label">{{ui.profile.retypePassword}}</label>
                   <div class="controls">
                     <input type="password" ng-model="memberForm.reTypePassword" class="span3">
+                  </div>
+                </div>
+                <div ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid &amp;&amp; !teamMemberForm.pincode.$pristine }" class="form-group">
+                  <label class="control-label">{{ui.profile.pincode}}</label>
+                  <div class="controls">
+                    <input type="text" ng-model="memberForm.pincode" ui-mask="9999?9999" ng-change="pincodeExists(memberForm.pincode)" name="pincode" class="span2 form-control">
+                    <p ng-hide="pincodeExistsValidation" class="text-danger"><small><i>{{pincodeExistsValidationMessage}}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.pincodeInfo}}</i></small></span>
                   </div>
                 </div>
               </fieldset>

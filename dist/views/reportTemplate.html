@@ -1,46 +1,61 @@
-<div class="modal-header">
-  <h4 ng-hide="view.newReport == true" class="reportTitle">{{report.title}}</h4>
-  <h4 ng-hide="view.newReport == false" class="reportTitle">{{ui.teamup.newReport}}</h4>
-  <button type="button" ng-click="close()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
-</div>
-<div class="modal-body">
-  <table>
-    <thead>
-      <tr>
-        <th>{{ui.teamup.date}}</th>
-        <th>{{ui.teamup.writenBy}}</th>
-        <th>Cliënt</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{report.creationTime|nicelyDate}}</td>
-        <td>{{report.author.firstName}} {{report.author.lastName}}</td>
-        <td>{{report.client.firstName}} {{report.client.lastName}}</td>
-      </tr>
-      <tr ng-show="report.media.length &gt; 0">
-        <div class="row">
-          <div ng-repeat="media in report.media" class="col-md-3"><a ng-href="{{config.app.host}}images/{{media.path}}" target="_blank" class="thumbnail"><img ng-src="{{media.path | avatar:&quot;avatar&quot;:&quot;171&quot;}}"></a></div>
-        </div>
-      </tr>
-      <tr ng-hide="view.viewReport == false">
-        <td colspan="3" class="description"><br>{{report.body}}</td>
-      </tr>
-      <tr ng-show="view.newReport || view.editReport ">
-        <td colspan="3"><br>
-          <label class="control-label">{{ui.teamup.reportTitle}}</label>
-          <div class="controls">
-            <input type="text" ng-model="report.title" class="span4">
-          </div>
-          <label class="control-label">{{ui.teamup.report}}</label>
-          <div class="controls">
-            <textarea ng-model="report.body" class="span4"></textarea>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="modal-footer">
-  <button ng-show="view.newReport || view.editReport" type="button" ng-click="saveReport(report)" class="btn btn-success">{{ui.teamup.saveReport}}</button>
+<div id="report-template" tabindex="-1" role="dialog" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" ng-click="$hide()" class="btn pull-right btn-primary marginLeftTen">{{ui.groups.close}}</button>
+        <h4 ng-show="view.newReport" class="modal-title">{{ ui.teamup.newReport }}</h4>
+        <h4 ng-show="view.editReport || view.viewReport" class="modal-title">{{ report.title }}</h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ui.teamup.date}}</th>
+              <th>{{ui.teamup.writenBy}}</th>
+              <th>Cliënt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{report.creationTime|nicelyDate}}</td>
+              <td>{{report.author.firstName}} {{report.author.lastName}}</td>
+              <td>{{report.client.firstName}} {{report.client.lastName}}</td>
+            </tr>
+            <tr ng-show="report.media.length &gt; 0">
+              <div class="row">
+                <div ng-repeat="media in report.media" class="col-md-3"><a ng-href="{{media.path | avatar:&quot;avatar&quot;:&quot;171&quot;}}" target="_blank" class="thumbnail"><img ng-src="{{media.path | avatar:&quot;avatar&quot;:&quot;171&quot;}}"></a></div>
+              </div>
+            </tr>
+            <tr ng-hide="view.viewReport == false">
+              <td colspan="3" class="description"><br>{{report.body}}</td>
+            </tr>
+            <tr ng-show="view.newReport || view.editReport">
+              <td colspan="3"><br>
+                <form name="reportForm" novalidate="novalidate">
+                  <div ng-class="{ 'has-error' : reportForm.title.$invalid &amp;&amp; !reportForm.title.$pristine }" class="form-group">
+                    <label class="control-label">{{ui.teamup.reportTitle}}</label>
+                    <div class="controls">
+                      <input type="text" name="title" ng-model="report.title" ng-minlength="4" ng-maxlength="30" required="required" class="span4 form-control"><span ng-show="reportForm.title.$invalid &amp;&amp; !reportForm.title.$pristine" class="help-block"><small ng-show="reportForm.title.$error.required"><i>{{ui.teamup.reportTitleRequired}}</i></small><small ng-show="reportForm.title.$error.minlength"><i>{{ui.teamup.reportTitleMinChars}}</i></small><small ng-show="reportForm.title.$error.maxlength"><i>{{ui.teamup.reportTitleMaxChars}}	</i>
+                          <!--ng-show='reportForm.title.$invalid && !reportForm.title.$pristine'--></small></span>
+                    </div>
+                  </div>
+                  <div ng-class="{ 'has-error' : reportForm.description.$invalid &amp;&amp; !reportForm.description.$pristine }" class="form-group">
+                    <label class="control-label">{{ui.teamup.reportBody}}</label>
+                    <div class="controls">
+                      <textarea ng-model="report.body" name="description" rows="5" cols="30" ng-required="true" ng-minlength="8" ng-maxlength="150" class="span4 form-control"></textarea><span ng-show="reportForm.description.$invalid &amp;&amp; !reportForm.description.$pristine" class="help-block"><small ng-show="reportForm.description.$error.required"><i>{{ui.teamup.reportBodyRequired}}</i></small><small ng-show="reportForm.description.$error.minlength"><i>{{ui.teamup.reportBodyMinChars}} </i></small><small ng-show="reportForm.description.$error.maxlength"><i>{{ui.teamup.reportBodyMaxChars}}
+                            <!--ng-show='reportForm.description.$invalid && !reportForm.description.$pristine'--></i></small></span>
+                    </div>
+                  </div>
+                </form>
+              </td>
+            </tr>
+            <!--tr(ng-show='view.newReport || view.editReport')-->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button ng-show="view.newReport || view.editReport" type="button" ng-click="saveReport(report)" class="btn btn-success">{{ui.teamup.saveReport}}</button>
+      </div>
+    </div>
+  </div>
 </div>

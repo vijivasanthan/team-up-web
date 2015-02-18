@@ -1,0 +1,1 @@
+angular.module("ui.alias",[]).config(["$compileProvider","uiAliasConfig",function(e,t){t=t||{},angular.forEach(t,function(t,n){angular.isString(t)&&(t={replace:!0,template:t}),e.directive(n,function(){return t})})}]);

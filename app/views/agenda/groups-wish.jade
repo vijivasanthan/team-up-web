@@ -1,0 +1,8 @@
+section#groups-wish
+	form.form-inline
+		fieldset
+			.form-group
+				//- TODO: rearrange to remove inline style
+				input.form-control(type='text', ng-model='popover.wish', style='width: 50px;')
+				button.btn.btn-primary.btn-sm(type='button', ng-click='saveWish(popover.id, popover.wish); $hide()') {{ui.teamup.save}}
+				button.btn.btn-default.btn-sm(type='button', ng-click='$hide()') {{ui.teamup.cancel}}

@@ -1,0 +1,120 @@
+section#planboard(ng-controller='agenda-timeline', scroll)
+	.agenda-timeline.page-header
+		h2.nullable {{ui.planboard.planboard}}
+		include ../agenda/time-quick-availability
+	include ../agenda/time-travel
+	include ../agenda/time-slot
+		
+	.agenda-timeline-tabs.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include ../agenda/tabs
+		
+		.tab-content
+		
+			// timeline(class="{{( ! views.agenda==true) && 'active'}}")
+			div#timelineTab.tab-pane.active
+				#timeline
+					div#timeline-toolbar
+						select.form-control.pull-left(ng-hide='app.resources.role > 1',
+							ng-model='timeline.current.group',
+							ng-options='group.uuid as group.name for group in groups',
+							ng-selected='timeline.current.group',
+							ng-change='requestTimeline()',
+							ng-show='timeline.current.layouts.group && app.resources.role == 0')
+						//select.form-control(ng-model='timeline.current.division',
+						//ng-options='division.id as division.label for division in divisions',
+						//ng-selected='timeline.current.division',
+						//ng-change='changeDivision()',
+						//ng-show='divisions.length > 0')
+						button.btn.btn-primary.pull-left(type='button',
+							style='margin: 3px 10px; 0 0',
+							data-content-template='views/agenda/groups-wish.html',
+							data-placement='bottom',
+							bs-popover='',
+							data-title='Behoefte wijzigen',
+							ng-hide='app.resources.role > 1')
+								span.badge.badge-inset(ng-show='wished')
+									| {{wish}}
+								| &nbsp;{{ui.agenda.requiredPeople}}
+							
+								
+						br(ng-show='browser.mobile')
+						br(ng-show='browser.mobile')
+						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
+						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
+							//.btn-group(ng-show='timeline.current.layouts.group')
+							//	button.btn.btn-primary(type='button',
+							//		class="{{(timeline.config.bar==true) && 'active'}}",
+							//		ng-click='barCharts()',
+							//		ng-model='timeline.config.bar') 
+							//			i.glyphicon.glyphicon-stats
+							//{{ui.agenda.barCharts}}
+							//.btn-group(ng-show='timeline.current.layouts.group')
+							//	button.btn.btn-primary(type='button',
+							//	class="{{(timeline.config.wishes==true) && 'active'}}",
+							//	ng-click='groupWishes()',
+							//	ng-model='timeline.config.wishes') {{ui.agenda.wishes}}
+							.btn-group
+								button.btn.btn-primary(type='button',
+								class="{{(timeline.config.bar==true) && 'active'}}",
+								ng-click='barCharts()',
+								ng-model='timeline.config.bar')
+									i.glyphicon.glyphicon-stats
+								button.btn.btn-primary(type='button',
+								class="{{(timeline.current.layouts.group==true) && 'active'}}",
+								ng-model='timeline.current.layouts.group',
+								ng-click='requestTimeline("group")') {{ui.agenda.group}}
+								button.btn.btn-primary(type='button',
+								class="{{(timeline.current.layouts.members==true) && 'active'}}",
+								ng-model='timeline.current.layouts.members',
+								ng-click='requestTimeline("members")',
+								ng-show='(app.resources.role < 3) || timeline.config.layouts.members')  {{ui.agenda.members}}
+								//.icomoon
+								//data-icon='',
+								//aria-hidden='true',
+								
+					hr
+					// alert-window
+					//div.alert.alert-warning(
+					//	ng-show='timeline.user.id != app.resources.uuid')
+					//	button.close(type='button',
+					//	data-dismiss='alert') ×
+					//	small
+					//		| U bekijkt de tijdlijn van 
+					//		strong
+					//			i  {{timeline.user.fullName}}
+					//		|  druk op annuleren om terug te gaan naar uw tijdlijn.
+					//	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren
+					
+					div.alert.alert-warning(ng-show='infoAvailibility.info')
+						button.close(type='button',
+						ng-click='disableInfoAvailibility()',
+						data-dismiss='alert') ×
+						small
+							| De
+							strong
+								i  bereikbaarheid kan gewijzigd worden
+							|  door te
+							| dubbelklikken op reeds bestaande blokken of 
+							strong
+								i  door te slepen 
+							|  met uw muis. Met de linkermuisknop en de
+							strong  SHIFT (Mac) 
+							|  of 
+							strong  CTRL (Windows) 
+							|  knop tegelijkertijd ingedrukt.
+		
+					#mainTimeline(set-position-slot-form)
+					div.legends-agenda
+						include ../agenda/time-legends
+				p
+					small.pull-left
+						span.text-warning {{ui.agenda.lastSyncTime}}
+						span.text-muted &nbsp; {{data.synced | nicelyDate}}
+					small.pull-right
+						span.text-warning {{ui.agenda.dataRangeStart}}
+						span.text-muted {{data.periods.start | nicelyDate}}
+						| &nbsp;&nbsp;| &nbsp;
+						span.text-warning {{ui.agenda.dataRangeEnd}}
+						span.text-muted {{data.periods.end | nicelyDate}}
+			

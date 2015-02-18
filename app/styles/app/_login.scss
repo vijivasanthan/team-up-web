@@ -1,7 +1,14 @@
 /**
  * Welcoming page styles
  */
-#welcomeLogo {
+#welcomeLogoTeamTelefoon {
+  background-image: url("../images/TeamTelefoonLogo.png");
+  margin: 0 auto 40px;
+  height: 82px;
+  width: 363px;
+}
+
+#welcomeLogoTeamUp {
   background-image: url("../images/logo.png");
   margin: 0 auto 40px;
   height: 82px;

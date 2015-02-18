@@ -60,7 +60,7 @@
 </div>
 <div ng-hide="views.viewClient || views.editClient || views.newClientGroup" class="page-header">
   <h2 class="nullable">{{ui.teamup.clients}}</h2>
-  <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
+  <div ng-show="app.resources.role == 1" class="selectGroup"><span class="selectTitle">Selecteer groep</span>
     <select ng-model="current" ng-options="c.id as c.name for c in clientGroups" ng-selected="current" ng-change="requestClientGroup(current)"></select>
   </div>
 </div>
@@ -69,7 +69,7 @@
     <li class="{{(views.client==true || views.viewClient==true || views.editClient) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;client&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.clients}}</a></li>
     <li ng-hide="app.resources.role &gt; 1" class="{{(views.newClientGroup==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newClientGroup&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newClientGroup}}</a></li>
     <li class="{{(views.newClient==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;newClient&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.newClient}}</a></li>
-    <li class="{{(views.reports==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;reports&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.reports}}</a></li>
+    <li ng-show="app.domainPermission.clientReports" class="{{(views.reports==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;reports&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>{{ui.teamup.reports}}</a></li>
   </ul>
   <div class="tab-content">
     <div id="viewClientTab" class="tab-pane {{(views.client==true) &amp;&amp; 'active'}}">
@@ -101,7 +101,7 @@
                 <div back-img="{{client.uuid | avatar:&quot;client&quot;:&quot;80&quot;}}" class="roundedPicSmall memberStateBusy"></div>
               </td>
               <td><a href="#/clientProfile/{{client.uuid}}#viewClient">{{client.firstName}} {{client.lastName}}</a></td>
-              <td>{{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}</td>
+              <td>{{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}</td>
               <td>
                 <div class="pull-right"><a href="#/clientProfile/{{client.uuid}}#editClient">
                     <button class="btn-primary btn-mini"><i class="icon-edit"></i></button></a>
@@ -147,7 +147,7 @@
         <h3 class="pull-left">{{ui.teamup.newClient}}</h3>
       </div>
       <hr>
-      <form>
+      <form name="newClientForm">
         <fieldset>
           <div class="control-group">
             <label class="control-label">{{ui.profile.firstName}}</label>
@@ -161,18 +161,21 @@
               <input type="text" ng-model="clientForm.lastName" class="span4">
             </div>
           </div>
-          <div class="control-group">
+          <div ng-class="{ 'has-error' : newClientForm.birthdate.$invalid &amp;&amp; !newClientForm.birthdate.$pristine }" class="form-group dater">
             <label class="control-label">{{ui.profile.birthday}}</label>
             <div class="controls">
-              <div style="" class="control-group dater">
-                <input name="date-start" type="text" ng-model="clientForm.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+              <div class="control-group">
+                <input type="text" name="birthdate" required="required" ng-model="clientForm.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" class="form-control"><i class="icon-calendar"></i>
+                <p ng-show="newClientForm.birthdate.$invalid &amp;&amp; !newClientForm.birthdate.$pristine" class="text-danger"><small><i>{{ui.validation.birthDate.notValid }}</i></small></p><span style="margin-top: -5px" class="help-block"><small><i>{{ui.profile.exampleBirthDate}}</i></small></span>
               </div>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label">{{ui.teamup.phone}}</label>
             <div class="controls">
-              <input type="text" ng-model="clientForm.phone" class="span4">
+              <input type="text" ng-model="clientForm.phone" ng-change="parsePhoneNumber(clientForm.phone)" class="span4 form-control inputPhoneNumber">
+              <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+              <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>
           </div>
           <div class="control-group">
@@ -224,7 +227,7 @@
         <select ng-init="currentMonth=0" ng-model="currentMonth" ng-selected="currentMonth" ng-change="requestReportsByFilter()">
           <option ng-repeat="month in Months|orderBy:number" value="{{month.number}}">{{month.name}}</option>
         </select>
-        <button type="button" ng-click="newReport()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.newReport}}</button>
+        <button type="button" data-animation="" data-ng-click="newReport()" class="btn pull-right btn-info marginLeftTen">{{ui.teamup.newReport}}</button>
       </div>
       <hr>
       <div ng-show="groupReports.length &gt; 0">
@@ -254,7 +257,7 @@
               </td>
             </tr>
           </tbody>
-        </table><span class="muted pull-right"><small><i>{{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
+        </table><span class="muted pull-right"><small><i>{{(groupReports|filter:false).length | i18n_spec:'teamup.reportCount'}}</i></small></span>
       </div>
     </div>
     <div id="viewClientTab" ng-show="views.viewClient" class="tab-pane {{(views.viewClient==true) &amp;&amp; 'active'}}">
@@ -274,7 +277,7 @@
             <dt>{{ui.teamup.phone}}</dt>
             <dd>{{client.phone}}</dd>
             <dt ng-show="client.address">{{ui.profile.address}}</dt>
-            <dd ng-show="client.address">{{client.address.street}} {{client.address.no}} {{client.address.zip}} {{client.address.city}} {{client.address.land}}</dd>
+            <dd ng-show="client.address">{{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}</dd>
             <dt ng-show="client.clientProfileUrl">{{ui.teamup.clientProfileUrl}}</dt>
             <dd ng-show="client.clientProfileUrl">{{client.clientProfileUrl}}</dd>
             <!-- pre: small {{client | json}}-->
@@ -314,7 +317,9 @@
         </div>
         <label class="control-label">{{ui.profile.phone}}</label>
         <div class="controls">
-          <input type="text" ng-model="contactForm.phone" class="span4">
+          <input type="text" ng-model="contactForm.phone" ng-change="parsePhoneNumber(contactForm.phone)" value="{{client.phone}}" class="span4 form-control inputPhoneNumber">
+          <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+          <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
         </div>
         <button ng-click="contactForm = null" ng-show="contactForm.index &gt;= 0" class="btn btn-primary">annuleren</button>
         <button ng-click="changeContacts(contactForm.index)" class="btn btn-info">{{contactForm.index >= 0 ? ui.teamup.editContact : ui.teamup.addContact}}</button>
@@ -352,10 +357,11 @@
           </tfoot>
         </table><span class="muted pull-right"><small><i>{{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}</i></small></span>
       </div>
-      <div class="tab-header">
+      <div ng-show="app.domainPermission.clientReports" class="tab-header">
         <h3 class="pull-left">{{ui.teamup.reports}}</h3>
       </div>
       <hr>
+      <p ng-show="reports.length == 0">{{ui.teamup.noReports}}</p>
       <div ng-show="reports.length &gt; 0">
         <table class="table table-striped">
           <thead>
@@ -412,13 +418,15 @@
           <div class="control-group">
             <label class="control-label">{{ui.profile.birthday}}</label>
             <div style="" class="control-group dater">
-              <input name="date-start" type="text" ng-model="clientmeta.birthDate" data-date-format="dd-mm-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
+              <input name="date-start" type="text" ng-model="clientmeta.birthDate" data-date-type="string" data-date-format="dd-MM-yyyy" bs-datepicker="" data-toggle="datepicker" class="ng-pristine ng-valid"><i class="icon-calendar"></i>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label">{{ui.profile.phone}}</label>
             <div class="controls">
-              <input type="text" ng-model="clientmeta.phone" value="{{client.phone}}" class="span3">
+              <input type="text" ng-model="clientmeta.phone" ng-change="parsePhoneNumber(clientmeta.phone)" value="{{client.phone}}" class="span3 form-control inputPhoneNumber">
+              <p ng-hide="phoneNumberParsed.result" class="text-danger"><small><i>{{phoneNumberParsed.message}}</i></small></p>
+              <p ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>
           </div>
           <div class="control-group">

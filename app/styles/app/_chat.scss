@@ -13,15 +13,20 @@
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
+    -webkit-transition: all 0.7s ease-in-out;
+    -moz-transition: all 0.7s ease-in-out;
+    -ms-transition: all 0.7s ease-in-out;
+    -o-transition: all 0.7s ease-in-out;
+    transition: all 0.7s ease-in-out;
     position: absolute;
     top: 50%;
     margin-top: -50px;
-    left: -78px;
+    left: -73px;//-78px;
     color: $offwhite;
     z-index: 2001;
     display: block;
-    width: 106px;
-    height: 50px;
+    width: 111px;//106px;
+    height: 35px;//50px;
     border: 3px solid #833c11;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -31,6 +36,11 @@
     &:hover {
       cursor: pointer;
       color: $brown;
+      -moz-transform: scale(1.1) rotate(-90deg);
+      -webkit-transform: scale(1.1) rotate(-90deg);
+      -o-transform: scale(1.1) rotate(-90deg);
+      -ms-transform: scale(1.1) rotate(-90deg);
+      transform: scale(1.1) rotate(-90deg);
     }
 
     span {
@@ -40,7 +50,8 @@
       height: 100%;
       width: 100%;
       text-align: center;
-      margin-top: 13px;
+      margin-top: 7px;//13px;
+      letter-spacing: 1px;
     }
   }
 
@@ -53,13 +64,13 @@
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     background-color: $chatBg;
-    padding-bottom: 70px;
+    padding-bottom: 51px; //70px;
     -moz-box-shadow: 0 0 0 3px $brown;
     -webkit-box-shadow: 0 0 0 3px $brown;
     box-shadow: 0 0 0 3px $brown;
 
     .chatHeader {
-      height: 20px;
+      height: 0px;//20px;
       border-top-left-radius: 10px;
       background-color: $offwhite;
       position: absolute;
@@ -76,10 +87,10 @@
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
-      margin-top: 20px;
+      margin-top: 0px;//20px;
     }
     .noMessages {
-      padding: 0 10px;
+      padding: 40px 10px;
     }
 
     .chat-separator {
@@ -184,7 +195,7 @@
         float: right;
       }
 
-      .arrow {
+      .chat-arrow {
         /* border-left: 8px solid $white;
         border-bottom: 8px solid transparent;
         border-top: 8px solid transparent;*/
@@ -224,6 +235,32 @@
 
     button {
       margin: 0 0 0 10px;
+    }
+  }
+
+  .web-rtc-button {
+    -moz-border-radius-topleft: 0px;
+    -webkit-border-top-left-radius: 0px;
+    border-top-left-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    -webkit-border-top-right-radius: 0px;
+    border-top-right-radius: 0px;
+    -moz-border-radius-bottomright: 15px;
+    -webkit-border-bottom-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    i.white {
+      background-image: url("../images/glyphicons-halflings-white.png");
+//      &:hover {
+//        background-image: url("../images/glyphicons-halflings.png")
+//      }
+    }
+    &:hover {
+      i.white {
+        background-image: url("../images/glyphicons-halflings.png");
+      }
     }
   }
 

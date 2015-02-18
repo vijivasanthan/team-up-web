@@ -11,7 +11,7 @@ define(
         function ($resource, $q, $location, $rootScope, Log)
         {
           var TeamUp = $resource(
-              config.app.host + config.app.namespace + '/:first/:second/:third/:fourth',
+              config.app.host + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
                 /**
@@ -81,6 +81,26 @@ define(
                   }
                 },
 
+                /**
+                 * TeamTelephone call order per group
+                 */
+                callOrderGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'network',
+                    third: 'orderedMembers', //Second: team uuid
+                    isTeam: true //Tells server to look for teamAgent instead of groupAgent
+                  }
+                },
+
+                callOrderSave: {
+                  method: 'PUT',
+                  params: {
+                    first: 'network',
+                    third: 'orderedMembers', //Second: team uuid
+                    isTeam: true //Tells server to look for teamAgent instead of groupAgent
+                  }
+                },
 
                 /**
                  * Tasks
@@ -429,6 +449,16 @@ define(
                   }
                 },
 
+                /**
+                 * Get the team-telephone number
+                 */
+                teamPhone: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'phone'
+                  }
+                },
 
                 /**
                  * Team-ClientGroup
@@ -567,7 +597,7 @@ define(
             }
             catch (err)
             {
-              // Log.error(err)               
+              // Log.error(err)
             }
 
             return deferred.promise;

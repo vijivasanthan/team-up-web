@@ -14,7 +14,8 @@ define(
             current: {
               today: function () { return Date.today().getDayOfYear() + 1 },
               week: function () { return Date.today().getWeekOfYear() },
-              month: function () { return new Date().getMonth() + 1 }
+              month: function () { return new Date().getMonth() + 1 },
+              year: function() {return new Date().toString('yyyy') }
             },
 
             readable: {
@@ -53,7 +54,7 @@ define(
               for (var i = 0; i < 12; i ++)
               {
                 var firstDay = new Date(year, i).moveToFirstDayOfMonth(),
-                    lastDay = new Date(year, i).moveToLastDayOfMonth(),
+                    lastDay = new Date(year, i).moveToLastDayOfMonth().addDays(1),
                     month = {
                       first: {
                         day: firstDay,
@@ -185,6 +186,18 @@ define(
             getPeriods: function ()
             {
               return Store('app').get('periods');
+            },
+
+            formatDate: function(date)
+            {
+              return moment(date)
+                        .format('DD-MM-YYYY');
+            },
+
+            formatDateMobile: function(date)
+            {
+              return moment(this.convert.absolute(date, 0))
+                        .format('YYYY-MM-DD');
             }
           }
         }

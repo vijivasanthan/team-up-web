@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'vis',
       [
-        '$rootScope', '$scope', '$location', 'Store', 'Dater', 'TeamUp', 'Moment',
-        function ($rootScope, $scope, $location, Store, Dater, TeamUp, Moment)
+        '$rootScope', '$scope', '$location', 'Store', 'Dater', 'TeamUp',
+        function ($rootScope, $scope, $location, Store, Dater, TeamUp)
         {
           // $rootScope.fixStyles();
 

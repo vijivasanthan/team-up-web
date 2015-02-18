@@ -36,68 +36,104 @@ block iestuff
 block navbar
 	.navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
 	ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
-	bs-navbar='')
+	bs-navbar='',
+	role="navigation")
 		.navbar-inner
 			.container-fluid
 				button.navbar-toggle(type='button',
 				data-toggle='collapse',
-				data-target='.bs-navbar-collapse')
+				data-target='#main-navbar')
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
 					// span.icon-bar {{ui.message.messages}}
-				a.navbar-brand(ng-click='nav("tasks2")') TeamUp
-				.navbar-collapse.collapse
-					ul.nav.navbar-nav
+				a.navbar-brand.header-logo-teamup(ng-click='nav("tasks2")' ng-show='app.domainPermission.tasks') TeamUp
+				a.navbar-brand.header-logo-teamtelefoon(ng-click='nav("team-telefoon/status")' ng-show='! app.domainPermission.tasks') TeamTelefoon
+				#main-navbar.navbar-collapse.collapse
+					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
-						li(data-match-route='/tasks2')
+						li.tasks2(ng-show='app.domainPermission.tasks',
+							data-match-route='/tasks2.*')
 							a(ng-click='nav("tasks2")') Taken
-						li(data-match-route='/team')
+						li.teamMenu(ng-show='app.domainPermission.teams',
+							data-match-route='/team.?')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
-						li#clientMenu(data-match-route='/(:?client)')
+						li#clientMenu(ng-show='app.domainPermission.clients',
+							data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
 						li(data-match-route='/manage',
-						ng-hide='app.resources.role > 1')
+							ng-hide='app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
-						li(data-match-route='/planboard',
-						ng-hide='app.resources.role > 1')
-							a(ng-click='nav("planboard")') Agenda
+						li(data-match-route='/team-telefoon.*',
+							ng-show='app.domainPermission.teamTelephone')
+							a(ng-click='nav("team-telefoon/status")') Team-telefoon
 						li(data-match-route='/support')
 							a(ng-click='nav("support")') Support
-						li(data-match-route='/upload',
-							ng-hide='app.resources.role > 1')
-							a(ng-click='nav("upload")') Upload
-						//li(data-match-route='/planboard',
-						//ng-hide='app.resources.role > 1')
-						//	a(ng-click='nav("vis")') Vis
 
 					ul.nav.pull-right(ng-hide='browser.mobile')
 						//Disabled temporarily till the functionailty exists
 						//li.navbar-btn
 						//	a(href='#search')
 						//		i.icon-search
-						li
+						li(data-match-route='/profile')
 							a#account(ng-click='nav("profile")')
 								.roundedPicxSmall(back-img = '{{app.resources.uuid | avatar:"team":"80" }}',
 								class='{{app.resources.states|stateColor}} profile-avatar')
-								span {{app.resources.firstName}} {{app.resources.lastName}}
+								span#show-name {{app.resources.firstName}} {{app.resources.lastName}}
 						li.navbar-btn
 							a(ng-click='nav("logout")')
 								i.icon-off
-					ul.nav.pull-right(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
+					ul.nav.pull-right.mobile-nav-bar(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
 						li
-							a(href='#profile')
-								i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Profile
-						li
-							a(href='#settings')
-								i.icon-wrench.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Settings
+							.dropdown
+								button.btn.btn-default.dropdown-toggle(type="button",
+									id="dropdownMenu1",
+									data-toggle="dropdown",
+									aria-expanded="true",
+									style='margin-right: 10px;') Menu
+									span.caret
+								ul.dropdown-menu(role='menu',
+								aria-labelledby="dropdownMenu1")
+									li(role="presentation",
+										ng-show='app.domainPermission.tasks',
+										data-match-route='/tasks2.*')
+										a(role="menuitem",
+											tabindex="-1",
+											ng-click='nav("tasks2")') Taken
+									li.teamMenu(role="presentation",
+										ng-show='app.domainPermission.teams',
+										data-match-route='/team')
+										a(role="menuitem",
+											tabindex="-1",
+											ng-click='nav("team")') {{ui.teamup.teams}}
+									li(role="presentation",
+									ng-show='config.app.tabs.tasks2',
+									data-match-route='/(:?client)')
+										a(role="menuitem",
+										tabindex="-1",
+										ng-click='nav("client")') {{ui.teamup.clients}}
+									li(role="presentation",
+										data-match-route='/manage',
+										ng-hide='app.resources.role > 1')
+										a(href='#manage',
+											tabindex="-1",) {{ui.teamup.manage}}
+									li(role="presentation",
+										data-match-route='/team-telefoon.*',
+										ng-show='app.domainPermission.teamTelephone')
+										a(ng-click='nav("team-telefoon/status")',
+											tabindex="-1",) Team-telefoon
+									li(role="presentation",
+										data-match-route='/support')
+										a(ng-click='nav("support")',
+											tabindex="-1",) Support
+							
+						li(data-match-route='/profile')
+							a(ng-click='nav("profile")')
+								i.icon-user.icon-white
 						li
 							a(href='#logout')
-								i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-								span(ng-show='browser.portrait || browser.screen.width < 768') Logout
+								i.icon-off.icon-white
 
 
 
@@ -157,13 +193,15 @@ block notifications
 
 
 block chat
-	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout")',
+	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile',
 	ng-controller='messagesCtrl')
 		#chat-btn(ng-click='openChat()')
 			span CHAT {{newCountShow}}
 		#chat-content(ng-show='toggleChat')
 			.chatHeader
-				h4 {{teamName}}
+				button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
+					i(class="icon-facetime-video white")
+				//h4 {{teamName}}
 			.mainContent
 				p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
 				div(ng-repeat='message in messagesShow')
@@ -171,18 +209,19 @@ block chat
 						span {{message.date}}
 						hr
 					.chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
-						a(href='#/client?uuid={{message.body.clientGroupId}}&reportUuid={{message.body.reportUuid}}#reports')
+						a(ng-click='directToChatLink("#/client?uuid=" + message.body.clientGroupId + "&reportUuid=" + message.body.reportUuid + "#reports")')
 							span {{message.title}}
 							hr
 					.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
 						.chatAvatar.roundedPicSmall(back-img = '{{message.member.uuid | avatar:"team":"80" }}',
 						class='{{message.member.states|stateColor}}')
-						.arrow(ng-show='(message.role == "other")')
+						.chat-arrow(ng-show='(message.role == "other")')
 						.chatCloud
 							h5.name {{message.senderName}}
 							h5.time {{message.sendTime|nicelyTime}}
-							div: p {{message.body}}
-						.arrow(ng-hide='(message.role == "other")')
+							div: p(ng-bind-html='message.body | trusted_html')
+							
+						.chat-arrow(ng-hide='(message.role == "other")')
 
 			.input-area
 				input#messageField(type='text',

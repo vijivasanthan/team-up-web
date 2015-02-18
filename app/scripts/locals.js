@@ -29,29 +29,132 @@ define(
           loading_User: 'Gebruikersinformatie laden...',
           loading_Message: 'Berichten laden...',
           loading_Group: 'Groepen laden...',
-          loading_Members: 'Leden laden...',
+          loading_Members: 'Teamleden laden...',
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
           loading: 'Laden..',
-          loading_clientGroups: 'Cliëntengroepen laden...'
+          loading_clientGroups: 'Cliëntengroepen laden...',
+          loading_clients: 'Clienten laden',
+          loading_teams: 'Teams laden...',
+          loading_tasks: 'Taken laden...'
         },
         dashboard: {
           thisWeek: 'Deze week',
           welcome: 'Welkom',
+          everyone: 'Iedereen',
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
+          possiblyReachable: 'Mogelijk bereikbaar',
+          noPlanning: 'Geen Planning',
+          load: 'laden...',
+          time: {
+            days: 'd',
+            hours: 'u',
+            minutes: 'm'
+          },
           announcements: 'Alarmberichten',
           loadingP2000: 'Alarmberichten laden...',
-          noP2000: 'Er zijn geen alarmberichten.'
+          noP2000: 'Er zijn geen alarmberichten.',
+          accessibilityStatement: 'Overzicht bereikbaarheid',
+          loading: 'aan het laden...',
+          accessible: 'bereikbaar'
         },
-        planboard: {
-          planboard: 'Agenda',
-          newAvail: 'Nieuwe beschikbaarheid',
+        agenda: {
+          requiredPeople: 'Benodigd',
+          newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
           month: 'Maand',
-          updateAvail: 'Update beschikbaarheid',
+          updateAvail: 'Update bereikbaarheid',
+          from: 'Vanaf',
+          till: 'Tot',
+          state: 'Status',
+          selectAState: 'Selecteer een status',
+          reoccuring: 'Elke week',
+          lessPeople: 'Er zijn $v mensen te weinig als nodig.',
+          samePeople: 'Er zijn net zoveel mensen als nodig.',
+          morePeople: 'Er zijn $v mensen meer als nodig.',
+          wished: 'Behoefte',
+          combine_reoccuring: 'Dit is een gecombineerde planning rij met opeenvolgende rijen.',
+          sendMsgToMember: 'Send Message To Members',
+          add: 'Toevoegen',
+          del: 'Verwijderen',
+          change: 'Wijzigen',
+          setWish: 'Behoefte opslaan',
+          timeline: 'Tijdlijn',
+          statistics: 'Statistics',
+          barCharts: 'Staafdiagrammen',
+          wishes: 'Behoefte',
+          legenda: 'Legenda',
+          group: 'Team',
+          groups: 'Team',
+          members: 'Leden',
+          teamMembers: 'Teamleden',
+          bothAvailable: 'Both available',
+          northAavailable: 'available North',
+          southAvailable: 'available South',
+          skipperOutService: 'Skipper Of Service',
+          notAvailable: 'Niet bereikbaar', // Niet Beschikbaar
+          notachieve: 'Niet gearchieveerd',
+          legendaLabels: {
+            morePeople: 'Genoeg Mensen',
+            enoughPeople: 'Precies genoeg mensen',
+            lessPeople: 'Te weinig mensen'
+          },
+          lastSyncTime: 'Laatste synchronisatie tijd:',
+          dataRangeStart: 'Datumbereik start: ',
+          DataRangeEnd: 'Datumbereik eind: ',
+          loadingTimeline: 'Tijdlijn laden...',
+          addTimeSlot: 'Tijdslot toevoegen...',
+          slotAdded: 'Nieuw tijdslot is succesvol toegevoegd',
+          changingSlot: 'Tijdslot wijzigen...',
+          slotChanged: 'Tijdslot succesvol gewijzigd.',
+          changingWish: 'Behofte wordt veranderd...',
+          wishChanged: 'De behoefte is succesvol gewijzigd.',
+          deletingTimeslot: 'Tijdslot verwijderen...',
+          timeslotDeleted: 'Tijdslot is succesvol verwijderd.',
+          refreshTimeline: 'Tijdlijn refreshen...',
+          preCompilingStortageMessage: 'Voor gecompileert kort bericht',
+          weeklyPlanning: 'Weekelijkse planninng',
+          planning: 'Mijn planning',
+          planningOf: 'Planning van ',
+          minNumber: 'Minimum aantal benodigden',
+          statDays: 'dagen',
+          statHours: 'uren',
+          statMinutes: 'minuten',
+          statPeopleLess: 'Less people than expected',
+          statPeopleEven: 'Precies genoeg mensen',
+          statPeopleMore: 'Meer mensen dan verwacht',
+          getWishes: 'Pak de minimale benodigde waarde...',
+          daterangerToday: 'Vandaag',
+          daterangerTomorrow: 'Morgen',
+          daterangerYesterday: 'Gisteren',
+          daterangerNext3Days: 'Volgende 3 dagen',
+          daterangerNext7Days: 'Volgende 7 dagen',
+          rangeInfoTotalSelectedDays: 'Totaal geselecteerde dagen: ',
+          rangeInfoTime: 'Tijd: ',
+          rangeInfoWeekNumber: 'Weeknummer: ',
+          rangeInfoMonth: 'Maand: ',
+          rangeInfoTotalDays: ', Totaal aantal dagen: ',
+          query: 'Er zijn wat problemen met het synchroniseren van de agenda. Kunt u alstublieft uw browser verversen om de laatste informatie op te halen.',
+          pastAdding: 'Het is niet mogelijk in het verleden te plannen!',
+          errorAdd: 'Error with adding a new planning!',
+          errorChange: 'Error with changing planning!',
+          pastChanging: 'Het wijzigen van een planning in het verleden is niet mogelijk!',
+          pastDeleting: 'Het verwijderen van een planning in het verleden is niet mogelijk!',
+          remove: 'Fout(en) met het verwijderen van de planning!',
+          wisher: 'Fout(en) met het wijzigen van de behoefte',
+          editTimeline: 'Wijzig de tijdlijn van ',
+          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coordinator. Als coordinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.'
+        },
+        planboard: {
+          planboard: 'Agenda',
+          newAvail: 'Nieuwe bereikbaarheid',
+          day: 'Dag',
+          week: 'Week',
+          month: 'Maand',
+          updateAvail: 'Update bereikbaarheid',
           from: 'Van',
           till: 'Tot',
           state: 'Status',
@@ -75,11 +178,12 @@ define(
           group: 'Groep',
           groups: 'Groepen',
           members: 'Leden',
-          bothAvailable: 'Beide beschikbaar',
+          teamMembers: 'Teamleden',
+          bothAvailable: 'Beide bereikbaar',
           northAavailable: 'Beschikbaar Noord',
           southAvailable: 'Beschikbaar Zuid',
           skipperOutService: 'Schipper van dienst',
-          notAvailable: 'Niet beschikbaar',
+          notAvailable: 'Niet bereikbaar',
           notachieve: 'Niet behaald',
           legendaLabels: {
             morePeople: 'Meer mensen',
@@ -89,7 +193,18 @@ define(
           lastSyncTime: 'Laatste synchronisatietijd:',
           dataRangeStart: 'Begin gegevensscala: ',
           DataRangeEnd: 'Eind gegevensscala: ',
+          daterangerToday: 'Vandaag',
+          daterangerTomorrow: 'Morgen',
+          daterangerLast7Days: 'Laatste 7 dagen',
+          daterangerYesterday: 'Gisteren',
+          daterangerNext3Days: 'Volgende 3 dagen',
+          daterangerNext7Days: 'Volgende 7 dagen',
           loadingTimeline: 'Tijdlijn laden...',
+          rangeInfoTotalSelectedDays: 'Totaal aantal geselecteerde dagen: ',
+          rangeInfoTime: 'Tijd: ',
+          rangeInfoWeekNumber: 'Weeknummer: ',
+          rangeInfoMonth: 'Maand: ',
+          rangeInfoTotalDays: ', Totaal aantal dagen: ',
           addTimeSlot: 'Tijdslot toevoegen...',
           slotAdded: 'Tijdslot succesvol toegevoegd.',
           changingSlot: 'Tijdslot wijzigen...',
@@ -100,13 +215,39 @@ define(
           timeslotDeleted: 'Tijdslot succesvol verwijderd.',
           refreshTimeline: 'Tijdlijn vernieuwen...',
           preCompilingStortageMessage: 'Opstellen tekortbericht',
-          weeklyPlanning: 'Wekelijkse planning',
-          planning: 'Planning',
+          weeklyPlanning: 'Mijn wekelijkse planning',
+          weeklyPlanningOf: 'Wekelijkse planning van ',
+          planning: 'Mijn planning',
+          planningOf: 'Planning van ',
           minNumber: 'Minimum aantal benodigde mensen',
           time: 'Time: ',
           weekNumber: 'Weeknummer: ',
           monthNumber: 'Maand nummer: ',
-          totalDays: 'Totaal dagen: '
+          totalDays: 'Totaal dagen: ',
+          removeTasksRange: function(options)
+          {
+            if(! _.isUndefined(options))
+            {
+              var html = 'Weet u zeker dat u de taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' wilt verwijderen?';
+            }
+
+            return html;
+          },
+          tasksDeleted: function(options)
+          {
+            if(! _.isUndefined(options))
+            {
+              var html = 'De taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' zijn verwijderd.';
+            }
+
+            return html;
+          },
+          noTasksFounded: 'Geen taken gevonden in de opegegeven range.',
+          removeTasksTitle: 'Verwijderen taken'
         },
         message: {
           messages: 'Berichten',
@@ -121,6 +262,7 @@ define(
           sms: 'SMS',
           email: 'Email',
           receviers: 'Ontvanger(s)',
+          webTRCWebLink: 'Een video conferentie is geopend doe mee!',
           // troubled
           // chooseRecept: 'Ontvanger(s) selecteren',
           //
@@ -148,13 +290,13 @@ define(
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Er is een tekort van ' +
-                   diff +
-                   ' mensen tussen ' +
-                   startDate + ' ' +
-                   startTime + ' en ' +
-                   endDate + ' ' +
-                   endTime + '. ' +
-                   'Zet uzelf a.u.b. op beschikbaar indien u beschikbaar bent voor die periode';
+              diff +
+              ' mensen tussen ' +
+              startDate + ' ' +
+              startTime + ' en ' +
+              endDate + ' ' +
+              endTime + '. ' +
+              'Zet uzelf a.u.b. op bereikbaar indien u bereikbaar bent voor die periode';
           },
           removed: 'Bericht succesvol verwijderd.',
           removing: 'Bericht verwijderen...',
@@ -210,7 +352,7 @@ define(
           noMembers: 'Er zijn geen leden.',
           removeSelectedMembers: 'Geselecteerde leden verwijderen',
           memberCount: 'Er zijn $v leden.',
-          searchingMembers: 'Leden zoeken...',
+          searchingMembers: 'Teamleden zoeken...',
           addingNewMember: 'Nieuw lid toevoegen...',
           memberAdded: 'Lid succesvol aan groep toegevoegd.',
           refreshingGroupMember: 'Groepen- en ledenlijst vernieuwen...',
@@ -223,7 +365,7 @@ define(
           memberRegstered: 'Lid succesvol geregistreerd.',
           deleting: 'Groep verwijderen...',
           deleted: 'Groep succesvol verwijderd.',
-          filterMembers: 'Leden filteren...',
+          filterMembers: 'Teamleden filteren...',
           searchfor: 'voornaam, achternaam..'
         },
         profile: {
@@ -247,7 +389,7 @@ define(
           newPass: 'Nieuw wachtwoord',
           newPassRepeat: 'Herhaal nieuw wachtwoord',
           changePass: 'Wachtwoord wijzigen',
-          newAvail: 'Nieuwe beschikbaarheid',
+          newAvail: 'Nieuwe bereikbaarheid',
           // saveProfile: 'Profielinformatie opslaan...',
           refreshing: 'Profielinformatie vernieuwen...',
           dataChanged: 'Profielgegevens succesvol gewijzigd.',
@@ -256,13 +398,15 @@ define(
           changingPass: 'Wachtwoord wijzigen...',
           passChanged: 'Wachtwoord succesvol gewijzigd.',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
+          currentPassWrong: 'Het ingevulde oude wachtwoord komt niet overeen met het huidige! Probeer opnieuw.',
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
+          exampleBirthDate: 'Bijvoorbeeld: 01-01-2001',
           firstName: 'Voornaam',
           lastName: 'Achternaam',
           editProfileImg: 'Profielfoto wijzigen',
-		  profileImgSuccessfullyUploaded: 'De profielfoto is succesvol geüpload.',
+          profileImgSuccessfullyUploaded: 'De profielfoto is succesvol geüpload.',
           loadUploadURL: 'Foto upload URL laden',
           click2upload: 'Klik hier om te uploaden',
           birthday: 'Geboortedatum',
@@ -270,7 +414,17 @@ define(
           retypePassword: 'Herhaal wachtwoord',
           roleChangePrompt: 'Je verandert je eigen rol. Het systeem zal hierdoor automatisch uitloggen. Druk op "Ok" om verder te gaan.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
           specifyTeam: 'Selecteer een team voor deze gebruiker.',//'You need to sepcify a team to this user'
-		      authorInfo: 'Auteurinfo laden...'
+          authorInfo: 'Auteurinfo laden...',
+          changePassWord: 'Wachtwoord wijzigen',
+          safePassword: 'Wachtwoord opslaan',
+          oldPassword: 'Oud wachtwoord',
+          pincode: 'Teamlidcode',
+          pincodeInUse: 'Deze teamlidcode is in gebruik. Kies een andere.',
+          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van maximaal 8 cijfers in!',
+          pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
+          pincodeInfo: 'Bovenstaande code kunt u telefonisch gebruiken om u aan te melden als TeamTelefoon uw nummer niet herkent.',
+          duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',
+          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, tenzij deze zelf wordt opgegeven.'
         },
         settings: {
           settings: 'Instellingen',
@@ -303,6 +457,7 @@ define(
         },
         teamup: {
           teams: 'Teams',
+          selectTeam: 'Selecteer team',
           clients: 'Cliënten',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
@@ -328,7 +483,7 @@ define(
           save: 'Opslaan',
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',
-          teamSubmitError: 'Fouten tijdens aanmaken van het team.',
+          teamSubmitError: 'Fouten tijdens het aanmaken: ',
           queryTeamError: 'Fouten tijdens het opzoeken van de teams.',
           teamNamePrompt1: 'Vul een teamnaam in.',
           teamNamePrompt2: 'Voeg contactdata toe a.u.b.',
@@ -352,12 +507,13 @@ define(
           group: 'Groep',
           errorSaveClientGroup: 'Opslaan wijzigingen cliëntengroep mislukt.',
           noContacts: 'Er zijn geen contactpersonen gedefinieerd.',
+          noReports: 'Er zijn geen rapporten voor deze cliënt.',
           contactCount: 'Er zijn $v contactpersonen.',
-          reportCount: 'Er zijn $v rapporteren.',
+          reportCount: 'Er zijn $v rapporten.',
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
           passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
           savingMember: 'Lid aan het opslaan...',
-          selectTeam: 'Selecteer een team a.u.b.',
+          selectTeam: 'Selecteer een team',
           clinetInfoFill: 'Vul de cliëntinformatie (naam en telefoon) in a.u.b.',
           savingClient: 'Cliënt aan het opslaan...',
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
@@ -369,6 +525,15 @@ define(
           map: 'kaart',
           saveContacts: 'Contactpersonen opslaan',
           loadingReports: 'Rapporten laden',
+          reportEmpty: 'Voer een valide titel en beschrijving in!',
+          reportValid: 'De invoervelden zijn niet valide!',
+          reportBody: 'Beschrijving',
+          reportBodyRequired: 'Vul een beschrijving in!',
+          reportTitleRequired: 'Vul een titel in!',
+          reportBodyMinChars: 'De beschrijving moet uit minimaal 8 karakters bestaan!',
+          reportTitleMinChars: 'De beschrijving moet uit minimaal 4 karakters bestaan!',
+          reportBodyMaxChars: 'De beschrijving mag maximaal 150 karakters bestaan!',
+          reportTitleMaxChars: 'De titel kan uit maximaal 30 karakters bestaan!',
           date: 'Datum',
           datetime: 'Datum en tijd',
           writenBy: 'Geschreven door',
@@ -377,6 +542,10 @@ define(
           // delClientGroupConfirm: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
           // delTeamConfirm: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
           deletingClientGroup: 'Groep verwijderen... ',
+          from: 'Van',
+          to: 'Tot',
+          time: 'Tijd',
+          duration: 'Duur',
           //deleteConfirm: 'Druk op OK om door te gaan.',
           confirms: {
             deleteClientTitle: 'Verwijder client',
@@ -385,8 +554,8 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
-			deleteMemberFromTeamTitle: 'Ontkoppel het profiel van het team',
-			deleteMemberFromTeam: 'Weet u zeker dat u het profiel van het team wilt ontkoppelen',
+            deleteMemberFromTeamTitle: 'Ontkoppel de gebruiker van het team',
+            deleteMemberFromTeam: 'Weet u zeker dat u de gebruiker van het team wilt ontkoppelen',
             deleteMemberTitle: 'Verwijderen lid',
             deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
@@ -395,16 +564,41 @@ define(
             deleteTeam: 'Weet u zeker dat u dit team wilt verwijderen? Het kan even duren.',
             deleteTaskTitle: 'Verwijderen taak',
             deleteTask: 'Weet u zeker dat u de taak wilt verwijderen?',
-			deleteContactTitle: 'Verwijder contact',
-		    deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
+            deleteContactTitle: 'Verwijder contact',
+            deleteContact: 'Weet u zeker dat u het contact wilt verwijderen?',
             remove: 'Verwijderen',
-            cancel: 'Annuleren'
+            addTeamMemberCodeAsPhoneTitle: 'Teamlidcode wijzigen',
+            addTeamMemberCodeAsPhone: 'Er is een eigen teamlidcode ingevoerd, die niet overeen komt met de laatste vier cijfers van uw standaard telefoonnummer?',
+            photoRemoveTitle: 'Profielfoto verwijderen',
+            photoRemoveBody: 'Weet u zeker dat u de profielfoto wilt verwijderen?',
+            yes: 'Ja, dat wil ik',
+            no: 'Nee, annuleren',
+            cancel: 'Annuleren',
+            day: {
+              sunday: 'zondag',
+              monday: 'maandag',
+              tuesday: 'donderdag',
+              wednesday: 'woensdag',
+              thursday: 'donderdag',
+              friday: 'vrijdag',
+              saturday: 'zaterdag'
+            },
+            shortDay: {
+             su: "zo",
+              mo: "ma",
+              tu: "di",
+              we: "wo",
+              th: "do",
+              fr: "vr",
+              su: "za"
+            }
           },
           deletingTeam: 'Team verwijderen...',
           deletingMember: 'Lid verwijderen ...',
           deletingClient: 'Cliënt verwijderen ...',
           noMessages: 'Er zijn geen berichten.',
           newReport: 'Nieuw rapport',
+          editReport: 'Wijzig rapport',
           selectClient: 'Selecteer een cliënt',
           selectMember: 'Selecteer een lid',
           selectMonth: 'Selecteer een maand',
@@ -427,7 +621,12 @@ define(
             'offline': 'Offline',
             'not_reachable': 'Niet bereikbaar',
             'on_the_phone': 'Aan de telefoon',
-            'unknown': 'Onbekend'
+            'unknown': 'Onbekend',
+            'reachable': 'Bereikbaar',
+            'possibly_reachable': 'Mogelijk bereikbaar',
+            'unreachable': 'Niet bereikbaar',
+            'unavailable': 'Niet bereikbaar',
+            'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'
@@ -451,11 +650,60 @@ define(
           planTaskInFuture: 'U kunt geen taak in het verleden aanmaken. Selecteer een start- en eindtijd in de toekomst.',
           startLaterThanEnd: 'Beginttijd moet eerder zijn dan de eindtijd.',
           specifyClient: 'Selecteer een cliënt voor deze taak.',
-          taskSaved: 'Taak is aangemaakt.',
+          creatingTask: 'Taak wordt aangemaakt',
+          editingTask: 'Taak wordt gewijzigd',
+          taskSaved: 'Taak is opgeslagen.',
           deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
           taskDeleted: 'Taak verwijderd.',
           planningTime: 'Tijdsbestek',
-          refreshTask: 'Het herladen van de taken'
+          refreshTask: 'Het herladen van de taken',
+          upload: 'Upload taken',
+          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?',
+          taskDescriptionMinChars: 'Opmerkingen moeten uit minimaal 8 karakters bestaan.',
+          taskDescriptionMaxChars: 'Het maximaal aantal karakters voor opmerkingen is 500.',
+          taskFormValide: 'De nieuwe taak is niet valide, ga eisen onder elk veld na.'
+        },
+        order: {
+          randomOrder: 'Willekeurige',
+          fixedOrder: 'Eigen volgorde',
+          confirmation: 'Bevestig Keuze',
+          randomFeedback: 'Een willekeurige volgorde wordt bepaald.'
+        },
+        validation: {
+          phone: {
+            notValid: 'Voer een valide telefoonnummer in!',
+            invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
+            tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
+            tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
+            notValidOnSubmit: 'Vul alstublieft minimaal een geldig telefoonnummer in om op te slaan.',
+            message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
+            as: ' als ',
+            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!',
+            fixedLine: 'een vastnummer',
+            mobile: 'een mobielnummer',
+            mobileOrFixedLine: 'een vast of mobielnummer'
+          },
+          pincode: {
+            exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
+          },
+          password: {
+            amountMinChars: function(chars)
+            {
+              return ' en dient uit minimaal ' + chars + ' teken(s) te bestaan'
+            },
+            amountMaxChars: function(chars)
+            {
+              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+            },
+            required: 'Een wachtwoord is verplicht'
+          },
+          email: {
+            notValid: 'Voer een valide e-mailadres in!',
+            required: 'Een e-mail is verplicht'
+          },
+          birthDate: {
+            notValid: 'Voer een valide geboortedatum in!'
+          }
         }
       }
     }

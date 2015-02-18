@@ -11,7 +11,7 @@ define(
         function ($scope, $rootScope, $q, $location, $route, $filter, Teams, TeamUp)
         {
           // TODO: Move this to config
-          // TODO: Find a better way for refreshing chat messages          
+          // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 2000; // * 60;
           var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000; // * 60;
           var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
@@ -44,7 +44,27 @@ define(
           // Prepare message for view
           $scope.formatMessage = function (messages)
           {
-            var chatMembers = [];
+            var chatMembers = [],
+              urlify = function(text)
+              {
+                var urlRegex = /(https?:\/\/[^\s]+)/g,
+                  result = null;
+                if(urlRegex.test(text))
+                {
+                  result = text.replace(urlRegex, function(url) {
+                    return '<a href="' + url + '" target="_blank">' + 'Klik' + '</a>';
+                  });
+                }
+                else
+                {
+                  result = text;
+                }
+
+                return result;
+
+              };
+
+
             angular.forEach(
               messages,
               function (message, i)
@@ -74,7 +94,7 @@ define(
                   senderUuid: message.senderUuid,
                   uuid: message.uuid,
                   type: message.type,
-                  title: message.title,
+                  title: message.title
                 };
 
                 var member = $rootScope.getTeamMemberById(message.senderUuid);
@@ -98,11 +118,27 @@ define(
                 if (msg.type == 'REPORT_NEW')
                 {
                   var msgBody = JSON.parse(message.body);
-                  var client = $rootScope.getClientByID(msgBody.clientUuid);
-                  angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
-                  msg.body = msgBody;
-                  msg.title = $scope.ui.message.reportMessage+" "+client.firstName+" "+client.lastName;
+
+                  if(msgBody && msgBody.clientUuid != null)
+                  {
+                    var client = $rootScope.getClientByID(msgBody.clientUuid);
+
+                    if(client != null)
+                    {
+                      angular.extend(msgBody, {clientGroupId: client.clientGroupUuid});
+                      msg.body = msgBody;
+                      msg.title = $scope.ui.message.reportMessage + " " + client.firstName + " " + client.lastName;
+                    }
+
+                  }
                 }
+                else
+                {
+                  //Check if there is a url and parse the url to a anchor tag
+                  msg.body = urlify(msg.body);
+                }
+
+                //Maak als er hhtp in de body staat er een anchor link vab
 
                 $scope.messages.push(msg);
 
@@ -143,29 +179,33 @@ define(
                 //    			messages = $filter('orderBy')(messages,'sendTime','reverse');
                 messages = $filter('orderBy')(messages, 'sendTime');
 
-                $scope.formatMessage(messages);
+                if ($scope.toggleChat)
+                {
+                  if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
+                  {
+                    $scope.moveToBottom = true;
+                  }
+
+                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
+                  setTimeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
+                }
 
                 // scroll to the bottom of the chat window
-                // TODO: Is this a handy way of doing this? 
-                // try to do it only once. 
-
+                // TODO: Is this a handy way of doing this?
                 if ($scope.moveToBottom)
                 {
                   setTimeout(
                     function ()
                     {
                       angular.element('#chat-content #messageField').focus();
-                      angular.element('#chat-content .mainContent').scrollTop(angular.element('#chat-content .mainContent')[0].scrollHeight);
+                      angular.element('#chat-content .mainContent').animate({
+                          'scrollTop': angular.element('#chat-content .mainContent')[0].scrollHeight},
+                        'slow');
                       $scope.moveToBottom = false;
-                    }, 1000); // FIXME: Temporarily made it longer till there is a better solution 
+                    }, 50); // FIXME: Temporarily made it longer till there is a better solution
                 }
 
-
-                if ($scope.toggleChat)
-                {
-                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
-                  setTimeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
-                }
+                $scope.formatMessage(messages);
 
               },
               function (error) { console.log(error) }
@@ -247,7 +287,7 @@ define(
             $scope.toggleChat = ! $scope.toggleChat;
 
             var teamIds = $rootScope.app.resources.teamUuids;
-            $scope.chatTeamId = teamIds[0].uuid;
+            $scope.chatTeamId = teamIds[0];
 
             var msgs = $filter('orderBy')($scope.messages, 'sendTime');
             var latestMsgTime = 0;
@@ -281,6 +321,44 @@ define(
             {
               console.log("login user doesn't belong to any team.")
             }
+          };
+
+          $scope.openVideo = function()
+          {
+            var getRandomString = function()
+            {
+              return Math.random()// Generate random number, eg: 0.123456
+                .toString(36)// Convert  to base-36 : "0.4fzyo82mvyr"
+                .slice(-8);// Cut off last 8 characters : "yo82mvyr"
+            },
+              random = getRandomString(),
+              current = new Date(),
+              url = ' http://webrtc.ask-fast.com/?room=' + getRandomString(),
+              message = $rootScope.ui.message.webTRCWebLink + url;
+
+            $rootScope.statusBar.display($rootScope.ui.message.sending);
+
+            TeamUp._(
+              'message',
+              {},
+              {
+                title: 'Van: TeamUp' + current.toString(config.app.formats.date),
+                body: message,
+                sendTime: current.getTime()
+              }).then(
+              function ()
+              {
+                $rootScope.statusBar.off();
+                $scope.moveToBottom = true;
+
+                window.open(url, '_blank');
+              },
+              function (error)
+              {
+                $rootScope.notifier.error(error);
+                $rootScope.statusBar.off();
+              }
+            );
           };
 
           // Send a chat message

@@ -13,48 +13,56 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="TeamUp Web Application">
     <meta name="viewport" content="width=device-width">
-    <title>TeamUp</title>
+    <title ng-bind="config.app.title"></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="styles/21fc4b4f.main.css">
+    <link rel="stylesheet" href="styles/397d77a8.main.css">
     <!-- block iestuff-->
     <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
   </head>
   <body>
-    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
+    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="" role="navigation" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          <button type="button" data-toggle="collapse" data-target="#main-navbar" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
             <!-- span.icon-bar {{ui.message.messages}}-->
-          </button><a ng-click="nav(&quot;tasks2&quot;)" class="navbar-brand">TeamUp</a>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+          </button><a ng-click="nav(&quot;tasks2&quot;)" ng-show="app.domainPermission.tasks" class="navbar-brand header-logo-teamup">TeamUp</a><a ng-click="nav(&quot;team-telefoon/status&quot;)" ng-show="! app.domainPermission.tasks" class="navbar-brand header-logo-teamtelefoon">TeamTelefoon</a>
+          <div id="main-navbar" class="navbar-collapse collapse">
+            <ul ng-hide="browser.mobile" class="nav navbar-nav">
               <!-- li(data-match-route='/tasks')// a(ng-click='nav("tasks")') Taken
               -->
-              <li data-match-route="/tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
-              <li data-match-route="/team"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
-              <li id="clientMenu" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
+              <li ng-show="app.domainPermission.tasks" data-match-route="/tasks2.*" class="tasks2"><a ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
+              <li ng-show="app.domainPermission.teams" data-match-route="/team.?" class="teamMenu"><a ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
+              <li id="clientMenu" ng-show="app.domainPermission.clients" data-match-route="/(:?client)"><a ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
               <li data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage">{{ui.teamup.manage}}</a></li>
-              <li data-match-route="/planboard" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;planboard&quot;)">Agenda</a></li>
+              <li data-match-route="/team-telefoon.*" ng-show="app.domainPermission.teamTelephone"><a ng-click="nav(&quot;team-telefoon/status&quot;)">Team-telefoon</a></li>
               <li data-match-route="/support"><a ng-click="nav(&quot;support&quot;)">Support</a></li>
-              <li data-match-route="/upload" ng-hide="app.resources.role &gt; 1"><a ng-click="nav(&quot;upload&quot;)">Upload</a></li>
-              <!--li(data-match-route='/planboard',-->
-              <!--ng-hide='app.resources.role > 1')-->
-              <!--	a(ng-click='nav("vis")') Vis-->
             </ul>
             <ul ng-hide="browser.mobile" class="nav pull-right">
               <!--Disabled temporarily till the functionailty exists-->
               <!--li.navbar-btn-->
               <!--	a(href='#search')-->
               <!--		i.icon-search-->
-              <li><a id="account" ng-click="nav(&quot;profile&quot;)">
-                  <div back-img="{{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicxSmall {{app.resources.states|stateColor}} profile-avatar"></div><span>{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
+              <li data-match-route="/profile"><a id="account" ng-click="nav(&quot;profile&quot;)">
+                  <div back-img="{{app.resources.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="roundedPicxSmall {{app.resources.states|stateColor}} profile-avatar"></div><span id="show-name">{{app.resources.firstName}} {{app.resources.lastName}}</span></a></li>
               <li class="navbar-btn"><a ng-click="nav(&quot;logout&quot;)"><i class="icon-off"></i></a></li>
             </ul>
-            <ul ng-show="browser.mobile" style="{{(browser.landscape) &amp;&amp; &quot;margin-right:-20px&quot;}}" class="nav pull-right">
-              <li><a href="#profile"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Profile</span></a></li>
-              <li><a href="#settings"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-wrench icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Settings</span></a></li>
-              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Logout</span></a></li>
+            <ul ng-show="browser.mobile" style="{{(browser.landscape) &amp;&amp; &quot;margin-right:-20px&quot;}}" class="nav pull-right mobile-nav-bar">
+              <li>
+                <div class="dropdown">
+                  <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="margin-right: 10px" class="btn btn-default dropdown-toggle">Menu<span class="caret"></span></button>
+                  <ul role="menu" aria-labelledby="dropdownMenu1" class="dropdown-menu">
+                    <li role="presentation" ng-show="app.domainPermission.tasks" data-match-route="/tasks2.*"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;tasks2&quot;)">Taken</a></li>
+                    <li role="presentation" ng-show="app.domainPermission.teams" data-match-route="/team" class="teamMenu"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;team&quot;)">{{ui.teamup.teams}}</a></li>
+                    <li role="presentation" ng-show="config.app.tabs.tasks2" data-match-route="/(:?client)"><a role="menuitem" tabindex="-1" ng-click="nav(&quot;client&quot;)">{{ui.teamup.clients}}</a></li>
+                    <li role="presentation" data-match-route="/manage" ng-hide="app.resources.role &gt; 1"><a href="#manage" tabindex="-1">{{ui.teamup.manage}}</a></li>
+                    <li role="presentation" data-match-route="/team-telefoon.*" ng-show="app.domainPermission.teamTelephone"><a ng-click="nav(&quot;team-telefoon/status&quot;)" tabindex="-1">Team-telefoon</a></li>
+                    <li role="presentation" data-match-route="/support"><a ng-click="nav(&quot;support&quot;)" tabindex="-1">Support</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li data-match-route="/profile"><a ng-click="nav(&quot;profile&quot;)"><i class="icon-user icon-white"></i></a></li>
+              <li><a href="#logout"><i class="icon-off icon-white"></i></a></li>
             </ul>
           </div>
         </div>
@@ -86,11 +94,12 @@
     <div id="notification" ng-show="notification.status" class="alert {{notification.type}}">
       <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
     </div>
-    <div id="chat" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)" ng-controller="messagesCtrl" class="ng-cloak">
+    <div id="chat" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;) || browser.mobile" ng-controller="messagesCtrl" class="ng-cloak">
       <div id="chat-btn" ng-click="openChat()"><span>CHAT {{newCountShow}}</span></div>
       <div id="chat-content" ng-show="toggleChat">
         <div class="chatHeader">
-          <h4>{{teamName}}</h4>
+          <button ng-click="openVideo()" class="btn btn-success web-rtc-button">Video <i class="icon-facetime-video white"></i></button>
+          <!--h4 {{teamName}}-->
         </div>
         <div class="mainContent">
           <p ng-hide="messagesShow.length &gt; 0" class="noMessages">{{ui.teamup.noMessages}}</p>
@@ -98,19 +107,19 @@
             <div ng-show="(message.date != &quot;&quot;)" class="chat-separator"><span>{{message.date}}</span>
               <hr>
             </div>
-            <div ng-show="(message.type == &quot;REPORT_NEW&quot;)" class="chat-separator reportLink"><a href="#/client?uuid={{message.body.clientGroupId}}&amp;reportUuid={{message.body.reportUuid}}#reports"><span>{{message.title}}</span>
+            <div ng-show="(message.type == &quot;REPORT_NEW&quot;)" class="chat-separator reportLink"><a ng-click="directToChatLink(&quot;#/client?uuid=&quot; + message.body.clientGroupId + &quot;&amp;reportUuid=&quot; + message.body.reportUuid + &quot;#reports&quot;)"><span>{{message.title}}</span>
                 <hr></a></div>
             <div ng-show="(message.type == &quot;CHAT&quot; || message.type == null)" class="message {{message.msgRole}}">
               <div back-img="{{message.member.uuid | avatar:&quot;team&quot;:&quot;80&quot; }}" class="chatAvatar roundedPicSmall {{message.member.states|stateColor}}"></div>
-              <div ng-show="(message.role == &quot;other&quot;)" class="arrow"></div>
+              <div ng-show="(message.role == &quot;other&quot;)" class="chat-arrow"></div>
               <div class="chatCloud">
                 <h5 class="name">{{message.senderName}}</h5>
                 <h5 class="time">{{message.sendTime|nicelyTime}}</h5>
                 <div>
-                  <p>{{message.body}}</p>
+                  <p ng-bind-html="message.body | trusted_html"></p>
                 </div>
               </div>
-              <div ng-hide="(message.role == &quot;other&quot;)" class="arrow"></div>
+              <div ng-hide="(message.role == &quot;other&quot;)" class="chat-arrow"></div>
             </div>
           </div>
         </div>
@@ -133,6 +142,6 @@
     </div>
     <script src="vendors/js-xlsx/jszip.js"></script>
     <script src="vendors/js-xlsx/xlsx.js"></script>
-    <script data-main="scripts/81b1fe55.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/1ff05474.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

@@ -65,6 +65,8 @@ define(
                     return false;
                   }
 
+                  console.log('angular.element(el).val()', angular.element(el).val());
+
                   $form.attr('action', $scope.action);
 
                   $scope.$apply(
@@ -79,6 +81,8 @@ define(
                       },
                       uploadProgress: function (event, position, total, percentComplete)
                       {
+                        console.log('event', event);
+
                         $scope.$apply(
                           function ()
                           {
@@ -88,16 +92,14 @@ define(
                       },
                       error: function (event, statusText, responseText, form)
                       {
-                        $form.removeAttr('action');
-
-                        //console.log('response : ', responseText);
+                        //$form.removeAttr('action');
                       },
                       success: function (responseText, statusText, xhr, form)
                       {
                         var ar = angular.element(el).val().split('\\'),
                             filename = ar[ar.length - 1];
 
-                        $form.removeAttr('action');
+                        //$form.removeAttr('action');
 
                         $scope.$apply(
                           function ()
@@ -119,16 +121,16 @@ define(
                               console.log(e);
                             }
 
-                            if ($scope.$parent.data.clientId)
+                            if ($scope.$parent.view.clientId)
                             {
-                              id = $scope.$parent.data.clientId;
+                              id = $scope.$parent.view.clientId;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'client';
 
                             }
-                            else if ($scope.$parent.data.uuid)
+                            else if ($scope.$parent.view.uuid)
                             {
-                              id = $scope.$parent.data.uuid;
+                              id = $scope.$parent.view.uuid;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'team';
                             }
@@ -192,28 +194,28 @@ define(
 
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
-      'ngenter',
-      function ()
+    'ngenter',
+    function ()
+    {
+      return function (scope, element, attrs)
       {
-        return function (scope, element, attrs)
-        {
-          element.bind(
-            'keydown keypress',
-            function (event)
+        element.bind(
+          'keydown keypress',
+          function (event)
+          {
+            if (event.which === 13)
             {
-              if (event.which === 13)
-              {
-                scope.$apply(
-                  function () { scope.$eval(attrs.ngenter) }
-                );
+              scope.$apply(
+                function () { scope.$eval(attrs.ngenter) }
+              );
 
-                event.preventDefault();
-              }
+              event.preventDefault();
             }
-          );
-        };
-      }
-    );
+          }
+        );
+      };
+    }
+  );
 
     // Setup the background image
     directives.directive(
@@ -297,6 +299,155 @@ define(
       }
     );
 
+    directives.directive(
+      'setPositionSlotForm',
+      function($window)
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            element.bind(
+              'mouseup',
+              function(ev)
+              {
+                var footer = angular.element('#footer').height(),
+                  form = angular.element('.time-slot-form'),
+                  modal = form.height(),
+                  slot = 105,
+                  currentScreen = $window.innerHeight,
+                  minNeededHeight = (modal + slot),
+                  clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+                  heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
+                  position = (minNeededHeight > ev.clientY)
+                    ? clickY
+                    : (clickY - minNeededHeight);
 
+                //TODO FIx position bottom
+                //The height needed for the modal is less then the height in the current view
+                form.css('top', position + 'px');
+              }
+            );
+          }
+        };
+      }
+    );
+
+    directives.directive(
+      'dynamic',
+      function($compile)
+      {
+        return {
+          restrict: 'A',
+          replace: true,
+          link: function (scope, element, attrs)
+          {
+            console.log('element', element);
+            scope.$watch(attrs.dynamic, function(html)
+            {
+              element.html(html);
+              $compile(element.contents())(scope);
+            });
+          }
+        };
+      }
+    );
+
+    directives.directive(
+      'inputRuleToggle',
+      function()
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            var index = attrs.inputRuleToggle,
+              parentFormGroup = element
+                                    .parents('.form-group');
+
+            element.bind('click',
+              function()
+              {
+                if(element.hasClass('add-button'))
+                {
+                  parentFormGroup.next()
+                    .removeClass('ng-hide')
+                    .find('input')
+                    .focus();
+                }
+                else if(element.hasClass('remove-button'))
+                {
+                  //empty current input value
+                  parentFormGroup
+                    .addClass('ng-hide')
+                    .find('input')
+                    .val('');
+
+                  //empty error message
+                  parentFormGroup
+                    .find('.text-danger small i')
+                    .text('');
+
+                  //focus on previous input
+                  var prevElement = angular.element(parentFormGroup[0].previousElementSibling);
+                  prevElement
+                    .find('input')
+                    .focus();
+
+                  //empty model scope value
+                  if(scope.edit.phoneNumbers[index])
+                  {
+                    scope.edit.phoneNumbers.splice(index, 1);
+                    scope.parsedPhoneNumbers[index] = {};
+                  }
+                }
+              }
+            );
+          }
+        };
+      }
+    );
+
+    //TODO use this one for date (difference in view and model)
+    directives.directive(
+      'formattedDate',
+      function($filter)
+      {
+        return {
+          link: function (scope, element, attrs, ctrl)
+          {
+            ctrl.$formatters.unshift(
+              function (modelValue)
+              {
+                return $filter('date')(modelValue, 'dd-MM-yyyy');
+              }
+            );
+
+            ctrl.$parsers.unshift(
+              function (viewValue)
+              {
+                return $filter('date')(viewValue, 'dd-MM-yyyy');
+              }
+            );
+          },
+          restrict: 'A',
+          require: 'ngModel'
+        }
+      }
+    );
+
+    //directives.directive(
+    //  'scroll',
+    //  function($window)
+    //  {
+    //    return function(scope, element, attrs) {
+    //      angular.element($window).bind("scroll", function()
+    //      {
+    //        //scope.currentScroll(this.pageYOffset);
+    //        //scope.$apply();
+    //      });
+    //    };
+    //  }
+    //);
   }
 );

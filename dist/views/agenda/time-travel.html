@@ -1,0 +1,53 @@
+<div id="timeline-controls" ng-controller="agenda-timeline-navigation">
+  <div style="margin-top: 10px" class="pull-left">
+    <div class="form-group has-feedback pull-left dateranger">
+      <input type="text" name="daterange" ng-model="daterange" daterangepicker="" class="form-control"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+    </div>
+    <div style="margin-right: 5px" class="btn-group pull-left">
+      <button type="button" ng-model="timeline.scope.day" ng-click="timelineScoper(&quot;day&quot;)" class="btn btn-primary {{(timeline.scope.day==true) &amp;&amp; 'active'}}">{{ui.agenda.day}}</button>
+      <button type="button" ng-model="timeline.scope.week" ng-click="timelineScoper(&quot;week&quot;)" class="btn btn-primary {{(timeline.scope.week==true) &amp;&amp; 'active'}}">{{ui.agenda.week}}</button>
+      <button type="button" ng-model="timeline.scope.month" ng-click="timelineScoper(&quot;month&quot;)" class="btn btn-primary {{(timeline.scope.month==true) &amp;&amp; 'active'}}">{{ui.agenda.month}}</button>
+    </div>
+    <div style="margin-right: 5px" class="btn-group pull-left">
+      <button id="timelineBeforeBtn" type="button" ng-click="timelineBefore(timeline.scope)" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></button>
+      <button id="timelineZoomInBtn" type="button" ng-click="timelineZoomIn()" class="btn btn-primary"><i class="glyphicon glyphicon-zoom-in"></i></button>
+      <button id="timelineZoomOutBtn" type="button" ng-click="timelineZoomOut()" class="btn btn-primary"><i class="glyphicon glyphicon-zoom-out"></i></button>
+      <button id="timelineAfterBtn" type="button" ng-click="timelineAfter(timeline.scope)" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-right"></i></button>
+    </div>
+  </div>
+  <div ng-hide="browser.mobile" style="text-align: {{(browser.mobile) &amp;&amp;  'left' || 'right' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
+    <h4 style="font-weight: normal">{{timeline.range | rangeMainFilter}}<br>
+      <div style="font-size: 15px; font-weight: lighter"><span>{{timeline | rangeInfoFilter}}</span>
+        <!---->
+      </div>
+    </h4>
+  </div>
+  <!--div(ng-show='browser.mobile'-->
+  <!--	class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}")-->
+  <!--	.btn-group-->
+  <!--		button.btn.btn-primary(type='button',-->
+  <!--		class="{{(timeline.config.legendarer==true) && 'active'}}",-->
+  <!--		ng-click='showLegenda()',-->
+  <!--		ng-model='timeline.config.legendarer') {{ui.agenda.legenda}}-->
+  <!--	.btn-group(ng-show='timeline.current.layouts.group')-->
+  <!--		button.btn.btn-primary(type='button',-->
+  <!--		class="{{(timeline.config.bar==true) && 'active'}}",-->
+  <!--		ng-click='barCharts()',-->
+  <!--		ng-model='timeline.config.bar') {{ui.agenda.barCharts}}-->
+  <!--	.btn-group(ng-show='timeline.current.layouts.group',-->
+  <!--	ng-hide='app.resources.role > 1')-->
+  <!--		button.btn.btn-primary(type='button',-->
+  <!--		class="{{(timeline.config.wishes==true) && 'active'}}",-->
+  <!--		ng-click='groupWishes()',-->
+  <!--		ng-model='timeline.config.wishes') {{ui.agenda.wishes}}-->
+  <!--	.btn-group-->
+  <!--		button.btn.btn-primary(type='button',-->
+  <!--		class="{{(timeline.current.layouts.group==true) && 'active'}}",-->
+  <!--		ng-model='timeline.current.layouts.group',-->
+  <!--		ng-click='requestTimeline("group")') {{ui.agenda.group}}-->
+  <!--		button.btn.btn-primary(type='button',-->
+  <!--		class="{{(timeline.current.layouts.members==true) && 'active'}}",-->
+  <!--		ng-model='timeline.current.layouts.members',-->
+  <!--		ng-click='requestTimeline("members")',-->
+  <!--		ng-show='(app.resources.role < 3) || timeline.config.layouts.members')  {{ui.agenda.members}}-->
+</div>

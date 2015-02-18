@@ -38,7 +38,7 @@
  * TODO
  *
  * Add zooming with pinching on Android
- * 
+ *
  * Bug: when an item contains a javascript onclick or a link, this does not work
  *      when the item is not selected (when the item is being selected,
  *      it is redrawn, which cancels any onclick or link action)
@@ -56,9 +56,10 @@
 if (typeof links === 'undefined')
 {
   links = {};
-  // important: do not use var, as "var links = {};" will overwrite 
-  //            the existing links variable value with undefined in IE8, IE7.  
+  // important: do not use var, as "var links = {};" will overwrite
+  //            the existing links variable value with undefined in IE8, IE7.
 }
+
 
 /**
  * Ensure the variable google exists
@@ -66,41 +67,43 @@ if (typeof links === 'undefined')
 if (typeof google === 'undefined')
 {
   google = undefined;
-  // important: do not use var, as "var google = undefined;" will overwrite 
+  // important: do not use var, as "var google = undefined;" will overwrite
   //            the existing google variable value with undefined in IE8, IE7.
 }
+
 
 // Internet Explorer 8 and older does not support Array.indexOf,
 // so we define it here in that case
 // http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-if (! Array.prototype.indexOf)
+if (!Array.prototype.indexOf)
 {
   Array.prototype.indexOf = function (obj)
   {
-    for (var i = 0; i < this.length; i ++)
+    for (var i = 0; i < this.length; i++)
     {
       if (this[i] == obj)
       {
         return i;
       }
     }
-    return - 1;
+    return -1;
   }
 }
 
 // Internet Explorer 8 and older does not support Array.forEach,
 // so we define it here in that case
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach
-if (! Array.prototype.forEach)
+if (!Array.prototype.forEach)
 {
   Array.prototype.forEach = function (fn, scope)
   {
-    for (var i = 0, len = this.length; i < len; ++ i)
+    for (var i = 0, len = this.length; i < len; ++i)
     {
       fn.call(scope || this, this[i], i, this);
     }
   }
 }
+
 
 /**
  * @constructor links.Timeline
@@ -127,7 +130,7 @@ links.Timeline = function (container)
 
   this.listeners = {}; // event listener callbacks
 
-  // Initialize sizes. 
+  // Initialize sizes.
   // Needed for IE (which gives an error when you try to set an undefined
   // value in a style)
   this.size = {
@@ -215,7 +218,7 @@ links.Timeline = function (container)
   this.data = [];
   this.firstDraw = true;
 
-  // date interval must be initialized 
+  // date interval must be initialized
   this.setVisibleChartRange(undefined, undefined, false);
 
   // render for the first time
@@ -224,6 +227,7 @@ links.Timeline = function (container)
   // fire the ready event
   this.trigger('ready');
 };
+
 
 /**
  * Main drawing logic. This is the function that needs to be called
@@ -246,8 +250,7 @@ links.Timeline.prototype.draw = function (data, options)
   this.setData(data);
 
   // set timer range. this will also redraw the timeline
-  if (options && (
-    options.start || options.end))
+  if (options && (options.start || options.end))
   {
     this.setVisibleChartRange(options.start, options.end);
   }
@@ -258,6 +261,7 @@ links.Timeline.prototype.draw = function (data, options)
 
   this.firstDraw = false;
 };
+
 
 /**
  * Set options for the timeline.
@@ -292,8 +296,7 @@ links.Timeline.prototype.setOptions = function (options)
   }
 
   // validate options
-  this.options.autoHeight = (
-    this.options.height === "auto");
+  this.options.autoHeight = (this.options.height === "auto");
 };
 
 /**
@@ -312,15 +315,15 @@ links.Timeline.prototype.setOptions = function (options)
 links.Timeline.mapColumnIds = function (dataTable)
 {
   var cols = {},
-      colMax = dataTable.getNumberOfColumns(),
-      allUndefined = true;
+    colMax = dataTable.getNumberOfColumns(),
+    allUndefined = true;
 
   // loop over the columns, and map the column id's to the column indexes
-  for (var col = 0; col < colMax; col ++)
+  for (var col = 0; col < colMax; col++)
   {
     var id = dataTable.getColumnId(col) || dataTable.getColumnLabel(col);
     if (id == 'start' || id == 'end' || id == 'content' ||
-        id == 'group' || id == 'className' || id == 'editable')
+      id == 'group' || id == 'className' || id == 'editable')
     {
       cols[id] = col;
       allUndefined = false;
@@ -348,7 +351,7 @@ links.Timeline.prototype.setData = function (data)
   // unselect any previously selected item
   this.unselectItem();
 
-  if (! data)
+  if (!data)
   {
     data = [];
   }
@@ -361,42 +364,28 @@ links.Timeline.prototype.setData = function (data)
   this.deleteGroups();
 
   if (google && google.visualization &&
-      data instanceof google.visualization.DataTable)
+    data instanceof google.visualization.DataTable)
   {
     // map the datatable columns
     var cols = links.Timeline.mapColumnIds(data);
 
     // read DataTable
-    for (var row = 0, rows = data.getNumberOfRows(); row < rows; row ++)
+    for (var row = 0, rows = data.getNumberOfRows(); row < rows; row++)
     {
-      items.push(
-        this.createItem(
-          {
-            'start': (
-              (
-                cols.start != undefined) ? data.getValue(row, cols.start) : undefined),
-            'end': (
-              (
-                cols.end != undefined) ? data.getValue(row, cols.end) : undefined),
-            'content': (
-              (
-                cols.content != undefined) ? data.getValue(row, cols.content) : undefined),
-            'group': (
-              (
-                cols.group != undefined) ? data.getValue(row, cols.group) : undefined),
-            'className': (
-              (
-                cols.className != undefined) ? data.getValue(row, cols.className) : undefined),
-            'editable': (
-              (
-                cols.editable != undefined) ? data.getValue(row, cols.editable) : undefined)
-          }));
+      items.push(this.createItem({
+        'start': ((cols.start != undefined) ? data.getValue(row, cols.start) : undefined),
+        'end': ((cols.end != undefined) ? data.getValue(row, cols.end) : undefined),
+        'content': ((cols.content != undefined) ? data.getValue(row, cols.content) : undefined),
+        'group': ((cols.group != undefined) ? data.getValue(row, cols.group) : undefined),
+        'className': ((cols.className != undefined) ? data.getValue(row, cols.className) : undefined),
+        'editable': ((cols.editable != undefined) ? data.getValue(row, cols.editable) : undefined)
+      }));
     }
   }
   else if (links.Timeline.isArray(data))
   {
     // read JSON array
-    for (var row = 0, rows = data.length; row < rows; row ++)
+    for (var row = 0, rows = data.length; row < rows; row++)
     {
       var itemData = data[row];
       var item = this.createItem(itemData);
@@ -414,10 +403,9 @@ links.Timeline.prototype.setData = function (data)
     this.clusterFactory.setData(this.items);
   }
 
-  this.render(
-    {
-      animate: false
-    });
+  this.render({
+    animate: false
+  });
 };
 
 /**
@@ -428,6 +416,7 @@ links.Timeline.prototype.getData = function ()
 {
   return this.data;
 };
+
 
 /**
  * Update the original data with changed start, end or group.
@@ -444,11 +433,10 @@ links.Timeline.prototype.updateData = function (index, values)
   var data = this.data;
 
   if (google && google.visualization &&
-      data instanceof google.visualization.DataTable)
+    data instanceof google.visualization.DataTable)
   {
     // update the original google DataTable
-    var missingRows = (
-                        index + 1) - data.getNumberOfRows();
+    var missingRows = (index + 1) - data.getNumberOfRows();
     if (missingRows > 0)
     {
       data.addRows(missingRows);
@@ -536,10 +524,10 @@ links.Timeline.prototype.updateData = function (index, values)
 links.Timeline.prototype.getItemIndex = function (element)
 {
   var e = element,
-      dom = this.dom,
-      frame = dom.items.frame,
-      items = this.items,
-      index = undefined;
+    dom = this.dom,
+    frame = dom.items.frame,
+    items = this.items,
+    index = undefined;
 
   // try to find the frame where the items are located in
   while (e.parentNode && e.parentNode !== frame)
@@ -551,7 +539,7 @@ links.Timeline.prototype.getItemIndex = function (element)
   {
     // yes! we have found the parent element of all items
     // retrieve its id from the array with items
-    for (var i = 0, iMax = items.length; i < iMax; i ++)
+    for (var i = 0, iMax = items.length; i < iMax; i++)
     {
       if (items[i].dom === e)
       {
@@ -581,19 +569,18 @@ links.Timeline.prototype.setSize = function (width, height)
   if (height)
   {
     this.options.height = height;
-    this.options.autoHeight = (
-      this.options.height === "auto");
+    this.options.autoHeight = (this.options.height === "auto");
     if (height !== "auto")
     {
       this.dom.frame.style.height = height;
     }
   }
 
-  this.render(
-    {
-      animate: false
-    });
+  this.render({
+    animate: false
+  });
 };
+
 
 /**
  * Set a new value for the visible range int the timeline.
@@ -610,13 +597,13 @@ links.Timeline.prototype.setSize = function (width, height)
 links.Timeline.prototype.setVisibleChartRange = function (start, end, redraw)
 {
   var range = {};
-  if (! start || ! end)
+  if (!start || !end)
   {
     // retrieve the date range of the items
     range = this.getDataRange(true);
   }
 
-  if (! start)
+  if (!start)
   {
     if (end)
     {
@@ -640,7 +627,7 @@ links.Timeline.prototype.setVisibleChartRange = function (start, end, redraw)
     }
   }
 
-  if (! end)
+  if (!end)
   {
     if (range.max)
     {
@@ -679,10 +666,9 @@ links.Timeline.prototype.setVisibleChartRange = function (start, end, redraw)
 
   if (redraw == undefined || redraw == true)
   {
-    this.render(
-      {
-        animate: false
-      });  // TODO: optimize, no reflow needed
+    this.render({
+      animate: false
+    });  // TODO: optimize, no reflow needed
   }
   else
   {
@@ -690,14 +676,15 @@ links.Timeline.prototype.setVisibleChartRange = function (start, end, redraw)
   }
 };
 
+
 /**
  * Change the visible chart range such that all items become visible
  */
 links.Timeline.prototype.setVisibleChartRangeAuto = function ()
 {
   var range = this.getDataRange(true),
-      start = undefined,
-      end = undefined;
+    start = undefined,
+    end = undefined;
   this.setVisibleChartRange(range.min, range.max);
 };
 
@@ -709,13 +696,13 @@ links.Timeline.prototype.setVisibleChartRangeNow = function ()
 {
   var now = new Date();
 
-  var diff = (
-    this.end.getTime() - this.start.getTime());
+  var diff = (this.end.getTime() - this.start.getTime());
 
   var startNew = new Date(now.getTime() - diff / 2);
   var endNew = new Date(startNew.getTime() + diff);
   this.setVisibleChartRange(startNew, endNew);
 };
+
 
 /**
  * Retrieve the current visible range in the timeline.
@@ -742,16 +729,16 @@ links.Timeline.prototype.getVisibleChartRange = function ()
 links.Timeline.prototype.getDataRange = function (withMargin)
 {
   var items = this.items,
-      min = undefined,
-      max = undefined;
+    min = undefined,
+    max = undefined;
 
   if (items)
   {
-    for (var i = 0, iMax = items.length; i < iMax; i ++)
+    for (var i = 0, iMax = items.length; i < iMax; i++)
     {
       var item = items[i],
-          start = item.start ? item.start.valueOf() : undefined,
-          end = item.end ? item.end.valueOf() : start;
+        start = item.start ? item.start.valueOf() : undefined,
+        end = item.end ? item.end.valueOf() : start;
 
       if (min != undefined && start != undefined)
       {
@@ -776,8 +763,7 @@ links.Timeline.prototype.getDataRange = function (withMargin)
   if (min && max && withMargin)
   {
     // zoom out 5% such that you have a little white space on the left and right
-    var diff = (
-      max.valueOf() - min.valueOf());
+    var diff = (max.valueOf() - min.valueOf());
     min = new Date(min.valueOf() - diff * 0.05);
     max = new Date(max.valueOf() + diff * 0.05);
   }
@@ -804,8 +790,7 @@ links.Timeline.prototype.render = function (options)
   var axisResized = this.reflowAxis();
   var groupsResized = this.reflowGroups();
   var itemsResized = this.reflowItems();
-  var resized = (
-    frameResized || axisResized || groupsResized || itemsResized);
+  var resized = (frameResized || axisResized || groupsResized || itemsResized);
 
   // TODO: only stackEvents/filterItems when resized or changed. (gives a bootstrap issue).
   // if (resized) {
@@ -858,12 +843,10 @@ links.Timeline.prototype.render = function (options)
     }
     if (renderTimesLeft > 0)
     {
-      this.render(
-        {
-          'animate': options ? options.animate : undefined,
-          'renderTimesLeft': (
-            renderTimesLeft - 1)
-        });
+      this.render({
+        'animate': options ? options.animate : undefined,
+        'renderTimesLeft': (renderTimesLeft - 1)
+      });
     }
   }
 };
@@ -882,8 +865,7 @@ links.Timeline.prototype.repaint = function ()
   this.repaintCurrentTime();
   this.repaintCustomTime();
 
-  return (
-    frameNeedsReflow || axisNeedsReflow || groupsNeedsReflow || itemsNeedsReflow);
+  return (frameNeedsReflow || axisNeedsReflow || groupsNeedsReflow || itemsNeedsReflow);
 };
 
 /**
@@ -894,18 +876,16 @@ links.Timeline.prototype.repaint = function ()
 links.Timeline.prototype.reflowFrame = function ()
 {
   var dom = this.dom,
-      options = this.options,
-      size = this.size,
-      resized = false;
+    options = this.options,
+    size = this.size,
+    resized = false;
 
   // Note: IE7 has issues with giving frame.clientWidth, therefore I use offsetWidth instead
   var frameWidth = dom.frame ? dom.frame.offsetWidth : 0,
-      frameHeight = dom.frame ? dom.frame.clientHeight : 0;
+    frameHeight = dom.frame ? dom.frame.clientHeight : 0;
 
-  resized = resized || (
-    size.frameWidth !== frameWidth);
-  resized = resized || (
-    size.frameHeight !== frameHeight);
+  resized = resized || (size.frameWidth !== frameWidth);
+  resized = resized || (size.frameHeight !== frameHeight);
   size.frameWidth = frameWidth;
   size.frameHeight = frameHeight;
 
@@ -920,12 +900,12 @@ links.Timeline.prototype.reflowFrame = function ()
 links.Timeline.prototype.repaintFrame = function ()
 {
   var needsReflow = false,
-      dom = this.dom,
-      options = this.options,
-      size = this.size;
+    dom = this.dom,
+    options = this.options,
+    size = this.size;
 
   // main frame
-  if (! dom.frame)
+  if (!dom.frame)
   {
     dom.frame = document.createElement("DIV");
     dom.frame.className = "timeline-frame";
@@ -936,20 +916,16 @@ links.Timeline.prototype.repaintFrame = function ()
   }
 
   var height = options.autoHeight ?
-               (
-                 size.actualHeight + "px") :
-               (
-                 options.height || "100%");
+    (size.actualHeight + "px") :
+    (options.height || "100%");
   var width = options.width || "100%";
-  needsReflow = needsReflow || (
-    dom.frame.style.height != height);
-  needsReflow = needsReflow || (
-    dom.frame.style.width != width);
+  needsReflow = needsReflow || (dom.frame.style.height != height);
+  needsReflow = needsReflow || (dom.frame.style.width != width);
   dom.frame.style.height = height;
   dom.frame.style.width = width;
 
   // contents
-  if (! dom.content)
+  if (!dom.content)
   {
     // create content box where the axis and items will be created
     dom.content = document.createElement("DIV");
@@ -967,25 +943,37 @@ links.Timeline.prototype.repaintFrame = function ()
     dom.contentTimelines = timelines;
 
     var params = this.eventParams,
-        me = this;
-    if (! params.onMouseDown)
+      me = this;
+    if (!params.onMouseDown)
     {
-      params.onMouseDown = function (event) {me.onMouseDown(event);};
+      params.onMouseDown = function (event)
+      {
+        me.onMouseDown(event);
+      };
       links.Timeline.addEventListener(dom.content, "mousedown", params.onMouseDown);
     }
-    if (! params.onTouchStart)
+    if (!params.onTouchStart)
     {
-      params.onTouchStart = function (event) {me.onTouchStart(event);};
+      params.onTouchStart = function (event)
+      {
+        me.onTouchStart(event);
+      };
       links.Timeline.addEventListener(dom.content, "touchstart", params.onTouchStart);
     }
-    if (! params.onMouseWheel)
+    if (!params.onMouseWheel)
     {
-      params.onMouseWheel = function (event) {me.onMouseWheel(event);};
+      params.onMouseWheel = function (event)
+      {
+        me.onMouseWheel(event);
+      };
       links.Timeline.addEventListener(dom.content, "mousewheel", params.onMouseWheel);
     }
-    if (! params.onDblClick)
+    if (!params.onDblClick)
     {
-      params.onDblClick = function (event) {me.onDblClick(event);};
+      params.onDblClick = function (event)
+      {
+        me.onDblClick(event);
+      };
       links.Timeline.addEventListener(dom.content, "dblclick", params.onDblClick);
     }
 
@@ -1008,57 +996,36 @@ links.Timeline.prototype.repaintFrame = function ()
 links.Timeline.prototype.reflowAxis = function ()
 {
   var resized = false,
-      dom = this.dom,
-      options = this.options,
-      size = this.size,
-      axisDom = dom.axis;
+    dom = this.dom,
+    options = this.options,
+    size = this.size,
+    axisDom = dom.axis;
 
-  var characterMinorWidth = (
-                              axisDom && axisDom.characterMinor) ?
-                            axisDom.characterMinor.clientWidth :
-                            0,
-      characterMinorHeight = (
-                               axisDom && axisDom.characterMinor) ?
-                             axisDom.characterMinor.clientHeight :
-                             0,
-      characterMajorWidth = (
-                              axisDom && axisDom.characterMajor) ?
-                            axisDom.characterMajor.clientWidth :
-                            0,
-      characterMajorHeight = (
-                               axisDom && axisDom.characterMajor) ?
-                             axisDom.characterMajor.clientHeight :
-                             0,
-      axisHeight = (
-                     options.showMinorLabels ? characterMinorHeight : 0) +
-                   (
-                     options.showMajorLabels ? characterMajorHeight : 0);
+  var characterMinorWidth = (axisDom && axisDom.characterMinor) ? axisDom.characterMinor.clientWidth : 0,
+    characterMinorHeight = (axisDom && axisDom.characterMinor) ? axisDom.characterMinor.clientHeight : 0,
+    characterMajorWidth = (axisDom && axisDom.characterMajor) ? axisDom.characterMajor.clientWidth : 0,
+    characterMajorHeight = (axisDom && axisDom.characterMajor) ? axisDom.characterMajor.clientHeight : 0,
+    axisHeight = (options.showMinorLabels ? characterMinorHeight : 0) +
+      (options.showMajorLabels ? characterMajorHeight : 0);
 
   var axisTop = options.axisOnTop ? 0 : size.frameHeight - axisHeight,
-      axisLine = options.axisOnTop ? axisHeight : axisTop;
+    axisLine = options.axisOnTop ? axisHeight : axisTop;
 
-  resized = resized || (
-    size.axis.top !== axisTop);
-  resized = resized || (
-    size.axis.line !== axisLine);
-  resized = resized || (
-    size.axis.height !== axisHeight);
+  resized = resized || (size.axis.top !== axisTop);
+  resized = resized || (size.axis.line !== axisLine);
+  resized = resized || (size.axis.height !== axisHeight);
   size.axis.top = axisTop;
   size.axis.line = axisLine;
   size.axis.height = axisHeight;
   size.axis.labelMajorTop = options.axisOnTop ? 0 : axisLine +
-                                                    (
-                                                      options.showMinorLabels ?
-                                                      characterMinorHeight :
-                                                      0);
+  (options.showMinorLabels ? characterMinorHeight : 0);
   size.axis.labelMinorTop = options.axisOnTop ?
-                            (
-                              options.showMajorLabels ? characterMajorHeight : 0) :
-                            axisLine;
+    (options.showMajorLabels ? characterMajorHeight : 0) :
+    axisLine;
   size.axis.lineMinorTop = options.axisOnTop ? size.axis.labelMinorTop : 0;
   size.axis.lineMinorHeight = options.showMajorLabels ?
-                              size.frameHeight - characterMajorHeight :
-                              size.frameHeight;
+  size.frameHeight - characterMajorHeight :
+    size.frameHeight;
   if (axisDom && axisDom.minorLines && axisDom.minorLines.length)
   {
     size.axis.lineMinorWidth = axisDom.minorLines[0].offsetWidth;
@@ -1076,14 +1043,10 @@ links.Timeline.prototype.reflowAxis = function ()
     size.axis.lineMajorWidth = 1;
   }
 
-  resized = resized || (
-    size.axis.characterMinorWidth !== characterMinorWidth);
-  resized = resized || (
-    size.axis.characterMinorHeight !== characterMinorHeight);
-  resized = resized || (
-    size.axis.characterMajorWidth !== characterMajorWidth);
-  resized = resized || (
-    size.axis.characterMajorHeight !== characterMajorHeight);
+  resized = resized || (size.axis.characterMinorWidth !== characterMinorWidth);
+  resized = resized || (size.axis.characterMinorHeight !== characterMinorHeight);
+  resized = resized || (size.axis.characterMajorWidth !== characterMajorWidth);
+  resized = resized || (size.axis.characterMajorHeight !== characterMajorHeight);
   size.axis.characterMinorWidth = characterMinorWidth;
   size.axis.characterMinorHeight = characterMinorHeight;
   size.axis.characterMajorWidth = characterMajorWidth;
@@ -1105,39 +1068,39 @@ links.Timeline.prototype.reflowAxis = function ()
 links.Timeline.prototype.repaintAxis = function ()
 {
   var needsReflow = false,
-      dom = this.dom,
-      options = this.options,
-      size = this.size,
-      step = this.step;
+    dom = this.dom,
+    options = this.options,
+    size = this.size,
+    step = this.step;
 
   var axis = dom.axis;
-  if (! axis)
+  if (!axis)
   {
     axis = {};
     dom.axis = axis;
   }
-  if (! size.axis.properties)
+  if (!size.axis.properties)
   {
     size.axis.properties = {};
   }
-  if (! axis.minorTexts)
+  if (!axis.minorTexts)
   {
     axis.minorTexts = [];
   }
-  if (! axis.minorLines)
+  if (!axis.minorLines)
   {
     axis.minorLines = [];
   }
-  if (! axis.majorTexts)
+  if (!axis.majorTexts)
   {
     axis.majorTexts = [];
   }
-  if (! axis.majorLines)
+  if (!axis.majorLines)
   {
     axis.majorLines = [];
   }
 
-  if (! axis.frame)
+  if (!axis.frame)
   {
     axis.frame = document.createElement("DIV");
     axis.frame.style.position = "absolute";
@@ -1149,10 +1112,8 @@ links.Timeline.prototype.repaintAxis = function ()
   // take axis offline
   dom.content.removeChild(axis.frame);
 
-  axis.frame.style.width = (
-                             size.contentWidth) + "px";
-  axis.frame.style.height = (
-                              size.axis.height) + "px";
+  axis.frame.style.width = (size.contentWidth) + "px";
+  axis.frame.style.height = (size.axis.height) + "px";
 
   // the drawn axis is more wide than the actual visual part, such that
   // the axis can be dragged without having to redraw it each time again.
@@ -1163,8 +1124,8 @@ links.Timeline.prototype.repaintAxis = function ()
   if (size.axis.characterMinorWidth)
   {
     this.minimumStep =
-    this.screenToTime(size.axis.characterMinorWidth * 6).valueOf() -
-    this.screenToTime(0).valueOf();
+      this.screenToTime(size.axis.characterMinorWidth * 6).valueOf() -
+      this.screenToTime(0).valueOf();
 
     step.setRange(start, end, this.minimumStep);
   }
@@ -1181,12 +1142,12 @@ links.Timeline.prototype.repaintAxis = function ()
   step.start();
   var xFirstMajorLabel = undefined;
   var max = 0;
-  while (! step.end() && max < 1000)
+  while (!step.end() && max < 1000)
   {
-    max ++;
+    max++;
     var cur = step.getCurrent(),
-        x = this.timeToScreen(cur),
-        isMajor = step.isMajor();
+      x = this.timeToScreen(cur),
+      isMajor = step.isMajor();
 
     if (options.showMinorLabels)
     {
@@ -1217,8 +1178,8 @@ links.Timeline.prototype.repaintAxis = function ()
   if (options.showMajorLabels)
   {
     var leftTime = this.screenToTime(0),
-        leftText = this.step.getLabelMajor(leftTime),
-        width = leftText.length * size.axis.characterMajorWidth + 10; // upper bound estimation
+      leftText = this.step.getLabelMajor(leftTime),
+      width = leftText.length * size.axis.characterMajorWidth + 10; // upper bound estimation
 
     if (xFirstMajorLabel === undefined || width < xFirstMajorLabel)
     {
@@ -1248,11 +1209,11 @@ links.Timeline.prototype.repaintAxisCharacters = function ()
   // this is used to calculate the step size, and also the positioning of the
   // axis
   var needsReflow = false,
-      dom = this.dom,
-      axis = dom.axis,
-      text;
+    dom = this.dom,
+    axis = dom.axis,
+    text;
 
-  if (! axis.characterMinor)
+  if (!axis.characterMinor)
   {
     text = document.createTextNode("0");
     var characterMinor = document.createElement("DIV");
@@ -1268,7 +1229,7 @@ links.Timeline.prototype.repaintAxisCharacters = function ()
     needsReflow = true;
   }
 
-  if (! axis.characterMajor)
+  if (!axis.characterMajor)
   {
     text = document.createTextNode("0");
     var characterMajor = document.createElement("DIV");
@@ -1308,9 +1269,9 @@ links.Timeline.prototype.repaintAxisStartOverwriting = function ()
 links.Timeline.prototype.repaintAxisEndOverwriting = function ()
 {
   var dom = this.dom,
-      props = this.size.axis.properties,
-      frame = this.dom.axis.frame,
-      num;
+    props = this.size.axis.properties,
+    frame = this.dom.axis.frame,
+    num;
 
   // remove leftovers
   var minorTexts = dom.axis.minorTexts;
@@ -1356,15 +1317,14 @@ links.Timeline.prototype.repaintAxisEndOverwriting = function ()
 links.Timeline.prototype.repaintAxisHorizontal = function ()
 {
   var axis = this.dom.axis,
-      size = this.size,
-      options = this.options;
+    size = this.size,
+    options = this.options;
 
   // line behind all axis elements (possibly having a background color)
-  var hasAxis = (
-    options.showMinorLabels || options.showMajorLabels);
+  var hasAxis = (options.showMinorLabels || options.showMajorLabels);
   if (hasAxis)
   {
-    if (! axis.backgroundLine)
+    if (!axis.backgroundLine)
     {
       // create the axis line background (for a background color or so)
       var backgroundLine = document.createElement("DIV");
@@ -1436,12 +1396,12 @@ links.Timeline.prototype.repaintAxisHorizontal = function ()
 links.Timeline.prototype.repaintAxisMinorText = function (x, text)
 {
   var size = this.size,
-      dom = this.dom,
-      props = size.axis.properties,
-      frame = dom.axis.frame,
-      minorTexts = dom.axis.minorTexts,
-      index = props.minorTextNum,
-      label;
+    dom = this.dom,
+    props = size.axis.properties,
+    frame = dom.axis.frame,
+    minorTexts = dom.axis.minorTexts,
+    index = props.minorTextNum,
+    label;
 
   if (index < minorTexts.length)
   {
@@ -1466,7 +1426,7 @@ links.Timeline.prototype.repaintAxisMinorText = function (x, text)
   label.style.top = size.axis.labelMinorTop + "px";
   //label.title = title;  // TODO: this is a heavy operation
 
-  props.minorTextNum ++;
+  props.minorTextNum++;
 };
 
 /**
@@ -1476,12 +1436,12 @@ links.Timeline.prototype.repaintAxisMinorText = function (x, text)
 links.Timeline.prototype.repaintAxisMinorLine = function (x)
 {
   var axis = this.size.axis,
-      dom = this.dom,
-      props = axis.properties,
-      frame = dom.axis.frame,
-      minorLines = dom.axis.minorLines,
-      index = props.minorLineNum,
-      line;
+    dom = this.dom,
+    props = axis.properties,
+    frame = dom.axis.frame,
+    minorLines = dom.axis.minorLines,
+    index = props.minorLineNum,
+    line;
 
   if (index < minorLines.length)
   {
@@ -1501,10 +1461,9 @@ links.Timeline.prototype.repaintAxisMinorLine = function (x)
 
   line.style.top = axis.lineMinorTop + "px";
   line.style.height = axis.lineMinorHeight + "px";
-  line.style.left = (
-                      x - axis.lineMinorWidth / 2) + "px";
+  line.style.left = (x - axis.lineMinorWidth / 2) + "px";
 
-  props.minorLineNum ++;
+  props.minorLineNum++;
 };
 
 /**
@@ -1515,11 +1474,11 @@ links.Timeline.prototype.repaintAxisMinorLine = function (x)
 links.Timeline.prototype.repaintAxisMajorText = function (x, text)
 {
   var size = this.size,
-      props = size.axis.properties,
-      frame = this.dom.axis.frame,
-      majorTexts = this.dom.axis.majorTexts,
-      index = props.majorTextNum,
-      label;
+    props = size.axis.properties,
+    frame = this.dom.axis.frame,
+    majorTexts = this.dom.axis.majorTexts,
+    index = props.majorTextNum,
+    label;
 
   if (index < majorTexts.length)
   {
@@ -1544,7 +1503,7 @@ links.Timeline.prototype.repaintAxisMajorText = function (x, text)
   label.style.left = x + "px";
   //label.title = title; // TODO: this is a heavy operation
 
-  props.majorTextNum ++;
+  props.majorTextNum++;
 };
 
 /**
@@ -1554,12 +1513,12 @@ links.Timeline.prototype.repaintAxisMajorText = function (x, text)
 links.Timeline.prototype.repaintAxisMajorLine = function (x)
 {
   var size = this.size,
-      props = size.axis.properties,
-      axis = this.size.axis,
-      frame = this.dom.axis.frame,
-      majorLines = this.dom.axis.majorLines,
-      index = props.majorLineNum,
-      line;
+    props = size.axis.properties,
+    axis = this.size.axis,
+    frame = this.dom.axis.frame,
+    majorLines = this.dom.axis.majorLines,
+    index = props.majorLineNum,
+    line;
 
   if (index < majorLines.length)
   {
@@ -1578,11 +1537,10 @@ links.Timeline.prototype.repaintAxisMajorLine = function (x)
     majorLines.push(line);
   }
 
-  line.style.left = (
-                      x - axis.lineMajorWidth / 2) + "px";
+  line.style.left = (x - axis.lineMajorWidth / 2) + "px";
   line.style.height = size.frameHeight + "px";
 
-  props.majorLineNum ++;
+  props.majorLineNum++;
 };
 
 /**
@@ -1592,38 +1550,35 @@ links.Timeline.prototype.repaintAxisMajorLine = function (x)
 links.Timeline.prototype.reflowItems = function ()
 {
   var resized = false,
-      i,
-      iMax,
-      group,
-      dom = this.dom,
-      groups = this.groups,
-      visibleItems = this.visibleItems;
+    i,
+    iMax,
+    group,
+    dom = this.dom,
+    groups = this.groups,
+    visibleItems = this.visibleItems;
 
   if (groups)
   { // TODO: need to check if labels exists?
     // loop through all groups to reset the items height
-    groups.forEach(
-      function (group)
-      {
-        group.itemsHeight = 0;
-      });
+    groups.forEach(function (group)
+    {
+      group.itemsHeight = 0;
+    });
   }
 
   // loop through the width and height of all visible items
-  for (i = 0, iMax = visibleItems.length; i < iMax; i ++)
+  for (i = 0, iMax = visibleItems.length; i < iMax; i++)
   {
     var item = visibleItems[i],
-        domItem = item.dom;
+      domItem = item.dom;
     group = item.group;
 
     if (domItem)
     {
       var width = domItem ? domItem.clientWidth : 0;
       var height = domItem ? domItem.clientHeight : 0;
-      resized = resized || (
-        item.width != width);
-      resized = resized || (
-        item.height != height);
+      resized = resized || (item.width != width);
+      resized = resized || (item.height != height);
       item.width = width;
       item.height = height;
       //item.borderWidth = (domItem.offsetWidth - domItem.clientWidth - 2) / 2; // TODO: borderWidth
@@ -1633,8 +1588,8 @@ links.Timeline.prototype.reflowItems = function ()
     if (group)
     {
       group.itemsHeight = group.itemsHeight ?
-                          Math.max(group.itemsHeight, item.height) :
-                          item.height;
+        Math.max(group.itemsHeight, item.height) :
+        item.height;
     }
   }
 
@@ -1651,16 +1606,16 @@ links.Timeline.prototype.reflowItems = function ()
 links.Timeline.prototype.recalcItems = function ()
 {
   var resized = false,
-      i,
-      iMax,
-      item,
-      finalItem,
-      finalItems,
-      group,
-      groups = this.groups,
-      size = this.size,
-      options = this.options,
-      visibleItems = this.visibleItems;
+    i,
+    iMax,
+    item,
+    finalItem,
+    finalItems,
+    group,
+    groups = this.groups,
+    size = this.size,
+    options = this.options,
+    visibleItems = this.visibleItems;
 
   var actualHeight = 0;
   if (groups.length == 0)
@@ -1670,7 +1625,7 @@ links.Timeline.prototype.recalcItems = function ()
     if (options.autoHeight || options.cluster)
     {
       var min = 0,
-          max = 0;
+        max = 0;
 
       if (this.stack && this.stack.finalItems)
       {
@@ -1682,7 +1637,7 @@ links.Timeline.prototype.recalcItems = function ()
           min = finalItem.top;
           max = finalItem.top + finalItem.height;
         }
-        for (i = 1, iMax = finalItems.length; i < iMax; i ++)
+        for (i = 1, iMax = finalItems.length; i < iMax; i++)
         {
           finalItem = finalItems[i];
           min = Math.min(min, finalItem.top);
@@ -1697,34 +1652,31 @@ links.Timeline.prototype.recalcItems = function ()
           min = item.top;
           max = item.top + item.height;
         }
-        for (i = 1, iMax = visibleItems.length; i < iMax; i ++)
+        for (i = 1, iMax = visibleItems.length; i < iMax; i++)
         {
           item = visibleItems[i];
           if (item.top)
           {
             min = Math.min(min, item.top);
-            max = Math.max(
-              max, (
-                item.top + item.height));
+            max = Math.max(max, (item.top + item.height));
           }
         }
       }
 
-      actualHeight = (
-                       max - min) + 2 * options.eventMarginAxis + size.axis.height;
+      actualHeight = (max - min) + 2 * options.eventMarginAxis + size.axis.height;
       if (actualHeight < options.minHeight)
       {
         actualHeight = options.minHeight;
       }
 
-      if (size.actualHeight != actualHeight && options.autoHeight && ! options.axisOnTop)
+      if (size.actualHeight != actualHeight && options.autoHeight && !options.axisOnTop)
       {
         // adjust the offset of all items when the actualHeight has been changed
         var diff = actualHeight - size.actualHeight;
         if (this.stack && this.stack.finalItems)
         {
           finalItems = this.stack.finalItems;
-          for (i = 0, iMax = finalItems.length; i < iMax; i ++)
+          for (i = 0, iMax = finalItems.length; i < iMax; i++)
           {
             finalItems[i].top += diff;
             finalItems[i].item.top += diff;
@@ -1732,7 +1684,7 @@ links.Timeline.prototype.recalcItems = function ()
         }
         else
         {
-          for (i = 0, iMax = visibleItems.length; i < iMax; i ++)
+          for (i = 0, iMax = visibleItems.length; i < iMax; i++)
           {
             visibleItems[i].top += diff;
           }
@@ -1745,13 +1697,12 @@ links.Timeline.prototype.recalcItems = function ()
     // loop through all groups to get the height of each group, and the
     // total height
     actualHeight = size.axis.height + 2 * options.eventMarginAxis;
-    for (i = 0, iMax = groups.length; i < iMax; i ++)
+    for (i = 0, iMax = groups.length; i < iMax; i++)
     {
       group = groups[i];
 
       var groupHeight = Math.max(group.labelHeight || 0, group.itemsHeight || 0);
-      resized = resized || (
-        groupHeight != group.height);
+      resized = resized || (groupHeight != group.height);
       group.height = groupHeight;
 
       actualHeight += groups[i].height + options.eventMargin;
@@ -1759,19 +1710,18 @@ links.Timeline.prototype.recalcItems = function ()
 
     // calculate top positions of the group labels and lines
     var eventMargin = options.eventMargin,
-        top = options.axisOnTop ?
-              options.eventMarginAxis + eventMargin / 2 :
-              size.contentHeight - options.eventMarginAxis + eventMargin / 2,
-        axisHeight = size.axis.height;
+      top = options.axisOnTop ?
+      options.eventMarginAxis + eventMargin / 2 :
+      size.contentHeight - options.eventMarginAxis + eventMargin / 2,
+      axisHeight = size.axis.height;
 
-    for (i = 0, iMax = groups.length; i < iMax; i ++)
+    for (i = 0, iMax = groups.length; i < iMax; i++)
     {
       group = groups[i];
       if (options.axisOnTop)
       {
         group.top = top + axisHeight;
-        group.labelTop = top + axisHeight + (
-                                              group.height - group.labelHeight) / 2;
+        group.labelTop = top + axisHeight + (group.height - group.labelHeight) / 2;
         group.lineTop = top + axisHeight + group.height + eventMargin / 2;
         top += group.height + eventMargin;
       }
@@ -1779,14 +1729,13 @@ links.Timeline.prototype.recalcItems = function ()
       {
         top -= group.height + eventMargin;
         group.top = top;
-        group.labelTop = top + (
-                                 group.height - group.labelHeight) / 2;
+        group.labelTop = top + (group.height - group.labelHeight) / 2;
         group.lineTop = top - eventMargin / 2;
       }
     }
 
     // calculate top position of the visible items
-    for (i = 0, iMax = visibleItems.length; i < iMax; i ++)
+    for (i = 0, iMax = visibleItems.length; i < iMax; i++)
     {
       item = visibleItems[i];
       group = item.group;
@@ -1804,8 +1753,7 @@ links.Timeline.prototype.recalcItems = function ()
   {
     actualHeight = options.minHeight;
   }
-  resized = resized || (
-    actualHeight != size.actualHeight);
+  resized = resized || (actualHeight != size.actualHeight);
   size.actualHeight = actualHeight;
 
   return resized;
@@ -1819,7 +1767,7 @@ links.Timeline.prototype.recalcItems = function ()
 links.Timeline.prototype.clearItems = function ()
 {
   var visibleItems = this.visibleItems;
-  for (var i = 0, iMax = visibleItems.length; i < iMax; i ++)
+  for (var i = 0, iMax = visibleItems.length; i < iMax; i++)
   {
     this.visibleItems[i].visible = false;
   }
@@ -1840,18 +1788,18 @@ links.Timeline.prototype.repaintItems = function ()
   var i, iMax, item;
 
   var needsReflow = false,
-      dom = this.dom,
-      size = this.size,
-      items = this.items;
+    dom = this.dom,
+    size = this.size,
+    items = this.items;
 
-  if (! dom.items)
+  if (!dom.items)
   {
     dom.items = {};
   }
 
   // draw the frame containing the items
   var frame = dom.items.frame;
-  if (! frame)
+  if (!frame)
   {
     frame = document.createElement("DIV");
     frame.style.position = "relative";
@@ -1869,16 +1817,15 @@ links.Timeline.prototype.repaintItems = function ()
   // create/update/hide the items DOM
   var newImageUrls = [];
   var itemNeedsReflow;
-  items.forEach(
-    function (item)
+  items.forEach(function (item)
+  {
+    itemNeedsReflow = item.repaint(frame);
+    needsReflow = needsReflow || itemNeedsReflow;
+    if (itemNeedsReflow)
     {
-      itemNeedsReflow = item.repaint(frame);
-      needsReflow = needsReflow || itemNeedsReflow;
-      if (itemNeedsReflow)
-      {
-        item.getImageUrls(newImageUrls);
-      }
-    });
+      item.getImageUrls(newImageUrls);
+    }
+  });
 
   // create/update/hide the clusters DOM
   // var clusters = this.currentClusters; // TODO
@@ -1890,34 +1837,30 @@ links.Timeline.prototype.repaintItems = function ()
     // remove the old clusters from the scene
     if (this.clusters)
     {
-      this.clusters.forEach(
-        function (cluster)
+      this.clusters.forEach(function (cluster)
+      {
+        cluster.hideDOM(frame);
+        cluster.items.forEach(function (item)
         {
-          cluster.hideDOM(frame);
-          cluster.items.forEach(
-            function (item)
-            {
-              delete item.cluster;
-            });
+          delete item.cluster;
         });
+      });
     }
 
     // check the new clusters for images and changes
-    clusters.forEach(
-      function (cluster)
+    clusters.forEach(function (cluster)
+    {
+      var clusterNeedsReflow = cluster.repaint(frame);
+      needsReflow = needsReflow || clusterNeedsReflow;
+      if (clusterNeedsReflow)
       {
-        var clusterNeedsReflow = cluster.repaint(frame);
-        needsReflow = needsReflow || clusterNeedsReflow;
-        if (clusterNeedsReflow)
-        {
-          cluster.getImageUrls(newImageUrls);
-        }
-        cluster.items.forEach(
-          function (item)
-          {
-            item.cluster = cluster;
-          });
+        cluster.getImageUrls(newImageUrls);
+      }
+      cluster.items.forEach(function (item)
+      {
+        item.cluster = cluster;
       });
+    });
 
     // store a pointer to the current clusters
     this.clusters = clusters;
@@ -1926,20 +1869,19 @@ links.Timeline.prototype.repaintItems = function ()
   }
 
   // create/update/hide the cluster DOM
-  clusters.forEach(
-    function (item)
+  clusters.forEach(function (item)
+  {
+    itemNeedsReflow = item.repaint(frame);
+    needsReflow = needsReflow || itemNeedsReflow;
+    if (itemNeedsReflow)
     {
-      itemNeedsReflow = item.repaint(frame);
-      needsReflow = needsReflow || itemNeedsReflow;
-      if (itemNeedsReflow)
-      {
-        item.getImageUrls(newImageUrls);
-      }
-    });
+      item.getImageUrls(newImageUrls);
+    }
+  });
 
   // reposition all visible items
   var visibleItems = this.visibleItems;
-  for (i = 0, iMax = visibleItems.length; i < iMax; i ++)
+  for (i = 0, iMax = visibleItems.length; i < iMax; i++)
   {
     item = visibleItems[i];
     item.updatePosition(this);
@@ -1976,9 +1918,9 @@ links.Timeline.prototype.repaintItems = function ()
 links.Timeline.prototype.reflowGroups = function ()
 {
   var resized = false,
-      options = this.options,
-      size = this.size,
-      dom = this.dom;
+    options = this.options,
+    size = this.size,
+    dom = this.dom;
 
   // calculate the groups width and height
   // TODO: only update when data is changed! -> use an updateSeq
@@ -1987,7 +1929,7 @@ links.Timeline.prototype.reflowGroups = function ()
   // loop through all groups to get the labels width and height
   var groups = this.groups;
   var labels = this.dom.groups ? this.dom.groups.labels : [];
-  for (var i = 0, iMax = groups.length; i < iMax; i ++)
+  for (var i = 0, iMax = groups.length; i < iMax; i++)
   {
     var group = groups[i];
     var label = labels[i];
@@ -2008,10 +1950,8 @@ links.Timeline.prototype.reflowGroups = function ()
   groupsWidth += 1;
 
   var groupsLeft = options.groupsOnRight ? size.frameWidth - groupsWidth : 0;
-  resized = resized || (
-    size.groupsWidth !== groupsWidth);
-  resized = resized || (
-    size.groupsLeft !== groupsLeft);
+  resized = resized || (size.groupsWidth !== groupsWidth);
+  resized = resized || (size.groupsLeft !== groupsLeft);
   size.groupsWidth = groupsWidth;
   size.groupsLeft = groupsLeft;
 
@@ -2024,9 +1964,9 @@ links.Timeline.prototype.reflowGroups = function ()
 links.Timeline.prototype.repaintGroups = function ()
 {
   var dom = this.dom,
-      options = this.options,
-      size = this.size,
-      groups = this.groups;
+    options = this.options,
+    size = this.size,
+    groups = this.groups;
 
   if (dom.groups === undefined)
   {
@@ -2034,19 +1974,19 @@ links.Timeline.prototype.repaintGroups = function ()
   }
 
   var labels = dom.groups.labels;
-  if (! labels)
+  if (!labels)
   {
     labels = [];
     dom.groups.labels = labels;
   }
   var labelLines = dom.groups.labelLines;
-  if (! labelLines)
+  if (!labelLines)
   {
     labelLines = [];
     dom.groups.labelLines = labelLines;
   }
   var itemLines = dom.groups.itemLines;
-  if (! itemLines)
+  if (!itemLines)
   {
     itemLines = [];
     dom.groups.itemLines = itemLines;
@@ -2054,7 +1994,7 @@ links.Timeline.prototype.repaintGroups = function ()
 
   // create the frame for holding the groups
   var frame = dom.groups.frame;
-  if (! frame)
+  if (!frame)
   {
     frame = document.createElement("DIV");
     frame.className = "timeline-groups-axis";
@@ -2068,10 +2008,9 @@ links.Timeline.prototype.repaintGroups = function ()
   }
 
   frame.style.left = size.groupsLeft + "px";
-  frame.style.width = (
-                        options.groupsWidth !== undefined) ?
-                      options.groupsWidth :
-                      size.groupsWidth + "px";
+  frame.style.width = (options.groupsWidth !== undefined) ?
+    options.groupsWidth :
+  size.groupsWidth + "px";
 
   // hide groups axis when there are no groups
   if (groups.length == 0)
@@ -2087,10 +2026,10 @@ links.Timeline.prototype.repaintGroups = function ()
 
   // create the items
   var current = labels.length,
-      needed = groups.length;
+    needed = groups.length;
 
   // overwrite existing group labels
-  for (var i = 0, iMax = Math.min(current, needed); i < iMax; i ++)
+  for (var i = 0, iMax = Math.min(current, needed); i < iMax; i++)
   {
     var group = groups[i];
     var label = labels[i];
@@ -2099,7 +2038,7 @@ links.Timeline.prototype.repaintGroups = function ()
   }
 
   // append new items when needed
-  for (var i = current; i < needed; i ++)
+  for (var i = current; i < needed; i++)
   {
     var group = groups[i];
 
@@ -2139,11 +2078,11 @@ links.Timeline.prototype.repaintGroups = function ()
   }
 
   // remove redundant items from the DOM when needed
-  for (var i = needed; i < current; i ++)
+  for (var i = needed; i < current; i++)
   {
     var label = labels[i],
-        labelLine = labelLines[i],
-        itemLine = itemLines[i];
+      labelLine = labelLines[i],
+      itemLine = itemLines[i];
 
     frame.removeChild(label);
     frame.removeChild(labelLine);
@@ -2154,16 +2093,16 @@ links.Timeline.prototype.repaintGroups = function ()
   itemLines.splice(needed, current - needed);
 
   frame.style.borderStyle = options.groupsOnRight ?
-                            "none none none solid" :
-                            "none solid none none";
+    "none none none solid" :
+    "none solid none none";
 
   // position the groups
-  for (var i = 0, iMax = groups.length; i < iMax; i ++)
+  for (var i = 0, iMax = groups.length; i < iMax; i++)
   {
     var group = groups[i],
-        label = labels[i],
-        labelLine = labelLines[i],
-        itemLine = itemLines[i];
+      label = labels[i],
+      labelLine = labelLines[i],
+      itemLine = itemLines[i];
 
     label.style.top = group.labelTop + "px";
     labelLine.style.top = group.lineTop + "px";
@@ -2171,7 +2110,7 @@ links.Timeline.prototype.repaintGroups = function ()
     itemLine.style.width = size.contentWidth + "px";
   }
 
-  if (! dom.groups.background)
+  if (!dom.groups.background)
   {
     // create the axis grid line background
     var background = document.createElement("DIV");
@@ -2187,7 +2126,7 @@ links.Timeline.prototype.repaintGroups = function ()
   dom.groups.background.style.top = size.axis.top + 'px';
   dom.groups.background.style.height = size.axis.height + 'px';
 
-  if (! dom.groups.line)
+  if (!dom.groups.line)
   {
     // create the axis grid line
     var line = document.createElement("DIV");
@@ -2222,16 +2161,17 @@ links.Timeline.prototype.repaintGroups = function ()
   }
 };
 
+
 /**
  * Redraw the current time bar
  */
 links.Timeline.prototype.repaintCurrentTime = function ()
 {
   var options = this.options,
-      dom = this.dom,
-      size = this.size;
+    dom = this.dom,
+    size = this.size;
 
-  if (! options.showCurrentTime)
+  if (!options.showCurrentTime)
   {
     if (dom.currentTime)
     {
@@ -2242,7 +2182,7 @@ links.Timeline.prototype.repaintCurrentTime = function ()
     return;
   }
 
-  if (! dom.currentTime)
+  if (!dom.currentTime)
   {
     // create the current time bar
     var currentTime = document.createElement("DIV");
@@ -2259,8 +2199,7 @@ links.Timeline.prototype.repaintCurrentTime = function ()
   var nowOffset = new Date(now.getTime() + this.clientTimeOffset);
   var x = this.timeToScreen(nowOffset);
 
-  var visible = (
-    x > - size.contentWidth && x < 2 * size.contentWidth);
+  var visible = (x > -size.contentWidth && x < 2 * size.contentWidth);
   dom.currentTime.style.display = visible ? '' : 'none';
   dom.currentTime.style.left = x + "px";
   dom.currentTime.title = "Current time: " + nowOffset;
@@ -2288,10 +2227,10 @@ links.Timeline.prototype.repaintCurrentTime = function ()
 links.Timeline.prototype.repaintCustomTime = function ()
 {
   var options = this.options,
-      dom = this.dom,
-      size = this.size;
+    dom = this.dom,
+    size = this.size;
 
-  if (! options.showCustomTime)
+  if (!options.showCustomTime)
   {
     if (dom.customTime)
     {
@@ -2302,7 +2241,7 @@ links.Timeline.prototype.repaintCustomTime = function ()
     return;
   }
 
-  if (! dom.customTime)
+  if (!dom.customTime)
   {
     var customTime = document.createElement("DIV");
     customTime.className = "timeline-customtime";
@@ -2326,12 +2265,12 @@ links.Timeline.prototype.repaintCustomTime = function ()
   }
 
   var x = this.timeToScreen(this.customTime),
-      visible = (
-        x > - size.contentWidth && x < 2 * size.contentWidth);
+    visible = (x > -size.contentWidth && x < 2 * size.contentWidth);
   dom.customTime.style.display = visible ? '' : 'none';
   dom.customTime.style.left = x + "px";
   dom.customTime.title = "Time: " + this.customTime;
 };
+
 
 /**
  * Redraw the delete button, on the top right of the currently selected item
@@ -2340,13 +2279,13 @@ links.Timeline.prototype.repaintCustomTime = function ()
 links.Timeline.prototype.repaintDeleteButton = function ()
 {
   var timeline = this,
-      options = this.options,
-      dom = this.dom,
-      size = this.size,
-      frame = dom.items.frame;
+    options = this.options,
+    dom = this.dom,
+    size = this.size,
+    frame = dom.items.frame;
 
   var deleteButton = dom.items.deleteButton;
-  if (! deleteButton)
+  if (!deleteButton)
   {
     // create a delete button
     deleteButton = document.createElement("DIV");
@@ -2357,12 +2296,12 @@ links.Timeline.prototype.repaintDeleteButton = function ()
     dom.items.deleteButton = deleteButton;
   }
 
-  var index = this.selection ? this.selection.index : - 1,
-      item = this.selection ? this.items[index] : undefined;
+  var index = this.selection ? this.selection.index : -1,
+    item = this.selection ? this.items[index] : undefined;
   if (item && item.visible && this.isEditable(item))
   {
     var right = item.getRight(this),
-        top = item.top;
+      top = item.top;
 
     deleteButton.style.left = right + 'px';
     deleteButton.style.top = top + 'px';
@@ -2376,6 +2315,7 @@ links.Timeline.prototype.repaintDeleteButton = function ()
   }
 };
 
+
 /**
  * Redraw the drag areas. When an item (ranges only) is selected,
  * it gets a drag area on the left and right side, to change its width
@@ -2383,13 +2323,13 @@ links.Timeline.prototype.repaintDeleteButton = function ()
 links.Timeline.prototype.repaintDragAreas = function ()
 {
   var timeline = this,
-      options = this.options,
-      dom = this.dom,
-      frame = this.dom.items.frame;
+    options = this.options,
+    dom = this.dom,
+    frame = this.dom.items.frame;
 
   // create left drag area
   var dragLeft = dom.items.dragLeft;
-  if (! dragLeft)
+  if (!dragLeft)
   {
     dragLeft = document.createElement("DIV");
     dragLeft.className = "timeline-event-range-drag-left";
@@ -2402,7 +2342,7 @@ links.Timeline.prototype.repaintDragAreas = function ()
 
   // create right drag area
   var dragRight = dom.items.dragRight;
-  if (! dragRight)
+  if (!dragRight)
   {
     dragRight = document.createElement("DIV");
     dragRight.className = "timeline-event-range-drag-right";
@@ -2414,16 +2354,15 @@ links.Timeline.prototype.repaintDragAreas = function ()
   }
 
   // reposition left and right drag area
-  var index = this.selection ? this.selection.index : - 1,
-      item = this.selection ? this.items[index] : undefined;
+  var index = this.selection ? this.selection.index : -1,
+    item = this.selection ? this.items[index] : undefined;
   if (item && item.visible && this.isEditable(item) &&
-      (
-        item instanceof links.Timeline.ItemRange))
+    (item instanceof links.Timeline.ItemRange))
   {
     var left = this.timeToScreen(item.start),
-        right = this.timeToScreen(item.end),
-        top = item.top,
-        height = item.height;
+      right = this.timeToScreen(item.end),
+      top = item.top,
+      height = item.height;
 
     dragLeft.style.left = left + 'px';
     dragLeft.style.top = top + 'px';
@@ -2432,8 +2371,7 @@ links.Timeline.prototype.repaintDragAreas = function ()
     frame.removeChild(dragLeft);
     frame.appendChild(dragLeft);
 
-    dragRight.style.left = (
-                             right - options.dragAreaWidth) + 'px';
+    dragRight.style.left = (right - options.dragAreaWidth) + 'px';
     dragRight.style.top = top + 'px';
     dragRight.style.height = height + 'px';
     dragRight.style.display = '';
@@ -2453,12 +2391,12 @@ links.Timeline.prototype.repaintDragAreas = function ()
 links.Timeline.prototype.repaintNavigation = function ()
 {
   var timeline = this,
-      options = this.options,
-      dom = this.dom,
-      frame = dom.frame,
-      navBar = dom.navBar;
+    options = this.options,
+    dom = this.dom,
+    frame = dom.frame,
+    navBar = dom.navBar;
 
-  if (! navBar)
+  if (!navBar)
   {
     if (options.showNavigation || options.showButtonNew)
     {
@@ -2495,6 +2433,8 @@ links.Timeline.prototype.repaintNavigation = function ()
       navBar.addButton.title = "Create new event";
       var onAdd = function (event)
       {
+        console.log(event);
+
         links.Timeline.preventDefault(event);
         links.Timeline.stopPropagation(event);
 
@@ -2509,18 +2449,44 @@ links.Timeline.prototype.repaintNavigation = function ()
           timeline.step.snap(xend);
         }
 
-        var content = 'Nieuw';
+
+        /**
+         * Modified for task and availibility planboard
+         */
         var group = timeline.groups.length ? timeline.groups[0].content : undefined;
 
-        timeline.addItem(
-          {
+        if(this.getGroupName(group).match(/task-planboard/))
+        {
+          var content = 'Nieuw';
+
+          timeline.addItem(
+            {
+              'start': xstart,
+              'end': xend,
+              'content': content,
+              'group': group
+            });
+        }
+        else
+        {
+          var recursive = (group.match(/recursive/)) ? 'true' : 'false';
+
+          this.addItem({
             'start': xstart,
             'end': xend,
-            'content': content,
-            'group': group
+            'content': '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
+            'group': group,
+            'className': 'state-available'
           });
-        var index = (
-          timeline.items.length - 1);
+        }
+
+
+
+
+        //
+
+
+        var index = (timeline.items.length - 1);
         timeline.selectItem(index);
 
         timeline.applyAdd = true;
@@ -2530,7 +2496,7 @@ links.Timeline.prototype.repaintNavigation = function ()
         // this listener calls the method cancelAdd().
         timeline.trigger('add');
 
-        if (! timeline.applyAdd)
+        if (!timeline.applyAdd)
         {
           // undo an add
           timeline.deleteItem(index);
@@ -2572,7 +2538,7 @@ links.Timeline.prototype.repaintNavigation = function ()
       {
         links.Timeline.preventDefault(event);
         links.Timeline.stopPropagation(event);
-        timeline.zoom(- 0.4);
+        timeline.zoom(-0.4);
         timeline.trigger("rangechange");
         timeline.trigger("rangechanged");
       };
@@ -2587,7 +2553,7 @@ links.Timeline.prototype.repaintNavigation = function ()
       {
         links.Timeline.preventDefault(event);
         links.Timeline.stopPropagation(event);
-        timeline.move(- 0.2);
+        timeline.move(-0.2);
         timeline.trigger("rangechange");
         timeline.trigger("rangechanged");
       };
@@ -2612,6 +2578,7 @@ links.Timeline.prototype.repaintNavigation = function ()
   }
 };
 
+
 /**
  * Set current time. This function can be used to set the time in the client
  * timeline equal with the time on a server.
@@ -2635,6 +2602,7 @@ links.Timeline.prototype.getCurrentTime = function ()
   var now = new Date();
   return new Date(now.getTime() + this.clientTimeOffset);
 };
+
 
 /**
  * Set custom time.
@@ -2696,6 +2664,7 @@ links.Timeline.prototype.redraw = function ()
   this.setData(this.data);
 };
 
+
 /**
  * Check if the timeline is resized, and if so, redraw the timeline.
  * Useful when the webpage is resized.
@@ -2737,8 +2706,9 @@ links.Timeline.prototype.recalcConversion = function ()
 {
   this.conversion.offset = parseFloat(this.start.valueOf());
   this.conversion.factor = parseFloat(this.size.contentWidth) /
-                           parseFloat(this.end.valueOf() - this.start.valueOf());
+  parseFloat(this.end.valueOf() - this.start.valueOf());
 };
+
 
 /**
  * Convert a position on screen (pixels) to a datetime
@@ -2750,7 +2720,7 @@ links.Timeline.prototype.recalcConversion = function ()
 links.Timeline.prototype.screenToTime = function (x)
 {
   var conversion = this.conversion,
-      time = new Date(parseFloat(x) / conversion.factor + conversion.offset);
+    time = new Date(parseFloat(x) / conversion.factor + conversion.offset);
   return time;
 };
 
@@ -2765,10 +2735,10 @@ links.Timeline.prototype.screenToTime = function (x)
 links.Timeline.prototype.timeToScreen = function (time)
 {
   var conversion = this.conversion;
-  var x = (
-            time.valueOf() - conversion.offset) * conversion.factor;
+  var x = (time.valueOf() - conversion.offset) * conversion.factor;
   return x;
 };
+
 
 /**
  * Event handler for touchstart event on mobile devices
@@ -2776,7 +2746,7 @@ links.Timeline.prototype.timeToScreen = function (time)
 links.Timeline.prototype.onTouchStart = function (event)
 {
   var params = this.eventParams,
-      me = this;
+    me = this;
 
   if (params.touchDown)
   {
@@ -2789,14 +2759,20 @@ links.Timeline.prototype.onTouchStart = function (event)
 
   this.onMouseDown(event);
 
-  if (! params.onTouchMove)
+  if (!params.onTouchMove)
   {
-    params.onTouchMove = function (event) {me.onTouchMove(event);};
+    params.onTouchMove = function (event)
+    {
+      me.onTouchMove(event);
+    };
     links.Timeline.addEventListener(document, "touchmove", params.onTouchMove);
   }
-  if (! params.onTouchEnd)
+  if (!params.onTouchEnd)
   {
-    params.onTouchEnd = function (event) {me.onTouchEnd(event);};
+    params.onTouchEnd = function (event)
+    {
+      me.onTouchEnd(event);
+    };
     links.Timeline.addEventListener(document, "touchend", params.onTouchEnd);
   }
 
@@ -2821,8 +2797,7 @@ links.Timeline.prototype.onTouchStart = function (event)
   var target = links.Timeline.getTarget(event);
   var item = this.getItemIndex(target);
   params.doubleTapStartPrev = params.doubleTapStart;
-  params.doubleTapStart = (
-    new Date()).getTime();
+  params.doubleTapStart = (new Date()).getTime();
   params.doubleTapItemPrev = params.doubleTapItem;
   params.doubleTapItem = item;
 
@@ -2841,9 +2816,9 @@ links.Timeline.prototype.onTouchMove = function (event)
     params.zoomed = true;
   }
 
-  if (! params.zoomed)
+  if (!params.zoomed)
   {
-    // move 
+    // move
     this.onMouseMove(event);
   }
   else
@@ -2855,12 +2830,11 @@ links.Timeline.prototype.onTouchMove = function (event)
       params.zoomed = true;
 
       var scale = event.scale,
-          oldWidth = (
-            params.end.valueOf() - params.start.valueOf()),
-          newWidth = oldWidth / scale,
-          diff = newWidth - oldWidth,
-          start = new Date(parseInt(params.start.valueOf() - diff / 2)),
-          end = new Date(parseInt(params.end.valueOf() + diff / 2));
+        oldWidth = (params.end.valueOf() - params.start.valueOf()),
+        newWidth = oldWidth / scale,
+        diff = newWidth - oldWidth,
+        start = new Date(parseInt(params.start.valueOf() - diff / 2)),
+        end = new Date(parseInt(params.end.valueOf() + diff / 2));
 
       // TODO: determine zoom-around-date from touch positions?
 
@@ -2902,14 +2876,12 @@ links.Timeline.prototype.onTouchEnd = function (event)
 
   // check for double tap event
   var delta = 500; // ms
-  var doubleTapEnd = (
-    new Date()).getTime();
+  var doubleTapEnd = (new Date()).getTime();
   var target = links.Timeline.getTarget(event);
   var doubleTapItem = this.getItemIndex(target);
   if (params.doubleTapStartPrev &&
-      (
-        doubleTapEnd - params.doubleTapStartPrev) < delta &&
-      params.doubleTapItem == params.doubleTapItemPrev)
+    (doubleTapEnd - params.doubleTapStartPrev) < delta &&
+    params.doubleTapItem == params.doubleTapItemPrev)
   {
     params.touchDown = true;
     me.onDblClick(event);
@@ -2918,6 +2890,7 @@ links.Timeline.prototype.onTouchEnd = function (event)
 
   links.Timeline.preventDefault(event);
 };
+
 
 /**
  * Start a moving operation inside the provided parent element
@@ -2929,20 +2902,18 @@ links.Timeline.prototype.onMouseDown = function (event)
   event = event || window.event;
 
   var params = this.eventParams,
-      options = this.options,
-      dom = this.dom;
+    options = this.options,
+    dom = this.dom;
 
   // only react on left mouse button down
-  var leftButtonDown = event.which ? (
-    event.which == 1) : (
-                         event.button == 1);
-  if (! leftButtonDown && ! params.touchDown)
+  var leftButtonDown = event.which ? (event.which == 1) : (event.button == 1);
+  if (!leftButtonDown && !params.touchDown)
   {
     return;
   }
 
   // get mouse position
-  if (! params.touchDown)
+  if (!params.touchDown)
   {
     params.mouseX = event.clientX;
     params.mouseY = event.clientY;
@@ -2953,9 +2924,13 @@ links.Timeline.prototype.onMouseDown = function (event)
     params.mouseY = event.targetTouches[0].clientY;
   }
   if (params.mouseX === undefined)
-  {params.mouseX = 0;}
+  {
+    params.mouseX = 0;
+  }
   if (params.mouseY === undefined)
-  {params.mouseY = 0;}
+  {
+    params.mouseY = 0;
+  }
   params.frameLeft = links.Timeline.getAbsoluteLeft(this.dom.content);
   params.frameTop = links.Timeline.getAbsoluteTop(this.dom.content);
   params.previousLeft = 0;
@@ -2966,14 +2941,10 @@ links.Timeline.prototype.onMouseDown = function (event)
   params.end = new Date(this.end);
 
   params.target = links.Timeline.getTarget(event);
-  var dragLeft = (
-                   dom.items && dom.items.dragLeft) ? dom.items.dragLeft : undefined;
-  var dragRight = (
-                    dom.items && dom.items.dragRight) ? dom.items.dragRight : undefined;
-  params.itemDragLeft = (
-    params.target === dragLeft);
-  params.itemDragRight = (
-    params.target === dragRight);
+  var dragLeft = (dom.items && dom.items.dragLeft) ? dom.items.dragLeft : undefined;
+  var dragRight = (dom.items && dom.items.dragRight) ? dom.items.dragRight : undefined;
+  params.itemDragLeft = (params.target === dragLeft);
+  params.itemDragRight = (params.target === dragRight);
 
   if (params.itemDragLeft || params.itemDragRight)
   {
@@ -2984,16 +2955,13 @@ links.Timeline.prototype.onMouseDown = function (event)
     params.itemIndex = this.getItemIndex(params.target);
   }
 
-  params.customTime = (
-                        params.target === dom.customTime ||
-                        params.target.parentNode === dom.customTime) ?
-                      this.customTime :
-                      undefined;
+  params.customTime = (params.target === dom.customTime ||
+  params.target.parentNode === dom.customTime) ?
+    this.customTime :
+    undefined;
 
   //params.addItem = (options.editable && event.ctrlKey);
-  params.addItem = (
-    options.editable && (
-    event.shiftKey || event.ctrlKey));
+  params.addItem = (options.editable && (event.shiftKey || event.ctrlKey));
   if (params.addItem)
   {
     // create a new event at the current mouse position
@@ -3006,19 +2974,66 @@ links.Timeline.prototype.onMouseDown = function (event)
       this.step.snap(xstart);
     }
     var xend = new Date(xstart);
-    var content = 'Nieuw';
-    var group = this.getGroupFromHeight(y);
-    this.addItem(
+
+
+    /**
+     * MODIFIED for task and availibility planboard
+     */
+    var group = this.getGroupFromHeight(y);   // (group may be undefined)
+      groupName = this.getGroupName(group),
+      recursive = (groupName.match(/recursive/)) ? 'true' : 'false',
+      urlRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/g;
+
+    if(this.getGroupName(group).match(/task-planboard/))
+    {
+      var content = 'Nieuw';
+      var group = this.getGroupFromHeight(y);
+      this.addItem(
+        {
+          'start': xstart,
+          'end': xend,
+          'content': content,
+          'group': this.getGroupName(group),
+          'className': 'state-new'
+        });
+
+      params.itemIndex = (this.items.length - 1);
+      this.selectItem(params.itemIndex);
+      params.itemDragRight = true;
+    }
+    else if(! groupName.match(urlRegex))
+    {
+      // push into the bulk
+      if (typeof window.slotsbulk === 'undefined')
       {
+        window.slotsbulk = [];
+      };
+
+      window.slotsbulk.push({
+        start: new Date(xstart).getTime() / 1000,
+        end: new Date(xend).getTime() / 1000,
+        recursive: recursive,
+        state: 'available'
+      });
+
+      this.addItem({
         'start': xstart,
         'end': xend,
-        'content': content,
-        'group': this.getGroupName(group)
+        'content': '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
+        'group': this.getGroupName(group),
+        'className': 'state-available'
       });
-    params.itemIndex = (
-      this.items.length - 1);
-    this.selectItem(params.itemIndex);
-    params.itemDragRight = true;
+
+      params.itemIndex = (this.items.length - 1);
+      this.selectItem(params.itemIndex);
+      params.itemDragRight = true;
+    }
+
+
+
+    //
+
+
   }
 
   var item = this.items[params.itemIndex];
@@ -3036,26 +3051,33 @@ links.Timeline.prototype.onMouseDown = function (event)
   {
     this.dom.frame.style.cursor = 'move';
   }
-  if (! params.touchDown)
+  if (!params.touchDown)
   {
     // add event listeners to handle moving the contents
     // we store the function onmousemove and onmouseup in the timeline, so we can
     // remove the eventlisteners lateron in the function mouseUp()
     var me = this;
-    if (! params.onMouseMove)
+    if (!params.onMouseMove)
     {
-      params.onMouseMove = function (event) {me.onMouseMove(event);};
+      params.onMouseMove = function (event)
+      {
+        me.onMouseMove(event);
+      };
       links.Timeline.addEventListener(document, "mousemove", params.onMouseMove);
     }
-    if (! params.onMouseUp)
+    if (!params.onMouseUp)
     {
-      params.onMouseUp = function (event) {me.onMouseUp(event);};
+      params.onMouseUp = function (event)
+      {
+        me.onMouseUp(event);
+      };
       links.Timeline.addEventListener(document, "mouseup", params.onMouseUp);
     }
 
     links.Timeline.preventDefault(event);
   }
 };
+
 
 /**
  * Perform moving operating.
@@ -3067,13 +3089,13 @@ links.Timeline.prototype.onMouseMove = function (event)
   event = event || window.event;
 
   var params = this.eventParams,
-      size = this.size,
-      dom = this.dom,
-      options = this.options;
+    size = this.size,
+    dom = this.dom,
+    options = this.options;
 
   // calculate change in mouse position
   var mouseX, mouseY;
-  if (! params.touchDown)
+  if (!params.touchDown)
   {
     mouseX = event.clientX;
     mouseY = event.clientY;
@@ -3084,9 +3106,13 @@ links.Timeline.prototype.onMouseMove = function (event)
     mouseY = event.targetTouches[0].clientY;
   }
   if (mouseX === undefined)
-  {mouseX = 0;}
+  {
+    mouseX = 0;
+  }
   if (mouseY === undefined)
-  {mouseY = 0;}
+  {
+    mouseY = 0;
+  }
 
   if (params.mouseX === undefined)
   {
@@ -3119,8 +3145,8 @@ links.Timeline.prototype.onMouseMove = function (event)
   else if (params.editItem)
   {
     var item = this.items[params.itemIndex],
-        left,
-        right;
+      left,
+      right;
 
     if (params.itemDragLeft)
     {
@@ -3173,8 +3199,7 @@ links.Timeline.prototype.onMouseMove = function (event)
 
       if (item.end)
       {
-        right = left + (
-          params.itemRight - params.itemLeft);
+        right = left + (params.itemRight - params.itemLeft);
         item.end = this.screenToTime(right);
       }
     }
@@ -3207,17 +3232,15 @@ links.Timeline.prototype.onMouseMove = function (event)
   }
   else if (options.moveable)
   {
-    var interval = (
-      params.end.valueOf() - params.start.valueOf());
-    var diffMillisecs = Math.round(parseFloat(- diffX) / size.contentWidth * interval);
+    var interval = (params.end.valueOf() - params.start.valueOf());
+    var diffMillisecs = Math.round(parseFloat(-diffX) / size.contentWidth * interval);
     var newStart = new Date(params.start.valueOf() + diffMillisecs);
     var newEnd = new Date(params.end.valueOf() + diffMillisecs);
     this.applyRange(newStart, newEnd);
 
-    // if the applied range is moved due to a fixed min or max, 
+    // if the applied range is moved due to a fixed min or max,
     // change the diffMillisecs accordingly
-    var appliedDiff = (
-      this.start.valueOf() - newStart.valueOf());
+    var appliedDiff = (this.start.valueOf() - newStart.valueOf());
     if (appliedDiff)
     {
       diffMillisecs += appliedDiff;
@@ -3226,18 +3249,16 @@ links.Timeline.prototype.onMouseMove = function (event)
     this.recalcConversion();
 
     // move the items by changing the left position of their frame.
-    // this is much faster than repositioning all elements individually via the 
+    // this is much faster than repositioning all elements individually via the
     // repaintFrame() function (which is done once at mouseup)
     // note that we round diffX to prevent wrong positioning on millisecond scale
     var previousLeft = params.previousLeft || 0;
     var currentLeft = parseFloat(dom.items.frame.style.left) || 0;
     var previousOffset = params.previousOffset || 0;
-    var frameOffset = previousOffset + (
-      currentLeft - previousLeft);
-    var frameLeft = - diffMillisecs / interval * size.contentWidth + frameOffset;
+    var frameOffset = previousOffset + (currentLeft - previousLeft);
+    var frameLeft = -diffMillisecs / interval * size.contentWidth + frameOffset;
 
-    dom.items.frame.style.left = (
-                                   frameLeft) + "px";
+    dom.items.frame.style.left = (frameLeft) + "px";
 
     // read the left again from DOM (IE8- rounds the value)
     params.previousOffset = frameOffset;
@@ -3254,6 +3275,7 @@ links.Timeline.prototype.onMouseMove = function (event)
   links.Timeline.preventDefault(event);
 };
 
+
 /**
  * Stop moving operating.
  * This function activated from within the funcion links.Timeline.onMouseDown().
@@ -3262,7 +3284,7 @@ links.Timeline.prototype.onMouseMove = function (event)
 links.Timeline.prototype.onMouseUp = function (event)
 {
   var params = this.eventParams,
-      options = this.options;
+    options = this.options;
 
   event = event || window.event;
 
@@ -3295,14 +3317,13 @@ links.Timeline.prototype.onMouseUp = function (event)
       this.applyChange = true;
       this.applyAdd = true;
 
-      this.updateData(
-        params.itemIndex, {
-          'start': item.start,
-          'end': item.end
-        });
+      this.updateData(params.itemIndex, {
+        'start': item.start,
+        'end': item.end
+      });
 
-      // fire an add or change event. 
-      // Note that the change can be canceled from within an event listener if 
+      // fire an add or change event.
+      // Note that the change can be canceled from within an event listener if
       // this listener calls the method cancelChange().
       this.trigger(params.addItem ? 'add' : 'change');
 
@@ -3310,13 +3331,12 @@ links.Timeline.prototype.onMouseUp = function (event)
       {
         if (this.applyAdd)
         {
-          this.updateData(
-            params.itemIndex, {
-              'start': item.start,
-              'end': item.end,
-              'content': item.content,
-              'group': this.getGroupName(item.group)
-            });
+          this.updateData(params.itemIndex, {
+            'start': item.start,
+            'end': item.end,
+            'content': item.content,
+            'group': this.getGroupName(item.group)
+          });
         }
         else
         {
@@ -3328,11 +3348,10 @@ links.Timeline.prototype.onMouseUp = function (event)
       {
         if (this.applyChange)
         {
-          this.updateData(
-            params.itemIndex, {
-              'start': item.start,
-              'end': item.end
-            });
+          this.updateData(params.itemIndex, {
+            'start': item.start,
+            'end': item.end
+          });
         }
         else
         {
@@ -3341,7 +3360,7 @@ links.Timeline.prototype.onMouseUp = function (event)
           delete this.applyAdd;
 
           var item = this.items[params.itemIndex],
-              domItem = item.dom;
+            domItem = item.dom;
 
           item.start = params.itemStart;
           item.end = params.itemEnd;
@@ -3356,7 +3375,7 @@ links.Timeline.prototype.onMouseUp = function (event)
   }
   else
   {
-    if (! params.moved && ! params.zoomed)
+    if (!params.moved && !params.zoomed)
     {
       // mouse did not move -> user has selected an item
 
@@ -3373,7 +3392,7 @@ links.Timeline.prototype.onMouseUp = function (event)
         // select/unselect item
         if (params.itemIndex !== undefined)
         {
-          if (! this.isSelected(params.itemIndex))
+          if (!this.isSelected(params.itemIndex))
           {
             this.selectItem(params.itemIndex);
             this.trigger('select');
@@ -3392,9 +3411,7 @@ links.Timeline.prototype.onMouseUp = function (event)
       // TODO: optimize: no need to reflow and cluster again?
       this.render();
 
-      if ((
-            params.moved && options.moveable) || (
-            params.zoomed && options.zoomable))
+      if ((params.moved && options.moveable) || (params.zoomed && options.zoomable))
       {
         // fire a rangechanged event
         this.trigger('rangechanged');
@@ -3410,9 +3427,9 @@ links.Timeline.prototype.onMouseUp = function (event)
 links.Timeline.prototype.onDblClick = function (event)
 {
   var params = this.eventParams,
-      options = this.options,
-      dom = this.dom,
-      size = this.size;
+    options = this.options,
+    dom = this.dom,
+    size = this.size;
   event = event || window.event;
 
   if (params.itemIndex !== undefined)
@@ -3431,15 +3448,19 @@ links.Timeline.prototype.onDblClick = function (event)
       // create a new item
 
       // get mouse position
-      if (! params.touchDown)
+      if (!params.touchDown)
       {
         params.mouseX = event.clientX;
         params.mouseY = event.clientY;
       }
       if (params.mouseX === undefined)
-      {params.mouseX = 0;}
+      {
+        params.mouseX = 0;
+      }
       if (params.mouseY === undefined)
-      {params.mouseY = 0;}
+      {
+        params.mouseY = 0;
+      }
       var x = params.mouseX - links.Timeline.getAbsoluteLeft(dom.content);
       var y = params.mouseY - links.Timeline.getAbsoluteTop(dom.content);
 
@@ -3452,36 +3473,77 @@ links.Timeline.prototype.onDblClick = function (event)
         this.step.snap(xend);
       }
 
-      var content = 'Nieuw';
+
+      /**
+       * MODIFIED
+       */
+      // var content = "New";
       var group = this.getGroupFromHeight(y);   // (group may be undefined)
-      this.addItem(
+        groupName = this.getGroupName(group),
+        recursive = (groupName.match(/recursive/)) ? 'true' : 'false',
+        urlRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/g;
+
+      if(this.getGroupName(group).match(/task-planboard/))
+      {
+        var content = 'Nieuw';
+        var group = this.getGroupFromHeight(y);   // (group may be undefined)
+        this.addItem(
+          {
+            'start': xstart,
+            'end': xend,
+            'content': content,
+            'group': this.getGroupName(group),
+            'className': 'state-new'
+          });
+
+        params.itemIndex = (this.items.length - 1);
+        this.selectItem(params.itemIndex);
+
+        this.applyAdd = true;
+
+        // fire an add event.
+        // Note that the change can be canceled from within an event listener if
+        // this listener calls the method cancelAdd().
+        this.trigger('add');
+
+        if (!this.applyAdd)
         {
+          // undo an add
+          this.deleteItem(params.itemIndex);
+        }
+      }
+      else if(! groupName.match(urlRegex))
+      {
+        this.addItem({
           'start': xstart,
           'end': xend,
-          'content': content,
-          'group': this.getGroupName(group)
+          'content': '<span class="secret">{"type":"slot", "recursive":' + recursive + ', "state":"com.ask-cs.State.Available"}</span>',
+          'group': this.getGroupName(group),
+          'className': 'state-available'
         });
-      params.itemIndex = (
-        this.items.length - 1);
-      this.selectItem(params.itemIndex);
 
-      this.applyAdd = true;
+        params.itemIndex = (this.items.length - 1);
+        this.selectItem(params.itemIndex);
 
-      // fire an add event.
-      // Note that the change can be canceled from within an event listener if
-      // this listener calls the method cancelAdd().
-      this.trigger('add');
+        this.applyAdd = true;
 
-      if (! this.applyAdd)
-      {
-        // undo an add
-        this.deleteItem(params.itemIndex);
+        // fire an add event.
+        // Note that the change can be canceled from within an event listener if
+        // this listener calls the method cancelAdd().
+        this.trigger('add');
+
+        if (!this.applyAdd)
+        {
+          // undo an add
+          this.deleteItem(params.itemIndex);
+        }
       }
     }
   }
 
   links.Timeline.preventDefault(event);
 };
+
 
 /**
  * Event handler for mouse wheel event, used to zoom the timeline
@@ -3490,17 +3552,17 @@ links.Timeline.prototype.onDblClick = function (event)
  */
 links.Timeline.prototype.onMouseWheel = function (event)
 {
-  if (! this.options.zoomable)
+  if (!this.options.zoomable)
   {
     return;
   }
 
-  if (! event)
+  if (!event)
   { /* For IE. */
     event = window.event;
   }
 
-  // retrieve delta    
+  // retrieve delta
   var delta = 0;
   if (event.wheelDelta)
   { /* IE/Opera. */
@@ -3510,7 +3572,7 @@ links.Timeline.prototype.onMouseWheel = function (event)
   { /* Mozilla case. */
     // In Mozilla, sign of delta is different than in IE.
     // Also, delta is multiple of 3.
-    delta = - event.detail / 3;
+    delta = -event.detail / 3;
   }
 
   // If delta is nonzero, handle it.
@@ -3518,7 +3580,7 @@ links.Timeline.prototype.onMouseWheel = function (event)
   // and negative, if wheel was scrolled down.
   if (delta)
   {
-    // TODO: on FireFox, the window is not redrawn within repeated scroll-events 
+    // TODO: on FireFox, the window is not redrawn within repeated scroll-events
     // -> use a delayed redraw? Make a zoom queue?
 
     var timeline = this;
@@ -3528,10 +3590,9 @@ links.Timeline.prototype.onMouseWheel = function (event)
       var zoomFactor = delta / 5.0;
       var frameLeft = links.Timeline.getAbsoluteLeft(timeline.dom.content);
       var zoomAroundDate =
-            (
-              event.clientX != undefined && frameLeft != undefined) ?
-            timeline.screenToTime(event.clientX - frameLeft) :
-            undefined;
+        (event.clientX != undefined && frameLeft != undefined) ?
+          timeline.screenToTime(event.clientX - frameLeft) :
+          undefined;
 
       timeline.zoom(zoomFactor, zoomAroundDate);
 
@@ -3572,6 +3633,7 @@ links.Timeline.prototype.onMouseWheel = function (event)
   links.Timeline.preventDefault(event);
 };
 
+
 /**
  * Zoom the timeline the given zoomfactor in or out. Start and end date will
  * be adjusted, and the timeline will be redrawn. You can optionally give a
@@ -3586,9 +3648,7 @@ links.Timeline.prototype.zoom = function (zoomFactor, zoomAroundDate)
   // if zoomAroundDate is not provided, take it half between start Date and end Date
   if (zoomAroundDate == undefined)
   {
-    zoomAroundDate = new Date(
-        (
-          this.start.valueOf() + this.end.valueOf()) / 2);
+    zoomAroundDate = new Date((this.start.valueOf() + this.end.valueOf()) / 2);
   }
 
   // prevent zoom factor larger than 1 or smaller than -1 (larger than 1 will
@@ -3597,17 +3657,16 @@ links.Timeline.prototype.zoom = function (zoomFactor, zoomAroundDate)
   {
     zoomFactor = 0.9;
   }
-  if (zoomFactor <= - 1)
+  if (zoomFactor <= -1)
   {
-    zoomFactor = - 0.9;
+    zoomFactor = -0.9;
   }
 
   // adjust a negative factor such that zooming in with 0.1 equals zooming
   // out with a factor -0.1
   if (zoomFactor < 0)
   {
-    zoomFactor = zoomFactor / (
-      1 + zoomFactor);
+    zoomFactor = zoomFactor / (1 + zoomFactor);
   }
 
   // zoom start Date and end Date relative to the zoomAroundDate
@@ -3620,10 +3679,9 @@ links.Timeline.prototype.zoom = function (zoomFactor, zoomAroundDate)
 
   this.applyRange(newStart, newEnd, zoomAroundDate);
 
-  this.render(
-    {
-      animate: this.options.animate && this.options.animateZoom
-    });
+  this.render({
+    animate: this.options.animate && this.options.animateZoom
+  });
 };
 
 /**
@@ -3658,8 +3716,7 @@ links.Timeline.prototype.applyRange = function (start, end, zoomAroundDate)
   // calculate new start and end value
   var startValue = start.valueOf();
   var endValue = end.valueOf();
-  var interval = (
-    endValue - startValue);
+  var interval = (endValue - startValue);
 
   // determine maximum and minimum interval
   var options = this.options;
@@ -3690,17 +3747,13 @@ links.Timeline.prototype.applyRange = function (start, end, zoomAroundDate)
       var day = 1000 * 60 * 60 * 24;
       max = min + day;
     }
-    if (intervalMax > (
-      max - min))
+    if (intervalMax > (max - min))
     {
-      intervalMax = (
-        max - min);
+      intervalMax = (max - min);
     }
-    if (intervalMin > (
-      max - min))
+    if (intervalMin > (max - min))
     {
-      intervalMin = (
-        max - min);
+      intervalMin = (max - min);
     }
   }
 
@@ -3714,34 +3767,25 @@ links.Timeline.prototype.applyRange = function (start, end, zoomAroundDate)
   // TODO: IE has problems with milliseconds
   if (interval < intervalMin)
   {
-    var diff = (
-      intervalMin - interval);
-    var f = zoomAroundDate ? (
-                               zoomAroundDate.valueOf() - startValue) / interval : 0.5;
+    var diff = (intervalMin - interval);
+    var f = zoomAroundDate ? (zoomAroundDate.valueOf() - startValue) / interval : 0.5;
     startValue -= Math.round(diff * f);
-    endValue += Math.round(
-        diff * (
-        1 - f));
+    endValue += Math.round(diff * (1 - f));
   }
 
   // prevent too large scale
   if (interval > intervalMax)
   {
-    var diff = (
-      interval - intervalMax);
-    var f = zoomAroundDate ? (
-                               zoomAroundDate.valueOf() - startValue) / interval : 0.5;
+    var diff = (interval - intervalMax);
+    var f = zoomAroundDate ? (zoomAroundDate.valueOf() - startValue) / interval : 0.5;
     startValue += Math.round(diff * f);
-    endValue -= Math.round(
-        diff * (
-        1 - f));
+    endValue -= Math.round(diff * (1 - f));
   }
 
   // prevent to small start date
   if (min != undefined)
   {
-    var diff = (
-      startValue - min);
+    var diff = (startValue - min);
     if (diff < 0)
     {
       startValue -= diff;
@@ -3752,8 +3796,7 @@ links.Timeline.prototype.applyRange = function (start, end, zoomAroundDate)
   // prevent to large end date
   if (max != undefined)
   {
-    var diff = (
-      max - endValue);
+    var diff = (max - endValue);
     if (diff < 0)
     {
       startValue += diff;
@@ -3777,13 +3820,13 @@ links.Timeline.prototype.confirmDeleteItem = function (index)
   this.applyDelete = true;
 
   // select the event to be deleted
-  if (! this.isSelected(index))
+  if (!this.isSelected(index))
   {
     this.selectItem(index);
   }
 
-  // fire a delete event trigger. 
-  // Note that the delete event can be canceled from within an event listener if 
+  // fire a delete event trigger.
+  // Note that the delete event can be canceled from within an event listener if
   // this listener calls the method cancelChange().
   this.trigger('delete');
 
@@ -3816,7 +3859,7 @@ links.Timeline.prototype.deleteItem = function (index)
   if (this.data)
   {
     if (google && google.visualization &&
-        this.data instanceof google.visualization.DataTable)
+      this.data instanceof google.visualization.DataTable)
     {
       this.data.removeRow(index);
     }
@@ -3832,6 +3875,7 @@ links.Timeline.prototype.deleteItem = function (index)
 
   this.render();
 };
+
 
 /**
  * Delete all items
@@ -3850,7 +3894,7 @@ links.Timeline.prototype.deleteAllItems = function ()
   if (this.data)
   {
     if (google && google.visualization &&
-        this.data instanceof google.visualization.DataTable)
+      this.data instanceof google.visualization.DataTable)
     {
       this.data.removeRows(0, this.data.getNumberOfRows());
     }
@@ -3867,6 +3911,7 @@ links.Timeline.prototype.deleteAllItems = function ()
   this.render();
 };
 
+
 /**
  * Find the group from a given height in the timeline
  * @param {Number} height   Height in the timeline
@@ -3876,14 +3921,14 @@ links.Timeline.prototype.deleteAllItems = function ()
 links.Timeline.prototype.getGroupFromHeight = function (height)
 {
   var i,
-      group,
-      groups = this.groups;
+    group,
+    groups = this.groups;
 
   if (groups)
   {
     if (this.options.axisOnTop)
     {
-      for (i = groups.length - 1; i >= 0; i --)
+      for (i = groups.length - 1; i >= 0; i--)
       {
         group = groups[i];
         if (height > group.top)
@@ -3894,7 +3939,7 @@ links.Timeline.prototype.getGroupFromHeight = function (height)
     }
     else
     {
-      for (i = 0; i < groups.length; i ++)
+      for (i = 0; i < groups.length; i++)
       {
         group = groups[i];
         if (height > group.top)
@@ -3936,8 +3981,7 @@ links.Timeline.Item = function (data, options)
       if (this.end)
       {
         // range
-        this.center = (
-                        this.start.valueOf() + this.end.valueOf()) / 2;
+        this.center = (this.start.valueOf() + this.end.valueOf()) / 2;
       }
       else
       {
@@ -3981,13 +4025,13 @@ links.Timeline.Item.prototype.repaint = function (container)
 
   if (this.visible)
   {
-    if (! this.dom)
+    if (!this.dom)
     {
       this.dom = this.createDOM();
       this.changed = true;
       needsReflow = true;
     }
-    if (! this.domVisible)
+    if (!this.domVisible)
     {
       this.showDOM(container);
     }
@@ -4134,6 +4178,7 @@ links.Timeline.Item.prototype.getRight = function (timeline)
   return 0;
 };
 
+
 /**
  * @constructor links.Timeline.ItemBox
  * @extends links.Timeline.Item
@@ -4160,17 +4205,14 @@ links.Timeline.ItemBox.prototype = new links.Timeline.Item();
 links.Timeline.ItemBox.prototype.reflow = function ()
 {
   var dom = this.dom,
-      dotHeight = dom.dot.offsetHeight,
-      dotWidth = dom.dot.offsetWidth,
-      lineWidth = dom.line.offsetWidth,
-      resized = (
-        (
-          this.dotHeight != dotHeight) ||
-        (
-          this.dotWidth != dotWidth) ||
-        (
-          this.lineWidth != lineWidth)
-        );
+    dotHeight = dom.dot.offsetHeight,
+    dotWidth = dom.dot.offsetWidth,
+    lineWidth = dom.line.offsetWidth,
+    resized = (
+    (this.dotHeight != dotHeight) ||
+    (this.dotWidth != dotWidth) ||
+    (this.lineWidth != lineWidth)
+    );
 
   this.dotHeight = dotHeight;
   this.dotWidth = dotWidth;
@@ -4186,6 +4228,7 @@ links.Timeline.ItemBox.prototype.reflow = function ()
 links.Timeline.ItemBox.prototype.select = function ()
 {
   var dom = this.dom;
+  console.log(dom);
   links.Timeline.addClassName(dom, 'timeline-event-selected');
   links.Timeline.addClassName(dom.line, 'timeline-event-selected');
   links.Timeline.addClassName(dom.dot, 'timeline-event-selected');
@@ -4327,51 +4370,42 @@ links.Timeline.ItemBox.prototype.updateDOM = function ()
 links.Timeline.ItemBox.prototype.updatePosition = function (timeline)
 {
   var dom = this.dom,
-      left = timeline.timeToScreen(this.start),
-      axisOnTop = timeline.options.axisOnTop,
-      axisTop = timeline.size.axis.top,
-      axisHeight = timeline.size.axis.height,
-      boxAlign = (
-                   timeline.options.box && timeline.options.box.align) ?
-                 timeline.options.box.align : undefined;
+    left = timeline.timeToScreen(this.start),
+    axisOnTop = timeline.options.axisOnTop,
+    axisTop = timeline.size.axis.top,
+    axisHeight = timeline.size.axis.height,
+    boxAlign = (timeline.options.box && timeline.options.box.align) ?
+      timeline.options.box.align : undefined;
 
   dom.style.top = this.top + "px";
   if (boxAlign == 'right')
   {
-    dom.style.left = (
-                       left - this.width) + "px";
+    dom.style.left = (left - this.width) + "px";
   }
   else if (boxAlign == 'left')
   {
-    dom.style.left = (
-                       left) + "px";
+    dom.style.left = (left) + "px";
   }
   else
   { // default or 'center'
-    dom.style.left = (
-                       left - this.width / 2) + "px";
+    dom.style.left = (left - this.width / 2) + "px";
   }
 
   var line = dom.line;
   var dot = dom.dot;
-  line.style.left = (
-                      left - this.lineWidth / 2) + "px";
-  dot.style.left = (
-                     left - this.dotWidth / 2) + "px";
+  line.style.left = (left - this.lineWidth / 2) + "px";
+  dot.style.left = (left - this.dotWidth / 2) + "px";
   if (axisOnTop)
   {
     line.style.top = axisHeight + "px";
     line.style.height = Math.max(this.top - axisHeight, 0) + "px";
-    dot.style.top = (
-                      axisHeight - this.dotHeight / 2) + "px";
+    dot.style.top = (axisHeight - this.dotHeight / 2) + "px";
   }
   else
   {
-    line.style.top = (
-                       this.top + this.height) + "px";
+    line.style.top = (this.top + this.height) + "px";
     line.style.height = Math.max(axisTop - this.top - this.height, 0) + "px";
-    dot.style.top = (
-                      axisTop - this.dotHeight / 2) + "px";
+    dot.style.top = (axisTop - this.dotHeight / 2) + "px";
   }
 };
 
@@ -4383,15 +4417,11 @@ links.Timeline.ItemBox.prototype.updatePosition = function (timeline)
 links.Timeline.ItemBox.prototype.updateVisible = function (timeline)
 {
   var left = timeline.timeToScreen(this.start),
-      contentWidth = timeline.size.contentWidth;
+    contentWidth = timeline.size.contentWidth;
 
-  this.visible = (
-                   (
-                     left + this.width / 2 > - contentWidth)
-                   && (
-                     left - this.width / 2 < 2 * contentWidth))
-    && (
-                   ! this.cluster);
+  this.visible = ((left + this.width / 2 > -contentWidth)
+  && (left - this.width / 2 < 2 * contentWidth))
+  && (!this.cluster);
 };
 
 /**
@@ -4404,12 +4434,9 @@ links.Timeline.ItemBox.prototype.setPosition = function (left, right)
 {
   var dom = this.dom;
 
-  dom.style.left = (
-                     left - this.width / 2) + "px";
-  dom.line.style.left = (
-                          left - this.lineWidth / 2) + "px";
-  dom.dot.style.left = (
-                         left - this.dotWidth / 2) + "px";
+  dom.style.left = (left - this.width / 2) + "px";
+  dom.line.style.left = (left - this.lineWidth / 2) + "px";
+  dom.dot.style.left = (left - this.dotWidth / 2) + "px";
 
   if (this.group)
   {
@@ -4426,9 +4453,8 @@ links.Timeline.ItemBox.prototype.setPosition = function (left, right)
  */
 links.Timeline.ItemBox.prototype.getRight = function (timeline)
 {
-  var boxAlign = (
-                   timeline.options.box && timeline.options.box.align) ?
-                 timeline.options.box.align : undefined;
+  var boxAlign = (timeline.options.box && timeline.options.box.align) ?
+    timeline.options.box.align : undefined;
 
   var left = timeline.timeToScreen(this.start);
   var right;
@@ -4438,13 +4464,11 @@ links.Timeline.ItemBox.prototype.getRight = function (timeline)
   }
   else if (boxAlign == 'left')
   {
-    right = (
-      left + this.width);
+    right = (left + this.width);
   }
   else
   { // default or 'center'
-    right = (
-      left + this.width / 2);
+    right = (left + this.width / 2);
   }
 
   return right;
@@ -4487,6 +4511,11 @@ links.Timeline.ItemRange.prototype.unselect = function ()
   var dom = this.dom;
   links.Timeline.removeClassName(dom, 'timeline-event-selected');
 };
+
+//function checkNewSlot(dom)
+//{
+//
+//}
 
 /**
  * Creates the DOM for the item, depending on its type
@@ -4580,14 +4609,14 @@ links.Timeline.ItemRange.prototype.updateDOM = function ()
 links.Timeline.ItemRange.prototype.updatePosition = function (timeline)
 {
   var dom = this.dom,
-      contentWidth = timeline.size.contentWidth,
-      left = timeline.timeToScreen(this.start),
-      right = timeline.timeToScreen(this.end);
+    contentWidth = timeline.size.contentWidth,
+    left = timeline.timeToScreen(this.start),
+    right = timeline.timeToScreen(this.end);
 
   // limit the width of the this, as browsers cannot draw very wide divs
-  if (left < - contentWidth)
+  if (left < -contentWidth)
   {
-    left = - contentWidth;
+    left = -contentWidth;
   }
   if (right > 2 * contentWidth)
   {
@@ -4608,15 +4637,12 @@ links.Timeline.ItemRange.prototype.updatePosition = function (timeline)
 links.Timeline.ItemRange.prototype.updateVisible = function (timeline)
 {
   var left = timeline.timeToScreen(this.start),
-      right = timeline.timeToScreen(this.end),
-      contentWidth = timeline.size.contentWidth;
+    right = timeline.timeToScreen(this.end),
+    contentWidth = timeline.size.contentWidth;
 
-  this.visible = (
-                   right > - contentWidth)
-                   && (
-                   left < 2 * contentWidth)
-    && (
-                   ! this.cluster);
+  this.visible = (right > -contentWidth)
+  && (left < 2 * contentWidth)
+  && (!this.cluster);
 };
 
 /**
@@ -4630,8 +4656,7 @@ links.Timeline.ItemRange.prototype.setPosition = function (left, right)
   var dom = this.dom;
 
   dom.style.left = left + 'px';
-  dom.style.width = (
-                      right - left) + 'px';
+  dom.style.width = (right - left) + 'px';
 
   if (this.group)
   {
@@ -4677,17 +4702,14 @@ links.Timeline.ItemDot.prototype = new links.Timeline.Item();
 links.Timeline.ItemDot.prototype.reflow = function ()
 {
   var dom = this.dom,
-      dotHeight = dom.dot.offsetHeight,
-      dotWidth = dom.dot.offsetWidth,
-      contentHeight = dom.content.offsetHeight,
-      resized = (
-        (
-          this.dotHeight != dotHeight) ||
-        (
-          this.dotWidth != dotWidth) ||
-        (
-          this.contentHeight != contentHeight)
-        );
+    dotHeight = dom.dot.offsetHeight,
+    dotWidth = dom.dot.offsetWidth,
+    contentHeight = dom.content.offsetHeight,
+    resized = (
+    (this.dotHeight != dotHeight) ||
+    (this.dotWidth != dotWidth) ||
+    (this.contentHeight != contentHeight)
+    );
 
   this.dotHeight = dotHeight;
   this.dotWidth = dotWidth;
@@ -4821,18 +4843,14 @@ links.Timeline.ItemDot.prototype.updateDOM = function ()
 links.Timeline.ItemDot.prototype.updatePosition = function (timeline)
 {
   var dom = this.dom,
-      left = timeline.timeToScreen(this.start);
+    left = timeline.timeToScreen(this.start);
 
   dom.style.top = this.top + "px";
-  dom.style.left = (
-                     left - this.dotWidth / 2) + "px";
+  dom.style.left = (left - this.dotWidth / 2) + "px";
 
-  dom.content.style.marginLeft = (
-                                   1.5 * this.dotWidth) + "px";
+  dom.content.style.marginLeft = (1.5 * this.dotWidth) + "px";
   //dom.content.style.marginRight = (0.5 * this.dotWidth) + "px"; // TODO
-  dom.dot.style.top = (
-                        (
-                          this.height - this.dotHeight) / 2) + "px";
+  dom.dot.style.top = ((this.height - this.dotHeight) / 2) + "px";
 };
 
 /**
@@ -4843,14 +4861,11 @@ links.Timeline.ItemDot.prototype.updatePosition = function (timeline)
 links.Timeline.ItemDot.prototype.updateVisible = function (timeline)
 {
   var left = timeline.timeToScreen(this.start),
-      contentWidth = timeline.size.contentWidth;
+    contentWidth = timeline.size.contentWidth;
 
-  this.visible = (
-                   left + this.width > - contentWidth)
-                   && (
-                   left < 2 * contentWidth)
-    && (
-                   ! this.cluster);
+  this.visible = (left + this.width > -contentWidth)
+  && (left < 2 * contentWidth)
+  && (!this.cluster);
 };
 
 /**
@@ -4863,8 +4878,7 @@ links.Timeline.ItemDot.prototype.setPosition = function (left, right)
 {
   var dom = this.dom;
 
-  dom.style.left = (
-                     left - this.dotWidth / 2) + "px";
+  dom.style.left = (left - this.dotWidth / 2) + "px";
 
   if (this.group)
   {
@@ -4946,10 +4960,10 @@ links.Timeline.prototype.addItem = function (itemData)
 links.Timeline.prototype.addItems = function (items)
 {
   var newItems = items,
-      curItems = this.items;
+    curItems = this.items;
 
   // append the items
-  for (var i = 0, iMax = newItems.length; i < iMax; i ++)
+  for (var i = 0, iMax = newItems.length; i < iMax; i++)
   {
     var itemData = items[i];
 
@@ -4959,10 +4973,9 @@ links.Timeline.prototype.addItems = function (items)
     this.updateData(index, itemData);
   }
 
-  this.render(
-    {
-      animate: false
-    });
+  this.render({
+    animate: false
+  });
 };
 
 /**
@@ -4986,7 +4999,7 @@ links.Timeline.prototype.createItem = function (itemData)
 
   // TODO: is initialTop needed?
   var initialTop,
-      options = this.options;
+    options = this.options;
   if (options.axisOnTop)
   {
     initialTop = this.size.axis.height + options.eventMarginAxis + options.eventMargin / 2;
@@ -5007,10 +5020,9 @@ links.Timeline.prototype.createItem = function (itemData)
   }
 
   console.log('ERROR: Unknown event style "' + type + '"');
-  return new links.Timeline.Item(
-    data, {
-      'top': initialTop
-    });
+  return new links.Timeline.Item(data, {
+    'top': initialTop
+  });
 };
 
 /**
@@ -5025,20 +5037,19 @@ links.Timeline.prototype.createItem = function (itemData)
 links.Timeline.prototype.changeItem = function (index, itemData)
 {
   var item = this.items[index];
-  if (! item)
+  if (!item)
   {
     throw "Cannot change item, index out of range";
   }
   item.deleteDOM();
 
   // replace item, merge changed
-  var newItem = this.createItem(
-    {
-      'start': itemData.hasOwnProperty('start') ? itemData.start : item.start,
-      'end': itemData.hasOwnProperty('end') ? itemData.end : item.end,
-      'content': itemData.hasOwnProperty('content') ? itemData.content : item.content,
-      'group': itemData.hasOwnProperty('group') ? itemData.group : this.getGroupName(item.group)
-    });
+  var newItem = this.createItem({
+    'start': itemData.hasOwnProperty('start') ? itemData.start : item.start,
+    'end': itemData.hasOwnProperty('end') ? itemData.end : item.end,
+    'content': itemData.hasOwnProperty('content') ? itemData.content : item.content,
+    'group': itemData.hasOwnProperty('group') ? itemData.group : this.getGroupName(item.group)
+  });
   //newItem.createDOM();
   //newItem.select();
   this.items[index] = newItem;
@@ -5047,10 +5058,9 @@ links.Timeline.prototype.changeItem = function (index, itemData)
   this.updateData(index, itemData);
 
   // redraw timeline
-  this.render(
-    {
-      animate: false
-    });
+  this.render({
+    animate: false
+  });
 
   newItem.select();
 };
@@ -5064,6 +5074,7 @@ links.Timeline.prototype.deleteGroups = function ()
   this.groupIndexes = {};
 };
 
+
 /**
  * Get a group by the group name. When the group does not exist,
  * it will be created.
@@ -5073,8 +5084,8 @@ links.Timeline.prototype.deleteGroups = function ()
 links.Timeline.prototype.getGroup = function (groupName)
 {
   var groups = this.groups,
-      groupIndexes = this.groupIndexes,
-      groupObj = undefined;
+    groupIndexes = this.groupIndexes,
+    groupObj = undefined;
 
   var groupIndex = groupIndexes[groupName];
   if (groupIndex === undefined && groupName !== undefined)
@@ -5083,27 +5094,26 @@ links.Timeline.prototype.getGroup = function (groupName)
       'content': groupName,
       'labelTop': 0,
       'lineTop': 0
-      // note: this object will lateron get addition information, 
-      //       such as height and width of the group         
+      // note: this object will lateron get addition information,
+      //       such as height and width of the group
     };
     groups.push(groupObj);
     // sort the groups
-    groups = groups.sort(
-      function (a, b)
+    groups = groups.sort(function (a, b)
+    {
+      if (a.content > b.content)
       {
-        if (a.content > b.content)
-        {
-          return 1;
-        }
-        if (a.content < b.content)
-        {
-          return - 1;
-        }
-        return 0;
-      });
+        return 1;
+      }
+      if (a.content < b.content)
+      {
+        return -1;
+      }
+      return 0;
+    });
 
     // rebuilt the groupIndexes
-    for (var i = 0, iMax = groups.length; i < iMax; i ++)
+    for (var i = 0, iMax = groups.length; i < iMax; i++)
     {
       groupIndexes[groups[i].content] = i;
     }
@@ -5147,6 +5157,7 @@ links.Timeline.prototype.cancelDelete = function ()
   this.applyDelete = false;
 };
 
+
 /**
  * Cancel creation of a new item
  * This method can be called insed an event listener which catches the "new"
@@ -5156,6 +5167,7 @@ links.Timeline.prototype.cancelAdd = function ()
 {
   this.applyAdd = false;
 };
+
 
 /**
  * Select an event. The visible chart range will be moved such that the selected
@@ -5183,18 +5195,15 @@ links.Timeline.prototype.setSelection = function (selection)
         var middle;
         if (end != undefined)
         {
-          middle = new Date(
-              (
-                end.valueOf() + start.valueOf()) / 2);
+          middle = new Date((end.valueOf() + start.valueOf()) / 2);
         }
         else
         {
           middle = new Date(start);
         }
-        var diff = (
-              this.end.valueOf() - this.start.valueOf()),
-            newStart = new Date(middle.valueOf() - diff / 2),
-            newEnd = new Date(middle.valueOf() + diff / 2);
+        var diff = (this.end.valueOf() - this.start.valueOf()),
+          newStart = new Date(middle.valueOf() - diff / 2),
+          newEnd = new Date(middle.valueOf() + diff / 2);
 
         this.setVisibleChartRange(newStart, newEnd);
 
@@ -5226,6 +5235,7 @@ links.Timeline.prototype.getSelection = function ()
   return sel;
 };
 
+
 /**
  * Select an item by its index
  * @param {Number} index
@@ -5239,7 +5249,7 @@ links.Timeline.prototype.selectItem = function (index)
   if (this.items[index] !== undefined)
   {
     var item = this.items[index],
-        domItem = item.dom;
+      domItem = item.dom;
 
     this.selection = {
       'index': index,
@@ -5264,8 +5274,7 @@ links.Timeline.prototype.selectItem = function (index)
  */
 links.Timeline.prototype.isSelected = function (index)
 {
-  return (
-    this.selection && this.selection.index === index);
+  return (this.selection && this.selection.index === index);
 };
 
 /**
@@ -5290,6 +5299,7 @@ links.Timeline.prototype.unselectItem = function ()
   }
 };
 
+
 /**
  * Stack the items such that they don't overlap. The items will have a minimal
  * distance equal to options.eventMargin.
@@ -5313,7 +5323,7 @@ links.Timeline.prototype.stackItems = function (animate)
 
   // calculate the order and final stack position of the items
   var stack = this.stack;
-  if (! stack)
+  if (!stack)
   {
     stack = {};
     this.stack = stack;
@@ -5327,13 +5337,12 @@ links.Timeline.prototype.stackItems = function (animate)
     var timeline = this;
     var step = function ()
     {
-      var arrived = timeline.stackMoveOneStep(
-        stack.sortedItems,
+      var arrived = timeline.stackMoveOneStep(stack.sortedItems,
         stack.finalItems);
 
       timeline.repaint();
 
-      if (! arrived)
+      if (!arrived)
       {
         stack.timer = setTimeout(step, 30);
       }
@@ -5343,7 +5352,7 @@ links.Timeline.prototype.stackItems = function (animate)
       }
     };
 
-    if (! stack.timer)
+    if (!stack.timer)
     {
       stack.timer = setTimeout(step, 30);
     }
@@ -5367,6 +5376,7 @@ links.Timeline.prototype.stackCancelAnimation = function ()
   }
 };
 
+
 /**
  * Order the items in the array this.items. The order is determined via:
  * - Ranges go before boxes and dots.
@@ -5381,23 +5391,19 @@ links.Timeline.prototype.stackOrder = function (items)
 
   var f = function (a, b)
   {
-    if ((
-          a instanceof links.Timeline.ItemRange) && ! (
-      b instanceof links.Timeline.ItemRange))
+    if ((a instanceof links.Timeline.ItemRange) && !(b instanceof links.Timeline.ItemRange))
     {
-      return - 1;
+      return -1;
     }
 
-    if (! (
-      a instanceof links.Timeline.ItemRange) &&
-        (
-          b instanceof links.Timeline.ItemRange))
+    if (!(a instanceof links.Timeline.ItemRange) &&
+      (b instanceof links.Timeline.ItemRange))
     {
       return 1;
     }
 
-    return (
-      a.left - b.left);
+
+    return (a.left - b.left);
   };
 
   sortedItems.sort(f);
@@ -5414,26 +5420,26 @@ links.Timeline.prototype.stackOrder = function (items)
 links.Timeline.prototype.stackCalculateFinal = function (items)
 {
   var i,
-      iMax,
-      size = this.size,
-      axisTop = size.axis.top,
-      axisHeight = size.axis.height,
-      options = this.options,
-      axisOnTop = options.axisOnTop,
-      eventMargin = options.eventMargin,
-      eventMarginAxis = options.eventMarginAxis,
-      finalItems = [];
+    iMax,
+    size = this.size,
+    axisTop = size.axis.top,
+    axisHeight = size.axis.height,
+    options = this.options,
+    axisOnTop = options.axisOnTop,
+    eventMargin = options.eventMargin,
+    eventMarginAxis = options.eventMarginAxis,
+    finalItems = [];
 
   // initialize final positions
-  for (i = 0, iMax = items.length; i < iMax; i ++)
+  for (i = 0, iMax = items.length; i < iMax; i++)
   {
     var item = items[i],
-        top,
-        left,
-        right,
-        bottom,
-        height = item.height,
-        width = item.width;
+      top,
+      left,
+      right,
+      bottom,
+      height = item.height,
+      width = item.width;
 
     if (axisOnTop)
     {
@@ -5470,7 +5476,7 @@ links.Timeline.prototype.stackCalculateFinal = function (items)
   {
     // calculate new, non-overlapping positions
     //var items = sortedItems;
-    for (i = 0, iMax = finalItems.length; i < iMax; i ++)
+    for (i = 0, iMax = finalItems.length; i < iMax; i++)
     {
       //for (var i = finalItems.length - 1; i >= 0; i--) {
       var finalItem = finalItems[i];
@@ -5492,13 +5498,13 @@ links.Timeline.prototype.stackCalculateFinal = function (items)
           }
           finalItem.bottom = finalItem.top + finalItem.height;
         }
-      }
-      while (collidingItem);
+      } while (collidingItem);
     }
   }
 
   return finalItems;
 };
+
 
 /**
  * Move the events one step in the direction of their final positions
@@ -5514,21 +5520,17 @@ links.Timeline.prototype.stackMoveOneStep = function (currentItems, finalItems)
   var arrived = true;
 
   // apply new positions animated
-  for (i = 0, iMax = currentItems.length; i < iMax; i ++)
+  for (i = 0, iMax = currentItems.length; i < iMax; i++)
   {
     var finalItem = finalItems[i],
-        item = finalItem.item;
+      item = finalItem.item;
 
     var topNow = parseInt(item.top);
     var topFinal = parseInt(finalItem.top);
-    var diff = (
-      topFinal - topNow);
+    var diff = (topFinal - topNow);
     if (diff)
     {
-      var step = (
-                   topFinal == topNow) ? 0 : (
-                   (
-                     topFinal > topNow) ? 1 : - 1);
+      var step = (topFinal == topNow) ? 0 : ((topFinal > topNow) ? 1 : -1);
       if (Math.abs(diff) > 4) step = diff / 4;
       var topNew = parseInt(topNow + step);
 
@@ -5553,6 +5555,7 @@ links.Timeline.prototype.stackMoveOneStep = function (currentItems, finalItems)
   return arrived;
 };
 
+
 /**
  * Move the events from their current position to the final position
  * @param {Array} currentItems   Array with the real items and their current
@@ -5563,10 +5566,10 @@ links.Timeline.prototype.stackMoveOneStep = function (currentItems, finalItems)
 links.Timeline.prototype.stackMoveToFinal = function (currentItems, finalItems)
 {
   // Put the events directly at there final position
-  for (i = 0, iMax = currentItems.length; i < iMax; i ++)
+  for (i = 0, iMax = currentItems.length; i < iMax; i++)
   {
     var current = currentItems[i],
-        finalItem = finalItems[i];
+      finalItem = finalItems[i];
 
     current.left = finalItem.left;
     current.top = finalItem.top;
@@ -5574,6 +5577,7 @@ links.Timeline.prototype.stackMoveToFinal = function (currentItems, finalItems)
     current.bottom = finalItem.bottom;
   }
 };
+
 
 /**
  * Check if the destiny position of given item overlaps with any
@@ -5584,17 +5588,16 @@ links.Timeline.prototype.stackMoveToFinal = function (currentItems, finalItems)
  * @param {int}  itemEnd     Last item to be checked.
  * @return {Object}          colliding item, or undefined when no collisions
  */
-links.Timeline.prototype.stackItemsCheckOverlap = function (
-  items, itemIndex, itemStart, itemEnd
-  )
+links.Timeline.prototype.stackItemsCheckOverlap = function (items, itemIndex,
+                                                            itemStart, itemEnd)
 {
   var eventMargin = this.options.eventMargin,
-      collision = this.collision;
+    collision = this.collision;
 
-  // we loop from end to start, as we suppose that the chance of a 
+  // we loop from end to start, as we suppose that the chance of a
   // collision is larger for items at the end, so check these first.
   var item1 = items[itemIndex];
-  for (var i = itemEnd; i >= itemStart; i --)
+  for (var i = itemEnd; i >= itemStart; i--)
   {
     var item2 = items[i];
     if (collision(item1, item2, eventMargin))
@@ -5623,19 +5626,19 @@ links.Timeline.prototype.stackItemsCheckOverlap = function (
  */
 links.Timeline.prototype.collision = function (item1, item2, margin)
 {
-  // set margin if not specified 
+  // set margin if not specified
   if (margin == undefined)
   {
     margin = 0;
   }
 
   // calculate if there is overlap (collision)
-  return (
-    item1.left - margin < item2.right &&
-    item1.right + margin > item2.left &&
-    item1.top - margin < item2.bottom &&
-    item1.bottom + margin > item2.top);
+  return (item1.left - margin < item2.right &&
+  item1.right + margin > item2.left &&
+  item1.top - margin < item2.bottom &&
+  item1.bottom + margin > item2.top);
 };
+
 
 /**
  * fire an event
@@ -5673,20 +5676,21 @@ links.Timeline.prototype.trigger = function (event)
   }
 };
 
+
 /**
  * Filter the visible events
  */
 links.Timeline.prototype.filterItems = function ()
 {
   var left,
-      timeline = this,
-      items = this.items,
-      size = this.size,
-      contentWidth = size.contentWidth,
-      visibleItems = [];
+    timeline = this,
+    items = this.items,
+    size = this.size,
+    contentWidth = size.contentWidth,
+    visibleItems = [];
   this.visibleItems = visibleItems;
 
-  for (var i = 0, iMax = items.length; i < iMax; i ++)
+  for (var i = 0, iMax = items.length; i < iMax; i++)
   {
     var item = items[i];
     item.updateVisible(this);
@@ -5698,21 +5702,17 @@ links.Timeline.prototype.filterItems = function ()
 
   // add the clusters to the visible items
   var clusters = this.clusterFactory.getClusters(this.conversion.factor);
-  clusters.forEach(
-    function (cluster)
-    {
-      left = timeline.timeToScreen(cluster.start);
-      cluster.visible = (
-        (
-          left + cluster.width / 2 > - contentWidth)
-        && (
-          left - cluster.width / 2 < 2 * contentWidth));
+  clusters.forEach(function (cluster)
+  {
+    left = timeline.timeToScreen(cluster.start);
+    cluster.visible = ((left + cluster.width / 2 > -contentWidth)
+    && (left - cluster.width / 2 < 2 * contentWidth));
 
-      if (cluster.visible)
-      {
-        visibleItems.push(cluster);
-      }
-    });
+    if (cluster.visible)
+    {
+      visibleItems.push(cluster);
+    }
+  });
 };
 
 /** ------------------------------------------------------------------------ **/
@@ -5747,7 +5747,7 @@ links.Timeline.ClusterFactory.prototype.clearCache = function ()
 {
   // cache containing created clusters for each cluster level
   this.cache = {};
-  this.cacheLevel = - 1;
+  this.cacheLevel = -1;
   this.cache[this.cacheLevel] = [];
   this.cacheValid = true;
 };
@@ -5774,30 +5774,27 @@ links.Timeline.ClusterFactory.prototype.setData = function (items)
   this.groups = groups;
 
   // split the items per group
-  items.forEach(
-    function (item)
+  items.forEach(function (item)
+  {
+    var groupName = item.group ? item.group.content : '';
+    var group = groups[groupName];
+    if (!group)
     {
-      var groupName = item.group ? item.group.content : '';
-      var group = groups[groupName];
-      if (! group)
-      {
-        group = [];
-        groups[groupName] = group;
-      }
-      group.push(item);
-    });
+      group = [];
+      groups[groupName] = group;
+    }
+    group.push(item);
+  });
 
   // sort the items per group
   for (var groupName in groups)
   {
     if (groups.hasOwnProperty(groupName))
     {
-      groups[groupName].sort(
-        function (a, b)
-        {
-          return (
-            a.center - b.center);
-        });
+      groups[groupName].sort(function (a, b)
+      {
+        return (a.center - b.center);
+      });
     }
   }
 };
@@ -5810,10 +5807,10 @@ links.Timeline.ClusterFactory.prototype.setData = function (items)
  */
 links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
 {
-  var level = - 1,
-      granularity = 2, // TODO: what granularity is needed for the cluster levels?
-      timeWindow = 0,  // milliseconds
-      maxItems = 5;    // TODO: do not hard code maxItems
+  var level = -1,
+    granularity = 2, // TODO: what granularity is needed for the cluster levels?
+    timeWindow = 0,  // milliseconds
+    maxItems = 5;    // TODO: do not hard code maxItems
 
   if (scale > 0)
   {
@@ -5828,7 +5825,7 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
   }
 
   // clear the cache when the cache is invalidated and the cache level is changed
-  if (! this.cacheValid && level != this.cacheLevel)
+  if (!this.cacheValid && level != this.cacheLevel)
   {
     this.clearCache();
     console.log('cache cleared...'); // TODO: cleanup
@@ -5836,7 +5833,7 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
   this.cacheLevel = level;
 
   var clusters = this.cache[level];
-  if (! clusters)
+  if (!clusters)
   {
     clusters = [];
 
@@ -5857,37 +5854,34 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
           // loop through items left from the current item
           var j = i - 1;
           while (j >= 0 &&
-                 (
-                   item.center - items[j].center) < timeWindow / 2)
+          (item.center - items[j].center) < timeWindow / 2)
           {
-            if (! items[j].cluster)
+            if (!items[j].cluster)
             {
-              neighbors ++;
+              neighbors++;
             }
-            j --;
+            j--;
           }
 
           // loop through items right from the current item
           var k = i + 1;
           while (k < items.length &&
-                 (
-                   items[k].center - item.center) < timeWindow / 2)
+          (items[k].center - item.center) < timeWindow / 2)
           {
-            neighbors ++;
-            k ++;
+            neighbors++;
+            k++;
           }
 
           // loop through the created clusters
           var l = clusters.length - 1;
           while (l >= 0 &&
-                 (
-                   item.center - clusters[l].center) < timeWindow / 2)
+          (item.center - clusters[l].center) < timeWindow / 2)
           {
             if (item.group == clusters[l].group)
             {
-              neighbors ++;
+              neighbors++;
             }
-            l --;
+            l--;
           }
 
           // aggregate until the number of items is within maxItems
@@ -5914,59 +5908,49 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
               if (count)
               {
                 // calculate new average (use fractions to prevent overflow)
-                avg = (
-                        count / (
-                        count + 1)) * avg + (
-                                              1 / (
-                                              count + 1)) * p.center;
+                avg = (count / (count + 1)) * avg + (1 / (count + 1)) * p.center;
               }
               else
               {
                 avg = p.center;
               }
-              min = (
-                      min != undefined) ? Math.min(min, start) : start;
-              max = (
-                      max != undefined) ? Math.max(max, end) : end;
-              containsRanges = containsRanges || (
-                p instanceof links.Timeline.ItemRange);
-              count ++;
-              m ++;
+              min = (min != undefined) ? Math.min(min, start) : start;
+              max = (max != undefined) ? Math.max(max, end) : end;
+              containsRanges = containsRanges || (p instanceof links.Timeline.ItemRange);
+              count++;
+              m++;
             }
 
             var cluster;
             var title = 'Cluster containing ' + count +
-                        ' events. Zoom in to see the individual events.';
+              ' events. Zoom in to see the individual events.';
             var content = '<div title="' + title + '">' + count + ' events</div>';
             var group = item.group ? item.group.content : undefined;
             if (containsRanges)
             {
               // boxes and/or ranges
-              cluster = this.timeline.createItem(
-                {
-                  'start': new Date(min),
-                  'end': new Date(max),
-                  'content': content,
-                  'group': group
-                });
+              cluster = this.timeline.createItem({
+                'start': new Date(min),
+                'end': new Date(max),
+                'content': content,
+                'group': group
+              });
             }
             else
             {
               // boxes only
-              cluster = this.timeline.createItem(
-                {
-                  'start': new Date(avg),
-                  'content': content,
-                  'group': group
-                });
+              cluster = this.timeline.createItem({
+                'start': new Date(avg),
+                'content': content,
+                'group': group
+              });
             }
             cluster.isCluster = true;
             cluster.items = clusterItems;
-            cluster.items.forEach(
-              function (item)
-              {
-                item.cluster = cluster;
-              });
+            cluster.items.forEach(function (item)
+            {
+              item.cluster = cluster;
+            });
 
             clusters.push(cluster);
             i += num;
@@ -5986,7 +5970,9 @@ links.Timeline.ClusterFactory.prototype.getClusters = function (scale)
   return clusters;
 };
 
+
 /** ------------------------------------------------------------------------ **/
+
 
 /**
  * Event listener (singleton)
@@ -6002,7 +5988,7 @@ links.events = links.events || {
   'indexOf': function (object)
   {
     var listeners = this.listeners;
-    for (var i = 0, iMax = this.listeners.length; i < iMax; i ++)
+    for (var i = 0, iMax = this.listeners.length; i < iMax; i++)
     {
       var listener = listeners[i];
       if (listener && listener.object == object)
@@ -6010,7 +5996,7 @@ links.events = links.events || {
         return i;
       }
     }
-    return - 1;
+    return -1;
   },
 
   /**
@@ -6024,7 +6010,7 @@ links.events = links.events || {
   {
     var index = this.indexOf(object);
     var listener = this.listeners[index];
-    if (! listener)
+    if (!listener)
     {
       listener = {
         'object': object,
@@ -6034,14 +6020,14 @@ links.events = links.events || {
     }
 
     var callbacks = listener.events[event];
-    if (! callbacks)
+    if (!callbacks)
     {
       callbacks = [];
       listener.events[event] = callbacks;
     }
 
     // add the callback if it does not yet exist
-    if (callbacks.indexOf(callback) == - 1)
+    if (callbacks.indexOf(callback) == -1)
     {
       callbacks.push(callback);
     }
@@ -6063,7 +6049,7 @@ links.events = links.events || {
       if (callbacks)
       {
         var index = callbacks.indexOf(callback);
-        if (index != - 1)
+        if (index != -1)
         {
           callbacks.splice(index, 1);
         }
@@ -6082,7 +6068,7 @@ links.events = links.events || {
       {
         if (events.hasOwnProperty(e))
         {
-          count ++;
+          count++;
         }
       }
       if (count == 0)
@@ -6115,7 +6101,7 @@ links.events = links.events || {
       var callbacks = listener.events[event];
       if (callbacks)
       {
-        for (var i = 0, iMax = callbacks.length; i < iMax; i ++)
+        for (var i = 0, iMax = callbacks.length; i < iMax; i++)
         {
           callbacks[i](properties);
         }
@@ -6123,6 +6109,7 @@ links.events = links.events || {
     }
   }
 };
+
 
 /** ------------------------------------------------------------------------ **/
 
@@ -6180,6 +6167,7 @@ links.Timeline.StepDate.SCALE = {
   YEAR: 8
 };
 
+
 /**
  * Set a new range
  * If minimumStep is provided, the step size is chosen as close as possible
@@ -6198,10 +6186,8 @@ links.Timeline.StepDate.prototype.setRange = function (start, end, minimumStep)
     return;
   }
 
-  this._start = (
-                  start != undefined) ? new Date(start) : new Date();
-  this._end = (
-                end != undefined) ? new Date(end) : new Date();
+  this._start = (start != undefined) ? new Date(start) : new Date();
+  this._end = (end != undefined) ? new Date(end) : new Date();
 
   if (this.autoScale)
   {
@@ -6264,10 +6250,7 @@ links.Timeline.StepDate.prototype.roundToMinor = function ()
         break;
       case links.Timeline.StepDate.SCALE.WEEKDAY:      // intentional fall through
       case links.Timeline.StepDate.SCALE.DAY:
-        this.current.setDate(
-            (
-              this.current.getDate() - 1) - (
-                                              this.current.getDate() - 1) % this.step + 1);
+        this.current.setDate((this.current.getDate() - 1) - (this.current.getDate() - 1) % this.step + 1);
         break;
       case links.Timeline.StepDate.SCALE.MONTH:
         this.current.setMonth(this.current.getMonth() - this.current.getMonth() % this.step);
@@ -6287,8 +6270,7 @@ links.Timeline.StepDate.prototype.roundToMinor = function ()
  */
 links.Timeline.StepDate.prototype.end = function ()
 {
-  return (
-    this.current.getTime() > this._end.getTime());
+  return (this.current.getTime() > this._end.getTime());
 };
 
 /**
@@ -6298,7 +6280,7 @@ links.Timeline.StepDate.prototype.next = function ()
 {
   var prev = this.current.getTime();
 
-  // Two cases, needed to prevent issues with switching daylight savings 
+  // Two cases, needed to prevent issues with switching daylight savings
   // (end of March and end of October)
   if (this.current.getMonth() < 6)
   {
@@ -6318,9 +6300,7 @@ links.Timeline.StepDate.prototype.next = function ()
         this.current = new Date(this.current.getTime() + this.step * 1000 * 60 * 60);
         // in case of skipping an hour for daylight savings, adjust the hour again (else you get: 0h 5h 9h ... instead of 0h 4h 8h ...)
         var h = this.current.getHours();
-        this.current.setHours(
-            h - (
-            h % this.step));
+        this.current.setHours(h - (h % this.step));
         break;
       case links.Timeline.StepDate.SCALE.WEEKDAY:      // intentional fall through
       case links.Timeline.StepDate.SCALE.DAY:
@@ -6405,6 +6385,7 @@ links.Timeline.StepDate.prototype.next = function ()
   }
 };
 
+
 /**
  * Get the current datetime
  * @return {Date}  current The current date
@@ -6448,6 +6429,7 @@ links.Timeline.StepDate.prototype.setAutoScale = function (enable)
   this.autoScale = enable;
 };
 
+
 /**
  * Automatically determine the scale that bests fits the provided minimum step
  * @param {Number} minimumStep  The minimum step size in milliseconds
@@ -6459,20 +6441,13 @@ links.Timeline.StepDate.prototype.setMinimumStep = function (minimumStep)
     return;
   }
 
-  var stepYear = (
-    1000 * 60 * 60 * 24 * 30 * 12);
-  var stepMonth = (
-    1000 * 60 * 60 * 24 * 30);
-  var stepDay = (
-    1000 * 60 * 60 * 24);
-  var stepHour = (
-    1000 * 60 * 60);
-  var stepMinute = (
-    1000 * 60);
-  var stepSecond = (
-    1000);
-  var stepMillisecond = (
-    1);
+  var stepYear = (1000 * 60 * 60 * 24 * 30 * 12);
+  var stepMonth = (1000 * 60 * 60 * 24 * 30);
+  var stepDay = (1000 * 60 * 60 * 24);
+  var stepHour = (1000 * 60 * 60);
+  var stepMinute = (1000 * 60);
+  var stepSecond = (1000);
+  var stepMillisecond = (1);
 
   // find the smallest step that is larger than the provided minimumStep
   if (stepYear * 1000 > minimumStep)
@@ -6646,7 +6621,7 @@ links.Timeline.StepDate.prototype.snap = function (date)
     {
       date.setDate(1);
       date.setMonth(date.getMonth() + 1);
-      // important: first set Date to 1, after that change the month.      
+      // important: first set Date to 1, after that change the month.
     }
     else
     {
@@ -6659,7 +6634,7 @@ links.Timeline.StepDate.prototype.snap = function (date)
     date.setMilliseconds(0);
   }
   else if (this.scale == links.Timeline.StepDate.SCALE.DAY ||
-           this.scale == links.Timeline.StepDate.SCALE.WEEKDAY)
+    this.scale == links.Timeline.StepDate.SCALE.WEEKDAY)
   {
     switch (this.step)
     {
@@ -6741,32 +6716,26 @@ links.Timeline.StepDate.prototype.isMajor = function ()
   switch (this.scale)
   {
     case links.Timeline.StepDate.SCALE.MILLISECOND:
-      return (
-        this.current.getMilliseconds() == 0);
+      return (this.current.getMilliseconds() == 0);
     case links.Timeline.StepDate.SCALE.SECOND:
-      return (
-        this.current.getSeconds() == 0);
+      return (this.current.getSeconds() == 0);
     case links.Timeline.StepDate.SCALE.MINUTE:
-      return (
-               this.current.getHours() == 0) && (
-               this.current.getMinutes() == 0);
+      return (this.current.getHours() == 0) && (this.current.getMinutes() == 0);
     // Note: this is no bug. Major label is equal for both minute and hour scale
     case links.Timeline.StepDate.SCALE.HOUR:
-      return (
-        this.current.getHours() == 0);
+      return (this.current.getHours() == 0);
     case links.Timeline.StepDate.SCALE.WEEKDAY: // intentional fall through
     case links.Timeline.StepDate.SCALE.DAY:
-      return (
-        this.current.getDate() == 1);
+      return (this.current.getDate() == 1);
     case links.Timeline.StepDate.SCALE.MONTH:
-      return (
-        this.current.getMonth() == 0);
+      return (this.current.getMonth() == 0);
     case links.Timeline.StepDate.SCALE.YEAR:
       return false;
     default:
       return false;
   }
 };
+
 
 /**
  * Returns formatted text for the minor axislabel, depending on the current
@@ -6776,16 +6745,12 @@ links.Timeline.StepDate.prototype.isMajor = function ()
  */
 links.Timeline.StepDate.prototype.getLabelMinor = function (date)
 {
-  var MONTHS_SHORT = [
-    "jan", "feb", "mrt",
+  var MONTHS_SHORT = ["jan", "feb", "mrt",
     "apr", "mei", "jun",
     "jul", "aug", "sep",
-    "okt", "nov", "dec"
-  ];
-  var DAYS_SHORT = [
-    "zo", "ma", "di",
-    "wo", "do", "vr", "za"
-  ];
+    "okt", "nov", "dec"];
+  var DAYS_SHORT = ["zo", "ma", "di",
+    "wo", "do", "vr", "za"];
 
   if (date == undefined)
   {
@@ -6815,6 +6780,7 @@ links.Timeline.StepDate.prototype.getLabelMinor = function (date)
   }
 };
 
+
 /**
  * Returns formatted text for the major axislabel, depending on the current
  * date and the scale. For example when scale is MINUTE, the major scale is
@@ -6823,16 +6789,12 @@ links.Timeline.StepDate.prototype.getLabelMinor = function (date)
  */
 links.Timeline.StepDate.prototype.getLabelMajor = function (date)
 {
-  var MONTHS = [
-    "januari", "februari", "maart",
+  var MONTHS = ["januari", "februari", "maart",
     "april", "mei", "juni",
     "juli", "augustus", "september",
-    "oktober", "november", "december"
-  ];
-  var DAYS = [
-    "zondag", "maandag", "dinsdag",
-    "woensdag", "donderdag", "vrijdag", "zaterdag"
-  ];
+    "oktober", "november", "december"];
+  var DAYS = ["zondag", "maandag", "dinsdag",
+    "woensdag", "donderdag", "vrijdag", "zaterdag"];
 
   if (date == undefined)
   {
@@ -6842,28 +6804,28 @@ links.Timeline.StepDate.prototype.getLabelMajor = function (date)
   switch (this.scale)
   {
     case links.Timeline.StepDate.SCALE.MILLISECOND:
-      return  this.addZeros(date.getHours(), 2) + ":" +
-              this.addZeros(date.getMinutes(), 2) + ":" +
-              this.addZeros(date.getSeconds(), 2);
+      return this.addZeros(date.getHours(), 2) + ":" +
+        this.addZeros(date.getMinutes(), 2) + ":" +
+        this.addZeros(date.getSeconds(), 2);
     case links.Timeline.StepDate.SCALE.SECOND:
-      return  date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              this.addZeros(date.getHours(), 2) + ":" +
-              this.addZeros(date.getMinutes(), 2);
+      return date.getDate() + " " +
+        MONTHS[date.getMonth()] + " " +
+        this.addZeros(date.getHours(), 2) + ":" +
+        this.addZeros(date.getMinutes(), 2);
     case links.Timeline.StepDate.SCALE.MINUTE:
-      return  DAYS[date.getDay()] + " " +
-              date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
+      return DAYS[date.getDay()] + " " +
+        date.getDate() + " " +
+        MONTHS[date.getMonth()] + " " +
+        date.getFullYear();
     case links.Timeline.StepDate.SCALE.HOUR:
-      return  DAYS[date.getDay()] + " " +
-              date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
+      return DAYS[date.getDay()] + " " +
+        date.getDate() + " " +
+        MONTHS[date.getMonth()] + " " +
+        date.getFullYear();
     case links.Timeline.StepDate.SCALE.WEEKDAY:
     case links.Timeline.StepDate.SCALE.DAY:
-      return  MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
+      return MONTHS[date.getMonth()] + " " +
+        date.getFullYear();
     case links.Timeline.StepDate.SCALE.MONTH:
       return String(date.getFullYear());
     default:
@@ -6888,6 +6850,7 @@ links.Timeline.StepDate.prototype.addZeros = function (value, len)
   return str;
 };
 
+
 /** ------------------------------------------------------------------------ **/
 
 /**
@@ -6907,7 +6870,7 @@ links.imageloader = (function ()
    * @return {boolean} loaded   True when loaded, false when not loaded
    *                            or when being loaded
    */
-  function isLoaded (url)
+  function isLoaded(url)
   {
     if (urls[url] == true)
     {
@@ -6930,10 +6893,9 @@ links.imageloader = (function ()
    * @return {boolean} loading   True when being loaded, false when not loading
    *                             or when already loaded
    */
-  function isLoading (url)
+  function isLoading(url)
   {
-    return (
-      callbacks[url] != undefined);
+    return (callbacks[url] != undefined);
   }
 
   /**
@@ -6942,7 +6904,7 @@ links.imageloader = (function ()
    * @param {function} callback
    * @param {boolean} sendCallbackWhenAlreadyLoaded  optional
    */
-  function load (url, callback, sendCallbackWhenAlreadyLoaded)
+  function load(url, callback, sendCallbackWhenAlreadyLoaded)
   {
     if (sendCallbackWhenAlreadyLoaded == undefined)
     {
@@ -6958,13 +6920,13 @@ links.imageloader = (function ()
       return;
     }
 
-    if (isLoading(url) && ! sendCallbackWhenAlreadyLoaded)
+    if (isLoading(url) && !sendCallbackWhenAlreadyLoaded)
     {
       return;
     }
 
     var c = callbacks[url];
-    if (! c)
+    if (!c)
     {
       var image = new Image();
       image.src = url;
@@ -6977,14 +6939,14 @@ links.imageloader = (function ()
         urls[url] = true;
         delete callbacks[url];
 
-        for (var i = 0; i < c.length; i ++)
+        for (var i = 0; i < c.length; i++)
         {
           c[i](url);
         }
       }
     }
 
-    if (c.indexOf(callback) == - 1)
+    if (c.indexOf(callback) == -1)
     {
       c.push(callback);
     }
@@ -6997,37 +6959,34 @@ links.imageloader = (function ()
    * @param {function } callback
    * @param {boolean} sendCallbackWhenAlreadyLoaded
    */
-  function loadAll (urls, callback, sendCallbackWhenAlreadyLoaded)
+  function loadAll(urls, callback, sendCallbackWhenAlreadyLoaded)
   {
     // list all urls which are not yet loaded
     var urlsLeft = [];
-    urls.forEach(
-      function (url)
+    urls.forEach(function (url)
+    {
+      if (!isLoaded(url))
       {
-        if (! isLoaded(url))
-        {
-          urlsLeft.push(url);
-        }
-      });
+        urlsLeft.push(url);
+      }
+    });
 
     if (urlsLeft.length)
     {
       // there are unloaded images
       var countLeft = urlsLeft.length;
-      urlsLeft.forEach(
-        function (url)
+      urlsLeft.forEach(function (url)
+      {
+        load(url, function ()
         {
-          load(
-            url, function ()
-            {
-              countLeft --;
-              if (countLeft == 0)
-              {
-                // done!
-                callback();
-              }
-            }, sendCallbackWhenAlreadyLoaded);
-        });
+          countLeft--;
+          if (countLeft == 0)
+          {
+            // done!
+            callback();
+          }
+        }, sendCallbackWhenAlreadyLoaded);
+      });
     }
     else
     {
@@ -7045,7 +7004,7 @@ links.imageloader = (function ()
    * @param {Node} elem
    * @param {String[]} urls   Urls will be added here (no duplicates)
    */
-  function filterImageUrls (elem, urls)
+  function filterImageUrls(elem, urls)
   {
     var child = elem.firstChild;
     while (child)
@@ -7053,7 +7012,7 @@ links.imageloader = (function ()
       if (child.tagName == 'IMG')
       {
         var url = child.src;
-        if (urls.indexOf(url) == - 1)
+        if (urls.indexOf(url) == -1)
         {
           urls.push(url);
         }
@@ -7074,7 +7033,9 @@ links.imageloader = (function ()
   };
 })();
 
+
 /** ------------------------------------------------------------------------ **/
+
 
 /**
  * Add and event listener. Works for all browsers
@@ -7137,6 +7098,7 @@ links.Timeline.removeEventListener = function (element, action, listener, useCap
   }
 };
 
+
 /**
  * Get HTML element which is the target of the event
  * @param {Event} event
@@ -7145,7 +7107,7 @@ links.Timeline.removeEventListener = function (element, action, listener, useCap
 links.Timeline.getTarget = function (event)
 {
   // code from http://www.quirksmode.org/js/events_properties.html
-  if (! event)
+  if (!event)
   {
     event = window.event;
   }
@@ -7175,7 +7137,7 @@ links.Timeline.getTarget = function (event)
  */
 links.Timeline.stopPropagation = function (event)
 {
-  if (! event)
+  if (!event)
   {
     event = window.event;
   }
@@ -7190,12 +7152,13 @@ links.Timeline.stopPropagation = function (event)
   }
 };
 
+
 /**
  * Cancels the event if it is cancelable, without stopping further propagation of the event.
  */
 links.Timeline.preventDefault = function (event)
 {
-  if (! event)
+  if (!event)
   {
     event = window.event;
   }
@@ -7209,6 +7172,7 @@ links.Timeline.preventDefault = function (event)
     event.returnValue = false;  // IE browsers
   }
 };
+
 
 /**
  * Retrieve the absolute left value of a DOM element
@@ -7225,7 +7189,7 @@ links.Timeline.getAbsoluteLeft = function (elem)
     left -= elem.scrollLeft;
     elem = elem.offsetParent;
   }
-  if (! document.body.scrollLeft && window.pageXOffset)
+  if (!document.body.scrollLeft && window.pageXOffset)
   {
     // FF
     left -= window.pageXOffset;
@@ -7248,7 +7212,7 @@ links.Timeline.getAbsoluteTop = function (elem)
     top -= elem.scrollTop;
     elem = elem.offsetParent;
   }
-  if (! document.body.scrollTop && window.pageYOffset)
+  if (!document.body.scrollTop && window.pageYOffset)
   {
     // FF
     top -= window.pageYOffset;
@@ -7264,7 +7228,7 @@ links.Timeline.getAbsoluteTop = function (elem)
 links.Timeline.addClassName = function (elem, className)
 {
   var classes = elem.className.split(' ');
-  if (classes.indexOf(className) == - 1)
+  if (classes.indexOf(className) == -1)
   {
     classes.push(className); // add the class to the array
     elem.className = classes.join(' ');
@@ -7280,7 +7244,7 @@ links.Timeline.removeClassName = function (elem, className)
 {
   var classes = elem.className.split(' ');
   var index = classes.indexOf(className);
-  if (index != - 1)
+  if (index != -1)
   {
     classes.splice(index, 1); // remove the class from the array
     elem.className = classes.join(' ');
@@ -7299,6 +7263,5 @@ links.Timeline.isArray = function (obj)
   {
     return true;
   }
-  return (
-    Object.prototype.toString.call(obj) === '[object Array]');
+  return (Object.prototype.toString.call(obj) === '[object Array]');
 };

@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -19,9 +19,11 @@ define(
         'TeamUp',
         'Dater',
         '$filter',
+        'MD5',
+        'Permission',
         function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter
-          )
+          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
+          Permission)
         {
           // TODO: Soon not needed!
           Dater.registerPeriods();
@@ -115,7 +117,7 @@ define(
               }
             );
 
-            auth($scope.loginData.username, MD5.parse($scope.loginData.password));
+            auth($scope.loginData.username, MD5($scope.loginData.password));
           };
 
           var auth = function (uuid, pass)
@@ -151,7 +153,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   return false;
@@ -167,7 +169,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   return false;
@@ -183,7 +185,7 @@ define(
                   };
 
                   angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_loggingIn)
+                    .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
                   console.log("Pay attention, this might caused by the Log module");
@@ -203,7 +205,9 @@ define(
           function queryMembersNotInTeams ()
           {
             TeamUp._('teamMemberFree').then(
-              function (result) { Store('app').save('members', result) }
+              function (result) {
+                Store('app').save('members', result)
+              }
             );
           }
 
@@ -213,7 +217,7 @@ define(
             // query my tasks
             TeamUp._("taskMineQuery").then(
                 function (result) {
-                  Store('app').save('myTasks', result) 
+                  Store('app').save('myTasks', result)
                 }
             );
 
@@ -286,10 +290,6 @@ define(
 						{
 							task.relatedClientName = client.firstName + ' ' + client.lastName;
 						}
-						else
-						{
-							console.log('client ', task.relatedClientUuid, task);
-						}
 					}
                   }
                 );
@@ -298,6 +298,32 @@ define(
               }
             );
           }
+
+
+          //TODO compare permission names with routenames
+          function getPermissionProfile()
+          {
+            Permission.getProfile()
+              .then(function(permissionProfile) {
+                $rootScope.app.domainPermission = permissionProfile;
+                var location = '';
+
+                if(_.has(permissionProfile, 'tasks'))
+                {
+                  location = '/tasks2';
+                }
+                else if(_.has(permissionProfile, 'teamTelephone'))
+                {
+                  location = '/team-telefoon/status';
+                }
+                else
+                {
+                  location = '/team';
+                }
+
+                $location.path(location);
+              });
+          };
 
           var preLoader = function ()
           {
@@ -323,7 +349,7 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  progress(40, $rootScope.ui.login.loading_Teams);
+                  progress(40, $rootScope.ui.login.loading_teams);
 
                   Teams.query(true, {})
                     .then(
@@ -338,7 +364,7 @@ define(
                         console.warn('error ->', teams);
                       }
 
-                      progress(60, $rootScope.ui.login.loading_clientGroups);
+                      progress(60, $rootScope.ui.login.loading_teams);
 
                       Teams.queryClientGroups(teams)
                         .then(
@@ -366,10 +392,16 @@ define(
                                     .then(
                                     function ()
                                     {
-										//update localStorage logged user
-										updateLoggedUserTeams();
+                                      //update localStorage logged user
+                                      updateLoggedUserTeams();
 
-										$location.path('/tasks2');
+                                      //update the avatar once, because the resources were not set when the directive was loaded
+                                      $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
+
+                                      //TODO for testpurposes only
+                                      //Permission.saveProfile();
+
+                                      getPermissionProfile();
 
                                       setTimeout(
                                         function ()

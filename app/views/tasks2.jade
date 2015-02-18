@@ -38,7 +38,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{task.statusLabel}}
 					dt Tijdsbestek
 						dd {{task.plannedTaskDuration.label}}
-					dt Beschrijving
+					dt(ng-show='task.description') Beschrijving
 						dd(class="description") {{task.description}}
 					dt Gemaakt door
 						dd
@@ -87,6 +87,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
+	.selectGroup(ng-show='views.allTasks && app.resources.role == 1')
+		span.selectTitle
+			| Selecteer team
+		select(ng-model='task.team',
+		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+		ng-selected='currentTeam',
+		ng-change='changeTeam(task.team)')
 
 
 .tabbable.tabs-left
@@ -101,10 +108,19 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			a(data-toggle='tab', ng-click='setViewTo("allTasks")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.allTasks}}
-		li(class="{{(views.newTask==true) && 'active'}}", ng-hide="app.resources.role > 1")
+		li(class="{{(views.newTask==true) && 'active'}}")
 			a(data-toggle='tab', ng-click='setViewTo("newTask")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
+		li(class="{{(views.upload==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("upload")')
+				span.entypo &#59213;
+				| {{ui.task.upload}}
+		li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
+					data-match-route='/tasks2')
+			a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
+				span.entypo &#128340;
+				| Agenda
 
 
 	.tab-content
@@ -115,6 +131,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.myTask}}
+				
 			hr
 
 			article(ng-show='tasks.mine.loading'): p Eigen taken aan het laden..
@@ -123,7 +140,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 
-				.well(style='padding-top: 25px')
+				.well(style='padding-top: 25px',
+					ng-show='tasks.mine.archieve')
 					label
 						input(type='checkbox', ng-model='showFinishedTasks')
 						small &nbsp;Toon gearchiveerde taken
@@ -165,18 +183,14 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-minus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)')
+										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
 					small: i Er zijn {{tasks.mine.list.length}} taken.
-
-
-
-
-
-
-
-
+					
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
@@ -186,11 +200,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 			article(ng-hide='tasks.all.loading')
 
-				p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
-
+				//p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
+				p(ng-hide='(tasks.all.list | filter: task.team ).length > 0') {{ui.task.noTasks}}
 				//pre: small {{tasks.all.list[0] | json}}
 
-				.well(style='padding-top: 25px')
+				.well(style='padding-top: 25px', ng-show='(tasks.all.list | filter: task.team ).length > 0')
 					label(style='margin-right: 15px; display: none')
 						input(type='checkbox', ng-model='showOnlyAvailable')
 						small &nbsp;Toon alleen niet toegewezen taken
@@ -198,7 +212,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						input(type='checkbox', ng-model='showAllTasks')
 						small &nbsp;Toon gearchiveerde taken
 
-				table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				table.table.table-striped.taskTable(ng-show='(tasks.all.list | filter: task.team ).length > 0')
 					thead
 						tr
 							th
@@ -218,7 +233,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					tbody
 						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
 						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
-						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed')
+						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed | filter: task.team')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
 								.roundedPicSmall.memberStateBusy(
@@ -256,32 +271,28 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)')
+										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
-					small: i Er zijn {{tasks.all.list.length}} taken.
+					//small: i Er zijn {{tasks.all.list.length}} taken.
+					small: i Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.
 
-
-
-
-
-
-
-
-		#newTask.tab-pane(class="{{(views.newTask==true) && 'active'}}",
-		ng-hide="app.resources.role > 1")
+		#newTask.tab-pane(class="{{(views.newTask==true || views.editTask==true) && 'active'}}")
 			.tab-header
-				h3.pull-left {{ui.task.newTask}}
-
+				h3.pull-left(ng-hide='task.uuid') {{ui.task.newTask}}
+				h3.pull-Left(ng-show='task.uuid') {{ui.teamup.updateTask}}
 			hr
 
-			form
+			form(name='taskForm', novalidate, ng-submit='saveTask(task)')
 				.row
 					.span6
 
 						fieldset
 
-							.control-group
+							.form-group
 								label.control-label Verzorger
 								.controls
 									select(ng-model='task.team',
@@ -294,7 +305,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-selected='currentMember')
 										option(value='') Lid
 
-							.control-group
+							.form-group
 								label.control-label Cliënt
 								.controls
 									select(ng-model='currentGroup',
@@ -310,44 +321,64 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 						fieldset
 
-							.control-group.dater
+							.form-group.dater
 								label.control-label {{ui.planboard.from}}
 								.controls
 									input(name='date-start',
 									type='text',
 									ng-model='task.start.date',
-									data-date-format='dd-mm-yyyy',
+									data-date-type='string',
+									data-date-format='dd-MM-yyyy',
 									bs-datepicker='',
-									ng-change='changeDate(date)')
+									ng-change='newDate(task.start.date)')
 									i.icon-calendar
 									input(name='time-start',
 									type='text',
 									ng-model='task.start.time',
-									ng-change='changeTime(time)',
-									bs-timepicker='')
+									ng-change='newTime(task.start.time)',
+									bs-timepicker='',
+									data-date-type='string',
+									data-time-format="HH:mm", 
+									data-length="1",
+									data-minute-step="15",
+									data-arrow-behavior="picker")
 									i.icon-time
-
-							.control-group.dater
+																		
+							.form-group.dater
 								label.control-label {{ui.planboard.till}}
 								.controls
 									input(name='date-end',
 									type='text',
 									ng-model='task.end.date',
-									data-date-format='dd-mm-yyyy',
-									bs-datepicker='',
-									ng-change='changeDate(date)')
+									data-date-type='string',
+									data-date-format='dd-MM-yyyy',
+									bs-datepicker='')
 									i.icon-calendar
 									input(name='time-end',
 									type='text',
 									ng-model='task.end.time',
-									ng-change='changeTime(time)',
-									bs-timepicker='')
+									bs-timepicker='',
+									data-date-type='string',
+									data-time-format="HH:mm",
+									data-length="1",
+									data-minute-step="15",
+									data-arrow-behavior="picker")
 									i.icon-time
 
-							.control-group
+							.form-group(ng-class="{ 'has-error' : taskForm.description.$invalid && !taskForm.description.$pristine }")
 								label.control-label {{ui.task.description}}
 								.controls
-									textarea.span8(style='height: 150px', ng-model='task.description')
+									textarea.span8.form-control(
+										style='height: 150px', 
+										ng-model='task.description',
+										name='description',
+										ng-minlength=8,
+										ng-maxlength=500)
+									span.help-block(ng-show='taskForm.description.$invalid && !taskForm.description.$pristine')
+										small(ng-show="taskForm.description.$error.minlength")
+											i {{ui.task.taskDescriptionMinChars}} 
+										small(ng-show="taskForm.description.$error.maxlength")
+											i {{ui.task.taskDescriptionMaxChars}}
 
 					.span6
 						fieldset
@@ -358,4 +389,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				hr
 				.form-actions
-					button.btn.btn-success(type='button' ng-click='createTask(task)') {{ui.teamup.saveMember}}
+					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
+					
+		
+		#upload.tab-pane(class="{{(views.upload==true) && 'active'}}"
+		ng-controller='uploadCtrl')
+			include upload/upload.jade

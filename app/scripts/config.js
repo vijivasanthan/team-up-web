@@ -2,39 +2,21 @@ define(
   {
     app: {
       // version: '@@version',
-      version: '1.2.0-snapshot',
+      version: '1.6.0',
       // version: '0.5.2',
       released: '@@released',
 
-      title: 'TeamUp',
-      lang: 'nl',
+      title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
+      lang: profile.lang,
+      profileName: profile.name,
 
-      statesall: {
-        'com.ask-cs.State.Available': {
-          className: 'state-available',
-          label: 'Beschikbaar',
-          color: '#4f824f',
-          type: 'Beschikbaar'
-        },
-        'com.ask-cs.State.Unavailable': {
-          className: 'state-unavailable',
-          label: 'Niet Beschikbaar',
-          color: '#a93232',
-          type: 'Niet Beschikbaar'
-        },
-        'com.ask-cs.State.Unreached': {
-          className: 'state-unreached',
-          label: 'Niet Bereikt',
-          color: '#65619b',
-          type: 'Niet Beschikbaar'
-        }
-      },
+      statesall: profile.statesall,
+
+      tabs: profile.tabs,
 
       namespace: "",
-      // host: "http://dev.ask-cs.com/", // Development
-      host: "http://test.ask-cs.com/",  // Test
-      // host: "http://askpack.ask-cs.com/", // Demo and acceptance
-      // host: "https://backend.ask-cs.nl/", // Live
+
+      host: localConfig.host,
 
       formats: {
         date: 'dd-MM-yyyy',
@@ -43,20 +25,7 @@ define(
         datetimefull: 'dd-MM-yyyy HH:mm'
       },
 
-      roles: [
-        {
-          id: '1',
-          label: 'coordinator'
-        },
-        {
-          id: '2',
-          label: 'team_member'
-        },
-        {
-          id: '3',
-          label: 'client'
-        }
-      ],
+      roles: profile.roles,
 
       mfunctions: [
         {
@@ -129,23 +98,23 @@ define(
             groups: true,
             members: true
           },
-          wishes: false,
+          wishes: true,
           legenda: {},
           legendarer: false,
           states: {},
           divisions: [
-            {
-              id: 'all',
-              label: 'All divisions'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarNoord',
-              label: 'Noord'
-            },
-            {
-              id: 'knrm.StateGroup.BeschikbaarZuid',
-              label: 'Zuid'
-            }
+            //{
+            //  id: 'all',
+            //  label: 'All divisions'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarNoord',
+            //  label: 'Noord'
+            //},
+            //{
+            //  id: 'knrm.StateGroup.BeschikbaarZuid',
+            //  label: 'Zuid'
+            //}
           ],
           densities: {
             less: '#a0a0a0',
@@ -178,6 +147,11 @@ define(
         }
       },
 
+      //states: [
+      //  'reachable',
+      //  'unreachable'//com.ask-cs.State.U
+      //],
+
       states: [
         'com.ask-cs.State.Available',
         'com.ask-cs.State.Unavailable',
@@ -197,11 +171,16 @@ define(
         4: 'Cancelled'
       },
 
+      timers: profile.timers,
+
       init: function ()
       {
         angular.forEach(
           this.states,
-          (function (state) { this.timeline.config.states[state] = this.statesall[state] }).bind(this)
+          (function (state)
+          {
+            this.timeline.config.states[state] = this.statesall[state]
+          }).bind(this)
         );
       }
     }

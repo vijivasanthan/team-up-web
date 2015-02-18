@@ -301,6 +301,36 @@ input.search-query {
   }
 }
 
+.orderTable {
+  // table-layout: fixed;
+
+  tr {
+    cursor: move;
+  }
+
+  td:nth-child(-n+2) {
+    width: 50px;
+  }
+
+  .orderNumber {
+    font-size: 1.8em;
+    color: $turq;
+  }
+
+  .dragIcon {
+    background-image: url("../images/dragIcon.png");
+    background-repeat: no-repeat;
+    height: 16px;
+  }
+
+  .orderNumber,
+  .dragIcon {
+    display: block;
+    margin: 0 10px;
+    width: 16px;
+  }
+}
+
 .teamsTable {
   dl, dd {
     margin: 0;

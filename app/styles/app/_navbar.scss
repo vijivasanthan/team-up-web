@@ -45,7 +45,6 @@
 // Brand: website or project name
 // -------------------------
 .navbar-brand {
-  background-image: url("../images/logoHeader.png");
   width: 126px;
   height: 50px;
   float: left;
@@ -61,6 +60,14 @@
   &:focus {
     text-decoration: none;
   }
+}
+
+.header-logo-teamup {
+  background-image: url("../images/logoHeaderTeamUp.png");
+}
+
+.header-logo-teamtelefoon {
+  background-image: url("../images/logoHeaderTeamTelefoon.png");
 }
 
 // Plain text in topbar
@@ -527,5 +534,4 @@
   .btn-navbar {
     @include buttonBackground(darken($navbarInverseBackgroundHighlight, 5%), darken($navbarInverseBackground, 5%));
   }
-
 }

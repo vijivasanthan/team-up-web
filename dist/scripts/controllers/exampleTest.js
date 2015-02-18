@@ -1,0 +1,1 @@
+define(["controllers/controllers","config"],function(e,t){e.controller("exampleTestCtrl",["$rootScope","$scope","TestModal",function(e,t,n){t.exampleTestString="Controller testing works",t.passWord="dasd2135",t.testLengthPassword=function(){t.strength=t.passWord.length>=8?"strong":"weak"},t.getACL=function(){n.getPermissionProfile().then(function(e){t.userId=e})}}])});

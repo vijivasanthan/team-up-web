@@ -1,0 +1,51 @@
+<section id="logs">
+  <div class="page-header agenda-timeline">
+    <h2 class="nullable">Logs</h2>
+  </div>
+  <div style="margin-top: 30px">
+    <div class="form-group has-feedback pull-left dateranger">
+      <input type="text" name="daterange" ng-model="daterange" log-ranger="" class="form-control"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+    </div>
+    <div class="form-group has-feedback pull-right">
+      <input type="text" placeholder="Filter logs.." ng-model="filtered" class="form-control search-query">
+    </div>
+  </div>
+  <div class="tabbable tabs-left">
+    <ul style="margin-right: 0" bs-navbar="bs-navbar" class="nav nav-tabs nav-tabs-app">
+      <li data-match-route="/team-telefoon/status"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/status&quot;)"><span class="entypo">&#59249;</span>Status</a></li>
+      <li data-match-route="/team-telefoon/agenda"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/agenda&quot;)"><span class="entypo">&#128340;</span>{{ui.planboard.planboard}}</a></li>
+      <li data-match-route="/team-telefoon/order"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/order&quot;)"><span class="entypo">&#57349;</span>Volgorde</a></li>
+      <li data-match-route="/team-telefoon/logs"><a href="planboard#timelineTab" data-toggle="tab" ng-click="nav(&quot;team-telefoon/logs&quot;)"><span class="entypo">&#59392;</span>Logs</a></li>
+    </ul>
+    <div class="tab-content">
+      <div id="groupTab" class="tab-pane active">
+        <p ng-hide="data.logs.length &gt; 0">Er zijn geen logs.</p>
+        <div ng-show="data.logs.length &gt; 0">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><a ng-click="orderBy(&quot;status&quot;)">Status</a><span ng-show="(ordered==&quot;status&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;from&quot;)">{{ui.teamup.from}}</a><span ng-show="(ordered==&quot;from&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;to&quot;)">{{ui.teamup.to }}</a><span ng-show="(ordered==&quot;to&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;started.stamp&quot;)">{{ui.teamup.time }} </a><span ng-show="(ordered==&quot;started.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+                <th><a ng-click="orderBy(&quot;duration.stamp&quot;)">{{ui.teamup.duration }} </a><span ng-show="(ordered==&quot;duration.stamp&quot;)"><span ng-hide="reversed">▲</span><span ng-show="reversed">▼</span></span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="log in data.logs | filter: filtered | orderBy:ordered : reversed">
+                <td><span class="label label-inverse log-{{log.status}}">{{log.status}}</span><span ng-show="log.records.length &gt; 0"><span ng-repeat="record in log.records"><br>∟<span class="label label-inverse log-{{record.status}}">{{record.status}}</span></span></span></td>
+                <td>
+                  <!-- <pre><small>{{log | json}}</small></pre>-->{{log.from}}<span ng-show="log.records.length &gt; 0" ng-repeat="record in log.records"><br>{{record.from}}</span>
+                </td>
+                <td>{{log.to}}<span ng-show="log.records.length &gt; 0" ng-repeat="record in log.records"><br>{{record.to}}</span></td>
+                <td>{{log.started.date}}</td>
+                <td>{{log.duration.presentation}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr><small class="pull-left"><span class="text-warning">{{ui.planboard.lastSyncTime}}</span><span class="text-muted">&nbsp;{{data.synced | date: 'medium'}}</span><br><span class="text-warning">{{ui.planboard.dataRangeStart}}</span><span class="text-muted">&nbsp;{{data.periods.start | date: 'medium'}}</span>&nbsp;|<span class="text-warning">{{ui.planboard.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | date: 'medium'}}</span></small><small ng-show="data.logs.length &gt; 0" class="text-muted pull-right"><br><i>Er zijn {{(data.logs|filter:filtered).length}} logs getoond.</i></small>
+      </div>
+    </div>
+  </div>
+</section>

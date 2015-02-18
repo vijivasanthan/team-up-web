@@ -1,4 +1,5 @@
-#welcomeLogo
+#welcomeLogoTeamTelefoon(ng-show="config.app.profileName == 'TeamTelefoon'")
+#welcomeLogoTeamUp(ng-show='config.app.profileName == "TeamUp"')
 #welcomeArrow
 #welcome
 	#preloader
@@ -14,6 +15,7 @@
 				ng-click='alert.login=false') ×
 				| {{alert.login.message}}
 			input(type='text',
+			autocapitalize='none',
 			ng-model='loginData.username',
 			placeholder='{{ui.login.ph_username}}',
 			autofocus='')

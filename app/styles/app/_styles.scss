@@ -156,14 +156,10 @@ dl {
 
 #groups-wish {
   form {
-    margin-top: 15px;
+    margin: 8px 0;
 
     input[type=text] {
-      margin-right: 15px;
-    }
-
-    button {
-      margin-right: 5px;
+      margin: 2px 0 0 0;
     }
   }
 }
@@ -292,6 +288,29 @@ dl {
     .mail {
       margin-left: 2px;
     }
+  }
+}
+
+#teams-legenda {
+  padding: 0;
+  list-style: none;
+  margin: 0 auto;
+  max-width: 650px;
+  li {
+    width: 200px;
+    margin-right: 5px;
+    float: left;
+  }
+  .roundedPicxSmall {
+    float: left;
+    width: 40px;
+    margin-right: 10px;
+  }
+  p {
+    display: block;
+    float: left;
+    width: 150px;
+    line-height: 37px;
   }
 }
 

@@ -1,0 +1,1 @@
+define(["services/services","config"],function(e,t){e.factory("Phone",[function(){function e(t,n,r){var i=e(t,n,r);return i.parsed=angular.fromJson(i.parsed),i}function t(){}return{parse:parse}}])});

@@ -19,12 +19,14 @@ define(
         'Browsers',
         'Dater',
         'TeamUp',
-        function (
-          $rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers, Dater, TeamUp
-          )
+        'Permission',
+        '$route',
+        'Pincode',
+        function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
+                  Dater, TeamUp, Permission, $route, Pincode)
         {
           // TODO: Remove later on (Needed for timeline info filters)
-          if (! Dater.getPeriods())
+          if (!Dater.getPeriods())
           {
             Dater.registerPeriods();
           }
@@ -36,12 +38,18 @@ define(
             function ()
             {
               console.log(
-                (! arguments[1]) ?
+                (!arguments[1]) ?
                 'connection restored :]' + Date.now() :
                 'connection lost :[' + Date.now()
               );
             }
           );
+
+          // TODO: Lose this later onw with VisJS/MomentJS navigation
+          if (Store('app').get('periods') == null || Store('app').get('periods').value == null)
+          {
+            Dater.registerPeriods();
+          }
 
           angular.element('#notification').css({display: 'block'});
 
@@ -49,11 +57,21 @@ define(
 
 
           $rootScope.config = config;
+          $rootScope.config.app.init();
           $rootScope.ui = locals.ui[config.app.lang];
-
 
           $rootScope.app = $rootScope.app || {};
           $rootScope.app.resources = Store('app').get('resources');
+          $rootScope.app.domainPermission =  Store('app').get('permissionProfile');
+
+          /**
+           * Timeline states
+           */
+          if (_.isEmpty($rootScope.config.app.timeline.states))
+          {
+            $rootScope.config.app.timeline.config.states = $rootScope.config.app.statesall;
+            delete $rootScope.config.app.timeline.config.states['com.ask-cs.State.Unreached'];
+          }
 
           /**
            * Status-Bar
@@ -73,7 +91,10 @@ define(
               };
             },
 
-            off: function () { $rootScope.loading.status = false }
+            off: function ()
+            {
+              $rootScope.loading.status = false
+            }
           };
 
           /**
@@ -91,37 +112,30 @@ define(
             {
               $rootScope.notification.status = true;
 
-              if ($rootScope.browser.mobile && status == true)
-              {
-                $window.alert(message);
-              }
-              else
-              {
-                $rootScope.notification = {
-                  status: status,
-                  type: type,
-                  message: message
-                };
-              }
+              $rootScope.notification = {
+                status: status,
+                type: type,
+                message: message
+              };
             },
 
             success: function (message, permanent)
             {
               this.init(true, 'alert-success', message);
 
-              if (! permanent) this.destroy();
+              if (!permanent) this.destroy();
             },
 
             error: function (message, permanent)
             {
               this.init(true, 'alert-danger', message);
 
-              if (! permanent) this.destroy();
+              if (!permanent) this.destroy();
             },
 
             destroy: function ()
             {
-              setTimeout(
+              $timeout(
                 function ()
                 {
                   $rootScope.notification.status = false;
@@ -145,14 +159,14 @@ define(
               function ()
               {
                 var $this = angular.element(this).attr('id'),
-                    contentHeight = angular.element('.tabs-left .tab-content #' + $this).height();
+                  contentHeight = angular.element('.tabs-left .tab-content #' + $this).height();
 
                 if (tabHeight > contentHeight)
                 {
                   angular.element('.tabs-left .tab-content #' + $this)
                     .css(
                     {
-                      height: angular.element('.tabs-left .nav-tabs').height() + 6
+                      minHeight: angular.element('.tabs-left .nav-tabs').height() + 6
                     }
                   );
                 }
@@ -213,41 +227,41 @@ define(
             }
 
             member.fullName = member.firstName +
-                              ' ' +
-                              member.lastName;
+            ' ' +
+            member.lastName;
 
             return member;
           };
 
-		  // Get teams of a member
-		  $rootScope.getTeamsofMembers = function (memberId)
-		  {
-			if (memberId == null)
-			{
-				return null;
-			}
+          // Get teams of a member
+          $rootScope.getTeamsofMembers = function (memberId)
+          {
+            if (memberId == null)
+            {
+              return null;
+            }
 
-			var currentTeams = [];
+            var currentTeams = [];
 
-			angular.forEach(
-				Store('app').get('teams'),
-				function (team)
-				{
-					angular.forEach(
-						Store('app').get(team.uuid),
-						function (_member)
-						{
-							if (_member.uuid == memberId)
-							{
-								currentTeams.push(team);
-							}
-						}
-					);
-				}
-			);
+            angular.forEach(
+              Store('app').get('teams'),
+              function (team)
+              {
+                angular.forEach(
+                  Store('app').get(team.uuid),
+                  function (_member)
+                  {
+                    if (_member.uuid == memberId)
+                    {
+                      currentTeams.push(team);
+                    }
+                  }
+                );
+              }
+            );
 
-			return currentTeams;
-		  };
+            return currentTeams;
+          };
 
           // Get client by id (shared)
           $rootScope.getClientByID = function (clientId)
@@ -318,15 +332,15 @@ define(
            * Update the states of the logged user localStorage
            * @param member
            */
-          $rootScope.checkUpdatedStatesLoggedUser = function(member)
+          $rootScope.checkUpdatedStatesLoggedUser = function (member)
           {
-            if($rootScope.app.resources.uuid == member.uuid
-              && ! _.isEqual($rootScope.app.resources.states, member.states))
+            if ($rootScope.app.resources.uuid == member.uuid
+              && !_.isEqual($rootScope.app.resources.states, member.states))
             {
               $rootScope.app.resources.states = member.states;
               Store('app').save('resources', $rootScope.app.resources);
             }
-          }
+          };
 
           // Get team name by id (shared)
           $rootScope.getTeamName = function (teamId)
@@ -414,7 +428,7 @@ define(
           $rootScope.getMembersByClient = function (clientGroup)
           {
             var members = [],
-                memberIds = [];
+              memberIds = [];
 
             angular.forEach(
               Store('app').get('teams'),
@@ -430,7 +444,7 @@ define(
                         Store('app').get(team.uuid),
                         function (member)
                         {
-                          if (memberIds.indexOf(member.uuid) == - 1)
+                          if (memberIds.indexOf(member.uuid) == -1)
                           {
                             memberIds.push(member.uuid);
 
@@ -522,7 +536,7 @@ define(
           {
             var list = Store('app').get('avatarChangeRecord');
 
-            if (! angular.isArray(list))
+            if (!angular.isArray(list))
             {
               list = [];
             }
@@ -544,7 +558,7 @@ define(
               {
                 if (avatarId == id)
                 {
-                  changedTimes ++;
+                  changedTimes++;
                 }
               });
             return changedTimes;
@@ -563,12 +577,12 @@ define(
               arr,
               function (word)
               {
-                if (word.indexOf('_cg') > - 1)
+                if (word.indexOf('_cg') > -1)
                 {
                   // might be the group id , try to search it , replace it with name if we found it
                   ret = ret.replace(word, $rootScope.getClientGroupName(word));
                 }
-                else if (word.indexOf('_team') > - 1)
+                else if (word.indexOf('_team') > -1)
                 {
                   // might be the team id , try to search it , replace it with name if we found it
                   ret = ret.replace(word, $rootScope.getTeamName(word));
@@ -577,6 +591,176 @@ define(
 
             return ret;
           };
+
+          //TODO add to service
+          $rootScope.resetPhoneNumberChecker = function ()
+          {
+            $rootScope.phoneNumberParsed = {};
+          };
+
+          $rootScope.resetPhoneNumberChecker();
+
+          $rootScope.parsePhoneNumber = function (checked, index)
+          {
+            if (checked != '')
+            {
+              var className = (!_.isUndefined(index))
+                ? '.inputPhoneNumber' + index
+                : '.inputPhoneNumber';
+
+              if (checked && checked.length > 0)
+              {
+                var result, all;
+
+                result = all = phoneNumberParser(checked, 'NL');
+
+                $rootScope.phoneNumberParsed.result = true;
+
+                if (result)
+                {
+                  var error = $rootScope.ui.validation.phone.notValid,
+                    invalidCountry = $rootScope.ui.validation.phone.invalidCountry,
+                    message;
+
+                  if (result.error)
+                  {
+                    $rootScope.phoneNumberParsed = {
+                      result: false,
+                      message: error
+                    };
+                  }
+                  else
+                  {
+                    if (!result.validation.isPossibleNumber)
+                    {
+                      switch (result.validation.isPossibleNumberWithReason)
+                      {
+                        case 'INVALID_COUNTRY_CODE':
+                          message = invalidCountry;
+                          break;
+                        case 'TOO_SHORT':
+                          message = error + $rootScope.ui.validation.phone.tooShort;
+                          break;
+                        case 'TOO_LONG':
+                          message = error + $rootScope.ui.validation.phone.tooLong;
+                          break;
+                      }
+
+                      $rootScope.phoneNumberParsed = {
+                        result: false,
+                        message: message
+                      };
+                    }
+                    else
+                    {
+                      if (!result.validation.isValidNumber)
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result: false,
+                          message: error
+                        };
+                      }
+                      else
+                      {
+                        if (!result.validation.isValidNumberForRegion)
+                        {
+                          $rootScope.phoneNumberParsed = {
+                            result: false,
+                            message: invalidCountry
+                          };
+                        }
+                        else
+                        {
+                          var numberType;
+
+                          switch (result.validation.getNumberType)
+                          {
+                            case 'FIXED_LINE':
+                              numberType = $rootScope.ui.validation.phone.fixedLine;
+                              break;
+                            case 'MOBILE':
+                              numberType = $rootScope.ui.validation.phone.mobile;
+                              break;
+                            case 'FIXED_LINE_OR_MOBILE':
+                              numberType = $rootScope.ui.validation.phone.mobileOrFixedLine;
+                              break;
+                          }
+
+                          $rootScope.phoneNumberParsed = {
+                            result: true,
+                            message: $rootScope.ui.validation.phone.message +
+                            result.validation.phoneNumberRegion +
+                            $rootScope.ui.validation.phone.as +
+                            numberType,
+                            format: result.formatting.e164
+                          };
+
+                          angular.element(className)
+                            .val(result.formatting.e164)
+                            .removeClass('error');
+                        }
+                      }
+                    }
+                  }
+                }
+
+                $rootScope.phoneNumberParsed.all = all;
+              }
+              else
+              {
+                $rootScope.phoneNumberParsed.result = true;
+
+                delete $rootScope.phoneNumberParsed.message;
+
+                angular.element(className)
+                  .removeClass('error');
+              }
+            }
+          };
+
+          //force route to reload even if the new url is equal as the current url
+          $rootScope.directToChatLink = function(url)
+          {
+              $window.location.href = url;
+              $route.reload();
+          };
+
+          $rootScope.pincodeExists = function (pincode, userId)
+          {
+            Pincode.pincodeExists(
+              pincode,
+              $rootScope.pincodeExistsValidation,
+              $rootScope.checkPincode,
+              userId
+            ).then(
+              function (data)
+              {
+                $rootScope.pincodeExistsValidation = data.pincodeExistsValidation;
+                $rootScope.pincodeExistsValidationMessage = data.pincodeExistsValidationMessage;
+                $rootScope.checkPincode = data.check;
+              }
+            );
+          };
+
+          $rootScope.unique = function (collection) {
+            var filter = function (result) {
+              return result.role > 0 && result.role < 4;
+            };
+
+            return _.indexBy(_.filter(
+              _.map(_.indexBy(collection, function (node) {
+                  return node.uuid;
+                }),
+                function (member) {
+                  return member;
+                }
+              ),
+              filter
+            ), function (member) {
+              return member.uuid;
+            });
+          };
+
         }
       ]
     );

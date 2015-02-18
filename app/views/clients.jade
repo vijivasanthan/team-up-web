@@ -76,7 +76,7 @@ aria-hidden='true')
 
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
 	h2.nullable {{ui.teamup.clients}}
-	.selectGroup
+	.selectGroup(ng-show="app.resources.role == 1")
 		span.selectTitle
 			| Selecteer groep
 		select(ng-model='current',
@@ -111,7 +111,7 @@ aria-hidden='true')
 				aria-hidden='true')
 				| {{ui.teamup.newClient}}
 
-		li(class="{{(views.reports==true) && 'active'}}")
+		li(ng-show='app.domainPermission.clientReports', class="{{(views.reports==true) && 'active'}}")
 			a(data-toggle='tab',
 			ng-click='setViewTo("reports")')
 				span.icomoon(data-icon='',
@@ -155,7 +155,7 @@ aria-hidden='true')
 							td
 								a(href='#/clientProfile/{{client.uuid}}#viewClient')
 									| {{client.firstName}} {{client.lastName}}
-							td {{client.address.street}} {{client.address.no}} {{client.address.city}} {{client.address.country}}
+							td {{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}
 							td
 								.pull-right
 									a(href='#/clientProfile/{{client.uuid}}#editClient')
@@ -205,7 +205,7 @@ aria-hidden='true')
 			.tab-header
 				h3.pull-left {{ui.teamup.newClient}}
 			hr
-			form
+			form(name='newClientForm')
 				fieldset
 					.control-group
 						label.control-label {{ui.profile.firstName}}
@@ -217,22 +217,37 @@ aria-hidden='true')
 						.controls
 							input.span4(type='text',
 							ng-model='clientForm.lastName')
-					.control-group
+					.form-group.dater(ng-class="{ 'has-error' : newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine }")
 						label.control-label {{ui.profile.birthday}}
 						.controls
-							.control-group.dater(style='')
-								input.ng-pristine.ng-valid(name='date-start',
-								type='text',
-								ng-model='clientForm.birthDate',
-								data-date-format='dd-mm-yyyy',
-								bs-datepicker='',
-								data-toggle='datepicker')
+							.control-group
+								input.form-control(type='text',
+								name='birthdate',
+								required,
+								ng-model='clientForm.birthDate', 
+								data-date-type='string',
+								data-date-format='dd-MM-yyyy',
+								bs-datepicker='')
 								i.icon-calendar
+								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
+									small
+										i {{ui.validation.birthDate.notValid }}
+								span.help-block(style='margin-top: -5px;')
+									small
+										i {{ui.profile.exampleBirthDate}}
+										
 					.control-group
 						label.control-label {{ui.teamup.phone}}
 						.controls
-							input.span4(type='text',
-							ng-model='clientForm.phone')
+							input.span4.form-control.inputPhoneNumber(type='text',
+							ng-model='clientForm.phone',
+							ng-change='parsePhoneNumber(clientForm.phone)')
+							p.text-danger(ng-hide='phoneNumberParsed.result')
+								small
+									i {{phoneNumberParsed.message}}
+							p.text-success(ng-show='phoneNumberParsed.result')
+								small
+									i {{phoneNumberParsed.message}}
 					.control-group
 						label.control-label {{ui.teamup.street}}
 						.controls
@@ -286,8 +301,7 @@ aria-hidden='true')
 				ng-change='requestReportsByFilter()')
 					option(ng-repeat='month in Months|orderBy:number',
 					value='{{month.number}}') {{month.name}}
-				button.btn.pull-right.btn-info.marginLeftTen(type='button',
-				ng-click='newReport()') {{ui.teamup.newReport}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button', data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
 			hr
 			div(ng-show='groupReports.length > 0')
 				table.table.table-striped
@@ -317,7 +331,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{(groupReports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+						i {{(groupReports|filter:false).length | i18n_spec:'teamup.reportCount'}}
 
 
 
@@ -346,7 +360,7 @@ aria-hidden='true')
 						dd {{client.phone}}
 						dt(ng-show="client.address") {{ui.profile.address}}
 						dd(ng-show="client.address")
-							| {{client.address.street}} {{client.address.no}} {{client.address.zip}} {{client.address.city}} {{client.address.land}}
+							| {{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}
 
 						dt(ng-show='client.clientProfileUrl') {{ui.teamup.clientProfileUrl}}
 						dd(ng-show='client.clientProfileUrl') {{client.clientProfileUrl}}
@@ -384,7 +398,16 @@ aria-hidden='true')
 					input.span4(type='text', ng-model='contactForm.function')
 				label.control-label {{ui.profile.phone}}
 				.controls
-					input.span4(type='text', ng-model='contactForm.phone')
+					input.span4.form-control.inputPhoneNumber(type='text',
+					ng-model='contactForm.phone',
+					ng-change='parsePhoneNumber(contactForm.phone)',
+					value='{{client.phone}}')
+					p.text-danger(ng-hide='phoneNumberParsed.result')
+						small
+							i {{phoneNumberParsed.message}}
+					p.text-success(ng-show='phoneNumberParsed.result')
+						small
+							i {{phoneNumberParsed.message}}
 				button.btn.btn-primary(ng-click="contactForm = null", ng-show='contactForm.index >= 0') annuleren
 				button.btn.btn-info(ng-click='changeContacts(contactForm.index)') {{contactForm.index >= 0 ? ui.teamup.editContact : ui.teamup.addContact}}
 
@@ -417,10 +440,10 @@ aria-hidden='true')
 				span.muted.pull-right
 					small: i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
 
-			.tab-header
+			.tab-header(ng-show='app.domainPermission.clientReports')
 				h3.pull-left {{ui.teamup.reports}}
 			hr
-
+			p(ng-show='reports.length == 0') {{ui.teamup.noReports}}
 			div(ng-show='reports.length > 0')
 				table.table.table-striped
 					thead
@@ -479,17 +502,24 @@ aria-hidden='true')
 						.control-group.dater(style='')
 							input.ng-pristine.ng-valid(name='date-start',
 							type='text',
-							ng-model='clientmeta.birthDate',
-							data-date-format='dd-mm-yyyy',
+							ng-model='clientmeta.birthDate', data-date-type='string',
+							data-date-format='dd-MM-yyyy',
 							bs-datepicker='',
 							data-toggle='datepicker')
 							i.icon-calendar
 					.control-group
 						label.control-label {{ui.profile.phone}}
 						.controls
-							input.span3(type='text',
+							input.span3.form-control.inputPhoneNumber(type='text',
 							ng-model='clientmeta.phone',
+							ng-change='parsePhoneNumber(clientmeta.phone)',
 							value='{{client.phone}}')
+							p.text-danger(ng-hide='phoneNumberParsed.result')
+								small
+									i {{phoneNumberParsed.message}}
+							p.text-success(ng-show='phoneNumberParsed.result')
+								small
+									i {{phoneNumberParsed.message}}
 					.control-group
 						label.control-label {{ui.teamup.street}}
 						.controls

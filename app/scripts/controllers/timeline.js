@@ -6,10 +6,21 @@ define(
 
     controllers.controller(
       'timeline', [
-        '$rootScope', '$scope', '$q', '$location', '$timeout', '$route', '$window', 'Dater', 'TeamUp', 'Store',
-        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store)
+        '$rootScope',
+        '$scope',
+        '$q',
+        '$location',
+        '$timeout',
+        '$route',
+        '$window',
+        'Dater',
+        'TeamUp',
+        'Store',
+        'Teams',
+        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store, Teams)
         {
           var range, diff;
+          $scope.removeTasksRange;
 
           $scope.$watch(
             function ()
@@ -51,7 +62,8 @@ define(
                 };
 
                 $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-                                   Dater.readable.date($scope.timeline.range.end);
+                Dater.readable.date($scope.timeline.range.end);
+
               }
               else if ($route.current.params.userId != $rootScope.app.resources.uuid)
               {
@@ -106,15 +118,30 @@ define(
               this.render($scope.timeline.options);
             },
 
-            getRange: function () { $scope.timelineGetRange() },
+            getRange: function ()
+            {
+              $scope.timelineGetRange()
+            },
 
-            onAdd: function () { $scope.timelineOnAdd() },
-			//todo remove after confirmation, (removes the row already before the confirmation ended)
-            onRemove: function () { $scope.timelineOnRemove() },
+            onAdd: function ()
+            {
+              $scope.timelineOnAdd()
+            },
+            //todo remove after confirmation, (removes the row already before the confirmation ended)
+            onRemove: function ()
+            {
+              $scope.timelineOnRemove()
+            },
 
-            onChange: function () { $scope.timelineChanging() },
+            onChange: function ()
+            {
+              $scope.timelineChanging()
+            },
 
-            onSelect: function () { $scope.timelineOnSelect() },
+            onSelect: function ()
+            {
+              $scope.timelineOnSelect()
+            },
 
             process: function (data)
             {
@@ -179,18 +206,18 @@ define(
 
                           // FIXME: Organise this one!
                           var content = '<span>' + slotContent + '</span>' +
-                                        "<input type=hidden value='" +
-                                        angular.toJson(
-                                          {
-                                            type: 'slot',
-                                            id: task.uuid,
-                                            mid: task.authorUuid,
-                                            state: task.description,
-                                            clientUuid: task.relatedClientUuid,
-                                            memberId: task.assignedTeamMemberUuid
-                                          }
-                                        ) +
-                                        "'>";
+                            "<input type=hidden value='" +
+                            angular.toJson(
+                              {
+                                type: 'slot',
+                                id: task.uuid,
+                                mid: task.authorUuid,
+                                description: task.description,
+                                clientUuid: task.relatedClientUuid,
+                                memberId: task.assignedTeamMemberUuid
+                              }
+                            ) +
+                            "'>";
 
                           timelineData.push(
                             {
@@ -215,7 +242,7 @@ define(
                       {
                         timedata.push(
                           {
-                            start: data.periods.end,
+                            start: 1577836800000,//data.periods.end,
                             end: 1577836800000,
                             group: row,
                             content: 'loading',
@@ -225,8 +252,8 @@ define(
 
                         timedata.push(
                           {
-                            start: 0,
-                            end: data.periods.start,
+                            start: 0,//data.periods.start,
+                            end: 0,
                             group: row,
                             content: 'loading',
                             className: 'state-loading-left',
@@ -247,7 +274,7 @@ define(
             render: function (options, remember)
             {
               var start,
-                  end;
+                end;
 
               if ($scope.timeline.range)
               {
@@ -314,7 +341,7 @@ define(
 
               if ($scope.timeline.main)
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
               else
               {
@@ -326,24 +353,35 @@ define(
 
               this.render(
                 {
-                  start: $scope.data.periods.start,
-                  end: $scope.data.periods.end
+                  start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,//$scope.data.periods.start,
+                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp //$scope.data.periods.end
                 }, true
               );
             },
 
-            redraw: function () { $scope.self.timeline.redraw() },
+            redraw: function ()
+            {
+              $scope.self.timeline.redraw()
+            },
 
-            isAdded: function () { return angular.element('.state-new').length },
+            isAdded: function ()
+            {
+              return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw') ? true : false
+            },
 
-            cancelAdd: function () { $scope.self.timeline.cancelAdd() }
+            cancelAdd: function ()
+            {
+              $scope.self.timeline.cancelAdd()
+            }
           };
 
           if ($scope.timeline)
-          { $scope.timeliner.init() }
+          {
+            $scope.timeliner.init()
+          }
 
           $rootScope.$on(
-            'timeliner',
+            'timelinerTasks',
             function ()
             {
               $scope.timeliner.render(
@@ -360,9 +398,9 @@ define(
             switch (section)
             {
               case 'group':
-                $scope.timeline.current.layouts.group = ! $scope.timeline.current.layouts.group;
+                $scope.timeline.current.layouts.group = !$scope.timeline.current.layouts.group;
 
-                if ($scope.timeline.current.layouts.members && ! $scope.timeline.current.layouts.group)
+                if ($scope.timeline.current.layouts.members && !$scope.timeline.current.layouts.group)
                 {
                   $scope.timeline.current.layouts.members = false;
                 }
@@ -370,9 +408,9 @@ define(
                 break;
 
               case 'members':
-                $scope.timeline.current.layouts.members = ! $scope.timeline.current.layouts.members;
+                $scope.timeline.current.layouts.members = !$scope.timeline.current.layouts.members;
 
-                if ($scope.timeline.current.layouts.members && ! $scope.timeline.current.layouts.group)
+                if ($scope.timeline.current.layouts.members && !$scope.timeline.current.layouts.group)
                 {
                   $scope.timeline.current.layouts.group = true;
                 }
@@ -441,7 +479,7 @@ define(
 
               if ($scope.timeline.main && values.content != 'Nieuw')
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
               else if (values.content != 'Nieuw')
               {
@@ -516,7 +554,8 @@ define(
                   memberId: content.memberId,
                   mid: content.mid,
                   clientUuid: content.clientUuid,
-                  relatedUser: relatedUserId
+                  relatedUser: relatedUserId,
+                  description: content.description
                 };
 
                 if ($scope.timeline.main)
@@ -545,8 +584,7 @@ define(
             }
             else
             {
-              //			$scope.resetInlineForms();
-              // console.log('click the timeline , but not a slot');
+              $scope.resetViews();
             }
           };
 
@@ -566,25 +604,24 @@ define(
             );
           };
 
-          // refresh myTasks and alltasks 
+          // remove the task item from the right list
+          function deleteTask(tasks, uuid)
+          {
+            var i = 0;
+            for (; i < tasks.length; i++)
+            {
+              if (uuid == tasks[i].uuid)
+              {
+                tasks.splice(i, 1);
+                i--;
+              }
+            }
+            return tasks;
+          }
+
+          // refresh myTasks and alltasks
           $scope.refreshTasks = function (taskId, action)
           {
-
-            // remove the task item from the
-            var deleteTask = function (tasks, uuid)
-            {
-              var i = 0;
-              for (; i < tasks.length; i ++)
-              {
-                if (uuid == tasks[i].uuid)
-                {
-                  tasks.splice(i, 1);
-                  i --;
-                }
-              }
-              return tasks;
-            }
-
             TeamUp._(
               'taskById',
               {second: taskId},
@@ -603,7 +640,7 @@ define(
                   }
                   else
                   {
-                    if (! allTasks.length)
+                    if (!allTasks.length)
                     {
                       allTasks = [];
                     }
@@ -614,7 +651,7 @@ define(
                     allTasks.push(result);
                     if (result.assignedTeamMemberUuid == $rootScope.app.resources.uuid)
                     {
-                      if (! myTasks.length)
+                      if (!myTasks.length)
                       {
                         myTasks = [];
                       }
@@ -636,7 +673,145 @@ define(
                 Store('app').save('myTasks', myTasks);
               });
 
-          }
+          };
+
+          /**
+           * confirmation to delete tasks by range group or user
+           * @param range start and enddate
+           */
+          $scope.confirmDeleteTasks = function (range, user)
+          {
+            if ($location.hash() == 'clients')
+            {
+              //TODO create options per client
+              $scope.removeTaskOptions = {
+                groupId: $scope.currentClientGroup,
+                name: $scope.currentName,
+                group: 'clientgroep',
+                range: {}
+              };
+            }
+            else if ($location.hash() == 'teams')
+            {
+              //TODO create options per member
+              $scope.removeTaskOptions = {
+                groupId: $scope.currentTeam,
+                name: $scope.currentName,
+                group: 'team',
+                range: {}
+              };
+            }
+
+            if(!_.isUndefined(user))
+            {
+              $scope.removeTaskOptions.userId = user.uuid;
+            }
+
+            //TODO als de range een dag is de datum is doe dan van 0:00 - 23:59
+            if (!_.isUndefined(range))
+            {
+              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
+              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM. YYYY");
+            }
+
+            //TODO the above moment will be depricated, the createFromInputFallback might be a solution
+            //moment.createFromInputFallback = function(config) {
+            //  // your favorite unreliable string magic, or
+            //  config._d = new Date(config._i);
+            //};
+
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTasksDeleteModal').modal('show');
+              }
+            );
+          };
+
+          /**
+           * Delete tasks by range depending what the group might be
+           * @param options uuid, range start and end
+           */
+          $scope.deleteTasksByRange = function (options)
+          {
+            var allTasks = Store('app').get('allTasks'),
+              myTasks = Store('app').get('myTasks');
+
+            $rootScope.planboardSync.clear();
+
+            angular.element('#confirmTasksDeleteModal').modal('hide');
+            $rootScope.statusBar.display($rootScope.ui.task.taskDeleted);
+
+            switch (options.group)
+            {
+              case "team":
+                deleteTasksByTeamByRange(options, allTasks, myTasks);
+                break;
+              case "client":
+                console.log('client');
+                break;
+              default:
+                console.log("Voor het verwijderen van taken is geen team, clientgroep, client of member geselecteert.");
+            }
+          };
+
+          /**
+           * Delete the tasks from a specific team by a date range
+           * @param options team uuid and start and end date
+           * @param allTasks allTasks localstorage
+           * @param myTasks myTasks localstorage
+           */
+          function deleteTasksByTeamByRange(options, allTasks, myTasks)
+          {
+            var calls = [];
+
+            Teams.getTasksRange(options)
+              .then(function (tasks)
+              {
+                if(tasks.length == 0)
+                {
+                  $rootScope.notifier.error($rootScope.ui.planboard.noTasksFounded);
+                  $rootScope.statusBar.off();
+                }
+                else if (tasks.error)
+                {
+                  $rootScope.notifier.error(result.error);
+                }
+                else
+                {
+                  angular.forEach(tasks, function (task)
+                  {
+
+                    allTasks = deleteTask(allTasks, task.uuid);
+                    myTasks = deleteTask(myTasks, task.uuid);
+
+                    calls.push(
+                      TeamUp._
+                      (
+                        'taskDelete',
+                        {second: task.uuid},
+                        task
+                      )
+                    );
+                  });
+
+                  $q.all(calls)
+                    .then(function (result)
+                    {
+                      if (result.error)
+                      {
+                        console.log('failed to remove task ', task);
+                      }
+
+                      $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
+                      $rootScope.statusBar.off();
+                      $scope.resetInlineForms();
+
+                      $rootScope.planboardSync.start();
+                    });
+                  }
+              });
+          };
 
           $scope.timelineOnAdd = function (form, slot)
           {
@@ -644,7 +819,7 @@ define(
 
             var values;
 
-            if (! form)
+            if (!form)
             {
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 
@@ -660,7 +835,7 @@ define(
                 {
                   if ($scope.timeline.main)
                   {
-                    $rootScope.$broadcast('resetPlanboardViews');
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                     $scope.views.slot.add = true;
                   }
@@ -686,6 +861,16 @@ define(
                     recursive: (values.group.match(/recursive/)) ? true : false,
                     state: 'com.ask-cs.State.Available'
                   };
+
+                  $scope.original = {
+                    start: new Date(values.start),
+                    end: new Date(values.end),
+                    content: {
+                      recursive: $scope.slot.recursive,
+                      state: $scope.slot.state
+                    }
+                  };
+
                 }
               );
             }
@@ -700,12 +885,12 @@ define(
 
               values = {
                 startTime: ($rootScope.browser.mobile) ?
-                           new Date(slot.start.datetime).getTime() :
-                           Dater.convert.absolute(slot.start.date, slot.start.time, false),
+                  new Date(slot.start.datetime).getTime() :
+                  Dater.convert.absolute(slot.start.date, slot.start.time, false),
                 endTime: ($rootScope.browser.mobile) ?
-                         new Date(slot.end.datetime).getTime() :
-                         Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description: (typeof slot.state == 'undefined') ? '' : slot.state,
+                  new Date(slot.end.datetime).getTime() :
+                  Dater.convert.absolute(slot.end.date, slot.end.time, false),
+                description: (typeof slot.description == 'undefined') ? '' : slot.description,
                 relatedUserId: slot.relatedUser
               };
 
@@ -722,7 +907,6 @@ define(
                   // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
 
                   // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
-                  console.log('currentTeam ->', $scope.currentClientGroup);
                 }
 
                 slot.relatedUser = null;
@@ -731,7 +915,7 @@ define(
               // console.log('values ->', values);
 
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                  memberId = angular.element(selected.group).attr('memberId');
+                memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof memberId == 'undefined')
               {
@@ -753,7 +937,7 @@ define(
               ).then(
                 function (result)
                 {
-                  $rootScope.$broadcast('resetPlanboardViews');
+                  $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                   if (result.error)
                   {
@@ -807,8 +991,8 @@ define(
             // console.log('rawSlot ->', rawSlot);
 
             var teamMemberId,
-                clientId,
-                team;
+              clientId,
+              team;
 
             if ($scope.views.teams)
             {
@@ -848,7 +1032,7 @@ define(
           $scope.redrawSlot = function ()
           {
             var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false),
-                end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
+              end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
 
             var selectedSlot = $scope.self.timeline.getSelection()[0];
 
@@ -906,10 +1090,10 @@ define(
             }
 
             var content = '<span>' + relatedUserName + '</span>' +
-                          '<input type="hidden" value="' + angular.toJson(itemContent) + '">';
+              '<input type="hidden" value="' + angular.toJson(itemContent) + '">';
 
             if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
-                (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
+              (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
             {
               if (typeof $scope.slot.relatedUser == 'undefined' || $scope.slot.relatedUser == '')
               {
@@ -925,7 +1109,7 @@ define(
             $rootScope.planboardSync.clear();
 
             var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                content = $scope.getSlotContentJSON(values.content);
+              content = $scope.getSlotContentJSON(values.content);
 
             if (content != undefined)
             {
@@ -948,7 +1132,8 @@ define(
                     memberId: content.memberId,
                     mid: content.mid,
                     clientUuid: content.clientUuid,
-                    relatedUser: $scope.slot.relatedUser
+                    relatedUser: $scope.slot.relatedUser,
+                    description: content.description
                   };
                 }
               );
@@ -975,19 +1160,21 @@ define(
 
           $scope.timelineOnChange = function (direct, original, slot)
           {
+
+            //add description
             $rootScope.planboardSync.clear();
 
             var options,
-                selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                content = $scope.getSlotContentJSON(selected.content),
-                memberId = angular.element(selected.group).attr('memberId');
+              selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+              content = $scope.getSlotContentJSON(selected.content),
+              memberId = angular.element(selected.group).attr('memberId');
 
-            if (! direct)
+            if (!direct)
             {
               options = {
                 startTime: selected.start,
                 endTime: selected.end,
-                description: '',
+                description: slot.description,
                 relatedUserId: slot.relatedUser,
                 uuid: content.id,
                 memberId: memberId
@@ -997,12 +1184,12 @@ define(
             {
               options = {
                 startTime: ($rootScope.browser.mobile) ?
-                           new Date(slot.start.datetime).getTime() :
-                           Dater.convert.absolute(slot.start.date, slot.start.time, false),
+                  new Date(slot.start.datetime).getTime() :
+                  Dater.convert.absolute(slot.start.date, slot.start.time, false),
                 endTime: ($rootScope.browser.mobile) ?
-                         new Date(slot.end.datetime).getTime() :
-                         Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                description: '',
+                  new Date(slot.end.datetime).getTime() :
+                  Dater.convert.absolute(slot.end.date, slot.end.time, false),
+                description: slot.description,
                 relatedUserId: slot.relatedUser,
                 uuid: content.id,
                 memberId: memberId
@@ -1013,12 +1200,12 @@ define(
 
             TeamUp._(
               'taskUpdate',
-              { second: values.uuid },
+              {second: values.uuid},
               values
             ).then(
               function (result)
               {
-                $rootScope.$broadcast('resetPlanboardViews');
+                $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                 if (result.error)
                 {
@@ -1064,37 +1251,38 @@ define(
             );
           };
 
-
-		  $scope.confirmDeleteTask = function ()
-			{
-				$timeout(
-					function ()
-					{
-						angular.element('#confirmTaskModal').modal('show');
-					}
-				);
-		  };
+          $scope.confirmDeleteTask = function ()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+          };
 
           $scope.timelineOnRemove = function ()
           {
             $rootScope.planboardSync.clear();
 
-			angular.element('#confirmTaskModal').modal('hide');
+            angular.element('#confirmTaskModal').modal('hide');
 
-			if ($scope.timeliner.isAdded() > 0)
+            if ($scope.timeliner.isAdded() > 0)
             {
               $scope.self.timeline.cancelAdd();
 
               $scope.$apply(
-                function () { $scope.resetInlineForms() }
+                function ()
+                {
+                  $scope.resetInlineForms();
+                }
               );
             }
             else
             {
-			  console.log($scope.self.timeline.getSelection());
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                  content = $scope.getSlotContentJSON(selected.content),
-                  memberId = angular.element(selected.group).attr('memberId');
+                content = $scope.getSlotContentJSON(selected.content),
+                memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof content == 'undefined')
               {
@@ -1104,7 +1292,6 @@ define(
 
               if (typeof content.id == 'undefined')
               {
-                // console.log('Nothing to delete');
                 return;
               }
 
@@ -1112,11 +1299,11 @@ define(
 
               TeamUp._(
                 'taskDelete',
-                { second: content.id }
+                {second: content.id}
               ).then(
                 function (result)
                 {
-                  $rootScope.$broadcast('resetPlanboardViews');
+                  $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                   if (result.error)
                   {
@@ -1146,7 +1333,7 @@ define(
                   }
 
                   // $scope.timeliner.refresh();
-                  $scope.refreshTasks(result.result, "delete");
+                  $scope.refreshTasks(content.id, "delete");
 
                   $rootScope.statusBar.off();
                   $rootScope.planboardSync.start();
@@ -1158,7 +1345,10 @@ define(
           if ($scope.timeline && $scope.timeline.main)
           {
             setTimeout(
-              function () { $scope.self.timeline.redraw() }, 100
+              function ()
+              {
+                $scope.self.timeline.redraw()
+              }, 100
             );
           }
 
@@ -1172,7 +1362,7 @@ define(
                   {
                     $scope.slot = {};
 
-                    $rootScope.$broadcast('resetPlanboardViews');
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
 
                     $scope.timeliner.render(
                       {
@@ -1185,7 +1375,10 @@ define(
               );
             },
 
-            clear: function () { $window.clearInterval($window.planboardSync) }
+            clear: function ()
+            {
+              $window.clearInterval($window.planboardSync)
+            }
           };
 
           $rootScope.planboardSync.start();
