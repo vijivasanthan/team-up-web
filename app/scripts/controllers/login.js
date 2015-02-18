@@ -167,15 +167,13 @@ define(
                 : MD5($scope.loginData.password);
 
             var newLoginData = {
-                username: $scope.loginData.username,
-                relogin: false
+                username: $scope.loginData.username
               };
 
             //Check if the user want to save his password and add it to the local storage
             if($scope.loginData.remember == true)
             {
               newLoginData.password = password;
-              newLoginData.relogin = true;
             }
 
             Store('app').save('loginData', newLoginData);
@@ -264,7 +262,7 @@ define(
             )
           };
 
-          if(localLoginData.relogin)
+          if(localLoginData.password)
           {
             $scope.login();
           }

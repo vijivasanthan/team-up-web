@@ -504,7 +504,6 @@ define(
             footer.hide();
 
             var loginData = Store('app').get('loginData');
-            loginData.relogin = false;
 
             TeamUp._('logout')
               .then(
@@ -520,7 +519,9 @@ define(
 
                   Store('app').nuke();
 
-                  Store('app').save('loginData', loginData);
+                  Store('app').save('loginData', {
+                    username: loginData.username
+                  });
 
                   $window.location.href = 'logout.html';
                 }
