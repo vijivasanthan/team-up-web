@@ -117,20 +117,18 @@ define(
           angular.element('#watermark').hide();
           angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
 
-          var loginData = Store('app').get('loginData');
-
-          console.log('loginData', loginData);
+          var localLoginData = Store('app').get('loginData');
 
           //Check if there is loginData local
-          if (loginData)
+          if (localLoginData)
           {
             //if there is a username, show it
             $scope.loginData = {};
-            $scope.loginData.username = loginData.username;
+            $scope.loginData.username = localLoginData.username;
 
             //if there is a local encrypted password, show a random string
             //and select the remember login
-            if(loginData.password)
+            if(localLoginData.password)
             {
               $scope.loginData.password = 1234;
               $scope.loginData.remember = true;
@@ -163,8 +161,8 @@ define(
               .attr('disabled', 'disabled');
 
             //Checks if there is already a password, otherwise encrypt the given password
-            var password = ($scope.loginData.password == '1234' && loginData.password)
-                ? loginData.password
+            var password = ($scope.loginData.password == '1234' && localLoginData.password)
+                ? localLoginData.password
                 : MD5($scope.loginData.password);
 
             var newLoginData = {
