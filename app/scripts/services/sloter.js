@@ -22,22 +22,22 @@ define(['services/services', 'config'],
                 });
 
                 return groups;
-              },
-
-              members: function ()
-              {
-                var members = {};
-
-                _.each($rootScope.unique(Store('app').get('members')), function (member)
-                {
-                  if (member != null && member.uuid != null)
-                  {
-                    members[member.uuid] = member.firstName + ' ' + member.lastName;
-                  }
-                });
-
-                return members;
               }
+
+              //members: function (groupId)
+              //{
+              //  var members = {};
+              //
+              //  _.each($rootScope.unique(Store('app').get(groupId)), function (member)
+              //  {
+              //    if (member != null && member.uuid != null)
+              //    {
+              //      members[member.uuid] = member.firstName + ' ' + member.lastName;
+              //    }
+              //  });
+              //
+              //  return members;
+              //}
             },
 
             wrapper: function (rank)
@@ -478,8 +478,9 @@ define(['services/services', 'config'],
             members: function (data, timedata, config, privilage, routeUserId, loggedUserId)
             {
               var _this = this,
-                members = this.get.members(),
                 filtered = [];
+
+              //console.log('data', data);
 
               _.each(data.members, function (member)
               {
@@ -515,11 +516,11 @@ define(['services/services', 'config'],
                   '<a href="#/profile/' +
                   member.id +
                   '#profile">' +
-                  members[member.id] +
+                  member.fullName +
                   '</a>';
 
                   link += '<a class="edit-timeline-icon" title="'
-                    + $rootScope.ui.agenda.editTimeline + members[member.id] + '"';
+                    + $rootScope.ui.agenda.editTimeline + member.id + '"';
                   link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"'
                   link += '><i class="icon-edit"></a>';
 
@@ -532,7 +533,7 @@ define(['services/services', 'config'],
                         var tooltip = {
                           start: slot.start,
                           end: slot.end,
-                          member: members[member.id],
+                          member: member.id,
                           state: config.states[slot.text].label
                         };
 
@@ -667,6 +668,9 @@ define(['services/services', 'config'],
             {
               var _this = this,
                 timedata = [];
+
+
+              console.log('data', data);
 
               if (data.user)
               {
