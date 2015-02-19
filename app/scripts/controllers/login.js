@@ -475,7 +475,7 @@ define(
                                         function ()
                                         {
                                           angular.element('.navbar').show();
-                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+                                          angular.element('body').addClass('background');
 
                                           if (! $rootScope.browser.mobile)
                                           {
