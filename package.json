@@ -1,8 +1,8 @@
 {
   "name": "TeamUp",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "description": "TeamUp description",
-  "author": "Cengiz Ulusoy - Micheal Yankun - Leonie van Dinten",
+  "author": "Cengiz Ulusoy - Micheal Yankun - Leonie van Dinten - Henk van Rooijen",
   "dependencies": {
     "grunt-svgmin": "^0.4.0"
   },

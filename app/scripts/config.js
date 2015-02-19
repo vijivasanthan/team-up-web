@@ -1,9 +1,7 @@
 define(
   {
     app: {
-      // version: '@@version',
-      version: '1.2.0-snapshot',
-      // version: '0.5.2',
+      version: '@@version',
       released: '@@released',
 
       title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
