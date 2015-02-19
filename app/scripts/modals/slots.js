@@ -508,6 +508,7 @@ define(['services/services', 'config'],
                               {
                                 mems.push({
                                   id: index,
+                                  fullName: member.firstName + ' ' + member.lastName,
                                   lastName: member.lastName,
                                   role: member.role,
                                   data: mdata,
