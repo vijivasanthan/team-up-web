@@ -249,7 +249,6 @@ define(
                     .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
-                  console.log("Pay attention, this might caused by the Log module");
                   return false;
                 }
                 else
@@ -265,7 +264,7 @@ define(
           //Check if there is a password locally and autologin
           if(localLoginData.password)
           {
-            //$scope.login();
+            $scope.login();
           }
 
           // TODO: Move this to somewhere later on!
@@ -462,7 +461,6 @@ define(
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
 
-                                      //console.log('$rootScope.app.resources.uuid', $rootScope.app.resources);
                                       trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
                                       //update the avatar once, because the resources were not set when the directive was loaded

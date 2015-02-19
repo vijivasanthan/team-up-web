@@ -439,53 +439,22 @@ define(
                   },
                   responseError: function (rejection)
                   {
-                    console.log('rejection', rejection);
-
                     if(rejection.status > 0)
                     {
                       switch (rejection.status)
                       {
                         case 403:
-                          var loginData = Store('app').get('loginData');
+                          var loginData = Store('app').get('loginData'),
+                              rejections = $injector.get('Rejections');
 
                           if(loginData.password)
                           {
-                            var deferred = $q.defer(),
-                              teamUp = $injector.get('TeamUp'),
-                              session = $injector.get('Session');
-
-                            teamUp._(
-                              'login',
-                              {
-                                uuid: loginData.username,
-                                pass: loginData.password
-                              }
-                            ).then(
-                              function (result)
-                              {
-                                session.set(result['X-SESSION_ID']);
-
-                                var http = $injector.get('$http'),
-                                  config = rejection.config;
-
-                                config.headers = {
-                                  'X-SESSION_ID': session.get()
-                                };
-
-                                deferred.resolve(http(config));
-                              }
-                            );
-
-                            //send the request again with the recovered session
-                            return deferred.promise;
+                            return rejections.reSetSession(loginData, rejection.config);
                           }
                           else
                           {
-                            $location.path('/logout');
-                            window.location.href = 'logout.html';
-                            localStorage.setItem('sessionTimeout', '');
+                            rejections.sessionTimeOut();
                           }
-
                           break;
                       }
 
@@ -500,10 +469,6 @@ define(
                         exMethodData: _.values(rejection.config.data).join() || ''
                       });
                     }
-
-                    //$location.path('/logout');
-                    //window.location.href = 'logout.html';
-                    //localStorage.setItem('sessionTimeout', '');
 
                     return $q.reject(rejection);
                   }

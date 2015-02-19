@@ -192,6 +192,7 @@ require(
     'services/stats',
     'services/pincode',
     'services/reports',
+    'services/rejections',
 
     // 'services/googleGEO',
 
