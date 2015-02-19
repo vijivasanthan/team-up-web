@@ -1,6 +1,6 @@
 {
   "name": "TeamUp",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "TeamUp description",
   "author": "Cengiz Ulusoy - Micheal Yankun - Leonie van Dinten - Henk van Rooijen",
   "dependencies": {
@@ -17,7 +17,7 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-copy": "*",
-    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-cssmin": "^0.11.0",
     "grunt-contrib-htmlmin": "*",
     "grunt-contrib-imagemin": "*",
     "grunt-contrib-jade": "^0.14.0",
