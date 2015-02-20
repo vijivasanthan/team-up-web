@@ -150,7 +150,7 @@ define(
                 };
               }
             ],
-            link: function (elem)
+            link: function (scope, elem, attrs, ctrl)
             {
               elem.find('.fake-uploader').click(
                 function () { elem.find('input[type="file"]').click() }
@@ -180,7 +180,7 @@ define(
                 $scope.loadMember = function (el) {}
               }
             ],
-            link: function (scope, elem, attrs)
+            link: function (scope, elem, attrs, ctrl)
             {
               console.log('profile directive ->', attrs.memberId);
             },
@@ -305,7 +305,7 @@ define(
       {
         return {
           restrict: 'A',
-          link: function (scope, element)
+          link: function (scope, element, attrs)
           {
             element.bind(
               'mouseup',
@@ -315,6 +315,7 @@ define(
                   form = angular.element('.time-slot-form'),
                   modal = form.height(),
                   slot = 105,
+
                   minNeededHeight = (modal + slot),
                   clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
                   heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
