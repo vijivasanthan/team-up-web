@@ -635,7 +635,7 @@ define(['services/services', 'config'],
                   xratios.push(ratio.ratio);
                 });
 
-                var r = Raphael('groupPie-' + id);
+                //var r = Raphael('groupPie-' + id);
                   //pie = r.piechart(120, 120, 100, xratios, {colors: colors});
               });
             },
@@ -666,6 +666,8 @@ define(['services/services', 'config'],
             {
               var _this = this,
                 timedata = [];
+
+              //console.log('dataaaa', data);
 
               if (data.user)
               {

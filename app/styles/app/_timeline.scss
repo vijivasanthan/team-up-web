@@ -421,7 +421,7 @@ div.timeline-customtime {
 }
 
 div.timeline-navigation-delete {
-  padding: 0px 0px 0px 5px;
+  padding: 0 0 0 5px;
   /*background: url('images/img/16/delete.png') no-repeat center;*/
   display: inline-block;
   margin-top: -2px;
@@ -1291,26 +1291,26 @@ sortable
 }
 
 .bars-more {
-  background-color: #6cad6c;
+  background-color: $turq;
 
   &:hover {
-    background-color: lighten(#6cad6c, 10%);
+    background-color: lighten($turq, 10%);
   }
 }
 
 .bars-less {
-  background-color: #d34545;
+  background-color: $red;
 
   &:hover {
-    background-color: lighten(#d34545, 10%);
+    background-color: lighten($red, 10%);
   }
 }
 
 .bars-even {
-  background-color: #e09131;
+  background-color: $orange;
 
   &:hover {
-    background-color: lighten(#e09131, 10%);
+    background-color: lighten($orange, 10%);
   }
 }
 
@@ -1352,6 +1352,10 @@ sortable
   color: $brown;
 }
 
+.timeline-event-content .badge-inverse {
+  background-color: $brown !important;
+}
+
 .badge-slot {
   position: absolute;
   top: 2px;
@@ -1359,6 +1363,12 @@ sortable
   right: 0;
   margin: auto;
   max-width: 30px;
+}
+
+#groups-wish {
+  .btn-default {
+    color: $brown !important;
+  }
 }
 
 /*

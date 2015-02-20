@@ -94,7 +94,7 @@ define(
                       {
                         //$form.removeAttr('action');
                       },
-                      success: function (responseText, statusText, xhr, form)
+                      success: function ()
                       {
                         var ar = angular.element(el).val().split('\\'),
                             filename = ar[ar.length - 1];
@@ -105,8 +105,8 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
-                            var avatarType = '';
-                            var avatarTagStyle = $('.roundedPicLarge').attr('style');
+                            var roundPicture = $('.roundedPicLarge');
+                            var avatarTagStyle = roundPicture.attr('style');
                             var size = 0,
                               id,
                               type,
@@ -142,7 +142,7 @@ define(
                             var newSize = parseInt(size, 10) + $scope.$parent.$root.getAvatarChangeTimes(id);
                             var newStyle = avatarTagStyle.replace("width=" + size, "width=" + newSize);
 
-                            $('.roundedPicLarge').attr('style', newStyle);
+                            roundPicture.attr('style', newStyle);
                           }
                         );
                       }
@@ -150,7 +150,7 @@ define(
                 };
               }
             ],
-            link: function (scope, elem, attrs, ctrl)
+            link: function (elem)
             {
               elem.find('.fake-uploader').click(
                 function () { elem.find('input[type="file"]').click() }
@@ -180,7 +180,7 @@ define(
                 $scope.loadMember = function (el) {}
               }
             ],
-            link: function (scope, elem, attrs, ctrl)
+            link: function (scope, elem, attrs)
             {
               console.log('profile directive ->', attrs.memberId);
             },
@@ -242,7 +242,7 @@ define(
       function ()
       {
         return {
-          link: function (scope, element, attrs)
+          link: function (scope, element)
           {
             element.parent().bind(
               'mouseenter',
@@ -305,7 +305,7 @@ define(
       {
         return {
           restrict: 'A',
-          link: function (scope, element, attrs)
+          link: function (scope, element)
           {
             element.bind(
               'mouseup',
@@ -315,7 +315,6 @@ define(
                   form = angular.element('.time-slot-form'),
                   modal = form.height(),
                   slot = 105,
-                  currentScreen = $window.innerHeight,
                   minNeededHeight = (modal + slot),
                   clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
                   heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,

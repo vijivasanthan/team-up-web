@@ -21,8 +21,8 @@ define(
         function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Dater, Sloter, TeamUp, Store)
         {
           // TODO: Define diff in the watcher maybe?
-          var range,
-            diff;
+          var range = null,
+            diff = null;
 
           /**
           * Timeliner listener
@@ -221,6 +221,13 @@ define(
 
               if ($scope.timeline.main)
               {
+                var wishes = null;
+
+                if($scope.data.aggs && $scope.data.aggs.wishes)
+                {
+                  wishes = $scope.data.aggs.wishes;
+                }
+
                 //TODO load and render at the same time, two times the same call
                 Slots.all(
                   {
@@ -234,7 +241,6 @@ define(
                 ).then(
                   function (data)
                   {
-                    console.log('data slots ', data);
                     if (data.error)
                     {
                       $rootScope.notifier.error($rootScope.ui.agenda.query);
@@ -244,44 +250,44 @@ define(
                     {
                       $scope.data = data;
 
+                      if($scope.data.aggs)
+                      {
+                        $scope.data.aggs.wishes = wishes;
+                      }
+
                       _this.render(stamps, remember);
                     }
 
                     $rootScope.statusBar.off();
-
-                    if ($scope.timeline.config.wishes)
-                    {
-                      getWishes();
-                    }
                   }
                 );
               }
               else
               {
                 //TODO is this ever used?
-                Profile.getSlots(
-                  $scope.timeline.user.id,
-                  stamps
-                ).then(
-                  function (data)
-                  {
-                    if (data.error)
-                    {
-                      $rootScope.notifier.error($rootScope.ui.agenda.query);
-                      console.warn('error ->', data);
-                    }
-                    else
-                    {
-                      data.user = data.slots.data;
-
-                      $scope.data = data;
-
-                      _this.render(stamps, remember);
-
-                      $rootScope.statusBar.off();
-                    }
-                  }
-                );
+                //Profile.getSlots(
+                //  $scope.timeline.user.id,
+                //  stamps
+                //).then(
+                //  function (data)
+                //  {
+                //    if (data.error)
+                //    {
+                //      $rootScope.notifier.error($rootScope.ui.agenda.query);
+                //      console.warn('error ->', data);
+                //    }
+                //    else
+                //    {
+                //      data.user = data.slots.data;
+                //
+                //      $scope.data = data;
+                //
+                //      //_this.render(stamps, remember);
+                //
+                //      $rootScope.statusBar.off();
+                //    }
+                //  }
+                //);
               }
             },
 
@@ -765,28 +771,28 @@ define(
           /**
           * Change division
           */
-          $scope.changeDivision = function ()
-          {
-            _.each(
-              $scope.divisions,
-              function (division)
-              {
-                $scope.groupPieHide[division.id] = false
-              }
-            );
-
-            if ($scope.timeline.current.division !== 'all')
-            {
-              $scope.groupPieHide[$scope.timeline.current.division] = true;
-            }
-
-            $scope.timeliner.render(
-              {
-                start: $scope.timeline.range.start,
-                end: $scope.timeline.range.end
-              }
-            );
-          };
+          //$scope.changeDivision = function ()
+          //{
+          //  _.each(
+          //    $scope.divisions,
+          //    function (division)
+          //    {
+          //      $scope.groupPieHide[division.id] = false
+          //    }
+          //  );
+          //
+          //  if ($scope.timeline.current.division !== 'all')
+          //  {
+          //    $scope.groupPieHide[$scope.timeline.current.division] = true;
+          //  }
+          //
+          //  $scope.timeliner.render(
+          //    {
+          //      start: $scope.timeline.range.start,
+          //      end: $scope.timeline.range.end
+          //    }
+          //  );
+          //};
 
           /**
           * Group aggs barCharts toggler
@@ -802,35 +808,6 @@ define(
               }
             );
           };
-
-
-          /**
-          * Group wishes toggle
-          */
-          $scope.groupWishes = function ()
-          {
-            if ($scope.timeline.config.wishes)
-            {
-              $scope.timeline.config.wishes = false;
-
-              delete $scope.data.aggs.wishes;
-
-              $scope.timeliner.render(
-                {
-                  start: $scope.timeline.range.start,
-                  end: $scope.timeline.range.end
-                },
-                true
-              );
-            }
-            else
-            {
-              $scope.timeline.config.wishes = true;
-
-              getWishes();
-            }
-          };
-
 
           /**
           * Get wishes
@@ -1534,14 +1511,10 @@ define(
 
           function wisher(id)
           {
-            $scope.wished = false;
-
             wish(id)
               .then(
               function (wish)
               {
-                $scope.wished = true;
-
                 $scope.wish = wish.count;
                 $rootScope.groupWish = $scope.wish;
 
@@ -1550,8 +1523,7 @@ define(
                   wish: wish.count
                 };
 
-                $rootScope.$broadcast('resetPlanboardViews');
-                $scope.timeliner.refresh();
+                getWishes();
               }
             );
           };
@@ -1585,8 +1557,8 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
               }
-
               wisher(id);
+              $scope.timeliner.refresh();
             });
 
           };
@@ -1626,7 +1598,6 @@ define(
           */
           $scope.wisher = function (slot)
           {
-            console.log('slot', slot);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
             Slots.setWish(
@@ -1638,7 +1609,7 @@ define(
                 end: ($rootScope.browser.mobile) ?
                   new Date(slot.end.datetime).getTime() / 1000 :
                   Dater.convert.absolute(slot.end.date, slot.end.time, true),
-                recursive: (!_.isUndefined(slot.recursive)) ? true : false,
+                recursive: (!_.isUndefined(slot.recursive)),
                 wish: slot.wish
               })
               .then(
@@ -1656,6 +1627,7 @@ define(
                   $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
                 }
 
+                getWishes();
                 $scope.timeliner.refresh();
               }
             );
@@ -1720,11 +1692,6 @@ define(
             {
               $window.clearInterval($window.planboardSync)
             }
-          };
-
-          var styleSelectedSlot = function()
-          {
-
           };
 
           /**

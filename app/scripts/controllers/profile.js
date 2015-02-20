@@ -22,10 +22,8 @@ define(
         '$timeout',
         'MD5',
         'Profile',
-        'Pincode',
-        '$injector',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Pincode, $injector)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
           var getProfileResource = function(userId, flag)
           {

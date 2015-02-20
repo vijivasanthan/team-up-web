@@ -220,7 +220,7 @@ define(
                     redirectLocationLoggedUser = function()
                     {
                       $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-                    }
+                    };
 
 
 
@@ -235,7 +235,12 @@ define(
                   var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
 
                   //check if userId belongs to the same team as the logged user (teammember role only)
-                  if($rootScope.app.resources.role > 1)
+                  if(! currentTeamsRouteUser.length)
+                  {
+                    redirectLocationLoggedUser();
+                    return false;
+                  }
+                  else if($rootScope.app.resources.role > 1)
                   {
                     var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
 
@@ -324,7 +329,7 @@ define(
             .when(
             '/team-telefoon',
             {
-              redirectTo: function(route, path, search)
+              redirectTo: function(route, path)
               {
                 return path + '/agenda';
               }

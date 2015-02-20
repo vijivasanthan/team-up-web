@@ -223,7 +223,7 @@ define(
           $scope.redirectOwnTimeline = function()
           {
             $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-          }
+          };
 
           //$scope.sendShortageMessage = function (slot)
           //{
