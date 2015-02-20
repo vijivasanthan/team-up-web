@@ -7,11 +7,12 @@ define(
     services.factory(
       'Rejections',
       [
+        '$rootScope',
         'TeamUp',
         'Session',
         '$injector',
         '$q',
-        function (TeamUp, Session, $injector, $q)
+        function ($rootScope, TeamUp, Session, $injector, $q)
         {
           return {
             reSetSession : function(loginData, config)
@@ -35,6 +36,8 @@ define(
                   _config.headers = {
                     'X-SESSION_ID': Session.get()
                   };
+
+                  $rootScope.showChangedAvatar('team', loginData.username);
 
                   deferred.resolve(http(_config));
                 }
