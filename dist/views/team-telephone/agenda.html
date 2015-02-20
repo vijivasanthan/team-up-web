@@ -182,7 +182,7 @@
             <!--ng-selected='timeline.current.division',-->
             <!--ng-change='changeDivision()',-->
             <!--ng-show='divisions.length > 0')-->
-            <button type="button" style="margin: 3px 10px; 0 0" data-content-template="views/agenda/groups-wish.html" data-placement="bottom" bs-popover="" data-title="Behoefte wijzigen" ng-hide="app.resources.role &gt; 1" class="btn btn-primary pull-left"><span ng-show="wished" class="badge badge-inset">{{wish}}</span>&nbsp;{{ui.agenda.requiredPeople}}</button><br ng-show="browser.mobile"><br ng-show="browser.mobile">
+            <button type="button" style="margin: 3px 10px; 0 0" data-content-template="views/agenda/groups-wish.html" data-placement="bottom" bs-popover="" data-title="Behoefte wijzigen" ng-hide="app.resources.role &gt; 1" class="btn btn-primary pull-left"><span class="badge badge-inset">{{wish}}</span>&nbsp;{{ui.agenda.requiredPeople}}</button><br ng-show="browser.mobile"><br ng-show="browser.mobile">
             <div style="{{ (browser.mobile) &amp;&amp; 'margin-left: -10px;' }}" class="{{ (browser.mobile) &amp;&amp; 'pull-left' || 'pull-right' }}">
               <!--.btn-group(ng-show='timeline.current.layouts.group')-->
               <!--	button.btn.btn-primary(type='button',-->
