@@ -436,6 +436,27 @@ define(
       }
     );
 
+    directives.directive(
+      'currentSelection',
+      function(CurrentSelection)
+      {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function (scope, element, attrs, ngModel)
+          {
+            ngModel.$setViewValue(CurrentSelection.getTeamId());
+
+            ngModel.$viewChangeListeners.push(function() {
+              CurrentSelection.local = ngModel.$viewValue;
+            });
+          }
+        }
+      }
+    );
+
+
+
     //directives.directive(
     //  'scroll',
     //  function($window)

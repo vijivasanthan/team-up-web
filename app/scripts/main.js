@@ -193,6 +193,7 @@ require(
     'services/pincode',
     'services/reports',
     'services/rejections',
+    'services/currentSelection',
 
     // 'services/googleGEO',
 

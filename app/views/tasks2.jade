@@ -90,7 +90,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 	.selectGroup(ng-show='views.allTasks && app.resources.role == 1')
 		span.selectTitle
 			| Selecteer team
-		select(ng-model='task.team',
+		select(current_selection ng-model='task.team',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 		ng-selected='currentTeam',
 		ng-change='changeTeam(task.team)')
@@ -295,7 +295,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							.form-group
 								label.control-label Verzorger
 								.controls
-									select(ng-model='task.team',
+									select(current_selection ng-model='task.team',
 									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 									ng-selected='currentTeam',
 									ng-change='changeTeam(task.team)')
