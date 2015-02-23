@@ -314,13 +314,50 @@ define(
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs',
               resolve: {
-                data: function(Logs)
+                data: function(Store, TeamUp, Logs, $q)
                 {
                   removeActiveClass('.teamMenu');
-                  return Logs.fetch({
-                    end: new Date.now().getTime(),
-                    start: new Date.today().addDays(- 7).getTime()
+
+                  var deferred = $q.defer(),
+                      teams = Store('app').get('teams'),
+                      adapterCalls = [];
+                  //TODO finish this when the backend added the adapterId
+                  _.each(teams, function(team)
+                  {
+                    var call = $q.defer();
+                    adapterCalls.push(call.promise);
+
+                    TeamUp._('teamPhone',
+                    {second: team.uuid})
+                      .then(
+                        function(result)
+                        {
+                          call.resolve({
+                                name: team.name,
+                                teamId: team.uuid,
+                                adapterId: result.phone || '0130'
+                              });
+                        }
+                      );
                   });
+
+                  $q.all(adapterCalls)
+                    .then(
+                      function(adapters)
+                      {
+                        Logs.fetch({
+                          end: new Date.now().getTime(),
+                          start: new Date.today().addDays(- 7).getTime()
+                        }).then(
+                          function(logs)
+                          {
+                            deferred.resolve({logs: logs, teamAdapters: adapters});
+                          }
+                        );
+                      }
+                  );
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false

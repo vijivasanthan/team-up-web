@@ -12,11 +12,21 @@ define(
         '$timeout',
         'Logs',
         'data',
-        function ($rootScope, $scope, $filter, $timeout, Logs, data)
+        'Store',
+        function ($rootScope, $scope, $filter, $timeout, Logs, data, Store)
         {
           $rootScope.fixStyles();
 
-          $scope.data = data;
+          $scope.data = data.logs;
+
+          $scope.teams = data.teamAdapters;
+
+          var selectedTeam = Store('app').get('currentTeamClientGroup'),
+              currentTeamAdapter = _.findWhere($scope.teams, {teamId: selectedTeam.team});
+
+          $scope.current = (currentTeamAdapter)
+              ? currentTeamAdapter.adapterId
+              : $scope.teams[0].adapterId;
 
           $scope.orderBy = function (ordered)
           {
@@ -28,8 +38,8 @@ define(
           $scope.ordered = 'started.stamp';
           $scope.reversed = true;
 
-          $scope.daterange = $filter('date')(data.periods.start, 'dd-MM-yyyy') + ' / ' +
-          $filter('date')(data.periods.end, 'dd-MM-yyyy');
+          $scope.daterange = $filter('date')($scope.data.periods.start, 'dd-MM-yyyy') + ' / ' +
+          $filter('date')($scope.data.periods.end, 'dd-MM-yyyy');
 
           $rootScope.$on('getLogRange', function ()
           {
@@ -42,13 +52,15 @@ define(
           {
             $timeout(function ()
             {
-              $rootScope.statusBar.display('Logs laden..')
+              $rootScope.statusBar.display('Logs laden..');
               $scope.loadLogs = true;
             });
 
             Logs.fetch(dataRange)
               .then(function (data)
               {
+                console.log('data', data);
+
                 $scope.loadLogs = false;
                 $scope.data = data;
 
