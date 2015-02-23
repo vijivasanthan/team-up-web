@@ -682,8 +682,8 @@ define(
             message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
             as: ' als ',
             multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!',
-            fixedLine: 'een vastnummer',
-            mobile: 'een mobielnummer',
+            fixedLine: 'een vast nummer',
+            mobile: 'een mobiel nummer',
             mobileOrFixedLine: 'een vast of mobielnummer'
           },
           pincode: {
