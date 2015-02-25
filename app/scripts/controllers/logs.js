@@ -13,7 +13,8 @@ define(
         'Logs',
         'data',
         'Store',
-        function ($rootScope, $scope, $filter, $timeout, Logs, data, Store)
+        'CurrentSelection',
+        function ($rootScope, $scope, $filter, $timeout, Logs, data, Store, CurrentSelection)
         {
           $rootScope.fixStyles();
 
@@ -21,8 +22,7 @@ define(
 
           $scope.teams = data.teamAdapters;
 
-          var selectedTeam = Store('app').get('currentTeamClientGroup'),
-              currentTeamAdapter = _.findWhere($scope.teams, {teamId: selectedTeam.team});
+          var currentTeamAdapter = _.findWhere($scope.teams, {teamId: CurrentSelection.getTeamId()});
 
           $scope.current = (currentTeamAdapter)
               ? currentTeamAdapter.adapterId
@@ -47,6 +47,18 @@ define(
 
             fetchLogs(periods);
           });
+
+          $scope.switchTeam = function(adapterId)
+          {
+            var team = (! _.isNull(adapterId))
+              ? _.findWhere($scope.teams, {adapterId: adapterId})
+              : null;
+
+            if(!_.isNull(team))
+            {
+              CurrentSelection.local = team.teamId;
+            }
+          };
 
           function fetchLogs(dataRange)
           {

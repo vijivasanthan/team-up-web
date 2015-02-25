@@ -8,7 +8,8 @@ section#logs
 			.controls
 				select(ng-model='current',
 				ng-options='team.adapterId as team.name for team in teams | orderBy:"name"',
-				ng-selected='current')
+				ng-selected='current',
+				ng-change='switchTeam(current)')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
 			input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			i.glyphicon.glyphicon-calendar.form-control-feedback

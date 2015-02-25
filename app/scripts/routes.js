@@ -209,18 +209,16 @@ define(
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function($route, Slots, Storage, Dater, Store, TeamUp, $q, $rootScope, $location)
+                data: function($route, Slots, Storage, Dater, Store, TeamUp,
+                               $q, $rootScope, $location, CurrentSelection)
                 {
                   var periods = Store('app').get('periods'),
-                    groups = Store('app').get('teams'),
-                    lastVisited = Store('app').get('currentTeamClientGroup'),
-                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team)
-                      ? lastVisited.team
-                      : groups[0].uuid,
-                    redirectLocationLoggedUser = function()
-                    {
-                      $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-                    };
+                      groups = Store('app').get('teams'),
+                      groupId = CurrentSelection.getTeamId(),
+                      redirectLocationLoggedUser = function()
+                      {
+                        $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                      };
 
 
 
@@ -321,7 +319,7 @@ define(
                   var deferred = $q.defer(),
                       teams = Store('app').get('teams'),
                       adapterCalls = [];
-                  //TODO finish this when the backend added the adapterId
+                  //TODO give every team agent a adapterId
                   _.each(teams, function(team)
                   {
                     var call = $q.defer();
@@ -335,7 +333,7 @@ define(
                           call.resolve({
                                 name: team.name,
                                 teamId: team.uuid,
-                                adapterId: result.phone || '0130'
+                                adapterId: result.adapter
                               });
                         }
                       );
