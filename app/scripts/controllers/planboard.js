@@ -15,15 +15,16 @@ define(
         'Clients',
         'TeamUp',
         'Session',
-        '$timeout',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, $timeout)
+        'CurrentSelection',
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, CurrentSelection)
         {
           var params = $location.search();
 
           var teams = Store('app').get('teams'),
-            clients = Store('app').get('ClientGroups'),
-            teamClientLocal = Teams.queryLocalClientGroup(teams),
-            currentTeamClientGroup = '';
+            clients = Store('app').get('ClientGroups');
+
+          $scope.currentTeam = CurrentSelection.getTeamId();
+          $scope.currentClientGroup = CurrentSelection.getClientGroupId();
 
           $scope.data = {
             teams: {
@@ -161,7 +162,7 @@ define(
                       '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
                       member.firstName +
                       ' ' +
-                      member.lastName + 123
+                      member.lastName
                     '</div>';
 
                     $scope.data.clients.members[client.id].push(
@@ -176,16 +177,6 @@ define(
             }
           );
 
-
-          //todo if user switch from team, switch the clientgroup also and save localStorage
-          if (Store('app').get('currentTeamClientGroup'))
-          {
-            currentTeamClientGroup = Store('app').get('currentTeamClientGroup');
-
-            $scope.currentTeam = (currentTeamClientGroup.team) ? currentTeamClientGroup.team : $scope.data.teams.list[0].uuid;
-            $scope.currentClientGroup = (currentTeamClientGroup.clientGroup) ? currentTeamClientGroup.clientGroup : $scope.data.clients.list[0].uuid;
-          }
-
           // switch agenda (timeline) between Team view or Client view
           function switchData()
           {
@@ -194,22 +185,12 @@ define(
               case 'teams':
                 $scope.list = $scope.data.teams.list;
 
-                if (typeof $scope.currentTeam == 'undefined')
-                {
-                  $scope.currentTeam = $scope.data.teams.list[0].uuid;
-                }
-
                 $scope.changeCurrent($scope.currentTeam);
 
                 break;
 
               case 'clients':
                 $scope.list = $scope.data.clients.list;
-
-                if (typeof $scope.currentClientGroup == 'undefined')
-                {
-                  $scope.currentClientGroup = $scope.data.clients.list[0].uuid;
-                }
 
                 $scope.changeCurrent($scope.currentClientGroup);
 
@@ -250,25 +231,19 @@ define(
           // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
-            angular.forEach(
-              $scope.data[$scope.section].list,
-              function (node)
-              {
-                if (node.uuid == current)
-                {
-                  $scope.currentName = node.name;
-                }
-              }
-            );
+            CurrentSelection.local = current;
+
+            $scope.currentName = (_.findWhere($scope.data[$scope.section].list, {uuid: current})).name;
+
+            $scope.currentTeam = CurrentSelection.getTeamId();
+            $scope.currentClientGroup = CurrentSelection.getClientGroupId();
 
             if ($scope.section == 'teams')
             {
-              $scope.currentTeam = current;
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
             }
             else if ($scope.section == 'clients')
             {
-              $scope.currentClientGroup = current;
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
             }
 

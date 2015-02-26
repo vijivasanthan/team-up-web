@@ -12,13 +12,13 @@ define(
         'Store',
         'Teams',
         'TeamUp',
-        function ($rootScope, $scope, $location, Store, Teams, TeamUp)
+        'CurrentSelection',
+        function ($rootScope, $scope, $location, Store, Teams, TeamUp, CurrentSelection)
         {
           $rootScope.fixStyles();
 
           var teams = Store('app').get('teams'),
             teamsLocal = Teams.queryLocal(),
-            lastVisited = Store('app').get('currentTeamClientGroup'),
             view,
             tempOrder = [];
 
@@ -28,7 +28,7 @@ define(
 
           //default first team
           $scope.current = {
-            group: lastVisited.team || $scope.groups[0].uuid
+            group: CurrentSelection.getTeamId()
           };
 
           if (!$location.hash())
@@ -109,6 +109,7 @@ define(
           $scope.getOrder = function ()
           {
             var groupID = $scope.current.group;
+            CurrentSelection.local = groupID;
 
             if (groupID !== '')
             {

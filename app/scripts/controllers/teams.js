@@ -30,9 +30,6 @@ define(
           $scope.members = data.members;
           $scope.teams = data.teams;
 
-          var teamsLocal = Teams.queryLocal();
-
-          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
           var params = $location.search();
 
@@ -47,18 +44,6 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-
-          var lastVisitedTeamClientGroup = function (teamId)
-          {
-            var clientGroupId = teamClientLocal[teamId];
-
-            Store('app').save(
-              'currentTeamClientGroup', {
-                team: teamId,
-                clientGroup: clientGroupId
-              });
-          };
-
           var uuid,
             view;
 
@@ -71,12 +56,7 @@ define(
           }
           else if (!params.uuid)
           {
-            if (!(Store('app').get('currentTeamClientGroup')).team)
-            {
-              lastVisitedTeamClientGroup(data.teams[0].uuid);
-            }
-
-            uuid = (Store('app').get('currentTeamClientGroup')).team;
+            uuid = data.teams[0].uuid;
             view = $location.hash();
 
             $location.search({uuid: uuid});
@@ -101,18 +81,14 @@ define(
             editTeam: false
           };
 
+          $scope.setCurrentTeam = function(id)
+          {
+            setTeamView(id);
+          };
+
           function setTeamView(id)
           {
-            angular.forEach(
-              data.teams,
-              function (team)
-              {
-                if (team.uuid == id)
-                {
-                  $scope.team = team;
-                }
-              }
-            );
+            $scope.team = _.findWhere(data.teams, {uuid: id});
 
             $scope.members = data.members[id];
 
@@ -180,14 +156,13 @@ define(
 
           $scope.requestTeam = function (current, switched)
           {
-            lastVisitedTeamClientGroup(current);
             setTeamView(current);
 
             $scope.$watch(
               $location.search(),
               function ()
               {
-                $location.search({uuid: current})
+                $location.search({uuid: current});
               },
               $scope.memberForm.team = current
             );

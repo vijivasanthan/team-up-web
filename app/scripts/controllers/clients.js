@@ -124,13 +124,7 @@ define(
           }
           else if (!params.uuid)
           {
-            //check the link between team and clientGroup and set the clientGroup
-            if (!(Store('app').get('currentTeamClientGroup')).clientGroup)
-            {
-              saveLastVisitedClientGroup(data.clientGroups[0].id);
-            }
-
-            uuid = (Store('app').get('currentTeamClientGroup')).clientGroup;
+            uuid = data.clientGroups[0].id;
 
             view = $location.hash();
 
@@ -278,25 +272,9 @@ define(
             }
           }
 
-          var teamsLocal = Teams.queryLocal();
-          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          //save the last visited clientgroup - team by id, so that it will be the default
-          function saveLastVisitedClientGroup(clientGroupId)
-          {
-            var teamId = (_.invert(teamClientLocal))[clientGroupId];
-
-            Store('app').save(
-              'currentTeamClientGroup', {
-                team: teamId,
-                clientGroup: clientGroupId
-              });
-          }
-
           $scope.requestClientGroup = function (current, switched)
           {
             setClientView(current);
-            saveLastVisitedClientGroup(current);
 
             $scope.$watch(
               $location.search(),

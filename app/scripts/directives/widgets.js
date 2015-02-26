@@ -445,7 +445,21 @@ define(
           require: 'ngModel',
           link: function (scope, element, attrs, ngModel)
           {
-            ngModel.$setViewValue(CurrentSelection.getTeamId());
+            var id = null;
+
+            switch (attrs.currentSelection)
+            {
+              case "team":
+                id = CurrentSelection.getTeamId();
+                break;
+              case "client":
+                id = CurrentSelection.getClientGroupId();
+                break;
+              default:
+                console.log("No current selection");
+            }
+
+            ngModel.$setViewValue(id);
 
             ngModel.$viewChangeListeners.push(function() {
               CurrentSelection.local = ngModel.$viewValue;
