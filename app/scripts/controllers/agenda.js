@@ -36,7 +36,7 @@ define(
             layouts: {
               user: true,
               group: true,
-              members: (data.userData.uuid != $rootScope.app.resources.uuid)
+              members: (data.userData.uuid != $rootScope.app.resources.uuid) ? true : false
             },
             day: moment().format('DDD'),
             week: moment().week(),

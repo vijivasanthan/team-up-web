@@ -18,7 +18,10 @@ define(
         'Sloter',
         'TeamUp',
         'Store',
-        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Dater, Sloter, TeamUp, Store)
+        'CurrentSelection',
+        '$filter',
+        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots,
+                  Dater, Sloter, TeamUp, Store, CurrentSelection, $filter)
         {
           // TODO: Define diff in the watcher maybe?
           var range = null,
@@ -221,13 +224,6 @@ define(
 
               if ($scope.timeline.main)
               {
-                var wishes = null;
-
-                if($scope.data.aggs && $scope.data.aggs.wishes)
-                {
-                  wishes = $scope.data.aggs.wishes;
-                }
-
                 //TODO load and render at the same time, two times the same call
                 Slots.all(
                   {
@@ -248,12 +244,11 @@ define(
                     }
                     else
                     {
+                      console.log('data', data);
+                      
                       $scope.data = data;
 
-                      if($scope.data.aggs)
-                      {
-                        $scope.data.aggs.wishes = wishes;
-                      }
+                      getWishes();
 
                       _this.render(stamps, remember);
                     }
@@ -483,6 +478,8 @@ define(
               wisher(currentTeamId);
             });
 
+          getWishes();
+
           /**
           * Timeliner listener
           */
@@ -511,6 +508,7 @@ define(
           */
           $scope.requestTimeline = function (section)
           {
+            CurrentSelection.local = $scope.timeline.current.group;
             switch (section)
             {
               case 'group':
@@ -529,6 +527,12 @@ define(
                 {
                   $scope.timeline.current.layouts.group = true;
                 }
+                $scope.timeliner.load(
+                  {
+                    start: $scope.data.periods.start,
+                    end: $scope.data.periods.end
+                  }
+                );
                 break;
             }
 
@@ -566,7 +570,6 @@ define(
               }
             );
           };
-
 
           /**
           * Get information of the selected slot
@@ -670,6 +673,8 @@ define(
                   recursive: content.recursive,
                   id: content.id
                 };
+
+                $scope.showDuration();
 
                 /**
                  * TODO (Check if this can be combined with switch later on!)
@@ -810,38 +815,6 @@ define(
           };
 
           /**
-          * Get wishes
-          */
-          function getWishes()
-          {
-            if ($scope.timeline.current.layouts.group)
-            {
-              $rootScope.statusBar.display($rootScope.ui.message.getWishes);
-
-              Slots.wishes(
-                {
-                  id: $scope.timeline.current.group,
-                  start: $scope.data.periods.start / 1000,
-                  end: $scope.data.periods.end / 1000
-                }).then(
-                function (wishes)
-                {
-                  $rootScope.statusBar.off();
-
-                  $scope.data.aggs.wishes = wishes;
-
-                  $scope.timeliner.render(
-                    {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    }, true);
-                }
-              );
-            }
-          }
-
-
-          /**
           * Timeline legenda toggler
           */
           $scope.showLegenda = function ()
@@ -975,6 +948,56 @@ define(
           };
 
           /**
+           * Show the duration of the slot
+           */
+          $scope.showDuration = function()
+          {
+            var startDate = $scope.slot.start.date + $scope.slot.start.time,
+                endDate = $scope.slot.end.date + $scope.slot.end.time,
+                dateTimeFormat = 'DD-MM-YYYY HH:mm',
+                startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+                endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf(),
+                duration = $filter('calculateDeltaTime')(endUnixTimeStamp, startUnixTimeStamp),
+                durationEl = angular.element('.duration'),
+                dangerClass = 'label-danger';
+
+            $scope.duration = '';
+
+            if(startUnixTimeStamp > endUnixTimeStamp)
+            {
+              durationEl.addClass(dangerClass);
+              $scope.duration += '-';
+            }
+            else
+            {
+              durationEl.removeClass(dangerClass);
+            }
+            $scope.duration += duration;
+          };
+
+          /**
+           * Set the end date depending on the start date
+           * @param startDate
+           */
+          $scope.setEndDate = function(startDate)
+          {
+            $scope.slot.end.date = startDate;
+          };
+
+          /**
+           * Set the end time depending on the start time
+           * @param startDate
+           */
+          $scope.setEndTime = function(startTime)
+          {
+            var dateFormat = 'DD-MM-YYYY',
+                timeFormat = 'HH:mm';
+            $scope.slot.end.time = moment(startTime, timeFormat)
+                                    .add(6, 'hours')
+                                    .format(timeFormat);
+          };
+
+          /**
           * Add slot trigger start view
           */
           $scope.timelineOnAdd = function (form, slot)
@@ -1035,6 +1058,10 @@ define(
                       recursive: (values.group.match(/recursive/)) ? true : false,
                       state: 'com.ask-cs.State.Available'
                     };
+
+                    $scope.setEndDate($scope.slot.start.date);
+                    $scope.setEndTime($scope.slot.start.time);
+                    $scope.showDuration();
 
                     $scope.original = {
                       start: new Date(values.start),
@@ -1177,6 +1204,7 @@ define(
                   recursive: options.content.recursive,
                   id: options.content.id
                 };
+                $scope.showDuration();
               }
             );
           };
@@ -1523,10 +1551,41 @@ define(
                   wish: wish.count
                 };
 
-                getWishes();
+                //getWishes();
               }
             );
           };
+
+          /**
+           * Get wishes
+           */
+          function getWishes()
+          {
+            if ($scope.timeline.current.layouts.group)
+            {
+              $rootScope.statusBar.display($rootScope.ui.message.getWishes);
+
+              Slots.wishes(
+                {
+                  id: $scope.timeline.current.group,
+                  start: $scope.data.periods.start / 1000,
+                  end: $scope.data.periods.end / 1000
+                }).then(
+                function (wishes)
+                {
+                  $rootScope.statusBar.off();
+
+                  $scope.data.aggs.wishes = wishes;
+
+                  $scope.timeliner.render(
+                    {
+                      start: $scope.timeline.range.start,
+                      end: $scope.timeline.range.end
+                    }, true);
+                }
+              );
+            }
+          }
 
           /**
            *

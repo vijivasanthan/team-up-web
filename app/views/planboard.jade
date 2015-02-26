@@ -29,14 +29,16 @@ div(ng-controller='timeline as taskPlanboard')
 							| Selecteer team
 						select(ng-model='currentTeam',
 						ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
+						ng-selected='currentTeam',
 						ng-change='changeCurrent(currentTeam)')
 		
 				span.nullable.pull-left(ng-show='views.clients')
 					.selectGroup
 						span.selectTitle
 							| Selecteer groep
-						select(ng-model='currentClientGroup',
+						select(ng-model='currentClientGroup'
 						ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
+						ng-selected='currentClientGroup',
 						ng-change='changeCurrent(currentClientGroup)')
 	
 			//br

@@ -79,7 +79,8 @@ aria-hidden='true')
 	.selectGroup(ng-show="app.resources.role == 1")
 		span.selectTitle
 			| Selecteer groep
-		select(ng-model='current',
+		select(current_selection='client',
+		ng-model='current',
 		ng-options='c.id as c.name for c in clientGroups',
 		ng-selected='current',
 		ng-change='requestClientGroup(current)')

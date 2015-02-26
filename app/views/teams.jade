@@ -42,7 +42,8 @@ aria-hidden='true')
 		ng-show='app.resources.role == 1 && views.team')
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
-		select(ng-model='current',
+		select(current_selection='team', 
+		ng-model='current',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
 		ng-selected='current',
 		ng-change='requestTeam(current)')
@@ -173,8 +174,10 @@ aria-hidden='true')
 					.control-group
 						label.control-label {{ui.teamup.teams}}
 						.controls
-							select(ng-model='memberForm.team',
-							ng-options='t.uuid as t.name for t in teams | orderBy:"name"')
+							select(current_selection='team',
+							ng-model='memberForm.team',
+							ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
+							ng-change='setCurrentTeam(memberForm.team)')
 								option(value='') {{ui.teamup.chooseTeam}}
 					hr
 					.row

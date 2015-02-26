@@ -1016,10 +1016,14 @@ $step: 7;
 }
 
 .daterangepicker td.in-range {
-  background: #ebf4f8;
+  background: lighten($turq, 10%);
+  color: $white;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+  &:hover {
+    color: $brown;
+  }
 }
 
 .daterangepicker td.start-date {
@@ -1148,6 +1152,38 @@ $step: 7;
       -moz-border-radius: 3px;
       border-radius: 3px;
     }
+    .btn-info {
+      background-color: $beige !important;
+      &:disabled {
+        opacity: 1.0;
+        color: $grayLighter !important;
+      }
+    }
+    .btn-default {
+      color: $brown !important;
+      .text-muted {
+        color: $gray !important;
+      }
+    }
+    .btn-default:disabled {
+      color: $gray !important;
+    }
+    .text-muted {
+      color: $brown !important;
+    }
+    .btn-primary {
+      background-color: $brown !important;
+      color: $white !important;
+      .text-muted {
+        color: $white !important;
+      }
+    }
+    .start-date {
+      background-color: orange;
+    }
+    .end-date {
+      background-color: orange;
+    }
   }
   tbody button {
     padding: 6px;
@@ -1179,6 +1215,12 @@ sortable
   -khtml-opacity: 0.60;
   opacity: 0.60;
   cursor: not-allowed !important;
+}
+
+.duration {
+//  position: absolute;
+//  top: -1px;
+//  left: 25%;
 }
 
 /*
