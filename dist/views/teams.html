@@ -31,7 +31,7 @@
 <div class="page-header">
   <h2 class="nullable">{{ui.teamup.teams}}</h2>
   <div ng-show="app.resources.role == 1 &amp;&amp; views.team" class="selectGroup"><span class="selectTitle">{{ ui.teamup.selectTeam }}</span>
-    <select ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
+    <select current_selection="team" ng-model="current" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="requestTeam(current)"></select>
   </div>
 </div>
 <div class="tabbable tabs-left">
@@ -125,7 +125,7 @@
           <div class="control-group">
             <label class="control-label">{{ui.teamup.teams}}</label>
             <div class="controls">
-              <select ng-model="memberForm.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;">
+              <select current_selection="team" ng-model="memberForm.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot;" ng-change="setCurrentTeam(memberForm.team)">
                 <option value="">{{ui.teamup.chooseTeam}}</option>
               </select>
             </div>

@@ -76,7 +76,7 @@
 <div class="page-header">
   <h2 class="nullable">{{ui.task.tasks}}</h2>
   <div ng-show="views.allTasks &amp;&amp; app.resources.role == 1" class="selectGroup"><span class="selectTitle">Selecteer team</span>
-    <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)"></select>
+    <select current_selection="team" ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)"></select>
   </div>
 </div>
 <div class="tabbable tabs-left">
@@ -211,7 +211,7 @@
               <div class="form-group">
                 <label class="control-label">Verzorger</label>
                 <div class="controls">
-                  <select ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
+                  <select current_selection="team" ng-model="task.team" ng-options="t.uuid as t.name for t in teams | orderBy:&quot;name&quot; " ng-selected="currentTeam" ng-change="changeTeam(task.team)">
                     <option value="">Team</option>
                   </select>
                   <select ng-model="task.member" ng-options="m.uuid as (m.firstName + &quot; &quot; + m.lastName) for m in members | orderBy:&quot;lastName&quot; " ng-selected="currentMember">

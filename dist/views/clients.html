@@ -61,7 +61,7 @@
 <div ng-hide="views.viewClient || views.editClient || views.newClientGroup" class="page-header">
   <h2 class="nullable">{{ui.teamup.clients}}</h2>
   <div ng-show="app.resources.role == 1" class="selectGroup"><span class="selectTitle">Selecteer groep</span>
-    <select ng-model="current" ng-options="c.id as c.name for c in clientGroups" ng-selected="current" ng-change="requestClientGroup(current)"></select>
+    <select current_selection="client" ng-model="current" ng-options="c.id as c.name for c in clientGroups" ng-selected="current" ng-change="requestClientGroup(current)"></select>
   </div>
 </div>
 <div class="tabbable tabs-left">

@@ -20,10 +20,10 @@
       <!--include planboard/time-slot.jade-->
       <div ng-hide="app.resources.role &gt; 1"><span ng-show="views.teams" class="nullable pull-left">
           <div class="selectGroup"><span class="selectTitle">Selecteer team</span>
-            <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentTeam)"></select>
+            <select ng-model="currentTeam" ng-options="t.uuid as t.name for t in data.teams.list | orderBy:&quot;name&quot;" ng-selected="currentTeam" ng-change="changeCurrent(currentTeam)"></select>
           </div></span><span ng-show="views.clients" class="nullable pull-left">
           <div class="selectGroup"><span class="selectTitle">Selecteer groep</span>
-            <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-change="changeCurrent(currentClientGroup)"></select>
+            <select ng-model="currentClientGroup" ng-options="t.uuid as t.name for t in data.clients.list | orderBy:&quot;name&quot;" ng-selected="currentClientGroup" ng-change="changeCurrent(currentClientGroup)"></select>
           </div></span></div>
       <!--br-->
       <!--a(class='btn btn-primary', ng-click='getTeamID()') get team id-->
