@@ -322,7 +322,7 @@ define(
                     Store('app').get(group.id),
                     function (client)
                     {
-                      if (client.uuid == clientId)
+                      if (client && client.uuid == clientId)
                       {
                         result = client;
 

@@ -7,7 +7,7 @@
     <!--input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')-->
     <label class="control-label">Selecteer team</label>
     <div class="controls">
-      <select ng-model="current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="current.group" ng-change="getOrder()"></select>
+      <select current_selection="team" ng-model="current.group" ng-options="group.uuid as group.name for group in groups" ng-selected="current.group" ng-change="getOrder()"></select>
     </div>
   </div>
   <div class="tabbable tabs-left">
@@ -20,8 +20,9 @@
     <div class="tab-content">
       <div id="order" class="tab-pane {{(views.order==true) &amp;&amp; 'active'}}">
         <div ng-show="current.group === &quot;&quot;">Er is geen team geselecteerd</div>
-        <div ng-show="orderedMembers.length &gt; 0">
-          <div class="btn-group">
+        <div style="overflow: hidden">
+          <h3 class="pull-left">{{current.group | getGroupNameById | toTitleCase}} <span ng-show="load">{{load}}</span></h3>
+          <div ng-show="orderedMembers.length &gt; 0" class="btn-group pull-right">
             <label class="btn btn-primary {{(orderType == &quot;FIXED&quot;) &amp;&amp; &quot;active&quot;}}">
               <input type="radio" ng-model="orderType" value="FIXED" ng-change="orderTypePreview()">{{ ui.order.fixedOrder }}
             </label>
@@ -29,6 +30,10 @@
               <input type="radio" ng-model="orderType" value="RANDOM" ng-change="orderTypePreview()">{{ ui.order.randomOrder }}
             </label>
           </div>
+        </div>
+        <hr>
+        <div ng-show="orderedMembers.length &gt; 0">
+          <button ng-show="orderedMembers.length &gt; 6 &amp;&amp; orderType == &quot;FIXED&quot;" type="button" ng-click="confirmOrder()" class="btn btn-info">{{ ui.order.confirmation }}</button>
           <p ng-show="orderType == &quot;RANDOM&quot;">{{ ui.order.randomFeedback }}</p>
           <table ng-show="orderType == &quot;FIXED&quot;" class="table table-striped orderTable">
             <thead>
