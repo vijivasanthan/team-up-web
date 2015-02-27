@@ -670,7 +670,12 @@ define(
           randomOrder: 'Willekeurige',
           fixedOrder: 'Eigen volgorde',
           confirmation: 'Bevestig Keuze',
-          randomFeedback: 'Een willekeurige volgorde wordt bepaald.'
+          randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
+          loadTeam: 'Team laden...',
+          orderSaved: 'Volgorde opgeslagen'
+        },
+        logs: {
+          loadLogs: 'Logs laden...'
         },
         validation: {
           phone: {

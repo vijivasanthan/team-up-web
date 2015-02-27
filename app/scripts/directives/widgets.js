@@ -461,9 +461,12 @@ define(
 
             ngModel.$setViewValue(id);
 
-            ngModel.$viewChangeListeners.push(function() {
-              CurrentSelection.local = ngModel.$viewValue;
-            });
+            ngModel.$viewChangeListeners.push(
+              function()
+              {
+                CurrentSelection.local = ngModel.$viewValue;
+              }
+            );
           }
         }
       }

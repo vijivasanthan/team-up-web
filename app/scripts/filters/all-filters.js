@@ -594,6 +594,21 @@ define(
       //   }
       // )
 
+      .filter(
+      'getGroupNameById',
+      [
+        'Store',
+        function (Store)
+        {
+          return function (id)
+          {
+            var teams = Store('app').get('teams');
+
+            return (_.findWhere(teams, {uuid: id})).name;
+          }
+        }
+      ])
+
 
     /**
      * Convert group id to name

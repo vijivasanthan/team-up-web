@@ -64,15 +64,13 @@ define(
           {
             $timeout(function ()
             {
-              $rootScope.statusBar.display('Logs laden..');
+              $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
               $scope.loadLogs = true;
             });
 
             Logs.fetch(dataRange)
               .then(function (data)
               {
-                console.log('data', data);
-
                 $scope.loadLogs = false;
                 $scope.data = data;
 

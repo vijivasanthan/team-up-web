@@ -406,6 +406,11 @@ define(
                 data: function()
                 {
                   removeActiveClass('.teamMenu');
+
+                  //return TeamUp._('callOrderGet',
+                  //  {
+                  //    second: CurrentSelection.getTeamId()
+                  //  });
                 }
               },
               reloadOnSearch: false

@@ -7,7 +7,8 @@ section
 		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 		label.control-label Selecteer team
 		.controls
-			select(ng-model='current.group',
+			select(current_selection='team',
+			ng-model='current.group',
 			ng-options='group.uuid as group.name for group in groups',
 			ng-selected='current.group',
 			ng-change='getOrder()')
@@ -20,20 +21,28 @@ section
 			#order.tab-pane(class="{{(views.order==true) && 'active'}}")
 				div(ng-show='current.group === ""')
 					| Er is geen team geselecteerd
-				div(ng-show='orderedMembers.length > 0')
-					div.btn-group
+				div(style='overflow: hidden;')
+					h3.pull-left
+						| {{current.group | getGroupNameById | toTitleCase}} 
+						span(ng-show='load') {{load}}
+					div.btn-group.pull-right(ng-show='orderedMembers.length > 0')
 						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
-							input(type='radio', 
-								ng-model='orderType', 
-								value='FIXED', 
-								ng-change='orderTypePreview()')
+							input(type='radio',
+							ng-model='orderType',
+							value='FIXED',
+							ng-change='orderTypePreview()')
 							| {{ ui.order.fixedOrder }}
 						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
-							input(type='radio', 
-								ng-model='orderType', 
-								value='RANDOM', 
-								ng-change='orderTypePreview()')
+							input(type='radio',
+							ng-model='orderType',
+							value='RANDOM',
+							ng-change='orderTypePreview()')
 							| {{ ui.order.randomOrder }}
+				hr
+				div(ng-show='orderedMembers.length > 0')
+					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
+						type='button', ng-click='confirmOrder()')
+							| {{ ui.order.confirmation }}
 					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED"')
 						thead

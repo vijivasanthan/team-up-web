@@ -12,24 +12,56 @@ define(
         'Store',
         'Teams',
         'TeamUp',
-        'CurrentSelection',
-        function ($rootScope, $scope, $location, Store, Teams, TeamUp, CurrentSelection)
+        function ($rootScope, $scope, $location, Store, Teams, TeamUp)
         {
           $rootScope.fixStyles();
 
-          var teams = Store('app').get('teams'),
-            teamsLocal = Teams.queryLocal(),
+          var teamsLocal = Teams.queryLocal(),
             view,
             tempOrder = [];
 
-          teams.unshift();
+          $scope.orderedMembers = [];
+          $scope.orderType = '';
+          //$scope.current = {
+          //  group: teamsLocal.teams[0].uuid
+          //};
 
-          $scope.groups = teams;
+          var showOrder = function (orderArray)
+          {
+            console.log('123', 123);
 
-          //default first team
-          $scope.current = {
-            group: CurrentSelection.getTeamId()
+            var members = teamsLocal.members[$scope.current.group];
+            var orderedMembers = [];
+
+            _.each(members, function (member)
+            {
+              _.each(orderArray, function (uuid, key)
+              {
+
+                if (member.uuid === uuid)
+                {
+                  if (member.phone)
+                  {
+                    $rootScope.parsePhoneNumber(member.phone);
+
+                    if ($rootScope.phoneNumberParsed.result === true)
+                    {
+                      member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
+                    }
+                  }
+
+                  member.originalPosition = key;
+                  orderedMembers[key] = member;
+                }
+
+              });
+            });
+
+            tempOrder = orderedMembers;
+            $scope.orderedMembers = orderedMembers;
           };
+
+          $scope.groups = teamsLocal.teams;
 
           if (!$location.hash())
           {
@@ -69,47 +101,13 @@ define(
 
           setView(view);
 
-
-          $scope.orderedMembers = [];
-          $scope.orderType = '';
-
-          var showOrder = function (orderArray)
-          {
-            var members = teamsLocal.members[$scope.current.group];
-            var orderedMembers = [];
-
-            _.each(members, function (member)
-            {
-              _.each(orderArray, function (uuid, key)
-              {
-
-                if (member.uuid === uuid)
-                {
-                  if (member.phone)
-                  {
-                    $rootScope.parsePhoneNumber(member.phone);
-
-                    if ($rootScope.phoneNumberParsed.result === true)
-                    {
-                      member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
-                    }
-                  }
-
-                  member.originalPosition = key;
-                  orderedMembers[key] = member;
-                }
-
-              });
-            });
-
-            tempOrder = orderedMembers;
-            $scope.orderedMembers = orderedMembers;
-          };
-
           $scope.getOrder = function ()
           {
             var groupID = $scope.current.group;
-            CurrentSelection.local = groupID;
+
+            $scope.load = $rootScope.ui.dashboard.load;
+
+            $rootScope.statusBar.display($rootScope.ui.order.loadTeam);
 
             if (groupID !== '')
             {
@@ -119,20 +117,11 @@ define(
                   $scope.orderType = result.sortBy;
 
                   showOrder(result.order);
+                  $scope.load = '';
+                  $rootScope.statusBar.off();
                 });
             }
           };
-
-          $scope.getOrder();
-
-          //$scope.sortableOptions = {
-          //  stop: function (e, ui)
-          //  {
-          //    tempOrder = $scope.orderedMembers;
-          //  },
-          //  cancel: ".unsortable",
-          //  items: "tr:not(.unsortable)"
-          //};
 
           $scope.sortableOptions = {
             animation: 150,
@@ -162,7 +151,7 @@ define(
               (
                 function (result)
                 {
-                  $rootScope.notifier.success("Volgorde opgeslagen");
+                  $rootScope.notifier.success($rootScope.ui.order.orderSaved);
                   $rootScope.statusBar.off();
                   $scope.orderType = result.sortBy;
                   showOrder(result.order);
