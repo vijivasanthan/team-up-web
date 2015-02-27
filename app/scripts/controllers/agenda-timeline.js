@@ -244,8 +244,6 @@ define(
                     }
                     else
                     {
-                      console.log('data', data);
-                      
                       $scope.data = data;
 
                       getWishes();
@@ -1694,7 +1692,11 @@ define(
 
           $rootScope.$on('resetTimeline', function ()
           {
-            $scope.timeliner.refresh();
+            $scope.timeliner.render(
+              {
+                start: $scope.timeline.range.start,
+                end: $scope.timeline.range.end
+              }, true);
           });
 
           /**
