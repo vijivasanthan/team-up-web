@@ -271,7 +271,7 @@ define(
                       layouts: {
                         user: true,
                         group: true,
-                        members: false
+                        members: (userId != $rootScope.app.resources.uuid)
                       },
                       user: userId
                     });
@@ -406,11 +406,6 @@ define(
                 data: function()
                 {
                   removeActiveClass('.teamMenu');
-
-                  //return TeamUp._('callOrderGet',
-                  //  {
-                  //    second: CurrentSelection.getTeamId()
-                  //  });
                 }
               },
               reloadOnSearch: false

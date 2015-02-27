@@ -507,6 +507,7 @@ define(
           $scope.requestTimeline = function (section)
           {
             CurrentSelection.local = $scope.timeline.current.group;
+
             switch (section)
             {
               case 'group':
