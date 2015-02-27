@@ -20,7 +20,9 @@ define(
         'Session',
         'Slots',
         'data',
-        function ($rootScope, $scope, $q, $window, $location, Dater, $timeout, Store, Teams, Clients, TeamUp, Session, Slots, data)
+        'ipCookie',
+        function ($rootScope, $scope, $q, $window, $location, Dater, $timeout, Store,
+                  Teams, Clients, TeamUp, Session, Slots, data, ipCookie)
         {
           $rootScope.notification.status = false;
 
@@ -49,17 +51,22 @@ define(
           $scope.periods = Dater.getPeriods();
           $scope.periodsNext = Dater.getPeriods(true);
 
-          $rootScope.infoAvailibility = Store('app').get('infoAvail') || {};
+          var cookieKey = 'infoTimeline' + $rootScope.app.resources.uuid,
+              setCookie = function(infoCheck)
+              {
+                ipCookie(cookieKey, infoCheck, {expires: 365});
+                $rootScope.infoAvailibility = infoCheck;
+              };
 
-          if(_.isUndefined($rootScope.infoAvailibility.info))
+          $rootScope.infoAvailibility = ipCookie(cookieKey);
+
+          if(_.isUndefined($rootScope.infoAvailibility))
           {
-            Store('app').save('infoAvail', {info: true});
-            $rootScope.infoAvailibility.info = true;
+            setCookie(true);
           }
 
           $rootScope.disableInfoAvailibility = function() {
-            Store('app').save('infoAvail', {info: false});
-            $rootScope.infoAvailibility.info = false;
+            setCookie(false);
           };
 
           $scope.slot = {};

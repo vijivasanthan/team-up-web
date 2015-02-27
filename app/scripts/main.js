@@ -18,7 +18,7 @@ require.config({
 
 requirejs([
     'jquery',
-    'localConfig',
+    'localConfig'
   ], function ($, localConfig)
   {
     'use strict';
@@ -45,6 +45,7 @@ require.config(
 
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
+      'angular-cookie': '../vendors/angular-cookie/angular-cookie.min',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
 
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
@@ -276,7 +277,7 @@ require(
 
     // 'jszip',
     // 'xlsx'
-    'clj-fuzzy',
+    'clj-fuzzy'
   ],
   function (angular, domReady)
   {
