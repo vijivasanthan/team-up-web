@@ -245,9 +245,6 @@ define(
                     else
                     {
                       $scope.data = data;
-
-                      getWishes();
-
                       _this.render(stamps, remember);
                     }
 
@@ -476,8 +473,6 @@ define(
               wisher(currentTeamId);
             });
 
-          getWishes();
-
           /**
           * Timeliner listener
           */
@@ -507,6 +502,10 @@ define(
           $scope.requestTimeline = function (section)
           {
             CurrentSelection.local = $scope.timeline.current.group;
+            var periods = {
+              start: ($scope.data.periods.start / 1000),
+              end: ($scope.data.periods.end / 1000)
+            };
 
             switch (section)
             {
@@ -517,6 +516,30 @@ define(
                 {
                   $scope.timeline.current.layouts.members = false;
                 }
+
+                if($scope.timeline.current.layouts.group)
+                {
+                  Slots.aggs({
+                    id: $scope.timeline.current.group,
+                    start: periods.start,
+                    end: periods.end,
+                    month: $scope.timeline.current.month
+                  })
+                    .then(
+                      function (aggs)
+                      {
+                        $scope.data.aggs = aggs
+                        $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                      }
+                  );
+                }
+                else
+                {
+                  delete $scope.data.aggs;
+                  $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                }
+
+                $scope.timeliner.load({start: $scope.data.periods.start, end: $scope.data.periods.end});
                 break;
 
               case 'members':
@@ -526,21 +549,29 @@ define(
                 {
                   $scope.timeline.current.layouts.group = true;
                 }
-                $scope.timeliner.load(
-                  {
-                    start: $scope.data.periods.start,
-                    end: $scope.data.periods.end
-                  }
-                );
-                break;
-            }
 
-            $scope.timeliner.load(
-              {
-                start: $scope.data.periods.start,
-                end: $scope.data.periods.end
-              }
-            );
+                if($scope.timeline.current.layouts.members)
+                {
+                  Slots.members($scope.timeline.current.group, periods)
+                    .then(
+                    function(members)
+                    {
+                      console.log('members', members)
+                      $scope.data.members = members;
+
+                      $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                    }
+                  );
+                }
+                else
+                {
+                  delete $scope.data.members;
+                  $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                }
+                break;
+              default:
+                $scope.timeliner.load({start: $scope.data.periods.start, end: $scope.data.periods.end});
+            }
           };
 
 
@@ -896,33 +927,6 @@ define(
 
             $scope.setAvailability(options.availability, options.period);
           }
-
-          /**
-           * set the form near the added or editable slot
-           * @param ev event
-           */
-          //var setPositionSlotForm = function(ev)
-          //{
-          //  var footer = angular.element('#footer').height(),
-          //    form = angular.element('.time-slot-form'),
-          //    modal = form.height(),
-          //    slot = 100,
-          //    clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
-          //    currentScreen = $window.innerHeight,
-          //    minNeededHeight = (modal + slot),
-          //    heightToBottom = ($window.outerHeight - clickY) + minNeededHeight;
-          //  //$scope.clientY = ev.clientY;
-          //
-          //  //TODO FIx position bottom
-          //  //The height needed for the modal is less then the height in the current view
-          //  var position = (minNeededHeight > ev.clientY)
-          //    ? clickY
-          //    : (clickY - minNeededHeight);
-          //
-          //  angular.element('.time-slot-form').css({
-          //    top: position + 'px'
-          //  });
-          //};
 
           /**
            * Event by editing a slot
@@ -1549,8 +1553,6 @@ define(
                   id: id,
                   wish: wish.count
                 };
-
-                //getWishes();
               }
             );
           };
@@ -1575,6 +1577,9 @@ define(
                   $rootScope.statusBar.off();
 
                   $scope.data.aggs.wishes = wishes;
+
+                  console.log($scope.data);
+                  console.log($scope.data.aggs.wishes);
 
                   $scope.timeliner.render(
                     {
@@ -1616,7 +1621,7 @@ define(
                 $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
               }
               wisher(id);
-              $scope.timeliner.refresh();
+              getWishes();
             });
 
           };
@@ -1685,7 +1690,6 @@ define(
                   $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
                 }
 
-                getWishes();
                 $scope.timeliner.refresh();
               }
             );
