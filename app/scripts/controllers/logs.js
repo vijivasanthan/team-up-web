@@ -12,11 +12,21 @@ define(
         '$timeout',
         'Logs',
         'data',
-        function ($rootScope, $scope, $filter, $timeout, Logs, data)
+        'Store',
+        'CurrentSelection',
+        function ($rootScope, $scope, $filter, $timeout, Logs, data, Store, CurrentSelection)
         {
           $rootScope.fixStyles();
 
-          $scope.data = data;
+          $scope.data = data.logs;
+
+          $scope.teams = data.teamAdapters;
+
+          var currentTeamAdapter = _.findWhere($scope.teams, {teamId: CurrentSelection.getTeamId()});
+
+          $scope.current = (currentTeamAdapter)
+              ? currentTeamAdapter.adapterId
+              : $scope.teams[0].adapterId;
 
           $scope.orderBy = function (ordered)
           {
@@ -28,8 +38,8 @@ define(
           $scope.ordered = 'started.stamp';
           $scope.reversed = true;
 
-          $scope.daterange = $filter('date')(data.periods.start, 'dd-MM-yyyy') + ' / ' +
-          $filter('date')(data.periods.end, 'dd-MM-yyyy');
+          $scope.daterange = $filter('date')($scope.data.periods.start, 'dd-MM-yyyy') + ' / ' +
+          $filter('date')($scope.data.periods.end, 'dd-MM-yyyy');
 
           $rootScope.$on('getLogRange', function ()
           {
@@ -38,11 +48,23 @@ define(
             fetchLogs(periods);
           });
 
+          $scope.switchTeam = function(adapterId)
+          {
+            var team = (! _.isNull(adapterId))
+              ? _.findWhere($scope.teams, {adapterId: adapterId})
+              : null;
+
+            if(!_.isNull(team))
+            {
+              CurrentSelection.local = team.teamId;
+            }
+          };
+
           function fetchLogs(dataRange)
           {
             $timeout(function ()
             {
-              $rootScope.statusBar.display('Logs laden..')
+              $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
               $scope.loadLogs = true;
             });
 

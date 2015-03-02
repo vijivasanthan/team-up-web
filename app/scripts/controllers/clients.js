@@ -9,6 +9,7 @@ define(
         '$rootScope',
         '$scope',
         '$location',
+        'Report',
         'Clients',
         'Teams',
         'data',
@@ -20,16 +21,19 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $scope, $location, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout)
+        'Reports',
+        function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
+                  $filter, $modal, TeamUp, $timeout, Reports)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
+
           var modalInstance = null;
 
           if (data.clientId)
           {
             var clientHasClientGroup = false;
+            Reports.clientId = data.clientId;
 
             data.clientGroups = Store('app').get('ClientGroups');
             data.clients = {};
@@ -61,13 +65,9 @@ define(
             if (!clientHasClientGroup)
             {
               data.clients = Store('app').get('clients');
-              data.client = (
-                _.where(data.clients,
-                  {
-                    uuid: data.clientId
-                  })
-              )[0];
+              data.client = _.findWhere(data.clients, {uuid: data.clientId});
 
+              Reports.clientId = $scope.client.uuid;
               $scope.client = data.client;
               $scope.contacts = data.client.contacts;
               data.client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
@@ -124,13 +124,7 @@ define(
           }
           else if (!params.uuid)
           {
-            //check the link between team and clientGroup and set the clientGroup
-            if (!(Store('app').get('currentTeamClientGroup')).clientGroup)
-            {
-              saveLastVisitedClientGroup(data.clientGroups[0].id);
-            }
-
-            uuid = (Store('app').get('currentTeamClientGroup')).clientGroup;
+            uuid = data.clientGroups[0].id;
 
             view = $location.hash();
 
@@ -186,39 +180,17 @@ define(
           // Load reports list for client profile view
           var loadReports = function ()
           {
-            console.log('loadReports-> ', $scope.client);
-
             $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
 
-            TeamUp._(
-              'clientReportsQuery',
-              {second: $scope.client.uuid},
-              null,
-              {
-                success: function (reports)
+            Report.all($scope.client.uuid)
+              .then(
+                function(reports)
                 {
-                  Store('app').save('reports_' + $scope.client.uuid, reports)
+                  $rootScope.statusBar.off();
+
+                  $scope.reports = $scope.processReports(reports);
                 }
-              }
-            ).then(
-              function (reports)
-              {
-                $rootScope.statusBar.off();
-
-                $scope.reports = $scope.processReports(reports);
-
-                //                $scope.$watch(
-                //                  $scope.reports, function (rs)
-                //                  {
-                //                    console.log('watcher found ... ', rs);
-                //                    $scope.loadMembersImg();
-                //                  }
-                //                );
-
-              }, function (error)
-              {
-                console.log(error)
-              });
+              );
           };
 
           // Get the list of reports for certain client group for reports tab
@@ -232,54 +204,40 @@ define(
               $scope.clientGroup = data.clientGroups[0];
             }
 
-            TeamUp._(
-              'clientGroupReportsQuery',
-              {
-                second: $scope.clientGroup.id
-              }
-            ).then(
-              function (reports)
-              {
-                $rootScope.statusBar.off();
-
-                $scope.groupReports = $scope.processReports(reports);
-
-                if ($scope.currentCLient != 0)
+            Report.allByClientGroup($scope.clientGroup.id)
+              .then(
+                function(reports)
                 {
-                  $scope.requestReportsByFilter();
-                }
+                  $rootScope.statusBar.off();
 
-                // open the report tab if the there is report Id in the params
-                var reportId = $location.search().reportUuid;
-                var report_modal = null;
-                if (reportId)
-                {
-                  angular.forEach(
-                    $scope.groupReports, function (report)
-                    {
-                      if (report.uuid == reportId)
-                      {
-                        report_modal = report;
-                      }
-                    });
-                  if (report_modal == null)
+                  $scope.groupReports = $scope.processReports(reports);
+
+                  if ($scope.currentCLient != 0)
                   {
-                    // clear the url param
-                    if ($location.search().reportUuid)
-                    {
-                      $location.search('reportUuid', null);
-                    }
-                    $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                    return;
+                    $scope.requestReportsByFilter();
                   }
-                  $scope.openReport(report_modal);
+
+                  // open the report tab if the there is report Id in the params
+                  var reportId = $location.search().reportUuid;
+
+                  if (reportId)
+                  {
+                    var report = (_.findWhere($scope.groupReports, {uuid: reportId})) || null;
+
+                    if (report == null)
+                    {
+                      // clear the url param
+                      if ($location.search().reportUuid)
+                      {
+                        $location.search('reportUuid', null);
+                      }
+                      $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                      return;
+                    }
+                    $scope.openReport(report);
+                  }
                 }
-
-              }, function (error)
-              {
-                console.log(error)
-              });
-
+            );
           };
 
           setView(view);
@@ -314,25 +272,9 @@ define(
             }
           }
 
-          var teamsLocal = Teams.queryLocal();
-          var teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          //save the last visited clientgroup - team by id, so that it will be the default
-          function saveLastVisitedClientGroup(clientGroupId)
-          {
-            var teamId = (_.invert(teamClientLocal))[clientGroupId];
-
-            Store('app').save(
-              'currentTeamClientGroup', {
-                team: teamId,
-                clientGroup: clientGroupId
-              });
-          }
-
           $scope.requestClientGroup = function (current, switched)
           {
             setClientView(current);
-            saveLastVisitedClientGroup(current);
 
             $scope.$watch(
               $location.search(),
@@ -502,11 +444,6 @@ define(
                         $scope.clientGroup = clientGroup;
 
                         $scope.current = clientGroup.id;
-
-                        // $scope.$watch(
-                        //   $location.search(),
-                        //   function () { $location.search({ id: clientGroup.id }) }
-                        // );
 
                         $location.url('/client?uuid=' + clientGroup.id).hash('client');
                       }
@@ -943,6 +880,13 @@ define(
               });
           };
 
+          var filterReport = function(clientId, createDate)
+          {
+            $scope.currentCLient = clientId;
+            $scope.currentMonth = moment(createDate).format('M');
+            $scope.requestReportsByFilter();
+          };
+
           // filter the report by client or the created month
           $scope.requestReportsByFilter = function ()
           {
@@ -972,7 +916,6 @@ define(
                 {
                   report.filtered = 'false';
                 }
-
               }
             );
           };
@@ -1007,21 +950,9 @@ define(
 
             if (report.editMode)
             {
-
-              TeamUp._(
-                'clientReportUpdate',
-                {
-                  second: report.clientUuid,
-                  fourth: report.uuid
-                },
-                {
-                  uuid: report.uuid,
-                  title: report.title,
-                  body: report.body,
-                  creationTime: report.creationTime
-                }
-              ).then(
-                function ()
+              Report.update(report)
+                .then(
+                function (result)
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -1031,25 +962,17 @@ define(
             }
             else
             {
-              TeamUp._(
-                'clientReportAdd',
-                {second: report.clientUuid},
-                {
-                  uuid: report.uuid,
-                  title: report.title,
-                  body: report.body,
-                  creationTime: report.creationTime
-                }
-              ).then(
-                function ()
+              Report.save(report)
+                .then(
+                function (result)
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   loadGroupReports();
+                  filterReport(report.clientUuid, report.creationTime);
                 }
               );
             }
-
           };
 
           function getModal()
@@ -1071,9 +994,7 @@ define(
           {
             if(!_.isUndefined(reportUuid))
             {
-              $scope.currentCLient = report.clientUuid;
-              $scope.currentMonth = moment(report.creationTime).format('M');
-              $scope.requestReportsByFilter();
+              filterReport(report.clientUuid, report.creationTime);
             }
 
             trackGa('send', 'event', 'Report', 'User is viewing a report');
@@ -1106,6 +1027,8 @@ define(
             trackGa('send', 'event', 'Report', 'User creates report');
 
             modalInstance = getModal();
+
+
           };
 
           $scope.editReport = function (report)
@@ -1138,34 +1061,23 @@ define(
 
             angular.element('#confirmReportModal').modal('hide');
 
-            TeamUp._(
-              'clientReportDelete',
-              {
-                second: report.clientUuid,
-                reportId: report.uuid
-              }
-            ).then(
-              function (result)
-              {
-                if (result.result == 'ok')
+            Report.remove(report.clientUuid, report.uuid)
+              .then(
+                function(result)
                 {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
-                  loadGroupReports();
-
-                  if ($scope.views.viewClient == true)
+                  if (result.result == 'ok')
                   {
-                    loadReports();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
+                    loadGroupReports();
+
+                    if ($scope.views.viewClient == true)
+                    {
+                      loadReports();
+                    }
                   }
                 }
-                else
-                {
-                  $rootScope.notifier.error(result.error);
-                }
-              }, function (error)
-              {
-                console.log(error)
-              });
+            );
           };
 
           $scope.editImg = function ()
@@ -1173,69 +1085,6 @@ define(
             $scope.uploadURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo?square=true";
             $scope.setViewTo('editImg');
           };
-
-          // open report from the link ( from the chat message )
-          // there will be a link URL changing when opening a report from other views , need to do some special process
-          //$scope.$on(
-          //  '$locationChangeSuccess', function (event, currentURL, preURL)
-          //  {
-          //    var currentScope = event.currentScope;
-          //
-          //    if ($location.hash() == "reports")
-          //    {
-          //      var param_clientGroup = $location.search().uuid,
-          //         param_report = $location.search().reportUuid;
-          //      console.log('param_clientgroup', param_clientGroup);
-          //      console.log('param_clientgroup', currentURL);
-          //      console.log('param_report', $location.search());
-          //
-          //      if (param_clientGroup)
-          //      {
-          //          angular.forEach(
-          //            currentScope.data.clientGroups, function (cGrp)
-          //            {
-          //              if (cGrp.id == param_clientGroup)
-          //              {
-          //                currentScope.clientGroup = cGrp;
-          //              }
-          //            });
-          //        console.log('currentScope.clientGroup', param_report);
-          //          currentScope.setViewTo('reports');
-          //          findReport(currentScope, param_report);
-          //      }
-          //    }
-          //  });
-          //
-          //  var findReport = function(currentScope, param_report)
-          //  {
-          //    console.log('123', param_report);
-          //
-          //    if (param_report)
-          //    {
-          //      var report_obj = null;
-          //      angular.forEach(
-          //        $scope.groupReports, function (rpt)
-          //        {
-          //          if (rpt.uuid == param_report)
-          //          {
-          //            report_obj = rpt;
-          //          }
-          //        });
-          //      if (report_obj == null)
-          //      {
-          //        $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-          //        // clear the url param
-          //        if ($location.search().reportUuid)
-          //        {
-          //          $location.search('reportUuid', null);
-          //        }
-          //        return;
-          //      }
-          //
-          //      currentScope.openReport(report_obj);
-          //    }
-          //  }
-
         }
       ]
     );

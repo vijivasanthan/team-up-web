@@ -475,12 +475,10 @@ define(['services/services', 'config'],
               return timedata;
             },
 
-            members: function (data, timedata, config, privilage, routeUserId, loggedUserId)
+            members: function (data, timedata, config)
             {
               var _this = this,
                 filtered = [];
-
-              //console.log('data', data);
 
               _.each(data.members, function (member)
               {
@@ -521,7 +519,7 @@ define(['services/services', 'config'],
 
                   link += '<a class="edit-timeline-icon" title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
-                  link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"'
+                  link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
                   link += '><i class="icon-edit"></a>';
 
                   _.each(member.data, function (slot)
@@ -637,8 +635,8 @@ define(['services/services', 'config'],
                   xratios.push(ratio.ratio);
                 });
 
-                var r = Raphael('groupPie-' + id),
-                  pie = r.piechart(120, 120, 100, xratios, {colors: colors});
+                //var r = Raphael('groupPie-' + id);
+                  //pie = r.piechart(120, 120, 100, xratios, {colors: colors});
               });
             },
 
@@ -669,8 +667,7 @@ define(['services/services', 'config'],
               var _this = this,
                 timedata = [];
 
-
-              console.log('data', data);
+              //console.log('dataaaa', data);
 
               if (data.user)
               {
@@ -697,7 +694,7 @@ define(['services/services', 'config'],
 
               if (data.members)
               {
-                timedata = _this.members(data, timedata, _config, privilage, routeUserId, loggedUserId);
+                timedata = _this.members(data, timedata, _config);
               }
 
               //if (data.aggs)

@@ -6,11 +6,32 @@ define(
 
     app.config(
       [
-        '$locationProvider', '$routeProvider', '$httpProvider',
-        function ($locationProvider, $routeProvider, $httpProvider)
+        '$locationProvider', '$routeProvider', '$httpProvider', '$provide',
+        function ($locationProvider, $routeProvider, $httpProvider, $provide)
         {
-          $routeProvider
+          $provide
+            .decorator(
+            "$exceptionHandler",
+            [
+              "$delegate",
+              "$window",
+              function($delegate)
+              {
+                return function (exception, cause)
+                {
+                  trackGa('send', 'exception', {
+                        exDescription: exception.message,
+                        exFatal: false,
+                        exStack: exception.stack
+                      });
 
+                  $delegate(exception, cause);
+                };
+              }
+            ]
+          );
+
+          $routeProvider
             .when(
             '/login',
             {
@@ -147,13 +168,13 @@ define(
               resolve: {
                 data: [
                   'Clients', 'Teams', '$location',
-                  function (ClientGroups, Teams, $location)
+                  function (Clients, Teams, $location)
                   {
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
                            {
                              t: Teams.query(),
-                             cg: ClientGroups.query()
+                             cg: Clients.query()
                            } :
                            { local: true };
                   }
@@ -188,18 +209,16 @@ define(
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function($route, Slots, Storage, Dater, Store, TeamUp, $q, $rootScope, $location)
+                data: function($route, Slots, Storage, Dater, Store, TeamUp,
+                               $q, $rootScope, $location, CurrentSelection)
                 {
                   var periods = Store('app').get('periods'),
-                    groups = Store('app').get('teams'),
-                    lastVisited = Store('app').get('currentTeamClientGroup'),
-                    groupId = (! _.isUndefined(lastVisited) && lastVisited.team)
-                      ? lastVisited.team
-                      : groups[0].uuid,
-                    redirectLocationLoggedUser = function()
-                    {
-                      $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-                    }
+                      groups = Store('app').get('teams'),
+                      groupId = CurrentSelection.getTeamId(),
+                      redirectLocationLoggedUser = function()
+                      {
+                        $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                      };
 
 
 
@@ -214,7 +233,12 @@ define(
                   var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
 
                   //check if userId belongs to the same team as the logged user (teammember role only)
-                  if($rootScope.app.resources.role > 1)
+                  if(! currentTeamsRouteUser.length)
+                  {
+                    redirectLocationLoggedUser();
+                    return false;
+                  }
+                  else if($rootScope.app.resources.role > 1)
                   {
                     var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
 
@@ -247,7 +271,7 @@ define(
                       layouts: {
                         user: true,
                         group: true,
-                        members: false
+                        members: (userId != $rootScope.app.resources.uuid)
                       },
                       user: userId
                     });
@@ -288,13 +312,50 @@ define(
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs',
               resolve: {
-                data: function(Logs)
+                data: function(Store, TeamUp, Logs, $q)
                 {
                   removeActiveClass('.teamMenu');
-                  return Logs.fetch({
-                    end: new Date.now().getTime(),
-                    start: new Date.today().addDays(- 7).getTime()
+
+                  var deferred = $q.defer(),
+                      teams = Store('app').get('teams'),
+                      adapterCalls = [];
+                  //TODO give every team agent a adapterId
+                  _.each(teams, function(team)
+                  {
+                    var call = $q.defer();
+                    adapterCalls.push(call.promise);
+
+                    TeamUp._('teamPhone',
+                    {second: team.uuid})
+                      .then(
+                        function(result)
+                        {
+                          call.resolve({
+                                name: team.name,
+                                teamId: team.uuid,
+                                adapterId: result.adapter
+                              });
+                        }
+                      );
                   });
+
+                  $q.all(adapterCalls)
+                    .then(
+                      function(adapters)
+                      {
+                        Logs.fetch({
+                          end: new Date.now().getTime(),
+                          start: new Date.today().addDays(- 7).getTime()
+                        }).then(
+                          function(logs)
+                          {
+                            deferred.resolve({logs: logs, teamAdapters: adapters});
+                          }
+                        );
+                      }
+                  );
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
@@ -303,7 +364,7 @@ define(
             .when(
             '/team-telefoon',
             {
-              redirectTo: function(route, path, search)
+              redirectTo: function(route, path)
               {
                 return path + '/agenda';
               }
@@ -325,12 +386,12 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams', '$route',
-                  function (Teams, $route)
+                  'Teams',
+                  function (Teams)
                   {
                     removeActiveClass('.teamMenu');
 
-                    return Teams.query(false, $route.current.params);
+                    return Teams.queryLocal();
                   }
                 ]
               }
@@ -389,10 +450,10 @@ define(
             })
 
             .when(
-            '/support',
+            '/help',
             {
-              templateUrl: 'views/support.html',
-              controller: 'supportCtrl',
+              templateUrl: 'views/help.html',
+              controller: 'helpCtrl',
               reloadOnSearch: false
             })
 
@@ -400,8 +461,8 @@ define(
 
           $httpProvider.interceptors.push(
             [
-              '$q', 'Log', '$location' ,
-              function ($q, Log, $location)
+              '$location', 'Store', '$injector', '$q',
+              function ($location, Store, $injector, $q)
               {
                 return {
                   request: function (config)
@@ -410,8 +471,6 @@ define(
                   },
                   requestError: function (rejection)
                   {
-                    // console.warn('request error ->', rejection);
-                    Log.error(rejection);
                     return $q.reject(rejection);
                   },
                   response: function (response)
@@ -420,15 +479,37 @@ define(
                   },
                   responseError: function (rejection)
                   {
-                    // console.warn('response error ->', rejection);
-                    if (rejection.status == 403)
+                    if(rejection.status > 0)
                     {
-                      localStorage.setItem('sessionTimeout', '');
-                      $location.path('/logout');
-                      window.location.href = 'logout.html';
+                      switch (rejection.status)
+                      {
+                        case 403:
+                          var loginData = Store('app').get('loginData'),
+                              rejections = $injector.get('Rejections');
+
+                          if(loginData.password)
+                          {
+                            return rejections.reSetSession(loginData, rejection.config);
+                          }
+                          else
+                          {
+                            rejections.sessionTimeOut();
+                          }
+                          break;
+                      }
+
+                      trackGa('send', 'exception', {
+                        exDescription: rejection.statusText,
+                        exFatal: false,
+                        exError: 'Response error',
+                        exStatus: rejection.status,
+                        exUrl: rejection.config.url,
+                        exData: rejection.data,
+                        exParams: _.values(rejection.config.params).join() || '',
+                        exMethodData: _.values(rejection.config.data).join() || ''
+                      });
                     }
 
-                    // Log.error(rejection);
                     return $q.reject(rejection);
                   }
                 };
@@ -438,7 +519,7 @@ define(
           var removeActiveClass = function(divId)
           {
             angular.element(divId).removeClass('active');
-          }
+          };
         }
       ]);
   }

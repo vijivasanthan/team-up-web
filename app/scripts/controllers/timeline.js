@@ -20,7 +20,6 @@ define(
         function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store, Teams)
         {
           var range, diff;
-          $scope.removeTasksRange;
 
           $scope.$watch(
             function ()
@@ -366,7 +365,7 @@ define(
 
             isAdded: function ()
             {
-              return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw') ? true : false
+              return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw');
             },
 
             cancelAdd: function ()

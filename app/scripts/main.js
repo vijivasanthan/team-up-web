@@ -191,6 +191,9 @@ require(
     'services/storage',
     'services/stats',
     'services/pincode',
+    'services/reports',
+    'services/rejections',
+    'services/currentSelection',
 
     // 'services/googleGEO',
 
@@ -207,6 +210,7 @@ require(
     'modals/permission',
     'modals/testModal',
     'modals/profile',
+    'modals/report',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',
@@ -234,7 +238,7 @@ require(
     'controllers/agenda-timeline',
     'controllers/agenda-timeline-navigation',
     'controllers/treegrid',
-    'controllers/support',
+    'controllers/help',
     'controllers/upload',
     'controllers/admin',
     'controllers/logs',

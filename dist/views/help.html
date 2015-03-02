@@ -5,7 +5,7 @@
   <ul style="margin-right: 0px" class="nav nav-tabs nav-tabs-app">
     <li class="{{(views.web==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;web&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Web</a></li>
     <li ng-show="false" class="{{(views.ios==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;ios&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>IOS</a></li>
-    <li class="{{(views.android==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;android&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Android</a></li>
+    <li ng-show="app.domainPermission.chat" class="{{(views.android==true) &amp;&amp; 'active'}}"><a data-toggle="tab" ng-click="setViewTo(&quot;android&quot;)"><span data-icon="" aria-hidden="true" class="icomoon"></span>Android</a></li>
   </ul>
   <div class="tab-content">
     <div id="web" class="tab-pane {{(views.web==true) &amp;&amp; 'active'}}">

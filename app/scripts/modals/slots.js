@@ -612,7 +612,7 @@ define(['services/services', 'config'],
                   id: team.uuid,
                   type: divisionID,
                   start: now,
-                  end: now + 1000
+                  end: now + 60
                 },
                 function (response)
                 {

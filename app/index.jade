@@ -75,8 +75,8 @@ block navbar
 						li(data-match-route='/team-telefoon.*',
 							ng-show='app.domainPermission.teamTelephone')
 							a(ng-click='nav("team-telefoon/status")') Team-telefoon
-						li(data-match-route='/support')
-							a(ng-click='nav("support")') Support
+						li(data-match-route='/help')
+							a(ng-click='nav("help")') Help
 
 					ul.nav.pull-right(ng-hide='browser.mobile')
 						//Disabled temporarily till the functionailty exists
@@ -198,7 +198,8 @@ block notifications
 		| {{notification.message}}
 
 block chat
-	#chat.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile',
+	#chat.ng-cloak(
+	ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile || ! app.domainPermission.chat', 
 	ng-controller='messagesCtrl')
 		#chat-btn(ng-click='openChat()')
 			span CHAT {{newCountShow}}

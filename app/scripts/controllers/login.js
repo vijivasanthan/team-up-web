@@ -21,9 +21,10 @@ define(
         '$filter',
         'MD5',
         'Permission',
+        '$window',
         function (
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission)
+          Permission, $window)
         {
 
           var setBackgroundColor = function()
@@ -102,15 +103,38 @@ define(
           {
             Store('app').save('app', '{}');
           }
+          else
+          {
+            var periods = Store('app').get('periods'),
+                loginData = Store('app').get('loginData');
+
+            Store('app').nuke();
+            Store('app').save('periods', periods);
+            Store('app').save('loginData', loginData);
+          }
 
           angular.element('.navbar').hide();
           angular.element('#footer').hide();
           angular.element('#watermark').hide();
           angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
 
-          var loginData = Store('app').get('loginData');
+          var localLoginData = Store('app').get('loginData');
 
-          if (loginData && loginData.remember) $scope.loginData = loginData;
+          //Check if there is loginData local
+          if (localLoginData)
+          {
+            //if there is a username, show it
+            $scope.loginData = {};
+            $scope.loginData.username = localLoginData.username;
+
+            //if there is a local encrypted password, show a random string
+            //and select the remember login
+            if(localLoginData.password)
+            {
+              $scope.loginData.password = 1234;
+              $scope.loginData.remember = true;
+            }
+          }
 
           $scope.login = function ()
           {
@@ -137,16 +161,24 @@ define(
               .text($rootScope.ui.login.button_loggingIn)
               .attr('disabled', 'disabled');
 
-            Store('app').save(
-              'loginData',
-              {
-                username: $scope.loginData.username,
-                password: $scope.loginData.password,
-                remember: $scope.loginData.remember
-              }
-            );
+            //Checks if there is already a password, otherwise encrypt the given password
+            var password = ($scope.loginData.password == '1234' && localLoginData.password)
+                ? localLoginData.password
+                : MD5($scope.loginData.password);
 
-            auth($scope.loginData.username, MD5($scope.loginData.password));
+            var newLoginData = {
+                username: $scope.loginData.username
+              };
+
+            //Check if the user want to save his password and add it to the local storage
+            if($scope.loginData.remember == true)
+            {
+              newLoginData.password = password;
+            }
+
+            Store('app').save('loginData', newLoginData);
+
+            auth($scope.loginData.username, password);
           };
 
           var auth = function (uuid, pass)
@@ -217,7 +249,6 @@ define(
                     .text($rootScope.ui.login.button_login)
                     .removeAttr('disabled');
 
-                  console.log("Pay attention, this might caused by the Log module");
                   return false;
                 }
                 else
@@ -229,6 +260,12 @@ define(
               }
             )
           };
+
+          //Check if there is a password locally and autologin
+          if(localLoginData.password)
+          {
+            $scope.login();
+          }
 
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams ()
@@ -424,7 +461,6 @@ define(
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
 
-                                      //console.log('$rootScope.app.resources.uuid', $rootScope.app.resources);
                                       trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
                                       //update the avatar once, because the resources were not set when the directive was loaded
@@ -439,7 +475,7 @@ define(
                                         function ()
                                         {
                                           angular.element('.navbar').show();
-                                          angular.element('body').css({ 'background': 'url(../images/bg.jpg) repeat' });
+                                          angular.element('body').addClass('background');
 
                                           if (! $rootScope.browser.mobile)
                                           {

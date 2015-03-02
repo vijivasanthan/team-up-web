@@ -2,11 +2,18 @@
   <div class="page-header agenda-timeline">
     <h2 class="nullable">Logs</h2>
   </div>
-  <div style="margin-top: 30px">
-    <div class="form-group has-feedback pull-left dateranger">
+  <div>
+    <div ng-hide="app.resources.role &gt; 1" class="form-group has-feedback pull-left">
+      <!--input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')-->
+      <label class="control-label">Selecteer team</label>
+      <div class="controls">
+        <select ng-model="current" ng-options="team.adapterId as team.name for team in teams | orderBy:&quot;name&quot;" ng-selected="current" ng-change="switchTeam(current)"></select>
+      </div>
+    </div>
+    <div class="form-group has-feedback pull-left dateranger headerTop">
       <input type="text" name="daterange" ng-model="daterange" log-ranger="" class="form-control"><i class="glyphicon glyphicon-calendar form-control-feedback"></i>
     </div>
-    <div class="form-group has-feedback pull-right">
+    <div class="form-group has-feedback pull-right headerTop">
       <input type="text" placeholder="Filter logs.." ng-model="filtered" class="form-control search-query">
     </div>
   </div>
@@ -32,7 +39,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="log in data.logs | filter: filtered | orderBy:ordered : reversed">
+              <tr ng-repeat="log in data.logs | filter: current | filter : filtered | orderBy:ordered : reversed">
                 <td><span class="label label-inverse log-{{log.status}}">{{log.status}}</span><span ng-show="log.records.length &gt; 0"><span ng-repeat="record in log.records"><br>∟<span class="label label-inverse log-{{record.status}}">{{record.status}}</span></span></span></td>
                 <td>
                   <!-- <pre><small>{{log | json}}</small></pre>-->{{log.from}}<span ng-show="log.records.length &gt; 0" ng-repeat="record in log.records"><br>{{record.from}}</span>
@@ -44,7 +51,7 @@
             </tbody>
           </table>
         </div>
-        <hr><small class="pull-left"><span class="text-warning">{{ui.planboard.lastSyncTime}}</span><span class="text-muted">&nbsp;{{data.synced | date: 'medium'}}</span><br><span class="text-warning">{{ui.planboard.dataRangeStart}}</span><span class="text-muted">&nbsp;{{data.periods.start | date: 'medium'}}</span>&nbsp;|<span class="text-warning">{{ui.planboard.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | date: 'medium'}}</span></small><small ng-show="data.logs.length &gt; 0" class="text-muted pull-right"><br><i>Er zijn {{(data.logs|filter:filtered).length}} logs getoond.</i></small>
+        <hr><small class="pull-left"><span class="text-warning">{{ui.planboard.lastSyncTime}}</span><span class="text-muted">&nbsp;{{data.synced | date: 'medium'}}</span><br><span class="text-warning">{{ui.planboard.dataRangeStart}}</span><span class="text-muted">&nbsp;{{data.periods.start | date: 'medium'}}</span>&nbsp;|<span class="text-warning">{{ui.planboard.dataRangeEnd}}</span><span class="text-muted">{{data.periods.end | date: 'medium'}}</span></small><small ng-show="data.logs.length &gt; 0" class="text-muted pull-right"><br><i>Er zijn {{(data.logs|filter: current|filter:filtered).length}} logs getoond.</i></small>
       </div>
     </div>
   </div>

@@ -337,9 +337,11 @@ define(
         '$rootScope',
         function ($rootScope)
         {
-          return function (stamp)
+          return function (stamp, secondStamp)
           {
-            var delta = Math.abs(stamp - Date.now().getTime()) / 1000;
+            var _secondStamp = secondStamp || Date.now().getTime();
+
+            var delta = Math.abs(stamp - _secondStamp) / 1000;
 
             var days = Math.floor(delta / 86400);
             delta -= days * 86400;
@@ -592,6 +594,21 @@ define(
       //   }
       // )
 
+      .filter(
+      'getGroupNameById',
+      [
+        'Store',
+        function (Store)
+        {
+          return function (id)
+          {
+            var teams = Store('app').get('teams');
+
+            return (_.findWhere(teams, {uuid: id})).name;
+          }
+        }
+      ])
+
 
     /**
      * Convert group id to name
@@ -697,7 +714,33 @@ define(
             return Strings.toTitleCase(txt);
           }
         }
-      ]);
+      ])
+
+    /**
+     * Translate date string to
+     */
+    .filter(
+    'formatDateTimeZone',
+    [
+      'Dater',
+      function (Dater)
+      {
+        return function (date)
+        {
+          var _date = null;
+
+          if(! _.isUndefined(date))
+          {
+            _date = Dater.formatDateMobile(date);
+            _date = moment(_date).format('MM/DD/YY');
+          }
+
+          return _date || date;
+        }
+      }
+    ]);
+
+
 
 
     // /**

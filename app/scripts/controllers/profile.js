@@ -22,12 +22,9 @@ define(
         '$timeout',
         'MD5',
         'Profile',
-        'Pincode',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile)
         {
-          $scope.lala = 123;
-
           var getProfileResource = function(userId, flag)
           {
             Profile.get(userId, flag)
@@ -445,9 +442,18 @@ define(
               $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
               return;
             }
-            else if (formData.newpass != null)
+            else
             {
               $scope.view.passwordHash = MD5(formData.newpass);
+
+              var loginData = Store('app').get('loginData');
+
+              if(loginData.password)
+              {
+                loginData.password = $scope.view.passwordHash;
+                Store('app').save('loginData', loginData);
+              }
+
               delete formData.oldpass;
               delete formData.newpass;
               delete formData.newpassrepeat;

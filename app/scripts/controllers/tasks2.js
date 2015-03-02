@@ -17,40 +17,17 @@ define(
         'Teams',
         'Clients',
         'Dater',
-        'TestModal',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task, Teams, Clients, Dater)
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
+                  Teams, Clients, Dater)
         {
           $rootScope.fixStyles();
 
           var view = $location.hash() || 'myTasks',
-            currentTeamClientGroup = Store('app').get('currentTeamClientGroup'),
             teamsLocal = Teams.queryLocal(),
             clientLocal = Clients.queryLocal(),
             teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
           $scope.teams = teamsLocal.teams;
-          $scope.currentTeam = $scope.teams[0].uuid;
-
-          //if(data.taskId)
-          //{
-          //  Task.getId(data.taskId)
-          //    .then(function(task) {
-          //      if(_.isUndefined(task))
-          //      {
-          //        console.log('error afhandeling zet query mine');
-          //      }
-          //      else
-          //      {
-          //        //vergeet niet de hask er al achter te zette
-          //      }
-          //    });
-          //}
-
-          //check if a team of clientgroup is visited lately
-          if (currentTeamClientGroup.team)
-          {
-            $scope.currentTeam = currentTeamClientGroup.team;
-          }
 
           $scope.task = $scope.task || {
             team: $scope.currentTeam
@@ -344,15 +321,15 @@ define(
 
             if (task.assignedTeamUuid)
             {
-              task.assignedTeamFullName = $scope.$root.getTeamName(task.assignedTeamUuid);
+              task.assignedTeamFullName = $rootScope.getTeamName(task.assignedTeamUuid);
             }
 
             if (task.relatedClient.clientGroupUuid)
             {
-              task.relatedClient.clientGroupName = $scope.$root.getClientGroupName(task.relatedClient.clientGroupUuid);
+              task.relatedClient.clientGroupName = $rootScope.getClientGroupName(task.relatedClient.clientGroupUuid);
             }
 
-            var author = $scope.$root.getTeamMemberById(task.authorUuid);
+            var author = $rootScope.getTeamMemberById(task.authorUuid);
             $scope.author = author.firstName + ' ' + author.lastName;
 
             angular.element('#taskModal').modal('show');

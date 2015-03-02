@@ -275,20 +275,6 @@ define(
 
 
                 /**
-                 * Client-Reports
-                 */
-                // get the reports of that particular client
-                clientReportsQuery: {
-                  method: 'GET',
-                  isArray: true,
-                  params: {
-                    first: 'clients',
-                    third: 'reports'
-                  }
-                },
-
-
-                /**
                  * Client-Group-Client
                  */
                 // remove the client(s) from the specific group, meant more for management
@@ -298,20 +284,6 @@ define(
                     first: 'client',
                     second: 'clientGroup',
                     fourth: 'removeClients'
-                  }
-                },
-
-
-                /**
-                 * Client-Group-Reports
-                 */
-                // get the reports of a particular client group
-                clientGroupReportsQuery: {
-                  method: 'GET',
-                  isArray: true,
-                  params: {
-                    first: 'clientGroup',
-                    third: 'reports'
                   }
                 },
 
@@ -331,36 +303,60 @@ define(
                   }
                 },
 
+                /**
+                 * Client-Group-Reports
+                 */
+                // get the reports of a particular client group
+                clientGroupReportsQuery: {
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clientGroup',
+                    third: 'reports'
+                  }
+                },
+
+                /**
+                 * Client-Reports
+                 */
+                // get the reports of that particular client
+                //clientReportsQuery: {
+                //  method: 'GET',
+                //  isArray: true,
+                //  params: {
+                //    first: 'clients',
+                //    third: 'reports'
+                //  }
+                //},
 
                 /**
                  * Client-Report
                  */
                 // add a client report
-                clientReportAdd: {
-                  method: 'POST',
-                  params: {
-                    first: 'clients',
-                    third: 'reports'
-                  }
-                },
+                //clientReportAdd: {
+                //  method: 'POST',
+                //  params: {
+                //    first: 'clients',
+                //    third: 'reports'
+                //  }
+                //},
                 // update a client report
-                clientReportUpdate: {
-                  method: 'PUT',
-                  params: {
-                    first: 'clients',
-                    third: 'reports'
-                  }
-                },
+                //clientReportUpdate: {
+                //  method: 'PUT',
+                //  params: {
+                //    first: 'clients',
+                //    third: 'reports'
+                //  }
+                //},
                 // remove a client report
-                clientReportDelete: {
-                  method: 'DELETE',
-                  params: {
-                    first: 'clients',
-                    third: 'reports',
-                    reportId: ''
-                  }
-                },
-
+                //clientReportDelete: {
+                //  method: 'DELETE',
+                //  params: {
+                //    first: 'clients',
+                //    third: 'reports',
+                //    reportId: ''
+                //  }
+                //},
 
                 /**
                  * Team
@@ -590,7 +586,6 @@ define(
                 function (result)
                 {
                   ((callback && callback.error)) && callback.error.call(this, result);
-
                   deferred.resolve({error: result});
                 }
               );

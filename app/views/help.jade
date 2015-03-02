@@ -14,7 +14,8 @@
 			a(data-toggle='tab', ng-click='setViewTo("ios")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| IOS
-		li(class="{{(views.android==true) && 'active'}}")
+		li(class="{{(views.android==true) && 'active'}}",
+				ng-show='app.domainPermission.chat')
 			a(data-toggle='tab', ng-click='setViewTo("android")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| Android
