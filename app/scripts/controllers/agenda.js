@@ -210,6 +210,8 @@ define(
 
               $scope.views.slot.add = true;
             }
+
+            $scope.$broadcast('showDuration');
           };
 
           $scope.refreshCurrentTimeline = function()
