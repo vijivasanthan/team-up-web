@@ -549,6 +549,8 @@ define(
           to: 'Tot',
           time: 'Tijd',
           duration: 'Duur',
+          coordinatorNoTeam: 'Het lijkt erop dat je niet in een team zit. Wijs jezelf toe aan een team.',
+          teamMemberNoTeam: 'Het lijkt erop dat je niet in een team zit. Neem contact op met een coordinator.',
           //deleteConfirm: 'Druk op OK om door te gaan.',
           confirms: {
             deleteClientTitle: 'Verwijder client',

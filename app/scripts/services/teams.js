@@ -357,7 +357,9 @@ define(
                 var userResources = Store('app').get('resources'),
                   indexTeam = userResources.teamUuids.indexOf(teamId);
 
-                (indexTeam < 0) ? userResources.teamUuids.push(teamId) : userResources.teamUuids.splice(indexTeam, 1);
+                (indexTeam < 0)
+                  ? userResources.teamUuids.push(teamId)
+                  : userResources.teamUuids.splice(indexTeam, 1);
 
                 Store('app').save('resources', userResources);
                 $rootScope.app.resources = userResources;

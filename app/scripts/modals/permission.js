@@ -11,7 +11,8 @@ define(['services/services', 'config'],
         '$resource',
         '$q',
         'Store',
-        function ($rootScope, $resource, $q, Store)
+        '$location',
+        function ($rootScope, $resource, $q, Store, $location)
         {
           var Permission = $resource(config.app.host + 'acl', {},
               {
@@ -39,25 +40,14 @@ define(['services/services', 'config'],
             chat: false
           };
 
-          Permission.prototype.getProfile = function()
+          Permission.prototype.getDefaultProfile = function()
           {
             var deferred = $q.defer();
 
             Permission.get(
-              function (response) {
-
-                var profile = response.data;
-                //create a access list
-                angular.forEach(response.data, function(val, key) {
-                  if(val == false)
-                  {
-                    delete profile[key];
-                  }
-                });
-
-                Store('app').save('permissionProfile', profile);
-
-                deferred.resolve(profile);
+              function (response)
+              {
+                deferred.resolve(response.data);
               },
               function (error) {
                 deferred.resolve({error: error});
@@ -67,7 +57,7 @@ define(['services/services', 'config'],
           };
 
           //For testpurposes only
-          Permission.prototype.saveProfile = function()
+          Permission.prototype.saveDefaultProfile = function()
           {
             var deferred = $q.defer();
 
@@ -93,6 +83,78 @@ define(['services/services', 'config'],
                 return valAccess;
               }
             });
+          };
+
+          /**
+           * Checks the where the user has access to
+           */
+          Permission.prototype.getAccess = function()
+          {
+            this.getDefaultProfile()
+              .then(
+                function(permissionProfile)
+                {
+                  var permission = permissionProfile,
+                      accessList = {};
+
+                  if($rootScope.app.resources.teamUuids.length)
+                  {
+                    _.each(permissionProfile, function(val, key)
+                    {
+                      if(val == false)
+                      {
+                        delete permission[key];
+                      }
+                    });
+
+                    accessList = permission;
+                  }
+                  else
+                  {
+                    _.each(permissionProfile, function(val, key)
+                    {
+                      permission[key] = false;
+                    });
+                  }
+
+                  Store('app').save('permissionProfile', permission);
+                  $rootScope.app.domainPermission = permission;
+
+                  permissionLocation(accessList);
+                }
+              );
+          };
+
+          /**
+           * Redirect the user to location of the permission
+           * @param permissionProfile
+           */
+          var permissionLocation = function(permissionProfile)
+          {
+            if(_.has(permissionProfile, 'tasks'))
+            {
+              $location.path('/tasks2').hash('myTasks');
+            }
+            else if(_.has(permissionProfile, 'teamTelephone'))
+            {
+              $location.path('/team-telefoon/status').hash('');
+            }
+            else
+            {
+              ($rootScope.app.resources.role > 1)
+                ? $location.path('/profile/' + $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile')
+                : $location.path('/manage').search({}).hash('teams');
+            }
+          };
+
+          Permission.prototype.getUnFiltered = function()
+          {
+            return profile;
+          };
+
+          Permission.prototype.setUnfiltered = function(newProfile)
+          {
+            profile = newProfile;
           };
 
           return new Permission;

@@ -22,8 +22,9 @@ define(
         '$timeout',
         'MD5',
         'Profile',
+        'Permission',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Permission)
         {
           var getProfileResource = function(userId, flag)
           {
@@ -39,6 +40,21 @@ define(
                 }
               }
             );
+          };
+
+          var userHasTeam = function()
+          {
+            if(! $scope.teams.length)
+            {
+              var info = ($rootScope.app.resources.role > 1)
+                ? $rootScope.ui.teamup.teamMemberNoTeam
+                : $rootScope.ui.teamup.coordinatorNoTeam;
+
+              $rootScope.notifier.error(
+                info,
+                true
+              );
+            }
           };
 
           //$rootScope.fixStyles();
@@ -59,6 +75,8 @@ define(
           var currentRole = $scope.view.role;
 
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
+
+          userHasTeam();
 
           $scope.forms = {
             add: false,
@@ -537,6 +555,8 @@ define(
                       Teams.updateMembersLocal();
                     }
                   });
+                  Permission.getAccess();
+                  userHasTeam();
                 }, function (error)
                 {
                   console.log(error)

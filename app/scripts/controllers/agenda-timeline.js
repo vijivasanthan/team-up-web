@@ -500,7 +500,6 @@ define(
             }
           );
 
-
           /**
           * Handle new requests for timeline
           */

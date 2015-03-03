@@ -21,10 +21,9 @@ define(
         '$filter',
         'MD5',
         'Permission',
-        '$window',
         function (
           $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission, $window)
+          Permission)
         {
 
           var setBackgroundColor = function()
@@ -369,25 +368,10 @@ define(
           //TODO compare permission names with routenames
           function getPermissionProfile()
           {
-            Permission.getProfile()
+            Permission.getDefaultProfile()
               .then(function(permissionProfile) {
                 $rootScope.app.domainPermission = permissionProfile;
-                var location = '';
-
-                if(_.has(permissionProfile, 'tasks'))
-                {
-                  location = '/tasks2';
-                }
-                else if(_.has(permissionProfile, 'teamTelephone'))
-                {
-                  location = '/team-telefoon/status';
-                }
-                else
-                {
-                  location = '/team';
-                }
-
-                $location.path(location);
+                console.log('permissionProfile', permissionProfile);
               });
           };
 
@@ -469,7 +453,7 @@ define(
                                       //TODO for testpurposes only
                                       //Permission.saveProfile();
 
-                                      getPermissionProfile();
+                                      Permission.getAccess();
 
                                       setTimeout(
                                         function ()
