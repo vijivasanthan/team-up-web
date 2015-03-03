@@ -1732,6 +1732,10 @@ define(
               }, true);
           });
 
+          $scope.$on('showDuration', function() {
+            $scope.showDuration();
+          });
+
           /**
           * TODO: Stress-test this!
           * Hot fix against not-dom-ready problem for timeline
