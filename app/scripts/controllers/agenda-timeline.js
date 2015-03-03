@@ -495,6 +495,38 @@ define(
             }
           );
 
+          /**
+           * Gets Aggs and the wish
+           * @param periods
+           * @returns {*}
+           */
+          var groupSlots = function(periods)
+          {
+            var deferred = $q.defer();
+            var aggs = Slots.aggs({
+              id: $scope.timeline.current.group,
+              start: periods.start,
+              end: periods.end,
+              month: $scope.timeline.current.month
+            });
+
+            var wishes = Slots.wishes(
+              {
+                id: $scope.timeline.current.group,
+                start: $scope.data.periods.start / 1000,
+                end: $scope.data.periods.end / 1000
+              });
+
+            $q.all([aggs, wishes])
+              .then(
+                function(data)
+                {
+                  deferred.resolve({aggs: data[0], wishes: data[1]});
+                }
+            );
+
+            return deferred.promise;
+          };
 
           /**
           * Handle new requests for timeline
@@ -517,18 +549,17 @@ define(
                   $scope.timeline.current.layouts.members = false;
                 }
 
+                //$rootScope.statusBar.off();
+
                 if($scope.timeline.current.layouts.group)
                 {
-                  Slots.aggs({
-                    id: $scope.timeline.current.group,
-                    start: periods.start,
-                    end: periods.end,
-                    month: $scope.timeline.current.month
-                  })
+                  groupSlots(periods)
                     .then(
-                      function (aggs)
+                      function(data)
                       {
-                        $scope.data.aggs = aggs
+                        console.log('data', data);
+                        $scope.data.aggs = data.aggs;
+                        $scope.data.aggs.wishes = data.wishes;
                         $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
                       }
                   );
@@ -538,8 +569,6 @@ define(
                   delete $scope.data.aggs;
                   $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
                 }
-
-                $scope.timeliner.load({start: $scope.data.periods.start, end: $scope.data.periods.end});
                 break;
 
               case 'members':
@@ -556,7 +585,6 @@ define(
                     .then(
                     function(members)
                     {
-                      console.log('members', members)
                       $scope.data.members = members;
 
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
