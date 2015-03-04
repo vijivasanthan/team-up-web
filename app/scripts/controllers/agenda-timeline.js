@@ -557,7 +557,6 @@ define(
                     .then(
                       function(data)
                       {
-                        console.log('data', data);
                         $scope.data.aggs = data.aggs;
                         $scope.data.aggs.wishes = data.wishes;
                         $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
@@ -588,6 +587,8 @@ define(
                       $scope.data.members = members;
 
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+
+                      ///das
                     }
                   );
                 }

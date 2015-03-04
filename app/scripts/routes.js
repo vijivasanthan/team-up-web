@@ -209,28 +209,27 @@ define(
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function($route, Slots, Storage, Dater, Store, TeamUp,
+                data: function($route, Slots, Storage, Dater, Store, Teams,
                                $q, $rootScope, $location, CurrentSelection)
                 {
                   var periods = Store('app').get('periods'),
                       groups = Store('app').get('teams'),
                       groupId = CurrentSelection.getTeamId(),
+                      userId = $route.current.params.userId,
                       redirectLocationLoggedUser = function()
                       {
                         $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
                       };
 
-
-
                   //Check if there is a userId in the url
-                  if(_.isUndefined($route.current.params.userId))
+                  if(_.isUndefined(userId))
                   {
                     redirectLocationLoggedUser();
                     return false;
                   }
 
                   //Get the teams of the userId in url
-                  var currentTeamsRouteUser = $rootScope.getTeamsofMembers($route.current.params.userId);
+                  var currentTeamsRouteUser = $rootScope.getTeamsofMembers(userId);
 
                   //check if userId belongs to the same team as the logged user (teammember role only)
                   if(! currentTeamsRouteUser.length)
@@ -277,27 +276,23 @@ define(
                     });
                   };
 
-                  TeamUp._(
-                    'profileGet',
-                    {
-                      third: $route.current.params.userId
-                    },
-                    null,
-                    {
-                      success: function (userData)
+                  Teams.query()
+                    .then(
+                      function(data)
                       {
-                        getAllSlots(userData.uuid)
+                        var currentUser = _.findWhere(data.members[groupId], {uuid: userId});
+
+                        getAllSlots(currentUser.uuid)
                           .then(
-                            function(timelineData)
-                            {
-                              deferred.resolve({
-                                timelineData: timelineData,
-                                userData: userData
-                              });
-                            }
-                          );
+                          function(timelineData)
+                          {
+                            deferred.resolve({
+                              timelineData: timelineData,
+                              userData: currentUser
+                            });
+                          }
+                        );
                       }
-                    }
                   );
 
                   return deferred.promise;
