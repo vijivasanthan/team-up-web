@@ -2,14 +2,6 @@ section#logs
 	.page-header.agenda-timeline
 		h2.nullable Logs
 	div
-		.form-group.has-feedback.pull-left(ng-hide='app.resources.role > 1')
-			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
-			label.control-label Selecteer team
-			.controls
-				select(ng-model='current',
-				ng-options='team.adapterId as team.name for team in teams | orderBy:"name"',
-				ng-selected='current',
-				ng-change='switchTeam(current)')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
 			input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			i.glyphicon.glyphicon-calendar.form-control-feedback
@@ -53,7 +45,7 @@ section#logs
 										span(ng-hide='reversed') ▲
 										span(ng-show='reversed') ▼
 						tbody
-							tr(ng-repeat='log in data.logs | filter: current | filter : filtered | orderBy:ordered : reversed')
+							tr(ng-repeat='log in data.logs | filter : filtered | orderBy:ordered : reversed')
 								td
 									span.label.label-inverse(class='log-{{log.status}}') {{log.status}}
 									span(ng-show='log.records.length > 0')
@@ -88,4 +80,4 @@ section#logs
 					span.text-muted {{data.periods.end | date: 'medium'}}
 				small.text-muted.pull-right(ng-show='data.logs.length > 0')
 					br
-					i Er zijn {{(data.logs|filter: current|filter:filtered).length}} logs getoond.
+					i Er zijn {{(data.logs|filter:filtered).length}} logs getoond.
