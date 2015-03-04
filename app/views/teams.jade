@@ -39,7 +39,7 @@ aria-hidden='true')
 .page-header
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(
-		ng-show='app.resources.role == 1 && views.team')
+		ng-show='app.resources.role == 1 && views.team || views.newMember')
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
 		select(current_selection='team', 
@@ -171,15 +171,15 @@ aria-hidden='true')
 			hr
 			form(name='teamMemberForm', novalidate)
 				fieldset
-					.control-group
-						label.control-label {{ui.teamup.teams}}
-						.controls
-							select(current_selection='team',
-							ng-model='memberForm.team',
-							ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
-							ng-change='setCurrentTeam(memberForm.team)')
-								option(value='') {{ui.teamup.chooseTeam}}
-					hr
+					//.control-group
+					//	label.control-label {{ui.teamup.teams}}
+					//	.controls
+					//		select(current_selection='team',
+					//		ng-model='memberForm.team',
+					//		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
+					//		ng-change='setCurrentTeam(memberForm.team)')
+					//			option(value='') {{ui.teamup.chooseTeam}}
+					//hr
 					.row
 						.span6
 							fieldset

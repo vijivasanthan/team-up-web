@@ -81,81 +81,52 @@ define(
             editTeam: false
           };
 
-          $scope.setCurrentTeam = function(id)
-          {
-            setTeamView(id);
-          };
+          //$scope.setCurrentTeam = function(id)
+          //{
+          //  setTeamView(id);
+          //};
 
           function setTeamView(id)
           {
             $scope.team = _.findWhere(data.teams, {uuid: id});
+            //
+            //$scope.members = data.members[id];
 
-            $scope.members = data.members[id];
-
-            angular.forEach(
-              $scope.members,
-              function (member)
-              {
-                //check if the state of the logged user is equal
-                $rootScope.checkUpdatedStatesLoggedUser(member);
-
-                angular.forEach(
-                  member.states,
-                  function (state, i)
-                  {
-                    if (state.name == 'Location')
-                    {
-                      state.value_rscoded = 'loading address';
-                      if (state.value && member.address && member.address.street)
-                      {
-                        var coordinates = state.value.split(','),
-                          latitude = parseFloat(coordinates[0]),
-                          longitude = parseFloat(coordinates[1]);
-                      }
-                      else
-                      {
-                        //remove state location if there is no address available on the given coordinates
-                        member.states.splice(i, 1);
-                      }
-
-                      // GoogleGEO.geocode(
-                      //   {
-                      //     'latLng': new google.maps.LatLng(latitude, longitude)
-                      //   },
-                      //   function (results, status)
-                      //   {
-                      //     // TODO: What if there are more results? Which one to pick?
-                      //     // console.log('results ->', results);
-
-                      //     if (status == google.maps.GeocoderStatus.OK)
-                      //     {
-                      //       if (results[1])
-                      //       {
-                      //         state.value_rscoded = results[1].formatted_address;
-                      //       }
-                      //       else
-                      //       {
-                      //         console.log('No results found for geo reversing!');
-                      //       }
-                      //     }
-                      //     else
-                      //     {
-                      //       alert('Geocoder failed due to: ' + status);
-                      //     }
-                      //   }
-                      // );
-
-                    }
-                  }
-                );
-              }
-            );
-
-            $scope.current = id;
+            //angular.forEach(
+            //  $scope.members,
+            //  function (member)
+            //  {
+            //    //check if the state of the logged user is equal
+            //    $rootScope.checkUpdatedStatesLoggedUser(member);
+            //
+            //    angular.forEach(
+            //      member.states,
+            //      function (state, i)
+            //      {
+            //        if (state.name == 'Location')
+            //        {
+            //          state.value_rscoded = 'loading address';
+            //          if (state.value && member.address && member.address.street)
+            //          {
+            //            var coordinates = state.value.split(','),
+            //              latitude = parseFloat(coordinates[0]),
+            //              longitude = parseFloat(coordinates[1]);
+            //          }
+            //          else
+            //          {
+            //            //remove state location if there is no address available on the given coordinates
+            //            member.states.splice(i, 1);
+            //          }
+            //        }
+            //      }
+            //    );
+            //  }
+            //);
           }
 
           $scope.requestTeam = function (current, switched)
           {
+            var hash = $location.hash() || 'team';
             setTeamView(current);
 
             $scope.$watch(
@@ -163,19 +134,10 @@ define(
               function ()
               {
                 $location.search({uuid: current});
-              },
-              $scope.memberForm.team = current
+              }
             );
 
-            if (switched)
-            {
-              if ($location.hash() != 'team')
-              {
-                $location.hash('team');
-              }
-
-              setView('team');
-            }
+            setView(hash);
           };
 
           var setView = function (hash)
@@ -467,7 +429,7 @@ define(
                 lastName: tempResources.lastName,
                 phone: tempResources.phone,
                 email: tempResources.email,
-                teamUuids: [tempResources.team],
+                teamUuids: [$scope.current],
                 role: tempResources.role,
                 birthDate: Dater.convert.absolute(tempResources.birthDate, 0)
                 //function: member.function
