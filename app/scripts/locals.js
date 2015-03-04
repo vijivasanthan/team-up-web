@@ -320,7 +320,7 @@ define(
         groups: {
           groups: 'Groepen',
           newGroup: 'Nieuwe groep',
-          newMember: 'Nieuw lid',
+          newMember: 'Nieuw teamlid',
           serach: 'Zoeken',
           addNewGroup: 'Nieuwe groep toevoegen',
           editGroup: 'Groep wijzigen',
@@ -477,6 +477,7 @@ define(
           street: 'Straat',
           postCode: 'Postcode',
           city: 'Woonplaats',
+          email: 'E-mail',
           saveMember: 'Opslaan',
           state: 'Status',
           states: 'Status',

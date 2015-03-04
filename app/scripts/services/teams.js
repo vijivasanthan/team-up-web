@@ -274,6 +274,7 @@ define(
               {
                 if (change.a.length > 0 && change.r.length == 0)
                 {
+                  console.log('change.a', change.a);
                   calls.push(
                     TeamUp._(
                       'teamMemberAdd',
