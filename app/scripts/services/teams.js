@@ -347,11 +347,14 @@ define(
            * @param changedUsers
            * @param teamId
            */
+          //TODO remove this one if the userobject in the backend is up to date
           TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
           {
             angular.forEach(changedUsers, function (user)
             {
-
+              console.log('changedUsers', changedUsers);
+              console.log('user', user);
+              console.log('$rootScope.app.resources.uuid', $rootScope.app.resources.uuid);
               if (user == $rootScope.app.resources.uuid)
               {
                 var userResources = Store('app').get('resources'),
@@ -363,6 +366,7 @@ define(
 
                 Store('app').save('resources', userResources);
                 $rootScope.app.resources = userResources;
+                console.log('manage teams', userResources.teamUuids);
                 return;
               }
             });

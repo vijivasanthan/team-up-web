@@ -712,9 +712,13 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
+                console.log('123', $rootScope.app.resources.teamUuids);
+
                 //Check if logged user had no teams, if there are by now renew accesslist
-                if(! currentUserTeams.length)
+                if(currentUserTeams.length != $rootScope.app.resources.teamUuids)
                 {
+                  console.log('access');
+                  //update localStorage
                   Permission.getAccess();
                 }
 
