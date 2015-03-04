@@ -1,1 +1,0 @@
-angular.module("doc.ui-utils",["ui.utils","prettifyDirective"]),angular.module("ui.scroll").factory("datasource",["$log","$timeout",function(e,t){var n=function(e,n,r){return t(function(){var t,i,s,o;i=[];for(t=s=e,o=e+n-1;e<=o?s<=o:s>=o;t=e<=o?++s:--s)i.push("item #"+t);return r(i)},100)};return{get:n}}]);

@@ -11,3 +11,4 @@ war/WEB-INF/classes/
 libpeerconnection.log
 dist/scripts/localConfig.js
 test-results.xml
+dist
