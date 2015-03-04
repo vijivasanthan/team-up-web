@@ -9,6 +9,7 @@ define(
     'directives/directives',
     'angular-resource',
     'angular-route',
+    'angular-cookie',
     'angular-md5',
     'angular-strap',
     //'ui-sortable',
@@ -37,7 +38,8 @@ define(
         'ui.bootstrap.pagination',
         'ui.mask',
 
-        'ng-sortable'
+        'ng-sortable',
+        'ipCookie'
         //'$strap.directives',
         //'ui.bootstrap.modal',
         // 'NgVis',

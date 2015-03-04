@@ -86,7 +86,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 					//		|  druk op annuleren om terug te gaan naar uw tijdlijn.
 					//	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren
 					
-					div.alert.alert-warning(ng-show='infoAvailibility.info')
+					div.alert.alert-warning(ng-show='infoAvailibility')
 						button.close(type='button',
 						ng-click='disableInfoAvailibility()',
 						data-dismiss='alert') ×

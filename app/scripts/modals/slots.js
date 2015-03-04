@@ -438,6 +438,62 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
+          Slots.prototype.members = function(groupId, periods)
+          {
+            var allMembers = Store('app').get(groupId),
+                deferred = $q.defer();
+
+            Slots.prototype.memberSlots2.query({
+                id: groupId,
+                start: periods.start,
+                end: periods.end,
+                type: 'both'
+              },
+              function (members)
+              {
+                var mems = [];
+                _.each(members,
+                    function (mdata, index)
+                    {
+                        _.each(mdata, function (tslot)
+                        {
+                          tslot.text = tslot.state
+                        });
+
+                        var member;
+
+                        _.each(allMembers, function (mem)
+                        {
+                          if (index == mem.uuid)
+                          {
+                            member = mem;
+                          }
+                        });
+
+                        if (member != null)
+                        {
+                          mems.push({
+                            id: index,
+                            fullName: member.firstName + ' ' + member.lastName,
+                            lastName: member.lastName,
+                            role: member.role,
+                            data: mdata,
+                            stats: Stats.member(mdata, periods.start, periods.end)
+                          });
+                        }
+                    }
+                );
+                deferred.resolve(mems);
+              },
+              function (error)
+              {
+                deferred.resolve({error: error})
+              }
+            );
+
+            return deferred.promise;
+          };
+
           Slots.prototype.all = function (options)
           {
             var deferred = $q.defer(),
@@ -473,81 +529,96 @@ define(['services/services', 'config'],
                   Slots.prototype.aggs(groupParams)
                     .then(function (aggs)
                   {
-                    if (options.layouts.members)
-                    {
-                      var allMembers = Store('app').get(options.groupId),
-                        calls = [];
+                    var _aggs = aggs;
 
-                      Slots.prototype.memberSlots2.query({
-                          id: options.groupId,
-                          start: params.start,
-                          end: params.end,
-                          type: 'both'
-                        },
-                        function (members)
+
+                    Slots.prototype.wishes(
+                      {
+                        id: options.groupId,
+                        start: params.start,
+                        end: params.end
+                      }).then(
+                      function(wishes)
+                      {
+                        _aggs.wishes = wishes;
+
+                        if (options.layouts.members)
                         {
-                          var mems = [];
-                          _.each(members, function (mdata, index)
+                          var allMembers = Store('app').get(options.groupId),
+                            calls = [];
+
+                          Slots.prototype.memberSlots2.query({
+                              id: options.groupId,
+                              start: params.start,
+                              end: params.end,
+                              type: 'both'
+                            },
+                            function (members)
                             {
-                              _.each(mdata, function (tslot)
-                              {
-                                tslot.text = tslot.state
-                              });
-
-                              var member;
-
-                              _.each(allMembers, function (mem)
-                              {
-                                if (index == mem.uuid)
+                              var mems = [];
+                              _.each(members, function (mdata, index)
                                 {
-                                  member = mem;
+                                  _.each(mdata, function (tslot)
+                                  {
+                                    tslot.text = tslot.state
+                                  });
+
+                                  var member;
+
+                                  _.each(allMembers, function (mem)
+                                  {
+                                    if (index == mem.uuid)
+                                    {
+                                      member = mem;
+                                    }
+                                  });
+
+                                  if (member != null)
+                                  {
+                                    mems.push({
+                                      id: index,
+                                      fullName: member.firstName + ' ' + member.lastName,
+                                      lastName: member.lastName,
+                                      role: member.role,
+                                      data: mdata,
+                                      stats: Stats.member(mdata, params.start, params.end)
+                                    });
+                                  }
+                                }
+                              );
+
+                              deferred.resolve({
+                                user: user,
+                                groupId: options.groupId,
+                                aggs: _aggs,
+                                members: mems,
+                                synced: new Date().getTime(),
+                                periods: {
+                                  start: options.stamps.start,
+                                  end: options.stamps.end
                                 }
                               });
-
-                              if (member != null)
-                              {
-                                mems.push({
-                                  id: index,
-                                  fullName: member.firstName + ' ' + member.lastName,
-                                  lastName: member.lastName,
-                                  role: member.role,
-                                  data: mdata,
-                                  stats: Stats.member(mdata, params.start, params.end)
-                                });
-                              }
-                            }
-                          );
-
+                            },
+                            function (error)
+                            {
+                              deferred.resolve({error: error})
+                            });
+                        }
+                        else
+                        {
                           deferred.resolve({
                             user: user,
                             groupId: options.groupId,
-                            aggs: aggs,
-                            members: mems,
+                            aggs: _aggs,
                             synced: new Date().getTime(),
                             periods: {
                               start: options.stamps.start,
                               end: options.stamps.end
                             }
                           });
-                        },
-                        function (error)
-                        {
-                          deferred.resolve({error: error})
-                        });
-                    }
-                    else
-                    {
-                      deferred.resolve({
-                        user: user,
-                        groupId: options.groupId,
-                        aggs: aggs,
-                        synced: new Date().getTime(),
-                        periods: {
-                          start: options.stamps.start,
-                          end: options.stamps.end
                         }
-                      });
-                    }
+                      }
+                    );
                   });
                 }
                 else
@@ -655,10 +726,7 @@ define(['services/services', 'config'],
 
               var memDeferred = [],
                 members = [],
-                queriedTeams = Teams.query();
-
-              queriedTeams.then(function (teams)
-              {
+                teams = Teams.queryLocal();
 
                 if (options.id == 'all')
                 {
@@ -721,8 +789,9 @@ define(['services/services', 'config'],
 
                   callbackSuccess(success);
 
+                  //Load new teamData and save it locally
+                  Teams.query();
                 });
-              });
             }
           }
 

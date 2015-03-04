@@ -18,7 +18,9 @@ define(
         'data',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store, Teams, $window, data, TeamUp, $timeout)
+        'Permission',
+        function ($rootScope, $scope, $location, Clients, $route,
+                  $routeParams, Store, Teams, $window, data, TeamUp, $timeout, Permission)
         {
           function loadData (data)
           {
@@ -199,8 +201,15 @@ define(
               };
             }
           }
-
           // end of loadData
+
+          if(! $rootScope.app.resources.teamUuids.length)
+          {
+            $rootScope.notifier.error(
+              'Het lijkt erop dat je niet in een team zit. Wijs jezelf toe aan een team',
+              true
+            );
+          }
 
           // TODO: Repetitive code
           var localData = loadData(data);
@@ -695,11 +704,23 @@ define(
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
+            var currentUserTeams = $rootScope.app.resources.teamUuids;
+
             Teams.manage(changes)
               .then(
               function ()
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
+                console.log('123', $rootScope.app.resources.teamUuids);
+
+                //Check if logged user had no teams, if there are by now renew accesslist
+                if(currentUserTeams.length != $rootScope.app.resources.teamUuids)
+                {
+                  console.log('access');
+                  //update localStorage
+                  Permission.getAccess();
+                }
 
                 // TeamUp._('teamMemberFree')
                 //   .then(

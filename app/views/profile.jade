@@ -77,7 +77,7 @@ section#profile
 						//div(dynamic='test') {{test}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
 							ng-click='confirmModal("#confirmProfileModal")',
-							ng-hide='app.resources.role > 1 && teams.length && edit.uuid != app.resources.uuid') 
+							ng-hide='app.resources.role > 1 && edit.uuid != app.resources.uuid || ! app.resources.teamUuids.length') 
 							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
 							ng-click='editProfile()',

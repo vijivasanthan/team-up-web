@@ -70,7 +70,10 @@ define(['services/services', 'config'], function (services, config) {
             {
               $rootScope.app.resources = result;
 
-              Store('app').save('resources', result);
+              var currentTeams = $rootScope.getTeamsofMembers($rootScope.app.resources.uuid);
+              $rootScope.app.resources.teamUuids = _.pluck(currentTeams, 'uuid');
+
+              Store('app').save('resources', $rootScope.app.resources);
             }
 
             deferred.resolve(result);
