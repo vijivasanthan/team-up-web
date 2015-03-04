@@ -307,50 +307,54 @@ define(
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs',
               resolve: {
-                data: function(Store, TeamUp, Logs, $q)
+                data: function(Logs)
                 {
                   removeActiveClass('.teamMenu');
 
-                  var deferred = $q.defer(),
-                      teams = Store('app').get('teams'),
-                      adapterCalls = [];
-                  //TODO give every team agent a adapterId
-                  _.each(teams, function(team)
-                  {
-                    var call = $q.defer();
-                    adapterCalls.push(call.promise);
-
-                    TeamUp._('teamPhone',
-                    {second: team.uuid})
-                      .then(
-                        function(result)
-                        {
-                          call.resolve({
-                                name: team.name,
-                                teamId: team.uuid,
-                                adapterId: result.adapter
-                              });
-                        }
-                      );
+                  //var deferred = $q.defer(),
+                  //    teams = Store('app').get('teams'),
+                  //    adapterCalls = [];
+                  ////TODO give every team agent a adapterId
+                  //_.each(teams, function(team)
+                  //{
+                  //  var call = $q.defer();
+                  //  adapterCalls.push(call.promise);
+                  //
+                  //  TeamUp._('teamPhone',
+                  //  {second: team.uuid})
+                  //    .then(
+                  //      function(result)
+                  //      {
+                  //        call.resolve({
+                  //              name: team.name,
+                  //              teamId: team.uuid,
+                  //              adapterId: result.adapter
+                  //            });
+                  //      }
+                  //    );
+                  //});
+                  //
+                  //$q.all(adapterCalls)
+                  //  .then(
+                  //    function(adapters)
+                  //    {
+                  //      Logs.fetch({
+                  //        end: new Date.now().getTime(),
+                  //        start: new Date.today().addDays(- 7).getTime()
+                  //      }).then(
+                  //        function(logs)
+                  //        {
+                  //          deferred.resolve({logs: logs, teamAdapters: adapters});
+                  //        }
+                  //      );
+                  //    }
+                  //);
+                  //
+                  //return deferred.promise;
+                  return Logs.fetch({
+                    end: new Date.now().getTime(),
+                    start: new Date.today().addDays(- 7).getTime()
                   });
-
-                  $q.all(adapterCalls)
-                    .then(
-                      function(adapters)
-                      {
-                        Logs.fetch({
-                          end: new Date.now().getTime(),
-                          start: new Date.today().addDays(- 7).getTime()
-                        }).then(
-                          function(logs)
-                          {
-                            deferred.resolve({logs: logs, teamAdapters: adapters});
-                          }
-                        );
-                      }
-                  );
-
-                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
