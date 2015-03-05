@@ -470,7 +470,7 @@ define(
           newTeam: 'Nieuw Team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
-          newMember: 'Nieuw lid',
+          newMember: 'Nieuw teamlid',
           name: 'Naam',
           role: 'Rol',
           phone: 'Telefoon',

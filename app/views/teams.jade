@@ -34,7 +34,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteMember(_memberId)') {{ui.teamup.confirms.remove}}
+				ng-click='deleteMember(currentMember)') {{ui.teamup.confirms.remove}}
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
@@ -110,7 +110,7 @@ aria-hidden='true')
 							th: a {{ui.teamup.states}}
 							th
 					tbody
-						tr(ng-repeat='member in data.members[team.uuid]|orderBy:"lastName"')
+						tr(ng-repeat='member in data.members[team.uuid] | orderBy:"lastName"')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
@@ -135,7 +135,7 @@ aria-hidden='true')
 										button.btn-primary.btn-mini
 											i.icon-edit
 									button.btn-primary.btn-mini(type='submit',
-									ng-click='confirmDeleteMember(member.uuid)',
+									ng-click='confirmDeleteMember(member)',
 									ng-show='app.resources.role == 1')
 										i.icon-trash
 				ul#teams-legenda
@@ -171,32 +171,37 @@ aria-hidden='true')
 				div.btn-group.pull-right
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
 						ng-click='setUserType("NEW")')
-						| Nieuwe
+						| Nieuw
 					button.btn.btn-primary(class='{{(userType == "EXISTING") && "active"}}',
 						ng-click='setUserType("EXISTING")')
 						| Bestaand
 			hr
-			table.table.table-striped(ng-show='userType == "EXISTING"')
-				thead
-					tr
-						th
-						th {{ui.teamup.name}}
-						th {{ui.teamup.email}}
-				tbody
-					tr(ng-repeat='member in membersWithoutTeam')
-						td
-							.roundedPicSmall(class='{{member.states|stateColor}}',
-							back-img = '{{member.uuid | avatar:"team":"80" }}')
-						td
-							a(href='index.html#/profile/{{member.uuid}}#profile')
-								| {{member.firstName}} {{member.lastName}}
-						td
-							| {{member.email}}
-						td
-							.pull-right
-								button.btn-primary.btn-mini(ng-click='addExistingUserMember(member.uuid)')
-									span.icomoon(data-icon='',
-									aria-hidden='true')
+			div(ng-show='userType == "EXISTING"')
+				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
+				table.table.table-striped
+					thead
+						tr
+							th
+							th {{ui.teamup.name}}
+							th {{ui.teamup.email}}
+					tbody
+						tr(ng-repeat='member in membersWithoutTeam | orderBy:"lastName"')
+							td
+								.roundedPicSmall(class='{{member.states|stateColor}}',
+								back-img = '{{member.uuid | avatar:"team":"80" }}')
+							td
+								a(href='index.html#/profile/{{member.uuid}}#profile')
+									| {{member.firstName}} {{member.lastName}}
+							td
+								| {{member.email}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)')
+										span.icomoon(data-icon='',
+										aria-hidden='true')
+				span.muted.pull-right
+					small
+						i {{membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
 			
 			form(name='teamMemberForm',
 				novalidate,
