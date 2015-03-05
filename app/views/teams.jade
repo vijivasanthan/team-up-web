@@ -39,8 +39,8 @@ aria-hidden='true')
 .page-header
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(
-		ng-show='app.resources.role == 1 && views.team || views.newMember')
-		span.selectTitle
+		ng-show='(app.resources.role == 1 && !views.newTeam)')
+		span.selectTitles
 			| {{ ui.teamup.selectTeam }}
 		select(current_selection='team', 
 		ng-model='current',
@@ -69,7 +69,7 @@ aria-hidden='true')
 				| {{ui.teamup.newTeam}}
 
 		li(class="{{(views.newMember==true) && 'active'}}",
-		ng-show="app.resources.role == 1")
+		ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
 			a(data-toggle='tab',
 			ng-click='setViewTo("newMember")')
 				span.icomoon(data-icon='',
@@ -136,7 +136,7 @@ aria-hidden='true')
 											i.icon-edit
 									button.btn-primary.btn-mini(type='submit',
 									ng-click='confirmDeleteMember(member)',
-									ng-show='app.resources.role == 1')
+									ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
 										i.icon-trash
 				ul#teams-legenda
 					li
@@ -182,10 +182,14 @@ aria-hidden='true')
 					thead
 						tr
 							th
-							th {{ui.teamup.name}}
-							th {{ui.teamup.email}}
+							th
+								a(ng-click='memberInTeamOrder="lastName"; reverse=!reverse') {{ui.teamup.name}}
+									i.icon-sort
+							th
+								a(ng-click='memberInTeamOrder="email"; reverse=!reverse') {{ui.teamup.email}}
+									i.icon-sort
 					tbody
-						tr(ng-repeat='member in membersWithoutTeam | orderBy:"lastName"')
+						tr(ng-repeat='member in membersWithoutTeam | orderBy:memberInTeamOrder:reverse')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
