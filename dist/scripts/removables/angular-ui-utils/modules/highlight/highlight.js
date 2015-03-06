@@ -1,1 +1,0 @@
-angular.module("ui.highlight",[]).filter("highlight",function(){return function(e,t,n){return e&&(t||angular.isNumber(t))?(e=e.toString(),t=t.toString(),n?e.split(t).join('<span class="ui-match">'+t+"</span>"):e.replace(new RegExp(t,"gi"),'<span class="ui-match">$&</span>')):e}});
