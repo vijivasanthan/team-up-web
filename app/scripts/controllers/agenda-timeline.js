@@ -549,10 +549,10 @@ define(
                   $scope.timeline.current.layouts.members = false;
                 }
 
-                //$rootScope.statusBar.off();
-
                 if($scope.timeline.current.layouts.group)
                 {
+                  $rootScope.statusBar.display($rootScope.ui.login.loading_Group);
+
                   groupSlots(periods)
                     .then(
                       function(data)
@@ -560,6 +560,7 @@ define(
                         $scope.data.aggs = data.aggs;
                         $scope.data.aggs.wishes = data.wishes;
                         $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                        $rootScope.statusBar.off();
                       }
                   );
                 }
@@ -580,15 +581,15 @@ define(
 
                 if($scope.timeline.current.layouts.members)
                 {
+                  $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
+
                   Slots.members($scope.timeline.current.group, periods)
                     .then(
                     function(members)
                     {
                       $scope.data.members = members;
-
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
-
-                      ///das
+                      $rootScope.statusBar.off();
                     }
                   );
                 }

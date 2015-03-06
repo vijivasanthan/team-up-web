@@ -494,6 +494,79 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
+          Slots.prototype.memberSlots2 = {
+            query: function (options, callbackSuccess, callbackError)
+            {
+              var memDeferred = [],
+                members = [],
+                teams = Teams.queryLocal();
+
+              if (options.id == 'all')
+              {
+                members = $rootScope.unique(Store('app').get('members'));
+              }
+              else if (typeof teams.members[options.id] != 'undefined')
+              {
+                members = $rootScope.unique(teams.members[options.id]);
+              }
+
+              _.each(members, function (member)
+              {
+                var memberDeferred = $q.defer(),
+                  _options;
+                memDeferred.push(memberDeferred.promise);
+
+                _options = {
+                  user: member.uuid,
+                  start: options.start,
+                  end: options.end
+                }
+
+                if (options.type)
+                {
+                  _options.type = options.type;
+                }
+
+                Slots.query(
+                  _options,
+                  function (result)
+                  {
+                    _.each(result, function (slot)
+                    {
+                      slot.state = slot.text;
+                      slot.text = null;
+                    })
+                    memberDeferred.resolve({uuid: member.uuid, content: result});
+                  },
+                  function (error)
+                  {
+                    memberDeferred.resolve({error: error});
+                  }
+                );
+              });
+
+              $q.all(memDeferred).then(function (results)
+              {
+                var success = {};
+                _.each(results, function (result)
+                {
+                  if (!result.error)
+                  {
+                    success[result.uuid] = result.content;
+                  }
+                  else
+                  {
+                    console.log(result.error);
+                  }
+                });
+
+                callbackSuccess(success);
+                //Load new teamData and save it locally
+                Teams.query();
+              });
+            }
+          }
+
           Slots.prototype.all = function (options)
           {
             var deferred = $q.defer(),
@@ -547,14 +620,18 @@ define(['services/services', 'config'],
                           var allMembers = Store('app').get(options.groupId),
                             calls = [];
 
-                          Slots.prototype.memberSlots2.query({
+                          MemberSlots.get
+                          (
+                            {
                               id: options.groupId,
                               start: params.start,
                               end: params.end,
                               type: 'both'
+
                             },
-                            function (members)
+                            function (response)
                             {
+                              var members = response.data;
                               var mems = [];
                               _.each(members, function (mdata, index)
                                 {
@@ -602,7 +679,8 @@ define(['services/services', 'config'],
                             function (error)
                             {
                               deferred.resolve({error: error})
-                            });
+                            }
+                          );
                         }
                         else
                         {
@@ -666,6 +744,31 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
+          Slots.prototype.MemberReachabilitiesByTeam = function(groupId)
+          {
+            var deferred = $q.defer(),
+                now = Math.floor(Date.now().getTime() / 1000);
+
+            MemberSlots.get
+            (
+              {
+                id: groupId,
+                type: null,
+                start: now,
+                end: now + 60
+              },
+              function (response)
+              {
+                deferred.resolve({
+                  members: response.data,
+                  synced: now
+                });
+              }
+            )
+
+            return deferred.promise;
+          };
+
           Slots.prototype.getAllMemberReachabilities = function (teams, divisionID)
           {
             var deferred = $q.defer(),
@@ -719,81 +822,6 @@ define(['services/services', 'config'],
 
             return deferred.promise;
           };
-
-          Slots.prototype.memberSlots2 = {
-            query: function (options, callbackSuccess, callbackError)
-            {
-
-              var memDeferred = [],
-                members = [],
-                teams = Teams.queryLocal();
-
-                if (options.id == 'all')
-                {
-                  members = $rootScope.unique(Store('app').get('members'));
-                }
-                else if (typeof teams.members[options.id] != 'undefined')
-                {
-                  members = $rootScope.unique(teams.members[options.id]);
-                }
-
-                _.each(members, function (member)
-                {
-                  var memberDeferred = $q.defer(),
-                    _options;
-                  memDeferred.push(memberDeferred.promise);
-
-                  _options = {
-                    user: member.uuid,
-                    start: options.start,
-                    end: options.end
-                  }
-
-                  if (options.type)
-                  {
-                    _options.type = options.type;
-                  }
-
-                  Slots.query(
-                    _options,
-                    function (result)
-                    {
-                      _.each(result, function (member)
-                      {
-                        member.state = member.text;
-                        member.text = null;
-                      })
-                      memberDeferred.resolve({uuid: member.uuid, content: result});
-                    },
-                    function (error)
-                    {
-                      memberDeferred.resolve({error: error});
-                    }
-                  );
-                });
-
-                $q.all(memDeferred).then(function (results)
-                {
-                  var success = {};
-                  _.each(results, function (result)
-                  {
-                    if (!result.error)
-                    {
-                      success[result.uuid] = result.content;
-                    }
-                    else
-                    {
-                      console.log(result.error);
-                    }
-                  });
-
-                  callbackSuccess(success);
-
-                  //Load new teamData and save it locally
-                  Teams.query();
-                });
-            }
-          }
 
           Slots.prototype.user = function (params)
           {
