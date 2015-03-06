@@ -78,10 +78,9 @@ define(
             return deferred.promise;
           };
 
-          // Update localStorage with all members including members which do not belong to any teams
           TeamsService.prototype.updateMembersLocal = function ()
           {
-            TeamUp._('teamMemberFree')
+            return TeamUp._('teamMemberFree')
               .then(
               function (result)
               {

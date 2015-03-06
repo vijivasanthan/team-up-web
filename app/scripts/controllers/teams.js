@@ -433,16 +433,16 @@ define(
               'memberAdd',
               null,
               {
-                uuid: user.userName,
-                userName: user.userName,
-                passwordHash: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                phone: user.phone,
-                email: user.email,
+                uuid: tempResources.userName,
+                userName: tempResources.userName,
+                passwordHash: tempResources.password,
+                firstName: tempResources.firstName,
+                lastName: tempResources.lastName,
+                phone: tempResources.phone,
+                email: tempResources.email,
                 teamUuids: [$scope.current],
-                role: user.role,
-                birthDate: user.birthDate
+                role: tempResources.role,
+                birthDate: tempResources.birthDate
                 //function: member.function
               }
             ).then(
@@ -523,18 +523,25 @@ define(
 
                   $scope.members = $scope.data.members[$scope.team.uuid];
 
+                  if(angular.isDefined($scope.teamMemberForm))
+                  {
+                    $rootScope.resetPhoneNumberChecker();
+                    $scope.teamMemberForm = {};
+                  }
+
+                  Teams.updateMembersLocal()
+                    .then(
+                    function()
+                    {
+                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(data.members);
+                    }
+                  );
+
                   $scope.setViewTo('team');
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 $rootScope.statusBar.off();
-                //reset validation
-                $rootScope.resetPhoneNumberChecker();
-
-                if(angular.isDefined($scope.teamMemberForm))
-                {
-                  $scope.teamMemberForm.$setPristine();
-                }
               }
             );
           };
