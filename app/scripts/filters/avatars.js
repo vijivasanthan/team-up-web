@@ -57,6 +57,41 @@ define(
       ]
     );
 
+    filters.filter(
+      'membersWithoutTeam',
+      [
+        'Store',
+        function (Store)
+        {
+          return function(membersHasTeam)
+          {
+            var allMembers = Store('app').get('members'),
+                membersInTeam = _.filter(membersHasTeam,
+                  function(members)
+                  {
+                    return members;
+                  }
+                );
+            //filter members of the team arrays
+            membersInTeam = _.flatten(membersInTeam);
+
+            //difference between users in team and without
+            var difference = _.difference(
+              _.pluck(allMembers, 'uuid'),
+              _.pluck(membersInTeam, 'uuid')
+            );
+
+            return _.filter(allMembers,
+              function(obj)
+              {
+                return difference.indexOf(obj.uuid) >= 0;
+              }
+            );
+          };
+        }
+      ]
+    );
+
     // Convert date
     filters.filter(
       'nicelyDate',
