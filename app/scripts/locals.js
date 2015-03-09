@@ -678,7 +678,13 @@ define(
           orderSaved: 'Volgorde opgeslagen'
         },
         logs: {
-          loadLogs: 'Logs laden...'
+          loadLogs: 'Logs laden...',
+          status: {
+            sent: 'Uitgaand',
+            received: 'Inkomend',
+            finished: 'Afgerond',
+            missed: 'Gemist'
+          }
         },
         validation: {
           phone: {

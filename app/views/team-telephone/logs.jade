@@ -54,12 +54,12 @@ section#logs
 						tbody
 							tr(ng-repeat='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
 								td
-									span.label.label-inverse(class='log-{{log.status}}') {{log.status}}
+									span.label.label-inverse(class='log-{{log.status}}') {{log.status | translateStatusLogs}}
 									span(ng-show='log.records.length > 0')
 										span(ng-repeat='record in log.records')
 											br
 											| ∟
-											span.label.label-inverse(class='log-{{record.status}}') {{record.status}}
+											span.label.label-inverse(class='log-{{record.status}}') {{record.status | translateStatusLogs}}
 								td
 									// <pre><small>{{log | json}}</small></pre>
 									| {{log.from}}

@@ -159,6 +159,41 @@ define(
       ]
     );
 
+    // Translate role
+    filters.filter(
+      'translateStatusLogs',
+      [
+        '$rootScope',
+        function ($rootScope)
+        {
+          return function (status)
+          {
+            var translatedStatus = null;
+
+            switch(status)
+            {
+              case 'SENT':
+                translatedStatus = $rootScope.ui.logs.status.sent;
+                break;
+              case 'RECEIVED':
+                translatedStatus = $rootScope.ui.logs.status.received;
+                break;
+              case 'FINISHED':
+                translatedStatus = $rootScope.ui.logs.status.finished;
+                break;
+              case 'MISSED':
+                translatedStatus = $rootScope.ui.logs.status.missed;
+                break;
+              default:
+                console.log("the status of the log isn't found");
+            }
+
+            return translatedStatus.toUpperCase();
+          }
+        }
+      ]
+    );
+
     // Translate user (working) function
     filters.filter(
       'translateFunc',
