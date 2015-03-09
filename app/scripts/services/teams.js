@@ -7,8 +7,8 @@ define(
     services.factory(
       'Teams',
       [
-        '$resource', '$q', 'Store', '$rootScope', 'TeamUp',
-        function ($resource, $q, Store, $rootScope, TeamUp)
+        '$resource', '$q', 'Store', '$rootScope', 'TeamUp', '$injector',
+        function ($resource, $q, Store, $rootScope, TeamUp, $injector)
         {
           var TeamsService = $resource();
 
@@ -267,6 +267,8 @@ define(
             var deferred = $q.defer(),
               calls = [];
 
+            console.log('changes', changes);
+
             angular.forEach(
               changes,
               function (change, teamId)
@@ -326,7 +328,7 @@ define(
                     //   )
                     // );
                     var routeParam = {uuid: teamId};
-                    TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
+                    //TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
                     queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
@@ -347,85 +349,67 @@ define(
            * @param changedUsers
            * @param teamId
            */
-          //TODO remove this one if the userobject in the backend is up to date
-          TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
-          {
-            angular.forEach(changedUsers, function (user)
-            {
-              console.log('changedUsers', changedUsers);
-              console.log('user', user);
-              console.log('$rootScope.app.resources.uuid', $rootScope.app.resources.uuid);
-              if (user == $rootScope.app.resources.uuid)
-              {
-                var userResources = Store('app').get('resources'),
-                  indexTeam = userResources.teamUuids.indexOf(teamId);
+          //TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
+          //{
+          //  angular.forEach(changedUsers, function (user)
+          //  {
+          //    console.log('changedUsers', changedUsers);
+          //    console.log('user', user);
+          //    console.log('$rootScope.app.resources.uuid', $rootScope.app.resources.uuid);
+          //    if (user == $rootScope.app.resources.uuid)
+          //    {
+          //      var userResources = Store('app').get('resources'),
+          //        indexTeam = userResources.teamUuids.indexOf(teamId);
+          //
+          //      (indexTeam < 0)
+          //        ? userResources.teamUuids.push(teamId)
+          //        : userResources.teamUuids.splice(indexTeam, 1);
+          //
+          //      Store('app').save('resources', userResources);
+          //      $rootScope.app.resources = userResources;
+          //      console.log('manage teams', userResources.teamUuids);
+          //      return;
+          //    }
+          //  });
+          //};
 
-                (indexTeam < 0)
-                  ? userResources.teamUuids.push(teamId)
-                  : userResources.teamUuids.splice(indexTeam, 1);
-
-                Store('app').save('resources', userResources);
-                $rootScope.app.resources = userResources;
-                console.log('manage teams', userResources.teamUuids);
-                return;
-              }
-            });
-          };
-
-          TeamsService.prototype.removeAllTeamsFromMember = function(userId, userTeams)
+          TeamsService.prototype.removeAllTeamsFromMember = function(user)
           {
             var deferred = $q.defer(),
-                teams = $rootScope.getTeamsofMembers(userId);
+                changes = {};
 
-            _.each(teams, function(team)
-            {
-
-              TeamUp._(
-                'teamMemberDelete',
-                {second: team.uuid},
-                {ids: [userId]}
-              ).then(
-                function (result)
-                {
-                  angular.forEach(userTeams, function (teamId, i)
-                  {
-                    if (team.uuid == teamId)
-                    {
-                      this.query(
-                        false,
-                        {'uuid': teamId}
-                      ).then(
-                        function ()
-                        {
-                          $rootScope.statusBar.off();
-                        }
-                      );
-
-                      userTeams.splice(i, 1);
-                      sessionStorage.removeItem(userId + '_team');
-                      this.updateMembersLocal();
-                    }
-                  });
-                }.bind(this),
-                function (error)
-                {
-                  console.log(error);
-                }
-              );
+            _.each(user.teamUuids, function(teamId) {
+              changes[teamId] = {
+                a: [],
+                r: [user.uuid]
+              };
             });
 
-            //update list of members
-            TeamUp._('teamMemberFree')
-              .then
-            (
-              function (result)
+            TeamsService.prototype.manage(changes)
+              .then(
+              function()
               {
-                Store('app').save('members', result);
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                console.log(error)
+                var loggedUser = {
+                  viewingUserhasTeam: true
+                };
+
+                if(user.uuid == $rootScope.app.resources.uuid)
+                {
+                  var Profile = $injector.get('Profile');
+
+                  Profile.fetchUserData($rootScope.app.resources.uuid)
+                    .then(
+                    function(userData)
+                    {
+                      if(! userData.length)
+                      {
+                        loggedUser.viewingUserhasTeam = false;
+                        deferred.resolve(loggedUser);
+                      }
+                    }
+                  );
+                }
+                deferred.resolve(loggedUser);
               }
             );
 

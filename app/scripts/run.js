@@ -263,6 +263,24 @@ define(
             return member;
           };
 
+          /**
+           * Info logged user without a team
+           */
+          $rootScope.infoUserWithoutTeam = function()
+          {
+            if(! $rootScope.app.resources.teamUuids.length)
+            {
+              var info = ($rootScope.app.resources.role > 1)
+                ? $rootScope.ui.teamup.teamMemberNoTeam
+                : $rootScope.ui.teamup.coordinatorNoTeam;
+
+              $rootScope.notifier.error(
+                info,
+                true
+              );
+            }
+          };
+
           // Get teams of a member
           $rootScope.getTeamsofMembers = function (memberId)
           {

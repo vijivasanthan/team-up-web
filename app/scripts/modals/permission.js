@@ -97,6 +97,8 @@ define(['services/services', 'config'],
                   var permission = permissionProfile,
                       accessList = {};
 
+                  console.log('$rootScope.app.resources.teamUuids', $rootScope.app.resources.teamUuids);
+                  
                   if($rootScope.app.resources.teamUuids.length)
                   {
                     _.each(permissionProfile, function(val, key)
@@ -120,6 +122,8 @@ define(['services/services', 'config'],
                   Store('app').save('permissionProfile', permission);
                   $rootScope.app.domainPermission = permission;
 
+                  console.log('accessList', accessList);
+                  
                   permissionLocation(accessList);
                 }
               );
@@ -144,6 +148,8 @@ define(['services/services', 'config'],
               ($rootScope.app.resources.role > 1)
                 ? $location.path('/profile/' + $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile')
                 : $location.path('/manage').search({}).hash('teams');
+
+              $rootScope.infoUserWithoutTeam();
             }
           };
 

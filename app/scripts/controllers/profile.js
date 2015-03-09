@@ -42,21 +42,6 @@ define(
             );
           };
 
-          var userHasTeam = function()
-          {
-            if(! $scope.teams.length)
-            {
-              var info = ($rootScope.app.resources.role > 1)
-                ? $rootScope.ui.teamup.teamMemberNoTeam
-                : $rootScope.ui.teamup.coordinatorNoTeam;
-
-              $rootScope.notifier.error(
-                info,
-                true
-              );
-            }
-          };
-
           //$rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
@@ -76,7 +61,7 @@ define(
 
           $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
 
-          userHasTeam();
+          $rootScope.infoUserWithoutTeam();
 
           $scope.forms = {
             add: false,
@@ -502,83 +487,21 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-            //TODO remove TeamUp._('teamMemberDelete',
-            //Teams.removeAllTeamsFromMember(
-            //  $scope.view.uuid,
-            //  $scope.view.teamUuids
-            //)
-            //  .then(
-            //    function(result)
-            //    {
-            //      console.log('scope.teams', $scope.teams);
-            //
-            //      $scope.teams = null;
-            //
-            //      console.log('scope.teams', $scope.teams);
-            //      $scope.view.teamUuids = null;
-            //
-            //      $rootScope.statusBar.off();
-            //    }
-            //  );
-
-            angular.forEach($scope.teams, function (team)
-            {
-
-              TeamUp._(
-                'teamMemberDelete',
-                {second: team.uuid},
-                {ids: [$scope.view.uuid]}
-              ).then(
-                function ()
+            Teams.removeAllTeamsFromMember($scope.view)
+              .then(
+                function(result)
                 {
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-
-                  angular.forEach($scope.view.teamUuids, function (teamId, i)
+                  if(result.loggedUserHasTeam)
                   {
-                    if (team.uuid == teamId)
-                    {
-                      $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                      Teams.query(
-                        false,
-                        {'uuid': teamId}
-                      ).then(
-                        function ()
-                        {
-                          $rootScope.statusBar.off()
-                        }
-                      );
-
-                      $scope.view.teamUuids.splice(i, 1);
-                      $scope.teams.splice(i, 1);
-                      sessionStorage.removeItem(data.uuid + '_team');
-                      Teams.updateMembersLocal();
-                    }
-                  });
-                  Permission.getAccess();
-                  userHasTeam();
-                }, function (error)
-                {
-                  console.log(error)
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  }
+                  else
+                  {
+                    Permission.getAccess();
+                  }
+                  $rootScope.statusBar.off()
                 }
-              );
-
-              //update list of members
-              TeamUp._('teamMemberFree')
-                .then
-              (
-                function (result)
-                {
-                  Store('app').save('members', result);
-
-                  $rootScope.statusBar.off();
-                },
-                function (error)
-                {
-                  console.log(error)
-                }
-              );
-            });
+            );
           };
         }
       ]
