@@ -10,7 +10,8 @@ define(['services/services', 'config'],
         '$resource',
         '$q',
         '$filter',
-        function ($resource, $q, $filter)
+        '$injector',
+        function ($resource, $q, $filter, $injector)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
           var Logs = $resource(
@@ -187,28 +188,28 @@ define(['services/services', 'config'],
             return uniques;
           };
 
-          Logs.prototype.fetch = function (periods)
+          Logs.prototype.fetch = function (options)
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                _options = {
+                  startTime: options.startTime || new Date.today().addDays(-7).getTime(),
+                  endTime: options.endTime || new Date.now().getTime(),
+                  adapterId: (options.adapterId != 'all')
+                    ? options.adapterId
+                    : null
+                };
 
-            if (!periods)
-            {
-              periods = {
-                end: new Date.now().getTime(),
-                start: new Date.today().addDays(-7).getTime()
-              }
-            }
             Logs.get(
-              {
-                startTime: periods.start,
-                endTime: periods.end
-              },
+              _options,
               function (result)
               {
                 var returned = {
                   logs: normalize(result),
                   synced: Date.now().getTime(),
-                  periods: periods
+                  periods: {
+                    startTime: _options.startTime,
+                    endTime:  _options.endTime
+                  }
                 };
 
                 deferred.resolve(returned);
@@ -216,6 +217,79 @@ define(['services/services', 'config'],
               function (error)
               {
                 deferred.resolve({error: error});
+              }
+            );
+
+            return deferred.promise;
+          };
+
+          /**
+           * Get logs per team or all, depends on the role of the user
+           * @returns {*}
+           */
+          Logs.prototype.fetchByTeam = function ()
+          {
+            var TeamUp = $injector.get('TeamUp'),
+                Store = $injector.get('Store'),
+                $rootScope = $injector.get('$rootScope'),
+                deferred = $q.defer(),
+                teams = Store('app').get('teams'),
+                adapterCalls = [];
+
+            //TODO give every team agent a adapterId
+            _.each(teams, function(team)
+            {
+              var call = $q.defer();
+              adapterCalls.push(call.promise);
+
+              TeamUp._('teamPhone',
+                {second: team.uuid})
+                .then(
+                function(result)
+                {
+                  call.resolve({
+                    name: team.name,
+                    teamId: team.uuid,
+                    adapterId: result.adapter
+                  });
+                }
+              );
+            });
+
+            $q.all(adapterCalls)
+              .then(
+              function(teams)
+              {
+                var options = {
+                  endTime: new Date.now().getTime(),
+                  startTime: new Date.today().addDays(- 6).getTime(),
+                  adapterId: 'all'
+                };
+
+                if($rootScope.app.resources.role > 1)
+                {
+                  var teamPhoneData = _.findWhere(teams, {teamId: ($rootScope.app.resources.teamUuids)[0]});
+
+                  /*
+                    Check if the team of the user has a adapterId, if not give a _.uniqueId()
+                  */
+                  options.adapterId  = teamPhoneData.adapterId || _.uniqueId();
+                }
+
+                /*
+                  In case of a _.uniqueId() there are no logs found, if the adapterId seems null
+                  all the logs will be show from the given range
+                */
+                Logs.prototype.fetch(options)
+                  .then(
+                  function(logs)
+                  {
+                    deferred.resolve({
+                      logData: logs,
+                      teams: teams
+                    });
+                  }
+                );
               }
             );
 

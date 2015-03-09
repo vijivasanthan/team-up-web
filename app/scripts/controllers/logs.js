@@ -7,81 +7,67 @@ define(
     controllers.controller(
       'logs', [
         '$rootScope',
-        '$scope',
         '$filter',
         '$timeout',
         'Logs',
         'data',
-        function ($rootScope, $scope, $filter, $timeout, Logs, data)
+        function ($rootScope, $filter, $timeout, Logs, data)
         {
           $rootScope.fixStyles();
 
-          $scope.data = data;
-          //$scope.teams = data.teamAdapters;
+          var vm = this;
+          vm.data = data;
+          vm.teams = data.teams;
 
-          //var currentTeamAdapter = _.findWhere($scope.teams, {teamId: CurrentSelection.getTeamId()});
+          var everyoneId = 'all',
+              periods = {
+                startTime: vm.data.logData.periods.startTime,
+                endTime: vm.data.logData.periods.endTime
+              };
 
-          //$scope.current = (currentTeamAdapter)
-          //    ? currentTeamAdapter.adapterId
-          //    : $scope.teams[0].adapterId;
+          vm.teams.unshift({
+            name: $rootScope.ui.dashboard.everyone,
+            teamId: everyoneId,
+            adapterId: everyoneId
+          });
 
-          //$scope.switchTeam = function(adapterId)
-          //{
-          //  var team = (! _.isNull(adapterId))
-          //    ? _.findWhere($scope.teams, {adapterId: adapterId})
-          //    : null;
-          //
-          //  if(!_.isNull(team))
-          //  {
-          //    CurrentSelection.local = team.teamId;
-          //  }
-          //};
+          vm.current = ($rootScope.app.resources.role > 1)
+            ? ($rootScope.app.resources.teamUuids)[0]
+            : everyoneId;
 
-          //filter: current
-          //|filter: current
+          vm.ordered = 'started.stamp';
+          vm.reversed = true;
 
-          //.form-group.has-feedback.pull-left(ng-hide='app.resources.role > 1')
-          //	label.control-label Selecteer team
-          //	.controls
-          //		select(ng-model='current',
-          //		ng-options='team.adapterId as team.name for team in teams | orderBy:"name"',
-          //		ng-selected='current',
-          //		ng-change='switchTeam(current)')
-
-          $scope.orderBy = function (ordered)
-          {
-            $scope.ordered = ordered;
-
-            $scope.reversed
-              = !$scope.reversed;
-          };
-
-          $scope.ordered = 'started.stamp';
-          $scope.reversed = true;
-
-          $scope.daterange = $filter('date')($scope.data.periods.start, 'dd-MM-yyyy') + ' / ' +
-          $filter('date')($scope.data.periods.end, 'dd-MM-yyyy');
+          vm.daterange = $filter('date')(periods.startTime, 'dd-MM-yyyy') + ' / ' +
+          $filter('date')(periods.endTime, 'dd-MM-yyyy');
 
           $rootScope.$on('getLogRange', function ()
           {
-            var periods = arguments[1];
+            periods = arguments[1];
 
-            fetchLogs(periods);
+            vm.fetchLogs();
           });
 
-          function fetchLogs(dataRange)
+          vm.fetchLogs = function()
           {
+            var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
+                options = {
+                  startTime: periods.startTime,
+                  endTime: periods.endTime,
+                  adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
+                };
+
             $timeout(function ()
             {
               $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
-              $scope.loadLogs = true;
+              vm.loadLogs = true;
             });
 
-            Logs.fetch(dataRange)
-              .then(function (data)
+            Logs.fetch(options)
+              .then(function (logData)
               {
-                $scope.loadLogs = false;
-                $scope.data = data;
+                vm.loadLogs = false;
+                vm.data.logData = logData;
 
                 $rootScope.statusBar.off();
               });
