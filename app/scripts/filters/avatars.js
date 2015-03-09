@@ -159,7 +159,9 @@ define(
       ]
     );
 
-    // Translate role
+    /**
+     * Translate the status of the logs
+     */
     filters.filter(
       'translateStatusLogs',
       [
