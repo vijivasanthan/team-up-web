@@ -276,23 +276,19 @@ define(
                     });
                   };
 
-                  Teams.query()
-                    .then(
-                      function(data)
-                      {
-                        var currentUser = _.findWhere(data.members[groupId], {uuid: userId});
+                  //TODO add Teams.query if the backend is faster
+                  var teamData = Teams.queryLocal(),
+                      currentUser = _.findWhere(teamData.members[groupId], {uuid: userId});
 
-                        getAllSlots(currentUser.uuid)
-                          .then(
-                          function(timelineData)
-                          {
-                            deferred.resolve({
-                              timelineData: timelineData,
-                              userData: currentUser
-                            });
-                          }
-                        );
-                      }
+                  getAllSlots(currentUser.uuid)
+                    .then(
+                    function(timelineData)
+                    {
+                      deferred.resolve({
+                        timelineData: timelineData,
+                        userData: currentUser
+                      });
+                    }
                   );
 
                   return deferred.promise;

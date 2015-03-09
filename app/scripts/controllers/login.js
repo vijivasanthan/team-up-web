@@ -383,7 +383,7 @@ define(
 
             angular.element('#preloader').show();
 
-            progress(20, $rootScope.ui.login.loading_User);
+            progress(17, $rootScope.ui.login.loading_User);
 
             TeamUp._('user')
               .then(
@@ -399,12 +399,14 @@ define(
 
                   Store('app').save('resources', $rootScope.app.resources);
 
-                  progress(40, $rootScope.ui.login.loading_teams);
+                  progress(34, $rootScope.ui.login.loading_teams);
 
                   Teams.query(true, {})
                     .then(
                     function (teams)
                     {
+                      console.log('teams', teams);
+
                       queryMembersNotInTeams();
 
                       queryTasks(teams);
@@ -414,34 +416,40 @@ define(
                         console.warn('error ->', teams);
                       }
 
-                      progress(60, $rootScope.ui.login.loading_teams);
+                      progress(51, $rootScope.ui.login.loading_teams);
 
                       Teams.queryClientGroups(teams)
                         .then(
                         function ()
                         {
-                          progress(80, $rootScope.ui.login.loading_clientGroups);
+                          console.log('teams', teams);
+
+                          progress(68, $rootScope.ui.login.loading_clientGroups);
 
                           TeamUp._('clientsQuery')
                             .then(
                             function (allClients)
                             {
+                              console.log('allClients', allClients);
                               // Save all clients into the localStorage
                               Store('app').save('clients', allClients);
 
                               Clients.query(false, {})
                                 .then(
-                                function ()
+                                function (clientData)
                                 {
-                                  progress(100, $rootScope.ui.login.loading_everything);
+                                  console.log('clientData', clientData);
 
                                   // TODO: Blend it in the modal!
                                   enhanceTasks();
+                                  progress(85, $rootScope.ui.login.loading_Members);
 
                                   Teams.query()
                                     .then(
-                                    function ()
+                                    function (teamsData)
                                     {
+                                      progress(100, $rootScope.ui.login.loading_everything);
+                                      console.log('teamsData', teamsData);
                                       //update localStorage logged user
                                       updateLoggedUserTeams();
 

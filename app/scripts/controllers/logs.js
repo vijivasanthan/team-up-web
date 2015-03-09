@@ -52,7 +52,8 @@ define(
           {
             $scope.ordered = ordered;
 
-            $scope.reversed = !$scope.reversed;
+            $scope.reversed
+              = !$scope.reversed;
           };
 
           $scope.ordered = 'started.stamp';

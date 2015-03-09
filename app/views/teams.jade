@@ -34,13 +34,13 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteMember(_memberId)') {{ui.teamup.confirms.remove}}
+				ng-click='deleteMember(currentMember)') {{ui.teamup.confirms.remove}}
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(
-		ng-show='app.resources.role == 1 && views.team')
-		span.selectTitle
+		ng-show='(app.resources.role == 1 && !views.newTeam)')
+		span.selectTitles
 			| {{ ui.teamup.selectTeam }}
 		select(current_selection='team', 
 		ng-model='current',
@@ -69,7 +69,7 @@ aria-hidden='true')
 				| {{ui.teamup.newTeam}}
 
 		li(class="{{(views.newMember==true) && 'active'}}",
-		ng-show="app.resources.role == 1")
+		ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
 			a(data-toggle='tab',
 			ng-click='setViewTo("newMember")')
 				span.icomoon(data-icon='',
@@ -110,7 +110,7 @@ aria-hidden='true')
 							th: a {{ui.teamup.states}}
 							th
 					tbody
-						tr(ng-repeat='member in data.members[team.uuid]|orderBy:"lastName"')
+						tr(ng-repeat='member in data.members[team.uuid] | orderBy:"lastName"')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
@@ -135,8 +135,8 @@ aria-hidden='true')
 										button.btn-primary.btn-mini
 											i.icon-edit
 									button.btn-primary.btn-mini(type='submit',
-									ng-click='confirmDeleteMember(member.uuid)',
-									ng-show='app.resources.role == 1')
+									ng-click='confirmDeleteMember(member)',
+									ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
 										i.icon-trash
 				ul#teams-legenda
 					li
@@ -168,18 +168,49 @@ aria-hidden='true')
 		#newMemberTab.tab-pane(class="{{(views.newMember==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.teamup.newMember}}
+				div.btn-group.pull-right
+					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
+						ng-click='setUserType("NEW")')
+						| Nieuw
+					button.btn.btn-primary(class='{{(userType == "EXISTING") && "active"}}',
+						ng-click='setUserType("EXISTING")')
+						| Bestaand
 			hr
-			form(name='teamMemberForm', novalidate)
+			div(ng-show='userType == "EXISTING"')
+				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
+				table.table.table-striped
+					thead
+						tr
+							th
+							th
+								a(ng-click='memberInTeamOrder="lastName"; reverse=!reverse') {{ui.teamup.name}}
+									i.icon-sort
+							th
+								a(ng-click='memberInTeamOrder="email"; reverse=!reverse') {{ui.teamup.email}}
+									i.icon-sort
+					tbody
+						tr(ng-repeat='member in membersWithoutTeam | orderBy:memberInTeamOrder:reverse')
+							td
+								.roundedPicSmall(class='{{member.states|stateColor}}',
+								back-img = '{{member.uuid | avatar:"team":"80" }}')
+							td
+								a(href='index.html#/profile/{{member.uuid}}#profile')
+									| {{member.firstName}} {{member.lastName}}
+							td
+								| {{member.email}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)')
+										span.icomoon(data-icon='',
+										aria-hidden='true')
+				span.muted.pull-right
+					small
+						i {{membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
+			
+			form(name='teamMemberForm',
+				novalidate,
+				ng-show='(userType == "NEW")')
 				fieldset
-					.control-group
-						label.control-label {{ui.teamup.teams}}
-						.controls
-							select(current_selection='team',
-							ng-model='memberForm.team',
-							ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
-							ng-change='setCurrentTeam(memberForm.team)')
-								option(value='') {{ui.teamup.chooseTeam}}
-					hr
 					.row
 						.span6
 							fieldset
@@ -250,7 +281,7 @@ aria-hidden='true')
 									label.control-label {{ui.profile.username}}
 									.controls
 										input.span3(type='text', ng-blur="convertUserName()"
-										ng-model='memberForm.username')
+										ng-model='memberForm.userName')
 								.form-group(ng-class="{ 'has-error' : teamMemberForm.password.$invalid && !teamMemberForm.password.$pristine }")
 									label.control-label {{ui.profile.password}}
 									.controls
