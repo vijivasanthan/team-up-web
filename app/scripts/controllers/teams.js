@@ -408,12 +408,6 @@ define(
               return;
             }
 
-            if(!member.userName.match([a-zA-Z0-9-_]))
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.userName);
-              return;
-            }
-
             if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
