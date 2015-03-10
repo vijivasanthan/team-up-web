@@ -408,6 +408,12 @@ define(
               return;
             }
 
+            if(!member.userName.match([a-zA-Z0-9-_]))
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.userName);
+              return;
+            }
+
             if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
@@ -706,10 +712,20 @@ define(
             }
           );
 
-          $scope.convertUserName = function ()
+          $scope.checkUserName = function ()
           {
-            $scope.memberForm.userName = angular.lowercase($scope.memberForm.userName);
-          }
+            var regUserName = /([A-Za-z0-9-_])/g,
+                matchesUserName = ($scope.memberForm.userName.match(regUserName));
+
+            if(!_.isNull(matchesUserName))
+            {
+              matchesUserName = matchesUserName.join('');
+            }
+
+            $scope.UserNameWrong = ($scope.memberForm.userName !== matchesUserName);
+            $scope.memberForm.userName = matchesUserName || '';
+
+          };
         }
       ]
     );

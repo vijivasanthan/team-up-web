@@ -720,6 +720,10 @@ define(
           },
           birthDate: {
             notValid: 'Voer een valide geboortedatum in!'
+          },
+          userName: {
+            regex: 'De gebruikersnaam mag alleen uit alphanummerieke tekens bestaan, inclusief streepjes en onderstreepjes',
+            valid: 'Een gebruikersnaam is vereist'
           }
         }
       }
