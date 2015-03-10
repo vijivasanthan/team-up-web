@@ -216,6 +216,8 @@ define(
                 }
               );
             }
+
+            angular.element('body').removeClass('modal-open');
           };
 
 

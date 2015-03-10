@@ -23,6 +23,7 @@ define(
         function ($rootScope, $scope, $location, Clients, $route,
                   $routeParams, Store, Teams, $window, data, TeamUp, $timeout, Permission, $injector)
         {
+          $rootScope.fixStyles();
           function loadData (data)
           {
             // console.log('loading data -> ', new Date());
