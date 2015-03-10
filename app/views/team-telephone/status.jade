@@ -42,7 +42,8 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.reachable')
-									span.sa-member-icon(class='{{member.style}}').roundedPicSmall.sa-icon-reserve-available(back-img='{{member.id | avatar:"client":"80"}}')
+									span.sa-member-icon(class='{{member.style}}').roundedPicSmall.sa-icon-reserve-available(
+										back-img='{{member.id | avatar:"client":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile')
@@ -58,7 +59,8 @@ section#dashboard
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.unreachable',
 								ng-show='(member.state != "no-state")')
-									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-unavailable(back-img='{{member.id | avatar:"client":"80"}}')
+									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-unavailable(
+										back-img='{{member.id | avatar:"client":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}

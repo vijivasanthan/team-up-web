@@ -204,6 +204,11 @@ define(
           }
           // end of loadData
 
+          if(! $rootScope.app.resources.teamUuids.length)
+          {
+            $rootScope.infoUserWithoutTeam();
+          }
+
           // TODO: Repetitive code
           var localData = loadData(data);
           data = localData.data;

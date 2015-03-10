@@ -267,15 +267,12 @@ define(
             var deferred = $q.defer(),
               calls = [];
 
-            console.log('changes', changes);
-
             angular.forEach(
               changes,
               function (change, teamId)
               {
                 if (change.a.length > 0 && change.r.length == 0)
                 {
-                  console.log('change.a', change.a);
                   calls.push(
                     TeamUp._(
                       'teamMemberAdd',
@@ -321,14 +318,7 @@ define(
                   changes,
                   function (change, teamId)
                   {
-                    // queryCalls.push(
-                    //   TeamUp._(
-                    //     'teamStatusQuery',
-                    //     { third: teamId }
-                    //   )
-                    // );
                     var routeParam = {uuid: teamId};
-                    //TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
                     queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
@@ -409,7 +399,10 @@ define(
                     }
                   );
                 }
-                deferred.resolve(loggedUser);
+                else
+                {
+                  deferred.resolve(loggedUser);
+                }
               }
             );
 
