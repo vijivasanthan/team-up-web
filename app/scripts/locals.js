@@ -460,6 +460,7 @@ define(
           teams: 'Teams',
           selectTeam: 'Selecteer team',
           clients: 'Cliënten',
+          selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
           edit: 'Bewerk',

@@ -78,7 +78,7 @@ aria-hidden='true')
 	h2.nullable {{ui.teamup.clients}}
 	.selectGroup(ng-show="app.resources.role == 1")
 		span.selectTitle
-			| Selecteer groep
+			| {{ ui.teamup.selectClientGroup }}
 		select(current_selection='client',
 		ng-model='current',
 		ng-options='c.id as c.name for c in clientGroups',
