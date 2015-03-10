@@ -44,7 +44,7 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          $scope.membersWithoutTeam = $filter('membersWithoutTeam')($scope.data.members);
+          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
 
           var uuid,
             view;
@@ -533,11 +533,10 @@ define(
                     .then(
                     function()
                     {
-                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(data.members);
+                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+                      $scope.setViewTo('team');
                     }
                   );
-
-                  $scope.setViewTo('team');
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -665,7 +664,13 @@ define(
                   function ()
                   {
                     $scope.data.members[$scope.current].splice(index, 1);
-                    $scope.membersWithoutTeam = $filter('membersWithoutTeam')($scope.data.members);
+                    Teams.updateMembersLocal()
+                      .then(
+                        function()
+                        {
+                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+                        }
+                    );
                     $rootScope.statusBar.off();
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   }

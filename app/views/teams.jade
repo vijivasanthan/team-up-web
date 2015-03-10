@@ -179,7 +179,7 @@ aria-hidden='true')
 			hr
 			div(ng-show='userType == "EXISTING"')
 				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
-				table.table.table-striped
+				table.table.table-striped(ng-show='membersWithoutTeam.length')
 					thead
 						tr
 							th
