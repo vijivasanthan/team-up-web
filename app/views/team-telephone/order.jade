@@ -7,11 +7,11 @@ section
 		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 		label.control-label Selecteer team
 		.controls
-			select(current_selection='team',
-			ng-model='current.group',
-			ng-options='group.uuid as group.name for group in groups',
-			ng-selected='current.group',
-			ng-change='getOrder()')
+			select(
+				ng-model='current.group',
+				ng-options='group.uuid as group.name for group in groups',
+				ng-selected='current.group',
+				ng-change='getOrder()')
 
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)

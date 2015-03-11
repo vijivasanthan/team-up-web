@@ -355,9 +355,15 @@ define(
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
               resolve: {
-                data: function()
+                data: function(TeamUp, CurrentSelection)
                 {
                   removeActiveClass('.teamMenu');
+
+                  return TeamUp._('callOrderGet', {second: CurrentSelection.getTeamId()})
+                    .then(function (result) {
+                        return result;
+                      }
+                  );
                 }
               },
               reloadOnSearch: false
