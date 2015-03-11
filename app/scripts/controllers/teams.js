@@ -24,17 +24,15 @@ define(
                   TeamUp, $timeout, MD5, Profile, $filter)
         {
           var uuid = null,
-              view = null,
-              teamData = data[0],
-              allMemberData = data[1];
+              view = null;
 
           $rootScope.fixStyles();
 
           //TODO get this from a service
           $rootScope.resetPhoneNumberChecker();
 
-          $scope.members = teamData.members;
-          $scope.teams = teamData.teams;
+          $scope.members = data.members;
+          $scope.teams = data.teams;
 
           var params = $location.search();
 
@@ -42,25 +40,23 @@ define(
 
           $scope.selection = {};
 
-          $scope.data = teamData;
+          $scope.data = data;
 
           $scope.roles = config.app.roles;
 
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMemberData);
-
           if (!params.uuid && !$location.hash())
           {
-            uuid = teamData.teams[0].uuid;
+            uuid = data.teams[0].uuid;
             view = 'team';
 
-            $location.search({uuid: teamData.teams[0].uuid}).hash('team');
+            $location.search({uuid: data.teams[0].uuid}).hash('team');
           }
           else if (!params.uuid)
           {
-            uuid = teamData.teams[0].uuid;
+            uuid = data.teams[0].uuid;
             view = $location.hash();
 
             $location.search({uuid: uuid});
@@ -87,9 +83,9 @@ define(
 
           function setTeamView(id)
           {
-            $scope.team = _.findWhere(teamData.teams, {uuid: id});
+            $scope.team = _.findWhere(data.teams, {uuid: id});
 
-            $scope.members = teamData.members[id];
+            $scope.members = data.members[id];
 
             angular.forEach(
               $scope.members,
@@ -129,6 +125,19 @@ define(
            */
           $scope.setUserType = function(userType)
           {
+            if(userType == 'EXISTING')
+            {
+              $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+
+              Teams.updateMembersLocal()
+                .then(
+                function(allmembers)
+                {
+                  $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+                }
+              );
+            }
+
             $scope.userType = userType;
           };
 
@@ -321,7 +330,7 @@ define(
                                   }
                                 });
 
-                              $scope.members = teamData.members[team.uuid];
+                              $scope.members = data.members[team.uuid];
 
                               $scope.current = team.uuid;
 
@@ -531,15 +540,21 @@ define(
                     $scope.teamMemberForm = {};
                   }
 
-                  Teams.updateMembersLocal()
-                    .then(
-                    function(allmembers)
-                    {
-                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
-
-                      $scope.setViewTo('team');
-                    }
-                  );
+                  if($rootScope.app.domainPermission.teamSelfManagement)
+                  {
+                    Teams.updateMembersLocal()
+                      .then(
+                      function(allmembers)
+                      {
+                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+                        $scope.setViewTo('team');
+                      }
+                    );
+                  }
+                  else
+                  {
+                    $scope.setViewTo('team');
+                  }
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);

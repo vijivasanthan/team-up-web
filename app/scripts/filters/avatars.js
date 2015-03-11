@@ -64,9 +64,16 @@ define(
         {
           return function(allMembers)
           {
-            return _.filter(allMembers, function(member) {
-              return (! member.teamUuids.length) ? member : '';
-            });
+            var membersWithoutTeams = null;
+
+            if(allMembers)
+            {
+              membersWithoutTeams = _.filter(allMembers, function(member) {
+                return (! member.teamUuids.length) ? member : '';
+              });
+            }
+
+            return membersWithoutTeams;
           };
         }
       ]
