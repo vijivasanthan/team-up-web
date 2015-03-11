@@ -14,7 +14,6 @@ define(
             "$exceptionHandler",
             [
               "$delegate",
-              "$window",
               function($delegate)
               {
                 return function (exception, cause)
@@ -86,20 +85,27 @@ define(
               controller: 'teamCtrl',
               reloadOnSearch: false,
               resolve: {
-                teamData: [
-                  'Teams', '$route',
-                  function (Teams, $route)
+                data: [
+                  '$rootScope', 'Teams', '$route', '$q',
+                  function ($rootScope, Teams, $route, $q)
                   {
-                    return ($route.current.params.local && $route.current.params.local == 'true') ?
-                           Teams.queryLocal() :
-                           Teams.query(false, $route.current.params);
-                  }
-                ],
-                allMemberData: [
-                  'Teams',
-                  function(Teams)
-                  {
-                    return  Teams.updateMembersLocal();
+                    var teamsLocalQuery = null,
+                        teamsQuery = null;
+
+                    if($rootScope.app.domainPermission.teamSelfManagement)
+                    {
+                      teamsLocalQuery = $q.all([Teams.queryLocal(), Teams.updateMembersLocal()]);
+                      teamsQuery = $q.all([Teams.query(false, $route.current.params), Teams.updateMembersLocal()]);
+                    }
+                    else
+                    {
+                      teamsLocalQuery = Teams.queryLocal();
+                      teamsQuery = Teams.query(false, $route.current.params);
+                    }
+
+                    return ($route.current.params.local && $route.current.params.local == 'true')
+                      ? teamsLocalQuery
+                      : teamsQuery;
                   }
                 ]
               }

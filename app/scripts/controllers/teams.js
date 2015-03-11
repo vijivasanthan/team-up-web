@@ -10,7 +10,7 @@ define(
         '$scope',
         '$location',
         'Teams',
-        'teamData',
+        'data',
         '$route',
         '$routeParams',
         'Store',
@@ -20,10 +20,14 @@ define(
         'MD5',
         'Profile',
         '$filter',
-        'allMemberData',
-        function ($rootScope, $scope, $location, Teams, teamData, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter, allMemberData)
+        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
+                  TeamUp, $timeout, MD5, Profile, $filter)
         {
+          var uuid = null,
+              view = null,
+              teamData = data[0],
+              allMemberData = data[1];
+
           $rootScope.fixStyles();
 
           //TODO get this from a service
@@ -46,9 +50,6 @@ define(
           $scope.mfuncs = config.app.mfunctions;
 
           $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMemberData);
-
-          var uuid,
-            view;
 
           if (!params.uuid && !$location.hash())
           {
