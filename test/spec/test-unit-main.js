@@ -24,6 +24,7 @@ requirejs.config(
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
+      'angular-cookie':    '../vendors/angular-cookie/angular-cookie',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/moment',
@@ -47,6 +48,7 @@ requirejs.config(
       'angular-md5': { deps: ['angular'] },
       'angular-strap': { deps: ['angular'] },
       'angular-strap-tpl': { deps: ['angular','angular-strap'] },
+      'angular-cookie': { deps: ['angular'] },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },
@@ -73,6 +75,7 @@ requirejs.config(
 requirejs.config({
   paths: {
     localConfig: 'localConfig',
-    profile: 'profiles/teamup/profile'
+    profile: 'profiles/teamup/profile',
+    config: 'config'
   }
 });

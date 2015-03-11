@@ -87,6 +87,7 @@ define(
       });
 
       it('should check if there is a permissionprofile', function () {
+
         var promise = testModal.getPermissionProfile(),
             jsonResponse  = {
               clientReports: true,
@@ -98,7 +99,7 @@ define(
             result = null;
 
         $httpBackend
-            .whenGET('http://dev.ask-cs.com/acl')
+            .whenGET(localConfig.host + 'acl')
             .respond(jsonResponse);
 
         promise.then(
@@ -128,7 +129,7 @@ define(
 
           $httpBackend.expect(
             'GET',
-            'http://dev.ask-cs.com/node/' + userId + '/pincode_exists' +
+            localConfig.host + 'node/' + userId + '/pincode_exists' +
              '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser,
             null
           ).respond(409);

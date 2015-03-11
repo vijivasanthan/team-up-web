@@ -13,6 +13,7 @@ module.exports = function (karma)
       {pattern: 'app/vendors/angular-md5/angular-md5.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.tpl.min.js', included: false },
+      {pattern: 'app/vendors/angular-cookie/angular-cookie.js', included: false },
       {pattern: 'app/vendors/jquery-ui/ui/jquery-ui.js', included: false },
       {pattern: 'app/vendors/bootstrap-daterangepicker/daterangepicker.js', included: false },
       {pattern: 'app/vendors/moment/moment.js', included: false },

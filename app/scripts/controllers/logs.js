@@ -20,10 +20,10 @@ define(
           vm.teams = data.teams;
 
           var everyoneId = 'all',
-              periods = {
-                startTime: vm.data.logData.periods.startTime,
-                endTime: vm.data.logData.periods.endTime
-              };
+            periods = {
+              startTime: vm.data.logData.periods.startTime,
+              endTime: vm.data.logData.periods.endTime
+            };
 
           vm.teams.unshift({
             name: $rootScope.ui.dashboard.everyone,
@@ -51,11 +51,11 @@ define(
           vm.fetchLogs = function()
           {
             var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
-                options = {
-                  startTime: periods.startTime,
-                  endTime: periods.endTime,
-                  adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
-                };
+              options = {
+                startTime: periods.startTime,
+                endTime: periods.endTime,
+                adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
+              };
 
             $timeout(function ()
             {

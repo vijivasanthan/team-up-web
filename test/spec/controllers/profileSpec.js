@@ -92,7 +92,6 @@ define(
       );
 
       it('Should check if there is userData', function () {
-        console.log('rootScope', rootScope);
         scope.view = data;
 
         expect(scope.view).toBe(data);
