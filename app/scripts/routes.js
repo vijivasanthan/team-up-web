@@ -89,6 +89,7 @@ define(
                   'Teams', '$route',
                   function (Teams, $route)
                   {
+
                     return ($route.current.params.local && $route.current.params.local == 'true')
                       ? Teams.queryLocal()
                       : Teams.query(false, $route.current.params);
