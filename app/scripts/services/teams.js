@@ -85,7 +85,8 @@ define(
               function (result)
               {
                 Store('app').save('members', result);
-              },
+                return result;
+              }.bind(this),
               function (error)
               {
                 console.log(error)

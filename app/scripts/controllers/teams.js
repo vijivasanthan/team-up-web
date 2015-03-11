@@ -10,7 +10,7 @@ define(
         '$scope',
         '$location',
         'Teams',
-        'data',
+        'teamData',
         '$route',
         '$routeParams',
         'Store',
@@ -20,16 +20,17 @@ define(
         'MD5',
         'Profile',
         '$filter',
-        function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter)
+        'allMemberData',
+        function ($rootScope, $scope, $location, Teams, teamData, $route, $routeParams, Store, Dater,
+                  TeamUp, $timeout, MD5, Profile, $filter, allMemberData)
         {
           $rootScope.fixStyles();
 
           //TODO get this from a service
           $rootScope.resetPhoneNumberChecker();
 
-          $scope.members = data.members;
-          $scope.teams = data.teams;
+          $scope.members = teamData.members;
+          $scope.teams = teamData.teams;
 
           var params = $location.search();
 
@@ -37,28 +38,28 @@ define(
 
           $scope.selection = {};
 
-          $scope.data = data;
+          $scope.data = teamData;
 
           $scope.roles = config.app.roles;
 
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMemberData);
 
           var uuid,
             view;
 
           if (!params.uuid && !$location.hash())
           {
-            uuid = data.teams[0].uuid;
+            uuid = teamData.teams[0].uuid;
             view = 'team';
 
-            $location.search({uuid: data.teams[0].uuid}).hash('team');
+            $location.search({uuid: teamData.teams[0].uuid}).hash('team');
           }
           else if (!params.uuid)
           {
-            uuid = data.teams[0].uuid;
+            uuid = teamData.teams[0].uuid;
             view = $location.hash();
 
             $location.search({uuid: uuid});
@@ -85,9 +86,9 @@ define(
 
           function setTeamView(id)
           {
-            $scope.team = _.findWhere(data.teams, {uuid: id});
+            $scope.team = _.findWhere(teamData.teams, {uuid: id});
 
-            $scope.members = data.members[id];
+            $scope.members = teamData.members[id];
 
             angular.forEach(
               $scope.members,
@@ -319,7 +320,7 @@ define(
                                   }
                                 });
 
-                              $scope.members = data.members[team.uuid];
+                              $scope.members = teamData.members[team.uuid];
 
                               $scope.current = team.uuid;
 
@@ -531,9 +532,10 @@ define(
 
                   Teams.updateMembersLocal()
                     .then(
-                    function()
+                    function(allmembers)
                     {
-                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+
                       $scope.setViewTo('team');
                     }
                   );
@@ -666,9 +668,9 @@ define(
                     $scope.data.members[$scope.current].splice(index, 1);
                     Teams.updateMembersLocal()
                       .then(
-                        function()
+                        function(allmembers)
                         {
-                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
                         }
                     );
                     $rootScope.statusBar.off();
