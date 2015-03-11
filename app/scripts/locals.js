@@ -452,7 +452,7 @@ define(
           dashboard: 'dashboard',
           planboard: 'agenda',
           messages: 'berichten',
-          groups: 'groepen',
+          teams: 'teams',
           profile: 'profiel',
           settings: 'instellingen'
         },
