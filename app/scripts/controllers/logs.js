@@ -15,29 +15,25 @@ define(
         {
           $rootScope.fixStyles();
 
-          var vm = this;
+          var vm = this,
+              everyoneId = 'all',
+              periods = {
+                startTime: data.logData.periods.startTime,
+                endTime: data.logData.periods.endTime
+              };
+
           vm.data = data;
           vm.teams = data.teams;
-
-          var everyoneId = 'all',
-            periods = {
-              startTime: vm.data.logData.periods.startTime,
-              endTime: vm.data.logData.periods.endTime
-            };
-
           vm.teams.unshift({
             name: $rootScope.ui.dashboard.everyone,
             teamId: everyoneId,
             adapterId: everyoneId
           });
-
           vm.current = ($rootScope.app.resources.role > 1)
             ? ($rootScope.app.resources.teamUuids)[0]
             : everyoneId;
-
           vm.ordered = 'started.stamp';
           vm.reversed = true;
-
           vm.daterange = $filter('date')(periods.startTime, 'dd-MM-yyyy') + ' / ' +
           $filter('date')(periods.endTime, 'dd-MM-yyyy');
 
@@ -52,8 +48,8 @@ define(
           {
             var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
               options = {
-                startTime: periods.startTime,
-                endTime: periods.endTime,
+                startTime: data.logData.periods.startTime,
+                endTime: data.logData.periods.endTime,
                 adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
               };
 

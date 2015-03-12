@@ -162,28 +162,30 @@ define(
 
             $q.all(calls)
               .then(
-              (function (results)
-              {
-                angular.forEach(
-                  teams,
-                  (function (team)
-                  {
-                    data.teams = teams;
+              (
+                function (results)
+                {
+                  angular.forEach(
+                    teams,
+                    (function (team)
+                    {
+                      data.teams = teams;
 
-                    data.groups[team.uuid] = [];
+                      data.groups[team.uuid] = [];
 
-                    angular.forEach(
-                      results,
-                      function (result)
-                      {
-                        data.groups[team.uuid] = result.data
-                      }
-                    );
-                  }).bind(results)
-                );
+                      angular.forEach(
+                        results,
+                        function (result)
+                        {
+                          data.groups[team.uuid] = result.data
+                        }
+                      );
+                    }).bind(results)
+                  );
 
-                deferred.resolve(data);
-              }).bind(data)
+                  deferred.resolve(data);
+                }
+              ).bind(data)
             );
 
             return deferred.promise;

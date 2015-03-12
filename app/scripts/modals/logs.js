@@ -84,6 +84,7 @@ define(['services/services', 'config'],
                 trackingID = trackingToken;
 
                 var record = {
+                  adapterId: log.adapterId,
                   trackingToken: trackingToken,
                   tracked: tracked,
                   from: strip(log.fromAddress),
@@ -203,14 +204,17 @@ define(['services/services', 'config'],
               _options,
               function (result)
               {
+                console.log('result', result);
+
                 var returned = {
                   logs: normalize(result),
-                  synced: Date.now().getTime(),
+                  synced: moment().valueOf(),
                   periods: {
                     startTime: _options.startTime,
                     endTime:  _options.endTime
                   }
                 };
+                console.log('returned', returned);
 
                 deferred.resolve(returned);
               },

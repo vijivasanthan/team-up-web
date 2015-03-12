@@ -154,6 +154,11 @@ require.config(
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
 
     }
+    //config: {
+    //  moment: {
+    //    noGlobal: true
+    //  }
+    //}
   }
 );
 

@@ -1,22 +1,10 @@
 define(
-  [ // The following items should always be loaded
-    'angular-mocks', // app and angular-mocks both require angular,
-    'app',           // so no need to load angular
-    // Add all needed test files below
+  [
+    'angular-mocks',
+    'app',
+    'underscore',
     'controllers/logs',
-    //'modals/testModal',
-    //'modals/profile',
-    //'modals/slots',
     'modals/logs'
-    //'services/dater',
-    //'services/store',
-    //'services/sloter',
-    //'services/stats',
-    //'services/teams',
-    //'services/teamup',
-    //'services/md5',
-    //'services/pincode',
-    //'daterangepicker',
   ],
   function() {
     'use strict';
@@ -31,8 +19,7 @@ define(
         module(
           'controllers',
           'services',
-          'ngResource',
-          'ngRoute'
+          'ngResource'
         )
       );
 
@@ -45,15 +32,11 @@ define(
       var logCtrl,
           rootScope,
           scope,
-          route,
-          testModal,
           $q,
-          $resource,
           $httpBackend,
-          profile,
+          $filter,
           data,
-          pincode,
-          //$filter,
+          logsService,
           everyoneId = 'all';
 
       // Initialize the controller and a mock scope
@@ -62,24 +45,21 @@ define(
         (
           function (
             $controller,
-            $rootScope,
+            _$rootScope_,
             _$q_,
             _$resource_,
             _$injector_,
-            //_$filter_,
+            _$filter_,
             _$httpBackend_,
-            _Profile_
-            //_Pincode_
-            //_TestModal_,
-            //_$route_,
+            _Logs_
           )
           {
-            rootScope = $rootScope;
+            rootScope = _$rootScope_;
             scope = rootScope.$new();
             $q = _$q_;
             $httpBackend = _$httpBackend_;
-            //profile = _Profile_;
-            //$filter = _$filter_;
+            logsService = _Logs_;
+            $filter = _$filter_;
             data = {
               logData: {
                 periods: {
@@ -159,12 +139,23 @@ define(
             logCtrl = $controller('logs', {
               $rootScope: rootScope,
               $scope: scope,
-              data: data
-              //$filter: $filter
+              data: data,
+              $filter: $filter,
+              Logs: logsService
             });
           }
         )
       );
+
+      var getOptions = function()
+      {
+        var teamPhoneAdapterData = _.findWhere(logCtrl.data.teams, {teamId: logCtrl.current});
+        return {
+          startTime: logCtrl.data.logData.periods.startTime,
+          endTime: logCtrl.data.logData.periods.endTime,
+          adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
+        };
+      };
 
       it('Should check what the current selector id must be', function () {
         //var currentTeam = (rootScope.app.resources.teamUuids)[0];
@@ -175,7 +166,45 @@ define(
         expect(logCtrl.daterange).toEqual('04-03-2015 / 10-03-2015');
       });
 
+      it('Should check if it will fetch logs by team or all', function () {
+        var logs = null,
+            options = getOptions();
 
+        $httpBackend.expect(
+                'GET',
+                localConfig.host + 'ddr?endTime=' + options.endTime +
+                 '&startTime=' + options.startTime,
+                null
+              ).respond(200);
+
+        logsService.fetch(options)
+          .then(
+            function(fetchedLogs)
+            {
+              logs = fetchedLogs;
+            }
+        );
+
+        $httpBackend.flush();
+        expect(logs).toEqual('04-03-2015 / 10-03-2015');
+      });
+
+
+
+      //Check if logs hetzelfde zijn
+
+      //it('Should check what the default daterange is', function () {
+      //
+      //
+      //  expect(logCtrl.daterange).toEqual('04-03-2015 / 10-03-2015');
+      //});
+
+      //$httpBackend.expect(
+      //  'GET',
+      //  localConfig.host + '/ddr?adapterId=' + options.adapterId + '&startTime=' + options.startTime +
+      //  '&endTime=' + options.endTime,
+      //  null
+      //).respond(409);
 
 
 

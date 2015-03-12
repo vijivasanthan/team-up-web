@@ -28,6 +28,7 @@ requirejs.config(
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/moment',
+      underscore: '../vendors/underscore/underscore',
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
@@ -63,6 +64,7 @@ requirejs.config(
         deps: ['angular'],
         exports: 'angular.mock'
       },
+      underscore: { exports: 'underscore'},
       mask: { deps: ['angular'] }
     },
 

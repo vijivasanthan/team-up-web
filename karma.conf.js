@@ -21,6 +21,7 @@ module.exports = function (karma)
       {pattern: 'app/vendors/Sortable/Sortable.js', included: false },
       {pattern: 'app/vendors/Sortable/ng-sortable.js', included: false },
       {pattern: 'app/vendors/angular-ui-bootstrap/src/pagination/pagination.js', included: false },
+      {pattern: 'app/vendors/underscore/underscore.js', included: false },
       // {pattern: 'app/vendors/**/*.js',        included: false},
       {pattern: 'app/scripts/*.js',           included: false},
       {pattern: 'app/scripts/**/*.js',        included: false},
