@@ -24,11 +24,13 @@ define(['services/services', 'config'],
             },
             change: {
               method: 'PUT',
-              params: {start: '', end: '', text: '', recursive: ''}
+              params: {start: '', end: '', text: '', recursive: ''},
+              isArray: true
             },
             save: {
               method: 'POST',
-              params: {}
+              params: {},
+              isArray: true
             },
             remove: {
               method: 'DELETE',
