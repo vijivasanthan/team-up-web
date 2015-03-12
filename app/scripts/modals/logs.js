@@ -204,8 +204,6 @@ define(['services/services', 'config'],
               _options,
               function (result)
               {
-                console.log('result', result);
-
                 var returned = {
                   logs: normalize(result),
                   synced: moment.valueOf(),
@@ -214,8 +212,6 @@ define(['services/services', 'config'],
                     endTime:  _options.endTime
                   }
                 };
-                console.log('returned', returned);
-
                 deferred.resolve(returned);
               },
               function (error)

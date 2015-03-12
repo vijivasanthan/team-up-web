@@ -201,7 +201,7 @@ define(['services/services', 'config'],
           Slots.prototype.pie = function (options)
           {
             var deferred = $q.defer(),
-              now = Math.floor(Date.now().getTime() / 1000),
+              now = Math.floor(moment().valueOf() / 1000),
               periods = Dater.getPeriods(),
               current = Dater.current.week(),
               weeks = {
@@ -775,7 +775,7 @@ define(['services/services', 'config'],
           {
             var deferred = $q.defer(),
               teamDeferred = [],
-              now = Math.floor(Date.now().getTime() / 1000);
+              now = Math.floor(moment().valueOf() / 1000);
 
             _.each(teams, function (team)
             {
