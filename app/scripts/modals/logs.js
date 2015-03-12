@@ -208,7 +208,7 @@ define(['services/services', 'config'],
 
                 var returned = {
                   logs: normalize(result),
-                  synced: moment().valueOf(),
+                  synced: moment.valueOf(),
                   periods: {
                     startTime: _options.startTime,
                     endTime:  _options.endTime
