@@ -3,18 +3,15 @@ define(
     'angular-mocks',
     'app',
     'underscore',
+    'moment',
     'controllers/logs',
     'modals/logs'
   ],
   function() {
     'use strict';
 
-    // You can have multiple describe functions, each with its own tests
     describe('Logs Controller', function () {
 
-      // Current structure uses one module per category,
-      // on which the controllers/directives/services/filters are bound.
-      // These are defined and loaded in app.js
       beforeEach(
         module(
           'controllers',
@@ -47,7 +44,6 @@ define(
             $controller,
             _$rootScope_,
             _$q_,
-            _$resource_,
             _$injector_,
             _$filter_,
             _$httpBackend_,
@@ -63,14 +59,14 @@ define(
             data = {
               logData: {
                 periods: {
-                  startTime: 1425475373000,
-                  endTime: 1425993773000
+                  startTime: 1425596400000,
+                  endTime: 1426164091944
                 }
               },
               teams: [{
-                name: 'Henk team',
-                teamId: 'eea1401e-833e-4647-b446-fe5ea2f6cd4b',
-                adapterId: '38d8a700-8509-11e4-b1da-061c2777aa3c'
+                name: 'Stefan team',
+                teamId: 'b3915de1-f29c-4609-a67f-73aaef529902',
+                adapterId: '502161e0-7b2c-11e4-8c29-061c2777aa3c'
               }]
             };
             rootScope.fixStyles = function()
@@ -112,7 +108,7 @@ define(
                     }
                   ],
                     "teamUuids": [
-                    "eea1401e-833e-4647-b446-fe5ea2f6cd4b"
+                    "b3915de1-f29c-4609-a67f-73aaef529902"
                   ],
                     "role": "1",
                     "function": null,
@@ -135,7 +131,7 @@ define(
                     "$promise": {},
                   "$resolved": true
                 }
-            }
+            },
             logCtrl = $controller('logs', {
               $rootScope: rootScope,
               $scope: scope,
@@ -149,7 +145,7 @@ define(
 
       var getOptions = function()
       {
-        var teamPhoneAdapterData = _.findWhere(logCtrl.data.teams, {teamId: logCtrl.current});
+        var teamPhoneAdapterData = _.findWhere(logCtrl.data.teams, {teamId: rootScope.app.resources.teamUuids[0]});
         return {
           startTime: logCtrl.data.logData.periods.startTime,
           endTime: logCtrl.data.logData.periods.endTime,
@@ -158,89 +154,68 @@ define(
       };
 
       it('Should check what the current selector id must be', function () {
-        //var currentTeam = (rootScope.app.resources.teamUuids)[0];
         expect(logCtrl.current).toEqual(everyoneId);
       });
 
       it('Should check what the default daterange is', function () {
-        expect(logCtrl.daterange).toEqual('04-03-2015 / 10-03-2015');
+        expect(logCtrl.daterange).toEqual('06-03-2015 / 12-03-2015');
       });
 
-      it('Should check if it will fetch logs by team or all', function () {
-        var logs = null,
-            options = getOptions();
+      it('Should check if it will fetch logs by team', function () {
+        var logsByTeam = null,
+            options = getOptions(),
+            url = testConfig.host + 'ddr?adapterId=' + options.adapterId + '&endTime=' + options.endTime +
+              '&startTime=' + options.startTime,
+            response = [
+              {
+                "adapterId": "502161e0-7b2c-11e4-8c29-061c2777aa3c",
+                "accountId": "093e753b-9d17-4c17-ae9b-73b08b988d73",
+                "fromAddress": "+31102250130",
+                "toAddressString": "{\"+31858884607\":\"\"}",
+                "ddrTypeId": "5390d362e4b02c61014547e4",
+                "quantity": 1,
+                "start": 1425979511000,
+                "duration": 15000,
+                "sessionKeys": [
+                  "08176804-15c6-4a1b-8ba9-e6b38141f6d8"
+                ],
+                "status": "RECEIVED",
+                "statusPerAddress": {
+                  "+31102250130": "RECEIVED",
+                  "+31858884607": "FINISHED"
+                },
+                "additionalInfo": {
+                  "message": "http://test.ask-cs.com/scenario/parse/teamup-test_scenario_teamup-StefanTeamScenario/ce89be2c-e8c0-45e6-a397-5f63ebc30807",
+                  "sessionKey": {
+                    "+31102250130": "08176804-15c6-4a1b-8ba9-e6b38141f6d8"
+                  },
+                  "trackingToken": "7328043f-c67a-4cb1-8dbe-75b4d2376582"
+                },
+                "accountType": null,
+                "totalCost": 0,
+                "fromAgentId": "zdaan",
+                "toAgentIds": [],
+                "_id": "54feb877e4b08647e3f4c468"
+              }
+            ];
 
-        $httpBackend.expect(
-                'GET',
-                localConfig.host + 'ddr?endTime=' + options.endTime +
-                 '&startTime=' + options.startTime,
-                null
-              ).respond(200);
+        $httpBackend.expectGET(url).respond(200, response);
 
         logsService.fetch(options)
           .then(
             function(fetchedLogs)
             {
-              logs = fetchedLogs;
+              logsByTeam = fetchedLogs;
+            },
+            function(error)
+            {
+              console.log('error', error);
             }
         );
 
         $httpBackend.flush();
-        expect(logs).toEqual('04-03-2015 / 10-03-2015');
+        expect(logsByTeam.logs[0].adapterId).toEqual(options.adapterId);
       });
-
-
-
-      //Check if logs hetzelfde zijn
-
-      //it('Should check what the default daterange is', function () {
-      //
-      //
-      //  expect(logCtrl.daterange).toEqual('04-03-2015 / 10-03-2015');
-      //});
-
-      //$httpBackend.expect(
-      //  'GET',
-      //  localConfig.host + '/ddr?adapterId=' + options.adapterId + '&startTime=' + options.startTime +
-      //  '&endTime=' + options.endTime,
-      //  null
-      //).respond(409);
-
-
-
-      //it("Should check if the logged user can't create a new member with the same teamlid-code",
-      //  function()
-      //  {
-      //    var result = null,
-      //        userId = 'henkie',
-      //        pincode = 8701,
-      //        currentUser = true;
-      //        //expectedResult = 'pincode not found';
-      //
-      //    $httpBackend.expect(
-      //      'GET',
-      //      'http://dev.ask-cs.com/node/' + userId + '/pincode_exists' +
-      //       '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser,
-      //      null
-      //    ).respond(409);
-      //
-      //    profile
-      //      .pincodeExists(userId, pincode, currentUser)
-      //      .then(
-      //      function(checkResult)
-      //      {
-      //        result = checkResult;
-      //      },
-      //      function(error)
-      //      {
-      //        result = error;
-      //      }
-      //    );
-      //
-      //    $httpBackend.flush();
-      //    expect(result).toBe(false);
-      //  }
-      //);
     });
   }
 );

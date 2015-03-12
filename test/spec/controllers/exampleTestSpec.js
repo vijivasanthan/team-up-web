@@ -47,6 +47,7 @@ define(
           $httpBackend,
           profile;
 
+
       // Initialize the controller and a mock scope
       beforeEach(
         inject
@@ -99,7 +100,7 @@ define(
             result = null;
 
         $httpBackend
-            .whenGET(localConfig.host + 'acl')
+            .whenGET(testConfig.host + 'acl')
             .respond(jsonResponse);
 
         promise.then(
@@ -125,11 +126,10 @@ define(
               userId = 'henkie',
               pincode = 8701,
               currentUser = true;
-              //expectedResult = 'pincode not found';
 
           $httpBackend.expect(
             'GET',
-            localConfig.host + 'node/' + userId + '/pincode_exists' +
+            testConfig.host + 'node/' + userId + '/pincode_exists' +
              '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser,
             null
           ).respond(409);

@@ -81,3 +81,7 @@ requirejs.config({
     config: 'config'
   }
 });
+
+var testConfig = {
+  host: 'http://test.ask-cs.com/'
+};
