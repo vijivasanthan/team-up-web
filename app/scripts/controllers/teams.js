@@ -678,13 +678,20 @@ define(
             ).then(
               function ()
               {
+                $scope.data.members[$scope.current].splice(index, 1);
+
                 Teams.query(false, {'uuid': $scope.current})
                   .then(
                   function ()
                   {
-                    $scope.data.members[$scope.current].splice(index, 1);
-
-                    if(member.uuid == $rootScope.app.resources.uuid)
+                    /**
+                     * Check if the removed user is the logged user
+                     * and the current team was his only team, so that the logged user is without team
+                     */
+                    if(memberId == $rootScope.app.resources.uuid &&
+                        $rootScope.app.resources.teamUuids.length == 1 &&
+                      _.lastIndexOf($rootScope.app.resources.teamUuids >= 0)
+                      )
                     {
                       var Permission = $injector.get('Permission'),
                           Profile = $injector.get('Profile');
@@ -701,15 +708,15 @@ define(
                     {
                       Teams.updateMembersLocal()
                         .then(
-                        function(allmembers)
+                        function(allMembers)
                         {
-                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMembers);
+
+                          $rootScope.statusBar.off();
+                          $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                         }
                       );
                     }
-
-                    $rootScope.statusBar.off();
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   }
                 );
               }
