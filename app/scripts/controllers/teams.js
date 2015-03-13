@@ -684,39 +684,30 @@ define(
                   .then(
                   function ()
                   {
-                    /**
-                     * Check if the removed user is the logged user
-                     * and the current team was his only team, so that the logged user is without team
-                     */
-                    if(memberId == $rootScope.app.resources.uuid &&
-                        $rootScope.app.resources.teamUuids.length == 1 &&
-                      $rootScope.app.resources.teamUuids.indexOf($scope.team.uuid)  >= 0
-                      )
-                    {
-                      var Permission = $injector.get('Permission'),
-                          Profile = $injector.get('Profile');
+                    Teams.updateMembersLocal()
+                      .then(
+                      function(allMembers)
+                      {
+                        if(memberId == $rootScope.app.resources.uuid)
+                        {
+                          var resources = _.findWhere(allMembers, {uuid: $rootScope.app.resources.uuid});
 
-                      Profile.fetchUserData($rootScope.app.resources.uuid)
-                        .then(
-                          function()
+                          Store('app').save('resources', resources);
+                          $rootScope.app.resources = resources;
+
+                          if(! $rootScope.app.resources.teamUuids.length)
                           {
+                            var Permission = $injector.get('Permission');
                             Permission.getAccess();
                           }
-                      );
-                    }
-                    else
-                    {
-                      Teams.updateMembersLocal()
-                        .then(
-                        function(allMembers)
-                        {
-                          $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMembers);
-
-                          $rootScope.statusBar.off();
-                          $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                         }
-                      );
-                    }
+
+                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMembers);
+
+                        $rootScope.statusBar.off();
+                        $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                      }
+                    );
                   }
                 );
               }
