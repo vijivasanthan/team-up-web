@@ -690,7 +690,7 @@ define(
                      */
                     if(memberId == $rootScope.app.resources.uuid &&
                         $rootScope.app.resources.teamUuids.length == 1 &&
-                      _.lastIndexOf($rootScope.app.resources.teamUuids >= 0)
+                      $rootScope.app.resources.teamUuids.indexOf($scope.team.uuid)  >= 0
                       )
                     {
                       var Permission = $injector.get('Permission'),
