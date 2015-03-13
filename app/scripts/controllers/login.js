@@ -422,8 +422,6 @@ define(
                         .then(
                         function ()
                         {
-                          console.log('teams', teams);
-
                           progress(68, $rootScope.ui.login.loading_clientGroups);
 
                           TeamUp._('clientsQuery')
@@ -450,8 +448,6 @@ define(
                                     {
                                       progress(100, $rootScope.ui.login.loading_everything);
                                       console.log('teamsData', teamsData);
-                                      //update localStorage logged user
-                                      updateLoggedUserTeams();
 
                                       trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 

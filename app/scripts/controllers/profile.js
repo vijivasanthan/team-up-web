@@ -59,7 +59,12 @@ define(
 
           var currentRole = $scope.view.role;
 
-          $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
+          $scope.teams = null;
+
+          if($scope.view.teamUuids.length > 0)
+          {
+            $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
+          }
 
           $rootScope.infoUserWithoutTeam();
 
@@ -194,26 +199,11 @@ define(
               }
             }
 
-            // check if the member is belong to any team, warn user to put his/herself to a team
             //TODO Check this part
-            if (_.isNull(resources.teamUuids) || _.isUndefined(resources.teamUuids[0]))
+            if (resources.teamUuids[0] == null)
             {
-              resources.teamUuids = [];
-
-              if ($scope.teams.length == 0)
-              {
-                //resources.teamUuids.push($scope.selectTeams[0].uuid);
-                resources.teamUuids.push(sessionStorage.getItem(resources.uuid + '_team'));
-              }
-              else
-              {
-                resources.teamUuids.push($scope.teams[0].uuid);
-              }
-              if (resources.teamUuids[0] == null)
-              {
-                $rootScope.notifier.error($rootScope.ui.profile.specifyTeam);
-                return false;
-              }
+              $rootScope.notifier.error($rootScope.ui.profile.specifyTeam);
+              return false;
             }
 
             if (_.isUndefined(resources.email) || resources.email == false)

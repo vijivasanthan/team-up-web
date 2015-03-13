@@ -20,8 +20,9 @@ define(
         'MD5',
         'Profile',
         '$filter',
+        '$injector',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter)
+                  TeamUp, $timeout, MD5, Profile, $filter, $injector)
         {
           var uuid = null,
               view = null;
@@ -682,13 +683,31 @@ define(
                   function ()
                   {
                     $scope.data.members[$scope.current].splice(index, 1);
-                    Teams.updateMembersLocal()
-                      .then(
+
+                    if(member.uuid == $rootScope.app.resources.uuid)
+                    {
+                      var Permission = $injector.get('Permission'),
+                          Profile = $injector.get('Profile');
+
+                      Profile.fetchUserData($rootScope.app.resources.uuid)
+                        .then(
+                          function()
+                          {
+                            Permission.getAccess();
+                          }
+                      );
+                    }
+                    else
+                    {
+                      Teams.updateMembersLocal()
+                        .then(
                         function(allmembers)
                         {
                           $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
                         }
-                    );
+                      );
+                    }
+
                     $rootScope.statusBar.off();
                     $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   }
