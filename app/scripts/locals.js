@@ -686,7 +686,8 @@ define(
             sent: 'Uitgaand',
             received: 'Inkomend',
             finished: 'Afgerond',
-            missed: 'Gemist'
+            missed: 'Gemist',
+            delivered: 'Ontvangen'
           }
         },
         validation: {

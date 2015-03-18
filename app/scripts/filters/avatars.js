@@ -170,11 +170,14 @@ define(
               case 'FINISHED':
                 translatedStatus = $rootScope.ui.logs.status.finished;
                 break;
+              case 'DELIVERED':
+                translatedStatus = $rootScope.ui.logs.status.delivered;
+                break;
               case 'MISSED':
                 translatedStatus = $rootScope.ui.logs.status.missed;
                 break;
               default:
-                console.log("the status of the log isn't found");
+                console.log("the status of the log isn't found-> ", status);
             }
 
             return translatedStatus.toUpperCase();
