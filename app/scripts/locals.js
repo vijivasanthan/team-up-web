@@ -391,6 +391,8 @@ define(
           newPassRepeat: 'Herhaal nieuw wachtwoord',
           changePass: 'Wachtwoord wijzigen',
           newAvail: 'Nieuwe bereikbaarheid',
+          userName: 'Gebruikersnaam',
+          pincode: 'teamlidcode',
           // saveProfile: 'Profielinformatie opslaan...',
           refreshing: 'Profielinformatie vernieuwen...',
           dataChanged: 'Profielgegevens succesvol gewijzigd.',

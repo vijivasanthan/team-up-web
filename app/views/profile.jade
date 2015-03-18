@@ -105,6 +105,10 @@ section#profile
 								//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
 								dt {{ui.profile.birthday}}
 								dd {{view.birthDate}}
+								dt {{ui.profile.userName}}
+								dd {{view.userName}}
+								dt {{ui.profile.pincode}}
+								dd {{view.pincode}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
 							.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}' class='{{view.states|stateColor}}')
 							div
@@ -248,7 +252,13 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[2].result')
 									small
 										i {{parsedPhoneNumbers[2].message}}
-										
+						
+						.form-group
+							label.control-label {{ui.profile.userName}}
+							.controls
+								input.span4.form-control(type='text',
+								disabled,
+								ng-model='edit.userName')
 						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
 							ng-show='(app.resources.role == 1) || (edit.uuid == app.resources.uuid)')
 							label.control-label {{ui.profile.pincode}}
