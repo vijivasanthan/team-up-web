@@ -722,8 +722,8 @@ define(
     .filter(
     'formatDateTimeZone',
     [
-      'Dater',
-      function (Dater)
+      'Dater', 'moment',
+      function (Dater, moment)
       {
         return function (date)
         {

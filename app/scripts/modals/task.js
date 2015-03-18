@@ -13,7 +13,8 @@ define(
         '$filter',
         'Store',
         'TeamUp',
-        function ($rootScope, $resource, $q, $filter, Store, TeamUp)
+        '$injector',
+        function ($rootScope, $resource, $q, $filter, Store, TeamUp, $injector)
         {
           var Task = $resource();
 
@@ -273,7 +274,9 @@ define(
 
                 tasks = _.filter(tasks, function (task)
                 {
-                  var taskStartTime = moment(task.plannedStartVisitTime);
+                  var moment = $injector.get('moment'),
+                      taskStartTime = moment(task.plannedStartVisitTime);
+
                   return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
                 });
 

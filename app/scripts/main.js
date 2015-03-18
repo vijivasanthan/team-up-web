@@ -153,12 +153,12 @@ require.config(
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
 
+    },
+    config: {
+      moment: {
+        noGlobal: true
+      }
     }
-    //config: {
-    //  moment: {
-    //    noGlobal: true
-    //  }
-    //}
   }
 );
 
@@ -201,6 +201,7 @@ require(
     'services/reports',
     'services/rejections',
     'services/currentSelection',
+    'services/moment',
 
     // 'services/googleGEO',
 

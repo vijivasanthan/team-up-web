@@ -14,7 +14,8 @@ define(['services/services', 'config'],
         'Store',
         'Stats',
         'Teams',
-        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams)
+        'moment',
+        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams, moment)
         {
           var Slots = $resource(config.app.host + 'askatars/:user/slots', {user: ''}, {
             query: {
@@ -201,7 +202,7 @@ define(['services/services', 'config'],
           Slots.prototype.pie = function (options)
           {
             var deferred = $q.defer(),
-              now = Math.floor(moment().valueOf() / 1000),
+              now = Math.floor(moment.valueOf() / 1000),
               periods = Dater.getPeriods(),
               current = Dater.current.week(),
               weeks = {

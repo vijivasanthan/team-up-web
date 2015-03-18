@@ -11,7 +11,8 @@ define(['services/services', 'config'],
         '$q',
         '$filter',
         '$injector',
-        function ($resource, $q, $filter, $injector)
+        'moment',
+        function ($resource, $q, $filter, $injector, moment)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
           var Logs = $resource(

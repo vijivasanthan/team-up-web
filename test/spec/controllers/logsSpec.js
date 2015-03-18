@@ -3,9 +3,9 @@ define(
     'angular-mocks',
     'app',
     'underscore',
-    'moment',
     'controllers/logs',
-    'modals/logs'
+    'modals/logs',
+    'services/moment'
   ],
   function() {
     'use strict';
@@ -34,6 +34,7 @@ define(
           $filter,
           data,
           logsService,
+          moment,
           everyoneId = 'all';
 
       // Initialize the controller and a mock scope
@@ -47,7 +48,8 @@ define(
             _$injector_,
             _$filter_,
             _$httpBackend_,
-            _Logs_
+            _Logs_,
+            _moment_
           )
           {
             rootScope = _$rootScope_;
@@ -56,6 +58,7 @@ define(
             $httpBackend = _$httpBackend_;
             logsService = _Logs_;
             $filter = _$filter_;
+            moment = _moment_;
             data = {
               logData: {
                 periods: {
@@ -86,7 +89,8 @@ define(
               $scope: scope,
               data: data,
               $filter: $filter,
-              Logs: logsService
+              Logs: logsService,
+              moment: moment
             });
           }
         )

@@ -22,8 +22,9 @@ define(
         'TeamUp',
         '$timeout',
         'Reports',
+        'moment',
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Reports)
+                  $filter, $modal, TeamUp, $timeout, Reports, moment)
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();

@@ -6,8 +6,8 @@ define(
     directives.directive(
     'logRanger',
     [
-      '$rootScope',
-      function ($rootScope) {
+      '$rootScope', 'moment',
+      function ($rootScope, moment) {
         return {
           restrict: 'A',
           link: function postLink (scope, element)

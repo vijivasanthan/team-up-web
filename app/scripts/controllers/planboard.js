@@ -16,7 +16,8 @@ define(
         'TeamUp',
         'Session',
         'CurrentSelection',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, CurrentSelection)
+        'moment',
+        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, CurrentSelection, moment)
         {
           var params = $location.search();
 

@@ -20,8 +20,9 @@ define(
         'Store',
         'CurrentSelection',
         '$filter',
+        'moment',
         function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots,
-                  Dater, Sloter, TeamUp, Store, CurrentSelection, $filter)
+                  Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
         {
           // TODO: Define diff in the watcher maybe?
           var range = null,
