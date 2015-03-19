@@ -117,29 +117,6 @@ define(
               }
             })
 
-            //TODO make it work so u could redirect to edit a task
-            .when(
-            '/editTask/:taskId',
-            {
-              templateUrl: 'views/tasks2.html',
-              controller: 'tasks2Ctrl',
-              reloadOnSearch: false,
-              resolve: {
-              //  data: [
-              //    '$rootScope', '$route', '$location', 'Task',
-              //    function ($rootScope, $route, $location, Task)
-              //    {
-              //      //angular.element('.navbar .tasks2').addClass('active');
-              //      $location.hash('editTask');
-              //      return Task.getId($route.current.params.taskId);
-              //
-              //
-              //      //return { taskId: $route.current.params.taskId };
-              //    }
-              //  ]
-              }
-            })
-
             .when(
             '/clientProfile/:clientId',
             {

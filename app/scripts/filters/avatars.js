@@ -79,6 +79,27 @@ define(
       ]
     );
 
+    filters.filter(
+      'membersInTeam',
+      [
+        function ()
+        {
+          return function(allMembers)
+          {
+            if(allMembers)
+            {
+              return _.filter(allMembers, function(member)
+              {
+                //console.log('member', member);
+
+                return (member.teamUuids.length) ? member : '';
+              });
+            }
+          };
+        }
+      ]
+    );
+
     // Convert date
     filters.filter(
       'nicelyDate',

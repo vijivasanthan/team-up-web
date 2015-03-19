@@ -85,6 +85,7 @@ define(
               function (result)
               {
                 Store('app').save('members', result);
+
                 return result;
               }.bind(this),
               function (error)
@@ -106,7 +107,7 @@ define(
               data.teams,
               function (team)
               {
-                data.members[team.uuid] = Store('app').get(team.uuid)
+                data.members[team.uuid] = Store('app').get(team.uuid);
               }
             );
 
@@ -509,6 +510,70 @@ define(
                   });
               }
             );
+
+            return deferred.promise;
+          };
+
+          /**
+           * Update member
+           */
+          TeamsService.prototype.updateMember = function(member)
+          {
+            var deferred = $q.defer(),
+                allMembers = Store('app').get('members');
+
+            var editAbleMember = _.findWhere(allMembers, {uuid: member.uuid});
+
+            return deferred.promise;
+          };
+
+          /**
+           * Filter all members by team
+           * @returns {*}
+           */
+          TeamsService.prototype.filterAllMembers = function()
+          {
+            var deferred = $q.defer(),
+                membersInTeam = Store('app').get('members'),
+                filterMembersInTeam = function (members)
+                {
+                  var filter = $injector.get('$filter'),
+                      membersInTeam = filter('membersInTeam')(members),
+                      filteredTeamMembers = {};
+
+                  _.each(membersInTeam, function(member) {
+                      _.each(member.teamUuids, function(teamUuid) {
+                          filteredTeamMembers[teamUuid] = filteredTeamMembers[teamUuid] || {};
+                          filteredTeamMembers[teamUuid][member.uuid] = member;
+                      });
+                  });
+
+                  //TODO this need to be fixed in the backend
+                  //Check if the teams of the member exist, the team could be deleted, while the userobject
+                  //is not updated
+                  var filteredTeamsUuids = _.keys(filteredTeamMembers),
+                      allTeamsUuids = _.pluck(Store('app').get('teams'), 'uuid'),
+                      existingTeams = _.intersection(allTeamsUuids, filteredTeamsUuids);
+
+                  return _.pick(filteredTeamMembers, existingTeams);
+                };
+
+            if(membersInTeam.length)
+            {
+              membersInTeam = filterMembersInTeam(membersInTeam);
+              deferred.resolve(membersInTeam);
+            }
+            else
+            {
+              TeamsService.prototype.updateMembersLocal()
+                .then(
+                  function(members)
+                  {
+                    membersInTeam = filterMembersInTeam(members);
+                    deferred.resolve(membersInTeam);
+                  }
+              );
+            }
 
             return deferred.promise;
           };

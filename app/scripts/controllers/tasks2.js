@@ -22,16 +22,35 @@ define(
         {
           $rootScope.fixStyles();
 
-          var view = $location.hash() || 'myTasks',
+          //Teams.filterAllMembers()
+          //  .then(
+          //  function(membersInTeam)
+          //  {
+          //    console.log('membersInTeam', membersInTeam);
+          //  }
+          //);
+
+          //Teams.updateMembersLocal()
+          //  .then(
+          //    function(members)
+          //    {
+          //      console.log('members', members);
+          //    }
+          //  );
+
+          //var test =  Store('app').get('members');
+          //
+          //_.each(test, function(member) {
+          //  console.log('member', member);
+          //});
+
+          console.log('store members', Store('app').get('members'));
+          console.log('store teamMembers', Store('app').get('teamMembers'));
+
+          var view = $location.hash(),
             teamsLocal = Teams.queryLocal(),
             clientLocal = Clients.queryLocal(),
             teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          $scope.teams = teamsLocal.teams;
-
-          $scope.task = $scope.task || {
-            team: $scope.currentTeam
-          };
 
           function resetViews()
           {
@@ -139,6 +158,12 @@ define(
           };
 
           setView(view);
+
+          $scope.teams = teamsLocal.teams;
+
+          $scope.task = $scope.task || {
+            team: $scope.currentTeam
+          };
 
           /**
            * Mody a task and prepare the form with the right values
