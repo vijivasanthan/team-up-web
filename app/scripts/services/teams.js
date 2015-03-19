@@ -515,16 +515,22 @@ define(
           };
 
           /**
-           * Update member
+           * Update all members list locally
+           * @param member updated userObject
+           * @returns {*} updated list of all users
            */
           TeamsService.prototype.updateMember = function(member)
           {
-            var deferred = $q.defer(),
-                allMembers = Store('app').get('members');
+            var allMembers = Store('app').get('members'),
+                indexMember = _.findIndex(allMembers, {uuid: member.uuid});
 
-            var editAbleMember = _.findWhere(allMembers, {uuid: member.uuid});
+            allMembers[indexMember] = member;
 
-            return deferred.promise;
+            Store('app').save('members', allMembers);
+
+            console.log('user', (Store('app').get('members'))[54]);
+
+            return allMembers;
           };
 
           /**

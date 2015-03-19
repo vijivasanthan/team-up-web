@@ -336,6 +336,9 @@ define(
                           }
                           else
                           {
+                            //TODO team/members
+                            //Teams.updateMember(data);
+
                             $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
                             $scope.view = data;

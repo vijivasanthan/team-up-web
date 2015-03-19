@@ -22,6 +22,29 @@ define(
         {
           $rootScope.fixStyles();
 
+          var members = Store('app').get('members');
+
+          //console.log('findIndex_', _.findIndex(members, {uuid: 'henkie'}));
+          //console.log('show userObject', members[54]);
+          var member = members[54];
+          member.userName = "testerdeTest";
+
+          members[54] = member;
+
+          Store('app').save('members', members);
+
+          members = Store('app').get('members');
+
+          console.log('members[54]', members[54]);
+
+          //Teams.updateMember()
+          //  .then(
+          //    function(members)
+          //    {
+          //      console.log('members', members);
+          //    }
+          //  );
+
           //Teams.filterAllMembers()
           //  .then(
           //  function(membersInTeam)
@@ -44,8 +67,8 @@ define(
           //  console.log('member', member);
           //});
 
-          console.log('store members', Store('app').get('members'));
-          console.log('store teamMembers', Store('app').get('teamMembers'));
+          //console.log('store members', Store('app').get('members'));
+          //console.log('store teamMembers', Store('app').get('teamMembers'));
 
           var view = $location.hash(),
             teamsLocal = Teams.queryLocal(),
