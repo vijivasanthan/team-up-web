@@ -529,7 +529,9 @@ define(
               .then(
               function (result)
               {
-                if (result.error)
+                console.log('result', result);
+
+                if (result && result.error)
                 {
                   console.warn('error ->', result);
                 }
@@ -543,7 +545,7 @@ define(
                     username: loginData.username
                   });
 
-                  $window.location.href = 'logout.html';
+                  $window.location.href = 'index.html';
                 }
               }
             );
