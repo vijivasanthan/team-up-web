@@ -529,8 +529,6 @@ define(
               .then(
               function (result)
               {
-                console.log('result', result);
-
                 if (result && result.error)
                 {
                   console.warn('error ->', result);
