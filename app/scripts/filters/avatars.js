@@ -36,13 +36,16 @@ define(
             {
               result = config.app.stateColors.availalbe;
               if(stateValues.indexOf('on_the_phone') >= 0
-                || stateValues.indexOf('not_reachable') >= 0
-                || stateValues.indexOf('unreachable') >= 0)
+                || stateValues.indexOf('UNREACHABLE') >= 0
+                || stateValues.indexOf('NOT_REACHABLE') >= 0)
               {
                 result = config.app.stateColors.busy;
               }
             }
-            else if (stateValues.indexOf('unavailable') >= 0 || stateValues.indexOf('working') >= 0)
+            else if (stateValues.indexOf('unavailable') >= 0
+              || stateValues.indexOf('working') >= 0
+              || stateValues.indexOf('UNREACHABLE') >= 0
+              || stateValues.indexOf('NOT_REACHABLE') >= 0)
             {
               result = config.app.stateColors.busy;
             }
