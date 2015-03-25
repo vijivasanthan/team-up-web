@@ -202,6 +202,7 @@ require(
     'services/rejections',
     'services/currentSelection',
     'services/moment',
+    'services/settings',
 
     // 'services/googleGEO',
 
