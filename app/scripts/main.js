@@ -70,7 +70,6 @@ require.config(
       //timepicker: 'removables/timepicker.min',
       //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
-      'underscore-string': '../vendors/underscore.string/dist/underscore.string.min',
       'lodash': '../vendors/lodash/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
