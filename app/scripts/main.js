@@ -5,36 +5,19 @@ if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
 
+localConfig.wantedProfile = localConfig.defaultProfile;
+localConfig.urlHostName = window.location.host;
 
-require.config({
-    paths: {
-      jquery: '../vendors/jquery/dist/jquery.min',
-      localConfig: 'localConfig'
-    },
-    shim: {
-      localConfig: {deps: ['jquery'], exports: 'localConfig' }
-    }
-});
-
-requirejs([
-    'jquery',
-    'localConfig'
-  ], function ($, localConfig)
-  {
-    'use strict';
-
-    var wantedProfile = localConfig.defaultProfile;
-    var urlHostName = window.location.host;
-    if(urlHostName.indexOf('teamtelefoon') > -1)
-      wantedProfile = 'teamtelefoon';
-    else if(urlHostName.indexOf('teamup') > -1)
-      wantedProfile = 'teamup';
+if (localConfig.urlHostName.indexOf('teamtelefoon') > -1)
+  localConfig.wantedProfile = 'teamtelefoon';
+else if(localConfig.urlHostName.indexOf('teamup') > -1)
+  localConfig.wantedProfile = 'teamup';
 
 require.config(
   {
     waitSeconds: 100,
     paths: {
-      profile: 'profiles/' + wantedProfile + '/profile',
+      jquery: '../vendors/jquery/dist/jquery.min',
       date: 'removables/date',
       angular: '../vendors/angular/angular.min',
       plugins: 'plugins',
@@ -102,31 +85,32 @@ require.config(
     },
     shim: {
       profile: {deps: ['jquery'], exports: 'profile' },
-      config: {deps: ['profile', 'localConfig'], exports: 'config' },
-      date: { deps: [], exports: 'date' },
-      plugins: { deps: ['jquery'], exports: 'plugins' },
+      config: {deps: ['profile'], exports: 'config' },
+      date: { deps: [], exports: 'Date' },
+      plugins: { deps: ['jquery'], exports: 'jQuery.browser' },
       angular: { deps: ['jquery'], exports: 'angular' },
-      'angular-resource': { deps: ['angular'] },
-      'angular-route': { deps: ['angular'] },
-      'angular-strap': { deps: ['angular'], exports: 'angular-strap' },
-      'angular-strap-tpl': { deps: ['angular','angular-strap'] },
-      'angular-cookie': { deps: ['angular'] },
-      'angular-md5': { deps: ['angular'] },
-      'ui-bootstrap': { deps: ['angular', 'bootstrap'], exports: 'ui-bootstrap' },
-      bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
-      lawnchair: { deps: [], exports: 'lawnchair' },
-      dom: { deps: ['lawnchair'], exports: 'dom' },
-      timeline: { deps: [], exports: 'timeline' },
+      'angular-resource': { deps: ['angular'], exports: 'angular' },
+      'angular-route': { deps: ['angular'], exports: 'angular' },
+      'angular-strap': { deps: ['angular'], exports: 'angular' },
+      'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
+      'angular-cookie': { deps: ['angular'], exports: 'angular' },
+      'angular-md5': { deps: ['angular'], exports: 'angular' },
+      'ui-bootstrap': { deps: ['angular', 'bootstrap'] },
+      bootstrap: { deps: ['jquery'], exports: 'jQuery' },
+      lawnchair: { deps: [], exports: 'Lawnchair' },
+      dom: { deps: ['lawnchair'], exports: 'Lawnchair' },
+      timeline: { deps: [], exports: 'links.Timeline' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       //moment: { deps: [], exports: 'moment' },
-      treegrid: { deps: [], exports: 'treegrid' },
+      treegrid: { deps: [], exports: 'links.TreeGrid' },
       //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       //md5: { exports: 'md5'},
       underscore: { exports: 'underscore'},
-      mask: { deps: ['angular'] },
+      mask: { deps: ['angular'], exports: 'angular' },
       store: { deps: ['angular', 'underscore']},
       offline: { deps: ['angular'] },
+      'clj-fuzzy': { deps: [], exports: 'clj_fuzzy'},
 
       // interceptor: { deps: ['angular'] },
 
@@ -138,12 +122,10 @@ require.config(
       // vis: { exports: 'vis' },
       // 'ng-vis': { deps: ['angular', 'vis'], exports: 'ng-vis' },
 
-      'jquery-form': { deps: ['jquery'], exports: 'jquery-form' },
-
       // 'angular-google-maps': { deps: ['angular'] },
       lodash: { deps: [], exports: 'lodash' },
 
-      'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
+      'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
@@ -161,6 +143,12 @@ require.config(
     }
   }
 );
+
+require.config({
+    paths: {
+      profile: 'profiles/' + localConfig.wantedProfile + '/profile',
+    }
+});
 
 // TODO: Look for ways to reduce the number of files loaded
 require(
@@ -294,4 +282,3 @@ require(
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
-});

@@ -298,9 +298,12 @@ module.exports = (grunt) ->
           src: ['generated/*']
         ,
           expand: true
-          cwd: '<%= paths.app %>/scripts'
-          dest: '.tmp/scripts'
-          src: "{,**/}*"
+          cwd: '<%= paths.app %>'
+          dest: '.tmp'
+          src: [
+            "scripts/{,**/}*"
+            "vendors/{,**/}*"
+          ]
         ]
       styles:
         expand: true
@@ -366,11 +369,13 @@ module.exports = (grunt) ->
           baseUrl: '.'
           dir: '<%= paths.dist %>/scripts/'
           optimize: 'uglify'
+          paths:
+            profile: 'empty:'
+            config: 'empty:'
           mainConfigFile: '.tmp/scripts/main.js'
+          skipDirOptimize: true
+          modules: [{name:'main'}]
           logLevel: 0
-          findNestedDependencies: true
-          fileExclusionRegExp: /^\./
-          inlineText: true
 
     changelog:
       options:
