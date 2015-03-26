@@ -21,12 +21,11 @@ define(
         '$filter',
         'MD5',
         'Permission',
-        function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-          Permission)
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
+                  Permission)
         {
 
-          var setBackgroundColor = function()
+          var setBackgroundColor = function ()
           {
             angular.element('body')
               .css(
@@ -44,10 +43,10 @@ define(
           catch (e)
           {
             var urlPrivateMode = 'http://support.apple.com/nl-nl/ht6366',
-              template = '<p>' + $rootScope.ui.teamup.checkLocalStorage +  '</p>';
+              template = '<p>' + $rootScope.ui.teamup.checkLocalStorage + '</p>';
 
             template += "<a href='" + urlPrivateMode + "'>";
-            template += urlPrivateMode +  '</a>';
+            template += urlPrivateMode + '</a>';
 
             setBackgroundColor();
 
@@ -62,7 +61,6 @@ define(
           Dater.registerPeriods();
 
 
-
           if ($location.path() == '/logout')
           {
             setBackgroundColor();
@@ -70,7 +68,7 @@ define(
 
           if ($routeParams.uuid && $routeParams.key)
           {
-            $scope.views = { changePass: true };
+            $scope.views = {changePass: true};
 
             $scope.changepass = {
               uuid: $routeParams.uuid,
@@ -98,14 +96,14 @@ define(
             }
           };
 
-          if (! Store('app').get('app'))
+          if (!Store('app').get('app'))
           {
             Store('app').save('app', '{}');
           }
           else
           {
             var periods = Store('app').get('periods'),
-                loginData = Store('app').get('loginData');
+              loginData = Store('app').get('loginData');
 
             Store('app').nuke();
             Store('app').save('periods', periods);
@@ -115,7 +113,7 @@ define(
           angular.element('.navbar').hide();
           angular.element('#footer').hide();
           angular.element('#watermark').hide();
-          angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
+          angular.element('body').css({'backgroundColor': '#1dc8b6'});
 
           var localLoginData = Store('app').get('loginData');
 
@@ -128,7 +126,7 @@ define(
 
             //if there is a local encrypted password, show a random string
             //and select the remember login
-            if(localLoginData.password)
+            if (localLoginData.password)
             {
               $scope.loginData.password = 1234;
               $scope.loginData.remember = true;
@@ -139,7 +137,7 @@ define(
           {
             angular.element('#alertDiv').hide();
 
-            if (! $scope.loginData || ! $scope.loginData.username || ! $scope.loginData.password)
+            if (!$scope.loginData || !$scope.loginData.username || !$scope.loginData.password)
             {
               $scope.alert = {
                 login: {
@@ -162,15 +160,15 @@ define(
 
             //Checks if there is already a password, otherwise encrypt the given password
             var password = ($scope.loginData.password == '1234' && localLoginData.password)
-                ? localLoginData.password
-                : MD5($scope.loginData.password);
+              ? localLoginData.password
+              : MD5($scope.loginData.password);
 
             var newLoginData = {
-                username: $scope.loginData.username
-              };
+              username: $scope.loginData.username
+            };
 
             //Check if the user want to save his password and add it to the local storage
-            if($scope.loginData.remember == true)
+            if ($scope.loginData.remember == true)
             {
               newLoginData.password = password;
             }
@@ -201,8 +199,8 @@ define(
                   status = result.error.status;
                 }
                 if (status == 400 ||
-                    status == 403 ||
-                    status == 404)
+                  status == 403 ||
+                  status == 404)
                 {
                   $scope.alert = {
                     login: {
@@ -261,29 +259,31 @@ define(
           };
 
           //Check if there is a password locally and autologin
-          if(localLoginData.password)
+          if (localLoginData.password)
           {
             $scope.login();
           }
 
           // TODO: Move this to somewhere later on!
-          function queryMembersNotInTeams ()
+          function queryMembersNotInTeams()
           {
             TeamUp._('teamMemberFree').then(
-              function (result) {
+              function (result)
+              {
                 Store('app').save('members', result)
               }
             );
           }
 
           // Query the tasks for login user and all other unsigned task in login user's team
-          function queryTasks (teams)
+          function queryTasks(teams)
           {
             // query my tasks
             TeamUp._("taskMineQuery").then(
-                function (result) {
-                  Store('app').save('myTasks', result)
-                }
+              function (result)
+              {
+                Store('app').save('myTasks', result)
+              }
             );
 
             // query unassigned tasks from each team
@@ -325,7 +325,7 @@ define(
           function updateLoggedUserTeams()
           {
             var userResources = Store('app').get('resources'),
-                teamsUser = _.pluck($scope.$root.getTeamsofMembers(userResources.uuid), 'uuid');
+              teamsUser = _.pluck($scope.$root.getTeamsofMembers(userResources.uuid), 'uuid');
 
             userResources.teamUuids = teamsUser;
 
@@ -333,7 +333,7 @@ define(
             Store('app').save('resources', userResources);
           }
 
-          function enhanceTasks ()
+          function enhanceTasks()
           {
             var taskGroups = ['myTasks', 'allTasks'];
 
@@ -347,15 +347,15 @@ define(
                   group,
                   function (task)
                   {
-					if(typeof(task) === 'object')
-					{
-						var client = $rootScope.getClientByID(task.relatedClientUuid);
+                    if (typeof(task) === 'object')
+                    {
+                      var client = $rootScope.getClientByID(task.relatedClientUuid);
 
-						if(client != null)
-						{
-							task.relatedClientName = client.firstName + ' ' + client.lastName;
-						}
-					}
+                      if (client != null)
+                      {
+                        task.relatedClientName = client.firstName + ' ' + client.lastName;
+                      }
+                    }
                   }
                 );
 
@@ -363,17 +363,6 @@ define(
               }
             );
           }
-
-
-          //TODO compare permission names with routenames
-          function getPermissionProfile()
-          {
-            Permission.getDefaultProfile()
-              .then(function(permissionProfile) {
-                $rootScope.app.domainPermission = permissionProfile;
-                console.log('permissionProfile', permissionProfile);
-              });
-          };
 
           var preLoader = function ()
           {
@@ -465,7 +454,7 @@ define(
                                           angular.element('.navbar').show();
                                           angular.element('body').addClass('background');
 
-                                          if (! $rootScope.browser.mobile)
+                                          if (!$rootScope.browser.mobile)
                                           {
                                             angular.element('#footer').show();
                                           }
@@ -487,7 +476,7 @@ define(
 
           var progress = function (ratio, message)
           {
-            angular.element('#preloader .progress .bar').css({ width: ratio + '%' });
+            angular.element('#preloader .progress .bar').css({width: ratio + '%'});
             angular.element('#preloader span').text(message);
           };
 
