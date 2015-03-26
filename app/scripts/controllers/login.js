@@ -9,7 +9,6 @@ define(
         function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp,
                   Dater, $filter, MD5, Permission, $injector)
         {
-
           var setBackgroundColor = function ()
           {
             angular.element('body')
@@ -113,7 +112,7 @@ define(
             //and select the remember login
             if (localLoginData.password)
             {
-              $scope.loginData.password = 1234;
+              $scope.loginData.password = _.repeat('*', 8);
               $scope.loginData.remember = true;
             }
           }
@@ -144,7 +143,7 @@ define(
               .attr('disabled', 'disabled');
 
             //Checks if there is already a password, otherwise encrypt the given password
-            var password = ($scope.loginData.password == '1234' && localLoginData.password)
+            var password = ($scope.loginData.password == (_.repeat('*', 8)) && localLoginData.password)
               ? localLoginData.password
               : MD5($scope.loginData.password);
 
@@ -340,7 +339,6 @@ define(
                                   console.log('clientData', clientData);
 
                                   Task.enhance();
-
                                   progress(85, $rootScope.ui.login.loading_Members);
 
                                   Teams.query()

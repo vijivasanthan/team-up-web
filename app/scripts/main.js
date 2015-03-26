@@ -49,9 +49,9 @@ require.config(
       // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
 
       //timepicker: 'removables/timepicker.min',
-      underscore: '../vendors/underscore/underscore',
       //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
+      'lodash': '../vendors/lodash/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/moment',
@@ -69,8 +69,6 @@ require.config(
 
       //'async':            '../vendors/requirejs-plugins/src/async',
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
-      'lodash': '../vendors/lodash/dist/lodash.min',
-
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
@@ -106,9 +104,9 @@ require.config(
       //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       //md5: { exports: 'md5'},
-      underscore: { exports: 'underscore'},
-      mask: { deps: ['angular'], exports: 'angular' },
-      store: { deps: ['angular', 'underscore']},
+      mask: { deps: ['angular'] },
+      lodash: { exports: '_'},
+      store: { deps: ['angular', 'lodash']},
       offline: { deps: ['angular'] },
       'clj-fuzzy': { deps: [], exports: 'clj_fuzzy'},
 
@@ -123,7 +121,6 @@ require.config(
       // 'ng-vis': { deps: ['angular', 'vis'], exports: 'ng-vis' },
 
       // 'angular-google-maps': { deps: ['angular'] },
-      lodash: { deps: [], exports: 'lodash' },
 
       'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
@@ -146,7 +143,7 @@ require.config(
 
 require.config({
     paths: {
-      profile: 'profiles/' + localConfig.wantedProfile + '/profile',
+      profile: 'profiles/' + localConfig.wantedProfile + '/profile'
     }
 });
 
@@ -248,9 +245,7 @@ require(
     'dom',
     'timeline',
     'daterangepicker',
-    //'moment',
     'treegrid',
-    'underscore',
     'mask',
     'store',
     'offline',
