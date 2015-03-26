@@ -261,7 +261,8 @@ define(
           }
 
           /**
-           * add teams to the logged user localStorage
+           * TODO Check if this is still necessary
+           * Keep the local user resources up to date
            */
           function updateLoggedUserTeams()
           {
@@ -272,37 +273,6 @@ define(
 
             $rootScope.app.resources = userResources;
             Store('app').save('resources', userResources);
-          }
-
-          function enhanceTasks()
-          {
-            var taskGroups = ['myTasks', 'allTasks'];
-
-            angular.forEach(
-              taskGroups,
-              function (label)
-              {
-                var group = Store('app').get(label);
-
-                angular.forEach(
-                  group,
-                  function (task)
-                  {
-                    if (typeof(task) === 'object')
-                    {
-                      var client = $rootScope.getClientByID(task.relatedClientUuid);
-
-                      if (client != null)
-                      {
-                        task.relatedClientName = client.firstName + ' ' + client.lastName;
-                      }
-                    }
-                  }
-                );
-
-                Store('app').save(label, group);
-              }
-            );
           }
 
           var preLoader = function ()
@@ -369,8 +339,8 @@ define(
                                 {
                                   console.log('clientData', clientData);
 
-                                  // TODO: Blend it in the modal!
-                                  enhanceTasks();
+                                  Task.enhance();
+
                                   progress(85, $rootScope.ui.login.loading_Members);
 
                                   Teams.query()

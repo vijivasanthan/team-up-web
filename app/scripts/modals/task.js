@@ -430,6 +430,37 @@ define(
             );
           };
 
+          Task.prototype.enhance = function ()
+          {
+            var taskGroups = ['myTasks', 'allTasks'];
+
+            angular.forEach(
+              taskGroups,
+              function (label)
+              {
+                var group = Store('app').get(label);
+
+                angular.forEach(
+                  group,
+                  function (task)
+                  {
+                    if (typeof(task) === 'object')
+                    {
+                      var client = $rootScope.getClientByID(task.relatedClientUuid);
+
+                      if (client != null)
+                      {
+                        task.relatedClientName = client.firstName + ' ' + client.lastName;
+                      }
+                    }
+                  }
+                );
+
+                Store('app').save(label, group);
+              }
+            );
+          };
+
           return new Task;
         }
       ]
