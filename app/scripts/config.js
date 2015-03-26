@@ -1,5 +1,5 @@
-define(
-  {
+define(['profile'], function(profile){
+  return {
     app: {
       version: '@@version',
       released: '@@released',
@@ -196,5 +196,5 @@ define(
         );
       }
     }
-  }
-);
+  };
+});
