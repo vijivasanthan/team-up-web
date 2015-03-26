@@ -9,6 +9,7 @@ define(
         function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp,
                   Dater, $filter, MD5, Permission, $injector)
         {
+          var tester = _.repeat('*', 8);
 
           var setBackgroundColor = function ()
           {
@@ -340,7 +341,6 @@ define(
                                   console.log('clientData', clientData);
 
                                   Task.enhance();
-
                                   progress(85, $rootScope.ui.login.loading_Members);
 
                                   Teams.query()

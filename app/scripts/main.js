@@ -16,6 +16,8 @@ require.config({
     }
 });
 
+
+
 requirejs([
     'jquery',
     'localConfig'
@@ -69,6 +71,8 @@ require.config(
       underscore: '../vendors/underscore/underscore',
       //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
+      'underscore-string': '../vendors/underscore.string/dist/underscore.string.min',
+      'lodash': '../vendors/lodash/dist/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/moment',
@@ -86,8 +90,6 @@ require.config(
 
       //'async':            '../vendors/requirejs-plugins/src/async',
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
-      'lodash': '../vendors/lodash/dist/lodash.min',
-
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
@@ -123,9 +125,10 @@ require.config(
       //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
       //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
       //md5: { exports: 'md5'},
-      underscore: { exports: 'underscore'},
+      underscore: { exports: '_'},
       mask: { deps: ['angular'] },
       store: { deps: ['angular', 'underscore']},
+      'underscore-string': {deps: ['underscore']},
       offline: { deps: ['angular'] },
 
       // interceptor: { deps: ['angular'] },
@@ -141,7 +144,7 @@ require.config(
       'jquery-form': { deps: ['jquery'], exports: 'jquery-form' },
 
       // 'angular-google-maps': { deps: ['angular'] },
-      lodash: { deps: [], exports: 'lodash' },
+      lodash: { deps: [], exports: '_' },
 
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
@@ -161,6 +164,16 @@ require.config(
     }
   }
 );
+
+//define('underscore', [
+//  'lodash',
+//  'underscore-string'
+//], function (_, _s) {
+//  //MERGE STRING PLUGIN TO UNDERSCORE NAMESPACE
+//  _.mixin(_s.exports());
+//  return _;
+//});
+
 
 // TODO: Look for ways to reduce the number of files loaded
 require(
@@ -273,7 +286,7 @@ require(
     // 'ng-vis',
     'jquery-form',
 
-    'lodash',
+    //'lodash',
     // 'angular-google-maps',
 
     'jquery-ui',
