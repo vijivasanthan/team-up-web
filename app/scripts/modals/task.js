@@ -351,6 +351,8 @@ define(
           };
 
 
+
+
           Task.prototype.chains = function ()
           {
             var data = {},
@@ -381,6 +383,52 @@ define(
 
           };
 
+          /**
+           * Query the tasks for login user and all other unsigned task in login user's team
+           * and save it locally
+           * @param teams
+           */
+          Task.prototype.getAllByTeamLoggedUser = function(teams)
+          {
+            // query my tasks
+            TeamUp._("taskMineQuery").then(
+              function (result)
+              {
+                Store('app').save('myTasks', result)
+              }
+            );
+
+            // query unassigned tasks from each team
+            var allTasks = [];
+
+            angular.forEach(
+              teams,
+              function (team_obj)
+              {
+                TeamUp._(
+                  "taskByTeam",
+                  {fourth: team_obj.uuid}
+                ).then(
+                  function (result)
+                  {
+                    angular.forEach(
+                      result,
+                      function (taskObj)
+                      {
+                        var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
+
+                        if (foundTask == null)
+                        {
+                          allTasks.push(taskObj);
+                        }
+                      }
+                    );
+                    Store('app').save('allTasks', allTasks);
+                  }
+                );
+              }
+            );
+          };
 
           return new Task;
         }

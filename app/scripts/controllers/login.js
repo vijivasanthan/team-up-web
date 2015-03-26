@@ -6,23 +6,8 @@ define(
 
     controllers.controller(
       'login',
-      [
-        '$rootScope',
-        '$location',
-        '$q',
-        '$scope',
-        'Session',
-        'Teams',
-        'Clients',
-        'Store',
-        '$routeParams',
-        'TeamUp',
-        'Dater',
-        '$filter',
-        'MD5',
-        'Permission',
-        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
-                  Permission)
+        function ($rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp,
+                  Dater, $filter, MD5, Permission, $injector)
         {
 
           var setBackgroundColor = function ()
@@ -265,56 +250,12 @@ define(
           }
 
           // TODO: Move this to somewhere later on!
-          function queryMembersNotInTeams()
+          function queryAllMembers()
           {
             TeamUp._('allTeamMembers').then(
               function (result)
               {
                 Store('app').save('members', result)
-              }
-            );
-          }
-
-          // Query the tasks for login user and all other unsigned task in login user's team
-          function queryTasks(teams)
-          {
-            // query my tasks
-            TeamUp._("taskMineQuery").then(
-              function (result)
-              {
-                Store('app').save('myTasks', result)
-              }
-            );
-
-            // query unassigned tasks from each team
-            var allTasks = [];
-
-            angular.forEach(
-              teams,
-              function (team_obj)
-              {
-                TeamUp._(
-                  "taskByTeam",
-                  {fourth: team_obj.uuid}
-                ).then(
-                  function (result)
-                  {
-                    angular.forEach(
-                      result,
-                      function (taskObj)
-                      {
-                        var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
-
-                        if (foundTask == null)
-                        {
-                          allTasks.push(taskObj);
-                        }
-                      }
-                    );
-
-                    Store('app').save('allTasks', allTasks);
-                  }
-                );
               }
             );
           }
@@ -396,9 +337,10 @@ define(
                     {
                       console.log('teams', teams);
 
-                      queryMembersNotInTeams();
+                      queryAllMembers();
 
-                      queryTasks(teams);
+                      var Task = $injector.get('Task');
+                      Task.getAllByTeamLoggedUser(teams);
 
                       if (teams.error)
                       {
@@ -493,6 +435,6 @@ define(
             };
           }
         }
-      ]);
+      );
   }
 );
