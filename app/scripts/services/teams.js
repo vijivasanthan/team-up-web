@@ -80,7 +80,7 @@ define(
 
           TeamsService.prototype.updateMembersLocal = function ()
           {
-            return TeamUp._('teamMemberFree')
+            return TeamUp._('allTeamMembers')
               .then(
               function (result)
               {

@@ -267,7 +267,7 @@ define(
           // TODO: Move this to somewhere later on!
           function queryMembersNotInTeams()
           {
-            TeamUp._('teamMemberFree').then(
+            TeamUp._('allTeamMembers').then(
               function (result)
               {
                 Store('app').save('members', result)

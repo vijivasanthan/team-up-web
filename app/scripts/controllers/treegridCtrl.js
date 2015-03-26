@@ -710,7 +710,7 @@ define(
               {
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                TeamUp._('teamMemberFree')
+                TeamUp._('allTeamMembers')
                   .then(
                   function (result)
                   {
