@@ -32,6 +32,26 @@ define(
       ]
     );
 
+    /**
+     * Filter false and null values and join it into a string
+     * comma seperated, the ending is between all values and the last one
+     * example: $filter('commaSeperatedWithEnding')(['hen', 'Henk', 'Henkieee'], 'en'); //hen, Henk en Henkieee
+     */
+    filters.filter
+    (
+      'commaSeperatedWithEnding',
+        function ()
+        {
+          return function (arr, ending)
+          {
+            var _arr = _.compact(arr),
+                last = _arr.pop();
+
+            return  _arr.join(', ') + ' ' + ending + ' ' + last;
+          }
+        }
+    );
+
     filters.filter
     (
       'trusted_html',
