@@ -535,10 +535,11 @@ define(
 
                   $scope.members = $scope.data.members[$scope.team.uuid];
 
-                  if(angular.isDefined($scope.teamMemberForm))
+                  if(angular.isDefined($scope.memberForm))
                   {
                     $rootScope.resetPhoneNumberChecker();
-                    $scope.teamMemberForm = {};
+                    $scope.memberForm.$setPristine();
+                    $scope.memberForm = {};
                   }
 
                   if($rootScope.app.domainPermission.teamSelfManagement)
