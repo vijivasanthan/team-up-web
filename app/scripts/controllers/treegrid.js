@@ -91,7 +91,7 @@ define(
                 'remove',
                 function (event)
                 {
-					//temp solution so a client or teammember can't be in two teams or clientgroups
+					//TODO temp solution so a client or teammember can't be in two teams or clientgroups
 					var items = event.items,
 						user = items[0];
 
@@ -288,7 +288,7 @@ define(
                     function (data) {
 						data._parent = key;
 
-						//temp solution so a client or teammember can't be in two teams or clientgroups
+						//TODO temp solution so a client or teammember can't be in two teams or clientgroups
 						var keyParent = key.split('_')[0];
 
 						if(keyParent == 'clients' || keyParent == 'teams')
