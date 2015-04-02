@@ -20,13 +20,9 @@ define(
         'MD5',
         'Profile',
         '$filter',
-        '$injector',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter, $injector)
+                  TeamUp, $timeout, MD5, Profile, $filter)
         {
-          var uuid = null,
-              view = null;
-
           $rootScope.fixStyles();
 
           //TODO get this from a service
@@ -47,6 +43,9 @@ define(
 
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
+
+          var uuid,
+            view;
 
           if (!params.uuid && !$location.hash())
           {
@@ -126,24 +125,38 @@ define(
            */
           $scope.setUserType = function(userType)
           {
-            if(userType == 'EXISTING')
+            switch (userType)
             {
-              $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
-
-              Teams.updateMembersLocal()
-                .then(
-                function(allmembers)
-                {
-                  $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
-                }
-              );
-            }
+              case 'EXISTING':
+                loadMembersWithoutTeam();
+                break;
+              default:
+                console.log("the usertype of add member is new or unknown");
+            };
 
             $scope.userType = userType;
           };
 
           $scope.setUserType('NEW');
 
+          /**
+           * Load all members and filter them by the ones without a team
+           */
+          var loadMembersWithoutTeam = function()
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
+            $scope.membersWithoutTeamLoad = true;
+
+            Teams.updateMembersLocal()
+              .then(
+              function(members)
+              {
+                $scope.membersWithoutTeam = $filter('membersWithoutTeam')(members);
+                $rootScope.statusBar.off();
+                $scope.membersWithoutTeamLoad = false;
+              }
+            );
+          };
 
           $scope.requestTeam = function (current, switched)
           {
@@ -485,8 +498,11 @@ define(
 
           $scope.addExistingUserMember = function(member)
           {
-            var index = $scope.membersWithoutTeam.indexOf(member);
-            $scope.membersWithoutTeam.splice(index, 1);
+            if(angular.isDefined($scope.membersWithoutTeam))
+            {
+              var index = $scope.membersWithoutTeam.indexOf(member);
+              $scope.membersWithoutTeam.splice(index, 1);
+            }
 
             TeamUp._(
               'teamMemberAdd',
@@ -541,21 +557,7 @@ define(
                     $scope.teamMemberForm = {};
                   }
 
-                  if($rootScope.app.domainPermission.teamSelfManagement)
-                  {
-                    Teams.updateMembersLocal()
-                      .then(
-                      function(allmembers)
-                      {
-                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
-                        $scope.setViewTo('team');
-                      }
-                    );
-                  }
-                  else
-                  {
-                    $scope.setViewTo('team');
-                  }
+                  $scope.setViewTo('team');
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -669,7 +671,7 @@ define(
 
             // TODO : we should also fix the issue in the backend.
             var memberId = angular.lowercase(member.uuid),
-                index = $scope.data.members[$scope.current].indexOf(member);
+              index = $scope.data.members[$scope.current].indexOf(member);
 
             TeamUp._(
               'teamMemberDelete',
@@ -678,44 +680,21 @@ define(
             ).then(
               function ()
               {
-                $scope.data.members[$scope.current].splice(index, 1);
-
                 Teams.query(false, {'uuid': $scope.current})
                   .then(
                   function ()
                   {
-                    Teams.updateMembersLocal()
-                      .then(
-                      function(allMembers)
-                      {
-                        if(memberId == $rootScope.app.resources.uuid)
-                        {
-                          var resources = _.findWhere(allMembers, {uuid: $rootScope.app.resources.uuid});
-
-                          Store('app').save('resources', resources);
-                          $rootScope.app.resources = resources;
-
-                          if(! $rootScope.app.resources.teamUuids.length)
-                          {
-                            var Permission = $injector.get('Permission');
-                            Permission.getAccess();
-                          }
-                        }
-
-                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMembers);
-
-                        $rootScope.statusBar.off();
-                        $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                      }
-                    );
+                    $scope.data.members[$scope.current].splice(index, 1);
+                    $rootScope.statusBar.off();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   }
                 );
               }
             ),
-            function (error)
-            {
-              console.log(error)
-            };
+              function (error)
+              {
+                console.log(error)
+              };
 
           };
 
@@ -746,20 +725,10 @@ define(
             }
           );
 
-          $scope.checkUserName = function ()
+          $scope.convertUserName = function ()
           {
-            var regUserName = /([A-Za-z0-9-_])/g,
-                matchesUserName = ($scope.memberForm.userName.match(regUserName));
-
-            if(!_.isNull(matchesUserName))
-            {
-              matchesUserName = matchesUserName.join('');
-            }
-
-            $scope.UserNameWrong = ($scope.memberForm.userName !== matchesUserName);
-            $scope.memberForm.userName = matchesUserName || '';
-
-          };
+            $scope.memberForm.userName = angular.lowercase($scope.memberForm.userName);
+          }
         }
       ]
     );

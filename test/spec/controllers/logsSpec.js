@@ -2,7 +2,7 @@ define(
   [
     'angular-mocks',
     'app',
-    'underscore',
+    'lodash',
     'controllers/logs',
     'modals/logs',
     'services/moment'

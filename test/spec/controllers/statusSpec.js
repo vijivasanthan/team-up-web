@@ -2,7 +2,7 @@ define(
   [
     'angular-mocks',
     'app',
-    'underscore',
+    'lodash',
     'moment',
     'lawnchair',
     'lawnchair-dom',

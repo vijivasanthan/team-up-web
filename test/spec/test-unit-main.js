@@ -31,7 +31,7 @@ requirejs.config(
       moment: '../vendors/moment/moment',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       'lawnchair-dom': '../vendors/lawnchair/src/adapters/dom',
-      underscore: '../vendors/underscore/underscore',
+      'lodash': '../vendors/lodash/lodash.min',
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
@@ -67,7 +67,7 @@ requirejs.config(
         deps: ['angular'],
         exports: 'angular.mock'
       },
-      underscore: { exports: 'underscore'},
+      lodash: { exports: '_'},
       lawnchair: { deps: [], exports: 'lawnchair' },
       'lawnchair-dom': { deps: ['lawnchair'], exports: 'dom' },
       mask: { deps: ['angular'] }

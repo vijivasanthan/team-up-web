@@ -7,7 +7,7 @@ section#dashboard
 			label.control-label {{ ui.teamup.selectTeam }}
 			.controls
 				select(ng-model='current.group',
-				ng-options='group.uuid as group.name for group in groups',
+				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 				ng-selected='current.group',
 				ng-change='getGroupReachability()')
 			

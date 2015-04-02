@@ -11,17 +11,9 @@ define(['controllers/controllers'], function (controllers)
         $rootScope.fixStyles();
 
         var teams = Store('app').get('teams'),
-          members = Store('app').get('members'),
+          members = _.flatten(_.values(data.members)),
           currentMembers = null,
           everyoneId = 'all';
-
-        //Check if members already stored locally in case of slow back end call
-        if(! members.length > 0)
-        {
-          members = [];
-          //get all teams members arrays and merge the values to one single array
-          members = _.flatten(_.values(data.members));
-        }
 
         members = $rootScope.unique(members);
 

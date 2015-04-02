@@ -91,7 +91,7 @@ define(
               // console.log('-------------------------------------------');
 
               angular.forEach(
-                Store('app').get('members'),
+                data.allMembers,
                 function (member)
                 {
                   if (memberGlobalIds.indexOf(member.uuid) == - 1)
@@ -211,9 +211,10 @@ define(
           }
 
           // TODO: Repetitive code
-          var localData = loadData(data);
-          data = localData.data;
-          var connections = localData.con;
+          //var localData = loadData(data);
+          //data = localData.data;
+          //var connections = localData.con;
+          var connections = null;
 
           $scope.data = {
             left: [],
@@ -230,10 +231,31 @@ define(
 
             $scope.views[hash] = true;
 
-            // TODO: Repetitive code
-            var localData = loadData(data);
-            data = localData.data;
-            connections = localData.con;
+            var localData = null;
+            data.allMembers = null;
+
+            if(hash == 'teams')
+            {
+              $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
+
+              Teams.updateMembersLocal()
+                .then(
+                function(members)
+                {
+                  data.allMembers = members;
+                  localData = loadData(data);
+                  data = localData.data;
+                  connections = localData.con;
+                  $rootScope.statusBar.off();
+                }
+              );
+            }
+            else
+            {
+              localData = loadData(data);
+              data = localData.data;
+              connections = localData.con;
+            }
           }
 
           $scope.setViewTo = function (hash)
@@ -260,6 +282,8 @@ define(
               }
             );
           };
+
+          setView('teamClients');
 
           var accessTo;
 

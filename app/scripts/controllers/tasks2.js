@@ -5,18 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'tasks2Ctrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        '$timeout',
-        '$filter',
-        'Store',
-        'TeamUp',
-        'Task',
-        'Teams',
-        'Clients',
-        'Dater',
+      'tasks2Ctrl',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
                   Teams, Clients, Dater)
         {
@@ -723,7 +712,6 @@ define(
           //  });
           //};
         }
-      ]
     );
   }
 );

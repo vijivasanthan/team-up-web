@@ -506,7 +506,7 @@ define(['services/services', 'config'],
 
               if (options.id == 'all')
               {
-                members = $rootScope.unique(Store('app').get('members'));
+                //members = $rootScope.unique(Store('app').get('members'));
               }
               else if (typeof teams.members[options.id] != 'undefined')
               {
