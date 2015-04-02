@@ -463,6 +463,8 @@ define(
           selectTeam: 'Selecteer team',
           clients: 'Cliënten',
           selectClientGroup: 'Selecteer een cliëntgroep',
+          membersWithoutTeam: 'load members without team.',
+          loadingMembersWithoutTeam: 'Leden zonder team aan het laden...',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
           edit: 'Bewerk',

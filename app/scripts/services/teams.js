@@ -84,8 +84,6 @@ define(
               .then(
               function (result)
               {
-                Store('app').save('members', result);
-
                 return result;
               }.bind(this),
               function (error)
@@ -515,32 +513,34 @@ define(
           };
 
           /**
+           * TODO still needed?
            * Update all members list locally
            * @param member updated userObject
            * @returns {*} updated list of all users
            */
           TeamsService.prototype.updateMember = function(member)
           {
-            var allMembers = Store('app').get('members'),
+            var allMembers = null,//Store('app').get('members')
                 indexMember = _.findIndex(allMembers, {uuid: member.uuid});
 
             allMembers[indexMember] = member;
 
-            Store('app').save('members', allMembers);
+            //Store('app').save('members', allMembers);
 
-            console.log('user', (Store('app').get('members'))[54]);
+            //console.log('user', (Store('app').get('members'))[54]);
 
             return allMembers;
           };
 
           /**
+           * TODO still needed?
            * Filter all members by team
            * @returns {*}
            */
           TeamsService.prototype.filterAllMembers = function()
           {
             var deferred = $q.defer(),
-                membersInTeam = Store('app').get('members'),
+                membersInTeam = null,//Store('app').get('members')
                 filterMembersInTeam = function (members)
                 {
                   var filter = $injector.get('$filter'),

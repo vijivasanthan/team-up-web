@@ -178,8 +178,9 @@ aria-hidden='true')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
-				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
-				table.table.table-striped(ng-show='membersWithoutTeam.length')
+				p(ng-show="membersWithoutTeamLoad") {{ ui.teamup.loadingMembersWithoutTeam }}
+				p(ng-show='! membersWithoutTeam.length && ! membersWithoutTeamLoad') {{ui.teamup.noMembers}}
+				table.table.table-striped(ng-show='membersWithoutTeam.length && ! membersWithoutTeamLoad')
 					thead
 						tr
 							th
