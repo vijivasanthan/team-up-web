@@ -218,24 +218,24 @@ aria-hidden='true')
 						.controls
 							input.span4(type='text',
 							ng-model='clientForm.lastName')
-					.form-group.dater(ng-class="{ 'has-error' : newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine }")
-						label.control-label {{ui.profile.birthday}}
-						.controls
-							.control-group
-								input.form-control(type='text',
-								name='birthdate',
-								required,
-								ng-model='clientForm.birthDate', 
-								data-date-type='string',
-								data-date-format='dd-MM-yyyy',
-								bs-datepicker='')
-								i.icon-calendar
-								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
-									small
-										i {{ui.validation.birthDate.notValid }}
-								span.help-block(style='margin-top: -5px;')
-									small
-										i {{ui.profile.exampleBirthDate}}
+					//.form-group.dater(ng-class="{ 'has-error' : newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine }")
+					//	label.control-label {{ui.profile.birthday}}
+					//	.controls
+					//		.control-group
+					//			input.form-control(type='text',
+					//			name='birthdate',
+					//			required,
+					//			ng-model='clientForm.birthDate', 
+					//			data-date-type='string',
+					//			data-date-format='dd-MM-yyyy',
+					//			bs-datepicker='')
+					//			i.icon-calendar
+					//			p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
+					//				small
+					//					i {{ui.validation.birthDate.notValid }}
+					//			span.help-block(style='margin-top: -5px;')
+					//				small
+					//					i {{ui.profile.exampleBirthDate}}
 										
 					.control-group
 						label.control-label {{ui.teamup.phone}}
@@ -355,8 +355,8 @@ aria-hidden='true')
 							span(ng-hide='app.resources.role > 1')
 								a(href='#/client?uuid={{client.clientGroupUuid}}#client')
 									| {{client.clientGroupUuid | getObjAttr:"clientGroup":"name"}}
-						dt {{ui.profile.birthday}}
-						dd {{client.birthDate}}
+						//dt {{ui.profile.birthday}}
+						//dd {{client.birthDate}}
 						dt {{ui.teamup.phone}}
 						dd {{client.phone}}
 						dt(ng-show="client.address") {{ui.profile.address}}
@@ -498,16 +498,16 @@ aria-hidden='true')
 						.controls
 							input.span4(type='text',
 							ng-model='clientmeta.lastName')
-					.control-group
-						label.control-label {{ui.profile.birthday}}
-						.control-group.dater(style='')
-							input.ng-pristine.ng-valid(name='date-start',
-							type='text',
-							ng-model='clientmeta.birthDate', data-date-type='string',
-							data-date-format='dd-MM-yyyy',
-							bs-datepicker='',
-							data-toggle='datepicker')
-							i.icon-calendar
+					//.control-group
+					//	label.control-label {{ui.profile.birthday}}
+					//	.control-group.dater(style='')
+					//		input.ng-pristine.ng-valid(name='date-start',
+					//		type='text',
+					//		ng-model='clientmeta.birthDate', data-date-type='string',
+					//		data-date-format='dd-MM-yyyy',
+					//		bs-datepicker='',
+					//		data-toggle='datepicker')
+					//		i.icon-calendar
 					.control-group
 						label.control-label {{ui.profile.phone}}
 						.controls

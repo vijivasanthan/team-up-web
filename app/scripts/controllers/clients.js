@@ -36,6 +36,8 @@ define(
 
           if (data.clientId)
           {
+            console.log('clientId', data.clientId);
+
             var clientHasClientGroup = false;
             Reports.clientId = data.clientId;
 
@@ -57,7 +59,6 @@ define(
                 //
                 //  console.log('client', $scope.contacts);
                 //
-                //  client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
                 //  $scope.clientmeta = client;
                 //  clientHasClientGroup = true;
                 //}
@@ -72,7 +73,6 @@ define(
                       $scope.client = client;
                       $scope.contacts = client.contacts;
 
-                      client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
                       $scope.clientmeta = client;
                       clientHasClientGroup = true;
                     }
@@ -89,7 +89,6 @@ define(
               Reports.clientId = $scope.client.uuid;
               $scope.client = data.client;
               $scope.contacts = data.client.contacts;
-              data.client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
               $scope.clientmeta = data.client;
             }
           }
@@ -591,20 +590,6 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
-            // might need to convert the client to client obj
-            try
-            {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              // console.log(error);
-
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return;
-            }
-
             if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
@@ -678,18 +663,6 @@ define(
             //temp var, so the user should't see the date changing
             var changedClient = angular.copy(client);
 
-            try
-            {
-              //convert birthdate into miliseconds for saving
-              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return;
-            }
-
             Clients.singleUpdate(changedClient)
               .then(
               function (result)
@@ -718,18 +691,6 @@ define(
           $scope.saveContacts = function (contacts)
           {
             var client = $scope.client;
-
-            try
-            {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              // console.log(error);
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return;
-            }
 
             client.contacts = contacts;
 
@@ -765,7 +726,6 @@ define(
                     {
                     });
                 }
-                $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
               }
             );
           };

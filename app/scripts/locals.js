@@ -465,6 +465,7 @@ define(
           selectClientGroup: 'Selecteer een cliëntgroep',
           membersWithoutTeam: 'load members without team.',
           loadingMembersWithoutTeam: 'Leden zonder team aan het laden...',
+          selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
           edit: 'Bewerk',

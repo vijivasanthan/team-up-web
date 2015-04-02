@@ -394,7 +394,7 @@ define(
 
           $scope.memberSubmit = function (member)
           {
-            if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword || !member.birthDate)
+            if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
             {
               //angular.element
               $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
@@ -452,7 +452,6 @@ define(
             delete tempResources.pincode;
 
             tempResources.password = MD5(tempResources.password);
-            tempResources.birthDate = Dater.convert.absolute(tempResources.birthDate, 0)
 
             TeamUp._(
               'memberAdd',
@@ -467,7 +466,7 @@ define(
                 email: tempResources.email,
                 teamUuids: [$scope.current],
                 role: tempResources.role,
-                birthDate: tempResources.birthDate
+                birthDate: 0
                 //function: member.function
               }
             ).then(
@@ -725,10 +724,20 @@ define(
             }
           );
 
-          $scope.convertUserName = function ()
+          $scope.checkUserName = function ()
           {
-            $scope.memberForm.userName = angular.lowercase($scope.memberForm.userName);
-          }
+            var regUserName = /([A-Za-z0-9-_])/g,
+              matchesUserName = ($scope.memberForm.userName.match(regUserName));
+
+            if(!_.isNull(matchesUserName))
+            {
+              matchesUserName = matchesUserName.join('');
+            }
+
+            $scope.UserNameWrong = ($scope.memberForm.userName !== matchesUserName);
+            $scope.memberForm.userName = matchesUserName || '';
+
+          };
         }
       ]
     );
