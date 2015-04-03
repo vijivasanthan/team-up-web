@@ -170,9 +170,9 @@ aria-hidden='true')
 			.tab-header
 				h3.pull-left {{ui.teamup.newMember}}
 				.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;', ng-show='userType == "EXISTING"')
-					input.form-control.search-query(type='text', placeholder='{{ ui.teamup.searchMembers }}', ng-model='logs.filtered')
+					input.form-control.search-query(type='text', placeholder='{{ ui.teamup.searchMembers }}', ng-model='memberValue')
 					span(class="input-group-btn")
-						button.search-button(input-rule-toggle='1' class="btn btn-default input-buttons add-button" type="button")
+						button.search-button(ng-click='searchMember(memberValue)' input-rule-toggle='1' class="btn btn-default input-buttons add-button" type="button")
 							i(class="glyphicon glyphicon-white glyphicon-search")
 				div.btn-group.pull-right
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
@@ -206,10 +206,10 @@ aria-hidden='true')
 							td
 								| {{ member.teamUuids | getTeamNameById }}
 							td
-								.pull-right
-									button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)')
-										span.icomoon(data-icon='',
-										aria-hidden='true')
+								button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)', 
+									ng-hide='member.teamUuids.indexOf(current) >= 0')
+									span.icomoon(data-icon='',
+									aria-hidden='true')
 				span.muted.pull-right(ng-show='! membersWithoutTeamLoad')
 					small
 						i {{ membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}

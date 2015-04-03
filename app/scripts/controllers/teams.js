@@ -23,9 +23,6 @@ define(
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
                   TeamUp, $timeout, MD5, Profile, $filter)
         {
-          //var test = $filter('getTeamNameById')(['87c82206-8193-454b-a455-81cfb076f39d_team', '87c82206-8193-454b-a455-81cfb076f39d_team']);
-          //
-          //  console.log('test', test);
           $rootScope.fixStyles();
 
           //TODO get this from a service
@@ -740,6 +737,41 @@ define(
             $scope.UserNameWrong = ($scope.memberForm.userName !== matchesUserName);
             $scope.memberForm.userName = matchesUserName || '';
 
+          };
+
+          $scope.searchMember = function(name)
+          {
+            if(_.isEmpty(name))
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.search.notValid);
+              return false;
+            }
+            else
+            {
+              console.log(name);
+
+              $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
+              $scope.membersWithoutTeamLoad = true;
+
+              TeamUp._(
+                'findMembers',
+                {name: name}
+              ).then(
+                function (result)
+                {
+                  if (result.error)
+                  {
+                    console.log('Error with finding members : ' + result.error);
+                  }
+                  else
+                  {
+                    $scope.membersWithoutTeam = result;
+                    $rootScope.statusBar.off();
+                    $scope.membersWithoutTeamLoad = false;
+                  }
+                }
+              );
+            }
           };
         }
       ]
