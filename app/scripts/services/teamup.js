@@ -445,14 +445,14 @@ define(
                   }
                 },
                 //search a member by first and/or lastname
-                //findMembers: {
-                //  method: 'GET',
-                //  isArray: true,
-                //  headers:{'Content-Type':'application/x-www-form-urlencoded'},
-                //  params: {
-                //    first: 'teammembers'
-                //  }
-                //},
+                findMembers: {
+                  method: 'GET',
+                  isArray: true,
+                  headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                  params: {
+                    first: 'teammembers'
+                  }
+                },
 
                 /**
                  * Get the team-telephone number

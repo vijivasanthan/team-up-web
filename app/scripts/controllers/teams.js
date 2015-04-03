@@ -128,8 +128,8 @@ define(
             switch (userType)
             {
               case 'EXISTING':
-                loadMembersWithoutTeam();
                 break;
+              $scope.findMembersLoad = false;
               default:
                 console.log("the usertype of add member is new or unknown");
             };
@@ -138,25 +138,6 @@ define(
           };
 
           $scope.setUserType('NEW');
-
-          /**
-           * Load all members and filter them by the ones without a team
-           */
-          var loadMembersWithoutTeam = function()
-          {
-            $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
-            $scope.membersWithoutTeamLoad = true;
-
-            Teams.updateMembersLocal()
-              .then(
-              function(members)
-              {
-                $scope.membersWithoutTeam = members;//$filter('membersWithoutTeam')(members);
-                $rootScope.statusBar.off();
-                $scope.membersWithoutTeamLoad = false;
-              }
-            );
-          };
 
           $scope.requestTeam = function (current, switched)
           {
@@ -741,6 +722,8 @@ define(
 
           $scope.searchMember = function(name)
           {
+            console.log('123');
+
             if(_.isEmpty(name))
             {
               $rootScope.notifier.error($rootScope.ui.validation.search.notValid);
@@ -748,14 +731,12 @@ define(
             }
             else
             {
-              console.log(name);
-
               $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
-              $scope.membersWithoutTeamLoad = true;
+              $scope.findMembersLoad = true;
 
               TeamUp._(
                 'findMembers',
-                {name: name}
+                {query: name}
               ).then(
                 function (result)
                 {
@@ -767,7 +748,7 @@ define(
                   {
                     $scope.membersWithoutTeam = result;
                     $rootScope.statusBar.off();
-                    $scope.membersWithoutTeamLoad = false;
+                    $scope.findMembersLoad = false;
                   }
                 }
               );
