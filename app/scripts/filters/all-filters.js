@@ -33,6 +33,7 @@ define(
     );
 
     /**
+     * TODO what if there are a single or two values
      * Filter false and null values and join it into a string
      * comma seperated, the ending is between all values and the last one
      * example: $filter('commaSeperatedWithEnding')(['hen', 'Henk', 'Henkieee'], 'en'); //hen, Henk en Henkieee
@@ -50,6 +51,36 @@ define(
             return  _arr.join(', ') + ' ' + ending + ' ' + last;
           }
         }
+    );
+
+    /**
+     * Add teamname by a teamid
+     */
+    filters.filter
+    (
+      'getTeamNameById',
+      function ($rootScope, Store, $filter)
+      {
+        return function (teamsUuids)
+        {
+          var teamNames = Store('app').get('teams'),
+              userTeams = [];
+
+          if(teamsUuids.length)
+          {
+            _.each(teamsUuids, function (teamId)
+            {
+              var team = _.findWhere(teamNames, {uuid: teamId});
+              userTeams.push(
+                team && team.name || $rootScope.ui.teamup.noTeamNameFound
+              );
+            });
+          }
+
+          return  userTeams.length && $filter('commaSeperated')(userTeams)
+                    || $rootScope.ui.teamup.noTeam;
+        }
+      }
     );
 
     filters.filter

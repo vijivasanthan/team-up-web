@@ -23,6 +23,9 @@ define(
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
                   TeamUp, $timeout, MD5, Profile, $filter)
         {
+          //var test = $filter('getTeamNameById')(['87c82206-8193-454b-a455-81cfb076f39d_team', '87c82206-8193-454b-a455-81cfb076f39d_team']);
+          //
+          //  console.log('test', test);
           $rootScope.fixStyles();
 
           //TODO get this from a service
@@ -151,7 +154,7 @@ define(
               .then(
               function(members)
               {
-                $scope.membersWithoutTeam = $filter('membersWithoutTeam')(members);
+                $scope.membersWithoutTeam = members;//$filter('membersWithoutTeam')(members);
                 $rootScope.statusBar.off();
                 $scope.membersWithoutTeamLoad = false;
               }
