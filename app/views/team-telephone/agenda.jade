@@ -17,7 +17,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 					div#timeline-toolbar
 						select.form-control.pull-left(ng-hide='app.resources.role > 1',
 							ng-model='timeline.current.group',
-							ng-options='group.uuid as group.name for group in groups',
+							ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 							ng-selected='timeline.current.group',
 							ng-change='requestTimeline()',
 							ng-show='timeline.current.layouts.group && app.resources.role == 0')

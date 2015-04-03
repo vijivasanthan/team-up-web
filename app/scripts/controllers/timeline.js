@@ -17,7 +17,8 @@ define(
         'TeamUp',
         'Store',
         'Teams',
-        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store, Teams)
+        'moment',
+        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store, Teams, moment)
         {
           var range, diff;
 

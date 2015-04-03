@@ -92,7 +92,7 @@ define(
                       },
                       error: function (event, statusText, responseText, form)
                       {
-                        //$form.removeAttr('action');
+                        $form.removeAttr('action');
                       },
                       success: function ()
                       {

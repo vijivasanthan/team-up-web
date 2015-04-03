@@ -36,13 +36,16 @@ define(
             {
               result = config.app.stateColors.availalbe;
               if(stateValues.indexOf('on_the_phone') >= 0
-                || stateValues.indexOf('not_reachable') >= 0
-                || stateValues.indexOf('unreachable') >= 0)
+                || stateValues.indexOf('UNREACHABLE') >= 0
+                || stateValues.indexOf('NOT_REACHABLE') >= 0)
               {
                 result = config.app.stateColors.busy;
               }
             }
-            else if (stateValues.indexOf('unavailable') >= 0 || stateValues.indexOf('working') >= 0)
+            else if (stateValues.indexOf('unavailable') >= 0
+              || stateValues.indexOf('working') >= 0
+              || stateValues.indexOf('UNREACHABLE') >= 0
+              || stateValues.indexOf('NOT_REACHABLE') >= 0)
             {
               result = config.app.stateColors.busy;
             }
@@ -60,33 +63,41 @@ define(
     filters.filter(
       'membersWithoutTeam',
       [
-        'Store',
-        function (Store)
+        function ()
         {
-          return function(membersHasTeam)
+          return function(allMembers)
           {
-            var allMembers = Store('app').get('members'),
-                membersInTeam = _.filter(membersHasTeam,
-                  function(members)
-                  {
-                    return members;
-                  }
-                );
-            //filter members of the team arrays
-            membersInTeam = _.flatten(membersInTeam);
+            var membersWithoutTeams = null;
 
-            //difference between users in team and without
-            var difference = _.difference(
-              _.pluck(allMembers, 'uuid'),
-              _.pluck(membersInTeam, 'uuid')
-            );
+            if(allMembers)
+            {
+              membersWithoutTeams = _.filter(allMembers, function(member) {
+                return (! member.teamUuids.length) ? member : '';
+              });
+            }
 
-            return _.filter(allMembers,
-              function(obj)
+            return membersWithoutTeams;
+          };
+        }
+      ]
+    );
+
+    filters.filter(
+      'membersInTeam',
+      [
+        function ()
+        {
+          return function(allMembers)
+          {
+            if(allMembers)
+            {
+              return _.filter(allMembers, function(member)
               {
-                return difference.indexOf(obj.uuid) >= 0;
-              }
-            );
+                //console.log('member', member);
+
+                return (member.teamUuids.length) ? member : '';
+              });
+            }
           };
         }
       ]
@@ -154,6 +165,46 @@ define(
             );
 
             return userRole;
+          }
+        }
+      ]
+    );
+
+    /**
+     * Translate the status of the logs
+     */
+    filters.filter(
+      'translateStatusLogs',
+      [
+        '$rootScope',
+        function ($rootScope)
+        {
+          return function (status)
+          {
+            var translatedStatus = null;
+
+            switch(status)
+            {
+              case 'SENT':
+                translatedStatus = $rootScope.ui.logs.status.sent;
+                break;
+              case 'RECEIVED':
+                translatedStatus = $rootScope.ui.logs.status.received;
+                break;
+              case 'FINISHED':
+                translatedStatus = $rootScope.ui.logs.status.finished;
+                break;
+              case 'DELIVERED':
+                translatedStatus = $rootScope.ui.logs.status.delivered;
+                break;
+              case 'MISSED':
+                translatedStatus = $rootScope.ui.logs.status.missed;
+                break;
+              default:
+                console.log("the status of the log isn't found-> ", status);
+            }
+
+            return translatedStatus.toUpperCase();
           }
         }
       ]

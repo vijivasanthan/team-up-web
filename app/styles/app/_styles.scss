@@ -103,7 +103,7 @@ dl {
 //TODO show scrollbar in the content even if the modal is shown
 //bug in angular if you change location without hiding the modal the scrollbar will never be shown again
 .modal-open {
-  overflow: auto;
+  overflow: hidden;
 }
 
 .modal-body {

@@ -21,8 +21,9 @@ define(
         'Slots',
         'data',
         'ipCookie',
+        'moment',
         function ($rootScope, $scope, $q, $window, $location, Dater, $timeout, Store,
-                  Teams, Clients, TeamUp, Session, Slots, data, ipCookie)
+                  Teams, Clients, TeamUp, Session, Slots, data, ipCookie, moment)
         {
           $rootScope.notification.status = false;
 

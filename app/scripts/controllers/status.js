@@ -4,18 +4,7 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'status',
-    [
-      '$scope',
-      '$rootScope',
-      '$q',
-      '$window',
-      '$location',
-      'Slots',
-      'Teams',
-      '$timeout',
-      'Store',
-      'data',
-      function ($scope, $rootScope, $q, $window, $location, Slots, Teams, $timeout, Store, data)
+      function ($scope, $rootScope, $q, Slots, Store, data)
       {
         $rootScope.notification.status = false;
 
@@ -227,17 +216,6 @@ define(['controllers/controllers'], function (controllers)
         };
 
         $scope.getGroupReachability();
-
-        $scope.setPrefixedReachability = function (reachability, period)
-        {
-          Store('environment').save('setPrefixedReachability', {
-            reachability: reachability,
-            period: period
-          });
-
-          $location.path('/planboard').search({setPrefixedReachability: true});
-        }
       }
-    ]
   );
 });

@@ -19,9 +19,11 @@ define(
         'TeamUp',
         '$timeout',
         'Permission',
+        '$injector',
         function ($rootScope, $scope, $location, Clients, $route,
-                  $routeParams, Store, Teams, $window, data, TeamUp, $timeout, Permission)
+                  $routeParams, Store, Teams, $window, data, TeamUp, $timeout, Permission, $injector)
         {
+          $rootScope.fixStyles();
           function loadData (data)
           {
             // console.log('loading data -> ', new Date());
@@ -205,10 +207,7 @@ define(
 
           if(! $rootScope.app.resources.teamUuids.length)
           {
-            $rootScope.notifier.error(
-              'Het lijkt erop dat je niet in een team zit. Wijs jezelf toe aan een team',
-              true
-            );
+            $rootScope.infoUserWithoutTeam();
           }
 
           // TODO: Repetitive code
@@ -710,45 +709,21 @@ define(
               .then(
               function ()
               {
+                var Profile = $injector.get('Profile');
+                Profile.fetchUserData($rootScope.app.resources.uuid)
+                  .then(
+                    function(userData)
+                    {
+                      if(currentUserTeams.length != userData.teamUuids.length)
+                      {
+                        Permission.getAccess();
+                      }
+                    }
+                );
+
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
 
-                console.log('123', $rootScope.app.resources.teamUuids);
-
-                //Check if logged user had no teams, if there are by now renew accesslist
-                if(currentUserTeams.length != $rootScope.app.resources.teamUuids)
-                {
-                  console.log('access');
-                  //update localStorage
-                  Permission.getAccess();
-                }
-
-                // TeamUp._('teamMemberFree')
-                //   .then(
-                //   function (result)
-                //   {
-                //     // Store('app').save('members', result);
-
-                //     $rootScope.statusBar.off();
-
                 $timeout(function () { $route.reload() }, 250);
-                //     //                    $timeout(
-                //     //                      function ()
-                //     //                      {
-                //     //                        $route.reload();
-                //     //                        $timeout(
-                //     //                          function ()
-                //     //                          {
-                //     //                            $location.path('/manage').hash('teams');
-                //     //                          },
-                //     //                          250
-                //     //                        );
-                //     //                      },
-                //     //                      150
-                //     //                    );
-                //   },
-                //   function (error) { console.log(error) });
-
-
               }
             );
           };

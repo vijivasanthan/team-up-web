@@ -7,8 +7,8 @@ define(
     services.factory(
       'Teams',
       [
-        '$resource', '$q', 'Store', '$rootScope', 'TeamUp',
-        function ($resource, $q, Store, $rootScope, TeamUp)
+        '$resource', '$q', 'Store', '$rootScope', 'TeamUp', '$injector',
+        function ($resource, $q, Store, $rootScope, TeamUp, $injector)
         {
           var TeamsService = $resource();
 
@@ -80,12 +80,14 @@ define(
 
           TeamsService.prototype.updateMembersLocal = function ()
           {
-            return TeamUp._('teamMemberFree')
+            return TeamUp._('allTeamMembers')
               .then(
               function (result)
               {
                 Store('app').save('members', result);
-              },
+
+                return result;
+              }.bind(this),
               function (error)
               {
                 console.log(error)
@@ -105,7 +107,7 @@ define(
               data.teams,
               function (team)
               {
-                data.members[team.uuid] = Store('app').get(team.uuid)
+                data.members[team.uuid] = Store('app').get(team.uuid);
               }
             );
 
@@ -161,28 +163,30 @@ define(
 
             $q.all(calls)
               .then(
-              (function (results)
-              {
-                angular.forEach(
-                  teams,
-                  (function (team)
-                  {
-                    data.teams = teams;
+              (
+                function (results)
+                {
+                  angular.forEach(
+                    teams,
+                    (function (team)
+                    {
+                      data.teams = teams;
 
-                    data.groups[team.uuid] = [];
+                      data.groups[team.uuid] = [];
 
-                    angular.forEach(
-                      results,
-                      function (result)
-                      {
-                        data.groups[team.uuid] = result.data
-                      }
-                    );
-                  }).bind(results)
-                );
+                      angular.forEach(
+                        results,
+                        function (result)
+                        {
+                          data.groups[team.uuid] = result.data
+                        }
+                      );
+                    }).bind(results)
+                  );
 
-                deferred.resolve(data);
-              }).bind(data)
+                  deferred.resolve(data);
+                }
+              ).bind(data)
             );
 
             return deferred.promise;
@@ -273,7 +277,6 @@ define(
               {
                 if (change.a.length > 0 && change.r.length == 0)
                 {
-                  console.log('change.a', change.a);
                   calls.push(
                     TeamUp._(
                       'teamMemberAdd',
@@ -319,14 +322,7 @@ define(
                   changes,
                   function (change, teamId)
                   {
-                    // queryCalls.push(
-                    //   TeamUp._(
-                    //     'teamStatusQuery',
-                    //     { third: teamId }
-                    //   )
-                    // );
                     var routeParam = {uuid: teamId};
-                    TeamsService.prototype.checkLoggedUserTeamsLocal(change, teamId);
                     queryCalls.push(TeamsService.prototype.query(false, routeParam));
                   }
                 );
@@ -347,85 +343,70 @@ define(
            * @param changedUsers
            * @param teamId
            */
-          //TODO remove this one if the userobject in the backend is up to date
-          TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
-          {
-            angular.forEach(changedUsers, function (user)
-            {
-              console.log('changedUsers', changedUsers);
-              console.log('user', user);
-              console.log('$rootScope.app.resources.uuid', $rootScope.app.resources.uuid);
-              if (user == $rootScope.app.resources.uuid)
-              {
-                var userResources = Store('app').get('resources'),
-                  indexTeam = userResources.teamUuids.indexOf(teamId);
+          //TeamsService.prototype.checkLoggedUserTeamsLocal = function (changedUsers, teamId)
+          //{
+          //  angular.forEach(changedUsers, function (user)
+          //  {
+          //    console.log('changedUsers', changedUsers);
+          //    console.log('user', user);
+          //    console.log('$rootScope.app.resources.uuid', $rootScope.app.resources.uuid);
+          //    if (user == $rootScope.app.resources.uuid)
+          //    {
+          //      var userResources = Store('app').get('resources'),
+          //        indexTeam = userResources.teamUuids.indexOf(teamId);
+          //
+          //      (indexTeam < 0)
+          //        ? userResources.teamUuids.push(teamId)
+          //        : userResources.teamUuids.splice(indexTeam, 1);
+          //
+          //      Store('app').save('resources', userResources);
+          //      $rootScope.app.resources = userResources;
+          //      console.log('manage teams', userResources.teamUuids);
+          //      return;
+          //    }
+          //  });
+          //};
 
-                (indexTeam < 0)
-                  ? userResources.teamUuids.push(teamId)
-                  : userResources.teamUuids.splice(indexTeam, 1);
-
-                Store('app').save('resources', userResources);
-                $rootScope.app.resources = userResources;
-                console.log('manage teams', userResources.teamUuids);
-                return;
-              }
-            });
-          };
-
-          TeamsService.prototype.removeAllTeamsFromMember = function(userId, userTeams)
+          TeamsService.prototype.removeAllTeamsFromMember = function(user)
           {
             var deferred = $q.defer(),
-                teams = $rootScope.getTeamsofMembers(userId);
+                changes = {};
 
-            _.each(teams, function(team)
-            {
-
-              TeamUp._(
-                'teamMemberDelete',
-                {second: team.uuid},
-                {ids: [userId]}
-              ).then(
-                function (result)
-                {
-                  angular.forEach(userTeams, function (teamId, i)
-                  {
-                    if (team.uuid == teamId)
-                    {
-                      this.query(
-                        false,
-                        {'uuid': teamId}
-                      ).then(
-                        function ()
-                        {
-                          $rootScope.statusBar.off();
-                        }
-                      );
-
-                      userTeams.splice(i, 1);
-                      sessionStorage.removeItem(userId + '_team');
-                      this.updateMembersLocal();
-                    }
-                  });
-                }.bind(this),
-                function (error)
-                {
-                  console.log(error);
-                }
-              );
+            _.each(user.teamUuids, function(teamId) {
+              changes[teamId] = {
+                a: [],
+                r: [user.uuid]
+              };
             });
 
-            //update list of members
-            TeamUp._('teamMemberFree')
-              .then
-            (
-              function (result)
+            TeamsService.prototype.manage(changes)
+              .then(
+              function()
               {
-                Store('app').save('members', result);
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                console.log(error)
+                var loggedUser = {
+                  viewingUserhasTeam: true
+                };
+
+                if(user.uuid == $rootScope.app.resources.uuid)
+                {
+                  var Profile = $injector.get('Profile');
+
+                  Profile.fetchUserData($rootScope.app.resources.uuid)
+                    .then(
+                    function(userData)
+                    {
+                      if(! userData.length)
+                      {
+                        loggedUser.viewingUserhasTeam = false;
+                        deferred.resolve(loggedUser);
+                      }
+                    }
+                  );
+                }
+                else
+                {
+                  deferred.resolve(loggedUser);
+                }
               }
             );
 
@@ -529,6 +510,76 @@ define(
                   });
               }
             );
+
+            return deferred.promise;
+          };
+
+          /**
+           * Update all members list locally
+           * @param member updated userObject
+           * @returns {*} updated list of all users
+           */
+          TeamsService.prototype.updateMember = function(member)
+          {
+            var allMembers = Store('app').get('members'),
+                indexMember = _.findIndex(allMembers, {uuid: member.uuid});
+
+            allMembers[indexMember] = member;
+
+            Store('app').save('members', allMembers);
+
+            console.log('user', (Store('app').get('members'))[54]);
+
+            return allMembers;
+          };
+
+          /**
+           * Filter all members by team
+           * @returns {*}
+           */
+          TeamsService.prototype.filterAllMembers = function()
+          {
+            var deferred = $q.defer(),
+                membersInTeam = Store('app').get('members'),
+                filterMembersInTeam = function (members)
+                {
+                  var filter = $injector.get('$filter'),
+                      membersInTeam = filter('membersInTeam')(members),
+                      filteredTeamMembers = {};
+
+                  _.each(membersInTeam, function(member) {
+                      _.each(member.teamUuids, function(teamUuid) {
+                          filteredTeamMembers[teamUuid] = filteredTeamMembers[teamUuid] || {};
+                          filteredTeamMembers[teamUuid][member.uuid] = member;
+                      });
+                  });
+
+                  //TODO this need to be fixed in the backend
+                  //Check if the teams of the member exist, the team could be deleted, while the userobject
+                  //is not updated
+                  var filteredTeamsUuids = _.keys(filteredTeamMembers),
+                      allTeamsUuids = _.pluck(Store('app').get('teams'), 'uuid'),
+                      existingTeams = _.intersection(allTeamsUuids, filteredTeamsUuids);
+
+                  return _.pick(filteredTeamMembers, existingTeams);
+                };
+
+            if(membersInTeam.length)
+            {
+              membersInTeam = filterMembersInTeam(membersInTeam);
+              deferred.resolve(membersInTeam);
+            }
+            else
+            {
+              TeamsService.prototype.updateMembersLocal()
+                .then(
+                  function(members)
+                  {
+                    membersInTeam = filterMembersInTeam(members);
+                    deferred.resolve(membersInTeam);
+                  }
+              );
+            }
 
             return deferred.promise;
           };

@@ -69,10 +69,6 @@ define(['services/services', 'config'], function (services, config) {
             if (userId == $rootScope.app.resources.uuid)
             {
               $rootScope.app.resources = result;
-
-              var currentTeams = $rootScope.getTeamsofMembers($rootScope.app.resources.uuid);
-              $rootScope.app.resources.teamUuids = _.pluck(currentTeams, 'uuid');
-
               Store('app').save('resources', $rootScope.app.resources);
             }
 

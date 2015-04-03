@@ -30,17 +30,17 @@ define(['services/services', 'config'],
                   params: {}
                 }
               }
-          ),//Only for test purposes
-          profile = {
-            teams: true,
-            clients: true,
-            tasks: true,
-            clientReports: true,
-            teamTelephone: true,
-            chat: false
-          };
+            ),//Only for test purposes
+            profile = {
+              teams: true,
+              clients: true,
+              tasks: true,
+              clientReports: true,
+              teamTelephone: true,
+              chat: false
+            };
 
-          Permission.prototype.getDefaultProfile = function()
+          Permission.prototype.getDefaultProfile = function ()
           {
             var deferred = $q.defer();
 
@@ -49,7 +49,8 @@ define(['services/services', 'config'],
               {
                 deferred.resolve(response.data);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               });
 
@@ -57,15 +58,17 @@ define(['services/services', 'config'],
           };
 
           //For testpurposes only
-          Permission.prototype.saveDefaultProfile = function()
+          Permission.prototype.saveDefaultProfile = function ()
           {
             var deferred = $q.defer();
 
             Permission.save(profile,
-              function (result) {
+              function (result)
+              {
                 deferred.resolve(result);
               },
-              function (error) {
+              function (error)
+              {
                 deferred.resolve({error: error});
               });
 
@@ -73,12 +76,13 @@ define(['services/services', 'config'],
           };
 
           //TODO not nessesary anymore
-          Permission.prototype.checkPermission = function(accessNode)
+          Permission.prototype.checkPermission = function (accessNode)
           {
             var profile = Store('app').get('permissionProfile');
 
-            _.filter(profile, function(valAccess, keyNode) {
-              if(keyNode == accessNode)
+            _.filter(profile, function (valAccess, keyNode)
+            {
+              if (keyNode == accessNode)
               {
                 return valAccess;
               }
@@ -88,54 +92,54 @@ define(['services/services', 'config'],
           /**
            * Checks the where the user has access to
            */
-          Permission.prototype.getAccess = function()
+          Permission.prototype.getAccess = function ()
           {
             this.getDefaultProfile()
               .then(
-                function(permissionProfile)
+              function (permissionProfile)
+              {
+                var permission = permissionProfile,
+                  accessList = {};
+
+                if ($rootScope.app.resources.teamUuids.length)
                 {
-                  var permission = permissionProfile,
-                      accessList = {};
-
-                  if($rootScope.app.resources.teamUuids.length)
+                  _.each(permissionProfile, function (val, key)
                   {
-                    _.each(permissionProfile, function(val, key)
+                    if (val == false)
                     {
-                      if(val == false)
-                      {
-                        delete permission[key];
-                      }
-                    });
+                      delete permission[key];
+                    }
+                  });
 
-                    accessList = permission;
-                  }
-                  else
-                  {
-                    _.each(permissionProfile, function(val, key)
-                    {
-                      permission[key] = false;
-                    });
-                  }
-
-                  Store('app').save('permissionProfile', permission);
-                  $rootScope.app.domainPermission = permission;
-
-                  permissionLocation(accessList);
+                  accessList = permission;
                 }
-              );
+                else
+                {
+                  _.each(permissionProfile, function (val, key)
+                  {
+                    permission[key] = false;
+                  });
+                }
+
+                Store('app').save('permissionProfile', permission);
+                $rootScope.app.domainPermission = permission;
+
+                permissionLocation(accessList);
+              }
+            );
           };
 
           /**
            * Redirect the user to location of the permission
            * @param permissionProfile
            */
-          var permissionLocation = function(permissionProfile)
+          var permissionLocation = function (permissionProfile)
           {
-            if(_.has(permissionProfile, 'tasks'))
+            if (_.has(permissionProfile, 'tasks'))
             {
               $location.path('/tasks2').hash('myTasks');
             }
-            else if(_.has(permissionProfile, 'teamTelephone'))
+            else if (_.has(permissionProfile, 'teamTelephone'))
             {
               $location.path('/team-telefoon/status').hash('');
             }
@@ -144,15 +148,17 @@ define(['services/services', 'config'],
               ($rootScope.app.resources.role > 1)
                 ? $location.path('/profile/' + $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile')
                 : $location.path('/manage').search({}).hash('teams');
+
+              $rootScope.infoUserWithoutTeam();
             }
           };
 
-          Permission.prototype.getUnFiltered = function()
+          Permission.prototype.getUnFiltered = function ()
           {
             return profile;
           };
 
-          Permission.prototype.setUnfiltered = function(newProfile)
+          Permission.prototype.setUnfiltered = function (newProfile)
           {
             profile = newProfile;
           };

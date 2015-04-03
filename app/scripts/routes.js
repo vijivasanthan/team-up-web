@@ -14,7 +14,6 @@ define(
             "$exceptionHandler",
             [
               "$delegate",
-              "$window",
               function($delegate)
               {
                 return function (exception, cause)
@@ -90,9 +89,10 @@ define(
                   'Teams', '$route',
                   function (Teams, $route)
                   {
-                    return ($route.current.params.local && $route.current.params.local == 'true') ?
-                           Teams.queryLocal() :
-                           Teams.query(false, $route.current.params);
+
+                    return ($route.current.params.local && $route.current.params.local == 'true')
+                      ? Teams.queryLocal()
+                      : Teams.query(false, $route.current.params);
                   }
                 ]
               }
@@ -114,29 +114,6 @@ define(
                            Clients.query(false, $route.current.params);
                   }
                 ]
-              }
-            })
-
-            //TODO make it work so u could redirect to edit a task
-            .when(
-            '/editTask/:taskId',
-            {
-              templateUrl: 'views/tasks2.html',
-              controller: 'tasks2Ctrl',
-              reloadOnSearch: false,
-              resolve: {
-              //  data: [
-              //    '$rootScope', '$route', '$location', 'Task',
-              //    function ($rootScope, $route, $location, Task)
-              //    {
-              //      //angular.element('.navbar .tasks2').addClass('active');
-              //      $location.hash('editTask');
-              //      return Task.getId($route.current.params.taskId);
-              //
-              //
-              //      //return { taskId: $route.current.params.taskId };
-              //    }
-              //  ]
               }
             })
 
@@ -301,56 +278,13 @@ define(
             '/team-telefoon/logs',
             {
               templateUrl: 'views/team-telephone/logs.html',
-              controller: 'logs',
+              controller: 'logs as logs',
               resolve: {
                 data: function(Logs)
                 {
                   removeActiveClass('.teamMenu');
 
-                  //var deferred = $q.defer(),
-                  //    teams = Store('app').get('teams'),
-                  //    adapterCalls = [];
-                  ////TODO give every team agent a adapterId
-                  //_.each(teams, function(team)
-                  //{
-                  //  var call = $q.defer();
-                  //  adapterCalls.push(call.promise);
-                  //
-                  //  TeamUp._('teamPhone',
-                  //  {second: team.uuid})
-                  //    .then(
-                  //      function(result)
-                  //      {
-                  //        call.resolve({
-                  //              name: team.name,
-                  //              teamId: team.uuid,
-                  //              adapterId: result.adapter
-                  //            });
-                  //      }
-                  //    );
-                  //});
-                  //
-                  //$q.all(adapterCalls)
-                  //  .then(
-                  //    function(adapters)
-                  //    {
-                  //      Logs.fetch({
-                  //        end: new Date.now().getTime(),
-                  //        start: new Date.today().addDays(- 7).getTime()
-                  //      }).then(
-                  //        function(logs)
-                  //        {
-                  //          deferred.resolve({logs: logs, teamAdapters: adapters});
-                  //        }
-                  //      );
-                  //    }
-                  //);
-                  //
-                  //return deferred.promise;
-                  return Logs.fetch({
-                    end: new Date.now().getTime(),
-                    start: new Date.today().addDays(- 7).getTime()
-                  });
+                  return Logs.fetchByTeam();
                 }
               },
               reloadOnSearch: false
@@ -398,9 +332,15 @@ define(
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
               resolve: {
-                data: function()
+                data: function(TeamUp, CurrentSelection)
                 {
                   removeActiveClass('.teamMenu');
+
+                  return TeamUp._('callOrderGet', {second: CurrentSelection.getTeamId()})
+                    .then(function (result) {
+                        return result;
+                      }
+                  );
                 }
               },
               reloadOnSearch: false

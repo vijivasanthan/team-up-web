@@ -5,63 +5,62 @@ define(
     'use strict';
 
     controllers.controller(
-      'order', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        'Store',
-        'Teams',
-        'TeamUp',
-        function ($rootScope, $scope, $location, Store, Teams, TeamUp)
+      'order',
+        function ($rootScope, $scope, $location, Store, Teams, TeamUp, data, CurrentSelection)
         {
           $rootScope.fixStyles();
 
           var teamsLocal = Teams.queryLocal(),
             view,
-            tempOrder = [];
-
-          $scope.orderedMembers = [];
-          $scope.orderType = '';
-          //$scope.current = {
-          //  group: teamsLocal.teams[0].uuid
-          //};
-
-          var showOrder = function (orderArray)
-          {
-            console.log('123', 123);
-
-            var members = teamsLocal.members[$scope.current.group];
-            var orderedMembers = [];
-
-            _.each(members, function (member)
+            tempOrder = [],
+            showOrder = function (orderArray)
             {
-              _.each(orderArray, function (uuid, key)
+              var members = teamsLocal.members[$scope.current.group];
+              var orderedMembers = [];
+
+              _.each(members, function (member)
               {
-
-                if (member.uuid === uuid)
+                _.each(orderArray, function (uuid, key)
                 {
-                  if (member.phone)
-                  {
-                    $rootScope.parsePhoneNumber(member.phone);
 
-                    if ($rootScope.phoneNumberParsed.result === true)
+                  if (member.uuid === uuid)
+                  {
+                    if (member.phone)
                     {
-                      member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
+                      $rootScope.parsePhoneNumber(member.phone);
+
+                      if ($rootScope.phoneNumberParsed.result === true)
+                      {
+                        member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
+                      }
                     }
+
+                    member.originalPosition = key;
+                    orderedMembers[key] = member;
                   }
 
-                  member.originalPosition = key;
-                  orderedMembers[key] = member;
-                }
-
+                });
               });
-            });
 
-            tempOrder = orderedMembers;
-            $scope.orderedMembers = orderedMembers;
+              tempOrder = orderedMembers;
+              $scope.orderedMembers = orderedMembers;
+            };
+
+          $scope.current = {
+            group: CurrentSelection.getTeamId()
           };
 
+          $scope.orderType = data.sortBy;
+
+          showOrder(data.order);
+
           $scope.groups = teamsLocal.teams;
+
+          $scope.sortableOptions = {
+            animation: 150,
+            scroll:false,
+            draggable: 'tr'
+          };
 
           if (!$location.hash())
           {
@@ -72,16 +71,11 @@ define(
             view = $location.hash();
           }
 
-          function resetViews()
+          var setView = function (hash)
           {
             $scope.views = {
               order: false
             };
-          }
-
-          var setView = function (hash)
-          {
-            resetViews();
 
             $scope.views[hash] = true;
           };
@@ -123,17 +117,14 @@ define(
             }
           };
 
-          $scope.sortableOptions = {
-            animation: 150,
-            scroll:false,
-            draggable: 'tr'
-          };
-
           $scope.confirmOrder = function ()
           {
             var groupID = $scope.current.group;
             var orderArray = [];
             var payload = {};
+
+            CurrentSelection.locals = groupID;
+
             $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
             payload.sortBy = $scope.orderType;
@@ -161,7 +152,6 @@ define(
           };
 
         }
-      ]
     );
   }
 );

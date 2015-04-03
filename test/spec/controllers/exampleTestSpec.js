@@ -47,6 +47,7 @@ define(
           $httpBackend,
           profile;
 
+
       // Initialize the controller and a mock scope
       beforeEach(
         inject
@@ -87,6 +88,7 @@ define(
       });
 
       it('should check if there is a permissionprofile', function () {
+
         var promise = testModal.getPermissionProfile(),
             jsonResponse  = {
               clientReports: true,
@@ -98,7 +100,7 @@ define(
             result = null;
 
         $httpBackend
-            .whenGET('http://dev.ask-cs.com/acl')
+            .whenGET(testConfig.host + 'acl')
             .respond(jsonResponse);
 
         promise.then(
@@ -124,11 +126,10 @@ define(
               userId = 'henkie',
               pincode = 8701,
               currentUser = true;
-              //expectedResult = 'pincode not found';
 
           $httpBackend.expect(
             'GET',
-            'http://dev.ask-cs.com/node/' + userId + '/pincode_exists' +
+            testConfig.host + 'node/' + userId + '/pincode_exists' +
              '?pincode=' + pincode + '&returnExistsWhenAssignedToUuid=' + currentUser,
             null
           ).respond(409);

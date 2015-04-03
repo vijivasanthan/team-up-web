@@ -7,8 +7,8 @@ define(
     services.factory(
       'Dater',
       [
-        '$rootScope', 'Store',
-        function ($rootScope, Store)
+        '$rootScope', 'Store', '$injector',
+        function ($rootScope, Store, $injector)
         {
           return {
             current: {
@@ -191,12 +191,16 @@ define(
             formatDate: function(date)
             {
 
+              var moment = $injector.get('moment');
+
               return moment(date)
                         .format('DD-MM-YYYY');
             },
 
             formatDateMobile: function(date)
             {
+              var moment = $injector.get('moment');
+
               return moment(this.convert.absolute(date, 0))
                         .format('YYYY-MM-DD');
             }

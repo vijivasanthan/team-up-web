@@ -4,10 +4,10 @@ section#dashboard
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-hide='app.resources.role > 1')
 			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
-			label.control-label Selecteer team
+			label.control-label {{ ui.teamup.selectTeam }}
 			.controls
 				select(ng-model='current.group',
-				ng-options='group.uuid as group.name for group in groups',
+				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 				ng-selected='current.group',
 				ng-change='getGroupReachability()')
 			
@@ -42,7 +42,8 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.reachable')
-									span.sa-member-icon(class='{{member.style}}').roundedPicSmall.sa-icon-reserve-available(back-img='{{member.id | avatar:"client":"80"}}')
+									span.sa-member-icon(class='{{member.style}}').roundedPicSmall.sa-icon-reserve-available(
+										back-img='{{member.id | avatar:"client":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile')
@@ -58,7 +59,8 @@ section#dashboard
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.unreachable',
 								ng-show='(member.state != "no-state")')
-									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-unavailable(back-img='{{member.id | avatar:"client":"80"}}')
+									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-unavailable(
+										back-img='{{member.id | avatar:"client":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
@@ -72,7 +74,7 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.possible')
-									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-noplanning(back-img='{{member.id | avatar:"client":"80"}}')
+									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-noplanning(back-img='{{member.id | avatar:"team":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
