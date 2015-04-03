@@ -300,10 +300,6 @@ input[type="submit"].btn {
   border-top: 1px solid #ddd;
 }
 
-.cancelButton {
-
-}
-
 .btn-primary-reverse {
   background-color: $brown;
   color: $orange;
@@ -322,6 +318,10 @@ input[type="submit"].btn {
       pointer-events: none;
     }
   }
+}
+
+.search-button {
+  @include border-radius(0px 15px 15px 0px !important);
 }
 
 .non-capitalize {
