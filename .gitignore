@@ -12,3 +12,4 @@ libpeerconnection.log
 dist/scripts/localConfig.js
 test-results.xml
 dist
+production/
