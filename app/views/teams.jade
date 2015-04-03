@@ -205,9 +205,9 @@ aria-hidden='true')
 									button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)')
 										span.icomoon(data-icon='',
 										aria-hidden='true')
-				span.muted.pull-right
+				span.muted.pull-right(ng-show='! membersWithoutTeamLoad')
 					small
-						i {{membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
+						i {{ membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
 			
 			form(name='teamMemberForm',
 				novalidate,
