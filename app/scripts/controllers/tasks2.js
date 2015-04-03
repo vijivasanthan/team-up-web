@@ -5,33 +5,16 @@ define(
     'use strict';
 
     controllers.controller(
-      'tasks2Ctrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        '$timeout',
-        '$filter',
-        'Store',
-        'TeamUp',
-        'Task',
-        'Teams',
-        'Clients',
-        'Dater',
+      'tasks2Ctrl',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
                   Teams, Clients, Dater)
         {
           $rootScope.fixStyles();
 
-          var view = $location.hash() || 'myTasks',
+          var view = $location.hash(),
             teamsLocal = Teams.queryLocal(),
             clientLocal = Clients.queryLocal(),
             teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
-
-          $scope.teams = teamsLocal.teams;
-
-          $scope.task = $scope.task || {
-            team: $scope.currentTeam
-          };
 
           function resetViews()
           {
@@ -139,6 +122,12 @@ define(
           };
 
           setView(view);
+
+          $scope.teams = teamsLocal.teams;
+
+          $scope.task = $scope.task || {
+            team: $scope.currentTeam
+          };
 
           /**
            * Mody a task and prepare the form with the right values
@@ -723,7 +712,6 @@ define(
           //  });
           //};
         }
-      ]
     );
   }
 );

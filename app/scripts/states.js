@@ -146,7 +146,7 @@ define(
                 break;
 
               case 'tasks2':
-                $location.path('/tasks2').search({}).hash('');
+                $location.path('/tasks2').search({}).hash('myTasks');
                 break;
 
               case 'team':

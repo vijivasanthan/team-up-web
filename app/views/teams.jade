@@ -41,7 +41,8 @@ aria-hidden='true')
 	.selectGroup(
 		ng-show='(app.resources.role == 1 && !views.newTeam)')
 		span.selectTitles
-			| {{ ui.teamup.selectTeam }}
+			strong
+				| {{ ui.teamup.selectTeam }}
 		select(current_selection='team', 
 		ng-model='current',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
@@ -178,7 +179,7 @@ aria-hidden='true')
 			hr
 			div(ng-show='userType == "EXISTING"')
 				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
-				table.table.table-striped
+				table.table.table-striped(ng-show='membersWithoutTeam.length')
 					thead
 						tr
 							th
@@ -277,11 +278,15 @@ aria-hidden='true')
 											small
 												i {{ui.profile.exampleBirthDate}}
 												
-								.form-group
+								.form-group(
+									ng-class="{'has-error' : UserNameWrong}")
 									label.control-label {{ui.profile.username}}
 									.controls
-										input.span3(type='text', ng-blur="convertUserName()"
-										ng-model='memberForm.userName')
+										input.span3.form-control(type='text', ng-change="checkUserName()", ng-blur='UserNameWrong=false',
+											ng-model='memberForm.userName')
+									p.text-danger
+										small(ng-show='UserNameWrong')
+											i {{ui.validation.userName.regex }}
 								.form-group(ng-class="{ 'has-error' : teamMemberForm.password.$invalid && !teamMemberForm.password.$pristine }")
 									label.control-label {{ui.profile.password}}
 									.controls

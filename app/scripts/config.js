@@ -1,5 +1,5 @@
-define(
-  {
+define(['profile'], function(profile){
+  return {
     app: {
       version: '@@version',
       released: '@@released',
@@ -137,15 +137,24 @@ define(
         colors: ['#415e6b', '#ba6a24', '#a0a0a0']
       },
 
-      defaults: {
-        settingsWebPaige: {
-          user: {
-            language: 'nl'
-          },
-          app: {
-            widgets: {
-              groups: {}
-            }
+      //defaults: {
+      //  settingsWebPaige: {
+      //    user: {
+      //      language: 'nl'
+      //    },
+      //    app: {
+      //      widgets: {
+      //        groups: {}
+      //      }
+      //    }
+      //  }
+      //},
+
+      settings: {
+        app: {
+          agenda: {
+            teams: ['teams'],//"none"|"teams"|"charts",
+            members: false
           }
         }
       },
@@ -187,5 +196,5 @@ define(
         );
       }
     }
-  }
-);
+  };
+});

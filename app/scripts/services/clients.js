@@ -35,6 +35,8 @@ define(
                       clientGroups,
                       function (clientGroup)
                       {
+
+                        //TODO this do not work with clients in multiple clientGroups, search in what clientGroups the client is
                         if (! routeParams.uuid || (routeParams.uuid == clientGroup.id))
                         {
                           // For each client group get the list of clients
@@ -54,6 +56,8 @@ define(
                                     [] :
                                     result
                                   );
+
+                                  console.log('clientGroup', Store('app').get(routeParams.uuid));
                                 }
                               }
                             )
@@ -360,6 +364,7 @@ define(
 
             return data;
           };
+
 
           return new ClientsService;
         }

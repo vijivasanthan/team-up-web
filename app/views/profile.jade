@@ -89,11 +89,16 @@ section#profile
 								dt {{ui.teamup.teams}}
 								dd(ng-show='! teams || teams.length == 0') Geen team geselecteerd
 								dd
-									span(ng-repeat='team in teams')
-										span(ng-hide='app.resources.role > 1')
-											a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
-										span(ng-hide = '{{((teams.length-1) == $index)}}') ,
-										span(ng-show = 'app.resources.role > 1') {{team.name}}
+									span(ng-show='teams.length == 1', ng-repeat='team in teams')
+										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+										li(ng-repeat='team in teams')
+											span
+												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									//span(ng-repeat='team in teams')
+									//		a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									//	span(ng-hide = '{{((teams.length-1) == $index)}}') ,
+									//	span(ng-show = 'app.resources.role > 1') {{team.name}}
 								dt {{ui.teamup.role}}
 								dd {{view.role|translateRole}}
 								dt E-mail
@@ -105,6 +110,10 @@ section#profile
 								//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
 								dt {{ui.profile.birthday}}
 								dd {{view.birthDate}}
+								dt {{ui.profile.userName}}
+								dd {{view.userName}}
+								dt {{ui.profile.pincode}}
+								dd {{view.pincode}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
 							.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}' class='{{view.states|stateColor}}')
 							div
@@ -113,10 +122,10 @@ section#profile
 										ng-click='editImg()',
 										ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
 										i.icon-edit
-								button.btn.btn-mini.btn-primary(type='submit',
-									ng-click='confirmModal("#confirmDeleteAvatar")',
-									ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
-									i.icon-trash
+								//button.btn.btn-mini.btn-primary(type='submit',
+								//	ng-click='confirmModal("#confirmDeleteAvatar")',
+								//	ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
+								//	i.icon-trash
 
 
 				#editTab.tab-pane(class="{{(views.edit==true) && 'active'}}")
@@ -248,7 +257,13 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[2].result')
 									small
 										i {{parsedPhoneNumbers[2].message}}
-										
+						
+						.form-group
+							label.control-label {{ui.profile.userName}}
+							.controls
+								input.span4.form-control(type='text',
+								disabled,
+								ng-model='edit.userName')
 						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
 							ng-show='(app.resources.role == 1) || (edit.uuid == app.resources.uuid)')
 							label.control-label {{ui.profile.pincode}}

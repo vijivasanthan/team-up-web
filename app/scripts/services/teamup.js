@@ -436,7 +436,7 @@ define(
                 },
                 // get all members including members which do not belong to any teams
                 // TODO: Makes a general query for members
-                teamMemberFree: {
+                allTeamMembers: {
                   method: 'GET',
                   isArray: true,
                   params: {

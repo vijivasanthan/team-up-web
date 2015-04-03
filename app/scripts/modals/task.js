@@ -13,7 +13,8 @@ define(
         '$filter',
         'Store',
         'TeamUp',
-        function ($rootScope, $resource, $q, $filter, Store, TeamUp)
+        '$injector',
+        function ($rootScope, $resource, $q, $filter, Store, TeamUp, $injector)
         {
           var Task = $resource();
 
@@ -273,7 +274,9 @@ define(
 
                 tasks = _.filter(tasks, function (task)
                 {
-                  var taskStartTime = moment(task.plannedStartVisitTime);
+                  var moment = $injector.get('moment'),
+                      taskStartTime = moment(task.plannedStartVisitTime);
+
                   return (taskStartTime.week() == weekNumber && taskStartTime.get('year') == year);
                 });
 
@@ -348,6 +351,8 @@ define(
           };
 
 
+
+
           Task.prototype.chains = function ()
           {
             var data = {},
@@ -378,6 +383,83 @@ define(
 
           };
 
+          /**
+           * Query the tasks for login user and all other unsigned task in login user's team
+           * and save it locally
+           * @param teams
+           */
+          Task.prototype.getAllByTeamLoggedUser = function(teams)
+          {
+            // query my tasks
+            TeamUp._("taskMineQuery").then(
+              function (result)
+              {
+                Store('app').save('myTasks', result)
+              }
+            );
+
+            // query unassigned tasks from each team
+            var allTasks = [];
+
+            angular.forEach(
+              teams,
+              function (team_obj)
+              {
+                TeamUp._(
+                  "taskByTeam",
+                  {fourth: team_obj.uuid}
+                ).then(
+                  function (result)
+                  {
+                    angular.forEach(
+                      result,
+                      function (taskObj)
+                      {
+                        var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
+
+                        if (foundTask == null)
+                        {
+                          allTasks.push(taskObj);
+                        }
+                      }
+                    );
+                    Store('app').save('allTasks', allTasks);
+                  }
+                );
+              }
+            );
+          };
+
+          Task.prototype.enhance = function ()
+          {
+            var taskGroups = ['myTasks', 'allTasks'];
+
+            angular.forEach(
+              taskGroups,
+              function (label)
+              {
+                var group = Store('app').get(label);
+
+                angular.forEach(
+                  group,
+                  function (task)
+                  {
+                    if (typeof(task) === 'object')
+                    {
+                      var client = $rootScope.getClientByID(task.relatedClientUuid);
+
+                      if (client != null)
+                      {
+                        task.relatedClientName = client.firstName + ' ' + client.lastName;
+                      }
+                    }
+                  }
+                );
+
+                Store('app').save(label, group);
+              }
+            );
+          };
 
           return new Task;
         }

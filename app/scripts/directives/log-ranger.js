@@ -6,15 +6,14 @@ define(
     directives.directive(
     'logRanger',
     [
-      '$rootScope',
-      function ($rootScope) {
+      '$rootScope', 'moment',
+      function ($rootScope, moment) {
         return {
           restrict: 'A',
-
-          link: function postLink (scope, element, attrs, controller)
+          link: function postLink (scope, element)
           {
             var options = {
-              startDate:      Date.today(),
+              startDate:      moment().subtract(6, 'day').toDate(),
               endDate:        Date.today(),
               format:         'DD-MM-YYYY',
               separator:      ' / ',
@@ -74,8 +73,8 @@ define(
                     $rootScope.$broadcast(
                       'getLogRange',
                       {
-                        start: start.getTime(),
-                        end: end.getTime()
+                        startTime: start.getTime(),
+                        endTime: end.getTime()
                       }
                     );
                   }

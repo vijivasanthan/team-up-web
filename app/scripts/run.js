@@ -216,6 +216,8 @@ define(
                 }
               );
             }
+
+            angular.element('body').removeClass('modal-open');
           };
 
 
@@ -261,6 +263,24 @@ define(
             member.lastName;
 
             return member;
+          };
+
+          /**
+           * Info logged user without a team
+           */
+          $rootScope.infoUserWithoutTeam = function()
+          {
+            if(! $rootScope.app.resources.teamUuids.length)
+            {
+              var info = ($rootScope.app.resources.role > 1)
+                ? $rootScope.ui.teamup.teamMemberNoTeam
+                : $rootScope.ui.teamup.coordinatorNoTeam;
+
+              $rootScope.notifier.error(
+                info,
+                true
+              );
+            }
           };
 
           // Get teams of a member
@@ -509,7 +529,7 @@ define(
               .then(
               function (result)
               {
-                if (result.error)
+                if (result && result.error)
                 {
                   console.warn('error ->', result);
                 }
@@ -523,7 +543,7 @@ define(
                     username: loginData.username
                   });
 
-                  $window.location.href = 'logout.html';
+                  $window.location.href = 'index.html';
                 }
               }
             );

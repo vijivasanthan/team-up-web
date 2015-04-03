@@ -20,9 +20,13 @@ define(
         'MD5',
         'Profile',
         '$filter',
+        '$injector',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter)
+                  TeamUp, $timeout, MD5, Profile, $filter, $injector)
         {
+          var uuid = null,
+              view = null;
+
           $rootScope.fixStyles();
 
           //TODO get this from a service
@@ -43,11 +47,6 @@ define(
 
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
-
-          $scope.membersWithoutTeam = $filter('membersWithoutTeam')($scope.data.members);
-
-          var uuid,
-            view;
 
           if (!params.uuid && !$location.hash())
           {
@@ -127,6 +126,19 @@ define(
            */
           $scope.setUserType = function(userType)
           {
+            if(userType == 'EXISTING')
+            {
+              $scope.membersWithoutTeam = $filter('membersWithoutTeam')(Store('app').get('members'));
+
+              Teams.updateMembersLocal()
+                .then(
+                function(allmembers)
+                {
+                  $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+                }
+              );
+            }
+
             $scope.userType = userType;
           };
 
@@ -523,21 +535,28 @@ define(
 
                   $scope.members = $scope.data.members[$scope.team.uuid];
 
-                  if(angular.isDefined($scope.teamMemberForm))
+                  if(angular.isDefined($scope.memberForm))
                   {
                     $rootScope.resetPhoneNumberChecker();
-                    $scope.teamMemberForm = {};
+                    $scope.memberForm.$setPristine();
+                    $scope.memberForm = {};
                   }
 
-                  Teams.updateMembersLocal()
-                    .then(
-                    function()
-                    {
-                      $scope.membersWithoutTeam = $filter('membersWithoutTeam')(data.members);
-                    }
-                  );
-
-                  $scope.setViewTo('team');
+                  if($rootScope.app.domainPermission.teamSelfManagement)
+                  {
+                    Teams.updateMembersLocal()
+                      .then(
+                      function(allmembers)
+                      {
+                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allmembers);
+                        $scope.setViewTo('team');
+                      }
+                    );
+                  }
+                  else
+                  {
+                    $scope.setViewTo('team');
+                  }
                 }
 
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -660,14 +679,36 @@ define(
             ).then(
               function ()
               {
+                $scope.data.members[$scope.current].splice(index, 1);
+
                 Teams.query(false, {'uuid': $scope.current})
                   .then(
                   function ()
                   {
-                    $scope.data.members[$scope.current].splice(index, 1);
-                    $scope.membersWithoutTeam = $filter('membersWithoutTeam')($scope.data.members);
-                    $rootScope.statusBar.off();
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    Teams.updateMembersLocal()
+                      .then(
+                      function(allMembers)
+                      {
+                        if(memberId == $rootScope.app.resources.uuid)
+                        {
+                          var resources = _.findWhere(allMembers, {uuid: $rootScope.app.resources.uuid});
+
+                          Store('app').save('resources', resources);
+                          $rootScope.app.resources = resources;
+
+                          if(! $rootScope.app.resources.teamUuids.length)
+                          {
+                            var Permission = $injector.get('Permission');
+                            Permission.getAccess();
+                          }
+                        }
+
+                        $scope.membersWithoutTeam = $filter('membersWithoutTeam')(allMembers);
+
+                        $rootScope.statusBar.off();
+                        $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                      }
+                    );
                   }
                 );
               }
@@ -706,10 +747,20 @@ define(
             }
           );
 
-          $scope.convertUserName = function ()
+          $scope.checkUserName = function ()
           {
-            $scope.memberForm.userName = angular.lowercase($scope.memberForm.userName);
-          }
+            var regUserName = /([A-Za-z0-9-_])/g,
+                matchesUserName = ($scope.memberForm.userName.match(regUserName));
+
+            if(!_.isNull(matchesUserName))
+            {
+              matchesUserName = matchesUserName.join('');
+            }
+
+            $scope.UserNameWrong = ($scope.memberForm.userName !== matchesUserName);
+            $scope.memberForm.userName = matchesUserName || '';
+
+          };
         }
       ]
     );

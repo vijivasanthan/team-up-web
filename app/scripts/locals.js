@@ -391,6 +391,8 @@ define(
           newPassRepeat: 'Herhaal nieuw wachtwoord',
           changePass: 'Wachtwoord wijzigen',
           newAvail: 'Nieuwe bereikbaarheid',
+          userName: 'Gebruikersnaam',
+          pincode: 'teamlidcode',
           // saveProfile: 'Profielinformatie opslaan...',
           refreshing: 'Profielinformatie vernieuwen...',
           dataChanged: 'Profielgegevens succesvol gewijzigd.',
@@ -452,7 +454,7 @@ define(
           dashboard: 'dashboard',
           planboard: 'agenda',
           messages: 'berichten',
-          groups: 'groepen',
+          teams: 'teams',
           profile: 'profiel',
           settings: 'instellingen'
         },
@@ -460,6 +462,7 @@ define(
           teams: 'Teams',
           selectTeam: 'Selecteer team',
           clients: 'Cliënten',
+          selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
           edit: 'Bewerk',
@@ -560,10 +563,10 @@ define(
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
             deleteProfile: 'Weet u zeker dat u het profiel wilt verwijderen?',
-            deleteMemberFromTeamTitle: 'Ontkoppel de gebruiker van het team',
-            deleteMemberFromTeam: 'Weet u zeker dat u de gebruiker van het team wilt ontkoppelen',
-            deleteMemberTitle: 'Verwijderen lid',
-            deleteMember: 'Weet u zeker dat u het lid wilt verwijderen?',
+            deleteMemberFromTeamTitle: 'Verwijder het lid uit alle teams',
+            deleteMemberFromTeam: 'Weet u zeker dat u het lid uit alle teams wilt verwijderen? Let op: iemand die niet in een team zit, kan TeamUp niet gebruiken. ',
+            deleteMemberTitle: 'Verwijderen teamlid',
+            deleteMember: 'Weet u zeker dat u het teamlid van het team wil verwijderen?',
             deleteClientGroupTitle: 'Verwijder cliëntengroep',
             deleteClientGroup: 'Weet u zeker dat u deze cliëntengroep wilt verwijderen? Het kan even duren.',
             deleteTeamTitle: 'Verwijderen team',
@@ -678,7 +681,14 @@ define(
           orderSaved: 'Volgorde opgeslagen'
         },
         logs: {
-          loadLogs: 'Logs laden...'
+          loadLogs: 'Logs laden...',
+          status: {
+            sent: 'Uitgaand',
+            received: 'Inkomend',
+            finished: 'Afgerond',
+            missed: 'Gemist',
+            delivered: 'Ontvangen'
+          }
         },
         validation: {
           phone: {
@@ -714,6 +724,10 @@ define(
           },
           birthDate: {
             notValid: 'Voer een valide geboortedatum in!'
+          },
+          userName: {
+            regex: 'De gebruikersnaam mag alleen uit alphanummerieke tekens bestaan, inclusief streepjes en onderstreepjes',
+            valid: 'Een gebruikersnaam is vereist'
           }
         }
       }

@@ -22,9 +22,13 @@ define(
         'TeamUp',
         '$timeout',
         'Reports',
+        'moment',
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Reports)
+                  $filter, $modal, TeamUp, $timeout, Reports, moment)
         {
+          //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
+          //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
+
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
 
@@ -42,8 +46,23 @@ define(
               data.clientGroups,
               function (clientGroup)
               {
-                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+                //var client = _.findWhere(Store('app').get(clientGroup.id), {uuid: data.clientId});
+                //
+                //if (! _.isUndefined(client))
+                //{
+                //  console.log('clientGroup.id', clientGroup.id);
+                //
+                //  $scope.client = client;
+                //  $scope.contacts = client.contacts;
+                //
+                //  console.log('client', $scope.contacts);
+                //
+                //  client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
+                //  $scope.clientmeta = client;
+                //  clientHasClientGroup = true;
+                //}
 
+                //TODO this works only with one clientGroup per client
                 angular.forEach(
                   data.clients[clientGroup.id],
                   function (client)
@@ -509,7 +528,7 @@ define(
           // TODO: design a way to save the contact directly
           $scope.changeContacts = function (contactIndex)
           {
-            if (typeof $scope.contactForm == 'undefined' || $scope.contactForm.func == ''
+            if (_.isUndefined($scope.contactForm) || $scope.contactForm.func == ''
               || $scope.contactForm.name != null)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt2);
@@ -531,16 +550,11 @@ define(
             if (!_.isNumber(contactIndex))
             {
               var contactPerson = {
-                firstName: '',
-                lastName: '',
-                function: '',
-                phone: ''
+                firstName: $scope.contactForm.firstName,
+                lastName: $scope.contactForm.lastName,
+                function: $scope.contactForm.function,
+                phone: $scope.contactForm.phone
               };
-
-              contactPerson.firstName = $scope.contactForm.firstName;
-              contactPerson.lastName = $scope.contactForm.lastName;
-              contactPerson.function = $scope.contactForm.function;
-              contactPerson.phone = $scope.contactForm.phone;
 
               if (typeof $scope.contacts == 'undefined')
               {
@@ -720,6 +734,13 @@ define(
             client.contacts = contacts;
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingContacts);
+
+            //var currentClientGroup = Store('app').get($route.current.params.uuid),
+            //    clientIndex = _.findIndex(currentClientGroup, {uuid: client.uuid});
+            //
+            //currentClientGroup[clientIndex] = client;
+            //
+            //Store('app').save($route.current.params.uuid, currentClientGroup);
 
             TeamUp._(
               'clientUpdate',
