@@ -29,12 +29,32 @@ aria-hidden='true')
 					span.sr-only Close
 				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}}
 			.modal-body
-				| {{ui.teamup.confirms.deleteMember}}
+				| {{ui.teamup.confirms.deleteMemberTitle}}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
 				ng-click='deleteMember(currentMember)') {{ui.teamup.confirms.remove}}
+				
+#confirmMemberAdd.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmMemberAddModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
+			.modal-body
+				| Wilt u {{ member.firstName }} {{ member.lastName }} lid maken van dit team? 
+				| Deze persoon maakt dan niet langer deel uit van het andere team.
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='addExistingUserMember(member)') Wijzigen
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
@@ -190,7 +210,7 @@ aria-hidden='true')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
-				p(ng-show='! findMemberSubmit || memberValue.length == 0') {{ ui.teamup.searchMembers }}
+				p(ng-show='! memberValue.length || ! findMemberSubmit') {{ ui.teamup.searchMembers }}
 				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }} '{{memberValue}}'
 				p(ng-show='membersWithoutTeam.length == 0 && ! findMembersLoad && memberValue.length > 0') {{ui.teamup.noMembersFound}} '{{memberValue}}'
 				table.table.table-striped(ng-show='membersWithoutTeam.length && ! findMembersLoad')
@@ -214,7 +234,7 @@ aria-hidden='true')
 							td
 								| {{ member.teamUuids | getTeamNameById }}
 							td
-								button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)', 
+								button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)', 
 									ng-hide='member.teamUuids.indexOf(current) >= 0')
 									span.icomoon(data-icon='',
 									aria-hidden='true')

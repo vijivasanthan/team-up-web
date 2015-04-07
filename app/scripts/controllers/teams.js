@@ -478,6 +478,8 @@ define(
 
           $scope.addExistingUserMember = function(member)
           {
+            angular.element('#confirmMemberAdd').modal('hide');
+
             if(angular.isDefined($scope.membersWithoutTeam))
             {
               var index = $scope.membersWithoutTeam.indexOf(member);
@@ -752,6 +754,26 @@ define(
                   }
                 }
               );
+            }
+          };
+
+          $scope.confirmAddTeamMember = function (member)
+          {
+            $scope.member = {};
+
+            if(member.teamUuids.length > 0)
+            {
+              $scope.member = member;
+              $timeout(
+                function ()
+                {
+                  angular.element('#confirmMemberAdd').modal('show');
+                }
+              );
+            }
+            else
+            {
+              $scope.addExistingUserMember(member);
             }
           };
         }
