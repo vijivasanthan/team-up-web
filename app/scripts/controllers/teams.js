@@ -707,6 +707,9 @@ define(
             }
           );
 
+          /**
+           * Check if the username is correct, otherwise remove the unwanted chars
+           */
           $scope.checkUserName = function ()
           {
             var regUserName = /([A-Za-z0-9-_])/g,
@@ -722,10 +725,12 @@ define(
 
           };
 
+          /**
+           * Search member by first and/or lastname
+           * @param name the search parameter
+           */
           $scope.searchMember = function(name)
           {
-            console.log('123');
-
             if(_.isEmpty(name))
             {
               $rootScope.notifier.error($rootScope.ui.validation.search.notValid);
@@ -757,6 +762,13 @@ define(
             }
           };
 
+          /**
+           * Confirm to add a member
+           * Check if member is already in a team,
+           * if that's the case ask if that member needs to leave
+           * his current team for the new team
+           * @param member the userobject added to the team
+           */
           $scope.confirmAddTeamMember = function (member)
           {
             $scope.member = {};

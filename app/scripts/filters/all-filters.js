@@ -63,22 +63,25 @@ define(
       {
         return function (teamsUuids)
         {
-          var teamNames = Store('app').get('teams'),
+          if(! _.isUndefined(teamsUuids))
+          {
+            var teamNames = Store('app').get('teams'),
               userTeams = [];
 
-          if(teamsUuids.length)
-          {
-            _.each(teamsUuids, function (teamId)
+            if(teamsUuids.length)
             {
-              var team = _.findWhere(teamNames, {uuid: teamId});
-              userTeams.push(
-                team && team.name || $rootScope.ui.teamup.noTeamNameFound
-              );
-            });
-          }
+              _.each(teamsUuids, function (teamId)
+              {
+                var team = _.findWhere(teamNames, {uuid: teamId});
+                userTeams.push(
+                  team && team.name || $rootScope.ui.teamup.noTeamNameFound
+                );
+              });
+            }
 
-          return  userTeams.length && $filter('commaSeperated')(userTeams)
-                    || $rootScope.ui.teamup.noTeam;
+            return  userTeams.length && $filter('commaSeperated')(userTeams)
+              || $rootScope.ui.teamup.noTeam;
+          }
         }
       }
     );

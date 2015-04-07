@@ -48,8 +48,11 @@ aria-hidden='true')
 					span.sr-only Close
 				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
 			.modal-body
-				| Wilt u {{ member.firstName }} {{ member.lastName }} lid maken van dit team? 
-				| Deze persoon maakt dan niet langer deel uit van het andere team.
+				| Wilt u 
+				strong {{ member.firstName }} {{ member.lastName }} 
+				| lid maken van dit team? 
+				| Deze persoon maakt dan niet langer deel uit van team 
+				strong {{ member.teamUuids|getTeamNameById }}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
