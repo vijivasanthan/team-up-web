@@ -450,8 +450,6 @@ define(
                                     {
                                       progress(100, $rootScope.ui.login.loading_everything);
                                       console.log('teamsData', teamsData);
-                                      //update localStorage logged user
-                                      updateLoggedUserTeams();
 
                                       trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
