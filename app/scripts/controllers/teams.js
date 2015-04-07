@@ -5,23 +5,9 @@ define(
     'use strict';
 
     controllers.controller(
-      'teamCtrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        'Teams',
-        'data',
-        '$route',
-        '$routeParams',
-        'Store',
-        'Dater',
-        'TeamUp',
-        '$timeout',
-        'MD5',
-        'Profile',
-        '$filter',
+      'teamCtrl',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile, $filter)
+                  TeamUp, $timeout, MD5, Profile)
         {
           $rootScope.fixStyles();
 
@@ -129,7 +115,6 @@ define(
             {
               case 'EXISTING':
                 break;
-              $scope.findMembersLoad = false;
               default:
                 console.log("the usertype of add member is new or unknown");
             };
@@ -478,13 +463,7 @@ define(
 
           $scope.addExistingUserMember = function(member)
           {
-            angular.element('#confirmMemberAdd').modal('hide');
-
-            if(angular.isDefined($scope.membersWithoutTeam))
-            {
-              var index = $scope.membersWithoutTeam.indexOf(member);
-              $scope.membersWithoutTeam.splice(index, 1);
-            }
+            $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
             TeamUp._(
               'teamMemberAdd',
@@ -503,7 +482,6 @@ define(
                 }
                 else
                 {
-                  //update user without team
                   loadTeams();
                 }
               }
@@ -532,6 +510,15 @@ define(
                   $scope.team = _.findWhere($scope.data.teams, {uuid: $scope.current});
 
                   $scope.members = $scope.data.members[$scope.team.uuid];
+
+                  //update the teams of the currently added member in the view
+                  if(angular.isDefined($scope.membersBySearch))
+                  {
+                    var index = $scope.membersBySearch.indexOf($scope.member);
+                    var lastUpdatedMember = _.findWhere($scope.members, {uuid: $scope.member.uuid});
+
+                    $scope.membersBySearch[index].teamUuids = lastUpdatedMember.teamUuids;
+                  }
 
                   if(angular.isDefined($scope.teamMemberForm))
                   {
@@ -738,7 +725,7 @@ define(
             }
             else
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.membersWithoutTeam);
+              $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
               $scope.findMembersLoad = true;
 
               TeamUp._(
@@ -753,7 +740,7 @@ define(
                   }
                   else
                   {
-                    $scope.membersWithoutTeam = result;
+                    $scope.membersBySearch = result;
                     $rootScope.statusBar.off();
                     $scope.findMembersLoad = false;
                   }
@@ -771,15 +758,13 @@ define(
            */
           $scope.confirmAddTeamMember = function (member)
           {
-            $scope.member = {};
-
             if(member.teamUuids.length > 0)
             {
               $scope.member = member;
               $timeout(
                 function ()
                 {
-                  angular.element('#confirmMemberAdd').modal('show');
+                  angular.element('#confirmMemberAddModal').modal('show');
                 }
               );
             }
@@ -788,8 +773,32 @@ define(
               $scope.addExistingUserMember(member);
             }
           };
+
+          /**
+           * Removes member from all his teams before adding to a new team
+           * @param member
+           */
+          $scope.AddTeamRemoveCurrent = function(member)
+          {
+            angular.element('#confirmMemberAddModal').modal('hide');
+            $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
+
+            Teams.removeAllTeamsFromMember(member)
+              .then(
+                function(result)
+                {
+                  if(result.error)
+                  {
+                    console.log('Error with deleting member from all his teams : ' + result.error);
+                  }
+                  else
+                  {
+                    $scope.addExistingUserMember(member);
+                  }
+                }
+              );
+          };
         }
-      ]
     );
   }
 );

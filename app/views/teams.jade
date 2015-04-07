@@ -29,14 +29,14 @@ aria-hidden='true')
 					span.sr-only Close
 				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}}
 			.modal-body
-				| {{ui.teamup.confirms.deleteMemberTitle}}
+				| {{ui.teamup.confirms.deleteMember}}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
 				ng-click='deleteMember(currentMember)') {{ui.teamup.confirms.remove}}
 				
-#confirmMemberAdd.modal.fade(tabindex='-1',
+#confirmMemberAddModal.modal.fade(tabindex='-1',
 role='dialog',
 aria-labelledby='confirmMemberAddModalLabel',
 aria-hidden='true')
@@ -57,7 +57,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='addExistingUserMember(member)') Wijzigen
+				ng-click='AddTeamRemoveCurrent(member)') Wijzigen
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
@@ -196,7 +196,9 @@ aria-hidden='true')
 					.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;', ng-show='userType == "EXISTING"')
 						input.form-control.search-query(
 							type='text',
-							placeholder='{{ ui.teamup.searchMembers }}', ng-model='memberValue')
+							focus='true',
+							placeholder='{{ ui.teamup.searchMembers }}', 
+							ng-model='memberValue')
 						span(class="input-group-btn")
 							button.search-button(ng-model='findMemberSubmit' ng-init="findMemberSubmit=false",
 								ng-click='searchMember(memberValue); findMemberSubmit=true',
@@ -213,10 +215,10 @@ aria-hidden='true')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
-				p(ng-show='! memberValue.length || ! findMemberSubmit') {{ ui.teamup.searchMembers }}
-				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }} '{{memberValue}}'
-				p(ng-show='membersWithoutTeam.length == 0 && ! findMembersLoad && memberValue.length > 0') {{ui.teamup.noMembersFound}} '{{memberValue}}'
-				table.table.table-striped(ng-show='membersWithoutTeam.length && ! findMembersLoad')
+				p(ng-show='! findMemberSubmit') {{ ui.teamup.searchMembers }}
+				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }}
+				p(ng-show='membersBySearch.length == 0 && ! findMembersLoad') {{ui.teamup.noMembersFound}}
+				table.table.table-striped(ng-show='membersBySearch.length && ! findMembersLoad')
 					thead
 						tr
 							th
@@ -227,7 +229,7 @@ aria-hidden='true')
 								a(ng-click='memberInTeamOrder="teamUuids"; reverse=!reverse') {{ui.teamup.teams_Cap}}
 									i.icon-sort
 					tbody
-						tr(ng-repeat='member in membersWithoutTeam | orderBy:memberInTeamOrder:reverse')
+						tr(ng-repeat='member in membersBySearch | orderBy:memberInTeamOrder:reverse')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
@@ -241,9 +243,9 @@ aria-hidden='true')
 									ng-hide='member.teamUuids.indexOf(current) >= 0')
 									span.icomoon(data-icon='',
 									aria-hidden='true')
-				span.muted.pull-right(ng-show='membersWithoutTeam.length > 0')
+				span.muted.pull-right(ng-show='membersBySearch.length > 0')
 					small
-						i {{ membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
+						i {{ membersBySearch.length | i18n_spec:'groups.memberCount'}}
 			
 			form(name='teamMemberForm',
 				novalidate,
@@ -255,7 +257,7 @@ aria-hidden='true')
 								.form-group
 									label.control-label {{ui.profile.firstName}}
 									.controls
-										input.span4(type='text',
+										input.span4(type='text', autofocus="true",
 										ng-model='memberForm.firstName')
 								.form-group
 									label.control-label {{ui.profile.lastName}}
