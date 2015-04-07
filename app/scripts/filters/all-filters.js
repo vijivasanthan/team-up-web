@@ -46,9 +46,24 @@ define(
           return function (arr, ending)
           {
             var _arr = _.compact(arr),
-                last = _arr.pop();
+                result = null;
 
-            return  _arr.join(', ') + ' ' + ending + ' ' + last;
+            if(_arr.length == 0)
+            {
+              result = _arr[0];
+            }
+            else if(_arr.length == 1)
+            {
+              var last = _arr.pop();
+              result = _arr[0] + ' ' + ending + ' ' + _arr[1];
+            }
+            else
+            {
+              var last = _arr.pop();
+              result = _arr.join(', ') + ' ' + ending + ' ' + last;
+            }
+
+            return result;
           }
         }
     );
