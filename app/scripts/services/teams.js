@@ -84,7 +84,6 @@ define(
               .then(
               function (result)
               {
-                console.log('result', result);
                 return result;
               }.bind(this),
               function (error)

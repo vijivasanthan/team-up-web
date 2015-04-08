@@ -93,6 +93,24 @@ define(
               );
 
               data.members = members;
+              data.membersWithoutTeam = [];
+
+              var filter = $injector.get('$filter');
+
+              _.each(filter('membersWithoutTeam')(dataMembers), function (member)
+              {
+                data.membersWithoutTeam.push(
+                  {
+                    'name': member.firstName + ' ' + member.lastName,
+                    'id': member.uuid
+                  }
+                );
+              });
+
+              //data.membersWithoutTeam = _.filter(data.members, function (member)
+              //{
+              //
+              //});
 
               data.groups = Store('app').get('ClientGroups');
 
@@ -217,9 +235,6 @@ define(
             $scope.views[hash] = true;
 
             // TODO: Repetitive code
-
-
-
             var localData = loadData(data);
             data = localData.data;
             connections = localData.con;
@@ -400,7 +415,7 @@ define(
                   grid,
                   '1:n',
                   {
-                    left: data.members,
+                    left: data.members, //data.members,//data.membersWithoutTeam
                     right: data.teams
                   },
                   $scope.connector.teams()
