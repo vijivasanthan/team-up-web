@@ -581,14 +581,19 @@ define(
           // create a new client
           $scope.clientSubmit = function (client)
           {
-            if (typeof client == 'undefined' || !client.firstName || !client.lastName || !client.phone)
+            if (typeof client == 'undefined' || !client.firstName || !client.lastName)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.clinetInfoFill);
 
               return;
             }
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
+            if(! client.phone)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+
+              return;
+            }
 
             if ($rootScope.phoneNumberParsed.result == false)
             {
@@ -602,6 +607,8 @@ define(
             }
 
             client.clientGroupUuid = $scope.clientGroup.id;
+
+            $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
             TeamUp._(
               'clientAdd',
