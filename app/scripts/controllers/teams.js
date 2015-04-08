@@ -740,7 +740,8 @@ define(
                   }
                   else
                   {
-                    $scope.membersBySearch = result;
+                    $scope.membersBySearch = result.members;
+                    Store('app').save('searchMembersTeams', result.teams);
                     $rootScope.statusBar.off();
                     $scope.findMembersLoad = false;
                   }

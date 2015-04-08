@@ -80,8 +80,13 @@ define(
         {
           if(! _.isUndefined(teamsUuids))
           {
-            var teamNames = Store('app').get('teams'),
+            var teamNames = Store('app').get('searchMembersTeams'),
               userTeams = [];
+
+            if(! teamNames.length && $rootScope.app.resources.role == 1)
+            {
+              teamNames = Store('app').get('teams');
+            }
 
             if(teamsUuids.length)
             {
