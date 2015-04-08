@@ -153,9 +153,12 @@ define(
                              t: Teams.query(),
                              cg: Clients.query()
                            } :
-                           { local: true };
+                           { local: true};
                   }
-                ]
+                ],
+                dataMembers: function(Teams) {
+                    return Teams.updateMembersLocal();
+                }
               }
             })
 

@@ -53,7 +53,7 @@ define(
                   break;
 
                 case '/manage':
-                  $rootScope.loaderIcons.messages = true;
+                  $rootScope.loaderIcons.dashboard = true;
 
                   $rootScope.location = 'manage';
                   break;

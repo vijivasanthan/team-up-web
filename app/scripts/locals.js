@@ -451,6 +451,7 @@ define(
         },
         loading: {
           general: 'Laden',
+          manage: 'beheren',
           dashboard: 'dashboard',
           planboard: 'agenda',
           messages: 'berichten',
