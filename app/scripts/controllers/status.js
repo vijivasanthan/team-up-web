@@ -4,7 +4,7 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'status',
-      function ($scope, $rootScope, $q, Slots, Store, data)
+      function ($scope, $rootScope, $q, Slots, Store, data, CurrentSelection)
       {
         $rootScope.notification.status = false;
 
@@ -35,8 +35,7 @@ define(['controllers/controllers'], function (controllers)
         };
 
         $scope.current = {
-          group: everyoneId,
-          division: everyoneId
+          group: CurrentSelection.getTeamId()
         };
 
         $scope.loadingReachability = true;
@@ -65,6 +64,7 @@ define(['controllers/controllers'], function (controllers)
           }
           else if (typeof data.members[groupID] != 'undefined')
           {
+            CurrentSelection.local = groupID;
             currentMembers = $rootScope.unique(data.members[groupID]);
           }
 

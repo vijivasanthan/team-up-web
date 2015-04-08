@@ -105,6 +105,9 @@ define(
 
           if (groupID !== '')
           {
+
+            CurrentSelection.local = groupID;
+
             TeamUp._('callOrderGet', {second: groupID})
               .then(function (result)
               {
@@ -122,8 +125,6 @@ define(
           var groupID = $scope.current.group;
           var orderArray = [];
           var payload = {};
-
-          CurrentSelection.locals = groupID;
 
           $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
