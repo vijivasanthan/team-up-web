@@ -95,9 +95,14 @@ define(
               data.members = members;
               data.membersWithoutTeam = [];
 
-              var filter = $injector.get('$filter');
+              var filter = $injector.get('$filter'),
+                  tempMembers = filter('membersWithoutTeam')(dataMembers);
 
-              _.each(filter('membersWithoutTeam')(dataMembers), function (member)
+              tempMembers = _.sortByAll(tempMembers, ['lastName']);
+
+              console.log('tempMembers', tempMembers);
+
+              _.each(tempMembers, function (member)
               {
                 data.membersWithoutTeam.push(
                   {
@@ -415,7 +420,7 @@ define(
                   grid,
                   '1:n',
                   {
-                    left: data.members, //data.members,//data.membersWithoutTeam
+                    left: data.membersWithoutTeam, //data.members,//data.membersWithoutTeam
                     right: data.teams
                   },
                   $scope.connector.teams()

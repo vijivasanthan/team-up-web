@@ -105,7 +105,7 @@ define(
                   var items = event.items,
                     user = items[0];
 
-                  _this.stores[(user._parent.split('_')[0]) + '_left'].data.push({
+                  _this.stores[(user._parent.split('_')[0]) + '_left'].data.unshift({
                     name: user.name,
                     _id: user._id,
                     _parent: user._parent
