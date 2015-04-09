@@ -381,6 +381,13 @@ define(
               return;
             }
 
+            if (! member.role)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.role);
+
+              return;
+            }
+
             if(!_.isEmpty(member.pincode) && $rootScope.pincodeExistsValidation == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);

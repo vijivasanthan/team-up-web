@@ -222,6 +222,12 @@ module.exports = (grunt) ->
             '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
             '<%= paths.dist %>/styles/fonts/*'
           ]
+      js:
+        src: [
+          '<%= paths.dist %>/scripts/config.js'
+          '<%= paths.dist %>/scripts/profiles/**/profile.js'
+          '<%= paths.dist %>/scripts/vendors/requirejs/require.js'
+        ]
 
     useminPrepare:
       html: '.tmp/index.html'
@@ -231,8 +237,14 @@ module.exports = (grunt) ->
     usemin:
       html: ['<%= paths.dist %>/{,*/}*.html']
       css: ['<%= paths.dist %>/styles/{,*/}*.css']
+      js: ['<%= paths.dist %>/scripts/*.js']
       options:
         dirs: ['<%= paths.dist %>']
+        patterns:
+          js: [
+            [ /(config)/, 'Replacing config', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profile)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+          ]
 
     svgmin:
       dist:
@@ -475,8 +487,11 @@ module.exports = (grunt) ->
     'copy:rest'
     'cssmin'
     'requirejs'
-    'rev'
-    'usemin'
+    'rev:js'
+    'usemin:js'
+    'rev:dist'
+    'usemin:html'
+    'usemin:css'
     'replace'
     'clean:rest'
   ]

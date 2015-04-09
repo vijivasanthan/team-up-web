@@ -731,6 +731,7 @@ define(
             notValid: 'Voer een valide e-mailadres in!',
             required: 'Een e-mail is verplicht'
           },
+          role: 'Kies een rol!',
           birthDate: {
             notValid: 'Voer een valide geboortedatum in!'
           },
