@@ -211,7 +211,22 @@ define(
             });
           }
         };
+      }
+    );
 
+    directives.directive(
+      'focusOnClick',
+      function ()
+      {
+        return function (scope, element, attrs)
+        {
+          element.on('click', function ()
+          {
+            var focusClass = '.' + attrs.focusOnClick;
+
+            angular.element(focusClass).focus();
+          });
+        };
       }
     );
 

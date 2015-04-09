@@ -210,7 +210,7 @@ aria-hidden='true')
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
 						ng-click='setUserType("NEW")')
 						| Nieuw
-					button.btn.btn-primary(class='{{(userType == "EXISTING") && "active"}}',
+					button.btn.btn-primary(focus-on-click='search-query', class='{{(userType == "EXISTING") && "active"}}',
 						ng-click='setUserType("EXISTING")')
 						| Bestaand
 			hr
