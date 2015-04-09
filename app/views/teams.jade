@@ -215,7 +215,7 @@ aria-hidden='true')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
-				p(ng-show='! findMemberSubmit') {{ ui.teamup.searchMembers }}
+				p(ng-show='! findMemberSubmit') {{ ui.teamup.howToSearchMembers }}
 				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }}
 				p(ng-show='membersBySearch.length == 0 && ! findMembersLoad') {{ui.teamup.noMembersFound}}
 				table.table.table-striped(ng-show='membersBySearch.length && ! findMembersLoad')

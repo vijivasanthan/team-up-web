@@ -466,6 +466,7 @@ define(
           selectClientGroup: 'Selecteer een cliëntgroep',
           loadMembersByName: 'Leden laden...',
           loadingMembers: 'Leden zoeken...',
+          howToSearchMembers: 'Zoek leden bij voor- en/of achternaam.',
           selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
