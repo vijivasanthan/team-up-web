@@ -149,6 +149,19 @@ define(
               editTeam: false
             };
 
+            switch (hash)
+            {
+              case "newMember":
+                if (angular.isDefined($scope.membersBySearch))
+                {
+                  $scope.membersBySearch = null;
+                  $scope.memberValue = "";
+                  $scope.findMemberSubmit = false;
+                }
+                break;
+              default:
+            }
+
             $scope.views[hash] = true;
           };
 
@@ -518,13 +531,15 @@ define(
 
                   $scope.members = $scope.data.members[$scope.team.uuid];
 
-                  //update the teams of the currently added member in the view
                   if(angular.isDefined($scope.membersBySearch))
                   {
-                    var index = $scope.membersBySearch.indexOf($scope.member);
-                    var lastUpdatedMember = _.findWhere($scope.members, {uuid: $scope.member.uuid});
-
-                    $scope.membersBySearch[index].teamUuids = lastUpdatedMember.teamUuids;
+                    $scope.membersBySearch = null;
+                    $scope.memberValue = '';
+                    ////update the teams of the currently added member in the view
+                    //var index = $scope.membersBySearch.indexOf($scope.member);
+                    //var lastUpdatedMember = _.findWhere($scope.members, {uuid: $scope.member.uuid});
+                    //
+                    //$scope.membersBySearch[index].teamUuids = lastUpdatedMember.teamUuids;
                   }
 
                   if(angular.isDefined($scope.teamMemberForm))
@@ -748,7 +763,23 @@ define(
                   else
                   {
                     $scope.membersBySearch = result.members;
-                    Store('app').save('searchMembersTeams', result.teams);
+
+                    if($scope.membersBySearch && result.teams)
+                    {
+                      //Check if the current team is in the search result teams, if not add the team
+                      var currentTeam = _.findWhere(result.teams, {uuid: $scope.current});
+
+                      if(_.isUndefined(currentTeam))
+                      {
+                        var teams = Store('app').get('teams');
+                        currentTeam = _.findWhere(teams, {uuid: $scope.current});
+
+                        result.teams.push(currentTeam);
+                      }
+
+                      Store('app').save('searchMembersTeams', result.teams);
+                    }
+
                     $rootScope.statusBar.off();
                     $scope.findMembersLoad = false;
                   }

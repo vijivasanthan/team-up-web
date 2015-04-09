@@ -530,7 +530,7 @@ define(
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
           clientGroups: 'Cliëntengroepen',
           teams_Cap: 'Teams',
-          noTeamNameFound: 'Geen teamnaam gevonden',
+          noTeamNameFound: 'Teamnaam onbekend',
           noTeam: 'Geen team',
           searchMembers: 'Zoek leden...',
           editClient: 'Bewerk cliënt',

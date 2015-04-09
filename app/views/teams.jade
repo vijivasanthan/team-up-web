@@ -50,7 +50,9 @@ aria-hidden='true')
 			.modal-body
 				| Wilt u 
 				strong {{ member.firstName }} {{ member.lastName }} 
-				| lid maken van dit team? 
+				| lid maken van team 
+				strong {{ [current]|getTeamNameById }}
+				|? 
 				| Deze persoon maakt dan niet langer deel uit van team 
 				strong {{ member.teamUuids|getTeamNameById }}
 			.modal-footer
@@ -196,7 +198,6 @@ aria-hidden='true')
 					.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;', ng-show='userType == "EXISTING"')
 						input.form-control.search-query(
 							type='text',
-							focus='true',
 							placeholder='{{ ui.teamup.searchMembers }}', 
 							ng-model='memberValue')
 						span(class="input-group-btn")
