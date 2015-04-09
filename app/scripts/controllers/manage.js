@@ -10,6 +10,27 @@ define(
                   Teams, $window, data, TeamUp, $timeout, Permission, $injector, dataMembers)
         {
           $rootScope.fixStyles();
+
+          var loadMembersWithoutTeam = function ()
+          {
+            data.membersWithoutTeam = [];
+
+            var filter = $injector.get('$filter'),
+              tempMembers = filter('membersWithoutTeam')(dataMembers);
+
+            tempMembers = _.sortByAll(tempMembers, ['lastName']);
+
+            _.each(tempMembers, function (member)
+            {
+              data.membersWithoutTeam.push(
+                {
+                  'name': member.firstName + ' ' + member.lastName,
+                  'id': member.uuid
+                }
+              );
+            });
+          };
+
           function loadData (data)
           {
             // console.log('loading data -> ', new Date());
@@ -93,29 +114,7 @@ define(
               );
 
               data.members = members;
-              data.membersWithoutTeam = [];
-
-              var filter = $injector.get('$filter'),
-                  tempMembers = filter('membersWithoutTeam')(dataMembers);
-
-              tempMembers = _.sortByAll(tempMembers, ['lastName']);
-
-              console.log('tempMembers', tempMembers);
-
-              _.each(tempMembers, function (member)
-              {
-                data.membersWithoutTeam.push(
-                  {
-                    'name': member.firstName + ' ' + member.lastName,
-                    'id': member.uuid
-                  }
-                );
-              });
-
-              //data.membersWithoutTeam = _.filter(data.members, function (member)
-              //{
-              //
-              //});
+              loadMembersWithoutTeam();
 
               data.groups = Store('app').get('ClientGroups');
 
