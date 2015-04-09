@@ -228,6 +228,7 @@ aria-hidden='true')
 							th
 								a(ng-click='memberInTeamOrder="teamUuids"; reverse=!reverse') {{ui.teamup.teams_Cap}}
 									i.icon-sort
+							th
 					tbody
 						tr(ng-repeat='member in membersBySearch | orderBy:memberInTeamOrder:reverse')
 							td
@@ -239,10 +240,10 @@ aria-hidden='true')
 							td
 								| {{ member.teamUuids | getTeamNameById }}
 							td
-								button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)', 
-									ng-hide='member.teamUuids.indexOf(current) >= 0')
-									span.icomoon(data-icon='',
-									aria-hidden='true')
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)', 
+										ng-hide='member.teamUuids.indexOf(current) >= 0')
+										span.icomoon(data-icon='')
 				span.muted.pull-right(ng-show='membersBySearch.length > 0')
 					small
 						i {{ membersBySearch.length | i18n_spec:'groups.memberCount'}}
