@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'teamCtrl',
         function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                  TeamUp, $timeout, MD5, Profile)
+                  TeamUp, $timeout, MD5, Profile, CurrentSelection)
         {
           $rootScope.fixStyles();
 
@@ -35,14 +35,14 @@ define(
 
           if (!params.uuid && !$location.hash())
           {
-            uuid = data.teams[0].uuid;
+            uuid = CurrentSelection.getTeamId();
             view = 'team';
 
             $location.search({uuid: data.teams[0].uuid}).hash('team');
           }
           else if (!params.uuid)
           {
-            uuid = data.teams[0].uuid;
+            uuid = CurrentSelection.getTeamId();
             view = $location.hash();
 
             $location.search({uuid: uuid});
@@ -53,6 +53,7 @@ define(
             view = $location.hash();
           }
 
+          $scope.current = uuid;
           setTeamView(uuid);
 
           //set default team by last visited team
@@ -69,6 +70,8 @@ define(
 
           function setTeamView(id)
           {
+            CurrentSelection.local = id;
+
             $scope.team = _.findWhere(data.teams, {uuid: id});
 
             $scope.members = data.members[id];

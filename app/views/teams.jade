@@ -68,8 +68,7 @@ aria-hidden='true')
 		span.selectTitles
 			strong
 				| {{ ui.teamup.selectTeam }}
-		select(current_selection='team', 
-		ng-model='current',
+		select(ng-model='current',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
 		ng-selected='current',
 		ng-change='requestTeam(current)')

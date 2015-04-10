@@ -178,7 +178,7 @@ define(
                 break;
 
               case 'tasks2/planboard':
-                $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
+                $location.path('/tasks2/planboard').search({}).hash('');
                 break;
 
               case 'team-telefoon/agenda':

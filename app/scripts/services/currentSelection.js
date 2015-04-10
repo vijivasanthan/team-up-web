@@ -73,7 +73,7 @@ define(
             },
             getClientGroupId: function()
             {
-              return this.local.clientGroupId || (this.init()).clientGroupId;
+              return  this.local.clientGroupId || (this.init()).clientGroupId;
             }
           };
         }

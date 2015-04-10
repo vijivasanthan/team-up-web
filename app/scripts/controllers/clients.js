@@ -5,26 +5,9 @@ define(
     'use strict';
 
     controllers.controller(
-      'clientCtrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        'Report',
-        'Clients',
-        'Teams',
-        'data',
-        '$route',
-        '$routeParams',
-        'Store',
-        'Dater',
-        '$filter',
-        '$modal',
-        'TeamUp',
-        '$timeout',
-        'Reports',
-        'moment',
+      'clientCtrl',
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Reports, moment)
+                  $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection)
         {
           //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
           //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
@@ -135,14 +118,14 @@ define(
 
           if (!params.uuid && !$location.hash())
           {
-            uuid = data.clientGroups[0].id;
+            uuid = CurrentSelection.getClientGroupId();
             view = 'client';
 
-            $location.search({uuid: data.clientGroups[0].id}).hash('client');
+            $location.search({uuid: uuid}).hash('client');
           }
           else if (!params.uuid)
           {
-            uuid = data.clientGroups[0].id;
+            uuid = CurrentSelection.getClientGroupId();
 
             view = $location.hash();
 
@@ -292,6 +275,8 @@ define(
 
           $scope.requestClientGroup = function (current, switched)
           {
+            CurrentSelection.local = current;
+
             setClientView(current);
 
             $scope.$watch(
@@ -1074,7 +1059,6 @@ define(
             $scope.setViewTo('editImg');
           };
         }
-      ]
     );
   }
 );

@@ -167,6 +167,8 @@ define(
           wished: 'Gewenst',
           combine_reoccuring: 'Dit is een gecombineerde planning.',
           sendMsgToMember: 'Stuur bericht naar leden',
+          noMembers: 'Er zijn geen leden in dit team.',
+          noClients: 'Er zijn geen clienten in deze clientgroep.',
           add: 'Toevoegen',
           del: 'Verwijderen',
           change: 'Wijzigen',
