@@ -138,7 +138,7 @@ module.exports = (grunt) ->
             '.tmp'
             '<%= paths.dist %>/*'
             '!<%= paths.dist %>/vendors*'
-            # '!<%= paths.dist %>/WEB-INF*' # depreciated
+# '!<%= paths.dist %>/WEB-INF*' # depreciated
             '!<%= paths.dist %>/.git*'
           ]
         ]
@@ -222,12 +222,6 @@ module.exports = (grunt) ->
             '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
             '<%= paths.dist %>/styles/fonts/*'
           ]
-      js:
-        src: [
-          '<%= paths.dist %>/scripts/config.js'
-          '<%= paths.dist %>/scripts/profiles/**/profile.js'
-          '<%= paths.dist %>/scripts/vendors/requirejs/require.js'
-        ]
 
     useminPrepare:
       html: '.tmp/index.html'
@@ -237,14 +231,8 @@ module.exports = (grunt) ->
     usemin:
       html: ['<%= paths.dist %>/{,*/}*.html']
       css: ['<%= paths.dist %>/styles/{,*/}*.css']
-      js: ['<%= paths.dist %>/scripts/*.js']
       options:
         dirs: ['<%= paths.dist %>']
-        patterns:
-          js: [
-            [ /(config)/, 'Replacing config', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
-            [ /(profile)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
-          ]
 
     svgmin:
       dist:
@@ -270,15 +258,15 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         options: {}
-      #removeCommentsFromCDATA: true,
-      #             // https://github.com/paths/grunt-usemin/issues/44
-      #             //collapseWhitespace: true,
-      #             collapseBooleanAttributes: true,
-      #             removeAttributeQuotes: true,
-      #             removeRedundantAttributes: true,
-      #             useShortDoctype: true,
-      #             removeEmptyAttributes: true,
-      #             removeOptionalTags: true
+#removeCommentsFromCDATA: true,
+#             // https://github.com/paths/grunt-usemin/issues/44
+#             //collapseWhitespace: true,
+#             collapseBooleanAttributes: true,
+#             removeAttributeQuotes: true,
+#             removeRedundantAttributes: true,
+#             useShortDoctype: true,
+#             removeEmptyAttributes: true,
+#             removeOptionalTags: true
         files: [
           expand: true
           cwd: '.tmp'
@@ -441,8 +429,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'stage', 'git add files before running the release task', ->
     files = @options().files
     grunt.util.spawn
-    # TODO (Test this if it is really needed git.cmd??)
-    # cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
+# TODO (Test this if it is really needed git.cmd??)
+# cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
       cmd: 'git'
       args: ['add'].concat(files)
     , grunt.task.current.async()
@@ -487,11 +475,8 @@ module.exports = (grunt) ->
     'copy:rest'
     'cssmin'
     'requirejs'
-    'rev:js'
-    'usemin:js'
-    'rev:dist'
-    'usemin:html'
-    'usemin:css'
+    'rev'
+    'usemin'
     'replace'
     'clean:rest'
   ]
