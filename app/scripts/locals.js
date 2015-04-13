@@ -509,6 +509,7 @@ define(
           reports: 'Rapporten',
           report: 'Rapport',
           noClients: 'Geen cliënten in deze groep',
+          noClientGroup: 'Geen clientgroep',
           TeamClients: 'TEAMS - CLIËNTEN',
           createClientGroup: 'Opslaan',
           contacts: 'Contacten',

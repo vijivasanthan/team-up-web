@@ -19,8 +19,6 @@ define(
 
           if (data.clientId)
           {
-            console.log('clientId', data.clientId);
-
             var clientHasClientGroup = false;
             Reports.clientId = data.clientId;
 
@@ -31,46 +29,29 @@ define(
               data.clientGroups,
               function (clientGroup)
               {
-                //var client = _.findWhere(Store('app').get(clientGroup.id), {uuid: data.clientId});
-                //
-                //if (! _.isUndefined(client))
-                //{
-                //  console.log('clientGroup.id', clientGroup.id);
-                //
-                //  $scope.client = client;
-                //  $scope.contacts = client.contacts;
-                //
-                //  console.log('client', $scope.contacts);
-                //
-                //  $scope.clientmeta = client;
-                //  clientHasClientGroup = true;
-                //}
+                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+                var clientInTeam = _.findWhere(data.clients[clientGroup.id], {uuid: data.clientId});
 
-                //TODO this works only with one clientGroup per client
-                angular.forEach(
-                  data.clients[clientGroup.id],
-                  function (client)
-                  {
-                    if (client.uuid == data.clientId)
-                    {
-                      $scope.client = client;
-                      $scope.contacts = client.contacts;
+                if(!_.isUndefined(clientInTeam))
+                {
+                  $scope.client = clientInTeam;
+                  $scope.contacts = clientInTeam.contacts;
 
-                      $scope.clientmeta = client;
-                      clientHasClientGroup = true;
-                    }
-                  }
-                );
+                  $scope.clientmeta = clientInTeam;
+                  clientHasClientGroup = true;
+                }
               }
             );
 
             if (!clientHasClientGroup)
             {
+              //add Geen clientgroep
+
               data.clients = Store('app').get('clients');
               data.client = _.findWhere(data.clients, {uuid: data.clientId});
 
-              Reports.clientId = $scope.client.uuid;
               $scope.client = data.client;
+              Reports.clientId = $scope.client.uuid;
               $scope.contacts = data.client.contacts;
               $scope.clientmeta = data.client;
             }
