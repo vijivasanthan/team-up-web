@@ -48,6 +48,8 @@ define(
                               {
                                 success: function (result)
                                 {
+                                  console.log('result ' + clientGroup.id, result);
+
                                   Store('app').save(
                                     clientGroup.id,
                                     (result.length == 4 &&

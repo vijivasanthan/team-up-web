@@ -221,13 +221,6 @@ div(ng-controller='timeline as taskPlanboard')
 					.tab-header
 						//h3.pull-left {{currentName}}
 						//div(ng-show='app.resources.role == 1')
-						button.btn.pull-right.btn-danger.marginLeftTen(type='button',
-						class="",
-						data-toggle='tab',
-						ng-show='views.teams',
-						ng-click='confirmDeleteTasks(timeline.range)')
-							span.glyphicon.glyphicon-trash
-							|  Verwijder taken
 						.btn-group.pull-right
 							button.btn.btn-primary(type='button',
 							class="{{(views.clients==true) && 'active'}}",
@@ -243,6 +236,15 @@ div(ng-controller='timeline as taskPlanboard')
 								span.icomoon(data-icon='',
 								aria-hidden='true')
 								| Teams
+							
+						button.btn.pull-right.btn-danger.marginRightTen(type='button',
+						class="",
+						data-toggle='tab',
+						ng-show='views.teams',
+						ng-click='confirmDeleteTasks(timeline.range)')
+							span.glyphicon.glyphicon-trash
+							|  Verwijder taken
+						
 						div#timeline-controls(ng-controller='timeline-navigation')
 							.form-group.has-feedback.pull-left.dateranger.marginLeftTen
 								input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
@@ -264,8 +266,19 @@ div(ng-controller='timeline as taskPlanboard')
 									i.glyphicon.glyphicon-zoom-out
 								button#timelineAfterBtn.btn.btn-primary(type='button', ng-click='timelineAfter(timeline.scope)')
 									i.glyphicon.glyphicon-arrow-right
-						
+						//p {{ data.teams.members[currentTeam].length }}
 					hr
+
+					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length')
+						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
+						small
+								i  {{ ui.planboard.noMembers }}
+								
+					div.alert.alert-warning(ng-show='section == "clients" && ! data.clients.members[currentClientGroup].length')
+						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
+						small
+							i  {{ ui.planboard.noClients }}
+					
 					#timeline
 						//include planboard/time-toolbar.jade
 						#mainTimeline(set-position-slot-form)

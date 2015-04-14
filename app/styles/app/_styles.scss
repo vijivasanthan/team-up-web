@@ -330,3 +330,15 @@ dl {
 .text-beige   { color: $beige }
 .text-graytu  { color: $graytu }
 .text-red     { color: $red }
+
+#newMemberTab {
+  .tab-header {
+    height: 40px;
+    .input-group {
+      padding-top: 7px;
+    }
+    .btn-group {
+      padding-top: 7px;
+    }
+  }
+}

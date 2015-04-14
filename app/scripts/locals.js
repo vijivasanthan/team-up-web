@@ -167,6 +167,8 @@ define(
           wished: 'Gewenst',
           combine_reoccuring: 'Dit is een gecombineerde planning.',
           sendMsgToMember: 'Stuur bericht naar leden',
+          noMembers: 'Er zijn geen leden in dit team.',
+          noClients: 'Er zijn geen clienten in deze clientgroep.',
           add: 'Toevoegen',
           del: 'Verwijderen',
           change: 'Wijzigen',
@@ -451,6 +453,7 @@ define(
         },
         loading: {
           general: 'Laden',
+          manage: 'beheren',
           dashboard: 'dashboard',
           planboard: 'agenda',
           messages: 'berichten',
@@ -463,6 +466,10 @@ define(
           selectTeam: 'Selecteer team',
           clients: 'Cliënten',
           selectClientGroup: 'Selecteer een cliëntgroep',
+          loadMembersByName: 'Leden laden...',
+          loadingMembers: 'Leden zoeken...',
+          howToSearchMembers: 'Zoek leden bij voor- en/of achternaam.',
+          selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
           edit: 'Bewerk',
@@ -474,6 +481,7 @@ define(
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
           newMember: 'Nieuw teamlid',
+          noMembersFound: 'Geen leden gevonden met de opgegeven zoekterm.',
           name: 'Naam',
           role: 'Rol',
           phone: 'Telefoon',
@@ -501,6 +509,7 @@ define(
           reports: 'Rapporten',
           report: 'Rapport',
           noClients: 'Geen cliënten in deze groep',
+          noClientGroup: 'Geen clientgroep',
           TeamClients: 'TEAMS - CLIËNTEN',
           createClientGroup: 'Opslaan',
           contacts: 'Contacten',
@@ -524,6 +533,9 @@ define(
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
           clientGroups: 'Cliëntengroepen',
           teams_Cap: 'Teams',
+          noTeamNameFound: 'Teamnaam onbekend',
+          noTeam: 'Geen team',
+          searchMembers: 'Zoek leden...',
           editClient: 'Bewerk cliënt',
           loadingNumber: 'Teamtelefoonnummer aan het laden...',
           birthdayError: 'Fout in de geboortedatum.',
@@ -722,12 +734,16 @@ define(
             notValid: 'Voer een valide e-mailadres in!',
             required: 'Een e-mail is verplicht'
           },
+          role: 'Kies een rol!',
           birthDate: {
             notValid: 'Voer een valide geboortedatum in!'
           },
           userName: {
             regex: 'De gebruikersnaam mag alleen uit alphanummerieke tekens bestaan, inclusief streepjes en onderstreepjes',
             valid: 'Een gebruikersnaam is vereist'
+          },
+          search: {
+            notValid: 'Voer een voor en/of achternaam in!'
           }
         }
       }

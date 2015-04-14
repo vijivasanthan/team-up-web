@@ -38,7 +38,7 @@ define(
             build: function (id, data)
             {
               var _this = this,
-                  key = $scope.treeGrid.grid + '_' + id;
+                key = $scope.treeGrid.grid + '_' + id;
 
               this.grids[key] = new links.TreeGrid(
                 document.getElementById($scope.treeGrid.grid + '_' + id),
@@ -55,7 +55,10 @@ define(
 
                   angular.forEach(
                     store.data,
-                    function (node) { node._id && filtered.push(node) }
+                    function (node)
+                    {
+                      node._id && filtered.push(node)
+                    }
                   );
 
                   store.data = store.filteredData = filtered;
@@ -69,21 +72,28 @@ define(
               links.events.addListener(
                 this.grids[key],
                 'expand',
-                function (properties) { console.log('expanding ->', key, properties) }
+                function (properties)
+                {
+                  console.log('expanding ->', key, properties)
+                }
               );
 
               links.events.addListener(
                 this.grids[key],
                 'collapse',
-                function (properties) { console.log('collapsing ->', key, properties) }
+                function (properties)
+                {
+                  console.log('collapsing ->', key, properties)
+                }
               );
 
               links.events.addListener(
                 this.grids[key],
                 'select',
-                function (properties) {
-					console.log('selecting ->', key, properties);
-				}
+                function (properties)
+                {
+                  console.log('selecting ->', key, properties);
+                }
               );
 
               links.events.addListener(
@@ -91,17 +101,17 @@ define(
                 'remove',
                 function (event)
                 {
-					//temp solution so a client or teammember can't be in two teams or clientgroups
-					var items = event.items,
-						user = items[0];
+                  //TODO temp solution so a client or teammember can't be in two teams or clientgroups
+                  var items = event.items,
+                    user = items[0];
 
-				  _this.stores[(user._parent.split('_')[0]) + '_left'].data.push({
-						name: user.name,
-						_id: user._id,
-						_parent: user._parent
-				  });
+                  _this.stores[(user._parent.split('_')[0]) + '_left'].data.unshift({
+                    name: user.name,
+                    _id: user._id,
+                    _parent: user._parent
+                  });
 
-                  for (var i = 0; i < items.length; i ++)
+                  for (var i = 0; i < items.length; i++)
                   {
                     _this.stores[key].removeLink(items[i]);
                   }
@@ -112,7 +122,7 @@ define(
             store: function (id, data)
             {
               var _this = this,
-                  key = $scope.treeGrid.grid + '_' + id;
+                key = $scope.treeGrid.grid + '_' + id;
 
               this.stores[key] = new links.DataTable(
                 this.process(id, data),
@@ -123,11 +133,11 @@ define(
 
               this.stores[key].appendItems = function (items, callback)
               {
-                function isUnique (item, data)
+                function isUnique(item, data)
                 {
                   var result = true;
 
-                  for (var i = 0; i < data.length; i ++)
+                  for (var i = 0; i < data.length; i++)
                   {
                     if (item._id == data[i]._id) result = false;
                   }
@@ -140,7 +150,7 @@ define(
                   return result;
                 }
 
-                for (var i = 0; i < items.length; i ++)
+                for (var i = 0; i < items.length; i++)
                 {
                   var unique = isUnique(items[i], this.data);
 
@@ -179,7 +189,7 @@ define(
               {
                 var index = this.data.indexOf(targetItem);
 
-                if (index == - 1)
+                if (index == -1)
                 {
                   errback('Error: targetItem not found in data');
 
@@ -187,9 +197,9 @@ define(
                 }
 
                 var names = [],
-                    ids = [];
+                  ids = [];
 
-                for (var i = 0; i < sourceItems.length; i ++)
+                for (var i = 0; i < sourceItems.length; i++)
                 {
                   names.push(sourceItems[i].name);
                   ids.push(sourceItems[i]._id);
@@ -222,7 +232,7 @@ define(
               {
                 var index = this.data.indexOf(item);
 
-                if (index == - 1)
+                if (index == -1)
                 {
                   throw Error('item not found in data');
                 }
@@ -241,7 +251,10 @@ define(
 
                 angular.forEach(
                   _this.stores[item._parent].data,
-                  function (data) { (data._id != item._id) && filtered.push(data) }
+                  function (data)
+                  {
+                    (data._id != item._id) && filtered.push(data)
+                  }
                 );
 
                 _this.stores[item._parent].data = _this.stores[item._parent].filteredData = filtered;
@@ -251,9 +264,9 @@ define(
                 this.trigger('change', undefined);
 
                 var processed = [],
-                    pieces = item._parent.split('_'),
-                    section = pieces[0],
-                    last = pieces[pieces.length - 1];
+                  pieces = item._parent.split('_'),
+                  section = pieces[0],
+                  last = pieces[pieces.length - 1];
 
                 angular.forEach(
                   _this.connections[section][last],
@@ -285,35 +298,38 @@ define(
                 {
                   angular.forEach(
                     _this.stores[key].data,
-                    function (data) {
-						data._parent = key;
+                    function (data)
+                    {
+                      data._parent = key;
 
-						//temp solution so a client or teammember can't be in two teams or clientgroups
-						var keyParent = key.split('_')[0];
+                      //TODO temp solution so a client or teammember can't be in two teams or clientgroups
+                      var keyParent = key.split('_')[0];
 
-						if(keyParent == 'clients' || keyParent == 'teams')
-						{
-							var leftSide = keyParent + '_left',
-								changedData = (
-								  _.where
-								  (
-									  _this.stores[leftSide].data,
-									  {
-										  _id: data._id
-									  }
-								  )
-								  )[0];
-							if(changedData)
-							{
-								_this.stores[leftSide].data.splice
-								(
-									_this.stores[leftSide].data.indexOf(changedData)
-									, 1
-								);
-							}
-						}
-					}
+                      if (keyParent == 'clients' || keyParent == 'teams')
+                      {
+                        var leftSide = keyParent + '_left',
+                          changedData = (
+                            _.where
+                            (
+                              _this.stores[leftSide].data,
+                              {
+                                _id: data._id
+                              }
+                            )
+                          )[0];
+                        if (changedData)
+                        {
+                          _this.stores[leftSide].data.splice
+                          (
+                            _this.stores[leftSide].data.indexOf(changedData)
+                            , 1
+                          );
+                        }
+                      }
+                    }
                   );
+
+
 
                   _this.caches[key] = _this.stores[key].data;
                 }
@@ -326,7 +342,7 @@ define(
                 {
                   var items = event.items;
 
-                  for (var i = 0; i < items.length; i ++)
+                  for (var i = 0; i < items.length; i++)
                   {
                     _this.stores[key].unlink(items[i]);
                   }
@@ -352,9 +368,9 @@ define(
                             index = ind;
 
                             var names = [],
-                                ids = [];
+                              ids = [];
 
-                            for (var i = 0; i < connection.sourceItems.length; i ++)
+                            for (var i = 0; i < connection.sourceItems.length; i++)
                             {
                               names.push(connection.sourceItems[i].name);
                               ids.push(connection.sourceItems[i].id);
@@ -387,12 +403,15 @@ define(
             process: function (id, data)
             {
               var _this = this,
-                  filtered = [],
-                  key = $scope.treeGrid.grid + '_' + id;
+                filtered = [],
+                key = $scope.treeGrid.grid + '_' + id;
 
               angular.forEach(
                 data,
-                function (node) { (node.id) && filtered.push(node) }
+                function (node)
+                {
+                  (node.id) && filtered.push(node)
+                }
               );
 
               this.processed[key] = [];
@@ -412,29 +431,35 @@ define(
                   if (_this.type == '1:n' && id == 'right')
                   {
                     if (_this.grid == 'teams' &&
-                        _this.connections.teams[node.id] &&
-                        _this.connections.teams[node.id].length > 0)
+                      _this.connections.teams[node.id] &&
+                      _this.connections.teams[node.id].length > 0)
                     {
                       setTimeout(
                         function ()
                         {
                           _this.stores[fid].appendItems(
                             _this.connections.teams[node.id],
-                            function (results) { _this.stores[fid].totalItems = results.totalItems }
+                            function (results)
+                            {
+                              _this.stores[fid].totalItems = results.totalItems
+                            }
                           );
                         }, 100);
                     }
 
                     if (_this.grid == 'clients' &&
-                        _this.connections.clients[node.id] &&
-                        _this.connections.clients[node.id].length > 0)
+                      _this.connections.clients[node.id] &&
+                      _this.connections.clients[node.id].length > 0)
                     {
                       setTimeout(
                         function ()
                         {
                           _this.stores[fid].appendItems(
                             _this.connections.clients[node.id],
-                            function (results) { _this.stores[fid].totalItems = results.totalItems }
+                            function (results)
+                            {
+                              _this.stores[fid].totalItems = results.totalItems
+                            }
                           );
                         }, 100);
                     }
@@ -442,8 +467,8 @@ define(
                     var data = ( _this.caches[fid]) ? _this.caches[fid] : [];
 
                     record.nodes = _this.store(
-                        id + '_' + node.id,
-                        data
+                      id + '_' + node.id,
+                      data
                     );
 
                     // record.name += ' (' + _this.stores[fid].totalItems + ')';
@@ -510,17 +535,23 @@ define(
               $scope.treeGrid.type = arguments[2];
               $scope.treeGrid.data = arguments[3];
               $scope.treeGrid.connections = arguments[4];
-				console.log();
+              console.log();
               (function ($scope)
               {
                 setTimeout(
-                  function () { $scope.treeGrid.init() }, 100
+                  function ()
+                  {
+                    $scope.treeGrid.init()
+                  }, 100
                 )
               })($scope);
             }
           );
 
-          $window.onresize = function () { $scope.treeGrid.init() };
+          $window.onresize = function ()
+          {
+            $scope.treeGrid.init()
+          };
 
           $scope.extract = function (sources)
           {
@@ -536,7 +567,10 @@ define(
 
                   angular.forEach(
                     source.nodes.data,
-                    function (node) { nodes.push(node._id) }
+                    function (node)
+                    {
+                      nodes.push(node._id)
+                    }
                   );
 
                   connections[source._id] = nodes;
@@ -551,7 +585,7 @@ define(
             teamClients: function ()
             {
               var data = $scope.treeGrid.stores['teamClients_right'].data,
-                  connections = {};
+                connections = {};
 
               angular.forEach(
                 data,
@@ -588,7 +622,7 @@ define(
             teamClients: function ()
             {
               var data = $scope.treeGrid.stores['teamClients_right'].data,
-                  connections = {};
+                connections = {};
 
               angular.forEach(
                 data,
@@ -604,9 +638,15 @@ define(
               return connections;
             },
 
-            teams: function () { return $scope.extract($scope.treeGrid.stores['teams_right'].data) },
+            teams: function ()
+            {
+              return $scope.extract($scope.treeGrid.stores['teams_right'].data)
+            },
 
-            clients: function () { return $scope.extract($scope.treeGrid.stores['clients_right'].data) }
+            clients: function ()
+            {
+              return $scope.extract($scope.treeGrid.stores['clients_right'].data)
+            }
           };
         }
       ]

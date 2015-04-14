@@ -13,11 +13,11 @@
 				aria-hidden='true')
 				| Teams & Cliënten
 
-		//li(class="{{(views.teams==true) && 'active'}}")
-		//	a(ng-click='setViewTo("teams")')
-		//		span.icomoon(data-icon='',
-		//		aria-hidden='true')
-		//		| Teams
+		li(class="{{(views.teams==true) && 'active'}}")
+			a(ng-click='setViewTo("teams")')
+				span.icomoon(data-icon='',
+				aria-hidden='true')
+				| Teams
 
 		li(class="{{(views.clients==true) && 'active'}}",
 			ng-show='app.domainPermission.clients')
@@ -49,22 +49,22 @@
 			button.btn.btn-success(ng-click='save.teamClients()') Opslaan
 
 
-		//#viewTeamsTab.tab-pane(class="{{(views.teams==true) && 'active'}}")
-		//	.row-fluid
-		//		.span6
-		//			h3
-		//				span.titleIcon.icon-user0
-		//				| Leden
-		//			hr
-		//			#teams_left
-		//		.span6
-		//			h3
-		//				span.titleIcon.icon-users
-		//				| Teams
-		//			hr
-		//			#teams_right
-		//	hr
-		//	button.btn.btn-success(ng-click='save.teams()') Opslaan
+		#viewTeamsTab.tab-pane(class="{{(views.teams==true) && 'active'}}")
+			.row-fluid
+				.span6
+					h3
+						span.titleIcon.icon-user0
+						| Leden
+					hr
+					#teams_left
+				.span6
+					h3
+						span.titleIcon.icon-users
+						| Teams
+					hr
+					#teams_right
+			hr
+			button.btn.btn-success(ng-click='save.teams()') Opslaan
 
 
 		#viewClientsTab.tab-pane(class="{{(views.clients==true) && 'active'}}")

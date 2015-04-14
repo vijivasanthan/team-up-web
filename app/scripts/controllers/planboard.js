@@ -72,6 +72,15 @@ define(
             {
               var members = Store('app').get(team.uuid);
 
+              $scope.data.teams.list.push(
+                {
+                  uuid: team.uuid,
+                  name: team.name
+                }
+              );
+
+              $scope.data.teams.members[team.uuid] = [];
+
               if (members && members.length > 0)
               {
                 //TODO remove dirty fix
@@ -82,14 +91,6 @@ define(
                 //      {uuid: $rootScope.app.resources.uuid}
                 //      );
                 //}
-                $scope.data.teams.list.push(
-                  {
-                    uuid: team.uuid,
-                    name: team.name
-                  }
-                );
-
-                $scope.data.teams.members[team.uuid] = [];
 
                 angular.forEach(
                   members,
@@ -132,17 +133,17 @@ define(
             {
               var members = Store('app').get(client.id);
 
+              $scope.data.clients.list.push(
+                {
+                  uuid: client.id,
+                  name: client.name
+                }
+              );
+
+              $scope.data.clients.members[client.id] = [];
+
               if (members && members.length > 0)
               {
-                $scope.data.clients.list.push(
-                  {
-                    uuid: client.id,
-                    name: client.name
-                  }
-                );
-
-                $scope.data.clients.members[client.id] = [];
-
                 angular.forEach(
                   members,
                   function (member)
@@ -186,59 +187,41 @@ define(
               case 'teams':
                 $scope.list = $scope.data.teams.list;
 
-                $scope.changeCurrent($scope.currentTeam);
+                console.log('teams', $scope.currentTeam);
+
+                loadData()
 
                 break;
 
               case 'clients':
                 $scope.list = $scope.data.clients.list;
 
-                $scope.changeCurrent($scope.currentClientGroup);
+                console.log('clients', $scope.currentClientGroup);
+
+                loadData();
 
                 break;
             }
 
           }
 
-          // TODO: not really sure what this function is used for
-          var getTeamID = function ()
-          {
-            var found = false;
-
-            var team = angular.forEach(
-              Store('app').all(),
-              function (value, key)
-              {
-                if (/teamGroup_/.test(key) && value.hasOwnProperty('0') && !found)
-                {
-                  if (value[0].id == $scope.currentClientGroup)
-                  {
-                    found = true;
-
-                    return key;
-                  }
-                }
-              }
-            );
-
-            return (found) ? team : false;
-          };
-
-          $scope.getTeamID = function ()
-          {
-            getTeamID()
-          };
-
           // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
             CurrentSelection.local = current;
 
-            $scope.currentName = (_.findWhere($scope.data[$scope.section].list, {uuid: current})).name;
-
             $scope.currentTeam = CurrentSelection.getTeamId();
             $scope.currentClientGroup = CurrentSelection.getClientGroupId();
 
+            var section = _.findWhere($scope.data[$scope.section].list, {uuid: current});
+
+            $scope.currentName = section && section.name;
+
+            loadData(periods);
+          };
+
+          var loadData = function(periods)
+          {
             if ($scope.section == 'teams')
             {
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];

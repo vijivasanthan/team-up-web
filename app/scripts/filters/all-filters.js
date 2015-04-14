@@ -33,6 +33,7 @@ define(
     );
 
     /**
+     * TODO what if there are a single or two values
      * Filter false and null values and join it into a string
      * comma seperated, the ending is between all values and the last one
      * example: $filter('commaSeperatedWithEnding')(['hen', 'Henk', 'Henkieee'], 'en'); //hen, Henk en Henkieee
@@ -45,11 +46,64 @@ define(
           return function (arr, ending)
           {
             var _arr = _.compact(arr),
-                last = _arr.pop();
+                result = null;
 
-            return  _arr.join(', ') + ' ' + ending + ' ' + last;
+            if(_arr.length == 0)
+            {
+              result = _arr[0];
+            }
+            else if(_arr.length == 1)
+            {
+              var last = _arr.pop();
+              result = _arr[0] + ' ' + ending + ' ' + _arr[1];
+            }
+            else
+            {
+              var last = _arr.pop();
+              result = _arr.join(', ') + ' ' + ending + ' ' + last;
+            }
+
+            return result;
           }
         }
+    );
+
+    /**
+     * Add teamname by a teamid
+     */
+    filters.filter
+    (
+      'getTeamNameById',
+      function ($rootScope, Store, $filter)
+      {
+        return function (teamsUuids)
+        {
+          if(! _.isUndefined(teamsUuids))
+          {
+            var teamNames = Store('app').get('searchMembersTeams'),
+                userTeams = [];
+
+            if(! teamNames.length && $rootScope.app.resources.role == 1)
+            {
+              teamNames = Store('app').get('teams');
+            }
+
+            if(teamsUuids.length)
+            {
+              _.each(teamsUuids, function (teamId)
+              {
+                var team = _.findWhere(teamNames, {uuid: teamId});
+                userTeams.push(
+                  team && team.name || $rootScope.ui.teamup.noTeamNameFound
+                );
+              });
+            }
+
+            return  userTeams.length && $filter('commaSeperated')(userTeams)
+              || $rootScope.ui.teamup.noTeam;
+          }
+        }
+      }
     );
 
     filters.filter
