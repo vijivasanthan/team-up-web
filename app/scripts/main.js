@@ -43,6 +43,7 @@ require.config(
 
       // treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
       treegrid: 'removables/treegrid',
+      config: 'configTeamUp',
 
       // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
       // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
@@ -141,9 +142,26 @@ require.config(
   }
 );
 
+var profile = null;
+
+switch (localConfig.wantedProfile)
+{
+  case "teamup":
+    profile = 'profiles/teamup/profileApp';
+    break;
+  case "teamtelefoon":
+    profile = 'profiles/teamtelefoon/profileApp';
+    break;
+  case "decentrale-demo":
+    profile = 'profiles/decentrale-demo/profileApp';
+    break;
+  default:
+    profile = 'profiles/teamup/profileApp';
+}
+
 require.config({
     paths: {
-      profile: 'profiles/' + localConfig.wantedProfile + '/profile'
+      profile: profile
     }
 });
 

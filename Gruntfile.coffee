@@ -222,18 +222,31 @@ module.exports = (grunt) ->
             '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
             '<%= paths.dist %>/styles/fonts/*'
           ]
-
+      js:
+        src: [
+          '<%= paths.dist %>/scripts/configTeamUp.js'
+          '<%= paths.dist %>/scripts/profiles/**/profileApp.js'
+        ]
     useminPrepare:
       html: '.tmp/index.html'
       options:
         dest: '<%= paths.dist %>'
-
     usemin:
       html: ['<%= paths.dist %>/{,*/}*.html']
       css: ['<%= paths.dist %>/styles/{,*/}*.css']
+      js: [
+        '<%= paths.dist %>/scripts/*.js'
+        '<%= paths.dist %>/scripts/profiles/**/*.js'
+      ]
       options:
         dirs: ['<%= paths.dist %>']
-
+        patterns:
+          js: [
+            [ /(configTeamUp)/, 'Replacing config', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/teamup\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/teamtelefoon\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/decentrale-demo\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+          ]
     svgmin:
       dist:
         files: [
@@ -410,7 +423,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           flatten: true
-          src: ['<%= paths.dist %>/scripts/config.js']
+          src: ['<%= paths.dist %>/scripts/configTeamUp.js']
           dest: '<%= paths.dist %>/scripts/'
         ]
 
@@ -475,8 +488,11 @@ module.exports = (grunt) ->
     'copy:rest'
     'cssmin'
     'requirejs'
-    'rev'
-    'usemin'
+    'rev:js'
+    'usemin:js'
+    'rev:dist'
+    'usemin:html'
+    'usemin:css'
     'replace'
     'clean:rest'
   ]
