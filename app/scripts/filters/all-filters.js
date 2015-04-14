@@ -78,8 +78,6 @@ define(
       {
         return function (teamsUuids)
         {
-          console.log('teamsUuids', teamsUuids);
-          
           if(! _.isUndefined(teamsUuids))
           {
             var teamNames = Store('app').get('searchMembersTeams'),
