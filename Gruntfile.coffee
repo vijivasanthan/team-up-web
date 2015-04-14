@@ -489,12 +489,12 @@ module.exports = (grunt) ->
     'copy:rest'
     'cssmin'
     'requirejs'
+    'replace'
     'rev:js'
     'usemin:js'
     'rev:dist'
     'usemin:html'
     'usemin:css'
-    'replace'
     'clean:rest'
   ]
 
