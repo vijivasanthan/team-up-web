@@ -30,49 +30,34 @@ define(
           // TODO: Readable variable name!
           $scope.mfuncs = config.app.mfunctions;
 
-          var uuid,
-            view;
-
-          if (!params.uuid && !$location.hash())
+          var setView = function (hash)
           {
-            uuid = CurrentSelection.getTeamId();
-            view = 'team';
+            $scope.views = {
+              team: false,
+              newTeam: false,
+              newMember: false,
+              editTeam: false
+            };
 
-            $location.search({uuid: data.teams[0].uuid}).hash('team');
-          }
-          else if (!params.uuid)
-          {
-            uuid = CurrentSelection.getTeamId();
-            view = $location.hash();
+            switch (hash)
+            {
+              case "newMember":
+                if (angular.isDefined($scope.membersBySearch))
+                {
+                  $scope.membersBySearch = null;
+                  $scope.memberValue = "";
+                  $scope.findMemberSubmit = false;
+                }
+                break;
+              default:
+            }
 
-            $location.search({uuid: uuid});
-          }
-          else
-          {
-            uuid = params.uuid;
-            view = $location.hash();
-          }
-
-          $scope.current = uuid;
-          setTeamView(uuid);
-
-          //set default team by last visited team
-          $scope.memberForm = {};
-          $scope.memberForm.team = uuid;
-          $scope.memberForm.pincode = '';
-
-          $scope.views = {
-            team: true,
-            newTeam: false,
-            newMember: false,
-            editTeam: false
+            $scope.views[hash] = true;
           };
 
-          function setTeamView(id)
+          var setTeamView = function(id)
           {
-            CurrentSelection.local = id;
-
-            $scope.team = _.findWhere(data.teams, {uuid: id});
+            //$scope.team = _.findWhere(data.teams, {uuid: id});
 
             $scope.members = data.members[id];
 
@@ -106,7 +91,39 @@ define(
                 );
               }
             );
+          };
+
+          var uuid,
+            view;
+
+          if (!params.uuid && !$location.hash())
+          {
+            uuid = CurrentSelection.getTeamId();
+            view = 'team';
+
+            $location.search({uuid: data.teams[0].uuid}).hash('team');
           }
+          else if (!params.uuid)
+          {
+            uuid = CurrentSelection.getTeamId();
+            view = $location.hash();
+
+            $location.search({uuid: uuid});
+          }
+          else
+          {
+            uuid = params.uuid;
+            view = $location.hash();
+          }
+
+          $scope.current = uuid;
+          setView('team');
+          setTeamView(uuid);
+
+          //set default team by last visited team
+          $scope.memberForm = {};
+          $scope.memberForm.team = uuid;
+          $scope.memberForm.pincode = '';
 
           /**
            * The type of user added to the team, existing or new
@@ -127,47 +144,6 @@ define(
 
           $scope.setUserType('NEW');
 
-          $scope.requestTeam = function (current, switched)
-          {
-            var hash = $location.hash() || 'team';
-            setTeamView(current);
-
-            $scope.$watch(
-              $location.search(),
-              function ()
-              {
-                $location.search({uuid: current});
-              }
-            );
-
-            setView(hash);
-          };
-
-          var setView = function (hash)
-          {
-            $scope.views = {
-              team: false,
-              newTeam: false,
-              newMember: false,
-              editTeam: false
-            };
-
-            switch (hash)
-            {
-              case "newMember":
-                if (angular.isDefined($scope.membersBySearch))
-                {
-                  $scope.membersBySearch = null;
-                  $scope.memberValue = "";
-                  $scope.findMemberSubmit = false;
-                }
-                break;
-              default:
-            }
-
-            $scope.views[hash] = true;
-          };
-
           $scope.setViewTo = function (hash)
           {
             $scope.$watch(
@@ -183,6 +159,21 @@ define(
 
           setView(view);
 
+          $scope.requestTeam = function (current)
+          {
+            CurrentSelection.local = current;
+
+            setTeamView(current);
+
+            $scope.$watch(
+              $location.search(),
+              function ()
+              {
+                $location.search({uuid: current});
+              }
+            );
+          };
+
           $scope.toggleSelection = function (group, master)
           {
             var flag = (master) ? true : false;
@@ -196,8 +187,10 @@ define(
             );
           };
 
-          $scope.editTeam = function (team)
+          $scope.editTeam = function (current)
           {
+            var team = _.findWhere(data.teams, {uuid: current});
+
             $scope.teamEditForm = {
               name: team.name,
               uuid: team.uuid
@@ -206,13 +199,8 @@ define(
             $scope.views.editTeam = true;
           };
 
-          $scope.cancelTeamEdit = function (team)
+          $scope.cancelTeamEdit = function ()
           {
-            $scope.teamEditForm = {
-              name: team.name,
-              uuid: team.uuid
-            };
-
             $scope.views.editTeam = false;
           };
 

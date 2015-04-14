@@ -76,11 +76,13 @@ define(
       'getTeamNameById',
       function ($rootScope, Store, $filter)
       {
-        return function (teamsUuids)
+        return function (teamsUuids, allTeams)
         {
           if(! _.isUndefined(teamsUuids))
           {
-            var teamNames = Store('app').get('searchMembersTeams'),
+            var teamNames = (allTeams)
+                ? Store('app').get('teams')
+                : Store('app').get('searchMembersTeams'),
                 userTeams = [];
 
             if(! teamNames.length && $rootScope.app.resources.role == 1)
