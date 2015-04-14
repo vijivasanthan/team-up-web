@@ -226,6 +226,7 @@ module.exports = (grunt) ->
         src: [
           '<%= paths.dist %>/scripts/configTeamUp.js'
           '<%= paths.dist %>/scripts/profiles/**/profileApp.js'
+#          '<%= paths.dist %>/scripts/vendors/requirejs/require.js' C:\Users\Henk\Documents\workspace\team-up-web\app\scripts\profiles\teamup
         ]
     useminPrepare:
       html: '.tmp/index.html'
@@ -243,8 +244,8 @@ module.exports = (grunt) ->
         patterns:
           js: [
             [ /(configTeamUp)/, 'Replacing config', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
-            [ /(profiles\/teamup\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
             [ /(profiles\/teamtelefoon\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/teamup\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
             [ /(profiles\/decentrale-demo\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
           ]
     svgmin:
