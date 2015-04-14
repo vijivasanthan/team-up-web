@@ -76,7 +76,7 @@ aria-hidden='true')
 
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
 	h2.nullable {{ui.teamup.clients}}
-	.selectGroup(ng-show="app.resources.role == 1")
+	.selectGroup(ng-show="app.resources.teamUuids.length > 1")
 		span.selectTitle
 			| {{ ui.teamup.selectClientGroup }}
 		select(ng-model='current',

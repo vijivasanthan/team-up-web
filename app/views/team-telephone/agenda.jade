@@ -15,12 +15,11 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 			div#timelineTab.tab-pane.active
 				#timeline
 					div#timeline-toolbar
-						select.form-control.pull-left(ng-hide='app.resources.role > 1',
+						select.form-control.pull-left(ng-show='app.resources.teamUuids.length > 1 && timeline.current.layouts.group',
 							ng-model='timeline.current.group',
 							ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 							ng-selected='timeline.current.group',
-							ng-change='requestTimeline()',
-							ng-show='timeline.current.layouts.group && app.resources.role == 0')
+							ng-change='requestTimeline()')
 						//select.form-control(ng-model='timeline.current.division',
 						//ng-options='division.id as division.label for division in divisions',
 						//ng-selected='timeline.current.division',

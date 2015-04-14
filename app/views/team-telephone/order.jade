@@ -3,7 +3,7 @@ section
 		h2.nullable
 			| Volgorde
 	div(style='margin-top: 20px;')
-	.form-group.has-feedback.pull-left(ng-show='app.resources.role == 1')
+	.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1')
 		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 		label.control-label Selecteer team
 		.controls

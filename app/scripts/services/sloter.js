@@ -517,10 +517,13 @@ define(['services/services', 'config'],
                   member.fullName +
                   '</a>';
 
-                  link += '<a class="edit-timeline-icon" title="'
+                  if($rootScope.app.resources.uuid !== member.id)
+                  {
+                    link += '<a class="edit-timeline-icon" title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
-                  link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
-                  link += '><i class="icon-edit"></a>';
+                    link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
+                    link += '><i class="icon-edit"></a>';
+                  }
 
                   _.each(member.data, function (slot)
                   {
