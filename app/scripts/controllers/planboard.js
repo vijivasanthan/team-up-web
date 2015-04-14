@@ -186,20 +186,12 @@ define(
             {
               case 'teams':
                 $scope.list = $scope.data.teams.list;
-
-                console.log('teams', $scope.currentTeam);
-
                 loadData()
-
                 break;
 
               case 'clients':
                 $scope.list = $scope.data.clients.list;
-
-                console.log('clients', $scope.currentClientGroup);
-
                 loadData();
-
                 break;
             }
 
