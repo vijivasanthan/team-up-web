@@ -92,7 +92,7 @@ section#profile
 									span(ng-show='teams.length == 1', ng-repeat='team in teams')
 										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									ol(ng-show='teams.length > 1' style='padding-left: 21px;')
-										li(ng-repeat='team in teams')
+										li(ng-repeat='team in teams| orderBy:"name"')
 											span
 												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//span(ng-repeat='team in teams')
