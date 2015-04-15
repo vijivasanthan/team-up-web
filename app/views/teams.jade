@@ -35,6 +35,31 @@ aria-hidden='true')
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
 				ng-click='deleteMember(currentMember)') {{ui.teamup.confirms.remove}}
+				
+#confirmMemberAddModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmMemberAddModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only Close
+				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
+			.modal-body
+				| Wilt u 
+				strong {{ member.firstName }} {{ member.lastName }} 
+				| lid maken van team 
+				strong {{ [current]|getTeamNameById }}
+				|? 
+				| Deze persoon maakt dan niet langer deel uit van team 
+				strong {{ member.teamUuids|getTeamNameById }}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='AddTeamRemoveCurrent(member)') Wijzigen
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
@@ -43,8 +68,7 @@ aria-hidden='true')
 		span.selectTitles
 			strong
 				| {{ ui.teamup.selectTeam }}
-		select(current_selection='team', 
-		ng-model='current',
+		select(ng-model='current',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
 		ng-selected='current',
 		ng-change='requestTeam(current)')
@@ -155,7 +179,7 @@ aria-hidden='true')
 
 		#newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")
 			.tab-header
-				h3.pull-left {{ui.teamup.newTeam}}
+				h3.pull-left {{ui.teamup.newTeam}} 
 			hr
 			form.form
 				.control-group
@@ -169,17 +193,32 @@ aria-hidden='true')
 		#newMemberTab.tab-pane(class="{{(views.newMember==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.teamup.newMember}}
+				form(ng-submit='searchMember(memberValue); findMemberSubmit=true')
+					.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;', ng-show='userType == "EXISTING"')
+						input.form-control.search-query(
+							type='text',
+							placeholder='{{ ui.teamup.searchMembers }}', 
+							ng-model='memberValue')
+						span(class="input-group-btn")
+							button.search-button(ng-model='findMemberSubmit' ng-init="findMemberSubmit=false",
+								ng-click='searchMember(memberValue); findMemberSubmit=true',
+								input-rule-toggle='1',
+								class="btn btn-default input-buttons add-button",
+								type="button")
+								i(class="glyphicon glyphicon-white glyphicon-search")
 				div.btn-group.pull-right
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
 						ng-click='setUserType("NEW")')
 						| Nieuw
-					button.btn.btn-primary(class='{{(userType == "EXISTING") && "active"}}',
+					button.btn.btn-primary(focus-on-click='search-query', class='{{(userType == "EXISTING") && "active"}}',
 						ng-click='setUserType("EXISTING")')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
-				p(ng-hide='membersWithoutTeam.length > 0') {{ui.teamup.noMembers}}
-				table.table.table-striped(ng-show='membersWithoutTeam.length')
+				p(ng-show='! findMemberSubmit') {{ ui.teamup.howToSearchMembers }}
+				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }}
+				p(ng-show='membersBySearch.length == 0 && ! findMembersLoad') {{ui.teamup.noMembersFound}}
+				table.table.table-striped(ng-show='membersBySearch.length && ! findMembersLoad')
 					thead
 						tr
 							th
@@ -187,10 +226,11 @@ aria-hidden='true')
 								a(ng-click='memberInTeamOrder="lastName"; reverse=!reverse') {{ui.teamup.name}}
 									i.icon-sort
 							th
-								a(ng-click='memberInTeamOrder="email"; reverse=!reverse') {{ui.teamup.email}}
+								a(ng-click='memberInTeamOrder="teamUuids"; reverse=!reverse') {{ui.teamup.teams_Cap}}
 									i.icon-sort
+							th
 					tbody
-						tr(ng-repeat='member in membersWithoutTeam | orderBy:memberInTeamOrder:reverse')
+						tr(ng-repeat='member in membersBySearch | orderBy:memberInTeamOrder:reverse')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
@@ -198,15 +238,15 @@ aria-hidden='true')
 								a(href='index.html#/profile/{{member.uuid}}#profile')
 									| {{member.firstName}} {{member.lastName}}
 							td
-								| {{member.email}}
+								| {{ member.teamUuids | getTeamNameById }}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(ng-click='addExistingUserMember(member)')
-										span.icomoon(data-icon='',
-										aria-hidden='true')
-				span.muted.pull-right
+									button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)', 
+										ng-hide='member.teamUuids.indexOf(current) >= 0')
+										span.icomoon(data-icon='')
+				span.muted.pull-right(ng-show='membersBySearch.length > 0')
 					small
-						i {{membersWithoutTeam.length | i18n_spec:'groups.memberCount'}}
+						i {{ membersBySearch.length | i18n_spec:'groups.memberCount'}}
 			
 			form(name='teamMemberForm',
 				novalidate,
@@ -218,7 +258,7 @@ aria-hidden='true')
 								.form-group
 									label.control-label {{ui.profile.firstName}}
 									.controls
-										input.span4(type='text',
+										input.span4(type='text', autofocus="true",
 										ng-model='memberForm.firstName')
 								.form-group
 									label.control-label {{ui.profile.lastName}}
@@ -259,25 +299,6 @@ aria-hidden='true')
 								//			option(value='') {{ui.teamup.chooseFunction}}
 						.span6
 							fieldset
-								.form-group.dater(ng-class="{ 'has-error' : teamMemberForm.birthdate.$invalid && !teamMemberForm.birthdate.$pristine }")
-									label.control-label {{ui.profile.birthday}}
-									.controls
-										input.form-control(
-										type='text',
-										name='birthdate',
-										required,
-										ng-model="memberForm.birthDate",
-										data-date-type='string',
-										data-date-format='dd-MM-yyyy',
-										bs-datepicker='')
-										i.icon-calendar
-										p.text-danger(ng-show='teamMemberForm.birthdate.$invalid && !teamMemberForm.birthdate.$pristine')
-											small
-												i {{ui.validation.birthDate.notValid }}
-										span.help-block(style='margin-top: -5px;')
-											small
-												i {{ui.profile.exampleBirthDate}}
-												
 								.form-group(
 									ng-class="{'has-error' : UserNameWrong}")
 									label.control-label {{ui.profile.username}}

@@ -4,24 +4,16 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'status',
-      function ($scope, $rootScope, $q, Slots, Store, data)
+      function ($scope, $rootScope, $q, Slots, Store, data, CurrentSelection)
       {
         $rootScope.notification.status = false;
 
         $rootScope.fixStyles();
 
         var teams = Store('app').get('teams'),
-          members = Store('app').get('members'),
+          members = _.flatten(_.values(data.members)),
           currentMembers = null,
           everyoneId = 'all';
-
-        //Check if members already stored locally in case of slow back end call
-        if(! members.length > 0)
-        {
-          members = [];
-          //get all teams members arrays and merge the values to one single array
-          members = _.flatten(_.values(data.members));
-        }
 
         members = $rootScope.unique(members);
 
@@ -43,8 +35,7 @@ define(['controllers/controllers'], function (controllers)
         };
 
         $scope.current = {
-          group: everyoneId,
-          division: everyoneId
+          group: CurrentSelection.getTeamId()
         };
 
         $scope.loadingReachability = true;
@@ -73,6 +64,7 @@ define(['controllers/controllers'], function (controllers)
           }
           else if (typeof data.members[groupID] != 'undefined')
           {
+            CurrentSelection.local = groupID;
             currentMembers = $rootScope.unique(data.members[groupID]);
           }
 

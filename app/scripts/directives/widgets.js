@@ -192,6 +192,44 @@ define(
       ]
     );
 
+    directives.directive(
+      'focus',
+      function($timeout) {
+
+        return {
+          scope : {
+            trigger : '@focus'
+          },
+          link : function(scope, element) {
+            scope.$watch('trigger', function(value) {
+              if (value === "true") {
+                $timeout(function() {
+                  element[0].autoFocus = true;
+                  element[0].focus();
+                });
+              }
+            });
+          }
+        };
+      }
+    );
+
+    directives.directive(
+      'focusOnClick',
+      function ()
+      {
+        return function (scope, element, attrs)
+        {
+          element.on('click', function ()
+          {
+            var focusClass = '.' + attrs.focusOnClick;
+
+            angular.element(focusClass).focus();
+          });
+        };
+      }
+    );
+
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
     'ngenter',

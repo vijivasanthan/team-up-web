@@ -53,7 +53,7 @@ define(
                   break;
 
                 case '/manage':
-                  $rootScope.loaderIcons.messages = true;
+                  $rootScope.loaderIcons.dashboard = true;
 
                   $rootScope.location = 'manage';
                   break;
@@ -178,7 +178,7 @@ define(
                 break;
 
               case 'tasks2/planboard':
-                $location.path('/tasks2/planboard').search({local: 'true'}).hash('teams');
+                $location.path('/tasks2/planboard').search({}).hash('');
                 break;
 
               case 'team-telefoon/agenda':

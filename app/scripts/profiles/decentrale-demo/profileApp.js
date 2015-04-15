@@ -7,7 +7,7 @@ var profile = {
 
   own: true,
 
-  name: 'TeamTelefoon',
+  name: 'Decentrale',
 
   lang: 'nl',
 
@@ -58,10 +58,6 @@ var profile = {
     {
       id: '2',
       label: 'team lid'
-    },
-    {
-      id: '3',
-      label: 'client'
     }
   ],
 
@@ -80,13 +76,13 @@ var profile = {
   },
 
   analytics: {
-    status: true,
+    status: false,
     code: function () {
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q || []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-59564357-1', 'auto');
+      ga('create', 'UA-59561184-1', 'auto');
       ga('send', 'pageview');
     }
   },

@@ -138,7 +138,7 @@ module.exports = (grunt) ->
             '.tmp'
             '<%= paths.dist %>/*'
             '!<%= paths.dist %>/vendors*'
-            # '!<%= paths.dist %>/WEB-INF*' # depreciated
+# '!<%= paths.dist %>/WEB-INF*' # depreciated
             '!<%= paths.dist %>/.git*'
           ]
         ]
@@ -222,18 +222,32 @@ module.exports = (grunt) ->
             '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
             '<%= paths.dist %>/styles/fonts/*'
           ]
-
+      js:
+        src: [
+          '<%= paths.dist %>/scripts/configTeamUp.js'
+          '<%= paths.dist %>/scripts/profiles/**/profileApp.js'
+#          '<%= paths.dist %>/scripts/vendors/requirejs/require.js' C:\Users\Henk\Documents\workspace\team-up-web\app\scripts\profiles\teamup
+        ]
     useminPrepare:
       html: '.tmp/index.html'
       options:
         dest: '<%= paths.dist %>'
-
     usemin:
       html: ['<%= paths.dist %>/{,*/}*.html']
       css: ['<%= paths.dist %>/styles/{,*/}*.css']
+      js: [
+        '<%= paths.dist %>/scripts/*.js'
+        '<%= paths.dist %>/scripts/profiles/**/*.js'
+      ]
       options:
         dirs: ['<%= paths.dist %>']
-
+        patterns:
+          js: [
+            [ /(configTeamUp)/, 'Replacing config', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/teamtelefoon\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/teamup\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/decentrale-demo\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+          ]
     svgmin:
       dist:
         files: [
@@ -258,15 +272,15 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         options: {}
-      #removeCommentsFromCDATA: true,
-      #             // https://github.com/paths/grunt-usemin/issues/44
-      #             //collapseWhitespace: true,
-      #             collapseBooleanAttributes: true,
-      #             removeAttributeQuotes: true,
-      #             removeRedundantAttributes: true,
-      #             useShortDoctype: true,
-      #             removeEmptyAttributes: true,
-      #             removeOptionalTags: true
+#removeCommentsFromCDATA: true,
+#             // https://github.com/paths/grunt-usemin/issues/44
+#             //collapseWhitespace: true,
+#             collapseBooleanAttributes: true,
+#             removeAttributeQuotes: true,
+#             removeRedundantAttributes: true,
+#             useShortDoctype: true,
+#             removeEmptyAttributes: true,
+#             removeOptionalTags: true
         files: [
           expand: true
           cwd: '.tmp'
@@ -410,7 +424,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           flatten: true
-          src: ['<%= paths.dist %>/scripts/config.js']
+          src: ['<%= paths.dist %>/scripts/configTeamUp.js']
           dest: '<%= paths.dist %>/scripts/'
         ]
 
@@ -429,8 +443,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'stage', 'git add files before running the release task', ->
     files = @options().files
     grunt.util.spawn
-    # TODO (Test this if it is really needed git.cmd??)
-    # cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
+# TODO (Test this if it is really needed git.cmd??)
+# cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
       cmd: 'git'
       args: ['add'].concat(files)
     , grunt.task.current.async()
@@ -475,9 +489,12 @@ module.exports = (grunt) ->
     'copy:rest'
     'cssmin'
     'requirejs'
-    'rev'
-    'usemin'
     'replace'
+    'rev:js'
+    'usemin:js'
+    'rev:dist'
+    'usemin:html'
+    'usemin:css'
     'clean:rest'
   ]
 

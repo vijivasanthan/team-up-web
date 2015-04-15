@@ -48,7 +48,6 @@ define(
           $scope.mfuncs = config.app.mfunctions;
 
           $scope.view = data;
-          $scope.view.birthDate = Dater.formatDate($scope.view.birthDate);
 
           // TODO: Still needed?
           $scope.noImgURL = config.app.noImgURL;
@@ -250,33 +249,8 @@ define(
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
-            if($rootScope.browser.mobile)
-            {
-              //browsers aren't recognizing local date string yet. Instead it's expecting a date format
-              // to be provided in ISO 8601 (type='date')
-              var tempDate = tempResources.birthDate,
-                days = tempDate.substr(tempDate.length - 2),
-                months = tempDate.substr(5, 2),
-                years = tempDate.substr(0, 4);
-
-              tempResources.birthDate = days + '-' + months + '-' + years;
-            }
-
-            // deal with birthday
-            try
-            {
-              tempResources.birthDate = Dater.convert.absolute(tempResources.birthDate, 0);
-            }
-            catch (error)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return false;
-            }
-
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
-            delete tempResources.birthday;
             delete tempResources.fullName;
             //delete resources.TeamMemberCodeAsPhone;
 
@@ -342,17 +316,11 @@ define(
                             $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
 
                             $scope.view = data;
-                            $scope.view.birthDate = Dater.formatDate($scope.view.birthDate);
 
                             getProfileResource(
                               $route.current.params.userId,
                               ($route.current.params.userId == $rootScope.app.resources.uuid)
                             );
-
-                            if($rootScope.browser.mobile)
-                            {
-                              $scope.edit.birthDate = Dater.formatDateMobile($scope.view.birthDate);
-                            }
 
                             $rootScope.statusBar.off();
                             $scope.setViewTo('profile');
@@ -398,11 +366,6 @@ define(
 
           $scope.editProfile = function ()
           {
-            if($rootScope.browser.mobile)
-            {
-              $scope.edit.birthDate = Dater.formatDateMobile($scope.edit.birthDate);
-            }
-
             setView('edit');
           };
 

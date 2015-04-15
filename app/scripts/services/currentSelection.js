@@ -6,15 +6,8 @@ define(
 
     services.factory(
       'CurrentSelection',
-      [
-        '$rootScope',
-        'Store',
-        'Teams',
         function ($rootScope, Store, Teams)
         {
-          var teams = Store('app').get('teams'),
-              teamsClientGroup = Teams.queryLocalClientGroup(teams);
-
           return {
             get local()
             {
@@ -22,29 +15,54 @@ define(
             },
             set local(id)
             {
-              var clientGroupId = teamsClientGroup[id],
-                  teamId = (_.invert(teamsClientGroup))[clientGroupId] || null;
+              this.update(id);
+            },
+            update: function(id)
+            {
+              var teams = Store('app').get('teams'),
+                  team = _.findWhere(teams, {uuid: id}),
+                  teamId = team && team.uuid,
+                  clientGroupId = null;
 
-              if(_.isNull(teamId))
+              //Check if there is ACL permission
+              if($rootScope.app.domainPermission.clients)
               {
-                teamId = (_.invert(teamsClientGroup))[id];
-                clientGroupId = teamsClientGroup[teamId];
+                var clientGroups = Store('app').get('ClientGroups'),
+                    teamsClientGroup = Teams.queryLocalClientGroup(teams);
+
+                //Check if id was a teamId, otherwise it's a clientId
+                if(_.isUndefined(teamId))
+                {
+                  //find the clientGroup by id
+                  var clientGroup = _.findWhere(clientGroups, {id: id});
+                  clientGroupId = clientGroup && clientGroup.id;
+
+                  //find the teamId matching with the clientgroup id
+                  //if there is none, set the last selected teamId back
+                  //if there is no last selected teamId, add the current teamId of the logged user
+                  teamId = (_.invert(teamsClientGroup))[clientGroupId]
+                          || this.getTeamId()
+                          || $rootScope.app.resources.teamUuids[0];
+                }
+                else
+                {
+                  //if the clientGroupId doesn't match with the given teamId, set the last selected clientGroupId
+                  //if there was not a selection of a clientGroupId before, set the first clientgroup id
+                  clientGroupId = teamsClientGroup[teamId]
+                    || this.clientGroupId
+                    || (clientGroups[0]).id;
+                }
               }
 
-              this.update(teamId, clientGroupId);
-            },
-            update: function(teamId, clientGroupId)
-            {
               Store('app').save('currentTeamClientGroup', {teamId: teamId, clientGroupId: clientGroupId });
             },
             init: function()
             {
               if(Object.keys(this.local).length == 1)
               {
-                var teamId = $rootScope.app.resources.teamUuids[0],
-                  clientGroupId = teamsClientGroup[teamId];
+                var id = $rootScope.app.resources.teamUuids[0];
 
-                this.update(teamId, clientGroupId);
+                this.update(id);
               }
 
               return this.local;
@@ -55,13 +73,10 @@ define(
             },
             getClientGroupId: function()
             {
-              return this.local.clientGroupId || (this.init()).clientGroupId;
+              return  this.local.clientGroupId || (this.init()).clientGroupId;
             }
           };
         }
-      ]
     );
-
-
   }
 );

@@ -108,8 +108,8 @@ section#profile
 									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  
 									span(class='phone-description') {{phone}}
 								//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
-								dt {{ui.profile.birthday}}
-								dd {{view.birthDate}}
+								//dt {{ui.profile.birthday}}
+								//dd {{view.birthDate}}
 								dt {{ui.profile.userName}}
 								dd {{view.userName}}
 								dt {{ui.profile.pincode}}
@@ -154,32 +154,32 @@ section#profile
 								select(ng-model='edit.role',
 								ng-options='r.id as r.label for r in roles',
 								ng-selected='currentRole')
-						.form-group.dater(
-							ng-class="{ 'has-error' : profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine }",
-							ng-hide='browser.mobile')
-							label.control-label {{ui.profile.birthday}}
-							.controls
-								input.form-control(name='birthdate',
-								required,
-								type='text',
-								ng-model='edit.birthDate',
-								data-date-type='string',
-								data-date-format='dd-MM-yyyy',
-								bs-datepicker='')
-								i.icon-calendar
-								p.text-danger(ng-show='profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine')
-									small
-										i {{ui.validation.birthDate.notValid }}
-								span.help-block(style='margin-top: -5px;')
-									small
-										i {{ui.profile.exampleBirthDate}}
+						//.form-group.dater(
+						//	ng-class="{ 'has-error' : profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine }",
+						//	ng-hide='browser.mobile')
+						//	label.control-label {{ui.profile.birthday}}
+						//	.controls
+						//		input.form-control(name='birthdate',
+						//		required,
+						//		type='text',
+						//		ng-model='edit.birthDate',
+						//		data-date-type='string',
+						//		data-date-format='dd-MM-yyyy',
+						//		bs-datepicker='')
+						//		i.icon-calendar
+						//		p.text-danger(ng-show='profileForm.birthdate.$invalid && !profileForm.birthdate.$pristine')
+						//			small
+						//				i {{ui.validation.birthDate.notValid }}
+						//		span.help-block(style='margin-top: -5px;')
+						//			small
+						//				i {{ui.profile.exampleBirthDate}}
 			
-						.form-elements-group(ng-show='browser.mobile')
-							label {{ui.profile.birthday}}
-							.form-group.dater-mobile
-								input.form-control(name='date-start',
-								type='date',
-								ng-model='edit.birthDate')
+						//.form-elements-group(ng-show='browser.mobile')
+						//	label {{ui.profile.birthday}}
+						//	.form-group.dater-mobile
+						//		input.form-control(name='date-start',
+						//		type='date',
+						//		ng-model='edit.birthDate')
 								
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
 							label.control-label E-mail

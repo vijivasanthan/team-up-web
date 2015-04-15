@@ -5,26 +5,9 @@ define(
     'use strict';
 
     controllers.controller(
-      'clientCtrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        'Report',
-        'Clients',
-        'Teams',
-        'data',
-        '$route',
-        '$routeParams',
-        'Store',
-        'Dater',
-        '$filter',
-        '$modal',
-        'TeamUp',
-        '$timeout',
-        'Reports',
-        'moment',
+      'clientCtrl',
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Reports, moment)
+                  $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection)
         {
           //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
           //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
@@ -46,50 +29,30 @@ define(
               data.clientGroups,
               function (clientGroup)
               {
-                //var client = _.findWhere(Store('app').get(clientGroup.id), {uuid: data.clientId});
-                //
-                //if (! _.isUndefined(client))
-                //{
-                //  console.log('clientGroup.id', clientGroup.id);
-                //
-                //  $scope.client = client;
-                //  $scope.contacts = client.contacts;
-                //
-                //  console.log('client', $scope.contacts);
-                //
-                //  client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
-                //  $scope.clientmeta = client;
-                //  clientHasClientGroup = true;
-                //}
+                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+                var clientInTeam = _.findWhere(data.clients[clientGroup.id], {uuid: data.clientId});
 
-                //TODO this works only with one clientGroup per client
-                angular.forEach(
-                  data.clients[clientGroup.id],
-                  function (client)
-                  {
-                    if (client.uuid == data.clientId)
-                    {
-                      $scope.client = client;
-                      $scope.contacts = client.contacts;
+                if(!_.isUndefined(clientInTeam))
+                {
+                  $scope.client = clientInTeam;
+                  $scope.contacts = clientInTeam.contacts;
 
-                      client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
-                      $scope.clientmeta = client;
-                      clientHasClientGroup = true;
-                    }
-                  }
-                );
+                  $scope.clientmeta = clientInTeam;
+                  clientHasClientGroup = true;
+                }
               }
             );
 
             if (!clientHasClientGroup)
             {
+              //add Geen clientgroep
+
               data.clients = Store('app').get('clients');
               data.client = _.findWhere(data.clients, {uuid: data.clientId});
 
-              Reports.clientId = $scope.client.uuid;
               $scope.client = data.client;
+              Reports.clientId = $scope.client.uuid;
               $scope.contacts = data.client.contacts;
-              data.client.birthDate = moment(client.birthDate).format('DD-MM-YYYY');
               $scope.clientmeta = data.client;
             }
           }
@@ -136,14 +99,14 @@ define(
 
           if (!params.uuid && !$location.hash())
           {
-            uuid = data.clientGroups[0].id;
+            uuid = CurrentSelection.getClientGroupId();
             view = 'client';
 
-            $location.search({uuid: data.clientGroups[0].id}).hash('client');
+            $location.search({uuid: uuid}).hash('client');
           }
           else if (!params.uuid)
           {
-            uuid = data.clientGroups[0].id;
+            uuid = CurrentSelection.getClientGroupId();
 
             view = $location.hash();
 
@@ -293,6 +256,8 @@ define(
 
           $scope.requestClientGroup = function (current, switched)
           {
+            CurrentSelection.local = current;
+
             setClientView(current);
 
             $scope.$watch(
@@ -582,25 +547,16 @@ define(
           // create a new client
           $scope.clientSubmit = function (client)
           {
-            if (typeof client == 'undefined' || !client.firstName || !client.lastName || !client.phone)
+            if (typeof client == 'undefined' || !client.firstName || !client.lastName)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.clinetInfoFill);
 
               return;
             }
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
-
-            // might need to convert the client to client obj
-            try
+            if(! client.phone)
             {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              // console.log(error);
-
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
 
               return;
             }
@@ -617,6 +573,8 @@ define(
             }
 
             client.clientGroupUuid = $scope.clientGroup.id;
+
+            $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
             TeamUp._(
               'clientAdd',
@@ -678,18 +636,6 @@ define(
             //temp var, so the user should't see the date changing
             var changedClient = angular.copy(client);
 
-            try
-            {
-              //convert birthdate into miliseconds for saving
-              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return;
-            }
-
             Clients.singleUpdate(changedClient)
               .then(
               function (result)
@@ -718,18 +664,6 @@ define(
           $scope.saveContacts = function (contacts)
           {
             var client = $scope.client;
-
-            try
-            {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
-            }
-            catch (error)
-            {
-              // console.log(error);
-              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
-              return;
-            }
 
             client.contacts = contacts;
 
@@ -765,7 +699,6 @@ define(
                     {
                     });
                 }
-                $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
               }
             );
           };
@@ -1107,7 +1040,6 @@ define(
             $scope.setViewTo('editImg');
           };
         }
-      ]
     );
   }
 );
