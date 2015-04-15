@@ -575,6 +575,24 @@ define(
             return deferred.promise;
           };
 
+          TeamsService.prototype.getTeamNamesOfUser = function (teamsUuids)
+          {
+            var teams = Store('app').get('teams'),
+              userTeams = [];
+
+            _.each(teamsUuids, function (teamUuid)
+            {
+              var team = _.findWhere(teams, {uuid: teamUuid});
+
+              if(!_.isUndefined(team))
+              {
+                userTeams.push(team);
+              }
+            });
+
+            return userTeams;
+          };
+
           return new TeamsService;
         }
       ]

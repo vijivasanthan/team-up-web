@@ -37,6 +37,7 @@ define(
                   $scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
                   $scope.edit = angular.copy($scope.view);
+                  $scope.edit.defaultTeam = $scope.edit.teamUuids[0];
                 }
               }
             );
@@ -62,7 +63,7 @@ define(
 
           if($scope.view.teamUuids.length > 0)
           {
-            $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
+            $scope.teams = Teams.getTeamNamesOfUser($scope.view.teamUuids);
           }
 
           $rootScope.infoUserWithoutTeam();
@@ -243,6 +244,20 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
+            //resources.defaultTeam
+            var tempTeamUuids = [];
+            _.each(resources.teamUuids, function (teamUuid)
+            {
+              if(teamUuid != resources.defaultTeam)
+              {
+                tempTeamUuids.push(teamUuid);
+              }
+            });
+
+            tempTeamUuids.unshift(resources.defaultTeam);
+
+            resources.teamUuids = tempTeamUuids;
+
             //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
 
@@ -252,6 +267,7 @@ define(
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             delete tempResources.fullName;
+            delete tempResources.defaultTeam;
             //delete resources.TeamMemberCodeAsPhone;
 
             //oldpass
@@ -321,6 +337,11 @@ define(
                               $route.current.params.userId,
                               ($route.current.params.userId == $rootScope.app.resources.uuid)
                             );
+
+                            if($scope.view.teamUuids.length > 0)
+                            {
+                              $scope.teams = Teams.getTeamNamesOfUser($scope.view.teamUuids);
+                            }
 
                             $rootScope.statusBar.off();
                             $scope.setViewTo('profile');

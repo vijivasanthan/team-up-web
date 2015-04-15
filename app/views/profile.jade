@@ -80,7 +80,7 @@ section#profile
 							ng-hide='app.resources.role > 1 && edit.uuid != app.resources.uuid || ! app.resources.teamUuids.length') 
 							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
-							ng-click='editProfile()',
+							ng-click='setViewTo("edit")',
 							ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)') {{ui.profile.edit}}
 					hr
 					.row-fluid
@@ -88,13 +88,18 @@ section#profile
 							dl
 								dt {{ui.teamup.teams}}
 								dd(ng-show='! teams || teams.length == 0') Geen team geselecteerd
-								dd
-									span(ng-show='teams.length == 1', ng-repeat='team in teams')
+								dd(ng-show='teams.length == 1')
+									span(ng-repeat='team in teams')
 										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
-									ol(ng-show='teams.length > 1' style='padding-left: 21px;')
-										li(ng-repeat='team in teams| orderBy:"name"')
-											span
-												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+								dd.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
+									span(class="label label-inverse") {{ ($index > 0) ? 'Extra' : 'Standaard' }}  
+									span.phone-description
+										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									
+									//ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+									//	li(ng-repeat='team in teams| orderBy:"name"')
+									//		span
+									//				a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//span(ng-repeat='team in teams')
 									//		a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//	span(ng-hide = '{{((teams.length-1) == $index)}}') ,
@@ -192,7 +197,14 @@ section#profile
 									small(ng-show="profileForm.$error.email")
 										i
 										| {{ ui.validation.email.notValid }}
-	
+						
+						.form-group
+							label.control-label {{ui.teamup.defaultTeam}}
+							.controls
+								select(ng-model='edit.defaultTeam', 
+									ng-options='team.uuid as team.name for team in teams|orderBy:"name"',
+									ng-selected='edit.defaultTeam')
+								
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
 							label.control-label {{ui.profile.phone}} standaard
 							.controls
