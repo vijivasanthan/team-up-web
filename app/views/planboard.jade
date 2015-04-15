@@ -22,7 +22,7 @@ div(ng-controller='timeline as taskPlanboard')
 		.page-header.timeline
 			h2.nullable {{ui.task.tasks}}
 			//include planboard/time-slot.jade
-			div(ng-show="app.resources.teamUuids.length > 1")
+			div(ng-show="app.resources.teamUuids.length > 1 || app.resources.role == 1")
 				span.nullable.pull-left(ng-show='views.teams')
 					.selectGroup
 						span.selectTitle

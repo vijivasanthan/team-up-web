@@ -45,8 +45,6 @@ define(
 
             if (!clientHasClientGroup)
             {
-
-
               data.clients = Store('app').get('clients');
               data.client = _.findWhere(data.clients, {uuid: data.clientId});
 

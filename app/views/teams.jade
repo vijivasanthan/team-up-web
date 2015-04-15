@@ -47,24 +47,41 @@ aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only Close
 				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
-			.modal-body
-				| Wilt u 
-				strong {{ member.firstName }} {{ member.lastName }} 
-				| lid maken van team 
-				strong {{ [current]|getTeamNameById }}
-				|? 
-				| Deze persoon maakt dan niet langer deel uit van team 
-				strong {{ member.teamUuids|getTeamNameById }}
+			.modal-body(ng-init='changeMemberTeamOption = 2')
+				p
+					| Wilt u 
+					strong {{ member.firstName }} {{ member.lastName }} 
+					| lid maken van team 
+					strong {{ [current]|getTeamNameById }}
+					|? 
+				div.radio
+					label
+						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='2')
+						strong Toevoegen
+						span.help-block
+							small
+								i
+									| Deze persoon zal deel uitmaken van de volgende teams
+									strong  {{  [current]|getTeamNameById }}, {{ member.teamUuids|getTeamNameById }}
+				div.radio
+					label
+						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='1')
+						strong Verplaatsen
+						span.help-block
+							small
+								i
+									| Deze persoon zal alleen deel uit maken van  
+									strong {{ [current]|getTeamNameById }}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='AddTeamRemoveCurrent(member)') Wijzigen
+				ng-click='changeMemberTeam(member, changeMemberTeamOption)') Wijzigen
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(
-		ng-show='app.resources.teamUuids.length > 1 && !views.newTeam')
+		ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1) && !views.newTeam')
 		span.selectTitles
 			strong
 				| {{ ui.teamup.selectTeam }}

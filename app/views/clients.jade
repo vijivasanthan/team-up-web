@@ -76,7 +76,7 @@ aria-hidden='true')
 
 .page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
 	h2.nullable {{ui.teamup.clients}}
-	.selectGroup(ng-show="app.resources.teamUuids.length > 1")
+	.selectGroup(ng-show="app.resources.teamUuids.length > 1 || app.resources.role == 1")
 		span.selectTitle
 			| {{ ui.teamup.selectClientGroup }}
 		select(ng-model='current',
@@ -374,9 +374,9 @@ aria-hidden='true')
 						a(href='#/clientProfile/{{client.uuid}}#editImg')
 							button.btn.btn-mini.btn-primary(ng-click='editImg()')
 								i.icon-edit
-						button.btn.btn-mini.btn-primary(type='submit',
-						ng-click='removeImg(client.uuid)')
-							i.icon-trash
+						//button.btn.btn-mini.btn-primary(type='submit',
+						//ng-click='removeImg(client.uuid)')
+						//	i.icon-trash
 
 			div(ng-show='client.extraInfo.basic')
 				.tab-header

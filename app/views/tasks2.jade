@@ -87,7 +87,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
-	.selectGroup(ng-show='views.allTasks && app.resources.teamUuids.length > 1')
+	.selectGroup(ng-show='views.allTasks && (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
 		span.selectTitle
 			| Selecteer team
 		select(current_selection='team' ng-model='task.team',

@@ -664,7 +664,7 @@ define(
 
             TeamUp._(
               'teamMemberDelete',
-              {second: $scope.team.uuid},
+              {second: $scope.current },
               {ids: [memberId]}
             ).then(
               function ()
@@ -764,16 +764,20 @@ define(
 
                     if($scope.membersBySearch && result.teams)
                     {
-                      //Check if the current team is in the search result teams, if not add the team
-                      var currentTeam = _.findWhere(result.teams, {uuid: $scope.current});
+                      result.teams = ($rootScope.app.resources.role == 1)
+                        ? Store('app').get('teams')
+                        : _.union(result.teams, Store('app').get('teams'));
 
-                      if(_.isUndefined(currentTeam))
-                      {
-                        var teams = Store('app').get('teams');
-                        currentTeam = _.findWhere(teams, {uuid: $scope.current});
-
-                        result.teams.push(currentTeam);
-                      }
+                      //Add current team to the search team results
+                      //var currentTeam = _.findWhere(result.teams, {uuid: $scope.current});
+                      //
+                      //  if(_.isUndefined(currentTeam))
+                      //  {
+                      //    var teams = Store('app').get('teams');
+                      //    currentTeam = _.findWhere(teams, {uuid: $scope.current});
+                      //
+                      //    result.teams.push(currentTeam);
+                      //  }
 
                       Store('app').save('searchMembersTeams', result.teams);
                     }
@@ -812,16 +816,20 @@ define(
           };
 
           /**
-           * Removes member from all his teams before adding to a new team
-           * @param member
+           * changeMemberTeamOption 1: Removes member from all his teams before adding to the current selected team
+           * changeMemberTeamOption 2: Add member to the current selected team
+           * @param member the userobject
+           * @param changeMemberTeamOption could be 1 or 2 replace or add
            */
-          $scope.AddTeamRemoveCurrent = function(member)
+          $scope.changeMemberTeam = function(member, changeMemberTeamOption)
           {
             angular.element('#confirmMemberAddModal').modal('hide');
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-            Teams.removeAllTeamsFromMember(member)
-              .then(
+            if(changeMemberTeamOption == 1)
+            {
+              Teams.removeAllTeamsFromMember(member)
+                .then(
                 function(result)
                 {
                   if(result.error)
@@ -834,6 +842,11 @@ define(
                   }
                 }
               );
+            }
+            else
+            {
+              $scope.addExistingUserMember(member);
+            }
           };
         }
     );
