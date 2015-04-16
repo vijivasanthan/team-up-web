@@ -217,6 +217,7 @@ module.exports = (grunt) ->
       dist:
         files:
           src: [
+            '<%= paths.dist %>/scripts/localConfig.js'
             '<%= paths.dist %>/scripts/main.js'
             '<%= paths.dist %>/styles/{,*/}*.css'
             '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
