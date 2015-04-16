@@ -673,7 +673,8 @@ define(
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                   //todo redirect to the clientprofile who was edited
-                  var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
+                  var clientGroupId = result.clientGroupUuid || $scope.current || $scope.clientGroups[0].id;
+
                   reloadGroup({'uuid': clientGroupId});
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
