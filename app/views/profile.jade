@@ -91,10 +91,16 @@ section#profile
 								dd(ng-show='teams.length == 1')
 									span(ng-repeat='team in teams')
 										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
-								dd.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
-									span(class="label label-inverse") {{ ($index > 0) ? 'Extra' : 'Standaard' }}  
-									span.phone-description
-										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+								dd
+									ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+										li(ng-repeat='team in teams')
+											span
+												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									//TODO wait until stefan approves to use the default team option
+									//.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
+									//span(class="label label-inverse") {{ ($index > 0) ? 'Extra' : 'Standaard' }}  
+									//span.phone-description
+									//	a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									
 									//ol(ng-show='teams.length > 1' style='padding-left: 21px;')
 									//	li(ng-repeat='team in teams| orderBy:"name"')
