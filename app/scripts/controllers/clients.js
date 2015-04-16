@@ -34,6 +34,7 @@ define(
 
                 if(!_.isUndefined(clientInTeam))
                 {
+                  clientInTeam.birthDate = moment(clientInTeam.birthDate).format('DD-MM-YYYY');
                   $scope.client = clientInTeam;
                   $scope.contacts = clientInTeam.contacts;
 
@@ -47,7 +48,7 @@ define(
             {
               data.clients = Store('app').get('clients');
               data.client = _.findWhere(data.clients, {uuid: data.clientId});
-
+              data.client.birthDate = moment(data.client.birthDate).format('DD-MM-YYYY');
               $scope.client = data.client;
               Reports.clientId = $scope.client.uuid;
               $scope.contacts = data.client.contacts;
@@ -574,6 +575,18 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
+            try
+            {
+              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              // console.log(error);
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
+
             TeamUp._(
               'clientAdd',
               null,
@@ -634,6 +647,18 @@ define(
             //temp var, so the user should't see the date changing
             var changedClient = angular.copy(client);
 
+            try
+            {
+              //convert birthdate into miliseconds for saving
+              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
+
             Clients.singleUpdate(changedClient)
               .then(
               function (result)
@@ -662,6 +687,18 @@ define(
           $scope.saveContacts = function (contacts)
           {
             var client = $scope.client;
+
+            try
+            {
+              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              // console.log(error);
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
 
             client.contacts = contacts;
 
@@ -693,9 +730,9 @@ define(
                   Clients.query(
                     false,
                     {'uuid': result.clientGroupUuid}
-                  ).then(function (queryRs)
-                    {
-                    });
+                  );
+
+                  $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
                 }
               }
             );
