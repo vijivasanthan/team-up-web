@@ -11,26 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          var loadMembersWithoutTeam = function ()
-          {
-            data.membersWithoutTeam = [];
-
-            var filter = $injector.get('$filter'),
-              tempMembers = filter('membersWithoutTeam')(dataMembers);
-
-            tempMembers = _.sortByAll(tempMembers, ['lastName']);
-
-            _.each(tempMembers, function (member)
-            {
-              data.membersWithoutTeam.push(
-                {
-                  'name': member.firstName + ' ' + member.lastName,
-                  'id': member.uuid
-                }
-              );
-            });
-          };
-
           function loadData (data)
           {
             // console.log('loading data -> ', new Date());
@@ -114,7 +94,6 @@ define(
               );
 
               data.members = members;
-              loadMembersWithoutTeam();
 
               data.groups = Store('app').get('ClientGroups');
 
@@ -419,7 +398,7 @@ define(
                   grid,
                   '1:n',
                   {
-                    left: data.membersWithoutTeam, //data.members,//data.membersWithoutTeam
+                    left: data.members,
                     right: data.teams
                   },
                   $scope.connector.teams()
