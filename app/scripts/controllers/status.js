@@ -12,7 +12,7 @@ define(['controllers/controllers'], function (controllers)
 
         var teams = Store('app').get('teams'),
           members = _.flatten(_.values(data.members)),
-          currentMembers = null,
+          currentMembers = {},
           everyoneId = 'all';
 
         members = $rootScope.unique(members);
@@ -43,15 +43,15 @@ define(['controllers/controllers'], function (controllers)
 
         $scope.loadingReachability = true;
 
-        var getMemberSlots = function(id)
+        var getMemberSlots = function(id, startTime)
         {
           return (id == everyoneId)
             ? Slots.getAllMemberReachabilities(data.teams)
-            : Slots.MemberReachabilitiesByTeam(id);
+            : Slots.MemberReachabilitiesByTeam(id, startTime);
         };
 
         //TODO resolve the Reachabilities of the member in the routing
-        $scope.getReachability = function (groupID)
+        $scope.getReachability = function (groupID, startTime)
         {
           var deferred = $q.defer(),
               id = null;
@@ -71,7 +71,7 @@ define(['controllers/controllers'], function (controllers)
             currentMembers = $rootScope.unique(data.members[groupID]);
           }
 
-          getMemberSlots(groupID)
+          getMemberSlots(groupID, startTime)
             .then(
             function (results)
             {
@@ -190,11 +190,10 @@ define(['controllers/controllers'], function (controllers)
         $scope.getGroupReachability = function ()
         {
           var deferred = $q.defer();
-          $scope.current.division = 'all';
           $scope.loadGroup = $rootScope.ui.dashboard.load;
           $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
-          $scope.getReachability($scope.current.group, $scope.current.division)
+          $scope.getReachability($scope.current.group)
             .then(function (results)
             {
               deferred.resolve(results);

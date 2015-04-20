@@ -15,7 +15,7 @@ requirejs.config(
 
     paths: {
       localConfig: 'localConfig',
-      config: 'config',
+      config: 'configTeamUp',
       angular:      '../vendors/angular/angular',
       jquery:       '../vendors/jquery/dist/jquery',
       plugins: 'plugins',
@@ -45,7 +45,7 @@ requirejs.config(
     shim: {
       localConfig: {deps: ['jquery'], exports: 'localConfig' },
       profile: {deps: ['jquery'], exports: 'profile' },
-      config: {deps: ['profile', 'localConfig'], exports: 'config' },
+      config: { deps: ['profile', 'localConfig'], exports: 'config' },
       plugins: { deps: ['jquery'], exports: 'plugins' },
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
@@ -82,8 +82,8 @@ requirejs.config(
 requirejs.config({
   paths: {
     localConfig: 'localConfig',
-    profile: 'profiles/teamup/profile',
-    config: 'config'
+    profile: 'profiles/teamtelefoon/profileApp',
+    config: 'configTeamUp'
   }
 });
 

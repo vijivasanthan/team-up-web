@@ -232,16 +232,11 @@ define(
               function (team)
               {
                 var flag = true;
-
                 var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
-
-                if (_teamGroup == [])
-                {
-                  // console.log('it is empty ->');
-                }
-
-                _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
-                // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
+                //_teamGroup = (_teamGroup[0] && (_teamGroup[0]).name)
+                //  ? _teamGroup
+                //  : {};
+                //angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
 
                 angular.forEach(
                   _teamGroup,

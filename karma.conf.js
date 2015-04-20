@@ -29,6 +29,8 @@ module.exports = function (karma)
       {pattern: 'app/scripts/*.js',           included: false},
       {pattern: 'app/scripts/**/*.js',        included: false},
       {pattern: 'test/spec/controllers/*.js', included: false},
+      //{pattern: 'test/spec/controllers/statusSpec.js', included: false},
+      //{pattern: 'test/spec/controllers/exampleSpec.js', included: false},
       // {pattern: 'test/spec/directives/*.js',  included: false},
       // {pattern: 'test/spec/filters/*.js',     included: false},
       // {pattern: 'test/spec/services/*.js',    included: false},
@@ -37,6 +39,7 @@ module.exports = function (karma)
     basePath: '',
     exclude: [
       'app/scripts/main.js',
+      //'test/spec/controllers/statusSpec.js',
       'app/scripts/removables/**/*Spec.js'
     ],
     port: 8080,

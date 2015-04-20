@@ -5,16 +5,6 @@ define(['services/services', 'config'],
 
     services.factory(
       'Slots',
-      [
-        '$rootScope',
-        '$resource',
-        '$q',
-        'Dater',
-        'Sloter',
-        'Store',
-        'Stats',
-        'Teams',
-        'moment',
         function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams, moment)
         {
           var Slots = $resource(config.app.host + 'askatars/:user/slots', {user: ''}, {
@@ -410,10 +400,10 @@ define(['services/services', 'config'],
             if (resources)
             {
               // TODO: Use mathematical formula to calculate it
-              var now;
+              var now = moment().unix();;
 
-              now = String(Date.now().getTime());
-              now = Number(now.substr(0, now.length - 3));
+              //now = String(Date.now().getTime());
+              //now = Number(now.substr(0, now.length - 3));
 
               var params = {
                 user: resources.uuid,
@@ -444,7 +434,7 @@ define(['services/services', 'config'],
           Slots.prototype.members = function(groupId, periods)
           {
             var allMembers = Store('app').get(groupId),
-                deferred = $q.defer();
+              deferred = $q.defer();
 
             Slots.prototype.memberSlots2.query({
                 id: groupId,
@@ -456,35 +446,35 @@ define(['services/services', 'config'],
               {
                 var mems = [];
                 _.each(members,
-                    function (mdata, index)
+                  function (mdata, index)
+                  {
+                    _.each(mdata, function (tslot)
                     {
-                        _.each(mdata, function (tslot)
-                        {
-                          tslot.text = tslot.state
-                        });
+                      tslot.text = tslot.state
+                    });
 
-                        var member;
+                    var member;
 
-                        _.each(allMembers, function (mem)
-                        {
-                          if (index == mem.uuid)
-                          {
-                            member = mem;
-                          }
-                        });
+                    _.each(allMembers, function (mem)
+                    {
+                      if (index == mem.uuid)
+                      {
+                        member = mem;
+                      }
+                    });
 
-                        if (member != null)
-                        {
-                          mems.push({
-                            id: index,
-                            fullName: member.firstName + ' ' + member.lastName,
-                            lastName: member.lastName,
-                            role: member.role,
-                            data: mdata,
-                            stats: Stats.member(mdata, periods.start, periods.end)
-                          });
-                        }
+                    if (member != null)
+                    {
+                      mems.push({
+                        id: index,
+                        fullName: member.firstName + ' ' + member.lastName,
+                        lastName: member.lastName,
+                        role: member.role,
+                        data: mdata,
+                        stats: Stats.member(mdata, periods.start, periods.end)
+                      });
                     }
+                  }
                 );
                 deferred.resolve(mems);
               },
@@ -573,11 +563,10 @@ define(['services/services', 'config'],
           Slots.prototype.all = function (options)
           {
             var deferred = $q.defer(),
-              periods = Dater.getPeriods(),
               params = {
                 user: options.user, //options.user, //Store('app').get('resources').uuid,
-                start: options.stamps.start / 1000,
-                end: options.stamps.end / 1000
+                start: moment(options.stamps.start).unix(),
+                end: moment(options.stamps.end).unix()
               },
               data = {};
 
@@ -604,103 +593,103 @@ define(['services/services', 'config'],
 
                   Slots.prototype.aggs(groupParams)
                     .then(function (aggs)
-                  {
-                    var _aggs = aggs;
+                    {
+                      var _aggs = aggs;
 
 
-                    Slots.prototype.wishes(
-                      {
-                        id: options.groupId,
-                        start: params.start,
-                        end: params.end
-                      }).then(
-                      function(wishes)
-                      {
-                        _aggs.wishes = wishes;
-
-                        if (options.layouts.members)
+                      Slots.prototype.wishes(
                         {
-                          var allMembers = Store('app').get(options.groupId),
-                            calls = [];
+                          id: options.groupId,
+                          start: params.start,
+                          end: params.end
+                        }).then(
+                        function(wishes)
+                        {
+                          _aggs.wishes = wishes;
 
-                          MemberSlots.get
-                          (
-                            {
-                              id: options.groupId,
-                              start: params.start,
-                              end: params.end,
-                              type: 'both'
+                          if (options.layouts.members)
+                          {
+                            var allMembers = Store('app').get(options.groupId),
+                              calls = [];
 
-                            },
-                            function (response)
-                            {
-                              var members = response.data;
-                              var mems = [];
-                              _.each(members, function (mdata, index)
-                                {
-                                  _.each(mdata, function (tslot)
+                            MemberSlots.get
+                            (
+                              {
+                                id: options.groupId,
+                                start: params.start,
+                                end: params.end,
+                                type: 'both'
+
+                              },
+                              function (response)
+                              {
+                                var members = response.data;
+                                var mems = [];
+                                _.each(members, function (mdata, index)
                                   {
-                                    tslot.text = tslot.state
-                                  });
-
-                                  var member;
-
-                                  _.each(allMembers, function (mem)
-                                  {
-                                    if (index == mem.uuid)
+                                    _.each(mdata, function (tslot)
                                     {
-                                      member = mem;
-                                    }
-                                  });
-
-                                  if (member != null)
-                                  {
-                                    mems.push({
-                                      id: index,
-                                      fullName: member.firstName + ' ' + member.lastName,
-                                      lastName: member.lastName,
-                                      role: member.role,
-                                      data: mdata,
-                                      stats: Stats.member(mdata, params.start, params.end)
+                                      tslot.text = tslot.state
                                     });
-                                  }
-                                }
-                              );
 
-                              deferred.resolve({
-                                user: user,
-                                groupId: options.groupId,
-                                aggs: _aggs,
-                                members: mems,
-                                synced: new Date().getTime(),
-                                periods: {
-                                  start: options.stamps.start,
-                                  end: options.stamps.end
-                                }
-                              });
-                            },
-                            function (error)
-                            {
-                              deferred.resolve({error: error})
-                            }
-                          );
+                                    var member;
+
+                                    _.each(allMembers, function (mem)
+                                    {
+                                      if (index == mem.uuid)
+                                      {
+                                        member = mem;
+                                      }
+                                    });
+
+                                    if (member != null)
+                                    {
+                                      mems.push({
+                                        id: index,
+                                        fullName: member.firstName + ' ' + member.lastName,
+                                        lastName: member.lastName,
+                                        role: member.role,
+                                        data: mdata,
+                                        stats: Stats.member(mdata, params.start, params.end)
+                                      });
+                                    }
+                                  }
+                                );
+
+                                deferred.resolve({
+                                  user: user,
+                                  groupId: options.groupId,
+                                  aggs: _aggs,
+                                  members: mems,
+                                  synced: new Date().getTime(),
+                                  periods: {
+                                    start: options.stamps.start,
+                                    end: options.stamps.end
+                                  }
+                                });
+                              },
+                              function (error)
+                              {
+                                deferred.resolve({error: error})
+                              }
+                            );
+                          }
+                          else
+                          {
+                            deferred.resolve({
+                              user: user,
+                              groupId: options.groupId,
+                              aggs: _aggs,
+                              synced: new Date().getTime(),
+                              periods: {
+                                start: options.stamps.start,
+                                end: options.stamps.end
+                              }
+                            });
+                          }
                         }
-                        else
-                        {
-                          deferred.resolve({
-                            user: user,
-                            groupId: options.groupId,
-                            aggs: _aggs,
-                            synced: new Date().getTime(),
-                            periods: {
-                              start: options.stamps.start,
-                              end: options.stamps.end
-                            }
-                          });
-                        }
-                      }
-                    );
-                  });
+                      );
+                    });
                 }
                 else
                 {
@@ -725,7 +714,7 @@ define(['services/services', 'config'],
           Slots.prototype.getMemberAvailabilitiesPerTeam = function (groupID, divisionID)
           {
             var deferred = $q.defer(),
-              now = Math.floor(Date.now().getTime() / 1000);
+              now = Math.floor(moment().valueOf() / 1000);
 
             MemberSlots.get({
                 id: groupID,
@@ -747,10 +736,10 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.MemberReachabilitiesByTeam = function(groupId)
+          Slots.prototype.MemberReachabilitiesByTeam = function(groupId, startTime)
           {
             var deferred = $q.defer(),
-                now = Math.floor(Date.now().getTime() / 1000);
+              now = startTime || Math.floor(moment().valueOf() / 1000);
 
             MemberSlots.get
             (
@@ -854,7 +843,7 @@ define(['services/services', 'config'],
             var deferred = $q.defer(),
               memDeferred = [];
 
-            var now = Math.floor(Date.now().getTime() / 1000);
+            var now = Math.floor(moment().valueOf() / 1000);
 
             _.each(members, function (member)
             {
@@ -981,6 +970,5 @@ define(['services/services', 'config'],
 
           return new Slots;
         }
-      ]
     );
   });
