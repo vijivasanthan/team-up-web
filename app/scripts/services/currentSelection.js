@@ -24,6 +24,8 @@ define(
                   teamId = team && team.uuid,
                   clientGroupId = null;
 
+              console.log('$rootScope.app.domainPermission', $rootScope.app);
+
               //Check if there is ACL permission
               if($rootScope.app.domainPermission.clients)
               {
@@ -55,8 +57,6 @@ define(
                     || clientGroups[0] && firstClientGroupUuid;
                 }
               }
-
-              console.log('teamId', teamId);
 
               Store('app').save('currentTeamClientGroup', {teamId: teamId, clientGroupId: clientGroupId });
             },

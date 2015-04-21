@@ -131,13 +131,13 @@ define(
            */
           $scope.setUserType = function(userType)
           {
-            switch (userType)
-            {
-              case 'EXISTING':
-                break;
-              default:
-                console.log("the usertype of add member is new or unknown");
-            };
+            //switch (userType)
+            //{
+            //  case 'EXISTING':
+            //    break;
+            //  default:
+            //    console.log("the usertype of add member is new or unknown");
+            //};
 
             $scope.userType = userType;
           };
@@ -473,7 +473,7 @@ define(
                   });
 
                   // TODO: Repetitive code!
-                  loadTeams(result.teamId);
+                  $scope.loadTeams();
                 }
               }
             );
@@ -500,13 +500,14 @@ define(
                 }
                 else
                 {
-                  loadTeams();
+                  $scope.result = result;
+                  $scope.loadTeams();
                 }
               }
             );
           };
 
-          var loadTeams = function()
+          $scope.loadTeams = function()
           {
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
@@ -527,7 +528,10 @@ define(
 
                   $scope.team = _.findWhere($scope.data.teams, {uuid: $scope.current});
 
-                  $scope.members = $scope.data.members[$scope.team.uuid];
+                  if(!_.isUndefined($scope.team))
+                  {
+                    $scope.members = $scope.data.members[$scope.team.uuid];
+                  }
 
                   if(angular.isDefined($scope.membersBySearch))
                   {
@@ -680,10 +684,10 @@ define(
                 );
               }
             ),
-              function (error)
-              {
-                console.log(error)
-              };
+            function (error)
+            {
+              console.log(error)
+            };
 
           };
 

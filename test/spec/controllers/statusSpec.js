@@ -162,7 +162,6 @@ define(
           .then(
             function(result)
             {
-              console.log('result', result);
               finalResult = result.members;
             }
           );
