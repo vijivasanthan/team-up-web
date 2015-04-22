@@ -126,12 +126,10 @@ define(
         };
       };
 
-      it('Should check what the current selector id must be', function () {
+      it('Should check if the current team is saved and equal in the CurrentSelection service', function () {
         var teams = Store('app').get('teams');
 
-        logCtrl.current = currentSelectionService.getTeamId();
-
-        expect(logCtrl.current).toEqual(rootScope.app.resources.teamUuids[0]);
+        expect(logCtrl.current).toEqual(currentSelectionService.getTeamId());
       });
 
       it('Should check what the default daterange is', function () {

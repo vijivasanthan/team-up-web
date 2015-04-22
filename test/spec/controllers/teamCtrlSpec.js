@@ -8,7 +8,8 @@ define(
     'lawnchair',
     'lawnchair-dom',
     'controllers/teams',
-    'services/teams'
+    'services/teams',
+    'services/currentSelection'
   ],
   function() {
     'use strict';
@@ -37,6 +38,7 @@ define(
           $location,
           data,
           teamsService,
+          currentSelectionService,
           Store;
 
       // Initialize the controller and a mock scope
@@ -45,6 +47,7 @@ define(
         (
           function (
             $controller,
+            _CurrentSelection_,
             _$rootScope_,
             _$httpBackend_,
             _$location_,
@@ -56,63 +59,7 @@ define(
             scope = rootScope.$new();
             $httpBackend = _$httpBackend_;
             $location = _$location_;
-            teamsService = _Teams_;
             Store = _Store_;
-            rootScope = {
-              checkUpdatedStatesLoggedUser: function(member)
-              {
-                return null;
-              },
-              fixStyles: function()
-              {
-                return null;
-              },
-              notification: {
-                status: false
-              },
-              ui: {
-                dashboard: {
-                  everyone: 'Iedereen'
-                },
-                teamup: {
-                  accountInfoFill: 'accountinformatiem waaronder het password niet valide',
-                  dataChanged: 'Data is gewijzigd!!'
-                }
-              },
-              resetPhoneNumberChecker: function()
-              {
-                return null;
-              },
-              app: {
-                domainPermission: {
-                  clients: true
-                },
-                resources: testConfig.userResources
-              },
-              statusBar: {
-                display: function(currentTeam) {},
-                off: function(){}
-              },
-              pincodeExists: function(pincode, uuid, bool)
-              {
-                return null;
-              },
-              notifier: {
-                error: function(errorMessage)
-                {
-                  return errorMessage
-                },
-                success: function(succesMessage)
-                {
-                  return succesMessage;
-                }
-              },
-              phoneNumberParsed: {
-                result: function(){
-                  return true;
-                }
-              }
-            };
 
             data = {};
 
@@ -120,10 +67,10 @@ define(
               name: "Stefan Team",
               uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
             },
-            {
-              name: "Suki Team",
-              uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
-            }
+              {
+                name: "Suki Team",
+                uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+              }
             ];
 
             data.members = {
@@ -243,15 +190,76 @@ define(
               ]
             };
 
+            rootScope = {
+              checkUpdatedStatesLoggedUser: function(member)
+              {
+                return null;
+              },
+              fixStyles: function()
+              {
+                return null;
+              },
+              notification: {
+                status: false
+              },
+              ui: {
+                dashboard: {
+                  everyone: 'Iedereen'
+                },
+                teamup: {
+                  accountInfoFill: 'accountinformatiem waaronder het password niet valide',
+                  dataChanged: 'Data is gewijzigd!!'
+                }
+              },
+              resetPhoneNumberChecker: function()
+              {
+                return null;
+              },
+              statusBar: {
+                display: function(currentTeam) {},
+                off: function(){}
+              },
+              pincodeExists: function(pincode, uuid, bool)
+              {
+                return null;
+              },
+              notifier: {
+                error: function(errorMessage)
+                {
+                  return errorMessage
+                },
+                success: function(succesMessage)
+                {
+                  return succesMessage;
+                }
+              },
+              phoneNumberParsed: {
+                result: function(){
+                  return true;
+                }
+              }
+            };
+
+            rootScope.app = {
+              domainPermission: {
+                clients: true
+              },
+              resources: testConfig.userResources
+            };
+
             Store('app').save('teams', data.teams);
 
+            currentSelectionService = _CurrentSelection_;
+            teamsService = _Teams_;
+
             teamsCtrl = $controller('teamCtrl', {
-              $rootScope: rootScope,
-              $scope: scope,
               $location: $location,
               data: data,
               Teams: teamsService,
-              Store: Store
+              CurrentSelection: currentSelectionService,
+              Store: Store,
+              $rootScope: rootScope,
+              $scope: scope
             });
           }
         )
@@ -309,16 +317,16 @@ define(
         scope.data = data;
 
         var member = {
-          birthDate: 0,
-          email: "levis@ask-cs.com",
+          uuid: "levis1234",
+          userName: "levis1234",
+          passwordHash: "4e8cc74b2e654b94acd1aea8fc654760",
           firstName: "Levi",
           lastName: "S",
-          passwordHash: "4e8cc74b2e654b94acd1aea8fc654760",
-          phone: "+31645895478",
-          role: "1",
+          email: "levis@ask-cs.com",
           teamUuids: [scope.current],
-          userName: "levis1234",
-          uuid: "levis1234"
+          role: "1",
+          birthDate: 0,
+          phone: "+31645895478"
         };
 
         var memberInfo = angular.copy(member);
@@ -433,13 +441,22 @@ define(
 
       it('Should get the selected teamUuid as parameter in the URL', function ()
       {
-        scope.current = (scope.data.teams[0]).uuid;
+        inject(function ($rootScope) {
+          $rootScope.app = {
+            domainPermission: {
+              clients: true
+            }
+          };
 
-        scope.requestTeam(scope.current);
+          scope.current = (data.teams[0]).uuid;
 
-        var urlParameters = $location.search();
+          scope.requestTeam(scope.current);
 
-        expect(urlParameters.uuid).toBe(scope.current);
+          var urlParameters = $location.search();
+
+
+          expect(urlParameters.uuid).toBe(scope.current);
+        });
       });
     });
   }

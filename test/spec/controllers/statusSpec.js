@@ -175,7 +175,7 @@ define(
 
         $httpBackend.flush();
         expect(finalResult).toEqual(response);
-      })
+      });
     });
   }
 );

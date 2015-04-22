@@ -24,8 +24,6 @@ define(
                   teamId = team && team.uuid,
                   clientGroupId = null;
 
-              console.log('$rootScope.app.domainPermission', $rootScope.app);
-
               //Check if there is ACL permission
               if($rootScope.app.domainPermission.clients)
               {
