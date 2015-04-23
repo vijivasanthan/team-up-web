@@ -20,7 +20,6 @@ section#dashboard
 				div.head
 					h4
 						| Overzicht bereikbaarheid{{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
-						span(ng-show='(current.division != "all")') ({{current.division | divisionIdToName}})
 					.pull-right(ng-hide='loadingReachability')
 						//select(ng-model='current.group',
 						//ng-options='group.uuid as group.name for group in groups',
