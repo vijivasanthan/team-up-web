@@ -18,6 +18,7 @@ requirejs.config(
       config: 'configTeamUp',
       angular:      '../vendors/angular/angular',
       jquery:       '../vendors/jquery/dist/jquery',
+      bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
       plugins: 'plugins',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
@@ -47,6 +48,7 @@ requirejs.config(
       profile: {deps: ['jquery'], exports: 'profile' },
       config: { deps: ['profile', 'localConfig'], exports: 'config' },
       plugins: { deps: ['jquery'], exports: 'plugins' },
+      bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
       'angular-md5': { deps: ['angular'] },
@@ -57,8 +59,6 @@ requirejs.config(
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
-
-      'ui.bootstrap.pagination': { deps: ['angular'] },
       angular: {
         deps:    ['jquery'],
         exports: 'angular'

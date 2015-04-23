@@ -4,6 +4,7 @@ define(
     'angular-route',
     'app',
     'lodash',
+    'bootstrap',
     'moment',
     'lawnchair',
     'lawnchair-dom',
@@ -439,6 +440,61 @@ define(
         expect(scope.result[0] + scope.result[1]).toBe(response[0] + response[1]);
       });
 
+      it('Should check if the newly added team is the only team of the testuser', function ()
+      {
+        var member = {
+          uuid: "levis1234",
+          userName: "levis1234",
+          passwordHash: "4e8cc74b2e654b94acd1aea8fc654760",
+          firstName: "Levi",
+          lastName: "S",
+          email: "levis@ask-cs.com",
+          teamUuids: [scope.current],
+          role: "1",
+          birthDate: 0,
+          phone: "+31645895478"
+        };
+        //1 for change team, 2 for add team
+        var changeMemberTeamOption = 1;
+        var teamId = (scope.data.teams[1]).uuid;
+        var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/removeMember';
+        var data = {
+          ids: [rootScope.app.resources.uuid]
+        };
+
+        scope.current = teamId;
+
+        $httpBackend.expectPUT(url, data).respond({result: ''});
+
+        $httpBackend.expectGET(testConfig.host + 'team').respond(data.teams);
+
+        $httpBackend.expectGET(testConfig.host + 'team/member/' + rootScope.app.resources.uuid).respond(data.teams);
+
+        var postUrl = testConfig.host + 'team/' + scope.current + '/member';
+
+        $httpBackend.expectPOST(postUrl, data).respond('ok');
+
+        $httpBackend.expectGET(testConfig.host + 'team').respond(data.teams);
+
+        //var lastUrl = testConfig.host + 'team/member/' + rootScope.app.resources.uuid;
+        //
+        //$httpBackend.expectGET(lastUrl).respond({});
+
+        inject(function ($rootScope)
+        {
+          $rootScope.app = {
+            resources: testConfig.userResources
+          };
+
+          scope.changeMemberTeam($rootScope.app.resources, changeMemberTeamOption);
+          $httpBackend.flush();
+
+          console.log('$rootScope.app', $rootScope.app.resources);
+
+          expect(true).toBe(true);
+        });
+      });
+
       it('Should get the selected teamUuid as parameter in the URL', function ()
       {
         inject(function ($rootScope) {
@@ -453,7 +509,6 @@ define(
           scope.requestTeam(scope.current);
 
           var urlParameters = $location.search();
-
 
           expect(urlParameters.uuid).toBe(scope.current);
         });
