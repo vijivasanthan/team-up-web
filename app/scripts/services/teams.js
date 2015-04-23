@@ -360,48 +360,32 @@ define(
           //  });
           //};
 
-          TeamsService.prototype.removeAllTeamsFromMember = function(user)
+          /**
+           * Removes all teams from a single member
+           * @param member the member who to remove all teams from
+           * @returns {*} promise with the result of call in the resolve
+           */
+          TeamsService.prototype.removeAll = function(member)
           {
-            var deferred = $q.defer(),
-                changes = {};
+            var deferred = $q.defer();
+            var calls = [];
 
-            _.each(user.teamUuids, function(teamId) {
-              changes[teamId] = {
-                a: [],
-                r: [user.uuid]
-              };
+            _.each(member.teamUuids, function(teamId) {
+              var removeMemberFromTeam = TeamUp._(
+                'teamMemberDelete',
+                {second: teamId},
+                {ids: [member.uuid]}
+              );
+              calls.push(removeMemberFromTeam);
             });
 
-            TeamsService.prototype.manage(changes)
+            $q.all(calls)
               .then(
-              function()
-              {
-                var loggedUser = {
-                  viewingUserhasTeam: true
-                };
-
-                if(user.uuid == $rootScope.app.resources.uuid)
+                function(result)
                 {
-                  var Profile = $injector.get('Profile');
-
-                  Profile.fetchUserData($rootScope.app.resources.uuid)
-                    .then(
-                    function(userData)
-                    {
-                      if(! userData.length)
-                      {
-                        loggedUser.viewingUserhasTeam = false;
-                        deferred.resolve(loggedUser);
-                      }
-                    }
-                  );
+                  deferred.resolve(result);
                 }
-                else
-                {
-                  deferred.resolve(loggedUser);
-                }
-              }
-            );
+              );
 
             return deferred.promise;
           };

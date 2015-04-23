@@ -458,27 +458,40 @@ define(
             angular.element('#confirmDeleteAvatar').modal('hide');
           };
 
-          // Remove a profile completely
+          /**
+           * Removes the member from all his teams
+           */
           $scope.deleteProfile = function ()
           {
             angular.element('#confirmProfileModal').modal('hide');
-
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-            Teams.removeAllTeamsFromMember($scope.view)
+            var changes = {};
+
+            //add member to the deletelist per team
+            _.each($scope.view.teamUuids, function(teamId) {
+              changes[teamId] = {
+                a: [],
+                r: [$scope.view.uuid]
+              };
+            });
+
+            Teams.manage(changes)
               .then(
-                function(result)
+              function()
+              {
+                //Check of logged user is equal to the profile user
+                if($scope.view.uuid == $rootScope.app.resources.uuid)
                 {
-                  if(result.loggedUserHasTeam)
-                  {
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  }
-                  else
-                  {
-                    Permission.getAccess();
-                  }
-                  $rootScope.statusBar.off()
+                  $rootScope.app.resources.teamUuids = [];
+                  //update local resources without teams
+                  Store('app').save('resources', $rootScope.app.resources);
+                  //Some options are permitted for members with teams only
+                  //get access again for a memmber without teams
+                  Permission.getAccess();
                 }
+                $rootScope.statusBar.off()
+              }
             );
           };
         }
