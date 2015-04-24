@@ -10,7 +10,8 @@ define(
     'lawnchair-dom',
     'controllers/teams',
     'services/teams',
-    'services/currentSelection'
+    'services/currentSelection',
+    'modals/permission'
   ],
   function() {
     'use strict';
@@ -40,7 +41,8 @@ define(
           data,
           teamsService,
           currentSelectionService,
-          Store;
+          Store,
+          Permission;
 
       // Initialize the controller and a mock scope
       beforeEach(
@@ -53,6 +55,7 @@ define(
             _$httpBackend_,
             _$location_,
             _Teams_,
+            _Permission_,
             _Store_
           )
           {
@@ -61,6 +64,7 @@ define(
             $httpBackend = _$httpBackend_;
             $location = _$location_;
             Store = _Store_;
+            Permission = _Permission_;
 
             data = {};
 
@@ -414,6 +418,43 @@ define(
         expect(memberEqual).toBe(true);
       });
 
+      it('Should check if the newly added team is the only team of the testuser', function ()
+      {
+        rootScope.app.resources.teamUuids = ['b3915de1-f29c-4609-a67f-73aaef529902'];
+
+        //1 for change team, 2 for add team
+        var changeMemberTeamOption = 1;
+        var teamId = (scope.data.teams[1]).uuid;
+        var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/removeMember';
+        var data = {
+          ids: [rootScope.app.resources.uuid]
+        };
+
+        scope.current = teamId;
+
+        $httpBackend.expectPUT(url, data).respond({result: ''});
+
+        var postUrl = testConfig.host + 'team/' + scope.current + '/member';
+
+        $httpBackend.expectPOST(postUrl, data).respond('ok');
+
+        $httpBackend.expectGET(testConfig.host + 'team').respond(data.teams);
+
+        inject(function ($rootScope)
+        {
+          $rootScope.app = {
+            resources: testConfig.userResources
+          };
+
+          scope.changeMemberTeam($rootScope.app.resources, changeMemberTeamOption);
+
+          $httpBackend.flush();
+
+          expect($rootScope.app.resources.teamUuids.length).toBe(1);
+          expect($rootScope.app.resources.teamUuids[0]).toBe(teamId);
+        });
+      });
+
       it('Should get a positive response if a existing member is added to a team', function ()
       {
         var member = rootScope.app.resources;
@@ -433,66 +474,11 @@ define(
         $httpBackend.expectGET(testConfig.host + 'team/status/' + scope.current)
           .respond(scope.data.members[scope.current]);
 
-        scope.addExistingUserMember(member);
+        scope.addExistingMember(member);
 
         $httpBackend.flush();
 
         expect(scope.result[0] + scope.result[1]).toBe(response[0] + response[1]);
-      });
-
-      it('Should check if the newly added team is the only team of the testuser', function ()
-      {
-        var member = {
-          uuid: "levis1234",
-          userName: "levis1234",
-          passwordHash: "4e8cc74b2e654b94acd1aea8fc654760",
-          firstName: "Levi",
-          lastName: "S",
-          email: "levis@ask-cs.com",
-          teamUuids: [scope.current],
-          role: "1",
-          birthDate: 0,
-          phone: "+31645895478"
-        };
-        //1 for change team, 2 for add team
-        var changeMemberTeamOption = 1;
-        var teamId = (scope.data.teams[1]).uuid;
-        var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/removeMember';
-        var data = {
-          ids: [rootScope.app.resources.uuid]
-        };
-
-        scope.current = teamId;
-
-        $httpBackend.expectPUT(url, data).respond({result: ''});
-
-        $httpBackend.expectGET(testConfig.host + 'team').respond(data.teams);
-
-        $httpBackend.expectGET(testConfig.host + 'team/member/' + rootScope.app.resources.uuid).respond(data.teams);
-
-        var postUrl = testConfig.host + 'team/' + scope.current + '/member';
-
-        $httpBackend.expectPOST(postUrl, data).respond('ok');
-
-        $httpBackend.expectGET(testConfig.host + 'team').respond(data.teams);
-
-        //var lastUrl = testConfig.host + 'team/member/' + rootScope.app.resources.uuid;
-        //
-        //$httpBackend.expectGET(lastUrl).respond({});
-
-        inject(function ($rootScope)
-        {
-          $rootScope.app = {
-            resources: testConfig.userResources
-          };
-
-          scope.changeMemberTeam($rootScope.app.resources, changeMemberTeamOption);
-          $httpBackend.flush();
-
-          console.log('$rootScope.app', $rootScope.app.resources);
-
-          expect(true).toBe(true);
-        });
       });
 
       it('Should get the selected teamUuid as parameter in the URL', function ()
@@ -509,9 +495,14 @@ define(
           scope.requestTeam(scope.current);
 
           var urlParameters = $location.search();
-
+          //test hier op get toevoegen van een team
           expect(urlParameters.uuid).toBe(scope.current);
         });
+      });
+
+      it('Should check ', function ()
+      {
+        //zet rol teamlid and try to add a new teams
       });
     });
   }
