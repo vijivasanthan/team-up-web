@@ -230,6 +230,37 @@ define(
       }
     );
 
+    directives.directive(
+      'selectAllPhones',
+      function ()
+      {
+        return function (scope, element)
+        {
+
+          function SelectText() {
+            var s = window.getSelection();
+            var referenceNode = document.getElementsByClassName('test');
+            var range = document.createRange();
+            var end = (referenceNode.length - 1);
+
+            if(s.rangeCount > 0)
+            {
+              s.removeAllRanges();
+            }
+
+            range.setStart(referenceNode[0], 0);
+            range.setEnd(referenceNode[end], 1);
+            s.addRange(range);
+          };
+
+          element.on('click', function ()
+          {
+            SelectText();
+          });
+        };
+      }
+    );
+
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
     'ngenter',

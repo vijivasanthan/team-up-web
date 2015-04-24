@@ -252,6 +252,7 @@ require(
     'controllers/order',
     'controllers/agenda',
     'controllers/exampleTest',
+    'controllers/phones',
 
     'bootstrap',
     'lawnchair',

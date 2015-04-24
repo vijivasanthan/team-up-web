@@ -311,6 +311,25 @@ define(
             })
 
             .when(
+            '/team-telefoon/status/phones',
+            {
+              templateUrl: 'views/phones.html',
+              controller: 'phones',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams',
+                  function (Teams)
+                  {
+                    removeActiveClass('.teamMenu');
+
+                    return Teams.queryLocal();
+                  }
+                ]
+              }
+            })
+
+            .when(
             '/team-telefoon/status',
             {
               templateUrl: 'views/team-telephone/status.html',
