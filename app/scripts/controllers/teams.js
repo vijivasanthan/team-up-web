@@ -272,6 +272,11 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
+                if(angular.isDefined($scope.teamForm))
+                {
+                  $scope.teamForm = null;
+                }
+
                 // TODO: Repetitive code!
                 Teams.query(false, result)
                   .then(

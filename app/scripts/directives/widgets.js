@@ -234,12 +234,11 @@ define(
       'selectAllPhones',
       function ()
       {
-        return function (scope, element)
+        return function (scope, element, attrs)
         {
-
           function SelectText() {
             var s = window.getSelection();
-            var referenceNode = document.getElementsByClassName('test');
+            var referenceNode = document.getElementsByClassName(attrs.selectAllPhones);
             var range = document.createRange();
             var end = (referenceNode.length - 1);
 
