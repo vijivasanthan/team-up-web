@@ -43,7 +43,7 @@ define(
             );
           };
 
-          //$rootScope.fixStyles();
+          $rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
           $scope.mfuncs = config.app.mfunctions;
