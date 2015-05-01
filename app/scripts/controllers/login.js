@@ -373,7 +373,7 @@ define(
                 $rootScope.app.domainPermission = permissionProfile;
                 console.log('permissionProfile', permissionProfile);
               });
-          };
+          }
 
           var preLoader = function ()
           {
@@ -405,10 +405,6 @@ define(
                     .then(
                     function (teams)
                     {
-                      console.log('teams', teams);
-
-                      //queryMembersNotInTeams();
-
                       queryTasks(teams);
 
                       if (teams.error)
@@ -436,10 +432,8 @@ define(
 
                               Clients.query(false, {})
                                 .then(
-                                function (clientData)
+                                function ()
                                 {
-                                  console.log('clientData', clientData);
-
                                   // TODO: Blend it in the modal!
                                   enhanceTasks();
                                   progress(85, $rootScope.ui.login.loading_Members);

@@ -12,6 +12,8 @@ define(
           //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
           //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
 
+          console.log('data', data);
+
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
 
@@ -840,34 +842,28 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
 
+            Clients.removeSingleFromAllLocally(clientId);
 
-            TeamUp._(
-              'clientDelete',
-              {second: clientId}
-            ).then(
-              function ()
-              {
-                TeamUp._(
-                  'clientsQuery'
-                ).then(
-                  function (clients)
-                  {
-                    Store('app').save('clients', clients);
+            if ($scope.views.viewClient == true)
+            {
+              $scope.setViewTo('client');
+            }
+            else
+            {
+              $route.reload();
+            }
 
-                    if ($scope.views.viewClient == true)
-                    {
-                      $scope.setViewTo('client');
-                    }
-                    else
-                    {
-                      $route.reload();
-                    }
-                  }
-                );
-              }, function (error)
-              {
-                console.log(error)
-              });
+            //TeamUp._(
+            //  'clientDelete',
+            //  {second: clientId}
+            //).then(
+            //  function ()
+            //  {
+            //
+            //  }, function (error)
+            //  {
+            //    console.log(error)
+            //  });
           };
 
           var filterReport = function(clientId, createDate)
@@ -942,7 +938,7 @@ define(
             {
               Report.update(report)
                 .then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -954,7 +950,7 @@ define(
             {
               Report.save(report)
                 .then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
