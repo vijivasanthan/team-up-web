@@ -32,32 +32,30 @@ section#dashboard
 						ng-change='getDivisionReachability()',
 						ng-show='divisions.length > 0 && current.group != "all"',
 						style="margin-left: 15px; width:160px")
-				div(ng-show='loadingReachability')
-					hr
-					p Overzicht bereikbaarheid aan het laden...
-				section(ng-hide='loadingReachability')
-					button.btn.btn-info(select_all_phones='reachable') Select phonenumbers from reachable members
+				section
+					//button.btn.btn-info(select_all_phones='reachable') Select phonenumbers from reachable members
 					div(ng-show='reachability.members.reachable.length > 0')
-					br
-					p
-						strong Bereikbaar
-					hr
-					ul(style='list-style: none; float: left;')
-						li(ng-repeat='member in reachability.members.reachable')
-							span {{member.name}}
-					ul(style='list-style: none; float: left;')
-						li.reachable(ng-repeat='member in reachability.members.reachable')
-							span {{member.phone}}	
-				section(ng-hide='loadingReachability', style='clear: both;')
-					button.btn.btn-info(select_all_phones='unreachable') Select phonenumbers from unreachable members
+						table.table.table-striped
+							caption Bereikbaar
+							thead
+								tr
+									th Naam
+									th Telefoon
+							tbody
+								tr(ng-repeat='member in reachability.members.reachable')
+									td {{member.name}}
+									td {{member.phone}}	
+								
+				section(ng-hide='loadingReachability')
+					//button.btn.btn-info(select_all_phones='unreachable') Select phonenumbers from unreachable members
 					div(ng-show='reachability.members.unreachable.length > 0')
-					br
-					p
-						strong Onbereikbaar
-					hr
-					ul(style='list-style: none; float: left;')
-						li(ng-repeat='member in reachability.members.unreachable')
-							span {{member.name}}
-					ul(style='list-style: none; float: left;')
-						li.unreachable(ng-repeat='member in reachability.members.unreachable')
-							span {{member.phone}}	
+						table.table.table-striped
+							caption Onbereikbaar
+							thead
+								tr
+									th Naam
+									th Telefoon
+							tbody
+								tr(ng-repeat='member in reachability.members.unreachable')
+									td {{member.name}}
+									td {{member.phone}}	
