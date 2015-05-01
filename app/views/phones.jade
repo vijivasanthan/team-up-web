@@ -21,11 +21,6 @@ section#dashboard
 					h4
 						| Overzicht bereikbaarheid{{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
 					.pull-right(ng-hide='loadingReachability')
-						//select(ng-model='current.group',
-						//ng-options='group.uuid as group.name for group in groups',
-						//ng-selected='current.group',
-						//ng-change='getGroupReachability()',
-						//style='width: 160px;')
 						select(ng-model='current.division',
 						ng-options='division.id as division.label for division in divisions',
 						ng-selected='current.division',
@@ -33,29 +28,43 @@ section#dashboard
 						ng-show='divisions.length > 0 && current.group != "all"',
 						style="margin-left: 15px; width:160px")
 				section
-					//button.btn.btn-info(select_all_phones='reachable') Select phonenumbers from reachable members
 					div(ng-show='reachability.members.reachable.length > 0')
+						button.btn.btn-info(select_all_phones='reachable') Select reachable members
 						table.table.table-striped
 							caption Bereikbaar
 							thead
 								tr
 									th Naam
 									th Telefoon
-							tbody
+							tbody#reachable
 								tr(ng-repeat='member in reachability.members.reachable')
 									td {{member.name}}
 									td {{member.phone}}	
-								
-				section(ng-hide='loadingReachability')
-					//button.btn.btn-info(select_all_phones='unreachable') Select phonenumbers from unreachable members
+				
+				section
+					div(ng-show='reachability.members.possible.length > 0')
+						button.btn.btn-info(select_all_phones='possible') Select possible members
+						table.table.table-striped
+							caption Mogelijk bereikbaar
+							thead
+								tr
+									th Naam
+									th Telefoon
+							tbody#possible
+								tr(ng-repeat='member in reachability.members.possible')
+									td {{member.name}}
+									td {{member.phone}}						
+				
+				section
 					div(ng-show='reachability.members.unreachable.length > 0')
+						button.btn.btn-info(select_all_phones='unreachable') Select unreachable members
 						table.table.table-striped
 							caption Onbereikbaar
 							thead
 								tr
 									th Naam
 									th Telefoon
-							tbody
+							tbody#unreachable
 								tr(ng-repeat='member in reachability.members.unreachable')
 									td {{member.name}}
 									td {{member.phone}}	

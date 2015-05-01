@@ -236,25 +236,44 @@ define(
       {
         return function (scope, element, attrs)
         {
-          function SelectText() {
-            var s = window.getSelection();
-            var referenceNode = document.getElementsByClassName(attrs.selectAllPhones);
-            var range = document.createRange();
-            var end = (referenceNode.length - 1);
+          //function SelectText() {
+          //  var s = window.getSelection();
+          //  var referenceNode = document.getElementsByClassName(attrs.selectAllPhones);
+          //  var range = document.createRange();
+          //  var end = (referenceNode.length - 1);
+          //
+          //  if(s.rangeCount > 0)
+          //  {
+          //    s.removeAllRanges();
+          //  }
+          //  console.log('referenceNode[0]', referenceNode[0]);
+          //  //range.setStart(referenceNode[0], 0);
+          //  //range.setEnd(referenceNode[end], 1);
+          //  //console.log('range', range);
+          //  s.addRange(range);
+          //};
 
-            if(s.rangeCount > 0)
-            {
-              s.removeAllRanges();
+          function SelectText(element) {
+            var doc = document
+              , text = doc.getElementById(element)
+              , range, selection
+              ;
+            if (doc.body.createTextRange) {
+              range = document.body.createTextRange();
+              range.moveToElementText(text);
+              range.select();
+            } else if (window.getSelection) {
+              selection = window.getSelection();
+              range = document.createRange();
+              range.selectNodeContents(text);
+              selection.removeAllRanges();
+              selection.addRange(range);
             }
-
-            range.setStart(referenceNode[0], 0);
-            range.setEnd(referenceNode[end], 1);
-            s.addRange(range);
-          };
+          }
 
           element.on('click', function ()
           {
-            SelectText();
+            SelectText(attrs.selectAllPhones);
           });
         };
       }
