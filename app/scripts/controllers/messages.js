@@ -48,15 +48,20 @@ define(
               urlify = function(text)
               {
                 var urlRegex = /(https?:\/\/[^\s]+)/g,
+                  htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g,
                   result = null;
                 if(urlRegex.test(text))
                 {
-                  result = text.replace(urlRegex, function(url) {
-                    return '<a href="' + url + '" target="_blank">' + 'Klik' + '</a>';
-                  });
+                  result = replaceUrl(text, urlRegex);
+                }
+                else if(htmlRegex.test(text))
+                {
+                  console.log('htmlRegex found-> ', text);
+                  result = replaceUrl(text, htmlRegex);
                 }
                 else
                 {
+                  console.log('nothing found-> ', text);
                   result = text;
                 }
 
@@ -64,6 +69,12 @@ define(
 
               };
 
+            var replaceUrl = function(text, regex)
+            {
+              return text.replace(regex, function(url) {
+                return '<a href="' + url + '">' + 'Klik' + '</a>';
+              });
+            };
 
             angular.forEach(
               messages,
@@ -334,7 +345,7 @@ define(
             },
               random = getRandomString(),
               current = new Date(),
-              url = ' http://webrtc.ask-fast.com/?room=' + getRandomString(),
+              url = ' index.html#/video/' + getRandomString(), //http://webrtc.ask-fast.com/?room=
               message = $rootScope.ui.message.webTRCWebLink + url;
 
             $rootScope.statusBar.display($rootScope.ui.message.sending);
@@ -352,7 +363,7 @@ define(
                 $rootScope.statusBar.off();
                 $scope.moveToBottom = true;
 
-                window.open(url, '_blank');
+                //window.open(url, '_blank');
               },
               function (error)
               {
