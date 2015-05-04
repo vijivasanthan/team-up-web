@@ -6,7 +6,6 @@
         return {
           check: function() {
             if (!this.get()) {
-              $location.path("/login");
               return false;
             } else {
               return true;

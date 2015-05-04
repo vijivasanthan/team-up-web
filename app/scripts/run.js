@@ -39,6 +39,7 @@ define(
           //  });
           //};
 
+
           var navBar = angular.element('.navbar'),
               footer = angular.element('#footer');
 
@@ -56,7 +57,30 @@ define(
             }
           );
 
-          Session.check();
+          /**
+           * Check if the location is available without session
+           * Check session on all other locations
+           * @param location
+           */
+          $rootScope.checkLocation = function(location)
+          {
+            //Check if there is a session
+            //if not bepaal check dan uitzonderingen
+
+            switch (location)
+            {
+              case "/video":
+                break;
+              default:
+                if(false == Session.check())
+                {
+                  $location.path("/login");
+                }
+            }
+          };
+
+          $rootScope.checkLocation($location.path());
+
           $rootScope.config = config;
           $rootScope.config.app.init();
           $rootScope.ui = locals.ui[config.app.lang];
@@ -813,7 +837,6 @@ define(
               return member.uuid;
             });
           };
-
         }
       ]
     );

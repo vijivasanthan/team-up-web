@@ -15,7 +15,7 @@ define(
             '$routeChangeStart',
             function ()
             {
-              Session.check();
+              $rootScope.checkLocation($location.path());
 
               function resetLoaders ()
               {
