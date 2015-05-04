@@ -413,6 +413,13 @@ define(
               controller: 'helpCtrl',
               reloadOnSearch: false
             })
+            .when(
+            '/video/:videoId',
+            {
+              templateUrl: 'views/video.html',
+              controller: 'videoCtrl',
+              reloadOnSearch: false
+            })
 
             .otherwise({ redirectTo: '/login' });
 

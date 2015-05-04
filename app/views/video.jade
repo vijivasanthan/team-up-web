@@ -1,0 +1,25 @@
+.page-header
+	h2.nullable Video
+
+
+.tabbable.tabs-left
+
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("web")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| Video
+
+
+	.tab-content
+		#web.tab-pane(class="{{'active'}}")
+			.tab-header
+				h3.pull-left Video gesprek met testgebruiker
+			hr
+			//h4 Hoe maak ik een nieuwe cliënt aan? http://webrtc.ask-fast.com/?room=bs79o1or   https://www.youtube.com/embed/s4rOjMugsxM?rel=0
+				//width="560" height="315" //(class="{{(views.web==true) && 'active'}}")
+			iframe(width="760" height="515" src="http://webrtc.ask-fast.com/?room=5vxkzkt9" frameborder="0" allowfullscreen)
+			br
+			br
+			br
