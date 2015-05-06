@@ -123,6 +123,21 @@ define(
       ]
     )
 
+    filters.filter
+    (
+      'trusted_url',
+      [
+        '$sce',
+        function ($sce)
+        {
+          return function (text)
+          {
+            return $sce.trustAsResourceUrl(text);
+          };
+        }
+      ]
+    )
+
       // /**
       //  * Translate roles
       //  */
