@@ -218,6 +218,7 @@ require(
     'modals/testModal',
     'modals/profile',
     'modals/report',
+    'modals/message',
 
     'resources/ClientResource',
     'resources/TeamMessageResource',

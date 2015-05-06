@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'clientCtrl',
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
-                  $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection)
+                  $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection, Message)
         {
           //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
           //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
@@ -1070,6 +1070,22 @@ define(
           {
             $scope.uploadURL = $scope.imgHost + $scope.ns + "/client/" + $scope.client.uuid + "/photo?square=true";
             $scope.setViewTo('editImg');
+          };
+
+          $scope.makeVideoCall = function(client, contact)
+          {
+            var typeData = {
+              type: 'client',
+              client: client
+            };
+
+            if(! _.isUndefined(contact))
+            {
+              typeData.contact = contact;
+              typeData.type = 'contact';
+            }
+
+            Message.addByType(typeData);
           };
         }
     );

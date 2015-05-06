@@ -362,8 +362,6 @@ define(
               {
                 $rootScope.statusBar.off();
                 $scope.moveToBottom = true;
-
-                //window.open(url, '_blank');
               },
               function (error)
               {
