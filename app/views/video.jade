@@ -17,9 +17,5 @@
 			.tab-header
 				h3.pull-left Video gesprek met testgebruiker
 			hr
-			//h4 Hoe maak ik een nieuwe cliënt aan? http://webrtc.ask-fast.com/?room=bs79o1or   https://www.youtube.com/embed/s4rOjMugsxM?rel=0
-				//width="560" height="315" //(class="{{(views.web==true) && 'active'}}")
-			iframe(width="100%" height="600px" data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)
-			br
-			br
-			br
+			div.frame-container
+				iframe(data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)
