@@ -14,9 +14,21 @@ define(
           angular.element('body').css('background-color', '');
           angular.element('#footer').show();
 
+          //Ook implementatie als er geen room name wordt meegegeven
           $scope.getRoom = function()
           {
-            return $filter('trusted_url')('http://webrtc.ask-fast.com/?room=' + $route.current.params.videoId);
+            var videoCall = null;
+
+            if($route.current.params.videoId)
+            {
+              videoCall = $filter('trusted_url')('http://webrtc.ask-fast.com/?room=' + $route.current.params.videoId);
+            }
+            else
+            {
+              //$rootScope.notifier.error("Er is geen roomnummer opgegeven");
+            }
+
+            return videoCall;
           };
         }
     );

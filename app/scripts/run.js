@@ -64,12 +64,11 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            //Check if there is a session
-            //if not bepaal check dan uitzonderingen
+            var videoRegex = /video\/([A-Za-z0-9-_/#]+)/g;
 
-            switch (location)
+            switch (true)
             {
-              case "/video":
+              case videoRegex.test(location):
                 break;
               default:
                 if(false == Session.check())

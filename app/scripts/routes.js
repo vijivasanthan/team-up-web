@@ -414,7 +414,7 @@ define(
               reloadOnSearch: false
             })
             .when(
-            '/video/:videoId',
+            '/video/:videoId?',
             {
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
