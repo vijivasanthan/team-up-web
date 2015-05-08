@@ -69,7 +69,7 @@ define(['services/services', 'config'],
               }
               else
               {
-                var errorMessage = 'Chat messages haven t been added -> ' + result;
+                var errorMessage = 'Chat message isn t added -> ' + result;
                 console.log(errorMessage);
                 deferred.resolve(errorMessage);
               }

@@ -16,3 +16,10 @@ iframe {
   box-sizing: border-box;
   transition: padding 2.4s linear;
 }
+
+#video-content {
+  iframe {
+    top: -50px;
+    height: calc(100% + 51px);
+  }
+}

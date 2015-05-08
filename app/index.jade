@@ -201,39 +201,45 @@ block chat
 	#chat.ng-cloak(
 	ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile || ! app.domainPermission.chat', 
 	ng-controller='messagesCtrl')
-		#chat-btn(ng-click='openChat()')
+		#chat-btn(ng-click='openChat();')
 			span CHAT {{newCountShow}}
-		#chat-content(ng-show='toggleChat')
-			.chatHeader
+		#message-content(ng-show='toggleChat')
+			#video-content(ng-show='video')
+				iframe(data-ng-src="{{ video }}" frameborder="0" allowfullscreen)
 				button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
 					i(class="icon-facetime-video white")
-				//h4 {{teamName}}
-			.mainContent
-				p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
-				div(ng-repeat='message in messagesShow')
-					.chat-separator(ng-show='(message.date != "")')
-						span {{message.date}}
-						hr
-					.chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
-						a(ng-click='directToChatLink("#/client?uuid=" + message.body.clientGroupId + "&reportUuid=" + message.body.reportUuid + "#reports")')
-							span {{message.title}}
+				button.btn.btn-success.stop-video(ng-click='closeVideoCall()') 
+					span
+						i(class="glyphicon glyphicon-earphone white")
+			#chat-content
+				.chatHeader
+					//h4 {{teamName}}
+				.mainContent
+					p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
+					div(ng-repeat='message in messagesShow')
+						.chat-separator(ng-show='(message.date != "")')
+							span {{message.date}}
 							hr
-					.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
-						.chatAvatar.roundedPicSmall(back-img = '{{message.member.uuid | avatar:"team":"80" }}',
-						class='{{message.member.states|stateColor}}')
-						.chat-arrow(ng-show='(message.role == "other")')
-						.chatCloud
-							h5.name {{message.senderName}}
-							h5.time {{message.sendTime|nicelyTime}}
-							div: p(ng-bind-html='message.body | trusted_html')
-							
-						.chat-arrow(ng-hide='(message.role == "other")')
-
-			.input-area
-				input#messageField(type='text',
-				ng-model='newMessage',
-				ngenter='sendMessage(newMessage)')
-				button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
+						.chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
+							a(ng-click='directToChatLink("#/client?uuid=" + message.body.clientGroupId + "&reportUuid=" + message.body.reportUuid + "#reports")')
+								span {{message.title}}
+								hr
+						.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
+							.chatAvatar.roundedPicSmall(back-img = '{{message.member.uuid | avatar:"team":"80" }}',
+							class='{{message.member.states|stateColor}}')
+							.chat-arrow(ng-show='(message.role == "other")')
+							.chatCloud
+								h5.name {{message.senderName}}
+								h5.time {{message.sendTime|nicelyTime}}
+								div: p(ng-bind-html='message.body | trusted_html')
+								
+							.chat-arrow(ng-hide='(message.role == "other")')
+	
+				.input-area
+					input#messageField(type='text',
+					ng-model='newMessage',
+					ngenter='sendMessage(newMessage)')
+					button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
 
 
 

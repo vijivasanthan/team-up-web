@@ -819,7 +819,8 @@ define(
             );
           };
 
-          $rootScope.unique = function (collection) {
+          $rootScope.unique = function (collection)
+          {
             var filter = function (result) {
               return result.role > 0 && result.role < 4;
             };
@@ -836,6 +837,40 @@ define(
             ), function (member) {
               return member.uuid;
             });
+          };
+
+          var clickChatBtn = function()
+          {
+            $timeout(function() {
+              var el = document.getElementById('chat-btn');
+              angular.element(el).triggerHandler('click');
+            }, 0);
+          };
+
+          var getRandomString = function()
+          {
+            return Math.random()// Generate random number, eg: 0.123456
+              .toString(36)// Convert  to base-36 : "0.4fzyo82mvyr"
+              .slice(-8);// Cut off last 8 characters : "yo82mvyr"
+          };
+
+          $rootScope.startVideoCall = function(receiver)
+          {
+            $rootScope.video = $filter('trusted_url')('http://webrtc.ask-fast.com/?room=' + getRandomString());
+
+            var content = angular.element('#message-content');
+
+            if(content.hasClass('ng-hide'))
+            {
+              content.removeClass('ng-hide');
+              clickChatBtn();
+            }
+          };
+
+          $rootScope.closeVideoCall = function()
+          {
+            $rootScope.video = null;
+            clickChatBtn();
           };
         }
       ]

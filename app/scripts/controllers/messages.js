@@ -56,12 +56,10 @@ define(
                 }
                 else if(htmlRegex.test(text))
                 {
-                  console.log('htmlRegex found-> ', text);
                   result = replaceUrl(text, htmlRegex);
                 }
                 else
                 {
-                  console.log('nothing found-> ', text);
                   result = text;
                 }
 
