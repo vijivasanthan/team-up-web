@@ -14,8 +14,10 @@
 
 	.tab-content
 		#web.tab-pane(class="{{'active'}}")
-			.tab-header
-				h3.pull-left Video gesprek met testgebruiker
-			hr
-			div.frame-container
+			//.tab-header
+			//	h3.pull-left Video gesprek met testgebruiker
+			//hr
+			div(class="embed-responsive embed-responsive-16by9")
 				iframe(data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)
+				//(class="embed-responsive embed-responsive-16by9")
+						.frame-container
