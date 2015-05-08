@@ -206,12 +206,10 @@ block chat
 		#message-content(ng-show='toggleChat')
 			#video-content(ng-show='video')
 				iframe(data-ng-src="{{ video }}" frameborder="0" allowfullscreen)
-				button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
-					i(class="icon-facetime-video white")
 				button.btn.btn-success.stop-video(ng-click='closeVideoCall()') 
 					span
 						i(class="glyphicon glyphicon-earphone white")
-			#chat-content
+			#chat-content(ng-class="{ 'border-left': video}")
 				.chatHeader
 					//h4 {{teamName}}
 				.mainContent
@@ -241,7 +239,8 @@ block chat
 					ngenter='sendMessage(newMessage)')
 					button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
 
-
+			button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
+				i(class="icon-facetime-video white")
 
 // TODO: Is it needed?
 block mobile-status

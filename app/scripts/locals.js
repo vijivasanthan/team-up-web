@@ -38,6 +38,9 @@ define(
           loading_teams: 'Teams laden...',
           loading_tasks: 'Taken laden...'
         },
+        video: {
+          stop: 'Het videogesprek is gestopt.'
+        },
         dashboard: {
           thisWeek: 'Deze week',
           welcome: 'Welkom',

@@ -871,6 +871,7 @@ define(
           {
             $rootScope.video = null;
             clickChatBtn();
+            $rootScope.notifier.success($rootScope.ui.video.stop);
           };
         }
       ]

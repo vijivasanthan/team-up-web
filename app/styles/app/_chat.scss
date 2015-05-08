@@ -73,10 +73,11 @@
       //background-color: $brown;
       width: 660px; //Need to be responsive
       //+ padding-bottom parent
-      height: calc(100% + 51px);
+      height: calc(100% + 52px);
       float: left;
       position: relative;
       overflow: hidden;
+      @include border-bottom-left-radius(15px);
     }
 
     #chat-content {
@@ -86,8 +87,7 @@
       position: relative;
 
       margin-top: -8px;
-      border-top: 9px solid #1dc8b6;
-      border-left: 8px solid #1dc8b6;
+      border-top: 8px solid #1dc8b6;
       border-top-left-radius: 15px;
 
       .chatHeader {
@@ -241,18 +241,15 @@
 
       .input-area {
         position: absolute;
-        //left: 8px;
-        //width: 100%;
-        //padding-top: 10px;
         background-color: $offwhite;
-        //border: 1px solid $offwhite;
-        //border-bottom-left-radius: 10px;
+        height: 67px;
+        padding-top: 16px;
         z-index: 20;
-
         left: -8px;
         border-left: 8px solid #1dc8b6;
+        border-bottom: 8px solid #1dc8b6;
+        @include border-bottom-left-radius(15px);
         width: calc(100% + 8px);
-        padding-top: 19px;
 
 
         #messageField {
@@ -266,13 +263,16 @@
         }
       }
     }
+
+    #chat-content.border-left {
+      border-left: 8px solid #1dc8b6;
+    }
   }
 
   .web-rtc-button{
     position: absolute;
-    //-moz-border-radius-bottomright: 15px;
-    //-webkit-border-bottom-right-radius: 15px;
-    //border-bottom-right-radius: 15px;
+    left: 8px;
+    top: 7px;
     @include border-left-radius(0px);
     @include border-top-right-radius(0px);
     @include border-bottom-right-radius(15px);
@@ -288,7 +288,7 @@
 
   .stop-video {
     position: absolute;
-    bottom: -4px;
+    bottom: -3px;
     right: 0;
     @include border-right-radius(0px);
     @include border-top-left-radius(15px);
