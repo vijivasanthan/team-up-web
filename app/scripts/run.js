@@ -853,9 +853,17 @@ define(
               .slice(-8);// Cut off last 8 characters : "yo82mvyr"
           };
 
+          var filterUrl = function(url)
+          {
+            return  $filter('trusted_url')(url);
+          };
+
           $rootScope.startVideoCall = function(receiver)
           {
-            $rootScope.video = $filter('trusted_url')('http://webrtc.ask-fast.com/?room=' + getRandomString());
+            $rootScope.video = {
+              url: filterUrl('http://webrtc.ask-fast.com/?room=' + getRandomString())
+            }
+            $rootScope.video.src = $rootScope.video.url;
 
             var content = angular.element('#message-content');
 
@@ -868,7 +876,9 @@ define(
 
           $rootScope.closeVideoCall = function()
           {
-            $rootScope.video = null;
+            $rootScope.video.src = false;
+            $rootScope.video.url = filterUrl('about:blank');
+
             clickChatBtn();
             $rootScope.notifier.success($rootScope.ui.video.stop);
           };

@@ -205,12 +205,12 @@ block chat
 		#chat-btn(ng-click='openChat();')
 			span CHAT {{newCountShow}}
 		#message-content(ng-show='toggleChat')
-			#video-content(ng-show='video')
-				iframe(data-ng-src="{{ video }}" frameborder="0" allowfullscreen)
+			#video-content(ng-show='video.src')
+				iframe(data-ng-src="{{ video.url }}" frameborder="0" allowfullscreen)
 				button.btn.btn-success.stop-video(ng-click='closeVideoCall()') 
 					span
 						i(class="glyphicon glyphicon-earphone white")
-			#chat-content(ng-class="{ 'border-left': video}")
+			#chat-content(ng-class="{ 'border-left': video.src}")
 				.chatHeader
 					//h4 {{teamName}}
 				.mainContent
@@ -238,7 +238,7 @@ block chat
 					input#messageField(type='text',
 					ng-model='newMessage',
 					ngenter='sendMessage(newMessage)')
-					button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}}
+					button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}} 
 
 			button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
 				i(class="icon-facetime-video white")
