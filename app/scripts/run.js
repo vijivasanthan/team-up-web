@@ -22,8 +22,9 @@ define(
         'Permission',
         '$route',
         'Pincode',
+        '$injector',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -862,9 +863,15 @@ define(
           {
             var room = roomId || getRandomString();
             var user = receiver || 'anonymous';
+            var Message = $injector.get('Message');
+            var url = 'http://webrtc.ask-fast.com/?room=' + room;
+            var message = $rootScope.ui.message.webTRCWebLink + url;
+            var teamId = receiver && receiver.teamUuids[0] || null;
+            console.log('receiver', receiver);
+            console.log('teamId', teamId);
 
             $rootScope.video = {
-              url: filterUrl('http://webrtc.ask-fast.com/?room=' + room)
+              url: filterUrl(url)
             }
             $rootScope.video.src = $rootScope.video.url;
 
@@ -875,6 +882,14 @@ define(
               content.removeClass('ng-hide');
               clickChatBtn();
             }
+
+            //Message.save(message, teamId)
+            //  .then(
+            //    function()
+            //    {
+            //
+            //    }
+            //  );
           };
 
           $rootScope.closeVideoCall = function()

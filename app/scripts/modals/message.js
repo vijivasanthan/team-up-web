@@ -6,12 +6,6 @@ define(['services/services', 'config'],
     services.factory
     (
       'Message',
-      [
-        '$rootScope',
-        '$resource',
-        '$q',
-        'Store',
-        '$location',
         function ($rootScope, $resource, $q, Store, $location)
         {
           var Message = $resource(config.app.host + 'team/teamMessage/:teamId', {},
@@ -61,24 +55,27 @@ define(['services/services', 'config'],
               sendTime: currentDate.getTime()
             };
 
-            message.save(teamData, messageData, function (result)
-            {
-              if(result.result)
+            Message.save(teamData, messageData, 
+              function (result)
               {
-                deferred.resolve(result.result);
-              }
-              else
-              {
-                var errorMessage = 'Chat message isn t added -> ' + result;
-                console.log(errorMessage);
-                deferred.resolve(errorMessage);
-              }
+                console.log('result', result);
+                if(result.result)
+                {
+                  deferred.resolve(result.result);
+                }
+                else
+                {
+                  var errorMessage = 'Chat message isn t added -> ' + result;
+                  console.log(errorMessage);
+                  deferred.resolve(errorMessage);
+                }
             })
+
+            deferred.promise;
           };
 
           return new Message;
         }
-      ]
     )
   }
 );

@@ -268,7 +268,7 @@ define(
           sms: 'SMS',
           email: 'Email',
           receviers: 'Ontvanger(s)',
-          webTRCWebLink: 'Een video conferentie is geopend doe mee!',
+          webTRCWebLink: 'Een video conferentie is geopend doe mee! ',
           // troubled
           // chooseRecept: 'Ontvanger(s) selecteren',
           //
