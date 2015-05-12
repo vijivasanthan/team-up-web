@@ -858,10 +858,13 @@ define(
             return  $filter('trusted_url')(url);
           };
 
-          $rootScope.startVideoCall = function(receiver)
+          $rootScope.startVideoCall = function(receiver, roomId)
           {
+            var room = roomId || getRandomString();
+            var user = receiver || 'anonymous';
+
             $rootScope.video = {
-              url: filterUrl('http://webrtc.ask-fast.com/?room=' + getRandomString())
+              url: filterUrl('http://webrtc.ask-fast.com/?room=' + room)
             }
             $rootScope.video.src = $rootScope.video.url;
 

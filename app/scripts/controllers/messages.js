@@ -45,25 +45,30 @@ define(
           $scope.formatMessage = function (messages)
           {
             var chatMembers = [],
-              urlify = function(text)
+              urlify = function(msg)
               {
                 var urlRegex = /(https?:\/\/[^\s]+)/g,
                   htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g,
                   result = null;
-                if(urlRegex.test(text))
+                if(urlRegex.test(msg.body))
                 {
-                  result = replaceUrl(text, urlRegex);
+                  console.log('videochat found');
+                  result = msg.body.replace(urlRegex, function(url) {
+                    url = url.split('=');
+                    var roomId = url[url.length - 1];
+
+                    //href="index.html#/video/' + roomId + '"
+                    //'<a href="index.html#/video/' + roomId + '">' + 'Klik' + '</a>'
+                    //'<a ng-click="click()" >' + 'Klik' + '</a>';
+                    msg.body = '<a href="index.html#/team?video=' + roomId + '">Klik</a>';
+                  });
                 }
-                else if(htmlRegex.test(text))
+                else if(htmlRegex.test(msg.body))
                 {
-                  result = replaceUrl(text, htmlRegex);
-                }
-                else
-                {
-                  result = text;
+                  result = replaceUrl(msg.body, htmlRegex);
                 }
 
-                return result;
+                return msg;
 
               };
 
@@ -144,7 +149,7 @@ define(
                 else
                 {
                   //Check if there is a url and parse the url to a anchor tag
-                  msg.body = urlify(msg.body);
+                  msg = urlify(msg);
                 }
 
                 //Maak als er hhtp in de body staat er een anchor link vab
@@ -343,7 +348,7 @@ define(
             },
               random = getRandomString(),
               current = new Date(),
-              url = ' index.html#/video/' + getRandomString(), //http://webrtc.ask-fast.com/?room=
+              url = ' http://webrtc.ask-fast.com/?room=' + getRandomString(),    //' index.html#/video/'
               message = $rootScope.ui.message.webTRCWebLink + url;
 
             $rootScope.statusBar.display($rootScope.ui.message.sending);

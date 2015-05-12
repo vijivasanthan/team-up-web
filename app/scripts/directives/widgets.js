@@ -424,18 +424,21 @@ define(
       'dynamic',
       function($compile)
       {
-        return {
-          restrict: 'A',
-          replace: true,
-          link: function (scope, element, attrs)
-          {
-            console.log('element', element);
-            scope.$watch(attrs.dynamic, function(html)
-            {
-              element.html(html);
+        return function(scope, element, attrs)
+        {
+          console.log('attrs', attrs.dynamicType);
+
+          var ensureCompileRunsOnce = scope.$watch(
+            function(scope) {
+              return scope.$eval(attrs.dynamic);
+            },
+            function(value) {
+              console.log('value', value);
+              element.html(value);
               $compile(element.contents())(scope);
+
+              ensureCompileRunsOnce();
             });
-          }
         };
       }
     );

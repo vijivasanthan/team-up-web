@@ -71,7 +71,7 @@ block navbar
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
 						li(data-match-route='/manage',
 							ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
-							a(href='#manage') {{ui.teamup.manage}} {{ (app.resources.role === undefined) }}
+							a(href='#manage') {{ui.teamup.manage}}
 						li(data-match-route='/team-telefoon.*',
 							ng-show='app.domainPermission.teamTelephone')
 							a(ng-click='nav("team-telefoon/status")') Team-telefoon
@@ -231,7 +231,6 @@ block chat
 								h5.name {{message.senderName}}
 								h5.time {{message.sendTime|nicelyTime}}
 								div: p(ng-bind-html='message.body | trusted_html')
-								
 							.chat-arrow(ng-hide='(message.role == "other")')
 	
 				.input-area

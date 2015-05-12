@@ -79,16 +79,21 @@ define(
             })
 
             .when(
-            '/team',
+            '/team/',
             {
               templateUrl: 'views/teams.html',
               controller: 'teamCtrl',
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams', '$route',
-                  function (Teams, $route)
+                  '$rootScope', 'Teams', '$route',
+                  function ($rootScope, Teams, $route)
                   {
+                    //TODO needs a better solution to start a videocall by chatmessage
+                    if($route.current.params.video)
+                    {
+                      $rootScope.startVideoCall(null, $route.current.params.video);
+                    }
 
                     return ($route.current.params.local && $route.current.params.local == 'true')
                       ? Teams.queryLocal()
