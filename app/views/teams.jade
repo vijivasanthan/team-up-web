@@ -170,7 +170,7 @@ aria-hidden='true')
 										href='http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}')  {{ui.teamup.map}}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(ng-click='startVideoCall(member)')
+									button.btn-primary.btn-mini(ng-show='app.resources.uuid != member.uuid', ng-click='startVideoCall(member)')
 										i.icon-facetime-video
 									a(href='#/profile/{{member.uuid}}#edit',
 									ng-click='editProfile(member.uuid, current)',
