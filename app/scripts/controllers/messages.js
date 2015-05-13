@@ -52,11 +52,9 @@ define(
 
                 if(urlRegex.test(body))
                 {
-                  console.log('videochat found');
                   body = body.replace(urlRegex, function(url) {
                     url = url.split('=');
                     var roomId = url[url.length - 1];
-
                     //href="index.html#/video/' + roomId + '"
                     //'<a href="index.html#/video/' + roomId + '">' + 'Klik' + '</a>'
                     //'<a ng-click="click()" >' + 'Klik' + '</a>';
@@ -123,9 +121,9 @@ define(
                 else
                 {
                   msg.role = 'other';
-                  msg.msgRole = 'messageOther'
+                  msg.msgRole = 'messageOther';
                   msg.member = member;
-                  msg.senderName = member.firstName + ' ' + member.lastName;
+                  msg.senderName = member && member.firstName + ' ' + member.lastName || $rootScope.ui.teamup.undefinedTeamMember;
                 }
 
                 // parse the message body if necessary
