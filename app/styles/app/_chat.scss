@@ -73,8 +73,34 @@
       height: calc(100% + 52px);
       float: left;
       position: relative;
-      overflow: hidden;
       @include border-bottom-left-radius(15px);
+
+      .video-content-wrap {
+        position: inherit;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      .stop-video {
+        position: absolute;
+        bottom: -3px;
+        right: -1px;
+        @include border-right-radius(0px);
+        @include border-top-left-radius(15px);
+        @include border-bottom-left-radius(0px);
+        span {
+          background-color: $red;
+          padding-top: 2px;
+          margin-left: 7px;
+          width: 24px;
+          @include border-radius(50%);
+          background-color: #c85a3c;
+          display: block;
+          i {
+            @include rotate(135deg);
+          }
+        }
+      }
     }
 
     #chat-content {
@@ -281,27 +307,6 @@
     &:hover {
       i.white {
         background-image: url("../images/glyphicons-halflings.png");
-      }
-    }
-  }
-
-  .stop-video {
-    position: absolute;
-    bottom: -3px;
-    right: 0;
-    @include border-right-radius(0px);
-    @include border-top-left-radius(15px);
-    @include border-bottom-left-radius(0px);
-    span {
-      background-color: $red;
-      padding-top: 2px;
-      margin-left: 7px;
-      width: 24px;
-      @include border-radius(50%);
-      background-color: #c85a3c;
-      display: block;
-      i {
-        @include rotate(135deg);
       }
     }
   }
