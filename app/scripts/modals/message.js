@@ -12,12 +12,7 @@ define(['services/services', 'config'],
               {
                 get: {
                   method: 'GET',
-                  interceptor: {
-                    response: function (response)
-                    {
-                      return response;
-                    }
-                  }
+                  params: {}
                 },
                 save: {
                   method: 'POST',
@@ -26,6 +21,7 @@ define(['services/services', 'config'],
               }
             );
 
+          //TODO different type of receivers
           Message.prototype.addByType = function (typeData)
           {
             switch (typeData.type)
@@ -46,32 +42,30 @@ define(['services/services', 'config'],
 
           Message.prototype.save = function(message, teamId)
           {
-            var deferred = $q.defer();
-            var teamData = (teamId) ? {teamId: teamId} : {};
-            var currentDate = new Date()
-            var messageData = {
-              title: 'Van: TeamUp' + currentDate.toString(config.app.formats.date),
-              body: message,
-              sendTime: currentDate.getTime()
-            };
+            var deferred = $q.defer(),
+                teamData = (teamId) ? {teamId: teamId} : {},
+                currentDate = new Date(),
+                messageData = {
+                  title: 'Van: TeamUp' + currentDate.toString(config.app.formats.date),
+                  body: message,
+                  sendTime: currentDate.getTime()
+                };
 
-            Message.save(teamData, messageData, 
+            //TODO Adding a teamId or userId needs to be created for sending messages backend
+            Message.save({}, messageData,
               function (result)
               {
-                console.log('result', result);
                 if(result.result)
                 {
                   deferred.resolve(result.result);
                 }
                 else
                 {
-                  var errorMessage = 'Chat message isn t added -> ' + result;
-                  console.log(errorMessage);
-                  deferred.resolve(errorMessage);
+                  deferred.resolve({error: 'Chat message isn t added -> ' + result});
                 }
-            })
+            });
 
-            deferred.promise;
+            return deferred.promise;
           };
 
           return new Message;

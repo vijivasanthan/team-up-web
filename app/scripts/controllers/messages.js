@@ -45,30 +45,30 @@ define(
           $scope.formatMessage = function (messages)
           {
             var chatMembers = [],
-              urlify = function(msg)
+              urlify = function(body)
               {
                 var urlRegex = /(https?:\/\/[^\s]+)/g,
-                  htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g,
-                  result = null;
-                if(urlRegex.test(msg.body))
+                  htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g;
+
+                if(urlRegex.test(body))
                 {
                   console.log('videochat found');
-                  result = msg.body.replace(urlRegex, function(url) {
+                  body = body.replace(urlRegex, function(url) {
                     url = url.split('=');
                     var roomId = url[url.length - 1];
 
                     //href="index.html#/video/' + roomId + '"
                     //'<a href="index.html#/video/' + roomId + '">' + 'Klik' + '</a>'
                     //'<a ng-click="click()" >' + 'Klik' + '</a>';
-                    msg.body = '<a href="index.html#/team?video=' + roomId + '">Klik</a>';
+                     return '<a href="index.html#/team?video=' + roomId + '">Klik</a>';
                   });
                 }
-                else if(htmlRegex.test(msg.body))
+                else if(htmlRegex.test(body))
                 {
-                  result = replaceUrl(msg.body, htmlRegex);
+                  body = replaceUrl(body, htmlRegex);
                 }
 
-                return msg;
+                return body;
 
               };
 
@@ -149,7 +149,7 @@ define(
                 else
                 {
                   //Check if there is a url and parse the url to a anchor tag
-                  msg = urlify(msg);
+                  msg.body = urlify(msg.body);
                 }
 
                 //Maak als er hhtp in de body staat er een anchor link vab
@@ -296,7 +296,7 @@ define(
           };
 
           // Open the chat box and initiate loaders
-          $scope.openChat = function ()
+          $scope.openChat = function()
           {
             $scope.toggleChat = ! $scope.toggleChat;
 

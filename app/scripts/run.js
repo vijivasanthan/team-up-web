@@ -870,26 +870,26 @@ define(
             console.log('receiver', receiver);
             console.log('teamId', teamId);
 
-            $rootScope.video = {
-              url: filterUrl(url)
-            }
-            $rootScope.video.src = $rootScope.video.url;
+            Message.save(message, teamId)
+              .then(
+                function(result)
+                {
+                  console.log('result', result);
+                  
+                  $rootScope.video = {
+                    url: filterUrl(url)
+                  }
+                  $rootScope.video.src = $rootScope.video.url;
 
-            var content = angular.element('#message-content');
+                  var content = angular.element('#message-content');
 
-            if(content.hasClass('ng-hide'))
-            {
-              content.removeClass('ng-hide');
-              clickChatBtn();
-            }
-
-            //Message.save(message, teamId)
-            //  .then(
-            //    function()
-            //    {
-            //
-            //    }
-            //  );
+                  if(content.hasClass('ng-hide'))
+                  {
+                    content.removeClass('ng-hide');
+                    clickChatBtn();
+                  }
+                }
+              );
           };
 
           $rootScope.closeVideoCall = function()
