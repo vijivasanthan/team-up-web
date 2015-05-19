@@ -34,7 +34,7 @@ define(
               {
                 if(profileData)
                 {
-                  $scope.view.pincode = angular.copy(profileData.pincode) || '';
+                  //$scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
                   $scope.edit = angular.copy($scope.view);
                   //$scope.edit.defaultTeam = $scope.edit.teamUuids[0];
@@ -105,12 +105,12 @@ define(
           /**
            * Check if pincode change and validate
            */
-          $scope.$watch(function()
-          {
-            return $scope.edit.pincode;
-          }, function() {
-            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
-          });
+          //$scope.$watch(function()
+          //{
+          //  return $scope.edit.pincode;
+          //}, function() {
+          //  $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
+          //});
 
           $scope.parsedPhoneNumbers = [];
 
@@ -147,23 +147,23 @@ define(
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
            * @param index index of what phonenumber
            */
-          $scope.setTeamMemberCodeAsPhone = function(index)
-          {
-            var phone = $scope.edit.phoneNumbers[index],
-                phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
-
-            if(phone && phone.length >= 10 &&
-              (_.isEmpty($scope.edit.pincode) || $scope.view.pincode != $scope.edit.pincode ||
-              getLastFourDigits($scope.view.phoneNumbers[index]) == $scope.view.pincode) &&
-              phoneValidateResult == true)
-            {
-              var inputVal = angular.element('.inputPhoneNumber0').val();
-
-              //current value of the input is different then the $scope data
-              //Will be the same after saving the form
-              $scope.edit.pincode = getLastFourDigits(inputVal);
-            }
-          };
+          //$scope.setTeamMemberCodeAsPhone = function(index)
+          //{
+          //  var phone = $scope.edit.phoneNumbers[index],
+          //      phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
+          //
+          //  if(phone && phone.length >= 10 &&
+          //    (_.isEmpty($scope.edit.pincode) || $scope.view.pincode != $scope.edit.pincode ||
+          //    getLastFourDigits($scope.view.phoneNumbers[index]) == $scope.view.pincode) &&
+          //    phoneValidateResult == true)
+          //  {
+          //    var inputVal = angular.element('.inputPhoneNumber0').val();
+          //
+          //    //current value of the input is different then the $scope data
+          //    //Will be the same after saving the form
+          //    $scope.edit.pincode = getLastFourDigits(inputVal);
+          //  }
+          //};
 
           var getLastFourDigits = function(phone)
           {
@@ -184,11 +184,11 @@ define(
               return false;
             }
 
-            if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
-              return false;
-            }
+            //if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
+            //{
+            //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
+            //  return false;
+            //}
 
             // let user know that user need to re-relogin if the login-user's role is changed.
             if (currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
@@ -279,8 +279,8 @@ define(
             Profile.save($route.current.params.userId,
               {
                 PhoneAddresses: resources.phoneNumbers,
-                PhoneAddress: resources.phone,
-                pincode: resources.pincode
+                PhoneAddress: resources.phone
+                //pincode: resources.pincode
               }
             )
               .then(
@@ -294,7 +294,7 @@ define(
                 else
                 {
                   delete tempResources.phoneNumbers;
-                  delete tempResources.pincode;
+                  //delete tempResources.pincode;
 
                   saveUserData(tempResources);
                 }
