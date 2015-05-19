@@ -25,7 +25,22 @@ define(
 
         $scope.data = data;
 
-        $scope.roles = config.app.roles;
+        $scope.roles = [];
+
+        if($rootScope.app.resources.role == 1)
+        {
+          $scope.roles.push({
+              id: '1',
+              label: 'coordinator'
+          });
+        }
+
+        $scope.roles.push({
+          id: '2',
+          label: 'team lid'
+        });
+
+        console.log('$scope.roles ', $scope.roles);
 
         // TODO: Readable variable name!
         $scope.mfuncs = config.app.mfunctions;
