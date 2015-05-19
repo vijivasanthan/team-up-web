@@ -5,7 +5,10 @@ define(
     'lodash',
     'controllers/logs',
     'modals/logs',
-    'services/moment'
+    'services/moment',
+    'lawnchair',
+    'lawnchair-dom',
+    'services/currentSelection'
   ],
   function() {
     'use strict';
@@ -35,7 +38,15 @@ define(
           data,
           logsService,
           moment,
-          everyoneId = 'all';
+          Store,
+          currentSelectionService,
+          everyoneId = 'all',
+          clientGroups = [
+            {
+              id: 123,
+              name: 'test-team'
+            }
+          ]
 
       // Initialize the controller and a mock scope
       beforeEach(
@@ -49,7 +60,9 @@ define(
             _$filter_,
             _$httpBackend_,
             _Logs_,
-            _moment_
+            _moment_,
+            _CurrentSelection_,
+            _Store_
           )
           {
             rootScope = _$rootScope_;
@@ -59,6 +72,8 @@ define(
             logsService = _Logs_;
             $filter = _$filter_;
             moment = _moment_;
+            Store = _Store_;
+            currentSelectionService = _CurrentSelection_,
             data = {
               logData: {
                 periods: {
@@ -82,7 +97,10 @@ define(
               }
             };
             rootScope.app = {
-              resources: testConfig.userResources
+              resources: testConfig.userResources,
+              domainPermission: {
+                clients: true
+              }
             },
             logCtrl = $controller('logs', {
               $rootScope: rootScope,
@@ -90,7 +108,9 @@ define(
               data: data,
               $filter: $filter,
               Logs: logsService,
-              moment: moment
+              moment: moment,
+              CurrentSelection: currentSelectionService,
+              Store: Store
             });
           }
         )
@@ -106,8 +126,10 @@ define(
         };
       };
 
-      it('Should check what the current selector id must be', function () {
-        expect(logCtrl.current).toEqual(everyoneId);
+      it('Should check if the current team is saved and equal in the CurrentSelection service', function () {
+        var teams = Store('app').get('teams');
+
+        expect(logCtrl.current).toEqual(currentSelectionService.getTeamId());
       });
 
       it('Should check what the default daterange is', function () {
@@ -159,10 +181,6 @@ define(
             function(fetchedLogs)
             {
               logsByTeam = fetchedLogs;
-            },
-            function(error)
-            {
-              console.log('error', error);
             }
         );
 

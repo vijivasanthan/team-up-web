@@ -3,7 +3,7 @@ define(['controllers/controllers'], function (controllers)
   'use strict';
 
   controllers.controller(
-    'status',
+    'phones',
       function ($scope, $rootScope, $q, Slots, Store, data, CurrentSelection)
       {
         $rootScope.notification.status = false;
@@ -38,7 +38,7 @@ define(['controllers/controllers'], function (controllers)
         };
 
         $scope.current = {
-          group: CurrentSelection.getTeamId()
+          group: everyoneId
         };
 
         $scope.loadingReachability = true;
@@ -91,7 +91,8 @@ define(['controllers/controllers'], function (controllers)
                       $rootScope.ui.dashboard.possiblyReachable,
                     name: (currentMembers && currentMembers[id]) ?
                     currentMembers[id].firstName + ' ' + currentMembers[id].lastName :
-                      id
+                      id,
+                    phone: currentMembers[id].phone
                   };
 
                   if (slots.length > 0)

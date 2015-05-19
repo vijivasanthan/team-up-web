@@ -47,24 +47,41 @@ aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only Close
 				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
-			.modal-body
-				| Wilt u 
-				strong {{ member.firstName }} {{ member.lastName }} 
-				| lid maken van team 
-				strong {{ [current]|getTeamNameById }}
-				|? 
-				| Deze persoon maakt dan niet langer deel uit van team 
-				strong {{ member.teamUuids|getTeamNameById }}
+			.modal-body(ng-init='changeMemberTeamOption = 2')
+				p
+					| Wilt u 
+					strong {{ member.firstName }} {{ member.lastName }} 
+					| lid maken van team 
+					strong {{ [current]|getTeamNameById }}
+					|? 
+				div.radio
+					label
+						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='2')
+						strong Toevoegen
+						span.help-block
+							small
+								i
+									| Deze persoon zal deel uitmaken van de volgende teams
+									strong  {{  [current]|getTeamNameById }}, {{ member.teamUuids|getTeamNameById }}
+				div.radio
+					label
+						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='1')
+						strong Verplaatsen
+						span.help-block
+							small
+								i
+									| Deze persoon zal alleen deel uit maken van team 
+									strong {{ [current]|getTeamNameById }}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='AddTeamRemoveCurrent(member)') Wijzigen
+				ng-click='changeMemberTeam(member, changeMemberTeamOption)') Wijzigen
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(
-		ng-show='(app.resources.role == 1 && !views.newTeam)')
+		ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1) && !views.newTeam')
 		span.selectTitles
 			strong
 				| {{ ui.teamup.selectTeam }}
@@ -106,27 +123,26 @@ aria-hidden='true')
 		#viewTeamTab.tab-pane(class="{{(views.team==true) && 'active'}}")
 
 			.tab-header(ng-hide='views.editTeam')
-				h3.pull-left {{team.name}}
-				h4.pull-left(ng-show='(team.phone != "" && team.phone != null)') ({{team.phone}})
+				h3.pull-left {{[current] | getTeamNameById:allTeams=true}}
 				div(ng-show='app.resources.role == 1')
 					button.btn.pull-right.btn-info.marginLeftTen(type='button',
 					ng-click='confirmDeleteTeam()') {{ui.teamup.del}}
 					button.btn.pull-right.btn-info(type='button',
-					ng-click='editTeam(team)') {{ui.teamup.edit}}
+					ng-click='editTeam(current)') {{ui.teamup.edit}}
 
 			.tab-header(ng-show='views.editTeam')
 				input.pull-left(type='text',
 				ng-model='teamEditForm.name')
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset',
-				ng-click='cancelTeamEdit(team)') {{ui.teamup.cancel}}
+				ng-click='cancelTeamEdit()') {{ui.teamup.cancel}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
 				ng-click='changeTeam(teamEditForm)') {{ui.teamup.save}}
 
 			hr
 
-			p(ng-hide='(data.members[team.uuid]).length > 0') {{ui.teamup.noMembers}}
+			p(ng-hide='(data.members[current]).length > 0') {{ui.teamup.noMembers}}
 
-			div(ng-show='(data.members[team.uuid]).length > 0')
+			div(ng-show='(data.members[current]).length > 0')
 				table.table.table-striped.teamsTable
 					thead
 						tr
@@ -135,13 +151,13 @@ aria-hidden='true')
 							th: a {{ui.teamup.states}}
 							th
 					tbody
-						tr(ng-repeat='member in data.members[team.uuid] | orderBy:"lastName"')
+						tr(ng-repeat='member in data.members[current] | orderBy:"lastName"')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
 							td
 								a(href='#/profile/{{member.uuid|lowercase}}#profile',
-								ng-click='editProfile(member.uuid,team.uuid)') {{member.firstName}} {{member.lastName}}
+								ng-click='editProfile(member.uuid, current)') {{member.firstName}} {{member.lastName}}
 							td
 								span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}}
 								dl.states(ng-repeat='state in member.states | filter:share=true ')
@@ -155,7 +171,7 @@ aria-hidden='true')
 							td
 								.pull-right
 									a(href='#/profile/{{member.uuid}}#edit',
-									ng-click='editProfile(member.uuid,team.uuid)',
+									ng-click='editProfile(member.uuid, current)',
 									ng-show='app.resources.role == 1 || app.resources.uuid == member.uuid')
 										button.btn-primary.btn-mini
 											i.icon-edit
@@ -175,7 +191,7 @@ aria-hidden='true')
 						p {{ ui.teamup.stateValue.reachable }}
 				span.muted.pull-right
 					small
-						i {{(data.members[team.uuid]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+						i {{(data.members[current]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
 
 		#newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")
 			.tab-header

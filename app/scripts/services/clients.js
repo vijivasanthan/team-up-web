@@ -48,8 +48,6 @@ define(
                               {
                                 success: function (result)
                                 {
-                                  console.log('result ' + clientGroup.id, result);
-
                                   Store('app').save(
                                     clientGroup.id,
                                     (result.length == 4 &&
@@ -58,8 +56,6 @@ define(
                                     [] :
                                     result
                                   );
-
-                                  console.log('clientGroup', Store('app').get(routeParams.uuid));
                                 }
                               }
                             )
@@ -332,6 +328,52 @@ define(
                 );
 
             return deferred.promise;
+          };
+
+          /**
+           * Check if All clients locally exist, if they exist remove the client from them and store
+           * the list of all client locally.
+           * @param clientId the id of the client who's removed
+           */
+          ClientsService.prototype.removeSingleFromAllLocally = function(clientId)
+          {
+            var allClients = Store('app').get('clients');
+
+            if(allClients.length)
+            {
+              var removedMember = _.findWhere(allClients, {uuid: clientId}),
+                  index = allClients.indexOf(removedMember);
+
+              allClients.splice(index, 1);
+
+              Store('app').save('clients', allClients);
+            }
+          };
+
+          /**
+           * query all clients, if there not locally call them from the backend
+           */
+          ClientsService.prototype.queryAllLocally = function()
+          {
+              var allClients = Store('app').get('clients'),
+                  deferred = $q.defer();
+
+              if(allClients.length)
+              {
+                deferred.resolve(allClients);
+              }
+              else
+              {
+                ClientsService.prototype.queryAll()
+                  .then(
+                    function(clients)
+                    {
+                      deferred.resolve(clients);
+                    }
+                  );
+              }
+
+              return deferred.promise();
           };
 
           /**

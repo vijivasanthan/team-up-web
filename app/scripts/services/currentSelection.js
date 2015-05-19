@@ -46,11 +46,13 @@ define(
                 }
                 else
                 {
+                  var firstClientGroupUuid = clientGroups[0] && (clientGroups[0]).id;
+
                   //if the clientGroupId doesn't match with the given teamId, set the last selected clientGroupId
                   //if there was not a selection of a clientGroupId before, set the first clientgroup id
                   clientGroupId = teamsClientGroup[teamId]
                     || this.clientGroupId
-                    || (clientGroups[0]).id;
+                    || clientGroups[0] && firstClientGroupUuid;
                 }
               }
 

@@ -102,14 +102,14 @@ define(
                 function (event)
                 {
                   //TODO temp solution so a client or teammember can't be in two teams or clientgroups
-                  var items = event.items,
-                    user = items[0];
+                  var items = event.items;
+                    //user = items[0];
 
-                  _this.stores[(user._parent.split('_')[0]) + '_left'].data.unshift({
-                    name: user.name,
-                    _id: user._id,
-                    _parent: user._parent
-                  });
+                  //_this.stores[(user._parent.split('_')[0]) + '_left'].data.unshift({
+                  //  name: user.name,
+                  //  _id: user._id,
+                  //  _parent: user._parent
+                  //});
 
                   for (var i = 0; i < items.length; i++)
                   {
@@ -301,31 +301,6 @@ define(
                     function (data)
                     {
                       data._parent = key;
-
-                      //TODO temp solution so a client or teammember can't be in two teams or clientgroups
-                      var keyParent = key.split('_')[0];
-
-                      if (keyParent == 'clients' || keyParent == 'teams')
-                      {
-                        var leftSide = keyParent + '_left',
-                          changedData = (
-                            _.where
-                            (
-                              _this.stores[leftSide].data,
-                              {
-                                _id: data._id
-                              }
-                            )
-                          )[0];
-                        if (changedData)
-                        {
-                          _this.stores[leftSide].data.splice
-                          (
-                            _this.stores[leftSide].data.indexOf(changedData)
-                            , 1
-                          );
-                        }
-                      }
                     }
                   );
 

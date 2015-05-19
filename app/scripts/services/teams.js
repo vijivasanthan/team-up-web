@@ -232,16 +232,11 @@ define(
               function (team)
               {
                 var flag = true;
-
                 var _teamGroup = Store('app').get('teamGroup_' + team.uuid);
-
-                if (_teamGroup == [])
-                {
-                  // console.log('it is empty ->');
-                }
-
-                _teamGroup = angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
-                // console.log('_teamGroup2 ->', angular.toJson(_teamGroup2.value));
+                //_teamGroup = (_teamGroup[0] && (_teamGroup[0]).name)
+                //  ? _teamGroup
+                //  : {};
+                //angular.fromJson(localStorage.getItem('app.teamGroup_' + team.uuid)).value;
 
                 angular.forEach(
                   _teamGroup,
@@ -365,48 +360,32 @@ define(
           //  });
           //};
 
-          TeamsService.prototype.removeAllTeamsFromMember = function(user)
+          /**
+           * Removes all teams from a single member
+           * @param member the member who to remove all teams from
+           * @returns {*} promise with the result of call in the resolve
+           */
+          TeamsService.prototype.removeAll = function(member)
           {
-            var deferred = $q.defer(),
-                changes = {};
+            var deferred = $q.defer();
+            var calls = [];
 
-            _.each(user.teamUuids, function(teamId) {
-              changes[teamId] = {
-                a: [],
-                r: [user.uuid]
-              };
+            _.each(member.teamUuids, function(teamId) {
+              var removeMemberFromTeam = TeamUp._(
+                'teamMemberDelete',
+                {second: teamId},
+                {ids: [member.uuid]}
+              );
+              calls.push(removeMemberFromTeam);
             });
 
-            TeamsService.prototype.manage(changes)
+            $q.all(calls)
               .then(
-              function()
-              {
-                var loggedUser = {
-                  viewingUserhasTeam: true
-                };
-
-                if(user.uuid == $rootScope.app.resources.uuid)
+                function(result)
                 {
-                  var Profile = $injector.get('Profile');
-
-                  Profile.fetchUserData($rootScope.app.resources.uuid)
-                    .then(
-                    function(userData)
-                    {
-                      if(! userData.length)
-                      {
-                        loggedUser.viewingUserhasTeam = false;
-                        deferred.resolve(loggedUser);
-                      }
-                    }
-                  );
+                  deferred.resolve(result);
                 }
-                else
-                {
-                  deferred.resolve(loggedUser);
-                }
-              }
-            );
+              );
 
             return deferred.promise;
           };
@@ -573,6 +552,24 @@ define(
             );
 
             return deferred.promise;
+          };
+
+          TeamsService.prototype.getTeamNamesOfUser = function (teamsUuids)
+          {
+            var teams = Store('app').get('teams'),
+              userTeams = [];
+
+            _.each(teamsUuids, function (teamUuid)
+            {
+              var team = _.findWhere(teams, {uuid: teamUuid});
+
+              if(!_.isUndefined(team))
+              {
+                userTeams.push(team);
+              }
+            });
+
+            return userTeams;
           };
 
           return new TeamsService;
