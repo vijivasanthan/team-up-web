@@ -298,15 +298,6 @@ aria-hidden='true')
 											small(ng-show="teamMemberForm.$error.email")
 												i
 												| {{ ui.validation.email.notValid }}
-								.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
-									label.control-label {{ui.teamup.phone}}
-									.controls
-										input.span3.form-control.inputPhoneNumber(type='text',
-										ng-model='memberForm.phone',
-										ng-change='parsePhoneNumber(memberForm.phone); changePinToPhone()')
-										span.help-block
-											small
-												i {{phoneNumberParsed.message}}
 								//.form-group
 								//	label.control-label {{ui.teamup.func}}
 								//	.controls
@@ -315,6 +306,15 @@ aria-hidden='true')
 								//			option(value='') {{ui.teamup.chooseFunction}}
 						.span6
 							fieldset
+								.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
+									label.control-label {{ui.teamup.phone}}
+									.controls
+										input.span3.form-control.inputPhoneNumber(type='text',
+										ng-model='memberForm.phone',
+										ng-change='parsePhoneNumber(memberForm.phone)')
+										span.help-block
+											small
+												i {{phoneNumberParsed.message}}
 								.form-group(
 									ng-class="{'has-error' : UserNameWrong}")
 									label.control-label {{ui.profile.username}}
@@ -350,21 +350,21 @@ aria-hidden='true')
 										input.span3(type='password',
 										ng-model='memberForm.reTypePassword')
 										
-								.form-group(
-									ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid && !teamMemberForm.pincode.$pristine }")
-									label.control-label {{ui.profile.pincode}}
-									.controls
-										input.span2.form-control(type='text',
-										ng-model='memberForm.pincode',
-										ui-mask='9999?9999',
-										ng-change='pincodeExists(memberForm.pincode)',
-										name='pincode')
-										p.text-danger(ng-hide='pincodeExistsValidation')
-											small
-												i {{pincodeExistsValidationMessage}}
-										span.help-block(style='margin-top: -5px;')
-											small
-												i {{ui.profile.pincodeInfo}}
+								//.form-group(
+								//	ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid && !teamMemberForm.pincode.$pristine }")
+								//	label.control-label {{ui.profile.pincode}}
+								//	.controls
+								//		input.span2.form-control(type='text',
+								//		ng-model='memberForm.pincode',
+								//		ui-mask='9999?9999',
+								//		ng-change='pincodeExists(memberForm.pincode)',
+								//		name='pincode')
+								//		p.text-danger(ng-hide='pincodeExistsValidation')
+								//			small
+								//				i {{pincodeExistsValidationMessage}}
+								//		span.help-block(style='margin-top: -5px;')
+								//			small
+								//				i {{ui.profile.pincodeInfo}}
 					hr
 					.form-actions
 						button.btn.btn-success(type='submit',

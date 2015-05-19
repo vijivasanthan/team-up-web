@@ -123,7 +123,7 @@ define(
         //set default team by last visited team
         $scope.memberForm = {};
         $scope.memberForm.team = uuid;
-        $scope.memberForm.pincode = '';
+        //$scope.memberForm.pincode = '';
 
         /**
          * The type of user added to the team, existing or new
@@ -343,24 +343,24 @@ define(
           );
         };
 
-        $scope.changePinToPhone = function ()
-        {
-          var phone = $scope.memberForm.phone,
-            phoneValidateResult = $rootScope.phoneNumberParsed.result;
-
-          $scope.tempPhone = $scope.tempPhone || '';
-
-
-          if (phone && phone.length >= 10 && (_.isEmpty($scope.memberForm.pincode) ||
-            $scope.memberForm.pincode == $scope.tempPhone)
-            && phoneValidateResult == true)
-          {
-            var inputVal = angular.element('.inputPhoneNumber').val();
-
-            $scope.tempPhone = lastFourDigits(inputVal);
-            $scope.memberForm.pincode = lastFourDigits(inputVal);
-          }
-        };
+        //$scope.changePinToPhone = function ()
+        //{
+        //  var phone = $scope.memberForm.phone,
+        //    phoneValidateResult = $rootScope.phoneNumberParsed.result;
+        //
+        //  $scope.tempPhone = $scope.tempPhone || '';
+        //
+        //
+        //  if (phone && phone.length >= 10 && (_.isEmpty($scope.memberForm.pincode) ||
+        //    $scope.memberForm.pincode == $scope.tempPhone)
+        //    && phoneValidateResult == true)
+        //  {
+        //    var inputVal = angular.element('.inputPhoneNumber').val();
+        //
+        //    $scope.tempPhone = lastFourDigits(inputVal);
+        //    $scope.memberForm.pincode = lastFourDigits(inputVal);
+        //  }
+        //};
 
         var lastFourDigits = function (phone)
         {
@@ -384,11 +384,11 @@ define(
             return;
           }
 
-          if (!_.isEmpty(member.pincode) && $rootScope.pincodeExistsValidation == false)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
-            return false;
-          }
+          //if (!_.isEmpty(member.pincode) && $rootScope.pincodeExistsValidation == false)
+          //{
+          //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
+          //  return false;
+          //}
 
           if (member.password != member.reTypePassword)
           {
@@ -437,8 +437,8 @@ define(
 
           //create a temp so the user don't see that the field changing
           var tempResources = angular.copy(member);
-          var pincode = tempResources.pincode;
-          delete tempResources.pincode;
+          //var pincode = tempResources.pincode;
+          //delete tempResources.pincode;
 
           tempResources.password = MD5(tempResources.password);
 
@@ -473,9 +473,9 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-                Profile.save(result.uuid, {
-                  pincode: pincode
-                });
+                //Profile.save(result.uuid, {
+                //  pincode: pincode
+                //});
 
                 // TODO: Repetitive code!
                 $scope.loadTeams();
@@ -726,13 +726,13 @@ define(
         /**
          * Check if pincode change and validate
          */
-        $scope.$watch(function ()
-        {
-          return $scope.memberForm.pincode;
-        }, function ()
-        {
-          $rootScope.pincodeExists($scope.memberForm.pincode, $rootScope.app.resources.uuid, true);
-        });
+        //$scope.$watch(function ()
+        //{
+        //  return $scope.memberForm.pincode;
+        //}, function ()
+        //{
+        //  $rootScope.pincodeExists($scope.memberForm.pincode, $rootScope.app.resources.uuid, true);
+        //});
 
         // TODO: Investigate on this!
         $scope.$on(
