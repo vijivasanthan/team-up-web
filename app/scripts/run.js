@@ -874,7 +874,12 @@ define(
               .then(
                 function(result)
                 {
-                  console.log('result', result);
+                  //console.log('result', result);
+
+                  var document = $injector.get('$document');
+
+                  console.log(document[0].domain);
+                  document[0].domain = 'ask-cs.com';
 
                   $rootScope.video = {
                     url: filterUrl(url)
