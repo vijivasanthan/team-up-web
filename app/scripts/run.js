@@ -39,7 +39,11 @@ define(
           //    exFatal: false
           //  });
           //};
+          var document = $injector.get('$document');
 
+          console.log('first domain' + document[0].domain);
+          document[0].domain = 'ask-cs.com';
+          console.log('last domain' + document[0].domain);
 
           var navBar = angular.element('.navbar'),
               footer = angular.element('#footer');
@@ -875,11 +879,6 @@ define(
                 function(result)
                 {
                   //console.log('result', result);
-
-                  var document = $injector.get('$document');
-
-                  console.log(document[0].domain);
-                  document[0].domain = 'ask-cs.com';
 
                   $rootScope.video = {
                     url: filterUrl(url)
