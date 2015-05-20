@@ -864,7 +864,7 @@ define(
             var room = roomId || getRandomString();
             var user = receiver || 'anonymous';
             var Message = $injector.get('Message');
-            var url = 'http://webrtc.ask-fast.com/?room=' + room;
+            var url = 'http://webrtc.ask-cs.com/?room=' + room; //'http://localhost:9001/?room=' + room;
             var message = $rootScope.ui.message.webTRCWebLink + url;
             var teamId = receiver && receiver.teamUuids[0] || null;
             console.log('receiver', receiver);
@@ -875,7 +875,7 @@ define(
                 function(result)
                 {
                   console.log('result', result);
-                  
+
                   $rootScope.video = {
                     url: filterUrl(url)
                   }
@@ -894,10 +894,14 @@ define(
 
           $rootScope.closeVideoCall = function()
           {
-            $rootScope.video.src = false;
-            $rootScope.video.url = filterUrl('about:blank');
+            //$rootScope.video.src = false;
+            //$rootScope.video.url = filterUrl('about:blank');
+            //
+            //clickChatBtn();
 
-            clickChatBtn();
+            //trigger buttons, like leave room
+            $("iframe").contents().find('#leave').click();
+
             $rootScope.notifier.success($rootScope.ui.video.stop);
           };
         }
