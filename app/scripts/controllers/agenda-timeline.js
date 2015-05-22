@@ -488,9 +488,8 @@ define(
 
               if (periods.start == periods.end)
               {
-                periods.end = new Date.create(arguments[1].end).addDays(1)
+                periods.end = moment(new Date(arguments[1].end)).add(1, 'days');
               }
-
 
               $scope.timeliner.load(periods);
             }
