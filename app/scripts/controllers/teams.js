@@ -40,8 +40,6 @@ define(
           label: 'team lid'
         });
 
-        console.log('$scope.roles ', $scope.roles);
-
         // TODO: Readable variable name!
         $scope.mfuncs = config.app.mfunctions;
 
