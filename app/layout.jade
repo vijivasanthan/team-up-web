@@ -21,7 +21,12 @@ html.no-js(lang='en')
 		// endbuild
 		// block iestuff
 		script.
-			document.domain = 'ask-cs.com';
+			var currentDomain = document.domain.split('.');
+
+			if(currentDomain.length > 1)
+			{
+				document.domain = currentDomain[currentDomain.length - 2] + '.' + currentDomain[currentDomain.length - 1];
+			}
 		script(src="https://maps.google.com/maps/api/js?sensor=false")
 		script(src="scripts/localConfig.js")
 	body
