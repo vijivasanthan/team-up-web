@@ -205,7 +205,7 @@ block chat
 		#chat-btn(ng-click='openChat();')
 			span CHAT {{newCountShow}}
 		#message-content(ng-show='toggleChat')
-			#video-content(ng-show='video.src')
+			#video-content(ng-show='video.src && app.domainPermission.video')
 				.video-content-wrap
 					iframe(data-ng-src="{{ video.url }}" frameborder="0" allowfullscreen)
 				button.btn.btn-success.stop-video(ng-click='closeVideoCall()') 
@@ -240,7 +240,7 @@ block chat
 					ngenter='sendMessage(newMessage)')
 					button.btn.btn-success(ng-click='sendMessage(newMessage)') {{ui.message.send}} 
 
-			button.btn.btn-success.web-rtc-button(ng-click='openVideo()') Video 
+			button.btn.btn-success.web-rtc-button(ng-click='openVideo()', ng-show='app.domainPermission.video') Video 
 				i(class="icon-facetime-video white")
 
 // TODO: Is it needed?
