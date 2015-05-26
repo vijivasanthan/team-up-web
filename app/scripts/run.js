@@ -39,11 +39,6 @@ define(
           //    exFatal: false
           //  });
           //};
-          //var document = $injector.get('$document');
-          //
-          //console.log('first domain' + document[0].domain);
-          //document[0].domain = 'ask-cs.com';
-          //console.log('last domain' + document[0].domain);
 
           var navBar = angular.element('.navbar'),
               footer = angular.element('#footer');
@@ -878,15 +873,15 @@ define(
               .then(
                 function(result)
                 {
-                  //console.log('result', result);
-
                   $rootScope.video = {
                     url: filterUrl(url)
                   }
                   $rootScope.video.src = $rootScope.video.url;
 
                   var content = angular.element('#message-content');
+                  $("iframe").contents().find('#leave').hide();
 
+                  //Check if chat/video message area is already opened
                   if(content.hasClass('ng-hide'))
                   {
                     content.removeClass('ng-hide');
@@ -898,13 +893,13 @@ define(
 
           $rootScope.closeVideoCall = function()
           {
-            //$rootScope.video.src = false;
-            //$rootScope.video.url = filterUrl('about:blank');
-            //
-            //clickChatBtn();
-
             //trigger buttons, like leave room
             $("iframe").contents().find('#leave').click();
+
+            $rootScope.video.src = false;
+            $rootScope.video.url = filterUrl('about:blank');
+
+            clickChatBtn();
 
             $rootScope.notifier.success($rootScope.ui.video.stop);
           };
