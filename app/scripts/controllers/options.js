@@ -40,8 +40,6 @@ define(
           ).then(
             function (result)
             {
-
-              console.log('result', result);
               if (result.error)
               {
                 console.log('Error by fetching team-telephone settings ->', result.error);
@@ -65,15 +63,19 @@ define(
          */
         vm.save = function (newOptions)
         {
+          vm.error = false;
+
           if (! newOptions.ringingTimeOut)
           {
             $rootScope.notifier.error('Geef de duur van de kiestoon aan!');
             //$rootScope.ui.validation.role
+            vm.error = true;
             return;
           }
 
           if($filter('number')(newOptions.ringingTimeOut, 0) == '')
           {
+            vm.error = true;
             $rootScope.notifier.error('De duur van de kiestoon kan alleen een nummer zijn!');
             return;
           }
