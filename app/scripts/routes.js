@@ -111,7 +111,7 @@ define(
                   function ($rootScope, Teams, $route)
                   {
                     //TODO needs a better solution to start a videocall by chatmessage
-                    if($route.current.params.video)
+                    if($route.current.params.video && $rootScope.app.domainPermission.videoChat)
                     {
                       $rootScope.startVideoCall(null, $route.current.params.video);
                     }
