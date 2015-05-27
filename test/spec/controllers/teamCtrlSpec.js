@@ -351,12 +351,13 @@ define(
 
         var resourceUrl = testConfig.host + 'node/' + member.uuid + '/resource';
 
-        $httpBackend.expectPUT(resourceUrl, {pincode: memberInfo.pincode}).respond(true);
-
         $httpBackend.expectGET(testConfig.host + 'team').respond(scope.data.teams);
 
         $httpBackend.expectGET(testConfig.host + 'team/status/' + scope.current)
-            .respond(scope.data.members[scope.current]);
+          .respond(scope.data.members[scope.current]);
+
+        //pincode is temp off
+        //$httpBackend.expectPUT(resourceUrl, {pincode: memberInfo.pincode}).respond(true);
 
         scope.memberSubmit(memberInfo);
 
