@@ -211,6 +211,27 @@ define(
               }
             })
 
+            .when(
+            '/team-telefoon/options',
+            {
+              templateUrl: 'views/team-telephone/options.html',
+              controller: 'options as options',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', '$route',
+                  function (Teams, $route)
+                  {
+                    removeActiveClass('.teamMenu');
+
+                    return ($route.current.params.local && $route.current.params.local == 'true')
+                      ? Teams.queryLocal()
+                      : Teams.query(false, $route.current.params);
+                  }
+                ]
+              }
+            })
+
             .when('/team-telefoon/agenda/:userId?', {
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',

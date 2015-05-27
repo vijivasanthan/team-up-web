@@ -1,0 +1,83 @@
+section#dashboard
+	.page-header.agenda-timeline
+		h2.nullable Instellingen
+	div(style='margin-top: 20px;')
+		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
+			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
+			label.control-label {{ ui.teamup.selectTeam }} 
+			.controls
+				select(ng-model='options.current',
+				ng-options='team.uuid as team.name for team in options.teams | orderBy:"name"',
+				ng-selected='options.current',
+				ng-change='options.fetch()')
+			
+	.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
+			include ../agenda/tabs
+				
+		.tab-content
+			#availabilities.sa.widget
+				div.head
+					h4
+						| Instellingen{{options.current | groupIdToName:true | toTitleCase}} {{ options.loadTeam }}
+				div
+					form.form-vertical(name='optionsForm', novalidate)
+						.form-group
+							label.control-label Voicemail-detectie
+							.controls
+								label.radio-inline 
+									input(type="radio" ng-model='options.scenarios.voicemailDetection',
+										name="voicemail-detection-menu", ng-value='true') 
+									| Aan
+								label.radio-inline 
+									input(type="radio" ng-model='options.scenarios.voicemailDetection',
+										name="voicemail-detection-menu", ng-value='false') 
+									| Uit
+								span.help-block
+									small
+										i
+											| Voicemail-detectie staat nu {{ (options.scenarios.voicemailDetection) ? 'aan' : 'uit' }}
+						.form-group
+							label.control-label SMS bij gemist gesprek
+							.controls
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.smsMissedCall',
+										name="sms-on-missed-call", ng-value='true')
+									| Aan
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.smsMissedCall',
+										name="sms-on-missed-call", ng-value='false')
+									| Uit
+								span.help-block
+									small
+										i
+											| SMS bij gemist gesprek staat nu {{ (options.scenarios.smsMissedCall) ? 'aan' : 'uit' }}
+						.form-group
+							label.control-label SMS bij een nieuwe voicemail bericht
+							.controls
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.smsVoicemail',
+										name="sms-on-new-team-voicemail", ng-value='true')
+									| Aan
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.smsVoicemail',
+										name="sms-on-new-team-voicemail", ng-value='false')
+									| Uit
+								span.help-block
+									small
+										i
+											| SMS bij een nieuwe voicemail staat nu {{ (options.scenarios.smsVoicemail) ? 'aan' : 'uit' }}
+						.form-group
+							label.control-label Kiestoon duur in seconden
+							.controls
+								div.input-group(style='width: 250px;')
+									input(type="text" class="form-control" ng-model='options.scenarios.ringingTimeOut',
+										id="exampleInputAmount" placeholder="Aantal")
+									div.input-group-addon seconden
+								span.help-block
+									small
+										i
+											| Kiestoon duur in seconden.......
+						.form-actions
+							button.btn.btn-success(type='submit',
+								ng-click='options.save(options.scenarios)') {{ ui.order.confirmation }}

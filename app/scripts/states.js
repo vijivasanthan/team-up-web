@@ -197,6 +197,10 @@ define(
                 $location.path('/team-telefoon/order').search({}).hash('');
                 break;
 
+              case 'team-telefoon/options':
+                $location.path('/team-telefoon/options').search({local: 'true'}).hash('');
+                break;
+
               case 'vis':
                 $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;

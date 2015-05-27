@@ -255,6 +255,7 @@ require(
     'controllers/exampleTest',
     'controllers/phones',
     'controllers/video',
+    'controllers/options',
 
     'bootstrap',
     'lawnchair',
