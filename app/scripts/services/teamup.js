@@ -62,6 +62,24 @@ define(
                   }
                 },
 
+                /**
+                 * Team telephone settings
+                 */
+                TTSettingsGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephoneSettings'
+                  }
+                },
+                TTSettingsSave: {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephoneSettings'
+                  }
+                },
+
 
                 /**
                  * Team profiles
