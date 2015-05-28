@@ -36,7 +36,12 @@ define(
                 {
                   //$scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
+
                   $scope.edit = angular.copy($scope.view);
+                  if($scope.edit.phoneNumbers.length > 0)
+                  {
+                    $scope.edit.defaultPhone = $scope.edit.phoneNumbers[0];
+                  }
                   //$scope.edit.defaultTeam = $scope.edit.teamUuids[0];
                 }
               }
@@ -244,6 +249,27 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
+            //delete defaultPhone
+            //var tempNumbers = [];
+            //
+            //_.each(resources.phoneNumbers, function (phoneNumber, index)
+            //{
+            //  if(phoneNumber == resources.defaultPhone && index != 0)
+            //  {
+            //    resources.phoneNumbers.splice(index, 1);
+            //    tempNumbers.unshift(phoneNumber);
+            //  }
+            //  else
+            //  {
+            //    tempNumbers.push(phoneNumber);
+            //  }
+            //});
+            //
+            //resources.phoneNumbers = tempNumbers;
+            //delete resources.defaultPhone;
+
+            console.log('resources.phoneNumbers', resources.phoneNumbers);
+
             //resources.defaultTeam
             //var tempTeamUuids = [];
             //_.each(resources.teamUuids, function (teamUuid)
@@ -420,6 +446,8 @@ define(
             }
             else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
             {
+              console.log('$scope.edit.passwordHash', $scope.edit.passwordHash);
+
               $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
               return;
             }
