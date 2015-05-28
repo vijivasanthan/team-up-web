@@ -22,7 +22,7 @@ define(
           voicemailDetection: false,
           smsMissedCall: true,
           smsVoicemail: true,
-          ringingTimeOut: "20"
+          ringingTimeOut: 20
         };
 
         /**
