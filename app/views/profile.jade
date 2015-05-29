@@ -143,8 +143,8 @@ section#profile
 					div(style='overflow: hidden; height: 35px')
 						h3.pull-left(style='margin-top: 0;') {{ui.profile.editProfile}}
 						button.btn.pull-right.btn-info(type='button',
-						ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)',
-						ng-click='editPassword()') {{ui.profile.changePassWord}}
+							ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)',
+							ng-click='editPassword()') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
 						.control-group
@@ -204,17 +204,21 @@ section#profile
 								input.span4.form-control(type='text',
 								disabled,
 								ng-model='edit.userName')
-						
+								
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
-							label.control-label {{ui.profile.phone}} standaard
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
-								.input-group
+								.input-group.phoneNumbers
+									span.input-group-addon
+										input(type="radio" name='default-phone',
+											ng-disabled='(! parsedPhoneNumbers[0].result || (view.phoneNumbers[0] != edit.phoneNumbers[0])) && (! parsedPhoneNumbers[0].result == (view.phoneNumbers[0] != edit.phoneNumbers[0]))',
+											ng-model='edit.defaultPhone' aria-label="" ng-value="0")
 									input.form-control.inputPhoneNumber0(type='text',
-									name='phone0',
-									ng-model='edit.phoneNumbers[0]',
-									required,
-									ng-change='checkPhoneNumber(edit.phoneNumbers[0], 0)',
-									value='{{view.phoneNumbers[0]}}')
+										name='phone0',
+										ng-model='edit.phoneNumbers[0]',
+										required,
+										ng-change='checkPhoneNumber(edit.phoneNumbers[0], 0)',
+										value='{{view.phoneNumbers[0]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
 											i(class="glyphicon glyphicon-white glyphicon-plus")
@@ -224,14 +228,18 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[0].result')
 									small
 										i {{parsedPhoneNumbers[0].message}}
-								//span.help-block(style='margin-top: -5px;')
-								//	small
-								//		i {{ui.edit.pincodeInfoPhone}}
+							//span.help-block(style='margin-top: -5px;')
+							//	small
+							//		i {{ui.edit.pincodeInfoPhone}}
 										
 						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
-							label.control-label {{ui.profile.phone}} extra
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
-								.input-group
+								.input-group.phoneNumbers
+									span.input-group-addon
+										input(type="radio" name='default-phone',
+										ng-disabled='(! parsedPhoneNumbers[1].result || (view.phoneNumbers[1] != edit.phoneNumbers[1])) && (! parsedPhoneNumbers[1].result == (view.phoneNumbers[1] != edit.phoneNumbers[1]))',
+										ng-model='edit.defaultPhone' aria-label="" ng-value="1")
 									input.form-control.inputPhoneNumber1(type='text',
 										name='phone1',
 										ng-model='edit.phoneNumbers[1]',
@@ -251,15 +259,19 @@ section#profile
 										i {{parsedPhoneNumbers[1].message}}
 										
 						.form-group(ng-show='view.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
-							label.control-label {{ui.profile.phone}} extra
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
-								.input-group
+								.input-group.phoneNumbers
+									span.input-group-addon
+										input(type="radio" name='default-phone',
+										ng-disabled='(! parsedPhoneNumbers[2].result || (view.phoneNumbers[2] != edit.phoneNumbers[2])) && (! parsedPhoneNumbers[2].result == (view.phoneNumbers[2] != edit.phoneNumbers[2]))',
+										ng-model='edit.defaultPhone' aria-label="" ng-value="2")
 									input.form-control.inputPhoneNumber2(type='text',
-									name='phone2',
-									ng-model='edit.phoneNumbers[2]',
-									required,
-									ng-change='checkPhoneNumber(edit.phoneNumbers[2], 2)',
-									value='{{view.phoneNumbers[2]}}')
+										name='phone2',
+										ng-model='edit.phoneNumbers[2]',
+										required,
+										ng-change='checkPhoneNumber(edit.phoneNumbers[2], 2)',
+										value='{{view.phoneNumbers[2]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='2' class="btn btn-default input-buttons remove-button" type="button")
 											i(class="glyphicon glyphicon-white glyphicon-remove")

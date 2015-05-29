@@ -36,7 +36,13 @@ define(
                 {
                   //$scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
+
                   $scope.edit = angular.copy($scope.view);
+                  if($scope.edit.phoneNumbers.length > 0)
+                  {
+                    //indexwise
+                    $scope.edit.defaultPhone = 0;
+                  }
                   //$scope.edit.defaultTeam = $scope.edit.teamUuids[0];
                 }
               }
@@ -258,15 +264,34 @@ define(
             //
             //resources.teamUuids = tempTeamUuids;
 
-            //add first phonenumber resource to user object
-            resources.phone = resources.phoneNumbers[0];
 
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
+            /**
+             * Check if there is a default phone number,
+             * if there is one, add the default as first phonenumber
+             * And remove duplicate numbers
+             */
+            var phoneIndex = tempResources.phoneNumbers.indexOf(tempResources.defaultPhone);
+
+            if(! _.isUndefined(tempResources.phoneNumbers[tempResources.defaultPhone]) &&
+              resources.defaultPhone != 0
+            )
+            {
+              var phoneDefault = tempResources.phoneNumbers[tempResources.defaultPhone];
+
+              tempResources.phoneNumbers.unshift(phoneDefault);
+              tempResources.phoneNumbers = _.uniq(tempResources.phoneNumbers);
+            }
+
+            //add first phonenumber resource to user object
+            tempResources.phone = tempResources.phoneNumbers[0];
+
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             delete tempResources.fullName;
+            delete tempResources.defaultPhone;
             //delete tempResources.defaultTeam;
             //delete resources.TeamMemberCodeAsPhone;
 
@@ -278,8 +303,8 @@ define(
             //save profileresource
             Profile.save($route.current.params.userId,
               {
-                PhoneAddresses: resources.phoneNumbers,
-                PhoneAddress: resources.phone
+                PhoneAddresses: tempResources.phoneNumbers,
+                PhoneAddress: tempResources.phone
                 //pincode: resources.pincode
               }
             )
@@ -296,6 +321,8 @@ define(
                   delete tempResources.phoneNumbers;
                   //delete tempResources.pincode;
 
+                  //clear validation after submit
+                  $scope.profileForm.$setPristine();
                   saveUserData(tempResources);
                 }
               }
@@ -420,6 +447,8 @@ define(
             }
             else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
             {
+              console.log('$scope.edit.passwordHash', $scope.edit.passwordHash);
+
               $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
               return;
             }
