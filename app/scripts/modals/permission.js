@@ -36,7 +36,7 @@ define(['services/services', 'config'],
               clients: true,
               tasks: true,
               clientReports: true,
-              teamTelephone: true,
+              teamTelephoneBasic: true,
               chat: false
             };
 
@@ -139,7 +139,7 @@ define(['services/services', 'config'],
             {
               $location.path('/tasks2').hash('myTasks');
             }
-            else if (_.has(permissionProfile, 'teamTelephone'))
+            else if (_.has(permissionProfile, 'teamTelephoneBasic'))
             {
               $location.path('/team-telefoon/status').hash('');
             }

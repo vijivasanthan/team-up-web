@@ -94,7 +94,7 @@ define(
               clientReports: true,
               clients: true,
               tasks: true,
-              teamTelephone: true,
+              teamTelephoneBasic: true,
               teams: true
             },
             result = null;
@@ -116,7 +116,7 @@ define(
 
         $httpBackend.flush();
 
-        expect(result.teamTelephone).toBe(true);
+        expect(result.teamTelephoneBasic).toBe(true);
       });
 
       it("Should check if the logged user can't create a new member with the same teamlid-code",

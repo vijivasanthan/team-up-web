@@ -73,7 +73,7 @@ block navbar
 							ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
 						li(data-match-route='/team-telefoon.*',
-							ng-show='app.domainPermission.teamTelephone')
+							ng-show='app.domainPermission.teamTelephoneBasic')
 							a(ng-click='nav("team-telefoon/status")') Team-telefoon
 						li(data-match-route='/help', ng-hide='(app.resources.role === undefined)')
 							a(ng-click='nav("help")') Help
@@ -127,7 +127,7 @@ block navbar
 											tabindex="-1",) {{ui.teamup.manage}}
 									li(role="presentation",
 										data-match-route='/team-telefoon.*',
-										ng-show='app.domainPermission.teamTelephone')
+										ng-show='app.domainPermission.teamTelephoneBasic')
 										a(ng-click='nav("team-telefoon/status")',
 											tabindex="-1",) Team-telefoon
 									li(role="presentation",
