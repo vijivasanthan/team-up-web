@@ -321,6 +321,8 @@ define(
                   delete tempResources.phoneNumbers;
                   //delete tempResources.pincode;
 
+                  //clear validation after submit
+                  $scope.profileForm.$setPristine();
                   saveUserData(tempResources);
                 }
               }
