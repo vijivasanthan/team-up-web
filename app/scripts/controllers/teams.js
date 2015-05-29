@@ -174,6 +174,7 @@ define(
 
         $scope.requestTeam = function (current)
         {
+          $scope.views.editTeam = false;
           CurrentSelection.local = current;
 
           setTeamView(current);
