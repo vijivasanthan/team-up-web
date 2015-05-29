@@ -206,13 +206,13 @@ section#profile
 								ng-model='edit.userName')
 								
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
-							label.phones.control-label {{ (edit.defaultPhone == edit.phoneNumbers[0]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.phones.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
 								.input-group
 									span.input-group-addon
 										input(type="radio" name='default-phone',
 											ng-disabled='(! parsedPhoneNumbers[0].result || (view.phoneNumbers[0] != edit.phoneNumbers[0])) && (! parsedPhoneNumbers[0].result == (view.phoneNumbers[0] != edit.phoneNumbers[0]))',
-											ng-model='edit.defaultPhone' aria-label="" ng-value="edit.phoneNumbers[0]")
+											ng-model='edit.defaultPhone' aria-label="" ng-value="0")
 									input.form-control.inputPhoneNumber0(type='text',
 									name='phone0',
 									ng-model='edit.phoneNumbers[0]',
@@ -233,13 +233,13 @@ section#profile
 								//		i {{ui.edit.pincodeInfoPhone}}
 										
 						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
-							label.phones.control-label {{ (edit.defaultPhone == edit.phoneNumbers[1]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.phones.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
 								.input-group
 									span.input-group-addon
 										input(type="radio" name='default-phone',
 										ng-disabled='(! parsedPhoneNumbers[1].result || (view.phoneNumbers[1] != edit.phoneNumbers[1])) && (! parsedPhoneNumbers[1].result == (view.phoneNumbers[1] != edit.phoneNumbers[1]))',
-										ng-model='edit.defaultPhone' aria-label="" ng-value="edit.phoneNumbers[1]")
+										ng-model='edit.defaultPhone' aria-label="" ng-value="1")
 									input.form-control.inputPhoneNumber1(type='text',
 										name='phone1',
 										ng-model='edit.phoneNumbers[1]',
@@ -259,13 +259,13 @@ section#profile
 										i {{parsedPhoneNumbers[1].message}}
 										
 						.form-group(ng-show='view.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
-							label.phones.control-label {{ (edit.defaultPhone == edit.phoneNumbers[2]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.phones.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
 							.controls
 								.input-group
 									span.input-group-addon
 										input(type="radio" name='default-phone',
 										ng-disabled='(! parsedPhoneNumbers[2].result || (view.phoneNumbers[2] != edit.phoneNumbers[2])) && (! parsedPhoneNumbers[2].result == (view.phoneNumbers[2] != edit.phoneNumbers[2]))',
-										ng-model='edit.defaultPhone' aria-label="" ng-value="edit.phoneNumbers[2]")
+										ng-model='edit.defaultPhone' aria-label="" ng-value="2")
 									input.form-control.inputPhoneNumber2(type='text',
 									name='phone2',
 									ng-model='edit.phoneNumbers[2]',

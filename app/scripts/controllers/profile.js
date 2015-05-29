@@ -40,7 +40,8 @@ define(
                   $scope.edit = angular.copy($scope.view);
                   if($scope.edit.phoneNumbers.length > 0)
                   {
-                    $scope.edit.defaultPhone = $scope.edit.phoneNumbers[0];
+                    //indexwise
+                    $scope.edit.defaultPhone = 0;
                   }
                   //$scope.edit.defaultTeam = $scope.edit.teamUuids[0];
                 }
@@ -249,27 +250,6 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
-            //delete defaultPhone
-            //var tempNumbers = [];
-            //
-            //_.each(resources.phoneNumbers, function (phoneNumber, index)
-            //{
-            //  if(phoneNumber == resources.defaultPhone && index != 0)
-            //  {
-            //    resources.phoneNumbers.splice(index, 1);
-            //    tempNumbers.unshift(phoneNumber);
-            //  }
-            //  else
-            //  {
-            //    tempNumbers.push(phoneNumber);
-            //  }
-            //});
-            //
-            //resources.phoneNumbers = tempNumbers;
-            //delete resources.defaultPhone;
-
-            console.log('resources.phoneNumbers', resources.phoneNumbers);
-
             //resources.defaultTeam
             //var tempTeamUuids = [];
             //_.each(resources.teamUuids, function (teamUuid)
@@ -284,15 +264,34 @@ define(
             //
             //resources.teamUuids = tempTeamUuids;
 
-            //add first phonenumber resource to user object
-            resources.phone = resources.phoneNumbers[0];
 
             //create a temp so the user don't see that the field changing
             var tempResources = angular.copy(resources);
 
+            /**
+             * Check if there is a default phone number,
+             * if there is one, add the default as first phonenumber
+             * And remove duplicate numbers
+             */
+            var phoneIndex = tempResources.phoneNumbers.indexOf(tempResources.defaultPhone);
+
+            if(! _.isUndefined(tempResources.phoneNumbers[tempResources.defaultPhone]) &&
+              resources.defaultPhone != 0
+            )
+            {
+              var phoneDefault = tempResources.phoneNumbers[tempResources.defaultPhone];
+
+              tempResources.phoneNumbers.unshift(phoneDefault);
+              tempResources.phoneNumbers = _.uniq(tempResources.phoneNumbers);
+            }
+
+            //add first phonenumber resource to user object
+            tempResources.phone = tempResources.phoneNumbers[0];
+
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             delete tempResources.fullName;
+            delete tempResources.defaultPhone;
             //delete tempResources.defaultTeam;
             //delete resources.TeamMemberCodeAsPhone;
 
@@ -304,8 +303,8 @@ define(
             //save profileresource
             Profile.save($route.current.params.userId,
               {
-                PhoneAddresses: resources.phoneNumbers,
-                PhoneAddress: resources.phone
+                PhoneAddresses: tempResources.phoneNumbers,
+                PhoneAddress: tempResources.phone
                 //pincode: resources.pincode
               }
             )
