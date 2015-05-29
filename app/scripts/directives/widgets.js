@@ -121,9 +121,9 @@ define(
                               console.log(e);
                             }
 
-                            if ($scope.$parent.view.clientId)
+                            if ($scope.$parent.client.uuid)
                             {
-                              id = $scope.$parent.view.clientId;
+                              id = $scope.$parent.client.uuid;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'client';
 
