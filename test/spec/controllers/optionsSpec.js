@@ -116,8 +116,7 @@ define(
 
       var response = {
         "ringing-timeout": 20,
-        "sms-on-missed-call": true,
-        "sms-on-new-team-voicemail": true,
+        "sms": true,
         "voicemail-detection-menu": false
       };
 
@@ -138,8 +137,7 @@ define(
         var vm = optionsCtrl;
         var currentOptions = {
           voicemailDetection: false,
-          smsMissedCall: true,
-          smsVoicemail: true,
+          sms: true,
           ringingTimeOut: "dsadsa"
         };
         var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/teamTelephoneSettings';
@@ -157,8 +155,7 @@ define(
         var vm = optionsCtrl;
         var currentOptions = {
           voicemailDetection: false,
-          smsMissedCall: true,
-          smsVoicemail: true,
+          sms: true,
           ringingTimeOut: "21"
         };
         var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/teamTelephoneSettings';
@@ -176,14 +173,21 @@ define(
         var vm = optionsCtrl;
         var currentOptions = {
           voicemailDetection: false,
-          smsMissedCall: true,
-          smsVoicemail: true,
+          sms: true,
           ringingTimeOut: "25"
         };
+
+        var finalOptions = {
+          "ringing-timeout": parseInt("25"),
+          "sms-on-missed-call": true,
+          "sms-on-new-team-voicemail": true,
+          "voicemail-detection-menu": false
+        };
+
         var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/teamTelephoneSettings';
 
-        $httpBackend.expectGET(url).respond(200, response);
-        $httpBackend.expectGET(url).respond(200, response);
+        $httpBackend.expectGET(url).respond(200, finalOptions);
+        $httpBackend.expectGET(url).respond(200, finalOptions);
 
         vm.save(currentOptions);
 
@@ -198,14 +202,21 @@ define(
         var vm = optionsCtrl;
         var currentOptions = {
           voicemailDetection: false,
-          smsMissedCall: true,
-          smsVoicemail: true,
+          sms: true,
           ringingTimeOut: "25"
         };
+
+        var finalOptions = {
+          "ringing-timeout": parseInt("25"),
+          "sms-on-missed-call": true,
+          "sms-on-new-team-voicemail": true,
+          "voicemail-detection-menu": false
+        };
+
         var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/teamTelephoneSettings';
 
-        $httpBackend.expectGET(url).respond(200, response);
-        $httpBackend.expectPUT(url, currentOptions).respond(200);
+        $httpBackend.expectGET(url).respond(200, finalOptions);
+        $httpBackend.expectPUT(url, finalOptions).respond(200);
 
         vm.save(currentOptions);
 
