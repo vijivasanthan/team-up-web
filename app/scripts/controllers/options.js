@@ -20,8 +20,7 @@ define(
         //Default scenario options of teamtelephone
         vm.scenarios = {
           voicemailDetection: false,
-          smsMissedCall: true,
-          smsVoicemail: true,
+          sms: true,
           ringingTimeOut: 20
         };
 
@@ -46,7 +45,11 @@ define(
               }
               else
               {
-                vm.scenarios = result;
+                vm.scenarios = {
+                  voicemailDetection: result["voicemail-detection-menu"],
+                  sms: result["sms-on-missed-call"],
+                  ringingTimeOut: result["ringing-timeout"]
+                };
                 vm.loadTeam = '';
               }
 
@@ -87,8 +90,8 @@ define(
             {second: vm.current},
             {
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
-              "sms-on-missed-call": newOptions.smsMissedCall,
-              "sms-on-new-team-voicemail": newOptions.smsVoicemail,
+              "sms-on-missed-call": newOptions.sms,
+              "sms-on-new-team-voicemail": newOptions.sms,
               "voicemail-detection-menu": newOptions.voicemailDetection
             }
           ).then(
