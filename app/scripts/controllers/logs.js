@@ -5,70 +5,70 @@ define(
     'use strict';
 
     controllers.controller(
-      'logs', [
-        '$rootScope',
-        '$filter',
-        '$timeout',
-        'Logs',
-        'data',
-        function ($rootScope, $filter, $timeout, Logs, data)
+      'logs',
+      function ($rootScope, $filter, $timeout, Logs, CurrentSelection, data)
+      {
+        $rootScope.fixStyles();
+
+        var vm = this,
+          everyoneId = 'all',
+          periods = {
+            startTime: data.logData.periods.startTime,
+            endTime: data.logData.periods.endTime
+          };
+
+        vm.data = data;
+        vm.teams = data.teams;
+
+        if ($rootScope.app.resources.role == 1)
         {
-          $rootScope.fixStyles();
-
-          var vm = this,
-              everyoneId = 'all',
-              periods = {
-                startTime: data.logData.periods.startTime,
-                endTime: data.logData.periods.endTime
-              };
-
-          vm.data = data;
-          vm.teams = data.teams;
           vm.teams.unshift({
             name: $rootScope.ui.dashboard.everyone,
             teamId: everyoneId,
             adapterId: everyoneId
           });
-          vm.current = ($rootScope.app.resources.role > 1)
-            ? ($rootScope.app.resources.teamUuids)[0]
-            : everyoneId;
-          vm.ordered = 'started.stamp';
-          vm.reversed = true;
-          vm.daterange = $filter('date')(periods.startTime, 'dd-MM-yyyy') + ' / ' +
-          $filter('date')(periods.endTime, 'dd-MM-yyyy');
+        }
 
-          $rootScope.$on('getLogRange', function ()
+        vm.current = CurrentSelection.getTeamId();
+
+        vm.ordered = 'started.stamp';
+        vm.reversed = true;
+        vm.daterange = $filter('date')(periods.startTime, 'dd-MM-yyyy') + ' / ' +
+        $filter('date')(periods.endTime, 'dd-MM-yyyy');
+
+        $rootScope.$on('getLogRange', function ()
+        {
+          periods = arguments[1];
+
+          vm.fetchLogs();
+        });
+
+        vm.fetchLogs = function ()
+        {
+          CurrentSelection.local = vm.current;
+
+          var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
+            options = {
+              startTime: data.logData.periods.startTime,
+              endTime: data.logData.periods.endTime,
+              adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
+            };
+
+          $timeout(function ()
           {
-            periods = arguments[1];
-
-            vm.fetchLogs();
+            $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
+            vm.loadLogs = true;
           });
 
-          vm.fetchLogs = function()
-          {
-            var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
-              options = {
-                startTime: data.logData.periods.startTime,
-                endTime: data.logData.periods.endTime,
-                adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
-              };
-
-            $timeout(function ()
+          Logs.fetch(options)
+            .then(function (logData)
             {
-              $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
-              vm.loadLogs = true;
+              vm.loadLogs = false;
+              vm.data.logData = logData;
+
+              $rootScope.statusBar.off();
             });
-
-            Logs.fetch(options)
-              .then(function (logData)
-              {
-                vm.loadLogs = false;
-                vm.data.logData = logData;
-
-                $rootScope.statusBar.off();
-              });
-          }
-        }
-      ]
+        };
+      }
     );
   });

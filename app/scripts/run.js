@@ -217,7 +217,7 @@ define(
               );
             }
 
-            angular.element('body').removeClass('modal-open');
+            angular.element('.modal').hide();
           };
 
 

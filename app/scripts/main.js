@@ -34,7 +34,6 @@ require.config(
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       //'angular-strap': 'removables/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
-      'ui-bootstrap': 'removables/ui-bootstrap-custom', // TODO: Remove later
 
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
@@ -74,7 +73,6 @@ require.config(
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
-      'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       'locale_nl': 'i18n/angular-locale_nl',
 
       // jszip: '../vendors/js-xlsx/jszip',
@@ -94,7 +92,6 @@ require.config(
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
       'angular-md5': { deps: ['angular'], exports: 'angular' },
-      'ui-bootstrap': { deps: ['angular', 'bootstrap'] },
       bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       lawnchair: { deps: [], exports: 'Lawnchair' },
       dom: { deps: ['lawnchair'], exports: 'Lawnchair' },
@@ -127,7 +124,6 @@ require.config(
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
-      'ui.bootstrap.pagination': { deps: ['angular'] },
       'locale_nl': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
@@ -177,7 +173,6 @@ require(
     'angular-md5',
     'angular-strap',
     'angular-strap-tpl',
-    'ui-bootstrap', // TODO: Remove later on
 
     'locals',
     'profile',
@@ -257,6 +252,7 @@ require(
     'controllers/order',
     'controllers/agenda',
     'controllers/exampleTest',
+    'controllers/phones',
 
     'bootstrap',
     'lawnchair',

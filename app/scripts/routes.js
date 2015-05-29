@@ -30,6 +30,27 @@ define(
             ]
           );
 
+          //Chrome Ipad solution in case of using $location.hash()
+          $provide
+            .decorator(
+            '$browser',
+            [
+              '$delegate',
+              function($delegate)
+              {
+                var originalUrl = $delegate.url;
+                $delegate.url = function() {
+                  var result = originalUrl.apply(this, arguments);
+                  if (result && result.replace) {
+                    result = result.replace(/%23/g, '#');
+                  }
+                  return result;
+                };
+                return $delegate;
+              }
+            ]
+          );
+
           $routeProvider
             .when(
             '/login',
@@ -308,6 +329,25 @@ define(
               templateUrl: 'views/planboard.html',
               controller: 'planboard',
               reloadOnSearch: false
+            })
+
+            .when(
+            '/team-telefoon/status/phones',
+            {
+              templateUrl: 'views/phones.html',
+              controller: 'phones',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams',
+                  function (Teams)
+                  {
+                    removeActiveClass('.teamMenu');
+
+                    return Teams.queryLocal();
+                  }
+                ]
+              }
             })
 
             .when(

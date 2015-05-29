@@ -34,15 +34,16 @@ define(
               {
                 if(profileData)
                 {
-                  $scope.view.pincode = angular.copy(profileData.pincode) || '';
+                  //$scope.view.pincode = angular.copy(profileData.pincode) || '';
                   $scope.view.phoneNumbers = angular.copy(profileData.PhoneAddresses) || [];
                   $scope.edit = angular.copy($scope.view);
+                  //$scope.edit.defaultTeam = $scope.edit.teamUuids[0];
                 }
               }
             );
           };
 
-          //$rootScope.fixStyles();
+          $rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
           $scope.mfuncs = config.app.mfunctions;
@@ -62,7 +63,7 @@ define(
 
           if($scope.view.teamUuids.length > 0)
           {
-            $scope.teams = $rootScope.getTeamsofMembers($scope.view.uuid);
+            $scope.teams = Teams.getTeamNamesOfUser($scope.view.teamUuids);
           }
 
           $rootScope.infoUserWithoutTeam();
@@ -104,12 +105,12 @@ define(
           /**
            * Check if pincode change and validate
            */
-          $scope.$watch(function()
-          {
-            return $scope.edit.pincode;
-          }, function() {
-            $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
-          });
+          //$scope.$watch(function()
+          //{
+          //  return $scope.edit.pincode;
+          //}, function() {
+          //  $rootScope.pincodeExists($scope.edit.pincode, $scope.view.uuid, false);
+          //});
 
           $scope.parsedPhoneNumbers = [];
 
@@ -146,23 +147,23 @@ define(
            * If the user don't have a teamlidcode the last four digits will be the teamlidcode
            * @param index index of what phonenumber
            */
-          $scope.setTeamMemberCodeAsPhone = function(index)
-          {
-            var phone = $scope.edit.phoneNumbers[index],
-                phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
-
-            if(phone && phone.length >= 10 &&
-              (_.isEmpty($scope.edit.pincode) || $scope.view.pincode != $scope.edit.pincode ||
-              getLastFourDigits($scope.view.phoneNumbers[index]) == $scope.view.pincode) &&
-              phoneValidateResult == true)
-            {
-              var inputVal = angular.element('.inputPhoneNumber0').val();
-
-              //current value of the input is different then the $scope data
-              //Will be the same after saving the form
-              $scope.edit.pincode = getLastFourDigits(inputVal);
-            }
-          };
+          //$scope.setTeamMemberCodeAsPhone = function(index)
+          //{
+          //  var phone = $scope.edit.phoneNumbers[index],
+          //      phoneValidateResult = $scope.parsedPhoneNumbers[index].result;
+          //
+          //  if(phone && phone.length >= 10 &&
+          //    (_.isEmpty($scope.edit.pincode) || $scope.view.pincode != $scope.edit.pincode ||
+          //    getLastFourDigits($scope.view.phoneNumbers[index]) == $scope.view.pincode) &&
+          //    phoneValidateResult == true)
+          //  {
+          //    var inputVal = angular.element('.inputPhoneNumber0').val();
+          //
+          //    //current value of the input is different then the $scope data
+          //    //Will be the same after saving the form
+          //    $scope.edit.pincode = getLastFourDigits(inputVal);
+          //  }
+          //};
 
           var getLastFourDigits = function(phone)
           {
@@ -183,11 +184,11 @@ define(
               return false;
             }
 
-            if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
-              return false;
-            }
+            //if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
+            //{
+            //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
+            //  return false;
+            //}
 
             // let user know that user need to re-relogin if the login-user's role is changed.
             if (currentRole != resources.role && $rootScope.app.resources.uuid == resources.uuid)
@@ -243,6 +244,20 @@ define(
               $scope.resetPhoneNumberCheck();
             }
 
+            //resources.defaultTeam
+            //var tempTeamUuids = [];
+            //_.each(resources.teamUuids, function (teamUuid)
+            //{
+            //  if(teamUuid != resources.defaultTeam)
+            //  {
+            //    tempTeamUuids.push(teamUuid);
+            //  }
+            //});
+            //
+            //tempTeamUuids.unshift(resources.defaultTeam);
+            //
+            //resources.teamUuids = tempTeamUuids;
+
             //add first phonenumber resource to user object
             resources.phone = resources.phoneNumbers[0];
 
@@ -252,6 +267,7 @@ define(
             $rootScope.statusBar.display($rootScope.ui.profile.saveProfile);
 
             delete tempResources.fullName;
+            //delete tempResources.defaultTeam;
             //delete resources.TeamMemberCodeAsPhone;
 
             //oldpass
@@ -263,8 +279,8 @@ define(
             Profile.save($route.current.params.userId,
               {
                 PhoneAddresses: resources.phoneNumbers,
-                PhoneAddress: resources.phone,
-                pincode: resources.pincode
+                PhoneAddress: resources.phone
+                //pincode: resources.pincode
               }
             )
               .then(
@@ -278,7 +294,7 @@ define(
                 else
                 {
                   delete tempResources.phoneNumbers;
-                  delete tempResources.pincode;
+                  //delete tempResources.pincode;
 
                   saveUserData(tempResources);
                 }
@@ -321,6 +337,12 @@ define(
                               $route.current.params.userId,
                               ($route.current.params.userId == $rootScope.app.resources.uuid)
                             );
+
+                            //Default team is temp cancelled
+                            //if($scope.view.teamUuids.length > 0)
+                            //{
+                            //  $scope.teams = Teams.getTeamNamesOfUser($scope.view.teamUuids);
+                            //}
 
                             $rootScope.statusBar.off();
                             $scope.setViewTo('profile');
@@ -436,27 +458,40 @@ define(
             angular.element('#confirmDeleteAvatar').modal('hide');
           };
 
-          // Remove a profile completely
+          /**
+           * Removes the member from all his teams
+           */
           $scope.deleteProfile = function ()
           {
             angular.element('#confirmProfileModal').modal('hide');
-
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
-            Teams.removeAllTeamsFromMember($scope.view)
+            var changes = {};
+
+            //add member to the deletelist per team
+            _.each($scope.view.teamUuids, function(teamId) {
+              changes[teamId] = {
+                a: [],
+                r: [$scope.view.uuid]
+              };
+            });
+
+            Teams.manage(changes)
               .then(
-                function(result)
+              function()
+              {
+                //Check of logged user is equal to the profile user
+                if($scope.view.uuid == $rootScope.app.resources.uuid)
                 {
-                  if(result.loggedUserHasTeam)
-                  {
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  }
-                  else
-                  {
-                    Permission.getAccess();
-                  }
-                  $rootScope.statusBar.off()
+                  $rootScope.app.resources.teamUuids = [];
+                  //update local resources without teams
+                  Store('app').save('resources', $rootScope.app.resources);
+                  //Some options are permitted for members with teams only
+                  //get access again for a memmber without teams
+                  Permission.getAccess();
                 }
+                $rootScope.statusBar.off()
+              }
             );
           };
         }

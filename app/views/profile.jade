@@ -80,7 +80,7 @@ section#profile
 							ng-hide='app.resources.role > 1 && edit.uuid != app.resources.uuid || ! app.resources.teamUuids.length') 
 							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
-							ng-click='editProfile()',
+							ng-click='setViewTo("edit")',
 							ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)') {{ui.profile.edit}}
 					hr
 					.row-fluid
@@ -88,13 +88,24 @@ section#profile
 							dl
 								dt {{ui.teamup.teams}}
 								dd(ng-show='! teams || teams.length == 0') Geen team geselecteerd
-								dd
-									span(ng-show='teams.length == 1', ng-repeat='team in teams')
+								dd(ng-show='teams.length == 1')
+									span(ng-repeat='team in teams')
 										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+								dd
 									ol(ng-show='teams.length > 1' style='padding-left: 21px;')
 										li(ng-repeat='team in teams')
 											span
 												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									//TODO wait until stefan approves to use the default team option
+									//.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
+									//span(class="label label-inverse") {{ ($index > 0) ? 'Extra' : 'Standaard' }}  
+									//span.phone-description
+									//	a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+									
+									//ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+									//	li(ng-repeat='team in teams| orderBy:"name"')
+									//		span
+									//				a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//span(ng-repeat='team in teams')
 									//		a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//	span(ng-hide = '{{((teams.length-1) == $index)}}') ,
@@ -112,8 +123,8 @@ section#profile
 								//dd {{view.birthDate}}
 								dt {{ui.profile.userName}}
 								dd {{view.userName}}
-								dt {{ui.profile.pincode}}
-								dd {{view.pincode}}
+								//dt {{ui.profile.pincode}}
+								//dd {{view.pincode}}
 						.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
 							.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}' class='{{view.states|stateColor}}')
 							div
@@ -180,19 +191,20 @@ section#profile
 						//		input.form-control(name='date-start',
 						//		type='date',
 						//		ng-model='edit.birthDate')
-								
-						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
-							label.control-label E-mail
+						
+						//.form-group
+						//	label.control-label {{ui.teamup.defaultTeam}}
+						//	.controls
+						//		select(ng-model='edit.defaultTeam', 
+						//			ng-options='team.uuid as team.name for team in teams|orderBy:"name"',
+						//			ng-selected='edit.defaultTeam')
+						.form-group
+							label.control-label {{ui.profile.userName}}
 							.controls
-								input.span4.form-control(type='email',
-								name='email',
-								required,
-								ng-model='edit.email')
-								span.help-block(ng-show='profileForm.email.$invalid && !profileForm.email.$pristine')
-									small(ng-show="profileForm.$error.email")
-										i
-										| {{ ui.validation.email.notValid }}
-	
+								input.span4.form-control(type='text',
+								disabled,
+								ng-model='edit.userName')
+						
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
 							label.control-label {{ui.profile.phone}} standaard
 							.controls
@@ -201,7 +213,7 @@ section#profile
 									name='phone0',
 									ng-model='edit.phoneNumbers[0]',
 									required,
-									ng-change='checkPhoneNumber(edit.phoneNumbers[0], 0); setTeamMemberCodeAsPhone(0)',
+									ng-change='checkPhoneNumber(edit.phoneNumbers[0], 0)',
 									value='{{view.phoneNumbers[0]}}')
 									span(class="input-group-btn")
 										button(input-rule-toggle='0' class="btn btn-default input-buttons add-button" type="button")
@@ -212,9 +224,9 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[0].result')
 									small
 										i {{parsedPhoneNumbers[0].message}}
-								span.help-block(style='margin-top: -5px;')
-									small
-										i {{ui.edit.pincodeInfoPhone}}
+								//span.help-block(style='margin-top: -5px;')
+								//	small
+								//		i {{ui.edit.pincodeInfoPhone}}
 										
 						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
 							label.control-label {{ui.profile.phone}} extra
@@ -257,28 +269,33 @@ section#profile
 								p.text-success(ng-show='parsedPhoneNumbers[2].result')
 									small
 										i {{parsedPhoneNumbers[2].message}}
-						
-						.form-group
-							label.control-label {{ui.profile.userName}}
+										
+						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
+							label.control-label E-mail
 							.controls
-								input.span4.form-control(type='text',
-								disabled,
-								ng-model='edit.userName')
-						.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
-							ng-show='(app.resources.role == 1) || (edit.uuid == app.resources.uuid)')
-							label.control-label {{ui.profile.pincode}}
-							.controls
-								input.span2.form-control(type='text',
-								ng-model='edit.pincode',
-								ui-mask='9999?9999',
-								ng-change='pincodeExists(edit.pincode, edit.uuid)',
-								name='pincode')
-								p.text-danger(ng-hide='pincodeExistsValidation')
-									small
-										i {{pincodeExistsValidationMessage}}
-								span.help-block(style='margin-top: -5px;')
-									small
-										i {{ui.profile.pincodeInfo}}
+								input.span4.form-control(type='email',
+								name='email',
+								required,
+								ng-model='edit.email')
+								span.help-block(ng-show='profileForm.email.$invalid && !profileForm.email.$pristine')
+									small(ng-show="profileForm.$error.email")
+										i
+										| {{ ui.validation.email.notValid }}
+						//.form-group(ng-class="{ 'has-error' : profileForm.pincode.$invalid && !profileForm.pincode.$pristine }",
+						//	ng-show='(app.resources.role == 1) || (edit.uuid == app.resources.uuid)')
+						//	label.control-label {{ui.profile.pincode}}
+						//	.controls
+						//		input.span2.form-control(type='text',
+						//		ng-model='edit.pincode',
+						//		ui-mask='9999?9999',
+						//		ng-change='pincodeExists(edit.pincode, edit.uuid)',
+						//		name='pincode')
+						//		p.text-danger(ng-hide='pincodeExistsValidation')
+						//			small
+						//				i {{pincodeExistsValidationMessage}}
+						//		span.help-block(style='margin-top: -5px;')
+						//			small
+						//				i {{ui.profile.pincodeInfo}}
 							
 						//.control-group
 						//	label.control-label {{ui.teamup.func}}

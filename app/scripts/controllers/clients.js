@@ -12,6 +12,8 @@ define(
           //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
           //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
 
+          console.log('data', data);
+
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
 
@@ -34,6 +36,7 @@ define(
 
                 if(!_.isUndefined(clientInTeam))
                 {
+                  clientInTeam.birthDate = moment(clientInTeam.birthDate).format('DD-MM-YYYY');
                   $scope.client = clientInTeam;
                   $scope.contacts = clientInTeam.contacts;
 
@@ -45,11 +48,9 @@ define(
 
             if (!clientHasClientGroup)
             {
-              //add Geen clientgroep
-
               data.clients = Store('app').get('clients');
               data.client = _.findWhere(data.clients, {uuid: data.clientId});
-
+              data.client.birthDate = moment(data.client.birthDate).format('DD-MM-YYYY');
               $scope.client = data.client;
               Reports.clientId = $scope.client.uuid;
               $scope.contacts = data.client.contacts;
@@ -576,6 +577,18 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
 
+            try
+            {
+              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              // console.log(error);
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
+
             TeamUp._(
               'clientAdd',
               null,
@@ -636,6 +649,18 @@ define(
             //temp var, so the user should't see the date changing
             var changedClient = angular.copy(client);
 
+            try
+            {
+              //convert birthdate into miliseconds for saving
+              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
+
             Clients.singleUpdate(changedClient)
               .then(
               function (result)
@@ -650,7 +675,8 @@ define(
                   $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
                   //todo redirect to the clientprofile who was edited
-                  var clientGroupId = (result.clientGroupUuid) ? result.clientGroupUuid : $scope.clientGroups[0].id;
+                  var clientGroupId = result.clientGroupUuid || $scope.current || $scope.clientGroups[0].id;
+
                   reloadGroup({'uuid': clientGroupId});
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -664,6 +690,18 @@ define(
           $scope.saveContacts = function (contacts)
           {
             var client = $scope.client;
+
+            try
+            {
+              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+            }
+            catch (error)
+            {
+              // console.log(error);
+              $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
+
+              return;
+            }
 
             client.contacts = contacts;
 
@@ -695,9 +733,9 @@ define(
                   Clients.query(
                     false,
                     {'uuid': result.clientGroupUuid}
-                  ).then(function (queryRs)
-                    {
-                    });
+                  );
+
+                  $scope.client.birthDate = $filter('nicelyDate')($scope.client.birthDate);
                 }
               }
             );
@@ -804,34 +842,28 @@ define(
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
 
+            Clients.removeSingleFromAllLocally(clientId);
 
-            TeamUp._(
-              'clientDelete',
-              {second: clientId}
-            ).then(
-              function ()
-              {
-                TeamUp._(
-                  'clientsQuery'
-                ).then(
-                  function (clients)
-                  {
-                    Store('app').save('clients', clients);
+            if ($scope.views.viewClient == true)
+            {
+              $scope.setViewTo('client');
+            }
+            else
+            {
+              $route.reload();
+            }
 
-                    if ($scope.views.viewClient == true)
-                    {
-                      $scope.setViewTo('client');
-                    }
-                    else
-                    {
-                      $route.reload();
-                    }
-                  }
-                );
-              }, function (error)
-              {
-                console.log(error)
-              });
+            //TeamUp._(
+            //  'clientDelete',
+            //  {second: clientId}
+            //).then(
+            //  function ()
+            //  {
+            //
+            //  }, function (error)
+            //  {
+            //    console.log(error)
+            //  });
           };
 
           var filterReport = function(clientId, createDate)
@@ -906,7 +938,7 @@ define(
             {
               Report.update(report)
                 .then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -918,7 +950,7 @@ define(
             {
               Report.save(report)
                 .then(
-                function (result)
+                function ()
                 {
                   $scope.close(report);
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);

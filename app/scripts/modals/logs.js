@@ -233,6 +233,7 @@ define(['services/services', 'config'],
             var TeamUp = $injector.get('TeamUp'),
                 Store = $injector.get('Store'),
                 $rootScope = $injector.get('$rootScope'),
+                CurrentSelection = $injector.get('CurrentSelection'),
                 deferred = $q.defer(),
                 teams = Store('app').get('teams'),
                 adapterCalls = [];
@@ -267,15 +268,12 @@ define(['services/services', 'config'],
                   adapterId: 'all'
                 };
 
-                if($rootScope.app.resources.role > 1)
-                {
-                  var teamPhoneData = _.findWhere(teams, {teamId: ($rootScope.app.resources.teamUuids)[0]});
+                var teamPhoneData = _.findWhere(teams, {teamId: CurrentSelection.getTeamId()});
 
-                  /*
-                    Check if the team of the user has a adapterId, if not give a _.uniqueId()
-                  */
-                  options.adapterId  = teamPhoneData.adapterId || _.uniqueId();
-                }
+                /*
+                  Check if the team of the user has a adapterId, if not give a _.uniqueId()
+                */
+                options.adapterId  = teamPhoneData.adapterId || _.uniqueId();
 
                 /*
                   In case of a _.uniqueId() there are no logs found, if the adapterId seems null

@@ -15,9 +15,10 @@ requirejs.config(
 
     paths: {
       localConfig: 'localConfig',
-      config: 'config',
+      config: 'configTeamUp',
       angular:      '../vendors/angular/angular',
       jquery:       '../vendors/jquery/dist/jquery',
+      bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
       plugins: 'plugins',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
@@ -45,8 +46,9 @@ requirejs.config(
     shim: {
       localConfig: {deps: ['jquery'], exports: 'localConfig' },
       profile: {deps: ['jquery'], exports: 'profile' },
-      config: {deps: ['profile', 'localConfig'], exports: 'config' },
+      config: { deps: ['profile', 'localConfig'], exports: 'config' },
       plugins: { deps: ['jquery'], exports: 'plugins' },
+      bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       'angular-resource': { deps: ['angular'] },
       'angular-route': { deps: ['angular'] },
       'angular-md5': { deps: ['angular'] },
@@ -57,8 +59,6 @@ requirejs.config(
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
-
-      'ui.bootstrap.pagination': { deps: ['angular'] },
       angular: {
         deps:    ['jquery'],
         exports: 'angular'
@@ -82,8 +82,8 @@ requirejs.config(
 requirejs.config({
   paths: {
     localConfig: 'localConfig',
-    profile: 'profiles/teamup/profile',
-    config: 'config'
+    profile: 'profiles/teamtelefoon/profileApp',
+    config: 'configTeamUp'
   }
 });
 
@@ -92,53 +92,21 @@ var testConfig = {
   userResources: {
     "uuid": "henkie",
     "userName": "henkie",
-    "passwordHash": "4e8cc74b2e654b94acd1aea8fc654760",
-    "firstName": "Henk",
-    "lastName": "van R00ijen",
-    "phone": "+31650458799",
-    "email": "henkie@henkie.nl",
-    "states": [
-      {
-        "uuid": 100,
-        "name": "Reachability",
-        "value": "possibly_reachable",
-        "share": true
-      },
-      {
-        "uuid": 104,
-        "name": "Location",
-        "value": "51.9205,4.4545",
-        "share": true
-      },
-      {
-        "uuid": 102,
-        "name": "Availability",
-        "value": "available",
-        "share": true
-      }
-    ],
+    "firstName": "henk",
+    "lastName": "R00ijen",
+    "phone": "+31654789522",
+    "email": "hgvanrooijen@gmail.com",
+    "role": "1",
+    "function": "1",
+    "birthDate": 1420498800000,
+    "phoneAddresses": null,
+    "emailAddresses": null,
     "teamUuids": [
       "b3915de1-f29c-4609-a67f-73aaef529902"
     ],
-    "role": "1",
-    "function": null,
-    "birthDate": 636764400000,
-    "address": {
-      "street": "Heemraadssingel",
-      "no": "89",
-      "zip": null,
-      "city": "Rotterdam",
-      "country": "Nederland",
-      "latitude": 51.9205,
-      "longitude": 4.4545
-    },
     "extraInfo": {
-      "photoUUID": "ab859243-0471-4598-a5c5-43f2696e9f13"
+      "photoUUID": "04ecc3e9-c049-4df6-8054-93a26b443917"
     },
-    "fullName": "Henk van R00ijen",
-    "apnskey": "b551dca7cb3e3c8c006b0da335f8c2fde9019828801ef50a4472f35776d24b46",
-    "gcmkey": "APA91bHquo0ikrNXW74wzijq0okPAMBceJgBN8U4mmnVJf9QsAI2qEZjGHu5cVqzqDPzYeyE6Pma-k2HvQ3mU2E7StPU85WGsZrm0QMTCPxNLF3lzxlxoeCyCT4d_hB-A3X-0tRG8P-tQyNMAhZaCpA9u4rh4i5ZJA",
-    "$promise": {},
-    "$resolved": true
+    "fullName": "henk R00ijen"
   }
 };

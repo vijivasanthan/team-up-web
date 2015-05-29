@@ -472,6 +472,7 @@ define(
           selectClientGroup: 'Selecteer een cliëntgroep',
           manage: 'Beheren',
           chooseTeam: 'Selecteer een team',
+          defaultTeam: 'Standaard team',
           edit: 'Bewerk',
           editTeam: 'Bewerk team',
           team: 'Team',

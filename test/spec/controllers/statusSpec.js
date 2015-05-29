@@ -57,7 +57,10 @@ define(
             teamsService = _Teams_;
             Store = _Store_;
             data = {
-              test: 'test'
+              test: 'test',
+              members: {
+                all: 123
+              }
             };
             rootScope.fixStyles = function ()
             {
@@ -72,9 +75,11 @@ define(
                 }
               };
             rootScope.app = {
-              resources: testConfig.userResources
-            }
-
+              resources: testConfig.userResources,
+              domainPermission: {
+                clients: true
+              }
+            },
             rootScope.unique = function(members)
             {
               return null;
@@ -128,48 +133,49 @@ define(
         )
       );
 
-      afterEach(inject(function(Store){
-        Store('teams').nuke();
-      }));
+      //TODO $scope.getGroupReachability(); unexpexted request, call on the run
+      it('Check if slots are available for the testgroup', function() {
+        var teamId = rootScope.app.resources.teamUuids[0];
+        var now = Math.floor(moment().valueOf() / 1000);
+        var response = {
+            "marja": [],
+            "antoinette": [],
+            "anja": [],
+            "henkie": [],
+            "marleen": [],
+            "erwin": [],
+            "hennie": []
+          };
+        var url = testConfig.host + 'network/' + teamId + '/member/slots2?end=' + (now + 60) + '&start=' + now;
+        var finalResult = null;
+        scope.current = {
+          group: teamId
+        };
 
-      it('Should check what the current selector id must be', function () {
-        var teams = Store('app').get('teams');
-        teams.splice(0, 1);
+        //first flush the slots call on the run, before firing a new new call
+        $httpBackend.expectGET(url).respond(response);
+        $httpBackend.flush();
 
-        scope.groups = teams;
-        console.log('scope.groups', scope.groups);
+        $httpBackend.expectGET(url).respond(response);
 
-        expect(1).toEqual(1);
+        slotsService.MemberReachabilitiesByTeam(teamId, now)
+          .then(
+            function(result)
+            {
+              finalResult = result.members;
+            }
+          );
+        //scope.getGroupReachability()
+        //  .then(
+        //    function(response)
+        //    {
+        //      finalResult = response.members;
+        //    }
+        //  );
+
+        $httpBackend.flush();
+        expect(finalResult).toEqual(response);
       });
-
-      //it('Should check what the default daterange is', function () {
-      //  expect(logCtrl.daterange).toEqual('06-03-2015 / 12-03-2015');
-      //});
-      //
-      //it('Should check if it will fetch logs by team', function () {
-      //  var logsByTeam = null,
-      //      options = getOptions(),
-      //      url = testConfig.host + 'ddr?adapterId=' + options.adapterId + '&endTime=' + options.endTime +
-      //        '&startTime=' + options.startTime,
-      //      response = [];
-      //
-      //  $httpBackend.expectGET(url).respond(200, response);
-      //
-      //  logsService.fetch(options)
-      //    .then(
-      //      function(fetchedLogs)
-      //      {
-      //        logsByTeam = fetchedLogs;
-      //      },
-      //      function(error)
-      //      {
-      //        console.log('error', error);
-      //      }
-      //  );
-      //
-      //  $httpBackend.flush();
-      //  expect(logsByTeam.logs[0].adapterId).toEqual(options.adapterId);
-      //});
     });
   }
 );

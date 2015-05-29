@@ -12,7 +12,6 @@ define(
     'angular-md5',
     'angular-strap',
     //'ui-sortable',
-    'ui.bootstrap.pagination',
     'ng-sortable',
     'angular-cookie',
     //'ui-bootstrap',
@@ -35,7 +34,7 @@ define(
         'ngMd5',
         'mgcrea.ngStrap',
         //'ui.sortable',
-        'ui.bootstrap.pagination',
+        //'ui.bootstrap.pagination',
         'ui.mask',
 
         'ng-sortable',
