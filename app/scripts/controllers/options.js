@@ -101,6 +101,10 @@ define(
               {
                 console.log('Error by saving team-telephone settings ->', result.error);
               }
+              else
+              {
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              }
 
               $rootScope.statusBar.off();
             }
