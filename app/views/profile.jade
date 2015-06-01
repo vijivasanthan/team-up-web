@@ -340,11 +340,11 @@ section#profile
 					hr
 					form.form-vertical(name='passWordForm', novalidate)
 						fieldset
-							.form-group
-								label.control-label {{ui.profile.oldPassword}}
-								.controls
-									input.span3(type='password',
-									ng-model='edit.oldpass')
+							//.form-group
+							//	label.control-label {{ui.profile.oldPassword}}
+							//	.controls
+							//		input.span3(type='password',
+							//		ng-model='edit.oldpass')
 							.form-group(ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
 								label.control-label {{ui.profile.newPass}}
 								.controls

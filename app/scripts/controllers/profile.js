@@ -435,8 +435,9 @@ define(
             //copy data so the user can't see real-life changes causing by two way binding
             var formData = angular.copy(resources);
 
-            if (!formData.oldpass || !formData.newpass || !formData.newpassrepeat)
+            if (!formData.newpass || !formData.newpassrepeat)
             {
+              //!formData.oldpass ||
               $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
               return;
             }
@@ -445,13 +446,13 @@ define(
               $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
               return;
             }
-            else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
-            {
-              console.log('$scope.edit.passwordHash', $scope.edit.passwordHash);
-
-              $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
-              return;
-            }
+            //else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
+            //{
+            //  console.log('$scope.edit.passwordHash', $scope.edit.passwordHash);
+            //
+            //  $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
+            //  return;
+            //}
             else
             {
               $scope.view.passwordHash = MD5(formData.newpass);
@@ -464,10 +465,13 @@ define(
                 Store('app').save('loginData', loginData);
               }
 
-              delete formData.oldpass;
+              //delete formData.oldpass;
               delete formData.newpass;
               delete formData.newpassrepeat;
             }
+
+            //removes validation errors from form
+            $scope.passWordForm.$setPristine();
 
             $scope.save($scope.view);
           };
