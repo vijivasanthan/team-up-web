@@ -113,9 +113,12 @@ define(
                         end: end
                       };
 
+                      console.log('periods', periods);
+
                       scope.timeline.range = periods;
 
                       $rootScope.$broadcast('timeliner', periods);
+                      $rootScope.$broadcast('timelinerTasks', periods);
                     }
                   );
                 }
