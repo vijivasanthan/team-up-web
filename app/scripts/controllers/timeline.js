@@ -351,10 +351,14 @@ define(
                 };
               }
 
+              var week = moment().week(),
+                  start = $scope.timeline.range.start || $scope.periods.weeks[week].first.timeStamp,
+                  end = $scope.timeline.range.end || $scope.periods.weeks[week].last.timeStamp;
+
               this.render(
                 {
-                  start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,//$scope.data.periods.start,
-                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp //$scope.data.periods.end
+                  start: start,
+                  end: end
                 }, true
               );
             },
@@ -726,6 +730,9 @@ define(
                 angular.element('#confirmTasksDeleteModal').modal('show');
               }
             );
+
+            console.log('user', user);
+            console.log('$scope.removeTaskOptions', $scope.removeTaskOptions);
           };
 
           /**
@@ -817,7 +824,9 @@ define(
           {
             $rootScope.planboardSync.clear();
 
-            var values;
+            var now = Date.now().getTime(),
+                nowStamp = Math.abs(Math.floor(now / 1000)),
+                values;
 
             if (!form)
             {
@@ -825,54 +834,65 @@ define(
 
               $scope.relatedUsers = $scope.processRelatedUsers(values);
 
-              if ($scope.timeliner.isAdded() > 1)
+              if ((new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
+              {
+                if ($scope.timeliner.isAdded() > 1)
+                {
+                  $scope.self.timeline.cancelAdd();
+                }
+
+                $scope.$apply(
+                  function ()
+                  {
+                    if ($scope.timeline.main)
+                    {
+                      $rootScope.$broadcast('resetPlanboardViewsTasks');
+
+                      $scope.views.slot.add = true;
+                    }
+                    else
+                    {
+                      $scope.forms = {
+                        add: true,
+                        edit: false
+                      };
+                    }
+
+                    $scope.slot = {
+                      start: {
+                        date: new Date(values.start).toString(config.app.formats.date),
+                        time: new Date(values.start).toString(config.app.formats.time),
+                        datetime: new Date(values.start).toISOString()
+                      },
+                      end: {
+                        date: new Date(values.end).toString(config.app.formats.date),
+                        time: new Date(values.end).toString(config.app.formats.time),
+                        datetime: new Date(values.end).toISOString()
+                      },
+                      recursive: (values.group.match(/recursive/)) ? true : false,
+                      state: 'com.ask-cs.State.Available'
+                    };
+
+                    $scope.original = {
+                      start: new Date(values.start),
+                      end: new Date(values.end),
+                      content: {
+                        recursive: $scope.slot.recursive,
+                        state: $scope.slot.state
+                      }
+                    };
+
+                  }
+                );
+              }
+              else
               {
                 $scope.self.timeline.cancelAdd();
+
+                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
+
+                $rootScope.$apply();
               }
-
-              $scope.$apply(
-                function ()
-                {
-                  if ($scope.timeline.main)
-                  {
-                    $rootScope.$broadcast('resetPlanboardViewsTasks');
-
-                    $scope.views.slot.add = true;
-                  }
-                  else
-                  {
-                    $scope.forms = {
-                      add: true,
-                      edit: false
-                    };
-                  }
-
-                  $scope.slot = {
-                    start: {
-                      date: new Date(values.start).toString(config.app.formats.date),
-                      time: new Date(values.start).toString(config.app.formats.time),
-                      datetime: new Date(values.start).toISOString()
-                    },
-                    end: {
-                      date: new Date(values.end).toString(config.app.formats.date),
-                      time: new Date(values.end).toString(config.app.formats.time),
-                      datetime: new Date(values.end).toISOString()
-                    },
-                    recursive: (values.group.match(/recursive/)) ? true : false,
-                    state: 'com.ask-cs.State.Available'
-                  };
-
-                  $scope.original = {
-                    start: new Date(values.start),
-                    end: new Date(values.end),
-                    content: {
-                      recursive: $scope.slot.recursive,
-                      state: $scope.slot.state
-                    }
-                  };
-
-                }
-              );
             }
             else
             {
@@ -894,92 +914,106 @@ define(
                 relatedUserId: slot.relatedUser
               };
 
-              if (typeof slot.relatedUser == 'undefined' || slot.relatedUser == '')
+              if(values.startTime < now && values.endTime < now)
               {
-                if ($scope.views.teams)
+                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
+
+                $scope.timeliner.refresh();
+              }
+              else
+              {
+                if (typeof slot.relatedUser == 'undefined' || slot.relatedUser == '')
                 {
-                  $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+                  if ($scope.views.teams)
+                  {
+                    $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+
+                    return;
+                  }
+                  else if ($scope.views.clients)
+                  {
+                    // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
+
+                    // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
+                  }
+
+                  slot.relatedUser = null;
+                }
+
+                if (values.startTime < now)
+                {
+                  values.startTime = now;
+                }
+
+                // console.log('values ->', values);
+
+                var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                  memberId = angular.element(selected.group).attr('memberId');
+
+                if (typeof memberId == 'undefined')
+                {
+                  $rootScope.notifier.error($rootScope.ui.teamup.selectSlot);
 
                   return;
                 }
-                else if ($scope.views.clients)
-                {
-                  // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
 
-                  // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
-                }
+                $rootScope.statusBar.display($rootScope.ui.planboard.addTimeSlot);
 
-                slot.relatedUser = null;
-              }
+                // convert the value to the new Task json object
+                values = $.extend(values, {'memberId': memberId});
+                values = $scope.convertTaskJsonObject(values);
 
-              // console.log('values ->', values);
-
-              var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                memberId = angular.element(selected.group).attr('memberId');
-
-              if (typeof memberId == 'undefined')
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.selectSlot);
-
-                return;
-              }
-
-              $rootScope.statusBar.display($rootScope.ui.planboard.addTimeSlot);
-
-              // convert the value to the new Task json object
-              values = $.extend(values, {'memberId': memberId});
-              values = $scope.convertTaskJsonObject(values);
-
-              TeamUp._(
-                'taskAdd',
-                null,
-                values
-              ).then(
-                function (result)
-                {
-                  $rootScope.$broadcast('resetPlanboardViewsTasks');
-
-                  if (result.error)
+                TeamUp._(
+                  'taskAdd',
+                  null,
+                  values
+                ).then(
+                  function (result)
                   {
-                    if (result.error.data)
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
+
+                    if (result.error)
                     {
-                      $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                      if (result.error.data)
+                      {
+                        $rootScope.notifier.error($rootScope.transError(result.error.data.result));
+                      }
+                      else
+                      {
+                        $rootScope.notifier.error($rootScope.transError(result.error));
+                      }
                     }
                     else
                     {
-                      $rootScope.notifier.error($rootScope.transError(result.error));
+                      $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
                     }
-                  }
-                  else
-                  {
-                    $rootScope.notifier.success($rootScope.ui.planboard.slotAdded);
-                  }
 
-                  if ($scope.section == 'teams')
-                  {
-                    $scope.changeCurrent(
-                      $scope.currentTeam, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
+                    if ($scope.section == 'teams')
+                    {
+                      $scope.changeCurrent(
+                        $scope.currentTeam, {
+                          start: $scope.timeline.range.start,
+                          end: $scope.timeline.range.end
+                        });
+                    }
+                    else if ($scope.section == 'clients')
+                    {
+                      $scope.changeCurrent(
+                        $scope.currentClientGroup, {
+                          start: $scope.timeline.range.start,
+                          end: $scope.timeline.range.end
+                        });
+                    }
+
+                    // refresh my tasks or alltasks
+                    $scope.refreshTasks(result.result, "add");
+
+                    $rootScope.statusBar.off();
+
+                    // $scope.timeliner.refresh();
                   }
-                  else if ($scope.section == 'clients')
-                  {
-                    $scope.changeCurrent(
-                      $scope.currentClientGroup, {
-                        start: $scope.timeline.range.start,
-                        end: $scope.timeline.range.end
-                      });
-                  }
-
-                  // refresh my tasks or alltasks
-                  $scope.refreshTasks(result.result, "add");
-
-                  $rootScope.statusBar.off();
-
-                  // $scope.timeliner.refresh();
-                }
-              );
+                );
+              }
             }
           };
 
@@ -1196,7 +1230,34 @@ define(
               };
             }
 
-            var values = $scope.convertTaskJsonObject(options);
+            var now = Date.now().getTime(),
+                values = $scope.convertTaskJsonObject(options);
+
+            original.start = new Date(original.start).getTime();
+            original.end = new Date(original.end).getTime();
+
+            var notAllowedForPast = function ()
+            {
+              $rootScope.notifier.error($rootScope.ui.agenda.pastChanging);
+
+              $scope.timeliner.refresh();
+            };
+
+            if (values.plannedStartVisitTime < now && values.plannedEndVisitTime < now
+              || values.plannedStartVisitTime < now && values.plannedEndVisitTime > now)
+            {
+              notAllowedForPast();
+              return;
+            }
+
+            if (values.plannedStartVisitTime > now && values.plannedEndVisitTime > now)
+            {
+              if (original.start < now && original.end < now)
+              {
+                notAllowedForPast();
+                return;
+              }
+            }
 
             TeamUp._(
               'taskUpdate',
