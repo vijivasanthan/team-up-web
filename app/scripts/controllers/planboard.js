@@ -353,23 +353,13 @@ define(
             }
           );
 
-          var uuid,
-            view;
-
-          if (!params.uuid && !$location.hash())
-          {
-            uuid = $scope.data.teams.list[0].uuid;
-            view = 'teams';
-
-            $location.search({uuid: $scope.data.teams.list[0].uuid}).hash(view);
-          }
-          else
-          {
-            uuid = params.uuid;
-            view = $location.hash();
-          }
-
-          $scope.setViewTo(uuid, view);
+          /**
+           * set default team and hash if there isn't any
+           */
+          $scope.setViewTo(
+            params.uuid || $scope.data.teams.list[0].uuid,
+            $location.hash() || 'teams'
+          );
 
           $scope.self = this;
 
