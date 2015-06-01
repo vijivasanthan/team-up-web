@@ -190,6 +190,14 @@ define(
               return false;
             }
 
+            //Check if phoneNumbers are unique
+            if(resources.phoneNumbers.length != (_.uniq(resources.phoneNumbers).length))
+            {
+              $rootScope.notifier.error('Een of meer telefoonnummers bestaan al, Andere nummer invoeren aub.');
+              return false;
+            }
+
+
             //if(!_.isEmpty(resources.pincode) && $rootScope.pincodeExistsValidation == false)
             //{
             //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
@@ -249,6 +257,7 @@ define(
               resources.phoneNumbers = _.without(resources.phoneNumbers, undefined);
               $scope.resetPhoneNumberCheck();
             }
+
 
             //resources.defaultTeam
             //var tempTeamUuids = [];
