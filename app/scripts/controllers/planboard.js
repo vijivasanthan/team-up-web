@@ -205,9 +205,7 @@ define(
             $scope.currentTeam = CurrentSelection.getTeamId();
             $scope.currentClientGroup = CurrentSelection.getClientGroupId();
 
-            var section = _.findWhere($scope.data[$scope.section].list, {uuid: current});
-
-            $scope.currentName = section && section.name;
+            $scope.currentName = getGroupName();
 
             loadData(periods);
           };
@@ -330,12 +328,28 @@ define(
 
                 $scope.section = hash;
 
+                $scope.currentName = getGroupName();
+
                 switchData();
 
                 setView(hash);
               }
             );
           };
+
+          function getGroupName()
+          {
+            var current = ($scope.section == 'teams')
+              ? $scope.currentTeam
+              : $scope.currentClientGroup;
+
+            var group = _.findWhere(
+              $scope.data[$scope.section].list,
+              {uuid: current}
+            );
+
+            return group.name;
+          }
 
           $scope.resetViews = function ()
           {
