@@ -313,40 +313,41 @@ define(
                         function (res)
                         {
                           console.log("new team added to team-client list", res);
-                        });
 
-                      angular.forEach(
-                        queries.teams,
-                        function (team)
-                        {
-                          if (team.uuid == result.uuid)
-                          {
-                            $scope.teams = queries.teams;
-
-                            angular.forEach(
-                              queries.teams,
-                              function (_team)
+                          angular.forEach(
+                            queries.teams,
+                            function (team)
+                            {
+                              if (team.uuid == result.uuid)
                               {
-                                if (_team.uuid == team.uuid)
-                                {
-                                  $scope.team = _team;
-                                }
-                              });
+                                $scope.teams = queries.teams;
 
-                            $scope.members = data.members[team.uuid];
+                                angular.forEach(
+                                  queries.teams,
+                                  function (_team)
+                                  {
+                                    if (_team.uuid == team.uuid)
+                                    {
+                                      $scope.team = _team;
+                                    }
+                                  });
 
-                            $scope.current = team.uuid;
+                                $scope.members = data.members[team.uuid];
 
-                            $scope.$watch(
-                              $location.search(),
-                              function ()
-                              {
-                                $location.search({uuid: team.uuid})
+                                $scope.current = team.uuid;
+
+                                $scope.$watch(
+                                  $location.search(),
+                                  function ()
+                                  {
+                                    $location.search({uuid: team.uuid});
+                                    $scope.setViewTo('team');
+                                  }
+                                );
                               }
-                            );
-                          }
-                        }
-                      );
+                            }
+                          );
+                        });
                     }
 
                     $rootScope.statusBar.off();
