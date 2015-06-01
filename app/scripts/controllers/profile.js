@@ -525,6 +525,9 @@ define(
                 //Check of logged user is equal to the profile user
                 if($scope.view.uuid == $rootScope.app.resources.uuid)
                 {
+                  $scope.teams = null;
+                  $scope.view.teamUuids = [];
+                  $scope.edit.teamUuids = [];
                   $rootScope.app.resources.teamUuids = [];
                   //update local resources without teams
                   Store('app').save('resources', $rootScope.app.resources);
