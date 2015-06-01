@@ -148,7 +148,7 @@ define(
                   members,
                   function (member)
                   {
-                    var avatar = '<div class="roundedPicSmall memberStateNone" ' +
+                    var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
                       'style="float: left; background-image: url(' +
                       config.app.host +
                       config.app.namespace +

@@ -926,15 +926,13 @@ define(
                 {
                   if ($scope.views.teams)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
-
+                    $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
                     return;
                   }
                   else if ($scope.views.clients)
                   {
-                    // $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
-
-                    // console.log('currentTeam ->', Store('app').get('teamGroup_' + $scope.currentClientGroup));
+                    $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+                    return;
                   }
 
                   slot.relatedUser = null;
