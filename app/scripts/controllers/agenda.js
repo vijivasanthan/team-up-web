@@ -88,7 +88,7 @@ define(
             user: {
               id: data.userData.uuid,//$rootScope.app.resources.uuid,
               role: data.userData.role,//$rootScope.app.resources.role,
-              fullName: data.userData.fullName
+              fullName: data.userData.firstName + ' ' + data.userData.lastName
             },
             current: $scope.current,
             options: {

@@ -475,7 +475,7 @@ define(['services/services', 'config'],
               return timedata;
             },
 
-            members: function (data, timedata, config)
+            members: function (data, timedata, config, routeUserId)
             {
               var _this = this,
                 filtered = [];
@@ -517,7 +517,7 @@ define(['services/services', 'config'],
                   member.fullName +
                   '</a>';
 
-                  if($rootScope.app.resources.uuid !== member.id)
+                  if(routeUserId !== member.id)
                   {
                     link += '<a class="edit-timeline-icon" title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
@@ -697,7 +697,7 @@ define(['services/services', 'config'],
 
               if (data.members)
               {
-                timedata = _this.members(data, timedata, _config);
+                timedata = _this.members(data, timedata, _config, routeUserId);
               }
 
               //if (data.aggs)
