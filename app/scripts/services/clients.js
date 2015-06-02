@@ -392,6 +392,41 @@ define(
               )
           };
 
+          /**
+           * Remove client from group
+           * @param clientGroupId id of the group
+           * @param clientId id of the client
+           * @returns {*} promise with the current members of the team
+           */
+          ClientsService.prototype.deleteFromGroup = function(clientGroupId, clientId)
+          {
+            var deferred = $q.defer();
+
+            TeamUp._(
+              'clientGroupClientDelete',
+              { third: clientGroupId },
+              { ids: [clientId] }
+            ).then(
+              function(result)
+              {
+                var clientGroup = {uuid: clientGroupId};
+
+                if(result)
+                {
+                  ClientsService.prototype.query(false, clientGroup)
+                    .then(
+                    function(clients)
+                    {
+                      deferred.resolve(clients);
+                    }
+                  );
+                }
+              }
+            );
+
+            return deferred.promise;
+          };
+
           // Get the list local client groups with clients in it
           ClientsService.prototype.queryLocal = function ()
           {

@@ -833,37 +833,42 @@ define(
             );
           };
 
-          // after delete the client, refresh the client group which used to have the client inside.
+          /**
+           * Remove client from group
+           * @param clientId id of the client
+           */
           $scope.deleteClient = function (clientId)
           {
             $scope._clientId = {};
 
             angular.element('#confirmClientModal').modal('hide');
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.deletingClient);
+            $rootScope.statusBar.display($rootScope.ui.teamup.deletingClientFromClientGroup);
 
-            Clients.removeSingleFromAllLocally(clientId);
+            Clients.deleteFromGroup($scope.current, clientId)
+              .then(
+                function(data)
+                {
+                  if(data)
+                  {
+                    $scope.data = data;
+                    $scope.clients = data.clients;
+                    $scope.clientGroups = data.clientGroups;
 
-            if ($scope.views.viewClient == true)
-            {
-              $scope.setViewTo('client');
-            }
-            else
-            {
-              $route.reload();
-            }
+                    $rootScope.notifier.success(
+                      $rootScope.ui.teamup.deleteClientFromClientGroup
+                    );
+                    $rootScope.statusBar.off();
 
-            //TeamUp._(
-            //  'clientDelete',
-            //  {second: clientId}
-            //).then(
-            //  function ()
-            //  {
-            //
-            //  }, function (error)
-            //  {
-            //    console.log(error)
-            //  });
+                    //TODO allClients are not updated
+                    //ClientsService.prototype.queryAll
+                  }
+                  else
+                  {
+                    console.log('client delete from clientgroup -> ', result);
+                  }
+                }
+              );
           };
 
           var filterReport = function(clientId, createDate)

@@ -537,6 +537,8 @@ define(
           savingClient: 'Cliënt aan het opslaan...',
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
           clientGroups: 'Cliëntengroepen',
+          deleteClientFromClientGroup: 'Cliënt is verwijderd',
+          deletingClientFromClientGroup: 'Cliënt uit groep verwijderen...',
           teams_Cap: 'Teams',
           noTeamNameFound: 'Teamnaam onbekend',
           noTeam: 'Geen team',
@@ -576,6 +578,8 @@ define(
           confirms: {
             deleteClientTitle: 'Verwijder client',
             deleteClient: 'Weet u zeker dat u de client wilt verwijderen?',
+            deleteClientFromTeamTitle: 'Verwijder client uit de groep',
+            deleteClientFromTeam: 'Weet u zeker dat u de client uit zijn groep wilt verwijderen?',
             deleteReportTitle: 'Verwijder rapport',
             deleteReport: 'Weet u zeker dat u het rapport wilt verwijderen?',
             deleteProfileTitle: 'Verwijder profile',
