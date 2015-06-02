@@ -121,14 +121,14 @@ define(
                               console.log(e);
                             }
 
-                            if ($scope.$parent.client.uuid)
+                            if (angular.isDefined($scope.$parent.client))
                             {
                               id = $scope.$parent.client.uuid;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
                               type = 'client';
 
                             }
-                            else if ($scope.$parent.view.uuid)
+                            else if (angular.isDefined($scope.$parent.view))
                             {
                               id = $scope.$parent.view.uuid;
                               message = $rootScope.ui.profile.profileImgSuccessfullyUploaded;
