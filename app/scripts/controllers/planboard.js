@@ -500,15 +500,12 @@ define(
             $scope.original = {};
 
             $scope.resetViews();
+          };
 
-            if ($scope.section == 'teams')
-            {
-              $scope.changeCurrent($scope.currentTeam);
-            }
-            else if ($scope.section == 'clients')
-            {
-              $scope.changeCurrent($scope.currentClientGroup);
-            }
+          $scope.refreshCurrentTimeline = function()
+          {
+            $scope.resetInlineForms();
+            $rootScope.$broadcast('resetTaskTimeline');
           };
 
           //check if there are already tasks on the dates of the uploaded sheet

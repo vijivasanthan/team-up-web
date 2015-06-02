@@ -1053,8 +1053,6 @@ define(
               var element = angular.element(values.content),
                 secret = angular.fromJson(element.html());
 
-              //console.log('values', values);
-
               if (secret.recursive ||
                 (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
               {

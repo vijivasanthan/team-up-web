@@ -57,7 +57,7 @@ div(ng-controller='timeline as taskPlanboard')
 	
 			form.form-inline.form-toggled.well
 			
-				button.close(ng-click='resetInlineForms()') ×
+				button.close(ng-click='refreshCurrentTimeline()') ×
 				h4(ng-show='views.slot.add') {{ui.teamup.newTask}}
 				h4(ng-show='views.slot.edit') {{ui.teamup.updateTask}}
 				hr

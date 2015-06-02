@@ -730,9 +730,6 @@ define(
                 angular.element('#confirmTasksDeleteModal').modal('show');
               }
             );
-
-            console.log('user', user);
-            console.log('$scope.removeTaskOptions', $scope.removeTaskOptions);
           };
 
           /**
@@ -1463,6 +1460,15 @@ define(
               );
             }
           }
+
+          $rootScope.$on('resetTaskTimeline', function ()
+          {
+            $scope.timeliner.render(
+              {
+                start: $scope.timeline.range.start,
+                end: $scope.timeline.range.end
+              }, true);
+          });
         }
       ]
     );
