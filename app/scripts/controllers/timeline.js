@@ -755,7 +755,7 @@ define(
                 console.log('client');
                 break;
               default:
-                console.log("Voor het verwijderen van taken is geen team, clientgroep, client of member geselecteert.");
+                console.log("Voor het verwijderen van taken is geen team, clientgroep, client of member geselecteerd.");
             }
           };
 

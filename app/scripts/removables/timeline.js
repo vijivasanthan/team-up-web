@@ -3485,31 +3485,37 @@ links.Timeline.prototype.onDblClick = function (event)
 
       if(this.getGroupName(group).match(/task-planboard/))
       {
-        var content = 'Nieuw';
-        var group = this.getGroupFromHeight(y);   // (group may be undefined)
-        this.addItem(
-          {
-            'start': xstart,
-            'end': xend,
-            'content': content,
-            'group': this.getGroupName(group),
-            'className': 'state-new'
-          });
+        //if()
+        var lastItem = this.items[this.items.length - 1];
 
-        params.itemIndex = (this.items.length - 1);
-        this.selectItem(params.itemIndex);
-
-        this.applyAdd = true;
-
-        // fire an add event.
-        // Note that the change can be canceled from within an event listener if
-        // this listener calls the method cancelAdd().
-        this.trigger('add');
-
-        if (!this.applyAdd)
+        if(lastItem && lastItem.content != 'Nieuw')
         {
-          // undo an add
-          this.deleteItem(params.itemIndex);
+          var content = 'Nieuw';
+          var group = this.getGroupFromHeight(y);   // (group may be undefined)
+          this.addItem(
+            {
+              'start': xstart,
+              'end': xend,
+              'content': content,
+              'group': this.getGroupName(group),
+              'className': 'state-new'
+            });
+
+          params.itemIndex = (this.items.length - 1);
+          this.selectItem(params.itemIndex);
+
+          this.applyAdd = true;
+
+          // fire an add event.
+          // Note that the change can be canceled from within an event listener if
+          // this listener calls the method cancelAdd().
+          this.trigger('add');
+
+          if (!this.applyAdd)
+          {
+            // undo an add
+            this.deleteItem(params.itemIndex);
+          }
         }
       }
       else if(! groupName.match(urlRegex))
