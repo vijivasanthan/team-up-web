@@ -48,7 +48,7 @@ define(
           newMessage: 'Nieuwe berichten',
           goToInbox: 'Ga naar inbox',
           loadingPie: 'Cirkeldiagrammen laden...',
-          possiblyReachable: 'Mogelijk bereikbaar',
+          possiblyReachable: 'Niet gepland',
           noPlanning: 'Geen Planning',
           load: 'laden...',
           time: {
@@ -649,7 +649,7 @@ define(
             'on_the_phone': 'Aan de telefoon',
             'unknown': 'Onbekend',
             'reachable': 'Bereikbaar',
-            'possibly_reachable': 'Mogelijk bereikbaar',
+            'possibly_reachable': 'Niet gepland',
             'unreachable': 'Niet bereikbaar',
             'unavailable': 'Niet bereikbaar',
             'unknown': 'Offline'
