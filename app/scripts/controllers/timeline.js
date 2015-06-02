@@ -938,12 +938,17 @@ define(
                   slot.relatedUser = null;
                 }
 
+                if(values.startTime > values.endTime ||
+                  values.startTime == values.endTime)
+                {
+                  $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+                  return;
+                }
+
                 if (values.startTime < now)
                 {
                   values.startTime = now;
                 }
-
-                // console.log('values ->', values);
 
                 var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
                   memberId = angular.element(selected.group).attr('memberId');
@@ -1255,6 +1260,13 @@ define(
                 notAllowedForPast();
                 return;
               }
+            }
+
+            if(values.plannedStartVisitTime > values.plannedEndVisitTime ||
+              values.plannedStartVisitTime == values.plannedEndVisitTime)
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return;
             }
 
             TeamUp._(

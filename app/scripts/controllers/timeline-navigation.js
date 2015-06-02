@@ -17,7 +17,6 @@ define(
             $scope.timeline.current.month = $scope.current.month;
 
             $scope.timeline.current.year = Number(new Date().toString('yyyy'));
-            console.log('$scope.timeline', $scope.timeline);
 
             switch (period)
             {
