@@ -137,15 +137,18 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			article(ng-show='tasks.mine.loading'): p Eigen taken aan het laden..
 
 			article(ng-hide='tasks.mine.loading')
-
-				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
-
+			
 				.well(style='padding-top: 25px',
 					ng-show='tasks.mine.archieve')
 					label
-						input(type='checkbox', ng-model='showFinishedTasks')
+						input(type='checkbox', 
+							name='showAllTasks' 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "mine")')
 						small &nbsp;Toon gearchiveerde taken
-
+				
+				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
+						
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
 						tr
@@ -204,12 +207,14 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				p(ng-hide='(tasks.all.list | filter: task.team ).length > 0') {{ui.task.noTasks}}
 				//pre: small {{tasks.all.list[0] | json}}
 
-				.well(style='padding-top: 25px', ng-show='(tasks.all.list | filter: task.team ).length > 0')
+				.well(style='padding-top: 25px', ng-show='tasks.all.archieve')
 					label(style='margin-right: 15px; display: none')
 						input(type='checkbox', ng-model='showOnlyAvailable')
 						small &nbsp;Toon alleen niet toegewezen taken
 					label
-						input(type='checkbox', ng-model='showAllTasks')
+						input(type='checkbox', 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "all")')
 						small &nbsp;Toon gearchiveerde taken
 
 				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')

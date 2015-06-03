@@ -164,11 +164,25 @@ define(
               .then(
               function (tasks)
               {
+                console.log('tasks.off', tasks);
+
                 $scope.tasks.mine = {
                   loading: false,
-                  list: tasks.on,
+                  list: (angular.isDefined($scope.showAllTasks) && $scope.showAllTasks)
+                      ? tasks['on'].concat(tasks['off'])
+                      : tasks['on'],
                   archieve: (tasks.off.length > 0)
                 };
+
+                //console.log('$scope.showAllTasks', $scope.showAllTasks);
+                //console.log('$scope.tasks.mine.archieve', $scope.tasks.mine.archieve);
+                //
+                //if((angular.isDefined($scope.showAllTasks) && $scope.showAllTasks)
+                //  && $scope.tasks.mine.archieve)
+                //{
+                //  $scope.tasks.mine.list.concat(tasks.off);
+                //  console.log('list ', $scope.tasks.mine.list);
+                //}
 
                 (callback && callback.call(this, tasks));
               }
@@ -190,7 +204,10 @@ define(
               {
                 $scope.tasks.all = {
                   loading: false,
-                  list: tasks.on
+                  list: (angular.isDefined($scope.showAllTasks) && $scope.showAllTasks)
+                    ? tasks['on'].concat(tasks['off'])
+                    : tasks['on'],
+                  archieve: (tasks['off'].length > 0)
                 };
 
                 (callback && callback.call(this, tasks));
@@ -198,32 +215,46 @@ define(
             );
           }
 
-          $scope.$watch(
-            'showFinishedTasks',
-            function (toggle)
+          $scope.showTasks = function(toggle, taskHolder)
+          {
+            if(taskHolder == 'mine')
             {
               var myTasks = Store('app').get('myTasks2');
-
               $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
             }
-          );
-
-          $scope.$watch(
-            'showAllTasks',
-            function (toggle)
+            else
             {
               var allTasks = Store('app').get('allTasks2');
-
-              if (toggle)
-              {
-                $scope.tasks.all.list = allTasks['on'].concat(allTasks['off']);
-              }
-              else
-              {
-                $scope.tasks.all.list = allTasks.on;
-              }
+              $scope.tasks.all.list = (toggle) ? allTasks['on'].concat(allTasks['off']) : allTasks['on'];
             }
-          );
+          };
+
+          //$scope.$watch(
+          //  'showFinishedTasks',
+          //  function (toggle)
+          //  {
+          //    var myTasks = Store('app').get('myTasks2');
+          //
+          //    $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
+          //  }
+          //);
+          //
+          //$scope.$watch(
+          //  'showAllTasks',
+          //  function (toggle)
+          //  {
+          //    var allTasks = Store('app').get('allTasks2');
+          //
+          //    if (toggle)
+          //    {
+          //      $scope.tasks.all.list = allTasks['on'].concat(allTasks['off']);
+          //    }
+          //    else
+          //    {
+          //      $scope.tasks.all.list = allTasks.on;
+          //    }
+          //  }
+          //);
 
           //date and time methods if a new task is creating
           if ($scope.views.newTask == true)
@@ -424,6 +455,11 @@ define(
                 {
                   $rootScope.notifier.success($rootScope.ui.task.taskDeleted);
                   // $scope.reloadAndSaveTask(result.uuid, 'delete');
+
+                  if(task.status == 3)
+                  {
+                    console.log('this tasks was archieved');
+                  }
 
                   queryMine();
                 }
