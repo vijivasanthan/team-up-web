@@ -284,24 +284,26 @@ aria-hidden='true')
 
 		#reportsTab.tab-pane(class="{{(views.reports==true) && 'active'}}")
 			.tab-header
-				| {{ui.teamup.clients}}:
-				// ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients"
-				select(ng-init='currentCLient=0',
-				ng-model='currentCLient',
-				ng-selected='currentCLient',
-				ng-change='requestReportsByFilter()')
-					option(value='0') {{ui.teamup.selectClient}}
-					option(ng-repeat='client in clients',
-					value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
-
-				| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
-				select(ng-init='currentMonth=0',
-				ng-model='currentMonth',
-				ng-selected='currentMonth',
-				ng-change='requestReportsByFilter()')
-					option(ng-repeat='month in Months|orderBy:number',
-					value='{{month.number}}') {{month.name}}
-				button.btn.pull-right.btn-info.marginLeftTen(type='button', data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
+				div.pull-left
+					| {{ui.teamup.clients}}:
+					// ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients"
+					select(ng-init='currentCLient=0',
+					ng-model='currentCLient',
+					ng-selected='currentCLient',
+					ng-change='requestReportsByFilter()')
+						option(value='0') {{ui.teamup.selectClient}}
+						option(ng-repeat='client in clients',
+						value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
+	
+					| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
+					select(ng-init='currentMonth=0',
+					ng-model='currentMonth',
+					ng-selected='currentMonth',
+					ng-change='requestReportsByFilter()')
+						option(ng-repeat='month in Months|orderBy:number',
+						value='{{month.number}}') {{month.name}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button', 
+					data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
 			hr
 			div(ng-show='groupReports.length > 0')
 				table.table.table-striped

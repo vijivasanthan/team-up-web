@@ -57,12 +57,27 @@
   #viewTeamsTab .tab-header {
     height: 130px;
   }
+
+  #reportsTab, #newMemberTab {
+    .tab-header {
+      overflow: inherit;
+      min-height: 40px;
+    }
+  }
 }
 
 @media (max-width: 767px) {
   .navbar-fixed-top {
     position: absolute;
     margin-bottom: 0;
+  }
+
+  #reportsTab, #newMemberTab
+  {
+    .tab-header {
+      overflow: inherit;
+      min-height: 40px;
+    }
   }
 
   #viewTeamsTab .tab-header {
