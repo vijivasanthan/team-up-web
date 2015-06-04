@@ -90,12 +90,12 @@ define(
                 start: {
                   date: new Date().toString(config.app.formats.date),
                   time: new Date().toString(config.app.formats.time),
-                  datetime: new Date().toISOString()
+                  datetime: getDateTimeToPicker(new Date().toISOString())
                 },
                 end: {
                   date: new Date().toString(config.app.formats.date),
                   time: new Date().addHours(1).toString(config.app.formats.time),
-                  datetime: new Date().toISOString()
+                  datetime: getDateTimeToPicker(new Date().toISOString())
                 },
                 state: 'com.ask-cs.State.Available',
                 recursive: false,
@@ -545,12 +545,12 @@ define(
                   start: {
                     date: new Date(values.start).toString(config.app.formats.date),
                     time: new Date(values.start).toString(config.app.formats.time),
-                    datetime: new Date(values.start).toISOString()
+                    datetime: getDateTimeToPicker(new Date(values.start).toISOString())
                   },
                   end: {
                     date: new Date(values.end).toString(config.app.formats.date),
                     time: new Date(values.end).toString(config.app.formats.time),
-                    datetime: new Date(values.end).toISOString()
+                    datetime: getDateTimeToPicker(new Date(values.end).toISOString())
                   },
                   state: content.state,
                   recursive: content.recursive,
@@ -606,6 +606,19 @@ define(
                 }
               }
             );
+          };
+
+          var getDateTimeFromPicker = function (date)
+          {
+            if (typeof(date) == 'undefined' || date == null || date == '') return "";
+
+            var tmpDate = new Date(date);
+
+            var offset = tmpDate.getTimezoneOffset();
+
+            var newDate = tmpDate.addMinutes(offset);
+
+            return newDate.toISOString();
           };
 
           // remove the task item from the right list
@@ -817,6 +830,15 @@ define(
               });
           };
 
+          var getDateTimeToPicker = function (d)
+          {
+            var d1 = new Date(d);
+            // var offset = d.getTimezoneOffset() / 60;
+            d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+
+            return d1.toISOString().replace("Z", "");
+          };
+
           $scope.timelineOnAdd = function (form, slot)
           {
             $rootScope.planboardSync.clear();
@@ -859,12 +881,12 @@ define(
                       start: {
                         date: new Date(values.start).toString(config.app.formats.date),
                         time: new Date(values.start).toString(config.app.formats.time),
-                        datetime: new Date(values.start).toISOString()
+                        datetime: getDateTimeToPicker(new Date(values.start).toISOString())
                       },
                       end: {
                         date: new Date(values.end).toString(config.app.formats.date),
                         time: new Date(values.end).toString(config.app.formats.time),
-                        datetime: new Date(values.end).toISOString()
+                        datetime: getDateTimeToPicker(new Date(values.end).toISOString())
                       },
                       recursive: (values.group.match(/recursive/)) ? true : false,
                       state: 'com.ask-cs.State.Available'
@@ -902,10 +924,10 @@ define(
 
               values = {
                 startTime: ($rootScope.browser.mobile) ?
-                  new Date(slot.start.datetime).getTime() :
+                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.start.datetime)).getTime())) :
                   Dater.convert.absolute(slot.start.date, slot.start.time, false),
                 endTime: ($rootScope.browser.mobile) ?
-                  new Date(slot.end.datetime).getTime() :
+                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.end.datetime)).getTime())) :
                   Dater.convert.absolute(slot.end.date, slot.end.time, false),
                 description: (typeof slot.description == 'undefined') ? '' : slot.description,
                 relatedUserId: slot.relatedUser
@@ -1154,12 +1176,12 @@ define(
                     start: {
                       date: new Date(values.start).toString(config.app.formats.date),
                       time: new Date(values.start).toString(config.app.formats.time),
-                      datetime: new Date(values.start).toISOString()
+                      datetime: getDateTimeToPicker(new Date(values.start).toISOString())
                     },
                     end: {
                       date: new Date(values.end).toString(config.app.formats.date),
                       time: new Date(values.end).toString(config.app.formats.time),
-                      datetime: new Date(values.end).toISOString()
+                      datetime: getDateTimeToPicker(new Date(values.end).toISOString())
                     },
                     state: content.state,
                     id: content.id,
@@ -1218,10 +1240,10 @@ define(
             {
               options = {
                 startTime: ($rootScope.browser.mobile) ?
-                  new Date(slot.start.datetime).getTime() :
+                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.start.datetime)).getTime())) :
                   Dater.convert.absolute(slot.start.date, slot.start.time, false),
                 endTime: ($rootScope.browser.mobile) ?
-                  new Date(slot.end.datetime).getTime() :
+                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.end.datetime)).getTime())) :
                   Dater.convert.absolute(slot.end.date, slot.end.time, false),
                 description: slot.description,
                 relatedUserId: slot.relatedUser,
@@ -1239,7 +1261,6 @@ define(
             var notAllowedForPast = function ()
             {
               $rootScope.notifier.error($rootScope.ui.agenda.pastChanging);
-
               $scope.timeliner.refresh();
             };
 

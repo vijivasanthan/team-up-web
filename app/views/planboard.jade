@@ -75,17 +75,6 @@ div(ng-controller='timeline as taskPlanboard')
 					ng-options='r.uuid as r.name for r in relatedUsers',
 					ng-show='views.member')
 				
-				.form-elements-group(ng-show='browser.mobile')
-					label {{ui.planboard.from}}
-					.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
-						input(name='date-start', type='datetime',
-						ng-model='slot.start.datetime')
-					.control-group.dater-mobile(ng-show='views.group || views.member')
-						input(name='date-start',
-						type='datetime',
-						ng-model='slot.start.datetime',
-						disabled='')
-
 				.form-elements-group(ng-hide='browser.mobile')
 					label {{ui.planboard.from}}
 					.control-group.dater(ng-show='views.slot.add || views.slot.edit')
@@ -119,18 +108,30 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-model='slot.start.time',
 						disabled='')
 						i.icon-time
+					
+				.form-elements-group(ng-show='browser.mobile')
+					label {{ui.planboard.from}} 
+					.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
+						input.form-control.input-sm(name='date-start', type='datetime-local',
+							ng-model='slot.start.datetime')
+						
+					.form-group.dater-mobile(ng-show='views.group || views.member')
+						input.form-control.input-sm(name='date-start',
+							type='datetime-local',
+							ng-model='slot.start.datetime',
+							disabled='')
 			
 				.form-elements-group(ng-show='browser.mobile')
-					label {{ui.planboard.from}}
-					.control-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
-						input(name='date-start',
-						type='datetime',
-						ng-model='slot.end.datetime')
-					.control-group.dater-mobile(ng-show='views.group || views.member')
-						input(name='date-start',
-						type='datetime',
-						ng-model='slot.end.datetime',
-						disabled='')
+					label {{ui.planboard.till}}
+					.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit')
+						input.form-control.input-sm(name='date-start',
+							type='datetime-local',
+							ng-model='slot.end.datetime')
+					.form-group.dater-mobile(ng-show='views.group || views.member')
+						input.form-control.input-sm(name='date-start',
+							type='datetime-local',
+							ng-model='slot.end.datetime',
+							disabled='')
 				
 				.form-elements-group(ng-hide='browser.mobile')
 					label {{ui.planboard.till}}
