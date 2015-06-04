@@ -327,7 +327,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 						fieldset
 
-							.form-group.dater
+							.form-group.dater(ng-hide='browser.mobile')
 								label.control-label {{ui.planboard.from}}
 								.controls
 									input(name='date-start',
@@ -349,8 +349,24 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									data-minute-step="15",
 									data-arrow-behavior="picker")
 									i.icon-time
+									
+							.form-group.dater-mobile(ng-show='browser.mobile')
+								label.control-label {{ui.planboard.from}}
+								.controls
+									input.form-control.input-sm(
+									name='date-start', 
+									type='datetime-local', 
+									ng-model='task.start.datetime',
+									ng-change='newDate(task.start.datetime, true)')
+									
+							.form-group.dater-mobile(ng-show='browser.mobile')
+								label.control-label {{ui.planboard.till}} 
+								.controls
+									input.form-control.input-sm(name='date-end', 
+									type='datetime-local', 
+									ng-model='task.end.datetime')
 																		
-							.form-group.dater
+							.form-group.dater(ng-hide='browser.mobile')
 								label.control-label {{ui.planboard.till}}
 								.controls
 									input(name='date-end',

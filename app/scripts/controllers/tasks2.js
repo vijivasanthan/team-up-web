@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'tasks2Ctrl',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
-                  Teams, Clients, Dater)
+                  Teams, Clients, Dater, moment)
         {
           $rootScope.fixStyles();
 
@@ -144,11 +144,17 @@ define(
               client: task.relatedClientUuid,
               start: {
                 date: new Date(task.plannedStartVisitTime),
-                time: task.plannedStartVisitTime
+                time: task.plannedStartVisitTime,
+                datetime: convertDateTimeToLocal(
+                  moment(task.plannedStartVisitTime)
+                )
               },
               end: {
                 date: new Date(task.plannedEndVisitTime),
-                time: task.plannedEndVisitTime
+                time: task.plannedEndVisitTime,
+                datetime: convertDateTimeToLocal(
+                  moment(task.plannedEndVisitTime)
+                )
               },
               description: task.description
             };
@@ -164,8 +170,6 @@ define(
               .then(
               function (tasks)
               {
-                console.log('tasks.off', tasks);
-
                 $scope.tasks.mine = {
                   loading: false,
                   list: (angular.isDefined($scope.showAllTasks) && $scope.showAllTasks)
@@ -173,16 +177,6 @@ define(
                       : tasks['on'],
                   archieve: (tasks.off.length > 0)
                 };
-
-                //console.log('$scope.showAllTasks', $scope.showAllTasks);
-                //console.log('$scope.tasks.mine.archieve', $scope.tasks.mine.archieve);
-                //
-                //if((angular.isDefined($scope.showAllTasks) && $scope.showAllTasks)
-                //  && $scope.tasks.mine.archieve)
-                //{
-                //  $scope.tasks.mine.list.concat(tasks.off);
-                //  console.log('list ', $scope.tasks.mine.list);
-                //}
 
                 (callback && callback.call(this, tasks));
               }
@@ -229,32 +223,14 @@ define(
             }
           };
 
-          //$scope.$watch(
-          //  'showFinishedTasks',
-          //  function (toggle)
-          //  {
-          //    var myTasks = Store('app').get('myTasks2');
-          //
-          //    $scope.tasks.mine.list = (toggle) ? myTasks.on.concat(myTasks.off) : myTasks.on;
-          //  }
-          //);
-          //
-          //$scope.$watch(
-          //  'showAllTasks',
-          //  function (toggle)
-          //  {
-          //    var allTasks = Store('app').get('allTasks2');
-          //
-          //    if (toggle)
-          //    {
-          //      $scope.tasks.all.list = allTasks['on'].concat(allTasks['off']);
-          //    }
-          //    else
-          //    {
-          //      $scope.tasks.all.list = allTasks.on;
-          //    }
-          //  }
-          //);
+          var convertDateTimeToLocal = function (d)
+          {
+            var d1 = new Date(d);
+
+            d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+
+            return d1.toISOString().replace("Z", "");
+          };
 
           //date and time methods if a new task is creating
           if ($scope.views.newTask == true)
@@ -268,13 +244,17 @@ define(
               $scope.task.start = {};
               $scope.task.end = {};
             }
+
             $scope.task.start = {
               date: new Date(),
-              time: currentStartTime
+              time: currentStartTime,
+              datetime: updateMobileDateTime(moment().toDate(), 15)
             };
+
             $scope.task.end = {
               date: new Date(),
-              time: currentEndTime
+              time: currentEndTime,
+              datetime: updateMobileDateTime(moment().toDate(), 30)
             };
           }
 
@@ -292,14 +272,31 @@ define(
             return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
           }
 
+          function updateMobileDateTime(newDate, minutes)
+          {
+            var start = moment(newDate),
+                roundMinutes = (start.minute() % 15),
+                newEndDateTime = moment(start).subtract("minutes", roundMinutes).add("minutes", minutes);
+
+            return convertDateTimeToLocal(newEndDateTime);
+          }
+
           $scope.newTime = function (newTime)
           {
             $scope.task.end.time = updateTime(newTime, 15);
           };
 
-          $scope.newDate = function (newDate)
+          $scope.newDate = function (newDate, mobile)
           {
-            $scope.task.end.date = newDate;
+              if(mobile)
+              {
+                $scope.task.end.datetime = convertDateTimeToLocal(moment(newDate).add("minutes", 15));
+              }
+              else
+              {
+                $scope.task.end.date = newDate;
+              }
+
           };
 
           //$scope.$watch(function() {
@@ -545,12 +542,6 @@ define(
 
           Task.chains();
 
-
-          /**
-           * ******************************************************************************
-           */
-
-
             // Validation of the task form
           $scope.validateTaskForm = function (task)
           {
@@ -576,20 +567,20 @@ define(
             if (!$scope.taskForm.$valid)
             {
               $rootScope.notifier.error($rootScope.ui.task.taskFormValide);
-              return;
+              return false;
             }
 
+            var now = new Date().getTime();
+
             $scope.task.startTime = ($rootScope.browser.mobile) ?
-              new Date(task.start.date).getTime() :
+              moment(task.start.datetime).utc().valueOf() :
               Dater.convert.absolute(formatDateTime(task.start.date, 'dd-MM-yyyy'), formatDateTime(task.start.time, 'HH:mm'), false);
 
             $scope.task.endTime = ($rootScope.browser.mobile) ?
-              new Date(task.end.date).getTime() :
+              moment(task.end.datetime).utc().valueOf() :
               Dater.convert.absolute(formatDateTime(task.end.date, 'dd-MM-yyyy'), formatDateTime(task.end.time, 'HH:mm'), false);
 
-            // start time and end time should be in the future
-            // end time should later than start time
-            if ($scope.task.startTime <= Date.now().getTime() || $scope.task.endTime <= Date.now().getTime())
+            if ($scope.task.startTime <= now || $scope.task.endTime <= now)
             {
               $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
               return false;
@@ -607,8 +598,6 @@ define(
               return false;
             }
 
-            // description should not be empty
-
             return true;
           };
 
@@ -622,6 +611,13 @@ define(
             {
               return;
             }
+
+            //if($scope.task.startTime && $scope.task.endTime)
+            //{
+            //  $rootScope.notifier.error($scope.task.startTime + ' ' + $scope.task.endTime);
+            //
+            //  return;
+            //}
 
             var values = {
               uuid: (task.uuid) ? task.uuid : '',
