@@ -39,7 +39,11 @@ define(
           ).then(
             function (result)
             {
-              if (result.error)
+              if (_.isUndefined(result["voicemail-detection-menu"]))
+              {
+                $rootScope.notifier.error('De instellingen konden niet geladen worden.');
+              }
+              else if(result.error)
               {
                 console.log('Error by fetching team-telephone settings ->', result.error);
               }
