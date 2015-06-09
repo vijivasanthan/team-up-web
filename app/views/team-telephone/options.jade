@@ -48,33 +48,38 @@ section#dashboard
 									div.range
 										input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
 										output#range &nbsp; {{ options.scenarios.ringingTimeOut }} seconden &nbsp;
-								span.help-block(style='height: 14px; margin-bottom: 35px;')
+								span.help-block(style='height: 14px; margin-bottom: 10px;')
 									small
 										i
 											| Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cli&euml;nten kan langer zijn als er veel teamleden zijn aangemeld.
-
-
-
-						.form-group
-							label.control-label Persoonlijke voicemailpreventie
-							.controls
-								label.radio-inline
-									input(type="radio" ng-model='options.scenarios.voicemailDetection',
-									name="voicemail-detection-menu", ng-value='true')
-									| Aan
-								label.radio-inline
-									input(type="radio" ng-model='options.scenarios.voicemailDetection',
-									name="voicemail-detection-menu", ng-value='false')
-									| Uit
-								span.help-block(style='height: 14px; margin-bottom: 35px;')
+								span.help-block(style='height: 14px; margin-bottom: 10px;')
 									small
-										i
-											| Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.
-								span.help-block(style='height: 14px; margin-bottom: 50px;')
-									small
-										i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20 && !options.scenarios.voicemailDetection')
-											| Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen of om gebruik te maken van de persoonlijke voicemailpreventie. Het uitzetten van de persoonlijke voicemail (van de werktelefoon) kunt u regelen bij de telefoonprovider.
-						
+										i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
+											| Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.
+
+
+						//
+						//.form-group
+						//	label.control-label Persoonlijke voicemailpreventie
+						//	.controls
+						//		label.radio-inline
+						//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
+						//			name="voicemail-detection-menu", ng-value='true')
+						//			| Aan
+						//		label.radio-inline
+						//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
+						//			name="voicemail-detection-menu", ng-value='false')
+						//			| Uit
+						//		span.help-block(style='height: 14px; margin-bottom: 35px;')
+						//			small
+						//				i
+						//					| Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.
+						//
 						.form-actions
 							button.btn.btn-success(type='submit',
 								ng-click='options.save(options.scenarios)') {{ ui.order.confirmation }}
+							
+							//&& !options.scenarios.voicemailDetection
+							//Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat 
+							//alle teamleden hun persoonlijke voicemail uitschakelen of om gebruik te maken van de persoonlijke 
+							//voicemailpreventie. Het uitzetten van de persoonlijke voicemail (van de werktelefoon) kunt u regelen bij de telefoonprovider.

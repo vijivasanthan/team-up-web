@@ -92,7 +92,7 @@ define(
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
               "sms-on-missed-call": newOptions.sms,
               "sms-on-new-team-voicemail": newOptions.sms,
-              "voicemail-detection-menu": newOptions.voicemailDetection
+              "voicemail-detection-menu": false//newOptions.voicemailDetection
             }
           ).then(
             function (result)
