@@ -1,0 +1,26 @@
+/**
+BADGESSS
+**/
+.roundedPicxSmall, .roundedPicSmall{
+  .badge {
+    margin-top: 22px;
+    margin-left: 20px !important;
+    padding-top: 0 !important;
+    background-color: $white;
+    color: $turq;
+    padding: 2px 3px 3px 3px;
+    .glyphicon {
+      top: 3px;
+    }
+  }
+}
+
+.roundedPicSmall {
+  .badge {
+    margin-top: 32px;
+    margin-left: 30px !important;
+    .glyphicon {
+      left: 2px;
+    }
+  }
+}

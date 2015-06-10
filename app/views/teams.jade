@@ -155,6 +155,8 @@ aria-hidden='true')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
+									span.badge
+										i.glyphicon.glyphicon-earphone
 							td
 								a(href='#/profile/{{member.uuid|lowercase}}#profile',
 								ng-click='editProfile(member.uuid, current)') {{member.firstName}} {{member.lastName}}
