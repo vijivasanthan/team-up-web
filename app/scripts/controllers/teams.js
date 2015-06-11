@@ -9,6 +9,8 @@ define(
       function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
                 TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission)
       {
+        console.log('data', data);
+        
         $rootScope.fixStyles();
 
         //TODO get this from a service

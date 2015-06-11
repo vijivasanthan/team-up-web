@@ -155,7 +155,7 @@ aria-hidden='true')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
-									span.badge
+									span.badge(ng-show='member.states|stateReachable')
 										i.glyphicon.glyphicon-earphone
 							td
 								a(href='#/profile/{{member.uuid|lowercase}}#profile',

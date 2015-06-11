@@ -20,6 +20,23 @@ define(
       ]
     );
 
+    filters.filter(
+      'stateReachable',
+      [
+        function ()
+        {
+          return function (states)
+          {
+            var stateValues = _.pluck(states, 'value');
+
+            return (stateValues.indexOf('REACHABLE') >= 0)
+              ? true
+              : false;
+          }
+        }
+      ]
+    );
+
     // Determine the color of circle based on the state
     filters.filter(
       'stateColor',
