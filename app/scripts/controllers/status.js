@@ -94,6 +94,17 @@ define(['controllers/controllers'], function (controllers)
                       id
                   };
 
+                  if(currentMembers && currentMembers[id])
+                  {
+                    _member.name = currentMembers[id].firstName + ' ' + currentMembers[id].lastName;
+                    _member.states = currentMembers[id].states;
+                  }
+                  else
+                  {
+                    _member.name = id;
+                    _member.states = null;
+                  }
+
                   if (slots.length > 0)
                   {
                     if (!ordered.reachable)

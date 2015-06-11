@@ -87,7 +87,7 @@ block navbar
 							a#account(ng-click='nav("profile")')
 									.roundedPicxSmall(back-img = '{{app.resources.uuid | avatar:"team":"80" }}',
 									class='{{app.resources.states|stateColor}} profile-avatar')
-										span.badge
+										span.badge(ng-show='app.resources.states|stateReachable')
 											i.glyphicon.glyphicon-earphone
 									span#show-name {{app.resources.firstName}} {{app.resources.lastName}}
 						li(ng-hide='(app.resources.role === undefined)').navbar-btn
