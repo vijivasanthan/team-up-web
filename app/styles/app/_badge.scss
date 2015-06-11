@@ -3,14 +3,15 @@ BADGESSS
 **/
 .roundedPicxSmall, .roundedPicSmall{
   .badge {
-    margin-top: 22px;
-    margin-left: 20px !important;
+    margin-top: 23px;
+    margin-left: 23px !important;
     padding-top: 0 !important;
-    background-color: $white;
+    background-color: $brown;
     color: $turq;
     padding: 2px 3px 3px 3px;
     .glyphicon {
       top: 3px;
+      left: 1px;
     }
   }
 }
@@ -19,6 +20,7 @@ BADGESSS
   .badge {
     margin-top: 32px;
     margin-left: 30px !important;
+    background-color: $white;
     .glyphicon {
       left: 2px;
     }
