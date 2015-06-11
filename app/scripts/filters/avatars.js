@@ -30,8 +30,6 @@ define(
             var stateValues = _.pluck(states, 'value');
 
             return (stateValues.indexOf('REACHABLE') >= 0)
-              ? true
-              : false;
           }
         }
       ]
@@ -52,17 +50,13 @@ define(
             if(stateValues.indexOf('available') >= 0)
             {
               result = config.app.stateColors.availalbe;
-              if(stateValues.indexOf('on_the_phone') >= 0
-                || stateValues.indexOf('UNREACHABLE') >= 0
-                || stateValues.indexOf('NOT_REACHABLE') >= 0)
+              if(stateValues.indexOf('on_the_phone') >= 0)
               {
                 result = config.app.stateColors.busy;
               }
             }
             else if (stateValues.indexOf('unavailable') >= 0
-              || stateValues.indexOf('working') >= 0
-              || stateValues.indexOf('UNREACHABLE') >= 0
-              || stateValues.indexOf('NOT_REACHABLE') >= 0)
+              || stateValues.indexOf('working') >= 0)
             {
               result = config.app.stateColors.busy;
             }

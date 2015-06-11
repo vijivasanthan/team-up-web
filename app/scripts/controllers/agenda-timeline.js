@@ -14,6 +14,7 @@ define(
         '$timeout',
         '$window',
         'Slots',
+        'Profile',
         'Dater',
         'Sloter',
         'TeamUp',
@@ -21,7 +22,7 @@ define(
         'CurrentSelection',
         '$filter',
         'moment',
-        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots,
+        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Profile,
                   Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
         {
           // TODO: Define diff in the watcher maybe?
@@ -898,6 +899,17 @@ define(
             );
           };
 
+          /**
+           * Update reachability status logged user
+           * @param userName of the user
+           */
+          var updateLoggedUser = function(userName)
+          {
+            if(userName == $rootScope.app.resources.uuid)
+            {
+              Profile.fetchUserData(userName);
+            }
+          };
 
           /**
           * Add prefixed availability periods in agenda
@@ -937,6 +949,8 @@ define(
                 }
                 else
                 {
+                  updateLoggedUser($scope.timeline.user.id);
+
                   $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
                 }
 
@@ -1179,6 +1193,7 @@ define(
                       }
                       else
                       {
+                        updateLoggedUser($scope.timeline.user.id);
                         $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
                       }
 
@@ -1311,6 +1326,8 @@ define(
               ).then(
                 function (result)
                 {
+                  updateLoggedUser($scope.timeline.user.id);
+
                   callback(
                     result,
                     {
@@ -1331,6 +1348,7 @@ define(
               ).then(
                 function (result)
                 {
+                  updateLoggedUser($scope.timeline.user.id);
                   callback(
                     result,
                     {
@@ -1523,7 +1541,8 @@ define(
               };
 
               var now = Date.now().getTime(),
-                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id;
+                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
+                  changedEndDate = new Date(now - 10000);
 
               if ($scope.original.end.getTime() <= now && $scope.original.content.recursive == false)
               {
@@ -1539,7 +1558,7 @@ define(
                   $scope.original,
                   {
                     start: Math.abs(Math.floor(new Date($scope.original.start).getTime())),
-                    end: Math.abs(Math.floor(now)),
+                    end: Math.abs(Math.floor(changedEndDate)),
                     content: {
                       recursive: $scope.original.content.recursive,
                       state: $scope.original.content.state
@@ -1549,6 +1568,7 @@ define(
                 ).then(
                   function (result)
                   {
+                    updateLoggedUser(currentSlotUser);
                     successCallback(result)
                   }
                 );
@@ -1561,6 +1581,7 @@ define(
                   .then(
                   function (result)
                   {
+                    updateLoggedUser(currentSlotUser);
                     successCallback(result)
                   }
                 );
@@ -1605,9 +1626,6 @@ define(
                   $rootScope.statusBar.off();
 
                   $scope.data.aggs.wishes = wishes;
-
-                  console.log($scope.data);
-                  console.log($scope.data.aggs.wishes);
 
                   $scope.timeliner.render(
                     {

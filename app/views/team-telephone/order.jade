@@ -63,7 +63,9 @@ section
 									.dragIcon
 								td
 									.roundedPicSmall(class='{{member.states|stateColor}}',
-									back-img = '{{member.uuid | avatar:"team":"80" }}')
+										back-img = '{{member.uuid | avatar:"team":"80" }}')
+										span.badge(ng-show='member.states|stateReachable')
+											i.glyphicon.glyphicon-earphone
 								td
 									a(href='index.html#/profile/{{member.uuid}}#profile')
 										| {{member.firstName}} {{member.lastName}}
