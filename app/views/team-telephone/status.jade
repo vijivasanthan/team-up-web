@@ -10,7 +10,6 @@ section#dashboard
 				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 				ng-selected='current.group',
 				ng-change='getGroupReachability()')
-			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
 			include ../agenda/tabs
@@ -26,17 +25,13 @@ section#dashboard
 						//ng-selected='current.group',
 						//ng-change='getGroupReachability()',
 						//style='width: 160px;')
-						select(ng-model='current.division',
-						ng-options='division.id as division.label for division in divisions',
-						ng-selected='current.division',
-						ng-change='getDivisionReachability()',
-						ng-show='divisions.length > 0 && current.group != "all"',
-						style="margin-left: 15px; width:160px")
-				div(ng-show='loadingReachability')
+				div(
+				ng-show='teamMembers.length == 0')
 					hr
-					p Overzicht bereikbaarheid aan het laden...
+					p {{ ui.order.noMembers }}
 				section(ng-hide='loadingReachability')
-					div(ng-show='reachability.members.reachable.length > 0')
+					div(
+						ng-show='reachability.members.reachable.length > 0')
 						hr
 						ul.sa-setup
 							li.sa-truck
@@ -75,7 +70,7 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.possible')
-									span.sa-member-icon.roundedPicSmall(class='{{member.states|stateColor}}')(back-img='{{member.id | avatar:"team":"80"}}')
+									span.sa-member-icon.roundedPicSmall.sa-icon-reserve-noplanning(back-img='{{member.id | avatar:"team":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}

@@ -383,15 +383,22 @@ define(
               controller: 'status',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Teams',
-                  function (Teams)
-                  {
-                    removeActiveClass('.teamMenu');
+                data: function (TeamUp, Slots, $q, CurrentSelection)
+                {
+                  var teamId = CurrentSelection.getTeamId();
 
-                    return Teams.queryLocal();
-                  }
-                ]
+                  removeActiveClass('.teamMenu');
+
+                  return $q.all([
+                    TeamUp._('teamStatusQuery', {third: teamId}),
+                    Slots.MemberReachabilitiesByTeam(teamId, null)
+                  ]).then(function(result) {
+                    return {
+                      members: result[0],
+                      membersReachability: result[1]
+                    };
+                  });
+                }
               }
             })
 
