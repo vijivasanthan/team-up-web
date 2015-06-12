@@ -54,6 +54,8 @@ define(
                   sms: result["sms-on-missed-call"],
                   ringingTimeOut: result["ringing-timeout"]
                 };
+
+                vm.defaults = angular.copy(vm.scenarios);
                 vm.loadTeam = '';
               }
 
@@ -94,9 +96,9 @@ define(
             {second: vm.current},
             {
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
-              "sms-on-missed-call": newOptions.sms,
-              "sms-on-new-team-voicemail": newOptions.sms,
-              "voicemail-detection-menu": false//newOptions.voicemailDetection
+              "sms-on-missed-call": vm.defaults.sms,//newOptions.sms
+              "sms-on-new-team-voicemail": vm.defaults.sms,//newOptions.sms
+              "voicemail-detection-menu": vm.defaults.voicemailDetection//newOptions.voicemailDetection
             }
           ).then(
             function (result)
