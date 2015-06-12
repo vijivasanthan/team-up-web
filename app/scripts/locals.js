@@ -699,7 +699,8 @@ define(
           confirmation: 'Bevestig Keuze',
           randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
           loadTeam: 'Team laden...',
-          orderSaved: 'Volgorde opgeslagen'
+          orderSaved: 'Volgorde opgeslagen',
+          noMembers: 'Er zijn geen leden in dit team.'
         },
         logs: {
           loadLogs: 'Logs laden...',

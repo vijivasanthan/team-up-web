@@ -8,24 +8,24 @@ section
 		label.control-label Selecteer team
 		.controls
 			select(
-				ng-model='current.group',
+				ng-model='currentTeam',
 				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
-				ng-selected='current.group',
-				ng-change='getOrder()')
+				ng-selected='currentTeam',
+				ng-change='fetchOrder()')
 
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 			include ../agenda/tabs
 			
 		.tab-content
-			#order.tab-pane(class="{{(views.order==true) && 'active'}}")
-				div(ng-show='current.group === ""')
+			#order.tab-pane.active
+				div(ng-show='currentTeam === ""')
 					| Er is geen team geselecteerd
 				div(style='overflow: hidden;')
 					h3.pull-left
-						| {{current.group | getGroupNameById | toTitleCase}} 
+						| {{currentTeam | getGroupNameById | toTitleCase}} 
 						span(ng-show='load') {{load}}
-					div.btn-group.pull-right(ng-show='orderedMembers.length > 0')
+					div.btn-group.pull-right
 						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
 							input(type='radio',
 							ng-model='orderType',
@@ -39,12 +39,13 @@ section
 							ng-change='orderTypePreview()')
 							| {{ ui.order.randomOrder }}
 				hr
-				div(ng-show='orderedMembers.length > 0')
+				div
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
 						type='button', ng-click='confirmOrder()')
 							| {{ ui.order.confirmation }}
 					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
-					table.table.table-striped.orderTable(ng-show='orderType == "FIXED"')
+					p(ng-show='orderedMembers.length == 0 && orderType != "RANDOM"') {{ ui.order.noMembers }}
+					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead
 							tr
 								th
@@ -75,5 +76,5 @@ section
 					div(style='margin-top: 20px;')
 						//ul(ng-sortable="{animation:150}")
 						//	li(ng-repeat="item in items") {{item}}
-						button.btn.btn-info(type='button', ng-click='confirmOrder()')
+						button.btn.btn-info(type='button', ng-click='saveOrder()')
 							| {{ ui.order.confirmation }}

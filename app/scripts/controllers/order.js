@@ -6,53 +6,18 @@ define(
 
     controllers.controller(
       'order',
-      function ($rootScope, $scope, $location, Store, Teams, TeamUp, data, CurrentSelection)
+      function ($rootScope, $scope, Teams, TeamUp, data, CurrentSelection, $q)
       {
         $rootScope.fixStyles();
 
         var teamsLocal = Teams.queryLocal(),
-          view,
-          tempOrder = [],
-          showOrder = function (orderArray)
-          {
-            var members = teamsLocal.members[$scope.current.group];
-            var orderedMembers = [];
+            tempOrder = [];
 
-            _.each(members, function (member)
-            {
-              _.each(orderArray, function (uuid, key)
-              {
+        $scope.currentTeam = CurrentSelection.getTeamId();
 
-                if (member.uuid === uuid)
-                {
-                  if (member.phone)
-                  {
-                    $rootScope.parsePhoneNumber(member.phone);
+        $scope.orderType = data.teamOrder.sortBy;
 
-                    if ($rootScope.phoneNumberParsed.result === true)
-                    {
-                      member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
-                    }
-                  }
-
-                  member.originalPosition = key;
-                  orderedMembers[key] = member;
-                }
-
-              });
-            });
-
-            tempOrder = orderedMembers;
-            $scope.orderedMembers = orderedMembers;
-          };
-
-        $scope.current = {
-          group: CurrentSelection.getTeamId()
-        };
-
-        $scope.orderType = data.sortBy;
-
-        showOrder(data.order);
+        showOrder(data.teamOrder.order, data.teamMembers);
 
         $scope.groups = teamsLocal.teams;
 
@@ -62,42 +27,13 @@ define(
           draggable: 'tr'
         };
 
-        if (!$location.hash())
+        /**
+         * Fetch the order of a team,
+         * inclusive the personal data per member of the team
+         */
+        $scope.fetchOrder = function ()
         {
-          view = 'order';
-        }
-        else
-        {
-          view = $location.hash();
-        }
-
-        var setView = function (hash)
-        {
-          $scope.views = {
-            order: false
-          };
-
-          $scope.views[hash] = true;
-        };
-
-        $scope.setViewTo = function (hash)
-        {
-          $scope.$watch(
-            hash,
-            function ()
-            {
-              $location.hash(hash);
-
-              setView(hash);
-            }
-          );
-        };
-
-        setView(view);
-
-        $scope.getOrder = function ()
-        {
-          var groupID = $scope.current.group;
+          var groupID = $scope.currentTeam;
 
           $scope.load = $rootScope.ui.dashboard.load;
 
@@ -105,26 +41,35 @@ define(
 
           if (groupID !== '')
           {
-
             CurrentSelection.local = groupID;
 
-            TeamUp._('callOrderGet', {second: groupID})
-              .then(function (result)
-              {
-                $scope.orderType = result.sortBy;
+            var teamStatus = TeamUp._('teamStatusQuery', {third: groupID}),
+              teamOrder = TeamUp._('callOrderGet', {second: groupID});
 
-                showOrder(result.order);
+            $q.all([teamStatus, teamOrder]).then(
+              function(teamResult)
+              {
+                data.teamMembers = teamResult[0];
+                var teamOrder = teamResult[1];
+
+                showOrder(teamOrder.order, data.teamMembers);
+
+                $scope.orderType = teamOrder.sortBy;
                 $scope.load = '';
                 $rootScope.statusBar.off();
-              });
+              }
+            );
           }
         };
 
-        $scope.confirmOrder = function ()
+        /**
+         * Saving the order of team
+         */
+        $scope.saveOrder = function ()
         {
-          var groupID = $scope.current.group;
-          var orderArray = [];
-          var payload = {};
+          var groupID = $scope.currentTeam,
+              orderArray = [],
+              payload = {};
 
           $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
@@ -138,18 +83,52 @@ define(
           payload.order = orderArray;
 
           TeamUp._('callOrderSave',
-            {second: groupID}, payload)
-            .then
-          (
-            function (result)
+            {second: groupID},
+            payload)
+            .then(function (teamOrder)
             {
+              showOrder(teamOrder.order, data.teamMembers);
               $rootScope.notifier.success($rootScope.ui.order.orderSaved);
               $rootScope.statusBar.off();
-              $scope.orderType = result.sortBy;
-              showOrder(result.order);
-            }
-          );
+            });
+        };
 
+        /**
+         * Order of the members, combined with their user data
+         * @param orderArray the order in which the members are placed
+         * @param teamMembers all the personaldata about the members in the current team
+         */
+        function showOrder(orderArray, teamMembers)
+        {
+          var members = teamMembers;
+          var orderedMembers = [];
+
+          _.each(members, function (member)
+          {
+            _.each(orderArray, function (uuid, key)
+            {
+
+              if (member.uuid === uuid)
+              {
+                if (member.phone)
+                {
+                  $rootScope.parsePhoneNumber(member.phone);
+
+                  if ($rootScope.phoneNumberParsed.result === true)
+                  {
+                    member.phoneE164 = $rootScope.phoneNumberParsed.all.formatting.e164;
+                  }
+                }
+
+                member.originalPosition = key;
+                orderedMembers[key] = member;
+              }
+
+            });
+          });
+
+          tempOrder = orderedMembers;
+          $scope.orderedMembers = orderedMembers;
         };
 
       }

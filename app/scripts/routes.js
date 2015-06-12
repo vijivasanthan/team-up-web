@@ -401,14 +401,22 @@ define(
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
               resolve: {
-                data: function(TeamUp, CurrentSelection)
+                data: function(TeamUp, CurrentSelection, $q)
                 {
                   removeActiveClass('.teamMenu');
 
-                  return TeamUp._('callOrderGet', {second: CurrentSelection.getTeamId()})
-                    .then(function (result) {
-                        return result;
-                      }
+                  var teamId = CurrentSelection.getTeamId(),
+                      teamStatus = TeamUp._('teamStatusQuery', {third: teamId}),
+                      teamOrder = TeamUp._('callOrderGet', {second: teamId});
+
+                  return $q.all([teamStatus, teamOrder]).then(
+                    function(teamResult)
+                    {
+                      return {
+                        teamMembers: teamResult[0],
+                        teamOrder: teamResult[1]
+                      };
+                    }
                   );
                 }
               },
