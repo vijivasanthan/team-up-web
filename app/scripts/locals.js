@@ -709,7 +709,8 @@ define(
             received: 'Inkomend',
             finished: 'Afgerond',
             missed: 'Gemist',
-            delivered: 'Ontvangen'
+            delivered: 'Ontvangen',
+            error: 'Fout'
           }
         },
         validation: {

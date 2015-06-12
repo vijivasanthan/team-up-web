@@ -211,6 +211,9 @@ define(
               case 'MISSED':
                 translatedStatus = $rootScope.ui.logs.status.missed;
                 break;
+              case 'ERROR':
+                translatedStatus = $rootScope.ui.logs.status.error;
+                break;
               default:
                 console.log("the status of the log isn't found-> ", status);
             }
