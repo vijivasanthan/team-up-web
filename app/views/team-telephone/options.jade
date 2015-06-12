@@ -48,11 +48,11 @@ section#dashboard
 									div.range
 										input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
 										output#range &nbsp; {{ options.scenarios.ringingTimeOut }} seconden &nbsp;
-								span.help-block(style='height: 14px; margin-bottom: 10px;')
+								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 									small
 										i
 											| Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cli&euml;nten kan langer zijn als er veel teamleden zijn aangemeld.
-								span.help-block(style='height: 14px; margin-bottom: 10px;')
+								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 									small
 										i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
 											| Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.
