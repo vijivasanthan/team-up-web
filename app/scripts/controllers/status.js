@@ -11,7 +11,6 @@ define(['controllers/controllers'], function (controllers)
         $rootScope.fixStyles();
 
         var dataAllTeams = Teams.queryLocal(),
-          teams = dataAllTeams.teams,
           members = _.flatten(_.values(dataAllTeams.members)), //merge members from all teams together
           everyoneId = 'all';
 
@@ -21,13 +20,10 @@ define(['controllers/controllers'], function (controllers)
         //Add a all teams option to the selector
         if($rootScope.app.resources.role == 1)
         {
-          teams.unshift({
-            'name': $rootScope.ui.dashboard.everyone,
-            'uuid': everyoneId
-          });
+          dataAllTeams.teams = addTeamAll(dataAllTeams.teams);
         }
 
-        $scope.groups = teams;
+        $scope.groups = dataAllTeams.teams;
 
         $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
 
@@ -58,9 +54,14 @@ define(['controllers/controllers'], function (controllers)
 
           if ($scope.current.group == everyoneId)
           {
-            Slots.getAllMemberReachabilities(dataAllTeams.teams)
+            var teams = angular.copy(dataAllTeams.teams);
+            teams.splice(0 , 1);
+
+            Slots.getAllMemberReachabilities(teams)
               .then(function(result)
               {
+                $scope.teamMembers = result.members;
+
                 getReachability(result, members);
               });
           }
@@ -219,6 +220,21 @@ define(['controllers/controllers'], function (controllers)
           });
 
           return newMembers;
+        }
+
+        /**
+         * Add option AllTeams
+         * @param teams All teams
+         * @returns {*} teams including the team 'All'
+         */
+        function addTeamAll(teams)
+        {
+          teams.unshift({
+            'name': $rootScope.ui.dashboard.everyone,
+            'uuid': everyoneId
+          });
+
+          return teams;
         }
       }
   );
