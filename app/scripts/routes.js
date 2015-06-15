@@ -249,14 +249,12 @@ define(
                 data: function($route, Slots, Storage, Dater, Store, Teams,
                                $q, $rootScope, $location, CurrentSelection)
                 {
+                  //remove active class TODO create a directive to solve this bug
+                  removeActiveClass('.teamMenu');
+
                   var periods = Store('app').get('periods'),
-                      groups = Store('app').get('teams'),
                       groupId = CurrentSelection.getTeamId(),
-                      userId = $route.current.params.userId,
-                      redirectLocationLoggedUser = function()
-                      {
-                        $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-                      };
+                      userId = $route.current.params.userId;
 
                   //Check if there is a userId in the url
                   if(_.isUndefined(userId))
@@ -288,11 +286,27 @@ define(
                     groupId = currentTeamsRouteUser[0].uuid;
                   }
 
-                  //remove active class TODO create a directive to solve this bug
-                  removeActiveClass('.teamMenu');
+                  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
+                    ? Teams.queryLocal()
+                    : Teams.query(false, $route.current.params);
+                  var currentUser = null;
 
-                  var deferred = $q.defer();
-                  var getAllSlots = function(userId)
+                  return $q.when(teamsMembers)
+                    .then(function(teamData)
+                    {
+                      currentUser = _.findWhere(teamData.members[groupId], {uuid: userId});
+                      return getAllSlots(currentUser.uuid);
+                    })
+                    .then(function(timelineData)
+                    {
+                      return ({
+                        timelineData: timelineData,
+                        userData: currentUser
+                      });
+                    }
+                  );
+
+                  function getAllSlots(userId)
                   {
                     return Slots.all({
                       groupId: groupId,
@@ -311,24 +325,12 @@ define(
                       },
                       user: userId
                     });
+                  }
+
+                  function redirectLocationLoggedUser()
+                  {
+                    $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
                   };
-
-                  //TODO add Teams.query if the backend is faster
-                  var teamData = Teams.queryLocal(),
-                      currentUser = _.findWhere(teamData.members[groupId], {uuid: userId});
-
-                  getAllSlots(currentUser.uuid)
-                    .then(
-                    function(timelineData)
-                    {
-                      deferred.resolve({
-                        timelineData: timelineData,
-                        userData: currentUser
-                      });
-                    }
-                  );
-
-                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
