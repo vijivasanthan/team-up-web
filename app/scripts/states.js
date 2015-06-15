@@ -211,7 +211,7 @@ define(
 
               //profile tab links to the logged user profile
               case 'profile':
-                $location.path('/profile/'+ $rootScope.app.resources.uuid).search({local: 'true'}).hash('profile');
+                $location.path('/profile/'+ $rootScope.app.resources.uuid).search({}).hash('profile');
                 break;
 
               case 'logout':

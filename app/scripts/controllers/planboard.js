@@ -9,6 +9,7 @@ define(
         '$rootScope',
         '$scope',
         '$location',
+        '$filter',
         'Dater',
         'Store',
         'Teams',
@@ -17,7 +18,8 @@ define(
         'Session',
         'CurrentSelection',
         'moment',
-        function ($rootScope, $scope, $location, Dater, Store, Teams, Clients, TeamUp, Session, CurrentSelection, moment)
+        function ($rootScope, $scope, $location, $filter, Dater, Store,
+                  Teams, Clients, TeamUp, Session, CurrentSelection, moment)
         {
           var params = $location.search();
 
@@ -81,49 +83,10 @@ define(
 
               $scope.data.teams.members[team.uuid] = [];
 
-              if (members && members.length > 0)
-              {
-                //TODO remove dirty fix
-                //if($rootScope.app.resources.role > 1)
-                //{
-                //  members = _.where(
-                //      members,
-                //      {uuid: $rootScope.app.resources.uuid}
-                //      );
-                //}
-
-                angular.forEach(
-                  members,
-                  function (member)
-                  {
-                    var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
-                      'style="float: left; background-image: url(' +
-                      config.app.host +
-                      config.app.namespace +
-                      '/team/member/' +
-                      member.uuid +
-                      '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
-                      Session.get() +
-                      ');" memberId="' +
-                      member.uuid +
-                      '"></div>';
-
-                    var name = avatar +
-                      '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
-                      member.firstName +
-                      ' ' +
-                      member.lastName +
-                      '</div>';
-
-                    $scope.data.teams.members[team.uuid].push(
-                      {
-                        'head': name,
-                        'memId': member.uuid
-                      }
-                    );
-                  }
-                );
-              }
+              //if (members && members.length > 0)
+              //{
+              //  addMembersToTimeline(team.uuid, members);
+              //}
             }
           );
 
@@ -212,17 +175,33 @@ define(
 
           var loadData = function(periods)
           {
+            $scope.data.section = $scope.section;
+
             if ($scope.section == 'teams')
             {
-              $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+              $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
+              $scope.load = true;
+
+              TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
+                .then(function(members) {
+                  addMembersToTimeline($scope.currentTeam, members)
+                  $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+
+                  setTasks(periods);
+
+                  $rootScope.statusBar.off();
+                  $scope.load = false;
+                });
             }
             else if ($scope.section == 'clients')
             {
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+              setTasks(periods);
             }
+          };
 
-            $scope.data.section = $scope.section;
-
+          function setTasks(periods)
+          {
             // try to loading the slots from here
             // TODO: Find a better way of handling this!
             var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
@@ -301,7 +280,7 @@ define(
                   storeTask(tasks, startTime, endTime)
                 });
             }
-          };
+          }
 
           function setView(hash)
           {
@@ -507,6 +486,58 @@ define(
             $scope.resetInlineForms();
             $rootScope.$broadcast('resetTaskTimeline');
           };
+
+          /**
+           * Create the members spots for sticking them to the timeline
+           * @param teamId the current teamId of the members
+           * @param members the members of the team
+           */
+          function addMembersToTimeline(teamId, members)
+          {
+            angular.forEach(
+              members,
+              function (member)
+              {
+                var avatarColorClass = $filter('stateColor')(member.states),
+                  memberReachable = $filter('stateReachable')(member.states);
+
+                var avatar = '<div class="task-planboard roundedPicSmall ' + avatarColorClass +
+                  '" ' +
+                  'style="float: left; background-image: url(' +
+                  config.app.host +
+                  config.app.namespace +
+                  '/team/member/' +
+                  member.uuid +
+                  '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
+                  Session.get() +
+                  ');" memberId="' +
+                  member.uuid +
+                  '">';
+
+                //Check if member is reachable
+                if(memberReachable)
+                {
+                  avatar += '<span class="badge"><i class="glyphicon glyphicon-earphone"></i></span>';
+                }
+
+                avatar += '</div>';
+
+                var name = avatar +
+                  '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                  member.firstName +
+                  ' ' +
+                  member.lastName +
+                  '</div>';
+
+                $scope.data.teams.members[teamId].push(
+                  {
+                    'head': name,
+                    'memId': member.uuid
+                  }
+                );
+              }
+            );
+          }
 
           //check if there are already tasks on the dates of the uploaded sheet
           //function deleteExistingTasksOnSheetDate(tasks)

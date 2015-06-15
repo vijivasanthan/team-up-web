@@ -269,20 +269,19 @@ div(ng-controller='timeline as taskPlanboard')
 									i.glyphicon.glyphicon-arrow-right
 						//p {{ data.teams.members[currentTeam].length }}
 					hr
-
-					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length')
+					
+					#timeline(ng-hide='section == "teams" && ! data.teams.members[currentTeam].length')
+						//include planboard/time-toolbar.jade
+						#mainTimeline(set-position-slot-form)
+					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length && ! load')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
-								i  {{ ui.planboard.noMembers }}
-								
+							i  {{ ui.planboard.noMembers }}
+
 					div.alert.alert-warning(ng-show='section == "clients" && ! data.clients.members[currentClientGroup].length')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.planboard.noClients }}
-					
-					#timeline
-						//include planboard/time-toolbar.jade
-						#mainTimeline(set-position-slot-form)
 					hr
 					p
 						small.pull-left
