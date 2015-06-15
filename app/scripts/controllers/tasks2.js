@@ -276,7 +276,7 @@ define(
           {
             var start = moment(newDate),
                 roundMinutes = (start.minute() % 15),
-                newEndDateTime = moment(start).subtract("minutes", roundMinutes).add("minutes", minutes);
+                newEndDateTime = moment(start).subtract(roundMinutes, "minutes").add(minutes, "minutes");
 
             return convertDateTimeToLocal(newEndDateTime);
           }
@@ -290,7 +290,7 @@ define(
           {
               if(mobile)
               {
-                $scope.task.end.datetime = convertDateTimeToLocal(moment(newDate).add("minutes", 15));
+                $scope.task.end.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
               }
               else
               {
