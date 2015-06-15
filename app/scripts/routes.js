@@ -256,50 +256,31 @@ define(
                       groupId = CurrentSelection.getTeamId(),
                       userId = $route.current.params.userId;
 
-                  //Check if there is a userId in the url
-                  if(_.isUndefined(userId))
+                  //Check the possiblities of the user by role
+                  if(! checkUserId())
                   {
                     redirectLocationLoggedUser();
-                    return false;
-                  }
-
-                  //Get the teams of the userId in url
-                  var currentTeamsRouteUser = $rootScope.getTeamsofMembers(userId);
-
-                  //check if userId belongs to the same team as the logged user (teammember role only)
-                  if(! currentTeamsRouteUser.length)
-                  {
-                    redirectLocationLoggedUser();
-                    return false;
-                  }
-                  else if($rootScope.app.resources.role > 1)
-                  {
-                    var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
-
-                    if(_.isEmpty(userTeam))
-                    {
-                      redirectLocationLoggedUser();
-                    }
-                  }
-                  else
-                  {
-                    groupId = currentTeamsRouteUser[0].uuid;
                   }
 
                   var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
                     ? Teams.queryLocal()
                     : Teams.query(false, $route.current.params);
                   var currentUser = null;
+                  var teamsMembersData = null;
 
                   return $q.when(teamsMembers)
                     .then(function(teamData)
                     {
+                      teamsMembersData = teamData;
                       currentUser = _.findWhere(teamData.members[groupId], {uuid: userId});
-                      return getAllSlots(currentUser.uuid);
+                      return getAllSlots(
+                        (currentUser && currentUser.uuid) || $rootScope.app.resources.uuid
+                      );
                     })
                     .then(function(timelineData)
                     {
                       return ({
+                        teamsMembers: teamsMembersData,
                         timelineData: timelineData,
                         userData: currentUser
                       });
@@ -327,6 +308,47 @@ define(
                     });
                   }
 
+                  /**
+                   *
+                   * @returns {boolean}
+                   */
+                  function checkUserId()
+                  {
+                    var userAllow = true;
+
+                    if(_.isUndefined(userId))
+                    {
+                      userAllow = false;
+                    }
+
+                    //Get the teams of the userId in url
+                    var currentTeamsRouteUser = $rootScope.getTeamsofMembers(userId);
+
+                    //check if userId belongs to the same team as the logged user (teammember role only)
+                    if(! currentTeamsRouteUser.length)
+                    {
+                      userAllow = false;
+                    }
+                    else if($rootScope.app.resources.role > 1)
+                    {
+                      var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
+
+                      if(_.isEmpty(userTeam))
+                      {
+                        userAllow = false;
+                      }
+                    }
+                    else
+                    {
+                      groupId = currentTeamsRouteUser[0].uuid;
+                    }
+
+                    return userAllow;
+                  }
+
+                  /**
+                   * redirect to the timeline of the logged user
+                   */
                   function redirectLocationLoggedUser()
                   {
                     $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
