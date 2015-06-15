@@ -83,10 +83,10 @@ define(
 
               $scope.data.teams.members[team.uuid] = [];
 
-              //if (members && members.length > 0)
-              //{
-              //  addMembersToTimeline(team.uuid, members);
-              //}
+              if (members && members.length > 0)
+              {
+                getMemberSpots(team.uuid, members);
+              }
             }
           );
 
@@ -157,7 +157,6 @@ define(
                 loadData();
                 break;
             }
-
           }
 
           // Change a time-slot
@@ -175,6 +174,9 @@ define(
 
           var loadData = function(periods)
           {
+            var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
+              endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
+
             $scope.data.section = $scope.section;
 
             if ($scope.section == 'teams')
@@ -182,12 +184,18 @@ define(
               $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
               $scope.load = true;
 
+              $scope.data[$scope.section].members[$scope.currentTeam] = [];
+
               TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
                 .then(function(members) {
-                  addMembersToTimeline($scope.currentTeam, members)
+                  getMemberSpots($scope.currentTeam, members);
                   $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
 
-                  setTasks(periods);
+                  return getTaskProvider('teamTaskQuery', $scope.currentTeam, startTime, endTime);
+                })
+                .then(function(tasks) {
+                  $location.search({uuid: $scope.currentTeam}).hash('teams');
+                  storeTask(tasks, startTime, endTime, periods);
 
                   $rootScope.statusBar.off();
                   $scope.load = false;
@@ -195,92 +203,72 @@ define(
             }
             else if ($scope.section == 'clients')
             {
+              $rootScope.statusBar.display($rootScope.ui.teamup.loadClients);
+              $scope.load = true;
+
               $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
-              setTasks(periods);
+
+              getTaskProvider('clientGroupTasksQuery', $scope.currentClientGroup, startTime, endTime)
+                .then(function(tasks){
+                  $location.search({uuid: $scope.currentClientGroup}).hash('clients');
+                  storeTask(tasks, startTime, endTime, periods)
+
+                  $rootScope.statusBar.off();
+                  $scope.load = false;
+                });
             }
           };
 
-          function setTasks(periods)
+          function getTaskProvider(query, sectionId, startTime, endTime)
           {
-            // try to loading the slots from here
-            // TODO: Find a better way of handling this!
-            var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
-              endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
-
-            var storeTask = function (tasks, startTime, endTime)
-            {
-              // clear the array to keep tasks sync with sever side after changing
-              $scope.data[$scope.section].tasks = [];
-
-              angular.forEach(
-                tasks,
-                function (task)
-                {
-                  if (task != null)
-                  {
-                    var memberId = '';
-
-                    if ($scope.section == 'teams')
-                    {
-                      memberId = task.assignedTeamMemberUuid;
-                    }
-
-                    if ($scope.section == 'clients')
-                    {
-                      memberId = task.relatedClientUuid;
-                    }
-
-                    if (typeof $scope.data[$scope.section].tasks[memberId] == 'undefined')
-                    {
-                      $scope.data[$scope.section].tasks[memberId] = [];
-                    }
-
-                    $scope.data[$scope.section].tasks[memberId].push(task);
-                  }
-                }
-              );
-
-              $rootScope.$broadcast(
-                'timelinerTasks',
-                (periods) ? periods : {start: startTime, end: endTime}
-              );
-            };
-
-            if ($scope.data.section == 'teams')
-            {
-              $location.search({uuid: $scope.currentTeam}).hash('teams');
-
-              TeamUp._(
-                'teamTaskQuery',
-                {
-                  second: $scope.currentTeam,
-                  from: startTime,
-                  to: endTime
-                }
-              ).then(
-                function (tasks)
-                {
-                  storeTask(tasks, startTime, endTime)
-                }
-              );
-            }
-            else if ($scope.data.section == 'clients')
-            {
-              $location.search({uuid: $scope.currentClientGroup}).hash('clients');
-
-              TeamUp._(
-                'clientGroupTasksQuery',
-                {
-                  second: $scope.currentClientGroup,
-                  from: startTime,
-                  to: endTime
-                }
-              ).then(function (tasks)
-                {
-                  storeTask(tasks, startTime, endTime)
-                });
-            }
+            return TeamUp._(
+              query,
+              {
+                second: sectionId,
+                from: startTime,
+                to: endTime
+              }
+            );
           }
+
+          var storeTask = function (tasks, startTime, endTime, periods)
+          {
+            // clear the array to keep tasks sync with sever side after changing
+            $scope.data[$scope.section].tasks = [];
+
+            angular.forEach(
+              tasks,
+              function (task)
+              {
+                if (task != null)
+                {
+                  var memberId = '';
+
+                  if ($scope.section == 'teams')
+                  {
+                    memberId = task.assignedTeamMemberUuid;
+                  }
+
+                  if ($scope.section == 'clients')
+                  {
+                    memberId = task.relatedClientUuid;
+                  }
+
+                  if (typeof $scope.data[$scope.section].tasks[memberId] == 'undefined')
+                  {
+                    $scope.data[$scope.section].tasks[memberId] = [];
+                  }
+
+                  $scope.data[$scope.section].tasks[memberId].push(task);
+                }
+              }
+            );
+
+            $rootScope.$broadcast(
+              'timelinerTasks',
+              (periods) ? periods : {start: startTime, end: endTime}
+            );
+          };
 
           function setView(hash)
           {
@@ -492,7 +480,7 @@ define(
            * @param teamId the current teamId of the members
            * @param members the members of the team
            */
-          function addMembersToTimeline(teamId, members)
+          function getMemberSpots(teamId, members)
           {
             angular.forEach(
               members,
@@ -538,35 +526,6 @@ define(
               }
             );
           }
-
-          //check if there are already tasks on the dates of the uploaded sheet
-          //function deleteExistingTasksOnSheetDate(tasks)
-          //{
-          //
-          //
-          //
-          //  angular.forEach(tasks, function (task)
-          //  {
-          //    tasksByWeek.push(TeamUp._(
-          //        'taskDelete',
-          //        {second: task.uuid},
-          //        task
-          //      ).then(
-          //        function (result)
-          //        {
-          //          if (result.error)
-          //          {
-          //            console.log('failed ', task);
-          //          }
-          //
-          //          return result;
-          //        }
-          //      )
-          //    );
-          //  });
-          //
-          //  return $q.all(tasksByWeek);
-          //}
         }
       ]
     );

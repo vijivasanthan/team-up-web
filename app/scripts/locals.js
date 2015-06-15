@@ -545,6 +545,7 @@ define(
           searchMembers: 'Zoek leden...',
           editClient: 'Bewerk cliënt',
           loadingNumber: 'Teamtelefoonnummer aan het laden...',
+          loadClients: 'Cliënten laden...',
           birthdayError: 'Fout in de geboortedatum.',
           map: 'kaart',
           saveContacts: 'Contactpersonen opslaan',

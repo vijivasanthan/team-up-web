@@ -270,7 +270,7 @@ div(ng-controller='timeline as taskPlanboard')
 						//p {{ data.teams.members[currentTeam].length }}
 					hr
 					
-					#timeline(ng-hide='section == "teams" && ! data.teams.members[currentTeam].length')
+					#timeline
 						//include planboard/time-toolbar.jade
 						#mainTimeline(set-position-slot-form)
 					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length && ! load')
