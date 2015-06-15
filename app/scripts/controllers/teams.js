@@ -7,10 +7,8 @@ define(
     controllers.controller(
       'teamCtrl',
       function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission)
+                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission, currentTeam)
       {
-        console.log('data', data);
-        
         $rootScope.fixStyles();
 
         //TODO get this from a service
@@ -18,6 +16,8 @@ define(
 
         $scope.members = data.members;
         $scope.teams = data.teams;
+
+        $scope.members[CurrentSelection.getTeamId()] = currentTeam;
 
         var params = $location.search();
 
@@ -72,40 +72,44 @@ define(
 
         var setTeamView = function (id)
         {
-          //$scope.team = _.findWhere(data.teams, {uuid: id});
-
-          $scope.members = data.members[id];
-
-          angular.forEach(
-            $scope.members,
-            function (member)
+          TeamUp._('teamStatusQuery', {third: id})
+            .then(function(members)
             {
-              //check if the state of the logged user is equal
-              $rootScope.checkUpdatedStatesLoggedUser(member);
+              data.members[id] = members;
+
+              $scope.members = members;
 
               angular.forEach(
-                member.states,
-                function (state, i)
+                $scope.members,
+                function (member)
                 {
-                  if (state.name == 'Location')
-                  {
-                    state.value_rscoded = 'loading address';
-                    if (state.value && member.address && member.address.street)
+                  //check if the state of the logged user is equal
+                  $rootScope.checkUpdatedStatesLoggedUser(member);
+
+                  angular.forEach(
+                    member.states,
+                    function (state, i)
                     {
-                      var coordinates = state.value.split(','),
-                        latitude = parseFloat(coordinates[0]),
-                        longitude = parseFloat(coordinates[1]);
+                      if (state.name == 'Location')
+                      {
+                        state.value_rscoded = 'loading address';
+                        if (state.value && member.address && member.address.street)
+                        {
+                          var coordinates = state.value.split(','),
+                            latitude = parseFloat(coordinates[0]),
+                            longitude = parseFloat(coordinates[1]);
+                        }
+                        else
+                        {
+                          //remove state location if there is no address available on the given coordinates
+                          member.states.splice(i, 1);
+                        }
+                      }
                     }
-                    else
-                    {
-                      //remove state location if there is no address available on the given coordinates
-                      member.states.splice(i, 1);
-                    }
-                  }
+                  );
                 }
               );
-            }
-          );
+            });
         };
 
         var uuid,
@@ -342,6 +346,7 @@ define(
                                   $location.search(),
                                   function ()
                                   {
+                                    CurrentSelection.local = team.uuid;
                                     $location.search({uuid: team.uuid});
                                     $scope.setViewTo('team');
                                   }

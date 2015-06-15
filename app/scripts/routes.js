@@ -116,9 +116,19 @@ define(
                       $rootScope.startVideoCall(null, $route.current.params.video);
                     }
 
+
                     return ($route.current.params.local && $route.current.params.local == 'true')
                       ? Teams.queryLocal()
                       : Teams.query(false, $route.current.params);
+                  }
+                ],
+                currentTeam: [
+                  'TeamUp', 'CurrentSelection',
+                  function (TeamUp, CurrentSelection)
+                  {
+                    var teamId = CurrentSelection.getTeamId();
+
+                    return TeamUp._('teamStatusQuery', {third: teamId});
                   }
                 ]
               }
