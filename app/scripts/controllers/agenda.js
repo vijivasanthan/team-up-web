@@ -33,8 +33,6 @@ define(
 
           $scope.data = data.timelineData;
 
-          var groups = Store('app').get('teams');
-
           $scope.current = {
             layouts: {
               user: true,
@@ -153,7 +151,7 @@ define(
 
           });
 
-          $scope.groups = groups;
+          $scope.groups = data.teamsMembers.teams;
 
           $scope.divisions = $scope.timeline.config.divisions;
 

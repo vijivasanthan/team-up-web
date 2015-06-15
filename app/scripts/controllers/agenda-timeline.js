@@ -503,7 +503,6 @@ define(
            */
           var groupSlots = function(periods)
           {
-            var deferred = $q.defer();
             var aggs = Slots.aggs({
               id: $scope.timeline.current.group,
               start: periods.start,
@@ -518,15 +517,13 @@ define(
                 end: $scope.data.periods.end / 1000
               });
 
-            $q.all([aggs, wishes])
+            return $q.all([aggs, wishes])
               .then(
-                function(data)
-                {
-                  deferred.resolve({aggs: data[0], wishes: data[1]});
-                }
+              function(data)
+              {
+                return ({aggs: data[0], wishes: data[1]});
+              }
             );
-
-            return deferred.promise;
           };
 
           /**
