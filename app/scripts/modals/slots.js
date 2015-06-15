@@ -554,8 +554,6 @@ define(['services/services', 'config'],
                 });
 
                 callbackSuccess(success);
-                //Load new teamData and save it locally
-                Teams.query();
               });
             }
           }
