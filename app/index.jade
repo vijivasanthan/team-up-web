@@ -2,12 +2,13 @@ extends layout
 
 // TODO: Fix icon locations
 block icons
-	link(rel='icon', ng-href='favicon_{{ config.app.profileName.toLowerCase() }}_16x16.ico')
+	link(rel='apple-touch-icon', sizes="72x72" ng-href='apple-touch-icon_{{ config.app.profileName.toLowerCase() }}_72x72.png')
+	link(rel='apple-touch-icon', ng-href='apple-touch-icon_{{ config.app.profileName.toLowerCase() }}_57x57.png')
 	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_64x64.png" sizes="64x64")
 	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_32x32.png" sizes="32x32")
 	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_16x16.png" sizes="16x16")
-		
-	link(rel='apple-touch-icon', ng-href='apple-touch-icon_{{ config.app.profileName.toLowerCase() }}.png')
+	link(rel='icon', ng-href='favicon_{{ config.app.profileName.toLowerCase() }}_16x16.ico')
+	
 
 
 // Not-used at the moment
