@@ -60,6 +60,19 @@ define(
               test: 'test',
               members: {
                 all: 123
+              },
+              membersReachability: {
+                "asilva": [],
+                "jlima": [
+                  {
+                    "ref": 41,
+                    "start": 1434319200,
+                    "state": "com.ask-cs.State.Available",
+                    "end": 1434495600
+                  }
+                ],
+                "henkie": [],
+                "cdinator": []
               }
             };
             rootScope.fixStyles = function ()
@@ -153,8 +166,6 @@ define(
         };
 
         //first flush the slots call on the run, before firing a new new call
-        $httpBackend.expectGET(url).respond(response);
-        $httpBackend.flush();
 
         $httpBackend.expectGET(url).respond(response);
 
@@ -165,13 +176,6 @@ define(
               finalResult = result.members;
             }
           );
-        //scope.getGroupReachability()
-        //  .then(
-        //    function(response)
-        //    {
-        //      finalResult = response.members;
-        //    }
-        //  );
 
         $httpBackend.flush();
         expect(finalResult).toEqual(response);

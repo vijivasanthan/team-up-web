@@ -39,6 +39,7 @@ define(
           $httpBackend,
           $location,
           data,
+          currentTeam,
           teamsService,
           currentSelectionService,
           Store,
@@ -195,6 +196,8 @@ define(
               ]
             };
 
+            currentTeam = data.members[0];
+
             rootScope = {
               checkUpdatedStatesLoggedUser: function(member)
               {
@@ -260,6 +263,7 @@ define(
             teamsCtrl = $controller('teamCtrl', {
               $location: $location,
               data: data,
+              currentTeam: currentTeam,
               Teams: teamsService,
               CurrentSelection: currentSelectionService,
               Store: Store,
@@ -305,6 +309,8 @@ define(
           }
         ]);
 
+        getCurrentTeamMembers();
+
         $httpBackend.expectGET(testConfig.host + 'team').respond(scope.data.teams);
 
         $httpBackend.expectGET(testConfig.host + 'team/status/' + scope.current)
@@ -346,6 +352,8 @@ define(
           uuid: member.uuid,
           teamId: scope.current
         };
+
+        getCurrentTeamMembers();
 
         $httpBackend.expectPOST(url, member).respond(responsePostMember);
 
@@ -406,6 +414,8 @@ define(
 
         scope.membersBySearch = {};
 
+        getCurrentTeamMembers();
+
         $httpBackend.expectGET(url).respond(expectedResponse);
 
         scope.searchMember(searchValue);
@@ -432,6 +442,10 @@ define(
         };
 
         scope.current = teamId;
+
+        console.log('scope.current', scope.current);
+
+        $httpBackend.expectGET(testConfig.host + 'team/status/' + rootScope.app.resources.teamUuids[0]).respond(scope.members[rootScope.app.resources.teamUuids[0]]);
 
         $httpBackend.expectPUT(url, data).respond({result: ''});
 
@@ -463,6 +477,8 @@ define(
         var url = testConfig.host + 'team/' + teamId + '/member';
         var response = {0 : 'o', 1 : 'k'};
 
+        $httpBackend.expectGET(testConfig.host + 'team/status/' + scope.current).respond(scope.members[scope.current]);
+
         scope.current = teamId;
 
         $httpBackend.expectPOST(
@@ -482,29 +498,15 @@ define(
         expect(scope.result[0] + scope.result[1]).toBe(response[0] + response[1]);
       });
 
-      it('Should get the selected teamUuid as parameter in the URL', function ()
+      function getCurrentTeamMembers()
       {
-        inject(function ($rootScope) {
-          $rootScope.app = {
-            domainPermission: {
-              clients: true
-            }
-          };
-
-          scope.current = (data.teams[0]).uuid;
-
-          scope.requestTeam(scope.current);
-
-          var urlParameters = $location.search();
-          //test hier op get toevoegen van een team
-          expect(urlParameters.uuid).toBe(scope.current);
-        });
-      });
-
-      it('Should check ', function ()
-      {
-        //zet rol teamlid and try to add a new teams
-      });
+        $httpBackend.expectGET(testConfig.host + 'team/status/' + scope.current).respond(scope.members[scope.current]);
+      }
+      //zet rol teamlid and try to add a new teams
+      //it('Should check ', function ()
+      //{
+      //
+      //});
     });
   }
 );

@@ -46,8 +46,7 @@ define(
             _$httpBackend_,
             _Logs_,
             _moment_,
-            _CurrentSelection_,
-            _Store_
+            _CurrentSelection_
           )
           {
             rootScope = _$rootScope_;
@@ -137,8 +136,13 @@ define(
         var vm = optionsCtrl;
         var currentOptions = {
           voicemailDetection: false,
-          sms: true,
+          sms: false,
           ringingTimeOut: "dsadsa"
+        };
+
+        vm.defaults = {
+          sms: false,
+          voicemailDetection: false
         };
         var url = testConfig.host + 'team/' + rootScope.app.resources.teamUuids[0] + '/teamTelephoneSettings';
 
