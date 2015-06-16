@@ -11,7 +11,7 @@ define(
           return {
             restrict: 'A',
 
-            link: function postLink(scope, element, attrs, controller) {
+            link: function postLink(scope, element, attrs) {
               // var startDate = Date.create().addDays(-6),
               //     endDate   = Date.create();
               //element.val(startDate.format('{MM}-{dd}-{yyyy}') + ' / ' + endDate.format('{MM}-{dd}-{yyyy}'));
@@ -115,8 +115,11 @@ define(
 
                       scope.timeline.range = periods;
 
-                      $rootScope.$broadcast('timeliner', periods);
-                      $rootScope.$broadcast('timelinerTasks', periods);
+                      var broadcastId = (attrs.daterangepicker == 'task-planboard')
+                        ? 'timelinerTasks'
+                        : 'timeliner';
+
+                      $rootScope.$broadcast(broadcastId, periods);
                     }
                   );
                 }

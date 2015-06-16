@@ -384,7 +384,7 @@ define(
             $scope.timeliner.init()
           }
 
-          $rootScope.$on(
+          $scope.$on(
             'timelinerTasks',
             function ()
             {
