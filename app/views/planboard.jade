@@ -82,7 +82,7 @@ div(ng-controller='timeline as taskPlanboard')
 						type='text',
 						ng-model='slot.start.date',
 						data-date-type='string',
-						data-date-format='dd-MM-yyyy',
+						data-date-format='d-M-yyyy',
 						bs-datepicker='',
 						ng-change='redrawSlot(slot)')
 						i.icon-calendar
@@ -98,7 +98,7 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-model='slot.start.time',
 						data-length='3',
 						data-time-type="string",
-						data-time-format="HH:mm",
+						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
 						bs-timepicker='')
 						i.icon-time
@@ -140,7 +140,7 @@ div(ng-controller='timeline as taskPlanboard')
 						type='text',
 						ng-model='slot.end.date',
 						data-date-type='string',
-						data-date-format='dd-MM-yyyy',
+						data-date-format='d-M-yyyy',
 						ng-change='redrawSlot(slot)',
 						bs-datepicker='')
 						i.icon-calendar
@@ -156,7 +156,7 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-model='slot.end.time',
 						data-length='3',
 						data-time-type="string",
-						data-time-format="HH:mm",
+						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
 						bs-timepicker='')
 						i.icon-time

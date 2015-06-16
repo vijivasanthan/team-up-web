@@ -334,17 +334,17 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									type='text',
 									ng-model='task.start.date',
 									data-date-type='string',
-									data-date-format='dd-MM-yyyy',
+									data-date-format='d-M-yyyy',
 									bs-datepicker='',
 									ng-change='newDate(task.start.date)')
 									i.icon-calendar
 									input(name='time-start',
 									type='text',
 									ng-model='task.start.time',
-									ng-change='newTime(task.start.time)',
+									ng-change='newTime(task.start.time);',
 									bs-timepicker='',
 									data-date-type='string',
-									data-time-format="HH:mm", 
+									data-time-format="H:mm", 
 									data-length="1",
 									data-minute-step="15",
 									data-arrow-behavior="picker")
@@ -373,7 +373,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									type='text',
 									ng-model='task.end.date',
 									data-date-type='string',
-									data-date-format='dd-MM-yyyy',
+									data-date-format='d-M-yyyy',
 									bs-datepicker='')
 									i.icon-calendar
 									input(name='time-end',
@@ -381,7 +381,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-model='task.end.time',
 									bs-timepicker='',
 									data-date-type='string',
-									data-time-format="HH:mm",
+									data-time-format="H:mm",
 									data-length="1",
 									data-minute-step="15",
 									data-arrow-behavior="picker")

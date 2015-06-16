@@ -601,6 +601,11 @@ define(
             return true;
           };
 
+          $scope.checkLeadingZeros = function(startTime)
+          {
+            console.log('startTime', startTime);
+          };
+
           /**
            * Save a task, this could be creating or editing.
            * @param task Save the task values from the form
