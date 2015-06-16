@@ -523,6 +523,7 @@ define(
                 break;
 
               case 'availability':
+                console.log('123', 123);
                 return 'icon-avail';
                 break;
 
