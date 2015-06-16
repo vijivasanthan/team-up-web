@@ -3,7 +3,7 @@
  */
 var profile = {
 
-  meta: 'teamup',
+  meta: 'teamtelefoon',
 
   own: true,
 

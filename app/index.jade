@@ -2,14 +2,12 @@ extends layout
 
 // TODO: Fix icon locations
 block icons
-	link(ng-show='app.domainPermission.tasks' rel='shortcut', href='favicon_teamup.ico')
-	link(ng-show='app.domainPermission.tasks' rel='shortcut', href='/favicon_teamup.ico')
-	link(ng-show='! app.domainPermission.tasks' rel='shortcut', href='/favicon_teamtelefoon.ico')
-	link(ng-show='! app.domainPermission.tasks' rel='shortcut', href='/favicon_teamtelefoon.ico')
-	link(rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32")
-	link(rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16")
-	link(ng-show='app.domainPermission.tasks' rel='apple-touch-icon', href='apple-touch-icon_teamup.png')
-	link(ng-show='! app.domainPermission.tasks' rel='apple-touch-icon', href='apple-touch-icon_teamtelefoon.png')
+	link(rel='icon', ng-href='favicon_{{ config.app.profileName.toLowerCase() }}_16x16.ico')
+	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_64x64.png" sizes="64x64")
+	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_32x32.png" sizes="32x32")
+	link(rel="icon" type="image/png" ng-href="favicon_{{ config.app.profileName.toLowerCase() }}_16x16.png" sizes="16x16")
+		
+	link(rel='apple-touch-icon', ng-href='apple-touch-icon_{{ config.app.profileName.toLowerCase() }}.png')
 
 
 // Not-used at the moment
