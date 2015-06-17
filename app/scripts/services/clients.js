@@ -125,86 +125,6 @@ define(
             return deferred.promise;
           };
 
-          //ClientsService.prototype.query = function (only, routeParams)
-          //{
-          //  var deferred = $q.defer();
-          //
-          //  var data = {};
-
-            //  TeamUp._(
-          //    'clientGroupsQuery',
-          //    null,
-          //    null,
-          //    {
-          //      success: function (clientGroups)
-          //      {
-          //        Store('app').save('ClientGroups', clientGroups);
-          //
-          //        if (! only)
-          //        {
-          //
-          //          data.clients = {};
-          //
-          //          data.clientGroups = (typeof data.clientGroups != 'undefined') ? clientGroups : {};
-          //
-          //          var clientGroupIds = _.pluck(clientGroups, 'id');
-          //
-          //          var calls = [];
-          //
-          //          if (!routeParams.uuid || clientGroupIds.indexOf(routeParams.uuid) >= 0)
-          //          {
-          //            console.log('door', routeParams.uuid);
-          //            angular.forEach(
-          //              clientGroups,
-          //              function (clientGroup)
-          //              {
-          //                data.clients[clientGroup.id] = [];
-          //                // For each client group get the list of clients
-          //                calls.push(
-          //                  TeamUp._(
-          //                    'clientsByGroupIDQuery',
-          //                    {third: clientGroup.id},
-          //                    null,
-          //                    {
-          //                      success: function (result)
-          //                      {
-          //                        //var resultData = (result.length == 4 && result[0][0] == 'n' && result[1][0] == 'u') ? [] : result
-          //
-          //                        Store('app').save(
-          //                          clientGroup.id,
-          //                          result
-          //                        );
-          //
-          //                        data.clients[clientGroup.id] = result;
-          //                      }
-          //                    }
-          //                  )
-          //                );
-          //              });
-          //          }
-          //
-          //          $q.all(calls)
-          //            .then(
-          //            function (results)
-          //            {
-          //              deferred.resolve(data);
-          //            }
-          //          );
-          //        }
-          //        else
-          //        {
-          //          deferred.resolve(clientGroups);
-          //        }
-          //
-          //      },
-          //      error: function (error) { deferred.resolve({ error: error }) }
-          //    }
-          //  );
-          //
-          //  return deferred.promise;
-          //};
-
-
           // Manage 1:n relations between clients and client groups
           ClientsService.prototype.manage = function (changes)
           {
@@ -330,51 +250,6 @@ define(
             return deferred.promise;
           };
 
-          /**
-           * Check if All clients locally exist, if they exist remove the client from them and store
-           * the list of all client locally.
-           * @param clientId the id of the client who's removed
-           */
-          ClientsService.prototype.removeSingleFromAllLocally = function(clientId)
-          {
-            var allClients = Store('app').get('clients');
-
-            if(allClients.length)
-            {
-              var removedMember = _.findWhere(allClients, {uuid: clientId}),
-                  index = allClients.indexOf(removedMember);
-
-              allClients.splice(index, 1);
-
-              Store('app').save('clients', allClients);
-            }
-          };
-
-          /**
-           * query all clients, if there not locally call them from the backend
-           */
-          ClientsService.prototype.queryAllLocally = function()
-          {
-              var allClients = Store('app').get('clients'),
-                  deferred = $q.defer();
-
-              if(allClients.length)
-              {
-                deferred.resolve(allClients);
-              }
-              else
-              {
-                ClientsService.prototype.queryAll()
-                  .then(
-                    function(clients)
-                    {
-                      deferred.resolve(clients);
-                    }
-                  );
-              }
-
-              return deferred.promise();
-          };
 
           /**
            * Query all Client and update them locally
@@ -390,6 +265,32 @@ define(
                   return clients;
                 }
               )
+          };
+
+          /**
+           * Add new client
+           * @param client All the info of the new client
+           */
+          ClientsService.prototype.add = function (client)
+          {
+            return TeamUp._(
+              'clientAdd',
+              null,
+              client
+            );
+          };
+
+          /**
+           * Add a new clientgroup
+           * @param clientGroupName The name of the new clientgroup
+           */
+          ClientsService.prototype.addGroup = function(clientGroupName)
+          {
+            return TeamUp._(
+              'clientGroupAdd',
+              null,
+              clientGroupName
+            );
           };
 
           /**
@@ -427,6 +328,23 @@ define(
             return deferred.promise;
           };
 
+          //########### Local ###########\\
+
+          /**
+           * Add a new clientgroup localy
+           * again they will load from the backend
+           * @param clientGroup id, name, and clients of the clientgroup
+           * @returns {*}
+           */
+          ClientsService.prototype.addGroupLocal = function(clientGroup)
+          {
+            var clientGroups = Store('app').get('ClientGroups');
+            clientGroups.push(clientGroup);
+            Store('app').save('ClientGroups', clientGroups);
+
+            return clientGroups;
+          };
+
           // Get the list local client groups with clients in it
           ClientsService.prototype.queryLocal = function ()
           {
@@ -444,6 +362,38 @@ define(
             return data;
           };
 
+          /**
+           * Check if All clients locally exist, if they exist remove the client from them and store
+           * the list of all client locally.
+           * @param clientId the id of the client who's removed
+           */
+          ClientsService.prototype.removeSingleFromAllLocally = function(clientId)
+          {
+            var allClients = Store('app').get('clients');
+
+            if(allClients.length)
+            {
+              var removedMember = _.findWhere(allClients, {uuid: clientId}),
+                index = allClients.indexOf(removedMember);
+
+              allClients.splice(index, 1);
+
+              Store('app').save('clients', allClients);
+            }
+          };
+
+          /**
+           * query all clients, if there not locally call them from the backend
+           */
+          ClientsService.prototype.queryAllLocally = function()
+          {
+            var allClientsLocal = Store('app').get('clients'),
+              allClients = (allClientsLocal.length)
+                ? allClientsLocal
+                : ClientsService.prototype.queryAll();
+
+            return $q.when(allClients);
+          };
 
           return new ClientsService;
         }

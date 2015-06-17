@@ -74,23 +74,23 @@ aria-hidden='true')
 				button.btn.btn-primary(type='button',
 				ng-click='removeReport(_report)') {{ui.teamup.confirms.remove}}
 
-.page-header(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
+.page-header
 	h2.nullable {{ui.teamup.clients}}
-	.selectGroup(ng-show="app.resources.teamUuids.length > 1 || app.resources.role == 1")
-		span.selectTitle
-			| {{ ui.teamup.selectClientGroup }}
-		select(ng-model='current',
-		ng-options='c.id as c.name for c in clientGroups',
-		ng-selected='current',
-		ng-change='requestClientGroup(current)')
-
-
-
+	div(ng-hide='views.viewClient || views.editClient || views.newClientGroup')
+		.selectGroup(ng-show="(app.resources.teamUuids.length > 1 || app.resources.role == 1) && data.clientGroups.length")
+			span.selectTitle
+				| {{ ui.teamup.selectClientGroup }}
+			select(ng-model='current',
+			ng-options='c.id as c.name for c in clientGroups',
+			ng-selected='current',
+			ng-change='requestClientGroup(current)')
+			
 .tabbable.tabs-left
 
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
 
-		li(class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}")
+		li(class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}",
+			ng-show='data.clientGroups.length')
 			a(data-toggle='tab',
 			ng-click='setViewTo("client")')
 				span.icomoon(data-icon='',
@@ -102,16 +102,17 @@ aria-hidden='true')
 			ng-click='setViewTo("newClientGroup")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
-				| {{ui.teamup.newClientGroup}}
+				| {{ui.teamup.newClientGroup}} 
 
-		li(class="{{(views.newClient==true) && 'active'}}")
+		li(class="{{(views.newClient==true) && 'active'}}",
+			ng-show='data.clientGroups.length')
 			a(data-toggle='tab',
 			ng-click='setViewTo("newClient")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
 				| {{ui.teamup.newClient}}
 
-		li(ng-show='app.domainPermission.clientReports', class="{{(views.reports==true) && 'active'}}")
+		li(ng-show='app.domainPermission.clientReports && data.clientGroups.length', class="{{(views.reports==true) && 'active'}}")
 			a(data-toggle='tab',
 			ng-click='setViewTo("reports")')
 				span.icomoon(data-icon='',
@@ -125,7 +126,7 @@ aria-hidden='true')
 
 		#viewClientTab.tab-pane(class="{{(views.client==true) && 'active'}}")
 			.tab-header(ng-hide='views.editClientGroup')
-				h3.pull-left {{clientGroup.name}}
+				h3.pull-left {{clientGroup.name}} 
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
 				ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
 				button.btn.pull-right.btn-info(type='button',
@@ -226,15 +227,12 @@ aria-hidden='true')
 								required,
 								ng-model='clientForm.birthDate', 
 								data-date-type='string',
-								data-date-format='dd-MM-yyyy',
+								data-date-format='d-M-yyyy',
 								bs-datepicker='')
 								i.icon-calendar
 								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
 									small
 										i {{ui.validation.birthDate.notValid }}
-								span.help-block(style='margin-top: -5px;')
-									small
-										i {{ui.profile.exampleBirthDate}}
 										
 					.control-group
 						label.control-label {{ui.teamup.phone}}

@@ -9,54 +9,12 @@ define(
         function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
                   $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection, Message)
         {
-          //TODO clients can't have more then one clientGroup by viewing this url. Remove the uuid from url and create a new controller clientDetail or profile
-          //http://localhost:3000/index.html#/clientProfile/17093d63-dd99-4aef-b83f-dbf3f8ac18c3?uuid=3467f9e3-b354-4ce3-807c-92695485ce08#viewClient
-
-          console.log('data', data);
-
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
 
           var modalInstance = null;
 
-          if (data.clientId)
-          {
-            var clientHasClientGroup = false;
-            Reports.clientId = data.clientId;
-
-            data.clientGroups = Store('app').get('ClientGroups');
-            data.clients = {};
-
-            angular.forEach(
-              data.clientGroups,
-              function (clientGroup)
-              {
-                data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
-                var clientInTeam = _.findWhere(data.clients[clientGroup.id], {uuid: data.clientId});
-
-                if(!_.isUndefined(clientInTeam))
-                {
-                  clientInTeam.birthDate = moment(clientInTeam.birthDate).format('DD-MM-YYYY');
-                  $scope.client = clientInTeam;
-                  $scope.contacts = clientInTeam.contacts;
-
-                  $scope.clientmeta = clientInTeam;
-                  clientHasClientGroup = true;
-                }
-              }
-            );
-
-            if (!clientHasClientGroup)
-            {
-              data.clients = Store('app').get('clients');
-              data.client = _.findWhere(data.clients, {uuid: data.clientId});
-              data.client.birthDate = moment(data.client.birthDate).format('DD-MM-YYYY');
-              $scope.client = data.client;
-              Reports.clientId = $scope.client.uuid;
-              $scope.contacts = data.client.contacts;
-              $scope.clientmeta = data.client;
-            }
-          }
+          dataHasClientId(data.clientId);
 
           // TODO: Check if it is use!
           $scope.imgHost = config.app.host;
@@ -65,29 +23,7 @@ define(
           $scope.clients = data.clients;
           $scope.clientGroups = data.clientGroups;
 
-          // process month drop-down list
-          // TODO: Remove it later on!
-          var Months = Dater.getMonthTimeStamps();
-
-          $scope.Months = [];
-
-          angular.forEach(
-            Months,
-            function (month, i)
-            {
-              $scope.Months[i] = {
-                number: i,
-                name: i,
-                start: month.first.timeStamp,
-                end: month.last.timeStamp
-              };
-            }
-          );
-
-          $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
-
-          var params = $location.search(),
-            reportUuid = params.reportUuid;
+          setMonthsReportsFilter();
 
           $scope.search = {query: ''};
 
@@ -95,171 +31,13 @@ define(
 
           $scope.data = data;
 
-          var uuid,
-            view;
-
-          if (!params.uuid && !$location.hash())
-          {
-            uuid = CurrentSelection.getClientGroupId();
-            view = 'client';
-
-            $location.search({uuid: uuid}).hash('client');
-          }
-          else if (!params.uuid)
-          {
-            uuid = CurrentSelection.getClientGroupId();
-
-            view = $location.hash();
-
-            $location.search({uuid: uuid});
-          }
-          else
-          {
-            uuid = params.uuid;
-
-            if (typeof uuid == 'undefined')
-            {
-              uuid = $scope.client.clientGroupUuid;
-            }
-
-            view = $location.hash();
-          }
-
-          $scope.views = {
-            client: true,
-            newClientGroup: false,
-            newClient: false,
-            reports: false,
-            editClientGroup: false,
-            editClient: false,
-            viewClient: false,
-            editImg: false
-          };
-
-          var setView = function (hash)
-          {
-            $scope.views = {
-              client: false,
-              newClientGroup: false,
-              newClient: false,
-              reports: false,
-              editImg: false
-            };
-
-            //load the reports on this view
-            if (hash == 'viewClient')
-            {
-              loadReports();
-            }
-
-            if (hash == 'reports' && _.isUndefined(reportUuid))
-            {
-              loadGroupReports();
-            }
-
-            $scope.views[hash] = true;
-          };
-
-          // Load reports list for client profile view
-          var loadReports = function ()
-          {
-            $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
-
-            Report.all($scope.client.uuid)
-              .then(
-                function(reports)
-                {
-                  $rootScope.statusBar.off();
-
-                  $scope.reports = $scope.processReports(reports);
-                }
-              );
-          };
-
-          // Get the list of reports for certain client group for reports tab
-          var loadGroupReports = function ()
-          {
-            $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
-
-            // get the groupId from the url
-            if (!$scope.clientGroup)
-            {
-              $scope.clientGroup = data.clientGroups[0];
-            }
-
-            Report.allByClientGroup($scope.clientGroup.id)
-              .then(
-                function(reports)
-                {
-                  $rootScope.statusBar.off();
-
-                  $scope.groupReports = $scope.processReports(reports);
-
-                  if ($scope.currentCLient != 0)
-                  {
-                    $scope.requestReportsByFilter();
-                  }
-
-                  // open the report tab if the there is report Id in the params
-                  var reportId = $location.search().reportUuid;
-
-                  if (reportId)
-                  {
-                    var report = (_.findWhere($scope.groupReports, {uuid: reportId})) || null;
-
-                    if (report == null)
-                    {
-                      // clear the url param
-                      if ($location.search().reportUuid)
-                      {
-                        $location.search('reportUuid', null);
-                      }
-                      $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
-                      return;
-                    }
-                    $scope.openReport(report);
-                  }
-                }
-            );
-          };
-
-          setView(view);
-
-          setClientView(uuid);
-
-          function setClientView(id)
-          {
-            angular.forEach(
-              data.clientGroups,
-              function (clientGroup)
-              {
-                if (clientGroup.id == id)
-                {
-                  $scope.clientGroup = clientGroup;
-                }
-              }
-            );
-
-            $scope.clients = data.clients[id];
-
-            $scope.current = id;
-
-            // show reports of this groups
-            if ($scope.views.reports)
-            {
-              //reset the filter
-              $scope.currentCLient = '0';
-              $scope.currentMonth = '0';
-
-              loadGroupReports();
-            }
-          }
+          getURLParams();
 
           $scope.requestClientGroup = function (current, switched)
           {
             CurrentSelection.local = current;
 
-            setClientView(current);
+            setCurrentClientGroup(current);
 
             $scope.$watch(
               $location.search(),
@@ -309,6 +87,8 @@ define(
 
           $scope.setViewTo = function (hash)
           {
+            var view = $location.hash();
+
             $scope.$watch(
               hash,
               function ()
@@ -401,8 +181,7 @@ define(
           var reloadGroup = function (result)
           {
             Clients.query(false, result)
-              .then(
-              function (queries)
+              .then(function (queries)
               {
                 if (queries.error)
                 {
@@ -420,25 +199,21 @@ define(
                   $scope.clientGroups = queries.clientGroups;
                   $scope.clients = queries.clients;
 
-                  angular.forEach(
-                    queries.clientGroups,
-                    function (clientGroup)
-                    {
-                      if (clientGroup.id == result.uuid)
-                      {
-                        $scope.clientGroup = clientGroup;
+                  var clientGroup = _.findWhere($scope.clientGroups, {id: result.uuid});
 
-                        $scope.current = clientGroup.id;
+                  if(! _.isUndefined(clientGroup))
+                  {
+                    $scope.clientGroup = clientGroup;
 
-                        $location.url('/client?uuid=' + clientGroup.id).hash('client');
-                      }
-                    }
-                  );
+                    $scope.current = clientGroup.id;
+                    CurrentSelection.local = $scope.current;
+
+                    $location.url('/client?uuid=' + $scope.current).hash('client');
+                  }
                 }
 
                 $rootScope.statusBar.off();
-              }
-            );
+              });
           };
 
           $scope.cGroupSubmit = function (clientGroup)
@@ -450,21 +225,10 @@ define(
               return;
             }
 
-            // FIXME: Message does not exist!
-            // $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
+            $rootScope.statusBar.display($rootScope.ui.teamup.saveClientGroup);
 
-            TeamUp._(
-              'clientGroupAdd',
-              null,
-              clientGroup,
-              {
-                success: function (result)
-                {
-                  Store('app').save(result.id, result);
-                }
-              }
-            ).then(
-              function (result)
+            Clients.addGroup(clientGroup)
+              .then(function (result)
               {
                 if (result.error)
                 {
@@ -473,12 +237,10 @@ define(
                 }
                 else
                 {
-                  $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
+                  Store('app').save(result.id, result);
                   reloadGroup({'uuid': result.id});
                 }
-              }
-            );
+              });
           };
 
           $scope.closeTabs = function ()
@@ -589,32 +351,21 @@ define(
               return;
             }
 
-            TeamUp._(
-              'clientAdd',
-              null,
-              client,
-              {
-                success: function (result)
+            Clients.add(client)
+              .then(function (result)
                 {
-                  Store('app').save(result.id, result)
-                }
-              }
-            ).then(
-              function (result)
-              {
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
-                }
-                else
-                {
-                  $scope.contactForm = null;
-                  $rootScope.resetPhoneNumberChecker();
-                  reloadGroup({'uuid': result.clientGroupUuid});
-                }
-              }
-            );
-
+                  if (result.error)
+                  {
+                    $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
+                  }
+                  else
+                  {
+                    Store('app').save(result.id, result);
+                    $scope.contactForm = null;
+                    $rootScope.resetPhoneNumberChecker();
+                    reloadGroup({'uuid': result.clientGroupUuid});
+                  }
+                });
           };
 
           // update client infomation
@@ -662,8 +413,7 @@ define(
             }
 
             Clients.singleUpdate(changedClient)
-              .then(
-              function (result)
+              .then(function(result)
               {
                 if (result.error)
                 {
@@ -681,8 +431,7 @@ define(
 
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                 }
-              }
-            );
+              });
           };
 
           // update the client's contact , this one really submit the info to the backend.
@@ -742,7 +491,7 @@ define(
           };
 
           // after people remove the contacts, you still need to save it to make it work.
-          $scope.removeContact = function (contact)
+          $scope.removeContact = function(contact)
           {
             // TODO: Contact has only been removed from list also from backend?!
             var indexContact = $scope.contacts.indexOf(contact);
@@ -750,7 +499,7 @@ define(
             angular.element('#confirmContactModal').modal('hide');
           };
 
-          $scope.confirmationRemoveContact = function (contact)
+          $scope.confirmationRemoveContact = function(contact)
           {
             $timeout(
               function ()
@@ -792,6 +541,7 @@ define(
                   ).then(
                     function (clientGroups)
                     {
+                      console.log('clientGroups', clientGroups);
                       $scope.requestClientGroup(clientGroups[0].id);
 
                       angular.forEach(
@@ -846,36 +596,24 @@ define(
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingClientFromClientGroup);
 
             Clients.deleteFromGroup($scope.current, clientId)
-              .then(
-                function(data)
+              .then(function(data)
+              {
+                if(data)
                 {
-                  if(data)
-                  {
-                    $scope.data = data;
-                    $scope.clients = data.clients;
-                    $scope.clientGroups = data.clientGroups;
+                  $scope.data = data;
+                  $scope.clients = data.clients;
+                  $scope.clientGroups = data.clientGroups;
 
-                    $rootScope.notifier.success(
-                      $rootScope.ui.teamup.deleteClientFromClientGroup
-                    );
-                    $rootScope.statusBar.off();
-
-                    //TODO allClients are not updated
-                    //ClientsService.prototype.queryAll
-                  }
-                  else
-                  {
-                    console.log('client delete from clientgroup -> ', result);
-                  }
+                  $rootScope.notifier.success(
+                    $rootScope.ui.teamup.deleteClientFromClientGroup
+                  );
+                  $rootScope.statusBar.off();
                 }
-              );
-          };
-
-          var filterReport = function(clientId, createDate)
-          {
-            $scope.currentCLient = clientId;
-            $scope.currentMonth = moment(createDate).format('M');
-            $scope.requestReportsByFilter();
+                else
+                {
+                  console.log('client delete from clientgroup -> ', result);
+                }
+              });
           };
 
           // filter the report by client or the created month
@@ -911,7 +649,7 @@ define(
             );
           };
 
-          $scope.getView = function (report)
+          $scope.getReportView = function (report)
           {
             $scope.view = $scope.view || {};
 
@@ -922,7 +660,7 @@ define(
 
           $scope.close = function ()
           {
-            if ($location.search().reportUuid)
+            if (( $location.search() ).reportUuid)
             {
               $location.search('reportUuid', null);
             }
@@ -968,7 +706,7 @@ define(
 
           function getModal()
           {
-            $scope.getView($scope.report);
+            $scope.getReportView($scope.report);
 
             return $modal(
               {
@@ -983,7 +721,9 @@ define(
           // vriables into the Modal controller to prevent the issue that problems caused by Uglifying javascript
           $scope.openReport = function (report)
           {
-            if(!_.isUndefined(reportUuid))
+            var params = $location.search();
+
+            if(!_.isUndefined(params.reportUuid))
             {
               filterReport(report.clientUuid, report.creationTime);
             }
@@ -1064,7 +804,7 @@ define(
 
                     if ($scope.views.viewClient == true)
                     {
-                      loadReports();
+                      loadClientReports();
                     }
                   }
                 }
@@ -1092,6 +832,233 @@ define(
 
             Message.addByType(typeData);
           };
+
+
+          function filterReport(clientId, createDate)
+          {
+            $scope.currentCLient = clientId;
+            $scope.currentMonth = moment(createDate).format('M');
+            $scope.requestReportsByFilter();
+          };
+
+          /**
+           * Get the url params like clientgroup url and the hash (view)
+           */
+          function getURLParams()
+          {
+            var params = $location.search(),
+              uuid = params.uuid,
+              view = (data.clientGroups.length)
+                ? ($location.hash() || 'client')
+                : 'newClient';
+
+            if (! uuid && !$location.hash())
+            {
+              uuid = CurrentSelection.getClientGroupId();
+              $location.search({uuid: uuid}).hash(view);
+            }
+            else
+            {
+              if(_.isUndefined( getCurrentClientGroup(uuid) ))
+              {
+                uuid = CurrentSelection.getClientGroupId();
+                $location.search({uuid: uuid});
+              }
+            }
+
+            setView(view);
+            setCurrentClientGroup(uuid);
+          }
+
+          /**
+           * Check if clientgroup by clientGroupId will match
+           * @param clientGroupId
+           */
+          function getCurrentClientGroup(clientGroupId)
+          {
+            return _.findWhere(data.clientGroups, {id: clientGroupId});
+          }
+
+          /**
+           * Set the current clientgroup and load the reports
+           * @param id
+           */
+          function setCurrentClientGroup(id)
+          {
+            $scope.current = id;
+            $scope.clientGroup = getCurrentClientGroup(id);
+            $scope.clients = data.clients[id];
+
+            // show reports of this groups
+            if ($scope.views.reports)
+            {
+              //reset the filter
+              $scope.currentCLient = '0';
+              $scope.currentMonth = '0';
+
+              loadGroupReports();
+            }
+          }
+
+          /**
+           * Set current view by hash
+           * @param hash one of the different views
+           */
+          function setView(hash)
+          {
+            var params = $location.search();
+
+            $scope.views = {
+              client: false,
+              newClientGroup: false,
+              newClient: false,
+              reports: false,
+              editImg: false
+            };
+            //load the reports on this view
+            if (hash == 'viewClient')
+            {
+              loadClientReports();
+            }
+
+            $scope.views[hash] = true;
+          }
+
+          /**
+           * Load reports list for client profile view
+           */
+          function loadClientReports()
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+
+            Report.all($scope.client.uuid)
+              .then(function(reports)
+              {
+                $rootScope.statusBar.off();
+
+                $scope.reports = $scope.processReports(reports);
+              });
+          }
+
+          /**
+           * Get the list of reports for certain client group for reports tab
+           */
+          function loadGroupReports()
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadingReports);
+
+            // get the groupId from the url
+            if (!$scope.clientGroup)
+            {
+              $scope.clientGroup = data.clientGroups[0];
+            }
+
+            Report.allByClientGroup($scope.clientGroup.id)
+              .then(function(reports)
+              {
+                $rootScope.statusBar.off();
+
+                $scope.groupReports = $scope.processReports(reports);
+
+                if ($scope.currentCLient != 0)
+                {
+                  $scope.requestReportsByFilter();
+                }
+
+                // open the report tab if the there is report Id in the params
+                var params = $location.search();
+
+                var reportId = params.reportUuid;
+
+                if (reportId)
+                {
+                  var report = (_.findWhere($scope.groupReports, {uuid: reportId})) || null;
+
+                  if (report == null)
+                  {
+                    // clear the url param
+                    if (reportId)
+                    {
+                      $location.search('reportUuid', null);
+                    }
+                    $rootScope.notifier.error($rootScope.ui.teamup.reportNotExists);
+                    return;
+                  }
+                  $scope.openReport(report);
+                }
+              });
+          }
+
+          /**
+           * Check if current view is a client instead of a clientgroup
+           */
+          function dataHasClientId()
+          {
+            if (data.clientId)
+            {
+              var clientHasClientGroup = false;
+              Reports.clientId = data.clientId;
+
+              data.clientGroups = Store('app').get('ClientGroups');
+              data.clients = {};
+              angular.forEach(
+                data.clientGroups,
+                function (clientGroup)
+                {
+                  data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
+                  var clientInTeam = _.findWhere(data.clients[clientGroup.id], {uuid: data.clientId});
+
+                  if(!_.isUndefined(clientInTeam))
+                  {
+                    clientInTeam.birthDate = moment(clientInTeam.birthDate).format('DD-MM-YYYY');
+                    $scope.client = clientInTeam;
+                    $scope.contacts = clientInTeam.contacts;
+
+                    $scope.clientmeta = clientInTeam;
+                    clientHasClientGroup = true;
+                  }
+                }
+              );
+
+              if (!clientHasClientGroup)
+              {
+                data.clients = Store('app').get('clients');
+                data.client = _.findWhere(data.clients, {uuid: data.clientId});
+                data.client.birthDate = moment(data.client.birthDate).format('DD-MM-YYYY');
+                $scope.client = data.client;
+                Reports.clientId = $scope.client.uuid;
+                $scope.contacts = data.client.contacts;
+                $scope.clientmeta = data.client;
+              }
+            }
+          }
+
+          /**
+           * Set months of the reports filter
+           */
+          function setMonthsReportsFilter()
+          {
+            // process month drop-down list
+            // TODO: Remove it later on!
+            var months = Dater.getMonthTimeStamps();
+
+            $scope.Months = [];
+
+            angular.forEach(
+              months,
+              function (month, i)
+              {
+                $scope.Months[i] = {
+                  number: i,
+                  name: i,
+                  start: month.first.timeStamp,
+                  end: month.last.timeStamp
+                };
+              }
+            );
+
+            $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
+          }
         }
     );
   }

@@ -537,6 +537,7 @@ define(
           savingClient: 'Cliënt aan het opslaan...',
           clientSubmitError: 'Fouten bij het aanmaken van een nieuwe cliënt.',
           clientGroups: 'Cliëntengroepen',
+          saveClientGroup: 'Opslaan cliëntgroep...',
           deleteClientFromClientGroup: 'Cliënt is verwijderd',
           deletingClientFromClientGroup: 'Cliënt uit groep verwijderen...',
           teams_Cap: 'Teams',
