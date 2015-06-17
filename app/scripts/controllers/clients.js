@@ -11,27 +11,52 @@ define(
         {
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
-
           var modalInstance = null;
-
           dataHasClientId(data.clientId);
 
           // TODO: Check if it is use!
           $scope.imgHost = config.app.host;
           $scope.ns = config.app.namespace;
 
+          $scope.data = data;
           $scope.clients = data.clients;
           $scope.clientGroups = data.clientGroups;
+          $scope.search = {query: ''};
+          $scope.selection = {};
 
           setMonthsReportsFilter();
 
-          $scope.search = {query: ''};
-
-          $scope.selection = {};
-
-          $scope.data = data;
-
+          /**
+           * Get url params and open the right view
+           */
           getURLParams();
+
+          $scope.setViewTo = function (hash)
+          {
+            var view = $location.hash();
+
+            $scope.$watch(
+              hash,
+              function ()
+              {
+                if (! $scope.clientGroup)
+                {
+                  $scope.clientGroup = $scope.clientGroups[0]
+                }
+
+                if (($location.hash() == 'viewClient' ||
+                  $location.hash() == 'editClient' ||
+                  $location.hash() == 'editImg') && hash == 'client')
+                {
+                  $location.path('/client').search({uuid: $scope.clientGroup.id});
+                }
+
+                $location.hash(hash);
+
+                setView(hash);
+              }
+            );
+          };
 
           $scope.requestClientGroup = function (current, switched)
           {
@@ -39,12 +64,23 @@ define(
 
             setCurrentClientGroup(current);
 
+            // show reports of this groups
+            if ($scope.views.reports)
+            {
+              //reset the filter
+              $scope.currentCLient = '0';
+              $scope.currentMonth = '0';
+
+              loadGroupReports();
+            }
+
             $scope.$watch(
               $location.search(),
               function ()
               {
                 $location.search({uuid: current});
-              });
+              }
+            );
 
             if (switched)
             {
@@ -83,33 +119,6 @@ define(
             );
 
             return _reports;
-          };
-
-          $scope.setViewTo = function (hash)
-          {
-            var view = $location.hash();
-
-            $scope.$watch(
-              hash,
-              function ()
-              {
-                if (!$scope.clientGroup)
-                {
-                  $scope.clientGroup = $scope.clientGroups[0]
-                }
-
-                if (($location.hash() == 'viewClient' ||
-                  $location.hash() == 'editClient' ||
-                  $location.hash() == 'editImg') && hash == 'client')
-                {
-                  $location.path('/client').search({uuid: $scope.clientGroup.id});
-                }
-
-                $location.hash(hash);
-
-                setView(hash);
-              }
-            );
           };
 
           $scope.editClientGroup = function (clientGroup)
@@ -888,16 +897,6 @@ define(
             $scope.current = id;
             $scope.clientGroup = getCurrentClientGroup(id);
             $scope.clients = data.clients[id];
-
-            // show reports of this groups
-            if ($scope.views.reports)
-            {
-              //reset the filter
-              $scope.currentCLient = '0';
-              $scope.currentMonth = '0';
-
-              loadGroupReports();
-            }
           }
 
           /**
@@ -915,10 +914,18 @@ define(
               reports: false,
               editImg: false
             };
-            //load the reports on this view
-            if (hash == 'viewClient')
+
+            switch (hash)
             {
-              loadClientReports();
+              case 'viewClient':
+                loadClientReports();
+                break;
+              case 'reports':
+                $scope.currentCLient = '0';
+                $scope.currentMonth = '0';
+
+                loadGroupReports();
+                break;
             }
 
             $scope.views[hash] = true;
