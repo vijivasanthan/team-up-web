@@ -58,7 +58,7 @@ define(
             );
           };
 
-          $scope.requestClientGroup = function (current, switched)
+          $scope.requestClientGroup = function (current)
           {
             CurrentSelection.local = current;
 
@@ -81,16 +81,6 @@ define(
                 $location.search({uuid: current});
               }
             );
-
-            if (switched)
-            {
-              if ($location.hash() != 'client')
-              {
-                $location.hash('client');
-              }
-
-              setView('client');
-            }
           };
 
           // Make reports data view friendly
