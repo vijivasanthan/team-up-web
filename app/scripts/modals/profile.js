@@ -35,6 +35,18 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
+    //$resource(url, [paramDefaults], [actions], options);
+    var ChangePassword = $resource(config.app.host + 'teammember/:memberId/pass',
+      {
+        oldPass: '@oldPass',
+        newPass: '@newPass'
+      },
+      {
+      update: {
+        method: 'PUT',
+      }
+    });
+
     var Resources = $resource(config.app.host + 'resources', {}, {
       get: {
         method: 'GET',
@@ -154,15 +166,18 @@ define(['services/services', 'config'], function (services, config) {
       return deferred.promise;
     };
 
-    Profile.prototype.changePassword = function (passwords) {
+    Profile.prototype.changePassword = function (memberId, oldPass, newPass) {
       var deferred = $q.defer();
 
-      Resources.save(null, {askPass: MD5(passwords.new1)},
+      ChangePassword.update(
+        {
+          memberId: memberId,
+          oldPass: MD5(oldPass),
+          newPass: MD5(newPass)
+        },
+        null,
         function (result) {
           deferred.resolve(result);
-        },
-        function (error) {
-          deferred.resolve({error: error});
         });
 
       return deferred.promise;

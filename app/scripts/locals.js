@@ -401,8 +401,11 @@ define(
           // saveProfile: 'Profielinformatie opslaan...',
           refreshing: 'Profielinformatie vernieuwen...',
           dataChanged: 'Profielgegevens succesvol gewijzigd.',
-          pleaseFill: 'Vul a.u.b. alle velden in!',
-          passNotMatch: 'Ingevoerd wachtwoord komt niet overeen. Probeer het opnieuw.',
+          savingPassword: 'Nieuw wachtwoord opslaan...',
+          passwordChanged: 'Het wachtwoord is succesvol gewijzigd.',
+          passwordSavedFailed: 'Er is iets mis gegaan bij het updaten van het wachtwoord.',
+          pleaseFill: 'Alle velden dienen valide ingevuld te worden!',
+          passNotMatch: 'Het nieuwe wachtwoord en de herhaling komen niet overeen.',
           changingPass: 'Wachtwoord wijzigen...',
           passChanged: 'Wachtwoord succesvol gewijzigd.',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
@@ -741,6 +744,7 @@ define(
             {
               return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
+            oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
             required: 'Een wachtwoord is verplicht'
           },
           email: {

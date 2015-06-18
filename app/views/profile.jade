@@ -144,7 +144,7 @@ section#profile
 						h3.pull-left(style='margin-top: 0;') {{ui.profile.editProfile}}
 						button.btn.pull-right.btn-info(type='button',
 							ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)',
-							ng-click='editPassword()') {{ui.profile.changePassWord}}
+							ng-click='setViewTo("editPassword")') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
 						.control-group
@@ -338,18 +338,18 @@ section#profile
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.changePassWord}}
 					hr
-					form.form-vertical(name='passWordForm', novalidate)
+					form.form-vertical(name='passWordForm', novalidate, ng-submit='savePassword(password)')
 						fieldset
-							//.form-group
-							//	label.control-label {{ui.profile.oldPassword}}
-							//	.controls
-							//		input.span3(type='password',
-							//		ng-model='edit.oldpass')
+							.form-group
+								label.control-label {{ui.profile.oldPassword}}
+								.controls
+									input.span3(type='password',
+									ng-model='password.old')
 							.form-group(ng-class="{ 'has-error' : passWordForm.password.$invalid && !passWordForm.password.$pristine }")
 								label.control-label {{ui.profile.newPass}}
 								.controls
 									input.span3.form-control(type='password',
-									ng-model='edit.newpass',
+									ng-model='password.new',
 									name='password',
 									required,
 									ng-minlength="8",
@@ -368,9 +368,8 @@ section#profile
 								label.control-label {{ui.profile.newPassRepeat}}
 								.controls
 									input.span3(type='password',
-									ng-model='edit.newpassrepeat')
+									ng-model='password.newRepeat')
 							.form-actions
 								button.btn.btn-default.btn-color-brown(type="button",
 									ng-click='setViewTo("profile")') {{ui.teamup.confirms.cancel}}
-								button.btn.btn-success(type='submit',
-									ng-click='savePassword(edit)') {{ui.profile.safePassword}}
+								button.btn.btn-success(type='submit') {{ui.profile.safePassword}}

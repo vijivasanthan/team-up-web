@@ -427,11 +427,6 @@ define(
             setView('edit');
           };
 
-          $scope.editPassword = function ()
-          {
-            setView('editPassword');
-          };
-
           // Change an avatar
           $scope.editImg = function ()
           {
@@ -439,50 +434,54 @@ define(
             $scope.setViewTo('editImg');
           };
 
-          $scope.savePassword = function (resources)
+          $scope.savePassword = function (passwordData)
           {
-            //copy data so the user can't see real-life changes causing by two way binding
-            var formData = angular.copy(resources);
-
-            if (!formData.newpass || !formData.newpassrepeat)
+            if ( ! passwordData.old || ! passwordData.new || ! passwordData.newRepeat)
             {
-              //!formData.oldpass ||
               $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
               return;
             }
-            else if (formData.newpass != null && formData.newpass != formData.newpassrepeat)
+            else if (passwordData.new !== passwordData.newRepeat)
             {
               $rootScope.notifier.error($rootScope.ui.profile.passNotMatch);
               return;
             }
-            //else if (MD5(formData.oldpass) !== $scope.edit.passwordHash)
-            //{
-            //  console.log('$scope.edit.passwordHash', $scope.edit.passwordHash);
-            //
-            //  $rootScope.notifier.error($rootScope.ui.profile.currentPassWrong);
-            //  return;
-            //}
             else
             {
-              $scope.view.passwordHash = MD5(formData.newpass);
+              $rootScope.statusBar.display($rootScope.ui.profile.savingPassword);
 
-              var loginData = Store('app').get('loginData');
-
-              if(loginData.password)
-              {
-                loginData.password = $scope.view.passwordHash;
-                Store('app').save('loginData', loginData);
-              }
-
-              //delete formData.oldpass;
-              delete formData.newpass;
-              delete formData.newpassrepeat;
+              Profile.changePassword($scope.view.uuid, passwordData.old, passwordData.new)
+                .then(function(result)
+                {
+                  if(result.error)
+                  {
+                    if(result.statusCode === 400)
+                    {
+                      switch (result.errorCode)
+                      {
+                        case 6:
+                          $rootScope.notifier.error($rootScope.ui.profile.dataChanged);
+                          break;
+                        case 19:
+                          $rootScope.notifier.error($rootScope.ui.validation.oldPassMatch);
+                          break;
+                      }
+                    }
+                    else if(result.statusCode === 500)
+                    {
+                      $rootScope.notifier.error($rootScope.ui.profile.passwordSavedFailed);
+                    }
+                  }
+                  else
+                  {
+                    $scope.password = null;
+                    $scope.passWordForm.$setPristine();
+                    $rootScope.notifier.success($rootScope.ui.profile.passwordChanged);
+                    $scope.setViewTo("profile");
+                  }
+                  $rootScope.statusBar.off();
+                });
             }
-
-            //removes validation errors from form
-            $scope.passWordForm.$setPristine();
-
-            $scope.save($scope.view);
           };
 
           $scope.confirmModal = function(id)
