@@ -453,33 +453,26 @@ define(
               Profile.changePassword($scope.view.uuid, passwordData.old, passwordData.new)
                 .then(function(result)
                 {
-                  if(result.error)
-                  {
-                    if(result.statusCode === 400)
-                    {
-                      switch (result.errorCode)
-                      {
-                        case 6:
-                          $rootScope.notifier.error($rootScope.ui.profile.dataChanged);
-                          break;
-                        case 19:
-                          $rootScope.notifier.error($rootScope.ui.validation.oldPassMatch);
-                          break;
-                      }
-                    }
-                    else if(result.statusCode === 500)
-                    {
-                      $rootScope.notifier.error($rootScope.ui.profile.passwordSavedFailed);
-                    }
-                  }
-                  else
-                  {
-                    $scope.password = null;
-                    $scope.passWordForm.$setPristine();
-                    $rootScope.notifier.success($rootScope.ui.profile.passwordChanged);
-                    $scope.setViewTo("profile");
-                  }
+                  $scope.password = null;
+                  $scope.passWordForm.$setPristine();
+                  $rootScope.notifier.success($rootScope.ui.profile.passwordChanged);
                   $rootScope.statusBar.off();
+                  $scope.setViewTo("profile");
+
+                }, function(errorData)
+                {
+                  if(errorData.error)
+                  {
+                    switch (errorData.errorCode)
+                    {
+                      case 6:
+                        $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
+                        break;
+                      case 19:
+                        $rootScope.notifier.error($rootScope.ui.validation.password.oldPassMatch);
+                        break;
+                    }
+                  }
                 });
             }
           };

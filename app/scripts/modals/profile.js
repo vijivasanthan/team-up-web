@@ -178,6 +178,9 @@ define(['services/services', 'config'], function (services, config) {
         null,
         function (result) {
           deferred.resolve(result);
+        },
+        function (error) {
+          deferred.reject(error.data);
         });
 
       return deferred.promise;
