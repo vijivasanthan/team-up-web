@@ -393,16 +393,13 @@ define(
         {
           if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
           {
-            //angular.element
             $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
-
             return;
           }
 
           if (!member.role)
           {
             $rootScope.notifier.error($rootScope.ui.validation.role);
-
             return;
           }
 
@@ -415,7 +412,6 @@ define(
           if (member.password != member.reTypePassword)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-
             return;
           }
 
@@ -433,21 +429,18 @@ define(
           if (!member.team)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
-
             return;
           }
 
           if (!member.phone)
           {
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-
             return;
           }
 
           if ($rootScope.phoneNumberParsed.result == false)
           {
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-
             return;
           }
           else if ($rootScope.phoneNumberParsed.result == true)
