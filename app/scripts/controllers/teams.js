@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'teamCtrl',
       function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission, currentTeam)
+                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission)
       {
         $rootScope.fixStyles();
 
@@ -17,7 +17,7 @@ define(
         $scope.members = data.members;
         $scope.teams = data.teams;
 
-        $scope.members[CurrentSelection.getTeamId()] = currentTeam;
+        console.log('data', data);
 
         var params = $location.search();
 

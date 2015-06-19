@@ -499,14 +499,10 @@ define(
            */
           TeamsService.prototype.updateMember = function(member)
           {
-            var allMembers = null,//Store('app').get('members')
+            var allMembers = null,
                 indexMember = _.findIndex(allMembers, {uuid: member.uuid});
 
             allMembers[indexMember] = member;
-
-            //Store('app').save('members', allMembers);
-
-            //console.log('user', (Store('app').get('members'))[54]);
 
             return allMembers;
           };
@@ -554,6 +550,62 @@ define(
             return deferred.promise;
           };
 
+          /**
+           * Check if the teamId belongs to a team
+           * ,otherwise the teamId stays the last visited teamId
+           * @param teamId The id of the team
+           * @returns {*} return the current teamId
+           */
+          TeamsService.prototype.checkExistence = function(teamId)
+          {
+            var CurrentSelection = $injector.get('CurrentSelection'),
+                teams = Store('app').get('teams');
+
+            if( ! teamId || ! _.findWhere(teams, {uuid: teamId}) )
+            {
+              teamId = CurrentSelection.getTeamId();
+            }
+            else
+            {
+              CurrentSelection.local = teamId;
+            }
+
+            return teamId;
+          };
+
+          /**
+           * Get a team by id
+           * @param teamId the id of the team
+           */
+          TeamsService.prototype.get = function(teamId)
+          {
+            teamId = TeamsService.prototype.checkExistence(teamId);
+
+            return TeamUp._('teamStatusQuery',
+              {third: teamId})
+              .then(function (team)
+              {
+                if($rootScope.app.resources.teamUuids.indexOf(teamId) !== -1)
+                {
+                  var loggedMemberId = $rootScope.app.resources.uuid,
+                    loggedUserResources = _.findWhere(team, {uuid: loggedMemberId});
+
+                  if(!_.isUndefined(loggedUserResources))
+                  {
+                    $rootScope.app.resources = loggedUserResources;
+                    Store('app').save('resources', loggedUserResources);
+                  }
+                }
+
+                return team;
+              });
+          };
+
+          /**
+           * Get the names from the teams of the user
+           * @param teamsUuids Uuids of the team
+           * @returns {Array} array with the names of the teams
+           */
           TeamsService.prototype.getTeamNamesOfUser = function (teamsUuids)
           {
             var teams = Store('app').get('teams'),

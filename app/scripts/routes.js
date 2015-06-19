@@ -107,8 +107,8 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', 'Teams', '$route',
-                  function ($rootScope, Teams, $route)
+                  '$rootScope', 'Teams', '$route', 'CurrentSelection',
+                  function ($rootScope, Teams, $route, CurrentSelection)
                   {
                     //TODO needs a better solution to start a videocall by chatmessage
                     if($route.current.params.video && $rootScope.app.domainPermission.videoChat)
@@ -116,18 +116,16 @@ define(
                       $rootScope.startVideoCall(null, $route.current.params.video);
                     }
 
-                    return ($route.current.params.local && $route.current.params.local == 'true')
-                      ? Teams.queryLocal()
-                      : Teams.query(false, $route.current.params);
-                  }
-                ],
-                currentTeam: [
-                  'TeamUp', 'CurrentSelection',
-                  function (TeamUp, CurrentSelection)
-                  {
-                    var teamId = CurrentSelection.getTeamId();
+                    return Teams.get($route.current.params.uuid)
+                      .then(function(team) {
+                        var TeamsMembers = Teams.queryLocal();
 
-                    return TeamUp._('teamStatusQuery', {third: teamId});
+                        return {
+                          members: TeamsMembers.members,
+                          teams: TeamsMembers.teams,
+                          currentTeam: team
+                        };
+                      });
                   }
                 ]
               }
