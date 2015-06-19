@@ -3488,7 +3488,7 @@ links.Timeline.prototype.onDblClick = function (event)
         //if()
         var lastItem = this.items[this.items.length - 1];
 
-        if(lastItem && lastItem.content != 'Nieuw')
+        if(lastItem && ! lastItem.content.match(/Nieuw/))
         {
           var content = 'Nieuw';
           var group = this.getGroupFromHeight(y);   // (group may be undefined)

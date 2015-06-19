@@ -481,11 +481,11 @@ define(
                 content: content
               };
 
-              if ($scope.timeline.main && values.content != 'Nieuw')
+              if ($scope.timeline.main && ! values.content.match(/Nieuw/))
               {
                 $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
-              else if (values.content != 'Nieuw')
+              else if (! values.content.match(/Nieuw/))
               {
                 $scope.forms = {
                   add: false,
@@ -493,7 +493,7 @@ define(
                 };
               }
 
-              if (values.content == 'Nieuw')
+              if (values.content.match(/Nieuw/))
               {
                 content = {type: 'slot'};
               }
@@ -509,7 +509,7 @@ define(
                   switch (content.type)
                   {
                     case 'slot':
-                      if (values.content == 'Nieuw' || (content.relatedUser && typeof content.id == 'undefined'))
+                      if (values.content.match(/Nieuw/) || (content.relatedUser && typeof content.id == 'undefined'))
                       {
                         $scope.views.slot.add = true;
                       }
@@ -901,6 +901,7 @@ define(
                       }
                     };
 
+                    $scope.redrawSlot();
                   }
                 );
               }
@@ -1145,8 +1146,7 @@ define(
               };
             }
 
-            var content = '<span>' + relatedUserName + '</span>' +
-              '<input type="hidden" value="' + angular.toJson(itemContent) + '">';
+            var content = '<span>' + relatedUserName + '</span>';
 
             if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
               (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
@@ -1156,6 +1156,8 @@ define(
                 content = 'Nieuw';
               }
             }
+
+            content += '<input type="hidden" value="' + angular.toJson(itemContent) + '">';
 
             return content;
           };
