@@ -101,6 +101,13 @@ define(
               $location.hash(),
               function ()
               {
+                switch (hash)
+                {
+                  case "editPassword":
+                    clearPasswordForm();
+                    break;
+                }
+
                 $location.hash(hash);
 
                 setView(hash);
@@ -453,8 +460,7 @@ define(
               Profile.changePassword($scope.view.uuid, passwordData.old, passwordData.new)
                 .then(function(result)
                 {
-                  $scope.password = null;
-                  $scope.passWordForm.$setPristine();
+                  clearPasswordForm();
                   $rootScope.notifier.success($rootScope.ui.profile.passwordChanged);
                   $rootScope.statusBar.off();
                   $scope.setViewTo("profile");
@@ -473,9 +479,16 @@ define(
                         break;
                     }
                   }
+                  $rootScope.statusBar.off();
                 });
             }
           };
+
+          function clearPasswordForm()
+          {
+            $scope.password = null;
+            $scope.passWordForm.$setPristine();
+          }
 
           $scope.confirmModal = function(id)
           {
