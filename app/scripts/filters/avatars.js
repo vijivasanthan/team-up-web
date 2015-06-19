@@ -21,6 +21,31 @@ define(
     );
 
     filters.filter(
+      'translateReachabilityState',
+      [
+        '$rootScope',
+        function ($rootScope)
+        {
+          return function (currentState)
+          {
+            switch (currentState)
+            {
+              case "REACHABLE":
+                return $rootScope.ui.teamup.stateValue.reachable;
+                break;
+              case "POSSIBLY_REACHABLE":
+                return $rootScope.ui.teamup.stateValue.possibly_reachable;
+                break;
+              case "UNREACHABLE":
+                return $rootScope.ui.teamup.stateValue.unreachable;
+                break;
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter(
       'stateReachable',
       [
         function ()
