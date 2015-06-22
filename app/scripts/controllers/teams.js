@@ -18,8 +18,6 @@ define(
 
         var params = $location.search();
 
-        //$scope.search = {query: ''};
-
         $scope.roles = [];
 
         if($rootScope.app.resources.role == 1)
@@ -286,25 +284,6 @@ define(
             });
         };
 
-        //$scope.changePinToPhone = function ()
-        //{
-        //  var phone = $scope.memberForm.phone,
-        //    phoneValidateResult = $rootScope.phoneNumberParsed.result;
-        //
-        //  $scope.tempPhone = $scope.tempPhone || '';
-        //
-        //
-        //  if (phone && phone.length >= 10 && (_.isEmpty($scope.memberForm.pincode) ||
-        //    $scope.memberForm.pincode == $scope.tempPhone)
-        //    && phoneValidateResult == true)
-        //  {
-        //    var inputVal = angular.element('.inputPhoneNumber').val();
-        //
-        //    $scope.tempPhone = lastFourDigits(inputVal);
-        //    $scope.memberForm.pincode = lastFourDigits(inputVal);
-        //  }
-        //};
-
         var lastFourDigits = function (phone)
         {
           return phone.substr(phone.length - 4);
@@ -312,112 +291,52 @@ define(
 
         $scope.memberSubmit = function (member)
         {
-          if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
+          console.log('member', member);
+
+          if(! addMemberValidation(member))
           {
-            $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
             return;
           }
 
-          if (!member.role)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.role);
-            return;
-          }
-
-          //if (!_.isEmpty(member.pincode) && $rootScope.pincodeExistsValidation == false)
-          //{
-          //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
-          //  return false;
-          //}
-
-          if (member.password != member.reTypePassword)
-          {
-            $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-            return;
-          }
-
-          if (member.password.length < 8 || member.password.length > 20)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
-          }
-
-          if (_.isUndefined(member.email) || member.email == false)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-            return;
-          }
-
-          if (!member.team)
-          {
-            $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
-            return;
-          }
-
-          if (!member.phone)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            return;
-          }
-
-          if ($rootScope.phoneNumberParsed.result == false)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            return;
-          }
-          else if ($rootScope.phoneNumberParsed.result == true)
-          {
-            member.phone = $rootScope.phoneNumberParsed.format;
-          }
+          member.phone = $rootScope.phoneNumberParsed.format;
 
           $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-          //create a temp so the user don't see that the field changing
           var tempResources = angular.copy(member);
-          //var pincode = tempResources.pincode;
-          //delete tempResources.pincode;
-
           tempResources.password = MD5(tempResources.password);
+          tempResources.teamUuids = [$scope.current];
 
-          TeamUp._(
-            'memberAdd',
-            null,
+          Teams.addMember(tempResources)
+            .then(function(newMember)
             {
-              uuid: tempResources.userName,
-              userName: tempResources.userName,
-              passwordHash: tempResources.password,
-              firstName: tempResources.firstName,
-              lastName: tempResources.lastName,
-              phone: tempResources.phone,
-              email: tempResources.email,
-              teamUuids: [$scope.current],
-              role: tempResources.role,
-              birthDate: 0
-              //function: member.function
-            }
-          ).then(
-            function (result)
-            {
-              // change the REST return to json.
-              if (result.error)
+              if (newMember.error)
               {
-                var errorData = result.error.data.error;
-
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + errorData);
+                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + newMember.errorMessage);
+                console.log('Error by adding a member ' + newMember.errorCode, newMember.errorMessage);
                 $rootScope.statusBar.off();
               }
               else
               {
-                $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                //Profile.save(result.uuid, {
-                //  pincode: pincode
-                //});
-
-                // TODO: Repetitive code!
-                $scope.loadTeams();
+                return Profile.fetchUserData(newMember.uuid);
               }
-            }
-          );
+            })
+            .then(function(currentMemberData)
+            {
+              if(currentMemberData.error)
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + currentMemberData.errorMessage);
+                console.log('Error by getting a member ' + currentMemberData.errorCode, currentMemberData.errorMessage);
+                $rootScope.statusBar.off();
+              }
+              else
+              {
+                $scope.data.members.push(currentMemberData);
+
+                $scope.setViewTo('team');
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+              }
+            });
         };
 
         $scope.addExistingMember = function (member)
@@ -453,14 +372,11 @@ define(
                   $scope.memberValue = '';
                 }
 
-                //$scope.data.members.push(member);
-                //
-                //$scope.setViewTo('team');
-                //$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                //$rootScope.statusBar.off();
+                $scope.data.members.push(member);
 
-                //TODO change this
-                $scope.loadTeams();
+                $scope.setViewTo('team');
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
               }
             }
           );
@@ -470,22 +386,17 @@ define(
         {
           $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-          Teams.query(
-            false,
-            {'uuid': $scope.current}
-          ).then(
-            function (queries)
+          Teams.getAll().then(
+            function (teams)
             {
-              if (queries.error)
+              if (teams.error)
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
                 console.warn('error ->', queries);
               }
               else
               {
-                $scope.data = queries;
-
-                $scope.data.members = queries.members[$scope.current];
+                $scope.data.teams = teams;
 
                 if (angular.isDefined($scope.teamMemberForm))
                 {
@@ -803,6 +714,69 @@ define(
             $scope.addExistingMember(member);
           }
         };
+
+        /**
+         * Add member validation
+         * @param member All the data of the added member
+         * @returns {boolean} valid true of false
+         */
+        function addMemberValidation(member)
+        {
+          var valid = true;
+
+          if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
+            valid = false;
+          }
+
+          if (!member.role)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.role);
+            valid = false;
+          }
+
+          if (member.password != member.reTypePassword)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+            valid = false;
+          }
+
+          if (member.password.length < 8 || member.password.length > 20)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
+            valid = false;
+          }
+
+          if (_.isUndefined(member.email) || member.email == false)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+            valid = false;
+          }
+
+          if (!member.team)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
+            valid = false;
+          }
+
+          if (!member.phone)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+            valid = false;
+          }
+
+          if ($rootScope.phoneNumberParsed.result == false)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+            valid = false;
+          }
+
+          console.log('member', member);
+          console.log('valid', valid);
+
+          return valid;
+        }
       }
     );
   }
