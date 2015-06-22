@@ -660,7 +660,7 @@ define(
             'reachable': 'Bereikbaar',
             'possibly_reachable': 'Niet gepland',
             'unreachable': 'Niet bereikbaar',
-            'unavailable': 'Niet bereikbaar',
+            'unavailable': 'Niet beschikbaar',
             'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',

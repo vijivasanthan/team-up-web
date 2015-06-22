@@ -577,7 +577,7 @@ define(
            * Get a team by id
            * @param teamId the id of the team
            */
-          TeamsService.prototype.get = function(teamId)
+          TeamsService.prototype.getSingle = function(teamId)
           {
             teamId = TeamsService.prototype.checkExistence(teamId);
 
@@ -598,6 +598,16 @@ define(
                 }
 
                 return team;
+              });
+          };
+
+          TeamsService.prototype.getAll= function()
+          {
+            return TeamUp._('teamQuery')
+              .then(function(teams)
+              {
+                Store('app').save('teams', teams);
+                return teams;
               });
           };
 

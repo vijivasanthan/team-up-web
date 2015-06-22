@@ -116,7 +116,7 @@ define(
                       $rootScope.startVideoCall(null, $route.current.params.video);
                     }
 
-                    return Teams.get($route.current.params.uuid)
+                    return Teams.getSingle($route.current.params.uuid)
                       .then(function(team) {
                         var TeamsMembers = Teams.queryLocal();
 
