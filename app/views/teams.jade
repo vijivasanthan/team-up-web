@@ -86,7 +86,7 @@ aria-hidden='true')
 			strong
 				| {{ ui.teamup.selectTeam }}
 		select(ng-model='current',
-		ng-options='t.uuid as t.name for t in teams | orderBy:"name"',
+		ng-options='t.uuid as t.name for t in data.teams | orderBy:"name"',
 		ng-selected='current',
 		ng-change='requestTeam(current)')
 
@@ -140,9 +140,9 @@ aria-hidden='true')
 
 			hr
 
-			p(ng-hide='(data.members[current]).length > 0') {{ui.teamup.noMembers}}
+			p(ng-hide='data.members.length > 0') {{ui.teamup.noMembers}}
 
-			div(ng-show='(data.members[current]).length > 0')
+			div(ng-show='(data.members).length > 0')
 				table.table.table-striped.teamsTable
 					thead
 						tr
@@ -151,7 +151,7 @@ aria-hidden='true')
 							th: a {{ui.teamup.states}}
 							th
 					tbody
-						tr(ng-repeat='member in data.members[current] | orderBy:"lastName"')
+						tr(ng-repeat='member in data.members | orderBy:"lastName"')
 							td
 								.roundedPicSmall(class='{{member.states|stateColor}}',
 								back-img = '{{member.uuid | avatar:"team":"80" }}')
@@ -196,7 +196,7 @@ aria-hidden='true')
 						p {{ ui.teamup.stateValue.reachable }}
 				span.muted.pull-right
 					small
-						i {{(data.members[current]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+						i {{(data.members|filter:filtered).length | i18n_spec:'groups.memberCount'}}
 
 		#newTeamTab.tab-pane(class="{{(views.newTeam==true) && 'active'}}")
 			.tab-header

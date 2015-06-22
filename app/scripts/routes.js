@@ -121,9 +121,8 @@ define(
                         var TeamsMembers = Teams.queryLocal();
 
                         return {
-                          members: TeamsMembers.members,
+                          members: team,
                           teams: TeamsMembers.teams,
-                          currentTeam: team
                         };
                       });
                   }

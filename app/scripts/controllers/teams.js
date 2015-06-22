@@ -14,18 +14,11 @@ define(
         //TODO get this from a service
         $rootScope.resetPhoneNumberChecker();
 
-        $scope.members = data.members;
-        $scope.teams = data.teams;
-
-        console.log('data', data);
+        $scope.data = data;
 
         var params = $location.search();
 
-        $scope.search = {query: ''};
-
-        $scope.selection = {};
-
-        $scope.data = data;
+        //$scope.search = {query: ''};
 
         $scope.roles = [];
 
@@ -75,12 +68,10 @@ define(
           TeamUp._('teamStatusQuery', {third: id})
             .then(function(members)
             {
-              data.members[id] = members;
-
-              $scope.members = members;
+              $scope.data.members = members;
 
               angular.forEach(
-                $scope.members,
+                $scope.data.members,
                 function (member)
                 {
                   //check if the state of the logged user is equal
@@ -136,7 +127,7 @@ define(
         }
 
         $scope.current = uuid;
-        setView('team');
+        setView(view);
         setTeamView(uuid);
 
         //set default team by last visited team
@@ -176,8 +167,6 @@ define(
           );
         };
 
-        setView(view);
-
         $scope.requestTeam = function (current)
         {
           $scope.views.editTeam = false;
@@ -190,19 +179,6 @@ define(
             function ()
             {
               $location.search({uuid: current});
-            }
-          );
-        };
-
-        $scope.toggleSelection = function (group, master)
-        {
-          var flag = (master) ? true : false;
-
-          angular.forEach(
-            Store('app').get(group.uuid),
-            function (member)
-            {
-              $scope.selection[member.uuid] = flag
             }
           );
         };
