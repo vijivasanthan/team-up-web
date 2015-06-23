@@ -107,22 +107,24 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', 'Teams', '$route', 'CurrentSelection',
-                  function ($rootScope, Teams, $route, CurrentSelection)
+                  '$rootScope', 'Teams', '$route',
+                  function ($rootScope, Teams, $route)
                   {
+                    var teamId = Teams.checkExistence($route.current.params.uuid);
+
                     //TODO needs a better solution to start a videocall by chatmessage
                     if($route.current.params.video && $rootScope.app.domainPermission.videoChat)
                     {
                       $rootScope.startVideoCall(null, $route.current.params.video);
                     }
 
-                    return Teams.getSingle($route.current.params.uuid)
-                      .then(function(team) {
-                        var TeamsMembers = Teams.queryLocal();
-
+                    return Teams.getSingle(teamId)
+                      .then(function(currentTeam)
+                      {
                         return {
-                          members: team,
-                          teams: TeamsMembers.teams,
+                          members: currentTeam,
+                          teams: Teams.getAllLocal(),
+                          teamId: teamId
                         };
                       });
                   }

@@ -579,8 +579,6 @@ define(
            */
           TeamsService.prototype.getSingle = function(teamId)
           {
-            teamId = TeamsService.prototype.checkExistence(teamId);
-
             return TeamUp._('teamStatusQuery',
               {third: teamId})
               .then(function (team)
@@ -638,6 +636,12 @@ define(
                 Store('app').save('teams', teams);
                 return teams;
               });
+          };
+
+          // Get teams data from localStorage
+          TeamsService.prototype.getAllLocal = function ()
+          {
+            return Store('app').get('teams');
           };
 
           /**
