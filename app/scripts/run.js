@@ -860,23 +860,22 @@ define(
 
           $rootScope.startVideoCall = function(receiver, roomId)
           {
-            var room = roomId || getRandomString();
-            var user = receiver || 'anonymous';
-            var Message = $injector.get('Message');
-            var url = 'http://webrtc.ask-cs.com/?room=' + room; //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
-            var message = $rootScope.ui.message.webTRCWebLink + url;
-            var CurrentSelection = $injector.get('CurrentSelection');
+            var room = roomId || getRandomString(),
+                user = receiver || 'anonymous',
+                MessageModal = $injector.get('Message'),
+                url = 'http://webrtc.ask-cs.com/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
+                message = $rootScope.ui.message.webTRCWebLink + url,
+                CurrentSelectionModal = $injector.get('CurrentSelection');
 
-            Message.save(message, CurrentSelection.getTeamId())
+            MessageModal.save(message, CurrentSelectionModal.getTeamId())
               .then(function(result)
               {
                 $rootScope.video = {
-                  url: filterUrl(url)
-                }
-                $rootScope.video.src = $rootScope.video.url;
+                  url: filterUrl(url),
+                  src: filterUrl(url)
+                };
 
                 var content = angular.element('#message-content');
-                $("iframe").contents().find('#leave').hide();
 
                 //Check if chat/video message area is already opened
                 if(content.hasClass('ng-hide'))
@@ -900,23 +899,21 @@ define(
           $rootScope.hangup = null;
 
           function displayMessage (evt) {
-            var message;
-            console.log('evt.data', evt.data);
-            console.log('evt.origin', evt.origin);
-
-            $rootScope.hangup = evt.data;
-            $rootScope.$apply();
-
-            if(!_.isNull($rootScope.hangup))
+            if (evt.origin === "http://webrtc.ask-cs.com" ||
+              evt.origin === "http://localhost:9001")
             {
-              $rootScope.closeVideoCall();
+              console.log('evt.data', evt.data);
+              console.log('evt.origin', evt.origin);
+
+              $rootScope.hangup = evt.data;
+              $rootScope.$apply();
+
+              if(!_.isNull($rootScope.hangup))
+              {
+                $rootScope.closeVideoCall();
+                $rootScope.hangup = null;
+              }
             }
-            //if (evt.origin !== "http://localhost:9001") {
-            //  $scope.message = "You are not worthy";
-            //}
-            //else {
-            //  $scope.message = "I got " + evt.data + " from " + evt.origin;
-            //}
           }
 
           if (window.addEventListener) {

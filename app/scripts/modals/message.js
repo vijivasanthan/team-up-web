@@ -51,6 +51,7 @@ define(['services/services', 'config'],
                   sendTime: currentDate.getTime()
                 };
 
+            //TODO Adding a teamId or userId needs to be created for sending messages backend
             Message.save(teamData, messageData,
               function (result)
               {

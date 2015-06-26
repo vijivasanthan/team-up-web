@@ -29,7 +29,9 @@ iframe {
 
 #video-content {
   iframe {
+    position: inherit;
     top: -50px;
     height: calc(100% + 51px);
+    z-index: 3;
   }
 }

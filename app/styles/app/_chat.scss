@@ -59,11 +59,11 @@
     z-index: 2000;
     height: 100%;
     margin-right: -8px; //size of border
-    border: 8px solid $turq;
+    border: 7px solid $turq;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     background-color: $chatBg;
-    padding-bottom: 51px; //70px;
+    padding-bottom: 52px; //70px;
     -moz-box-shadow: 0 0 0 3px $brown;
     -webkit-box-shadow: 0 0 0 3px $brown;
     box-shadow: 0 0 0 3px $brown;
@@ -74,11 +74,16 @@
       float: left;
       position: relative;
       @include border-bottom-left-radius(15px);
+      @include border-top-left-radius(15px);
+      border-right: 7px solid $turq;
 
       .video-content-wrap {
         position: inherit;
         overflow: hidden;
         height: 100%;
+        @include border-bottom-left-radius(15px);
+        @include border-top-left-radius(15px);
+        z-index: 6;
       }
 
       .stop-video {
@@ -109,9 +114,7 @@
       height: 100%;
       position: relative;
 
-      margin-top: -8px;
-      border-top: 8px solid #1dc8b6;
-      border-top-left-radius: 15px;
+      margin-top: -7px;
 
       .chatHeader {
         height: 0px;//20px;
@@ -131,7 +134,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
         height: 100%;
-        margin-top: 0px;//20px;
+        margin-top: 7px;//20px;
       }
       .noMessages {
         padding: 40px 10px;
@@ -266,15 +269,12 @@
 
       .input-area {
         position: absolute;
+        width: 100%;
+        bottom: -59px;
         background-color: $offwhite;
-        height: 67px;
-        padding-top: 16px;
+        padding-top: 20px;
         z-index: 20;
-        left: -8px;
-        border-left: 8px solid #1dc8b6;
-        border-bottom: 8px solid #1dc8b6;
-        @include border-bottom-left-radius(15px);
-        width: calc(100% + 8px);
+        @include border-bottom-left-radius(8px);
 
 
         #messageField {
@@ -290,7 +290,7 @@
     }
 
     #chat-content.border-left {
-      border-left: 8px solid #1dc8b6;
+      //border-left: 8px solid #1dc8b6;
     }
   }
 
