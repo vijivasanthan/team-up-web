@@ -863,39 +863,32 @@ define(
             var room = roomId || getRandomString();
             var user = receiver || 'anonymous';
             var Message = $injector.get('Message');
-            var url = 'http://webrtc.ask-cs.com/?room=' + room; //'http://localhost:9001/?room=' + room;
+            var url = 'http://webrtc.ask-cs.com/?room=' + room; //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
             var message = $rootScope.ui.message.webTRCWebLink + url;
-            var teamId = receiver && receiver.teamUuids[0] || null;
-            console.log('receiver', receiver);
-            console.log('teamId', teamId);
+            var CurrentSelection = $injector.get('CurrentSelection');
 
-            Message.save(message, teamId)
-              .then(
-                function(result)
-                {
-                  $rootScope.video = {
-                    url: filterUrl(url)
-                  }
-                  $rootScope.video.src = $rootScope.video.url;
-
-                  var content = angular.element('#message-content');
-                  $("iframe").contents().find('#leave').hide();
-
-                  //Check if chat/video message area is already opened
-                  if(content.hasClass('ng-hide'))
-                  {
-                    content.removeClass('ng-hide');
-                    clickChatBtn();
-                  }
+            Message.save(message, CurrentSelection.getTeamId())
+              .then(function(result)
+              {
+                $rootScope.video = {
+                  url: filterUrl(url)
                 }
-              );
+                $rootScope.video.src = $rootScope.video.url;
+
+                var content = angular.element('#message-content');
+                $("iframe").contents().find('#leave').hide();
+
+                //Check if chat/video message area is already opened
+                if(content.hasClass('ng-hide'))
+                {
+                  content.removeClass('ng-hide');
+                  clickChatBtn();
+                }
+              });
           };
 
           $rootScope.closeVideoCall = function()
           {
-            //trigger buttons, like leave room
-            $("iframe").contents().find('#leave').click();
-
             $rootScope.video.src = false;
             $rootScope.video.url = filterUrl('about:blank');
 
@@ -903,6 +896,36 @@ define(
 
             $rootScope.notifier.success($rootScope.ui.video.stop);
           };
+
+          $rootScope.hangup = null;
+
+          function displayMessage (evt) {
+            var message;
+            console.log('evt.data', evt.data);
+            console.log('evt.origin', evt.origin);
+
+            $rootScope.hangup = evt.data;
+            $rootScope.$apply();
+
+            if(!_.isNull($rootScope.hangup))
+            {
+              $rootScope.closeVideoCall();
+            }
+            //if (evt.origin !== "http://localhost:9001") {
+            //  $scope.message = "You are not worthy";
+            //}
+            //else {
+            //  $scope.message = "I got " + evt.data + " from " + evt.origin;
+            //}
+          }
+
+          if (window.addEventListener) {
+            // For standards-compliant web browsers
+            window.addEventListener("message", displayMessage, false);
+          }
+          else {
+            window.attachEvent("onmessage", displayMessage);
+          }
         }
       ]
     );

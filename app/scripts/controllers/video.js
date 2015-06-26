@@ -21,7 +21,10 @@ define(
 
             if($route.current.params.videoId)
             {
-              videoCall = $filter('trusted_url')('http://webrtc.ask-fast.com/?room=' + $route.current.params.videoId);
+              //http://webrtc.ask-fast.com
+              //http://webrtc.ask-cs.com
+              //http://localhost:9001
+              videoCall = $filter('trusted_url')('http://webrtc.ask-cs.com/?room=' + $route.current.params.videoId);
             }
             else
             {
