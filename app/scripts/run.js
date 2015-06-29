@@ -846,12 +846,10 @@ define(
             }, 0);
           };
 
-          var getRandomString = function()
+          function randomString(length)
           {
-            return Math.random()// Generate random number, eg: 0.123456
-              .toString(36)// Convert  to base-36 : "0.4fzyo82mvyr"
-              .slice(-8);// Cut off last 8 characters : "yo82mvyr"
-          };
+            return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+          }
 
           var filterUrl = function(url)
           {
@@ -860,10 +858,10 @@ define(
 
           $rootScope.startVideoCall = function(receiver, roomId)
           {
-            var room = roomId || getRandomString(),
+            var room = roomId || randomString(32),
                 user = receiver || 'anonymous',
                 MessageModal = $injector.get('Message'),
-                url = 'http://webrtc.ask-cs.com/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
+                url = 'http://localhost:9001/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
                 message = $rootScope.ui.message.webTRCWebLink + url,
                 CurrentSelectionModal = $injector.get('CurrentSelection');
 
@@ -902,17 +900,28 @@ define(
             if (evt.origin === "http://webrtc.ask-cs.com" ||
               evt.origin === "http://localhost:9001")
             {
-              console.log('evt.data', evt.data);
-              console.log('evt.origin', evt.origin);
-
               $rootScope.hangup = evt.data;
               $rootScope.$apply();
 
               if(!_.isNull($rootScope.hangup))
               {
-                $rootScope.closeVideoCall();
+                var location = $location.path().split('/');
+
+                if(location[1] === 'video'
+                  && ! Session.check())
+                {
+                  $location.path("/login");
+                  $rootScope.$apply();
+
+                }
+                else
+                {
+                  $rootScope.closeVideoCall();
+                }
                 $rootScope.hangup = null;
               }
+
+
             }
           }
 

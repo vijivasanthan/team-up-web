@@ -8,8 +8,8 @@ define(
     services.factory(
       'States',
       [
-        '$location', '$rootScope', 'Session',
-        function ($location, $rootScope, Session)
+        '$location', '$rootScope',
+        function ($location, $rootScope)
         {
           $rootScope.$on(
             '$routeChangeStart',
@@ -228,7 +228,7 @@ define(
             '$routeChangeSuccess',
             function ()
             {
-              $rootScope.newLocation = $location.path();
+              $rootScope.currentLocation = $location.path();
 
               $rootScope.loadingBig = false;
 
@@ -246,7 +246,7 @@ define(
               try {
                 trackGa('send', 'pageview', {
                   title: $location.hash(),
-                  page: $rootScope.newLocation
+                  page: $rootScope.currentLocation
                 });
               } catch (err) {
                 console.warn('Google analytics error!', err);

@@ -505,11 +505,21 @@ define(
               controller: 'helpCtrl',
               reloadOnSearch: false
             })
+
             .when(
             '/video/:videoId?',
             {
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
+              resolve: {
+                'check': function ($rootScope, $location, Session)
+                {
+                  if(Session.check())
+                  {
+                    $location.path($rootScope.currentLocation);
+                  }
+                }
+              },
               reloadOnSearch: false
             })
 

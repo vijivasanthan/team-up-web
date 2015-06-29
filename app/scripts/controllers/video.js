@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'videoCtrl',
-        function ($rootScope, $route, $scope, $filter, $location)
+        function ($rootScope, $route, $scope, $filter, check)
         {
           $rootScope.fixStyles();
 
@@ -24,7 +24,7 @@ define(
               //http://webrtc.ask-fast.com
               //http://webrtc.ask-cs.com
               //http://localhost:9001
-              videoCall = $filter('trusted_url')('http://webrtc.ask-cs.com/?room=' + $route.current.params.videoId);
+              videoCall = $filter('trusted_url')('http://localhost:9001/?room=' + $route.current.params.videoId);
             }
             else
             {
