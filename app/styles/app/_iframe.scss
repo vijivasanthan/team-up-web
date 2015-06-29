@@ -22,9 +22,18 @@ iframe {
 }
 
 .embed-responsive {
+  position: relative;
+  display: block;
+  height: calc(100vh - 370px);
+  padding: 0;
+  overflow: hidden;
   iframe {
     top: -60px;
   }
+}
+
+.embed-responsive.embed-responsive-16by9 {
+  padding-bottom: 0;
 }
 
 #video-content {
