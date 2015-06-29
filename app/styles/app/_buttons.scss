@@ -335,3 +335,9 @@ input[type="submit"].btn {
 .btn-color-brown {
   color: $brown;
 }
+
+.downloadButton {
+  width: 190px;
+  height: 40px;
+  @include border-radius('5px')
+}

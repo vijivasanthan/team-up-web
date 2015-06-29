@@ -13,8 +13,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          var view = (! $location.hash()) ? 'web' : $location.hash();
-
           function resetViews ()
           {
             $scope.views = {
@@ -46,7 +44,7 @@ define(
             );
           };
 
-          setView(view);
+          setView($location.hash() || 'web');
         }
       ]
     );
