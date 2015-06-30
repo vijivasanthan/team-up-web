@@ -861,7 +861,7 @@ define(
             var room = roomId || randomString(32),
                 user = receiver || 'anonymous',
                 MessageModal = $injector.get('Message'),
-                url = 'http://localhost:9001/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
+                url = 'http://webrtc.ask-cs.com/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
                 message = $rootScope.ui.message.webTRCWebLink + url,
                 CurrentSelectionModal = $injector.get('CurrentSelection');
 
