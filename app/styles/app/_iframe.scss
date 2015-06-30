@@ -16,9 +16,6 @@
   border-radius: 3px;
   padding-bottom: 65%;
   height: 0;
-  iframe {
-    top: -60px;
-  }
 }
 
 .embed-responsive {
@@ -27,9 +24,6 @@
   height: calc(100vh - 370px);
   padding: 0;
   overflow: hidden;
-  iframe {
-    top: -60px;
-  }
 }
 
 .embed-responsive.embed-responsive-16by9 {
@@ -39,7 +33,6 @@
 #video-content {
   iframe {
     position: inherit;
-    top: -50px;
     height: calc(100% + 51px);
     z-index: 3;
   }

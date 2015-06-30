@@ -65,7 +65,7 @@ define(
 
         var setTeamView = function (id)
         {
-          $scope.startVideoCall = ($rootScope.app.resources.teamUuids.indexOf(id) >= 0);
+          $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf(id) >= 0);
 
           TeamUp._('teamStatusQuery', {third: id})
             .then(function(members)
