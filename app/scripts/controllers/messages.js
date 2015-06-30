@@ -150,6 +150,10 @@ define(
 
                   }
                 }
+                else if (msg.type == 'VIDEO_CHAT')
+                {
+                  console.log('msg', msg);
+                }
                 else
                 {
                   //Check if there is a url and parse the url to a anchor tag

@@ -40,7 +40,7 @@ define(['services/services', 'config'],
             }
           };
 
-          Message.prototype.save = function(message, teamId)
+          Message.prototype.save = function(message, type, teamId)
           {
             var deferred = $q.defer(),
                 teamData = (teamId) ? { teamId: teamId } : {},
@@ -48,7 +48,8 @@ define(['services/services', 'config'],
                 messageData = {
                   title: 'Van: TeamUp' + currentDate.toString(config.app.formats.date),
                   body: message,
-                  sendTime: currentDate.getTime()
+                  sendTime: currentDate.getTime(),
+                  type: type
                 };
 
             //TODO Adding a teamId or userId needs to be created for sending messages backend

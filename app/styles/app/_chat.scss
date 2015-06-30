@@ -117,11 +117,11 @@
       margin-top: -7px;
 
       .chatHeader {
-        height: 49px;
+        height: 40px;
         background-color: $turq;
         position: absolute;
-        width: 250px;
-        padding-top: 7px;
+        width: 240px;
+        padding-top: 2px;
         z-index: 21;
         text-align: center;
         top: 5px;
@@ -178,6 +178,32 @@
 
         hr {
           border-color: $orange;
+        }
+      }
+
+      .videoLink {
+        border: 1px solid $orange;
+        background-color: $white;
+        position: relative;
+        margin: 0 15px 15px 15px;
+        min-height: 30px;
+        padding: 6px;
+        h5 {
+          color: $turq;
+          font-weight: bold;
+          width: 280px;
+          margin: 0;
+        }
+        p {
+          color: $graytu;
+          font-style: italic;
+          margin: 0 0 0px !important;
+          font-weight: bold;
+        }
+        a button {
+          position: absolute;
+          right: 15px;
+          top: calc(50% - 15px);
         }
       }
 
@@ -278,7 +304,7 @@
         width: 100%;
         bottom: -59px;
         background-color: $offwhite;
-        padding-top: 20px;
+        padding-top: 11px;
         z-index: 20;
         @include border-bottom-left-radius(8px);
 

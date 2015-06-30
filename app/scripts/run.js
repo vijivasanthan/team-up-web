@@ -856,32 +856,43 @@ define(
             return  $filter('trusted_url')(url);
           };
 
-          $rootScope.startVideoCall = function(receiver, roomId)
+
+          $rootScope.createVideoCall = function(receiver)
           {
-            var room = roomId || randomString(32),
-                user = receiver || 'anonymous',
-                MessageModal = $injector.get('Message'),
-                url = 'http://webrtc.ask-cs.com/?room=' + room, //'http://webrtc.ask-cs.com/?room=' + room; //http://localhost:9001/?room=
-                message = $rootScope.ui.message.webTRCWebLink + url,
-                CurrentSelectionModal = $injector.get('CurrentSelection');
+            var room = randomString(32),
+              user = receiver || 'anonymous',
+              MessageModal = $injector.get('Message'),
+              type = 'VIDEO_CHAT',
+              CurrentSelectionModal = $injector.get('CurrentSelection');
 
-            MessageModal.save(message, CurrentSelectionModal.getTeamId())
-              .then(function(result)
+            MessageModal.save(room, type, CurrentSelectionModal.getTeamId())
+              .then(function()
               {
-                $rootScope.video = {
-                  url: filterUrl(url),
-                  src: filterUrl(url)
-                };
-
-                var content = angular.element('#message-content');
-
-                //Check if chat/video message area is already opened
-                if(content.hasClass('ng-hide'))
-                {
-                  content.removeClass('ng-hide');
-                  clickChatBtn();
-                }
+                $rootScope.startVideoCall(room);
               });
+          };
+
+          $rootScope.startVideoCall = function(roomId)
+          {
+            console.log('roomId', roomId);
+
+
+            var url = 'http://webrtc.ask-cs.com/?room=' + roomId;
+            //username aan de url toevoegen
+
+            $rootScope.video = {
+              url: filterUrl(url),
+              src: filterUrl(url)
+            };
+
+            var content = angular.element('#message-content');
+
+            //Check if chat/video message area is already opened
+            if(content.hasClass('ng-hide'))
+            {
+              content.removeClass('ng-hide');
+              clickChatBtn();
+            }
           };
 
           $rootScope.closeVideoCall = function()
