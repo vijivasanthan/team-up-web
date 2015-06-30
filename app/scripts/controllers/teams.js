@@ -664,20 +664,20 @@ define(
         //});
 
         // TODO: Investigate on this!
-        $scope.$on(
-          '$viewContentLoaded',
-          function ()
-          {
-            console.log("teams : viewContentLoaded");
-
-            // make sure the loading of the
-            if (!$rootScope.taskVisit)
-            {
-              $rootScope.$broadcast('taskFinishLoading');
-              $rootScope.taskVisit = true;
-            }
-          }
-        );
+        //$scope.$on(
+        //  '$viewContentLoaded',
+        //  function ()
+        //  {
+        //    console.log("teams : viewContentLoaded");
+        //
+        //    // make sure the loading of the
+        //    if (!$rootScope.taskVisit)
+        //    {
+        //      $rootScope.$broadcast('taskFinishLoading');
+        //      $rootScope.taskVisit = true;
+        //    }
+        //  }
+        //);
 
         /**
          * Check if the username is correct, otherwise remove the unwanted chars
