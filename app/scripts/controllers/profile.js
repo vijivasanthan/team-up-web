@@ -516,7 +516,8 @@ define(
             var changes = {};
 
             //add member to the deletelist per team
-            _.each($scope.view.teamUuids, function(teamId) {
+            _.each($scope.view.teamUuids, function(teamId)
+            {
               changes[teamId] = {
                 a: [],
                 r: [$scope.view.uuid]
@@ -528,11 +529,12 @@ define(
               function()
               {
                 //Check of logged user is equal to the profile user
+                $scope.teams = null;
+                $scope.view.teamUuids = [];
+                $scope.edit.teamUuids = [];
+
                 if($scope.view.uuid == $rootScope.app.resources.uuid)
                 {
-                  $scope.teams = null;
-                  $scope.view.teamUuids = [];
-                  $scope.edit.teamUuids = [];
                   $rootScope.app.resources.teamUuids = [];
                   //update local resources without teams
                   Store('app').save('resources', $rootScope.app.resources);
@@ -540,7 +542,8 @@ define(
                   //get access again for a memmber without teams
                   Permission.getAccess();
                 }
-                $rootScope.statusBar.off()
+                $rootScope.statusBar.off();
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               }
             );
           };
