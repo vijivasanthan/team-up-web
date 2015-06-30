@@ -214,8 +214,12 @@ block chat
 			#chat-content(ng-class="{ 'border-left': video.src}")
 				.chatHeader
 					//h4 {{teamName}}
+					select(ng-model='chatTeamId',
+						ng-options='team.uuid as team.name for team in teams',
+						ng-change='fetchMessagesByTeam()')
 				.mainContent
-					p.noMessages(ng-hide='messagesShow.length > 0') {{ui.teamup.noMessages}}
+					p.noMessages(ng-show='messagesShow.length == 0 && ! loadChatMessages') {{ui.teamup.noMessages}}
+					p.noMessages(ng-show='loadChatMessages') Berichten worden geladen...
 					div(ng-repeat='message in messagesShow')
 						.chat-separator(ng-show='(message.date != "")')
 							span {{message.date}}

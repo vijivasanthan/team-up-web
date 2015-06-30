@@ -58,7 +58,8 @@ define(
                   method: 'POST',
                   params: {
                     first: 'team',
-                    second: 'teamMessage'
+                    second: 'teamMessage',
+                    third: ''
                   }
                 },
 

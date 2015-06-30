@@ -56,6 +56,14 @@ define(
                 }
               }
 
+              //if ACL permission chat load the current chats of the team
+              //if($rootScope.app.domainPermission.chat && $rootScope.app.resources.teamUuids.indexOf(teamId) >= 0)
+              //{
+              //  console.log('broadvast chat ', teamId);
+              //
+              //  $rootScope.$broadcast('loadChatsCurrentTeam');
+              //}
+
               Store('app').save('currentTeamClientGroup', {teamId: teamId, clientGroupId: clientGroupId });
             },
             init: function()
