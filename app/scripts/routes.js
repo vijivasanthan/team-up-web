@@ -18,6 +18,10 @@ define(
               {
                 return function (exception, cause)
                 {
+                  console.log('exception', exception);
+                  console.log('cause', cause);
+
+
                   trackGa('send', 'exception', {
                         exDescription: exception.message,
                         exFatal: false,
@@ -110,16 +114,9 @@ define(
                   '$rootScope', 'Teams', '$route', 'CurrentSelection',
                   function ($rootScope, Teams, $route, CurrentSelection)
                   {
-                    //TODO needs a better solution to start a videocall by chatmessage
-                    if($route.current.params.video && $rootScope.app.domainPermission.videoChat)
-                    {
-                      $rootScope.startVideoCall(null, $route.current.params.video);
-                    }
-
                     return Teams.getSingle($route.current.params.uuid)
                       .then(function(team) {
                         var TeamsMembers = Teams.queryLocal();
-
                         return {
                           members: team,
                           teams: TeamsMembers.teams,
@@ -547,11 +544,12 @@ define(
                   {
                     if(rejection.status > 0)
                     {
+                      var rejections = $injector.get('Rejections');
+
                       switch (rejection.status)
                       {
                         case 403:
-                          var loginData = Store('app').get('loginData'),
-                              rejections = $injector.get('Rejections');
+                          var loginData = Store('app').get('loginData');
 
                           if(loginData.password)
                           {
@@ -563,6 +561,13 @@ define(
                           }
                           break;
                       }
+
+                      if(rejection.data && rejection.data.error)
+                      {
+                        rejections.trowError(rejection.data);
+                      }
+
+                      console.log('rejection', rejection);
 
                       trackGa('send', 'exception', {
                         exDescription: rejection.statusText,

@@ -664,7 +664,31 @@ define(
             'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',
-          sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.'
+          sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.',
+          errorCode: {
+            '1': 'Onbekende foutmelding',
+            '2': 'De Deomeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
+            '3': 'Dit lid moet de rol van coördinator hebben, voordat er een team aangemaakt kan worden',
+            '4': 'Eeen agent id mag alleen uit alpha nummerieke karakters, onder- en streepjes bestaan',
+            '5': 'Kan de JSON niet parsen of de JSON body',
+            '6': 'Een of meerdere paramters zijn er niet',
+            '7': 'De group "members" is niet gevonden',
+            '8': 'Team met het gegeven teamUuid bestaat niet',
+            '9': 'Dit lid maakt geen deel uit van het team',
+            '10': 'Team met het gegeven teamUuid bestaat niet',
+            '11': 'Dit lid moet de rol van coördinator hebben, voordat er een nieuw team aangemaakt kan worden',
+            '12': 'De team agent kon niet aangemaakt worden',
+            '13': 'De uuid parameter en het uuid in de payload komen niet overheen',
+            '14': 'Een lid met dit uuid bestaat al',
+            '15': 'Een van de meegstuurde waardes is onbekend',
+            '16': 'Een van de volgende settings heeft als waarde null, Dit is niet mogelijk',
+            '17': 'Een van de meegestuurde waardes heeft een onbekend type',
+            '18': 'De gebruiker met het opgegeven id bestaat niet',
+            '19': 'Het ingevoerde oude wachtwoord komt niet overheen met het huidige',
+            '20': 'Dit lid moet de rol van coördinator hebben, voordat er een wachtwoord van een ander lid gewijzigd kan worden',
+            '21': 'Een parameter kan niet geparst worden',
+            '22': 'Dit lid is in geen enkel team'
+          }
         },
         task: {
           information: 'Informatie',
