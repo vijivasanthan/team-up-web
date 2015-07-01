@@ -102,7 +102,7 @@ define(
           notAvailable: 'Niet bereikbaar', // Niet Beschikbaar
           notachieve: 'Niet gearchieveerd',
           legendaLabels: {
-            morePeople: 'Genoeg Mensen',
+            morePeople: 'Ruim genoeg mensen',
             enoughPeople: 'Precies genoeg mensen',
             lessPeople: 'Te weinig mensen'
           },
