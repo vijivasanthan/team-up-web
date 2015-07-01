@@ -76,24 +76,18 @@ define(
           TeamUp._('teamUpdate', { second: team.uuid }, team)
             .then(function (result)
             {
-              if (result.error)
-              {
-                $rootScope.notifier.error('Error with saving team info : ' + result.errorMessage);
-                console.log('error by updating team ' + result.errorCode, result.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
-              {
-                return Teams.getAll();
-              }
+              return result.error && result || Teams.getAll();
             })
             .then(function(teams)
             {
-              $scope.data.teams = teams;
-              $scope.views.editTeam = false;
+              if(! teams.error)
+              {
+                $scope.data.teams = teams;
+                $scope.views.editTeam = false;
 
-              $rootScope.statusBar.off();
-              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              }
             });
         };
 
@@ -103,7 +97,7 @@ define(
          */
         $scope.teamSubmit = function (team)
         {
-          if (typeof team == 'undefined' || $.trim(team.name) == '')
+          if (! _.isUndefined(team))
           {
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
             return;
@@ -115,7 +109,7 @@ define(
             {
               if (newTeam.error)
               {
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError);
+                return newTeam;
               }
               else
               {
@@ -130,13 +124,7 @@ define(
             })
             .then(function(teams)
             {
-              if (teams.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
-                //errorCode5
-                console.warn('fetching teams error ->', teams.errorMessage);
-              }
-              else
+              if (! teams.error)
               {
                 $scope.data.teams = teams;
                 $scope.data.members = null;
@@ -145,8 +133,8 @@ define(
 
                 $location.search({ uuid: $scope.current });
                 $scope.setViewTo('team');
+                $rootScope.statusBar.off();
               }
-              $rootScope.statusBar.off();
             });
         };
 
@@ -157,7 +145,7 @@ define(
          */
         $scope.memberSubmit = function (member)
         {
-          console.log('member', member);
+          member.team = $scope.current;
 
           if(! addMemberValidation(member))
           {
@@ -167,34 +155,19 @@ define(
           $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
           member.phone = $rootScope.phoneNumberParsed.format;
-          var tempResources = angular.copy(member);
 
+          var tempResources = angular.copy(member);
           tempResources.password = MD5(tempResources.password);
           tempResources.teamUuids = [$scope.current];
 
           Teams.addMember(tempResources)
             .then(function(newMember)
             {
-              if (newMember.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + newMember.errorMessage);
-                console.log('Error by adding a member ' + newMember.errorCode, newMember.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
-              {
-                return Profile.fetchUserData(newMember.uuid);
-              }
+              return newMember.error && newMember || Profile.fetchUserData(newMember.uuid);
             })
             .then(function(currentMemberData)
             {
-              if(currentMemberData.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + currentMemberData.errorMessage);
-                console.log('Error by getting a member ' + currentMemberData.errorCode, currentMemberData.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
+              if(! currentMemberData.error)
               {
                 $scope.data.members.push(currentMemberData);
 
@@ -229,13 +202,11 @@ define(
           {
             if (result.error)
             {
-              $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + result.errorMessage);
-              $rootScope.statusBar.off();
+              return result;
             }
             else
             {
               $scope.result = result;
-
               if (angular.isDefined($scope.membersBySearch))
               {
                 $scope.membersBySearch = null;
@@ -246,12 +217,15 @@ define(
           })
           .then(function(currentMember)
           {
-            $scope.data.members.push(currentMember);
-            $scope.data.members = checkLocationMembers($scope.data.members);
+            if(! currentMember.error)
+            {
+              $scope.data.members.push(currentMember);
+              $scope.data.members = checkLocationMembers($scope.data.members);
 
-            $scope.setViewTo('team');
-            $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-            $rootScope.statusBar.off();
+              $scope.setViewTo('team');
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              $rootScope.statusBar.off();
+            }
           });
         };
 
@@ -263,19 +237,13 @@ define(
           Teams.getAll().then(
             function (teams)
             {
-              if (teams.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
-                console.warn('error ->', queries);
-              }
-              else
+              if (! teams.error)
               {
                 $scope.data.teams = teams;
                 $scope.setViewTo('team');
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
               }
-
-              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-              $rootScope.statusBar.off();
             }
           );
         };
@@ -325,23 +293,17 @@ define(
           TeamUp._('teamDelete', {second: $scope.current} )
             .then(function (teamDelete)
             {
-              if(teamDelete.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
-                console.warn('error -> ' + teamDelete.errorCode, teamDelete.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
-              {
-                return Teams.getAll();
-              }
+              return teamDelete.error && teamDelete || Teams.getAll();
             })
             .then(function(teams)
             {
-              $scope.data.teams = teams;
-              $scope.requestTeam(teams[0].uuid);
-              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-              $rootScope.statusBar.off();
+              if(! teams.error)
+              {
+                $scope.data.teams = teams;
+                $scope.requestTeam(teams[0].uuid);
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+              }
             });
         };
 
@@ -380,18 +342,12 @@ define(
             {ids: [memberId]}
           ).then(function(memberDelete)
             {
-              if(memberDelete.error)
-              {
-                $rootScope.notifier.error(memberDelete.errorMessage);
-                console.warn('error -> ' + memberDelete.errorCode, memberDelete.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
+              if(! memberDelete.error)
               {
                 removedLoggedMember(memberId);
 
                 var deletedMember = _.findWhere($scope.data.members, {uuid: memberId}),
-                    memberIndex = $scope.data.members.indexOf(deletedMember);
+                  memberIndex = $scope.data.members.indexOf(deletedMember);
 
                 $scope.data.members.splice(memberIndex, 1);
                 $rootScope.statusBar.off();
@@ -435,13 +391,9 @@ define(
             $scope.findMembersLoad = true;
 
             TeamUp._('findMembers', { query: name })
-              .then(function (result)
+              .then(function(result)
               {
-                if (result.error)
-                {
-                  console.log('Error with finding members : ' + result.error);
-                }
-                else
+                if (! result.error)
                 {
                   $scope.membersBySearch = result.members;
 
@@ -501,14 +453,9 @@ define(
           if (changeMemberTeamOption == 1)
           {
             Teams.removeAll(member)
-              .then(
-              function (result)
+              .then(function(result)
               {
-                if (result.error)
-                {
-                  console.log('Error with deleting member from all his teams : ' + result.error);
-                }
-                else
+                if (! result.error)
                 {
                   member.teamUuids = [];
                   $scope.addExistingMember(member);
@@ -604,10 +551,6 @@ define(
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
             valid = false;
           }
-
-          console.log('member', member);
-          console.log('valid', valid);
-
           return valid;
         }
 
@@ -622,7 +565,10 @@ define(
           Teams.getSingle(teamId)
             .then(function(members)
             {
-              $scope.data.members = checkLocationMembers(members);
+              if(! members.error)
+              {
+                $scope.data.members = checkLocationMembers(members);
+              }
             });
         }
 

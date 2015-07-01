@@ -57,6 +57,7 @@ define(
             trowError: function (error)
             {
               var errorCode = error.errorCode.toString() || "0";
+              $rootScope.statusBar.off();
               $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode]);
               console.log('error -> ', error.errorMessage);
             }

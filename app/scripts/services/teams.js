@@ -583,7 +583,7 @@ define(
               {third: teamId})
               .then(function (team)
               {
-                if($rootScope.app.resources.teamUuids.indexOf(teamId) !== -1)
+                if($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0)
                 {
                   var loggedMemberId = $rootScope.app.resources.uuid,
                     loggedUserResources = _.findWhere(team, {uuid: loggedMemberId});
@@ -594,7 +594,6 @@ define(
                     Store('app').save('resources', loggedUserResources);
                   }
                 }
-
                 return team;
               });
           };
