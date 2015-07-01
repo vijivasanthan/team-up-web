@@ -57,7 +57,7 @@
       //copied from .btn-primary and .btn-mini
       margin-top: 3px;
       a {
-        background: $orange url("../images/unlink.png") no-repeat center;
+        background: $orange url("../images/glyphicons-halflings.png") no-repeat -448px 7px;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);
@@ -79,7 +79,7 @@
       //copied from .btn-primary and .btn-mini
       margin-top: 4px;
       a {
-        background: $orange url("../images/unlink.png") no-repeat center;
+        background: $orange url("../images/glyphicons-halflings.png") no-repeat -448px 7px;
         color: $brown;
         font-size: $fontSizeMini;
         @include border-radius($borderRadiusLarge);

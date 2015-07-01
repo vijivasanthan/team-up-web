@@ -1,5 +1,5 @@
 .page-header
-	h2.nullable Teams - Cliënten
+	h2.nullable Teams - Cliëntgroepen
 
 
 .tabbable.tabs-left
@@ -11,7 +11,11 @@
 			a(ng-click='setViewTo("teamClients")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
-				| Teams & Cliënten
+				| Teams
+				br
+				| & 
+				br
+				| Cliëntgroepen
 
 		li(class="{{(views.teams==true) && 'active'}}")
 			a(ng-click='setViewTo("teams")')
