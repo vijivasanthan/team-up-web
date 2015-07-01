@@ -79,6 +79,7 @@ define(
           lessPeople: 'Er zijn $v mensen te weinig als nodig.',
           samePeople: 'Er zijn net zoveel mensen als nodig.',
           morePeople: 'Er zijn $v mensen meer als nodig.',
+          noMembers: 'Dit team heeft geen leden',
           wished: 'Behoefte',
           combine_reoccuring: 'Dit is een gecombineerde planning rij met opeenvolgende rijen.',
           sendMsgToMember: 'Send Message To Members',

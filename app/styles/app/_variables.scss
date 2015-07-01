@@ -288,6 +288,11 @@ $successBackground: $turq !default;
 // #dff0d8 !default;
 $successBorder: darken(adjust-hue($successBackground, -10), 5%) !default;
 
+$infoBackground: $orange !default;
+// #dff0d8 !default;
+$infoBorder: darken(adjust-hue($infoBackground, -10), 5%) !default;
+
+
 $infoText: $brown !default;
 // #3a87ad !default;
 $infoBackground: $brown !default;

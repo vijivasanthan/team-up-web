@@ -171,21 +171,21 @@ define(
                 message: message
               };
             },
-
             success: function (message, permanent)
             {
               this.init(true, 'alert-success', message);
-
               if (!permanent) this.destroy();
             },
-
+            info: function (message, permanent)
+            {
+              this.init(true, 'alert-info', message);
+              if (!permanent) this.destroy();
+            },
             error: function (message, permanent)
             {
               this.init(true, 'alert-danger', message);
-
               if (!permanent) this.destroy();
             },
-
             destroy: function ()
             {
               $timeout(

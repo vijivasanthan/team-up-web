@@ -552,15 +552,13 @@ define(
                   $rootScope.statusBar.display($rootScope.ui.login.loading_Group);
 
                   groupSlots(periods)
-                    .then(
-                      function(data)
-                      {
-                        $scope.data.aggs = data.aggs;
-                        $scope.data.aggs.wishes = data.wishes;
-                        $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
-                        $rootScope.statusBar.off();
-                      }
-                  );
+                    .then(function(data)
+                    {
+                      $scope.data.aggs = data.aggs;
+                      $scope.data.aggs.wishes = data.wishes;
+                      $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                      $rootScope.statusBar.off();
+                    });
                 }
                 else
                 {
@@ -585,6 +583,12 @@ define(
                     .then(
                     function(members)
                     {
+                      if(! members.length)
+                      {
+                        $scope.timeline.current.layouts.members = false;
+                        $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
+                      }
+
                       $scope.data.members = members;
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
                       $rootScope.statusBar.off();
