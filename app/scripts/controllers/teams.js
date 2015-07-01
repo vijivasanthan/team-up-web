@@ -11,175 +11,45 @@ define(
       {
         $rootScope.fixStyles();
 
-        //TODO get this from a service
-        $rootScope.resetPhoneNumberChecker();
-
-        $scope.data = data;
-
-        var params = $location.search();
-
-        //$scope.search = {query: ''};
-
-        $scope.roles = [];
-
-        if($rootScope.app.resources.role == 1)
-        {
-          $scope.roles.push({
-              id: '1',
-              label: 'coordinator'
-          });
-        }
-
-        $scope.roles.push({
-          id: '2',
-          label: 'team lid'
-        });
-
-        // TODO: Readable variable name!
-        $scope.mfuncs = config.app.mfunctions;
-
-        var setView = function (hash)
-        {
-          $scope.views = {
-            team: false,
-            newTeam: false,
-            newMember: false,
-            editTeam: false
-          };
-
-          switch (hash)
-          {
-            case "newMember":
-              if (angular.isDefined($scope.membersBySearch))
-              {
-                $scope.membersBySearch = null;
-                $scope.memberValue = "";
-                $scope.findMemberSubmit = false;
-              }
-              break;
-            default:
-          }
-
-          $scope.views[hash] = true;
+        $scope.data = {
+          teams: data.teams,
+          members: checkLocationMembers(data.members)
         };
-
-        var setTeamView = function (id)
-        {
-          $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf(id) >= 0);
-
-          TeamUp._('teamStatusQuery', {third: id})
-            .then(function(members)
-            {
-              $scope.data.members = members;
-
-              angular.forEach(
-                $scope.data.members,
-                function (member)
-                {
-                  //check if the state of the logged user is equal
-                  $rootScope.checkUpdatedStatesLoggedUser(member);
-
-                  angular.forEach(
-                    member.states,
-                    function (state, i)
-                    {
-                      if (state.name == 'Location')
-                      {
-                        state.value_rscoded = 'loading address';
-                        if (state.value && member.address && member.address.street)
-                        {
-                          var coordinates = state.value.split(','),
-                            latitude = parseFloat(coordinates[0]),
-                            longitude = parseFloat(coordinates[1]);
-                        }
-                        else
-                        {
-                          //remove state location if there is no address available on the given coordinates
-                          member.states.splice(i, 1);
-                        }
-                      }
-                    }
-                  );
-                }
-              );
-            });
-        };
-
-        var uuid,
-          view;
-
-        if (!params.uuid && !$location.hash())
-        {
-          uuid = CurrentSelection.getTeamId();
-          view = 'team';
-
-          $location.search({uuid: data.teams[0].uuid}).hash('team');
-        }
-        else if (!params.uuid)
-        {
-          uuid = CurrentSelection.getTeamId();
-          view = $location.hash();
-
-          $location.search({uuid: uuid});
-        }
-        else
-        {
-          uuid = params.uuid;
-          view = $location.hash();
-        }
-
-        $scope.current = uuid;
-        setView(view);
-        setTeamView(uuid);
-
-        //set default team by last visited team
-        $scope.memberForm = {};
-        $scope.memberForm.team = uuid;
-        //$scope.memberForm.pincode = '';
+        $scope.current = data.teamId;
+        $location.search({ uuid: $scope.current }).hash($location.hash() || 'team');
+        setView($location.hash());
 
         /**
-         * The type of user added to the team, existing or new
-         * @param userType
+         * set view of the different tabs
+         * @param hash
          */
-        $scope.setUserType = function (userType)
-        {
-          $scope.userType = userType;
-        };
-
-        $scope.setUserType('NEW');
-
         $scope.setViewTo = function (hash)
         {
-          $scope.$watch(
-            hash,
-            function ()
-            {
-              $location.hash(hash);
-
-              setView(hash);
-            }
-          );
+          $location.hash(hash);
+          setView(hash);
         };
 
+        /**
+         * request a team
+         * @param current The id of the team
+         */
         $scope.requestTeam = function (current)
         {
           $scope.views.editTeam = false;
           CurrentSelection.local = current;
 
-          setTeamView(current);
+          loadCurrentTeam(current);
 
-          $scope.$watch(
-            $location.search(),
-            function ()
-            {
-              $location.search({uuid: current});
-            }
-          );
+          $location.search({uuid: current});
         };
 
+        /**
+         * Edit the name of a team
+         * @param current
+         */
         $scope.editTeam = function (current)
         {
-          var team = _.findWhere(data.teams, {uuid: current});
+          var team = _.findWhere($scope.data.teams, {uuid: current});
 
           $scope.teamEditForm = {
             name: team.name,
@@ -189,53 +59,48 @@ define(
           $scope.views.editTeam = true;
         };
 
-        $scope.cancelTeamEdit = function ()
-        {
-          $scope.views.editTeam = false;
-        };
-
+        /**
+         * Update the name of a team
+         * @param team teamname and uuid
+         */
         $scope.changeTeam = function (team)
         {
-          if ($.trim(team.name) == '')
+          if (! team.name.length)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-
             return;
           }
 
           $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
-          TeamUp._(
-            'teamUpdate',
-            {second: team.uuid},
-            team
-          ).then(
-            function (result)
+          TeamUp._('teamUpdate', { second: team.uuid }, team)
+            .then(function (result)
             {
               if (result.error)
               {
-                $rootScope.notifier.error('Error with saving team info : ' + result.error);
+                $rootScope.notifier.error('Error with saving team info : ' + result.errorMessage);
+                console.log('error by updating team ' + result.errorCode, result.errorMessage);
+                $rootScope.statusBar.off();
               }
               else
               {
-                $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                Teams.query(false, result)
-                  .then(
-                  function ()
-                  {
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                    $rootScope.statusBar.off();
-
-                    $scope.team.name = team.name;
-                    $scope.views.editTeam = false;
-                  }
-                );
+                return Teams.getAll();
               }
-            }
-          );
+            })
+            .then(function(teams)
+            {
+              $scope.data.teams = teams;
+              $scope.views.editTeam = false;
+
+              $rootScope.statusBar.off();
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            });
         };
 
+        /**
+         * Add a new team
+         * @param team teamname
+         */
         $scope.teamSubmit = function (team)
         {
           if (typeof team == 'undefined' || $.trim(team.name) == '')
@@ -276,152 +141,81 @@ define(
                 $scope.data.teams = teams;
                 $scope.data.members = null;
 
-                //add team link with clientgroup local
-                Store('app').save('teamGroup_' + $scope.current, {});
                 CurrentSelection.local = $scope.current;
 
                 $location.search({ uuid: $scope.current });
                 $scope.setViewTo('team');
               }
-
               $rootScope.statusBar.off();
             });
         };
 
-        //$scope.changePinToPhone = function ()
-        //{
-        //  var phone = $scope.memberForm.phone,
-        //    phoneValidateResult = $rootScope.phoneNumberParsed.result;
-        //
-        //  $scope.tempPhone = $scope.tempPhone || '';
-        //
-        //
-        //  if (phone && phone.length >= 10 && (_.isEmpty($scope.memberForm.pincode) ||
-        //    $scope.memberForm.pincode == $scope.tempPhone)
-        //    && phoneValidateResult == true)
-        //  {
-        //    var inputVal = angular.element('.inputPhoneNumber').val();
-        //
-        //    $scope.tempPhone = lastFourDigits(inputVal);
-        //    $scope.memberForm.pincode = lastFourDigits(inputVal);
-        //  }
-        //};
-
-        var lastFourDigits = function (phone)
-        {
-          return phone.substr(phone.length - 4);
-        };
-
+        /**
+         * Add a member to a team
+         * All the data from the newly added member
+         * @param member
+         */
         $scope.memberSubmit = function (member)
         {
-          if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
+          console.log('member', member);
+
+          if(! addMemberValidation(member))
           {
-            $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
             return;
-          }
-
-          if (!member.role)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.role);
-            return;
-          }
-
-          //if (!_.isEmpty(member.pincode) && $rootScope.pincodeExistsValidation == false)
-          //{
-          //  $rootScope.notifier.error($rootScope.ui.validation.pincode.exists);
-          //  return false;
-          //}
-
-          if (member.password != member.reTypePassword)
-          {
-            $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-            return;
-          }
-
-          if (member.password.length < 8 || member.password.length > 20)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
-          }
-
-          if (_.isUndefined(member.email) || member.email == false)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-            return;
-          }
-
-          if (!member.team)
-          {
-            $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
-            return;
-          }
-
-          if (!member.phone)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            return;
-          }
-
-          if ($rootScope.phoneNumberParsed.result == false)
-          {
-            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            return;
-          }
-          else if ($rootScope.phoneNumberParsed.result == true)
-          {
-            member.phone = $rootScope.phoneNumberParsed.format;
           }
 
           $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-          //create a temp so the user don't see that the field changing
+          member.phone = $rootScope.phoneNumberParsed.format;
           var tempResources = angular.copy(member);
-          //var pincode = tempResources.pincode;
-          //delete tempResources.pincode;
 
           tempResources.password = MD5(tempResources.password);
+          tempResources.teamUuids = [$scope.current];
 
-          TeamUp._(
-            'memberAdd',
-            null,
+          Teams.addMember(tempResources)
+            .then(function(newMember)
             {
-              uuid: tempResources.userName,
-              userName: tempResources.userName,
-              passwordHash: tempResources.password,
-              firstName: tempResources.firstName,
-              lastName: tempResources.lastName,
-              phone: tempResources.phone,
-              email: tempResources.email,
-              teamUuids: [$scope.current],
-              role: tempResources.role,
-              birthDate: 0
-              //function: member.function
-            }
-          ).then(
-            function (result)
-            {
-              // change the REST return to json.
-              if (result.error)
+              if (newMember.error)
               {
-                var errorData = result.error.data.error;
-
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + errorData);
+                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + newMember.errorMessage);
+                console.log('Error by adding a member ' + newMember.errorCode, newMember.errorMessage);
                 $rootScope.statusBar.off();
               }
               else
               {
-                $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-                //Profile.save(result.uuid, {
-                //  pincode: pincode
-                //});
-
-                // TODO: Repetitive code!
-                $scope.loadTeams();
+                return Profile.fetchUserData(newMember.uuid);
               }
-            }
-          );
+            })
+            .then(function(currentMemberData)
+            {
+              if(currentMemberData.error)
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + currentMemberData.errorMessage);
+                console.log('Error by getting a member ' + currentMemberData.errorCode, currentMemberData.errorMessage);
+                $rootScope.statusBar.off();
+              }
+              else
+              {
+                $scope.data.members.push(currentMemberData);
+
+                if (angular.isDefined($scope.teamMemberForm))
+                {
+                  $rootScope.resetPhoneNumberChecker();
+                  $scope.memberForm = null;
+                  $scope.teamMemberForm.$setPristine();
+                }
+
+                $scope.setViewTo('team');
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
+              }
+            });
         };
 
+        /**
+         * Add already existing member to a team
+         * @param member All the member data like uuid, name etc
+         */
         $scope.addExistingMember = function (member)
         {
           $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
@@ -430,71 +224,53 @@ define(
             'teamMemberAdd',
             {second: $scope.current},
             {ids: [member.uuid]}
-          ).then(
-            function (result)
+          )
+          .then(function(result)
+          {
+            if (result.error)
             {
-              if (result.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + result.errorMessage);
-                $rootScope.statusBar.off();
-              }
-              else
-              {
-                $scope.result = result;
-
-                if(member.uuid == $rootScope.app.resources.uuid)
-                {
-                  member.teamUuids.push($scope.current) ;
-                  $rootScope.app.resources = member;
-                  Store('app').save('resources', member);
-                }
-
-                if (angular.isDefined($scope.membersBySearch))
-                {
-                  $scope.membersBySearch = null;
-                  $scope.memberValue = '';
-                }
-
-                //$scope.data.members.push(member);
-                //
-                //$scope.setViewTo('team');
-                //$rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                //$rootScope.statusBar.off();
-
-                //TODO change this
-                $scope.loadTeams();
-              }
+              $rootScope.notifier.error($rootScope.ui.teamup.teamSubmitError + result.errorMessage);
+              $rootScope.statusBar.off();
             }
-          );
+            else
+            {
+              $scope.result = result;
+
+              if (angular.isDefined($scope.membersBySearch))
+              {
+                $scope.membersBySearch = null;
+                $scope.memberValue = '';
+              }
+              return Profile.fetchUserData(member.uuid);
+            }
+          })
+          .then(function(currentMember)
+          {
+            $scope.data.members.push(currentMember);
+            $scope.data.members = checkLocationMembers($scope.data.members);
+
+            $scope.setViewTo('team');
+            $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            $rootScope.statusBar.off();
+          });
         };
 
+        /**
+         * Load all teams
+         */
         $scope.loadTeams = function ()
         {
-          $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
-
-          Teams.query(
-            false,
-            {'uuid': $scope.current}
-          ).then(
-            function (queries)
+          Teams.getAll().then(
+            function (teams)
             {
-              if (queries.error)
+              if (teams.error)
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
                 console.warn('error ->', queries);
               }
               else
               {
-                $scope.data = queries;
-
-                $scope.data.members = queries.members[$scope.current];
-
-                if (angular.isDefined($scope.teamMemberForm))
-                {
-                  $rootScope.resetPhoneNumberChecker();
-                  $scope.teamMemberForm = {};
-                }
-
+                $scope.data.teams = teams;
                 $scope.setViewTo('team');
               }
 
@@ -502,11 +278,6 @@ define(
               $rootScope.statusBar.off();
             }
           );
-        };
-
-        $scope.editProfile = function (memberId, teamId)
-        {
-          sessionStorage.setItem(angular.lowercase(memberId) + '_team', teamId)
         };
 
         // give a special flag to member if there is no states being shared
@@ -530,6 +301,9 @@ define(
           return result;
         };
 
+        /**
+         * Confirmation before the deleting the team
+         */
         $scope.confirmDeleteTeam = function ()
         {
           $timeout(
@@ -540,57 +314,45 @@ define(
           );
         };
 
+        /**
+         * Delete a team
+         */
         $scope.deleteTeam = function ()
         {
           angular.element('#confirmTeamModal').modal('hide');
-
           $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
-          TeamUp._(
-            'teamDelete',
-            {second: $scope.current}
-          ).then(
-            function (result)
+          TeamUp._('teamDelete', {second: $scope.current} )
+            .then(function (teamDelete)
             {
-              if (result)
+              if(teamDelete.error)
               {
-                Teams.query(
-                  true,
-                  {}
-                ).then(
-                  function (teams)
-                  {
-                    $scope.requestTeam(teams[0].uuid);
-                    // locally refresh
-                    angular.forEach(
-                      $scope.data.teams,
-                      function (team, i)
-                      {
-                        if (team.uuid == result.result)
-                        {
-                          $scope.data.teams.splice(i, 1);
-                        }
-                      }
-                    );
-                  }, function (error)
-                  {
-                    console.log(error)
-                  });
-
+                $rootScope.notifier.error($rootScope.ui.teamup.queryTeamError);
+                console.warn('error -> ' + teamDelete.errorCode, teamDelete.errorMessage);
+                $rootScope.statusBar.off();
               }
-
+              else
+              {
+                return Teams.getAll();
+              }
+            })
+            .then(function(teams)
+            {
+              $scope.data.teams = teams;
+              $scope.requestTeam(teams[0].uuid);
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               $rootScope.statusBar.off();
-            }, function (error)
-            {
-              console.log(error)
             });
         };
 
-        $scope.currentMember = {};
-
+        /**
+         * Confirmation by deleting a member
+         * @param member All the data from the member who is deleted
+         */
         $scope.confirmDeleteMember = function (member)
         {
+          $scope.currentMember = null;
+
           $timeout(
             function ()
             {
@@ -601,85 +363,42 @@ define(
           );
         };
 
+        /**
+         * Delete member from team
+         * @param member All the data from the member who is deleted
+         */
         $scope.deleteMember = function (member)
         {
+          var memberId = angular.lowercase(member.uuid);
+
           angular.element('#confirmMemberModal').modal('hide');
-
           $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
-
-          // TODO : we should also fix the issue in the backend.
-          var memberId = angular.lowercase(member.uuid),
-            index = $scope.data.members.indexOf(member);
 
           TeamUp._(
             'teamMemberDelete',
             {second: $scope.current},
             {ids: [memberId]}
-          ).then(
-            function ()
+          ).then(function(memberDelete)
             {
-              Teams.query(false, {'uuid': $scope.current})
-                .then(
-                function ()
-                {
-                  $scope.data.members.splice(index, 1);
+              if(memberDelete.error)
+              {
+                $rootScope.notifier.error(memberDelete.errorMessage);
+                console.warn('error -> ' + memberDelete.errorCode, memberDelete.errorMessage);
+                $rootScope.statusBar.off();
+              }
+              else
+              {
+                removedLoggedMember(memberId);
 
-                  //Check if the member is equal to the the logged user
-                  if(memberId == $rootScope.app.resources.uuid)
-                  {
-                    //update local resources by removing the current team
-                    $rootScope.app.resources.teamUuids.splice(
-                      $rootScope.app.resources.teamUuids.indexOf($scope.current),
-                      1
-                    );
-                    Store('get').save('resources', $rootScope.app.resources);
+                var deletedMember = _.findWhere($scope.data.members, {uuid: memberId}),
+                    memberIndex = $scope.data.members.indexOf(deletedMember);
 
-                    //if the removed team was the logged user his last team, he or she needs to get
-                    //their accesslist updated
-                    if($rootScope.app.resources.teamUuids.length == 0)
-                    {
-                      Permission.getAccess();
-                    }
-                  }
-
-                  $rootScope.statusBar.off();
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                }
-              );
-            }
-          ),
-            function (error)
-            {
-              console.log(error)
-            };
+                $scope.data.members.splice(memberIndex, 1);
+                $rootScope.statusBar.off();
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              }
+            });
         };
-
-        /**
-         * Check if pincode change and validate
-         */
-        //$scope.$watch(function ()
-        //{
-        //  return $scope.memberForm.pincode;
-        //}, function ()
-        //{
-        //  $rootScope.pincodeExists($scope.memberForm.pincode, $rootScope.app.resources.uuid, true);
-        //});
-
-        // TODO: Investigate on this!
-        //$scope.$on(
-        //  '$viewContentLoaded',
-        //  function ()
-        //  {
-        //    console.log("teams : viewContentLoaded");
-        //
-        //    // make sure the loading of the
-        //    if (!$rootScope.taskVisit)
-        //    {
-        //      $rootScope.$broadcast('taskFinishLoading');
-        //      $rootScope.taskVisit = true;
-        //    }
-        //  }
-        //);
 
         /**
          * Check if the username is correct, otherwise remove the unwanted chars
@@ -715,11 +434,8 @@ define(
             $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
             $scope.findMembersLoad = true;
 
-            TeamUp._(
-              'findMembers',
-              {query: name}
-            ).then(
-              function (result)
+            TeamUp._('findMembers', { query: name })
+              .then(function (result)
               {
                 if (result.error)
                 {
@@ -805,6 +521,201 @@ define(
             $scope.addExistingMember(member);
           }
         };
+
+        /**
+         * Check if the removed member is the logged user
+         * Update his local resources
+         * @param memberId
+         */
+        function removedLoggedMember(memberId)
+        {
+          //Check if the member is equal to the the logged user
+          if(memberId == $rootScope.app.resources.uuid)
+          {
+            //update local resources by removing the current team
+            $rootScope.app.resources.teamUuids.splice(
+              $rootScope.app.resources.teamUuids.indexOf($scope.current),
+              1
+            );
+            Store('get').save('resources', $rootScope.app.resources);
+
+            //if the removed team was the logged user his last team, he or she needs to get
+            //their accesslist updated
+            if($rootScope.app.resources.teamUuids.length == 0)
+            {
+              Permission.getAccess();
+            }
+          }
+        }
+
+        /**
+         * Add member validation
+         * @param member All the data of the added member
+         * @returns {boolean} valid true of false
+         */
+        function addMemberValidation(member)
+        {
+          var valid = true;
+
+          if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
+            valid = false;
+          }
+
+          if (!member.role)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.role);
+            valid = false;
+          }
+
+          if (member.password != member.reTypePassword)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+            valid = false;
+          }
+
+          if (member.password.length < 8 || member.password.length > 20)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
+            valid = false;
+          }
+
+          if (_.isUndefined(member.email) || member.email == false)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+            valid = false;
+          }
+
+          if (!member.team)
+          {
+            $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
+            valid = false;
+          }
+
+          if (!member.phone)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+            valid = false;
+          }
+
+          if ($rootScope.phoneNumberParsed.result == false)
+          {
+            $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+            valid = false;
+          }
+
+          console.log('member', member);
+          console.log('valid', valid);
+
+          return valid;
+        }
+
+        /**
+         * Load a team by teamId
+         * @param teamId The id of the team
+         */
+        function loadCurrentTeam(teamId)
+        {
+          $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0);
+
+          Teams.getSingle(teamId)
+            .then(function(members)
+            {
+              $scope.data.members = checkLocationMembers(members);
+            });
+        }
+
+        /**
+         * Check the status location of the member,
+         * because of no location found
+         * @param members All the members of the current team
+         * @returns {*} All members of the current team, with there location status checked
+         */
+        function checkLocationMembers(members)
+        {
+          angular.forEach(
+            members,
+            function (member)
+            {
+              angular.forEach(
+                member.states,
+                function (state, i)
+                {
+                  if (state.name == 'Location')
+                  {
+                    state.value_rscoded = 'loading address';
+                    if (state.value && member.address && member.address.street)
+                    {
+                      var coordinates = state.value.split(','),
+                        latitude = parseFloat(coordinates[0]),
+                        longitude = parseFloat(coordinates[1]);
+                    }
+                    else
+                    {
+                      //remove state location if there is no address available on the given coordinates
+                      member.states.splice(i, 1);
+                    }
+                  }
+                }
+              );
+            }
+          );
+
+          return members;
+        }
+
+        /**
+         * set wich view has to be openend
+         * @param hash the name of one of the tabs
+         */
+        function setView(hash)
+        {
+          $scope.views = {
+            team: false,
+            newTeam: false,
+            newMember: false,
+            editTeam: false
+          };
+
+          switch (hash)
+          {
+            case "newMember":
+              if (angular.isDefined($scope.membersBySearch))
+              {
+                $scope.membersBySearch = null;
+                $scope.memberValue = "";
+                $scope.findMemberSubmit = false;
+              }
+              $rootScope.resetPhoneNumberChecker();
+              $scope.userType = 'NEW';
+              setRoles();
+              break;
+            default:
+          }
+
+          $scope.views[hash] = true;
+        }
+
+        /**
+         * Set the different roles,
+         * depending on the role of the logged user
+         */
+        function setRoles()
+        {
+          $scope.roles = [{
+            id: '2',
+            label: 'team lid'
+          }];
+
+          if($rootScope.app.resources.role == 1)
+          {
+            $scope.roles.push({
+              id: '1',
+              label: 'coordinator'
+            });
+          }
+        }
       }
     );
   }

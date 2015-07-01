@@ -579,8 +579,6 @@ define(
            */
           TeamsService.prototype.getSingle = function(teamId)
           {
-            teamId = TeamsService.prototype.checkExistence(teamId);
-
             return TeamUp._('teamStatusQuery',
               {third: teamId})
               .then(function (team)
@@ -601,6 +599,35 @@ define(
               });
           };
 
+          /**
+           * Add new member to a team
+           * @param member All the data of the new member
+           */
+          TeamsService.prototype.addMember = function(member)
+          {
+            return TeamUp._(
+              'memberAdd',
+              null,
+              {
+                uuid: member.userName,
+                userName: member.userName,
+                passwordHash: member.password,
+                firstName: member.firstName,
+                lastName: member.lastName,
+                phone: member.phone,
+                email: member.email,
+                teamUuids: member.teamUuids,
+                role: member.role,
+                birthDate: 0
+                //function: member.function
+              }
+            );
+          };
+
+          /**
+           * Get all teams
+           * @returns {*} all teams
+           */
           TeamsService.prototype.getAll= function()
           {
             return TeamUp._('teamQuery')
@@ -609,6 +636,12 @@ define(
                 Store('app').save('teams', teams);
                 return teams;
               });
+          };
+
+          // Get teams data from localStorage
+          TeamsService.prototype.getAllLocal = function ()
+          {
+            return Store('app').get('teams');
           };
 
           /**

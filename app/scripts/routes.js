@@ -18,10 +18,6 @@ define(
               {
                 return function (exception, cause)
                 {
-                  console.log('exception', exception);
-                  console.log('cause', cause);
-
-
                   trackGa('send', 'exception', {
                         exDescription: exception.message,
                         exFatal: false,
@@ -111,15 +107,18 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', 'Teams', '$route', 'CurrentSelection',
-                  function ($rootScope, Teams, $route, CurrentSelection)
+                  '$rootScope', 'Teams', '$route',
+                  function ($rootScope, Teams, $route)
                   {
-                    return Teams.getSingle($route.current.params.uuid)
-                      .then(function(team) {
-                        var TeamsMembers = Teams.queryLocal();
+                    var teamId = Teams.checkExistence($route.current.params.uuid);
+
+                    return Teams.getSingle(teamId)
+                      .then(function(currentTeam)
+                      {
                         return {
-                          members: team,
-                          teams: TeamsMembers.teams,
+                          members: currentTeam,
+                          teams: Teams.getAllLocal(),
+                          teamId: teamId
                         };
                       });
                   }

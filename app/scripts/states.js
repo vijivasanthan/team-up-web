@@ -150,7 +150,7 @@ define(
                 break;
 
               case 'team':
-                $location.path('/team').search({local: 'true'}).hash('team');
+                $location.path('/team').search({}).hash('team');
                 break;
 
               case 'client':

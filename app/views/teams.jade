@@ -88,7 +88,7 @@ aria-hidden='true')
 		select(ng-model='current',
 		ng-options='t.uuid as t.name for t in data.teams | orderBy:"name"',
 		ng-selected='current',
-		ng-change='requestTeam(current)')
+		ng-change='requestTeam(current); views.editTeam = false')
 
 
 .tabbable.tabs-left
@@ -134,7 +134,7 @@ aria-hidden='true')
 				input.pull-left(type='text',
 				ng-model='teamEditForm.name')
 				button.btn.pull-right.btn-info.marginLeftTen(type='reset',
-				ng-click='cancelTeamEdit()') {{ui.teamup.cancel}}
+				ng-click='views.editTeam = false') {{ui.teamup.cancel}}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
 				ng-click='changeTeam(teamEditForm)') {{ui.teamup.save}}
 
@@ -158,8 +158,7 @@ aria-hidden='true')
 									span.badge(ng-show='member.states|stateReachable')
 										i.glyphicon.glyphicon-earphone
 							td
-								a(href='#/profile/{{member.uuid|lowercase}}#profile',
-								ng-click='editProfile(member.uuid, current)') {{member.firstName}} {{member.lastName}}
+								a(href='#/profile/{{member.uuid|lowercase}}#profile') {{member.firstName}} {{member.lastName}}
 							td
 								span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}}
 								dl.states(ng-repeat='state in member.states | filter:share=true ')
@@ -230,10 +229,10 @@ aria-hidden='true')
 								i(class="glyphicon glyphicon-white glyphicon-search")
 				div.btn-group.pull-right
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
-						ng-click='setUserType("NEW")')
+						ng-click='userType = "NEW"')
 						| Nieuw
 					button.btn.btn-primary(focus-on-click='search-query', class='{{(userType == "EXISTING") && "active"}}',
-						ng-click='setUserType("EXISTING")')
+						ng-click='userType = "EXISTING"')
 						| Bestaand
 			hr
 			div(ng-show='userType == "EXISTING"')
