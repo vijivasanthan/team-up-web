@@ -316,6 +316,8 @@ define(
             {
               delete tempResources.oldpass;
             }
+
+
             //save profileresource
             Profile.save($route.current.params.userId,
               {
@@ -464,22 +466,6 @@ define(
                   $rootScope.notifier.success($rootScope.ui.profile.passwordChanged);
                   $rootScope.statusBar.off();
                   $scope.setViewTo("profile");
-
-                }, function(errorData)
-                {
-                  if(errorData.error)
-                  {
-                    switch (errorData.errorCode)
-                    {
-                      case 6:
-                        $rootScope.notifier.error($rootScope.ui.profile.pleaseFill);
-                        break;
-                      case 19:
-                        $rootScope.notifier.error($rootScope.ui.validation.password.oldPassMatch);
-                        break;
-                    }
-                  }
-                  $rootScope.statusBar.off();
                 });
             }
           };

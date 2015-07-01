@@ -53,6 +53,12 @@ define(
               location.path('/logout');
               window.location.href = 'logout.html';
               localStorage.setItem('sessionTimeout', '');
+            },
+            trowError: function (error)
+            {
+              var errorCode = error.errorCode.toString() || "0";
+              $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode]);
+              console.log('error -> ', error.errorMessage);
             }
           };
         }
