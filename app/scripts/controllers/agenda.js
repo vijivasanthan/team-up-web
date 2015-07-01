@@ -31,13 +31,13 @@ define(
 
           $scope.self = this;
 
-          $scope.data = data.timelineData;
+          $scope.data = data.timeline;
 
           $scope.current = {
             layouts: {
               user: true,
               group: true,
-              members: (data.userData.uuid != $rootScope.app.resources.uuid)
+              members: (data.user.uuid != $rootScope.app.resources.uuid)
             },
             day: moment().format('DDD'),
             week: moment().week(),
@@ -84,9 +84,9 @@ define(
             id: 'mainTimeline',
             main: true,
             user: {
-              id: data.userData.uuid,//$rootScope.app.resources.uuid,
-              role: data.userData.role,//$rootScope.app.resources.role,
-              fullName: data.userData.firstName + ' ' + data.userData.lastName
+              id: data.user.uuid,
+              role: data.user.role,
+              fullName: data.user.firstName + ' ' + data.user.lastName
             },
             current: $scope.current,
             options: {
@@ -151,7 +151,7 @@ define(
 
           });
 
-          $scope.groups = data.teamsMembers.teams;
+          $scope.groups = Teams.getAllLocal();
 
           $scope.divisions = $scope.timeline.config.divisions;
 

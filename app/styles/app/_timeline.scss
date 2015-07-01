@@ -106,7 +106,7 @@ Timeline agenda
   padding-top: 10px;
   margin: 0 auto 25px;
   margin-top: -20px;
-  max-width: 600px;
+  max-width: 605px;
 }
 
 .legenda-row {
@@ -136,10 +136,9 @@ Timeline agenda
 
     li {
       float: left;
-      margin-right: 15px;
       //border-right: 1px solid #ddd;
       padding-right: 15px;
-      min-width: 135px;
+      min-width: 150px;
       font-size: 11px;
 
       &:last-child {

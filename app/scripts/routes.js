@@ -19,10 +19,10 @@ define(
                 return function (exception, cause)
                 {
                   trackGa('send', 'exception', {
-                        exDescription: exception.message,
-                        exFatal: false,
-                        exStack: exception.stack
-                      });
+                    exDescription: exception.message,
+                    exFatal: false,
+                    exStack: exception.stack
+                  });
 
                   $delegate(exception, cause);
                 };
@@ -90,8 +90,8 @@ define(
             })
 
             .when('/admin', {
-               templateUrl: 'views/admin.html',
-               controller: 'adminCtrl'
+              templateUrl: 'views/admin.html',
+              controller: 'adminCtrl'
             })
 
             .when('/scenarios', {
@@ -138,8 +138,8 @@ define(
                   function (Clients, $route)
                   {
                     return ($route.current.params.local && $route.current.params.local == 'true') ?
-                           Clients.queryLocal() :
-                           Clients.query(false, $route.current.params);
+                      Clients.queryLocal() :
+                      Clients.query(false, $route.current.params);
                   }
                 ]
               }
@@ -177,15 +177,15 @@ define(
                   {
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
-                           {
-                             t: Teams.query(),
-                             cg: Clients.query()
-                           } :
-                           { local: true};
+                    {
+                      t: Teams.query(),
+                      cg: Clients.query()
+                    } :
+                    { local: true};
                   }
                 ],
                 dataMembers: function(Teams) {
-                    return Teams.updateMembersLocal();
+                  return Teams.updateMembersLocal();
                 }
               }
             })
@@ -203,11 +203,11 @@ define(
                   {
                     // TODO: Lose short property names and make them more readable!
                     return (($location.hash() && $location.hash() == 'reload')) ?
-                           {
-                             t: Teams.query(),
-                             cg: ClientGroups.query()
-                           } :
-                           { local: true };
+                    {
+                      t: Teams.query(),
+                      cg: ClientGroups.query()
+                    } :
+                    { local: true };
                   }
                 ]
               }
@@ -239,48 +239,55 @@ define(
               controller: 'agenda',
               resolve: {
                 data: function($route, Slots, Storage, Dater, Store, Teams,
-                               $q, $rootScope, $location, CurrentSelection)
+                               $q, $rootScope, $location, CurrentSelection, Profile)
                 {
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
 
-                  var periods = Store('app').get('periods'),
-                      groupId = CurrentSelection.getTeamId(),
-                      userId = $route.current.params.userId;
+                  var groupId = CurrentSelection.getTeamId(),
+                    userId = $route.current.params.userId,
+                    data = {
+                      members: null,
+                      user: null
+                    };
 
-                  //Check the possiblities of the user by role
-                  if(! checkUserId())
+                  if(! userAllowance(userId))
                   {
                     redirectLocationLoggedUser();
                   }
 
-                  var teamsMembers = ($route.current.params.local && $route.current.params.local == 'true')
-                    ? Teams.queryLocal()
-                    : Teams.query(false, $route.current.params);
-                  var currentUser = null;
-                  var teamsMembersData = null;
-
-                  return $q.when(teamsMembers)
-                    .then(function(teamData)
+                  return Teams.getSingle(groupId)
+                    .then(function(members)
                     {
-                      teamsMembersData = teamData;
-                      currentUser = _.findWhere(teamData.members[groupId], {uuid: userId});
-                      return getAllSlots(
-                        (currentUser && currentUser.uuid) || $rootScope.app.resources.uuid
-                      );
+                      data.members = members;
+                      return members.error && members || Profile.fetchUserData(userId);
                     })
-                    .then(function(timelineData)
+                    .then(function(user)
                     {
-                      return ({
-                        teamsMembers: teamsMembersData,
-                        timelineData: timelineData,
-                        userData: currentUser
-                      });
-                    }
-                  );
+                      data.user = user;
+                      return user.error && user || getAllSlots(userId, groupId);
+                    })
+                    .then(function(timeline)
+                    {
+                      if(! timeline.error)
+                      {
+                        return {
+                          members: data.members,
+                          timeline: timeline,
+                          user: data.user
+                        };
+                      }
+                    });
 
-                  function getAllSlots(userId)
+                  /**
+                   * All slots timeline
+                   * @param userId current user timeline
+                   * @param groupId current team timeline
+                   */
+                  function getAllSlots(userId, groupId)
                   {
+                    var periods = Store('app').get('periods');
+
                     return Slots.all({
                       groupId: groupId,
                       stamps: (Dater.current.today() > 360) ? {
@@ -302,10 +309,11 @@ define(
 
                   /**
                    *
-                   * @returns {boolean}
+                   * @param userId
                    */
-                  function checkUserId()
+                  function userAllowance(userId)
                   {
+                    //Check the possiblities of the user by role
                     var userAllow = true;
 
                     if(_.isUndefined(userId))
@@ -316,26 +324,21 @@ define(
                     //Get the teams of the userId in url
                     var currentTeamsRouteUser = $rootScope.getTeamsofMembers(userId);
 
-                    //check if userId belongs to the same team as the logged user (teammember role only)
+                    //Check if the userId is in a team
                     if(! currentTeamsRouteUser.length)
                     {
                       userAllow = false;
                     }
+                    //check if userId belongs to the same team as the logged user (teammember role only)
                     else if($rootScope.app.resources.role > 1)
                     {
                       var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
-
+                      //Check if the user is in the same as the logged user
                       if(_.isEmpty(userTeam))
                       {
                         userAllow = false;
                       }
                     }
-                    else
-                    {
-                      groupId = currentTeamsRouteUser[0].uuid;
-                    }
-
-                    return userAllow;
                   }
 
                   /**
@@ -439,8 +442,8 @@ define(
                   removeActiveClass('.teamMenu');
 
                   var teamId = CurrentSelection.getTeamId(),
-                      teamStatus = TeamUp._('teamStatusQuery', {third: teamId}),
-                      teamOrder = TeamUp._('callOrderGet', {second: teamId});
+                    teamStatus = TeamUp._('teamStatusQuery', {third: teamId}),
+                    teamOrder = TeamUp._('callOrderGet', {second: teamId});
 
                   return $q.all([teamStatus, teamOrder]).then(
                     function(teamResult)
