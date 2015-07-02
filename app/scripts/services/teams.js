@@ -627,7 +627,7 @@ define(
            * Get all teams
            * @returns {*} all teams
            */
-          TeamsService.prototype.getAll= function()
+          TeamsService.prototype.getAll = function()
           {
             return TeamUp._('teamQuery')
               .then(function(teams)
@@ -637,10 +637,41 @@ define(
               });
           };
 
-          // Get teams data from localStorage
+          /**
+           * Get teams data from localStorage or network
+           * Depends if the data is local
+           * @returns {*}
+           */
           TeamsService.prototype.getAllLocal = function ()
           {
-            return Store('app').get('teams');
+            var teamsLocal = Store('app').get('teams');
+            return teamsLocal.length && teamsLocal || TeamsService.prototype.getAll();
+          };
+
+          TeamsService.prototype.getAllWithMembers = function()
+          {
+            var teams = TeamsService.prototype.getAllLocal(),
+                teamMembers = {},
+                calls = [];
+
+            _.each(teams, function (team)
+            {
+              calls.push(TeamsService.prototype.getSingle(team.uuid)
+                .then(function(members)
+                {
+                  teamMembers[team.uuid] = members;
+                })
+              )
+            });
+
+            return $q.all(calls)
+              .then(function(data)
+              {
+                  if(! data.error)
+                  {
+                    return teamMembers;
+                  }
+              });
           };
 
           /**

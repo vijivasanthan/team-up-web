@@ -151,7 +151,7 @@ define(
 
           });
 
-          $scope.groups = Teams.getAllLocal();
+          $scope.groups = data.teams;
 
           $scope.divisions = $scope.timeline.config.divisions;
 

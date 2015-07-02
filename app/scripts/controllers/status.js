@@ -6,24 +6,18 @@ define(['controllers/controllers'], function (controllers)
     'status',
       function ($scope, $rootScope, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
+        console.log('data', data);
+        
         $rootScope.notification.status = false;
-
         $rootScope.fixStyles();
 
-        var dataAllTeams = Teams.queryLocal(),
-          members = _.flatten(_.values(dataAllTeams.members)), //merge members from all teams together
-          everyoneId = 'all';
-
-        //Check if there are duplicate usernames
-        members = $rootScope.unique(members);
+        $scope.teams = Teams.getAllLocal();
 
         //Add a all teams option to the selector
         if($rootScope.app.resources.role == 1)
         {
-          dataAllTeams.teams = addTeamAll(dataAllTeams.teams);
+          $scope.teams = addTeamAll($scope.teams);
         }
-
-        $scope.groups = dataAllTeams.teams;
 
         $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
 
@@ -35,12 +29,8 @@ define(['controllers/controllers'], function (controllers)
           display: false
         };
 
-        $scope.current = {
-          group: CurrentSelection.getTeamId()
-        };
-
+        $scope.currentTeam = CurrentSelection.getTeamId();
         $scope.teamMembers = data.members;
-
         getReachability(data.membersReachability, setKeyAsUsername(data.members));
 
         /**
@@ -52,31 +42,34 @@ define(['controllers/controllers'], function (controllers)
           $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
 
-          if ($scope.current.group == everyoneId)
+          if ($scope.currentTeam == 'all')
           {
-            var teams = angular.copy(dataAllTeams.teams);
+            //splice teams 'All' of
+            var teams = angular.copy($scope.teams);
             teams.splice(0 , 1);
 
-            Slots.getAllMemberReachabilities(teams)
+            Teams.getAllWithMembers()
+              .then(function(allMembers)
+              {
+                $scope.teamMembers = _.flatten(_.values(allMembers));
+                return Slots.getAllMemberReachabilities(teams)
+              })
               .then(function(result)
               {
-                $scope.teamMembers = result.members;
-
-                getReachability(result, members);
+                getReachability(result, setKeyAsUsername($scope.teamMembers));
               });
           }
           else
           {
-            CurrentSelection.local = $scope.current.group;
+            CurrentSelection.local = $scope.currentTeam;
 
             $q.all([
-              TeamUp._('teamStatusQuery', {third: $scope.current.group}),
-              Slots.MemberReachabilitiesByTeam($scope.current.group, null)
-            ]).then(function(result)
+              Teams.getSingle($scope.currentTeam),
+              Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
+            ])
+            .then(function(result)
             {
-
               $scope.teamMembers = result[0];
-
               getReachability(result[1], setKeyAsUsername($scope.teamMembers));
             });
           }
@@ -231,7 +224,7 @@ define(['controllers/controllers'], function (controllers)
         {
           teams.unshift({
             'name': $rootScope.ui.dashboard.everyone,
-            'uuid': everyoneId
+            'uuid': 'all'
           });
 
           return teams;

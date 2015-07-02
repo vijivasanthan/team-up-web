@@ -248,7 +248,8 @@ define(
                     userId = $route.current.params.userId,
                     data = {
                       members: null,
-                      user: null
+                      user: null,
+                      timeline: null
                     };
 
                   if(! userAllowance(userId))
@@ -269,12 +270,18 @@ define(
                     })
                     .then(function(timeline)
                     {
-                      if(! timeline.error)
+                      data.timeline = timeline;
+                      return $q.when(Teams.getAllLocal());
+                    })
+                    .then(function(teams)
+                    {
+                      if(! teams.error)
                       {
                         return {
                           members: data.members,
-                          timeline: timeline,
-                          user: data.user
+                          timeline: data.timeline,
+                          user: data.user,
+                          teams: teams
                         };
                       }
                     });
@@ -412,19 +419,20 @@ define(
               controller: 'status',
               reloadOnSearch: false,
               resolve: {
-                data: function (TeamUp, Slots, $q, CurrentSelection)
+                data: function (Teams, Slots, $q, CurrentSelection)
                 {
                   var teamId = CurrentSelection.getTeamId();
-
                   removeActiveClass('.teamMenu');
 
                   return $q.all([
-                    TeamUp._('teamStatusQuery', {third: teamId}),
-                    Slots.MemberReachabilitiesByTeam(teamId, null)
+                    Teams.getSingle(teamId),
+                    Slots.MemberReachabilitiesByTeam(teamId, null),
+                    $q.when(Teams.getAllLocal())
                   ]).then(function(result) {
                     return {
                       members: result[0],
-                      membersReachability: result[1]
+                      membersReachability: result[1],
+                      teams: result[2]
                     };
                   });
                 }
