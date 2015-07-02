@@ -9,7 +9,7 @@ define(
       'States',
       [
         '$location', '$rootScope',
-        function ($location, $rootScope)
+        function ($location, $rootScope, Rejections)
         {
           $rootScope.$on(
             '$routeChangeStart',
@@ -258,7 +258,10 @@ define(
             '$routeChangeError',
             function (event, current, previous, rejection)
             {
-              $rootScope.notifier.error(rejection);
+              if(angular.isDefined(Rejections))
+              {
+                Rejections.trowError(rejection);
+              }
             }
           );
         }

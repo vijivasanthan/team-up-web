@@ -311,124 +311,55 @@ define(
             //delete tempResources.defaultTeam;
             //delete resources.TeamMemberCodeAsPhone;
 
-            //oldpass
-            if(!_.isUndefined(resources.oldpass))
-            {
-              delete tempResources.oldpass;
-            }
-
-
             //save profileresource
-            Profile.save($route.current.params.userId,
+            Profile.save(tempResources.uuid,
               {
                 PhoneAddresses: tempResources.phoneNumbers,
                 PhoneAddress: tempResources.phone
                 //pincode: resources.pincode
-              }
-            )
-              .then(
-              function(result)
+              })
+              .then(function()
               {
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.errors.profile.save);
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  delete tempResources.phoneNumbers;
-                  //delete tempResources.pincode;
-
-                  //clear validation after submit
-                  $scope.profileForm.$setPristine();
-                  saveUserData(tempResources);
-                }
-              }
-            );
+                delete tempResources.phoneNumbers;
+                //delete tempResources.pincode;
+                $scope.profileForm.$setPristine();
+                saveUserData(tempResources);
+              });
           };
 
           var saveUserData = function(resources)
           {
             Profile.saveUserData(resources)
-              .then(
-                function(result)
+              .then(function()
+              {
+                return Profile.fetchUserData($route.current.params.userId);
+              })
+              .then(function(data)
+              {
+                $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
+
+                $scope.view = data;
+
+                getProfileResource(
+                  $route.current.params.userId,
+                  ($route.current.params.userId == $rootScope.app.resources.uuid)
+                );
+
+                $rootScope.statusBar.off();
+                $scope.setViewTo('profile');
+
+                if ($rootScope.app.resources.uuid == $route.current.params.userId)
                 {
-                  if (result.error)
+                  $rootScope.app.resources.firstName = $scope.edit.firstName;
+                  $rootScope.app.resources.lastName = $scope.edit.lastName;
+
+                  // will logout if the role is changed for the user him/her-self.
+                  if (currentRole != $scope.view.role)
                   {
-                    $rootScope.notifier.error('Error with saving profile information.');
-                    console.warn('error ->', result);
-                  }
-                  else
-                  {
-                    Profile.fetchUserData($route.current.params.userId)
-                      .then(
-                        function(data)
-                        {
-                          if (data.error)
-                          {
-                            $rootScope.notifier.error('Error with getting profile data.');
-                            console.warn('error ->', data);
-                          }
-                          else
-                          {
-                            //TODO team/members
-                            //Teams.updateMember(data);
-
-                            $rootScope.notifier.success($rootScope.ui.profile.dataChanged);
-
-                            $scope.view = data;
-
-                            getProfileResource(
-                              $route.current.params.userId,
-                              ($route.current.params.userId == $rootScope.app.resources.uuid)
-                            );
-
-                            //Default team is temp cancelled
-                            //if($scope.view.teamUuids.length > 0)
-                            //{
-                            //  $scope.teams = Teams.getTeamNamesOfUser($scope.view.teamUuids);
-                            //}
-
-                            $rootScope.statusBar.off();
-                            $scope.setViewTo('profile');
-
-                            if ($rootScope.app.resources.uuid == $route.current.params.userId)
-                            {
-                              $rootScope.app.resources.firstName = $scope.edit.firstName;
-                              $rootScope.app.resources.lastName = $scope.edit.lastName;
-
-                              // will logout if the role is changed for the user him/her-self.
-                              if (currentRole != $scope.view.role)
-                              {
-                                $rootScope.nav("logout");
-                              }
-                            }
-
-                            // refresh the teams in the background
-                            angular.forEach
-                            (
-                              resources.teamUuids, function (teamId)
-                              {
-                                // FIXME: Message is not absent in localization file so turned off
-                                // $rootScope.statusBar.display($rootScope.ui.profile.refreshTeam);
-
-                                Teams.query(
-                                  false,
-                                  {uuid: teamId}
-                                ).then(
-                                  function ()
-                                  {
-                                    $rootScope.statusBar.off()
-                                  }
-                                );
-                              }
-                            );
-                          }
-                        }
-                      );
+                    $rootScope.nav("logout");
                   }
                 }
-              );
+              });
           };
 
           $scope.editProfile = function ()
@@ -500,7 +431,6 @@ define(
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingMember);
 
             var changes = {};
-
             //add member to the deletelist per team
             _.each($scope.view.teamUuids, function(teamId)
             {
@@ -511,8 +441,7 @@ define(
             });
 
             Teams.manage(changes)
-              .then(
-              function()
+              .then(function()
               {
                 //Check of logged user is equal to the profile user
                 $scope.teams = null;
@@ -530,8 +459,7 @@ define(
                 }
                 $rootScope.statusBar.off();
                 $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-              }
-            );
+              });
           };
         }
       ]

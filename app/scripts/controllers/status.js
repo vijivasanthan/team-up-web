@@ -6,8 +6,6 @@ define(['controllers/controllers'], function (controllers)
     'status',
       function ($scope, $rootScope, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
-        console.log('data', data);
-        
         $rootScope.notification.status = false;
         $rootScope.fixStyles();
 

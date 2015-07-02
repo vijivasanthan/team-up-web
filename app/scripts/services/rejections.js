@@ -56,10 +56,22 @@ define(
             },
             trowError: function (error)
             {
-              var errorCode = error.errorCode.toString() || "0";
+              var errorCode = error.data && error.data.errorCode || 1;
+
               $rootScope.statusBar.off();
-              $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode]);
-              console.log('error -> ', error.errorMessage);
+              $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
+              console.log('error -> ', error);
+
+              trackGa('send', 'exception', {
+                exDescription: error.statusText,
+                exFatal: false,
+                exError: 'Response error',
+                exStatus: error.status,
+                exUrl: error.config.url,
+                exData: error.data,
+                exParams: _.values(error.config.params).join() || '',
+                exMethodData: _.values(error.config.data).join() || ''
+              });
             }
           };
         }

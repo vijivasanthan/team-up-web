@@ -68,7 +68,6 @@ define(['services/services', 'config'], function (services, config) {
             $rootScope.app.resources = result;
             Store('app').save('resources', $rootScope.app.resources);
           }
-          return result;
         }).$promise;
     };
 
@@ -77,10 +76,7 @@ define(['services/services', 'config'], function (services, config) {
       return user.save({
           teamId: resources.teamUuids[0],
           userId: resources.uuid
-        }, resources,
-        function (result) {
-          return result;
-        }).$promise;
+        }, resources).$promise;
     };
 
     Profile.prototype.userExists = function (username) {
@@ -120,11 +116,7 @@ define(['services/services', 'config'], function (services, config) {
           oldPass: MD5(oldPass),
           newPass: MD5(newPass)
         },
-        null,
-        function (result)
-        {
-          return result;
-        }).$promise;
+        null).$promise;
     };
 
     Profile.prototype.get = function (id)
@@ -188,10 +180,9 @@ define(['services/services', 'config'], function (services, config) {
 
     Profile.prototype.save = function (id, resources)
     {
-      return Profile.save({id: id}, resources,
-        function (result) {
-          return result;
-        }).$promise;
+      return Profile
+              .save({id: id}, resources)
+              .$promise;
     };
 
     return new Profile;

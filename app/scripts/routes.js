@@ -252,7 +252,7 @@ define(
                       timeline: null
                     };
 
-                  if(! userAllowance(userId))
+                  if(_.isUndefined(userId))
                   {
                     redirectLocationLoggedUser();
                   }
@@ -265,25 +265,44 @@ define(
                     })
                     .then(function(user)
                     {
-                      data.user = user;
-                      return user.error && user || getAllSlots(userId, groupId);
-                    })
-                    .then(function(timeline)
-                    {
-                      data.timeline = timeline;
-                      return $q.when(Teams.getAllLocal());
-                    })
-                    .then(function(teams)
-                    {
-                      if(! teams.error)
-                      {
-                        return {
-                          members: data.members,
-                          timeline: data.timeline,
-                          user: data.user,
-                          teams: teams
-                        };
+                        var loggedUserTeams = $rootScope.app.resources.teamUuids,
+                          urlUserTeams = user.teamUuids,
+                          userAllow = true;
+
+                        data.user = user;
+
+                        //Check if there are equal team, otherwise it's not aloud to edit this user's
+                        //timeline with the role of team lid
+                        if($rootScope.app.resources.role > 1)
+                        {
+                          userAllow = hasEqualTeams(
+                            loggedUserTeams.concat(urlUserTeams)
+                          );
+                        }
+
+                      return (! userAllow)
+                          ? $q.reject(user)
+                          : $q.all([
+                              getAllSlots(userId, groupId),
+                              $q.when(Teams.getAllLocal())
+                            ]);
+
+                      function hasEqualTeams(teams) {
+                        return _.uniq(teams).length !== teams.length;
                       }
+                    })
+                    .then(function(result)
+                    {
+                      return {
+                        members: data.members,
+                        timeline: result[0],
+                        user: data.user,
+                        teams: result[1]
+                      };
+                    },
+                    function ()
+                    {
+                      redirectLocationLoggedUser();
                     });
 
                   /**
@@ -312,40 +331,6 @@ define(
                       },
                       user: userId
                     });
-                  }
-
-                  /**
-                   *
-                   * @param userId
-                   */
-                  function userAllowance(userId)
-                  {
-                    //Check the possiblities of the user by role
-                    var userAllow = true;
-
-                    if(_.isUndefined(userId))
-                    {
-                      userAllow = false;
-                    }
-
-                    //Get the teams of the userId in url
-                    var currentTeamsRouteUser = $rootScope.getTeamsofMembers(userId);
-
-                    //Check if the userId is in a team
-                    if(! currentTeamsRouteUser.length)
-                    {
-                      userAllow = false;
-                    }
-                    //check if userId belongs to the same team as the logged user (teammember role only)
-                    else if($rootScope.app.resources.role > 1)
-                    {
-                      var userTeam = _.where(currentTeamsRouteUser, {uuid: groupId});
-                      //Check if the user is in the same as the logged user
-                      if(_.isEmpty(userTeam))
-                      {
-                        userAllow = false;
-                      }
-                    }
                   }
 
                   /**
@@ -552,6 +537,8 @@ define(
                   },
                   responseError: function (rejection)
                   {
+                    var promise = $q.reject(rejection);
+
                     if(rejection.status > 0)
                     {
                       var rejections = $injector.get('Rejections');
@@ -563,35 +550,20 @@ define(
 
                           if(loginData.password)
                           {
-                            return rejections.reSetSession(loginData, rejection.config);
+                            promise = rejections.reSetSession(loginData, rejection.config);
                           }
                           else
                           {
                             rejections.sessionTimeOut();
                           }
                           break;
+                        default:
+                          rejections.trowError(rejection);
+                          break;
                       }
-
-                      if(rejection.data && rejection.data.error)
-                      {
-                        rejections.trowError(rejection.data);
-                      }
-
-                      console.log('rejection', rejection);
-
-                      trackGa('send', 'exception', {
-                        exDescription: rejection.statusText,
-                        exFatal: false,
-                        exError: 'Response error',
-                        exStatus: rejection.status,
-                        exUrl: rejection.config.url,
-                        exData: rejection.data,
-                        exParams: _.values(rejection.config.params).join() || '',
-                        exMethodData: _.values(rejection.config.data).join() || ''
-                      });
                     }
 
-                    return $q.reject(rejection);
+                    return promise;
                   }
                 };
               }
