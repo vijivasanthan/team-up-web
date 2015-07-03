@@ -303,6 +303,7 @@ module.exports = (grunt) ->
             '*.{ico,png,txt}'
             '.htaccess'
             'vendors/**/*'
+            'downloads/*'
             'images/{,*/}*.{gif,webp}'
             'fonts/**/*'
           ]
