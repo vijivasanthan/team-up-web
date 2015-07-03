@@ -150,11 +150,11 @@ define(
 
                   }
                 }
-                else
-                {
-                  //Check if there is a url and parse the url to a anchor tag
-                  msg.body = urlify(msg.body);
-                }
+                //else
+                //{
+                //  //Check if there is a url and parse the url to a anchor tag
+                //  msg.body = urlify(msg.body);
+                //}
 
                 //Maak als er hhtp in de body staat er een anchor link vab
 
@@ -195,22 +195,20 @@ define(
             ).then(
               function (messages)
               {
-                if (messages.error)
-                {
-                  $rootScope.notifier.error(messages.error.data);
-                  return;
-                }
-
                 messages = $filter('orderBy')(messages, 'sendTime');
 
                 if ($scope.toggleChat)
                 {
-                  if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
+                  if(messages.length)
                   {
-                    $scope.moveToBottom = true;
+                    if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
+                    {
+                      $scope.moveToBottom = true;
+                    }
+
+                    $scope.latestMsgTime = messages[messages.length - 1].sendTime;
                   }
 
-                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
                   $timeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
                 }
 
@@ -230,7 +228,6 @@ define(
                 }
 
                 $scope.formatMessage(messages);
-
               },
               function (error) { console.log(error) }
             );

@@ -16,6 +16,7 @@ define(
           members: checkLocationMembers(data.members)
         };
         $scope.current = data.teamId;
+        $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
         $location.search({ uuid: $scope.current }).hash($location.hash() || 'team');
         setView($location.hash());
 
