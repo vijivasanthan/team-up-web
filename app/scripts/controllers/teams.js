@@ -329,7 +329,7 @@ define(
          * Delete member from team
          * @param member All the data from the member who is deleted
          */
-        $scope.deleteMember = function (member)
+        $scope.deleteMember = function (member, callBack)
         {
           var memberId = angular.lowercase(member.uuid);
 
@@ -341,19 +341,34 @@ define(
             {second: $scope.current},
             {ids: [memberId]}
           ).then(function(memberDelete)
+          {
+            //callback
+            if(! memberDelete.error)
             {
-              if(! memberDelete.error)
-              {
-                removedLoggedMember(memberId);
+              removedLoggedMember(memberId);
 
+              //Check if the role is team lid and the deleted member is equal to the logged one
+              //remove current team from all teams
+              if($rootScope.app.resources.role > 1
+                && memberId === $rootScope.app.resources.uuid)
+              {
+                var currentTeam = _.findWhere($scope.data.teams, { uuid: $scope.current }),
+                    indexTeam = $scope.data.teams.indexOf(currentTeam);
+                $scope.data.teams.splice(indexTeam, 1);
+                $scope.current = $scope.data.teams[0].uuid;
+                $scope.requestTeam($scope.current);
+              }
+              else
+              {
                 var deletedMember = _.findWhere($scope.data.members, {uuid: memberId}),
                   memberIndex = $scope.data.members.indexOf(deletedMember);
 
                 $scope.data.members.splice(memberIndex, 1);
                 $rootScope.statusBar.off();
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               }
-            });
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            }
+          });
         };
 
         /**
@@ -560,6 +575,7 @@ define(
          */
         function loadCurrentTeam(teamId)
         {
+          $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
           $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0);
 
           Teams.getSingle(teamId)
@@ -568,6 +584,7 @@ define(
               if(! members.error)
               {
                 $scope.data.members = checkLocationMembers(members);
+                $rootScope.statusBar.off();
               }
             });
         }
