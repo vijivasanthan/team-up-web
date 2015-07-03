@@ -11,21 +11,19 @@ define(
         $rootScope.fixStyles();
 
         var vm = this,
-          everyoneId = 'all',
           periods = {
             startTime: data.logData.periods.startTime,
             endTime: data.logData.periods.endTime
           };
 
         vm.data = data;
-        vm.teams = data.teams;
 
         if ($rootScope.app.resources.role == 1)
         {
-          vm.teams.unshift({
+          vm.data.teams.unshift({
             name: $rootScope.ui.dashboard.everyone,
-            teamId: everyoneId,
-            adapterId: everyoneId
+            teamId: 'all',
+            adapterId: 'all'
           });
         }
 

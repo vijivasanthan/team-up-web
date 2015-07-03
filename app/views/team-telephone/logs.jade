@@ -6,7 +6,7 @@ section#logs
 			label.control-label Selecteer team
 			.controls
 				select(ng-model='logs.current',
-				ng-options='team.teamId as team.name for team in logs.teams | orderBy:"name"',
+				ng-options='team.teamId as team.name for team in logs.data.teams | orderBy:"name"',
 				ng-selected='logs.current',
 				ng-change='logs.fetchLogs()')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
