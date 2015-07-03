@@ -107,17 +107,17 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  '$rootScope', 'Teams', '$route',
-                  function ($rootScope, Teams, $route)
+                  'Teams', '$route', '$q',
+                  function (Teams, $route, $q)
                   {
                     var teamId = Teams.checkExistence($route.current.params.uuid);
 
-                    return Teams.getSingle(teamId)
-                      .then(function(currentTeam)
+                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
+                      .then(function(teamsData)
                       {
                         return {
-                          members: currentTeam,
-                          teams: Teams.getAllLocal(),
+                          members: teamsData[0],
+                          teams: teamsData[1],
                           teamId: teamId
                         };
                       });
