@@ -8,15 +8,7 @@ define(['controllers/controllers'], function (controllers)
       {
         $rootScope.notification.status = false;
         $rootScope.fixStyles();
-
-        $scope.teams = Teams.getAllLocal();
-
-        //Add a all teams option to the selector
-        if($rootScope.app.resources.role == 1)
-        {
-          $scope.teams = addTeamAll($scope.teams);
-        }
-
+        $scope.teams = data.teams;
         $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
 
         $scope.states['no-state'] = {
@@ -39,38 +31,18 @@ define(['controllers/controllers'], function (controllers)
           $scope.loadGroup = $rootScope.ui.dashboard.load;
           $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
+          CurrentSelection.local = $scope.currentTeam;
 
-          if ($scope.currentTeam == 'all')
+          $q.all([
+            Teams.getSingle($scope.currentTeam),
+            Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
+          ])
+          .then(function(result)
           {
-            //splice teams 'All' of
-            var teams = angular.copy($scope.teams);
-            teams.splice(0 , 1);
+            $scope.teamMembers = result[0];
+            getReachability(result[1], setKeyAsUsername($scope.teamMembers));
+          });
 
-            Teams.getAllWithMembers()
-              .then(function(allMembers)
-              {
-                $scope.teamMembers = _.flatten(_.values(allMembers));
-                return Slots.getAllMemberReachabilities(teams)
-              })
-              .then(function(result)
-              {
-                getReachability(result, setKeyAsUsername($scope.teamMembers));
-              });
-          }
-          else
-          {
-            CurrentSelection.local = $scope.currentTeam;
-
-            $q.all([
-              Teams.getSingle($scope.currentTeam),
-              Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
-            ])
-            .then(function(result)
-            {
-              $scope.teamMembers = result[0];
-              getReachability(result[1], setKeyAsUsername($scope.teamMembers));
-            });
-          }
         };
 
         /**
@@ -211,21 +183,6 @@ define(['controllers/controllers'], function (controllers)
           });
 
           return newMembers;
-        }
-
-        /**
-         * Add option AllTeams
-         * @param teams All teams
-         * @returns {*} teams including the team 'All'
-         */
-        function addTeamAll(teams)
-        {
-          teams.unshift({
-            'name': $rootScope.ui.dashboard.everyone,
-            'uuid': 'all'
-          });
-
-          return teams;
         }
       }
   );
