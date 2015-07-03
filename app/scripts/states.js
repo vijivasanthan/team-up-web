@@ -198,7 +198,7 @@ define(
                 break;
 
               case 'team-telefoon/options':
-                $location.path('/team-telefoon/options').search({local: 'true'}).hash('');
+                $location.path('/team-telefoon/options').search({}).hash('');
                 break;
 
               case 'vis':

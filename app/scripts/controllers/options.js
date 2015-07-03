@@ -12,9 +12,7 @@ define(
 
         //view model
         var vm = this;
-
-        vm.teams = data.teams;
-
+        vm.teams = data;
         vm.current = CurrentSelection.getTeamId();
 
         //Default scenario options of teamtelephone

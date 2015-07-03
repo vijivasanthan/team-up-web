@@ -644,8 +644,9 @@ define(
            */
           TeamsService.prototype.getAllLocal = function ()
           {
-            var teamsLocal = Store('app').get('teams');
-            return teamsLocal.length && teamsLocal || TeamsService.prototype.getAll();
+            var teamsLocal = Store('app').get('teams'),
+                teamsFinal = teamsLocal.length && teamsLocal || TeamsService.prototype.getAll();
+            return $q.when(teamsFinal);
           };
 
           TeamsService.prototype.getAllWithMembers = function()

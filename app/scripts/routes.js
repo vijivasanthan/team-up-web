@@ -221,14 +221,11 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams', '$route',
-                  function (Teams, $route)
+                  'Teams',
+                  function (Teams)
                   {
                     removeActiveClass('.teamMenu');
-
-                    return ($route.current.params.local && $route.current.params.local == 'true')
-                      ? Teams.queryLocal()
-                      : Teams.query(false, $route.current.params);
+                    return Teams.getAllLocal();
                   }
                 ]
               }
@@ -284,7 +281,7 @@ define(
                           ? $q.reject(user)
                           : $q.all([
                               getAllSlots(userId, groupId),
-                              $q.when(Teams.getAllLocal())
+                              Teams.getAllLocal()
                             ]);
 
                       function hasEqualTeams(teams) {
@@ -412,7 +409,7 @@ define(
                   return $q.all([
                     Teams.getSingle(teamId),
                     Slots.MemberReachabilitiesByTeam(teamId, null),
-                    $q.when(Teams.getAllLocal())
+                    Teams.getAllLocal()
                   ]).then(function(result) {
                     return {
                       members: result[0],
@@ -439,7 +436,7 @@ define(
                     teamOrder = TeamUp._('callOrderGet', {second: teamId}),
                     allTeams = Teams.getAllLocal();
 
-                  return $q.all([ teamStatus, teamOrder, $q.when(allTeams) ])
+                  return $q.all([teamStatus, teamOrder, allTeams])
                     .then(
                     function(teamResult)
                     {
