@@ -10,8 +10,7 @@ define(
       {
         $rootScope.fixStyles();
 
-        var teamsLocal = Teams.queryLocal(),
-            tempOrder = [];
+        var tempOrder = [];
 
         $scope.currentTeam = CurrentSelection.getTeamId();
 
@@ -19,7 +18,7 @@ define(
 
         showOrder(data.teamOrder.order, data.teamMembers);
 
-        $scope.groups = teamsLocal.teams;
+        $scope.groups = data.teams;
 
         $scope.sortableOptions = {
           animation: 150,

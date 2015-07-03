@@ -430,23 +430,25 @@ define(
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
               resolve: {
-                data: function(TeamUp, CurrentSelection, $q)
+                data: function(TeamUp, Teams, CurrentSelection, $q)
                 {
                   removeActiveClass('.teamMenu');
 
                   var teamId = CurrentSelection.getTeamId(),
-                    teamStatus = TeamUp._('teamStatusQuery', {third: teamId}),
-                    teamOrder = TeamUp._('callOrderGet', {second: teamId});
+                    teamStatus = Teams.getSingle(teamId),
+                    teamOrder = TeamUp._('callOrderGet', {second: teamId}),
+                    allTeams = Teams.getAllLocal();
 
-                  return $q.all([teamStatus, teamOrder]).then(
+                  return $q.all([ teamStatus, teamOrder, $q.when(allTeams) ])
+                    .then(
                     function(teamResult)
                     {
                       return {
                         teamMembers: teamResult[0],
-                        teamOrder: teamResult[1]
+                        teamOrder: teamResult[1],
+                        teams: teamResult[2]
                       };
-                    }
-                  );
+                    });
                 }
               },
               reloadOnSearch: false
