@@ -56,11 +56,16 @@ define(
             },
             trowError: function (error)
             {
-              var errorCode = error.data && error.data.errorCode || 1;
+              var errorCode = error.data && error.data.errorCode || 1,
+                  controller = error.config.url.split('/');
+              controller = controller[controller.length - 1];
 
               $rootScope.statusBar.off();
-              $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
-              console.log('error -> ', error);
+              if(controller != 'login')
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
+              }
+              console.log('error -> ' + error.config.url, error);
 
               trackGa('send', 'exception', {
                 exDescription: error.statusText,
