@@ -12,6 +12,8 @@ if (localConfig.urlHostName.indexOf('teamtelefoon') > -1)
   localConfig.wantedProfile = 'teamtelefoon';
 else if(localConfig.urlHostName.indexOf('teamup') > -1)
   localConfig.wantedProfile = 'teamup';
+else if(localConfig.urlHostName.indexOf('decentrale') > -1)
+  localConfig.wantedProfile = 'decentrale';
 
 require.config(
   {
@@ -150,6 +152,9 @@ switch (localConfig.wantedProfile)
     break;
   case "decentrale-demo":
     profile = 'profiles/decentrale-demo/profileApp';
+    break;
+  case "decentrale":
+    profile = 'profiles/decentrale/profileApp';
     break;
   default:
     profile = 'profiles/teamup/profileApp';

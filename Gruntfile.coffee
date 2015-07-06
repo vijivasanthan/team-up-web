@@ -248,6 +248,7 @@ module.exports = (grunt) ->
             [ /(profiles\/teamtelefoon\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
             [ /(profiles\/teamup\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
             [ /(profiles\/decentrale-demo\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
+            [ /(profiles\/decentrale\/profileApp)/, 'Replacing profile', ((path) => path + '.js'), ((path) => path.slice(0, -3))]
           ]
     svgmin:
       dist:
