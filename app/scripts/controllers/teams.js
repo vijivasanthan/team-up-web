@@ -222,6 +222,7 @@ define(
             {
               $scope.data.members.push(currentMember);
               $scope.data.members = checkLocationMembers($scope.data.members);
+              $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
 
               $scope.setViewTo('team');
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -507,6 +508,10 @@ define(
             if($rootScope.app.resources.teamUuids.length == 0)
             {
               Permission.getAccess();
+            }
+            else
+            {
+              $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
             }
           }
         }

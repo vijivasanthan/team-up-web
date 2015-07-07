@@ -24,7 +24,7 @@ define(
               //http://webrtc.ask-fast.com
               //http://webrtc.ask-cs.com
               //http://localhost:9001
-              videoCall = $filter('trusted_url')('http://webrtc.ask-cs.com/?room=' + $route.current.params.videoId);
+              videoCall = $filter('trusted_url')('http://localhost:9001/?room=' + $route.current.params.videoId + '&username=Joop');
             }
             else
             {
