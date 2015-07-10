@@ -67,7 +67,8 @@ define(
                       start = start.toDate();
                       // bootstrap-daterangepicker uses end of day,
                       // make it the beginning using moment's function
-                      end = (end.startOf('day')).toDate();
+                      //end = (end.startOf('day')).toDate();
+                      end = end.toDate();
                     }
 
                     $rootScope.$broadcast(
