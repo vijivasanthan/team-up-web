@@ -41,7 +41,7 @@ section
 				hr
 				div
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
-						type='button', ng-click='confirmOrder()')
+						type='button', ng-click='saveOrder()')
 							| {{ ui.order.confirmation }}
 					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
 					p(ng-show='orderedMembers.length == 0 && orderType != "RANDOM"') {{ ui.order.noMembers }}
