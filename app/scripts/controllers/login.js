@@ -31,7 +31,7 @@ define(
             angular.element('body')
               .css(
               {
-                'backgroundColor': '#1dc8b6',
+                'backgroundColor': '#fff',
                 'backgroundImage': 'none'
               }
             );
@@ -115,7 +115,7 @@ define(
           angular.element('.navbar').hide();
           angular.element('#footer').hide();
           angular.element('#watermark').hide();
-          angular.element('body').css({ 'backgroundColor': '#1dc8b6' });
+          angular.element('body').css({ 'backgroundColor': '#fff' });
 
           var localLoginData = Store('app').get('loginData');
 

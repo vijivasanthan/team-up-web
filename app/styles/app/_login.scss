@@ -8,6 +8,13 @@
   width: 363px;
 }
 
+#welcomeLogoDecentrale {
+  background-image: url("../images/DecentraleLogo.png");
+  margin: 0 auto 40px;
+  height: 82px;
+  width: 290px;
+}
+
 #welcomeLogoTeamUp {
   background-image: url("../images/logo.png");
   margin: 0 auto 40px;
@@ -24,7 +31,7 @@
   height: 0;
   border-left: 32px solid transparent;
   border-right: 32px solid transparent;
-  border-bottom: 15px solid $offwhite;
+  border-bottom: 15px solid $decentrale-gray;
   position: absolute;
   left: 50%;
   margin: -14px 0 0 -80px;
@@ -35,7 +42,7 @@
   padding: 35px 29px 19px 29px;
   max-width: 300px;
   border-radius: 20px;
-  background-color: $offwhite;
+  background-color: $decentrale-gray;
   text-align: center;
 
   h2 {

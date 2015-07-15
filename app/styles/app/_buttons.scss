@@ -159,15 +159,15 @@ input[type="button"] {
 // Set the backgrounds
 // -------------------------
 .btn-primary {
-  background-color: $orange;
-  color: $brown;
+  background-color: $decentrale-blue-lighter;
+  color: $decentrale-gray;
   &:hover,
   &:focus,
   &:active,
   &.active,
   &.dropdown-toggle {
-    background-color: $orange;
-    color: $offwhite;
+    background-color: $decentrale-blue-lighter;
+    color: $decentrale-accent;
   }
 }
 

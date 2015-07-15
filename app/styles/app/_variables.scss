@@ -28,13 +28,35 @@ $pink: #c3325f !default;
 $purple: #7772b5 !default;
 //
 
-$turq: #1dc8b6 !default;
+// $decentrale-blue: #2D54A3;
+// $decentrale-blue: #194fa0;
+// $decentrale-blue: #0D47A1;
+// $decentrale-blue: #165893;
+// $decentrale-blue: #124796;
+$decentrale-blue: #184486;
+
+$decentrale-blue-lighter: #205BB5;
+
+// $decentrale-gray: #f5f5f5;
+// $decentrale-gray: #f1f1f1;
+$decentrale-gray: #f3f3f3;
+
+// $decentrale-accent: #F5B130;
+// $decentrale-accent: #D48F0C;
+$decentrale-accent: #E39208;
+
+// $decentrale-accent-alt: #A38133;
+// $decentrale-accent-alt: #A76D00;
+// $decentrale-accent-alt: #F58630;
+$decentrale-accent-alt: #D4630C;
+
+$turq: $decentrale-accent-alt !default;
 // teamup
-$orange: #f5a962 !default;
+$orange: $decentrale-accent !default;
 //  teamup
-$brown: #833c11 !default;
+$brown: $decentrale-blue;
 // teamup
-$beige: #f5e6d8 !default;
+$beige: $decentrale-gray;
 // teamup
 $graytu: #c8c8b4 !default;
 //  teamup
@@ -45,7 +67,7 @@ $offwhite: #fffaf0 !default;
 
 // Scaffolding
 // -------------------------
-$bodyBackground: #fffaf0 !default;
+$bodyBackground: $decentrale-gray;
 // $white !default;
 $textColor: $brown !default;
 // $grayDark !default;
