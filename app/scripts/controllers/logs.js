@@ -10,11 +10,7 @@ define(
       {
         $rootScope.fixStyles();
 
-        var vm = this,
-          periods = {
-            startTime: data.logData.periods.startTime,
-            endTime: data.logData.periods.endTime
-          };
+        var vm = this;
 
         vm.data = data;
 
@@ -31,12 +27,14 @@ define(
 
         vm.ordered = 'started.stamp';
         vm.reversed = true;
-        vm.daterange = $filter('date')(periods.startTime, 'dd-MM-yyyy') + ' / ' +
-        $filter('date')(periods.endTime, 'dd-MM-yyyy');
+        vm.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
+        $filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
 
         $rootScope.$on('getLogRange', function ()
         {
-          periods = arguments[1];
+          var periods = arguments[1];
+          data.logData.periods.startTime = periods.startTime;
+          data.logData.periods.endTime = periods.endTime;
 
           vm.fetchLogs();
         });

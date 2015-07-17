@@ -23,21 +23,21 @@ section#dashboard
 				div
 					form.form-vertical(name='optionsForm', novalidate)
 						
-						//.form-group
-						//	label.control-label SMS bij een gemist gesprek of nieuwe voicemail
-						//	.controls
-						//		label.radio-inline
-						//			input(type="radio" ng-model='options.scenarios.sms',
-						//				name="sms-on-new-team-voicemail", ng-value='true')
-						//			| Aan
-						//		label.radio-inline
-						//			input(type="radio" ng-model='options.scenarios.sms',
-						//				name="sms-on-new-team-voicemail", ng-value='false')
-						//			| Uit
-						//		span.help-block
-						//			small
-						//				i
-						//					| Bereikbare teamleden ontvangen {{ (options.scenarios.sms) ? 'een' : 'geen' }} SMS als het team een gesprek heeft gemist of als er een voicemail is ingesproken.
+						.form-group
+							label.control-label SMS bij een gemist gesprek of nieuwe voicemail
+							.controls
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.sms',
+										name="sms-on-new-team-voicemail", ng-value='true')
+									| Aan
+								label.radio-inline
+									input(type="radio" ng-model='options.scenarios.sms',
+										name="sms-on-new-team-voicemail", ng-value='false')
+									| Uit
+								span.help-block
+									small
+										i
+											| Bereikbare teamleden ontvangen {{ (options.scenarios.sms) ? 'een' : 'geen' }} SMS als het team een gesprek heeft gemist of als er een voicemail is ingesproken.
 										
 						hr
 						
