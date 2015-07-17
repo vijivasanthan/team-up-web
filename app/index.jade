@@ -55,8 +55,7 @@ block navbar
 					span.icon-bar
 					span.icon-bar
 					// span.icon-bar {{ui.message.messages}}
-				a.navbar-brand.header-logo-teamup(ng-click='nav("tasks2")' ng-show='app.domainPermission.tasks') TeamUp
-				a.navbar-brand(ng-click='nav("team-telefoon/status")' ng-show='!app.domainPermission.tasks' class="header-logo-{{config.app.profileName.toLowerCase()}}") {{config.app.profileName}}
+				a.navbar-brand(ng-click='nav("team-telefoon/status")' class="header-logo-{{config.app.profileName.toLowerCase()}}") {{config.app.profileName}}
 				#main-navbar.navbar-collapse.collapse
 					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
