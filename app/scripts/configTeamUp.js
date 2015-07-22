@@ -5,7 +5,7 @@ define(['profile'], function(profile){
       released: '@@released',
 
       title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
-      lang: profile.lang,
+      lang: getLanguage(),
       profileName: profile.name,
 
       statesall: profile.statesall,
@@ -197,4 +197,20 @@ define(['profile'], function(profile){
       }
     }
   };
+
+  function getLanguage()
+  {
+    var lang = profile.lang,
+      currentHost = 'http://teamtelefon.de/';//window.location.host;
+
+    if (currentHost.indexOf('.de') > -1)
+    {
+      lang = 'de';
+    }
+    else if (currentHost.indexOf('.nl') > -1)
+    {
+      lang = 'nl';
+    }
+    return lang;
+  }
 });
