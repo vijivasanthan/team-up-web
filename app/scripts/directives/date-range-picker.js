@@ -28,12 +28,12 @@ define(
                 showDropdowns:  false,
                 dateLimit:      false,
                 locale: {
-                  applyLabel:     'Toepassen',
-                  cancelLabel:    'Annuleren',
-                  fromLabel:      'van',
-                  toLabel:        'tot',
+                  applyLabel:     $rootScope.ui.teamup.apply,
+                  cancelLabel:    $rootScope.ui.teamup.cancel,
+                  fromLabel:      $rootScope.ui.teamup.from,
+                  toLabel:        $rootScope.ui.teamup.to,
                   weekLabel:      'W',
-                  customRangeLabel: 'Aangepaste periode',
+                  customRangeLabel: $rootScope.ui.planboard.customDates,
                   daysOfWeek:     Date.CultureInfo.shortestDayNames,
                   monthNames:     Date.CultureInfo.monthNames,
                   firstDay:       0
@@ -65,11 +65,11 @@ define(
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
                 new Date.today(),
-                moment().add(3, 'day').toDate(),
+                moment().add(3, 'day').toDate()
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
                 new Date.today(),
-                moment().add(7, 'day').toDate(),
+                moment().add(7, 'day').toDate()
               ];
 
               element.daterangepicker(

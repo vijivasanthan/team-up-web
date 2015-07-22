@@ -1,6 +1,6 @@
 section#dashboard
 	.page-header.agenda-timeline
-		h2.nullable Status
+		h2.nullable {{ ui.teamup.state }}
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
@@ -18,7 +18,7 @@ section#dashboard
 			#availabilities.sa.widget
 				div.head
 					h4
-						| Overzicht bereikbaarheid{{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
+						| {{ ui.dashboard.accessibilityStatement }} {{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
 					.pull-right(ng-hide='loadingReachability')
 						//select(ng-model='current.group',
 						//ng-options='group.uuid as group.name for group in groups',

@@ -1111,7 +1111,11 @@ $step: 7;
   }
 }
 
-//.task-agenda .tab-header {
+#timeline-toolbar .popover {
+  max-width: 300px !important;
+}
+
+  //.task-agenda .tab-header {
 //  height: 45px;
 //}
 

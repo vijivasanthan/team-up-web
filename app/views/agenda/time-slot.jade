@@ -7,7 +7,7 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 			span.duration.label.label-info {{ duration}} 
 		h4(ng-show='views.group') {{slot.group|stripHtml}} 
 			span.duration.label.label-info {{ duration}} 
-		h4(ng-show='views.wish') {{slot.group|stripHtml}} (Behoefte) 
+		h4(ng-show='views.wish') {{slot.group|stripHtml}} ({{ ui.agenda.wished }}) 
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}} 
 			span.duration.label.label-info {{ duration}}

@@ -16,15 +16,11 @@ var profile = {
   statesall: {
     'com.ask-cs.State.Available': {
       className: 'state-available',
-      label: 'Bereikbaar',
-      color: '#4f824f',
-      type: 'Bereikbaar'
+      color: '#4f824f'
     },
     'com.ask-cs.State.Unavailable': {
       className: 'state-unavailable',
-      label: 'Niet bereikbaar',
-      color: '#a93232',
-      type: 'Niet bereikbaar'
+      color: '#a93232'
     },
     'com.ask-cs.State.Unreached': {
       className: 'state-unreached',

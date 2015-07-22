@@ -30,7 +30,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							data-content-template='views/agenda/groups-wish.html',
 							data-placement='bottom',
 							bs-popover='',
-							data-title='Behoefte wijzigen',
+							data-title='{{ ui.agenda.wished }} {{ ui.agenda.change }}',
 							ng-hide='app.resources.role > 1')
 								span.badge.badge-inset
 									| {{wish}}
@@ -62,7 +62,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								button.btn.btn-primary(type='button',
 								class="{{(timeline.current.layouts.group==true) && 'active'}}",
 								ng-model='timeline.current.layouts.group',
-								ng-click='requestTimeline("group")') {{ui.agenda.group}}
+								ng-click='requestTimeline("group")') {{ui.teamup.team }}
 								button.btn.btn-primary(type='button',
 								class="{{(timeline.current.layouts.members==true) && 'active'}}",
 								ng-model='timeline.current.layouts.members',

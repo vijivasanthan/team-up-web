@@ -26,12 +26,12 @@ define(
               locale: {
                 //todayLabel:     $rootScope.ui.planboard.daterangerToday,
                 //yesterdayLabel: $rootScope.ui.planboard.daterangerYesterday,
-                applyLabel:     'Toepassen',
-                cancelLabel:    'Annuleren',
-                fromLabel:      'van',
-                toLabel:        'tot',
+                applyLabel:     $rootScope.ui.teamup.apply,
+                cancelLabel:    $rootScope.ui.teamup.cancel,
+                fromLabel:      $rootScope.ui.teamup.from,
+                toLabel:        $rootScope.ui.teamup.to,
                 weekLabel:      'W',
-                customRangeLabel: 'Aangepaste periode',
+                customRangeLabel: $rootScope.ui.planboard.customDates,
                 daysOfWeek:     Date.CultureInfo.shortestDayNames,
                 monthNames:     Date.CultureInfo.monthNames,
                 firstDay:       0

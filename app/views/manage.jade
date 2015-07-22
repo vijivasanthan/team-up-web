@@ -1,5 +1,5 @@
 .page-header
-	h2.nullable Teams - Cliëntgroepen
+	h2.nullable {{ ui.teamup.teams_Cap }} - {{ ui.teamup.clientGroups }}
 
 
 .tabbable.tabs-left
@@ -11,24 +11,24 @@
 			a(ng-click='setViewTo("teamClients")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
-				| Teams
+				| {{ ui.teamup.teams_Cap }}
 				br
 				| & 
 				br
-				| Cliëntgroepen
+				| {{ ui.teamup.clientGroups }}
 
 		li(class="{{(views.teams==true) && 'active'}}")
 			a(ng-click='setViewTo("teams")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
-				| Teams
+				| {{ ui.teamup.teams_Cap }}
 
 		li(class="{{(views.clients==true) && 'active'}}",
 			ng-show='app.domainPermission.clients')
 			a(ng-click='setViewTo("clients")')
 				span.icomoon(data-icon='',
 				aria-hidden='true')
-				| Cliënten
+				| {{ ui.teamup.clients }}
 
 
 
@@ -50,7 +50,7 @@
 					hr
 					#teamClients_right
 			hr
-			button.btn.btn-success(ng-click='save.teamClients()') Opslaan
+			button.btn.btn-success(ng-click='save.teamClients()') {{ ui.teamup.createTeam }}
 
 
 		#viewTeamsTab.tab-pane(class="{{(views.teams==true) && 'active'}}")
@@ -58,17 +58,17 @@
 				.span6
 					h3
 						span.titleIcon.icon-user0
-						| Leden
+						| {{ ui.agenda.members }}
 					hr
 					#teams_left
 				.span6
 					h3
 						span.titleIcon.icon-users
-						| Teams
+						| {{ ui.teamup.teams_Cap }}
 					hr
 					#teams_right
 			hr
-			button.btn.btn-success(ng-click='save.teams()') Opslaan
+			button.btn.btn-success(ng-click='save.teams()') {{ ui.teamup.createTeam }}
 
 
 		#viewClientsTab.tab-pane(class="{{(views.clients==true) && 'active'}}")
@@ -76,14 +76,14 @@
 				.span6
 					h3
 						span.titleIcon.icon-heart7
-						| Cliënten
+						| {{ ui.teamup.clients }}
 					hr
 					#clients_left
 				.span6
 					h3
 						span.titleIcon.icon-users
-						| Groepen
+						| {{ ui.teamup.teams_Cap }}
 					hr
 					#clients_right
 			hr
-			button.btn.btn-success(ng-click='save.clients()') Opslaan
+			button.btn.btn-success(ng-click='save.clients()') {{ ui.teamup.createTeam }}

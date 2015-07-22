@@ -1,6 +1,6 @@
 section#dashboard
 	.page-header.agenda-timeline
-		h2.nullable Instellingen
+		h2.nullable {{ ui.options.title }}
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
@@ -19,30 +19,30 @@ section#dashboard
 			#availabilities.sa.widget
 				div.head
 					h4
-						| Instellingen{{options.current | groupIdToName:true | toTitleCase}} {{ options.loadTeam }}
+						| {{ ui.options.title }}{{options.current | groupIdToName:true | toTitleCase}} {{ options.loadTeam }}
 				div
 					form.form-vertical(name='optionsForm', novalidate)
 						
 						.form-group
-							label.control-label SMS bij een gemist gesprek of nieuwe voicemail
+							label.control-label {{ ui.options.smsMissedCall }}
 							.controls
 								label.radio-inline
 									input(type="radio" ng-model='options.scenarios.sms',
 										name="sms-on-new-team-voicemail", ng-value='true')
-									| Aan
+									| {{ ui.options.on }}
 								label.radio-inline
 									input(type="radio" ng-model='options.scenarios.sms',
 										name="sms-on-new-team-voicemail", ng-value='false')
-									| Uit
+									| {{ ui.options.off }}
 								span.help-block
 									small
 										i
-											| Bereikbare teamleden ontvangen {{ (options.scenarios.sms) ? 'een' : 'geen' }} SMS als het team een gesprek heeft gemist of als er een voicemail is ingesproken.
+											| {{ ui.options.receiveReachableMembers }} {{ hasSms(options.scenarios.sms) }} {{ ui.options.missedOrVoicemail }}.
 										
 						hr
 						
 						.form-group
-							label.control-label Rinkeltijd
+							label.control-label {{ ui.options.ringingTimeOut.title }}
 							.controls
 								div.input-group(style='width: 250px;')
 									div.range
@@ -51,16 +51,16 @@ section#dashboard
 								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 									small
 										i
-											| Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cli&euml;nten kan langer zijn als er veel teamleden zijn aangemeld.
+											| {{ ui.options.ringingTimeOut.short }}
 								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 									small
 										i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
-											| Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.
+											| {{ ui.options.ringingTimeOut.long }}
 
 
 						//
 						//.form-group
-						//	label.control-label Persoonlijke voicemailpreventie
+						//	label.control-label {{ ui.options.personalVoicemailPrevention }}
 						//	.controls
 						//		label.radio-inline
 						//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
@@ -73,13 +73,11 @@ section#dashboard
 						//		span.help-block(style='height: 14px; margin-bottom: 35px;')
 						//			small
 						//				i
-						//					| Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.
+						//					| {{ ui.options.personalVoicemailPreventionInfo }}
 						//
 						.form-actions
 							button.btn.btn-success(type='submit',
 								ng-click='options.save(options.scenarios)') {{ ui.order.confirmation }}
 							
 							//&& !options.scenarios.voicemailDetection
-							//Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat 
-							//alle teamleden hun persoonlijke voicemail uitschakelen of om gebruik te maken van de persoonlijke 
-							//voicemailpreventie. Het uitzetten van de persoonlijke voicemail (van de werktelefoon) kunt u regelen bij de telefoonprovider.
+							// {{ ui.options.voicemailDetectionInfo }}

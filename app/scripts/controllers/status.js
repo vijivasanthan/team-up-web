@@ -13,9 +13,9 @@ define(['controllers/controllers'], function (controllers)
 
         $scope.states['no-state'] = {
           className: 'no-state',
-          label: $rootScope.ui.dashboard.possiblyReachable,
+          label: $rootScope.ui.teamup.stateValue.possibly_reachable,
           color: '#ececec',
-          type: $rootScope.ui.dashboard.noPlanning,
+          type: $rootScope.ui.teamup.stateValue.possibly_reachable,
           display: false
         };
 
@@ -166,7 +166,7 @@ define(['controllers/controllers'], function (controllers)
             members: ordered,
             synced: currentReachability.synced * 1000
           };
-        };
+        }
 
         /**
          * Set key as username array of members

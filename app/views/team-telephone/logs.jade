@@ -3,7 +3,7 @@ section#logs
 		h2.nullable Logs
 	div
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
-			label.control-label Selecteer team
+			label.control-label {{ ui.teamup.chooseTeam }}
 			.controls
 				select(ng-model='logs.current',
 				ng-options='team.teamId as team.name for team in logs.data.teams | orderBy:"name"',
@@ -13,7 +13,7 @@ section#logs
 			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 		.form-group.has-feedback.pull-right.headerTop
-			input.form-control.search-query(type='text', placeholder='Filter logs..', ng-model='logs.filtered')
+			input.form-control.search-query(type='text', placeholder='{{ ui.logs.filter }}', ng-model='logs.filtered')
 			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
@@ -21,13 +21,13 @@ section#logs
 				
 		.tab-content
 			#groupTab.tab-pane.active
-				p(ng-hide='logs.data.logData.logs.length > 0') Er zijn geen logs.
+				p(ng-hide='logs.data.logData.logs.length > 0') {{ ui.logs.empty }}
 				div(ng-show='logs.data.logData.logs.length > 0')
 					table.table.table-striped
 						thead
 							tr
 								th
-									a(ng-click='logs.ordered = "status"; logs.reversed = !logs.reversed') Status
+									a(ng-click='logs.ordered = "status"; logs.reversed = !logs.reversed') {{ ui.teamup.state }}
 									span(ng-show='(logs.ordered=="status")')
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼

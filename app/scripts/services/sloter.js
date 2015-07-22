@@ -88,12 +88,12 @@ define(['services/services', 'config'],
 
               if (periods.hasOwnProperty('min'))
               {
-                content += ' / Huidig aantal beschikbaar: ' + periods.min;
+                content += ' / ' + $rootScope.ui.agenda.currentAmountReachable + ': ' + periods.min;
               }
 
               if (periods.hasOwnProperty('wish'))
               {
-                content += ' / Gewenst aantal mensen: ' + periods.wish;
+                content += ' / ' + $rootScope.ui.agenda.amountOfPeopleWished +': ' + periods.wish;
               }
 
               if (periods.hasOwnProperty('member'))
@@ -314,7 +314,7 @@ define(['services/services', 'config'],
                   var actual = '<div class="bar ' + color + '" style="' +
                     style +
                     '" ' +
-                    ' title="Huidig aantal beschikbaar: ' +
+                    ' title="' + $root.ui.agenda.currentAmountReachable + ': ' +
                     num +
                     ' personen">' +
                     span +
@@ -437,7 +437,8 @@ define(['services/services', 'config'],
 
               title = (privilage == 1) ? link : '<span>' + name + '</span>';
 
-              title += ' <span class="label label-default">Behoefte</span>';
+              title += ' <span class="label label-default">' + $rootScope.ui.agenda.wished;
+              title += '</span>';
 
               _.each(data.aggs.wishes, function (wish)
                 {

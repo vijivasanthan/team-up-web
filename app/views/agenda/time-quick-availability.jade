@@ -9,25 +9,25 @@ div.btn-group.pull-right
 		li
 			a(ng-click='setAvailability(true, 1)')
 				.square.available
-				| Bereikbaar (1 uur)
+				| {{ ui.teamup.stateValue.reachable }} (1 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(true, 6)')
 				.square.available
-				| Bereikbaar (6 uur)
+				| {{ ui.teamup.stateValue.reachable }} (6 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(true, 24)')
 				.square.available
-				| Bereikbaar (24 uur)
+				| {{ ui.teamup.stateValue.reachable }} (24 {{ ui.teamup.hour }})
 		li.divider
 		li
 			a(ng-click='setAvailability(false, 1)')
 				.square.unavailable
-				| Niet bereikbaar (1 uur)
+				| {{ ui.teamup.stateValue.not_reachable }} (1 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(false, 6)')
 				.square.unavailable
-				| Niet bereikbaar (6 uur)
+				| {{ ui.teamup.stateValue.not_reachable }} (6 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(false, 24)')
 				.square.unavailable
-				| Niet bereikbaar (24 uur)
+				| {{ ui.teamup.stateValue.not_reachable }} (24 {{ ui.teamup.hour }})

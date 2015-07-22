@@ -75,7 +75,7 @@ block navbar
 							a(href='#manage') {{ui.teamup.manage}}
 						li(data-match-route='/team-telefoon.*',
 							ng-show='app.domainPermission.teamTelephoneBasic')
-							a(ng-click='nav("team-telefoon/status")') Team-telefoon
+							a(ng-click='nav("team-telefoon/status")') {{ ui.teamup.teamTelephone }}
 						li(data-match-route='/help', ng-hide='(app.resources.role === undefined)')
 							a(ng-click='nav("help")') Help
 

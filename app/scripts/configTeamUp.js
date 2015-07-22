@@ -201,7 +201,7 @@ define(['profile'], function(profile){
   function getLanguage()
   {
     var lang = profile.lang,
-      currentHost = 'http://teamtelefon.de/';//window.location.host;
+      currentHost = window.location.host;
 
     if (currentHost.indexOf('.de') > -1)
     {
