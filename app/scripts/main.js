@@ -13,16 +13,6 @@ if (localConfig.urlHostName.indexOf('teamtelefoon') > -1)
 else if(localConfig.urlHostName.indexOf('teamup') > -1)
   localConfig.wantedProfile = 'teamup';
 
-function checkDomain(url)
-{
-  var lang = '_nl';
-  if(url.indexOf('.de'))
-  {
-    lang = '_de'
-  }
-  return lang;
-}
-
 require.config(
   {
     waitSeconds: 100,
@@ -83,7 +73,7 @@ require.config(
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
-      'locale': 'i18n/angular-locale' + getLocal(localConfig.urlHostName),
+      'locale_nl': 'i18n/angular-locale_nl',
 
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
@@ -134,7 +124,7 @@ require.config(
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
-      'locale': { deps: ['angular'] }
+      'locale_nl': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
@@ -291,7 +281,7 @@ require(
     //'ui-sortable',
     //'Sortable',
     'ng-sortable',
-    'locale',
+    'locale_nl',
 
     // 'jszip',
     // 'xlsx'
