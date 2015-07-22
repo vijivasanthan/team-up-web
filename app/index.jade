@@ -133,11 +133,10 @@ block navbar
 										ng-show='app.domainPermission.teamTelephoneBasic')
 										a(ng-click='nav("team-telefoon/status")',
 											tabindex="-1",) Team-telefoon
-									li(role="presentation",
-										ng-hide='(app.resources.role === undefined)',
-										data-match-route='/support')
-										a(ng-click='nav("support")',
-											tabindex="-1",) Support
+									li(role="presentation", ng-hide='(app.resources.role === undefined)',
+										data-match-route='/help')
+										a(ng-click='nav("help")',
+											tabindex="-1",) Help
 							
 						li(data-match-route='/profile')
 							a(ng-click='nav("profile")')
