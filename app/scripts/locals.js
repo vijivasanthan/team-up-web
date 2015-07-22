@@ -1,6 +1,658 @@
 define(
   {
     ui: {
+      de: {
+        meta: {
+          name: 'de',
+          label: 'Deutch'
+        },
+        login: {
+          header: 'Anmelden',
+          placeholder_username: 'Anwendernamen eingeben',
+          placeholder_password: 'Passwort eingeben',
+          label_rememberMe: 'Passwort speichern',
+          button_login: 'Anmelden',
+          button_loggingIn: 'Anmelden...',
+          forgot_password: 'Wachtwoord vergeten?',
+          forgetPassword: 'Wachtwoord vergeten',
+          emailAddress: 'Emailadres',
+          resetPassword: 'Wachtwoord opnieuw instellen',
+          returnLogin: 'Terugkeren om in te loggen',
+          changePassword: 'Passwort ändern',
+          downloadApp: 'Download mobiele app',
+          ph_username: 'Anwendername',
+          ph_password: 'Passwort',
+          ph_newPass: 'Passwort ändern',
+          ph_retypePass: 'Passwort wiederholen',
+          alert_fillfiled: 'Nicht alle Felder sind ausgefüllt',
+          alert_wrongUserPass: 'Anwendername oder Passwort nicht korrekt!',
+          loading_User: 'Anwenderinformationen laden...',
+          loading_Message: 'Nachrichten laden...',
+          loading_Group: 'Gruppen laden...',
+          loading_Members: 'Team-Mitglieder laden...',
+          loading_everything: 'Alles geladen!',
+          logout: 'Abmelden',
+          loading: 'Laden..',
+          loading_clientGroups: 'Patientengruppen laden...',
+          loading_clients: 'Patienten laden',
+          loading_teams: 'Teams laden...',
+          loading_tasks: 'Aufgaben laden...'
+        },
+        video: {
+          stop: 'Het videogesprek is gestopt.'
+        },
+        dashboard: {
+          thisWeek: 'Deze week',
+          welcome: 'Welkom',
+          everyone: 'Iedereen',
+          newMessage: 'Nieuwe berichten',
+          goToInbox: 'Ga naar inbox',
+          loadingPie: 'Cirkeldiagrammen laden...',
+          possiblyReachable: 'Niet gepland',
+          noPlanning: 'Geen Planning',
+          load: 'laden...',
+          time: {
+            days: 'd',
+            hours: 'u',
+            minutes: 'm',
+            seconds: 's'
+          },
+          announcements: 'Alarmberichten',
+          loadingP2000: 'Alarmberichten laden...',
+          noP2000: 'Er zijn geen alarmberichten.',
+          accessibilityStatement: 'Overzicht bereikbaarheid',
+          loading: 'aan het laden...',
+          accessible: 'bereikbaar'
+        },
+        agenda: {
+          requiredPeople: 'Benodigd',
+          newAvail: 'neue Verfügbarkeit',
+          day: 'Tag',
+          week: 'Woche',
+          month: 'Monat',
+          updateAvail: 'Verfügbarkeit aktualisieren',
+          from: 'Ab',
+          till: 'bis',
+          state: 'Status',
+          selectAState: 'Status wählen',
+          reoccuring: 'jede Woche',
+          lessPeople: 'Es fehlen $v Personen.',
+          samePeople: 'Es sind ausreichend Personen vorhanden.',
+          morePeople: 'E sind $v Personen zu viel.',
+          wished: 'Bedarf',
+          combine_reoccuring: 'Es betrifft eine kombinierte Planung mit mehreren Reihen ?????? ',
+          sendMsgToMember: 'Nachricht an Gruppe senden',
+          add: 'hinzufügen',
+          del: 'löschen',
+          change: 'ändern',
+          setWish: 'Bedarf speichern',
+          timeline: 'Zeitachse',
+          statistics: 'Statistiken',
+          barCharts: 'Stabdiagramm',
+          wishes: 'Bedarf',
+          legenda: 'Legende',
+          group: 'Team',
+          groups: 'Team',
+          members: 'Mitglieder',
+          teamMembers: 'Team-Mitglieder',
+          bothAvailable: 'Both available',
+          northAavailable: 'available North',
+          southAvailable: 'available South',
+          skipperOutService: 'Skipper Of Service',
+          notAvailable: 'nicht verfügbar', // nicht verfügbar
+          notachieve: 'nicht gespeichert',
+          legendaLabels: {
+            morePeople: 'mehr als notwendig',
+            enoughPeople: 'exakt',
+            lessPeople: 'zu wenig'
+          },
+          lastSyncTime: 'Letzte Synchronisierung:',
+          dataRangeStart: 'Anfang Daten-Skala: ',
+          DataRangeEnd: 'Ende Daten-Skala: ',
+          daterangerToday: 'heute',
+          daterangerTomorrow: 'morgen',
+          daterangerLast7Days: 'Letzte 7 Tage',
+          daterangerYesterday: 'gestern',
+          daterangerNext3Days: 'nächste 3 Tage',
+          daterangerNext7Days: 'nächste 7 Tage',
+          loadingTimeline: 'Zeitspanne laden...',
+          rangeInfoTotalSelectedDays: 'Zeitraum (Tage): ',
+          rangeInfoTime: 'Zeit: ',
+          rangeInfoWeekNumber: 'Woche: ',
+          rangeInfoMonth: 'Monat: ',
+          rangeInfoTotalDays: ', Anzahl Tage: ',
+          addTimeSlot: 'Planung hinzufügen...',
+          slotAdded: 'Planung erfolgreich hinzugefügt.',
+          changingSlot: 'Planung ändern...',
+          slotChanged: 'Planung erfolgreich geändert.',
+          changingWish: 'Bedarf ändern...',
+          wishChanged: 'Bedarf erfolgreich geändert.',
+          deletingTimeslot: 'Planung löschen...',
+          timeslotDeleted: 'Planung erfolgreich gelöscht.',
+          refreshTimeline: 'Zeitachse aktualisieren...',
+          preCompilingStortageMessage: 'Bedarfsbericht erstellen',
+          weeklyPlanning: 'meine wöchentliche Planung',
+          weeklyPlanningOf: 'wöchentliche Planung von ',
+          planning: 'meine Planung',
+          planningOf: 'Planung von ',
+          minNumber: 'Minimum Anzahl benötigt ',
+          time: 'Zeit: ',
+          weekNumber: 'Woche: ',
+          monthNumber: 'Monat: ',
+          totalDays: 'Anzahl Tage: ',
+          removeTasksRange: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'Sind Sie sicher, dass Sie die Aufgaben von ' + options.range.start + ' bis' + options.range.end;
+              html += ' von  ' + options.group + ' ' + options.name;
+              html += ' löschen möchten?';
+            }
+
+            return html;
+          },
+          tasksDeleted: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'Die Aufgaben von ' + options.range.start + ' bis' + options.range.end;
+              html += ' bis ' + options.group + ' ' + options.name;
+              html += ' wurden gelöscht.';
+            }
+
+            return html;
+          },
+          noTasksFounded: 'in diesem Zeitraum gibt es keine Aufgaben ',
+          removeTasksTitle: 'Aufgaben löschen'
+        },
+        message: {
+          messages: 'Berichten',
+          composeAMessage: 'Bericht opstellen',
+          compose: 'Opstellen',
+          inbox: 'Inbox',
+          outbox: 'Outbox',
+          trash: 'Prullenbak',
+          composeMessage: 'Bericht opstellen',
+          close: 'Sluiten',
+          broadcast: 'Extra medium',
+          sms: 'SMS',
+          email: 'Email',
+          receviers: 'Ontvanger(s)',
+          webTRCWebLink: 'Eine Video-Konferenz wurde gestartet ',
+          // troubled
+          // chooseRecept: 'Teilnehmer auswählen',
+          subject: 'Onderwerp',
+          message: 'Bericht',
+          sendMessage: 'Bericht versturen',
+          sender: 'Zender',
+          date: 'Datum',
+          questionText: 'Bericht',
+          reply: 'Antwoorden',
+          del: 'Verwijderen',
+          noMessage: 'Er zijn geen berichten.',
+          from: 'Van',
+          newMsg: 'Nieuw',
+          deleteSelected: 'Verwijder geselecteerde berichten',
+          someMessage: 'Er zijn $v berichten',
+          emptyTrash: 'Prullenbak legen',
+          noMsgInTrash: 'Er zijn geen berichten.',
+          box: 'Box',
+          persons: 'Personen',
+          restoreSelected: 'Geselecteerde berichten terugplaatsen',
+          loadingMessage: 'Bericht laden...',
+          escalation: 'Escalatiebericht',
+          reportMessage: 'Nieuw rapport van',
+          escalationBody: function (diff, startDate, startTime, endDate, endTime)
+          {
+            return 'Er is een tekort van ' +
+              diff +
+              ' mensen tussen ' +
+              startDate + ' ' +
+              startTime + ' en ' +
+              endDate + ' ' +
+              endTime + '. ' +
+              'Zet uzelf a.u.b. op bereikbaar indien u bereikbaar bent voor die periode';
+          },
+          removed: 'Bericht succesvol verwijderd.',
+          removing: 'Bericht verwijderen...',
+          refreshing: 'Bericht vernieuwen...',
+          removingSelected: 'Geselecteerde berichten verwijderen...',
+          restoring: 'Bericht terugplaatsen...',
+          restored: 'Bericht succesvol teruggeplaatst.',
+          restoringSelected: 'Geselecteerde berichten terugplaatsen...',
+          emptying: 'Prullenbak leegmaken...',
+          emptied: 'Prullenbak succesvol geleegd.',
+          sending: 'Bericht versturen...',
+          sent: 'Bericht verstuurd.',
+          typeSubject: 'Vul een onderwerp in.',
+          // messages: 'Berichten',
+          ph_filterMessage: 'Berichten filteren...',
+          noReceivers: 'Selecteer een ontvanger',
+          emptyMessageBody: 'Het bericht is leeg, typ a.u.b. een bericht.',
+          send: 'Versturen'
+        },
+        groups: {
+          groups: 'Gruppen',
+          newGroup: 'neue Gruppe',
+          newMember: 'neues Team-Mitglied',
+          search: 'Zoeken',
+          addNewGroup: 'neue Gruppe hinzufügen',
+          editGroup: 'Gruppe ändern',
+          searchResults: 'Zoekresultaten',
+          group: 'Gruppe',
+          close: 'beenden',
+          name: 'Name',
+          saveGroup: 'Gruppe speichern',
+          registerMember: 'Mitglied hinzufügen',
+          role: 'Funktion',
+          selectRole: 'Funktion hinzufügen',
+          // troubled
+          // selectGroup: 'Gruppe auswählen',
+          //
+          email: 'Email',
+          phone: 'Telefon',
+          address: 'Adresse',
+          postCode: 'Postleitzahl',
+          tel: 'Telefonnummer',
+          city: 'Wohnort',
+          userName: 'Anwendername',
+          password: 'Passwort',
+          saveMember: 'Mitglied speichern',
+          serachFor: 'Zoekresultaten voor ',
+          sorryCanNotFind: 'Sorry, geen resultaten.',
+          addToGroup: 'der Gruppe hinzufügen',
+          addMemberToGroup: 'ausgewählte(n) Teilnehmer der Gruppe hinzufügen',
+          resultCount: 'Er zijn $v resultaten.',
+          deleteGroup: 'Gruppe löschen',
+          noMembers: 'keine Mitglieder in dieser Gruppe.',
+          removeSelectedMembers: 'ausgewählte Mitglieder löschen',
+          memberCount: 'Es gibt $v Mitglieder.',
+          searchingMembers: 'Mitglieder suchen...',
+          addingNewMember: 'neues Mitglied hinzufügen...',
+          memberAdded: 'Mitglied erfolgreich dieser Gruppe hinzugefügt.',
+          refreshingGroupMember: 'Gruppen- und Mitgliederliste aktualisieren...',
+          removingMember: 'Mitglied aus dieser Gruppe löschen...',
+          memberRemoved: 'Mitglied erfolgreich aus dieser Gruppe gelöscht.',
+          removingSelected: 'ausgewählte Mitglieder löschen...',
+          saving: 'Gruppe speichern...',
+          groupSaved: 'Gruppe erfolgreich gespeichert.',
+          registerNew: 'neues Mitglied hinzufügen...',
+          memberRegstered: 'Mitglied erfolgreich hinzugefügt.',
+          deleting: 'Gruppe löschen...',
+          deleted: 'Gruppe erfolgreich gelöscht.',
+          filterMembers: 'Teamleden filteren...',
+          searchfor: 'voornaam, achternaam..'
+        },
+        profile: {
+          profile: 'Profil',
+          edit: 'ändern',
+          password: 'Wachtwoord',
+          timeline: 'Tijdlijn',
+          profileView: 'Profilwiedergabe',
+          userGroups: 'Anwendergruppen',
+          role: 'Funktion',
+          email: 'Email',
+          phone: 'Telefon',
+          address: 'Adresse',
+          postcode: 'Postleitzahl',
+          city: 'Wohnort',
+          editProfile: 'Profil ändern',
+          name: 'Name',
+          saveProfile: 'Profil speichern',
+          passChange: 'Passwort ändern',
+          currentPass: 'aktuelles Passwort',
+          newPass: 'neues Passwort',
+          newPassRepeat: 'neues Passwort wiederholen',
+          changePass: 'Passwort ändern',
+          newAvail: 'Nieuwe bereikbaarheid',
+          userName: 'Anwendername',
+          pincode: 'teamlidcode',
+          // saveProfile: 'Profilinformationen speichern...',
+          refreshing: 'Profielinformatie vernieuwen...',
+          dataChanged: 'Profildaten erfolgreich geändert.',
+          savingPassword: 'neues Passwort speichern...',
+          passwordChanged: 'Passwort erfolgreich aktualisiert.',
+          passwordSavedFailed: 'Passwort aktualisieren fehlgeschlagen.',
+          pleaseFill: 'Nicht alle Felder sind ausgefüllt!',
+          passNotMatch: 'Passwort-Einträge stimmen nicht überein.',
+          changingPass: 'Passwort ändern...',
+          passChanged: 'Passwort erfolgreich geändert.',
+          passwrong: 'Passwort ist inkorrekt. Eingabe wiederholen.',
+          currentPassWrong: 'Das aktuelle Passwort ist inkorrekt. Eingabe wiederholen.',
+          newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
+          changingTimeslot: 'Tijdslot wijzigen...',
+          timeslotChanged: 'Tijdslot succesvol gewijzigd.',
+          exampleBirthDate: 'Beispiel: 31-12-2001 ',
+          firstName: 'Vorname',
+          lastName: 'Nachname',
+          editProfileImg: 'Profilbild ändern',
+          profileImgSuccessfullyUploaded: 'Profilbild erfolgreich hochgeladen.',
+          loadUploadURL: 'Bild hochladen, URL laden',
+          click2upload: 'Klicken Sie hier, um hochzuladen',
+          birthday: 'Geburtsdatum',
+          username: 'Anwendername',
+          retypePassword: 'Passwort wiederholen',
+          roleChangePrompt: 'Ihre Rolle ändert sich hiermit. Sie werden automatisch abgemeldet. Klicken Sie "Ok", um die Änderung durchzuführen.',//'You changed your own role, system will automatically logout, press "Yes" to continue.',
+          specifyTeam: 'Wählen Sie eine Gruppe für diese Anwender.',//'You need to sepcify a team to this user'
+          authorInfo: 'Erfasser-Info laden...',
+          changePassWord: 'Passwort ändern',
+          safePassword: 'Passwort speichern',
+          oldPassword: 'altes Passwort',
+          pincode: 'Teamlidcode',
+          pincodeInUse: 'Deze teamlidcode is in gebruik. Kies een andere.',
+          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van maximaal 8 cijfers in!',
+          pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
+          pincodeInfo: 'Bovenstaande code kunt u telefonisch gebruiken om u aan te melden als TeamTelefoon uw nummer niet herkent.',
+          duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',
+          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, tenzij deze zelf wordt opgegeven.'
+        },
+        settings: {
+          settings: 'Einstellungen',
+          user: 'Anwender',
+          application: 'Applicatie',
+          userSettings: 'Gebruikersinstellingen',
+          appSettings: 'Applicatie-instellingen',
+          saveSettings: 'Instellingen opslaan',
+          langSetting: 'Taal',
+          saving: 'Einstellungen speichern...',
+          refreshing: 'Einstellungen aktualisieren...',
+          saved: 'Einstellungen erfolgreich gespeichert.',
+          selectTeam: 'Gruppe wählen',
+          teamSettings: 'Einstellungen, Gruppen-Name',
+          ringtime: 'Rufdauer',
+          ButtonSaveChoice: 'Auswahl bestätigen'
+        },
+        help: {
+          header: 'Hulp & Ondersteuning',
+          header: 'Support',
+          web: 'Web Anwendung',
+          HowTo: 'Wie kann ich einen neuen Patienten anlegen?',
+          Manuel: 'Handbuch TeamTelefon',
+          buttonDownloadManual: 'Handbuch herunterladen',
+          support: 'Ondersteuning',
+          android: 'Android',
+          HowTo2: 'Wie kann ich einem Patienten einen Bericht hinzufügen?',
+          HowTo3: 'Wie kann ich einen Kunden anrufen?',
+        },
+        downloads: {
+          app: 'Binnenkort te downloaden.',
+          manual: 'Handbuch herunterladen'
+        },
+        loading: {
+          general: 'laden',
+          manage: 'verwalten',
+          dashboard: 'Dashboard',
+          planboard: 'Agenda',
+          messages: 'Berichte',
+          teams: 'Gruppen',
+          profile: 'Profil',
+          settings: 'Einstellungen'
+        },
+        teamup: {
+          teams: 'Gruppen',
+          selectTeam: 'Gruppe auswählen',
+          clients: 'Patienten',
+          selectClientGroup: 'Patientengruppe wählen',
+          loadMembersByName: 'Mitglieder laden...',
+          loadingMembers: 'Mitglieder suchen...',
+          howToSearchMembers: 'Mitglieder suchen per Anfangsbuchstaben des Vor- und/oder Nachnamens.',
+          selectClientGroup: 'Patientengruppe wählen',
+          manage: 'verwalten',
+          chooseTeam: 'Gruppe wählen',
+          undefinedTeamMember: 'unbekanntes Gruppen-Mitglied',
+          defaultTeam: 'Standard Gruppe',
+          edit: 'bearbeiten',
+          editTeam: 'Gruppe bearbeiten',
+          team: 'Gruppe',
+          del: 'löschen',
+          noMembers: 'keine Gruppen-Mitglieder',
+          newTeam: 'neue Gruppe',
+          teamName: 'Gruppen-Name',
+          createTeam: 'speichern',
+          newMember: 'neues Gruppen-Mitglied',
+          noMembersFound: 'kein Ergebnis für diese Suche.',
+          name: 'Name',
+          role: 'Rolle',
+          phone: 'Telefon',
+          street: 'Strasse',
+          postCode: 'Postleitzahl',
+          city: 'Ortsname',
+          email: 'E-Mail',
+          saveMember: 'speichern',
+          state: 'Status',
+          states: 'Status',
+          saveTeam: 'Gruppe speichern',
+          save: 'speichern',
+          refreshing: 'Gruppen-Informationen aktualisieren',
+          dataChanged: 'Informationen wurden geändert.',
+          teamSubmitError: 'Fehler beim Erstellen: ',
+          queryTeamError: 'Fehler bei Gruppe-Suche aufgetreten.',
+          teamNamePrompt1: 'Gruppen-Namen eintragen.',
+          teamNamePrompt2: 'Kontaktdaten hinzufügen',
+          cancel: 'abbrechen',
+          chooseRole: 'Rolle wählen',
+          func: 'Funktion',
+          chooseFunction: 'Funktion wählen',
+          newClientGroup: 'neue Gruppe',
+          newClient: 'neuer Patient',
+          reports: 'Berichte',
+          report: 'Bericht',
+          noClients: 'keine Patienten in dieser Gruppe',
+          noClientGroup: 'keine Patienten-Gruppe',
+          TeamClients: 'Gruppe - Patienten',
+          createClientGroup: 'speichern',
+          contacts: 'Kontakte',
+          Number: 'Nummer',
+          clientProfileUrl: 'URL Patientenprofil',
+          addContact: 'Ansprechpartner hinzufügen',
+          editContact: 'Ansprechpartner ändern',
+          saveClient: 'speichern',
+          group: 'Gruppe',
+          errorSaveClientGroup: 'Speichern von Änderungen der Kunden-Gruppe ist fehlgeschlagen.',
+          noContacts: 'keine Ansprechpartner vorhanden.',
+          noReports: 'keine Berichte für diesen Patienten.',
+          contactCount: 'Es gibt $v Ansprechpartner.',
+          reportCount: 'Es gibt $v Berichte.',
+          accountInfoFill: 'Account-Informationen eintragen',
+          passNotSame: 'Passwörter stimmen nicht überein.',
+          savingMember: 'Mitglied speichern...',
+          selectTeam: 'Gruppe wählen',
+          clinetInfoFill: 'Patienteninformationen (Name, Telefonnummer, ...) eintragen',
+          savingClient: 'Patienteninformationen speichern...',
+          clientSubmitError: 'Fehler beim Anlegen eines neuen Patienten.',
+          clientGroups: 'Patienten-Gruppen',
+          saveClientGroup: 'Patienten-Gruppe speichern...',
+          deleteClientFromClientGroup: 'Patient wurde gelöscht',
+          deletingClientFromClientGroup: 'Patient aus Gruppe löschen...',
+          teams_Cap: 'Gruppen',
+          noTeamNameFound: 'unbekannter Gruppenname',
+          noTeam: 'keine Gruppe',
+          searchMembers: 'Mitglieder suchen...',
+          editClient: 'Patient bearbeiten',
+          loadingNumber: 'Telefonnummer der Gruppe wird geladen...',
+          loadClients: 'Patienteninformationen werden geladen...',
+          birthdayError: 'Geburtsdatum ist ungültig.',
+          map: 'Karte',
+          saveContacts: 'Ansprechpartner speichern',
+          loadingReports: 'Berichte laden',
+          reportEmpty: 'Titel und Zusammenfassung eintragen!',
+          reportValid: 'Eingabefelder nicht korrekt!',
+          reportBody: 'Umschreibung',
+          reportBodyRequired: 'Umschreibung eintragen',
+          reportTitleRequired: 'Überschrift eintragen',
+          reportBodyMinChars: 'Umschreibung sollte mindestens 8 Zeichen enthalten!',
+          reportTitleMinChars: 'Überschrift sollte mindestens 4 Zeichen enthalten!',
+          reportBodyMaxChars: 'Die Umschreibung darf maximal 150 Zeichen enthalten!',
+          reportTitleMaxChars: 'Die Überschrift darf maximal 30 Zeichen enthalten!',
+          checkLocalStorage: 'Der von Ihnen eingeschaltete Privat-Modus wird nicht unterstützt. Hier erfahren Sie, wie der Privat-Modus ausgeschaltet wird:',
+          readMore: 'mehr erfahren',
+          date: 'Datum',
+          datetime: 'Datum und Zeit',
+          writenBy: 'erfasst von',
+          noSharedStates: 'kein geteilter Status',
+          savingContacts: 'Ansprechpartner speichern',
+          // delClientGroupConfirm: 'Soll diese Patienten-Gruppe tatsächlich gelöscht werden? Dies kann einen Moment dauern.',
+          // delTeamConfirm: 'Soll diese Gruppe tatsächlich gelöscht werden? Dies kann einen Moment dauern.',
+          deletingClientGroup: 'Gruppe löschen... ',
+          from: 'von',
+          to: 'bis',
+          time: 'Zeit',
+          duration: 'Dauer',
+          coordinatorNoTeam: 'Sie sind in keiner Gruppe; Tragen Sie sich in eine Gruppe ein.',
+          teamMemberNoTeam: 'Sie sind in keiner Gruppe, bitte nehmen Sie Kontakt mit dem Verwalter auf. ',
+          //deleteConfirm: 'OK klicken, um weiter zu machen.',
+          confirms: {
+            deleteClientTitle: 'Patient löschen',
+            deleteClient: 'Soll dieser Patient tatsächlich gelöscht werden?',
+            deleteClientFromTeamTitle: 'Patient aus Gruppe löschen',
+            deleteClientFromTeam: 'Sind Sie sicher, dass dieser Patient aus dieser Gruppe gelöscht werden soll?',
+            deleteReportTitle: 'Bericht löschen',
+            deleteReport: 'Sind Sie sicher, dass dieser Bericht gelöscht werden soll?',
+            deleteProfileTitle: 'Profil löschen',
+            deleteProfile: 'Sind Sie sicher, dass dieses Profil gelöscht werden soll?',
+            deleteMemberFromTeamTitle: 'Mitglied aus allen Gruppen löschen',
+            deleteMemberFromTeam: 'Sind Sie sicher, dass dieses Mitglied aus allen Gruppen gelöscht werden soll? Achtung, wer nicht in einer Gruppe ist, kann TeamUp nicht anwenden!',
+            deleteMemberTitle: 'Mitglied löschen',
+            deleteMember: ' Sind Sie sicher, dass dieses Mitglied aus der Gruppe gelöscht werden soll?',
+            deleteClientGroupTitle: 'Kunden-Gruppe löschen',
+            deleteClientGroup: ' Sind Sie sicher, dass diese Kunden-Gruppe gelöscht werden soll? Dies kann einen Moment dauern.',
+            deleteTeamTitle: 'Gruppe löschen',
+            deleteTeam: ' Sind Sie sicher, dass diese Gruppe gelöscht werden soll? Dies kann einen Moment dauern.',
+            deleteTaskTitle: 'Aufgabe löschen',
+            deleteTask: ' Sind Sie sicher, dass diese Aufgabe gelöscht werden soll? ',
+            deleteContactTitle: 'Ansprechpartner löschen',
+            deleteContact: ' Sind Sie sicher, dass dieser Ansprechpartner gelöscht werden soll?',
+            remove: 'löschen',
+            addTeamMemberCodeAsPhoneTitle: 'Teamlidcode wijzigen',
+            addTeamMemberCodeAsPhone: 'Er is een eigen teamlidcode ingevoerd, die niet overeen komt met de laatste vier cijfers van uw standaard telefoonnummer?',
+            photoRemoveTitle: 'Profilbild löschen',
+            photoRemoveBody: ' Sind Sie sicher, dass Ihr Profilbild gelöscht werden soll?',
+            yes: 'Ja, das möchte ich',
+            no: 'Nein, abbrechen',
+            cancel: 'abbrechen',
+            day: {
+              sunday: 'Sonntag',
+              monday: 'Montag',
+              tuesday: 'Dienstag',
+              wednesday: 'Mittwoch',
+              thursday: 'Donnerstag',
+              friday: 'Freitag',
+              saturday: 'Samstag'
+            },
+            shortDay: {
+              su: "So",
+              mo: "Mo",
+              tu: "Di",
+              we: "Mi",
+              th: "Do",
+              fr: "Fr",
+              su: "Sa"
+            }
+          },
+          deletingTeam: 'Gruppe löschen...',
+          deletingMember: 'Mitglied löschen ...',
+          deletingClient: 'Patient löschen ...',
+          noMessages: 'Es gibt keine Berichte.',
+          newReport: 'neuer Bericht',
+          editReport: 'Bericht ändern',
+          selectClient: 'Patient wählen',
+          selectMember: 'Mitglied wählen',
+          selectMonth: 'Monat wählen',
+          saveReport: 'Bericht speichern',
+          reportTitle: 'Titel',
+          selectSlot: 'Zeitraum wählen',
+          editClientImg: 'Patientenbild ändern',
+          newTask: 'neue Aufgabe',
+          updateTask: 'Aufgabe ändern',
+          managePanelchangePrompt: 'Daten wurden geändert. Auf \'Ok\' klicken, um fortzufahren, ansonsten \'Abbrechen\' .',
+          pagePrevious: 'vorherige',
+          pageNext: 'nächste',
+          pageFirst: 'erste',
+          pageLast: 'letzte',
+          refresh: 'aktualisieren',
+          stateValue: {
+            'reachable': 'erreichbar',
+            'available': 'erreichbar',
+            'working': 'beschäftigt',
+            'offline': 'Off-line',
+            'not_reachable': 'nicht erreichbar',
+            'on_the_phone': 'am Telefon',
+            'unknown': 'unbekannt',
+            'reachable': 'erreichbar',
+            'possibly_reachable': 'nichts geplant',
+            'unreachable': 'nicht erreichbar',
+            'unavailable': 'nicht verfügbar',
+            'unknown': 'Off-line'
+          },
+          reportNotExists: 'Bericht nicht vorhanden.',
+          sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.'
+        },
+        order: {
+          randomOrder: 'Willekeurige',
+          fixedOrder: 'Eigen volgorde',
+          confirmation: 'Bevestig Keuze',
+          randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
+          loadTeam: 'Team laden...',
+          orderSaved: 'Volgorde opgeslagen',
+          noMembers: 'Er zijn geen leden in dit team.'
+        },
+        logs: {
+          loadLogs: 'Logs laden...',
+          status: {
+            sent: 'Uitgaand',
+            received: 'Inkomend',
+            finished: 'Afgerond',
+            missed: 'Gemist',
+            delivered: 'Ontvangen',
+            error: 'Fout'
+          }
+        },
+        validation: {
+          phone: {
+            notValid: 'Voer een valide telefoonnummer in!',
+            invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
+            tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
+            tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
+            notValidOnSubmit: 'Vul alstublieft minimaal een geldig telefoonnummer in om op te slaan.',
+            message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
+            as: ' als ',
+            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!',
+            fixedLine: 'een vast nummer',
+            mobile: 'een mobiel nummer',
+            mobileOrFixedLine: 'een vast of mobielnummer'
+          },
+          pincode: {
+            exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
+          },
+          password: {
+            amountMinChars: function (chars)
+            {
+              return ' en dient uit minimaal ' + chars + ' teken(s) te bestaan'
+            },
+            amountMaxChars: function (chars)
+            {
+              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+            },
+            oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
+            required: 'Een wachtwoord is verplicht'
+          },
+          email: {
+            notValid: 'Voer een valide e-mailadres in!',
+            required: 'Een e-mail is verplicht'
+          },
+          role: 'Kies een rol!',
+          birthDate: {
+            notValid: 'Voer een valide geboortedatum in!'
+          },
+          userName: {
+            regex: 'De gebruikersnaam mag alleen uit alphanummerieke tekens bestaan, inclusief streepjes en onderstreepjes',
+            valid: 'Een gebruikersnaam is vereist'
+          },
+          search: {
+            notValid: 'Voer een voor en/of achternaam in!'
+          }
+        }
+      },
       nl: {
         meta: {
           name: 'nl',
@@ -231,9 +883,9 @@ define(
           weekNumber: 'Weeknummer: ',
           monthNumber: 'Maand nummer: ',
           totalDays: 'Totaal dagen: ',
-          removeTasksRange: function(options)
+          removeTasksRange: function (options)
           {
-            if(! _.isUndefined(options))
+            if (!_.isUndefined(options))
             {
               var html = 'Weet u zeker dat u de taken van ' + options.range.start + ' t/m ' + options.range.end;
               html += ' van ' + options.group + ' ' + options.name;
@@ -242,9 +894,9 @@ define(
 
             return html;
           },
-          tasksDeleted: function(options)
+          tasksDeleted: function (options)
           {
-            if(! _.isUndefined(options))
+            if (!_.isUndefined(options))
             {
               var html = 'De taken van ' + options.range.start + ' t/m ' + options.range.end;
               html += ' van ' + options.group + ' ' + options.name;
@@ -620,7 +1272,7 @@ define(
               saturday: 'zaterdag'
             },
             shortDay: {
-             su: "zo",
+              su: "zo",
               mo: "ma",
               tu: "di",
               we: "wo",
@@ -761,11 +1413,11 @@ define(
             exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
           },
           password: {
-            amountMinChars: function(chars)
+            amountMinChars: function (chars)
             {
               return ' en dient uit minimaal ' + chars + ' teken(s) te bestaan'
             },
-            amountMaxChars: function(chars)
+            amountMaxChars: function (chars)
             {
               return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
