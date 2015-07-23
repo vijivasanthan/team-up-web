@@ -554,12 +554,6 @@ define(
             valid = false;
           }
 
-          if (!member.team)
-          {
-            $rootScope.notifier.error($rootScope.ui.teamup.selectTeam);
-            valid = false;
-          }
-
           if (!member.phone)
           {
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
