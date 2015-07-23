@@ -146,8 +146,6 @@ define(
          */
         $scope.memberSubmit = function (member)
         {
-          member.team = $scope.current;
-
           if(! addMemberValidation(member))
           {
             return;
@@ -158,6 +156,7 @@ define(
           member.phone = $rootScope.phoneNumberParsed.format;
 
           var tempResources = angular.copy(member);
+          tempResources.team = $scope.current;
           tempResources.password = MD5(tempResources.password);
           tempResources.teamUuids = [$scope.current];
 
