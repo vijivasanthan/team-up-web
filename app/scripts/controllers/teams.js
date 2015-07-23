@@ -66,7 +66,7 @@ define(
          */
         $scope.changeTeam = function (team)
         {
-          if (! team.name.length)
+          if (team.name.length == 0)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
             return;
@@ -98,7 +98,7 @@ define(
          */
         $scope.teamSubmit = function (team)
         {
-          if (! _.isUndefined(team))
+          if (! team)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
             return;
