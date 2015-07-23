@@ -1304,12 +1304,12 @@ define(
           header: 'Hulp & Ondersteuning',
           support: 'Ondersteuning',
           web: {
-            title: 'Web Anwendung',
-            newMember: 'Wie kann ich einen neuen Patienten anlegen?'
+            title: 'Web applicatie',
+            newMember: 'Hoe kan ik een nieuwe patiënt te creëren?'
           },
           manuelTeamTelephone: {
-            title: 'Handbuch TeamTelefon',
-            download: 'Handbuch herunterladen',
+            title: 'Handleiding TeamTelefoon',
+            download: 'Handleiding downloaden',
           },
           android: {
             title: 'Android',
