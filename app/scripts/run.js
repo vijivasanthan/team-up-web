@@ -692,8 +692,7 @@ define(
               if (checked && checked.length > 0)
               {
                 var result, all;
-
-                result = all = phoneNumberParser(checked, 'NL');
+                result = all = phoneNumberParser(checked, config.app.lang.toUpperCase());
 
                 $rootScope.phoneNumberParsed.result = true;
 
