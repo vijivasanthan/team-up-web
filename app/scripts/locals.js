@@ -493,6 +493,18 @@ define(
         help: {
           header: 'Hilfe & Support',
           support: 'Support',
+          teamTelephone: {
+            setReachabilityPhone: 'Hoe geef ik telefonisch mijn bereikbaarheid door?',
+            setReachabilityWeb: 'Hoe wijzig ik mijn bereikbaarheid in de web applicatie?',
+            changeReachabilityTeamMember: 'Hoe wijzig ik de bereikbaarheid van een teamlid?',
+            changeCallOrderTeam: 'Hoe wijzig ik de belvolgorde van mijn team?',
+            changeCallOptions: 'Hoe wijzig ik de belinstellingen van mijn team?'
+          },
+          teams: {
+            addNewMember: 'Hoe voeg ik een nieuw lid toe aan mijn team?',
+            addExistingMember: 'Hoe voeg ik een nieuw lid toe aan mijn team?',
+            removeMember: 'Hoe verwijder ik een lid uit mijn team?'
+          },
           web: {
             title: 'Web Anwendung',
             newMember: 'Wie kann ich einen neuen Patienten anlegen?'
@@ -1303,6 +1315,18 @@ define(
         help: {
           header: 'Hulp & Ondersteuning',
           support: 'Ondersteuning',
+          teamTelephone: {
+            setReachabilityPhone: 'Hoe geef ik telefonisch mijn bereikbaarheid door?',
+            setReachabilityWeb: 'Hoe wijzig ik mijn bereikbaarheid in de web applicatie?',
+            changeReachabilityTeamMember: 'Hoe wijzig ik de bereikbaarheid van een teamlid?',
+            changeCallOrderTeam: 'Hoe wijzig ik de belvolgorde van mijn team?',
+            changeCallOptions: 'Hoe wijzig ik de belinstellingen van mijn team?'
+          },
+          teams: {
+            addNewMember: 'Hoe voeg ik een nieuw lid toe aan mijn team?',
+            addExistingMember: 'Hoe voeg ik een bestaand lid toe aan mijn team?',
+            removeMember: 'Hoe verwijder ik een lid uit mijn team?'
+          },
           web: {
             title: 'Web applicatie',
             newMember: 'Hoe kan ik een nieuwe patiënt te creëren?'

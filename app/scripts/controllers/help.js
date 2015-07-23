@@ -16,9 +16,11 @@ define(
           function resetViews ()
           {
             $scope.views = {
+              teamTelephone: false,
               web: false,
               ios: false,
-              android: false
+              android: false,
+              teams: false
             };
           }
 

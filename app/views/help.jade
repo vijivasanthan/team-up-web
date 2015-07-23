@@ -6,6 +6,14 @@
 
 
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{(views.teamTelephone==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("teamTelephone")')
+				span.entypo &#128241
+				| {{ ui.teamup.teamTelephone }}
+		li(class="{{(views.teams==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("teams")')
+				span.entypo &#128101;
+				| {{ ui.teamup.teams }}
 		li(class="{{(views.web==true) && 'active'}}")
 			a(data-toggle='tab', ng-click='setViewTo("web")')
 				span.icomoon(data-icon='', aria-hidden='true')
@@ -23,20 +31,65 @@
 
 	.tab-content
 
-
 		#web.tab-pane(class="{{(views.web==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ ui.help.web.title }}
 			hr
 			h4 {{ ui.help.web.newMember }}
 			iframe(width="560" height="315" src="https://www.youtube.com/embed/s4rOjMugsxM?rel=0" frameborder="0" allowfullscreen)
+			
+		#teamsHelp.tab-pane(class="{{(views.teams==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ ui.teamup.teams }}
+			hr
+			h4 {{ ui.help.teams.addNewMember }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/JObvo5odBgU?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
 			br
 			br
+			br
+			h4 {{ ui.help.teams.addExistingMember }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/laLuTcIcsW0?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			br
+			br
+			br
+			h4 {{ ui.help.teams.removeMember }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/jXSPQYzrOgE?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+
+		#teaTelephone.tab-pane(class="{{(views.teamTelephone==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ ui.teamup.teamTelephone }}
+			hr
 			h4 {{ ui.help.manuelTeamTelephone.title }}
 			a(href="../downloads/HandleidingTeamTelefoon.pdf" title="Download TeamTelefoon handleiding" download="Handleiding TeamTelefoon.pdf")
-				button.btn-primary.btn-mini.downloadButton 
+				button.btn-primary.btn-mini.downloadButton
 					i.glyphicon.glyphicon-download-alt
 					|  {{ ui.help.manuelTeamTelephone.download }}
+			br
+			br
+			br
+			h4 {{ ui.help.teamTelephone.setReachabilityPhone }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/AVkSMv6j6V8?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			br
+			br
+			br
+			h4 {{ ui.help.teamTelephone.setReachabilityWeb }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/Vu2MPxSTRYI?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			br
+			br
+			br
+			h4 {{ ui.help.teamTelephone.changeReachabilityTeamMember }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/vGsh0VTbJb4?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			br
+			br
+			br
+			h4 {{ ui.help.teamTelephone.changeCallOrderTeam }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/lgWdNbGjC7c?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			br
+			br
+			br
+			h4 {{ ui.help.teamTelephone.changeCallOptions }}
+			iframe(width="560" height="315" src="https://www.youtube.com/embed/1t1T-I5L0gM?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			
 
 		#ios.tab-pane(class="{{(views.ios==true) && 'active'}}")
 			.tab-header
