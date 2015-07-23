@@ -23,7 +23,7 @@ section#dashboard
 				div
 					form.form-vertical(name='optionsForm', novalidate)
 						
-						.form-group
+						.form-group(ng-show='app.domainPermission.smsNotification')
 							label.control-label {{ ui.options.smsMissedCall }}
 							.controls
 								label.radio-inline

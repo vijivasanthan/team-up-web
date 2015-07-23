@@ -46,7 +46,7 @@ define(
             );
           };
 
-          setView($location.hash() || 'web');
+          setView($location.hash() || 'teams');
         }
       ]
     );

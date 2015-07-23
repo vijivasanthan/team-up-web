@@ -6,7 +6,8 @@
 
 
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
-		li(class="{{(views.teamTelephone==true) && 'active'}}")
+		li(class="{{(views.teamTelephone==true) && 'active'}}",
+			ng-show='app.domainPermission.teamTelephoneBasic')
 			a(data-toggle='tab', ng-click='setViewTo("teamTelephone")')
 				span.entypo &#128241
 				| {{ ui.teamup.teamTelephone }}
@@ -14,7 +15,8 @@
 			a(data-toggle='tab', ng-click='setViewTo("teams")')
 				span.entypo &#128101;
 				| {{ ui.teamup.teams }}
-		li(class="{{(views.web==true) && 'active'}}")
+		li(class="{{(views.web==true) && 'active'}}"
+			ng-show='app.domainPermission.tasks')
 			a(data-toggle='tab', ng-click='setViewTo("web")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| Web
@@ -87,8 +89,8 @@
 			br
 			br
 			br
-			h4 {{ ui.help.teamTelephone.changeCallOptions }}
-			iframe(width="560" height="315" src="https://www.youtube.com/embed/1t1T-I5L0gM?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
+			h4(ng-show='app.domainPermission.smsNotification') {{ ui.help.teamTelephone.changeCallOptions }}
+			iframe(ng-show='app.domainPermission.smsNotification' width="560" height="315" src="https://www.youtube.com/embed/1t1T-I5L0gM?list=PLWg5O1iEqVpI1LLhtOjRPT2ua2brWcNP3?rel=0&hl=nl&cc_lang_pref=nl&cc_load_policy=1" frameborder="0" allowfullscreen)
 			
 
 		#ios.tab-pane(class="{{(views.ios==true) && 'active'}}")
