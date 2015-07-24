@@ -90,18 +90,25 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 						ng-click='disableInfoAvailibility()',
 						data-dismiss='alert') ×
 						small
-							| De
+							| {{ ui.agenda.the }}
 							strong
-								i  bereikbaarheid kan gewijzigd worden
-							|  door te
-							| dubbelklikken op reeds bestaande blokken of 
+								i  {{ ui.agenda.reachabilityChangedSentence }} 
+							|  {{ ui.agenda.byThe }} 
+							| {{ ui.agenda.doubleClick }}
 							strong
-								i  door te slepen 
-							|  met uw muis. Met de linkermuisknop en de
+								i  {{ ui.agenda.byDragging }}
+							|  {{ ui.agenda.leftButtonMouse }}
 							strong  SHIFT (Mac) 
-							|  of 
+							|  {{ ui.agenda.or }}
 							strong  CTRL (Windows) 
-							|  knop tegelijkertijd ingedrukt.
+							|  {{ ui.agenda.buttonPushed }}
+						
+						
+						//Die Planung Ihrer Verfügbarkeit kann geändert werden, 
+						//durch Doppelklick auf eine bereits vorhandene Planung oder durch Markierung der 
+						//Planung mit der Maus und anschließender Verschiebung bei 
+						//gedrückter linker Maustaste (linker-Maustaste und 
+						//Shift bei MAC bzw. CTRL bei Windows).
 		
 					#mainTimeline(set-position-slot-form)
 					div.legends-agenda

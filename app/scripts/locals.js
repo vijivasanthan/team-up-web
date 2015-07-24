@@ -39,37 +39,35 @@ define(
           loading_tasks: 'Aufgaben laden...'
         },
         video: {
-          stop: 'Het videogesprek is gestopt.'
+          stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
-          thisWeek: 'Deze week',
-          welcome: 'Welkom',
-          everyone: 'Iedereen',
-          newMessage: 'Nieuwe berichten',
-          goToInbox: 'Ga naar inbox',
-          loadingPie: 'Cirkeldiagrammen laden...',
-          possiblyReachable: 'Niet gepland',
-          noPlanning: 'Geen Planning',
+          thisWeek: 'Diese Woche',
+          welcome: 'Willkommen',
+          everyone: 'Alle',
+          newMessage: 'Neue Nachrichten',
+          goToInbox: 'Zum Posteingang',
+          loadingPie: 'Kreisdiagramm laden...',
+          possiblyReachable: 'Nicht geplant',
+          noPlanning: 'Keine planung',
           load: 'laden...',
           time: {
             days: 'd',
-            hours: 'u',
-            minutes: 'm',
-            seconds: 's'
+            hours: 'h',
+            minutes: 'min',
+            seconds: 'sec'
           },
-          announcements: 'Alarmberichten',
-          loadingP2000: 'Alarmberichten laden...',
-          noP2000: 'Er zijn geen alarmberichten.',
-          accessibilityStatement: 'Overzichte bereichbarheid',
-          loading: 'aan het laden...',
-          accessible: 'bereikbaar'
+          accessibilityStatement: 'Übersicht verfügbarkeit',
+          loading: 'laden...',
+          accessible: 'Verfügbarkeit'
         },
         agenda: {
           planboard: 'Agenda',
-          currentAmountReachable: 'Huidig aantal bereikbar',
-          amountOfPeopleWished: 'Aantal mensen gewunstnst',
-          requiredPeople: 'Benodigd',
+          currentAmountReachable: 'Aktuell verfügbar (ist)',
+          amountOfPeopleWished: 'Gewünscht (soll)',
+          requiredPeople: 'Erforderliches',
           newAvail: 'Neue verfügbarkeit',
+          query: 'Synchronisierung des terminkalenders fehlgeschlagen. Bitte den browser aktualisieren (F5).',
           day: 'Tag',
           week: 'Woche',
           month: 'Monat',
@@ -165,12 +163,29 @@ define(
 
             return html;
           },
-          noTasksFounded: 'in diesem Zeitraum gibt es keine Aufgaben ',
-          removeTasksTitle: 'Aufgaben löschen'
+          noTasksFounded: 'in diesem zeitraum gibt es keine aufgaben ',
+          removeTasksTitle: 'Aufgaben löschen',
+          pastAdding: 'Eine planung in der vergangenheit ist nicht möglich!',
+          errorAdd: 'Neue planung kann nicht gespeichert werden!',
+          errorChange: 'Fehler beim Ändern der planung!',
+          pastChanging: 'eine planung in der vergangenheit kann nicht geändert werden!',
+          pastDeleting: 'eine planung in der vergangenheit kann nicht gelöscht werden!!',
+          remove: 'Fehler beim löschen einer planung!',
+          wisher: 'Fehler beim Ändern des bedarfes',
+          editTimeline: 'Zeitspanne ändern  von ',
+          notAuth: 'Nur wenn Sie koordinator sind, können Sie die planung von anderen personen ändern. Dazu wählen Sie die gewünschte person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die planung anpassen können.',
+          the: 'Die',
+          reachabilityChangedSentence: 'Planung Ihrer Verfügbarkeit kann geändert werden',
+          byThe: 'durch',
+          doubleClick: 'Doppelklick auf eine bereits',
+          byDragging: 'vorhandene planung oder durch markierung der planung mit der maus und anschließender Verschiebung',
+          leftButtonMouse: 'mit der maus und anschließender Verschiebung',
+          or: 'bei ',
+          buttonPushed: 'gedrückter linker Maustaste.'
         },
         planboard: {
           planboard: 'Agenda',
-          requiredPeople: 'Benodigd',
+          requiredPeople: 'Bedarf',
           newAvail: 'Neue verfügbarkeit',
           day: 'Tag',
           week: 'Woche',
@@ -226,7 +241,7 @@ define(
           rangeInfoWeekNumber: 'Woche: ',
           rangeInfoMonth: 'Monat: ',
           rangeInfoTotalDays: ', Anzahl Tage: ',
-          customDates: 'custom Dates',
+          customDates: 'Definierter zeitraum',
           addTimeSlot: 'Planung hinzufügen...',
           slotAdded: 'Planung erfolgreich hinzugefügt.',
           changingSlot: 'Planung ändern...',
@@ -268,96 +283,94 @@ define(
 
             return html;
           },
-          noTasksFounded: 'in diesem Zeitraum gibt es keine Aufgaben ',
+          noTasksFounded: 'in diesem zeitraum gibt es keine Aufgaben ',
           removeTasksTitle: 'Aufgaben löschen'
         },
         options: {
-          title: 'Instellingen',
-          smsMissedCall: 'SMS bij een gemist gesprek of nieuwe voicemail',
-          receiveReachableMembers: 'Bereikbare teamleden ontvangen',
-          missedOrVoicemail: 'SMS als het team een gesprek heeft gemist of als er een voicemail is ingesproken',
+          title: 'Einstellungen',
+          smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice mailbox-nachricht',
+          receiveReachableMembers: 'Verfügbare gruppen-mitglieder empfangen',
+          missedOrVoicemail: 'SMS falls das gruppe ein anruf verpasst hat oder bei eingang einer neuen voice-mailbox-nachricht',
           hasSms: function (sms)
           {
             return (sms)
-              ? 'een'
-              : 'geen';
+              ? 'ein'
+              : 'kein';
           },
-          on: 'Aan',
-          off: 'Uit',
+          on: 'An',
+          off: 'Aus',
           ringingTimeOut: {
-            title: 'Rinkeltijd',
-            short: 'Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cliënten kan langer zijn als er veel teamleden zijn aangemeld.',
-            long: 'Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.',
+            title: 'Anruf-Dauer',
+            short: 'Bei einer längeren anruf-dauer haben die gruppen-Mitglieder mehr zeit, ans telefon zu gehen, die wartezeit für den patienten kann dadurch jedoch länger werden.',
+            long: 'Bei einer anruf-dauer von mehr als 15 Sekunden wird empfohlen, dass die gruppen-Mitglieder Ihre voice-mail abschalten.',
           },
-          personalVoicemailPrevention: 'Persoonlijke voicemailpreventie',
-          personalVoicemailPreventionInfo: 'Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.',
-          voicemailDetectionInfo: 'Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen of om gebruik te maken van de persoonlijke voicemailpreventie. Het uitzetten van de persoonlijke voicemail (van de werktelefoon) kunt u regelen bij de telefoonprovider.'
+          personalVoicemailPrevention: 'Persönliche voicemail präferenz',
+          personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das gespräch entgegen nehmen möchten. Wenn diese option eingeschaltet ist, vermeidet man, dass ein patient eine Nachricht auf einer voice-mailbox eines mitglieds hinterlassen kann.',
+          voicemailDetectionInfo: 'Bei einer anruf-dauer von mehr als 15 sekunden wird empfohlen, dass alle mitglieder Ihre voice-mailbox abschalten, oder die persönliche voicemail präferenz einschalten. Bei Ihrem provider erfahren Sie, wie Sie die voice-mailbox abschalten können.'
         },
         message: {
-          messages: 'Berichten',
-          composeAMessage: 'Bericht opstellen',
-          compose: 'Opstellen',
-          inbox: 'Inbox',
-          outbox: 'Outbox',
-          trash: 'Prullenbak',
-          composeMessage: 'Bericht opstellen',
-          close: 'Sluiten',
-          broadcast: 'Extra medium',
+          messages: 'Nachrichten',
+          composeAMessage: 'Nachricht erstellen',
+          compose: 'Erstellen',
+          inbox: 'Empfangen',
+          outbox: 'Gesendet',
+          trash: 'Gelöscht',
+          composeMessage: 'Nachricht erstellen',
+          close: 'Beenden',
+          broadcast: 'Extra Medium',
           sms: 'SMS',
           email: 'Email',
-          receviers: 'Ontvanger(s)',
-          webTRCWebLink: 'Eine Video-Konferenz wurde gestartet ',
-          // troubled
-          // chooseRecept: 'Teilnehmer auswählen',
-          subject: 'Onderwerp',
-          message: 'Bericht',
-          sendMessage: 'Bericht versturen',
-          sender: 'Zender',
+          receviers: 'Empfänger',
+          webTRCWebLink: 'Eine Video Konferenz wurde gestartet, teilnehmen? ',
+          subject: 'Subjekt',
+          message: 'Nachricht',
+          sendMessage: 'Nachricht versenden',
+          sender: 'Absender',
           date: 'Datum',
-          questionText: 'Bericht',
-          reply: 'Antwoorden',
-          del: 'Verwijderen',
-          noMessage: 'Er zijn geen berichten.',
-          from: 'Van',
-          newMsg: 'Nieuw',
-          deleteSelected: 'Verwijder geselecteerde berichten',
-          someMessage: 'Er zijn $v berichten',
-          emptyTrash: 'Prullenbak legen',
-          noMsgInTrash: 'Er zijn geen berichten.',
+          questionText: 'Nachricht',
+          reply: 'Beantworten',
+          del: 'Löschen',
+          noMessage: 'Keine Nachrichten.',
+          from: 'Von',
+          newMsg: 'Neu',
+          deleteSelected: 'Markierte nachrichten löschen',
+          someMessage: 'Es gibt $v nachrichten',
+          emptyTrash: 'gelöschte nachrichten endgültig löschen',
+          noMsgInTrash: 'keine gelöschten nachrichten.',
           box: 'Box',
           persons: 'Personen',
-          restoreSelected: 'Geselecteerde berichten terugplaatsen',
-          loadingMessage: 'Bericht laden...',
-          escalation: 'Escalatiebericht',
-          reportMessage: 'Nieuw rapport van',
+          restoreSelected: 'Markierte nachrichten wiederherstellen',
+          loadingMessage: 'Nachricht laden...',
+          escalation: 'Escalations-nachricht',
+          reportMessage: 'Neue nachricht',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
-            return 'Er is een tekort van ' +
+            return 'Es fehlen ' +
               diff +
-              ' mensen tussen ' +
+              ' personen zwischen ' +
               startDate + ' ' +
-              startTime + ' en ' +
+              startTime + ' und ' +
               endDate + ' ' +
               endTime + '. ' +
-              'Zet uzelf a.u.b. op bereikbaar indien u bereikbaar bent voor die periode';
+              'bitte stellen Sie sich, falls möglich, für diesen zeitraum verfügbar';
           },
-          removed: 'Bericht succesvol verwijderd.',
-          removing: 'Bericht verwijderen...',
-          refreshing: 'Bericht vernieuwen...',
-          removingSelected: 'Geselecteerde berichten verwijderen...',
-          restoring: 'Bericht terugplaatsen...',
-          restored: 'Bericht succesvol teruggeplaatst.',
-          restoringSelected: 'Geselecteerde berichten terugplaatsen...',
-          emptying: 'Prullenbak leegmaken...',
-          emptied: 'Prullenbak succesvol geleegd.',
-          sending: 'Bericht versturen...',
-          sent: 'Bericht verstuurd.',
-          typeSubject: 'Vul een onderwerp in.',
-          // messages: 'Berichten',
-          ph_filterMessage: 'Berichten filteren...',
-          noReceivers: 'Selecteer een ontvanger',
-          emptyMessageBody: 'Het bericht is leeg, typ a.u.b. een bericht.',
-          send: 'Versturen'
+          removed: 'Nachricht wurde gelöscht.',
+          removing: 'Nachricht löschen...',
+          refreshing: 'Nachricht aktualisieren...',
+          removingSelected: 'Markierte nachrichten löschen...',
+          restoring: 'Nachricht wiederherstellen...',
+          restored: 'Nachricht erfolgreich wiederhergestellt.',
+          restoringSelected: 'Markierte nachrichten wiederherstellen...',
+          emptying: 'Nachrichten endgültig löschen...',
+          emptied: 'Nachrichten endgültig gelöscht.',
+          sending: 'Nachricht versenden...',
+          sent: 'Nachricht versenden.',
+          typeSubject: 'Subjekt eintragen.',
+          // messages: 'Nachrichten',
+          ph_filterMessage: 'Nachrichten filtern...',
+          noReceivers: 'Empfänger festlegen',
+          emptyMessageBody: 'Bitte Text zu dieser Nachricht eintragen.',
+          send: 'Versenden'
         },
         groups: {
           groups: 'Gruppen',
@@ -447,9 +460,9 @@ define(
           passChanged: 'Passwort erfolgreich geändert.',
           passwrong: 'Passwort ist inkorrekt. Eingabe wiederholen.',
           currentPassWrong: 'Das aktuelle Passwort ist inkorrekt. Eingabe wiederholen.',
-          newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
-          changingTimeslot: 'Tijdslot wijzigen...',
-          timeslotChanged: 'Tijdslot succesvol gewijzigd.',
+          newTimeslotAdded: 'Neue Planung erfolgreich hinzugefügt.',
+          changingTimeslot: 'Planung ändern...',
+          timeslotChanged: 'Planung erfolgreich geändert.',
           exampleBirthDate: 'Beispiel: 31-12-2001 ',
           firstName: 'Vorname',
           lastName: 'Nachname',
@@ -494,16 +507,16 @@ define(
           header: 'Hilfe & Support',
           support: 'Support',
           teamTelephone: {
-            setReachabilityPhone: 'Hoe geef ik telefonisch mijn bereikbaarheid door?',
-            setReachabilityWeb: 'Hoe wijzig ik mijn bereikbaarheid in de web applicatie?',
-            changeReachabilityTeamMember: 'Hoe wijzig ik de bereikbaarheid van een teamlid?',
-            changeCallOrderTeam: 'Hoe wijzig ik de belvolgorde van mijn team?',
-            changeCallOptions: 'Hoe wijzig ik de belinstellingen van mijn team?'
+            setReachabilityPhone: 'Wie kann ich telefonisch meine Verfügbarkeit melden?',
+            setReachabilityWeb: 'Wie kann ich meine Verfügbarkeit im Web angeben?',
+            changeReachabilityTeamMember: 'Wie kann ich die Verfügbarkeit eines Gruppenmitgliedes ändern?',
+            changeCallOrderTeam: 'Wie kann ich die Anruf-Reihenfolge meiner Gruppe ändern?',
+            changeCallOptions: 'Wie kann ich die Anruf-Einstellungen für meine Gruppe ändern?'
           },
           teams: {
-            addNewMember: 'Hoe voeg ik een nieuw lid toe aan mijn team?',
-            addExistingMember: 'Hoe voeg ik een nieuw lid toe aan mijn team?',
-            removeMember: 'Hoe verwijder ik een lid uit mijn team?'
+            addNewMember: 'Wie kann ich einen neuen Teilnehmer meiner Gruppe hinzufügen?',
+            addExistingMember: 'Wie kann ich einen bereits vorhandenen Teilnehmer meiner Gruppe hinzufügen?',
+            removeMember: 'Wie kann ich einen Teilnehmer aus meiner Gruppe löschen?'
           },
           web: {
             title: 'Web Anwendung',
@@ -737,28 +750,28 @@ define(
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
           errorCode: {
-              '1': 'Onbekende foutmelding',
-              '2': 'De Deomeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
-              '3': 'Dit lid moet de rol van coördinator hebben, voordat er een team aangemaakt kan worden',
-              '4': 'Eeen agent id mag alleen uit alpha nummerieke karakters, onder- en streepjes bestaan',
-              '5': 'Kan de JSON niet parsen of de JSON body',
-              '6': 'Een of meerdere paramters zijn er niet',
-              '7': 'De group "members" is niet gevonden',
-              '8': 'Team met het gegeven teamUuid bestaat niet',
-              '9': 'Dit lid maakt geen deel uit van het team',
-              '10': 'Team met het gegeven teamUuid bestaat niet',
-              '11': 'Dit lid moet de rol van coördinator hebben, voordat er een nieuw team aangemaakt kan worden',
-              '12': 'De team agent kon niet aangemaakt worden',
-              '13': 'De uuid parameter en het uuid in de payload komen niet overheen',
-              '14': 'Een lid met dit uuid bestaat al',
-              '15': 'Een van de meegstuurde waardes is onbekend',
-              '16': 'Een van de volgende settings heeft als waarde null, Dit is niet mogelijk',
-              '17': 'Een van de meegestuurde waardes heeft een onbekend type',
-              '18': 'De gebruiker met het opgegeven id bestaat niet',
-              '19': 'Het ingevoerde oude wachtwoord komt niet overheen met het huidige',
-              '20': 'Dit lid moet de rol van coördinator hebben, voordat er een wachtwoord van een ander lid gewijzigd kan worden',
-              '21': 'Een parameter kan niet geparst worden',
-              '22': 'Dit lid is in geen enkel team'
+            '1': 'Unbekannte Fehlermeldung',
+            '2': 'Domainagent nicht gefunden. Erneutes Anmelden könnte das Problem beheben.',
+            '3': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
+            '4': 'Agent ID darf nur Buchstaben und Zahlen enthalten.',
+            '5': 'JSON Parsing oder JSON body Fehler',
+            '6': 'Ein oder mehrere Parameter fehlen',
+            '7': 'Die Gruppe "Teilnehmer" wurde nicht gefunden',
+            '8': 'Keine Gruppe mit dieser ID: teamUuid vorhanden',
+            '9': 'Dieser Teilnehmer ist nicht Mitglied dieser Gruppe',
+            '10': 'Gruppe mit  teamUuid existiert nicht',
+            '11': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
+            '12': 'Team-Agent konnte nicht erstellt werden',
+            '13': 'Uuid Parameter und uuid in payload sind nicht identisch',
+            '14': 'Es gibt bereits ein Mitglied mit dieser uuid ',
+            '15': 'Einer der Werte ist unbekannt',
+            '16': 'Eine der Eingaben ist NULL, d.h. ungültig',
+            '17': 'Einer der Werte ist von einem unbekannten Typ.',
+            '18': 'Ein Anwender mit dieser ID existiert nicht',
+            '19': 'Das vorherige und aktuelle Passwort stimmen nicht überein',
+            '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
+            '21': 'Ein Parameter kann nicht bearbeitet werden',
+            '22': 'Dieser Teilnehmer ist in keiner Gruppe'
           },
         },
         task: {
@@ -794,70 +807,70 @@ define(
           taskFormValide: 'De nieuwe taak is niet valide! Ga de eisen onder elk veld na.'
         },
         order: {
-          randomOrder: 'Willekeurige',
-          fixedOrder: 'Eigen volgorde',
-          confirmation: 'Bevestig Keuze',
-          randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
-          loadTeam: 'Team laden...',
-          orderSaved: 'Volgorde opgeslagen',
-          noMembers: 'Er zijn geen leden in dit team.'
+          randomOrder: 'Willkürlich',
+          fixedOrder: 'Reihenfolge selbst bestimmen',
+          confirmation: 'Auswahl bestätigen',
+          randomFeedback: 'Willkürliche Reihenfolge wird genommen.',
+          loadTeam: 'Gruppe laden...',
+          orderSaved: 'Reihenfolge gespeichert',
+          noMembers: 'Keine Mitglieder in dieser Gruppe.'
         },
         logs: {
           loadLogs: 'Logs laden...',
-          empty: 'Er zijn Nein logs',
-          filter: 'Filterung logs...',
+          empty: 'Keine Logs vorhanden',
+          filter: 'Logs filtern...',
           status: {
-            sent: 'Uitgaand',
-            received: 'Inkomend',
-            finished: 'Afgerond',
-            missed: 'Gemist',
-            delivered: 'Ontvangen',
-            error: 'Fout'
+            sent: 'Ausgehend',
+            received: 'Eingehend',
+            finished: 'Beendet',
+            missed: 'Verpasst',
+            delivered: 'Empfangen',
+            error: 'Fehler'
           }
         },
         validation: {
           phone: {
-            notValid: 'Voer een valide telefoonnummer in!',
-            invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
-            tooShort: ' (Telefoonnummer niet correct: te weining nummers.)',
-            tooLong: ' (Telefoonnummer niet correct: teveel cijfers.)',
-            notValidOnSubmit: 'Vul alstublieft minimaal een geldig telefoonnummer in om op te slaan.',
-            message: 'Ingevoerd telefoonnummer is correct. Nummer is geregistreerd in ',
+            notValid: 'Bitte eine gültige Telefonnummer eintragen!',
+            invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
+            tooShort: ' (Fehlerhafte Telefonnummer: zu wenig Ziffern.)',
+            tooLong: ' (Fehlerhafte Telefonnummer: zu viele Ziffern.)',
+            notValidOnSubmit: 'Es muss minimal eine korrekte Telefonnummer eingetragen werden, bevor die Daten gespeichert werden.',
+            message: 'Fehlerhafte Telefonnummer. Die Nummer ist bereits vorhanden ',
             as: ' als ',
-            multipleNotvalid: 'Een of meerdere telefoonnummers zijn niet valide!',
-            fixedLine: 'een vast nummer',
-            mobile: 'een mobiel nummer',
-            mobileOrFixedLine: 'een vast of mobielnummer'
+            multipleNotvalid: 'Eine oder mehrere fehlerhafte Telefonnummer(n)!',
+            fixedLine: 'Eine Festnetznummer',
+            mobile: 'Eine mobile Telefonnummer',
+            mobileOrFixedLine: 'Eine Festnetz- oder mobile Telefonnummer'
           },
           pincode: {
-            exists: 'Kiest u a.u.b. een andere teamlidcode. Deze is in gebruik!'
+            exists: 'Dieser Mitglieder-Kode ist bereits vergeben. Wählen Sie einen anderen!'
           },
           password: {
             amountMinChars: function (chars)
             {
-              return ' en dient uit minimaal ' + chars + ' teken(s) te bestaan'
+              return ' und sollte minimal ' + chars + ' Zeichen enthalten'
             },
             amountMaxChars: function (chars)
             {
-              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+              return ' und maximal ' + chars + ' Zeichen enthalten'
             },
-            oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
-            required: 'Een wachtwoord is verplicht'
+            oldPassMatch: 'Das eingetragene alte Passwort ist nicht identisch mit dem aktuellen Passwort.',
+            required: 'Es muss ein Passwort eingetragen werden'
           },
           email: {
-            notValid: 'Voer een valide e-mailadres in!',
-            required: 'Een e-mail is verplicht'
+            notValid: 'E-Mail Adresse ist fehlerhaft!',
+            required: 'Es muss eine E-Mail Adresse eingetragen werden'
           },
-          role: 'Kies een rol!',
+          role: 'Rolle festlegen',
           birthDate: {
-            notValid: 'Voer een valide geboortedatum in!'
+            notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
-            regex: 'De gebruikersnaam mag alleen uit alphanummerieke tekens bestaan, inclusief streepjes en onderstreepjes',
-            valid: 'Een gebruikersnaam is vereist'
+            regex: 'Der Anwender Name darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
+            valid: 'Es muss ein Anwender Name festgelegt werden'
           },
           search: {
-            notValid: 'Voer een voor en/of achternaam in!'
+            notValid: 'Vor- und Nachname festlegen!'
           }
         }
       },
@@ -1011,7 +1024,15 @@ define(
           remove: 'Fout(en) met het verwijderen van de planning!',
           wisher: 'Fout(en) met het wijzigen van de behoefte',
           editTimeline: 'Wijzig de tijdlijn van ',
-          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coordinator. Als coordinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.'
+          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coordinator. Als coordinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.',
+          the: 'De',
+          reachabilityChangedSentence: 'bereikbaarheid kan gewijzigd worden',
+          byThe: 'door te',
+          doubleClick: 'dubbelklikken op reeds bestaande blokken of ',
+          byDragging: 'door te slepen',
+          leftButtonMouse: 'met uw muis. Met de linkermuisknop en de',
+          or: 'of',
+          buttonPushed: 'knop tegelijkertijd ingedrukt.'
         },
         planboard: {
           planboard: 'Agenda',
