@@ -938,6 +938,8 @@ define(
           accessible: 'bereikbaar'
         },
         agenda: {
+          currentAmountReachable: 'Huidig aantal beschikbaar ',
+          amountOfPeopleWished: 'Gewenst aantal mensen',
           requiredPeople: 'Benodigd',
           newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
