@@ -5,7 +5,7 @@ section
 	div(style='margin-top: 20px;')
 	.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
-		label.control-label Selecteer team
+		label.control-label {{ ui.teamup.selectTeam }}
 		.controls
 			select(
 				ng-model='currentTeam',
