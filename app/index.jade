@@ -75,7 +75,7 @@ block navbar
 						li(data-match-route='/manage',
 							ng-hide='(app.resources.role === undefined) || app.resources.role > 1 || !app.domainPermission.manage')
 							a(href='#manage') {{ui.teamup.manage}}
-						li(data-match-route='/help', ng-hide='(app.resources.role === undefined)')
+						li(data-match-route='/help', ng-hide='(app.resources.role === undefined) || !app.domainPermission.help')
 							a(ng-click='nav("help")') Help
 
 					ul.nav.pull-right(ng-hide='browser.mobile')
@@ -133,7 +133,7 @@ block navbar
 										a(href='#manage',
 											tabindex="-1",) {{ui.teamup.manage}}
 									li(role="presentation",
-										ng-hide='(app.resources.role === undefined)',
+										ng-hide='(app.resources.role === undefined) || !app.domainPermission.help',
 										data-match-route='/support')
 										a(ng-click='nav("support")',
 											tabindex="-1",) Support
