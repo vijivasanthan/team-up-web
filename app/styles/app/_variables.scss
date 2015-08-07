@@ -306,7 +306,7 @@ $errorBorder: darken(adjust-hue($errorBackground, -10), 3%) !default;
 
 $successText: $turq !default;
 // #468847 !default;
-$successBackground: $turq !default;
+$successBackground: $green !default;
 // #dff0d8 !default;
 $successBorder: darken(adjust-hue($successBackground, -10), 5%) !default;
 
