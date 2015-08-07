@@ -1785,7 +1785,7 @@ define(
                   /**
                    * Update planboard only in planboard is selected
                    */
-                  if ($location.path() == '/team-telefoon')
+                  if ($location.path() == '/dashboard')
                   {
                     $scope.slot = {};
 

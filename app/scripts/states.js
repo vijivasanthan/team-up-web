@@ -181,24 +181,24 @@ define(
                 $location.path('/tasks2/planboard').search({}).hash('');
                 break;
 
-              case 'team-telefoon/agenda':
-                $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid).search({}).hash('');
+              case 'dashboard/agenda':
+                $location.path('/dashboard/agenda/' + $rootScope.app.resources.uuid).search({}).hash('');
                 break;
 
-              case 'team-telefoon/logs':
-                $location.path('/team-telefoon/logs').search({}).hash('');
+              case 'dashboard/logs':
+                $location.path('/dashboard/logs').search({}).hash('');
                 break;
 
-              case 'team-telefoon/status':
-                $location.path('/team-telefoon/status').search({}).hash('');
+              case 'dashboard/status':
+                $location.path('/dashboard/status').search({}).hash('');
                 break;
 
-              case 'team-telefoon/order':
-                $location.path('/team-telefoon/order').search({}).hash('');
+              case 'dashboard/order':
+                $location.path('/dashboard/order').search({}).hash('');
                 break;
 
-              case 'team-telefoon/options':
-                $location.path('/team-telefoon/options').search({}).hash('');
+              case 'dashboard/options':
+                $location.path('/dashboard/options').search({}).hash('');
                 break;
 
               case 'vis':

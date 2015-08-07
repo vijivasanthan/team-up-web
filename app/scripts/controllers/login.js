@@ -445,7 +445,7 @@ define(
                                       progress(100, $rootScope.ui.login.loading_everything);
                                       console.log('teamsData', teamsData);
 
-                                      trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
+                                      //trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
 
                                       //update the avatar once, because the resources were not set when the directive was loaded
                                       $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);

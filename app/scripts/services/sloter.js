@@ -521,7 +521,7 @@ define(['services/services', 'config'],
                   {
                     link += '<a class="edit-timeline-icon" title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
-                    link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
+                    link +=  'href="' + '#/dashboard/agenda/' + member.id + '"';
                     link += '><i class="icon-edit"></a>';
                   }
 

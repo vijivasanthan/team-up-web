@@ -141,7 +141,7 @@ define(['services/services', 'config'],
             }
             else if (_.has(permissionProfile, 'teamTelephoneBasic'))
             {
-              $location.path('/team-telefoon/status').hash('');
+              $location.path('/dashboard/status').hash('');
             }
             else
             {
@@ -169,4 +169,3 @@ define(['services/services', 'config'],
     )
   }
 );
-

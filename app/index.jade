@@ -55,11 +55,14 @@ block navbar
 					span.icon-bar
 					span.icon-bar
 					// span.icon-bar {{ui.message.messages}}
-				a.navbar-brand(ng-click='nav("team-telefoon/status")' class="header-logo-{{config.app.profileName.toLowerCase()}}") {{config.app.profileName}}
+				a.navbar-brand(ng-click='nav("dashboard/status")' class="header-logo-{{config.app.profileName.toLowerCase()}}") {{config.app.profileName}}
 				#main-navbar.navbar-collapse.collapse
 					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
+						li(data-match-route='/dashboard.*',
+							ng-show='app.domainPermission.teamTelephoneBasic')
+							a(ng-click='nav("dashboard/status")') Dashboard
 						li.tasks2(ng-show='app.domainPermission.tasks',
 							data-match-route='/tasks2.*')
 							a(ng-click='nav("tasks2")') Taken
@@ -72,9 +75,6 @@ block navbar
 						li(data-match-route='/manage',
 							ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
-						li(data-match-route='/team-telefoon.*',
-							ng-show='app.domainPermission.teamTelephoneBasic')
-							a(ng-click='nav("team-telefoon/status")') Team-telefoon
 						li(data-match-route='/help', ng-hide='(app.resources.role === undefined)')
 							a(ng-click='nav("help")') Help
 
@@ -105,6 +105,11 @@ block navbar
 								ul.dropdown-menu(role='menu',
 								aria-labelledby="dropdownMenu1")
 									li(role="presentation",
+										data-match-route='/dashboard.*',
+										ng-show='app.domainPermission.teamTelephoneBasic')
+										a(ng-click='nav("dashboard/status")',
+											tabindex="-1",) Dashboard
+									li(role="presentation",
 										ng-show='app.domainPermission.tasks',
 										data-match-route='/tasks2.*')
 										a(role="menuitem",
@@ -127,11 +132,6 @@ block navbar
 										ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
 										a(href='#manage',
 											tabindex="-1",) {{ui.teamup.manage}}
-									li(role="presentation",
-										data-match-route='/team-telefoon.*',
-										ng-show='app.domainPermission.teamTelephoneBasic')
-										a(ng-click='nav("team-telefoon/status")',
-											tabindex="-1",) Team-telefoon
 									li(role="presentation",
 										ng-hide='(app.resources.role === undefined)',
 										data-match-route='/support')

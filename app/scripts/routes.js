@@ -214,7 +214,7 @@ define(
             })
 
             .when(
-            '/team-telefoon/options',
+            '/dashboard/options',
             {
               templateUrl: 'views/team-telephone/options.html',
               controller: 'options as options',
@@ -231,7 +231,7 @@ define(
               }
             })
 
-            .when('/team-telefoon/agenda/:userId?', {
+            .when('/dashboard/agenda/:userId?', {
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
@@ -335,7 +335,7 @@ define(
                    */
                   function redirectLocationLoggedUser()
                   {
-                    $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                    $location.path('/dashboard/agenda/' + $rootScope.app.resources.uuid);
                   };
                 }
               },
@@ -343,7 +343,7 @@ define(
             })
 
             .when(
-            '/team-telefoon/logs',
+            '/dashboard/logs',
             {
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs as logs',
@@ -359,7 +359,7 @@ define(
             })
 
             .when(
-            '/team-telefoon',
+            '/dashboard',
             {
               redirectTo: function(route, path)
               {
@@ -376,7 +376,7 @@ define(
             })
 
             .when(
-            '/team-telefoon/status/phones',
+            '/dashboard/status/phones',
             {
               templateUrl: 'views/phones.html',
               controller: 'phones',
@@ -395,7 +395,7 @@ define(
             })
 
             .when(
-            '/team-telefoon/status',
+            '/dashboard/status',
             {
               templateUrl: 'views/team-telephone/status.html',
               controller: 'status',
@@ -422,7 +422,7 @@ define(
             })
 
             .when(
-            '/team-telefoon/order',
+            '/dashboard/order',
             {
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
