@@ -1320,6 +1320,9 @@ sortable
   }
   tbody {
     button {
+      &.btn-primary {
+        color: #fff;
+      }
       padding: 6px;
       margin: 0;
       font-weight: 100;
