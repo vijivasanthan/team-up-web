@@ -179,12 +179,12 @@ aria-hidden='true')
 									ng-click='editProfile(member.uuid, current)',
 									ng-show='app.resources.role == 1 || app.resources.uuid == member.uuid')
 										button.btn-primary.btn-mini
-											i.icon-edit
+											i.icon-edit.icon-white
 									button.btn-primary.btn-mini(type='submit',
 									ng-click='confirmDeleteMember(member)',
 									ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
-										i.icon-trash
 				ul#teams-legenda
+										i.icon-trash.icon-white
 					li
 						div(class='roundedPicxSmall memberStateNone')
 						p {{ ui.teamup.noSharedStates }}
