@@ -301,7 +301,7 @@ module.exports = (grunt) ->
           cwd: '<%= paths.app %>'
           dest: '<%= paths.dist %>'
           src: [
-            '*.{ico,png,txt}'
+            '*.{ico,png,txt,json,xml}'
             '.htaccess'
             'vendors/**/*'
             'downloads/*'
