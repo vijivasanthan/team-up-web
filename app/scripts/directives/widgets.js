@@ -444,6 +444,29 @@ define(
     );
 
     directives.directive(
+      'hideTeamTelephoneTabs',
+      function()
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            var tabsParent = angular.element('li:not(:last)', element);
+
+            if(attrs.hideTeamTelephoneTabs)
+            {
+              tabsParent.addClass('ng-hide');
+            }
+            else
+            {
+              tabsParent.removeClass('ng-hide');
+            }
+          }
+        };
+      }
+    );
+
+    directives.directive(
       'inputRuleToggle',
       function()
       {

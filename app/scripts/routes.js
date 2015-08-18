@@ -14,7 +14,7 @@ define(
             "$exceptionHandler",
             [
               "$delegate",
-              function($delegate)
+              function ($delegate)
               {
                 return function (exception, cause)
                 {
@@ -36,12 +36,14 @@ define(
             '$browser',
             [
               '$delegate',
-              function($delegate)
+              function ($delegate)
               {
                 var originalUrl = $delegate.url;
-                $delegate.url = function() {
+                $delegate.url = function ()
+                {
                   var result = originalUrl.apply(this, arguments);
-                  if (result && result.replace) {
+                  if (result && result.replace)
+                  {
                     result = result.replace(/%23/g, '#');
                   }
                   return result;
@@ -113,7 +115,7 @@ define(
                     var teamId = Teams.checkExistence($route.current.params.uuid);
 
                     return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
-                      .then(function(teamsData)
+                      .then(function (teamsData)
                       {
                         return {
                           members: teamsData[0],
@@ -158,7 +160,7 @@ define(
                   {
                     angular.element('.navbar #clientMenu').addClass('active');
 
-                    return { clientId: $route.current.params.clientId };
+                    return {clientId: $route.current.params.clientId};
                   }
                 ]
               }
@@ -181,10 +183,11 @@ define(
                       t: Teams.query(),
                       cg: Clients.query()
                     } :
-                    { local: true};
+                    {local: true};
                   }
                 ],
-                dataMembers: function(Teams) {
+                dataMembers: function (Teams)
+                {
                   return Teams.updateMembersLocal();
                 }
               }
@@ -207,7 +210,7 @@ define(
                       t: Teams.query(),
                       cg: ClientGroups.query()
                     } :
-                    { local: true };
+                    {local: true};
                   }
                 ]
               }
@@ -221,11 +224,20 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams',
-                  function (Teams)
+                  'Teams', 'TeamUp', 'CurrentSelection', '$q',
+                  function (Teams, TeamUp, CurrentSelection, $q)
                   {
                     removeActiveClass('.teamMenu');
-                    return Teams.getAllLocal();
+
+                    var teamId = CurrentSelection.getTeamId();
+                    return $q.all([TeamUp._('TTSettingsGet', {second: teamId}), Teams.getAllLocal()])
+                      .then(function (result)
+                      {
+                        return {
+                          teamTelephoneOptions: result[0],
+                          teams: result[1]
+                        }
+                      });
                   }
                 ]
               }
@@ -235,13 +247,14 @@ define(
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
-                data: function($route, Slots, Storage, Dater, Store, Teams,
-                               $q, $rootScope, $location, CurrentSelection, Profile)
+                data: function ($route, Slots, Storage, Dater, Store, Teams,
+                                $q, $rootScope, $location, CurrentSelection, Profile, TeamUp)
                 {
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
 
                   var groupId = CurrentSelection.getTeamId(),
+                    deferred = $q.defer(),
                     userId = $route.current.params.userId,
                     data = {
                       members: null,
@@ -249,58 +262,73 @@ define(
                       timeline: null
                     };
 
-                  if(_.isUndefined(userId))
+                  if (_.isUndefined(userId))
                   {
                     redirectLocationLoggedUser();
                   }
 
-                  return Teams.getSingle(groupId)
-                    .then(function(members)
+                  TeamUp._('TTSettingsGet', {second: groupId})
+                    .then(function (options)
                     {
-                      data.members = members;
-                      return members.error && members || Profile.fetchUserData(userId);
-                    })
-                    .then(function(user)
-                    {
-                        var loggedUserTeams = $rootScope.app.resources.teamUuids,
-                          urlUserTeams = user.teamUuids,
-                          userAllow = true;
+                      //team telephone not activated
+                      if (!options.adapterId)
+                      {
+                        $location.path('team-telefoon/options');
+                      }
+                      else
+                      {
+                        Teams.getSingle(groupId)
+                          .then(function (members)
+                          {
+                            data.members = members;
+                            return members.error && members || Profile.fetchUserData(userId);
+                          })
+                          .then(function (user)
+                          {
+                            var loggedUserTeams = $rootScope.app.resources.teamUuids,
+                              urlUserTeams = user.teamUuids,
+                              userAllow = true;
 
-                        data.user = user;
+                            data.user = user;
 
-                        //Check if there are equal team, otherwise it's not aloud to edit this user's
-                        //timeline with the role of team lid
-                        if($rootScope.app.resources.role > 1)
-                        {
-                          userAllow = hasEqualTeams(
-                            loggedUserTeams.concat(urlUserTeams)
-                          );
-                        }
+                            //Check if there are equal team, otherwise it's not aloud to edit this user's
+                            //timeline with the role of team lid
+                            if ($rootScope.app.resources.role > 1)
+                            {
+                              userAllow = hasEqualTeams(
+                                loggedUserTeams.concat(urlUserTeams)
+                              );
+                            }
 
-                      return (! userAllow)
-                          ? $q.reject(user)
-                          : $q.all([
+                            return (!userAllow)
+                              ? $q.reject(user)
+                              : $q.all([
                               getAllSlots(userId, groupId),
                               Teams.getAllLocal()
                             ]);
 
-                      function hasEqualTeams(teams) {
-                        return _.uniq(teams).length !== teams.length;
+                            function hasEqualTeams(teams)
+                            {
+                              return _.uniq(teams).length !== teams.length;
+                            }
+                          })
+                          .then(function (result)
+                          {
+                            deferred.resolve({
+                              members: data.members,
+                              timeline: result[0],
+                              user: data.user,
+                              teams: result[1]
+                            });
+                          },
+                          function ()
+                          {
+                            redirectLocationLoggedUser();
+                          });
                       }
-                    })
-                    .then(function(result)
-                    {
-                      return {
-                        members: data.members,
-                        timeline: result[0],
-                        user: data.user,
-                        teams: result[1]
-                      };
-                    },
-                    function ()
-                    {
-                      redirectLocationLoggedUser();
                     });
+
+                  return deferred.promise;
 
                   /**
                    * All slots timeline
@@ -348,11 +376,31 @@ define(
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs as logs',
               resolve: {
-                data: function(Logs)
+                data: function ($q, Logs, TeamUp, $location, CurrentSelection)
                 {
                   removeActiveClass('.teamMenu');
 
-                  return Logs.fetchByTeam();
+                  var deferred = $q.defer(),
+                    teamId = CurrentSelection.getTeamId()
+
+                  TeamUp._('TTSettingsGet', {second: teamId})
+                    .then(function (options)
+                    {
+                      //team telephone not activated
+                      if (!options.adapterId)
+                      {
+                        $location.path('team-telefoon/options');
+                      }
+                      else
+                      {
+                        Logs.fetchByTeam()
+                          .then(function (result)
+                          {
+                            deferred.resolve(result);
+                          });
+                      }
+                    });
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
@@ -361,9 +409,9 @@ define(
             .when(
             '/team-telefoon',
             {
-              redirectTo: function(route, path)
+              redirectTo: function (route, path)
               {
-                return path + '/agenda';
+                return path + '/status';
               }
             })
 
@@ -386,6 +434,15 @@ define(
                   'Teams',
                   function (Teams)
                   {
+                    return $q.all([TeamUp._('TTSettingsGet', {second: teamId}), Teams.getAllLocal()])
+                      .then(function (result)
+                      {
+                        return {
+                          teamTelephoneOptions: result[0],
+                          teams: result[1]
+                        }
+                      });
+
                     removeActiveClass('.teamMenu');
 
                     return Teams.queryLocal();
@@ -401,22 +458,37 @@ define(
               controller: 'status',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Slots, $q, CurrentSelection)
+                data: function (Teams, Slots, $q, $location, CurrentSelection, TeamUp)
                 {
-                  var teamId = CurrentSelection.getTeamId();
+                  var teamId = CurrentSelection.getTeamId(),
+                    deferred = $q.defer();
                   removeActiveClass('.teamMenu');
 
-                  return $q.all([
-                    Teams.getSingle(teamId),
-                    Slots.MemberReachabilitiesByTeam(teamId, null),
-                    Teams.getAllLocal()
-                  ]).then(function(result) {
-                    return {
-                      members: result[0],
-                      membersReachability: result[1],
-                      teams: result[2]
-                    };
-                  });
+                  TeamUp._('TTSettingsGet', {second: teamId})
+                    .then(function (options)
+                    {
+                      //team telephone not activated
+                      if (!options.adapterId)
+                      {
+                        $location.path('team-telefoon/options');
+                      }
+                      else
+                      {
+                        $q.all([
+                          Teams.getSingle(teamId),
+                          Slots.MemberReachabilitiesByTeam(teamId, null),
+                          Teams.getAllLocal()
+                        ]).then(function (result)
+                        {
+                          deferred.resolve({
+                            members: result[0],
+                            membersReachability: result[1],
+                            teams: result[2]
+                          });
+                        });
+                      }
+                    });
+                  return deferred.promise;
                 }
               }
             })
@@ -427,25 +499,39 @@ define(
               templateUrl: 'views/team-telephone/order.html',
               controller: 'order',
               resolve: {
-                data: function(TeamUp, Teams, CurrentSelection, $q)
+                data: function (TeamUp, Teams, CurrentSelection, $q, $location)
                 {
                   removeActiveClass('.teamMenu');
 
                   var teamId = CurrentSelection.getTeamId(),
                     teamStatus = Teams.getSingle(teamId),
                     teamOrder = TeamUp._('callOrderGet', {second: teamId}),
-                    allTeams = Teams.getAllLocal();
+                    allTeams = Teams.getAllLocal(),
+                    deferred = $q.defer();
 
-                  return $q.all([teamStatus, teamOrder, allTeams])
-                    .then(
-                    function(teamResult)
+                  TeamUp._('TTSettingsGet', {second: teamId})
+                    .then(function (options)
                     {
-                      return {
-                        teamMembers: teamResult[0],
-                        teamOrder: teamResult[1],
-                        teams: teamResult[2]
-                      };
+                      //team telephone not activated
+                      if (!options.adapterId)
+                      {
+                        $location.path('team-telefoon/options');
+                      }
+                      else
+                      {
+                        $q.all([teamStatus, teamOrder, allTeams])
+                          .then(function (teamResult)
+                          {
+                            deferred.resolve({
+                              teamMembers: teamResult[0],
+                              teamOrder: teamResult[1],
+                              teams: teamResult[2]
+                            });
+                          });
+                      }
                     });
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
@@ -470,7 +556,7 @@ define(
                   '$rootScope', '$route', 'Profile', '$location',
                   function ($rootScope, $route, Profile, $location)
                   {
-                    if (! $route.current.params.userId)
+                    if (!$route.current.params.userId)
                     {
                       $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
                     }
@@ -505,7 +591,7 @@ define(
               resolve: {
                 'check': function ($rootScope, $location, Session)
                 {
-                  if(Session.check())
+                  if (Session.check())
                   {
                     $location.path($rootScope.currentLocation);
                   }
@@ -514,7 +600,7 @@ define(
               reloadOnSearch: false
             })
 
-            .otherwise({ redirectTo: '/login' });
+            .otherwise({redirectTo: '/login'});
 
           $httpProvider.interceptors.push(
             [
@@ -538,7 +624,7 @@ define(
                   {
                     var promise = $q.reject(rejection);
 
-                    if(rejection.status > 0)
+                    if (rejection.status > 0)
                     {
                       var rejections = $injector.get('Rejections');
 
@@ -547,7 +633,7 @@ define(
                         case 403:
                           var loginData = Store('app').get('loginData');
 
-                          if(loginData.password)
+                          if (loginData.password)
                           {
                             promise = rejections.reSetSession(loginData, rejection.config);
                           }
@@ -568,7 +654,7 @@ define(
               }
             ]);
 
-          var removeActiveClass = function(divId)
+          var removeActiveClass = function (divId)
           {
             angular.element(divId).removeClass('active');
           };

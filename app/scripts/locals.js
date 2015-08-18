@@ -287,9 +287,12 @@ define(
           removeTasksTitle: 'Aufgaben löschen'
         },
         options: {
-          title: 'Einstellungen',
+          title: 'Einstellungen ',
+          teamEmail: 'E-Mail an das Team',
+          activateTeamTelephone: "Aktivieren TeamTelefon für ",
           smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice mailbox-nachricht',
           receiveReachableMembers: 'Verfügbare gruppen-mitglieder empfangen',
+          teamTelephoneNotActivated: "TeamTelefoon hat nicht zu diesem team aktiviert wurde",
           missedOrVoicemail: 'SMS falls das gruppe ein anruf verpasst hat oder bei eingang einer neuen voice-mailbox-nachricht',
           hasSms: function (sms)
           {
@@ -871,7 +874,7 @@ define(
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
-          }
+          },
         }
       },
       nl: {
@@ -1585,8 +1588,8 @@ define(
             '2': 'De Deomeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
             '3': 'Dit lid moet de rol van coördinator hebben, voordat er een team aangemaakt kan worden',
             '4': 'Eeen agent id mag alleen uit alpha nummerieke karakters, onder- en streepjes bestaan',
-            '5': 'Kan de JSON niet parsen of de JSON body',
-            '6': 'Een of meerdere paramters zijn er niet',
+            '5': 'Kan de JSON body niet parsen',
+            '6': 'Een of meerdere paramters missen',
             '7': 'De group "members" is niet gevonden',
             '8': 'Team met het gegeven teamUuid bestaat niet',
             '9': 'Dit lid maakt geen deel uit van het team',
@@ -1602,11 +1605,21 @@ define(
             '19': 'Het ingevoerde oude wachtwoord komt niet overheen met het huidige',
             '20': 'Dit lid moet de rol van coördinator hebben, voordat er een wachtwoord van een ander lid gewijzigd kan worden',
             '21': 'Een parameter kan niet geparst worden',
-            '22': 'Dit lid is in geen enkel team'
+            '22': 'Dit lid is in geen enkel team',
+            '23': 'Geen valide body, er worden een aantal attributen gemist',
+            '24': 'Er is iets niet goed geconfigureerd, waardoor AskFast niet kan worden bereikt',
+            '25': 'Het telefoonnummer is reeds in gebruik',
+            '26': 'Een van de condities om TeamTelefoon te activeren is niet gelukt',
+            '27': 'Het scenario kon niet aangemaakt worden voor dit team',
+            '28': 'AskFast foutmelding',
+            '29': 'Een voicemail groep kon niet aangemaakt worden',
           }
         },
         options: {
-          title: 'Instellingen',
+          title: 'Instellingen ',
+          teamEmail: 'E-mail van het team',
+          activateTeamTelephone: "Activeer TeamTelefoon voor het ",
+          teamTelephoneNotActivated: "TeamTelefoon is niet geactiveerd voor dit team",
           smsMissedCall: 'SMS bij een gemist gesprek of nieuwe voicemail',
           receiveReachableMembers: 'Bereikbare teamleden ontvangen',
           missedOrVoicemail: 'SMS als het team een gesprek heeft gemist of als er een voicemail is ingesproken',

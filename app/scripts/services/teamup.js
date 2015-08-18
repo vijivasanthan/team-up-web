@@ -80,7 +80,26 @@ define(
                     third: 'teamTelephoneSettings'
                   }
                 },
-
+                /**
+                 * Get all the teamtelelephone settings
+                 */
+                TTOptionsGet : {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephone'
+                  }
+                },
+                /**
+                 * post eamtelelephone settings
+                 */
+                TTOptionsPost : {
+                  method: 'POST',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephone'
+                  }
+                },
 
                 /**
                  * Team profiles
