@@ -73,7 +73,6 @@ require.config(
       //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
-      'locale_nl': 'i18n/angular-locale_nl',
 
       // jszip: '../vendors/js-xlsx/jszip',
       // xlsx: '../vendors/js-xlsx/xlsx'
@@ -124,7 +123,7 @@ require.config(
       // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
       //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
 
-      'locale_nl': { deps: ['angular'] }
+      'locale': { deps: ['angular'] }
 
       // jszip: { exports: 'jszip' },
       // xlsx: { deps: ['jszip'], exports: 'xlsx' }
@@ -157,7 +156,8 @@ switch (localConfig.wantedProfile)
 
 require.config({
     paths: {
-      profile: profile
+      profile: profile,
+      'locale': 'i18n/angular-locale_' + getLanguage(),
     }
 });
 
@@ -281,7 +281,7 @@ require(
     //'ui-sortable',
     //'Sortable',
     'ng-sortable',
-    'locale_nl',
+    'locale',
 
     // 'jszip',
     // 'xlsx'
@@ -294,3 +294,19 @@ require(
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
+
+function getLanguage()
+{
+  var lang = null,
+    currentHost = 'www.lala.de'//window.location.host;
+
+  if (currentHost.indexOf('.de') > -1)
+  {
+    lang = 'de';
+  }
+  else
+  {
+    lang = 'nl';
+  }
+  return lang;
+}
