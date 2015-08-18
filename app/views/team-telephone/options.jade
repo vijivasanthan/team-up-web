@@ -94,7 +94,7 @@ section#dashboard
 					
 					div
 						form.form-vertical(name='activateTTForm', novalidate)
-							.form-group.has-feedback(ng-show='app.resources.teamUuids.length > 1')
+							.form-group.has-feedback()
 								label.control-label {{ ui.teamup.selectTeam }} 
 								.controls
 									select(ng-model='options.currentTeamId',
