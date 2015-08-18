@@ -522,50 +522,48 @@ define(
          */
         function addMemberValidation(member)
         {
-          var valid = true;
-
           if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
-            valid = false;
+            return false;
           }
 
           if (!member.role)
           {
             $rootScope.notifier.error($rootScope.ui.validation.role);
-            valid = false;
+            return false;
           }
 
           if (member.password != member.reTypePassword)
           {
             $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-            valid = false;
+            return false;
           }
 
           if (member.password.length < 8 || member.password.length > 20)
           {
             $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
-            valid = false;
+            return false;
           }
 
           if (_.isUndefined(member.email) || member.email == false)
           {
             $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-            valid = false;
+            return false;
           }
 
           if (!member.phone)
           {
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            valid = false;
+            return false;
           }
 
           if ($rootScope.phoneNumberParsed.result == false)
           {
             $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-            valid = false;
+            return false;
           }
-          return valid;
+          return true;
         }
 
         /**
