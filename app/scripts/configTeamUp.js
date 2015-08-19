@@ -201,16 +201,16 @@ define(['profile'], function(profile){
   function getLanguage()
   {
     var lang = profile.lang,
-      currentHost = window.location.host;
+      currentHost = window.location.host,
+      langs = ['nl', 'de', 'en'];
 
-    if (currentHost.indexOf('.de') > -1)
+    langs.forEach(function (val)
     {
-      lang = 'de';
-    }
-    else if (currentHost.indexOf('.nl') > -1)
-    {
-      lang = 'nl';
-    }
+      if (currentHost.indexOf('.' + val) > -1)
+      {
+        lang = val;
+      }
+    });
     return lang;
   }
 });
