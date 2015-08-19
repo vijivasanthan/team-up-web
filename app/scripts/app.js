@@ -11,6 +11,7 @@ define(
     'angular-route',
     'angular-md5',
     'angular-strap',
+    'angular-dynamic-locale',
     //'ui-sortable',
     'ng-sortable',
     'angular-cookie',
@@ -38,7 +39,8 @@ define(
         'ui.mask',
 
         'ng-sortable',
-        'ipCookie'
+        'ipCookie',
+        'tmh.dynamicLocale'
         //'$strap.directives',
         //'ui.bootstrap.modal',
         // 'NgVis',

@@ -6,9 +6,23 @@ define(
 
     app.config(
       [
-        '$locationProvider', '$routeProvider', '$httpProvider', '$provide',
-        function ($locationProvider, $routeProvider, $httpProvider, $provide)
+        '$locationProvider',
+        '$routeProvider',
+        '$httpProvider',
+        '$provide',
+        'tmhDynamicLocaleProvider',
+        function (
+          $locationProvider,
+          $routeProvider,
+          $httpProvider,
+          $provide,
+          tmhDynamicLocaleProvider
+        )
         {
+          //dynamic angular localization
+          tmhDynamicLocaleProvider
+            .localeLocationPattern('scripts/i18n/angular-locale_{{locale}}.js');
+
           $provide
             .decorator(
             "$exceptionHandler",
@@ -602,57 +616,52 @@ define(
 
             .otherwise({redirectTo: '/login'});
 
-          $httpProvider.interceptors.push(
-            [
-              '$location', 'Store', '$injector', '$q',
-              function ($location, Store, $injector, $q)
+          $httpProvider.interceptors.push(function ($location, Store, $injector, $q) {
+            return {
+              request: function (config)
               {
-                return {
-                  request: function (config)
-                  {
-                    return config || $q.when(config);
-                  },
-                  requestError: function (rejection)
-                  {
-                    return $q.reject(rejection);
-                  },
-                  response: function (response)
-                  {
-                    return response || $q.when(response);
-                  },
-                  responseError: function (rejection)
-                  {
-                    var promise = $q.reject(rejection);
+                return config || $q.when(config);
+              },
+              requestError: function (rejection)
+              {
+                return $q.reject(rejection);
+              },
+              response: function (response)
+              {
+                return response || $q.when(response);
+              },
+              responseError: function (rejection)
+              {
+                var promise = $q.reject(rejection);
 
-                    if (rejection.status > 0)
-                    {
-                      var rejections = $injector.get('Rejections');
+                if (rejection.status > 0)
+                {
+                  var rejections = $injector.get('Rejections');
 
-                      switch (rejection.status)
+                  switch (rejection.status)
+                  {
+                    case 403:
+                      var loginData = Store('app').get('loginData');
+
+                      if (loginData.password)
                       {
-                        case 403:
-                          var loginData = Store('app').get('loginData');
-
-                          if (loginData.password)
-                          {
-                            promise = rejections.reSetSession(loginData, rejection.config);
-                          }
-                          else
-                          {
-                            rejections.sessionTimeOut();
-                          }
-                          break;
-                        default:
-                          rejections.trowError(rejection);
-                          break;
+                        promise = rejections.reSetSession(loginData, rejection.config);
                       }
-                    }
-
-                    return promise;
+                      else
+                      {
+                        rejections.sessionTimeOut();
+                      }
+                      break;
+                    default:
+                      rejections.trowError(rejection);
+                      break;
                   }
-                };
+                }
+
+                return promise;
               }
-            ]);
+            };
+          });
 
           var removeActiveClass = function (divId)
           {

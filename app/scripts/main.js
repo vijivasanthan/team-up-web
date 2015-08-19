@@ -30,6 +30,7 @@ require.config(
       'angular-route': '../vendors/angular-route/angular-route.min',
       'angular-cookie': '../vendors/angular-cookie/angular-cookie',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
+      'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
 
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       //'angular-strap': 'removables/angular-strap.min',
@@ -54,11 +55,9 @@ require.config(
       'lodash': '../vendors/lodash/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
-      moment: '../vendors/moment/moment',
+      moment: '../vendors/moment/min/moment-with-locales',
+      'moment-timezone': '../vendors/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
       phone: '../vendors/web-lib-phonenumber/libphonenumber',
-      //moment: '../vendors/momentjs/min/moment-with-langs.min',
-      // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
-
       log: '../vendors/web-lib-log/dist/log',
       session: '../vendors/web-lib-session/dist/session',
 
@@ -66,6 +65,7 @@ require.config(
       // 'ng-vis': '../vendors/web-lib-vis/public/dist/ng-vis',
 
       'jquery-form': '../vendors/jquery-form/jquery.form',
+      'locale': 'i18n/angular-locale_nl',
 
       //'async':            '../vendors/requirejs-plugins/src/async',
       // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
@@ -90,6 +90,7 @@ require.config(
       'angular-strap': { deps: ['angular'], exports: 'angular' },
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
+      'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
       'angular-md5': { deps: ['angular'], exports: 'angular' },
       bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       lawnchair: { deps: [], exports: 'Lawnchair' },
@@ -157,7 +158,7 @@ switch (localConfig.wantedProfile)
 require.config({
     paths: {
       profile: profile,
-      'locale': 'i18n/angular-locale_' + getLanguage(),
+      //'locale': 'i18n/angular-locale_' + getLanguage(),
     }
 });
 
@@ -173,6 +174,7 @@ require(
     'angular-md5',
     'angular-strap',
     'angular-strap-tpl',
+    'angular-dynamic-locale',
 
     'locals',
     'profile',
@@ -294,19 +296,3 @@ require(
     domReady(function () { angular.bootstrap(document, ['TeamUp']) });
   }
 );
-
-function getLanguage()
-{
-  var lang = null,
-    currentHost = 'www.lala.de'//window.location.host;
-
-  if (currentHost.indexOf('.de') > -1)
-  {
-    lang = 'de';
-  }
-  else
-  {
-    lang = 'nl';
-  }
-  return lang;
-}
