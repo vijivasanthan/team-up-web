@@ -60,22 +60,13 @@ require.config(
       phone: '../vendors/web-lib-phonenumber/libphonenumber',
       log: '../vendors/web-lib-log/dist/log',
       session: '../vendors/web-lib-session/dist/session',
-
       // vis: '../vendors/vis/dist/vis.min',
       // 'ng-vis': '../vendors/web-lib-vis/public/dist/ng-vis',
-
       'jquery-form': '../vendors/jquery-form/jquery.form',
       'locale': 'i18n/angular-locale_nl',
-
-      //'async':            '../vendors/requirejs-plugins/src/async',
-      // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
       'sortable': '../vendors/Sortable/Sortable',
       'ng-sortable': '../vendors/Sortable/ng-sortable',
-
-      // jszip: '../vendors/js-xlsx/jszip',
-      // xlsx: '../vendors/js-xlsx/xlsx'
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
@@ -157,8 +148,7 @@ switch (localConfig.wantedProfile)
 
 require.config({
     paths: {
-      profile: profile,
-      //'locale': 'i18n/angular-locale_' + getLanguage(),
+      profile: profile
     }
 });
 
