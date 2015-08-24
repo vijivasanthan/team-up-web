@@ -22,35 +22,19 @@ require.config(
       angular: '../vendors/angular/angular.min',
       plugins: 'plugins',
       domReady: '../vendors/requirejs-domready/domReady',
-
-      // bootstrap: '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
-
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
       'angular-cookie': '../vendors/angular-cookie/angular-cookie',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
-
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
-      //'angular-strap': 'removables/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
-
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
-
-      // treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
       treegrid: 'removables/treegrid',
       config: 'configTeamUp',
-
-      // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
-      // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
-
-      //timepicker: 'removables/timepicker.min',
-      //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       'lodash': '../vendors/lodash/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
@@ -60,8 +44,6 @@ require.config(
       phone: '../vendors/web-lib-phonenumber/libphonenumber',
       log: '../vendors/web-lib-log/dist/log',
       session: '../vendors/web-lib-session/dist/session',
-      // vis: '../vendors/vis/dist/vis.min',
-      // 'ng-vis': '../vendors/web-lib-vis/public/dist/ng-vis',
       'jquery-form': '../vendors/jquery-form/jquery.form',
       'locale': 'i18n/angular-locale_nl',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
@@ -88,38 +70,17 @@ require.config(
       dom: { deps: ['lawnchair'], exports: 'Lawnchair' },
       timeline: { deps: [], exports: 'links.Timeline' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
-      //moment: { deps: [], exports: 'moment' },
       treegrid: { deps: [], exports: 'links.TreeGrid' },
-      //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
-      //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
-      //md5: { exports: 'md5'},
       mask: { deps: ['angular'] },
       lodash: { exports: '_'},
       store: { deps: ['angular', 'lodash']},
       offline: { deps: ['angular'] },
       'clj-fuzzy': { deps: [], exports: 'clj_fuzzy'},
-
-      // interceptor: { deps: ['angular'] },
-
       log: { deps: ['angular'] },
       phone: { deps: ['angular'] },
-      //_moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
-
-      // vis: { exports: 'vis' },
-      // 'ng-vis': { deps: ['angular', 'vis'], exports: 'ng-vis' },
-
-      // 'angular-google-maps': { deps: ['angular'] },
-
       'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
-      // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
-
       'locale': { deps: ['angular'] }
-
-      // jszip: { exports: 'jszip' },
-      // xlsx: { deps: ['jszip'], exports: 'xlsx' }
-
     },
     config: {
       moment: {
@@ -194,12 +155,9 @@ require(
     'services/moment',
     'services/settings',
 
-    // 'services/googleGEO',
-
     'directives/widgets',
     'directives/date-range-picker',
     'directives/log-ranger',
-    // 'directives/treegrid',
 
     'modals/task',
     'modals/slots',
@@ -261,22 +219,11 @@ require(
     'log',
     'phone',
     'session',
-    // 'vis',
-    // 'ng-vis',
     'jquery-form',
-
     'lodash',
-    // 'angular-google-maps',
-
     'jquery-ui',
-    // 'angular-dragdrop',
-    //'ui-sortable',
-    //'Sortable',
     'ng-sortable',
     'locale',
-
-    // 'jszip',
-    // 'xlsx'
     'clj-fuzzy'
   ],
   function (angular, domReady)
