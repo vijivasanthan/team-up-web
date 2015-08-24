@@ -267,16 +267,11 @@ define(
                       {
                         console.log('result', result);
 
-                        var finalResult = {
-                          teams: result[0]
+                        return {
+                          teams: result[0],
+                          phoneNumbers: result[1] || [],
+                          teamTelephoneOptions: teamTelephoneOptions
                         }
-
-                        if(result.length > 1)
-                        {
-                          finalResult.phoneNumbers = result[1];
-                          finalResult.teamTelephoneOptions = teamTelephoneOptions;
-                        }
-                        return finalResult;
                       });
                   }
                 ]

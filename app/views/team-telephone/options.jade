@@ -13,17 +13,16 @@ section#dashboard
 			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', 
-		bs-navbar, 
-		hide-team-telephone-tabs='options.activateTTForm')
+		bs-navbar)
 			include ../agenda/tabs
-				
+				//hide-team-telephone-tabs='{{options.activateTTForm}}'
 		.tab-content
 			#order.tab-pane.active
 				div
 					div(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
 						div.head
 							h3
-								| {{ ui.options.title }}{{ options.currentTeam }} {{ options.loadTeam }} 
+								| {{ ui.options.title }}{{ options.currentTeam }} 
 						hr
 					div.alert.alert-warning(ng-show='options.activateTTForm && app.resources.role > 1')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
@@ -120,3 +119,4 @@ section#dashboard
 							.form-actions
 								button.btn.btn-success(type='submit',
 								ng-click='options.activate(activateData)') {{ ui.order.confirmation }}
+								

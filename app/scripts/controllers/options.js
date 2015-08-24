@@ -24,7 +24,7 @@ define(
         {
           CurrentSelection.local = vm.currentTeamId;
           vm.currentTeam = setTeamIdToName(vm.currentTeamId);
-          vm.loadTeam = $rootScope.ui.dashboard.load;
+          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
           TeamUp._(
             'TTOptionsGet',
@@ -43,7 +43,6 @@ define(
             {
               vm.data.phoneNumbers = phoneNumbers;
               show(vm.data.teamTelephoneOptions);
-              vm.loadTeam = '';
               $rootScope.statusBar.off();
             });
         };
@@ -156,6 +155,9 @@ define(
          */
         function show(options)
         {
+          //TODO fix directive
+          var tabs = angular.element('.nav-tabs-app li:not(:last)');
+
           if (!options || !options.adapterId)
           {
             if (angular.isDefined(vm.activateTTForm))
@@ -168,6 +170,7 @@ define(
               $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
             }
             vm.activateTTForm = true;
+            tabs.addClass('ng-hide');
           }
           else
           {
@@ -176,6 +179,8 @@ define(
               sms: options["sms-on-missed-call"] || true,
               ringingTimeOut: options["ringing-timeout"] || 20
             };
+            vm.activateTTForm = false;
+            tabs.removeClass('ng-hide');
           }
         }
       }
