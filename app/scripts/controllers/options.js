@@ -33,11 +33,11 @@ define(
             {
               vm.data.teamTelephoneOptions = options;
               return ($rootScope.app.resources.role == 1)
-                ? TeamUp._('TTAdaptersGet', {
-                adapterType: 'call',
-                excludeAdaptersWithDialog: 'true'
-              })
-                : $q.resolve([]);
+                ? $q.defer()
+                : TeamUp._('TTAdaptersGet', {
+                    adapterType: 'call',
+                    excludeAdaptersWithDialog: 'true'
+                  });
             })
             .then(function (phoneNumbers)
             {
