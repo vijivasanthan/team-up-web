@@ -98,7 +98,8 @@ section#dashboard
 								label.control-label Telefoonnummer
 								.controls
 									select(ng-model='activateData.adapterId',
-									ng-options='phoneNumber.id as phoneNumber.address for phoneNumber in options.phoneNumbers',
+									required,
+									ng-options='phoneNumber.id as phoneNumber.address for phoneNumber in options.data.phoneNumbers',
 									ng-selected='options.phoneNumbers[0].id')
 										option(value='') {{ ui.options.pickAPhoneNumber }}
 									
@@ -117,5 +118,3 @@ section#dashboard
 							.form-actions
 								button.btn.btn-success(type='submit',
 								ng-click='options.activate(activateData)') {{ ui.order.confirmation }}
-							
-							
