@@ -85,24 +85,16 @@ define(
           $rootScope.config = config;
           $rootScope.config.app.init();
 
-          //@TODO create a angular-translade service
+          //@TODO create a angular-translate service
           //Set language
           $rootScope.ui = locals.ui[config.app.lang];
           moment.locale(config.app.lang);
           tmhDynamicLocale.set(config.app.lang);
 
           //Set timezone
-          switch (config.app.lang)
-          {
-            case "nl":
-              moment.tz('Europe/Amsterdam');
-              break;
-            case "de":
-              moment.tz('Europe/Berlin');
-              break;
-            default:
-              moment.tz('Europe/Amsterdam');
-          }
+          //moment.tz('Europe/Amsterdam');
+          //moment.tz('Europe/Berlin');
+          //}
 
           /**
           * test if localStorage is reachable
