@@ -243,14 +243,40 @@ define(
                   {
                     removeActiveClass('.teamMenu');
 
-                    var teamId = CurrentSelection.getTeamId();
-                    return $q.all([TeamUp._('TTSettingsGet', {second: teamId}), Teams.getAllLocal()])
-                      .then(function (result)
+                    var teamId = CurrentSelection.getTeamId(),
+                        teamTelephoneOptions = null;
+
+                    return TeamUp._('TTOptionsGet', {second: teamId})
+                      .then(function(options)
                       {
-                        return {
-                          teamTelephoneOptions: result[0],
-                          teams: result[1]
+                        teamTelephoneOptions = options;
+
+                        var promises = [Teams.getAllLocal()];
+                        if(options.error && options.error.status === 404)
+                        {
+                          promises.push(
+                            TeamUp._('TTAdaptersGet', {
+                              adapterType: 'call',
+                              excludeAdaptersWithDialog: 'true'
+                            })
+                          );
                         }
+                        return $q.all(promises)
+                      })
+                      .then(function(result)
+                      {
+                        console.log('result', result);
+
+                        var finalResult = {
+                          teams: result[0]
+                        }
+
+                        if(result.length > 1)
+                        {
+                          finalResult.phoneNumbers = result[1];
+                          finalResult.teamTelephoneOptions = teamTelephoneOptions;
+                        }
+                        return finalResult;
                       });
                   }
                 ]
@@ -651,6 +677,9 @@ define(
                       {
                         rejections.sessionTimeOut();
                       }
+                      break;
+                    case 404:
+                      console.log('404 not found', rejection);
                       break;
                     default:
                       rejections.trowError(rejection);

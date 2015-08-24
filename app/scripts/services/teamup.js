@@ -93,12 +93,33 @@ define(
                 /**
                  * post eamtelelephone settings
                  */
-                TTOptionsPost : {
+                TTOptionsActivate : {
                   method: 'POST',
                   params: {
                     first: 'team',
                     third: 'teamTelephone'
                   }
+                },
+                TTOptionsSave : {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephone'
+                  }
+                },
+
+                /**
+                 * Get free phonenumbers
+                 */
+                TTAdaptersGet : {
+                  method: 'GET',
+                  params: {
+                    first: 'teamTelephone',
+                    second: 'adapters',
+                    adapterType: '',
+                    excludeAdaptersWithDialog: ''
+                  },
+                  isArray: true
                 },
 
                 /**

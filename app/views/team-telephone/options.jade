@@ -7,7 +7,7 @@ section#dashboard
 			label.control-label {{ ui.teamup.selectTeam }} 
 			.controls
 				select(ng-model='options.currentTeamId',
-				ng-options='team.uuid as team.name for team in options.teams | orderBy:"name"',
+				ng-options='team.uuid as team.name for team in options.data.teams | orderBy:"name"',
 				ng-selected='options.currentTeamId',
 				ng-change='options.fetch()')
 			
@@ -55,7 +55,7 @@ section#dashboard
 									div.input-group(style='width: 250px;')
 										div.range
 											input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
-											output#range &nbsp; {{ options.scenarios.ringingTimeOut }} seconden &nbsp;
+											output#range &nbsp; {{ options.scenarios.ringingTimeOut }} {{ ui.teamup.seconds }} &nbsp;
 									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 										small
 											i
@@ -93,23 +93,24 @@ section#dashboard
 					h4 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
 					
 					div
-						form.form-vertical(name='activateTTForm', novalidate)
+						form.form-vertical(name='formActivateTT', novalidate)
 							.form-group.has-feedback()
-								label.control-label {{ ui.teamup.selectTeam }} 
+								label.control-label Telefoonnummer
 								.controls
-									select(ng-model='options.currentTeamId',
-									ng-options='team.uuid as team.name for team in options.teams | orderBy:"name"',
-									ng-selected='options.currentPhone')
+									select(ng-model='activateData.adapterId',
+									ng-options='phoneNumber.id as phoneNumber.address for phoneNumber in options.phoneNumbers',
+									ng-selected='options.phoneNumbers[0].id')
+										option(value='') {{ ui.options.pickAPhoneNumber }}
 									
-							.form-group(ng-class="{ 'has-error' : activateTTForm.email.$invalid && !activateTTForm.email.$pristine }")
+							.form-group(ng-class="{ 'has-error' : formActivateTT.email.$invalid && !formActivateTT.email.$pristine }")
 								label.control-label E-mail
 								.controls
 									input.span3.form-control(type='email',
 									name='email',
 									required,
 									ng-model='activateData.email')
-									span.help-block(ng-show='activateTTForm.email.$invalid && !activateTTForm.email.$pristine')
-										small(ng-show="activateTTForm.$error.email")
+									span.help-block(ng-show='formActivateTT.email.$invalid && !formActivateTT.email.$pristine')
+										small(ng-show="formActivateTT.$error.email")
 											i
 											| {{ ui.validation.email.notValid }}
 					

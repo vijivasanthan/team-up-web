@@ -6,83 +6,70 @@ define(
 
     controllers.controller(
       'options',
-      function ($rootScope, $filter, TeamUp, CurrentSelection, data)
+      function ($scope, $rootScope, $filter, TeamUp, CurrentSelection, data, $q)
       {
         $rootScope.fixStyles();
 
         //view model
         var vm = this;
-        vm.teams = data.teams;
+        vm.data = data;
         vm.currentTeamId = CurrentSelection.getTeamId();
         vm.currentTeam = setTeamIdToName(vm.currentTeamId);
-
-        //Default scenario options of teamtelephone
-        vm.scenarios = {
-          voicemailDetection: false,
-          sms: true,
-          ringingTimeOut: 20
-        };
-
         show(data.teamTelephoneOptions);
-
-        function show(options)
-        {
-          vm.activateTTForm = (! options.adapterId);
-          vm.scenarios = {
-            voicemailDetection: options["voicemail-detection-menu"],
-            sms: options["sms-on-missed-call"],
-            ringingTimeOut: options["ringing-timeout"]
-          };
-          //vm.defaults = angular.copy(vm.scenarios);
-        }
 
         /**
          * Fetch team-telephone options
          */
-        vm.fetch = function()
+        vm.fetch = function ()
         {
           CurrentSelection.local = vm.currentTeamId;
           vm.currentTeam = setTeamIdToName(vm.currentTeamId);
           vm.loadTeam = $rootScope.ui.dashboard.load;
 
           TeamUp._(
-            'TTSettingsGet',
+            'TTOptionsGet',
             {second: vm.currentTeamId}
-          ).then(
-            function (result)
+          ).then(function (options)
             {
-              console.log('result', result);
-              show(result);
+              vm.data.teamTelephoneOptions = options;
+              return ($rootScope.app.resources.role == 1)
+                ? TeamUp._('TTAdaptersGet', {
+                adapterType: 'call',
+                excludeAdaptersWithDialog: 'true'
+              })
+                : $q.resolve([]);
+            })
+            .then(function (phoneNumbers)
+            {
+              vm.data.phoneNumbers = phoneNumbers;
+              show(vm.data.teamTelephoneOptions);
               vm.loadTeam = '';
               $rootScope.statusBar.off();
-            }
-          );
+            });
         };
 
         /**
          * activate teamTelefone
          */
-        vm.activate = function (settings)
+        vm.activate = function (options)
         {
-          console.log('settings', settings);
-
-          if(! settings.email)
+          var error = validate(options);
+          if (error)
           {
-            $rootScope.notifier.error(ui.validation.email.required);
+            $rootScope.notifier.error(error);
             return;
           }
-          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
+          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
           TeamUp._(
-            'TTSettingsPost',
-            {second: vm.currentTeamId}
-          ).then(
-            function (result)
+            'TTOptionsActivate',
+            {second: vm.currentTeamId},
+            {adapterId: options.adapterId, voicemailEmailAddress: options.email}
+          ).then(function (newOptions)
             {
-              show(result);
+              show(newOptions);
               $rootScope.statusBar.off();
-            }
-          );
+            });
         };
 
         /**
@@ -93,25 +80,24 @@ define(
         {
           vm.error = false;
 
-          if (! newOptions.ringingTimeOut)
+          if (!newOptions.ringingTimeOut)
           {
-            $rootScope.notifier.error('Geef de duur van de kiestoon aan!');
-            //$rootScope.ui.validation.role
+            $rootScope.notifier.error($rootScope.ui.options.durationDialTone);
             vm.error = true;
             return;
           }
 
-          if($filter('number')(newOptions.ringingTimeOut, 0) == '')
+          if ($filter('number')(newOptions.ringingTimeOut, 0) == '')
           {
             vm.error = true;
-            $rootScope.notifier.error('De duur van de kiestoon kan alleen een nummer zijn!');
+            $rootScope.notifier.error($rootScope.ui.options.dialToneNumber);
             return;
           }
 
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
           TeamUp._(
-            'TTSettingsSave',
+            'TTOptionsSave',
             {second: vm.currentTeamId},
             {
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
@@ -119,20 +105,11 @@ define(
               "sms-on-new-team-voicemail": newOptions.sms,
               "voicemail-detection-menu": newOptions.voicemailDetection
             }
-          ).then(
-            function (result)
+          ).then(function (result)
             {
-              if (result.error)
-              {
-                console.log('Error by saving team-telephone settings ->', result.error);
-              }
-              else
-              {
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-              }
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               $rootScope.statusBar.off();
-            }
-          );
+            });
         };
 
         /**
@@ -144,6 +121,62 @@ define(
         {
           var teamName = $filter('groupIdToName')(teamId);
           return $filter('toTitleCase')(teamName);
+        }
+
+        /**
+         * Check validation
+         * @param options
+         * @returns {*}
+         */
+        function validate(options)
+        {
+          var error = null;
+          if (!options)
+          {
+            error = $rootScope.ui.validation.data;
+          }
+          else if (!options.adapterId)
+          {
+            error = (vm.data.phoneNumbers.length)
+              ? $rootScope.ui.validation.phone.notValid
+              : $rootScope.ui.options.noPhoneNumbers;
+          }
+          else if (!options.email)
+          {
+            error = $rootScope.ui.validation.email.required;
+          }
+          return error;
+        }
+
+        /**
+         * Show the TeamTelephone settings per Team
+         * if it's not a TeamTelephone team, the activate form will be shown
+         * This form will show up only if you have the role of coordinator
+         * @param options
+         */
+        function show(options)
+        {
+          if (!options || !options.adapterId)
+          {
+            if (angular.isDefined(vm.activateTTForm))
+            {
+              $scope.formActivateTT.$setPristine();
+            }
+
+            if ($rootScope.app.resources.role == 1 && !vm.data.phoneNumbers.length)
+            {
+              $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
+            }
+            vm.activateTTForm = true;
+          }
+          else
+          {
+            vm.scenarios = {
+              voicemailDetection: options["voicemail-detection-menu"] || false,
+              sms: options["sms-on-missed-call"] || true,
+              ringingTimeOut: options["ringing-timeout"] || 20
+            };
+          }
         }
       }
     );
