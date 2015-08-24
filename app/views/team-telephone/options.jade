@@ -18,11 +18,13 @@ section#dashboard
 			include ../agenda/tabs
 				
 		.tab-content
-			#availabilities.sa.widget
+			#order.tab-pane.active
 				div
-					div.head(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
-						h4
-							| {{ ui.options.title }}{{ options.currentTeam }} {{ options.loadTeam }} 
+					div(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
+						div.head
+							h3
+								| {{ ui.options.title }}{{ options.currentTeam }} {{ options.loadTeam }} 
+						hr
 					div.alert.alert-warning(ng-show='options.activateTTForm && app.resources.role > 1')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
@@ -90,12 +92,12 @@ section#dashboard
 								// {{ ui.options.voicemailDetectionInfo }}
 				
 				div(ng-show='options.activateTTForm && app.resources.role == 1')
-					h4 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
-					
+					h3 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
+					hr
 					div
 						form.form-vertical(name='formActivateTT', novalidate)
 							.form-group.has-feedback()
-								label.control-label Telefoonnummer
+								label.control-label {{ ui.groups.phone }}
 								.controls
 									select(ng-model='activateData.adapterId',
 									required,

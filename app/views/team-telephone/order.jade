@@ -25,25 +25,19 @@ section
 					h3.pull-left
 						| {{currentTeam | getGroupNameById | toTitleCase}} 
 						span(ng-show='load') {{load}}
-					div.btn-group.pull-right
-						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
-							input(type='radio',
-							ng-model='orderType',
-							value='FIXED',
-							ng-change='orderTypePreview()')
-							| {{ ui.order.fixedOrder }}
-						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
-							input(type='radio',
-							ng-model='orderType',
-							value='RANDOM',
-							ng-change='orderTypePreview()')
-							| {{ ui.order.randomOrder }}
 				hr
 				div
+					form.form-vertical(name='formActivateTT', novalidate)
+						.form-group.has-feedback()
+							.controls
+								select(ng-model='orderType',
+								required,
+								ng-options='orderType.id as orderType.name for orderType in orderTypes',
+								ng-selected='orderTypes[0]')
+					
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
 						type='button', ng-click='saveOrder()')
 							| {{ ui.order.confirmation }}
-					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
 					p(ng-show='orderedMembers.length == 0 && orderType != "RANDOM"') {{ ui.order.noMembers }}
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead

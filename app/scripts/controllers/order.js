@@ -14,6 +14,21 @@ define(
 
         $scope.currentTeam = CurrentSelection.getTeamId();
 
+        $scope.orderTypes = [
+          {
+          name: $rootScope.ui.order.fixedOrder,
+          id: 'FIXED'
+          },
+          {
+            name: $rootScope.ui.order.randomOrder,
+            id: 'RANDOM'
+          },
+          {
+            name: $rootScope.ui.order.evenOrder,
+            id: 'LONGEST_IDLE'
+          }
+        ];
+
         $scope.orderType = data.teamOrder.sortBy;
 
         showOrder(data.teamOrder.order, data.teamMembers);

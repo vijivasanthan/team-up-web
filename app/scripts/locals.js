@@ -817,6 +817,7 @@ define(
         order: {
           randomOrder: 'Willkürlich',
           fixedOrder: 'Reihenfolge selbst bestimmen',
+          evenOrder: 'Gleichmäßig',
           confirmation: 'Auswahl bestätigen',
           randomFeedback: 'Willkürliche Reihenfolge wird genommen.',
           loadTeam: 'Gruppe laden...',
@@ -1686,6 +1687,7 @@ define(
         order: {
           randomOrder: 'Willekeurige',
           fixedOrder: 'Eigen volgorde',
+          evenOrder: 'Gelijkmatig',
           confirmation: 'Bevestig Keuze',
           randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
           loadTeam: 'Team laden...',
