@@ -130,6 +130,19 @@ links.Timeline = function (container)
 
   this.listeners = {}; // event listener callbacks
 
+  this.daysShort = ["zo", "ma", "di",
+    "wo", "do", "vr", "za"];
+  this.days = ["zondag", "maandag", "dinsdag",
+    "woensdag", "donderdag", "vrijdag", "zaterdag"];
+  this.monthsShort = ["jan", "feb", "mrt",
+    "apr", "mei", "jun",
+    "jul", "aug", "sep",
+    "okt", "nov", "dec"];
+  this.months = ["januari", "februari", "maart",
+    "april", "mei", "juni",
+    "juli", "augustus", "september",
+    "oktober", "november", "december"];
+
   // Initialize sizes.
   // Needed for IE (which gives an error when you try to set an undefined
   // value in a style)
@@ -242,10 +255,12 @@ links.Timeline = function (container)
  * @param {Object} options         A name/value map containing settings for the
  *                                 timeline. Optional.
  */
-links.Timeline.prototype.draw = function (data, options)
+links.Timeline.prototype.draw = function (data, options, languageOptions)
 {
   this.setOptions(options);
 
+  //languageOptions translateOptions
+  links.Timeline.prototype.translateOptions(languageOptions);
   // read the data
   this.setData(data);
 
@@ -772,6 +787,14 @@ links.Timeline.prototype.getDataRange = function (withMargin)
     'min': min ? new Date(min) : undefined,
     'max': max ? new Date(max) : undefined
   };
+};
+
+links.Timeline.prototype.translateOptions = function(translation)
+{
+  this.daysShort = translation.daysShort;
+  this.days = translation.days;
+  this.monthsShort = translation.monthsShort;
+  this.months = translation.months;
 };
 
 /**
@@ -6742,7 +6765,6 @@ links.Timeline.StepDate.prototype.isMajor = function ()
   }
 };
 
-
 /**
  * Returns formatted text for the minor axislabel, depending on the current
  * date and the scale. For example when scale is MINUTE, the current time is
@@ -6751,12 +6773,8 @@ links.Timeline.StepDate.prototype.isMajor = function ()
  */
 links.Timeline.StepDate.prototype.getLabelMinor = function (date)
 {
-  var MONTHS_SHORT = ["jan", "feb", "mrt",
-    "apr", "mei", "jun",
-    "jul", "aug", "sep",
-    "okt", "nov", "dec"];
-  var DAYS_SHORT = ["zo", "ma", "di",
-    "wo", "do", "vr", "za"];
+  var MONTHS_SHORT = this.monthsShort;
+  var DAYS_SHORT = this.daysShort;
 
   if (date == undefined)
   {
@@ -6795,12 +6813,11 @@ links.Timeline.StepDate.prototype.getLabelMinor = function (date)
  */
 links.Timeline.StepDate.prototype.getLabelMajor = function (date)
 {
-  var MONTHS = ["januari", "februari", "maart",
-    "april", "mei", "juni",
-    "juli", "augustus", "september",
-    "oktober", "november", "december"];
-  var DAYS = ["zondag", "maandag", "dinsdag",
-    "woensdag", "donderdag", "vrijdag", "zaterdag"];
+  var MONTHS = this.months;
+  var DAYS = this.days;
+
+  console.log('MONTHS', MONTHS);
+  console.log('DAYS', DAYS);
 
   if (date == undefined)
   {
