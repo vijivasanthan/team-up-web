@@ -302,7 +302,7 @@ define(
                     redirectLocationLoggedUser();
                   }
 
-                  TeamUp._('TTSettingsGet', {second: groupId})
+                  TeamUp._('TTOptionsGet', {second: groupId})
                     .then(function (options)
                     {
                       //team telephone not activated
@@ -418,7 +418,7 @@ define(
                   var deferred = $q.defer(),
                     teamId = CurrentSelection.getTeamId()
 
-                  TeamUp._('TTSettingsGet', {second: teamId})
+                  TeamUp._('TTOptionsGet', {second: teamId})
                     .then(function (options)
                     {
                       //team telephone not activated
@@ -466,10 +466,10 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Teams',
-                  function (Teams)
+                  'Teams', 'TeamUp',
+                  function (Teams, TeamUp)
                   {
-                    return $q.all([TeamUp._('TTSettingsGet', {second: teamId}), Teams.getAllLocal()])
+                    return $q.all([TeamUp._('TTOptionsGet', {second: teamId}), Teams.getAllLocal()])
                       .then(function (result)
                       {
                         return {
@@ -499,7 +499,7 @@ define(
                     deferred = $q.defer();
                   removeActiveClass('.teamMenu');
 
-                  TeamUp._('TTSettingsGet', {second: teamId})
+                  TeamUp._('TTOptionsGet', {second: teamId})
                     .then(function (options)
                     {
                       //team telephone not activated
@@ -544,7 +544,7 @@ define(
                     allTeams = Teams.getAllLocal(),
                     deferred = $q.defer();
 
-                  TeamUp._('TTSettingsGet', {second: teamId})
+                  TeamUp._('TTOptionsGet', {second: teamId})
                     .then(function (options)
                     {
                       //team telephone not activated
