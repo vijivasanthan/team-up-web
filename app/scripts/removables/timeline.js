@@ -114,7 +114,7 @@ if (!Array.prototype.forEach)
  * @param {Element} container   The DOM element in which the Timeline will
  *                                  be created. Normally a div element.
  */
-links.Timeline = function (container)
+links.Timeline = function (container, langOptions)
 {
   // create variables and set default values
   this.dom = {};
@@ -128,7 +128,7 @@ links.Timeline = function (container)
   this.currentClusters = [];
   this.selection = undefined; // stores index and item which is currently selected
 
-  this.listeners = {}; // event listener callbacks
+  this.listeners = {}; // event listener callback
 
   // Initialize sizes.
   // Needed for IE (which gives an error when you try to set an undefined
@@ -213,6 +213,7 @@ links.Timeline = function (container)
 
   // create a step for drawing the axis
   this.step = new links.Timeline.StepDate();
+  this.step.setTranslateOptions(langOptions);
 
   // initialize data
   this.data = [];
@@ -245,7 +246,6 @@ links.Timeline = function (container)
 links.Timeline.prototype.draw = function (data, options)
 {
   this.setOptions(options);
-
   // read the data
   this.setData(data);
 
@@ -773,6 +773,8 @@ links.Timeline.prototype.getDataRange = function (withMargin)
     'max': max ? new Date(max) : undefined
   };
 };
+
+
 
 /**
  * Re-render (reflow and repaint) all components of the Timeline: frame, axis,
@@ -6156,6 +6158,7 @@ links.Timeline.StepDate = function (start, end, minimumStep)
   this.autoScale = true;
   this.scale = links.Timeline.StepDate.SCALE.DAY;
   this.step = 1;
+  this.langOptions = {};
 
   // initialize the range
   this.setRange(start, end, minimumStep);
@@ -6199,6 +6202,16 @@ links.Timeline.StepDate.prototype.setRange = function (start, end, minimumStep)
   {
     this.setMinimumStep(minimumStep);
   }
+};
+
+links.Timeline.StepDate.prototype.setTranslateOptions = function(langOptions)
+{
+  this.langOptions = langOptions;
+};
+
+links.Timeline.StepDate.prototype.getTranslateOptions = function(langOptions)
+{
+  return this.langOptions;
 };
 
 /**
@@ -6742,7 +6755,6 @@ links.Timeline.StepDate.prototype.isMajor = function ()
   }
 };
 
-
 /**
  * Returns formatted text for the minor axislabel, depending on the current
  * date and the scale. For example when scale is MINUTE, the current time is
@@ -6751,12 +6763,10 @@ links.Timeline.StepDate.prototype.isMajor = function ()
  */
 links.Timeline.StepDate.prototype.getLabelMinor = function (date)
 {
-  var MONTHS_SHORT = ["jan", "feb", "mrt",
-    "apr", "mei", "jun",
-    "jul", "aug", "sep",
-    "okt", "nov", "dec"];
-  var DAYS_SHORT = ["zo", "ma", "di",
-    "wo", "do", "vr", "za"];
+  var langOptions = this.getTranslateOptions();
+
+  var MONTHS_SHORT = langOptions.monthsShort;
+  var DAYS_SHORT = langOptions.daysShort;
 
   if (date == undefined)
   {
@@ -6795,12 +6805,10 @@ links.Timeline.StepDate.prototype.getLabelMinor = function (date)
  */
 links.Timeline.StepDate.prototype.getLabelMajor = function (date)
 {
-  var MONTHS = ["januari", "februari", "maart",
-    "april", "mei", "juni",
-    "juli", "augustus", "september",
-    "oktober", "november", "december"];
-  var DAYS = ["zondag", "maandag", "dinsdag",
-    "woensdag", "donderdag", "vrijdag", "zaterdag"];
+  var langOptions = this.getTranslateOptions();
+
+  var MONTHS = langOptions.months;
+  var DAYS = langOptions.days;
 
   if (date == undefined)
   {

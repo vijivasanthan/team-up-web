@@ -66,7 +66,14 @@ define(
              */
             init: function ()
             {
-              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id));
+              var calendarOptions = {
+                daysShort: moment.weekdaysShort(),
+                days: moment.weekdays(),
+                monthsShort: moment.monthsShort(),
+                months: moment.months(),
+              };
+
+              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id), calendarOptions);
 
               links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
               links.events.addListener($scope.self.timeline, 'add', this.onAdd);
