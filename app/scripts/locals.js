@@ -507,6 +507,7 @@ define(
         teamup: {
           teams: 'Teams',
           selectTeam: 'Select team',
+          seconds: 'seconds',
           hour: 'hour',
           clients: 'Cliënts',
           order: 'Order',
@@ -742,7 +743,9 @@ define(
         options: {
           title: 'Settings ',
           teamEmail: 'Team email',
-          activateTeamTelephone: "activate team phone for the ",
+          pickAPhoneNumber: 'Pick a phone number',
+          noPhoneNumbers: 'There are no phonenumbers left',
+          activateTeamTelephone: "Activate team phone for the ",
           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
           smsMissedCall: 'SMS by a mist call or a new voicemail',
           receiveReachableMembers: 'Reachable teammebers receive',
@@ -800,6 +803,7 @@ define(
           randomOrder: 'Random',
           fixedOrder: 'Fixed order',
           confirmation: 'Confirm choise',
+          evenOrder: 'Evenly',
           randomFeedback: 'a random order gets determined.',
           loadTeam: 'Load team...',
           orderSaved: 'Order saved',
