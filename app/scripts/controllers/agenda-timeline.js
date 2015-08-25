@@ -66,7 +66,14 @@ define(
              */
             init: function ()
             {
-              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id));
+              var calendarOptions = {
+                daysShort: moment.weekdaysShort(),
+                days: moment.weekdays(),
+                monthsShort: moment.monthsShort(),
+                months: moment.months(),
+              };
+
+              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id), calendarOptions);
 
               links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
               links.events.addListener($scope.self.timeline, 'add', this.onAdd);
@@ -109,13 +116,6 @@ define(
             {
               var start,
                 end;
-
-              var calendarOptions = {
-                daysShort: moment.weekdaysShort(),
-                days: moment.weekdays(),
-                monthsShort: moment.monthsShort(),
-                months: moment.months(),
-              };
 
               /**
                * Hot fix for not converted Date objects initially given by timeline
@@ -180,8 +180,7 @@ define(
                     $scope.timeline.current,
                     $rootScope.app.resources.uuid
                   ),
-                  $scope.timeline.options,
-                  calendarOptions
+                  $scope.timeline.options
                 );
               }
               else
@@ -202,8 +201,7 @@ define(
                       Sloter.profile(
                         $scope.data.slots.data,
                         $scope.timeline.config
-                      ), $scope.timeline.options,
-                      calendarOptions);
+                      ), $scope.timeline.options);
                   }, timeout);
               }
 
