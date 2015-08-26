@@ -739,7 +739,10 @@ define(
             '28': 'AskFast error',
             '29': 'A voicemailgroup could not be created',
             '30': 'A item in the TeamTelephone config is not writable',
-            '31': 'TeamTelefoon is already activated for this team'
+            '31': 'TeamTelefoon is already activated for this team',
+            '32': 'Agent not found',
+            '33': 'No templates found in the ScenarioTemplateAgent',
+            '34': 'Could not generate scenario'
           }
       },
         options: {
@@ -1659,7 +1662,10 @@ define(
             '28': 'AskFast error',
             '29': 'A voicemailgroup could not be created',
             '30': 'A item in the TeamTelephone config is not writable',
-            '31': 'TeamTelefoon is already activated for this team'
+            '31': 'TeamTelefoon is already activated for this team',
+            '32': 'Agent not found',
+            '33': 'No templates found in the ScenarioTemplateAgent',
+            '34': 'Could not generate scenario'
           },
         },
         task: {
@@ -2502,7 +2508,10 @@ define(
             '28': 'AskFast foutmelding',
             '29': 'Een voicemail groep kon niet aangemaakt worden',
             '30': 'Een item in de TeamTelephone configuratie kon niet beschreven worden',
-            '31': 'TeamTelefoon is al geactiveerd voor dit team'
+            '31': 'TeamTelefoon is al geactiveerd voor dit team',
+            '32': 'Agent niet gevonden',
+            '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
+            '34': 'Kon het scenario niet genereren'
           }
         },
         options: {
