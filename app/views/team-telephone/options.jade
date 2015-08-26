@@ -116,15 +116,18 @@ section#dashboard
 											i
 											| {{ ui.validation.email.notValid }}
 							
-							.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
+							.form-group(ng-class="{'has-error': phoneNumberParsed.result == false && activateData.phoneNumberAlias}")
 								label.control-label {{ui.teamup.phone}} alias
 								.controls
 									input.span3.form-control.inputPhoneNumber(type='text',
+									name='phone', 
 									ng-model='activateData.phoneNumberAlias',
 									ng-change='parsePhoneNumber(activateData.phoneNumberAlias)')
-									span.help-block
+									span.help-block(ng-show='activateData.phoneNumberAlias')
 										small
 											i {{phoneNumberParsed.message}}
+											
+							p {{ activateData.phoneNumberAlias }}
 					
 							.form-actions
 								button.btn.btn-success(type='submit',
