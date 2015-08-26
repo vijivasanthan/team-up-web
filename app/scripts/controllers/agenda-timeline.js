@@ -553,7 +553,7 @@ define(
                 }
                 else
                 {
-                  fetchTeamTimelineData(options);
+                  fetchTeamTimelineData(section, periods);
                 }
               });
           };
@@ -562,7 +562,7 @@ define(
            * Fetch timeline data per team
            * @param section group or members
            */
-          function fetchTeamTimelineData(section)
+          function fetchTeamTimelineData(section, periods)
           {
             switch (section)
             {
