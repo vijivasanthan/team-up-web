@@ -110,11 +110,21 @@ section#dashboard
 									input.span3.form-control(type='email',
 									name='email',
 									required,
-									ng-model='activateData.email')
+									ng-model='activateData.voicemailEmailAddress')
 									span.help-block(ng-show='formActivateTT.email.$invalid && !formActivateTT.email.$pristine')
 										small(ng-show="formActivateTT.$error.email")
 											i
 											| {{ ui.validation.email.notValid }}
+							
+							.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
+								label.control-label {{ui.teamup.phone}} alias
+								.controls
+									input.span3.form-control.inputPhoneNumber(type='text',
+									ng-model='activateData.phoneNumberAlias',
+									ng-change='parsePhoneNumber(activateData.phoneNumberAlias)')
+									span.help-block
+										small
+											i {{phoneNumberParsed.message}}
 					
 							.form-actions
 								button.btn.btn-success(type='submit',

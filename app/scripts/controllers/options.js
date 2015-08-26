@@ -58,12 +58,14 @@ define(
             $rootScope.notifier.error(error);
             return;
           }
+          //phonenumber is validated add the right format to the modal
+          options.phoneNumberAlias = (options.phoneNumberAlias && $rootScope.phoneNumberParsed.format) || null;
 
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
           TeamUp._(
             'TTOptionsActivate',
             {second: vm.currentTeamId},
-            {adapterId: options.adapterId, voicemailEmailAddress: options.email}
+            options
           ).then(function (newOptions)
             {
               show(newOptions);
@@ -135,14 +137,18 @@ define(
             error = $rootScope.ui.validation.data;
           }
           else if (!options.adapterId)
-          {
+          {//Another check if there are phonenumbers in the pool
             error = (vm.data.phoneNumbers.length)
-              ? $rootScope.ui.validation.phone.notValid
-              : $rootScope.ui.options.noPhoneNumbers;
+              ? $rootScope.ui.validation.phone.notValid //Error if no phonenumber is chosen
+              : $rootScope.ui.options.noPhoneNumbers;//No phonenumbers error
           }
-          else if (!options.email)
+          else if (!options.voicemailEmailAddress)
           {
             error = $rootScope.ui.validation.email.required;
+          }
+          else if(options.phoneNumberAlias && $rootScope.phoneNumberParsed.result == false)// phone alias could be empty
+          {
+            error = $rootScope.ui.validation.phone.notValid;
           }
           return error;
         }
@@ -161,7 +167,7 @@ define(
           if (!options || !options.adapterId)
           {
             if (angular.isDefined(vm.activateTTForm))
-            {
+            {//Empty form validation by changing the team
               $scope.formActivateTT.$setPristine();
             }
 
