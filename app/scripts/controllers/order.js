@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'order',
-      function ($rootScope, $scope, Teams, TeamUp, data, CurrentSelection, $q)
+      function ($rootScope, $scope, $location, Teams, TeamUp, data, CurrentSelection, $q)
       {
         $rootScope.fixStyles();
 
@@ -60,8 +60,18 @@ define(
             var teamStatus = TeamUp._('teamStatusQuery', {third: groupID}),
               teamOrder = TeamUp._('callOrderGet', {second: groupID});
 
-            $q.all([teamStatus, teamOrder]).then(
-              function(teamResult)
+            TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+              .then(function (options)
+              {
+                var promise = $q.all([teamStatus, teamOrder]);
+                if (!options.adapterId)
+                {
+                  $location.path('team-telefoon/options');
+                  promise = $q.reject();
+                }
+                return promise;
+              })
+              .then(function (teamResult)
               {
                 data.teamMembers = teamResult[0];
                 var teamOrder = teamResult[1];

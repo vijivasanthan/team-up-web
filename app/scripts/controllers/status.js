@@ -4,7 +4,7 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'status',
-      function ($scope, $rootScope, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
+      function ($scope, $rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
         $rootScope.notification.status = false;
         $rootScope.fixStyles();
@@ -33,16 +33,26 @@ define(['controllers/controllers'], function (controllers)
 
           CurrentSelection.local = $scope.currentTeam;
 
-          $q.all([
-            Teams.getSingle($scope.currentTeam),
-            Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
-          ])
-          .then(function(result)
-          {
-            $scope.teamMembers = result[0];
-            getReachability(result[1], setKeyAsUsername($scope.teamMembers));
-          });
+          TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+            .then(function (options)
+            {
+              var promise = $q.all([
+                Teams.getSingle($scope.currentTeam),
+                Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
+              ]);
 
+              if (!options.adapterId)
+              {
+                $location.path('team-telefoon/options');
+                promise = $q.reject();
+              }
+              return promise;
+            })
+            .then(function (result)
+            {
+              $scope.teamMembers = result[0];
+              getReachability(result[1], setKeyAsUsername($scope.teamMembers));
+            });
         };
 
         /**

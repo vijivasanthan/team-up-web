@@ -244,15 +244,15 @@ define(
                     removeActiveClass('.teamMenu');
 
                     var teamId = CurrentSelection.getTeamId(),
-                        teamTelephoneOptions = null;
+                      teamTelephoneOptions = null;
 
                     return TeamUp._('TTOptionsGet', {second: teamId})
-                      .then(function(options)
+                      .then(function (options)
                       {
                         teamTelephoneOptions = options;
 
                         var promises = [Teams.getAllLocal()];
-                        if(options.error && options.error.status === 404)
+                        if (options.error && options.error.status === 404)
                         {
                           promises.push(
                             TeamUp._('TTAdaptersGet', {
@@ -263,7 +263,7 @@ define(
                         }
                         return $q.all(promises)
                       })
-                      .then(function(result)
+                      .then(function (result)
                       {
                         console.log('result', result);
 
@@ -411,12 +411,12 @@ define(
               templateUrl: 'views/team-telephone/logs.html',
               controller: 'logs as logs',
               resolve: {
-                data: function ($q, Logs, TeamUp, $location, CurrentSelection)
+                data: function ($q, Logs, Teams, TeamUp, $location, CurrentSelection)
                 {
                   removeActiveClass('.teamMenu');
 
                   var deferred = $q.defer(),
-                    teamId = CurrentSelection.getTeamId()
+                    teamId = CurrentSelection.getTeamId();
 
                   TeamUp._('TTOptionsGet', {second: teamId})
                     .then(function (options)
@@ -428,10 +428,16 @@ define(
                       }
                       else
                       {
-                        Logs.fetchByTeam()
+                        var teams = Teams.getAllLocal(),
+                            logsPerTeam = Logs.fetch({adapterId: options.adapterId});
+                        $q.all([teams, logsPerTeam])
                           .then(function (result)
                           {
-                            deferred.resolve(result);
+                            console.log('result', result);
+                            deferred.resolve({
+                              teams: result[0],
+                              logData: result[1]
+                            });
                           });
                       }
                     });
@@ -637,7 +643,8 @@ define(
 
             .otherwise({redirectTo: '/login'});
 
-          $httpProvider.interceptors.push(function ($location, Store, $injector, $q) {
+          $httpProvider.interceptors.push(function ($location, Store, $injector, $q)
+          {
             return {
               request: function (config)
               {

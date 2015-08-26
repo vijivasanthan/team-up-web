@@ -544,6 +544,26 @@ define(
               end: ($scope.data.periods.end / 1000)
             };
 
+            TeamUp._('TTOptionsGet', { second: $scope.timeline.current.group })
+              .then(function(options)
+              {
+                if(! options.adapterId)
+                {
+                  $location.path('team-telefoon/options');
+                }
+                else
+                {
+                  fetchTeamTimelineData(options);
+                }
+              });
+          };
+
+          /**
+           * Fetch timeline data per team
+           * @param section group or members
+           */
+          function fetchTeamTimelineData(section)
+          {
             switch (section)
             {
               case 'group':
@@ -611,8 +631,7 @@ define(
               default:
                 $scope.timeliner.load({start: $scope.data.periods.start, end: $scope.data.periods.end});
             }
-          };
-
+          }
 
           /**
           * Timeline get ranges
