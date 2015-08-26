@@ -6,14 +6,15 @@
   height: 82px;
   width: 363px;
   background-repeat: no-repeat;
-}
-
-.nl {
   background-image: url("../images/TeamTelefoonLogo.png");
 }
 
+.nl {
+  background-image: url("../images/TeamTelefoonLogo.png") !important;
+}
+
 .de {
-  background-image: url("../images/teamTelefoonLogoSloganDE.png");
+  background-image: url("../images/teamTelefoonLogoSloganDE.png") !important;
 }
 
 #welcomeLogoTeamUp {
