@@ -738,12 +738,15 @@ define(
             '27': 'The scenario could not be created for this team',
             '28': 'AskFast error',
             '29': 'A voicemailgroup could not be created',
+            '30': 'A item in the TeamTelephone config is not writable',
+            '31': 'TeamTelefoon is already activated for this team'
           }
       },
         options: {
           title: 'Settings ',
           teamEmail: 'Team email',
           pickAPhoneNumber: 'Pick a phone number',
+          phoneNumberAlias: 'Phonenumber alias',
           noPhoneNumbers: 'There are no phonenumbers left',
           activateTeamTelephone: "Activate team phone for the ",
           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
@@ -1157,6 +1160,7 @@ define(
           title: 'Einstellungen ',
           teamEmail: 'E-Mail an das Team',
           activateTeamTelephone: "Aktivieren TeamTelefon für ",
+          phoneNumberAlias: 'Telefonnummer alias',
           smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice mailbox-nachricht',
           receiveReachableMembers: 'Verfügbare gruppen-mitglieder empfangen',
           teamTelephoneNotActivated: "Team-Telefon wurde für dieses Team nicht aktiviert",
@@ -1646,7 +1650,16 @@ define(
             '19': 'Das vorherige und aktuelle Passwort stimmen nicht überein',
             '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
             '21': 'Ein Parameter kann nicht bearbeitet werden',
-            '22': 'Dieser Teilnehmer ist in keiner Gruppe'
+            '22': 'Dieser Teilnehmer ist in keiner Gruppe',
+            '23': 'No valid body, some attributes are missing',
+            '24': 'Something is not configured properly,AskFast can not be reached',
+            '25': 'The phonenumber is already in use',
+            '26': 'One of the conditions to activate TeamTelephone was unsuccessful',
+            '27': 'The scenario could not be created for this team',
+            '28': 'AskFast error',
+            '29': 'A voicemailgroup could not be created',
+            '30': 'A item in the TeamTelephone config is not writable',
+            '31': 'TeamTelefoon is already activated for this team'
           },
         },
         task: {
@@ -2488,12 +2501,15 @@ define(
             '27': 'Het scenario kon niet aangemaakt worden voor dit team',
             '28': 'AskFast foutmelding',
             '29': 'Een voicemail groep kon niet aangemaakt worden',
+            '30': 'Een item in de TeamTelephone configuratie kon niet beschreven worden',
+            '31': 'TeamTelefoon is al geactiveerd voor dit team'
           }
         },
         options: {
           title: 'Instellingen ',
           teamEmail: 'E-mail van het team',
           activateTeamTelephone: "Activeer TeamTelefoon voor het ",
+          phoneNumberAlias: 'Telefoonnummer alias',
           teamTelephoneNotActivated: "TeamTelefoon is niet geactiveerd voor dit team",
           smsMissedCall: 'SMS bij een gemist gesprek of nieuwe voicemail',
           receiveReachableMembers: 'Bereikbare teamleden ontvangen',
