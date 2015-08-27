@@ -182,7 +182,7 @@ define(
           {
             vm.scenarios = {
               voicemailDetection: options["voicemail-detection-menu"] || false,
-              sms: options["sms-on-missed-call"] || true,
+              sms: options["sms-on-missed-call"] || false,
               ringingTimeOut: options["ringing-timeout"] || 20
             };
             vm.activateTTForm = false;
