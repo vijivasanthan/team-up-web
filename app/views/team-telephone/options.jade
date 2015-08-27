@@ -109,10 +109,10 @@ section
 								.controls
 									label.radio(ng-show='options.data.phoneNumbers.length', ng-repeat='phoneNumber in options.data.phoneNumbers')
 										input(type="radio" 
-										ng-model='activateData.adapterId',
 										name="adapterId",
 										required,
-										value='{{ phoneNumber.id }}')
+										ng-value='phoneNumber.id',
+										ng-model='$parent.activateData.adapterId')
 										| {{ phoneNumber.address }}
 									span.help-block(ng-hide="options.data.phoneNumbers.length")
 										small
@@ -151,7 +151,6 @@ section
 									span.help-block
 										small
 											i {{ ui.options.phoneNumberTeamAliasDescription }}
-											
 							p * {{ ui.options.requiredFields }}
 					
 							.form-actions
