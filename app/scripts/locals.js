@@ -817,10 +817,12 @@ define(
           fixedOrder: 'Fixed order',
           confirmation: 'Confirm choise',
           evenOrder: 'Evenly',
-          randomFeedback: 'a random order gets determined.',
           loadTeam: 'Load team...',
           orderSaved: 'Order saved',
-          noMembers: 'This team has no members.'
+          noMembers: 'This team has no members.',
+          evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
+          randomFeedback: 'With this option, a caller is always connected to any team member.',
+          fixedOrderFeedback: 'With this option, the team can determine the sequence.'
         },
         logs: {
           loadLogs: 'Loading logs..',
@@ -1719,10 +1721,12 @@ define(
           fixedOrder: 'Reihenfolge selbst bestimmen',
           evenOrder: 'Gleichmäßig',
           confirmation: 'Auswahl bestätigen',
-          randomFeedback: 'Willkürliche Reihenfolge wird genommen.',
           loadTeam: 'Gruppe laden...',
           orderSaved: 'Reihenfolge gespeichert',
-          noMembers: 'Keine Mitglieder in dieser Gruppe.'
+          noMembers: 'Keine Mitglieder in dieser Gruppe.',
+          evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
+          randomFeedback: 'With this option, a caller is always connected to any team member.',
+          fixedOrderFeedback: 'With this option, the team can determine the sequence.'
         },
         logs: {
           loadLogs: 'Logs laden...',
@@ -2600,9 +2604,11 @@ define(
         order: {
           randomOrder: 'Willekeurige',
           fixedOrder: 'Eigen volgorde',
-          evenOrder: 'Gelijkmatig',
+          fixedOrderFeedback: 'Met deze optie kan het team zelf de volgorde bepalen.',
+          evenOrder: 'Langst niet gebeld',
           confirmation: 'Bevestig Keuze',
-          randomFeedback: 'Een willekeurige volgorde wordt bepaald.',
+          randomFeedback: 'Met deze optie wordt een beller altijd doorverbonden naar een willekeurig teamlid.',
+          evenOrderFeedback: "Met deze optie wordt een beller doorverbonden met het teamlid waar het langst geleden naar toe is gebeld.",
           loadTeam: 'Team laden...',
           orderSaved: 'Volgorde opgeslagen',
           noMembers: 'Er zijn geen leden in dit team.'

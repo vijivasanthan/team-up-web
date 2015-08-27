@@ -31,14 +31,28 @@ section
 						.form-group.has-feedback()
 							.controls
 								select(ng-model='orderType',
-								required,
-								ng-options='orderType.id as orderType.name for orderType in orderTypes',
-								ng-selected='orderTypes[0]')
-					
+									required,
+									ng-options='orderType.id as orderType.name for orderType in orderTypes',
+									ng-selected='orderTypes[0]')
+								span.help-block(ng-show='orderType == "FIXED"')
+									small
+										i
+											| {{ ui.order.fixedOrderFeedback }}
+								span.help-block(ng-show='orderType == "RANDOM"')
+									small
+										i
+											| {{ ui.order.randomFeedback }}
+								span.help-block(ng-show='orderType == "LONGEST_IDLE"')
+									small
+										i
+											| {{ ui.order.evenOrderFeedback }}
+								
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
 						type='button', ng-click='saveOrder()')
 							| {{ ui.order.confirmation }}
-					p(ng-show='orderedMembers.length == 0 && orderType != "RANDOM"') {{ ui.order.noMembers }}
+					
+					p(ng-show='orderedMembers.length == 0 && orderType == "FIXED"') {{ ui.order.noMembers }}
+					
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead
 							tr
