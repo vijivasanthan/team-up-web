@@ -756,6 +756,13 @@ define(
           smsMissedCall: 'SMS by a mist call or a new voicemail',
           receiveReachableMembers: 'Reachable teammebers receive',
           missedOrVoicemail: 'SMS when the team has a missed call or a voicemail has been recorded',
+          phoneNumberTeam: "Telephone number for the team",
+          phoneNumberTeamDescription: "Choose one of the following numbers, which the team will be reached.",
+          phoneNumberTeamAlias: "Known public telephone number",
+          phoneNumberTeamAliasDescription: "This field is optional. The telephone number can be filled in what is known to the clients. For example, the 06 number of the current relay phone.",
+          voicemailEmailAddress: "Voicemail e-mailaddress",
+          voicemailEmailAddressDescription: "A e-mail will be sent to this e-mailaddress if a voicemail is left or the team has a missed call.",
+          requiredFields: "required fields",
           hasSms: function (sms)
           {
             return (sms)
@@ -1172,6 +1179,13 @@ define(
           pickAPhoneNumber: "Wählen Sie eine Telefonnummer",
           durationDialTone: 'Geben Sie die Dauer der Freizeichen an!',
           dialToneNumber: "Das Freizeichen kann nur eine Zahl sein",
+          phoneNumberTeam: "Telephone number for the team",
+          phoneNumberTeamDescription: "Choose one of the following numbers, which the team will be reached.",
+          phoneNumberTeamAlias: "Known public telephone number",
+          phoneNumberTeamAliasDescription: "This field is optional. The telephone number can be filled in what is known to the clients. For example, the 06 number of the current relay phone.",
+          voicemailEmailAddress: "Voicemail e-mailaddress",
+          voicemailEmailAddressDescription: "A e-mail will be sent to this e-mailaddress if a voicemail is left or the team has a missed call.",
+          requiredFields: "required fields",
           hasSms: function (sms)
           {
             return (sms)
@@ -2527,6 +2541,13 @@ define(
           pickAPhoneNumber: "Kies een telefoonnummer",
           durationDialTone: 'Geef de duur van de kiestoon aan!',
           dialToneNumber: "De duur van de kiestoon kan alleen een nummer zijn!",
+          phoneNumberTeam: "Telefoonnummer voor het team",
+          phoneNumberTeamDescription: "Kies één van de volgende telefoonnummers waarop het team bereikbaar zal zijn.",
+          phoneNumberTeamAlias: "Publiek bekend telefoonnummer",
+          phoneNumberTeamAliasDescription: "Dit veld is optioneel. Hier kan het telefoonnummer worden ingevuld dat bij de cliënten bekend is. Bijvoorbeeld het 06-nummer van de huidige doorgeef-telefoon.",
+          voicemailEmailAddress: "Voicemail emailadres",
+          voicemailEmailAddressDescription: "Naar dit emailadres wordt een email gestuurd als er een voicemail is achtergelaten voor het team en als het team een gemist gesprek heeft.",
+          requiredFields: "verplichte velden",
           hasSms: function (sms)
           {
             return (sms)

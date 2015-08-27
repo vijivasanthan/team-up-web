@@ -1,4 +1,4 @@
-section#dashboard
+section
 	.page-header.agenda-timeline
 		h2.nullable {{ ui.options.title }}
 	div(style='margin-top: 20px;')
@@ -29,7 +29,15 @@ section#dashboard
 						small
 							i  {{ ui.options.teamTelephoneNotActivated }}
 								
-					div(ng-hide='options.activateTTForm')
+					div(id='TTOptions' ng-hide='options.activateTTForm')
+						.row-fluid
+							.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
+								dl
+									dt(ng-show='options.data.teamTelephoneOptions.phoneNumber') {{ ui.options.phoneNumberTeam }}
+									dd(ng-show='options.data.teamTelephoneOptions.phoneNumber') {{ options.data.teamTelephoneOptions.phoneNumber }}
+									dt(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ ui.options.phoneNumberTeamAlias }}
+									dd(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ options.data.teamTelephoneOptions.phoneNumberAlias }}
+									
 						form.form-vertical(name='optionsForm', novalidate)
 							
 							.form-group(ng-show='app.domainPermission.smsNotification')
@@ -90,22 +98,33 @@ section#dashboard
 								//&& !options.scenarios.voicemailDetection
 								// {{ ui.options.voicemailDetectionInfo }}
 				
-				div(ng-show='options.activateTTForm && app.resources.role == 1')
+				div(id="activateTTForm" ng-show='options.activateTTForm && app.resources.role == 1')
 					h3 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
 					hr
 					div
 						form.form-vertical(name='formActivateTT', novalidate)
-							.form-group.has-feedback()
-								label.control-label {{ ui.groups.phone }}
+							
+							.form-group(ng-class="{ 'has-error' : options.data.phoneNumbers.length == 0 || (formActivateTT.adapterId.$invalid && !formActivateTT.adapterId.$pristine) }")
+								label.control-label {{ ui.options.phoneNumberTeam }} *
 								.controls
-									select(ng-model='activateData.adapterId',
-									required,
-									ng-options='phoneNumber.id as phoneNumber.address for phoneNumber in options.data.phoneNumbers',
-									ng-selected='options.phoneNumbers[0].id')
-										option(value='') {{ ui.options.pickAPhoneNumber }}
+									label.radio(ng-show='options.data.phoneNumbers.length', ng-repeat='phoneNumber in options.data.phoneNumbers')
+										input(type="radio" 
+										ng-model='activateData.adapterId',
+										name="adapterId",
+										required,
+										value='{{ phoneNumber.id }}')
+										| {{ phoneNumber.address }}
+									span.help-block(ng-hide="options.data.phoneNumbers.length")
+										small
+											i.text-danger
+												| {{ ui.options.noPhoneNumbers }}
+									span.help-block(ng-show='options.data.phoneNumbers.length')
+										small
+											i
+												| {{ ui.options.phoneNumberTeamDescription }}
 									
 							.form-group(ng-class="{ 'has-error' : formActivateTT.email.$invalid && !formActivateTT.email.$pristine }")
-								label.control-label E-mail
+								label.control-label {{ ui.options.voicemailEmailAddress }} *
 								.controls
 									input.span3.form-control(type='email',
 									name='email',
@@ -115,9 +134,12 @@ section#dashboard
 										small(ng-show="formActivateTT.$error.email")
 											i
 											| {{ ui.validation.email.notValid }}
+									span.help-block
+										small
+											i {{ ui.options.voicemailEmailAddressDescription }}
 							
 							.form-group(ng-class="{'has-error': phoneNumberParsed.result == false && activateData.phoneNumberAlias}")
-								label.control-label {{ui.teamup.phone}} alias
+								label.control-label {{ ui.options.phoneNumberTeamAlias }}
 								.controls
 									input.span3.form-control.inputPhoneNumber(type='text',
 									name='phone', 
@@ -126,8 +148,11 @@ section#dashboard
 									span.help-block(ng-show='activateData.phoneNumberAlias')
 										small
 											i {{phoneNumberParsed.message}}
+									span.help-block
+										small
+											i {{ ui.options.phoneNumberTeamAliasDescription }}
 											
-							p {{ activateData.phoneNumberAlias }}
+							p * {{ ui.options.requiredFields }}
 					
 							.form-actions
 								button.btn.btn-success(type='submit',

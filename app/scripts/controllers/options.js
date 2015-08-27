@@ -32,7 +32,7 @@ define(
           ).then(function (options)
             {
               vm.data.teamTelephoneOptions = options;
-              return ($rootScope.app.resources.role == 1)
+              return (vm.data.teamTelephoneOptions.adapterId)
                 ? $q.defer()
                 : TeamUp._('TTAdaptersGet', {
                     adapterType: 'call',
