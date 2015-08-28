@@ -269,6 +269,9 @@ define(
           removeTasksTitle: 'Remove tasks'
         },
         message: {
+          title: 'CHAT',
+          messagesLoaded: 'Loading messages...',
+          videoStartedBy: 'Video gesprek gestart door',
           messages: 'Messages',
           composeAMessage: 'Compose a message',
           compose: 'Compose',
@@ -1290,6 +1293,9 @@ define(
           voicemailDetectionInfo: 'Bei einer anruf-dauer von mehr als 15 sekunden wird empfohlen, dass alle mitglieder Ihre voice-mailbox abschalten, oder die persönliche voicemail präferenz einschalten. Bei Ihrem provider erfahren Sie, wie Sie die voice-mailbox abschalten können.'
         },
         message: {
+          title: 'CHAT',
+          messagesLoaded: 'Loading messages...',
+          videoStartedBy: 'Video gesprek gestart door',
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
           compose: 'Erstellen',
@@ -2222,6 +2228,9 @@ define(
           removeTasksTitle: 'Taken verwijderen'
         },
         message: {
+          title: 'CHAT',
+          messagesLoaded: 'Berichten laden...',
+          videoStartedBy: 'Video gesprek gestart door',
           messages: 'Berichten',
           composeAMessage: 'Bericht opstellen',
           compose: 'Opstellen',
