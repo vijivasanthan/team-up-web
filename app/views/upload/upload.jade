@@ -1,10 +1,10 @@
 #UploadProgressBar
 	p#breadcrumb
-		| Bestand kiezen
+		| {{ ui.upload.chooseFile }}
 
 #UploadStepSelectFile(ng-show='step === "SelectFile"')
 	.tab-header
-		h3 Bestand kiezen
+		h3 {{ ui.upload.chooseFile }}
 	hr
 	div(style='display:none;')
 		| Output Format:
@@ -15,12 +15,12 @@
 		br
 
 	div(id='uploadSheetPicker')
-		button(class="btn btn-primary") Upload spreadsheet...
+		button(class="btn btn-primary") {{ ui.upload.uploadSpreadSheet }}
 		input(type="file", name='xlfile', onchange='angular.element(this).scope().handleFile(this.files)', class='uploadSheetButton')
 
 
 	#drop(drag-enter-leave='sheetEntering' ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
-		|Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe.
+		|{{ ui.upload.dragSpreadSheet }}
 	div(style='display:none;')
 		| Advanced Demo Options:
 		// br
@@ -36,11 +36,11 @@
 
 #UploadStepCheckNames(ng-show='step === "CheckNames"')
 	.tab-header
-		h3.pull-left Namen controleren
+		h3.pull-left {{ ui.upload.checkNames }}
 	hr
-	button(ng-click="uploadStepConfirmNames()", class='btn btn-primary') Verder gaan
+	button(ng-click="uploadStepConfirmNames()", class='btn btn-primary') {{ ui.upload.continue }}
 	#UploadStepCheckTeamMemberNames
-		h4 Team Leden
+		h4 {{ ui.teamup.teamMembers }}
 		form
 			fieldset
 				div(ng-repeat="matchedPerson in matchedTeamMembersByName")
@@ -61,17 +61,17 @@
 
 #UploadStepSelectSheet(ng-show='step === "SelectSheet"')
 	.tab-header
-		h3.pull-left Week kiezen
+		h3.pull-left {{ ui.upload.choiceWeek }}
 	hr
 	div(class="SheetDiv" ng-repeat="sheetName in sheetNames" ng-click="selectSheet(sheetName)") {{ sheetName }}
 
 #UploadStepCheckStructure(ng-show='step === "CheckStructure"')
 	.tab-header
-		h3.pull-left Routes controleren
+		h3.pull-left {{ ui.upload.checkRoutes }}
 	hr
-	button(ng-click="uploadStepCheckNames()", class='btn btn-primary') Verder gaan
+	button(ng-click="uploadStepCheckNames()", class='btn btn-primary') {{ ui.upload.continue }}
 	#UploadStepShowErrors(ng-show="tuSheet.errors.length > 0")
-		h3 Fouten
+		h3 {{ ui.upload.errors }}
 		p(ng-repeat="error in tuSheet.errors")
 			| Foutcode {{ error.code + ": "}}
 			span {{ error.text }}
@@ -91,23 +91,23 @@
 					.SheetRouteTeamMemberNameDiv
 						span
 							| Teamlid:#{' '}
-							span {{ route.teamMemberName ? route.teamMemberName : "niemand" }}
+							span {{ route.teamMemberName ? route.teamMemberName : ui.upload.nobody }}
 					.SheetRouteTeamMemberToggleDiv
 						input(type='checkbox', ng-show='route.teamMemberName', ng-model='route.doInsert', ng-change="toggleRouteInsert()")
 				.SheetTaskDiv(ng-repeat="task in route.tasks")
 					.SheetTaskStartDiv {{ task.backendTask.plannedStartVisitTime | date: 'shortTime'  }}
 					.SheetTaskClientDiv
-						| {{ task.clientName ? ( task.client ? ( task.client.fullName + " (" + (task.clientScore * 100).toFixed() + "%)" ) : task.clientName ) : "niemand" }}
+						| {{ task.clientName ? ( task.client ? ( task.client.fullName + " (" + (task.clientScore * 100).toFixed() + "%)" ) : task.clientName ) : ui.upload.nobody }}
 					.SheetTaskDurationDiv {{ task.duration }}
 					.SheetTaskToggleDiv
 						input(type='checkbox', ng-model='task.doInsert')
 
 #UploadStepCreateTasks(ng-show='step === "CreateTasks"')
 	.tab-header
-		h3.pull-left Taken aanmaken
+		h3.pull-left {{ ui.upload.createTasks }}
 	hr
 	div.taskErrors(ng-show='taskCreateErrors.length > 0')
-		h5 De volgende taken konden niet geupload worden
+		h5 {{ ui.upload.followingTasksNotUploaded }}
 		ul
 			li(ng-repeat='task in taskCreateErrors' class='has-error') {{ task.error.result  }} {{ task.backendTask.plannedStartVisitTime | date: 'dd-MM-yyyy h:mm a' }}
 

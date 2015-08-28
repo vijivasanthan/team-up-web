@@ -46,37 +46,37 @@ aria-hidden='true')
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
 					span.sr-only Close
-				h4#confirmMemberAddModalLabel.modal-title Lidmaatschap wijzigen
+				h4#confirmMemberAddModalLabel.modal-title {{ ui.groups.changeMemberShip }}
 			.modal-body(ng-init='changeMemberTeamOption = 2')
 				p
-					| Wilt u 
+					| {{ ui.groups.doYou }}
 					strong {{ member.firstName }} {{ member.lastName }} 
-					| lid maken van team 
+					| {{ ui.groups.memberOfATeam }}
 					strong {{ [current]|getTeamNameById }}
 					|? 
 				div.radio
 					label
 						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='2')
-						strong Toevoegen
+						strong {{ ui.planboard.add }}
 						span.help-block
 							small
 								i
-									| Deze persoon zal deel uitmaken van de volgende teams
+									| {{ ui.groups.personPartOfTeams }}
 									strong  {{  [current]|getTeamNameById }}, {{ member.teamUuids|getTeamNameById }}
 				div.radio
 					label
 						input.radioButton(type="radio" ng-model='changeMemberTeamOption' value='1')
-						strong Verplaatsen
+						strong {{ ui.groups.replace }}
 						span.help-block
 							small
 								i
-									| Deze persoon zal alleen deel uit maken van team 
+									| {{ ui.groups.personPartOfTeam }}
 									strong {{ [current]|getTeamNameById }}
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='changeMemberTeam(member, changeMemberTeamOption)') Wijzigen
+				ng-click='changeMemberTeam(member, changeMemberTeamOption)') {{ ui.profile.edit }}
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
@@ -230,10 +230,10 @@ aria-hidden='true')
 				div.btn-group.pull-right
 					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
 						ng-click='userType = "NEW"')
-						| Nieuw
+						| {{ ui.teamup.new }}
 					button.btn.btn-primary(focus-on-click='search-query', class='{{(userType == "EXISTING") && "active"}}',
 						ng-click='userType = "EXISTING"')
-						| Bestaand
+						| {{ ui.teamup.existing }}
 			hr
 			div(ng-show='userType == "EXISTING"')
 				p(ng-show='! findMemberSubmit') {{ ui.teamup.howToSearchMembers }}
@@ -293,7 +293,7 @@ aria-hidden='true')
 										ng-options='r.id as r.label for r in roles')
 											option(value='') {{ui.teamup.chooseRole}}
 								.form-group(ng-class="{ 'has-error' : teamMemberForm.email.$invalid && !teamMemberForm.email.$pristine }")
-									label.control-label E-mail
+									label.control-label {{ ui.profile.email }}
 									.controls
 										input.span3.form-control(type='email',
 										name='email',

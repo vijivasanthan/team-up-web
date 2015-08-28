@@ -15,7 +15,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='removeContact(_contact)') Verwijderen
+				ng-click='removeContact(_contact)') {{ uit.teamup.del }}
 
 #confirmClientModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -34,7 +34,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteClient(_clientId)') Verwijderen
+				ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
 
 #confirmClientGroupModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -180,9 +180,9 @@ aria-hidden='true')
 								| {{ui.teamup.confirms.deleteClient}}
 							.modal-footer
 								button.btn.btn-default(type='button',
-								data-dismiss='modal') Annuleren
+								data-dismiss='modal') {{ uit.teamup.cancel }}
 								button.btn.btn-primary(type='button',
-								ng-click='deleteClient(_clientId)') Verwijderen
+								ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
 				span.muted.pull-right
 					small
 						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}

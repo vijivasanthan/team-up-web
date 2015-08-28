@@ -138,7 +138,7 @@ define(
                 reader.readAsArrayBuffer(f);
               }
               $scope.step = "ProcessFile";
-              addBreadcrumb('Bestand verwerken', 'file');
+              addBreadcrumb($rootScope.ui.upload.processFile, 'file');
               $scope.$apply();
             }
           }
@@ -292,7 +292,7 @@ define(
 
           function process_wb(workbook)
           {
-            addBreadcrumb('Week kiezen', 'chooseWeek');
+            addBreadcrumb($rootScope.ui.upload.choiceWeek, 'chooseWeek');
             $scope.step = "SelectSheet";
             $scope.sheetNames = Object.keys(workbook.Sheets);
             $scope.workbook = workbook;
@@ -301,7 +301,7 @@ define(
           $scope.selectSheet = function (sheetName)
           {
             $scope.step = "ProcessSheet";
-            addBreadcrumb('Sheet verwerken', 'processSheet');
+            addBreadcrumb($rootScope.ui.upload.processSheet, 'processSheet');
 
             function processSheet()
             {
@@ -327,14 +327,14 @@ define(
           $scope.uploadStepCheckStructure = function ()
           {
             $scope.step = "CheckStructure";
-            addBreadcrumb('Routes controleren', 'checkRoutes');
+            addBreadcrumb($rootScope.ui.upload.checkRoutes, 'checkRoutes');
             //showRoutes($scope.tuSheet);
           }
 
           $scope.uploadStepCheckNames = function ()
           {
             $scope.step = "CheckNames";
-            addBreadcrumb('Namen controleren', 'checkNames');
+            addBreadcrumb($rootScope.ui.upload.checkNames, 'checkNames');
             //TODO check check check
             $scope.tuSheet.matchTeamMembers();
             $scope.tuSheet.matchClients();
@@ -346,10 +346,10 @@ define(
           $scope.textForTaskUploadStatus = function (stat)
           {
             var translations = {
-              "failed": "mislukt",
-              "open": "open",
-              "busy": "bezig",
-              "success": "gelukt"
+              "failed": $rootScope.ui.upload.failed,
+              "open": $rootScope.ui.upload.open,
+              "busy": $rootScope.ui.upload.busy,
+              "success": $rootScope.ui.upload.passed
             };
             return translations[stat];
           }
@@ -357,7 +357,7 @@ define(
           $scope.uploadStepConfirmNames = function ()
           {
             $scope.step = "CreateTasks";
-            addBreadcrumb('Taken aanmaken', 'createTasks');
+            addBreadcrumb($rootScope.ui.upload.createTasks, 'createTasks');
             $scope.tuSheet.uploadTasks();
           }
 
@@ -569,7 +569,7 @@ define(
             this.periodHeaderRow = 1;
             this.minimalMatchScore = 0.1;
             this.maxRange = XLSX.utils.decode_range(sheet['!ref']);
-            this.dayparts = ["ochtend", "namiddag", "avond", "middag", "nacht"];
+            this.dayparts = ['ochtend', 'namiddag', 'avond', 'middag', 'nacht'];
             this.periodHeaderRows = {};
             this.days = [];
             this.teamMemberNames = [];
@@ -985,7 +985,7 @@ define(
                           plannedStartVisitTime: null,
                           plannedEndVisitTime: null,
                           assignedTeamUuid: this.myTeamUuid,
-                          description: 'Geimporteerd vanuit een spreadsheet',
+                          description: $rootScope.ui.importedFromASpreadSheet,
                         },
                         clientName: null,
                         duration: 0,
@@ -1012,21 +1012,21 @@ define(
                             {
                               this.errors.push({
                                 code: 1001,
-                                text: "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een tijdstip werd verwacht."
+                                text: $rootScope.upload.expectationTime(cellName)
                               });
                             }
                             else if (subColNo == 0)
                             {
                               this.errors.push({
                                 code: 1002,
-                                text: "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een clientnaam werd verwacht."
+                                text: $rootScope.upload.expectationClientName(cellName)
                               });
                             }
                             else if (subColNo == 1)
                             {
                               this.errors.push({
                                 code: 1003,
-                                text: "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een aantal minuten werd verwacht."
+                                text: $rootScope.upload.expectationMinutes(cellName)
                               });
                             }
                             break;
@@ -1035,14 +1035,14 @@ define(
                             {
                               this.errors.push({
                                 code: 1004,
-                                text: "Er is een getal gevonden in cell " + cellName + ", terwijl er een tijdstip werd verwacht."
+                                text: $rootScope.upload.expectationTime(cellName)
                               });
                             }
                             else if (subColNo == 0)
                             {
                               this.errors.push({
                                 code: 1005,
-                                text: "Er is een getal gevonden in cell " + cellName + ", terwijl er een clientnaam werd verwacht."
+                                text: $rootScope.upload.expectationClientName(cellName)
                               });
                             }
                             else if (subColNo == 1)
@@ -1053,7 +1053,7 @@ define(
                           case "e":
                             this.errors.push({
                               code: 1006,
-                              text: "Er is een fout gevonden in cell " + cellName + ": " + cell.v
+                              text: $rootScope.upload.foundIntNeedString + cellName + ": " + cell.v
                             });
                             break;
                           case "s":
@@ -1065,7 +1065,7 @@ define(
                               {
                                 this.errors.push({
                                   code: 1007,
-                                  text: "Het is niet mogelijk om het tijdstip in cell " + cellName + " te lezen."
+                                  text: readError(cellName)
                                 });
                                 foundTask = null;
                               }
@@ -1122,7 +1122,7 @@ define(
               {
                 this.errors.push({
                   code: 1009,
-                  text: "Er zijn " + this.nofUnassignedRoutes + " routes waaraan nog geen teamlid is toegekend."
+                  text: $rootScope.upload.nofUnassignedRoutes(this.nofUnassignedRoutes)
                 });
               }
             }
@@ -1227,7 +1227,7 @@ define(
                   {
                     this.errors.push({
                       code: 1008,
-                      text: "Er is een onbekende fout opgetreden: " + error
+                      text: $rootScope.ui.upload.unknownError + error
                     });
                     console.log(error);
                     console.log(error.stack);

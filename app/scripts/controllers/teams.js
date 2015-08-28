@@ -665,14 +665,14 @@ define(
         {
           $scope.roles = [{
             id: '2',
-            label: 'team lid'
+            label: $rootScope.ui.teamup.teamMember
           }];
 
           if($rootScope.app.resources.role == 1)
           {
             $scope.roles.push({
               id: '1',
-              label: 'coordinator'
+              label: $rootScope.ui.teamup.coordinator
             });
           }
         }

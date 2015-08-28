@@ -33,7 +33,7 @@ define(
           loading_everything: 'Finish loading!',
           logout: 'Log out',
           loading: 'Loading..',
-          loading_clientGroups: 'Loading clientgroups...',
+          loading_clientGroups: 'Loading client groups...',
           loading_clients: 'Loading clients',
           loading_teams: 'Loading teams...',
           loading_tasks: 'Loading tasks...'
@@ -65,6 +65,7 @@ define(
           accessible: 'Accessible'
         },
         agenda: {
+          planboard: 'Agenda',
           currentAmountReachable: 'Current ammount reachable ',
           amountOfPeopleWished: 'Ammount of people wished',
           requiredPeople: 'Required people',
@@ -246,9 +247,9 @@ define(
           {
             if (!_.isUndefined(options))
             {
-              var html = 'Are you sure you want the tasks of ' + options.range.start + ' t/m ' + options.range.end;
+              var html = 'Are you sure you want to delete the tasks of ' + options.range.start + ' till ' + options.range.end;
               html += ' from ' + options.group + ' ' + options.name;
-              html += ' want to delete?';
+              html += '?';
             }
 
             return html;
@@ -265,7 +266,7 @@ define(
             return html;
           },
           noTasksFounded: 'No tasks found in given range.',
-          removeTasksTitle: 'Removed tasks'
+          removeTasksTitle: 'Remove tasks'
         },
         message: {
           messages: 'Messages',
@@ -335,6 +336,12 @@ define(
           send: 'send'
         },
         groups: {
+          changeMemberShip: 'Change membership',
+          doYou: 'Do you ',
+          memberOfATeam: ' like to be part of a team ',
+          personPartOfTeams: 'This person will be part of the following teams ',
+          replace: 'Replace',
+          personPartOfTeam: 'This person will only be part of team ',
           groups: 'Groups',
           newGroup: 'New group',
           newMember: 'New teammember',
@@ -467,7 +474,7 @@ define(
           teamTelephone: {
             setReachabilityPhone: 'How do I set my reachability by phone?',
             setReachabilityWeb: 'How do I set my reachability in the web application?',
-            changeReachabilityTeamMember: 'How do I change the reachability of a teammamber?',
+            changeReachabilityTeamMember: 'How do I change the reachability of a teammember?',
             changeCallOrderTeam: 'How do I change the call order of my team?',
             changeCallOptions: 'How do I change the call option of my team?'
           },
@@ -505,19 +512,27 @@ define(
           settings: 'settings'
         },
         teamup: {
+          clientGroup: 'Client group',
+          client: 'Client',
+          coordinator: 'Coordinator',
+          teamMember: 'Team member',
+          teamMembers: 'Team members',
+          help: "Help",
+          'new': 'New',
+          'existing': 'Existing',
           teams: 'Teams',
-          selectTeam: 'Select team',
+          selectTeam: 'Select a team',
           seconds: 'seconds',
           hour: 'hour',
-          clients: 'Cliënts',
+          clients: 'Clients',
           order: 'Order',
           logs: 'Logs',
           options: 'Options',
-          selectClientGroup: 'Select a cliëntgroup',
+          selectClientGroup: 'Select a client group',
           loadMembersByName: 'Loading members...',
           loadingMembers: 'searching members...',
           howToSearchMembers: 'Search members by name.',
-          selectClientGroup: 'Select een cliëntgroup',
+          selectClientGroup: 'Select a client group',
           manage: 'Manage',
           teamTelephone: 'TeamTelephone',
           chooseTeam: 'Select a team',
@@ -556,7 +571,7 @@ define(
           func: 'Function',
           chooseFunction: 'Choose function',
           newClientGroup: 'New client group',
-          newClient: 'New cliënt',
+          newClient: 'New client',
           reports: 'Reports',
           report: 'Report',
           noClients: 'No clients in this group',
@@ -565,7 +580,7 @@ define(
           createClientGroup: 'Save',
           contacts: 'Contacts',
           Number: 'Number',
-          clientProfileUrl: 'URL Cliëntenprofile',
+          clientProfileUrl: 'URL Client profile',
           addContact: 'Add contact person',
           editContact: 'Edit contact person',
           saveClient: 'Save',
@@ -582,7 +597,7 @@ define(
           clinetInfoFill: 'Please fill in client information (name, telephone)',
           savingClient: 'Saving client...',
           clientSubmitError: 'Error creating new client.',
-          clientGroups: 'Cliënt groups',
+          clientGroups: 'Client groups',
           saveClientGroup: 'Saving client group...',
           deleteClientFromClientGroup: 'Client is deleted',
           deletingClientFromClientGroup: 'Deleting client form client group...',
@@ -745,6 +760,54 @@ define(
             '34': 'Could not generate scenario'
           }
       },
+        upload: {
+          chooseFile: 'Choose file',
+          processFile: 'Process file',
+          choiceWeek: 'Choose week',
+          processSheet: 'Process sheet',
+          checkRoutes: 'Check routes',
+          dragSpreadSheet: 'Drag a spreadsheet (XLSX, XLSM or XLSB) to this point',
+          checkRoutes: 'Checking routes',
+          continue: 'Continue',
+          checkNames: 'Checking names',
+          passed: 'passed',
+          failed: 'failed',
+          busy: 'busy',
+          open: 'open',
+          uploadSpreadSheet: 'upload spreadsheet...',
+          nobody: 'Nobody',
+          createTasks: 'Create tasks',
+          followingTasksNotUploaded: "The next tasks couldn't be uploaded",
+          morning: "morning",
+          noon: "noon",
+          evening: "evening",
+          afternoon: "afternoon",
+          night: "night",
+          importedFromASpreadSheet: 'Imported from spreadsheet',
+          expectationTime: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there is a point in time expected.";
+          },
+          expectationClientName: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there was a clientname expected.";
+          },
+          expectationMinutes: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there are a amount of minutes expected";
+          },
+          foundIntNeedString: "There is a error found in ",
+          readError: function(cellName)
+          {
+            return "It's not possible to read a point in time in cell " + cellName + " te lezen.";
+          },
+          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          {
+            return  "There are " + nofUnassignedRoutes + " routes where a teammember is assigned to.";
+          },
+          unknownError: "A unknown error is occured: ",
+          errors: 'Errors'
+        },
         options: {
           title: 'Settings ',
           teamEmail: 'Team email',
@@ -781,6 +844,27 @@ define(
           voicemailDetectionInfo: 'When the rinkeltime is 15 seconds or more it is recommended for the teammebers to disable their personal voicemail or to use the personal voicemail prevention. Enabling the perosnal voicemail can be done via the phone provider.'
         },
         task: {
+          timeframe: 'Timeframe',
+          status: 'Status',
+          description: 'Description',
+          createdBy: 'Created by',
+          name: 'Name',
+          hasToload: ' are loading..',
+          showArchivedTasks: 'Show archieved tasks',
+          showOnlyNotAssignedTasks: 'Show only the not assigned tasks',
+          member: 'Member',
+          thereAreAmountTasks: function(amountTasks)
+          {
+            if(amountTasks == 1)
+            {
+              return "There is " + amountTasks + " task.";
+            }
+            else
+            {
+              return "There are " + amountTasks + " tasks."
+            }
+          },
+          carer: 'Carer',
           information: 'Information',
           noTasks: 'No tasks',
           clientName: 'Client',
@@ -1270,6 +1354,12 @@ define(
           send: 'Versenden'
         },
         groups: {
+          changeMemberShip: 'Change membership',
+          doYou: 'Do you ',
+          memberOfATeam: ' like to be part of a team ',
+          personPartOfTeams: 'This person will be part of the following teams ',
+          replace: 'Replace',
+          personPartOfTeam: 'This person will only be part of team ',
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
@@ -1444,6 +1534,14 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          clientGroup: 'Clientgrupe',
+          client: 'Client',
+          coordinator: 'Coordinator',
+          teamMember: 'Team member',
+          teamMembers: 'Team members',
+          help: "Help",
+          new: 'New',
+          existing: 'Existing',
           apply: 'Anwenden',
           hour: 'Stunde',
           teams: 'Gruppen',
@@ -1684,7 +1782,76 @@ define(
             '34': 'Could not generate scenario'
           },
         },
+        upload: {
+          chooseFile: 'Choose file',
+          processFile: 'Process file',
+          choiceWeek: 'Choose week',
+          processSheet: 'Process sheet',
+          checkRoutes: 'Check routes',
+          dragSpreadSheet: 'Drag a spreadsheet (XLSX, XLSM or XLSB) to this point',
+          checkRoutes: 'Checking routes',
+          continue: 'Continue',
+          checkNames: 'Checking names',
+          passed: 'passed',
+          failed: 'failed',
+          busy: 'busy',
+          open: 'open',
+          uploadSpreadSheet: 'upload spreadsheet...',
+          nobody: 'Nobody',
+          createTasks: 'Create tasks',
+          followingTasksNotUploaded: "The next tasks couldn't be uploaded",
+          morning: "morning",
+          noon: "noon",
+          evening: "evening",
+          afternoon: "afternoon",
+          night: "night",
+          importedFromASpreadSheet: 'Imported from spreadsheet',
+          expectationTime: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there is a point in time expected.";
+          },
+          expectationClientName: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there was a clientname expected.";
+          },
+          expectationMinutes: function(cellName)
+          {
+            return "There is a yes/no value found in cell " + cellName + ", while there are a amount of minutes expected";
+          },
+          foundIntNeedString: "There is a error found in ",
+          readError: function(cellName)
+          {
+            return "It's not possible to read a point in time in cell " + cellName + " te lezen.";
+          },
+          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          {
+            return  "There are " + nofUnassignedRoutes + " routes where a teammember is assigned to.";
+          },
+          unknownError: "A unknown error is occured: ",
+          errors: 'Errors'
+        },
         task: {
+          timeframe: 'Tijdsbestek',
+          status: 'Status',
+          description: 'Beschrijving',
+          createdBy: 'Gemaakt door',
+          name: 'Naam',
+          hasToload: ' aan het laden..',
+          showArchivedTasks: 'Toon gearchiveerde taken',
+          showOnlyNotAssignedTasks: 'Toon alleen niet toegewezen taken',
+          member: 'Lid',
+          thereAreAmountTasks: function(amountTasks)
+          {
+            if(amountTasks == 1)
+            {
+              return "Er is " + amountTasks + " taak.";
+            }
+            else
+            {
+              return "Er zijn " + amountTasks + " taken."
+            }
+          },
+          carer: 'Verzorger',
           information: 'Informatie',
           noTasks: 'Geen taken',
           clientName: 'Cliënt',
@@ -2052,7 +2219,7 @@ define(
             return html;
           },
           noTasksFounded: 'Geen taken gevonden in de opegegeven range.',
-          removeTasksTitle: 'Verwijderen taken'
+          removeTasksTitle: 'Taken verwijderen'
         },
         message: {
           messages: 'Berichten',
@@ -2122,6 +2289,12 @@ define(
           send: 'Versturen'
         },
         groups: {
+          changeMemberShip: 'Lidmaatschap wijzigen',
+          doYou: 'Wilt u ',
+          memberOfATeam: 'lid maken van team ',
+          personPartOfTeams: 'Deze persoon zal deel uitmaken van de volgende teams ',
+          replace: 'Verplaatsen',
+          personPartOfTeam: 'Deze persoon zal alleen deel uit maken van team ',
           groups: 'Groepen',
           newGroup: 'Nieuwe groep',
           newMember: 'Nieuw teamlid',
@@ -2292,6 +2465,15 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          clientGroup: 'Cliëntgroep',
+          client: 'Cliënt',
+          coordinator: 'Coordinator',
+          teamMember: 'Team lid',
+          teamMembers: 'Team Leden',
+          help: "Help",
+          't/m': 'till',
+          'new': 'Nieuw',
+          'existing': 'Bestaand',
           teams: 'Teams',
           selectTeam: 'Selecteer team',
           hour: 'uur',
@@ -2570,6 +2752,27 @@ define(
           voicemailDetectionInfo: 'Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen of om gebruik te maken van de persoonlijke voicemailpreventie. Het uitzetten van de persoonlijke voicemail (van de werktelefoon) kunt u regelen bij de telefoonprovider.'
         },
         task: {
+          timeframe: 'Tijdsbestek',
+          status: 'Status',
+          description: 'Beschrijving',
+          createdBy: 'Gemaakt door',
+          name: 'Naam',
+          hasToload: ' aan het laden..',
+          showArchivedTasks: 'Toon gearchiveerde taken',
+          showOnlyNotAssignedTasks: 'Toon alleen niet toegewezen taken',
+          member: 'Lid',
+          thereAreAmountTasks: function(amountTasks)
+          {
+            if(amountTasks == 1)
+            {
+              return "Er is " + amountTasks + " taak.";
+            }
+            else
+            {
+              return "Er zijn " + amountTasks + " taken."
+            }
+          },
+          carer: 'Verzorger',
           information: 'Informatie',
           noTasks: 'Geen taken',
           clientName: 'Cliënt',
@@ -2612,6 +2815,54 @@ define(
           loadTeam: 'Team laden...',
           orderSaved: 'Volgorde opgeslagen',
           noMembers: 'Er zijn geen leden in dit team.'
+        },
+        upload: {
+          chooseFile: 'Bestand kiezen',
+          processFile: 'Bestand verwerken',
+          choiceWeek: 'Week kiezen',
+          processSheet: 'Sheet verwerken',
+          checkRoutes: 'routes controleren',
+          dragSpreadSheet: 'Sleep een spreadsheet (XLSX, XLSM of XLSB) hier naar toe',
+          checkRoutes: 'Checking routes',
+          continue: 'Verder gaan',
+          checkNames: 'Checking names',
+          passed: 'gelukt',
+          failed: 'gefaald',
+          busy: 'bezig',
+          open: 'open',
+          uploadSpreadSheet: 'spreadsheet uploaden...',
+          nobody: 'Niemand',
+          createTasks: 'Taken aanmaken',
+          followingTasksNotUploaded: 'De volgende taken konden niet geupload worden',
+          morning: "ochtend",
+          noon: "namiddag",
+          evening: "avond",
+          afternoon: "middag",
+          night: "nacht",
+          importedFromASpreadSheet: 'Geimporteerd vanuit een spreadsheet',
+          expectationTime: function(cellName)
+          {
+            return "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een tijdstip werd verwacht.";
+          },
+          expectationClientName: function(cellName)
+          {
+            return "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een clientnaam werd verwacht.";
+          },
+          expectationMinutes: function(cellName)
+          {
+            return "Er is een ja/nee waarde gevonden in cell " + cellName + ", terwijl er een aantal minuten werd verwacht.";
+          },
+          foundIntNeedString: "Er is een fout gevonden in cell ",
+          readError: function(cellName)
+          {
+            return "Het is niet mogelijk om het tijdstip in cell " + cellName + " te lezen.";
+          },
+          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          {
+            return  "Er zijn " + nofUnassignedRoutes + " routes waaraan nog geen teamlid is toegekend.";
+          },
+          unknownError: "Er is een onbekende fout opgetreden: ",
+          errors: 'Fouten'
         },
         logs: {
           loadLogs: 'Logs laden...',

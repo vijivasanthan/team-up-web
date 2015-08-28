@@ -229,14 +229,14 @@ div(ng-controller='timeline as taskPlanboard')
 							ng-click='setViewTo(current,"clients")')
 								span.icomoon(data-icon='',
 								aria-hidden='true')
-								|  Clienten
+								|  {{ ui.teamup.clients }}
 							button.btn.btn-primary(type='button',
 							class="{{(views.teams==true) && 'active'}}",
 							data-toggle='tab',
 							ng-click='setViewTo(current,"teams")')
 								span.icomoon(data-icon='',
 								aria-hidden='true')
-								| Teams
+								| {{ ui.teamup.teams }}
 							
 						button.btn.pull-right.btn-danger.marginRightTen(type='button',
 						class="",
@@ -244,7 +244,7 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-show='views.teams',
 						ng-click='confirmDeleteTasks(timeline.range)')
 							span.glyphicon.glyphicon-trash
-							|  Verwijder taken
+							|  {{ ui.planboard.removeTasksTitle }}
 						
 						div#timeline-controls(ng-controller='timeline-navigation')
 							.form-group.has-feedback.pull-left.dateranger.marginLeftTen
