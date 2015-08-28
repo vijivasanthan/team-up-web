@@ -271,7 +271,7 @@ define(
         message: {
           title: 'CHAT',
           messagesLoaded: 'Loading messages...',
-          videoStartedBy: 'Video gesprek gestart door',
+          videoStartedBy: 'Video message started by ',
           messages: 'Messages',
           composeAMessage: 'Compose a message',
           compose: 'Compose',
@@ -853,7 +853,7 @@ define(
           createdBy: 'Created by',
           name: 'Name',
           hasToload: ' are loading..',
-          showArchivedTasks: 'Show archieved tasks',
+          showArchivedTasks: 'Show archived tasks',
           showOnlyNotAssignedTasks: 'Show only the not assigned tasks',
           member: 'Member',
           thereAreAmountTasks: function(amountTasks)
@@ -1295,7 +1295,7 @@ define(
         message: {
           title: 'CHAT',
           messagesLoaded: 'Loading messages...',
-          videoStartedBy: 'Video gesprek gestart door',
+          videoStartedBy: 'Video message started by ',
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
           compose: 'Erstellen',
