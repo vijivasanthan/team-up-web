@@ -6,13 +6,6 @@
 	.tab-header
 		h3 {{ ui.upload.chooseFile }}
 	hr
-	div(style='display:none;')
-		| Output Format:
-		select(name='format')
-			option(value='csv', selected='')  CSV
-			option(value='json')  JSON
-			option(value='form', selected='')  FORMULAE
-		br
 
 	div(id='uploadSheetPicker')
 		button(class="btn btn-primary") {{ ui.upload.uploadSpreadSheet }}
@@ -21,18 +14,6 @@
 
 	#drop(drag-enter-leave='sheetEntering' ondragover='angular.element(this).scope().handleDragover(event)', ondragenter='angular.element(this).scope().handleDragenter(event)', ondrop='angular.element(this).scope().handleDrop(event)')
 		|{{ ui.upload.dragSpreadSheet }}
-	div(style='display:none;')
-		| Advanced Demo Options:
-		// br
-		// | Use Web Workers: (when available)
-		// input(type='checkbox', name='useworker', checked='')
-		br
-		| Use Transferrables: (when available)
-		input(type='checkbox', name='xferable', checked='')
-		br
-		| Use readAsBinaryString: (when available)
-		input(type='checkbox', name='userabs', checked='')
-		br
 
 #UploadStepCheckNames(ng-show='step === "CheckNames"')
 	.tab-header
@@ -50,7 +31,7 @@
 						ng-options="alternative.person as alternative.person.fullName + ' (' + (alternative.score * 100).toFixed() + '%)' for alternative in matchedPerson.alternatives")
 
 	#UploadStepCheckClientNames
-		h4 Cli&euml;nten
+		h4 {{ ui.teamup.clients }}
 		form
 			fieldset
 				div(ng-repeat="matchedPerson in matchedClientsByName")
@@ -73,7 +54,7 @@
 	#UploadStepShowErrors(ng-show="tuSheet.errors.length > 0")
 		h3 {{ ui.upload.errors }}
 		p(ng-repeat="error in tuSheet.errors")
-			| Foutcode {{ error.code + ": "}}
+			| {{ ui.logs.status.error }} {{ error.code + ": "}}
 			span {{ error.text }}
 	#UploadStepShowRoutes
 		.SheetDayDiv(ng-repeat="day in tuSheet.days")
@@ -82,7 +63,7 @@
 				.SheetDayDateDiv {{ day.startDate | date: 'longDate' }}
 				.sheetDayDivHandler
 					.SheetDayNameDiv(ng-show="day.taskExist")
-						span Taken:#{' '} {{ day.doInsert ? 'aan' : 'uit' }}
+						span {{ ui.task.tasks }}:#{' '} {{ day.doInsert ? ui.options.on : ui.options.off }}
 					.SheetDayNameToggleDiv(ng-show="day.taskExist")
 						input(type='checkbox', ng-model='day.doInsert', ng-change="toggleDayInsert(day)")
 			.SheetRouteDiv(ng-repeat="route in day.routes")
@@ -90,7 +71,7 @@
 				.SheetRouteTeamMemberDiv
 					.SheetRouteTeamMemberNameDiv
 						span
-							| Teamlid:#{' '}
+							| {{ ui.teamup.teamMember }}:#{' '}
 							span {{ route.teamMemberName ? route.teamMemberName : ui.upload.nobody }}
 					.SheetRouteTeamMemberToggleDiv
 						input(type='checkbox', ng-show='route.teamMemberName', ng-model='route.doInsert', ng-change="toggleRouteInsert()")

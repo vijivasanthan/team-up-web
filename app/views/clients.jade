@@ -7,7 +7,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteContactTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteContact}}
@@ -26,7 +26,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientFromTeamTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteClientFromTeam}}
@@ -45,7 +45,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientGroupModalLabel.modal-title {{ui.teamup.confirms.deleteClientGroupTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteClientGroup}}
@@ -64,7 +64,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmReportModalLabel.modal-title {{ui.teamup.confirms.deleteReportTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteReport}}
@@ -174,7 +174,7 @@ aria-hidden='true')
 							.modal-header
 								button.close(type='button', data-dismiss='modal')
 									span(aria-hidden='true') ×
-									span.sr-only Close
+									span.sr-only {{ ui.message.close }}
 								h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
 							.modal-body
 								| {{ui.teamup.confirms.deleteClient}}
@@ -380,7 +380,7 @@ aria-hidden='true')
 
 			div(ng-show='client.extraInfo.basic')
 				.tab-header
-					h3.pull-left Cliënt Informatie
+					h3.pull-left {{ ui.task.clientName }} {{ ui.taks.information }}
 				hr
 				p.description {{client.extraInfo.basic || '-' }}
 				br
@@ -553,7 +553,7 @@ aria-hidden='true')
 							value='{{client.clientProfileUrl}}',
 							ng-model='clientmeta.clientProfileUrl')
 					.control-group
-						label.control-label Extra Info
+						label.control-label {{ ui.profile.extra }} {{ ui.task.information }}
 						.controls
 							textarea.span8(style='height: 150px',
 							ng-model='clientmeta.extraInfo.basic')

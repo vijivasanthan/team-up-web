@@ -5,7 +5,7 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteTask}}
@@ -23,7 +23,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#taskModalLabel.modal-title
 					span.text-turq {{task.relatedClient.fullName}}
 					br
@@ -125,7 +125,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				
 			hr
 
-			article(ng-show='tasks.mine.loading'): p {ui.task.myTask}} {{ ui.task.hasToLoad }}
+			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
 
 			article(ng-hide='tasks.mine.loading')
 			

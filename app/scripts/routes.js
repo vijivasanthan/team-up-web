@@ -470,24 +470,27 @@ define(
               controller: 'phones',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Teams', 'TeamUp',
-                  function (Teams, TeamUp)
-                  {
-                    return $q.all([TeamUp._('TTOptionsGet', {second: teamId}), Teams.getAllLocal()])
-                      .then(function (result)
-                      {
-                        return {
-                          teamTelephoneOptions: result[0],
-                          teams: result[1]
-                        }
-                      });
+                data: function ($q, Teams, TeamUp, CurrentSelection)
+                {
+                  var promises = [
+                      TeamUp._('TTOptionsGet', {second: teamId}),
+                      Teams.getAllLocal()
+                    ],
+                    teamId = CurrentSelection.getTeamId();
 
-                    removeActiveClass('.teamMenu');
+                  return $q.all(promises)
+                    .then(function (result)
+                    {
+                      return {
+                        teamTelephoneOptions: result[0],
+                        teams: result[1]
+                      }
+                    });
 
-                    return Teams.queryLocal();
-                  }
-                ]
+                  removeActiveClass('.teamMenu');
+
+                  return Teams.queryLocal();
+                }
               }
             })
 

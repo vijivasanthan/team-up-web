@@ -7,7 +7,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmTeamModalLabel.modal-title {{ui.teamup.confirms.deleteTeamTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteTeam}}
@@ -26,7 +26,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteMember}}
@@ -45,7 +45,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmMemberAddModalLabel.modal-title {{ ui.groups.changeMemberShip }}
 			.modal-body(ng-init='changeMemberTeamOption = 2')
 				p

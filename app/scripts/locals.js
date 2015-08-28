@@ -31,6 +31,7 @@ define(
           loading_Group: 'Loading groups...',
           loading_Members: 'Loading teammembers...',
           loading_everything: 'Finished loading!',
+          loggingOff: 'Logging off',
           logout: 'Log out',
           loading: 'Loading..',
           loading_clientGroups: 'Loading client groups...',
@@ -39,6 +40,8 @@ define(
           loading_tasks: 'Loading tasks...'
         },
         video: {
+          title: 'Video',
+          videoNotLoaded: 'Your videocall could not be loaded.',
           stop: 'Video has stopped'
         },
         dashboard: {
@@ -397,6 +400,10 @@ define(
           searchfor: 'name, surename..'
         },
         profile: {
+          noTeamSelected: 'No team selected',
+          extra: 'Extra ',
+          default: 'Default',
+          back: 'Back',
           profile: 'Profile',
           edit: 'Edit',
           password: 'Password',
@@ -557,7 +564,7 @@ define(
           street: 'Street',
           postCode: 'Zipcode',
           city: 'City',
-          email: 'Email',
+          email: 'E-mail',
           saveMember: 'Save',
           state: 'State',
           states: 'States',
@@ -915,6 +922,17 @@ define(
           loadLogs: 'Loading logs..',
           empty: 'There are no logs',
           filter: 'Filter logs...',
+          amountLogs: function(amount)
+          {
+            if(amount == 1)
+            {
+              return 'There is ' + amount + ' log shown';
+            }
+            else
+            {
+              return 'There are ' + amount + ' logs shown.';
+            }
+          },
           status: {
             sent: 'Sent',
             received: 'Inbox',
@@ -1000,6 +1018,7 @@ define(
           loading_Group: 'Gruppen laden...',
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
+          loggingOff: 'Logging off',
           logout: 'Abmelden',
           loading: 'Laden..',
           loading_clientGroups: 'Patientengruppen laden...',
@@ -1008,6 +1027,8 @@ define(
           loading_tasks: 'Aufgaben laden...'
         },
         video: {
+          title: 'Video',
+          videoNotLoaded: 'Your videocall could not be loaded.',
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -1418,6 +1439,10 @@ define(
           searchfor: 'voornaam, achternaam..'
         },
         profile: {
+          noTeamSelected: 'No team selected',
+          extra: 'Extra',
+          default: 'Default',
+          back: 'Back',
           profile: 'Profil',
           edit: 'ändern',
           password: 'Wachtwoord',
@@ -1905,6 +1930,17 @@ define(
           loadLogs: 'Logs laden...',
           empty: 'Keine Logs vorhanden',
           filter: 'Logs filtern...',
+          amountLogs: function(amount)
+          {
+            if(amount == 1)
+            {
+              return 'There is ' + amount + ' log shown';
+            }
+            else
+            {
+              return 'There are ' + amount + ' logs shown.';
+            }
+          },
           status: {
             sent: 'Ausgehend',
             received: 'Eingehend',
@@ -1992,6 +2028,7 @@ define(
           loading_Members: 'Teamleden laden...',
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
+          loggingOff: 'Logging off',
           loading: 'Laden..',
           loading_clientGroups: 'Cliëntengroepen laden...',
           loading_clients: 'Clienten laden',
@@ -1999,6 +2036,8 @@ define(
           loading_tasks: 'Taken laden...'
         },
         video: {
+          title: 'Video',
+          videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
           stop: 'Het videogesprek is gestopt.'
         },
         dashboard: {
@@ -2356,6 +2395,10 @@ define(
           searchfor: 'voornaam, achternaam..'
         },
         profile: {
+          noTeamSelected: 'Geen team geselecteerd',
+          extra: 'Extra',
+          default: 'Standaard',
+          back: 'Terug',
           profile: 'Profiel',
           edit: 'Wijzigen',
           password: 'Wachtwoord',
@@ -2363,7 +2406,7 @@ define(
           profileView: 'Profiel weergave',
           userGroups: 'Gebruikersgroepen',
           role: 'Functie',
-          email: 'Email',
+          email: 'E-mail',
           phone: 'Telefoon',
           address: 'Adres',
           postcode: 'Postcode',
@@ -2686,6 +2729,7 @@ define(
           },
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.',
+          menu: 'Menu',
           errorCode: {
             '1': 'Onbekende foutmelding',
             '2': 'De Deomeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
@@ -2784,7 +2828,7 @@ define(
           carer: 'Verzorger',
           information: 'Informatie',
           noTasks: 'Geen taken',
-          clientName: 'Cliënt',
+          clientName: 'Cliënt ',
           memberName: 'Lid',
           orderType1: 'Standaard volgorde',
           orderType2: 'Tijd',
@@ -2877,6 +2921,17 @@ define(
           loadLogs: 'Logs laden...',
           empty: 'Er zijn geen logs',
           filter: 'Filter logs...',
+          amountLogs: function(amount)
+          {
+            if(amount == 1)
+            {
+              return 'Er is ' + amount + ' log getoond.';
+            }
+            else
+            {
+              return 'Er zijn ' + amount + ' logs getoond.';
+            }
+          },
           status: {
             sent: 'Uitgaand',
             received: 'Inkomend',

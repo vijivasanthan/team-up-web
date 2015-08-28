@@ -1,6 +1,6 @@
 section#logs
 	.page-header.agenda-timeline
-		h2.nullable Logs
+		h2.nullable {{ ui.teamup.logs }}
 	div
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			label.control-label {{ ui.teamup.chooseTeam }}
@@ -87,4 +87,4 @@ section#logs
 					span.text-muted  {{logs.data.logData.periods.endTime | date: 'medium'}}
 				small.text-muted.pull-right(ng-show='logs.data.logData.logs.length > 0')
 					br
-					i Er zijn {{(logs.data.logData.logs|filter:filtered).length}} logs getoond.
+					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter:filtered).length) }}

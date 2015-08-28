@@ -17,13 +17,13 @@ define(['controllers/controllers'], function (controllers)
 
         members = $rootScope.unique(members);
 
-        if($rootScope.app.resources.role == 1)
-        {
-          teams.unshift({
-            'name': $rootScope.ui.dashboard.everyone,
-            'uuid': everyoneId
-          });
-        }
+        //if($rootScope.app.resources.role == 1)
+        //{
+        //  teams.unshift({
+        //    'name': $rootScope.ui.dashboard.everyone,
+        //    'uuid': everyoneId
+        //  });
+        //}
 
         $scope.groups = teams;
 
