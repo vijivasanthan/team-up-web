@@ -29,7 +29,7 @@ define(
           loading_User: 'Loading user information...',
           loading_Message: 'Loading messages...',
           loading_Group: 'Loading groups...',
-          loading_Members: 'Loading teammembers...',
+          loading_Members: 'Loading team members...',
           loading_everything: 'Finished loading!',
           logout: 'Log out',
           loading: 'Loading..',
@@ -45,7 +45,7 @@ define(
           thisWeek: 'This week',
           welcome: 'Welcome',
           everyone: 'Everyone',
-          newMessage: 'New massage(s)',
+          newMessage: 'New message(s)',
           goToInbox: 'Go to inbox',
           loadingPie: 'Loading pie diagrams...',
           possiblyReachable: 'Possibly reachable ',
@@ -66,14 +66,14 @@ define(
         },
         agenda: {
           planboard: 'Agenda',
-          currentAmountReachable: 'Current ammount reachable ',
-          amountOfPeopleWished: 'Ammount of people wished',
+          currentAmountReachable: 'Current amount reachable ',
+          amountOfPeopleWished: 'Amount of people wished',
           requiredPeople: 'Required people',
           newAvail: 'New availability',
           day: 'Day',
           week: 'Week',
           month: 'Month',
-          updateAvail: 'Update availibility',
+          updateAvail: 'Update availability',
           from: 'From',
           till: 'Till',
           state: 'State',
@@ -114,14 +114,14 @@ define(
           dataRangeStart: 'Date range start: ',
           DataRangeEnd: 'Date range end: ',
           loadingTimeline: 'Loading Timeline...',
-          addTimeSlot: 'Add timeslot...',
-          slotAdded: 'New timeslot is successfully added',
-          changingSlot: 'Edit timeslot...',
-          slotChanged: 'Timeslot successfully changed.',
+          addTimeSlot: 'Add time slot...',
+          slotAdded: 'New time slot is successfully added',
+          changingSlot: 'Edit time slot...',
+          slotChanged: 'Time slot successfully changed.',
           changingWish: 'Wish is being changed...',
           wishChanged: 'The wish is successfully changed.',
-          deletingTimeslot: 'Deleting timeslot...',
-          timeslotDeleted: 'Timeslot is successfully deleted.',
+          deletingTimeslot: 'Deleting time slot...',
+          timeslotDeleted: 'Time slot is successfully deleted.',
           refreshTimeline: 'Refresh timeline...',
           preCompilingStortageMessage: 'Precompiling Stortage Message',
           weeklyPlanning: 'Weekly planning',
@@ -142,10 +142,10 @@ define(
           daterangerNext7Days: 'Next seven days',
           rangeInfoTotalSelectedDays: 'Total selected days: ',
           rangeInfoTime: 'Time: ',
-          rangeInfoWeekNumber: 'Weeknumber: ',
+          rangeInfoWeekNumber: 'Week number: ',
           rangeInfoMonth: 'Month: ',
           rangeInfoTotalDays: ', Total number of days: ',
-          query: 'There are problems synchronising the agenda. Please refresh your browser the page.',
+          query: 'There are problems synchronizing the agenda. Please refresh your browser the page.',
           pastAdding: 'It is not possible to plan in the past!',
           errorAdd: 'Error with adding a new planning!',
           errorChange: 'Error with changing planning!',
@@ -176,7 +176,7 @@ define(
           state: 'State',
           customDates: 'Custom dates',
           selectAState: 'select a state',
-          reoccuring: 'Reoccuring',
+          reoccuring: 'Reoccurring',
           lessPeople: 'There are $v people less than needed.',
           samePeople: 'There are as much people as needed.',
           morePeople: 'There are $v people more than needed.',
@@ -191,7 +191,7 @@ define(
           setWish: 'Set wish',
           timeline: 'Timeline',
           statistics: 'Statistics',
-          barCharts: 'Barcharts',
+          barCharts: 'Bar charts',
           wishes: 'Wishes',
           legenda: 'Legend',
           group: 'Group',
@@ -215,23 +215,23 @@ define(
           daterangerToday: 'Today',
           daterangerTomorrow: 'Tomorrow',
           daterangerLast7Days: 'Last 7 days',
-          daterangerYesterday: 'Yesterdag',
+          daterangerYesterday: 'Yesterday',
           daterangerNext3Days: 'Next 3 days',
           daterangerNext7Days: 'Next 7 days',
           loadingTimeline: 'Loading timeline...',
           rangeInfoTotalSelectedDays: 'Total amount of selected days: ',
           rangeInfoTime: 'Time: ',
-          rangeInfoWeekNumber: 'Weeknumber: ',
+          rangeInfoWeekNumber: 'Week number: ',
           rangeInfoMonth: 'Month: ',
           rangeInfoTotalDays: ', Total amount of days: ',
-          addTimeSlot: 'Add timeslot...',
-          slotAdded: 'Timeslot successfully added.',
-          changingSlot: 'Edit timeslot...',
-          slotChanged: 'Timeslot successfully changed.',
+          addTimeSlot: 'Add time slot...',
+          slotAdded: 'Time slot successfully added.',
+          changingSlot: 'Edit time slot...',
+          slotChanged: 'Time slot successfully changed.',
           changingWish: 'Edit wish...',
           wishChanged: 'Wish successfully changed.',
-          deletingTimeslot: 'Delete timeslot...',
-          timeslotDeleted: 'Timeslot successfully deleted.',
+          deletingTimeslot: 'Delete time slot...',
+          timeslotDeleted: 'Time slot successfully deleted.',
           refreshTimeline: 'Refresh timeline...',
           preCompilingStortageMessage: 'Precompiling stortage message',
           weeklyPlanning: 'My weekly planning',
@@ -240,7 +240,7 @@ define(
           planningOf: 'Planning of ',
           minNumber: 'Min needed people',
           time: 'Time: ',
-          weekNumber: 'Weeknumber: ',
+          weekNumber: 'Week number: ',
           monthNumber: 'Month number: ',
           totalDays: 'Total days: ',
           removeTasksRange: function (options)
@@ -365,7 +365,7 @@ define(
           email: 'Email',
           phone: 'Telephone',
           address: 'Address',
-          postCode: 'Zipcode',
+          postCode: 'Zip code',
           tel: 'Phone number',
           city: 'City',
           userName: 'Username',
@@ -380,7 +380,7 @@ define(
           noMembers: 'There are no members',
           removeSelectedMembers: 'Remove selected members',
           memberCount: 'There are $v members',
-          searchingMembers: 'Searching for teammembers ...',
+          searchingMembers: 'Searching for team members ...',
           addingNewMember: 'Adding new member...',
           memberAdded: 'Member successfully added to group',
           refreshingGroupMember: 'Refreshing groups- and memberlist...',
@@ -393,8 +393,8 @@ define(
           memberRegstered: 'Member successfully registered .',
           deleting: 'Deleting group...',
           deleted: 'Group successfully deleted',
-          filterMembers: 'Filter teammembers...',
-          searchfor: 'name, surename..'
+          filterMembers: 'Filter team members...',
+          searchfor: 'name, surname..'
         },
         profile: {
           profile: 'Profile',
@@ -407,7 +407,7 @@ define(
           email: 'Email',
           phone: 'Telephone',
           address: 'Address',
-          postcode: 'Zipcode',
+          postcode: 'Zip code',
           city: 'City',
           editProfile: 'Edit profile',
           name: 'Name',
@@ -432,12 +432,12 @@ define(
           passChanged: 'Password successfully changed',
           passwrong: 'Wrong password! Try again',
           currentPassWrong: 'The entered old password does not match the current! Try again',
-          newTimeslotAdded: 'New timeslot successfully added',
-          changingTimeslot: 'Changing timeslot...',
-          timeslotChanged: 'Timeslot successfully changed',
+          newTimeslotAdded: 'New time slot successfully added',
+          changingTimeslot: 'Changing time slot...',
+          timeslotChanged: 'Time slot successfully changed',
           exampleBirthDate: 'Example birthdate: 01-01-2001',
-          firstName: 'Firstname',
-          lastName: 'Lastname',
+          firstName: 'First name',
+          lastName: 'Last name',
           editProfileImg: 'Edit profile picture',
           profileImgSuccessfullyUploaded: 'The profile picture is successfully uploaded',
           loadUploadURL: 'Load photo upload URL',
@@ -451,13 +451,13 @@ define(
           changePassWord: 'Change password',
           safePassword: 'Save password',
           oldPassword: 'Old password',
-          pincode: 'pincode',
-          pincodeInUse: 'This pincode is in use. Please choose another one',
-          pincodeNotValid: 'Please enter a valid pincode! (At least 4 digits, maximum 8 digits)',
-          pincodeCorrect: 'This pincode is either in use or not valid. Please enter a valid pincode',
-          pincodeInfo: 'The pincode above is used for TeamUp/TeamTelephone Call-in and is only requested when you are calling with a telephone number unknown by the system',
+          pincode: 'pin code',
+          pincodeInUse: 'This pin code is in use. Please choose another one',
+          pincodeNotValid: 'Please enter a valid pin code! (At least 4 digits, maximum 8 digits)',
+          pincodeCorrect: 'This pin code is either in use or not valid. Please enter a valid pin code',
+          pincodeInfo: 'The pin code above is used for TeamUp/TeamTelephone Call-in and is only requested when you are calling with a telephone number unknown by the system',
           duplicateNumber: 'This phone number is already in use by another user. Please enter an another phone number',
-          pincodeInfoPhone: 'The last 4 digits of this phonenumber will be used as pincode, unless the pincode is manually entered'
+          pincodeInfoPhone: 'The last 4 digits of this phone number will be used as pin code, unless the pin code is manually entered'
         },
         settings: {
           settings: 'Settings',
@@ -546,16 +546,16 @@ define(
           team: 'Team',
           del: 'Delete',
           noMembers: 'No members in this team',
-          newTeam: 'New Team',
-          teamName: 'Teamname',
+          newTeam: 'New team',
+          teamName: 'Team name',
           createTeam: 'Create team',
-          newMember: 'New teammember',
+          newMember: 'New team member',
           noMembersFound: 'No members found with the given search criteria',
           name: 'Name',
           role: 'Role',
           phone: 'Telephone',
           street: 'Street',
-          postCode: 'Zipcode',
+          postCode: 'Zip code',
           city: 'City',
           email: 'Email',
           saveMember: 'Save',
@@ -567,7 +567,7 @@ define(
           dataChanged: 'Data is changed',
           teamSubmitError: 'Error while creating: ',
           queryTeamError: 'Error while searching the teams',
-          teamNamePrompt1: 'Fill in a teamname',
+          teamNamePrompt1: 'Fill in a team name',
           teamNamePrompt2: 'Please add contact data',
           cancel: 'Cancel',
           chooseRole: 'Choose a role',
@@ -578,7 +578,7 @@ define(
           reports: 'Reports',
           report: 'Report',
           noClients: 'No clients in this group',
-          noClientGroup: 'No clientgroup',
+          noClientGroup: 'No client group',
           TeamClients: 'TEAMS - CLIENTS',
           createClientGroup: 'Save',
           contacts: 'Contacts',
@@ -609,7 +609,7 @@ define(
           noTeam: 'No team',
           searchMembers: 'Search members...',
           editClient: 'Edit client',
-          loadingNumber: 'Loading teamtelephone number...',
+          loadingNumber: 'Loading team telephone number...',
           loadClients: 'Loading clients...',
           birthdayError: 'Error in birthday.',
           map: 'map',
@@ -663,30 +663,30 @@ define(
             deleteContactTitle: 'Delete contact',
             deleteContact: 'Are you sure you want to delete the contact?',
             remove: 'Delete',
-            addTeamMemberCodeAsPhoneTitle: 'Edit pincode',
-            addTeamMemberCodeAsPhone: 'The entered pincode does not match with the last four digits of your telephone number ,',
+            addTeamMemberCodeAsPhoneTitle: 'Edit pin code',
+            addTeamMemberCodeAsPhone: 'The entered pin code does not match with the last four digits of your telephone number ,',
             photoRemoveTitle: 'Remove profile photo',
             photoRemoveBody: 'Are you sure you want to remove the profile photo?',
             yes: 'Yes',
             no: 'No, cancel',
             cancel: 'Cancel',
             day: {
-            sunday: 'sunday',
-              monday: 'monday',
-              tuesday: 'tuesday',
-              wednesday: 'wednesday',
-              thursday: 'thursday',
-              friday: 'friday',
-              saturday: 'saterday'
+            sunday: 'Sunday',
+              monday: 'Monday',
+              tuesday: 'Tuesday',
+              wednesday: 'Wednesday',
+              thursday: 'Thursday',
+              friday: 'Friday',
+              saturday: 'Saterday'
             },
             shortDay: {
-            su: "su",
-              mo: "mo",
-              tu: "tu",
-              we: "we",
-              th: "th",
-              fr: "fr",
-              su: "su"
+              su: "Su",
+              mo: "Mo",
+              tu: "Tu",
+              we: "We",
+              th: "Th",
+              fr: "Fr",
+              sa: "Sa"
           }
           },
           deletingTeam: 'Deleting team...',
@@ -704,7 +704,7 @@ define(
           editClientImg: 'Edit client profile photo',
           newTask: 'New task',
           updateTask: 'Edit task',
-          managePanelchangePrompt: 'Data is changed. Click on \'Ok\' to continue, \'Cancel\' to stay.',
+          managePanelchangePrompt: 'Data is changed. Click on \'OK\' to continue, \'Cancel\' to stay.',
           pagePrevious: 'Previous',
           pageNext: 'Next',
           pageFirst: 'First',
@@ -720,8 +720,8 @@ define(
             'unknown': 'Unknown',
             'reachable': 'Reachable',
             'possibly_reachable': 'Possibly reachable',
-            'unreachable': 'unreachable',
-            'unavailable': 'unavailable',
+            'unreachable': 'Unreachable',
+            'unavailable': 'Unavailable',
             'unknown': 'Offline'
           },
           reportNotExists: 'Report does not exist',
@@ -793,7 +793,7 @@ define(
           },
           expectationClientName: function(cellName)
           {
-            return "There is a yes/no value found in cell " + cellName + ", while there was a clientname expected.";
+            return "There is a yes/no value found in cell " + cellName + ", while there was a client name expected.";
           },
           expectationMinutes: function(cellName)
           {
@@ -802,13 +802,13 @@ define(
           foundIntNeedString: "There is a error found in ",
           readError: function(cellName)
           {
-            return "It's not possible to read a point in time in cell " + cellName + " te lezen.";
+            return "It's not possible to read a timestamp in cell " + cellName + ".";
           },
           nofUnassignedRoutes: function(nofUnassignedRoutes)
           {
-            return  "There are " + nofUnassignedRoutes + " routes where a teammember is assigned to.";
+            return  "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
           },
-          unknownError: "A unknown error is occured: ",
+          unknownError: "A unknown error is occurred: ",
           errors: 'Errors'
         },
         options: {
@@ -839,7 +839,7 @@ define(
           off: 'Off',
           ringingTimeOut: {
             title: 'Ringing timeout',
-            short: 'When the ringing timeout is long the teamembers will have more time to pick up their phone, but the total waiting time for clients can be longer when many team members are reachable.',
+            short: 'When the ringing timeout is long the team members will have more time to pick up their phone, but the total waiting time for clients can be longer when many team members are reachable.',
             long: 'When the ringing timeout is 15 seconds or more, it is recommended for team members to disable their personal voice mail.',
           },
           personalVoicemailPrevention: 'Personal voice mail prevention',
@@ -847,7 +847,7 @@ define(
           voicemailDetectionInfo: 'When the ringing timeout is 15 seconds or more, it is recommended for team members to disable their personal voice mail, or to use the personal voice mail prevention. Enabling / disabling the personal voice mail can be done via the phone provider.'
         },
         task: {
-          timeframe: 'Timeframe',
+          timeframe: 'Time frame',
           status: 'Status',
           description: 'Description',
           createdBy: 'Created by',
@@ -902,7 +902,7 @@ define(
         order: {
           randomOrder: 'Random',
           fixedOrder: 'Fixed order',
-          confirmation: 'Confirm choise',
+          confirmation: 'Confirm choice',
           evenOrder: 'Evenly',
           loadTeam: 'Load team...',
           orderSaved: 'Order saved',
@@ -927,9 +927,9 @@ define(
         validation: {
           phone: {
             notValid: 'Fill in a valid phone number!',
-            invalidCountry: 'Invalid countrycode! Only Dutch (+31) numbers allowed.',
-            tooShort: ' (Phonenumber incorect: not enough digits.)',
-            tooLong: ' (Phonenumber incorrect: too many digits.)',
+            invalidCountry: 'Invalid country code! Only Dutch (+31) numbers allowed.',
+            tooShort: ' (Phone number incorect: not enough digits.)',
+            tooLong: ' (Phone number incorrect: too many digits.)',
             notValidOnSubmit: 'Please fill in at least one valid phone number to save.',
             message: 'Entered phone number is correct. Number is registered in ',
             as: ' as ',
@@ -939,7 +939,7 @@ define(
             mobileOrFixedLine: 'Fixed or mobile number'
           },
           pincode: {
-            exists: 'Please choose a different pincode. The chosen pin code is already in use.'
+            exists: 'Please choose a different pin code. The chosen pin code is already in use.'
           },
           password: {
             amountMinChars: function (chars)
@@ -959,14 +959,14 @@ define(
           },
           role: 'Choose a role!',
           birthDate: {
-            notValid: 'Enter a valid birtday!'
+            notValid: 'Enter a valid birthday!'
           },
           userName: {
             regex: 'The user name may only contain alphanumeric characters, including scores and underscores',
             valid: 'A username is required'
           },
           search: {
-            notValid: 'Fill in a name and/or surename!'
+            notValid: 'Fill in a name and/or surname!'
           }
         }
       },
@@ -1831,7 +1831,7 @@ define(
           },
           nofUnassignedRoutes: function(nofUnassignedRoutes)
           {
-            return  "There are " + nofUnassignedRoutes + " routes where a teammember is assigned to.";
+            return  "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
           },
           unknownError: "A unknown error is occured: ",
           errors: 'Errors'
@@ -2477,8 +2477,8 @@ define(
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
           coordinator: 'Coordinator',
-          teamMember: 'Team lid',
-          teamMembers: 'Team Leden',
+          teamMember: 'Teamlid',
+          teamMembers: 'Teamleden',
           help: "Help",
           't/m': 'till',
           'new': 'Nieuw',
