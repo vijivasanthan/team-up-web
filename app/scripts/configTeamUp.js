@@ -201,7 +201,7 @@ define(['profile'], function(profile){
   function getLanguage()
   {
     var lang = profile.lang,
-      currentHost = 'www.lala.en';//window.location.host,
+      currentHost = window.location.host,
       langs = ['nl', 'de', 'en'];
 
     langs.forEach(function (val)
