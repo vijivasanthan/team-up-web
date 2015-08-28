@@ -136,7 +136,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							name='showAllTasks' 
 							ng-model='showAllTasks',
 							ng-change='showTasks(showAllTasks, "mine")')
-						small &nbsp; 
+						small &nbsp; {{ ui.task.showArchivedTasks }}
 				
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 						
