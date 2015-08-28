@@ -219,6 +219,7 @@ define(
           {
             if(! currentMember.error)
             {
+              $scope.data.members = $scope.data.members || [];
               $scope.data.members.push(currentMember);
               $scope.data.members = checkLocationMembers($scope.data.members);
               $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
