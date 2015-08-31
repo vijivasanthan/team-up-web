@@ -30,6 +30,7 @@ require.config(
       'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
+      'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
       timeline: 'removables/timeline',
@@ -47,8 +48,6 @@ require.config(
       'jquery-form': '../vendors/jquery-form/jquery.form',
       'locale': 'i18n/angular-locale_nl',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      'sortable': '../vendors/Sortable/Sortable',
-      'ng-sortable': '../vendors/Sortable/ng-sortable',
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
@@ -64,6 +63,7 @@ require.config(
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
       'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
+      'angular-sortable-view': { deps: ['angular'], exports: 'angular' },
       'angular-md5': { deps: ['angular'], exports: 'angular' },
       bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       lawnchair: { deps: [], exports: 'Lawnchair' },
@@ -222,7 +222,7 @@ require(
     'jquery-form',
     'lodash',
     'jquery-ui',
-    'ng-sortable',
+    'angular-sortable-view',
     'locale',
     'clj-fuzzy'
   ],

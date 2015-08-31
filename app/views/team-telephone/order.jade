@@ -53,6 +53,9 @@ section
 					
 					p(ng-show='orderedMembers.length == 0 && orderType == "FIXED"') {{ ui.order.noMembers }}
 					
+					//div(class="sortable-container" sv-root sv-part="test")
+					//	div(ng-repeat="item in test" sv-element="opts" class="well") {{ item }}
+					
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead
 							tr
@@ -62,9 +65,8 @@ section
 								th
 								th {{ui.teamup.name}}
 								th {{ui.teamup.phone}}
-						tbody(ng-sortable="sortableOptions",
-							ng-model="orderedMembers")
-							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")
+						tbody(sv-root, sv-part="orderedMembers", ng-model="orderedMembers")
+							tr(ng-repeat='member in orderedMembers', sv-element)
 								td
 									.orderNumber
 										| {{member.originalPosition + 1}}

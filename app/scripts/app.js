@@ -12,7 +12,7 @@ define(
     'angular-md5',
     'angular-strap',
     'angular-dynamic-locale',
-    'ng-sortable',
+    'angular-sortable-view',
     'angular-cookie'
   ],
   function (angular)
@@ -29,7 +29,7 @@ define(
         'ngMd5',
         'mgcrea.ngStrap',
         'ui.mask',
-        'ng-sortable',
+        'angular-sortable-view',
         'ipCookie',
         'tmh.dynamicLocale'
       ]);
