@@ -320,8 +320,30 @@ dl {
   }
 }
 
-.orderTable tr {
-  border-radius: 1px;
+.sortable-container {
+  max-height: 400px;
+  overflow: hidden;
+  padding: 10px 50px;
+  background: hsl(60, 80%, 90%);
+}
+
+.sv-sorting-in-progress {
+  -webkit-touch-callout: none !important;
+}
+
+.orderTable {
+  -webkit-touch-callout: none;
+  //width: 100%;
+  //max-width: 100%;
+  //margin-bottom: 20px;
+  //max-height: 400px;
+  //overflow: auto;
+  //padding: 10px 50px;
+  //background: hsl(60, 80%, 90%);
+  //tr {
+  //  border-radius: 1px;
+  //  display: block;
+  //}
 }
 
 .text-turq    { color: $turq }
