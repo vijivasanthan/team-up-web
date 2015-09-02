@@ -825,7 +825,6 @@ define(
           phoneNumberAlias: 'Phone number alias',
           noPhoneNumbers: 'There are no phone numbers left',
           activateTeamTelephone: "Activate team phone for the ",
-          //start TODO
           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
           smsMissedCall: 'SMS by a missed call or a new voicemail',
           receiveReachableMembers: 'Reachable team members receive',
@@ -837,7 +836,6 @@ define(
           voicemailEmailAddress: "Voicemail email address",
           voicemailEmailAddressDescription: "A email will be sent to this email address if a voicemail is left or the team has a missed call.",
           requiredFields: "required fields",
-          //end
           hasSms: function (sms)
           {
             return (sms)
@@ -1020,9 +1018,9 @@ define(
           loading_Group: 'Gruppen laden...',
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
-          //start TODO
+
           loggingOff: 'Logging off',
-          //end
+
           logout: 'Abmelden',
           loading: 'Laden..',
           loading_clientGroups: 'Patientengruppen laden...',
@@ -1031,13 +1029,14 @@ define(
           loading_tasks: 'Aufgaben laden...'
         },
         video: {
-          //start TODO
+
           title: 'Video',
           videoNotLoaded: 'Your videocall could not be loaded.',
-          //end
+
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
+
           thisWeek: 'Diese Woche',
           welcome: 'Willkommen',
           everyone: 'Alle',
@@ -1056,6 +1055,7 @@ define(
           accessibilityStatement: 'Übersicht verfügbarkeit',
           loading: 'laden...',
           accessible: 'Verfügbarkeit'
+
         },
         agenda: {
           planboard: 'Agenda',
@@ -1325,11 +1325,11 @@ define(
           voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder Ihre Voice-Mailbox abschalten, oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
         },
         message: {
-          //start TODO
+
           title: 'CHAT',
           messagesLoaded: 'Loading messages...',
           videoStartedBy: 'Video message started by ',
-          //end
+
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
           compose: 'erstellen',
@@ -1393,14 +1393,14 @@ define(
           send: 'versenden'
         },
         groups: {
-          //start TODO
+
           changeMemberShip: 'Change membership',
           doYou: 'Do you ',
           memberOfATeam: ' like to be part of a team ',
           personPartOfTeams: 'This person will be part of the following teams ',
           replace: 'Replace',
           personPartOfTeam: 'This person will only be part of team ',
-          //end
+
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
@@ -1450,14 +1450,14 @@ define(
           searchfor: 'voornaam, achternaam..'
         },
         profile: {
-          //start TODO
+
           noTeamSelected: 'No team selected',
           extra: 'Extra',
           default: 'Default',
           back: 'Back',
           password: 'Wachtwoord',
           timeline: 'Tijdlijn',
-          //end
+
           profile: 'Profil',
           edit: 'ändern',
           profileView: 'Profilwiedergabe',
@@ -1576,23 +1576,21 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
-          //start TODO
           clientGroup: 'Clientgrupe',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team member',
           teamMembers: 'Team members',
-          //end
           apply: 'Anwenden',
           hour: 'Stunde',
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
-          //start TODO
+
           help: "Help",
           new: 'New',
           existing: 'Existing',
-          //end
+
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
           clients: 'Patienten',
@@ -1815,7 +1813,6 @@ define(
             '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
             '21': 'Ein Parameter kann nicht bearbeitet werden',
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
-            //start TODO
             '23': 'No valid body, some attributes are missing',
             '24': 'Something is not configured properly,AskFast can not be reached',
             '25': 'The phonenumber is already in use',
@@ -1828,7 +1825,6 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario'
-            //end
           },
         },
         upload: {
@@ -1935,24 +1931,19 @@ define(
         order: {
           randomOrder: 'willkürlich',
           fixedOrder: 'Reihenfolge selbst bestimmen',
-          //start TODO
-          evenOrder: 'Evenly',
-          //end
+          evenOrder: 'Gleichmäßig',
           confirmation: 'Auswahl bestätigen',
           loadTeam: 'Gruppe laden...',
           orderSaved: 'Reihenfolge gespeichert',
           noMembers: 'keine Mitglieder in dieser Gruppe.',
-          //start TODO
           evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
           randomFeedback: 'With this option, a caller is always connected to any team member.',
           fixedOrderFeedback: 'With this option, the team can determine the sequence.'
-          //end
         },
         logs: {
           loadLogs: 'Logs laden...',
           empty: 'keine Logs vorhanden',
           filter: 'Logs filtern...',
-          //start TODO
           amountLogs: function (amount)
           {
             if (amount == 1)
@@ -1964,7 +1955,6 @@ define(
               return 'There are ' + amount + ' logs shown.';
             }
           },
-          //end
           status: {
             sent: 'ausgehend',
             received: 'eingehend',
@@ -1975,9 +1965,7 @@ define(
           }
         },
         validation: {
-          //start TODO
           data: "Eine oder mehrere Eingaben sind nicht abgeschlossen",
-          //end
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',

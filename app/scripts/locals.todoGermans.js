@@ -825,7 +825,6 @@ define(
           phoneNumberAlias: 'Phone number alias',
           noPhoneNumbers: 'There are no phone numbers left',
           activateTeamTelephone: "Activate team phone for the ",
-          //start TODO
           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
           smsMissedCall: 'SMS by a missed call or a new voicemail',
           receiveReachableMembers: 'Reachable team members receive',
@@ -837,7 +836,6 @@ define(
           voicemailEmailAddress: "Voicemail email address",
           voicemailEmailAddressDescription: "A email will be sent to this email address if a voicemail is left or the team has a missed call.",
           requiredFields: "required fields",
-          //end
           hasSms: function (sms)
           {
             return (sms)
@@ -1020,9 +1018,9 @@ define(
           loading_Group: 'Gruppen laden...',
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
-          //start TODO
+
           loggingOff: 'Logging off',
-          //end
+
           logout: 'Abmelden',
           loading: 'Laden..',
           loading_clientGroups: 'Patientengruppen laden...',
@@ -1031,10 +1029,10 @@ define(
           loading_tasks: 'Aufgaben laden...'
         },
         video: {
-          //start TODO
+
           title: 'Video',
           videoNotLoaded: 'Your videocall could not be loaded.',
-          //end
+
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -1059,11 +1057,13 @@ define(
         },
         agenda: {
           planboard: 'Agenda',
-          currentAmountReachable: 'aktuell verfügbar (ist)',
-          amountOfPeopleWished: 'gewünscht (soll)',
-          requiredPeople: 'Bedarf',
-          newAvail: 'neue Verfügbarkeit',
+          currentAmountReachable: 'Aktuell verfügbar (ist)',
+          amountOfPeopleWished: 'Gewünscht (soll)',
+          requiredPeople: 'Erforderliches',
+          newAvail: 'Neue verfügbarkeit',
           query: 'Synchronisierung des Terminkalenders fehlgeschlagen. Bitte den Browser aktualisieren (F5).',
+          requiredPeople: 'Benodigd',
+          newAvail: 'neue Verfügbarkeit',
           day: 'Tag',
           week: 'Woche',
           month: 'Monat',
@@ -1092,11 +1092,9 @@ define(
           groups: 'Team',
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
-
           bothAvailable: 'Both available',
           northAavailable: 'available North',
           southAvailable: 'available South',
-
           skipperOutService: 'Skipper Of Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
@@ -1172,6 +1170,7 @@ define(
           wisher: 'Fehler beim Ändern des Bedarfes',
           editTimeline: 'Zeitspanne ändern  von ',
           notAuth: 'Nur wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
+          the: 'Die',
           reachabilityChangedSentence: 'Die Planung Ihrer Verfügbarkeit kann geändert werden',
           byThe: 'durch',
           doubleClick: 'Doppelklick auf eine bereits',
@@ -1181,9 +1180,7 @@ define(
           buttonPushed: 'gedrückter linker Maustaste.'
         },
         planboard: {
-
           planboard: 'Agenda',
-
           requiredPeople: 'Bedarf',
           newAvail: 'Neue verfügbarkeit',
           day: 'Tag',
@@ -1240,7 +1237,7 @@ define(
           rangeInfoWeekNumber: 'Woche: ',
           rangeInfoMonth: 'Monat: ',
           rangeInfoTotalDays: ', Anzahl Tage: ',
-          customDates: 'definierter Zeitraum',
+          customDates: 'Definierter Zeitraum',
           addTimeSlot: 'Planung hinzufügen...',
           slotAdded: 'Planung erfolgreich hinzugefügt.',
           changingSlot: 'Planung ändern...',
@@ -1290,7 +1287,6 @@ define(
           teamEmail: 'E-Mail an das Team',
           activateTeamTelephone: "Aktiviere TeamTelefon für ",
 
-          teamTelephoneNotActivated: "TeamTelefon activated",
           phoneNumberTeamAlias: "Known public telephone number",
           phoneNumberTeam: "Telephone number for the team",
           phoneNumberTeamDescription: "Choose one of the following numbers, which the team will be reached.",
@@ -1303,6 +1299,7 @@ define(
           smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice Mailbox-Nachricht',
           receiveReachableMembers: 'verfügbare Gruppen-Mitglieder empfangen',
           missedOrVoicemail: 'SMS falls das Team ein Anruf verpasst hat oder bei Eingang einer neuen Voice-Mailbox-Nachricht',
+          teamTelephoneNotActivated: "Team-Telefon wurde für dieses Team nicht aktiviert",
           noPhoneNumbers: "Keine Telefonnummern vorhanden",
           pickAPhoneNumber: "Wählen Sie eine Telefonnummer",
           durationDialTone: 'Geben Sie die Dauer der Freizeichen an!',
@@ -1325,63 +1322,65 @@ define(
           voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder Ihre Voice-Mailbox abschalten, oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
         },
         message: {
-          //start TODO
+
           title: 'CHAT',
           messagesLoaded: 'Loading messages...',
           videoStartedBy: 'Video message started by ',
-          //end
+
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
-          compose: 'erstellen',
-          inbox: 'empfangen',
-          outbox: 'gesendet',
-          trash: 'gelöscht',
+          compose: 'Erstellen',
+          inbox: 'Empfangen',
+          outbox: 'Gesendet',
+          trash: 'Gelöscht',
           composeMessage: 'Nachricht erstellen',
-          close: 'beenden',
-          broadcast: 'Extra Medium',
+          close: 'Beenden',
+          broadcast: 'Extra medium',
           sms: 'SMS',
           email: 'Email',
           receviers: 'Empfänger',
-          webTRCWebLink: 'Eine Video Konferenz wurde gestartet, teilnehmen? ',
+          webTRCWebLink: 'Eine Video Konferenz wurde gestartet',
           subject: 'Subjekt',
           message: 'Nachricht',
           sendMessage: 'Nachricht versenden',
           sender: 'Absender',
           date: 'Datum',
           questionText: 'Nachricht',
-          reply: 'beantworten',
-          del: 'löschen',
-          noMessage: 'keine Nachrichten.',
-          from: 'von',
-          newMsg: 'neu',
-          deleteSelected: 'markierte Nachrichten löschen',
-          someMessage: 'Es gibt $v Nachrichten',
-          emptyTrash: 'gelöschte Nachrichten endgültig löschen',
-          noMsgInTrash: 'keine gelöschten Nachrichten.',
+          reply: 'Beantworten',
+          del: 'Löschen',
+          noMessage: 'Keine Nachrichten.',
+          from: 'Von',
+          newMsg: 'Neu',
+          deleteSelected: 'Markierte nachrichten löschen',
+          someMessage: 'Es gibt $v nachrichten',
+          emptyTrash: 'Gelöschte nachrichten endgültig löschen',
+          noMsgInTrash: 'keine gelöschten nachrichten.',
+
           box: 'Box',
           persons: 'Personen',
-          restoreSelected: 'markierte Nachrichten wiederherstellen',
+
+          restoreSelected: 'Markierte nachrichten wiederherstellen',
           loadingMessage: 'Nachricht laden...',
-          escalation: 'Escalations-Nachricht',
-          reportMessage: 'neue Nachricht',
+          escalation: 'Escalations-nachricht',
+          reportMessage: 'Neue nachricht',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Es fehlen ' +
               diff +
-              ' Personen zwischen ' +
+              ' personen zwischen ' +
               startDate + ' ' +
               startTime + ' und ' +
               endDate + ' ' +
               endTime + '. ' +
-              'Bitte stellen Sie sich, falls möglich, für diesen Zeitraum verfügbar';
+              'bitte stellen Sie sich, falls möglich, für diesen zeitraum verfügbar';
           },
           removed: 'Nachricht wurde gelöscht.',
           removing: 'Nachricht löschen...',
           refreshing: 'Nachricht aktualisieren...',
-          removingSelected: 'markierte Nachrichten löschen...',
+          removingSelected: 'Markierte nachrichten löschen...',
           restoring: 'Nachricht wiederherstellen...',
           restored: 'Nachricht erfolgreich wiederhergestellt.',
-          restoringSelected: 'markierte Nachrichten wiederherstellen...',
+          restoringSelected: 'Markierte nachrichten wiederherstellen...',
           emptying: 'Nachrichten endgültig löschen...',
           emptied: 'Nachrichten endgültig gelöscht.',
           sending: 'Nachricht versenden...',
@@ -1389,18 +1388,18 @@ define(
           typeSubject: 'Subjekt eintragen.',
           ph_filterMessage: 'Nachrichten filtern...',
           noReceivers: 'Empfänger festlegen',
-          emptyMessageBody: 'bitte Text zu dieser Nachricht eintragen.',
-          send: 'versenden'
+          emptyMessageBody: 'Bitte Text zu dieser Nachricht eintragen.',
+          send: 'Versenden'
         },
         groups: {
-          //start TODO
+
           changeMemberShip: 'Change membership',
           doYou: 'Do you ',
           memberOfATeam: ' like to be part of a team ',
           personPartOfTeams: 'This person will be part of the following teams ',
           replace: 'Replace',
           personPartOfTeam: 'This person will only be part of team ',
-          //end
+
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
@@ -1450,16 +1449,14 @@ define(
           searchfor: 'voornaam, achternaam..'
         },
         profile: {
-          //start TODO
           noTeamSelected: 'No team selected',
           extra: 'Extra',
           default: 'Default',
           back: 'Back',
-          password: 'Wachtwoord',
-          timeline: 'Tijdlijn',
-          //end
           profile: 'Profil',
           edit: 'ändern',
+          password: 'Wachtwoord',
+          timeline: 'Tijdlijn',
           profileView: 'Profilwiedergabe',
           userGroups: 'Anwendergruppen',
           role: 'Funktion',
@@ -1490,7 +1487,7 @@ define(
           passChanged: 'Passwort erfolgreich geändert.',
           passwrong: 'Passwort ist inkorrekt. Eingabe wiederholen.',
           currentPassWrong: 'Das aktuelle Passwort ist inkorrekt. Eingabe wiederholen.',
-          newTimeslotAdded: 'neue Planung erfolgreich hinzugefügt.',
+          newTimeslotAdded: 'Neue Planung erfolgreich hinzugefügt.',
           changingTimeslot: 'Planung ändern...',
           timeslotChanged: 'Planung erfolgreich geändert.',
           exampleBirthDate: 'Beispiel: 31-12-2001 ',
@@ -1563,6 +1560,7 @@ define(
           }
         },
         downloads: {
+          app: 'Binnenkort te downloaden.',
           manual: 'Handbuch herunterladen'
         },
         loading: {
@@ -1576,23 +1574,21 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
-          //start TODO
           clientGroup: 'Clientgrupe',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team member',
           teamMembers: 'Team members',
-          //end
           apply: 'Anwenden',
           hour: 'Stunde',
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
-          //start TODO
+
           help: "Help",
           new: 'New',
           existing: 'Existing',
-          //end
+
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
           clients: 'Patienten',
@@ -1778,7 +1774,7 @@ define(
           refresh: 'aktualisieren',
           stateValue: {
             'reachable': 'erreichbar',
-            'available': 'verfügbar',
+            'available': 'erreichbar',
             'working': 'beschäftigt',
             'offline': 'Off-line',
             'not_reachable': 'nicht erreichbar',
@@ -1793,7 +1789,7 @@ define(
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
           errorCode: {
-            '1': 'unbekannte Fehlermeldung',
+            '1': 'Unbekannte Fehlermeldung',
             '2': 'Domainagent nicht gefunden. Erneutes Anmelden könnte das Problem beheben.',
             '3': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '4': 'Agent ID darf nur Buchstaben und Zahlen enthalten.',
@@ -1805,17 +1801,16 @@ define(
             '10': 'Gruppe mit  teamUuid existiert nicht',
             '11': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '12': 'Team-Agent konnte nicht erstellt werden',
-            '13': 'uuid Parameter und uuid in payload sind nicht identisch',
-            '14': 'Es gibt bereits ein Mitglied mit dieser uuid ',
-            '15': 'einer der Werte ist unbekannt',
-            '16': 'eine der Eingaben ist NULL, d.h. ungültig',
-            '17': 'einer der Werte ist von einem unbekannten Typ.',
-            '18': 'ein Anwender mit dieser ID existiert nicht',
-            '19': 'das vorherige und aktuelle Passwort stimmen nicht überein',
+            '13': 'Uuid Parameter und uuid in payload sind nicht identisch',
+            '14': 'Es gibt bereits ein Mitglied mit dieser benutzername ',
+            '15': 'Einer der Werte ist unbekannt',
+            '16': 'Eine der Eingaben ist NULL, d.h. ungültig',
+            '17': 'Einer der Werte ist von einem unbekannten Typ.',
+            '18': 'Ein Anwender mit dieser ID existiert nicht',
+            '19': 'Das vorherige und aktuelle Passwort stimmen nicht überein',
             '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
             '21': 'Ein Parameter kann nicht bearbeitet werden',
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
-            //start TODO
             '23': 'No valid body, some attributes are missing',
             '24': 'Something is not configured properly,AskFast can not be reached',
             '25': 'The phonenumber is already in use',
@@ -1828,7 +1823,6 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario'
-            //end
           },
         },
         upload: {
@@ -1933,26 +1927,21 @@ define(
           taskFormValide: 'De nieuwe taak is niet valide! Ga de eisen onder elk veld na.'
         },
         order: {
-          randomOrder: 'willkürlich',
+          randomOrder: 'Willkürlich',
           fixedOrder: 'Reihenfolge selbst bestimmen',
-          //start TODO
-          evenOrder: 'Evenly',
-          //end
+          evenOrder: 'Gleichmäßig',
           confirmation: 'Auswahl bestätigen',
           loadTeam: 'Gruppe laden...',
           orderSaved: 'Reihenfolge gespeichert',
-          noMembers: 'keine Mitglieder in dieser Gruppe.',
-          //start TODO
+          noMembers: 'Keine Mitglieder in dieser Gruppe.',
           evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
           randomFeedback: 'With this option, a caller is always connected to any team member.',
           fixedOrderFeedback: 'With this option, the team can determine the sequence.'
-          //end
         },
         logs: {
           loadLogs: 'Logs laden...',
-          empty: 'keine Logs vorhanden',
+          empty: 'Keine Logs vorhanden',
           filter: 'Logs filtern...',
-          //start TODO
           amountLogs: function (amount)
           {
             if (amount == 1)
@@ -1964,32 +1953,29 @@ define(
               return 'There are ' + amount + ' logs shown.';
             }
           },
-          //end
           status: {
-            sent: 'ausgehend',
-            received: 'eingehend',
-            finished: 'beendet',
-            missed: 'verpasst',
-            delivered: 'empfangen',
+            sent: 'Ausgehend',
+            received: 'Eingehend',
+            finished: 'Beendet',
+            missed: 'Verpasst',
+            delivered: 'Empfangen',
             error: 'Fehler'
           }
         },
         validation: {
-          //start TODO
           data: "Eine oder mehrere Eingaben sind nicht abgeschlossen",
-          //end
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
-            tooShort: ' (fehlerhafte Telefonnummer: zu wenig Ziffern.)',
-            tooLong: ' (fehlerhafte Telefonnummer: zu viele Ziffern.)',
-            notValidOnSubmit: 'es muss minimal eine korrekte Telefonnummer eingetragen werden, bevor die Daten gespeichert werden.',
-            message: 'fehlerhafte Telefonnummer. Die Nummer ist bereits vorhanden ',
+            tooShort: ' (Fehlerhafte Telefonnummer: zu wenig Ziffern.)',
+            tooLong: ' (Fehlerhafte Telefonnummer: zu viele Ziffern.)',
+            notValidOnSubmit: 'Es muss minimal eine korrekte Telefonnummer eingetragen werden, bevor die Daten gespeichert werden.',
+            message: 'Fehlerhafte Telefonnummer. Die Nummer ist bereits vorhanden ',
             as: ' als ',
-            multipleNotvalid: 'eine oder mehrere fehlerhafte Telefonnummer(n)!',
-            fixedLine: 'eine Festnetznummer',
-            mobile: 'eine mobile Telefonnummer',
-            mobileOrFixedLine: 'eine Festnetz- oder mobile Telefonnummer'
+            multipleNotvalid: 'Eine oder mehrere fehlerhafte Telefonnummer(n)!',
+            fixedLine: 'Eine Festnetznummer',
+            mobile: 'Eine mobile Telefonnummer',
+            mobileOrFixedLine: 'Eine Festnetz- oder mobile Telefonnummer'
           },
           pincode: {
             exists: 'Dieser Mitglieder-Kode ist bereits vergeben. Wählen Sie einen anderen!'
@@ -2004,19 +1990,19 @@ define(
               return ' und maximal ' + chars + ' Zeichen enthalten'
             },
             oldPassMatch: 'Das eingetragene alte Passwort ist nicht identisch mit dem aktuellen Passwort.',
-              required: 'Es muss ein Passwort eingetragen werden'
+            required: 'Es muss ein Passwort eingetragen werden'
           },
           email: {
             notValid: 'E-Mail Adresse ist fehlerhaft!',
-              required: 'es muss eine E-Mail Adresse eingetragen werden'
+            required: 'Es muss eine E-Mail Adresse eingetragen werden'
           },
           role: 'Rolle festlegen',
-            birthDate: {
+          birthDate: {
             notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
             regex: 'Der Anwender Name darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
-              valid: 'Es muss ein Anwender Name festgelegt werden'
+            valid: 'Es muss ein Anwender Name festgelegt werden'
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
