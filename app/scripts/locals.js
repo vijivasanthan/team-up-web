@@ -1816,6 +1816,7 @@ define(
             '21': 'Ein Parameter kann nicht bearbeitet werden',
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
             //start TODO
+
             '23': 'No valid body, some attributes are missing',
             '24': 'Something is not configured properly,AskFast can not be reached',
             '25': 'The phonenumber is already in use',
