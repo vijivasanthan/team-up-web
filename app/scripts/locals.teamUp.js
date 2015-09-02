@@ -825,7 +825,7 @@ define(
           phoneNumberAlias: 'Phone number alias',
           noPhoneNumbers: 'There are no phone numbers left',
           activateTeamTelephone: "Activate team phone for the ",
-          teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
+           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
           smsMissedCall: 'SMS by a missed call or a new voicemail',
           receiveReachableMembers: 'Reachable team members receive',
           missedOrVoicemail: 'SMS when the team has a missed call or a voicemail has been recorded',
