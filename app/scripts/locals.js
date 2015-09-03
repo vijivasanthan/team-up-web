@@ -33,7 +33,7 @@ define(
           loading_everything: 'Finished loading!',
           loggingOff: 'Logging off',
           logout: 'Log out',
-          loading: 'Loading..',
+          loading: 'Loading...',
           loading_clientGroups: 'Loading client groups...',
           loading_clients: 'Loading clients',
           loading_teams: 'Loading teams...',
@@ -1024,7 +1024,7 @@ define(
           loggingOff: 'Logging off',
           //end
           logout: 'Abmelden',
-          loading: 'Laden..',
+          loading: 'Laden...',
           loading_clientGroups: 'Patientengruppen laden...',
           loading_clients: 'Patienten laden',
           loading_teams: 'Teams laden...',
