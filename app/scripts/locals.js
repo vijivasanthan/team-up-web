@@ -1048,11 +1048,11 @@ define(
           button_loggingIn: 'Anmelden...',
           forgot_password: 'Passwort vergessen?',
           forgetPassword: 'Passwort vergessen',
-          emailAddress: 'Emailadres',
-          resetPassword: 'Wachtwoord opnieuw instellen',
-          returnLogin: 'Terugkeren om in te loggen',
+          emailAddress: 'Email-Adresse',
+          resetPassword: 'Passwort erneut eingeben',
+          returnLogin: 'Zurück zum Login',
           changePassword: 'Passwort ändern',
-          downloadApp: 'Download mobiele app',
+          downloadApp: 'App downloaden',
           ph_username: 'Anwendername',
           ph_password: 'Passwort',
           ph_newPass: 'Passwort ändern',
@@ -1065,7 +1065,7 @@ define(
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
           //start TODO
-          loggingOff: 'Logging off',
+          loggingOff: 'Logout',
           //end
           logout: 'Abmelden',
           loading: 'Laden..',
@@ -1077,7 +1077,7 @@ define(
         video: {
           //start TODO
           title: 'Video',
-          videoNotLoaded: 'Your videocall could not be loaded.',
+          videoNotLoaded: 'Videokonferenz konnte nicht geladen werden.',
           //end
           stop: 'Videokonferenz wurde beendet.'
         },
@@ -1089,15 +1089,15 @@ define(
           goToInbox: 'Zum Posteingang',
           loadingPie: 'Kreisdiagramm laden...',
           possiblyReachable: 'Nicht geplant',
-          noPlanning: 'Keine planung',
+          noPlanning: 'Keine Planung',
           load: 'laden...',
           time: {
             days: 'd',
-            hours: 'u',
-            minutes: 'm',
-            seconds: 's'
+            hours: 'h',
+            minutes: 'min',
+            seconds: 'sek'
           },
-          accessibilityStatement: 'Übersicht verfügbarkeit',
+          accessibilityStatement: 'Übersicht Verfügbarkeit',
           loading: 'laden...',
           accessible: 'Verfügbarkeit'
         },
@@ -1138,11 +1138,11 @@ define(
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
           //start TODO
-          bothAvailable: 'Both available',
-          northAavailable: 'available North',
-          southAvailable: 'available South',
+          bothAvailable: 'beide verfügbar',
+          northAavailable: 'verfügbar Nord',
+          southAvailable: 'verfügbar Süd',
           //end
-          skipperOutService: 'Skipper Of Service',
+          skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
           legendaLabels: {
@@ -1212,11 +1212,11 @@ define(
           errorAdd: 'neue Planung kann nicht gespeichert werden!',
           errorChange: 'Fehler beim Ändern der Planung!',
           pastChanging: 'eine Planung in der Vergangenheit kann nicht geändert werden!',
-          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!!',
+          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!',
           remove: 'Fehler beim Löschen einer Planung!',
           wisher: 'Fehler beim Ändern des Bedarfes',
           editTimeline: 'Zeitspanne ändern  von ',
-          notAuth: 'Nur wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
+          notAuth: 'Nur, wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
           reachabilityChangedSentence: 'Die Planung Ihrer Verfügbarkeit kann geändert werden',
           byThe: 'durch',
           doubleClick: 'Doppelklick auf eine bereits',
@@ -1237,7 +1237,7 @@ define(
           week: 'Woche',
           month: 'Monat',
           updateAvail: 'Verfügbarkeit aktualisieren',
-          from: 'Ab',
+          from: 'ab',
           till: 'bis',
           state: 'Status',
           selectAState: 'Status wählen',
@@ -1262,11 +1262,11 @@ define(
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
           //start TODO
-          bothAvailable: 'Both available',
-          northAavailable: 'available North',
-          southAvailable: 'available South',
+          bothAvailable: 'beide verfügbar',
+          northAavailable: 'verfügbar Nord',
+          southAvailable: 'verfügbar Süd',
           //end
-          skipperOutService: 'Skipper Of Service',
+          skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
           legendaLabels: {
@@ -1354,19 +1354,19 @@ define(
           teamEmail: 'E-Mail an das Team',
           activateTeamTelephone: "Aktiviere TeamTelefon für ",
 
-          teamTelephoneNotActivated: "TeamTelefon activated",
-          phoneNumberTeamAlias: "Known public telephone number",
-          phoneNumberTeam: "Telephone number for the team",
-          phoneNumberTeamDescription: "Choose one of the following numbers, which the team will be reached.",
-          phoneNumberTeamAlias: "Known public telephone number",
-          phoneNumberTeamAliasDescription: "This field is optional. The telephone number can be filled in what is known to the clients. For example, the 06 number of the current relay phone.",
-          voicemailEmailAddress: "Voicemail e-mailaddress",
-          voicemailEmailAddressDescription: "A e-mail will be sent to this e-mailaddress if a voicemail is left or the team has a missed call.",
-          requiredFields: "required fields",
+          teamTelephoneNotActivated: "TeamTelefon aktiviert",
+          phoneNumberTeamAlias: "bekannte Telefonnummer",
+          phoneNumberTeam: "Telefonnummer für das Team",
+          phoneNumberTeamDescription: "Wählen Sie eine der folgenden Telefonnummern, über die das Team erreichbar sein soll.",
+          phoneNumberTeamAlias: "bekannte Telefonnummer",
+          phoneNumberTeamAliasDescription: "Feld ist freiwillig. Sofern bekannt, kann die Telefonnummer des Klienten eingetragen werden, bspw. die 06 Nummer des Teamtelefons.",
+          voicemailEmailAddress: "Sprachbox Email-Adresse",
+          voicemailEmailAddressDescription: "Bei einer Sprachnachricht wird oder einem verpassten Anruf wird eine Email an die Adresse gesendet.",
+          requiredFields: "obligatorische Felder",
 
-          smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice Mailbox-Nachricht',
+          smsMissedCall: 'SMS bei verpasstem Anruf oder neuer Sprachnachricht',
           receiveReachableMembers: 'verfügbare Gruppen-Mitglieder empfangen',
-          missedOrVoicemail: 'SMS falls das Team ein Anruf verpasst hat oder bei Eingang einer neuen Voice-Mailbox-Nachricht',
+          missedOrVoicemail: 'SMS, falls das Team ein Anruf verpasst hat oder bei Eingang einer neuen Sprachnachricht',
           noPhoneNumbers: "Keine Telefonnummern vorhanden",
           pickAPhoneNumber: "Wählen Sie eine Telefonnummer",
           durationDialTone: 'Geben Sie die Dauer der Freizeichen an!',
@@ -1386,13 +1386,13 @@ define(
           },
           personalVoicemailPrevention: 'persönliche Voicemail Präferenz',
           personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das Gespräch entgegen nehmen möchten. Wenn diese Option eingeschaltet ist, vermeidet man, dass ein Patient eine Nachricht auf einer Voice-Mailbox eines Mitglieds hinterlassen kann.',
-          voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder Ihre Voice-Mailbox abschalten, oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
+          voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder ihre Voice-Mailbox abschalten oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
         },
         message: {
           //start TODO
           title: 'CHAT',
-          messagesLoaded: 'Loading messages...',
-          videoStartedBy: 'Video message started by ',
+          messagesLoaded: 'Lade Nachrichten...',
+          videoStartedBy: 'Videonachricht gestartet durch ',
           //end
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
@@ -1426,7 +1426,7 @@ define(
           persons: 'Personen',
           restoreSelected: 'markierte Nachrichten wiederherstellen',
           loadingMessage: 'Nachricht laden...',
-          escalation: 'Escalations-Nachricht',
+          escalation: 'Eskalations-Nachricht',
           reportMessage: 'neue Nachricht',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
@@ -1458,20 +1458,20 @@ define(
         },
         groups: {
           //start TODO
-          changeMemberShip: 'Change membership',
-          doYou: 'Do you ',
-          memberOfATeam: ' like to be part of a team ',
-          personPartOfTeams: 'This person will be part of the following teams ',
-          replace: 'Replace',
-          personPartOfTeam: 'This person will only be part of team ',
+          changeMemberShip: 'Mitgliedschaft ändern',
+          doYou: 'Möchten Sie ',
+          memberOfATeam: ' in das Team ',
+          personPartOfTeams: 'Diese Person wird folgenden Teams zugeordnet ',
+          replace: 'Ersetzen',
+          personPartOfTeam: 'Diese Person wird nur Teil des Teams ',
           //end
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
-          search: 'Zoeken',
+          search: 'Suchen',
           addNewGroup: 'neue Gruppe hinzufügen',
           editGroup: 'Gruppe ändern',
-          searchResults: 'Zoekresultaten',
+          searchResults: 'Suchergebnisse',
           group: 'Gruppe',
           close: 'beenden',
           name: 'Name',
@@ -1492,7 +1492,7 @@ define(
           sorryCanNotFind: 'Leider kein Ergebnis.',
           addToGroup: 'der Gruppe hinzufügen',
           addMemberToGroup: 'ausgewählte(n) Teilnehmer der Gruppe hinzufügen',
-          resultCount: 'Er zijn $v resultaten.',
+          resultCount: 'Es gibt $v Ergebnisse.',
           deleteGroup: 'Gruppe löschen',
           noMembers: 'keine Mitglieder in dieser Gruppe.',
           removeSelectedMembers: 'ausgewählte Mitglieder löschen',
@@ -1510,17 +1510,17 @@ define(
           memberRegstered: 'Mitglied erfolgreich hinzugefügt.',
           deleting: 'Gruppe löschen...',
           deleted: 'Gruppe erfolgreich gelöscht.',
-          filterMembers: 'Teamleden filteren...',
-          searchfor: 'voornaam, achternaam..'
+          filterMembers: 'Teammitglieder filtern...',
+          searchfor: 'Vorname, Nachname..'
         },
         profile: {
           //start TODO
-          noTeamSelected: 'No team selected',
+          noTeamSelected: 'kein Team ausgewählt',
           extra: 'Extra',
-          default: 'Default',
-          back: 'Back',
-          password: 'Wachtwoord',
-          timeline: 'Tijdlijn',
+          default: 'Standard',
+          back: 'Zurück',
+          password: 'Passwort',
+          timeline: 'Zeitverlauf',
           //end
           profile: 'Profil',
           edit: 'ändern',
@@ -1540,10 +1540,10 @@ define(
           newPass: 'neues Passwort',
           newPassRepeat: 'neues Passwort wiederholen',
           changePass: 'Passwort ändern',
-          newAvail: 'Nieuwe bereikbaarheid',
+          newAvail: 'Neue Verfügbarkeit',
           userName: 'Anwendername',
-          pincode: 'teamlidcode',
-          refreshing: 'Profielinformatie vernieuwen...',
+          pincode: 'Teammitgliedscode',
+          refreshing: 'Profil aktualisieren...',
           dataChanged: 'Profildaten erfolgreich geändert.',
           savingPassword: 'neues Passwort speichern...',
           passwordChanged: 'Passwort erfolgreich aktualisiert.',
@@ -1573,22 +1573,22 @@ define(
           changePassWord: 'Passwort ändern',
           safePassword: 'Passwort speichern',
           oldPassword: 'altes Passwort',
-          pincode: 'Teamlidcode',
-          pincodeInUse: 'Deze teamlidcode is in gebruik. Kies een andere.',
-          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van maximaal 8 cijfers in!',
-          pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
-          pincodeInfo: 'Bovenstaande code kunt u telefonisch gebruiken om u aan te melden als TeamTelefoon uw nummer niet herkent.',
-          duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',
-          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, tenzij deze zelf wordt opgegeven.'
+          pincode: 'Teammitgliedskode',
+          pincodeInUse: 'Teammitgliedskode bereits vergeben, geben Sie einen anderen ein.',
+          pincodeNotValid: 'Geben Sie den Teammitgliedskode mit maximal 8 Ziffern an',
+          pincodeCorrect: 'Teammitgliedskode vergeben oder ungültig, gebene Sie den korrekten Teammitgliedskode an.',
+          pincodeInfo: 'Mit dem oben angegebenen Kode können Sie sich bei Teamtelefon anmelden, falls Teamtelefon Ihre Telefonnummer nicht erkennt.',
+          duplicateNumber: 'Nummer bereits vorhanden, bitte geben Sie eine andere Nummer an.',
+          pincodeInfoPhone: 'Sofern Sie keinen Kode selbst angegeben haben, werden die letzten 4 Ziffern der Telefonnummer als Teammitgliedkode üebrnommen.'
         },
         settings: {
           settings: 'Einstellungen',
           user: 'Anwender',
-          application: 'Applicatie',
-          userSettings: 'Gebruikersinstellingen',
-          appSettings: 'Applicatie-instellingen',
-          saveSettings: 'Instellingen opslaan',
-          langSetting: 'Taal',
+          application: 'Anwendung',
+          userSettings: 'Anwendereinstellungen',
+          appSettings: 'App-Einstellungen',
+          saveSettings: 'Einstellungen speichern',
+          langSetting: 'Sprache',
           saving: 'Einstellungen speichern...',
           refreshing: 'Einstellungen aktualisieren...',
           saved: 'Einstellungen erfolgreich gespeichert.',
@@ -1644,8 +1644,8 @@ define(
           clientGroup: 'Clientgrupe',
           client: 'Client',
           coordinator: 'Coordinator',
-          teamMember: 'Team member',
-          teamMembers: 'Team members',
+          teamMember: 'Team Mitglied',
+          teamMembers: 'Team Mitglieder',
           //end
           apply: 'Anwenden',
           hour: 'Stunde',
@@ -1653,9 +1653,9 @@ define(
           order: 'Auftrag',
           options: 'Einstellungen',
           //start TODO
-          help: "Help",
-          new: 'New',
-          existing: 'Existing',
+          help: "Hilfe",
+          new: 'Neu',
+          existing: 'vorhanden',
           //end
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
@@ -1692,7 +1692,7 @@ define(
           states: 'Status',
           saveTeam: 'Gruppe speichern',
           save: 'speichern',
-          seconds: "Seconds",
+          seconds: "Sekunden",
           refreshing: 'Gruppen-Informationen aktualisieren',
           dataChanged: 'Informationen wurden geändert.',
           teamSubmitError: 'Fehler beim Erstellen: ',
@@ -1793,8 +1793,8 @@ define(
             deleteContactTitle: 'Ansprechpartner löschen',
             deleteContact: ' Sind Sie sicher, dass dieser Ansprechpartner gelöscht werden soll?',
             remove: 'löschen',
-            addTeamMemberCodeAsPhoneTitle: 'Teamlidcode wijzigen',
-            addTeamMemberCodeAsPhone: 'Er is een eigen teamlidcode ingevoerd, die niet overeen komt met de laatste vier cijfers van uw standaard telefoonnummer?',
+            addTeamMemberCodeAsPhoneTitle: 'Teammitgliedskode ändern',
+            addTeamMemberCodeAsPhone: 'Es wurde ein eigener Teammitgliedskode angegeben, der anders lautet, las die 4 letzten Ziffern Ihrer Teamtelefonnummer?',
             photoRemoveTitle: 'Profilbild löschen',
             photoRemoveBody: ' Sind Sie sicher, dass Ihr Profilbild gelöscht werden soll?',
             yes: 'Ja, das möchte ich',
@@ -1844,7 +1844,7 @@ define(
             'reachable': 'erreichbar',
             'available': 'verfügbar',
             'working': 'beschäftigt',
-            'offline': 'Off-line',
+            'offline': 'offline',
             'not_reachable': 'nicht erreichbar',
             'on_the_phone': 'am Telefon',
             'unknown': 'unbekannt',
@@ -1852,7 +1852,7 @@ define(
             'possibly_reachable': 'nichts geplant',
             'unreachable': 'nicht erreichbar',
             'unavailable': 'nicht verfügbar',
-            'unknown': 'Off-line'
+            'unknown': 'offline'
           },
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
@@ -1881,9 +1881,9 @@ define(
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
             //start TODO
 
-            '23': 'No valid body, some attributes are missing',
-            '24': 'Something is not configured properly,AskFast can not be reached',
-            '25': 'The phonenumber is already in use',
+            '23': 'Ungültig, es fehlen Angaben',
+            '24': 'Konfigurationsfehler, AskFast nicht möglich',
+            '25': 'Telefonnummer wird schon verwendet',
             '26': 'One of the conditions to activate TeamTelephone was unsuccessful',
             '27': 'The scenario could not be created for this team',
             '28': 'AskFast error',
@@ -1945,57 +1945,57 @@ define(
           errors: 'Errors'
         },
         task: {
-          timeframe: 'Tijdsbestek',
+          timeframe: 'Zeitspanne',
           status: 'Status',
-          description: 'Beschrijving',
-          createdBy: 'Gemaakt door',
-          name: 'Naam',
-          hasToload: ' aan het laden..',
-          showArchivedTasks: 'Toon gearchiveerde taken',
-          showOnlyNotAssignedTasks: 'Toon alleen niet toegewezen taken',
-          member: 'Lid',
+          description: 'Beschreibung',
+          createdBy: 'Erstellt durch',
+          name: 'Name',
+          hasToload: ' läd..',
+          showArchivedTasks: 'archivierte Aufgaben anzeigen',
+          showOnlyNotAssignedTasks: 'Nur nicht zugewiesene Aufgaben anzeigen',
+          member: 'Mitglied',
           thereAreAmountTasks: function (amountTasks)
           {
             if (amountTasks == 1)
             {
-              return "Er is " + amountTasks + " taak.";
+              return "Es gibt eine " + amountTasks + " Aufgabe.";
             }
             else
             {
-              return "Er zijn " + amountTasks + " taken."
+              return "Es gibt " + amountTasks + " Aufgaben."
             }
           },
-          carer: 'Verzorger',
-          information: 'Informatie',
-          noTasks: 'Geen taken',
-          clientName: 'Cliënt',
-          memberName: 'Lid',
-          orderType1: 'Standaard volgorde',
-          orderType2: 'Tijd',
-          tasks: 'Taken',
-          myTask: 'Mijn taken',
-          newTask: 'Nieuwe Taak',
-          orderby: 'Sorteer op',
-          allTasks: 'Alle taken',
-          description: 'Opmerkingen',
-          filltheTime: 'Vul de start- en eindtijd in voor de taak.',
-          startTimeEmpty: 'Vul de startdatum en -tijd in.',
-          endTimeEmpty: 'Vul de einddatum en -tijd in.',
-          planTaskInFuture: 'U kunt geen taak in het verleden aanmaken. Selecteer een start- en eindtijd in de toekomst.',
-          startLaterThanEnd: 'Beginttijd moet eerder zijn dan de eindtijd.',
-          specifyClient: 'Selecteer een cliënt voor deze taak.',
-          creatingTask: 'Taak wordt aangemaakt',
-          editingTask: 'Taak wordt gewijzigd',
-          taskSaved: 'Taak is opgeslagen.',
-          deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
-          taskDeleted: 'Taak verwijderd.',
-          planningTime: 'Tijdsbestek',
-          refreshTask: 'Het herladen van de taken',
-          upload: 'Upload taken',
-          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?',
-          taskDescriptionMinChars: 'Opmerkingen moeten uit minimaal 8 karakters bestaan.',
-          taskDescriptionMaxChars: 'Het maximaal aantal karakters voor opmerkingen is 500.',
-          taskFormValide: 'De nieuwe taak is niet valide! Ga de eisen onder elk veld na.'
+          carer: 'Betreuer',
+          information: 'Information',
+          noTasks: 'Keine Aufgaben',
+          clientName: 'Klient',
+          memberName: 'Mitglied',
+          orderType1: 'Standard -Reihenfolge',
+          orderType2: 'Zeit',
+          tasks: 'Aufgaben',
+          myTask: 'Meine Aufgaben',
+          newTask: 'Neue Aufgabe,
+          orderby: 'Aufsteigend sortieren',
+          allTasks: 'Alle Aufgaben',
+          description: 'Anmerkungen',
+          filltheTime: 'Geben Sie Start- und Endzeit der Aufgabe ein.',
+          startTimeEmpty: 'Geben Sie Startdatum und Startzeit ein.',
+          endTimeEmpty: 'Geben Sie Enddatum und Endzeit ein.',
+          planTaskInFuture: 'Sie können keine Aufgabe in der Vergangenheit einrichten. Wählen Sie Start und Ende in der Zukunft',
+          startLaterThanEnd: 'Beginn muss vor dem Ende liegen.',
+          specifyClient: 'Wählen Sie einen Klienten für die Aufgabe.',
+          creatingTask: 'Aufgabe wird erstellt',
+          editingTask: 'Aufgabe wird geändert',
+          taskSaved: 'Aufgabe gespeichert.',
+          deleteTaskConfirm: 'Sind Sie sicher, dass Sie diese Aufgabe endügltig löschen möchten?',
+          taskDeleted: 'Aufgabe gelöscht.',
+          planningTime: 'Zeitspanne',
+          refreshTask: 'Das Laden von Aufgaben',
+          upload: 'Aufgaben hochladen',
+          deleteTasksConfirm: 'Sind Sie sicher, dass Sie diese Anmerkungen löschen möchten?',
+          taskDescriptionMinChars: 'Anmerkungen müssen mindestens 8 Zeichen umfassen.',
+          taskDescriptionMaxChars: 'Anmerkungen können maximal 500 Zeichen umfassen.',
+          taskFormValide: 'Neue Aufgabe ungültig! Folgen Sie schrittweise den Anweisungen.'
         },
         order: {
           randomOrder: 'willkürlich',
@@ -2057,7 +2057,7 @@ define(
             mobileOrFixedLine: 'eine Festnetz- oder mobile Telefonnummer'
           },
           pincode: {
-            exists: 'Dieser Mitglieder-Kode ist bereits vergeben. Wählen Sie einen anderen!'
+            exists: 'Dieser Mitgliedskode ist bereits vergeben. Wählen Sie einen anderen!'
           },
           password: {
             amountMinChars: function (chars)
@@ -2073,15 +2073,15 @@ define(
           },
           email: {
             notValid: 'E-Mail Adresse ist fehlerhaft!',
-              required: 'es muss eine E-Mail Adresse eingetragen werden'
+              required: 'Es muss eine E-Mail Adresse eingetragen werden'
           },
           role: 'Rolle festlegen',
             birthDate: {
             notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
-            regex: 'Der Anwender Name darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
-              valid: 'Es muss ein Anwender Name festgelegt werden'
+            regex: 'Der Anwendername darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
+              valid: 'Es muss ein Anwendernamen festgelegt werden'
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
