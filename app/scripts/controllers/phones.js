@@ -4,213 +4,268 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'phones',
-      function ($scope, $rootScope, $q, Slots, Store, data, CurrentSelection)
+    function ($scope, $rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
+    {
+      $rootScope.notification.status = false;
+      $rootScope.fixStyles();
+      $scope.teams = angular.copy(data.teams);
+      $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
+
+      $scope.states['no-state'] = {
+        className: 'no-state',
+        label: $rootScope.ui.teamup.stateValue.possibly_reachable,
+        color: '#ececec',
+        type: $rootScope.ui.teamup.stateValue.possibly_reachable,
+        display: false
+      };
+
+      $scope.currentTeam = CurrentSelection.getTeamId();
+      $scope.teamMembers = data.members;
+      getReachability(data.membersReachability, setKeyAsUsername(data.members));
+
+      $scope.teams.push({
+        name: $rootScope.ui.dashboard.everyone,
+        uuid: 'Everyone'
+      });
+
+      /**
+       * Load the current team(s) including the slots
+       */
+      $scope.getGroupReachability = function ()
       {
-        $rootScope.notification.status = false;
+        $scope.loadGroup = $rootScope.ui.dashboard.load;
+        $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
-        $rootScope.fixStyles();
+        if ($scope.currentTeam === 'Everyone')
+        {
+          fetchAllTeams();
+        }
+        else
+        {
+          fetchReachPerTeam();
+        }
+      };
 
-        var teams = Store('app').get('teams'),
-          members = _.flatten(_.values(data.members)),
-          currentMembers = {},
-          everyoneId = 'all';
+      function fetchAllTeams()
+      {
+        var promises = [],
+            allMembers = [],
+            allReach = {
+              members: {}
+            };
 
-        members = $rootScope.unique(members);
+        _.each(data.teams, function (team)
+        {
+          var promise = $q.all([
+            Teams.getSingle(team.uuid),
+            Slots.MemberReachabilitiesByTeam(team.uuid, null)
+          ]);
+          promises.push(promise);
+        });
 
-        //if($rootScope.app.resources.role == 1)
-        //{
-        //  teams.unshift({
-        //    'name': $rootScope.ui.dashboard.everyone,
-        //    'uuid': everyoneId
-        //  });
-        //}
+        $q.all(promises)
+          .then(function(results)
+          {
+            _.each(results, function (result)
+            {
+              if(result[0] && result[0].length)
+              {
+                var team = result[0];
+                _.each(team, function (member)
+                {
+                  allMembers[member.uuid] = member;
+                });
+              }
 
-        $scope.groups = teams;
 
-        $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
+              if(result[1])
+              {
+                if(result[1].members)
+                {
+                  _.each(result[1].members, function (memberData, memberKey)
+                  {
+                    allReach.members[memberKey] = memberData;
+                  });
+                }
 
-        $scope.states['no-state'] = {
-          className: 'no-state',
-          label: $rootScope.ui.dashboard.possiblyReachable,
-          color: '#ececec',
-          type: $rootScope.ui.dashboard.noPlanning,
-          display: false
-        };
+                allReach.synced = result[1].synced;
+              }
+            });
+            getReachability(allReach, allMembers);
+          });
+      }
 
-        $scope.current = {
-          group: everyoneId
-        };
+      function fetchReachPerTeam()
+      {
+        CurrentSelection.local = $scope.currentTeam;
 
+        TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+          .then(function (options)
+          {
+            var promise = $q.all([
+              Teams.getSingle($scope.currentTeam),
+              Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
+            ]);
+
+            if (!options.adapterId)
+            {
+              $rootScope.notifier.error($rootScope.ui.options.teamTelephoneNotActivated);
+              promise = $q.reject();
+            }
+            return promise;
+          })
+          .then(function (result)
+          {
+            $scope.teamMembers = result[0];
+            getReachability(result[1], setKeyAsUsername($scope.teamMembers));
+          });
+      }
+
+      /**
+       * merge the member reachability data with the personal data of the member
+       * @param reachabilityData reachability data
+       */
+      function getReachability(currentReachability, currentMembers)
+      {
+        var ordered = {};
         $scope.loadingReachability = true;
 
-        var getMemberSlots = function(id, startTime)
+        $scope.loadGroup = '';
+        $rootScope.statusBar.off();
+
+
+
+        _.each(currentReachability.members, function (slots, id)
         {
-          return (id == everyoneId)
-            ? Slots.getAllMemberReachabilities(data.teams)
-            : Slots.MemberReachabilitiesByTeam(id, startTime);
-        };
+          //console.log('slots', slots);
+          //console.log('id', id);
 
-        //TODO resolve the Reachabilities of the member in the routing
-        $scope.getReachability = function (groupID, startTime)
-        {
-          var deferred = $q.defer(),
-              id = null;
-
-          if (!groupID)
+          if (currentMembers[id] &&
+            (currentMembers[id].role != 0 && currentMembers[id].role != 4))
           {
-            groupID = $scope.current.group;
-          }
+            var _member = {
+              id: id,
+              state: (slots.length > 0) ? slots[0].state : 'no-state',
+              label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
+              end: (slots.length > 0 && slots[0].end !== undefined) ?
+              slots[0].end * 1000 :
+                $rootScope.ui.dashboard.possiblyReachable,
+              name: (currentMembers && currentMembers[id]) ?
+              currentMembers[id].firstName + ' ' + currentMembers[id].lastName :
+                id
+            };
 
-          if (groupID == everyoneId)
-          {
-            currentMembers = members;
-          }
-          else if (typeof data.members[groupID] != 'undefined')
-          {
-            CurrentSelection.local = groupID;
-            currentMembers = $rootScope.unique(data.members[groupID]);
-          }
-
-          getMemberSlots(groupID, startTime)
-            .then(
-            function (results)
+            if (currentMembers && currentMembers[id])
             {
-              var ordered = {};
+              _member.name = currentMembers[id].firstName + ' ' + currentMembers[id].lastName;
+              _member.phone = currentMembers[id].phone;
+              _member.states = currentMembers[id].states;
+            }
+            else
+            {
+              _member.name = id;
+              _member.states = null;
+            }
 
-              _.each(results.members, function (slots, id)
+            if (slots.length > 0)
+            {
+              if (!ordered.reachable)
               {
-                if (currentMembers[id] &&
-                  (currentMembers[id].role != 0 && currentMembers[id].role != 4))
-                {
-                  var _member = {
-                    id: id,
-                    state: (slots.length > 0) ? slots[0].state : 'no-state',
-                    label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
-                    end: (slots.length > 0 && slots[0].end !== undefined) ?
-                    slots[0].end * 1000 :
-                      $rootScope.ui.dashboard.possiblyReachable,
-                    name: (currentMembers && currentMembers[id]) ?
-                    currentMembers[id].firstName + ' ' + currentMembers[id].lastName :
-                      id,
-                    phone: currentMembers[id].phone
-                  };
-
-                  if (slots.length > 0)
-                  {
-                    if (!ordered.reachable)
-                    {
-                      ordered.reachable = [];
-                    }
-
-                    if (!ordered.unreachable)
-                    {
-                      ordered.unreachable = [];
-                    }
-
-                    if (slots[0].state == 'com.ask-cs.State.Unavailable')
-                    {
-                      ordered.unreachable.push(_member);
-                    }
-                    else
-                    {
-                      if (slots[0].state == 'com.ask-cs.State.Available')
-                      {
-                        _member.style = 'sa-icon-reserve-available';
-                      }
-
-                      ordered.reachable.push(_member);
-                    }
-                  }
-                  else
-                  {
-                    if (! ordered.possible)
-                    {
-                      ordered.possible = [];
-                    }
-
-                    ordered.possible.push(_member);
-                  }
-                }
-              });
-
-              $scope.loadingReachability = false;
-
-              var sortByEnd = function (a, b)
-              {
-                if (a.end < b.end)
-                {
-                  return -1;
-                }
-
-                if (a.end > b.end)
-                {
-                  return 1;
-                }
-
-                return 0;
-              };
-
-              if (ordered.hasOwnProperty('reachable'))
-              {
-                ordered.reachable.sort(sortByEnd);
+                ordered.reachable = [];
               }
 
-              if (ordered.hasOwnProperty('unreachable'))
+              if (!ordered.unreachable)
               {
-                ordered.unreachable.sort(sortByEnd);
+                ordered.unreachable = [];
               }
 
-              var _reachables = [];
-
-              _.each(ordered.reachable, function (reachable)
+              if (slots[0].state == 'com.ask-cs.State.Unavailable')
               {
-                if (reachable.state == 'com.ask-cs.State.Available')
+                ordered.unreachable.push(_member);
+              }
+              else
+              {
+                if (slots[0].state == 'com.ask-cs.State.Available')
                 {
-                  _reachables.push(reachable);
+                  _member.style = 'sa-icon-reserve-available';
                 }
-              });
 
-              ordered.reachable = _reachables;
-
-              $scope.reachability = {
-                members: ordered,
-                synced: results.synced * 1000
-              };
-
-              deferred.resolve($scope.reachability);
-            },
-            function (results)
+                ordered.reachable.push(_member);
+              }
+            }
+            else
             {
-              deferred.reject(results);
-            });
+              if (!ordered.possible)
+              {
+                ordered.possible = [];
+              }
 
-          return deferred.promise;
-        };
+              ordered.possible.push(_member);
+            }
+          }
+        });
 
-
-        $scope.getGroupReachability = function ()
+        var sortByEnd = function (a, b)
         {
-          var deferred = $q.defer();
-          $scope.loadGroup = $rootScope.ui.dashboard.load;
-          $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
+          if (a.end < b.end)
+          {
+            return -1;
+          }
 
-          $scope.getReachability($scope.current.group)
-            .then(function (results)
-            {
-              deferred.resolve(results);
+          if (a.end > b.end)
+          {
+            return 1;
+          }
 
-              $scope.loadGroup = '';
-              $rootScope.statusBar.off();
-            },
-            function (results)
-            {
-              deferred.reject(results);
-              $rootScope.statusBar.off();
-            });
-          return deferred.promise;
+          return 0;
         };
 
-        $scope.getGroupReachability();
+        if (ordered.hasOwnProperty('reachable'))
+        {
+          ordered.reachable.sort(sortByEnd);
+        }
+
+        if (ordered.hasOwnProperty('unreachable'))
+        {
+          ordered.unreachable.sort(sortByEnd);
+        }
+
+        var _reachables = [];
+
+        _.each(ordered.reachable, function (reachable)
+        {
+          if (reachable.state == 'com.ask-cs.State.Available')
+          {
+            _reachables.push(reachable);
+          }
+        });
+
+        ordered.reachable = _reachables;
+
+        $scope.loadingReachability = false;
+
+        $scope.reachability = {
+          members: ordered,
+          synced: currentReachability.synced * 1000
+        };
       }
+
+      /**
+       * Set key as username array of members
+       * @param members
+       * @returns {Array}
+       */
+      function setKeyAsUsername(members)
+      {
+        var newMembers = [];
+
+        _.each(members, function (member)
+        {
+          newMembers[member.uuid] = member;
+        });
+
+        return newMembers;
+      }
+    }
   );
 });
