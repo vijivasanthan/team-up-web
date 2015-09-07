@@ -1974,7 +1974,7 @@ define(
           orderType2: 'Zeit',
           tasks: 'Aufgaben',
           myTask: 'Meine Aufgaben',
-          newTask: 'Neue Aufgabe,
+          newTask: 'Neue Aufgabe',
           orderby: 'Aufsteigend sortieren',
           allTasks: 'Alle Aufgaben',
           description: 'Anmerkungen',
