@@ -869,7 +869,6 @@ define(
           phoneNumberAlias: 'Phone number alias',
           noPhoneNumbers: 'There are no phone numbers left',
           activateTeamTelephone: "Activate team phone for the ",
-          //start TODO
           teamTelephoneNotActivated: "TeamTelephone is not activated for this team",
           smsMissedCall: 'SMS by a missed call or a new voicemail',
           receiveReachableMembers: 'Reachable team members receive',
@@ -881,7 +880,6 @@ define(
           voicemailEmailAddress: "Voicemail email address",
           voicemailEmailAddressDescription: "A email will be sent to this email address if a voicemail is left or the team has a missed call.",
           requiredFields: "required fields",
-          //end
           hasSms: function (sms)
           {
             return (sms)
@@ -1064,9 +1062,7 @@ define(
           loading_Group: 'Gruppen laden...',
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
-          //start TODO
           loggingOff: 'Abmelden',
-          //end
           logout: 'Abmelden',
           loading: 'Laden..',
           loading_clientGroups: 'Patientengruppen laden...',
@@ -1075,10 +1071,8 @@ define(
           loading_tasks: 'Aufgaben laden...'
         },
         video: {
-          //start TODO
           title: 'Video',
           videoNotLoaded: 'Videokonferenz konnte nicht gestartet werden.',
-          //end
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -1113,14 +1107,14 @@ define(
           week: 'Woche',
           month: 'Monat',
           updateAvail: 'Verfügbarkeit aktualisieren',
-          from: 'Ab',
+          from: 'ab',
           till: 'bis',
           state: 'Status',
           selectAState: 'Status wählen',
-          reoccuring: 'jede Woche',
+          reoccuring: 'jede woche',
           lessPeople: 'Es fehlen $v Personen.',
           samePeople: 'Es sind ausreichend Personen vorhanden.',
-          morePeople: 'E sind $v Personen zu viel.',
+          morePeople: 'Es sind $v Personen zu viel.',
           wished: 'Bedarf',
           combine_reoccuring: 'Es betrifft eine kombinierte Planung mit mehreren Reihen ?????? ',
           sendMsgToMember: 'Nachricht an Gruppe senden',
@@ -1137,11 +1131,9 @@ define(
           groups: 'Team',
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
-          //start TODO
           bothAvailable: 'beide verfügbar',
           northAavailable: 'verfügbar Nord',
           southAvailable: 'verfügbar Süd',
-          //end
           skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
@@ -1261,11 +1253,9 @@ define(
           groups: 'Team',
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
-          //start TODO
           bothAvailable: 'beide verfügbar',
           northAavailable: 'verfügbar Nord',
           southAvailable: 'verfügbar Süd',
-          //end
           skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
@@ -1336,11 +1326,11 @@ define(
           errorAdd: 'neue Planung kann nicht gespeichert werden!',
           errorChange: 'Fehler beim Ändern der Planung!',
           pastChanging: 'eine Planung in der Vergangenheit kann nicht geändert werden!',
-          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!!',
+          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!',
           remove: 'Fehler beim Löschen einer Planung!',
           wisher: 'Fehler beim Ändern des Bedarfes',
           editTimeline: 'Zeitspanne ändern  von ',
-          notAuth: 'Nur wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
+          notAuth: 'Nur, wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
           reachabilityChangedSentence: 'Die Planung Ihrer Verfügbarkeit kann geändert werden',
           byThe: 'durch',
           doubleClick: 'Doppelklick auf eine bereits',
@@ -1389,11 +1379,9 @@ define(
           voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder ihre Voice-Mailbox abschalten oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
         },
         message: {
-          //start TODO
           title: 'CHAT',
           messagesLoaded: 'Nachrichten laden...',
           videoStartedBy: 'Videokonferenz gestartet von ',
-          //end
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
           compose: 'erstellen',
@@ -1457,14 +1445,12 @@ define(
           send: 'versenden'
         },
         groups: {
-          //start TODO
           changeMemberShip: 'Mitgliedschaft ändern',
           doYou: 'Möchten Sie ',
           memberOfATeam: ' in das Team ',
           personPartOfTeams: 'Diese Person wird folgenden Teams zugeordnet ',
           replace: 'Ersetzen',
           personPartOfTeam: 'Diese Person wird nur Teil des Teams ',
-          //end
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
@@ -1514,14 +1500,12 @@ define(
           searchfor: 'Vorname, Nachname..'
         },
         profile: {
-          //start TODO
           noTeamSelected: 'kein Team ausgewählt',
           extra: 'Extra',
           default: 'Standard',
           back: 'Zurück',
           password: 'Passwort',
           timeline: 'Zeitverlauf',
-          //end
           profile: 'Profil',
           edit: 'ändern',
           profileView: 'Profilwiedergabe',
@@ -1640,23 +1624,19 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
-          //start TODO
           clientGroup: 'Clientgrupe',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team Mitglied',
           teamMembers: 'Team Mitglieder',
-          //end
           apply: 'Anwenden',
           hour: 'Stunde',
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
-          //start TODO
           help: "Hilfe",
           new: 'neu',
           existing: 'vorhanden',
-          //end
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
           clients: 'Patienten',
@@ -1879,8 +1859,6 @@ define(
             '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
             '21': 'Ein Parameter kann nicht bearbeitet werden',
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
-            //start TODO
-
             '23': 'Ungültig, es fehlen Angaben',
             '24': 'Konfigurationsfehler, AskFast nicht möglich',
             '25': 'Telefonnummer wird schon verwendet',
@@ -1893,7 +1871,6 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario'
-            //end
           },
         },
         upload: {
@@ -2000,24 +1977,19 @@ define(
         order: {
           randomOrder: 'willkürlich',
           fixedOrder: 'Reihenfolge selbst bestimmen',
-          //start TODO
           evenOrder: 'Evenly',
-          //end
           confirmation: 'Auswahl bestätigen',
           loadTeam: 'Gruppe laden...',
           orderSaved: 'Reihenfolge gespeichert',
           noMembers: 'keine Mitglieder in dieser Gruppe.',
-          //start TODO
           evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
           randomFeedback: 'With this option, a caller is always connected to any team member.',
           fixedOrderFeedback: 'With this option, the team can determine the sequence.'
-          //end
         },
         logs: {
           loadLogs: 'Logs laden...',
           empty: 'keine Logs vorhanden',
           filter: 'Logs filtern...',
-          //start TODO
           amountLogs: function (amount)
           {
             if (amount == 1)
@@ -2029,7 +2001,6 @@ define(
               return 'There are ' + amount + ' logs shown.';
             }
           },
-          //end
           status: {
             sent: 'ausgehend',
             received: 'eingehend',
@@ -2040,9 +2011,7 @@ define(
           }
         },
         validation: {
-          //start TODO
           data: "Eine oder mehrere Eingaben sind nicht abgeschlossen",
-          //end
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
