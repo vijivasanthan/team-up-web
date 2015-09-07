@@ -1,62 +1,69 @@
 section
 	.page-header.agenda-timeline
 		h2.nullable
-			| Volgorde
+			| {{ ui.teamup.order }}
 	div(style='margin-top: 20px;')
 	.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 		//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 		label.control-label {{ ui.teamup.selectTeam }}
 		.controls
 			select(
-				ng-model='currentTeam',
-				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
-				ng-selected='currentTeam',
-				ng-change='fetchOrder()')
+			ng-model='currentTeam',
+			ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
+			ng-selected='currentTeam',
+			ng-change='fetchOrder()')
 
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 			include ../agenda/tabs
-			
+
 		.tab-content
 			#order.tab-pane.active
 				div(ng-show='currentTeam === ""')
-					| Er is geen team geselecteerd
+					| {{ ui.profile.noTeamSelected }}
 				div(style='overflow: hidden;')
 					h3.pull-left
 						| {{currentTeam | getGroupNameById | toTitleCase}} 
 						span(ng-show='load') {{load}}
-					div.btn-group.pull-right
-						label.btn.btn-primary(class='{{(orderType == "FIXED") && "active"}}')
-							input(type='radio',
-							ng-model='orderType',
-							value='FIXED',
-							ng-change='orderTypePreview()')
-							| {{ ui.order.fixedOrder }}
-						label.btn.btn-primary(class='{{(orderType == "RANDOM") && "active"}}')
-							input(type='radio',
-							ng-model='orderType',
-							value='RANDOM',
-							ng-change='orderTypePreview()')
-							| {{ ui.order.randomOrder }}
 				hr
 				div
+					form.form-vertical(name='formActivateTT', novalidate)
+						.form-group.has-feedback()
+							.controls
+								select(ng-model='orderType',
+								required,
+								ng-options='orderType.id as orderType.name for orderType in orderTypes',
+								ng-selected='orderTypes[0]')
+								span.help-block(ng-show='orderType == "FIXED"')
+									small
+										i
+											| {{ ui.order.fixedOrderFeedback }}
+								span.help-block(ng-show='orderType == "RANDOM"')
+									small
+										i
+											| {{ ui.order.randomFeedback }}
+								span.help-block(ng-show='orderType == "LONGEST_IDLE"')
+									small
+										i
+											| {{ ui.order.evenOrderFeedback }}
+
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
-						type='button', ng-click='saveOrder()')
-							| {{ ui.order.confirmation }}
-					p(ng-show='orderType == "RANDOM"') {{ ui.order.randomFeedback }}
-					p(ng-show='orderedMembers.length == 0 && orderType != "RANDOM"') {{ ui.order.noMembers }}
+					type='button', ng-click='saveOrder()')
+						| {{ ui.order.confirmation }}
+
+					p(ng-show='orderedMembers.length == 0 && orderType == "FIXED"') {{ ui.order.noMembers }}
+
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead
 							tr
 								th
 									a {{ui.tasks.orderType1}}
-								th 
+								th
 								th
 								th {{ui.teamup.name}}
 								th {{ui.teamup.phone}}
-						tbody(ng-sortable="sortableOptions",
-							ng-model="orderedMembers")
-							tr(ng-repeat='member in orderedMembers', ng-class="{unsortable: orderType=='RANDOM'}")
+						tbody(sv-root, sv-part="orderedMembers", ng-model="orderedMembers")
+							tr(ng-repeat='member in orderedMembers', sv-element)
 								td
 									.orderNumber
 										| {{member.originalPosition + 1}}
@@ -64,7 +71,7 @@ section
 									.dragIcon
 								td
 									.roundedPicSmall(class='{{member.states|stateColor}}',
-										back-img = '{{member.uuid | avatar:"team":"80" }}')
+									back-img = '{{member.uuid | avatar:"team":"80" }}')
 										span.badge(ng-show='member.states|stateReachable')
 											i.glyphicon.glyphicon-earphone
 								td
@@ -72,7 +79,7 @@ section
 										| {{member.firstName}} {{member.lastName}}
 								td
 									| {{member.phoneE164}}
-					
+
 					div(style='margin-top: 20px;')
 						//ul(ng-sortable="{animation:150}")
 						//	li(ng-repeat="item in items") {{item}}

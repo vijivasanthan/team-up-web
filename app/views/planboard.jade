@@ -6,7 +6,7 @@ div(ng-controller='timeline as taskPlanboard')
 				.modal-header
 					button.close(type='button', data-dismiss='modal')
 						span(aria-hidden='true') ×
-						span.sr-only Close
+						span.sr-only {{ ui.message.close }}
 					h4#confirmTasksDeleteModal.modal-title {{ui.planboard.removeTasksTitle}}
 				.modal-body
 					| {{ ui.planboard.removeTasksRange(removeTaskOptions) }}
@@ -26,7 +26,7 @@ div(ng-controller='timeline as taskPlanboard')
 				span.nullable.pull-left(ng-show='views.teams')
 					.selectGroup
 						span.selectTitle
-							| Selecteer team
+							| {{ ui.teamup.selectTeam }}
 						select(ng-model='currentTeam',
 						ng-options='t.uuid as t.name for t in data.teams.list | orderBy:"name"',
 						ng-selected='currentTeam',
@@ -35,7 +35,7 @@ div(ng-controller='timeline as taskPlanboard')
 				span.nullable.pull-left(ng-show='views.clients')
 					.selectGroup
 						span.selectTitle
-							| Selecteer groep
+							| {{ ui.teamup.selectClientGroup }}
 						select(ng-model='currentClientGroup'
 						ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
 						ng-selected='currentClientGroup',
@@ -213,7 +213,7 @@ div(ng-controller='timeline as taskPlanboard')
 				li(class="{{(views.teams==true || views.clients==true) && 'active'}}")
 					a(data-toggle='tab', ng-click='setViewTo(current,"teams")')
 						span.entypo &#128340;
-						| Agenda
+						| {{ ui.agenda.planboard }}
 	
 			.tab-content.treegrid-container(ng-controller='treegrid')
 	
@@ -229,14 +229,14 @@ div(ng-controller='timeline as taskPlanboard')
 							ng-click='setViewTo(current,"clients")')
 								span.icomoon(data-icon='',
 								aria-hidden='true')
-								|  Clienten
+								|  {{ ui.teamup.clients }}
 							button.btn.btn-primary(type='button',
 							class="{{(views.teams==true) && 'active'}}",
 							data-toggle='tab',
 							ng-click='setViewTo(current,"teams")')
 								span.icomoon(data-icon='',
 								aria-hidden='true')
-								| Teams
+								| {{ ui.teamup.teams }}
 							
 						button.btn.pull-right.btn-danger.marginRightTen(type='button',
 						class="",
@@ -244,7 +244,7 @@ div(ng-controller='timeline as taskPlanboard')
 						ng-show='views.teams',
 						ng-click='confirmDeleteTasks(timeline.range)')
 							span.glyphicon.glyphicon-trash
-							|  Verwijder taken
+							|  {{ ui.planboard.removeTasksTitle }}
 						
 						div#timeline-controls(ng-controller='timeline-navigation')
 							.form-group.has-feedback.pull-left.dateranger.marginLeftTen

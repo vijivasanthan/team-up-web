@@ -22,61 +22,32 @@ require.config(
       angular: '../vendors/angular/angular.min',
       plugins: 'plugins',
       domReady: '../vendors/requirejs-domready/domReady',
-
-      // bootstrap: '../vendors/bootstrap-sass-official/vendor/assets/javascripts/bootstrap',
       bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
-
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
       'angular-cookie': '../vendors/angular-cookie/angular-cookie',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
-
+      'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
-      //'angular-strap': 'removables/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
-
+      'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      // timeline:           '../vendors/chap-links-library/js/src/timeline/timeline-min',
       timeline: 'removables/timeline',
-
-      // treegrid:           '../vendors/chap-links-library/js/src/treegrid/treegrid-min',
       treegrid: 'removables/treegrid',
       config: 'configTeamUp',
-
-      // datepicker:         '../vendors/bootstrap-datepicker/js/bootstrap-datepicker',
-      // datepicker:         '../vendors/jquery-ui/ui/jquery.ui.datepicker',
-      // timepicker:         '../vendors/bootstrap-timepicker/js/bootstrap-timepicker.min'
-
-      //timepicker: 'removables/timepicker.min',
-      //md5: '../vendors/web-lib-md5/md5.min',
       store: '../vendors/web-lib-store/dist/store',
       'lodash': '../vendors/lodash/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
-      moment: '../vendors/moment/moment',
+      moment: '../vendors/moment/min/moment-with-locales',
+      'moment-timezone': '../vendors/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
       phone: '../vendors/web-lib-phonenumber/libphonenumber',
-      //moment: '../vendors/momentjs/min/moment-with-langs.min',
-      // interceptor: '../vendors/web-lib-interceptor/dist/interceptor',
-
       log: '../vendors/web-lib-log/dist/log',
       session: '../vendors/web-lib-session/dist/session',
-
-      // vis: '../vendors/vis/dist/vis.min',
-      // 'ng-vis': '../vendors/web-lib-vis/public/dist/ng-vis',
-
       'jquery-form': '../vendors/jquery-form/jquery.form',
-
-      //'async':            '../vendors/requirejs-plugins/src/async',
-      // 'angular-google-maps': '../vendors/angular-google-maps/dist/angular-google-maps.min',
+      'locale': 'i18n/angular-locale_nl',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
-      //'ui-sortable':      '../vendors/angular-ui-sortable/sortable',
-      'sortable': '../vendors/Sortable/Sortable',
-      'ng-sortable': '../vendors/Sortable/ng-sortable',
-      'locale_nl': 'i18n/angular-locale_nl',
-
-      // jszip: '../vendors/js-xlsx/jszip',
-      // xlsx: '../vendors/js-xlsx/xlsx'
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
@@ -91,44 +62,25 @@ require.config(
       'angular-strap': { deps: ['angular'], exports: 'angular' },
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
+      'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
+      'angular-sortable-view': { deps: ['angular'], exports: 'angular' },
       'angular-md5': { deps: ['angular'], exports: 'angular' },
       bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       lawnchair: { deps: [], exports: 'Lawnchair' },
       dom: { deps: ['lawnchair'], exports: 'Lawnchair' },
       timeline: { deps: [], exports: 'links.Timeline' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
-      //moment: { deps: [], exports: 'moment' },
       treegrid: { deps: [], exports: 'links.TreeGrid' },
-      //datepicker: { deps: ['jquery', 'bootstrap'], exports: 'datepicker' },
-      //timepicker: { deps: ['jquery', 'bootstrap'], exports: 'timepicker' },
-      //md5: { exports: 'md5'},
       mask: { deps: ['angular'] },
       lodash: { exports: '_'},
       store: { deps: ['angular', 'lodash']},
       offline: { deps: ['angular'] },
       'clj-fuzzy': { deps: [], exports: 'clj_fuzzy'},
-
-      // interceptor: { deps: ['angular'] },
-
       log: { deps: ['angular'] },
       phone: { deps: ['angular'] },
-      //_moment: { deps: ['angular', 'moment'] },
       session: { deps: ['angular'] },
-
-      // vis: { exports: 'vis' },
-      // 'ng-vis': { deps: ['angular', 'vis'], exports: 'ng-vis' },
-
-      // 'angular-google-maps': { deps: ['angular'] },
-
       'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
-      // 'angular-dragdrop': { deps: ['jquery','jquery-ui'], exports: 'dragdrop'},
-      //'ui-sortable':      { deps: ['jquery','jquery-ui'], exports: 'ui-sortable' },
-
-      'locale_nl': { deps: ['angular'] }
-
-      // jszip: { exports: 'jszip' },
-      // xlsx: { deps: ['jszip'], exports: 'xlsx' }
-
+      'locale': { deps: ['angular'] }
     },
     config: {
       moment: {
@@ -173,6 +125,7 @@ require(
     'angular-md5',
     'angular-strap',
     'angular-strap-tpl',
+    'angular-dynamic-locale',
 
     'locals',
     'profile',
@@ -202,12 +155,9 @@ require(
     'services/moment',
     'services/settings',
 
-    // 'services/googleGEO',
-
     'directives/widgets',
     'directives/date-range-picker',
     'directives/log-ranger',
-    // 'directives/treegrid',
 
     'modals/task',
     'modals/slots',
@@ -269,22 +219,11 @@ require(
     'log',
     'phone',
     'session',
-    // 'vis',
-    // 'ng-vis',
     'jquery-form',
-
     'lodash',
-    // 'angular-google-maps',
-
     'jquery-ui',
-    // 'angular-dragdrop',
-    //'ui-sortable',
-    //'Sortable',
-    'ng-sortable',
-    'locale_nl',
-
-    // 'jszip',
-    // 'xlsx'
+    'angular-sortable-view',
+    'locale',
     'clj-fuzzy'
   ],
   function (angular, domReady)

@@ -23,8 +23,10 @@ define(
         '$route',
         'Pincode',
         '$injector',
+        'moment',
+        'tmhDynamicLocale',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -82,7 +84,17 @@ define(
 
           $rootScope.config = config;
           $rootScope.config.app.init();
+
+          //@TODO create a angular-translate service
+          //Set language
           $rootScope.ui = locals.ui[config.app.lang];
+          moment.locale(config.app.lang);
+          tmhDynamicLocale.set(config.app.lang);
+
+          //Set timezone
+          //moment.tz('Europe/Amsterdam');
+          //moment.tz('Europe/Berlin');
+          //}
 
           /**
           * test if localStorage is reachable

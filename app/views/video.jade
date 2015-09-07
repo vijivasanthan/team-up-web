@@ -1,5 +1,5 @@
 .page-header
-	h2.nullable Video
+	h2.nullable {{ ui.video.title }}
 
 
 .tabbable.tabs-left
@@ -9,7 +9,7 @@
 		li(class="{{'active'}}")
 			a(data-toggle='tab', ng-click='setViewTo("web")')
 				span.icomoon(data-icon='', aria-hidden='true')
-				| Video
+				| {{ ui.video.title }}
 
 
 	.tab-content
@@ -18,7 +18,7 @@
 			//	h3.pull-left Video gesprek met testgebruiker
 			//hr
 			.tab-header(ng-show='(getRoom()) == null')
-				p Uw videogesprek kon niet worden geladen.
+				p {{ ui.video.videoNotLoaded }}
 			hr
 			div(class="embed-responsive embed-responsive-16by9")
 				iframe(data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)

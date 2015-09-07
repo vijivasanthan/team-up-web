@@ -1,12 +1,12 @@
 section#logs
 	.page-header.agenda-timeline
-		h2.nullable Logs
+		h2.nullable {{ ui.teamup.logs }}
 	div
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			label.control-label {{ ui.teamup.chooseTeam }}
 			.controls
 				select(ng-model='logs.current',
-				ng-options='team.teamId as team.name for team in logs.data.teams | orderBy:"name"',
+				ng-options='team.uuid as team.name for team in logs.data.teams | orderBy:"name"',
 				ng-selected='logs.current',
 				ng-change='logs.fetchLogs()')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
@@ -87,4 +87,4 @@ section#logs
 					span.text-muted  {{logs.data.logData.periods.endTime | date: 'medium'}}
 				small.text-muted.pull-right(ng-show='logs.data.logData.logs.length > 0')
 					br
-					i Er zijn {{(logs.data.logData.logs|filter:filtered).length}} logs getoond.
+					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter:filtered).length) }}

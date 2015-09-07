@@ -2,10 +2,19 @@
  * Welcoming page styles
  */
 #welcomeLogoTeamTelefoon {
-  background-image: url("../images/TeamTelefoonLogo.png");
   margin: 0 auto 40px;
   height: 82px;
   width: 363px;
+  background-repeat: no-repeat;
+  background-image: url("../images/TeamTelefoonLogo.png");
+}
+
+.nl {
+  background-image: url("../images/TeamTelefoonLogo.png") !important;
+}
+
+.de {
+  background-image: url("../images/teamTelefoonLogoSloganDE.png") !important;
 }
 
 #welcomeLogoTeamUp {

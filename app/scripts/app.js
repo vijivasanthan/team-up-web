@@ -11,13 +11,9 @@ define(
     'angular-route',
     'angular-md5',
     'angular-strap',
-    //'ui-sortable',
-    'ng-sortable',
-    'angular-cookie',
-    //'ui-bootstrap',
-    // 'ng-vis',
-    // 'angular-google-maps',
-    // 'angular-dragdrop',
+    'angular-dynamic-locale',
+    'angular-sortable-view',
+    'angular-cookie'
   ],
   function (angular)
   {
@@ -28,23 +24,14 @@ define(
         'services',
         'filters',
         'directives',
-
         'ngResource',
         'ngRoute',
         'ngMd5',
         'mgcrea.ngStrap',
-        //'ui.sortable',
-        //'ui.bootstrap.pagination',
         'ui.mask',
-
-        'ng-sortable',
-        'ipCookie'
-        //'$strap.directives',
-        //'ui.bootstrap.modal',
-        // 'NgVis',
-        // 'google-maps',
-        // 'ngDragDrop',
-        // 'collapse',
+        'angular-sortable-view',
+        'ipCookie',
+        'tmh.dynamicLocale'
       ]);
   }
 );
