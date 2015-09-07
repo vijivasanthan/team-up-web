@@ -1065,7 +1065,7 @@ define(
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
           //start TODO
-          loggingOff: 'Logout',
+          loggingOff: 'Abmelden',
           //end
           logout: 'Abmelden',
           loading: 'Laden..',
@@ -1077,7 +1077,7 @@ define(
         video: {
           //start TODO
           title: 'Video',
-          videoNotLoaded: 'Videokonferenz konnte nicht geladen werden.',
+          videoNotLoaded: 'Videokonferenz konnte nicht gestartet werden.',
           //end
           stop: 'Videokonferenz wurde beendet.'
         },
@@ -1092,10 +1092,10 @@ define(
           noPlanning: 'Keine Planung',
           load: 'laden...',
           time: {
-            days: 'd',
-            hours: 'h',
-            minutes: 'min',
-            seconds: 'sek'
+            days: 'T',
+            hours: 'S',
+            minutes: 'M',
+            seconds: 'S'
           },
           accessibilityStatement: 'Übersicht Verfügbarkeit',
           loading: 'laden...',
@@ -1241,10 +1241,10 @@ define(
           till: 'bis',
           state: 'Status',
           selectAState: 'Status wählen',
-          reoccuring: 'jede Woche',
+          reoccuring: 'jede woche',
           lessPeople: 'Es fehlen $v Personen.',
           samePeople: 'Es sind ausreichend Personen vorhanden.',
-          morePeople: 'E sind $v Personen zu viel.',
+          morePeople: 'Es sind $v Personen zu viel.',
           wished: 'Bedarf',
           combine_reoccuring: 'Es betrifft eine kombinierte Planung mit mehreren Reihen ?????? ',
           sendMsgToMember: 'Nachricht an Gruppe senden',
@@ -1391,8 +1391,8 @@ define(
         message: {
           //start TODO
           title: 'CHAT',
-          messagesLoaded: 'Lade Nachrichten...',
-          videoStartedBy: 'Videonachricht gestartet durch ',
+          messagesLoaded: 'Nachrichten laden...',
+          videoStartedBy: 'Videokonferenz gestartet von ',
           //end
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
@@ -1540,7 +1540,7 @@ define(
           newPass: 'neues Passwort',
           newPassRepeat: 'neues Passwort wiederholen',
           changePass: 'Passwort ändern',
-          newAvail: 'Neue Verfügbarkeit',
+          newAvail: 'neue Verfügbarkeit',
           userName: 'Anwendername',
           pincode: 'Teammitgliedscode',
           refreshing: 'Profil aktualisieren...',
@@ -1654,7 +1654,7 @@ define(
           options: 'Einstellungen',
           //start TODO
           help: "Hilfe",
-          new: 'Neu',
+          new: 'neu',
           existing: 'vorhanden',
           //end
           teams: 'Gruppen',
