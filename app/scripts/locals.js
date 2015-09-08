@@ -863,7 +863,7 @@ define(
           errors: 'Errors'
         },
         options: {
-          title: 'Einstellungen ',
+          title: 'Options ',
           teamEmail: 'Team email',
           pickAPhoneNumber: 'Pick a phone number',
           phoneNumberAlias: 'Phone number alias',
@@ -2088,7 +2088,7 @@ define(
           loading_Members: 'Teamleden laden...',
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
-          loggingOff: 'Logging off',
+          loggingOff: 'Uitloggen',
           loading: 'Laden..',
           loading_clientGroups: 'Cliëntengroepen laden...',
           loading_clients: 'Cliënten laden',
