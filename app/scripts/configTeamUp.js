@@ -16,10 +16,12 @@ define(['profile'], function(profile){
 
       host: localConfig.host,
 
-      //analytics: {
-      //  status: profile.analytics.status,
-      //  code: profile.analytics.code
-      //},
+      otapRole: localConfig.otapRole,
+
+      backEnds: [
+        'https://backend.ask-cs.nl/',
+        'https://bz-backend.ask-cs.nl/'
+      ],
 
       formats: {
         date: 'dd-MM-yyyy',
