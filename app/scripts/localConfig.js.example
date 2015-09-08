@@ -34,26 +34,3 @@ var localConfig = {
 	//defaultProfile: "teamtelefoon"
 
 };
-
-/**
- Profiles
-
- ********
- * Dev
- * ******
- * Test
- * liza->askaskask
- * handers->askask11
- * jlima->askask11
- *  Demo
- *  ecare___stefan askaskask
- * ******
- * Live
- * ******
- * jhellingman
- * Ikbenjeroen1
- * ******
- * Local
- * ******
-
- **/
