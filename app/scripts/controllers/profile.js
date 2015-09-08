@@ -52,6 +52,9 @@ define(
           $rootScope.fixStyles();
 
           $scope.roles = config.app.roles;
+          $scope.roles[0].label = $rootScope.ui.teamup.coordinator;
+          $scope.roles[1].label = $rootScope.ui.teamup.teamMember;
+
           $scope.mfuncs = config.app.mfunctions;
 
           $scope.view = data;

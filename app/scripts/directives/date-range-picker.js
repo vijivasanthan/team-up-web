@@ -1,6 +1,6 @@
 define(
-  ['directives/directives'],
-  function (directives) {
+  ['directives/directives', 'config'],
+  function (directives, config) {
     'use strict';
 
     directives.directive(
@@ -34,8 +34,8 @@ define(
                   toLabel:        $rootScope.ui.teamup.to,
                   weekLabel:      'W',
                   customRangeLabel: $rootScope.ui.planboard.customDates,
-                  daysOfWeek:     Date.CultureInfo.shortestDayNames,
-                  monthNames:     Date.CultureInfo.monthNames,
+                  daysOfWeek:     moment.weekdaysMin(),
+                  monthNames:     moment.months(),
                   firstDay:       0
                 },
                 ranges: {}

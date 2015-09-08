@@ -7,7 +7,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteContactTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteContact}}
@@ -15,7 +15,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='removeContact(_contact)') Verwijderen
+				ng-click='removeContact(_contact)') {{ uit.teamup.del }}
 
 #confirmClientModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -26,7 +26,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientFromTeamTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteClientFromTeam}}
@@ -34,7 +34,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteClient(_clientId)') Verwijderen
+				ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
 
 #confirmClientGroupModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -45,7 +45,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmClientGroupModalLabel.modal-title {{ui.teamup.confirms.deleteClientGroupTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteClientGroup}}
@@ -64,7 +64,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmReportModalLabel.modal-title {{ui.teamup.confirms.deleteReportTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteReport}}
@@ -174,15 +174,15 @@ aria-hidden='true')
 							.modal-header
 								button.close(type='button', data-dismiss='modal')
 									span(aria-hidden='true') ×
-									span.sr-only Close
+									span.sr-only {{ ui.message.close }}
 								h4#confirmClientModalLabel.modal-title {{ui.teamup.confirms.deleteClientTitle}}
 							.modal-body
 								| {{ui.teamup.confirms.deleteClient}}
 							.modal-footer
 								button.btn.btn-default(type='button',
-								data-dismiss='modal') Annuleren
+								data-dismiss='modal') {{ uit.teamup.cancel }}
 								button.btn.btn-primary(type='button',
-								ng-click='deleteClient(_clientId)') Verwijderen
+								ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
 				span.muted.pull-right
 					small
 						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
@@ -380,7 +380,7 @@ aria-hidden='true')
 
 			div(ng-show='client.extraInfo.basic')
 				.tab-header
-					h3.pull-left Cliënt Informatie
+					h3.pull-left {{ ui.task.clientName }} {{ ui.taks.information }}
 				hr
 				p.description {{client.extraInfo.basic || '-' }}
 				br
@@ -553,7 +553,7 @@ aria-hidden='true')
 							value='{{client.clientProfileUrl}}',
 							ng-model='clientmeta.clientProfileUrl')
 					.control-group
-						label.control-label Extra Info
+						label.control-label {{ ui.profile.extra }} {{ ui.task.information }}
 						.controls
 							textarea.span8(style='height: 150px',
 							ng-model='clientmeta.extraInfo.basic')

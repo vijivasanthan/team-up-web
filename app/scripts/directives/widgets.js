@@ -13,12 +13,18 @@ define(
         {
           scope.$watch(
             'receviersList',
-            function () { element.trigger('liszt:updated') }
+            function ()
+            {
+              element.trigger('liszt:updated')
+            }
           );
 
           scope.$watch(
             'message.receviers',
-            function () { angular.element(element[0]).trigger('liszt:updated') }
+            function ()
+            {
+              angular.element(element[0]).trigger('liszt:updated')
+            }
           );
 
           element.chosen();
@@ -31,6 +37,43 @@ define(
       }
     );
 
+    //TODO custom team switch selectbox
+    directives.directive(
+      'selectBox', function ()
+      {
+        return {
+          replace: true,
+          restrict: 'E',
+          scope: false,
+          template: function (element, attrs)
+          {
+            if (!angular.isDefined(attrs.defaultLabel))
+            {
+              attrs.defaultLabel = "";
+            }
+
+
+
+            return '<div class="selectBox selector">' +
+              '<span>' + attrs.name + '</span>' +
+              '<select name="' + attrs.name + '" ng-model="' + attrs.ngModel + '" ng-options="' + attrs.optexp + '"' + ((attrs.required) ? ' required' : '') + '></select>' +
+              '</div>';
+          },
+          link: function (scope, el, attrs)
+          {
+            scope.$watch(attrs.ngModel, function ()
+            {
+              var model = scope.$eval(attrs.ngModel);
+              //when value changes, update the selectBox text
+              if (angular.isDefined(model) && angular.isDefined(model.name))
+              {
+                el[0].firstChild.innerText = model.name;
+              }
+            });
+          }
+        }
+      });
+
     // Upload images
     directives.directive(
       'uploader', [
@@ -42,7 +85,7 @@ define(
               action: '@'
             },
             controller: [
-              '$scope', '$rootScope', 'Session' ,
+              '$scope', '$rootScope', 'Session',
               function ($scope, $rootScope, Session)
               {
                 $scope.progress = 0 + '%';
@@ -70,7 +113,10 @@ define(
                   $form.attr('action', $scope.action);
 
                   $scope.$apply(
-                    function () { $scope.progress = 0 + '%' }
+                    function ()
+                    {
+                      $scope.progress = 0 + '%'
+                    }
                   );
 
                   $form.ajaxSubmit(
@@ -97,7 +143,7 @@ define(
                       success: function ()
                       {
                         var ar = angular.element(el).val().split('\\'),
-                            filename = ar[ar.length - 1];
+                          filename = ar[ar.length - 1];
 
                         //$form.removeAttr('action');
 
@@ -153,7 +199,10 @@ define(
             link: function (scope, elem, attrs, ctrl)
             {
               elem.find('.fake-uploader').click(
-                function () { elem.find('input[type="file"]').click() }
+                function ()
+                {
+                  elem.find('input[type="file"]').click()
+                }
               );
             },
             replace: false,
@@ -177,7 +226,9 @@ define(
               '$scope',
               function ($scope)
               {
-                $scope.loadMember = function (el) {}
+                $scope.loadMember = function (el)
+                {
+                }
               }
             ],
             link: function (scope, elem, attrs, ctrl)
@@ -194,16 +245,21 @@ define(
 
     directives.directive(
       'focus',
-      function($timeout) {
+      function ($timeout)
+      {
 
         return {
-          scope : {
-            trigger : '@focus'
+          scope: {
+            trigger: '@focus'
           },
-          link : function(scope, element) {
-            scope.$watch('trigger', function(value) {
-              if (value === "true") {
-                $timeout(function() {
+          link: function (scope, element)
+          {
+            scope.$watch('trigger', function (value)
+            {
+              if (value === "true")
+              {
+                $timeout(function ()
+                {
                   element[0].autoFocus = true;
                   element[0].focus();
                 });
@@ -253,16 +309,20 @@ define(
           //  s.addRange(range);
           //};
 
-          function SelectText(element) {
+          function SelectText(element)
+          {
             var doc = document
               , text = doc.getElementById(element)
               , range, selection
               ;
-            if (doc.body.createTextRange) {
+            if (doc.body.createTextRange)
+            {
               range = document.body.createTextRange();
               range.moveToElementText(text);
               range.select();
-            } else if (window.getSelection) {
+            }
+            else if (window.getSelection)
+            {
               selection = window.getSelection();
               range = document.createRange();
               range.selectNodeContents(text);
@@ -281,28 +341,31 @@ define(
 
     // TODO: Is it really needed? Maybe use ng-submit
     directives.directive(
-    'ngenter',
-    function ()
-    {
-      return function (scope, element, attrs)
+      'ngenter',
+      function ()
       {
-        element.bind(
-          'keydown keypress',
-          function (event)
-          {
-            if (event.which === 13)
+        return function (scope, element, attrs)
+        {
+          element.bind(
+            'keydown keypress',
+            function (event)
             {
-              scope.$apply(
-                function () { scope.$eval(attrs.ngenter) }
-              );
+              if (event.which === 13)
+              {
+                scope.$apply(
+                  function ()
+                  {
+                    scope.$eval(attrs.ngenter)
+                  }
+                );
 
-              event.preventDefault();
+                event.preventDefault();
+              }
             }
-          }
-        );
-      };
-    }
-  );
+          );
+        };
+      }
+    );
 
     // Setup the background image
     directives.directive(
@@ -310,9 +373,9 @@ define(
       {
         return function (scope, element, attrs)
         {
-//			console.log(element.parent('a'));
-//			console.log('attrs-> ', attrs);
-//			console.log('attrs->backImg-> ', attrs.backImg);
+          //			console.log(element.parent('a'));
+          //			console.log('attrs-> ', attrs);
+          //			console.log('attrs->backImg-> ', attrs.backImg);
           var url = attrs.backImg;
           element.css(
             {
@@ -355,13 +418,13 @@ define(
 
     directives.directive(
       'dragEnterLeave',
-      function()
+      function ()
       {
         return {
           link: function (scope, element, attrs)
           {
             var className = attrs.dragEnterLeave,
-                defaultText = element.text();
+              defaultText = element.text();
 
             element.bind(
               'dragenter',
@@ -388,7 +451,7 @@ define(
 
     directives.directive(
       'setPositionSlotForm',
-      function($window)
+      function ($window)
       {
         return {
           restrict: 'A',
@@ -396,7 +459,7 @@ define(
           {
             element.bind(
               'mouseup',
-              function(ev)
+              function (ev)
               {
                 var footer = angular.element('#footer').height(),
                   form = angular.element('.time-slot-form'),
@@ -422,17 +485,19 @@ define(
 
     directives.directive(
       'dynamic',
-      function($compile)
+      function ($compile)
       {
-        return function(scope, element, attrs)
+        return function (scope, element, attrs)
         {
           console.log('attrs', attrs.dynamicType);
 
           var ensureCompileRunsOnce = scope.$watch(
-            function(scope) {
+            function (scope)
+            {
               return scope.$eval(attrs.dynamic);
             },
-            function(value) {
+            function (value)
+            {
               console.log('value', value);
               element.html(value);
               $compile(element.contents())(scope);
@@ -444,8 +509,31 @@ define(
     );
 
     directives.directive(
+      'hideTeamTelephoneTabs',
+      function ()
+      {
+        return {
+          restrict: 'A',
+          link: function (scope, element, attrs)
+          {
+            var tabsParent = angular.element('li:not(:last)', element);
+
+            if (attrs.hideTeamTelephoneTabs)
+            {
+              tabsParent.addClass('ng-hide');
+            }
+            else
+            {
+              tabsParent.removeClass('ng-hide');
+            }
+          }
+        };
+      }
+    );
+
+    directives.directive(
       'inputRuleToggle',
-      function()
+      function ()
       {
         return {
           restrict: 'A',
@@ -453,19 +541,19 @@ define(
           {
             var index = attrs.inputRuleToggle,
               parentFormGroup = element
-                                    .parents('.form-group');
+                .parents('.form-group');
 
             element.bind('click',
-              function()
+              function ()
               {
-                if(element.hasClass('add-button'))
+                if (element.hasClass('add-button'))
                 {
                   parentFormGroup.next()
                     .removeClass('ng-hide')
                     .find('input')
                     .focus();
                 }
-                else if(element.hasClass('remove-button'))
+                else if (element.hasClass('remove-button'))
                 {
                   //empty current input value
                   parentFormGroup
@@ -485,7 +573,7 @@ define(
                     .focus();
 
                   //empty model scope value
-                  if(scope.edit.phoneNumbers[index])
+                  if (scope.edit.phoneNumbers[index])
                   {
                     scope.edit.phoneNumbers.splice(index, 1);
                     scope.parsedPhoneNumbers[index] = {};
@@ -501,7 +589,7 @@ define(
     //TODO use this one for date (difference in view and model)
     directives.directive(
       'formattedDate',
-      function($filter)
+      function ($filter)
       {
         return {
           link: function (scope, element, attrs, ctrl)
@@ -528,7 +616,7 @@ define(
 
     directives.directive(
       'currentSelection',
-      function(CurrentSelection)
+      function (CurrentSelection)
       {
         return {
           restrict: 'A',
@@ -552,7 +640,7 @@ define(
             ngModel.$setViewValue(id);
 
             ngModel.$viewChangeListeners.push(
-              function()
+              function ()
               {
                 CurrentSelection.local = ngModel.$viewValue;
               }
@@ -561,7 +649,6 @@ define(
         }
       }
     );
-
 
 
     //directives.directive(

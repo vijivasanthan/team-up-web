@@ -1,4 +1,4 @@
-define(['services/services', 'moment'],
+define(['services/services', 'moment-timezone'],
   function(services, moment)
   {
   'use strict';

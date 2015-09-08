@@ -5,7 +5,7 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteTask}}
@@ -23,7 +23,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#taskModalLabel.modal-title
 					span.text-turq {{task.relatedClient.fullName}}
 					br
@@ -34,13 +34,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				//h4.pull-right Taakinformatie
 				dl
-					dt Status
+					dt {{ ui.task.status }}
 						dd {{task.statusLabel}}
-					dt Tijdsbestek
+					dt {{ ui.task.timeframe }}
 						dd {{task.plannedTaskDuration.label}}
-					dt(ng-show='task.description') Beschrijving
+					dt(ng-show='task.description') {{ ui.task.description }}
 						dd(class="description") {{task.description}}
-					dt Gemaakt door
+					dt {{ ui.task.createdBy }}
 						dd
 							span(ng-hide="author") {{ui.profile.authorInfo}}
 							a(href='index.html#/profile/{{task.authorUuid}}#profile')
@@ -50,23 +50,23 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 				//h4.pull-right Cliëntinformatie
 				dl
-					dt Cliënt
+					dt {{ ui.teamup.client }}
 						dd
 							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 								| {{task.relatedClient.fullName}}
-					dt Cliëntgroep
+					dt {{ ui.teamup.clientGroup }}
 						dd
 							a(href='index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client')
 								| {{task.relatedClient.clientGroupName}}
-					dt Adres
+					dt {{ ui.groups.address }}
 						dd {{task.relatedClient.fullAddress}}
-					dt Telefoon
+					dt {{ ui.teamup.phone }}
 						dd {{task.relatedClient.phone}}
 
 				hr
 
 				dl
-					dt(ng-show='task.assignedTeamMember') Naam
+					dt(ng-show='task.assignedTeamMember') {{ ui.teamup.name }}
 						dd
 							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
 									| {{task.assignedTeamMember.fullName}}
@@ -75,21 +75,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
 								| {{task.assignedTeamFullName}}
 
-
-			//.modal-footer
-			//	button.btn.btn-default(type='button', data-dismiss='modal')
-			//		| {{ui.teamup.confirms.cancel}}
-			//	button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')
-			//		| {{ui.teamup.confirms.remove}}
-
-
-
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
 	.selectGroup(ng-show='views.allTasks && (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
 		span.selectTitle
-			| Selecteer team
+			| {{ ui.teamup.selectTeam }}
 		select(current_selection='team' ng-model='task.team',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 		ng-selected='currentTeam',
@@ -120,7 +111,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					data-match-route='/tasks2')
 			a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
 				span.entypo &#128340;
-				| Agenda
+				| {{ ui.planboard.planboard }}
 
 
 	.tab-content
@@ -134,7 +125,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				
 			hr
 
-			article(ng-show='tasks.mine.loading'): p Eigen taken aan het laden..
+			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
 
 			article(ng-hide='tasks.mine.loading')
 			
@@ -145,7 +136,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							name='showAllTasks' 
 							ng-model='showAllTasks',
 							ng-change='showTasks(showAllTasks, "mine")')
-						small &nbsp;Toon gearchiveerde taken
+						small &nbsp; {{ ui.task.showArchivedTasks }}
 				
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
 						
@@ -153,7 +144,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					thead
 						tr
 							th
-								a(ng-click='orderBy("status")') Status
+								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
 							th
 							th
@@ -192,14 +183,14 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
-					small: i Er zijn {{tasks.mine.list.length}} taken.
+					small: i {{ ui.task.thereAreAmountTasks(tasks.mine.list.length) }}
 					
 		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
 			hr
 
-			article(ng-show='tasks.all.loading'): p Taken aan het laden..
+			article(ng-show='tasks.all.loading'): p {{ ui.task.tasks }} {{ ui.task.hasToLoad }}
 
 			article(ng-hide='tasks.all.loading')
 
@@ -210,19 +201,19 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				.well(style='padding-top: 25px', ng-show='tasks.all.archieve')
 					label(style='margin-right: 15px; display: none')
 						input(type='checkbox', ng-model='showOnlyAvailable')
-						small &nbsp;Toon alleen niet toegewezen taken
+						small &nbsp;{{ ui.task.showOnlyNotAssignedTasks }}
 					label
 						input(type='checkbox', 
 							ng-model='showAllTasks',
 							ng-change='showTasks(showAllTasks, "all")')
-						small &nbsp;Toon gearchiveerde taken
+						small &nbsp;{{ ui.task.showArchivedTasks }}
 
 				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 				table.table.table-striped.taskTable(ng-show='(tasks.all.list | filter: task.team ).length > 0')
 					thead
 						tr
 							th
-								a(ng-click='orderBy("status")') Status
+								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
 							th
 							th
@@ -231,7 +222,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							th {{ui.task.information}}
 							th(colspan='2')
 							th
-								a(ng-click='orderBy("assignedTeamMember.fullName")') Lid
+								a(ng-click='orderBy("assignedTeamMember.fullName")') {{ ui.task.member }}
 									i.icon-sort
 							th(colspan='1')
 
@@ -283,7 +274,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					//small: i Er zijn {{tasks.all.list.length}} taken.
-					small: i Er zijn {{ (tasks.all.list | filter: task.team ).length }} taken.
+					small: i {{ ui.task.thereAreAmountTasks((tasks.all.list | filter: task.team ).length) }} 
 
 		#newTask.tab-pane(class="{{(views.newTask==true || views.editTask==true) && 'active'}}")
 			.tab-header
@@ -298,32 +289,32 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						fieldset
 
 							.form-group
-								label.control-label Verzorger
+								label.control-label {{ ui.task.carer }}
 								.controls
 									select(current_selection='team', 
 									ng-model='task.team',
 									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 									ng-selected='currentTeam',
 									ng-change='changeTeam(task.team)')
-										option(value='') Team
+										option(value='') {{ ui.teamup.team }}
 									select(ng-model='task.member',
 									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
 									ng-selected='currentMember')
-										option(value='') Lid
+										option(value='') {{ ui.teamup.member }}
 
 							.form-group
-								label.control-label Cliënt
+								label.control-label {{ ui.teamup.client }}
 								.controls
 									select(ng-model='currentGroup',
 									ng-options='g.id as g.name for g in groups | orderBy:"name"',
 									ng-selected='currentGroup',
 									ng-change='changeClientGroup(currentGroup)')
-										option(value='') Cliëntengroep
+										option(value='') {{ ui.teamup.clientGroup }}
 									select(ng-model='task.client',
 									ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in clients | orderBy:"lastName" ',
 									ng-selected='currentClient',
 									ng-change='changeClient(task.client)')
-										option(value='') Cliënt
+										option(value='') {{ ui.teamup.client }}
 
 						fieldset
 

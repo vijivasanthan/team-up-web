@@ -36,7 +36,8 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.reachable')
-									span.sa-member-icon.roundedPicSmall(class='{{member.states|stateColor}}')(
+									span.sa-member-icon.roundedPicSmall(
+										class='{{member.states|stateColor}}',
 										back-img='{{member.id | avatar:"client":"80"}}')
 										span.badge(ng-show='member.states|stateReachable')
 											i.glyphicon.glyphicon-earphone
@@ -55,7 +56,8 @@ section#dashboard
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.unreachable',
 								ng-show='(member.state != "no-state")')
-									span.sa-member-icon.roundedPicSmall(class='{{member.states|stateColor}}')(
+									span.sa-member-icon.roundedPicSmall(
+										class='{{member.states|stateColor}}',
 										back-img='{{member.id | avatar:"client":"80"}}')
 									.sa-member-card
 										h5
@@ -70,7 +72,9 @@ section#dashboard
 						ul.sa-setup
 							li.sa-truck
 								.sa-member(ng-repeat='member in reachability.members.possible')
-									span.sa-member-icon.roundedPicSmall(class='{{member.states|stateColor}}')(back-img='{{member.id | avatar:"team":"80"}}')
+									span.sa-member-icon.roundedPicSmall(
+										class='{{member.states|stateColor}}', 
+										back-img='{{member.id | avatar:"team":"80"}}')
 									.sa-member-card
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}

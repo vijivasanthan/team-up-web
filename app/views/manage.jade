@@ -50,7 +50,7 @@
 					hr
 					#teamClients_right
 			hr
-			button.btn.btn-success(ng-click='save.teamClients()') {{ ui.teamup.createTeam }}
+			button.btn.btn-success(ng-click='save.teamClients()') {{ ui.teamup.save }}
 
 
 		#viewTeamsTab.tab-pane(class="{{(views.teams==true) && 'active'}}")
@@ -68,7 +68,7 @@
 					hr
 					#teams_right
 			hr
-			button.btn.btn-success(ng-click='save.teams()') {{ ui.teamup.createTeam }}
+			button.btn.btn-success(ng-click='save.teams()') {{ ui.teamup.save }}
 
 
 		#viewClientsTab.tab-pane(class="{{(views.clients==true) && 'active'}}")
@@ -86,4 +86,4 @@
 					hr
 					#clients_right
 			hr
-			button.btn.btn-success(ng-click='save.clients()') {{ ui.teamup.createTeam }}
+			button.btn.btn-success(ng-click='save.clients()') {{ ui.teamup.save }}

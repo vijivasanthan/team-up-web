@@ -6,20 +6,26 @@ define(
 
     controllers.controller(
       'logs',
-      function ($rootScope, $filter, $timeout, Logs, CurrentSelection, data)
+      function (
+        $rootScope,
+        $location,
+        $filter,
+        $timeout,
+        TeamUp,
+        Logs,
+        CurrentSelection,
+        data)
       {
         $rootScope.fixStyles();
 
         var vm = this;
-
         vm.data = data;
 
         if ($rootScope.app.resources.role == 1)
         {
           vm.data.teams.unshift({
             name: $rootScope.ui.dashboard.everyone,
-            teamId: 'all',
-            adapterId: 'all'
+            uuid: 'all'
           });
         }
 
@@ -41,14 +47,10 @@ define(
 
         vm.fetchLogs = function ()
         {
-          CurrentSelection.local = vm.current;
-
-          var teamPhoneAdapterData = _.findWhere(vm.data.teams, {teamId: vm.current}),
-            options = {
-              startTime: data.logData.periods.startTime,
-              endTime: data.logData.periods.endTime,
-              adapterId: teamPhoneAdapterData.adapterId || _.uniqueId()
-            };
+          var options = {
+            startTime: data.logData.periods.startTime,
+            endTime: data.logData.periods.endTime
+          };
 
           $timeout(function ()
           {
@@ -56,15 +58,56 @@ define(
             vm.loadLogs = true;
           });
 
-          Logs.fetch(options)
-            .then(function (logData)
-            {
-              vm.loadLogs = false;
-              vm.data.logData = logData;
-
-              $rootScope.statusBar.off();
-            });
+          (vm.current == 'all')
+            ? fetchForAllTeams(options)
+            : fetchForSingleTeam(options);
         };
+
+        /**
+         * Fetch logs per team
+         */
+        function fetchForSingleTeam(options)
+        {
+          CurrentSelection.local = vm.current;
+
+          TeamUp._('TTOptionsGet', {second: vm.current})
+            .then(function (TeamTelephoneSettings)
+            {
+              options.adapterId = TeamTelephoneSettings.adapterId;
+              var promise = Logs.fetch(options);
+
+              if (! TeamTelephoneSettings.adapterId)
+              {
+                $location.path('team-telefoon/options');
+                promise = $q.reject();
+              }
+              return promise;
+            })
+            .then(receiveLogs);
+        }
+
+        /**
+         * Fetch all logs
+         * @param options
+         */
+        function fetchForAllTeams(options)
+        {
+          options.adapterId = null;
+          Logs.fetch(options)
+            .then(receiveLogs);
+        }
+
+        /**
+         * Receive logs if the promise is fullfilled
+         * @param logData The logs per team of all teams
+         */
+        function receiveLogs(logData)
+        {
+          vm.loadLogs = false;
+          vm.data.logData = logData;
+
+          $rootScope.statusBar.off();
+        }
       }
     );
   });

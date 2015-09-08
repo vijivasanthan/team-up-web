@@ -66,7 +66,14 @@ define(
              */
             init: function ()
             {
-              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id));
+              var calendarOptions = {
+                daysShort: moment.weekdaysShort(),
+                days: moment.weekdays(),
+                monthsShort: moment.monthsShort(),
+                months: moment.months(),
+              };
+
+              $scope.self.timeline = new links.Timeline(document.getElementById($scope.timeline.id), calendarOptions);
 
               links.events.addListener($scope.self.timeline, 'rangechanged', this.getRange);
               links.events.addListener($scope.self.timeline, 'add', this.onAdd);
@@ -537,6 +544,26 @@ define(
               end: ($scope.data.periods.end / 1000)
             };
 
+            TeamUp._('TTOptionsGet', { second: $scope.timeline.current.group })
+              .then(function(options)
+              {
+                if(! options.adapterId)
+                {
+                  $location.path('team-telefoon/options');
+                }
+                else
+                {
+                  fetchTeamTimelineData(section, periods);
+                }
+              });
+          };
+
+          /**
+           * Fetch timeline data per team
+           * @param section group or members
+           */
+          function fetchTeamTimelineData(section, periods)
+          {
             switch (section)
             {
               case 'group':
@@ -604,8 +631,7 @@ define(
               default:
                 $scope.timeliner.load({start: $scope.data.periods.start, end: $scope.data.periods.end});
             }
-          };
-
+          }
 
           /**
           * Timeline get ranges

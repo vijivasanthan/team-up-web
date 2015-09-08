@@ -219,6 +219,7 @@ define(
           {
             if(! currentMember.error)
             {
+              $scope.data.members = $scope.data.members || [];
               $scope.data.members.push(currentMember);
               $scope.data.members = checkLocationMembers($scope.data.members);
               $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
@@ -665,14 +666,14 @@ define(
         {
           $scope.roles = [{
             id: '2',
-            label: 'team lid'
+            label: $rootScope.ui.teamup.teamMember
           }];
 
           if($rootScope.app.resources.role == 1)
           {
             $scope.roles.push({
               id: '1',
-              label: 'coordinator'
+              label: $rootScope.ui.teamup.coordinator
             });
           }
         }

@@ -225,10 +225,11 @@ define(['services/services', 'config'],
           };
 
           /**
+           * TODO Depricated
            * Get logs per team or all, depends on the role of the user
            * @returns {*}
            */
-          Logs.prototype.fetchByTeam = function ()
+          Logs.prototype.fetchAllTeams = function ()
           {
             var TeamUp = $injector.get('TeamUp'),
                 Store = $injector.get('Store'),

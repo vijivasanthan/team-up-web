@@ -7,7 +7,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmProfileModalLabel.modal-title {{ui.teamup.confirms.deleteMemberFromTeamTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.deleteMemberFromTeam}}
@@ -26,7 +26,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmTeamMemberCodeAsPhone.modal-title {{ui.teamup.confirms.addTeamMemberCodeAsPhoneTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.addTeamMemberCodeAsPhone}}
@@ -45,7 +45,7 @@ aria-hidden='true')
 			.modal-header
 				button.close(type='button', data-dismiss='modal')
 					span(aria-hidden='true') ×
-					span.sr-only Close
+					span.sr-only {{ ui.message.close }}
 				h4#confirmDeleteAvatarLabel.modal-title {{ui.teamup.confirms.photoRemoveTitle}}
 			.modal-body
 				| {{ui.teamup.confirms.photoRemoveBody}}
@@ -87,7 +87,7 @@ section#profile
 						.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 							dl
 								dt {{ui.teamup.teams}}
-								dd(ng-show='! teams || teams.length == 0') Geen team geselecteerd
+								dd(ng-show='! teams || teams.length == 0') {{ ui.profile.noTeamSelected }} 
 								dd(ng-show='teams.length == 1')
 									span(ng-repeat='team in teams')
 										a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
@@ -98,7 +98,7 @@ section#profile
 												a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									//TODO wait until stefan approves to use the default team option
 									//.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
-									//span(class="label label-inverse") {{ ($index > 0) ? 'Extra' : 'Standaard' }}  
+									//span(class="label label-inverse") {{ ($index > 0) ? ui.profile.extra : ui.profile.default }}  
 									//span.phone-description
 									//	a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
 									
@@ -112,11 +112,11 @@ section#profile
 									//	span(ng-show = 'app.resources.role > 1') {{team.name}}
 								dt {{ui.teamup.role}}
 								dd {{view.role|translateRole}}
-								dt E-mail
+								dt {{ ui.profile.email }}
 								dd {{view.email }}
 								dt(ng-show='view.phoneNumbers.length > 0') {{ui.profile.phone}}
 								dd(class='phones', ng-repeat='phone in view.phoneNumbers') 
-									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? 'Extra' : 'Standaard' }}  
+									span(class="label label-inverse") {{ ($index > 0 && phone != null) ? ui.profile.extra : ui.profile.default }}  
 									span(class='phone-description') {{phone}}
 								//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
 								//dt {{ui.profile.birthday}}
@@ -206,7 +206,7 @@ section#profile
 								ng-model='edit.userName')
 								
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon
@@ -233,7 +233,7 @@ section#profile
 							//		i {{ui.edit.pincodeInfoPhone}}
 										
 						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon
@@ -259,7 +259,7 @@ section#profile
 										i {{parsedPhoneNumbers[1].message}}
 										
 						.form-group(ng-show='view.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? 'Standaard' : 'Extra'  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon
@@ -283,7 +283,7 @@ section#profile
 										i {{parsedPhoneNumbers[2].message}}
 										
 						.form-group(ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }")
-							label.control-label E-mail
+							label.control-label {{ ui.profile.email }}
 							.controls
 								input.span4.form-control(type='email',
 								name='email',
@@ -326,7 +326,7 @@ section#profile
 						h3.pull-left(style='margin-top: 0;')
 							| {{ui.profile.editProfileImg}} : {{view.firstName}} {{view.lastName}}
 						button.btn.btn-info.pull-right(type="button",
-							ng-click='setViewTo("profile")') Terug
+							ng-click='setViewTo("profile")') {{ ui.profile.back }}
 					hr
 					div.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}')
 					#uploadImgModule

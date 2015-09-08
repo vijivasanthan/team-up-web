@@ -1,4 +1,4 @@
-section#dashboard
+section
 	.page-header.agenda-timeline
 		h2.nullable {{ ui.options.title }}
 	div(style='margin-top: 20px;')
@@ -6,78 +6,154 @@ section#dashboard
 			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			label.control-label {{ ui.teamup.selectTeam }} 
 			.controls
-				select(ng-model='options.current',
-				ng-options='team.uuid as team.name for team in options.teams | orderBy:"name"',
-				ng-selected='options.current',
-				ng-change='options.fetch()')
+				select(ng-model='options.currentTeamId',
+					ng-options='team.uuid as team.name for team in options.data.teams | orderBy:"name"',
+					ng-selected='options.currentTeamId',
+					ng-change='options.fetch()')
 			
 	.tabbable.tabs-left
-		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', 
+		bs-navbar)
 			include ../agenda/tabs
-				
+				//hide-team-telephone-tabs='{{options.activateTTForm}}'
 		.tab-content
-			#availabilities.sa.widget
-				div.head
-					h4
-						| {{ ui.options.title }}{{options.current | groupIdToName:true | toTitleCase}} {{ options.loadTeam }}
+			#order.tab-pane.active
 				div
-					form.form-vertical(name='optionsForm', novalidate)
-						
-						.form-group(ng-show='app.domainPermission.smsNotification')
-							label.control-label {{ ui.options.smsMissedCall }}
-							.controls
-								label.radio-inline
-									input(type="radio" ng-model='options.scenarios.sms',
-										name="sms-on-new-team-voicemail", ng-value='true')
-									| {{ ui.options.on }}
-								label.radio-inline
-									input(type="radio" ng-model='options.scenarios.sms',
-										name="sms-on-new-team-voicemail", ng-value='false')
-									| {{ ui.options.off }}
-								span.help-block
-									small
-										i
-											| {{ ui.options.receiveReachableMembers }} {{ hasSms(options.scenarios.sms) }} {{ ui.options.missedOrVoicemail }}.
-										
+					div(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
+						div.head
+							h3
+								| {{ ui.options.title }}{{ options.currentTeam }} 
 						hr
-						
-						.form-group
-							label.control-label {{ ui.options.ringingTimeOut.title }}
-							.controls
-								div.input-group(style='width: 250px;')
-									div.range
-										input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
-										output#range &nbsp; {{ options.scenarios.ringingTimeOut }} seconden &nbsp;
-								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
-									small
-										i
-											| {{ ui.options.ringingTimeOut.short }}
-								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
-									small
-										i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
-											| {{ ui.options.ringingTimeOut.long }}
-
-
-						//
-						//.form-group
-						//	label.control-label {{ ui.options.personalVoicemailPrevention }}
-						//	.controls
-						//		label.radio-inline
-						//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
-						//			name="voicemail-detection-menu", ng-value='true')
-						//			| Aan
-						//		label.radio-inline
-						//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
-						//			name="voicemail-detection-menu", ng-value='false')
-						//			| Uit
-						//		span.help-block(style='height: 14px; margin-bottom: 35px;')
-						//			small
-						//				i
-						//					| {{ ui.options.personalVoicemailPreventionInfo }}
-						//
-						.form-actions
-							button.btn.btn-success(type='submit',
-								ng-click='options.save(options.scenarios)') {{ ui.order.confirmation }}
+					div.alert.alert-warning(ng-show='options.activateTTForm && app.resources.role > 1')
+						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
+						small
+							i  {{ ui.options.teamTelephoneNotActivated }}
+								
+					div(id='TTOptions' ng-hide='options.activateTTForm')
+						.row-fluid
+							.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
+								dl
+									dt(ng-show='options.data.teamTelephoneOptions.phoneNumber') {{ ui.options.phoneNumberTeam }}
+									dd(ng-show='options.data.teamTelephoneOptions.phoneNumber') {{ options.data.teamTelephoneOptions.phoneNumber }}
+									dt(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ ui.options.phoneNumberTeamAlias }}
+									dd(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ options.data.teamTelephoneOptions.phoneNumberAlias }}
+									
+						form.form-vertical(name='optionsForm', novalidate)
 							
-							//&& !options.scenarios.voicemailDetection
-							// {{ ui.options.voicemailDetectionInfo }}
+							.form-group(ng-show='app.domainPermission.smsNotification')
+								label.control-label {{ ui.options.smsMissedCall }}
+								.controls
+									label.radio-inline
+										input(type="radio" ng-model='options.scenarios.sms',
+											name="sms-on-new-team-voicemail", ng-value='true')
+										| {{ ui.options.on }}
+									label.radio-inline
+										input(type="radio" ng-model='options.scenarios.sms',
+											name="sms-on-new-team-voicemail", ng-value='false')
+										| {{ ui.options.off }}
+									span.help-block
+										small
+											i
+												| {{ ui.options.receiveReachableMembers }} {{ hasSms(options.scenarios.sms) }} {{ ui.options.missedOrVoicemail }}.
+											
+							hr
+							
+							.form-group
+								label.control-label {{ ui.options.ringingTimeOut.title }}
+								.controls
+									div.input-group(style='width: 250px;')
+										div.range
+											input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
+											output#range &nbsp; {{ options.scenarios.ringingTimeOut }} {{ ui.teamup.seconds }} &nbsp;
+									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
+										small
+											i
+												| {{ ui.options.ringingTimeOut.short }}
+									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
+										small
+											i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
+												| {{ ui.options.ringingTimeOut.long }}
+							
+							//
+							//.form-group
+							//	label.control-label {{ ui.options.personalVoicemailPrevention }}
+							//	.controls
+							//		label.radio-inline
+							//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
+							//			name="voicemail-detection-menu", ng-value='true')
+							//			| Aan
+							//		label.radio-inline
+							//			input(type="radio" ng-model='options.scenarios.voicemailDetection',
+							//			name="voicemail-detection-menu", ng-value='false')
+							//			| Uit
+							//		span.help-block(style='height: 14px; margin-bottom: 35px;')
+							//			small
+							//				i
+							//					| {{ ui.options.personalVoicemailPreventionInfo }}
+							//
+							.form-actions
+								button.btn.btn-success(type='submit',
+									ng-click='options.save(options.scenarios)') {{ ui.order.confirmation }}
+								
+								//&& !options.scenarios.voicemailDetection
+								// {{ ui.options.voicemailDetectionInfo }}
+				
+				div(id="activateTTForm" ng-show='options.activateTTForm && app.resources.role == 1')
+					h3 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
+					hr
+					div
+						form.form-vertical(name='formActivateTT', novalidate)
+							
+							.form-group(ng-class="{ 'has-error' : options.data.phoneNumbers.length == 0 || (formActivateTT.adapterId.$invalid && !formActivateTT.adapterId.$pristine) }")
+								label.control-label {{ ui.options.phoneNumberTeam }} *
+								.controls
+									label.radio(ng-show='options.data.phoneNumbers.length', ng-repeat='phoneNumber in options.data.phoneNumbers')
+										input(type="radio" 
+										name="adapterId",
+										required,
+										ng-value='phoneNumber.id',
+										ng-model='$parent.activateData.adapterId')
+										| {{ phoneNumber.address }}
+									span.help-block(ng-hide="options.data.phoneNumbers.length")
+										small
+											i.text-danger
+												| {{ ui.options.noPhoneNumbers }}
+									span.help-block(ng-show='options.data.phoneNumbers.length')
+										small
+											i
+												| {{ ui.options.phoneNumberTeamDescription }}
+									
+							.form-group(ng-class="{ 'has-error' : formActivateTT.email.$invalid && !formActivateTT.email.$pristine }")
+								label.control-label {{ ui.options.voicemailEmailAddress }} *
+								.controls
+									input.span3.form-control(type='email',
+									name='email',
+									required,
+									ng-model='activateData.voicemailEmailAddress')
+									span.help-block(ng-show='formActivateTT.email.$invalid && !formActivateTT.email.$pristine')
+										small(ng-show="formActivateTT.$error.email")
+											i
+											| {{ ui.validation.email.notValid }}
+									span.help-block
+										small
+											i {{ ui.options.voicemailEmailAddressDescription }}
+							
+							.form-group(ng-class="{'has-error': phoneNumberParsed.result == false && activateData.phoneNumberAlias}")
+								label.control-label {{ ui.options.phoneNumberTeamAlias }}
+								.controls
+									input.span3.form-control.inputPhoneNumber(type='text',
+									name='phone', 
+									ng-model='activateData.phoneNumberAlias',
+									ng-change='parsePhoneNumber(activateData.phoneNumberAlias)')
+									span.help-block(ng-show='activateData.phoneNumberAlias')
+										small
+											i {{phoneNumberParsed.message}}
+									span.help-block
+										small
+											i {{ ui.options.phoneNumberTeamAliasDescription }}
+							p * {{ ui.options.requiredFields }}
+					
+							.form-actions
+								button.btn.btn-success(type='submit',
+								ng-click='options.activate(activateData)') {{ ui.order.confirmation }}
+								
