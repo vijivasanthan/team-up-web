@@ -11,6 +11,7 @@ define(
         '$location',
         '$q',
         '$scope',
+        'Settings',
         'Session',
         'Teams',
         'Clients',
@@ -22,7 +23,7 @@ define(
         'MD5',
         'Permission',
         function (
-          $rootScope, $location, $q, $scope, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
+          $rootScope, $location, $q, $scope, Settings, Session, Teams, Clients, Store, $routeParams, TeamUp, Dater, $filter, MD5,
           Permission)
         {
 
@@ -182,82 +183,40 @@ define(
 
           var auth = function (uuid, pass)
           {
-            TeamUp._(
-              'login',
-              {
-                uuid: uuid,
-                pass: pass
-              }
-            ).then(
-              function (result)
-              {
-                var status = 0;
-                if (result.status)
+            //TeamUp._(
+            //  'login',
+            //  {
+            //    uuid: uuid,
+            //    pass: pass
+            //  }
+            //)
+            Settings
+              .initBackEnd(uuid, pass)
+              .then(
+                function (result)
                 {
-                  status = result.status;
-                }
-                else if (result.error && result.error.status)
-                {
-                  status = result.error.status;
-                }
-                if (status == 400 ||
-                  status == 403 ||
-                  status == 404)
-                {
-                  $scope.alert = {
-                    login: {
-                      display: true,
-                      type: 'alert-error',
-                      message: $rootScope.ui.login.alert_wrongUserPass
-                    }
-                  };
+                  if (result.errorMessage)
+                  {
+                    $scope.alert = {
+                      login: {
+                        display: true,
+                        type: 'alert-error',
+                        message: result.errorMessage
+                      }
+                    };
+                    angular.element('#login button[type=submit]')
+                      .text($rootScope.ui.login.button_login)
+                      .removeAttr('disabled');
 
-                  angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_login)
-                    .removeAttr('disabled');
-
-                  return false;
-                }
-                else if (result.status == 0)
-                {
-                  $scope.alert = {
-                    login: {
-                      display: true,
-                      type: 'alert-error',
-                      message: $rootScope.ui.login.alert_network
-                    }
-                  };
-
-                  angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_login)
-                    .removeAttr('disabled');
-
-                  return false;
-                }
-                else if (result.error)
-                {
-                  $scope.alert = {
-                    login: {
-                      display: true,
-                      type: 'alert-error',
-                      message: $rootScope.ui.login.alert_wrongUserPass
-                    }
-                  };
-
-                  angular.element('#login button[type=submit]')
-                    .text($rootScope.ui.login.button_login)
-                    .removeAttr('disabled');
-
-                  return false;
-                }
-                else
-                {
-                  Session.set(result['X-SESSION_ID']);
-
-                  preLoader();
-                }
-              }
-            )
+                    return false;
+                  }
+                  else
+                  {
+                    console.log('Settings', Settings.getBackEnd);
+                    Session.set(result['X-SESSION_ID']);
+                    preLoader();
+                  }
+                });
           };
 
           //Check if there is a password locally and autologin

@@ -12,11 +12,12 @@ define(['services/services', 'config'],
         '$filter',
         '$injector',
         'moment',
-        function ($resource, $q, $filter, $injector, moment)
+        'Settings',
+        function ($resource, $q, $filter, $injector, moment, Settings)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
           var Logs = $resource(
-            config.app.host + 'ddr',
+            Settings.getBackEnd() + 'ddr',
             {},
             {
               get: {

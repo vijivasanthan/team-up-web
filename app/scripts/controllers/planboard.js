@@ -10,6 +10,7 @@ define(
         '$scope',
         '$location',
         '$filter',
+        'Settings',
         'Dater',
         'Store',
         'Teams',
@@ -18,7 +19,7 @@ define(
         'Session',
         'CurrentSelection',
         'moment',
-        function ($rootScope, $scope, $location, $filter, Dater, Store,
+        function ($rootScope, $scope, $location, $filter, Settings, Dater, Store,
                   Teams, Clients, TeamUp, Session, CurrentSelection, moment)
         {
           var params = $location.search();
@@ -113,7 +114,7 @@ define(
                   {
                     var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
                       'style="float: left; background-image: url(' +
-                      config.app.host +
+                      Settings.getBackEnd() +
                       config.app.namespace +
                       '/client/' +
                       member.uuid +
@@ -492,7 +493,7 @@ define(
                 var avatar = '<div class="task-planboard roundedPicSmall ' + avatarColorClass +
                   '" ' +
                   'style="float: left; background-image: url(' +
-                  config.app.host +
+                  Settings.getBackEnd() +
                   config.app.namespace +
                   '/team/member/' +
                   member.uuid +

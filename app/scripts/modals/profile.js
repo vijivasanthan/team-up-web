@@ -1,8 +1,8 @@
 define(['services/services', 'config'], function (services, config) {
   'use strict';
 
-  services.factory('Profile', function ($rootScope, $resource, $q, Slots, MD5, Store) {
-    var Profile = $resource(config.app.host + 'node/:id/:section', {}, {
+  services.factory('Profile', function ($rootScope, $resource, $q, Slots, MD5, Store, Settings) {
+    var Profile = $resource(Settings.getBackEnd() + 'node/:id/:section', {}, {
       get: {
         method: 'GET',
         params: { id: '', section: 'resource' }
@@ -28,7 +28,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    var PincodeExists = $resource(config.app.host + 'node/:id/pincode_exists', {}, {
+    var PincodeExists = $resource(Settings.getBackEnd() + 'node/:id/pincode_exists', {}, {
       check: {
         method: 'GET',
         params: {}
@@ -36,7 +36,7 @@ define(['services/services', 'config'], function (services, config) {
     });
 
     //$resource(url, [paramDefaults], [actions], options);
-    var ChangePassword = $resource(config.app.host + 'teammember/:memberId/pass',
+    var ChangePassword = $resource(Settings.getBackEnd() + 'teammember/:memberId/pass',
       {
         oldPass: '@oldPass',
         newPass: '@newPass'
@@ -47,7 +47,7 @@ define(['services/services', 'config'], function (services, config) {
       }
     });
 
-    var user = $resource(config.app.host + 'team/:teamId/member/:userId',  {}, {
+    var user = $resource(Settings.getBackEnd() + 'team/:teamId/member/:userId',  {}, {
       get: {
         method: 'GET',
         params: {}

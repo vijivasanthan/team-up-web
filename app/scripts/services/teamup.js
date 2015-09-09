@@ -7,11 +7,13 @@ define(
     services.factory(
       'TeamUp',
       [
-        '$resource', '$q',
-        function ($resource, $q)
+        '$resource', '$q', 'Settings',
+        function ($resource, $q, Settings)
         {
+          console.log('Settings.getBackEnd()', Settings.getBackEnd());
+          
           var TeamUp = $resource(
-              config.app.host + config.app.namespace + ':first/:second/:third/:fourth',
+              Settings.getBackEnd() + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
                 /**

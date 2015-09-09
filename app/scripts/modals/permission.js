@@ -12,9 +12,10 @@ define(['services/services', 'config'],
         '$q',
         'Store',
         '$location',
-        function ($rootScope, $resource, $q, Store, $location)
+        'Settings',
+        function ($rootScope, $resource, $q, Store, $location, Settings)
         {
-          var Permission = $resource(config.app.host + 'acl', {},
+          var Permission = $resource(Settings.getBackEnd() + 'acl', {},
               {
                 get: {
                   method: 'GET',
