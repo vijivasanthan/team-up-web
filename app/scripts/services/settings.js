@@ -1,55 +1,185 @@
 define(['services/services', 'config'], function (services, config) {
   'use strict';
 
-  services.factory('Settings', function ($resource, $q, Store, $injector) {
-    //TODO not yet implented, waiting until the userobject add the settings
-
+  services.factory('Settings', function ($q, Store, $injector) {
     return {
       getBackEnd: function()
       {
-        return Store('app').get('backEnd') || config.app.host;
-      }
+        var backEnd = Store('app').get('backEnd');
+
+        return (backEnd && backEnd.get) ? backEnd.get : config.app.host;
+      },
       setBackEnd: function(backEnd)
       {
-        Store('app').save('backEnd', backEnd)
+        Store('app').save('backEnd', { 'get': backEnd });
         return backEnd;
       },
       initBackEnd: function(userName, passWord)
       {
-        var deferred = $q.defer,
-          loginPromises = (config.app.otapRole == 'live')
-            ? $q.all[ login(config.app.host) ]
-            : $q.all([
-                login( config.app.backEnds[0] ),
-                login( config.app.backEnds[1] )
-              ]);
+        var deferred = $q.defer(),
+          self = this;
 
-        loginPromises
-          .then(function(result) 
+        if(config.app.otapRole == 'dev')
+        {
+          var promises = [];
+          //create http requests with the different backends
+          _.each(config.app.backEnds, function (backEndDir)
           {
-            //check result
-            //if the first result got ant 
-            //what backEnd is the final Backend
-            //deferred.resolve(one of the results)
+            var request = self.login(backEndDir, userName, passWord);
+            promises.push(request);
           });
+
+          //Resolve all promises even if there are rejections
+          this.aSync(promises, function error(results)
+          {
+            console.log('Rejected request:', results);
+          }, function success(results)
+          {
+            console.log('Results (final):', results);
+            var finalIndex = null;
+            results.some(function (singleResult, index)
+            {
+              finalIndex = index;
+              singleResult = self.validate(singleResult);
+              return (singleResult['X-SESSION_ID']);
+            });
+
+            self.setBackEnd(config.app.backEnds[finalIndex]);
+            deferred.resolve(results[finalIndex]);
+          });
+
+
+          //$q.all(promises)
+          //  .then(function (results)
+          //  {
+          //    console.log('results', results);
+          //    var finalIndex = null;
+          //    //the first valid result will be the final backEnd
+          //    results.some(function (singleResult, index)
+          //    {
+          //      finalIndex = index;
+          //      //singleResult = self.validate(singleResult);
+          //      return (singleResult['X-SESSION_ID']);
+          //    });
+          //    //if none of the results is valid
+          //    //if(! results[finalIndex].validate)
+          //    //{
+          //    //  //When the system tries to login and all hosts time-out, show a message to the user that the system is temporarily unavailable and that they should try again
+          //    //  results[finalIndex].errorMessage = 'System is temporarily unavailable, try again in a minute';
+          //    //  self.setBackEnd(config.app.host);//set backend back on the default host
+          //    //} else {
+          //    //  self.setBackEnd(config.app.backEnds[finalIndex]);//set the backend on the one who was logging in correctly
+          //    //}
+          //
+          //    self.setBackEnd(config.app.backEnds[finalIndex]);
+          //    deferred.resolve(results[finalIndex]);
+          //  }, function (error)
+          //  {
+          //    console.log('error', error);
+          //  });
+        }
+        else
+        {
+          var self = this;
+          self.setBackEnd(config.app.host);
+
+          //There is still one backend, so only one promise to resolve
+          self.login(config.app.host, userName, passWord)
+            .then(function(result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              error = self.validate(error);
+              deferred.resolve(error);
+            });
+        }
         return deferred.promise;
       },
-      login : function(backEnd)
+      /**
+       * Validate the result of the login
+       * @param result the result of tje login
+       * @returns {result} with the validation true or false
+       */
+      validate: function(result)
       {
-        var login = $resource(backEnd + 'login/',  {}, {
-          get: {
-            method: 'GET',
-            params: {
-              uuid: '',
-              pass: ''
-            }
-          }
-        });
+        var $rootScope = $injector.get('$rootScope');
 
+        result.validation = true;
+        //check if 404 or 200 with session
+        var status = 0;
+        if (result.status)
+        {
+          status = result.status;
+        }
+        else if (result.error && result.error.status)
+        {
+          status = result.error.status;
+        }
+        if (status == 400 ||
+          status == 403 ||
+          status == 404 ||
+          result.error)
+        {
+          result.validation = false;
+          result.errorMessage = $rootScope.ui.login.alert_wrongUserPass;
+
+        }
+        else if (result.status == 0)
+        {
+          result.validation = false;
+          result.errorMessage = $rootScope.ui.login.alert_network;
+
+        }
+        return result;
+      },
+      /**
+       *
+       * @param backEndDir the location of the backend
+       * @returns {*|{method, params}} returns a resource promise
+       */
+      login: function(backEndDir, userName, passWord)
+      {
+        var $resource = $injector.get('$resource'),
+          login = $resource(backEndDir + 'login/',  {}, {
+            get: {
+              method: 'GET',
+              params: {
+                uuid: '',
+                pass: ''
+              }
+            }
+          });
         return login.get({
           uuid: userName,
           pass: passWord
+        }).$promise;
+      },
+      aSync: function (listOfPromises, onErrorCallback, finalCallback) {
+
+        listOfPromises  = listOfPromises  || [];
+        onErrorCallback = onErrorCallback || angular.noop;
+        finalCallback   = finalCallback   || angular.noop;
+
+        // Create a new list of promises
+        // that can "recover" from rejection
+        var newListOfPromises = listOfPromises.map(function (promise) {
+          return promise.catch(function (reason) {
+
+            // First call the `onErrroCallback`
+            onErrorCallback(reason);
+
+            // Change the returned value to indicate that it was rejected
+            // Based on the type of `reason` you might need to change this
+            // (e.g. if `reason` is an object, add a `rejected` property)
+            console.log('rejected');
+            return reason;
+          });
         });
+        // Finally, we create a "collective" promise that calls `finalCallback` when resolved.
+        // Thanks to our modifications, it will never get rejected !
+        $q.all(newListOfPromises).then(finalCallback);
       }
     };
 
