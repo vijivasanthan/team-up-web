@@ -64,7 +64,7 @@ define(['services/services', 'config'], function (services, config) {
         var $rootScope = $injector.get('$rootScope'),
           statusCodes = _.pluck(results, 'status'),
           //add a index to the result, so by returing the system will know what result was the first in order
-          index = -1;
+          index = 0;
 
         // statuscode undefined is equal to 200, because there will be not request info
         // when there is a successfull result
