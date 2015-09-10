@@ -10,9 +10,11 @@ define(
         '$resource', '$q', 'Settings',
         function ($resource, $q, Settings)
         {
-          console.log('Settings.getBackEnd()', Settings.getBackEnd());
-          
-          var TeamUp = $resource(
+          var TeamUp = function() {};
+
+          TeamUp.prototype.get = function()
+          {
+            return $resource(
               Settings.getBackEnd() + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
@@ -628,7 +630,8 @@ define(
                 }
 
               }
-          );
+            );
+          };
 
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
@@ -643,7 +646,9 @@ define(
 
             try
             {
-              TeamUp[proxy](
+              var service = TeamUp.prototype.get();
+
+              service[proxy](
                 params,
                 data,
                 function (result)
@@ -661,6 +666,7 @@ define(
             }
             catch (err)
             {
+              console.log('error', err);
               // Log.error(err)
             }
 
