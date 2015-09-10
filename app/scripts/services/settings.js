@@ -82,17 +82,17 @@ define(['services/services', 'config'], function (services, config) {
         else if( (index = statusCodes.indexOf(503)) >= 0)
         {
           results[index].validate = false;
-          results[index].errorMessage = "The system is temporarily unavailable, try again in a few seconds";
+          results[index].errorMessage = $rootScope.ui.teamup.systemUnavailable;
         }
         else if( (index = statusCodes.indexOf(0)) >= 0)
         {
           results[index].validate = false;
-          results[index].errorMessage = "The backend does not exist";
+          results[index].errorMessage = $rootScope.ui.teamup.noBackend;
         }
         else
         {
           results[index].validate = false;
-          results[index].errorMessage = 'Statuscode not regonized';
+          results[index].errorMessage = $rootScope.ui.teamup.statusCodeNotRegonized;
         }
         results[index].index = index;
         return results[index];
