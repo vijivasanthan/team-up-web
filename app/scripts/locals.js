@@ -614,6 +614,9 @@ define(
           states: 'States',
           saveTeam: 'Save team',
           save: 'Save',
+          systemUnavailable: "The system is temporarily unavailable, try again in a few seconds",
+          noBackend: "The defined backend cannot be found",
+          statusCodeNotRegonized: "Statuscode not regonized",
           refreshing: 'Refreshing team information',
           dataChanged: 'Data is changed',
           teamSubmitError: 'Error while creating: ',
@@ -1660,6 +1663,11 @@ define(
           createTeam: 'speichern',
           newMember: 'neues Gruppen-Mitglied',
           noMembersFound: 'kein Ergebnis für diese Suche.',
+          //start TODO
+          systemUnavailable: "The system is temporarily unavailable, try again in a few seconds",
+          noBackend: "The defined backend cannot be found",
+          statusCodeNotRegonized: "Statuscode not regonized",
+          //end
           name: 'Name',
           role: 'Rolle',
           phone: 'Telefon',
@@ -2717,6 +2725,11 @@ define(
           states: 'Status',
           saveTeam: 'Team opslaan',
           save: 'Opslaan',
+          //start TODO
+          systemUnavailable: "Het systeem is tijdelijk buiten gebruik, probeer het naar een paar seconde nog een keer.",
+          noBackend: "De gedefinieerde backend kon niet gevonden worden.",
+          statusCodeNotRegonized: "Statuscode is niet bekend.",
+          //end
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',
           teamSubmitError: 'Fouten tijdens het aanmaken: ',
