@@ -57,9 +57,12 @@ define(['services/services'], function (services)
         return deferred.promise;
       },
       /**
-       * Depending on the order of status codes,
+       * The statuscodes will be ordered by depending on the result of the backend.
+       * First a 200 as in a successfully login, second in a 400, 403, or 404 as in wrong username or password.
+       * The thirth status code 503 represents as the back-end will time out. At last statuscode zero if the back-end
+       * not exist
        * the first result in that order will return validated
-       * @param results All the requests with the different backends
+       * @param results An array of objects, where each entry represents the http status code of a /login request
        * @returns {*} The first result in the order of status codes will return
        */
       getResultOnStatusCode: function (results)
@@ -120,7 +123,7 @@ define(['services/services'], function (services)
 
           case 503:
             result.valid = false;
-            result.errorMessage = $rootScope.ui.teamup.systemUnavailable;
+            result.errorMessage = $rootScope.ui.teamup.backEndUnavailable;
             break;
         }
         return result;

@@ -614,9 +614,9 @@ define(
           states: 'States',
           saveTeam: 'Save team',
           save: 'Save',
-          systemUnavailable: "The system is temporarily unavailable, try again in a few seconds",
-          noBackend: "The defined backend cannot be found",
-          statusCodeNotRegonized: "Statuscode not regonized",
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: "The defined back-end cannot be found",
+          statusCodeNotRegonized: "Status-code not regonized",
           refreshing: 'Refreshing team information',
           dataChanged: 'Data is changed',
           teamSubmitError: 'Error while creating: ',
@@ -1664,9 +1664,9 @@ define(
           newMember: 'neues Gruppen-Mitglied',
           noMembersFound: 'kein Ergebnis für diese Suche.',
           //start TODO
-          systemUnavailable: "The system is temporarily unavailable, try again in a few seconds",
-          noBackend: "The defined backend cannot be found",
-          statusCodeNotRegonized: "Statuscode not regonized",
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: "The defined back-end cannot be found",
+          statusCodeNotRegonized: "Status-code not regonized",
           //end
           name: 'Name',
           role: 'Rolle',
@@ -2726,9 +2726,9 @@ define(
           saveTeam: 'Team opslaan',
           save: 'Opslaan',
           //start TODO
-          systemUnavailable: "Het systeem is tijdelijk buiten gebruik, probeer het naar een paar seconde nog een keer.",
-          noBackend: "De gedefinieerde backend kon niet gevonden worden.",
-          statusCodeNotRegonized: "Statuscode is niet bekend.",
+          backEndUnavailable: "De back-end is tijdelijk buiten gebruik, probeer opnieuw in te loggen. Als het probleem blijft voorkomen, neem dan contact op met uw systeembeheerder.",
+          noBackend: "De gedefinieerde back-end kon niet gevonden worden.",
+          statusCodeNotRegonized: "Status-code is niet bekend.",
           //end
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',

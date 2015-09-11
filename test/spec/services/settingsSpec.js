@@ -53,9 +53,9 @@ define(
                   alert_wrongUserPass: 'Onjuiste gebruikersnaam of wachtwoord!'
                 },
                 teamup: {
-                  systemUnavailable: "Het systeem is tijdelijk buiten gebruik, probeer het naar een paar seconde nog een keer.",
-                  noBackend: "De gedefinieerde backend kon niet gevonden worden.",
-                  statusCodeNotRegonized: "Statuscode is niet bekend.",
+                  backEndUnavailable: "De back-end is tijdelijk buiten gebruik, probeer opnieuw in te loggen. Als het probleem blijft voorkomen, neem dan contact op met uw systeembeheerder.",
+                  noBackend: "De gedefinieerde back-end kon niet gevonden worden.",
+                  statusCodeNotRegonized: "Status-code is niet bekend.",
                 }
               }
             }
@@ -154,7 +154,7 @@ define(
           var result = settingsService.getResultOnStatusCode(results);
 
           expect(result.errorMessage)
-            .toBe(rootScope.ui.teamup.systemUnavailable);
+            .toBe(rootScope.ui.teamup.backEndUnavailable);
         })
 
         it('Should return status code not recognized', function ()
