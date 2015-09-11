@@ -16,17 +16,22 @@ define(['services/services', 'config'],
         function ($resource, $q, $filter, $injector, moment, Settings)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
-          var Logs = $resource(
-            Settings.getBackEnd() + 'ddr',
-            {},
-            {
-              get: {
-                method: 'GET',
-                params: {},
-                isArray: true
+          var Logs = function() {};
+
+          Logs.prototype.get = function ()
+          {
+            return $resource(
+              Settings.getBackEnd() + 'ddr',
+              {},
+              {
+                get: {
+                  method: 'GET',
+                  params: {},
+                  isArray: true
+                }
               }
-            }
-          );
+            )
+          };
 
           var normalize = function (logs)
           {
@@ -201,8 +206,8 @@ define(['services/services', 'config'],
                     ? options.adapterId
                     : null
                 };
-
-            Logs.get(
+            var resource = Logs.prototype.get();
+            resource.get(
               _options,
               function (result)
               {
