@@ -182,11 +182,11 @@ define(
           var auth = function (uuid, pass)
           {
             Settings
-              .initBackEnd(uuid, pass)
+              .initBackEnd(config.app.host, uuid, pass)
               .then(
               function (result)
               {
-                if (result.validate === false && result.errorMessage)
+                if (result.valid === false && result.errorMessage)
                 {
                   $scope.alert = {
                     login: {
@@ -200,7 +200,7 @@ define(
                     .removeAttr('disabled');
                   return false;
                 }
-                else if (result.validate === true)
+                else if (result.valid === true)
                 {
                   Session.set(result['X-SESSION_ID']);
                   preLoader();
