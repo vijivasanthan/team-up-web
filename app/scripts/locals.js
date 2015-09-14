@@ -31,7 +31,7 @@ define(
           loading_Group: 'Loading groups...',
           loading_Members: 'Loading team members...',
           loading_everything: 'Finished loading!',
-          loggingOff: 'Logging off',
+          loggingOff: 'Logging off...',
           logout: 'Log out',
           loading: 'Loading..',
           loading_clientGroups: 'Loading client groups...',
@@ -566,7 +566,9 @@ define(
           settings: 'settings'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Client group',
+          extraInfo: 'Extra info',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team member',
@@ -1627,8 +1629,10 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Clientgrupe',
           client: 'Client',
+          extraInfo: 'Extra info',
           coordinator: 'Coordinator',
           teamMember: 'Team Mitglied',
           teamMembers: 'Team Mitglieder',
@@ -2676,8 +2680,10 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          notFound: 'Niet gevonden',
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
+          extraInfo: 'Extra info',
           coordinator: 'Coördinator',
           teamMember: 'Teamlid',
           teamMembers: 'Teamleden',
