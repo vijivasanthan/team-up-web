@@ -1,168 +1,192 @@
-define(['services/services', 'config'], function (services, config) {
+define(['services/services'], function (services)
+{
   'use strict';
 
-  services.factory('Settings', function ($resource, $q, Store, $injector) {
-    //TODO not yet implented, waiting until the userobject add the settings
-
+  services.factory('Settings', function ($q, Store, $injector)
+  {
     return {
-      getBackEnd: function()
+      /**
+       * get the backend directory locally
+       * @returns {*} return the backend dir
+       */
+      getBackEnd: function ()
       {
-        return Store('app').get('backEnd') || config.app.host;
-      }
-      setBackEnd: function(backEnd)
-      {
-        Store('app').save('backEnd', backEnd)
-        return backEnd;
+        var backEnd = Store('app').get('backEnd');
+        //the default back End is for testpurposes only
+        return backEnd.get;
       },
-      initBackEnd: function(userName, passWord)
+      /**
+       * Save the backend directory locally
+       * @param backEnd The backend directory
+       */
+      setBackEnd: function (backEnd)
       {
-        var deferred = $q.defer,
-          loginPromises = (config.app.otapRole == 'live')
-            ? $q.all[ login(config.app.host) ]
-            : $q.all([
-                login( config.app.backEnds[0] ),
-                login( config.app.backEnds[1] )
-              ]);
+        Store('app').save('backEnd', {'get': backEnd});
+      },
+      /**
+       * initialise backend directory by logging in on all backends defined
+       * after that validate all the responses on statuscode
+       * in the localConfig.host
+       * @param backEnds all the backend directories
+       * @param userName
+       * @param passWord
+       * @returns {*} the response, if the response was rejected a errorMessage is added
+       */
+      initBackEnd: function (backEnds, userName, passWord)
+      {
+        var deferred = $q.defer(),
+          self = this,
+          promises = [];
 
-        loginPromises
-          .then(function(result) 
-          {
-            //check result
-            //if the first result got ant 
-            //what backEnd is the final Backend
-            //deferred.resolve(one of the results)
-          });
-        return deferred.promise;
-      },
-      login : function(backEnd)
-      {
-        var login = $resource(backEnd + 'login/',  {}, {
-          get: {
-            method: 'GET',
-            params: {
-              uuid: '',
-              pass: ''
-            }
-          }
+        //create http requests with the different backends
+        _.each(backEnds, function (backEndDir)
+        {
+          var request = self.login(backEndDir, userName, passWord);
+          promises.push(request);
         });
 
+        //Resolve all promises even if there are rejections
+        this.aSync(promises, function error(results)
+        {},
+        function success(results)
+        {
+          var result = self.getResultOnStatusCode(results);
+          self.setBackEnd(backEnds[result.index]);
+          deferred.resolve(result);
+        });
+        return deferred.promise;
+      },
+      /**
+       * The statuscodes will be ordered by depending on the result of the backend.
+       * First a 200 as in a successfully login, second in a 400, 403, or 404 as in wrong username or password.
+       * The thirth status code 503 represents as the back-end will time out. At last statuscode zero if the back-end
+       * not exist
+       * the first result in that order will return validated
+       * @param results An array of objects, where each entry represents the http status code of a /login request
+       * @returns {*} The first result in the order of status codes will return
+       */
+      getResultOnStatusCode: function (results)
+      {
+        var $rootScope = $injector.get('$rootScope'),
+          statusCodes = _.pluck(results, 'status'),
+          self = this,
+          index = 0;
+
+        // The order of these status codes is mandatory!
+        [undefined, 400, 403, 404, 503, 0]
+          .some(function (statusCode)
+          {
+            index = statusCodes.indexOf(statusCode);
+            if (index !== -1)
+            {
+              results[index].index = index;
+              results[index] = self.validate(results[index]);
+              return true;
+            }
+          });
+        //statuscode not found
+        if (index === -1)
+        {
+          index = 0;
+          results[index].validate = false;
+          results[index].errorMessage = $rootScope.ui.teamup.statusCodeNotRegonized;
+        }
+
+        return results[index];
+      },
+      /**
+       * Validate the result on statuscode and add a error message
+       * @param result the result inclusive a key value with valid true/false and a error message
+       * if the result was not successfully
+       * @returns {result} with the validation true or false
+       */
+      validate: function (result)
+      {
+        var $rootScope = $injector.get('$rootScope');
+
+        switch (result.status)
+        {
+          case undefined:
+            result.valid = true;
+            break;
+          case 0:
+            result.valid = false;
+            result.errorMessage = $rootScope.ui.teamup.noBackend;
+            break;
+
+          case 400:
+          case 403:
+          case 404:
+            result.valid = false;
+            result.errorMessage = $rootScope.ui.login.alert_wrongUserPass;
+            break;
+
+          case 503:
+            result.valid = false;
+            result.errorMessage = $rootScope.ui.teamup.backEndUnavailable;
+            break;
+        }
+        return result;
+      },
+      /**
+       * Create a resource object with the combination of the backend directory, username and password
+       * and return this as a promise
+       * @param backEndDir the location of the backend
+       * @param userName
+       * @param passWord
+       * @returns {*|{method, params}} returns a promify resource
+       */
+      login: function (backEndDir, userName, passWord)
+      {
+        var $resource = $injector.get('$resource'),
+          login = $resource(backEndDir + 'login/', {}, {
+            get: {
+              method: 'GET',
+              params: {
+                uuid: '',
+                pass: ''
+              }
+            }
+          });
         return login.get({
           uuid: userName,
           pass: passWord
+        }).$promise;
+      },
+      /**
+       * This method will bundle all the responses, and rejections, not seperated in a resolved and rejected callBack
+       * like $q.all does
+       * @param listOfPromises
+       * @param onErrorCallback
+       * @param finalCallback
+       */
+      aSync: function (listOfPromises, onErrorCallback, finalCallback)
+      {
+
+        listOfPromises = listOfPromises || [];
+        onErrorCallback = onErrorCallback || angular.noop;
+        finalCallback = finalCallback || angular.noop;
+
+        // Create a new list of promises
+        // that can "recover" from rejection
+        var newListOfPromises = listOfPromises.map(function (promise)
+        {
+          return promise.catch(function (reason)
+          {
+
+            // First call the `onErrroCallback`
+            onErrorCallback(reason);
+
+            // Change the returned value to indicate that it was rejected
+            // Based on the type of `reason` you might need to change this
+            // (e.g. if `reason` is an object, add a `rejected` property)
+            return reason;
+          });
         });
+        // Finally, we create a "collective" promise that calls `finalCallback` when resolved.
+        // Thanks to our modifications, it will never get rejected !
+        $q.all(newListOfPromises).then(finalCallback);
       }
     };
-
-    // var Settings = $resource();
-
-    // Settings.prototype.get = function () {
-    //   var deferred = $q.defer(),
-    //       settings = Store('app').get('settings');
-
-    //   if(settings.length)
-    //   {
-    //     deferred.resolve(settings);
-    //   }
-    //   else
-    //   {
-    //     Settings.prototype.init()
-    //       .then(
-    //         function(userSettings)
-    //         {
-    //           deferred.resolve(userSettings);
-    //         }
-    //       );
-    //   }
-
-    //   return deferred.promise;
-    // };
-
-    // /**
-    //  * Checks if the user already have some setting otherwise return and save the default settings
-    //  * @returns {*} promise with the settings of the user
-    //  */
-    // Settings.prototype.init = function()
-    // {
-    //   var deferred = $q.defer();
-
-    //   Profile.get($rootScope.app.resources.uuid)
-    //     .then(
-    //     function(profileData)
-    //     {
-    //       if(profileData)
-    //       {
-    //         var settings = Settings.prototype.default();
-
-    //         if(profileData.settings)
-    //         {
-    //           settings = profileData.settings;
-    //         }
-    //         else
-    //         {
-    //           Settings.prototype.save($rootScope.app.resources.uuid, settings);
-    //         }
-
-    //         Store('app').save('settings', settings);
-    //         deferred.resolve(settings);
-    //       }
-    //       else
-    //       {
-    //         console.error('No profile data', profileData);
-    //       }
-    //     }
-    //   );
-
-    //   return deferred.promise;
-    // };
-
-    // Settings.prototype.default = function()
-    // {
-    //   return $rootScope.config.app.settings;
-    // };
-
-    // Settings.prototype.save = function (id, settings) {
-    //   var deferred = $q.defer();
-
-    //   Profile.save(id, settings).then(function () {
-    //     deferred.resolve({ saved: true });
-    //   });
-
-    //   return deferred.promise;
-    // };
-
-    // // BackendSettings
-    // var BackendSettings = $resource(
-    //   config.host + '/settings',
-    //   {},
-    //   {
-    //     get: {
-    //       method: 'GET',
-    //       params: {}
-    //     }
-    //   }
-    // );
-
-
-    // // Get BackendSettings
-    // Settings.prototype.getBackendSettings = function () {
-    //   var deferred = $q.defer();
-
-    //   BackendSettings.get(
-    //     {},
-    //     function (results)
-    //     {
-    //       Store('BackendSettings').save('settings', results);
-    //       deferred.resolve(results);
-    //     },
-    //     function (error)
-    //     {
-    //       deferred.resolve(error);
-    //     }
-    //   );
-
-    //   return deferred.promise;
-    // };
-
-    // return new Settings;
   });
 });

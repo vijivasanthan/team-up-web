@@ -500,7 +500,7 @@ define(
               controller: 'status',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Slots, $q, $location, CurrentSelection, TeamUp)
+                data: function ($q, $location, CurrentSelection, TeamUp, Teams, Slots)
                 {
                   var teamId = CurrentSelection.getTeamId(),
                     deferred = $q.defer();

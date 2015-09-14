@@ -16,13 +16,6 @@ define(['profile'], function(profile){
 
       host: localConfig.host,
 
-      otapRole: localConfig.otapRole,
-
-      backEnds: [
-        'https://backend.ask-cs.nl/',
-        'https://bz-backend.ask-cs.nl/'
-      ],
-
       formats: {
         date: 'dd-MM-yyyy',
         time: 'HH:mm',
