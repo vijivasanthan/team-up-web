@@ -52,6 +52,10 @@ module.exports = (grunt) ->
           ext: '.html'
         ]
 
+    readme:
+      options:
+        readme: 'README.md'
+
     validation:
       options: [
         charset: 'utf-8',
