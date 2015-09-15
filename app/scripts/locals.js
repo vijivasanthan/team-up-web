@@ -701,7 +701,7 @@ define(
             deleteClientTitle: 'Delete client',
             deleteClient: 'Are u sure that you would like to delete the client?',
             deleteClientFromTeamTitle: 'Delete client from team',
-            deleteClientFromTeam: 'Are you sure you want to delete the client form the team?',
+            deleteClientFromTeam: 'Are you sure you want to delete the client from the team?',
             deleteReportTitle: 'Delete report',
             deleteReport: 'Are you sure you want to delete the report?',
             deleteProfileTitle: 'delete profile',
