@@ -16,6 +16,8 @@ define(['profile'], function(profile){
 
       host: localConfig.host,
 
+      videoCallUrl: 'https://webrtc.ask-fast.com/',
+
       formats: {
         date: 'dd-MM-yyyy',
         time: 'HH:mm',
