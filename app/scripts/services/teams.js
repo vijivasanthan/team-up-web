@@ -619,12 +619,14 @@ define(
             $q.all(calls)
               .then(function(relations)
               {
-                var teamsRelationsResult = [];
+                var teamsRelationsResult = {};
                 _.each(relations, function (relation, index)
                 {
                   var currentTeam = teams[index];
-                  teamsRelationsResult[currentTeam.uuid] = [];
-                  teamsRelationsResult[currentTeam.uuid] = relation;
+                  if(relation.length)
+                  {
+                    teamsRelationsResult[currentTeam.uuid] = (relation[0]).id;
+                  }
                   Store('app').save(
                     'teamGroup_' + currentTeam.uuid,
                     (relation.length == 4 &&
