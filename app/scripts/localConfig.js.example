@@ -12,7 +12,7 @@ var localConfig = {
 	host: ["http://dev.ask-cs.com/"],
 	host: ["http://test.ask-cs.com/"],
 	host: ["http://demo.ask-cs.com/"],
-  	host: [ "https://backend.ask-cs.nl/", "http://192.168.128.24:8080/" ],
+  	host: [ "https://backend.ask-cs.nl/", "http://bz-backend.ask-cs.nl/" ],
    */
 	host: ["http://dev.ask-cs.com/"],
 
