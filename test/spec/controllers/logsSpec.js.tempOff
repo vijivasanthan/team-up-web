@@ -3,12 +3,21 @@ define(
     'angular-mocks',
     'app',
     'lodash',
-    'controllers/logs',
-    'modals/logs',
-    'services/moment',
     'lawnchair',
     'lawnchair-dom',
-    'services/currentSelection'
+    'controllers/logs',
+    'services/moment',
+    'services/currentSelection',
+    'services/settings',
+    'services/store',
+    'services/teamup',
+    'services/teams',
+    'services/dater',
+    'services/md5',
+    'modals/logs',
+    'modals/profile',
+    'modals/slots',
+    'localConfig'
   ],
   function() {
     'use strict';
@@ -137,11 +146,14 @@ define(
       });
 
       it('Should check if it will fetch logs by team', function () {
-        var logsByTeam = null,
-            options = getOptions(),
-            url = testConfig.host + 'ddr?adapterId=' + options.adapterId + '&endTime=' + options.endTime +
-              '&startTime=' + options.startTime,
-            response = [
+
+
+        var host = testConfig.host;
+        var logsByTeam = null;
+        var options = getOptions();
+        var url = host + 'ddr?adapterId=' + options.adapterId + '&endTime=' + options.endTime +
+              '&startTime=' + options.startTime;
+        var response = [
               {
                 "adapterId": "502161e0-7b2c-11e4-8c29-061c2777aa3c",
                 "accountId": "093e753b-9d17-4c17-ae9b-73b08b988d73",

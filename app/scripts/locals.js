@@ -31,7 +31,7 @@ define(
           loading_Group: 'Loading groups...',
           loading_Members: 'Loading team members...',
           loading_everything: 'Finished loading!',
-          loggingOff: 'Logging off',
+          loggingOff: 'Logging off...',
           logout: 'Log out',
           loading: 'Loading..',
           loading_clientGroups: 'Loading client groups...',
@@ -566,7 +566,9 @@ define(
           settings: 'settings'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Client group',
+          extraInfo: 'Extra info',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team member',
@@ -614,6 +616,9 @@ define(
           states: 'States',
           saveTeam: 'Save team',
           save: 'Save',
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: "The defined back-end cannot be found",
+          statusCodeNotRegonized: "Status-code not regonized",
           refreshing: 'Refreshing team information',
           dataChanged: 'Data is changed',
           teamSubmitError: 'Error while creating: ',
@@ -696,7 +701,7 @@ define(
             deleteClientTitle: 'Delete client',
             deleteClient: 'Are u sure that you would like to delete the client?',
             deleteClientFromTeamTitle: 'Delete client from team',
-            deleteClientFromTeam: 'Are you sure you want to delete the client form the team?',
+            deleteClientFromTeam: 'Are you sure you want to delete the client from the team?',
             deleteReportTitle: 'Delete report',
             deleteReport: 'Are you sure you want to delete the report?',
             deleteProfileTitle: 'delete profile',
@@ -863,7 +868,7 @@ define(
           errors: 'Errors'
         },
         options: {
-          title: 'Einstellungen ',
+          title: 'Options ',
           teamEmail: 'Team email',
           pickAPhoneNumber: 'Pick a phone number',
           phoneNumberAlias: 'Phone number alias',
@@ -1624,8 +1629,10 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Clientgrupe',
           client: 'Client',
+          extraInfo: 'Extra info',
           coordinator: 'Coordinator',
           teamMember: 'Team Mitglied',
           teamMembers: 'Team Mitglieder',
@@ -1660,6 +1667,11 @@ define(
           createTeam: 'speichern',
           newMember: 'neues Gruppen-Mitglied',
           noMembersFound: 'kein Ergebnis für diese Suche.',
+          //start TODO
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: "The defined back-end cannot be found",
+          statusCodeNotRegonized: "Status-code not regonized",
+          //end
           name: 'Name',
           role: 'Rolle',
           phone: 'Telefon',
@@ -2088,7 +2100,7 @@ define(
           loading_Members: 'Teamleden laden...',
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
-          loggingOff: 'Logging off',
+          loggingOff: 'Uitloggen',
           loading: 'Laden..',
           loading_clientGroups: 'Cliëntengroepen laden...',
           loading_clients: 'Cliënten laden',
@@ -2668,8 +2680,10 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          notFound: 'Niet gevonden',
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
+          extraInfo: 'Extra info',
           coordinator: 'Coördinator',
           teamMember: 'Teamlid',
           teamMembers: 'Teamleden',
@@ -2717,6 +2731,11 @@ define(
           states: 'Status',
           saveTeam: 'Team opslaan',
           save: 'Opslaan',
+          //start TODO
+          backEndUnavailable: "De back-end is tijdelijk buiten gebruik, probeer opnieuw in te loggen. Als het probleem blijft voorkomen, neem dan contact op met uw systeembeheerder.",
+          noBackend: "De gedefinieerde back-end kon niet gevonden worden.",
+          statusCodeNotRegonized: "Status-code is niet bekend.",
+          //end
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',
           teamSubmitError: 'Fouten tijdens het aanmaken: ',

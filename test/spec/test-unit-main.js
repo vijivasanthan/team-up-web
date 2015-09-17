@@ -28,8 +28,11 @@ requirejs.config(
       'angular-cookie':    '../vendors/angular-cookie/angular-cookie',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
+      'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
+      'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
       domReady:     '../vendors/requirejs-domready/domReady',
-      moment: '../vendors/moment/moment',
+      moment: '../vendors/moment/min/moment-with-locales',
+      'moment-timezone': '../vendors/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       'lawnchair-dom': '../vendors/lawnchair/src/adapters/dom',
       'lodash': '../vendors/lodash/lodash.min',
@@ -55,6 +58,8 @@ requirejs.config(
       'angular-strap': { deps: ['angular'] },
       'angular-strap-tpl': { deps: ['angular','angular-strap'] },
       'angular-cookie': { deps: ['angular'] },
+      'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
+      'angular-sortable-view': { deps: ['angular'], exports: 'angular' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },
@@ -89,6 +94,7 @@ requirejs.config({
 
 var testConfig = {
   host: 'http://test.ask-cs.com/',
+  passWord: 'askaskask',
   userResources: {
     "uuid": "henkie",
     "userName": "henkie",

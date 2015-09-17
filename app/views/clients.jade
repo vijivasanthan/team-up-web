@@ -15,7 +15,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='removeContact(_contact)') {{ uit.teamup.del }}
+				ng-click='removeContact(_contact)') {{ uit.agenda.del }}
 
 #confirmClientModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -33,8 +33,7 @@ aria-hidden='true')
 			.modal-footer
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
-				button.btn.btn-primary(type='button',
-				ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
+				button.btn.btn-primary(type='button', ng-click='deleteClient(_clientId)') {{ ui.agenda.del }}
 
 #confirmClientGroupModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -53,7 +52,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='deleteClientGroup()') {{ui.teamup.confirms.remove}}
+				ng-click='deleteClientGroup()') {{ui.agenda.del}}
 
 #confirmReportModal.modal.fade(tabindex='-1',
 role='dialog',
@@ -72,7 +71,7 @@ aria-hidden='true')
 				button.btn.btn-default(type='button',
 				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button',
-				ng-click='removeReport(_report)') {{ui.teamup.confirms.remove}}
+				ng-click='removeReport(_report)') {{ui.agenda.del }}
 
 .page-header
 	h2.nullable {{ui.teamup.clients}}
@@ -182,7 +181,7 @@ aria-hidden='true')
 								button.btn.btn-default(type='button',
 								data-dismiss='modal') {{ uit.teamup.cancel }}
 								button.btn.btn-primary(type='button',
-								ng-click='deleteClient(_clientId)') {{ uit.teamup.del }}
+								ng-click='deleteClient(_clientId)') {{ uit.agenda.del }}
 				span.muted.pull-right
 					small
 						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
@@ -270,7 +269,7 @@ aria-hidden='true')
 							input.span4(type='text',
 							ng-model='clientForm.clientProfileUrl')
 					.control-group
-						label.control-label Extra Info
+						label.control-label {{ ui.teamup.extraInfo }}
 						.controls
 							textarea.span8(style='height: 150px',
 							ng-model='clientForm.extraInfo.basic')

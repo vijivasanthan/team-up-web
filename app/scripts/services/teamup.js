@@ -7,11 +7,15 @@ define(
     services.factory(
       'TeamUp',
       [
-        '$resource', '$q',
-        function ($resource, $q)
+        '$resource', '$q', 'Settings',
+        function ($resource, $q, Settings)
         {
-          var TeamUp = $resource(
-              config.app.host + config.app.namespace + ':first/:second/:third/:fourth',
+          var TeamUp = function() {};
+
+          TeamUp.prototype.get = function()
+          {
+            return $resource(
+              Settings.getBackEnd() + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
                 /**
@@ -626,7 +630,8 @@ define(
                 }
 
               }
-          );
+            );
+          };
 
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
@@ -641,7 +646,9 @@ define(
 
             try
             {
-              TeamUp[proxy](
+              var service = TeamUp.prototype.get();
+
+              service[proxy](
                 params,
                 data,
                 function (result)
@@ -659,6 +666,7 @@ define(
             }
             catch (err)
             {
+              console.log('error', err);
               // Log.error(err)
             }
 

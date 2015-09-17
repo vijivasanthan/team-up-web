@@ -10,12 +10,12 @@ define(['services/services', 'config'],
         '$rootScope',
         '$resource',
         '$q',
-        //'Store',
+        'Settings',
         function (
           $rootScope,
           $resource,
-          $q
-          //Store
+          $q,
+          Settings
         )
         {
           //var TestModal = function()
@@ -24,7 +24,7 @@ define(['services/services', 'config'],
           //};
           //$resource(config.app.host + 'team/member/:user', {user: ''}, {
 
-          var TestModal = $resource(config.app.host + 'acl', {}, {
+          var TestModal = $resource(Settings.getBackEnd() + 'acl', {}, {
             get: {
               method: 'GET',
               interceptor: {

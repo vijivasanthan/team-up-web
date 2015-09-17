@@ -894,7 +894,7 @@ define(
             console.log('roomId', roomId);
 
 
-            var url = 'http://webrtc.ask-cs.com/?room=' + roomId;
+            var url = config.app.videoCallUrl + '?room=' + roomId;
             //username aan de url toevoegen
 
             $rootScope.video = {
