@@ -78,20 +78,20 @@ define(
             return deferred.promise;
           };
 
-          TeamsService.prototype.updateMembersLocal = function ()
-          {
-            return TeamUp._('allTeamMembers')
-              .then(
-              function (result)
-              {
-                return result;
-              }.bind(this),
-              function (error)
-              {
-                console.log(error)
-              }
-            );
-          };
+          //TeamsService.prototype.updateMembersLocal = function ()
+          //{
+          //  return TeamUp._('allTeamMembers')
+          //    .then(
+          //    function (result)
+          //    {
+          //      return result;
+          //    }.bind(this),
+          //    function (error)
+          //    {
+          //      console.log(error)
+          //    }
+          //  );
+          //};
 
           // Get teams data from localStorage
           TeamsService.prototype.queryLocal = function ()
@@ -512,43 +512,43 @@ define(
            * Filter all members by team
            * @returns {*}
            */
-          TeamsService.prototype.filterAllMembers = function()
-          {
-            var deferred = $q.defer();
-            var filterMembersInTeam = function (members)
-            {
-              var filter = $injector.get('$filter'),
-                  membersInTeam = filter('membersInTeam')(members),
-                  filteredTeamMembers = {};
-
-              _.each(membersInTeam, function(member) {
-                  _.each(member.teamUuids, function(teamUuid) {
-                      filteredTeamMembers[teamUuid] = filteredTeamMembers[teamUuid] || {};
-                      filteredTeamMembers[teamUuid][member.uuid] = member;
-                  });
-              });
-
-              //TODO this need to be fixed in the backend
-              //Check if the teams of the member exist, the team could be deleted, while the userobject
-              //is not updated
-              var filteredTeamsUuids = _.keys(filteredTeamMembers),
-                  allTeamsUuids = _.pluck(Store('app').get('teams'), 'uuid'),
-                  existingTeams = _.intersection(allTeamsUuids, filteredTeamsUuids);
-
-              return _.pick(filteredTeamMembers, existingTeams);
-            };
-
-            TeamsService.prototype.updateMembersLocal()
-              .then(
-                function(members)
-                {
-                  var membersInTeam = filterMembersInTeam(members);
-                  deferred.resolve(membersInTeam);
-                }
-            );
-
-            return deferred.promise;
-          };
+          //TeamsService.prototype.filterAllMembers = function()
+          //{
+          //  var deferred = $q.defer();
+          //  var filterMembersInTeam = function (members)
+          //  {
+          //    var filter = $injector.get('$filter'),
+          //        membersInTeam = filter('membersInTeam')(members),
+          //        filteredTeamMembers = {};
+          //
+          //    _.each(membersInTeam, function(member) {
+          //        _.each(member.teamUuids, function(teamUuid) {
+          //            filteredTeamMembers[teamUuid] = filteredTeamMembers[teamUuid] || {};
+          //            filteredTeamMembers[teamUuid][member.uuid] = member;
+          //        });
+          //    });
+          //
+          //    //TODO this need to be fixed in the backend
+          //    //Check if the teams of the member exist, the team could be deleted, while the userobject
+          //    //is not updated
+          //    var filteredTeamsUuids = _.keys(filteredTeamMembers),
+          //        allTeamsUuids = _.pluck(Store('app').get('teams'), 'uuid'),
+          //        existingTeams = _.intersection(allTeamsUuids, filteredTeamsUuids);
+          //
+          //    return _.pick(filteredTeamMembers, existingTeams);
+          //  };
+          //
+          //  TeamsService.prototype.updateMembersLocal()
+          //    .then(
+          //      function(members)
+          //      {
+          //        var membersInTeam = filterMembersInTeam(members);
+          //        deferred.resolve(membersInTeam);
+          //      }
+          //  );
+          //
+          //  return deferred.promise;
+          //};
 
           /**
            * Check if the teamId belongs to a team
@@ -705,8 +705,10 @@ define(
            */
           TeamsService.prototype.getSingleLocal = function(teamId)
           {
-            var teamLocal = Store('app').get(teamId),
-              teamFinal = teamLocal.length && teamLocal || TeamsService.prototype.getSingle(teamId);
+            var teamFinal = (! Store('app').has(teamId))
+                ? TeamsService.prototype.getSingle(teamId)
+                : Store('app').get(teamId);
+
             return $q.when(teamFinal);
           };
 
