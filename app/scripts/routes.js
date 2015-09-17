@@ -103,6 +103,7 @@ define(
             {
               templateUrl: 'views/tasks2.html',
               controller: 'tasks2Ctrl',
+              reloadOnSearch: false,
               resolve: {
                 data:
                   function (Teams, Clients, Task, $q)
