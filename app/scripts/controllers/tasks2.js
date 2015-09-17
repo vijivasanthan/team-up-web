@@ -11,14 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          var view = $location.hash(),
-            clientLocal = Clients.queryLocal(),
-            teamClientLocal = Teams.queryLocalClientGroup(data.teams);
-
-          console.log('data', data);
-          console.log('clientLocal', Clients.queryLocal());
-          console.log('teamClientLocal', Teams.queryLocalClientGroup(data.teams));
-
           function resetViews()
           {
             $scope.tasks = {
@@ -124,7 +116,7 @@ define(
             );
           };
 
-          setView(view);
+          setView($location.hash());
 
           $scope.teams = data.teams;
 
@@ -480,7 +472,7 @@ define(
             $scope.groups = [];
 
             angular.forEach(
-              clientLocal.clientGroups,
+              data.clientGroups,
               function (cg)
               {
                 if ($scope.currentGroup == cg.id)
@@ -496,7 +488,7 @@ define(
           // Related to chain of dropd-owns of groups and clients
           $scope.groupAffectClient = function (groupId)
           {
-            $scope.clients = clientLocal.clients[groupId];
+            $scope.clients = data.clients[groupId];
 
             if (( $scope.currentClient == null || typeof $scope.currentClient == 'undefined' )
               && $scope.clients && $scope.clients.length > 0)
@@ -514,13 +506,13 @@ define(
             }
           };
 
-          if (typeof teamClientLocal[$scope.currentTeam] == 'undefined')
+          if (typeof data.teamClientsGroups[$scope.currentTeam] == 'undefined')
           {
             $scope.currentGroup = null;
           }
           else
           {
-            $scope.currentGroup = teamClientLocal[$scope.currentTeam];
+            $scope.currentGroup = data.teamClientsGroups[$scope.currentTeam];
             $scope.teamAffectGroup();
 
             $scope.groupAffectClient($scope.currentGroup);
@@ -534,7 +526,7 @@ define(
           $scope.changeTeam = function (teamUuid)
           {
             $scope.members = data.members[teamUuid];
-            $scope.currentGroup = teamClientLocal[teamUuid];
+            $scope.currentGroup = data.teamClientsGroups[teamUuid];
 
             $scope.teamAffectGroup();
 
