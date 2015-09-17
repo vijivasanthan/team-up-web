@@ -102,7 +102,57 @@ define(
             '/tasks2',
             {
               templateUrl: 'views/tasks2.html',
-              controller: 'tasks2Ctrl'
+              controller: 'tasks2Ctrl',
+              resolve: {
+                data:
+                  function (Teams, Clients, Task, $q)
+                  {
+                    var deferred = $q.defer(),
+                      data = {
+                        teams: null,
+                        myTasks: null,
+                        allTasks: null,
+                        members: null,
+                        teamClientsGroups: null,
+                        clientGroups: null,
+                        clients: null
+                      };
+
+                    Teams.getAllLocal()
+                      .then(function(teams)
+                      {
+                        data.teams = teams;
+                        return Teams.getAllWithMembers()
+                      })
+                      .then(function(members)
+                      {
+                        data.members = members;
+                        return $q.all([
+                          Task.queryMine(),
+                          Task.queryAll(),
+                          Teams.relationClientGroups(data.teams)
+                        ])
+                      })
+                      .then(function(teamsTasksData)
+                      {
+                        data.myTasks = teamsTasksData[0];
+                        data.allTasks = teamsTasksData[1];
+                        data.teamClientsGroups = teamsTasksData[2];
+                        return Clients.getAllLocal();
+                      })
+                      .then(function(clientGroups)
+                      {
+                        data.clientGroups = clientGroups;
+                        return Clients.getAllWithClients();
+                      })
+                      .then(function(GroupsAndClients)
+                      {
+                        data.clients = GroupsAndClients;
+                        deferred.resolve(data);
+                      });
+                    return deferred.promise;
+                  }
+              }
             })
 
             .when('/admin', {

@@ -7,14 +7,17 @@ define(
     controllers.controller(
       'tasks2Ctrl',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
-                  Teams, Clients, Dater, moment)
+                  Teams, Clients, Dater, moment, data)
         {
           $rootScope.fixStyles();
 
           var view = $location.hash(),
-            teamsLocal = Teams.queryLocal(),
             clientLocal = Clients.queryLocal(),
-            teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
+            teamClientLocal = Teams.queryLocalClientGroup(data.teams);
+
+          console.log('data', data);
+          console.log('clientLocal', Clients.queryLocal());
+          console.log('teamClientLocal', Teams.queryLocalClientGroup(data.teams));
 
           function resetViews()
           {
@@ -123,7 +126,7 @@ define(
 
           setView(view);
 
-          $scope.teams = teamsLocal.teams;
+          $scope.teams = data.teams;
 
           $scope.task = $scope.task || {
             team: $scope.currentTeam
@@ -465,7 +468,7 @@ define(
             );
           };
 
-          $scope.members = teamsLocal.members[$scope.currentTeam];
+          $scope.members = data.members[$scope.currentTeam];
 
           $scope.groups = [];
           $scope.clients = [];
@@ -530,7 +533,7 @@ define(
 
           $scope.changeTeam = function (teamUuid)
           {
-            $scope.members = teamsLocal.members[teamUuid];
+            $scope.members = data.members[teamUuid];
             $scope.currentGroup = teamClientLocal[teamUuid];
 
             $scope.teamAffectGroup();
