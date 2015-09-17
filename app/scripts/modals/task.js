@@ -30,7 +30,7 @@ define(
                 task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
                 if (task.relatedClient == null)
                 {
-                  task.relatedClient = {firstName: "*", lastName: "Niet gevonden"};
+                  task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
                 }
 
                 task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;

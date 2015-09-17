@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'vis',
       [
-        '$rootScope', '$scope', '$location', 'Store', 'Dater', 'TeamUp',
-        function ($rootScope, $scope, $location, Store, Dater, TeamUp)
+        '$rootScope', '$scope', '$location', 'Store', 'Dater', 'TeamUp', 'Settings',
+        function ($rootScope, $scope, $location, Store, Dater, TeamUp, Settings)
         {
           // $rootScope.fixStyles();
 
@@ -270,7 +270,7 @@ define(
           var params = $location.search();
 
           // TODO: Remove these ones too!
-          $scope.imgHost = config.app.host;
+          $scope.imgHost = Settings.getBackEnd();
           $scope.ns = config.app.ns;
 
           var teams = Store('app').get('teams'),

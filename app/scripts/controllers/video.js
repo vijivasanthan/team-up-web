@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -24,7 +24,8 @@ define(
               //http://webrtc.ask-fast.com
               //http://webrtc.ask-cs.com
               //http://localhost:9001
-              videoCall = $filter('trusted_url')('http://localhost:9001/?room=' + $route.current.params.videoId + '&username=Joop');
+              var url = config.app.videoCallUrl + '?room=' + $route.current.params.videoId + '&username=Joop';
+              videoCall = $filter(url);
             }
             else
             {

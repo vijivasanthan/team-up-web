@@ -23,8 +23,9 @@ define(
         'MD5',
         'Profile',
         'Permission',
+        '$injector',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
-                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Permission)
+                  Dater, $filter, TeamUp, $timeout, MD5, Profile, Permission, $injector)
         {
           var getProfileResource = function(userId, flag)
           {
@@ -373,7 +374,8 @@ define(
           // Change an avatar
           $scope.editImg = function ()
           {
-            $scope.uploadURL = config.app.host + config.app.namespace + "/team/member/" + $route.current.params.userId + "/photo?square=true";
+            var Settings = $injector.get('Settings');
+            $scope.uploadURL = Settings.getBackEnd() + config.app.namespace + "/team/member/" + $route.current.params.userId + "/photo?square=true";
             $scope.setViewTo('editImg');
           };
 

@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'clientCtrl',
-        function ($rootScope, $scope, $location, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
+        function ($rootScope, $scope, $location, Settings, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
                   $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection, Message)
         {
           $rootScope.fixStyles();
@@ -15,7 +15,7 @@ define(
           dataHasClientId(data.clientId);
 
           // TODO: Check if it is use!
-          $scope.imgHost = config.app.host;
+          $scope.imgHost = Settings.getBackEnd();
           $scope.ns = config.app.namespace;
 
           $scope.data = data;

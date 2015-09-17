@@ -1,65 +1,85 @@
-define(['services/services', 'config'], function (services, config) {
+define(['services/services', 'config'], function (services, config)
+{
   'use strict';
 
-  services.factory('Profile', function ($rootScope, $resource, $q, Slots, MD5, Store) {
-    var Profile = $resource(config.app.host + 'node/:id/:section', {}, {
-      get: {
-        method: 'GET',
-        params: { id: '', section: 'resource' }
-      },
-      save: {
-        method: 'PUT',
-        params: { section: 'resource' }
-      },
-      remove: {
-        method: 'DELETE',
-        params: {},
-        isArray: true
-      },
-      role: {
-        method: 'PUT',
-        params: { section: 'role' },
-        isArray: true
-      },
-      membership: {
-        method: 'PUT',
-        params: { id: '', section: 'membership' },
-        isArray: true
-      }
-    });
+  services.factory('Profile', function ($rootScope, $resource, $q, Slots, MD5, Store, Settings)
+  {
 
-    var PincodeExists = $resource(config.app.host + 'node/:id/pincode_exists', {}, {
-      check: {
-        method: 'GET',
-        params: {}
-      }
-    });
+    var Profile = function ()
+    {
+    }
 
     //$resource(url, [paramDefaults], [actions], options);
-    var ChangePassword = $resource(config.app.host + 'teammember/:memberId/pass',
-      {
-        oldPass: '@oldPass',
-        newPass: '@newPass'
-      },
-      {
-      update: {
-        method: 'PUT',
-      }
-    });
+    Profile.prototype.resourcePincode = function ()
+    {
+      return $resource(Settings.getBackEnd() + 'node/:id/pincode_exists', {}, {
+        check: {
+          method: 'GET',
+          params: {}
+        }
+      });
+    };
 
-    var user = $resource(config.app.host + 'team/:teamId/member/:userId',  {}, {
-      get: {
-        method: 'GET',
-        params: {}
-      },
-      save: {
-        method: 'PUT',
-        params: {}
-      }
-    });
+    Profile.prototype.resourceChangePassword = function ()
+    {
+      return $resource(Settings.getBackEnd() + 'teammember/:memberId/pass',
+        {
+          oldPass: '@oldPass',
+          newPass: '@newPass'
+        },
+        {
+          update: {
+            method: 'PUT',
+          }
+        });
+    };
+
+    Profile.prototype.resourceProfile = function ()
+    {
+      return $resource(Settings.getBackEnd() + 'node/:id/:section', {}, {
+        get: {
+          method: 'GET',
+          params: {id: '', section: 'resource'}
+        },
+        save: {
+          method: 'PUT',
+          params: {section: 'resource'}
+        },
+        remove: {
+          method: 'DELETE',
+          params: {},
+          isArray: true
+        },
+        role: {
+          method: 'PUT',
+          params: {section: 'role'},
+          isArray: true
+        },
+        membership: {
+          method: 'PUT',
+          params: {id: '', section: 'membership'},
+          isArray: true
+        }
+      });
+    };
+
+    Profile.prototype.resourceUser = function ()
+    {
+      return $resource(Settings.getBackEnd() + 'team/:teamId/member/:userId', {}, {
+        get: {
+          method: 'GET',
+          params: {}
+        },
+        save: {
+          method: 'PUT',
+          params: {}
+        }
+      });
+    };
 
     Profile.prototype.fetchUserData = function (userId)
     {
+      var user = Profile.prototype.resourceUser();
       return user.get({userId: userId},
         function (result)
         {
@@ -73,18 +93,29 @@ define(['services/services', 'config'], function (services, config) {
 
     Profile.prototype.saveUserData = function (resources)
     {
+      var user = Profile.prototype.resourceUser();
       return user.save({
-          teamId: resources.teamUuids[0],
-          userId: resources.uuid
-        }, resources).$promise;
+        teamId: resources.teamUuids[0],
+        userId: resources.uuid
+      }, resources).$promise;
     };
 
-    Profile.prototype.userExists = function (username) {
-      return UserExists.check({ username: username },
-        function () {
+    Profile.prototype.userExists = function (username)
+    {
+      var UserExists = $resource(config.app.host + 'user_exists', {}, {
+        check: {
+          method: 'GET',
+          params: {username: ''}
+        }
+      });
+
+      return UserExists.check({username: username},
+        function ()
+        {
           return true
         },
-        function () {
+        function ()
+        {
           return false;
         }).$promise;
     };
@@ -94,15 +125,18 @@ define(['services/services', 'config'], function (services, config) {
       //TODO validation check in controller
       if (pincode != '' || pincode.length > 0)
       {
-        return PincodeExists.check({
+        var pincode = Profile.prototype.resourcePincode();
+        return pincode.check({
             id: id,
             pincode: pincode,
             returnExistsWhenAssignedToUuid: assignedId
           },
-          function () {
+          function ()
+          {
             return true;
           },
-          function () {
+          function ()
+          {
             return false;
           }).$promise;
       }
@@ -110,7 +144,8 @@ define(['services/services', 'config'], function (services, config) {
 
     Profile.prototype.changePassword = function (memberId, oldPass, newPass)
     {
-      return ChangePassword.update(
+      var changePassword = Profile.prototype.resourceChangePassword();
+      return changePassword.update(
         {
           memberId: memberId,
           oldPass: MD5(oldPass),
@@ -121,8 +156,9 @@ define(['services/services', 'config'], function (services, config) {
 
     Profile.prototype.get = function (id)
     {
-      return Profile.get({id: id},
-        function(result)
+      var resource = Profile.prototype.resourceProfile();
+      return resource.get({id: id},
+        function (result)
         {
           return result;
         }).$promise;
@@ -131,13 +167,16 @@ define(['services/services', 'config'], function (services, config) {
     Profile.prototype.getWithSlots = function (id, localize, params)
     {
       var deferred = $q.defer();
+      var resource = Profile.prototype.resourceProfile();
 
-      Profile.prototype.get(id, localize).then(function (resources) {
+      resource.prototype.get(id, localize).then(function (resources)
+      {
         Slots.user({
           user: id,
           start: params.start,
           end: params.end
-        }).then(function (slots) {
+        }).then(function (slots)
+        {
           deferred.resolve(angular.extend(resources, {
             slots: slots,
             synced: new Date().getTime(),
@@ -160,7 +199,8 @@ define(['services/services', 'config'], function (services, config) {
         user: id,
         start: params.start / 1000,
         end: params.end / 1000
-      }).then(function (slots) {
+      }).then(function (slots)
+      {
         deferred.resolve({
           slots: slots,
           synced: new Date().getTime(),
@@ -174,15 +214,17 @@ define(['services/services', 'config'], function (services, config) {
       return deferred.promise;
     };
 
-    Profile.prototype.local = function () {
+    Profile.prototype.local = function ()
+    {
       return Store('app').get('resources');
     };
 
     Profile.prototype.save = function (id, resources)
     {
-      return Profile
-              .save({id: id}, resources)
-              .$promise;
+      var resource = Profile.prototype.resourceProfile();
+      return resource
+        .save({id: id}, resources)
+        .$promise;
     };
 
     return new Profile;
