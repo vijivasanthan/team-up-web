@@ -134,6 +134,7 @@ define(
             }
           }
 
+
           $scope.login = function ()
           {
             angular.element('#alertDiv').hide();
@@ -179,6 +180,23 @@ define(
             auth($scope.loginData.username, password);
           };
 
+          /**
+           * Check if there is a password locally and autologin
+           */
+          if (localLoginData.password)
+          {
+            $scope.login();
+          }
+
+          /**
+           * Authenticate the user who tries to login
+           * Thereby the backend directory will be set,
+           * by authenticating the log atempt
+           * If the result is not a statuscode 0, 505, 400, 401 or 404
+           * the user is permitted to login and a session is stored
+           * @param uuid Username
+           * @param pass Password
+           */
           var auth = function (uuid, pass)
           {
             Settings
@@ -207,124 +225,6 @@ define(
                 }
               });
           };
-
-          //Check if there is a password locally and autologin
-          if (localLoginData.password)
-          {
-            $scope.login();
-          }
-
-          // TODO: Move this to somewhere later on!
-          function queryMembersNotInTeams()
-          {
-            TeamUp._('teamMemberFree').then(
-              function (result)
-              {
-                Store('app').save('members', result)
-              }
-            );
-          }
-
-          // Query the tasks for login user and all other unsigned task in login user's team
-          function queryTasks(teams)
-          {
-            // query my tasks
-            TeamUp._("taskMineQuery").then(
-              function (result)
-              {
-                Store('app').save('myTasks', result)
-              }
-            );
-
-            // query unassigned tasks from each team
-            var allTasks = [];
-
-            angular.forEach(
-              teams,
-              function (team_obj)
-              {
-                TeamUp._(
-                  "taskByTeam",
-                  {fourth: team_obj.uuid}
-                ).then(
-                  function (result)
-                  {
-                    angular.forEach(
-                      result,
-                      function (taskObj)
-                      {
-                        var foundTask = $filter('getByUuid')(allTasks, taskObj.uuid);
-
-                        if (foundTask == null)
-                        {
-                          allTasks.push(taskObj);
-                        }
-                      }
-                    );
-
-                    Store('app').save('allTasks', allTasks);
-                  }
-                );
-              }
-            );
-          }
-
-          /**
-           * add teams to the logged user localStorage
-           */
-          function updateLoggedUserTeams()
-          {
-            var userResources = Store('app').get('resources'),
-              teamsUser = _.pluck($scope.$root.getTeamsofMembers(userResources.uuid), 'uuid');
-
-            userResources.teamUuids = teamsUser;
-
-            $rootScope.app.resources = userResources;
-            Store('app').save('resources', userResources);
-          }
-
-          function enhanceTasks()
-          {
-            var taskGroups = ['myTasks', 'allTasks'];
-
-            angular.forEach(
-              taskGroups,
-              function (label)
-              {
-                var group = Store('app').get(label);
-
-                angular.forEach(
-                  group,
-                  function (task)
-                  {
-                    if (typeof(task) === 'object')
-                    {
-                      var client = $rootScope.getClientByID(task.relatedClientUuid);
-
-                      if (client != null)
-                      {
-                        task.relatedClientName = client.firstName + ' ' + client.lastName;
-                      }
-                    }
-                  }
-                );
-
-                Store('app').save(label, group);
-              }
-            );
-          }
-
-
-          //TODO compare permission names with routenames
-          function getPermissionProfile()
-          {
-            Permission.getDefaultProfile()
-              .then(function (permissionProfile)
-              {
-                $rootScope.app.domainPermission = permissionProfile;
-                console.log('permissionProfile', permissionProfile);
-              });
-          }
 
           /**
            * Preload logged userdata, all team names and id's
@@ -378,6 +278,11 @@ define(
               });
           };
 
+          /**
+           * The progressbar will show which data is loading at the moment
+           * @param ratio Shows on a scale of one till hundred, how much data is already loaded
+           * @param message
+           */
           var progress = function (ratio, message)
           {
             angular.element('#preloader .progress .bar').css({width: ratio + '%'});
