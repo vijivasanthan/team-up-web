@@ -204,7 +204,6 @@ define(
                 {
                   Session.set(result['X-SESSION_ID']);
                   preLoader();
-                  //loadData();
                 }
               });
           };
@@ -327,7 +326,11 @@ define(
               });
           }
 
-          function loadData()
+          /**
+           * Preload logged userdata, all team names and id's
+           * and the ACL to give the user the right permissions
+           */
+          var preLoader = function ()
           {
             angular.element('#login').hide();
             angular.element('#download').hide();
@@ -350,140 +353,29 @@ define(
                   return Teams.getAllLocal()
                 }
               })
-              .then(function(teams)
+              .then(function (teams)
               {
-                if (teams.error)
-                {
-                  console.warn('error ->', teams);
-                }
-                else
-                {
-                  progress(100, $rootScope.ui.login.loading_everything);
-                  trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
-                  //update the avatar once, because the resources were not set when the directive was loaded
-                  $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-                  //TODO for testpurposes only
-                  //Permission.saveProfile();
+                progress(100, $rootScope.ui.login.loading_everything);
+                trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
+                //update the avatar once, because the resources were not set when the directive was loaded
+                $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
+                //TODO for testpurposes only
+                //Permission.saveProfile();
 
-                  //Permission.getAccess();
-                  //
-                  //setTimeout(
-                  //  function ()
-                  //  {
-                  //    angular.element('.navbar').show();
-                  //    angular.element('body').addClass('background');
-                  //
-                  //    if (!$rootScope.browser.mobile)
-                  //    {
-                  //      angular.element('#footer').show();
-                  //    }
-                  //  }, 100);
-                }
-              });
-          }
+                Permission.getAccess();
 
-          var preLoader = function ()
-          {
-            angular.element('#login').hide();
+                setTimeout(
+                  function ()
+                  {
+                    angular.element('.navbar').show();
+                    angular.element('body').addClass('background');
 
-            angular.element('#download').hide();
-
-            angular.element('#preloader').show();
-
-            progress(17, $rootScope.ui.login.loading_User);
-
-            TeamUp._('user')
-              .then(
-              function (resources)
-              {
-                if (resources.error)
-                {
-                  console.warn('error ->', resources);
-                }
-                else
-                {
-                  $rootScope.app.resources = resources;
-
-                  Store('app').save('resources', $rootScope.app.resources);
-
-                  progress(34, $rootScope.ui.login.loading_teams);
-
-                  Teams.query(true, {})
-                    .then(
-                    function (teams)
+                    if (!$rootScope.browser.mobile)
                     {
-                      queryTasks(teams);
-
-                      if (teams.error)
-                      {
-                        console.warn('error ->', teams);
-                      }
-
-                      progress(51, $rootScope.ui.login.loading_teams);
-
-                      Teams.queryClientGroups(teams)
-                        .then(
-                        function ()
-                        {
-                          progress(68, $rootScope.ui.login.loading_clientGroups);
-
-                          TeamUp._('clientsQuery')
-                            .then(
-                            function (allClients)
-                            {
-                              console.log('allClients', allClients);
-                              // Save all clients into the localStorage
-                              Store('app').save('clients', allClients);
-
-                              Clients.query(false, {})
-                                .then(
-                                function ()
-                                {
-                                  // TODO: Blend it in the modal!
-                                  enhanceTasks();
-                                  progress(85, $rootScope.ui.login.loading_Members);
-
-                                  Teams.query()
-                                    .then(
-                                    function (teamsData)
-                                    {
-                                      progress(100, $rootScope.ui.login.loading_everything);
-                                      console.log('teamsData', teamsData);
-
-                                      trackGa('send', 'event', 'Login', 'User login', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
-
-                                      //update the avatar once, because the resources were not set when the directive was loaded
-                                      $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-
-                                      //TODO for testpurposes only
-                                      //Permission.saveProfile();
-
-                                      Permission.getAccess();
-
-                                      setTimeout(
-                                        function ()
-                                        {
-                                          angular.element('.navbar').show();
-                                          angular.element('body').addClass('background');
-
-                                          if (!$rootScope.browser.mobile)
-                                          {
-                                            angular.element('#footer').show();
-                                          }
-                                        }, 100);
-                                    }
-                                  );
-                                }
-                              );
-                            }
-                          );
-                        }
-                      );
+                      angular.element('#footer').show();
                     }
-                  );
-                }
-              }
-            );
+                  }, 100);
+              });
           };
 
           var progress = function (ratio, message)
