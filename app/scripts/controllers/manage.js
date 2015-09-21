@@ -248,18 +248,7 @@ define(
             );
           };
 
-          var accessTo;
-
-          if($rootScope.app.domainPermission.clients)
-          {
-            accessTo = 'teamClients';
-          }
-          else
-          {
-            accessTo = 'teams';
-          }
-
-          $scope.setViewTo(accessTo);
+          $scope.setViewTo($rootScope.app.domainPermission.clients ? 'teamClients' : 'teams');
 
           $scope.connector = {
             data: connections,
@@ -361,7 +350,7 @@ define(
             {
               this.connections.clients = {};
               //console.log('clients', data.clients);
-              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_')
+              this.connections.clients = this.populate(this.data.clients, data.clients, 'clients_right_');
 
               return this.connections;
             }
