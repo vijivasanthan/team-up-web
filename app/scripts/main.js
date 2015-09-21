@@ -153,6 +153,7 @@ require(
     'services/moment',
     'services/settings',
     'services/store',
+    'services/login',
 
     'directives/widgets',
     'directives/date-range-picker',
