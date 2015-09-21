@@ -72,7 +72,7 @@ define(
             '/login',
             {
               templateUrl: 'views/login.html',
-              controller: 'login'
+              controller: 'login as loginCtrl'
             })
 
             .when(
@@ -251,9 +251,17 @@ define(
                     {local: true};
                   }
                 ],
-                dataMembers: function (Teams)
+                dataMembers: function ($q, TeamUp, Teams)
                 {
-                  return Teams.updateMembersLocal();
+                  var deferred = $q.defer();
+                  $q.all([
+                    TeamUp._('allTeamMembers'),
+                    Teams.getAllWithMembers()
+                  ]).then(function(result)
+                  {
+                    deferred.resolve(result[0]);
+                  });
+                  return deferred.promise;
                 }
               }
             })
@@ -316,8 +324,6 @@ define(
                       })
                       .then(function(result)
                       {
-                        console.log('result', result);
-
                         return {
                           teams: result[0],
                           phoneNumbers: result[1] || [],
