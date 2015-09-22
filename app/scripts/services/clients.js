@@ -328,6 +328,101 @@ define(
             return deferred.promise;
           };
 
+          /**
+           * Get a single clientsgroup from localStorage or network
+           * Depends if the data is local
+           * @returns {*}
+           */
+          ClientsService.prototype.getSingleLocal = function (clientGroupId)
+          {
+            var clientLocal = Store('app').get(clientGroupId),
+              clientFinal = clientLocal.length && clientLocal
+                || ClientsService.prototype.getSingle(clientGroupId);
+            return $q.when(clientFinal);
+          };
+
+          /**
+           * Get all clients of a single clientgroup by clientgroup id
+           * @param clientGroupId the id of the clientgroup
+           */
+          ClientsService.prototype.getSingle = function(clientGroupId)
+          {
+            return TeamUp._('clientsByGroupIDQuery',
+              { third: clientGroupId },
+              null,
+              {
+                success: function (clients)
+                {
+                  Store('app').save(
+                    clientGroupId,
+                    (clients.length == 4 &&
+                    clients[0][0] == 'n' &&
+                    clients[1][0] == 'u') ?
+                      [] :
+                      clients
+                  );
+                }
+              });
+          };
+
+          /**
+           * Get all clientgroup including all the clients,
+           * and save every individual clientgroup with clients localy
+           * @returns {*} all clientgroup including all the clients
+           */
+          ClientsService.prototype.getAllWithClients = function()
+          {
+            var deferred = $q.defer(),
+              GroupsAndClients = [],
+              calls = [];
+
+            ClientsService.prototype.getAllLocal()
+              .then(function(clientsGroups)
+              {
+                _.each(clientsGroups, function (clientGroup)
+                {
+                  calls.push(ClientsService.prototype.getSingleLocal(clientGroup.id));
+                });
+                $q.all(calls)
+                  .then(function(clientsInClientGroup)
+                  {
+                    _.each(clientsInClientGroup, function (clients, index)
+                    {
+                      var currentClientGroup = clientsGroups[index];
+                      GroupsAndClients[currentClientGroup.id] = [];
+                      GroupsAndClients[currentClientGroup.id] = clients;
+                    });
+                    deferred.resolve(GroupsAndClients);
+                  });
+              });
+            return deferred.promise;
+          };
+
+          /**
+           * Get all ClientGroups
+           * @returns {*} all clientgroups
+           */
+          ClientsService.prototype.getAll = function()
+          {
+            return TeamUp._('clientGroupsQuery', null, null)
+              .then(function (clientGroups) {
+                Store('app').save('ClientGroups', clientGroups);
+                return clientGroups;
+              });
+          };
+
+          /**
+           * Get clientsgroups from localStorage or network
+           * Depends if the data is local
+           * @returns {*}
+           */
+          ClientsService.prototype.getAllLocal = function ()
+          {
+            var clientsLocal = Store('app').get('ClientGroups'),
+              clientsFinal = clientsLocal.length && clientsLocal || ClientsService.prototype.getAll();
+            return $q.when(clientsFinal);
+          };
+
           //########### Local ###########\\
 
           /**

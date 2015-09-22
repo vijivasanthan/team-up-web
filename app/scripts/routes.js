@@ -72,7 +72,7 @@ define(
             '/login',
             {
               templateUrl: 'views/login.html',
-              controller: 'login'
+              controller: 'login as loginCtrl'
             })
 
             .when(
@@ -102,7 +102,58 @@ define(
             '/tasks2',
             {
               templateUrl: 'views/tasks2.html',
-              controller: 'tasks2Ctrl'
+              controller: 'tasks2Ctrl',
+              reloadOnSearch: false,
+              resolve: {
+                data:
+                  function (Teams, Clients, Task, $q)
+                  {
+                    var deferred = $q.defer(),
+                      data = {
+                        teams: null,
+                        myTasks: null,
+                        allTasks: null,
+                        members: null,
+                        teamClientsGroups: null,
+                        clientGroups: null,
+                        clients: null
+                      };
+
+                    Teams.getAllLocal()
+                      .then(function(teams)
+                      {
+                        data.teams = teams;
+                        return Teams.getAllWithMembers()
+                      })
+                      .then(function(members)
+                      {
+                        data.members = members;
+                        return $q.all([
+                          Task.queryMine(),
+                          Task.queryAll(),
+                          Teams.relationClientGroups(data.teams)
+                        ])
+                      })
+                      .then(function(teamsTasksData)
+                      {
+                        data.myTasks = teamsTasksData[0];
+                        data.allTasks = teamsTasksData[1];
+                        data.teamClientsGroups = teamsTasksData[2];
+                        return Clients.getAllLocal();
+                      })
+                      .then(function(clientGroups)
+                      {
+                        data.clientGroups = clientGroups;
+                        return Clients.getAllWithClients();
+                      })
+                      .then(function(GroupsAndClients)
+                      {
+                        data.clients = GroupsAndClients;
+                        deferred.resolve(data);
+                      });
+                    return deferred.promise;
+                  }
+              }
             })
 
             .when('/admin', {
@@ -135,6 +186,33 @@ define(
                           members: teamsData[0],
                           teams: teamsData[1],
                           teamId: teamId
+                        };
+                      });
+                  }
+                ]
+              }
+            })
+
+            .when(
+            '/members/',
+            {
+              templateUrl: 'views/teams/teamMembers.html',
+              controller: 'teamMembers as teamCtrl',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', '$route', '$q',
+                  function (Teams, $route, $q)
+                  {
+                    var teamId = Teams.checkExistence($route.current.params.uuid);
+
+                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
+                      .then(function (teamsData)
+                      {
+                        return {
+                          members: teamsData[0],
+                          teams: teamsData[1],
+                          currentTeamId: teamId
                         };
                       });
                   }
@@ -200,9 +278,17 @@ define(
                     {local: true};
                   }
                 ],
-                dataMembers: function (Teams)
+                dataMembers: function ($q, TeamUp, Teams)
                 {
-                  return Teams.updateMembersLocal();
+                  var deferred = $q.defer();
+                  $q.all([
+                    TeamUp._('allTeamMembers'),
+                    Teams.getAllWithMembers()
+                  ]).then(function(result)
+                  {
+                    deferred.resolve(result[0]);
+                  });
+                  return deferred.promise;
                 }
               }
             })
@@ -265,8 +351,6 @@ define(
                       })
                       .then(function(result)
                       {
-                        console.log('result', result);
-
                         return {
                           teams: result[0],
                           phoneNumbers: result[1] || [],
