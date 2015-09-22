@@ -154,6 +154,7 @@ require(
     'services/settings',
     'services/store',
     'services/login',
+    'services/team',
 
     'directives/widgets',
     'directives/date-range-picker',
@@ -206,6 +207,7 @@ require(
     'controllers/phones',
     'controllers/video',
     'controllers/options',
+    'controllers/teamMembers',
 
     'bootstrap',
     'lawnchair',

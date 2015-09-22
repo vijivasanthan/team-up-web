@@ -194,6 +194,33 @@ define(
             })
 
             .when(
+            '/members/',
+            {
+              templateUrl: 'views/teams/teamMembers.html',
+              controller: 'teamMembers as teamCtrl',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', '$route', '$q',
+                  function (Teams, $route, $q)
+                  {
+                    var teamId = Teams.checkExistence($route.current.params.uuid);
+
+                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
+                      .then(function (teamsData)
+                      {
+                        return {
+                          members: teamsData[0],
+                          teams: teamsData[1],
+                          currentTeamId: teamId
+                        };
+                      });
+                  }
+                ]
+              }
+            })
+
+            .when(
             '/client',
             {
               templateUrl: 'views/clients.html',

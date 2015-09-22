@@ -1,0 +1,22 @@
+li(class="{{(views.team==true) && 'active'}}")
+	a(data-toggle='tab',
+	ng-click='setViewTo("team")')
+		span.icomoon(data-icon='',
+		aria-hidden='true')
+		| {{ui.teamup.teams}}
+
+li(class="{{(views.newTeam==true) && 'active'}}",
+ng-show="app.resources.role == 1")
+	a(data-toggle='tab',
+	ng-click='setViewTo("newTeam")')
+		span.icomoon(data-icon='',
+		aria-hidden='true')
+		| {{ui.teamup.newTeam}}
+
+li(class="{{(views.newMember==true) && 'active'}}",
+ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
+	a(data-toggle='tab',
+	ng-click='setViewTo("newMember")')
+		span.icomoon(data-icon='',
+		aria-hidden='true')
+		| {{ui.teamup.newMember}}
