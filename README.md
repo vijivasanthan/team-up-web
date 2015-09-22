@@ -1,5 +1,5 @@
 # TeamUp Web
-v1.15.0
+v1.15.1
 
 ## Start
 1. npm install
