@@ -103,6 +103,57 @@ define(
         });
       });
 
+      it('should return a error message saying, "Wrong username or password!"', function ()
+      {
+        inject(function($controller) {
+          Store('app').save('loginData', {});
+
+          var loginCtrl = $controller('login', {
+            Login: loginService
+          });
+
+          loginCtrl.loginData = {
+            username: testConfig.userResources.userName,
+            password: "12fdsfggfd_fake_password_dsada432"
+          };
+
+          Store('app').save('loginData', loginCtrl.loginData);
+
+          $httpBackend
+            .expectGET(testConfig.host + 'login?pass=' +  md5Service(loginCtrl.loginData.password) + '&uuid=' + loginCtrl.loginData.username)
+            .respond(404, {});
+
+          loginCtrl.login();
+
+          $httpBackend.flush();
+
+          expect(loginCtrl.error.login.message)
+            .toEqual(rootScope.ui.login.alert_wrongUserPass);
+        });
+      });
+
+      it('should return a error message saying, "Fill in all fields!"', function ()
+      {
+        inject(function($controller) {
+          Store('app').save('loginData', {});
+
+          var loginCtrl = $controller('login', {
+            Login: loginService
+          });
+
+          loginCtrl.loginData = {
+            username: testConfig.userResources.userName
+          };
+
+          Store('app').save('loginData', loginCtrl.loginData);
+
+          loginCtrl.login();
+
+          expect(loginCtrl.error.login.message)
+            .toEqual(rootScope.ui.login.alert_fillfiled);
+        });
+      });
+
       it('should return a error message saying, "Your session has ended. Please login again"', function ()
       {
         inject(function($controller) {
