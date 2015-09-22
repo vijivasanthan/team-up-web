@@ -10,6 +10,7 @@ src/log4j.properties
 war/WEB-INF/classes/
 libpeerconnection.log
 dist/scripts/localConfig.js
+test/spec/testConfig.js
 test-results.xml
 dist
 production/
