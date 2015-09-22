@@ -208,6 +208,9 @@ define(['profile'], function(profile){
         lang = val;
       }
     });
+    if(currentHost.indexOf('teamtelephone.ask-cs.nl') > -1)
+	    lang = 'en';
+
     return lang;
   }
 });
