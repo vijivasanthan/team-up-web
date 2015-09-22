@@ -11,6 +11,7 @@ define(['services/services', 'config'],
                 Teams,
                 Permission,
                 Settings,
+                Dater,
                 Session,
                 $location,
                 MD5)
@@ -72,6 +73,7 @@ define(['services/services', 'config'],
           this.checkSessionTimeout = function ()
           {
             var errorMessage = null;
+
             if (localStorage.hasOwnProperty('sessionTimeout'))
             {
               localStorage.removeItem('sessionTimeout');
