@@ -4,6 +4,8 @@ v1.15.1
 ## Prerequisits
 
 1. Install npm: https://nodejs.org/download/release/latest/
+2. npm install -g grunt-cli
+3. npm install -g bower
 
 ## Install
 1. npm install
