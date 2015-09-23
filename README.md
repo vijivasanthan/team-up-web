@@ -21,5 +21,5 @@ v1.15.1
 1. grunt build
 
 ## Start production build
-1. grunt serve
+1. grunt dist
 
