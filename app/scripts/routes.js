@@ -11,13 +11,11 @@ define(
         '$httpProvider',
         '$provide',
         'tmhDynamicLocaleProvider',
-        function (
-          $locationProvider,
-          $routeProvider,
-          $httpProvider,
-          $provide,
-          tmhDynamicLocaleProvider
-        )
+        function ($locationProvider,
+                  $routeProvider,
+                  $httpProvider,
+                  $provide,
+                  tmhDynamicLocaleProvider)
         {
           //dynamic angular localization
           tmhDynamicLocaleProvider
@@ -105,54 +103,53 @@ define(
               controller: 'tasks2Ctrl',
               reloadOnSearch: false,
               resolve: {
-                data:
-                  function (Teams, Clients, Task, $q)
-                  {
-                    var deferred = $q.defer(),
-                      data = {
-                        teams: null,
-                        myTasks: null,
-                        allTasks: null,
-                        members: null,
-                        teamClientsGroups: null,
-                        clientGroups: null,
-                        clients: null
-                      };
+                data: function (Teams, Clients, Task, $q)
+                {
+                  var deferred = $q.defer(),
+                    data = {
+                      teams: null,
+                      myTasks: null,
+                      allTasks: null,
+                      members: null,
+                      teamClientsGroups: null,
+                      clientGroups: null,
+                      clients: null
+                    };
 
-                    Teams.getAllLocal()
-                      .then(function(teams)
-                      {
-                        data.teams = teams;
-                        return Teams.getAllWithMembers()
-                      })
-                      .then(function(members)
-                      {
-                        data.members = members;
-                        return $q.all([
-                          Task.queryMine(),
-                          Task.queryAll(),
-                          Teams.relationClientGroups(data.teams)
-                        ])
-                      })
-                      .then(function(teamsTasksData)
-                      {
-                        data.myTasks = teamsTasksData[0];
-                        data.allTasks = teamsTasksData[1];
-                        data.teamClientsGroups = teamsTasksData[2];
-                        return Clients.getAllLocal();
-                      })
-                      .then(function(clientGroups)
-                      {
-                        data.clientGroups = clientGroups;
-                        return Clients.getAllWithClients();
-                      })
-                      .then(function(GroupsAndClients)
-                      {
-                        data.clients = GroupsAndClients;
-                        deferred.resolve(data);
-                      });
-                    return deferred.promise;
-                  }
+                  Teams.getAllLocal()
+                    .then(function (teams)
+                    {
+                      data.teams = teams;
+                      return Teams.getAllWithMembers()
+                    })
+                    .then(function (members)
+                    {
+                      data.members = members;
+                      return $q.all([
+                        Task.queryMine(),
+                        Task.queryAll(),
+                        Teams.relationClientGroups(data.teams)
+                      ])
+                    })
+                    .then(function (teamsTasksData)
+                    {
+                      data.myTasks = teamsTasksData[0];
+                      data.allTasks = teamsTasksData[1];
+                      data.teamClientsGroups = teamsTasksData[2];
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups)
+                    {
+                      data.clientGroups = clientGroups;
+                      return Clients.getAllWithClients();
+                    })
+                    .then(function (GroupsAndClients)
+                    {
+                      data.clients = GroupsAndClients;
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
+                }
               }
             })
 
@@ -194,29 +191,54 @@ define(
             })
 
             .when(
-            '/members/',
+            '/team/members',
             {
-              templateUrl: 'views/teams/teamMembers.html',
-              controller: 'teamMembers as teamCtrl',
+              templateUrl: 'views/teams/members.html',
+              controller: 'members as membersCtrl',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Teams', '$route', '$q',
-                  function (Teams, $route, $q)
-                  {
-                    var teamId = Teams.checkExistence($route.current.params.uuid);
+                data: function (Teams, $q)
+                {
+                  var teamId = Teams.checkExistence();
 
-                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
-                      .then(function (teamsData)
-                      {
-                        return {
-                          members: teamsData[0],
-                          teams: teamsData[1],
-                          currentTeamId: teamId
-                        };
-                      });
-                  }
-                ]
+                  return $q.all([
+                    Teams.getSingle(teamId),
+                    Teams.getAllLocal()
+                  ]).then(function (teamsData)
+                  {
+                    return {
+                      members: teamsData[0],
+                      teams: teamsData[1],
+                      currentTeamId: teamId
+                    };
+                  });
+                }
+              }
+            })
+
+            .when(
+            '/team/new',
+            {
+              templateUrl: 'views/teams/new.html',
+              controller: 'newTeam as newTeamCtrl',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, $q)
+                {
+                  var teamId = Teams.checkExistence();
+
+                  return $q.all([
+                    Teams.getSingle(teamId),
+                    Teams.getAllLocal()
+                  ]).then(function (teamsData)
+                  {
+                    return {
+                      members: teamsData[0],
+                      teams: teamsData[1],
+                      currentTeamId: teamId
+                    };
+                  });
+                }
               }
             })
 
@@ -284,7 +306,7 @@ define(
                   $q.all([
                     TeamUp._('allTeamMembers'),
                     Teams.getAllWithMembers()
-                  ]).then(function(result)
+                  ]).then(function (result)
                   {
                     deferred.resolve(result[0]);
                   });
@@ -330,15 +352,15 @@ define(
                     removeActiveClass('.teamMenu');
 
                     var teamId = CurrentSelection.getTeamId(),
-                        teamTelephoneOptions = null;
+                      teamTelephoneOptions = null;
 
                     return TeamUp._('TTOptionsGet', {second: teamId})
-                      .then(function(options)
+                      .then(function (options)
                       {
                         teamTelephoneOptions = options;
 
                         var promises = [Teams.getAllLocal()];
-                        if(options.error && options.error.status === 404)
+                        if (options.error && options.error.status === 404)
                         {
                           promises.push(
                             TeamUp._('TTAdaptersGet', {
@@ -349,7 +371,7 @@ define(
                         }
                         return $q.all(promises)
                       })
-                      .then(function(result)
+                      .then(function (result)
                       {
                         return {
                           teams: result[0],
@@ -728,7 +750,8 @@ define(
 
             .otherwise({redirectTo: '/login'});
 
-          $httpProvider.interceptors.push(function ($location, Store, $injector, $q) {
+          $httpProvider.interceptors.push(function ($location, Store, $injector, $q)
+          {
             return {
               request: function (config)
               {

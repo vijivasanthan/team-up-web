@@ -181,6 +181,18 @@ define(
                 $location.path('/tasks2/planboard').search({}).hash('');
                 break;
 
+              case 'team/members':
+                $location.path('/team/members').search({}).hash('');
+                break;
+
+              case 'team/new':
+                $location.path('/team/new').search({}).hash('');
+                break;
+
+              case 'team/member/new':
+                $location.path('/team/member/new').search({}).hash('');
+                break;
+
               case 'team-telefoon/agenda':
                 $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid).search({}).hash('');
                 break;

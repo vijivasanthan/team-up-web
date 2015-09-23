@@ -1,20 +1,19 @@
-li(class="{{(views.team==true) && 'active'}}")
-	a(data-toggle='tab',
-	ng-click='setViewTo("team")')
+li(data-match-route='/team/members')
+	a(data-toggle='tab', ng-click='nav("team/members")')
 		span.icomoon(data-icon='',
 		aria-hidden='true')
 		| {{ui.teamup.teams}}
 
-li(class="{{(views.newTeam==true) && 'active'}}",
-ng-show="app.resources.role == 1")
+li(data-match-route='/team/new'
+	ng-show="app.resources.role == 1")
 	a(data-toggle='tab',
-	ng-click='setViewTo("newTeam")')
+	ng-click='nav("team/new")')
 		span.icomoon(data-icon='',
 		aria-hidden='true')
 		| {{ui.teamup.newTeam}}
 
-li(class="{{(views.newMember==true) && 'active'}}",
-ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
+li(data-match-route='/team/member/new'
+	ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
 	a(data-toggle='tab',
 	ng-click='setViewTo("newMember")')
 		span.icomoon(data-icon='',

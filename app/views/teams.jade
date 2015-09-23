@@ -173,7 +173,7 @@ aria-hidden='true')
 							td
 								.pull-right
 									button.btn-primary.btn-mini(ng-click='createVideoCall(member)',
-										ng-show='app.resources.uuid != member.uuid && app.domainPermission.videoChat && isLoggedUserTeam')
+										ng-show='(app.resources.uuid != member.uuid && app.domainPermission.videoChat) && ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0)')
 										i.icon-facetime-video
 									a(href='#/profile/{{member.uuid}}#edit',
 									ng-click='editProfile(member.uuid, current)',

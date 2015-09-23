@@ -1,0 +1,115 @@
+#confirmMemberModal.modal.fade(tabindex='-1',
+role='dialog',
+aria-labelledby='confirmMemberModalLabel',
+aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteMember}}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='membersCtrl.deleteMember(membersCtrl.currentMember)') {{ui.teamup.confirms.remove}}
+
+.page-header
+	h2.nullable {{ui.teamup.teams}}
+	.selectGroup
+		span.selectTitles
+			strong
+				| {{ ui.teamup.selectTeam }}
+		select(ng-model='membersCtrl.data.currentTeamId',
+		ng-options='t.uuid as t.name for t in membersCtrl.data.teams | orderBy:"name"',
+		ng-selected='membersCtrl.data.currentTeamId',
+		ng-change='membersCtrl.requestTeam(membersCtrl.data.currentTeamId)')
+
+
+.tabbable.tabs-left
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+		include ../teams/tabs
+
+	.tab-content
+
+		#viewTeamTab.tab-pane(class="active")
+
+			.tab-header
+				h3.pull-left {{[membersCtrl.data.currentTeamId] | getTeamNameById:allTeams=true}}
+			//	div(ng-show='app.resources.role == 1')
+			//		button.btn.pull-right.btn-info.marginLeftTen(type='button',
+			//		ng-click='confirmDeleteTeam()') {{ui.teamup.del}}
+			//		button.btn.pull-right.btn-info(type='button',
+			//		ng-click='editTeam(current)') {{ui.teamup.edit}}
+			//
+			//.tab-header(ng-show='views.editTeam')
+			//	input.pull-left(type='text',
+			//	ng-model='teamEditForm.name')
+			//	button.btn.pull-right.btn-info.marginLeftTen(type='reset',
+			//	ng-click='views.editTeam = false') {{ui.teamup.cancel}}
+			//	button.btn.pull-right.btn-info.marginLeftTen(type='button',
+			//	ng-click='changeTeam(teamEditForm)') {{ui.teamup.save}}
+
+			hr
+			
+			p(ng-hide='membersCtrl.data.members.length > 0') {{ui.teamup.noMembers}}
+			
+			div(ng-show='(membersCtrl.data.members).length > 0')
+				table.table.table-striped.teamsTable
+					thead
+						tr
+							th
+							th: a(ng-click='sorter="name"') {{ui.teamup.name}}
+							th: a {{ui.teamup.states}}
+							th
+					tbody
+						tr(ng-repeat='member in membersCtrl.data.members | orderBy:"lastName"')
+							td
+								.roundedPicSmall(class='{{member.states|stateColor}}',
+								back-img = '{{member.uuid | avatar:"team":"80" }}')
+									span.badge(ng-show='member.states|stateReachable')
+										i.glyphicon.glyphicon-earphone
+							td
+								a(href='#/profile/{{member.uuid|lowercase}}#profile') {{member.firstName}} {{member.lastName}}
+							td
+								span.states(ng-show='noSharedStates(member.states)') {{ui.teamup.noSharedStates}}
+								dl.states(ng-repeat='state in member.states | filter:share=true ')
+									span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
+									aria-hidden='true',
+									class="{{state.name|stateDataIcon:'class_name'}}")
+									span.stateValue(ng-show='(state.name == "Reachability")') {{ state.value | translateReachabilityState }}
+									span.stateValue(ng-show='(state.name == "Location")') {{[member.address.street, member.address.no, member.address.zip, member.address.city] | commaSeperated}}
+									span.stateValue(ng-show='(state.name == "Availability")') {{state.value | i18n_spec:'teamup.stateValue'}}
+										a(ng-show='(state.name == "Location")',
+										href='http://maps.google.com/?q={{member.address.latitude}},{{member.address.longitude}}')  {{ui.teamup.map}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='createVideoCall(member)',
+										ng-show='app.resources.uuid != member.uuid && app.domainPermission.videoChat && isLoggedUserTeam')
+										i.icon-facetime-video
+									a(href='#/profile/{{member.uuid}}#edit',
+									ng-click='editProfile(member.uuid, current)',
+									ng-show='app.resources.role == 1 || app.resources.uuid == member.uuid')
+										button.btn-primary.btn-mini
+											i.icon-edit
+									button.btn-primary.btn-mini(type='submit',
+									ng-click='membersCtrl.confirmDeleteMember(member)',
+									ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
+										i.icon-trash
+				ul#teams-legenda
+					li
+						div(class='roundedPicxSmall memberStateNone')
+						p {{ ui.teamup.noSharedStates }}
+					li
+						div(class='roundedPicxSmall memberStateBusy')
+						p {{ ui.teamup.stateValue.unavailable }}
+					li
+						div(class='roundedPicxSmall memberStateAvailalbe')
+						p {{ ui.teamup.stateValue.available }}
+				span.muted.pull-right
+					small
+						i {{(membersCtrl.data.members|filter:filtered).length | i18n_spec:'groups.memberCount'}}
