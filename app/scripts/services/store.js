@@ -238,12 +238,24 @@ define(['services/services'], function (services) {
           return target;
         },
 
-        has: function(key, callback) {
+        has: function(key) {
+          var value;
           LawnChair(function () {
-            this.exists(key, function (result) {
-                callback(result);
+            this.exists(key, function (result)
+            {
+              value = undefined;
             });
           });
+
+          if(typeof value === 'undefined')
+          {
+            return false;
+            console.error("You have to use a callback");
+          }
+          else
+          {
+            return value;
+          }
         },
 
         get: function (key, callback) {

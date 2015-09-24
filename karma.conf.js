@@ -25,6 +25,7 @@ module.exports = function (karma)
       {pattern: 'app/vendors/lawnchair/src/adapters/dom.js', included: false },
       {pattern: 'app/vendors/lodash/lodash.min.js', included: false },
       {pattern: 'app/vendors/angular-cookie/angular-cookie.js', included: false },
+      {pattern: 'app/vendors/web-lib-session/dist/session.js', included: false },
       // {pattern: 'app/vendors/**/*.js',        included: false},
       {pattern: 'app/scripts/*.js',           included: false},
       {pattern: 'app/scripts/**/*.js',        included: false},
@@ -35,7 +36,8 @@ module.exports = function (karma)
       // {pattern: 'test/spec/directives/*.js',  included: false},
       // {pattern: 'test/spec/filters/*.js',     included: false},
       // {pattern: 'test/spec/services/*.js',    included: false},
-      'test/spec/test-unit-main.js'
+      'test/spec/test-unit-main.js',
+      'test/spec/testConfig.js'
     ],
     basePath: '',
     exclude: [

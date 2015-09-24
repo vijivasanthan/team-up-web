@@ -67,7 +67,7 @@ define(
           {
             var result = seperateBackEndTest(
               testConfig.userResources.uuid,
-              testConfig.passWord,
+              testConfig.userResources.passWord,
                 [
                 "http://lala.ask-cs.com/",
                 "https://backend.ask-cs.nl/",
@@ -96,7 +96,7 @@ define(
             ];
             var result = seperateBackEndTest(
               testConfig.userResources.uuid,
-              testConfig.passWord,
+              testConfig.userResources.passWord,
               backEnds,
               [0, 404, 200, 200]
             );
@@ -195,7 +195,7 @@ define(
             ];
             seperateBackEndTest(
               testConfig.userResources.uuid,
-              testConfig.passWord,
+              testConfig.userResources.passWord,
               backEnds,
               [0, 404, 200, 200]
             );

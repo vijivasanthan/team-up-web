@@ -1,0 +1,18 @@
+var testConfig = {
+  host: '', //example : http://test.ask-cs.com/
+  userResources: {
+    "uuid": "", //example: janj
+    "userName": "", //example: janj
+    "passWord": '', //example : lala1234, 8 digits
+    "firstName": "", ////example: Jan
+    "lastName": "", //example: de Jong
+    "phone": "", example: +31654789522
+    "email": "", //example: jandejong@domain.com
+    "role": "1", //example: 1 for admin 2 for team member
+    "phoneAddresses": [],//example: ['+31654789522']
+    "emailAddresses": [], //example: ['jandejong@domain.com']
+    "teamUuids": [], //["b3915de1-f29c-4609-a67f-73aaef529902"]
+    "extraInfo": {}, //example: {"photoUUID": "04ecc3e9-c049-4df6-8054-93a26b443917"}
+    "fullName": "" //example: Jan de Jong
+  }
+};
