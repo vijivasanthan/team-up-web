@@ -894,7 +894,8 @@ define(
             console.log('roomId', roomId);
 
 
-            var url = config.app.videoCallUrl + '?room=' + roomId;
+            var url = config.app.videoCallUrl + '?room=' + roomId
+            url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
 
             $rootScope.video = {
