@@ -894,7 +894,7 @@ define(
             console.log('roomId', roomId);
 
 
-            var url = config.app.videoCallUrl + '?room=' + roomId
+            var url = config.app.videoCallUrl + '/?room=' + roomId
             url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
 
@@ -926,8 +926,7 @@ define(
           $rootScope.hangup = null;
 
           function displayMessage (evt) {
-            if (evt.origin === "http://webrtc.ask-cs.com" ||
-              evt.origin === "http://localhost:9001")
+            if (evt.origin === config.app.videoCallUrl)
             {
               $rootScope.hangup = evt.data;
               $rootScope.$apply();
