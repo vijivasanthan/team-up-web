@@ -1,6 +1,12 @@
 # TeamUp Web
 v1.15.1
 
+## Prerequisits
+
+1. Install npm: https://nodejs.org/download/release/latest/
+2. npm install -g grunt-cli
+3. npm install -g bower
+
 ## Install
 1. npm install
 2. bower install
@@ -17,5 +23,5 @@ v1.15.1
 1. grunt build
 
 ## Start production build
-1. grunt build
+1. grunt dist
 
