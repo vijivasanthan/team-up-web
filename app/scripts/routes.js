@@ -197,9 +197,9 @@ define(
               controller: 'members as membersCtrl',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, $q)
+                data: function ($q, $location, Teams)
                 {
-                  var teamId = Teams.checkExistence();
+                  var teamId = Teams.checkExistence(($location.search()).teamId);
 
                   return $q.all([
                     Teams.getSingle(teamId),

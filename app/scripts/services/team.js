@@ -37,10 +37,45 @@ define(['services/services', 'config'],
             return Teams.getSingle(teamId)
               .then(function (members)
               {
+                $location.search('teamId', teamId)
                 $rootScope.statusBar.off();
                 return members;
               });
           },
+          this.update = function (editedTeam)
+          {
+            if (! editedTeam.name)
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+              return;
+            }
+
+            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
+
+            return TeamUp._('teamUpdate', { second: editedTeam.uuid }, editedTeam)
+              .then(function (result)
+              {
+                return result.error && result || Teams.getAll();
+              })
+              .then(function(teams)
+              {
+                if(! teams.error)
+                {
+                  $rootScope.statusBar.off();
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  return teams;
+                }
+              });
+          }
+
+            this.getName = function (teamId)
+            {
+              return Teams.getAllLocal()
+                .then(function(teams)
+                {
+                  return _.findWhere(teams, {uuid: teamId});
+                });
+            },
 
             this.create = function (team)
             {
@@ -51,13 +86,19 @@ define(['services/services', 'config'],
               }
               $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
+              var _newTeam = null;
               return TeamUp._('teamAdd',
                 {id: $rootScope.app.resources.uuid},
                 team)
                 .then(function (newTeam)
                 {
-                  $rootScope.statusBar.off();
-                  return newTeam;
+                  _newTeam = newTeam;
+                  return Teams.getAll();
+                })
+                .then(function(teams)
+                {
+                  CurrentSelection.local = _newTeam.uuid;
+                  $location.path('team/members');
                 });
             }
         }).call(teamService.prototype);

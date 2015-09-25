@@ -16,6 +16,8 @@ define(
          */
         this.data = data;
 
+        console.log('this.data', this.data);
+
         /**
          * Request a team
          * @param current The id of the team
@@ -61,6 +63,11 @@ define(
               }
             });
         };
+
+        this.updateTeam = function (teams)
+        {
+          this.data.teams = teams;
+        }.bind(this);
 
         /**
          * Remove the current team from the teams of the user in the interface,

@@ -19,7 +19,7 @@ aria-hidden='true')
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
-	.selectGroup
+	.selectGroup(ng-if='membersCtrl.data.teams.length > 1')
 		span.selectTitles
 			strong
 				| {{ ui.teamup.selectTeam }}
@@ -37,22 +37,22 @@ aria-hidden='true')
 	.tab-content
 
 		#viewTeamTab.tab-pane(class="active")
-
-			.tab-header
-				h3.pull-left {{[membersCtrl.data.currentTeamId] | getTeamNameById:allTeams=true}}
-			//	div(ng-show='app.resources.role == 1')
-			//		button.btn.pull-right.btn-info.marginLeftTen(type='button',
-			//		ng-click='confirmDeleteTeam()') {{ui.teamup.del}}
-			//		button.btn.pull-right.btn-info(type='button',
-			//		ng-click='editTeam(current)') {{ui.teamup.edit}}
-			//
-			//.tab-header(ng-show='views.editTeam')
-			//	input.pull-left(type='text',
-			//	ng-model='teamEditForm.name')
-			//	button.btn.pull-right.btn-info.marginLeftTen(type='reset',
-			//	ng-click='views.editTeam = false') {{ui.teamup.cancel}}
-			//	button.btn.pull-right.btn-info.marginLeftTen(type='button',
-			//	ng-click='changeTeam(teamEditForm)') {{ui.teamup.save}}
+			div(ng-controller='newTeam as teamCRUD')
+				.tab-header(ng-hide='teamCRUD.updateForm')
+					h3.pull-left {{[membersCtrl.data.currentTeamId] | getTeamNameById:allTeams=true}}
+					div(ng-show='app.resources.role == 1')
+						button.btn.pull-right.btn-info.marginLeftTen(type='button',
+						ng-click='confirmDeleteTeam()') {{ui.teamup.del}}
+						button.btn.pull-right.btn-info(type='button',
+						ng-click='teamCRUD.showEditForm(membersCtrl.data.currentTeamId)') {{ui.teamup.edit}}
+				
+				.tab-header(ng-show='teamCRUD.updateForm')
+					input.pull-left(type='text',
+					ng-model='teamCRUD.teamEditForm.name')
+					button.btn.pull-right.btn-info.marginLeftTen(type='reset',
+					ng-click='teamCRUD.updateForm = false') {{ui.teamup.cancel}}
+					button.btn.pull-right.btn-info.marginLeftTen(type='button',
+					ng-click='teamCRUD.update(teamCRUD.teamEditForm, membersCtrl.updateTeam)') {{ui.teamup.save}}
 
 			hr
 			
@@ -89,7 +89,7 @@ aria-hidden='true')
 							td
 								.pull-right
 									button.btn-primary.btn-mini(ng-click='createVideoCall(member)',
-										ng-show='app.resources.uuid != member.uuid && app.domainPermission.videoChat && isLoggedUserTeam')
+										ng-show='app.resources.uuid != member.uuid && app.domainPermission.videoChat && (app.resources.teamUuids.indexOf(membersCtrl.data.currentTeamId) >= 0)')
 										i.icon-facetime-video
 									a(href='#/profile/{{member.uuid}}#edit',
 									ng-click='editProfile(member.uuid, current)',

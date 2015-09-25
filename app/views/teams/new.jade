@@ -1,33 +1,9 @@
-#confirmMemberModal.modal.fade(tabindex='-1',
-role='dialog',
-aria-labelledby='confirmMemberModalLabel',
-aria-hidden='true')
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close(type='button', data-dismiss='modal')
-					span(aria-hidden='true') ×
-					span.sr-only {{ ui.message.close }}
-				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}}
-			.modal-body
-				| {{ui.teamup.confirms.deleteMember}}
-			.modal-footer
-				button.btn.btn-default(type='button',
-				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
-				button.btn.btn-primary(type='button',
-				ng-click='membersCtrl.deleteMember(membersCtrl.currentMember)') {{ui.teamup.confirms.remove}}
-
 .page-header
 	h2.nullable {{ui.teamup.teams}}
-
-
 .tabbable.tabs-left
-
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 		include ../teams/tabs
-
 	.tab-content
-
 		#newTeamTab.tab-pane(class="active")
 			.tab-header
 				h3.pull-left {{ui.teamup.newTeam}} 
@@ -39,4 +15,4 @@ aria-hidden='true')
 					ng-model='teamForm.name')
 				.control-group
 					button.btn.btn-success.confirmButton.controls(type='button',
-					ng-click='teamSubmit(teamForm)') {{ui.teamup.createTeam}}
+					ng-click='newTeamCtrl.create(teamForm)') {{ui.teamup.createTeam}}
