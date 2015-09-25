@@ -150,13 +150,14 @@ define(
 
                   }
                 }
-                //else
-                //{
-                //  //Check if there is a url and parse the url to a anchor tag
-                //  msg.body = urlify(msg.body);
-                //}
 
-                //Maak als er hhtp in de body staat er een anchor link vab
+                msg.currentDay = $filter('date')(msg.sendTime, 'dd-MM-yyyy');
+                var index = ($scope.messages && $scope.messages.length - 1);
+                if(index >= 0)
+                {
+                  var prevDay = $filter('date')($scope.messages[index].sendTime, 'dd-MM-yyyy');
+                  if(msg.currentDay === prevDay) msg.currentDay = null;
+                }
 
                 $scope.messages.push(msg);
 
