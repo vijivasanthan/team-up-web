@@ -19,11 +19,39 @@ define(['services/services', 'config'],
           /**
            * Initializing the team service
            */
+
+          this.list = Store('app').get('teams');
         };
 
         // public methods \\
         (function ()
         {
+          this.updateList = function (oldEditedTeam, newEditedTeam)
+          {
+            var index = _.findIndex(this.list, { uuid: oldEditedTeam.uuid });
+
+            if(this.list.length)
+            {
+              this.list[index] = newEditedTeam;
+            }
+          };
+          this.getList = function ()
+          {
+            return this.list;
+          };
+          this.removeFromList = function (currentTeam)
+          {
+            var index = _.findIndex(this.list, { uuid: currentTeam });
+
+            if(index >= 0)
+            {
+              console.error('index', index);
+              this.list.splice(index, 1);
+              Store('app').save('teams', this.list);
+              console.error('this.list', this.list);
+            }
+          };
+
           /**
            * Get a single team by id
            * @param teamId The id of the team
@@ -37,13 +65,15 @@ define(['services/services', 'config'],
             return Teams.getSingle(teamId)
               .then(function (members)
               {
-                $location.search('teamId', teamId)
+                $location.search('teamId', teamId);
                 $rootScope.statusBar.off();
                 return members;
               });
           },
           this.update = function (editedTeam)
           {
+            var self = this;
+
             if (! editedTeam.name)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
@@ -55,6 +85,7 @@ define(['services/services', 'config'],
             return TeamUp._('teamUpdate', { second: editedTeam.uuid }, editedTeam)
               .then(function (result)
               {
+                self.updateList(editedTeam, result);
                 return result.error && result || Teams.getAll();
               })
               .then(function(teams)

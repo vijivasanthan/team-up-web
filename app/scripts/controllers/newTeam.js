@@ -8,11 +8,18 @@ define(
       'newTeam',
       function (Team)
       {
-        this.allTeams = [];
-
         this.create = function(team)
         {
           Team.create(team);
+        };
+
+        this.update = function (editedTeam)
+        {
+          Team.update(editedTeam)
+            .then(function()
+            {
+              this.updateForm = false;
+            }.bind(this));
         };
 
         this.showEditForm = function (currentTeam)
@@ -22,27 +29,12 @@ define(
           Team.getName(currentTeam)
             .then(function(editableTeam)
             {
-              console.log('editableTeam', editableTeam);
-
               this.teamEditForm = {
                 name: editableTeam.name,
                 uuid: editableTeam.uuid
               };
             }.bind(this));
         };
-
-        this.update = function (editedTeam, callback)
-        {
-          console.log('editedTeam', editedTeam);
-          Team.update(editedTeam)
-            .then(function(teams)
-            {
-              this.allTeams = teams;
-              this.updateForm = false;
-
-              (callback && callback(teams));
-            }.bind(this));
-        }
       }
     );
   }

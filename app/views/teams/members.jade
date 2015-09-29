@@ -21,12 +21,13 @@ aria-hidden='true')
 	h2.nullable {{ui.teamup.teams}}
 	.selectGroup(ng-if='membersCtrl.data.teams.length > 1')
 		span.selectTitles
-			strong
+			strong 
 				| {{ ui.teamup.selectTeam }}
 		select(ng-model='membersCtrl.data.currentTeamId',
 		ng-options='t.uuid as t.name for t in membersCtrl.data.teams | orderBy:"name"',
 		ng-selected='membersCtrl.data.currentTeamId',
 		ng-change='membersCtrl.requestTeam(membersCtrl.data.currentTeamId)')
+	h4 {{ membersCtrl.test }}
 
 
 .tabbable.tabs-left
@@ -52,8 +53,7 @@ aria-hidden='true')
 					button.btn.pull-right.btn-info.marginLeftTen(type='reset',
 					ng-click='teamCRUD.updateForm = false') {{ui.teamup.cancel}}
 					button.btn.pull-right.btn-info.marginLeftTen(type='button',
-					ng-click='teamCRUD.update(teamCRUD.teamEditForm, membersCtrl.updateTeam)') {{ui.teamup.save}}
-
+					ng-click='teamCRUD.update(teamCRUD.teamEditForm)') {{ui.teamup.save}}
 			hr
 			
 			p(ng-hide='membersCtrl.data.members.length > 0') {{ui.teamup.noMembers}}

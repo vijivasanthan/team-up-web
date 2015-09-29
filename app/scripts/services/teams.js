@@ -761,6 +761,13 @@ define(
             return userTeams;
           };
 
+          TeamsService.prototype.all = Store('app').get('teams');
+
+          TeamsService.prototype.updateAllTeamsView = function (teams)
+          {
+            TeamsService.prototype.all = teams;
+          };
+
           return new TeamsService;
         }
       ]
