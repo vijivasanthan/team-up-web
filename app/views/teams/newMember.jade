@@ -1,0 +1,175 @@
+.page-header(ng-controller='members as membersCtrl')
+	h2.nullable {{ui.teamup.teams}}
+	.selectGroup(ng-if='membersCtrl.data.teams.length > 1')
+		span.selectTitles
+			strong
+				| {{ ui.teamup.selectTeam }}
+		select(ng-model='membersCtrl.data.currentTeamId',
+		ng-options='t.uuid as t.name for t in membersCtrl.data.teams | orderBy:"name"',
+		ng-selected='membersCtrl.data.currentTeamId',
+		ng-change='membersCtrl.requestTeam(membersCtrl.data.currentTeamId)')
+	
+.tabbable.tabs-left
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+		include ../teams/tabs
+	.tab-content
+		#newMemberTab.tab-pane(class="active")
+			.tab-header
+				h3.pull-left {{ui.teamup.newMember}}
+				form(ng-submit='searchMember(memberValue); findMemberSubmit=true')
+					.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;', ng-show='userType == "EXISTING"')
+						input.form-control.search-query(
+						type='text',
+						placeholder='{{ ui.teamup.searchMembers }}',
+						ng-model='memberValue')
+						span(class="input-group-btn")
+							button.search-button(ng-model='findMemberSubmit' ng-init="findMemberSubmit=false",
+							ng-click='searchMember(memberValue); findMemberSubmit=true',
+							input-rule-toggle='1',
+							class="btn btn-default input-buttons add-button",
+							type="button")
+								i(class="glyphicon glyphicon-white glyphicon-search")
+				div.btn-group.pull-right
+					button.btn.btn-primary(class='{{(userType == "NEW") && "active"}}'
+					ng-click='userType = "NEW"')
+						| {{ ui.teamup.new }}
+					button.btn.btn-primary(focus-on-click='search-query', class='{{(userType == "EXISTING") && "active"}}',
+					ng-click='userType = "EXISTING"')
+						| {{ ui.teamup.existing }}
+			hr
+			div(ng-show='userType == "EXISTING"')
+				p(ng-show='! findMemberSubmit') {{ ui.teamup.howToSearchMembers }}
+				p(ng-show="findMembersLoad") {{ ui.teamup.loadingMembers }}
+				p(ng-show='membersBySearch.length == 0 && ! findMembersLoad') {{ui.teamup.noMembersFound}}
+				table.table.table-striped(ng-show='membersBySearch.length && ! findMembersLoad')
+					thead
+						tr
+							th
+							th
+								a(ng-click='memberInTeamOrder="lastName"; reverse=!reverse') {{ui.teamup.name}}
+									i.icon-sort
+							th
+								a(ng-click='memberInTeamOrder="teamUuids"; reverse=!reverse') {{ui.teamup.teams_Cap}}
+									i.icon-sort
+							th
+					tbody
+						tr(ng-repeat='member in membersBySearch | orderBy:memberInTeamOrder:reverse')
+							td
+								.roundedPicSmall(class='{{member.states|stateColor}}',
+								back-img = '{{member.uuid | avatar:"team":"80" }}')
+							td
+								a(href='index.html#/profile/{{member.uuid}}#profile')
+									| {{member.firstName}} {{member.lastName}}
+							td
+								| {{ member.teamUuids | getTeamNameById }}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)',
+									ng-hide='member.teamUuids.indexOf(current) >= 0')
+										span.icomoon(data-icon='')
+				span.muted.pull-right(ng-show='membersBySearch.length > 0')
+					small
+						i {{ membersBySearch.length | i18n_spec:'groups.memberCount'}}
+			form(name='teamMemberForm',
+			novalidate,
+			ng-show='(userType == "NEW")')
+				fieldset
+					.row
+						.span6
+							fieldset
+								.form-group
+									label.control-label {{ui.profile.firstName}}
+									.controls
+										input.span4(type='text', autofocus="true",
+										ng-model='memberForm.firstName')
+								.form-group
+									label.control-label {{ui.profile.lastName}}
+									.controls
+										input.span4(type='text',
+										ng-model='memberForm.lastName')
+								.form-group
+									label.control-label {{ui.teamup.role}}
+									.controls
+										select(ng-model='memberForm.role',
+										ng-options='r.id as r.label for r in roles')
+											option(value='') {{ui.teamup.chooseRole}}
+								.form-group(ng-class="{ 'has-error' : teamMemberForm.email.$invalid && !teamMemberForm.email.$pristine }")
+									label.control-label {{ ui.profile.email }}
+									.controls
+										input.span3.form-control(type='email',
+										name='email',
+										required,
+										ng-model='memberForm.email')
+										span.help-block(ng-show='teamMemberForm.email.$invalid && !teamMemberForm.email.$pristine')
+											small(ng-show="teamMemberForm.$error.email")
+												i
+												| {{ ui.validation.email.notValid }}
+								//.form-group
+								//	label.control-label {{ui.teamup.func}}
+								//	.controls
+								//		select(ng-model='memberForm.function',
+								//		ng-options='f.id as f.label for f in mfuncs')
+								//			option(value='') {{ui.teamup.chooseFunction}}
+						.span6
+							fieldset
+								.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
+									label.control-label {{ui.teamup.phone}}
+									.controls
+										input.span3.form-control.inputPhoneNumber(type='text',
+										ng-model='memberForm.phone',
+										ng-change='parsePhoneNumber(memberForm.phone)')
+										span.help-block
+											small
+												i {{phoneNumberParsed.message}}
+								.form-group(
+								ng-class="{'has-error' : UserNameWrong}")
+									label.control-label {{ui.profile.username}}
+									.controls
+										input.span3.form-control(type='text', ng-change="checkUserName()", ng-blur='UserNameWrong=false',
+										ng-model='memberForm.userName')
+									p.text-danger
+										small(ng-show='UserNameWrong')
+											i {{ui.validation.userName.regex }}
+								.form-group(ng-class="{ 'has-error' : teamMemberForm.password.$invalid && !teamMemberForm.password.$pristine }")
+									label.control-label {{ui.profile.password}}
+									.controls
+										input.span3.form-control(type='password',
+										ng-model='memberForm.password',
+										name='password',
+										required,
+										ng-minlength="8",
+										ng-maxlength="20")
+										span.help-block(ng-show='teamMemberForm.password.$invalid && !teamMemberForm.password.$pristine')
+											small
+												i
+												| {{ ui.validation.password.required }}
+											small(ng-show="teamMemberForm.password.$error.minlength")
+												i
+												| {{ ui.validation.password.amountMinChars(8) }} 
+											small(ng-show="teamMemberForm.password.$error.maxlength")
+												i
+												| {{ ui.validation.password.amountMaxChars(20) }}
+								.form-group
+									label.control-label {{ui.profile.retypePassword}}
+									.controls
+										input.span3(type='password',
+										ng-model='memberForm.reTypePassword')
+								//.form-group(
+								//	ng-class="{ 'has-error' : teamMemberForm.pincode.$invalid && !teamMemberForm.pincode.$pristine }")
+								//	label.control-label {{ui.profile.pincode}}
+								//	.controls
+								//		input.span2.form-control(type='text',
+								//		ng-model='memberForm.pincode',
+								//		ui-mask='9999?9999',
+								//		ng-change='pincodeExists(memberForm.pincode)',
+								//		name='pincode')
+								//		p.text-danger(ng-hide='pincodeExistsValidation')
+								//			small
+								//				i {{pincodeExistsValidationMessage}}
+								//		span.help-block(style='margin-top: -5px;')
+								//			small
+								//				i {{ui.profile.pincodeInfo}}
+					hr
+					.form-actions
+						button.btn.btn-success(type='submit',
+						ng-click='memberSubmit(memberForm)') {{ui.teamup.saveMember}}

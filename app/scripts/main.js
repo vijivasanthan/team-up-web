@@ -210,6 +210,7 @@ require(
     'controllers/options',
     'controllers/members',
     'controllers/newTeam',
+    'controllers/newMember',
 
     'bootstrap',
     'lawnchair',

@@ -110,6 +110,8 @@ define(['services/services', 'config'],
 
             this.create = function (team)
             {
+              var self = this;
+
               if (!team)
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
@@ -123,12 +125,13 @@ define(['services/services', 'config'],
                 team)
                 .then(function (newTeam)
                 {
-                  _newTeam = newTeam;
+                  self.list.push(newTeam);
+                  Store('app').save('teams', self.list);
                   return Teams.getAll();
                 })
                 .then(function(teams)
                 {
-                  CurrentSelection.local = _newTeam.uuid;
+                  CurrentSelection.local = self.list[self.list.length - 1].uuid;
                   $location.path('team/members');
                 });
             }

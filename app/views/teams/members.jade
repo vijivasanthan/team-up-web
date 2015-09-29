@@ -27,7 +27,6 @@ aria-hidden='true')
 		ng-options='t.uuid as t.name for t in membersCtrl.data.teams | orderBy:"name"',
 		ng-selected='membersCtrl.data.currentTeamId',
 		ng-change='membersCtrl.requestTeam(membersCtrl.data.currentTeamId)')
-	h4 {{ membersCtrl.test }}
 
 
 .tabbable.tabs-left

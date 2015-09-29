@@ -219,27 +219,17 @@ define(
             .when(
             '/team/new',
             {
-              templateUrl: 'views/teams/new.html',
+              templateUrl: 'views/teams/newTeam.html',
               controller: 'newTeam as newTeamCtrl',
-              reloadOnSearch: false,
-              resolve: {
-                data: function (Teams, $q)
-                {
-                  var teamId = Teams.checkExistence();
+              reloadOnSearch: false
+            })
 
-                  return $q.all([
-                    Teams.getSingle(teamId),
-                    Teams.getAllLocal()
-                  ]).then(function (teamsData)
-                  {
-                    return {
-                      members: teamsData[0],
-                      teams: teamsData[1],
-                      currentTeamId: teamId
-                    };
-                  });
-                }
-              }
+            .when(
+            '/team/member/new',
+            {
+              templateUrl: 'views/teams/newMember.html',
+              controller: 'newMember as newMemberCtrl',
+              reloadOnSearch: false,
             })
 
             .when(

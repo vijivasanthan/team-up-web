@@ -16,6 +16,8 @@ define(
          * data.currentTeamId : The current team id
          * @type {data|*}
          */
+        console.log('data', data);
+        
         vm.data = angular.copy(data);
         Member.fillList(data.members);
         vm.data.members = Member.getList();

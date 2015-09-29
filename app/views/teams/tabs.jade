@@ -15,7 +15,7 @@ li(data-match-route='/team/new'
 li(data-match-route='/team/member/new'
 	ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
 	a(data-toggle='tab',
-	ng-click='setViewTo("newMember")')
+	ng-click='nav("team/member/new")')
 		span.icomoon(data-icon='',
 		aria-hidden='true')
 		| {{ui.teamup.newMember}}
