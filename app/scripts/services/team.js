@@ -16,11 +16,6 @@ define(['services/services', 'config'],
         // constructor \\
         var teamService = function ()
         {
-          /**
-           * Initializing the team service
-           */
-
-          this.list = Store('app').get('teams');
         };
 
         // public methods \\
@@ -28,9 +23,9 @@ define(['services/services', 'config'],
         {
           this.updateList = function (oldEditedTeam, newEditedTeam)
           {
-            var index = _.findIndex(this.list, { uuid: oldEditedTeam.uuid });
+            var index = _.findIndex(this.list, {uuid: oldEditedTeam.uuid});
 
-            if(this.list.length)
+            if (this.list.length)
             {
               this.list[index] = newEditedTeam;
             }
@@ -41,9 +36,9 @@ define(['services/services', 'config'],
           };
           this.removeFromList = function (currentTeam)
           {
-            var index = _.findIndex(this.list, { uuid: currentTeam });
+            var index = _.findIndex(this.list, {uuid: currentTeam});
 
-            if(index >= 0)
+            if (index >= 0)
             {
               console.error('index', index);
               this.list.splice(index, 1);
@@ -51,6 +46,14 @@ define(['services/services', 'config'],
               console.error('this.list', this.list);
             }
           };
+          this.setCurrent = function (teamId)
+          {
+            this.current.teamId = teamId;
+          }
+          this.getCurrent = function ()
+          {
+            return this.current;
+          }
 
           /**
            * Get a single team by id
@@ -60,54 +63,19 @@ define(['services/services', 'config'],
           this.get = function (teamId)
           {
             $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-            CurrentSelection.local = teamId;
 
-            return Teams.getSingle(teamId)
+            var _teamId = teamId || CurrentSelection.getTeamId();
+
+            CurrentSelection.local = _teamId;
+
+            return Teams.getSingle(_teamId)
               .then(function (members)
               {
-                $location.search('teamId', teamId);
+                $location.search('teamId', _teamId);
                 $rootScope.statusBar.off();
                 return members;
               });
           },
-          this.update = function (editedTeam)
-          {
-            var self = this;
-
-            if (! editedTeam.name)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              return;
-            }
-
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
-
-            return TeamUp._('teamUpdate', { second: editedTeam.uuid }, editedTeam)
-              .then(function (result)
-              {
-                self.updateList(editedTeam, result);
-                return result.error && result || Teams.getAll();
-              })
-              .then(function(teams)
-              {
-                if(! teams.error)
-                {
-                  $rootScope.statusBar.off();
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  return teams;
-                }
-              });
-          }
-
-            this.getName = function (teamId)
-            {
-              return Teams.getAllLocal()
-                .then(function(teams)
-                {
-                  return _.findWhere(teams, {uuid: teamId});
-                });
-            },
-
             this.create = function (team)
             {
               var self = this;
@@ -129,23 +97,87 @@ define(['services/services', 'config'],
                   Store('app').save('teams', self.list);
                   return Teams.getAll();
                 })
-                .then(function(teams)
+                .then(function (teams)
                 {
+                  //The last added team is the current one
                   CurrentSelection.local = self.list[self.list.length - 1].uuid;
                   $location.path('team/members');
                 });
-            }
+            },
+            this.read = function (teamId)
+            {
+              return Teams.getAllLocal()
+                .then(function (teams)
+                {
+                  return _.findWhere(teams, {uuid: teamId});
+                });
+            },
+            this.update = function (editedTeam)
+            {
+              var self = this;
+
+              if (!editedTeam.name)
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
+                return;
+              }
+
+              $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
+
+              return TeamUp._('teamUpdate', {second: editedTeam.uuid}, editedTeam)
+                .then(function (result)
+                {
+                  self.updateList(editedTeam, result);
+                  return result.error && result || Teams.getAll();
+                })
+                .then(function (teams)
+                {
+                  if (!teams.error)
+                  {
+                    $rootScope.statusBar.off();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    return teams;
+                  }
+                });
+            },
+            this.delete = function (current)
+            {
+              var self = this,
+                deferred = $q.defer();
+
+              angular.element('#confirmTeamModal').modal('hide');
+              $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
+
+              TeamUp._('teamDelete', {second: current})
+                .then(function (teamDelete)
+                {
+                  self.removeFromList(current);
+                  return teamDelete.error && teamDelete || Teams.getAll();
+                })
+                .then(function (teams)
+                {
+                  if (!teams.error)
+                  {
+                    self.setCurrent(self.list[0].uuid);
+                    deferred.resolve(self.getCurrent());
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    $rootScope.statusBar.off();
+                  }
+                });
+
+              return deferred.promise;
+            },
+            this.init = function (teamId, callback)
+            {
+              var _teamId = teamId || CurrentSelection.getTeamId();
+              CurrentSelection.local = _teamId;
+
+              this.list = Store('app').get('teams');
+              this.current = {};
+              this.setCurrent(_teamId);
+              (callback && callback(teamId));
+            };
         }).call(teamService.prototype);
-
-
-        // private methods \\
-
-        /**
-         */
-        function testPrivate()
-        {
-          return null;
-        }
 
         return new teamService();
       });

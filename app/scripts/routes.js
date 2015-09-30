@@ -194,24 +194,13 @@ define(
             '/team/members',
             {
               templateUrl: 'views/teams/members.html',
-              controller: 'members as membersCtrl',
+              controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
                 data: function ($q, $location, Teams)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-
-                  return $q.all([
-                    Teams.getSingle(teamId),
-                    Teams.getAllLocal()
-                  ]).then(function (teamsData)
-                  {
-                    return {
-                      members: teamsData[0],
-                      teams: teamsData[1],
-                      currentTeamId: teamId
-                    };
-                  });
+                  return  Teams.getSingle(teamId);
                 }
               }
             })
@@ -220,7 +209,7 @@ define(
             '/team/new',
             {
               templateUrl: 'views/teams/newTeam.html',
-              controller: 'newTeam as newTeamCtrl',
+              controller: 'team as team',
               reloadOnSearch: false
             })
 

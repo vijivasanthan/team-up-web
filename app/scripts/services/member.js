@@ -14,10 +14,6 @@ define(['services/services', 'config'],
         // constructor \\
         var memberService = function ()
         {
-          /**
-           * Initializing the team service
-           */
-          this.list = [];
         };
 
         // public methods \\
@@ -55,15 +51,15 @@ define(['services/services', 'config'],
           /**
            * Remove the deleted member from the current team in the interface
            */
-            this.removeFromList = function (member)
-            {
-              var index = _.findIndex(this.list, {uuid: member.uuid});
+          this.removeFromList = function (member)
+          {
+            var index = _.findIndex(this.list, {uuid: member.uuid});
 
-              if (index >= 0)
-              {
-                this.list.splice(index, 1);
-              }
-            };
+            if (index >= 0)
+            {
+              this.list.splice(index, 1);
+            }
+          };
           /**
            * Delete member from team
            * @param member All the data from the member who is deleted
@@ -133,11 +129,13 @@ define(['services/services', 'config'],
               {
                 Permission.getAccess();
               }
-            }
+            },
+            this.init = function (members)
+            {
+              this.list = [];
+              this.fillList(members);
+            };
         }).call(memberService.prototype);
-
-
-        // private methods \\
 
         return new memberService();
       });

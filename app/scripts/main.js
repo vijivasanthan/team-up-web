@@ -208,9 +208,8 @@ require(
     'controllers/phones',
     'controllers/video',
     'controllers/options',
-    'controllers/members',
-    'controllers/newTeam',
-    'controllers/newMember',
+    'controllers/member',
+    'controllers/team',
 
     'bootstrap',
     'lawnchair',
