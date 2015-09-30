@@ -41,6 +41,10 @@ define(['services/services', 'config'],
               self.list.push(member);
             });
           },
+            this.setList = function (list)
+            {
+              this.list = list;
+            };
           /**
            * Get the current list of mem
            */
@@ -130,10 +134,9 @@ define(['services/services', 'config'],
                 Permission.getAccess();
               }
             },
-            this.init = function (members)
+            this.init = function (members, callback)
             {
-              this.list = [];
-              this.fillList(members);
+              this.setList(members);
             };
         }).call(memberService.prototype);
 

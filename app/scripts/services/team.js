@@ -54,28 +54,6 @@ define(['services/services', 'config'],
           {
             return this.current;
           }
-
-          /**
-           * Get a single team by id
-           * @param teamId The id of the team
-           * @returns {*} A promise with the members of the team
-           */
-          this.get = function (teamId)
-          {
-            $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-
-            var _teamId = teamId || CurrentSelection.getTeamId();
-
-            CurrentSelection.local = _teamId;
-
-            return Teams.getSingle(_teamId)
-              .then(function (members)
-              {
-                $location.search('teamId', _teamId);
-                $rootScope.statusBar.off();
-                return members;
-              });
-          },
             this.create = function (team)
             {
               var self = this;
@@ -87,7 +65,6 @@ define(['services/services', 'config'],
               }
               $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
-              var _newTeam = null;
               return TeamUp._('teamAdd',
                 {id: $rootScope.app.resources.uuid},
                 team)
@@ -104,12 +81,25 @@ define(['services/services', 'config'],
                   $location.path('team/members');
                 });
             },
+            /**
+             * Get a single team by id
+             * @param teamId The id of the team
+             * @returns {*} A promise with the members of the team
+             */
             this.read = function (teamId)
             {
-              return Teams.getAllLocal()
-                .then(function (teams)
+              $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
+
+              var _teamId = teamId || CurrentSelection.getTeamId();
+
+              CurrentSelection.local = _teamId;
+
+              return Teams.getSingle(_teamId)
+                .then(function (members)
                 {
-                  return _.findWhere(teams, {uuid: teamId});
+                  $location.search('teamId', _teamId);
+                  $rootScope.statusBar.off();
+                  return members;
                 });
             },
             this.update = function (editedTeam)
@@ -167,7 +157,7 @@ define(['services/services', 'config'],
 
               return deferred.promise;
             },
-            this.init = function (teamId, callback)
+            this.init = function (teamId)
             {
               var _teamId = teamId || CurrentSelection.getTeamId();
               CurrentSelection.local = _teamId;
@@ -175,7 +165,6 @@ define(['services/services', 'config'],
               this.list = Store('app').get('teams');
               this.current = {};
               this.setCurrent(_teamId);
-              (callback && callback(teamId));
             };
         }).call(teamService.prototype);
 

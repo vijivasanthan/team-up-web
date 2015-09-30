@@ -46,7 +46,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			select(ng-model='team.current.teamId',
 			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
 			ng-selected='team.current.teamId',
-			ng-change='team.init(team.current.teamId, member.init)')
+			ng-change='member.init(team.current.teamId, null, team.read)')
 	
 	
 	.tabbable.tabs-left

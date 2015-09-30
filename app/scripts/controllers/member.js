@@ -6,9 +6,14 @@ define(
 
     controllers.controller(
       'member',
-      function ($scope, Team, Member, data)
+      function (Team, Member, data)
       {
         var self = this;
+
+        self.create = function (member)
+        {
+          //add member
+        };
 
         /**
          * Delete a team member from a single team
@@ -44,25 +49,21 @@ define(
          */
         function removeTeamFromView()
         {
+          //check wat je met de read method op dit moment wil
           self.data.currentTeamId = self.data.teams[0].uuid;
           self.requestTeam(self.data.currentTeamId);
         }
 
-        self.init = function (teamId, membersData)
+        self.init = function (teamId, membersData, callback)
         {
-          if(membersData)
+          (membersData)
+            ? initialize(membersData)
+            : callback && callback(teamId, initialize);
+
+          function initialize(data)
           {
-            Member.init(membersData);
+            Member.init(data);
             self.list = Member.getList();
-          }
-          else
-          {
-            Team.get(teamId)
-              .then(function(members)
-              {
-                Member.init(members);
-                self.list = Member.getList();
-              });
           }
         };
 

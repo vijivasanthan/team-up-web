@@ -20,16 +20,22 @@ define(
           Team.create(teamName);
         };
 
-        self.read = function (current)
+        self.read = function (current, callback)
         {
-          Team.read(current);
+          Team.read(current)
+            .then(function(members)
+            {
+              (callback && callback(members));
+              self.init();
+            });
         };
 
-        self.update = function (team, confirm)
+        self.update = function (current, confirm)
         {
           if(! confirm)
           {
             self.updateForm = true;
+            var team =  _.findWhere(self.list, {uuid: current});
             self.editForm = {
               name: team.name,
               uuid: team.uuid
@@ -37,7 +43,7 @@ define(
           }
           else
           {
-            Team.update(team)
+            Team.update(current)
               .then(function()
               {
                 self.updateForm = false;
@@ -63,11 +69,9 @@ define(
 
         self.init = function (current, callback)
         {
-          //set the list from the resolve method
           Team.init(current);
           self.list = Team.getList();
           self.current = Team.getCurrent();
-          (callback && callback(current));
         };
 
         self.init();
