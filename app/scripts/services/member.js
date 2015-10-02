@@ -25,21 +25,7 @@ define(['services/services', 'config'],
            */
           this.fillList = function (list)
           {
-            var self = this;
-            //splice every object from the list,
-            // so the reference will nog be lost
-            if (self.list.length)
-            {
-              _.each(self.list, function ()
-              {
-                self.list.splice((self.list.length - 1), 1);
-              });
-            }
-            //add the new members to the list
-            _.each(list, function (member)
-            {
-              self.list.push(member);
-            });
+            this.list = list.slice();
           },
             this.setList = function (list)
             {
@@ -134,7 +120,7 @@ define(['services/services', 'config'],
                 Permission.getAccess();
               }
             },
-            this.init = function (members, callback)
+            this.init = function (members)
             {
               this.setList(members);
             };
