@@ -711,16 +711,20 @@ define(
             })
 
             .when(
-            '/video/:videoId?',
+            '/video/',
             {
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
               resolve: {
-                'check': function ($rootScope, $location, Session)
+                'data': function ($rootScope, $location, $route, Session)
                 {
                   if (Session.check())
                   {
                     $location.path($rootScope.currentLocation);
+                  }
+
+                  return {
+                    fullName: $route.current.params.fullName || 'user'
                   }
                 }
               },

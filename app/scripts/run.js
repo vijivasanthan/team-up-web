@@ -66,7 +66,8 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            var videoRegex = /video\/([A-Za-z0-9-_/#]+)/g;
+            //([A-Za-z0-9-_/#]+)/g;
+            var videoRegex = /video\/()/g;
 
             switch (true)
             {

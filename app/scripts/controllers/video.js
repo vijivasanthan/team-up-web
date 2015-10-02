@@ -6,8 +6,10 @@ define(
 
     controllers.controller(
       'videoCtrl',
-        function ($rootScope, $route, $scope, $filter, check)
+        function ($rootScope, $route, $scope, $filter, data)
         {
+          console.error('data', data);
+
           $rootScope.fixStyles();
 
           angular.element('.navbar').show();
@@ -19,20 +21,21 @@ define(
           {
             var videoCall = null;
 
+            var url = config.app.videoCallUrl + '/?room=' + 123 + '&userName=' + data.fullName;
+
             if($route.current.params.videoId)
             {
               //http://webrtc.ask-fast.com
               //http://webrtc.ask-cs.com
               //http://localhost:9001
-              var url = config.app.videoCallUrl + '/?room=' + $route.current.params.videoId + '&username=user';
-              videoCall = $filter(url);
             }
             else
             {
               //$rootScope.notifier.error("Er is geen roomnummer opgegeven");
             }
+            console.log('url', url);
 
-            return videoCall;
+            return $filter('trusted_url')(url);
           };
         }
     );
