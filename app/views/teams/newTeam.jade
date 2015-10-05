@@ -12,7 +12,7 @@
 				.control-group
 					input.input-xlarge.search-query.controls(type='text',
 					placeholder='{{ui.teamup.teamName}}',
-					ng-model='teamForm.name')
+					ng-model='editForm.name')
 				.control-group
 					button.btn.btn-success.confirmButton.controls(type='button',
-					ng-click='newTeamCtrl.create(teamForm)') {{ui.teamup.createTeam}}
+					ng-click='team.create(teamForm)') {{ui.teamup.createTeam}}
