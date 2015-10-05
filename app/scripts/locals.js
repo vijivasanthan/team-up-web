@@ -2110,7 +2110,7 @@ define(
         video: {
           title: 'Video',
           videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
-          stop: 'Het videogesprek is gestopt.'
+          stop: 'Het videogesprek is beëindigd.'
         },
         dashboard: {
           thisWeek: 'Deze week',
