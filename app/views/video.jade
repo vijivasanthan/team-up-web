@@ -16,11 +16,11 @@
 			//.tab-header
 			//	h3.pull-left Video gesprek met testgebruiker
 			//hr
-			.tab-header(ng-hide='hasRoom')
+			.tab-header(ng-hide='hasCall')
 				p {{ ui.video.videoNotLoaded }}
 			hr
 			div(class="responsive_video")
-				iframe(data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)
+				iframe(data-ng-src="{{ getCall() }}" frameborder="0" allowfullscreen)
 				//(class="embed-responsive embed-responsive-16by9")
 						.frame-container
 				///embed-responsive embed-responsive-16by9

@@ -724,16 +724,19 @@ define(
                       video = {};
 
                   /**
-                   * Get the roomId of the video conversation
+                   * Get the callId of the video conversation
                    * @param bacEnd The current backend url
                    * @param teamPhoneNumber The team telephone number
                    */
-                  video.getRoomIdRequest = function(bacEnd, teamPhoneNumber)
+                  video.getCallIdRequest = function(bacEnd, teamPhoneNumber)
                   {
                     Settings.setBackEnd(bacEnd);//set current backend
-                    TeamUp._('TTvideo', //get the roomId for the video conversation
-                      { phoneNumber: teamPhoneNumber })
-                      .then(video.getRoomIdResponse);//get the response
+                    TeamUp._('TTvideo', //get the callId for the video conversation
+                      {
+                        phoneNumber: teamPhoneNumber,
+                        type: 'video'
+                      })
+                      .then(video.getCallIdResponse);//get the response
                   };
 
                   /**
@@ -741,20 +744,20 @@ define(
                    * error appears
                    * @param result
                    */
-                  video.getRoomIdResponse = function(result)
+                  video.getCallIdResponse = function(result)
                   {//if a error appears, check then if there are multiple backends, to try another time
-                    //to get a roomID
+                    //to get a callID
                     (result.error && backEnds.length)
-                      ? video.getRoomIdRequest(backEnds.shift(), teamPhoneNumber)
+                      ? video.getCallIdRequest(backEnds.shift(), teamPhoneNumber)
                       : deferred.resolve({
-                          roomId: result.roomId || '',
+                          callId: result.callId || '',
                           fullName: decodeURI($route.current.params.fullName) || 'user'
                         });
                   };
                   //This routing is only for the ones without session
                   (Session.check())
                     ? $location.path($rootScope.currentLocation)
-                    : video.getRoomIdRequest(backEnds.shift(), teamPhoneNumber);
+                    : video.getCallIdRequest(backEnds.shift(), teamPhoneNumber);
 
                   return deferred.promise;
                 }
