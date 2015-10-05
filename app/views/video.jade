@@ -11,16 +11,16 @@
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ ui.video.title }}
 
-
 	.tab-content
 		#web.tab-pane(class="{{'active'}}")
 			//.tab-header
 			//	h3.pull-left Video gesprek met testgebruiker
 			//hr
-			.tab-header(ng-show='(getRoom()) == null')
+			.tab-header(ng-if='! hasCall')
 				p {{ ui.video.videoNotLoaded }}
 			hr
-			div(class="embed-responsive embed-responsive-16by9")
-				iframe(data-ng-src="{{ getRoom() }}" frameborder="0" allowfullscreen)
+			div(ng-if="hasCall" class="responsive_video")
+				iframe(data-ng-src="{{ getCall() }}" frameborder="0" allowfullscreen)
 				//(class="embed-responsive embed-responsive-16by9")
 						.frame-container
+				///embed-responsive embed-responsive-16by9

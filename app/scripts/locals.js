@@ -816,7 +816,8 @@ define(
             '31': 'TeamTelephone is already activated for this team',
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
-            '34': 'Could not generate scenario'
+            '34': 'Could not generate scenario',
+            '36': 'A unexpected parameter of type'
           }
         },
         upload: {
@@ -1882,7 +1883,8 @@ define(
             '31': 'TeamTelefoon is already activated for this team',
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
-            '34': 'Could not generate scenario'
+            '34': 'Could not generate scenario',
+            '36': 'A unexpected parameter of type'
           },
         },
         upload: {
@@ -2110,7 +2112,7 @@ define(
         video: {
           title: 'Video',
           videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
-          stop: 'Het videogesprek is gestopt.'
+          stop: 'Het videogesprek is beëindigd.'
         },
         dashboard: {
           thisWeek: 'Deze week',
@@ -2934,7 +2936,8 @@ define(
             '31': 'TeamTelefoon is al geactiveerd voor dit team',
             '32': 'Agent niet gevonden',
             '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
-            '34': 'Kon het scenario niet genereren'
+            '34': 'Kon het scenario niet genereren',
+            '36': 'Een niet verwachte parameter "type"'
           }
         },
         options: {

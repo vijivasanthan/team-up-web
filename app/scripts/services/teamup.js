@@ -127,6 +127,18 @@ define(
                 },
 
                 /**
+                 * Post a Team phonenumber and it will return the room id for a videoconversation
+                 */
+                TTvideo : {
+                  method: 'POST',
+                  params: {
+                    first: 'teamTelephone',
+                    second: 'video',
+                    phoneNumber: '',
+                  },
+                },
+
+                /**
                  * Team profiles
                  */
                 profileGet: {

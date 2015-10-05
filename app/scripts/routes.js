@@ -1,6 +1,6 @@
 define(
-  ['app'],
-  function (app)
+  ['app', 'config'],
+  function (app, config)
   {
     'use strict';
 
@@ -711,17 +711,55 @@ define(
             })
 
             .when(
-            '/video/:videoId?',
+            '/video/',
             {
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
               resolve: {
-                'check': function ($rootScope, $location, Session)
+                'data': function ($rootScope, $location, $route, $q, Session, TeamUp, Settings)
                 {
-                  if (Session.check())
+                  var deferred = $q.defer(),
+                      backEnds = angular.copy(config.app.host),//The different backend url's
+                      teamPhoneNumber = $route.current.params.teamPhoneNumber,
+                      video = {};
+
+                  /**
+                   * Get the callId of the video conversation
+                   * @param bacEnd The current backend url
+                   * @param teamPhoneNumber The team telephone number
+                   */
+                  video.getCallIdRequest = function(bacEnd, teamPhoneNumber)
                   {
-                    $location.path($rootScope.currentLocation);
-                  }
+                    Settings.setBackEnd(bacEnd);//set current backend
+                    TeamUp._('TTvideo', //get the callId for the video conversation
+                      {
+                        phoneNumber: teamPhoneNumber,
+                        type: 'video'
+                      })
+                      .then(video.getCallIdResponse);//get the response
+                  };
+
+                  /**
+                   * The callback of the request will do a request again if there are multiple backend url's if a
+                   * error appears
+                   * @param result
+                   */
+                  video.getCallIdResponse = function(result)
+                  {//if a error appears, check then if there are multiple backends, to try another time
+                    //to get a callID
+                    (result.error && backEnds.length)
+                      ? video.getCallIdRequest(backEnds.shift(), teamPhoneNumber)
+                      : deferred.resolve({
+                          callId: result.callId || '',
+                          fullName: decodeURI($route.current.params.fullName) || 'user'
+                        });
+                  };
+                  //This routing is only for the ones without session
+                  (Session.check())
+                    ? $location.path($rootScope.currentLocation)
+                    : video.getCallIdRequest(backEnds.shift(), teamPhoneNumber);
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
