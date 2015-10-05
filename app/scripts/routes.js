@@ -1,6 +1,6 @@
 define(
-  ['app'],
-  function (app)
+  ['app', 'config'],
+  function (app, config)
   {
     'use strict';
 
@@ -716,16 +716,47 @@ define(
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
               resolve: {
-                'data': function ($rootScope, $location, $route, Session)
+                'data': function ($rootScope, $location, $route, $q, Session, TeamUp, Settings)
                 {
-                  if (Session.check())
-                  {
-                    $location.path($rootScope.currentLocation);
-                  }
+                  var deferred = $q.defer(),
+                      backEnds = angular.copy(config.app.host),//The different backend url's
+                      teamPhoneNumber = $route.current.params.teamPhoneNumber,
+                      video = {};
 
-                  return {
-                    fullName: $route.current.params.fullName || 'user'
-                  }
+                  /**
+                   * Get the roomId of the video conversation
+                   * @param bacEnd The current backend url
+                   * @param teamPhoneNumber The team telephone number
+                   */
+                  video.getRoomIdRequest = function(bacEnd, teamPhoneNumber)
+                  {
+                    Settings.setBackEnd(bacEnd);//set current backend
+                    TeamUp._('TTvideo', //get the roomId for the video conversation
+                      { phoneNumber: teamPhoneNumber })
+                      .then(video.getRoomIdResponse);//get the response
+                  };
+
+                  /**
+                   * The callback of the request will do a request again if there are multiple backend url's if a
+                   * error appears
+                   * @param result
+                   */
+                  video.getRoomIdResponse = function(result)
+                  {//if a error appears, check then if there are multiple backends, to try another time
+                    //to get a roomID
+                    (result.error && backEnds.length)
+                      ? video.getRoomIdRequest(backEnds.shift(), teamPhoneNumber)
+                      : deferred.resolve({
+                          roomId: result.roomId || '',
+                          fullName: encodeURI($route.current.params.fullName) || 'user'
+                        });
+                  };
+                  //This routing is only for the ones without session
+                  (Session.check())
+                    ? $location.path($rootScope.currentLocation)
+                    : video.getRoomIdRequest(backEnds.shift(), teamPhoneNumber);
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
