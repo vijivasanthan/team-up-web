@@ -748,7 +748,7 @@ define(
                       ? video.getRoomIdRequest(backEnds.shift(), teamPhoneNumber)
                       : deferred.resolve({
                           roomId: result.roomId || '',
-                          fullName: encodeURI($route.current.params.fullName) || 'user'
+                          fullName: decodeURI($route.current.params.fullName) || 'user'
                         });
                   };
                   //This routing is only for the ones without session
