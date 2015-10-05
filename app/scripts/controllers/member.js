@@ -12,7 +12,12 @@ define(
 
         self.create = function (member)
         {
-          //add member
+          //create member
+        };
+
+        self.read = function (member)
+        {
+          //read member
         };
 
         /**
