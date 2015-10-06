@@ -217,7 +217,15 @@ define(
             '/team/member/new',
             {
               templateUrl: 'views/teams/newMember.html',
-              controller: 'newMember as newMemberCtrl',
+              controller: 'newMember as member',
+              reloadOnSearch: false,
+            })
+
+            .when(
+            '/team/member/search',
+            {
+              templateUrl: 'views/teams/searchMember.html',
+              controller: 'searchMember as member',
               reloadOnSearch: false,
             })
 

@@ -1,0 +1,58 @@
+div(ng-controller='team as team', style='padding-top: 1px;')
+	.page-header
+		h2.nullable {{ui.teamup.teams}}
+		
+	.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include ../teams/tabs
+		.tab-content
+			#newMemberTab.tab-pane(class="active", style="min-height: 282px;")
+				.tab-header
+					h3.pull-left {{ui.teamup.searchMember}}
+					form(ng-submit='member.search(memberValue); member.findMemberSubmit=true')
+						.input-group.has-feedback.pull-left.marginLeftTen(style='width: 260px;')
+							input.form-control.search-query(
+							type='text',
+							placeholder='{{ ui.teamup.searchMembers }}',
+							ng-model='memberValue')
+							span(class="input-group-btn")
+								button.search-button(ng-model='member.findMemberSubmit' ng-init="member.findMemberSubmit=false",
+								ng-click='member.search(memberValue); member.findMemberSubmit=true',
+								input-rule-toggle='1',
+								class="btn btn-default input-buttons add-button",
+								type="button")
+									i(class="glyphicon glyphicon-white glyphicon-search")
+				hr
+				div
+					p(ng-show='! member.findMemberSubmit') {{ ui.teamup.howToSearchMembers }}
+					p(ng-show="member.findMembersLoad") {{ ui.teamup.loadingMembers }}
+					p(ng-show='member.membersBySearch.length == 0 && ! member.findMembersLoad') {{ui.teamup.noMembersFound}}
+					table.table.table-striped(ng-show='member.membersBySearch.length && ! member.findMembersLoad')
+						thead
+							tr
+								th
+								th
+									a(ng-click='memberInTeamOrder="lastName"; reverse=!reverse') {{ui.teamup.name}}
+										i.icon-sort
+								th
+									a(ng-click='memberInTeamOrder="teamUuids"; reverse=!reverse') {{ui.teamup.teams_Cap}}
+										i.icon-sort
+								th
+						tbody
+							tr(ng-repeat='member in member.membersBySearch | orderBy:memberInTeamOrder:reverse')
+								td
+									.roundedPicSmall(class='{{member.states|stateColor}}',
+									back-img = '{{member.uuid | avatar:"team":"80" }}')
+								td
+									a(href='index.html#/profile/{{member.uuid}}#profile')
+										| {{member.firstName}} {{member.lastName}}
+								td
+									| {{ member.teamUuids | getTeamNameById }}
+								td
+									.pull-right
+										button.btn-primary.btn-mini(ng-click='confirmAddTeamMember(member)',
+										ng-hide='member.teamUuids.indexOf(current) >= 0')
+											span.icomoon(data-icon='')
+					span.muted.pull-right(ng-show='member.membersBySearch.length > 0')
+						small
+							i {{ member.membersBySearch.length | i18n_spec:'groups.memberCount'}}

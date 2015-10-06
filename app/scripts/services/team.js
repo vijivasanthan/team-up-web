@@ -57,7 +57,6 @@ define(['services/services', 'config'],
             this.create = function (team)
             {
               var self = this;
-
               if (!team)
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);

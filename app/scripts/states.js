@@ -193,6 +193,10 @@ define(
                 $location.path('/team/member/new').search({}).hash('');
                 break;
 
+              case 'team/member/search':
+                $location.path('/team/member/search').search({}).hash('');
+                break;
+
               case 'team-telefoon/agenda':
                 $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid).search({}).hash('');
                 break;

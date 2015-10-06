@@ -1,18 +1,19 @@
-.page-header
-	h2.nullable {{ui.teamup.teams}}
-.tabbable.tabs-left
-	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
-		include ../teams/tabs
-	.tab-content
-		#newTeamTab.tab-pane(class="active")
-			.tab-header
-				h3.pull-left {{ui.teamup.newTeam}} 
-			hr
-			form.form
-				.control-group
-					input.input-xlarge.search-query.controls(type='text',
-					placeholder='{{ui.teamup.teamName}}',
-					ng-model='editForm.name')
-				.control-group
-					button.btn.btn-success.confirmButton.controls(type='button',
-					ng-click='team.create(teamForm)') {{ui.teamup.createTeam}}
+div(style='padding-top: 1px;')
+	.page-header
+		h2.nullable {{ui.teamup.teams}}
+	.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include ../teams/tabs
+		.tab-content
+			#newTeamTab.tab-pane(class="active")
+				.tab-header
+					h3.pull-left {{ui.teamup.newTeam}} 
+				hr
+				form.form
+					.control-group
+						input.input-xlarge.search-query.controls(type='text',
+						placeholder='{{ui.teamup.teamName}}',
+						ng-model='editForm.name')
+					.control-group
+						button.btn.btn-success.confirmButton.controls(type='button',
+						ng-click='team.create(editForm)') {{ui.teamup.createTeam}}
