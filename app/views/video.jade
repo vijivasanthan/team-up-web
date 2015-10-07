@@ -19,8 +19,9 @@
 			.tab-header(ng-if='! hasCall')
 				p {{ ui.video.videoNotLoaded }}
 			hr
-			div(ng-if="hasCall" class="responsive_video")
+			div( class="responsive_video")
 				iframe(data-ng-src="{{ getCall() }}" frameborder="0" allowfullscreen)
 				//(class="embed-responsive embed-responsive-16by9")
 						.frame-container
 				///embed-responsive embed-responsive-16by9
+					//ng-if="hasCall"
