@@ -133,7 +133,7 @@ define(
                   method: 'POST',
                   params: {
                     first: 'teamTelephone',
-                    second: 'video',
+                    second: 'call',
                     phoneNumber: '',
                   },
                 },

@@ -24,6 +24,25 @@ define(
             var url = config.app.videoCallUrl + '/?room=' + (data.callId || 123) + '&username=' + data.fullName;
             return $filter('trusted_url')(url);
           };
+
+          function displayMessage(evt)
+          {
+            console.log('evt', evt);
+            console.error(evt.data);
+
+            if(evt.data === 'stop')
+            {
+              window.history.back();
+            }
+          }
+
+          if (window.addEventListener) {
+            // For standards-compliant web browsers
+            window.addEventListener("message", displayMessage, false);
+          }
+          else {
+            window.attachEvent("onmessage", displayMessage);
+          }
         }
     );
   }
