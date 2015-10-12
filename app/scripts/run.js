@@ -927,28 +927,20 @@ define(
           $rootScope.hangup = null;
 
           function displayMessage (evt) {
+            console.error('evt', evt);
+            
             if (evt.origin === config.app.videoCallUrl)
             {
-              $rootScope.hangup = evt.data;
-              $rootScope.$apply();
 
-              if(!_.isNull($rootScope.hangup))
+              console.error('Hangup triggerd');
+              if(evt.data == 'left')
               {
-                var location = $location.path().split('/');
-
-                if(location[1] === 'video'
-                  && ! Session.check())
-                {
-                  $location.path("/login");
-                  $rootScope.$apply();
-
-                }
-                else
-                {
-                  $rootScope.closeVideoCall();
-                }
+                $rootScope.hangup = evt.data;
+                $rootScope.$apply();
+                $rootScope.closeVideoCall();
                 $rootScope.hangup = null;
               }
+
 
 
             }
