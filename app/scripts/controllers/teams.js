@@ -7,9 +7,27 @@ define(
     controllers.controller(
       'teamCtrl',
       function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission)
+                TeamUp, $timeout, MD5, Profile, $interval, CurrentSelection, Permission)
       {
         $rootScope.fixStyles();
+
+
+        // Example without progress Bar
+        $scope.loadingWithProgress = function () {
+          // Set progress 0;
+          $scope.laddaLoadingBar = 0;
+          // Run in every 30 milliseconds
+          var interval = $interval(function () {
+            // Increment by 1;
+            $scope.laddaLoadingBar++;
+            if ($scope.laddaLoadingBar >= 100) {
+              // Cancel interval if progress is 100
+              $interval.cancel(interval);
+              //Set ladda loading false
+              $scope.laddaLoadingBar = false;
+            }
+          }, 30);
+        };
 
         $scope.data = {
           teams: data.teams,

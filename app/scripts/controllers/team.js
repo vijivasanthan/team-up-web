@@ -67,7 +67,7 @@ define(
           }
         };
 
-        self.init = function (current, callback)
+        self.init = function (current)
         {
           Team.init(current);
           self.list = Team.getList();

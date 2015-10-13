@@ -22,6 +22,8 @@ require.config(
       angular: '../vendors/angular/angular.min',
       plugins: 'plugins',
       domReady: '../vendors/requirejs-domready/domReady',
+      spin: '../vendors/ladda/dist/spin.min',
+      ladda: '../vendors/ladda/dist/ladda.min',
       bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
@@ -66,6 +68,7 @@ require.config(
       'angular-md5': { deps: ['angular'], exports: 'angular' },
       bootstrap: { deps: ['jquery'], exports: 'jQuery' },
       lawnchair: { deps: [], exports: 'Lawnchair' },
+      'ladda': { deps: [],  exports: 'Ladda'},
       dom: { deps: ['lawnchair'], exports: 'Lawnchair' },
       timeline: { deps: [], exports: 'links.Timeline' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
@@ -160,6 +163,7 @@ require(
     'directives/widgets',
     'directives/date-range-picker',
     'directives/log-ranger',
+    'directives/ladda-button',
 
     'modals/task',
     'modals/slots',
@@ -227,7 +231,8 @@ require(
     'jquery-ui',
     'angular-sortable-view',
     'locale',
-    'clj-fuzzy'
+    'clj-fuzzy',
+    'ladda'
   ],
   function (angular, domReady)
   {

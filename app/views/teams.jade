@@ -80,6 +80,11 @@ aria-hidden='true')
 
 .page-header
 	h2.nullable {{ui.teamup.teams}}
+	button(class="btn btn-success ladda-button" 
+		ng-click="loadingWithProgress();" 
+		ladda-button="laddaLoadingBar" 
+		data-style="zoom-in")
+		span(class="ladda-label") Synchroniseren
 	.selectGroup(
 		ng-show='data.teams.length > 1 && !views.newTeam')
 		span.selectTitles
