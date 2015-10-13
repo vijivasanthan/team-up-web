@@ -40,7 +40,6 @@
 @import "app/variables";
 // Modify this for custom colors, font-sizes, etc
 @import "app/mixins";
-@import "app/ladda";
 //@import "variables";
 //@import "mixins";
 // TODO: remove reset
@@ -84,6 +83,7 @@
 @import 'app/sheets';
 @import 'app/admin';
 @import 'app/logs';
+@import "app/ladda";
 
 
 
