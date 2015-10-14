@@ -591,12 +591,13 @@ define(
               $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
               return false;
             }
+            //We need a feature toggle here. Show or hide clients in task selection menu
 
-            if (!task.client || task.client == null)
+            /*if (!task.client || task.client == null)
             {
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
               return false;
-            }
+            }*/
 
             return true;
           };
