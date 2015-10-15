@@ -22,6 +22,11 @@ define(['services/services', 'config'],
         // public methods \\
         (function ()
         {
+          /**
+           * Update a single team in the list
+           * @param oldEditedTeam The team before the update
+           * @param newEditedTeam The team after the update
+           */
           this.updateList = function (oldEditedTeam, newEditedTeam)
           {
             var index = _.findIndex(this.list, {uuid: oldEditedTeam.uuid});
@@ -31,35 +36,56 @@ define(['services/services', 'config'],
               this.list[index] = newEditedTeam;
             }
           };
+
+          /**
+           * Get the list of teams
+           * @returns {*}
+           */
           this.getList = function ()
           {
             return this.list;
           };
-          this.removeFromList = function (currentTeam)
+
+          /**
+           * Remove a team from the list
+           * @param currentTeam
+           */
+          this.removeFromList = function (teamId)
           {
-            var index = _.findIndex(this.list, {uuid: currentTeam});
+            var index = _.findIndex(this.list, {uuid: teamId});
 
             if (index >= 0)
             {
-              console.error('index', index);
               this.list.splice(index, 1);
               Store('app').save('teams', this.list);
-              //console.error('this.list', this.list);
-              //CurrentSelection.local = this.list[0].uuid;
-
+              this.setCurrent(this.list[0].uuid);
             }
           };
 
+          /**
+           * Set the current team
+           * @param teamId
+           */
           this.setCurrent = function (teamId)
           {
+            CurrentSelection.local = teamId;
             this.current.teamId = teamId;
           };
 
+          /**
+           * Get the current team
+           * @returns {*}
+           */
           this.getCurrent = function ()
           {
             return this.current;
           };
 
+          /**
+           * Create a new team
+           * @param team the data of the new team, (Only a name)
+           * @returns {*}
+           */
           this.create = function (team)
           {
             var self = this;
@@ -70,7 +96,7 @@ define(['services/services', 'config'],
             }
             $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
-            return TeamUp._('teamAdd',
+            TeamUp._('teamAdd',
               {id: $rootScope.app.resources.uuid},
               team)
               .then(function (newTeam)
@@ -109,11 +135,16 @@ define(['services/services', 'config'],
               });
           };
 
-          this.update = function (editedTeam)
+          /**
+           * Update the current team
+           * @param team
+           * @returns {*}
+           */
+          this.update = function (team)
           {
             var self = this;
 
-            if (!editedTeam.name)
+            if (!team.name)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
               return;
@@ -121,10 +152,10 @@ define(['services/services', 'config'],
 
             $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
 
-            return TeamUp._('teamUpdate', {second: editedTeam.uuid}, editedTeam)
+            return TeamUp._('teamUpdate', {second: team.uuid}, team)
               .then(function (result)
               {
-                self.updateList(editedTeam, result);
+                self.updateList(team, result);
                 return result.error && result || Teams.getAll();
               })
               .then(function (teams)
@@ -138,7 +169,7 @@ define(['services/services', 'config'],
               });
           };
 
-          this.delete = function (current)
+          this.delete = function (teamId)
           {
             var self = this,
               deferred = $q.defer();
@@ -146,17 +177,16 @@ define(['services/services', 'config'],
             angular.element('#confirmTeamModal').modal('hide');
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
-            TeamUp._('teamDelete', {second: current})
+            TeamUp._('teamDelete', {second: teamId})
               .then(function (teamDelete)
               {
-                self.removeFromList(current);
+                self.removeFromList(teamId);
                 return teamDelete.error && teamDelete || Teams.getAll();
               })
               .then(function (teams)
               {
                 if (!teams.error)
                 {
-                  self.setCurrent(self.list[0].uuid);
                   deferred.resolve(self.getCurrent());
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   $rootScope.statusBar.off();
@@ -167,52 +197,51 @@ define(['services/services', 'config'],
           };
 
           /**
-           * teamOption 1: Removes member from all his teams before adding to the current selected team
+           * Add a member to a team
+           * teamOption 1: Removes member from all his
+           *  teams before adding to the current selected team
            * teamOption 2: Add member to the current selected team
            * @param member member the userobject
            * @param teamOption could be 1 or 2 replace or add
            */
-          this.addMember = function(member, teamOption)
+          this.addMember = function (member, teamOption)
           {
-            var self = this,
-              add = function(member, teamId)
+            var self = this;
+            var add = function (memberId, teamId)
               {
                 TeamUp._(
                   'teamMemberAdd',
                   {second: teamId},
-                  {ids: [member.uuid]}
-                ).then(function()
-                {
-                  return Profile.fetchUserData(member.uuid);
-                })
-                .then(function(user)
-                {
-                  $location.path('team/members');
-                });
+                  {ids: [memberId]}
+                ).then(function ()
+                  {
+                    return Profile.fetchUserData(memberId);
+                  })
+                  .then(function ()
+                  {
+                    $location.path('team/members');
+                  });
               };
 
             angular.element('#confirmMemberAddModal').modal('hide');
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
 
-            if (teamOption == 1)
-            {
-              Teams.removeAll(member)
-                .then(function(result)
-                {
-                  add(member, self.current.teamId);
-                }
-              );
-            }
-            else
-            {
-              add(member, self.current.teamId);
-            }
+            (teamOption == 2)
+              ? add(member.uuid, self.current.teamId)
+              : Teams.removeAll(member)
+                  .then(function (result)
+                  {
+                    add(member.uuid, self.current.teamId);
+                  });
           };
 
+          /**
+           * Initialize the current team and list of all teams
+           * @param teamId
+           */
           this.init = function (teamId)
           {
             var _teamId = teamId || CurrentSelection.getTeamId();
-            CurrentSelection.local = _teamId;
 
             this.list = Store('app').get('teams');
             this.current = {};

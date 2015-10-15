@@ -136,16 +136,14 @@ define(['services/services', 'config'],
                 ($rootScope.app.resources.role > 1 &&
                 $rootScope.app.resources.teamUuids.length)
                   ? Team.removeFromList(teamId)//update the the list of teams in the view
-                  : self.removeFromList(member);
-                //remove team from list and update current team
+                  : self.removeFromList(member);//remove team from list and update current team
               }
               else
               {
                 self.removeFromList(member);
               }
 
-              deferred.resolve((loggedUser && $rootScope.app.resources.teamUuids.length)
-                && member.role > 1);
+              deferred.resolve(true);
 
               $rootScope.statusBar.off();
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);

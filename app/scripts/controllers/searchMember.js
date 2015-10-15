@@ -10,13 +10,17 @@ define(
       {
         var self = this;
 
-        self.searchResults = null;
-        self.searchValue = "";
-        self.searchSubmit = false;
-        self.searchTeams = [];
+        self.searchResults = null; //The searchresult are by default empty
+        self.searchValue = ""; // The value of the search is empty by start
+        self.searchSubmit = false; //The submit button on the search field is default false
+        self.searchTeams = []; //The teams of the members found by the searched value
 
-        Team.init();
+        Team.init();//initialize the team service, so there is a current team and a list of teams
 
+        /**
+         * Search for a member by his first -and/or lastname
+         * @param value
+         */
         self.search = function (value)
         {
           self.findMembersLoad = true;
@@ -27,26 +31,6 @@ define(
               self.searchResults = result.members;
               self.searchTeams = result.teams;
             });
-        };
-
-        /**
-         * Confirm to add a member
-         * Check if member is already in a team,
-         * if that's the case ask if that member needs to leave
-         * his current team for the new team
-         * @param member the userobject added to the team
-         */
-        self.confirmAddTeamMember = function (member)
-        {
-          if (member.teamUuids.length > 0)
-          {
-            self.selected = member;
-            angular.element('#confirmMemberAddModal').modal('show');
-          }
-          else
-          {
-            self.addExistingMember(member);
-          }
         };
       }
     );

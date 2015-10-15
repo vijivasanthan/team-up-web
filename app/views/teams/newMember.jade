@@ -10,7 +10,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			ng-selected='team.current.teamId',
 			ng-change='team.init(team.current.teamId)')
 		
-	.tabbable.tabs-left
+	.teams-section.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 			include ../teams/tabs
 		.tab-content
