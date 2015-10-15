@@ -67,7 +67,23 @@ define(
           }
         };
 
-        self.init = function (current, callback)
+        /**
+         * Confirm to add a member
+         * Check if member is already in a team,
+         * if that's the case ask if that member needs to leave
+         * his current team for the new team
+         * @param member the userobject added to the team
+         * @param teamOption
+         * @confirm
+         */
+        self.addMember = function(member, teamOption, confirm)
+        {
+          (! confirm)
+            ? angular.element('#confirmMemberAddModal').modal('show')
+            : Team.addMember(member, teamOption);
+        };
+
+        self.init = function (current)
         {
           Team.init(current);
           self.list = Team.getList();

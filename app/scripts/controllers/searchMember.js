@@ -10,9 +10,12 @@ define(
       {
         var self = this;
 
-        self.membersBySearch = null;
-        self.memberValue = "";
-        self.findMemberSubmit = false;
+        self.searchResults = null;
+        self.searchValue = "";
+        self.searchSubmit = false;
+        self.searchTeams = [];
+
+        Team.init();
 
         self.search = function (value)
         {
@@ -20,10 +23,9 @@ define(
           Member.search(value)
             .then(function(result)
             {
-              self.findMembersLoad = false;
-              self.membersBySearch = result.members;
-              console.error('result', result);
-              console.error('self.membersBySearch', self.membersBySearch);
+              self.load = false;
+              self.searchResults = result.members;
+              self.searchTeams = result.teams;
             });
         };
 
@@ -38,7 +40,7 @@ define(
         {
           if (member.teamUuids.length > 0)
           {
-            self.member = member;
+            self.selected = member;
             angular.element('#confirmMemberAddModal').modal('show');
           }
           else

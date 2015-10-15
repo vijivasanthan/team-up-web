@@ -123,33 +123,32 @@ define(['services/services', 'config'],
               'teamMemberDelete',
               {second: teamId},
               {ids: [memberId]}
-            )
-              .then(function ()
+            ).then(function ()
+            {
+              var loggedUser = (memberId === $rootScope.app.resources.uuid);
+              if (memberId === $rootScope.app.resources.uuid)
               {
-                var loggedUser = (memberId === $rootScope.app.resources.uuid);
-                if (memberId === $rootScope.app.resources.uuid)
-                {
-                  //update localTeams and return if there is
-                  self.updateLocalTeams(memberId, teamId);
+                //update localTeams and return if there is
+                self.updateLocalTeams(memberId, teamId);
 
-                  //Check if the user is a teammember, otherwise the team
-                  //needs to be removed, because there is no permission anymore to read
-                  ($rootScope.app.resources.role > 1 &&
-                  $rootScope.app.resources.teamUuids.length)
-                    ? Team.removeFromList(teamId)//update the the list of teams in the view
-                    : self.removeFromList(member);
-                }
-                else
-                {
-                  self.removeFromList(member);
-                }
+                //Check if the user is a teammember, otherwise the team
+                //needs to be removed, because there is no permission anymore to read
+                ($rootScope.app.resources.role > 1 &&
+                $rootScope.app.resources.teamUuids.length)
+                  ? Team.removeFromList(teamId)//update the the list of teams in the view
+                  : self.removeFromList(member);
+              }
+              else
+              {
+                self.removeFromList(member);
+              }
 
-                deferred.resolve((loggedUser && $rootScope.app.resources.teamUuids.length)
-                  && member.role > 1);
+              deferred.resolve((loggedUser && $rootScope.app.resources.teamUuids.length)
+                && member.role > 1);
 
-                $rootScope.statusBar.off();
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-              });
+              $rootScope.statusBar.off();
+              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+            });
             return deferred.promise;
           };
 
@@ -240,27 +239,9 @@ define(['services/services', 'config'],
             else
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
-              //$scope.findMembersLoad = true;
-
               TeamUp._('findMembers', { query: name })
                 .then(function(members)
                 {
-                  //if (! result.error)
-                  //{
-                  //  $scope.membersBySearch = result.members;
-                  //
-                  //  if ($scope.membersBySearch && result.teams)
-                  //  {
-                  //    result.teams = ($rootScope.app.resources.role == 1)
-                  //      ? Store('app').get('teams')
-                  //      : _.union(result.teams, Store('app').get('teams'));
-                  //
-                  //    Store('app').save('searchMembersTeams', result.teams);
-                  //  }
-                  //
-                  //  $rootScope.statusBar.off();
-                  //  $scope.findMembersLoad = false;
-                  //}
                   deferred.resolve(members);
                   $rootScope.statusBar.off();
                 }
