@@ -35,15 +35,7 @@ define(
           else
           {
             Member
-              .deleteFromSingleTeam(current, teamId, callback)
-              .then(function (memberHasRoleTeamMember)
-              {
-                // Check if the role is team member
-                if (memberHasRoleTeamMember)
-                {
-                  (callback && callback());
-                }
-              });
+              .deleteFromSingleTeam(current, teamId);
           }
         };
 

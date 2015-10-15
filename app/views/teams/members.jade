@@ -16,7 +16,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 					button.btn.btn-default(type='button',
 					data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 					button.btn.btn-primary(type='button',
-					ng-click='member.delete(member.current, true, team.current.teamId)') {{ui.teamup.confirms.remove}}
+					ng-click='member.delete(member.current, team.current.teamId, true)') {{ui.teamup.confirms.remove}}
 	
 	#confirmTeamModal.modal.fade(tabindex='-1',
 	role='dialog',
