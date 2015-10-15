@@ -26,8 +26,9 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 									.form-group
 										label.control-label {{ui.profile.firstName}}
 										.controls
-											input.span4(type='text', autofocus="true",
-											ng-model='member.form.firstName')
+											input.span4(type='text', 
+												focus
+												ng-model='member.form.firstName')
 									.form-group
 										label.control-label {{ui.profile.lastName}}
 										.controls
