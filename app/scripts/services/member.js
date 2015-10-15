@@ -137,6 +137,7 @@ define(['services/services', 'config'],
                 $rootScope.app.resources.teamUuids.length)
                   ? Team.removeFromList(teamId)//update the the list of teams in the view
                   : self.removeFromList(member);
+                //remove team from list and update current team
               }
               else
               {

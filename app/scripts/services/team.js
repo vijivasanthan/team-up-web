@@ -44,7 +44,9 @@ define(['services/services', 'config'],
               console.error('index', index);
               this.list.splice(index, 1);
               Store('app').save('teams', this.list);
-              console.error('this.list', this.list);
+              //console.error('this.list', this.list);
+              //CurrentSelection.local = this.list[0].uuid;
+
             }
           };
 
