@@ -7,8 +7,8 @@ define(
     services.factory(
       'Teams',
       [
-        '$resource', '$q', 'Store', '$rootScope', 'TeamUp', '$injector',
-        function ($resource, $q, Store, $rootScope, TeamUp, $injector)
+        '$resource', '$q', 'Store', 'moment', '$rootScope', 'TeamUp', '$injector',
+        function ($resource, $q, Store, moment, $rootScope, TeamUp, $injector)
         {
           var TeamsService = $resource();
 
@@ -201,8 +201,8 @@ define(
               'teamTaskQuery',
               {
                 second: options.groupId,
-                from: new Date(options.range.start).getTime(),
-                to: new Date(options.range.end).getTime()
+                from: moment(options.range.start, "DD MMM. YYYY").valueOf(),
+                to: moment(options.range.end, "DD MMM. YYYY").valueOf()
               }
             ).then(
               function (tasks)
@@ -244,8 +244,6 @@ define(
                   {
                     if (groupIds.indexOf(group.id) != -1 && flag)
                     {
-                      // console.log('putting in ->', group.id);
-
                       returnValue[team.uuid] = group.id;
 
                       flag = false;

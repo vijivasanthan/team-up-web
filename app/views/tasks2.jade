@@ -25,7 +25,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only {{ ui.message.close }}
 				h4#taskModalLabel.modal-title
-					span.text-turq {{task.relatedClient.fullName}}
+					span.text-turq(ng-if='app.domainPermission.clients') {{task.relatedClient.fullName}}
 					br
 					| {{task.plannedTaskDuration.label}}
 			.modal-body
@@ -46,10 +46,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							a(href='index.html#/profile/{{task.authorUuid}}#profile')
 								| {{author}}
 
-				hr
+				hr(ng-if='app.domainPermission.clients')
 
 				//h4.pull-right Cliëntinformatie
-				dl
+				dl(ng-if='app.domainPermission.clients')
 					dt {{ ui.teamup.client }}
 						dd
 							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
@@ -69,7 +69,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					dt(ng-show='task.assignedTeamMember') {{ ui.teamup.name }}
 						dd
 							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
-									| {{task.assignedTeamMember.fullName}}
+								| {{task.assignedTeamMember.fullName}}
 					dt Team
 						dd
 							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
@@ -78,10 +78,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
-	.selectGroup(ng-show='views.allTasks && (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
+	.selectGroup(ng-show='views.allTasks (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
-		select(current_selection='team' ng-model='task.team',
+		select( ng-model='task.team',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 		ng-selected='currentTeam',
 		ng-change='changeTeam(task.team)')
@@ -103,7 +103,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			a(data-toggle='tab', ng-click='setViewTo("newTask")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
-		li(class="{{(views.upload==true) && 'active'}}")
+		li(class="{{(views.upload==true) && 'active'}}" ng-if='app.domainPermission.clients')
 			a(data-toggle='tab', ng-click='setViewTo("upload")')
 				span.entypo &#59213;
 				| {{ui.task.upload}}
@@ -128,7 +128,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
 
 			article(ng-hide='tasks.mine.loading')
-			
 				.well(style='padding-top: 25px',
 					ng-show='tasks.mine.archieve')
 					label
@@ -146,11 +145,11 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							th
 								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
-							th
-							th
+							th(ng-if='app.domainPermission.clients')
+							th(ng-if='app.domainPermission.clients')
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
-							th {{ui.task.information}}
+							th(ng-if='app.domainPermission.clients'){{ui.task.information}}
 							th
 								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
 									i.icon-sort
@@ -159,13 +158,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					tbody
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
-							td
+							td(ng-if='app.domainPermission.clients')
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
-							td
+							td(ng-if='app.domainPermission.clients')
 								small
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
-							td
+							td(ng-if='app.domainPermission.clients')
 								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress'  aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 							td
@@ -216,10 +215,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
 							th
-							th
+								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
+									i.icon-sort
+							th(ng-if='app.domainPermission.clients')
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
-							th {{ui.task.information}}
+							th(ng-if='app.domainPermission.clients') {{ui.task.information}}
 							th(colspan='2')
 							th
 								a(ng-click='orderBy("assignedTeamMember.fullName")') {{ ui.task.member }}
@@ -231,18 +232,18 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
 						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed | filter: task.team')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
-							td
+							td(ng-if='app.domainPermission.clients')
 								.roundedPicSmall.memberStateBusy(
 								back-img='{{task.relatedClientUuid |  avatar:"client":"80"}}'
 								)
-							td
+							td(ng-if='app.domainPermission.clients')
 								small
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
 							td
-								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
+								span.taskIcon.icon-location4(ng-if='app.domainPermission.clients' ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
-								br
+								br(ng-if='app.domainPermission.clients')
 								span.taskIcon.icon-time(aria-hidden='true')
 								small {{task.plannedTaskDuration.label}}
 							td
@@ -296,13 +297,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 									ng-selected='currentTeam',
 									ng-change='changeTeam(task.team)')
-										option(value='') {{ ui.teamup.team }}
+										option(value='') {{ ui.teamup.selectTeam }}
 									select(ng-model='task.member',
 									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
 									ng-selected='currentMember')
 										option(value='') {{ ui.teamup.member }}
 
-							.form-group
+							.form-group(ng-if='app.domainPermission.clients')
 								label.control-label {{ ui.teamup.client }}
 								.controls
 									select(ng-model='currentGroup',
@@ -405,6 +406,4 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
 					
 		
-		#upload.tab-pane(class="{{(views.upload==true) && 'active'}}"
-		ng-controller='uploadCtrl')
-			include upload/upload.jade
+					

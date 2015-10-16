@@ -33,8 +33,7 @@ define(
               myTasks: false,
               allTasks: false,
               newTask: false,
-              editTask: false,
-              upload: false
+              editTask: false
             };
 
             $scope.showAllTasks = false;
@@ -103,8 +102,6 @@ define(
                 break;
               case 'newTask':
                 break;
-              case 'upload':
-                break;
             }
           };
 
@@ -141,7 +138,6 @@ define(
               uuid: task.uuid,
               team: task.assignedTeamUuid,
               member: task.assignedTeamMemberUuid,
-              client: task.relatedClientUuid,
               start: {
                 date: new Date(task.plannedStartVisitTime),
                 time: task.plannedStartVisitTime,
@@ -403,7 +399,7 @@ define(
             trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
 
             task.assignedTeamMemberUuid = null;
-            task.assignedTeamUuid = null;
+            //task.assignedTeamUuid = null;
 
             updateTask(task);
           };

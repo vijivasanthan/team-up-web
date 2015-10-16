@@ -712,7 +712,7 @@ define(
                 groupId: $scope.currentClientGroup,
                 name: $scope.currentName,
                 group: 'clientgroep',
-                range: {}
+                range: range
               };
             }
             else if ($location.hash() == 'teams')
@@ -722,7 +722,7 @@ define(
                 groupId: $scope.currentTeam,
                 name: $scope.currentName,
                 group: 'team',
-                range: {}
+                range: range
               };
             }
 
@@ -734,8 +734,8 @@ define(
             //TODO als de range een dag is de datum is doe dan van 0:00 - 23:59
             if (!_.isUndefined(range))
             {
-              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
-              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM. YYYY");
+              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM YYYY");
+              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM YYYY");
             }
 
             //TODO the above moment will be depricated, the createFromInputFallback might be a solution
@@ -830,7 +830,7 @@ define(
                       $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
                       $rootScope.statusBar.off();
                       $scope.resetInlineForms();
-
+                      console.log(123);
                       $rootScope.planboardSync.start();
                     });
                   }
@@ -956,7 +956,7 @@ define(
                     $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
                     return;
                   }
-                  else if ($scope.views.clients)
+                  else if ($scope.views.clients && app.domainPermission.clients)
                   {
                     $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
                     return;

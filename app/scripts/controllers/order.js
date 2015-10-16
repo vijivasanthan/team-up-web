@@ -11,7 +11,6 @@ define(
         $rootScope.fixStyles();
 
         var tempOrder = [];
-
         $scope.currentTeam = CurrentSelection.getTeamId();
 
         $scope.test = ["1.0", "1.3", "1.1", "1.5", "1.6", "1.7", "1.8",

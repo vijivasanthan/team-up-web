@@ -64,7 +64,7 @@ div(ng-controller='timeline as taskPlanboard')
 			
 				// TODO: Look at to this later on!
 				//div(ng-show='relatedUsers.length > 0')
-				.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+				.form-elements-group(ng-if='app.domainPermission.clients' ng-show='views.slot.add || views.slot.edit || views.member')
 					label {{relatedUserLabel}}
 					select(ng-model='slot.relatedUser',
 					ng-options='r.uuid as r.name for r in relatedUsers',
@@ -206,14 +206,14 @@ div(ng-controller='timeline as taskPlanboard')
 					a(data-toggle='tab', ng-click='nav("tasks2/newtask")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.newTask}}
-				li(class="{{(views.upload==true) && 'active'}}")
+				li(ng-if='app.domainPermission.clients' class="{{(views.upload==true) && 'active'}}")
 					a(data-toggle='tab', ng-click='nav("tasks2/upload")')
 						span.entypo &#59213;
 						| {{ui.task.upload}}
 				li(class="{{(views.teams==true || views.clients==true) && 'active'}}")
 					a(data-toggle='tab', ng-click='setViewTo(current,"teams")')
 						span.entypo &#128340;
-						| {{ ui.agenda.planboard }}
+						| {{ ui.planboard.planboard }}
 	
 			.tab-content.treegrid-container(ng-controller='treegrid')
 	
@@ -222,7 +222,8 @@ div(ng-controller='timeline as taskPlanboard')
 					.tab-header
 						//h3.pull-left {{currentName}}
 						//div(ng-show='app.resources.role == 1')
-						.btn-group.pull-right
+						.btn-group.pull-right(ng-if='app.domainPermission.clients')
+							
 							button.btn.btn-primary(type='button',
 							class="{{(views.clients==true) && 'active'}}",
 							data-toggle='tab',

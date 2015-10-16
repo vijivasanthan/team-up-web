@@ -1577,6 +1577,7 @@ define(
           hour: 'Stunde',
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
+          selectMember: 'Select member',
           clients: 'Patienten',
           logs: 'Logs',
           order: 'Auftrag',

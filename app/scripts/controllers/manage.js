@@ -227,7 +227,7 @@ define(
           {
             if (typeof $scope.dataChanged != 'undefined' && $scope.dataChanged($location.$$hash))
             {
-              if (! confirm($rootScope.ui.teamup.managePanelchangePrompt))
+              if (! ($rootScope.ui.teamup.managePanelchangePrompt))
               {
                 event.preventDefault();
 
