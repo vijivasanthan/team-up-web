@@ -734,8 +734,8 @@ define(
             //TODO als de range een dag is de datum is doe dan van 0:00 - 23:59
             if (!_.isUndefined(range))
             {
-              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM. YYYY");
-              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM. YYYY");
+              $scope.removeTaskOptions.range.start = moment(range.start).format("DD MMM YYYY");
+              $scope.removeTaskOptions.range.end = moment(range.end).format("DD MMM YYYY");
             }
 
             //TODO the above moment will be depricated, the createFromInputFallback might be a solution
