@@ -2718,7 +2718,7 @@ define(
           del: 'Verwijder',
           seconds: "seconden",
           noMembers: 'Geen leden in dit team.',
-          newTeam: 'Nieuw Team',
+          newTeam: 'Nieuw team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
           newMember: 'Nieuw teamlid',
