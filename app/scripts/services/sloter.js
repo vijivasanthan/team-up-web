@@ -109,16 +109,16 @@ define(['services/services', 'config'],
               return '<div class="time-tip" title="' + content + '">' + content + '</div>'
             },
 
-            user: function (data, timedata, config, routeUserId, routeUserFullName, loggedUserId)
+            user: function (data, timedata, config, routeUserId, routeUser, loggedUser, current)
             {
               var _this = this,
                 planning = $rootScope.ui.planboard.planning,
                 weekPlanning = $rootScope.ui.planboard.weeklyPlanning;
 
-              if(routeUserId != loggedUserId)
+              if(routeUserId != loggedUser.uuid)
               {
-                planning = $rootScope.ui.planboard.planningOf + routeUserFullName;
-                weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + routeUserFullName;
+                planning = $rootScope.ui.planboard.planningOf + routeUser.fullName;
+                weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + routeUser.fullName;
               }
 
               _.each(data.user, function (slot, index)
@@ -149,10 +149,14 @@ define(['services/services', 'config'],
                 }.bind(this));
               }.bind(this));
 
-              timedata = _this.addLoading(data, timedata, [
-                _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
-                _this.wrapper('a') + planning + _this.wrapper('planning')
-              ]);
+              var currentSelectedUser = ((routeUser.teamUuids).indexOf(current.group) >= 0)
+                  ? [
+                    _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
+                    _this.wrapper('a') + planning + _this.wrapper('planning')
+                    ]
+                  : [];
+
+              timedata = _this.addLoading(data, timedata, currentSelectedUser);
 
               return timedata;
             },
@@ -666,16 +670,14 @@ define(['services/services', 'config'],
               return filtered;
             },
 
-            process: function (data, _config, divisions, routeUserId, privilage, routeUserFullName, current, loggedUserId)
+            process: function (data, _config, divisions, routeUserId, privilage, routeUser, current, loggedUser)
             {
               var _this = this,
                 timedata = [];
 
-              //console.log('dataaaa', data);
-
               if (data.user)
               {
-                timedata = _this.user(data, timedata, _config, routeUserId, routeUserFullName, loggedUserId);
+                timedata = _this.user(data, timedata, _config, routeUserId, routeUser, loggedUser, current);
               }
 
               if (data.aggs)

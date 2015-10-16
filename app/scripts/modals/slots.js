@@ -419,7 +419,7 @@ define(['services/services', 'config'],
             if (resources)
             {
               // TODO: Use mathematical formula to calculate it
-              var now = moment().unix();;
+              var now = moment().unix();
 
               //now = String(Date.now().getTime());
               //now = Number(now.substr(0, now.length - 3));
