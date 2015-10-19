@@ -829,9 +829,7 @@ define(
           return _date || date;
         }
       }
-    ]);
-
-
+    ])
 
 
     // /**

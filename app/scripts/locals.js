@@ -2826,7 +2826,9 @@ define(
               return "Er zijn " + amountTasks + " taken."
             }
           },
+
           carer: 'Verzorger',
+          employee: 'Team en medewerker',
           information: 'Informatie',
           noTasks: 'Geen taken',
           clientName: 'Cliënt ',

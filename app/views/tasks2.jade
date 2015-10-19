@@ -290,7 +290,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						fieldset
 
 							.form-group
-								label.control-label {{ ui.task.carer }}
+								label.control-label(ng-if='app.domainPermission.clients != true') {{ ui.task.employee }}
+								label.control-label(ng-if='app.domainPermission.clients') {{ ui.task.carer }}
 								.controls
 									select(current_selection='team', 
 									ng-model='task.team',

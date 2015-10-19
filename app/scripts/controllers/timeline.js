@@ -13,12 +13,13 @@ define(
         '$timeout',
         '$route',
         '$window',
+        '$filter',
         'Dater',
         'TeamUp',
         'Store',
         'Teams',
         'moment',
-        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, Dater, TeamUp, Store, Teams, moment)
+        function ($rootScope, $scope, $q, $location, $timeout, $route, $window, $filter, Dater, TeamUp, Store, Teams, moment)
         {
           var range, diff;
 
@@ -211,20 +212,51 @@ define(
                             task.plannedEndVisitTime = offset;
                           }
 
+                          var description = $filter('limitTo')(task.description, 20, 0);
+                          if (description == null){
+                            description = 'Geen beschrijving';
+                          }
+                          if (description.length >= 20)
+                          {
+
+                            description = description + '...';
+                          }
+
+
                           // FIXME: Organise this one!
-                          var content = '<span>' + slotContent + '</span>' +
-                            "<input type=hidden value='" +
-                            angular.toJson(
-                              {
-                                type: 'slot',
-                                id: task.uuid,
-                                mid: task.authorUuid,
-                                description: task.description,
-                                clientUuid: task.relatedClientUuid,
-                                memberId: task.assignedTeamMemberUuid
-                              }
-                            ) +
-                            "'>";
+                          if(app.domainPermission.clients){
+                            var content = '<span>' + slotContent + '</span>' +
+                              "<input type=hidden value='" +
+                              angular.toJson(
+                                {
+                                  type: 'slot',
+                                  id: task.uuid,
+                                  mid: task.authorUuid,
+                                  description: task.description,
+                                  clientUuid: task.relatedClientUuid,
+                                  memberId: task.assignedTeamMemberUuid
+                                }
+                              ) +
+                              "'>";
+                          }
+                          else{
+                            var content = '<span>' + description + '</span>' +
+                              "<input type=hidden value='" +
+                              angular.toJson(
+                                {
+                                  type: 'slot',
+                                  id: task.uuid,
+                                  mid: task.authorUuid,
+                                  description: task.description,
+                                  clientUuid: task.relatedClientUuid,
+                                  memberId: task.assignedTeamMemberUuid
+                                }
+                              ) +
+                              "'>";
+
+                          }
+
+
 
                           timelineData.push(
                             {
