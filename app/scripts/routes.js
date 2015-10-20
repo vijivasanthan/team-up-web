@@ -163,32 +163,18 @@ define(
               controller: 'adminCtrl'
             })
 
-            //.when(
-            //'/team/',
-            //{
-            //  templateUrl: 'views/teams.html',
-            //  controller: 'teamCtrl',
-            //  reloadOnSearch: false,
-            //  resolve: {
-            //    data: [
-            //      'Teams', '$route', '$q',
-            //      function (Teams, $route, $q)
-            //      {
-            //        var teamId = Teams.checkExistence($route.current.params.uuid);
-            //
-            //        return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
-            //          .then(function (teamsData)
-            //          {
-            //            return {
-            //              members: teamsData[0],
-            //              teams: teamsData[1],
-            //              teamId: teamId
-            //            };
-            //          });
-            //      }
-            //    ]
-            //  }
-            //})
+            .when(
+            '/team',
+            {
+              redirectTo: function (routeParams, path, search)
+              {
+                var teamParam = (search.uuid)
+                  ? '?uuid=' + search.uuid
+                  : '';
+
+                return 'team/members' + teamParam;
+              }
+            })
 
             .when(
             '/team/members',
