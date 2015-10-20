@@ -432,7 +432,7 @@ define(['services/services', 'config'],
 
               var groups = this.get.groups(),
                 name = groups[data.aggs[0].id],
-                link = '<a style="text-transform: capitalize" href="#/teams?uuid=' +
+                link = '<a style="text-transform: capitalize" href="#/team?uuid=' +
                   data.aggs[0].id +
                   '#view">' +
                   name +
