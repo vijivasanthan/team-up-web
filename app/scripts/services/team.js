@@ -108,7 +108,7 @@ define(['services/services', 'config'],
               .then(function (teams)
               {
                 //The last added team is the current one
-                CurrentSelection.local = self.list[self.list.length - 1].uuid;
+                self.setCurrent(self.list[self.list.length - 1].uuid);
                 $location.path('team/members');
               });
           };
@@ -122,9 +122,9 @@ define(['services/services', 'config'],
           {
             $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
 
-            var _teamId = teamId || CurrentSelection.getTeamId();
+            var _teamId = teamId || this.getCurrent();
 
-            CurrentSelection.local = _teamId;
+            this.setCurrent(_teamId);
 
             return Teams.getSingle(_teamId)
               .then(function (members)

@@ -31,7 +31,7 @@ define(
             .then(function(members)
             {
               (callback && callback(members));
-              self.init();
+              self.init(teamId);
             });
         };
 
