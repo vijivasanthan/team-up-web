@@ -318,7 +318,7 @@ define(['services/services', 'config'],
                   var actual = '<div class="bar ' + color + '" style="' +
                     style +
                     '" ' +
-                    ' title="' + $root.ui.agenda.currentAmountReachable + ': ' +
+                    ' title="' + $rootScope.ui.agenda.currentAmountReachable + ': ' +
                     num +
                     ' personen">' +
                     span +
