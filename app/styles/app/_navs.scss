@@ -422,6 +422,12 @@
   *border-left-color: $white;
 }
 
+.teams-section {
+  .tab-content {
+    min-height: 334px !important;
+  }
+}
+
 // DISABLED STATES
 // ---------------
 

@@ -220,6 +220,22 @@ define(
             }
           };
 
+          $scope.getTasks = function (section, currentGroup, startTime, endTime)
+          {
+            var taskProvider = (section == 'teams')
+              ? 'teamTaskQuery'
+              : 'clientGroupTasksQuery';
+
+            getTaskProvider(taskProvider,
+              currentGroup,
+              startTime,
+              endTime)
+              .then(function(tasks)
+              {
+                storeTask(tasks, startTime, endTime);
+              });
+          };
+
           function getTaskProvider(query, sectionId, startTime, endTime)
           {
             return TeamUp._(
@@ -267,7 +283,7 @@ define(
 
             $rootScope.$broadcast(
               'timelinerTasks',
-              (periods) ? periods : {start: startTime, end: endTime}
+              periods || {start: startTime, end: endTime}
             );
           };
 

@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'manageCtrl',
         function ($rootScope, $scope, $location, Clients, $route, $routeParams, Store,
-                  Teams, $window, data, TeamUp, $timeout, Permission, $injector, dataMembers)
+                  Teams, $window, data, TeamUp, $filter, $timeout, Permission, $injector, dataMembers)
         {
           $rootScope.fixStyles();
 
@@ -86,6 +86,7 @@ define(
                     members.push(
                       {
                         'name': member.firstName + ' ' + member.lastName,
+                        'lastName': member.lastName,
                         'id': member.uuid
                       }
                     );
@@ -93,7 +94,7 @@ define(
                 }
               );
 
-              data.members = members;
+              data.members = $filter('orderBy')(members, 'lastName');
 
               data.groups = Store('app').get('ClientGroups');
 
@@ -692,7 +693,10 @@ define(
                   {
                     if(currentUserTeams.length != userData.teamUuids.length)
                     {
-                      Permission.getAccess();
+                      Permission.getAccess(function (permissionProfile)
+                      {
+                        if(permissionProfile.chat) $rootScope.$broadcast('loadChatsCurrentTeam');
+                      });
                     }
                   }
                 );

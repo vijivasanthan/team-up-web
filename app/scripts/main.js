@@ -213,6 +213,8 @@ require(
     'controllers/video',
     'controllers/options',
     'controllers/member',
+    'controllers/newMember',
+    'controllers/searchMember',
     'controllers/team',
 
     'bootstrap',

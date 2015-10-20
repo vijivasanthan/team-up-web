@@ -19,3 +19,12 @@ li(data-match-route='/team/member/new'
 		span.icomoon(data-icon='',
 		aria-hidden='true')
 		| {{ui.teamup.newMember}}
+	
+li(data-match-route='/team/member/search'
+	ng-show="app.resources.role == 1 || app.domainPermission.teamSelfManagement")
+	a(data-toggle='tab',
+	ng-click='nav("team/member/search")')
+		span.icomoon(data-icon='',
+		aria-hidden='true')
+		| {{ui.teamup.searchMember}}
+	//data-icon="&#xe948;

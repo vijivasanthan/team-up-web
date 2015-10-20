@@ -6,34 +6,39 @@ define(
 
     controllers.controller(
       'newMember',
-      function (Team)
+      function (Team, Member)
       {
-        this.create = function(team)
+        var self = this;
+        self.roles = Member.getRoles();
+
+        /**
+         * Create new member if the member data is valid
+         * @param member The new member data
+         * @param teamId The current selected team
+         */
+        self.create = function(member, teamId)
         {
-          Team.create(team);
+          if(Member.valid(member))
+          {
+            Member.create(member, teamId);
+          }
         };
 
-        this.update = function (editedTeam)
+        /**
+         * Check if the username is correct, otherwise remove the unwanted chars
+         */
+        self.checkUserName = function ()
         {
-          Team.update(editedTeam)
-            .then(function()
-            {
-              this.updateForm = false;
-            }.bind(this));
-        };
+          var regUserName = /([A-Za-z0-9-_])/g,
+            matchesUserName = (self.form.userName.match(regUserName));
 
-        this.showEditForm = function (currentTeam)
-        {
-          this.updateForm = true;
+          if (!_.isNull(matchesUserName))
+          {
+            matchesUserName = matchesUserName.join('');
+          }
 
-          Team.getName(currentTeam)
-            .then(function(editableTeam)
-            {
-              this.teamEditForm = {
-                name: editableTeam.name,
-                uuid: editableTeam.uuid
-              };
-            }.bind(this));
+          self.UserNameWrong = (self.form.userName !== matchesUserName);
+          self.form.userName = matchesUserName || '';
         };
       }
     );

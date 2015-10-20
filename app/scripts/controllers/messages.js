@@ -6,25 +6,13 @@ define(
 
     controllers.controller(
       'messagesCtrl',
-      [
-        '$scope',
-        '$rootScope',
-        '$q',
-        '$location',
-        '$route',
-        '$filter',
-        '$timeout',
-        'Teams',
-        'TeamUp',
-        'CurrentSelection',
-        'moment',
         function ($scope, $rootScope, $q, $location, $route, $filter,
-                  $timeout, Teams, TeamUp, CurrentSelection, moment)
+                  $timeout, Teams, TeamUp, CurrentSelection, moment, Settings)
         {
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 2000; // * 60;
-          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 5000; // * 60;
+          var REFRESH_CHAT_MESSAGES_WHEN_CLOSE = 30000; // * 60;
           var SECONDS_A_WEEK = 60 * 60 * 24 * 7 * 1000;
 
           $scope.messages = [];
@@ -36,12 +24,12 @@ define(
           $rootScope.$on(
             'loadChatsCurrentTeam', function (event, args)
             {
-              if (angular.isArray($rootScope.app.resources.teamUuids))
+              if (angular.isArray($rootScope.app.resources.teamUuids) && $rootScope.app.resources.teamUuids.length)
               {
-                $scope.chatTeamId = CurrentSelection.getTeamId();
-                if ($scope.chatTeamId && ! $scope.toggleChat)
+                $scope.chatTeamId =  $rootScope.app.resources.teamUuids[0];
+                if (! $scope.toggleChat && ! _.isUndefined( Settings.getBackEnd()) )
                 {
-                  $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+                  $scope.checkMessage();
                 }
               }
             });
@@ -237,6 +225,7 @@ define(
           // Check whether there are new messages
           $scope.checkMessage = function (latestMsgTime)
           {
+            //console.error('checkMessage', moment().format('MMMM Do YYYY, h:mm:ss a'));
             TeamUp._(
               'chats',
               { third: $scope.chatTeamId, since: $scope.latestMsgTime}
@@ -292,7 +281,8 @@ define(
                     $scope.formatMessage(messages);
                   }
 
-                  $scope.latestMsgTime = messages[messages.length - 1].sendTime;
+                  var lastMsg = messages[messages.length - 1];
+                  $scope.latestMsgTime = lastMsg && lastMsg.sendTime ||  (moment().valueOf() - REFRESH_CHAT_MESSAGES);
 
                   $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
                 }
@@ -322,7 +312,8 @@ define(
             {
               $scope.messages = [];
               $scope.messagesShow = [];
-              var now = moment().utc().valueOf();
+              var now = moment().valueOf();
+
               $scope.latestMsgTime = now - SECONDS_A_WEEK;
             }
 
@@ -400,7 +391,6 @@ define(
           }
 
         }
-      ]
     );
   }
 );

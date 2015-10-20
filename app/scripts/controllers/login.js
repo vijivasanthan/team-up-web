@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 

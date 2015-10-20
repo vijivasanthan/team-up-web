@@ -53,8 +53,20 @@ define(
                   alert_wrongUserPass: 'Onjuiste gebruikersnaam of wachtwoord!'
                 },
                 teamup: {
-                  backEndUnavailable: "De back-end is tijdelijk buiten gebruik, probeer opnieuw in te loggen. Als het probleem blijft voorkomen, neem dan contact op met uw systeembeheerder.",
-                  noBackend: "De gedefinieerde back-end kon niet gevonden worden.",
+                  noBackend: function(email)
+                  {
+                    var text = "Het is niet gelukt om verbinding te maken met de server.<br />"
+                    text += "Als u problemen blijft ervaren, kunt u een  <a href='mailto:" + email;
+                    text += "?subject=Melding van een probleem met TeamUp / TeamTelefoon";
+                    text += "&body=Beste%20support%2C%0A%0AHelaas%20ervaar%20ik%20problemen%20met%20TeamTelefoon.";
+                    text += "%20Ik%20krijg%20de%20melding%20%u201CHet%20is%20niet%20gelukt%20om%20verbinding";
+                    text += "%20te%20maken%20met%20de%20server.%u201D%0A%0AKunt%20u%20mij%20hiermee%20helpen";
+                    text += "%3F%0A%0AMet%20vriendelijke%20groet%2C%0A%0A%5Buw%20naam";
+                    text += "%5D%0A%5Buw%20team%5D%0A%5Buw%20organisatie%5D%20";
+                    text += "'>email</a> sturen naar onze support afdeling."
+
+                    return text;
+                  },
                   statusCodeNotRegonized: "Status-code is niet bekend.",
                 }
               }
@@ -154,7 +166,7 @@ define(
           var result = settingsService.getResultOnStatusCode(results);
 
           expect(result.errorMessage)
-            .toBe(rootScope.ui.teamup.backEndUnavailable);
+            .toBe(rootScope.ui.teamup.noBackend('support@ask-cs.com'));
         })
 
         it('Should return status code not recognized', function ()

@@ -164,29 +164,15 @@ define(
             })
 
             .when(
-            '/team/',
+            '/team',
             {
-              templateUrl: 'views/teams.html',
-              controller: 'teamCtrl',
-              reloadOnSearch: false,
-              resolve: {
-                data: [
-                  'Teams', '$route', '$q',
-                  function (Teams, $route, $q)
-                  {
-                    var teamId = Teams.checkExistence($route.current.params.uuid);
+              redirectTo: function (routeParams, path, search)
+              {
+                var teamParam = (search.uuid)
+                  ? '?uuid=' + search.uuid
+                  : '';
 
-                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
-                      .then(function (teamsData)
-                      {
-                        return {
-                          members: teamsData[0],
-                          teams: teamsData[1],
-                          teamId: teamId
-                        };
-                      });
-                  }
-                ]
+                return 'team/members' + teamParam;
               }
             })
 
@@ -217,7 +203,15 @@ define(
             '/team/member/new',
             {
               templateUrl: 'views/teams/newMember.html',
-              controller: 'newMember as newMemberCtrl',
+              controller: 'newMember as member',
+              reloadOnSearch: false,
+            })
+
+            .when(
+            '/team/member/search',
+            {
+              templateUrl: 'views/teams/searchMember.html',
+              controller: 'searchMember as member',
               reloadOnSearch: false,
             })
 

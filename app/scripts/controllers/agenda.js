@@ -86,7 +86,8 @@ define(
             user: {
               id: data.user.uuid,
               role: data.user.role,
-              fullName: data.user.firstName + ' ' + data.user.lastName
+              fullName: data.user.firstName + ' ' + data.user.lastName,
+              teamUuids: data.user.teamUuids
             },
             current: $scope.current,
             options: {

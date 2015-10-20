@@ -76,28 +76,21 @@ define(
       'getTeamNameById',
       function ($rootScope, Store, $filter)
       {
-        return function (teamsUuids, allTeams)
+        return function (teamsUuids, searchTeams)
         {
           if(! _.isUndefined(teamsUuids))
           {
-            var teamNames = (allTeams)
-                ? Store('app').get('teams')
-                : Store('app').get('searchMembersTeams'),
-                userTeams = [];
-
-            if(! teamNames.length && $rootScope.app.resources.role == 1)
-            {
-              teamNames = Store('app').get('teams');
-            }
+            var teams = (searchTeams && searchTeams.length)
+                ? searchTeams
+                : Store('app').get('teams');
+            var userTeams = [];
 
             if(teamsUuids.length)
             {
-              _.each(teamsUuids, function (teamId)
+              userTeams = _.map(teamsUuids, function (teamId)
               {
-                var team = _.findWhere(teamNames, {uuid: teamId});
-                userTeams.push(
-                  team && team.name || $rootScope.ui.teamup.noTeamNameFound
-                );
+                var team = _.findWhere(teams, {uuid: teamId});
+                return team && team.name || $rootScope.ui.teamup.noTeamNameFound;
               });
             }
 
