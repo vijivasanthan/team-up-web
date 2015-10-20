@@ -235,6 +235,21 @@ define(['services/services', 'config'],
                   });
           };
 
+          this.sync = function (teamId)
+          {
+            return TeamUp._(
+              'teamSync',
+              {second: teamId}
+            ).then(function(sync)
+            {
+              var notifier = $rootScope.notifier;
+              (sync && sync.isSyncing)
+                ? notifier.success('Bezig met syncen uit Nedap')
+                : notifier.error('Het syncen uit Nedap is mislukt');
+              return sync;
+            });
+          };
+
           /**
            * Initialize the current team and list of all teams
            * @param teamId

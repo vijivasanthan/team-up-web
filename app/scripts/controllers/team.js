@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'team',
-      function (Team)
+      function ($interval, Team)
       {
         //view model
         var self = this;
@@ -84,6 +84,20 @@ define(
         };
 
         /**
+         * Syncen team, members and slots from Nedap
+         * @param teamId The id of the team
+         * @param callback
+         */
+        self.sync = function (teamId, callback)
+        {
+          Team.sync(teamId)
+            .then(function(sync)
+            {
+              (callback && callback(sync));
+            });
+        };
+
+        /**
          * Confirm to add a member
          * Check if member is already in a team,
          * if that's the case ask if that member needs to leave
@@ -98,6 +112,24 @@ define(
             ? angular.element('#confirmMemberAddModal').modal('show')
             : Team.addMember(member, teamOption);
         };
+
+        //self.loadingWithProgress = function ()
+        //{
+        //  // Set progress 0;
+        //  self.laddaLoadingBar = 0;
+        //  // Run in every 30 milliseconds
+        //  var interval = $interval(function ()
+        //  {
+        //    // Increment by 1;
+        //    self.laddaLoadingBar++;
+        //    if (self.laddaLoadingBar >= 100) {
+        //      // Cancel interval if progress is 100
+        //      $interval.cancel(interval);
+        //      //Set ladda loading false
+        //      self.laddaLoadingBar = false;
+        //    }
+        //  }, 30);
+        //};
 
         /**
          * Initialize the current team and a list of all teams
