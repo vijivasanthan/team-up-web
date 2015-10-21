@@ -88,7 +88,7 @@ define(
       });
 
       it('should check if there is a permissionprofile', function () {
-
+        console.log('testConfig.host', testConfig);
         var promise = testModal.getPermissionProfile(),
             jsonResponse  = {
               clientReports: true,

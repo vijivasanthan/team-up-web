@@ -9,12 +9,12 @@
 var localConfig = {
   /* The host parameter defines which backend is used. Most common
      values are:
-  */
-	host: "http://dev.ask-cs.com/",
-	//host: "http://test.ask-cs.com/",
-	//host: "http://demo.ask-cs.com/",
-	//host: "https://backend.ask-cs.nl/",
-  //host: "http://192.168.128.24:8080/",
+	host: ["http://dev.ask-cs.com/"],
+	host: ["http://test.ask-cs.com/"],
+	host: ["http://demo.ask-cs.com/"],
+  	host: [ "https://backend.ask-cs.nl/", "http://bz-backend.ask-cs.nl/" ],
+   */
+	host: ["http://dev.ask-cs.com/"],
 
   /* The otapRole parameter tells what kind of backend we're using. Most
      common values are:
@@ -34,26 +34,3 @@ var localConfig = {
 	//defaultProfile: "teamtelefoon"
 
 };
-
-/**
- Profiles
-
- ********
- * Dev
- * ******
- * Test
- * liza->askaskask
- * handers->askask11
- * jlima->askask11
- *  Demo
- *  ecare___stefan askaskask
- * ******
- * Live
- * ******
- * jhellingman
- * Ikbenjeroen1
- * ******
- * Local
- * ******
-
- **/

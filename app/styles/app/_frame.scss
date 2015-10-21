@@ -266,3 +266,15 @@ section {
     display: inline;
   }
 }
+
+.video-conversation {
+  .responsive_video {
+    iframe {
+      width: 100%;
+      min-height: calc(100vh - 150px) !important;
+    }
+  }
+}
+
+
+

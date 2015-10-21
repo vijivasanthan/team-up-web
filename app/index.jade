@@ -66,7 +66,7 @@ block navbar
 							a(ng-click='nav("tasks2")') {{ ui.task.tasks }}
 						li.teamMenu(ng-show='app.domainPermission.teams',
 							data-match-route='/team.?')
-							a(ng-click='nav("team")') {{ui.teamup.teams}}
+							a(ng-click='nav("team/members")') {{ui.teamup.teams}}
 						li#clientMenu(ng-show='app.domainPermission.clients',
 							data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
@@ -221,15 +221,16 @@ block chat
 					p.noMessages(ng-show='loadChatMessages') {{ ui.message.messagesLoaded }}
 					div(ng-repeat='message in messagesShow')
 						.chat-separator(ng-show='(message.date != "")')
-							span {{message.date}}
-							hr
+							div(ng-if='message.currentDay')
+								span {{ message.currentDay }} 
+								hr
 						.chat-separator.reportLink(ng-show='(message.type == "REPORT_NEW")')
 							a(ng-click='directToChatLink("#/client?uuid=" + message.body.clientGroupId + "&reportUuid=" + message.body.reportUuid + "#reports")')
 								span {{message.title}}
 								hr
 						.videoLink(ng-show='(message.type == "VIDEO_CHAT")')
 							h5 {{ ui.message.videoStartedBy }} {{ message.senderName }}
-							p {{ message.sendTime | nicelyDate }}
+							p {{ message.sendTime | date: 'HH:mm' }}
 							a(ng-click='startVideoCall(message.body)')
 								button.btn-primary.btn-mini
 									i.icon-facetime-video

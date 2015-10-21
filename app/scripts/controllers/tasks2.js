@@ -7,14 +7,9 @@ define(
     controllers.controller(
       'tasks2Ctrl',
         function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
-                  Teams, Clients, Dater, moment)
+                  Teams, Clients, Dater, moment, data)
         {
           $rootScope.fixStyles();
-
-          var view = $location.hash(),
-            teamsLocal = Teams.queryLocal(),
-            clientLocal = Clients.queryLocal(),
-            teamClientLocal = Teams.queryLocalClientGroup(teamsLocal.teams);
 
           function resetViews()
           {
@@ -121,9 +116,9 @@ define(
             );
           };
 
-          setView(view);
+          setView($location.hash());
 
-          $scope.teams = teamsLocal.teams;
+          $scope.teams = data.teams;
 
           $scope.task = $scope.task || {
             team: $scope.currentTeam
@@ -464,7 +459,7 @@ define(
             );
           };
 
-          $scope.members = teamsLocal.members[$scope.currentTeam];
+          $scope.members = data.members[$scope.currentTeam];
 
           $scope.groups = [];
           $scope.clients = [];
@@ -476,7 +471,7 @@ define(
             $scope.groups = [];
 
             angular.forEach(
-              clientLocal.clientGroups,
+              data.clientGroups,
               function (cg)
               {
                 if ($scope.currentGroup == cg.id)
@@ -492,7 +487,7 @@ define(
           // Related to chain of dropd-owns of groups and clients
           $scope.groupAffectClient = function (groupId)
           {
-            $scope.clients = clientLocal.clients[groupId];
+            $scope.clients = data.clients[groupId];
 
             if (( $scope.currentClient == null || typeof $scope.currentClient == 'undefined' )
               && $scope.clients && $scope.clients.length > 0)
@@ -510,13 +505,13 @@ define(
             }
           };
 
-          if (typeof teamClientLocal[$scope.currentTeam] == 'undefined')
+          if (typeof data.teamClientsGroups[$scope.currentTeam] == 'undefined')
           {
             $scope.currentGroup = null;
           }
           else
           {
-            $scope.currentGroup = teamClientLocal[$scope.currentTeam];
+            $scope.currentGroup = data.teamClientsGroups[$scope.currentTeam];
             $scope.teamAffectGroup();
 
             $scope.groupAffectClient($scope.currentGroup);
@@ -529,8 +524,8 @@ define(
 
           $scope.changeTeam = function (teamUuid)
           {
-            $scope.members = teamsLocal.members[teamUuid];
-            $scope.currentGroup = teamClientLocal[teamUuid];
+            $scope.members = data.members[teamUuid];
+            $scope.currentGroup = data.teamClientsGroups[teamUuid];
 
             $scope.teamAffectGroup();
 

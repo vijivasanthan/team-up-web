@@ -1,6 +1,6 @@
 define(
-  ['app'],
-  function (app)
+  ['app', 'config'],
+  function (app, config)
   {
     'use strict';
 
@@ -11,13 +11,11 @@ define(
         '$httpProvider',
         '$provide',
         'tmhDynamicLocaleProvider',
-        function (
-          $locationProvider,
-          $routeProvider,
-          $httpProvider,
-          $provide,
-          tmhDynamicLocaleProvider
-        )
+        function ($locationProvider,
+                  $routeProvider,
+                  $httpProvider,
+                  $provide,
+                  tmhDynamicLocaleProvider)
         {
           //dynamic angular localization
           tmhDynamicLocaleProvider
@@ -72,7 +70,7 @@ define(
             '/login',
             {
               templateUrl: 'views/login.html',
-              controller: 'login'
+              controller: 'login as loginCtrl'
             })
 
             .when(
@@ -102,7 +100,57 @@ define(
             '/tasks2',
             {
               templateUrl: 'views/tasks2.html',
-              controller: 'tasks2Ctrl'
+              controller: 'tasks2Ctrl',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, Clients, Task, $q)
+                {
+                  var deferred = $q.defer(),
+                    data = {
+                      teams: null,
+                      myTasks: null,
+                      allTasks: null,
+                      members: null,
+                      teamClientsGroups: null,
+                      clientGroups: null,
+                      clients: null
+                    };
+
+                  Teams.getAllLocal()
+                    .then(function (teams)
+                    {
+                      data.teams = teams;
+                      return Teams.getAllWithMembers()
+                    })
+                    .then(function (members)
+                    {
+                      data.members = members;
+                      return $q.all([
+                        Task.queryMine(),
+                        Task.queryAll(),
+                        Teams.relationClientGroups(data.teams)
+                      ])
+                    })
+                    .then(function (teamsTasksData)
+                    {
+                      data.myTasks = teamsTasksData[0];
+                      data.allTasks = teamsTasksData[1];
+                      data.teamClientsGroups = teamsTasksData[2];
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups)
+                    {
+                      data.clientGroups = clientGroups;
+                      return Clients.getAllWithClients();
+                    })
+                    .then(function (GroupsAndClients)
+                    {
+                      data.clients = GroupsAndClients;
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
+                }
+              }
             })
 
             .when('/admin', {
@@ -116,30 +164,55 @@ define(
             })
 
             .when(
-            '/team/',
+            '/team',
             {
-              templateUrl: 'views/teams.html',
-              controller: 'teamCtrl',
+              redirectTo: function (routeParams, path, search)
+              {
+                var teamParam = (search.uuid)
+                  ? '?uuid=' + search.uuid
+                  : '';
+
+                return 'team/members' + teamParam;
+              }
+            })
+
+            .when(
+            '/team/members',
+            {
+              templateUrl: 'views/teams/members.html',
+              controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Teams', '$route', '$q',
-                  function (Teams, $route, $q)
-                  {
-                    var teamId = Teams.checkExistence($route.current.params.uuid);
-
-                    return $q.all([Teams.getSingle(teamId), Teams.getAllLocal()])
-                      .then(function (teamsData)
-                      {
-                        return {
-                          members: teamsData[0],
-                          teams: teamsData[1],
-                          teamId: teamId
-                        };
-                      });
-                  }
-                ]
+                data: function ($q, $location, Teams)
+                {
+                  var teamId = Teams.checkExistence(($location.search()).teamId);
+                  return  Teams.getSingle(teamId);
+                }
               }
+            })
+
+            .when(
+            '/team/new',
+            {
+              templateUrl: 'views/teams/newTeam.html',
+              controller: 'team as team',
+              reloadOnSearch: false
+            })
+
+            .when(
+            '/team/member/new',
+            {
+              templateUrl: 'views/teams/newMember.html',
+              controller: 'newMember as member',
+              reloadOnSearch: false,
+            })
+
+            .when(
+            '/team/member/search',
+            {
+              templateUrl: 'views/teams/searchMember.html',
+              controller: 'searchMember as member',
+              reloadOnSearch: false,
             })
 
             .when(
@@ -198,9 +271,17 @@ define(
                     {local: true};
                   }
                 ],
-                dataMembers: function (Teams)
+                dataMembers: function ($q, TeamUp, Teams)
                 {
-                  return Teams.updateMembersLocal();
+                  var deferred = $q.defer();
+                  $q.all([
+                    TeamUp._('allTeamMembers'),
+                    Teams.getAllWithMembers()
+                  ]).then(function (result)
+                  {
+                    deferred.resolve(result[0]);
+                  });
+                  return deferred.promise;
                 }
               }
             })
@@ -242,15 +323,15 @@ define(
                     removeActiveClass('.teamMenu');
 
                     var teamId = CurrentSelection.getTeamId(),
-                        teamTelephoneOptions = null;
+                      teamTelephoneOptions = null;
 
                     return TeamUp._('TTOptionsGet', {second: teamId})
-                      .then(function(options)
+                      .then(function (options)
                       {
                         teamTelephoneOptions = options;
 
                         var promises = [Teams.getAllLocal()];
-                        if(options.error && options.error.status === 404)
+                        if (options.error && options.error.status === 404)
                         {
                           promises.push(
                             TeamUp._('TTAdaptersGet', {
@@ -261,10 +342,8 @@ define(
                         }
                         return $q.all(promises)
                       })
-                      .then(function(result)
+                      .then(function (result)
                       {
-                        console.log('result', result);
-
                         return {
                           teams: result[0],
                           phoneNumbers: result[1] || [],
@@ -468,26 +547,25 @@ define(
               controller: 'phones',
               reloadOnSearch: false,
               resolve: {
-                data: function ($q, Teams, TeamUp, CurrentSelection)
+                data: function (Teams, Slots, $q, $location, CurrentSelection)
                 {
-                  var promises = [
-                      TeamUp._('TTOptionsGet', {second: teamId}),
-                      Teams.getAllLocal()
-                    ],
-                    teamId = CurrentSelection.getTeamId();
-
-                  return $q.all(promises)
-                    .then(function (result)
-                    {
-                      return {
-                        teamTelephoneOptions: result[0],
-                        teams: result[1]
-                      }
-                    });
-
+                  var teamId = CurrentSelection.getTeamId(),
+                    deferred = $q.defer();
                   removeActiveClass('.teamMenu');
 
-                  return Teams.queryLocal();
+                  $q.all([
+                    Teams.getSingle(teamId),
+                    Slots.MemberReachabilitiesByTeam(teamId, null),
+                    Teams.getAllLocal()
+                  ]).then(function (result)
+                  {
+                    deferred.resolve({
+                      members: result[0],
+                      membersReachability: result[1],
+                      teams: result[2]
+                    });
+                  });
+                  return deferred.promise;
                 }
               }
             })
@@ -499,7 +577,7 @@ define(
               controller: 'status',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Slots, $q, $location, CurrentSelection, TeamUp)
+                data: function ($q, $location, CurrentSelection, TeamUp, Teams, Slots)
                 {
                   var teamId = CurrentSelection.getTeamId(),
                     deferred = $q.defer();
@@ -625,17 +703,55 @@ define(
             })
 
             .when(
-            '/video/:videoId?',
+            '/video/',
             {
               templateUrl: 'views/video.html',
               controller: 'videoCtrl',
               resolve: {
-                'check': function ($rootScope, $location, Session)
+                'data': function ($rootScope, $location, $route, $q, Session, TeamUp, Settings)
                 {
-                  if (Session.check())
+                  var deferred = $q.defer(),
+                      backEnds = angular.copy(config.app.host),//The different backend url's
+                      teamPhoneNumber = $route.current.params.teamPhoneNumber,
+                      video = {};
+
+                  /**
+                   * Get the callId of the video conversation
+                   * @param bacEnd The current backend url
+                   * @param teamPhoneNumber The team telephone number
+                   */
+                  video.getCallIdRequest = function(bacEnd, teamPhoneNumber)
                   {
-                    $location.path($rootScope.currentLocation);
-                  }
+                    Settings.setBackEnd(bacEnd);//set current backend
+                    TeamUp._('TTvideo', //get the callId for the video conversation
+                      {
+                        phoneNumber: teamPhoneNumber,
+                        type: 'video'
+                      })
+                      .then(video.getCallIdResponse);//get the response
+                  };
+
+                  /**
+                   * The callback of the request will do a request again if there are multiple backend url's if a
+                   * error appears
+                   * @param result
+                   */
+                  video.getCallIdResponse = function(result)
+                  {//if a error appears, check then if there are multiple backends, to try another time
+                    //to get a callID
+                    (result.error && backEnds.length)
+                      ? video.getCallIdRequest(backEnds.shift(), teamPhoneNumber)
+                      : deferred.resolve({
+                          callId: result.callId || '',
+                          fullName: decodeURI($route.current.params.fullName) || 'user'
+                        });
+                  };
+                  //This routing is only for the ones without session
+                  (Session.check())
+                    ? $location.path($rootScope.currentLocation)
+                    : video.getCallIdRequest(backEnds.shift(), teamPhoneNumber);
+
+                  return deferred.promise;
                 }
               },
               reloadOnSearch: false
@@ -643,7 +759,8 @@ define(
 
             .otherwise({redirectTo: '/login'});
 
-          $httpProvider.interceptors.push(function ($location, Store, $injector, $q) {
+          $httpProvider.interceptors.push(function ($location, Store, $injector, $q)
+          {
             return {
               request: function (config)
               {

@@ -149,9 +149,9 @@ define(
                 $location.path('/tasks2').search({}).hash('myTasks');
                 break;
 
-              case 'team':
-                $location.path('/team').search({}).hash('team');
-                break;
+              //case 'team':
+              //  $location.path('/team').search({}).hash('team');
+              //  break;
 
               case 'client':
                 $location.path('/client').search({local: 'true'}).hash('client');
@@ -179,6 +179,22 @@ define(
 
               case 'tasks2/planboard':
                 $location.path('/tasks2/planboard').search({}).hash('');
+                break;
+
+              case 'team/members':
+                $location.path('/team/members').search({}).hash('');
+                break;
+
+              case 'team/new':
+                $location.path('/team/new').search({}).hash('');
+                break;
+
+              case 'team/member/new':
+                $location.path('/team/member/new').search({}).hash('');
+                break;
+
+              case 'team/member/search':
+                $location.path('/team/member/search').search({}).hash('');
                 break;
 
               case 'team-telefoon/agenda':

@@ -9,23 +9,22 @@
 			.bar
 		span.muted
 	#login.boxed
-		form(ng-submit='login()')
-			.alert(class='{{alert.login.type}}',
-			ng-show='alert.login.display')
+		form(ng-submit='loginCtrl.login()')
+			.alert.alert-error(ng-show='loginCtrl.error.login.display')
 				button.close(type='button',
-				ng-click='alert.login=false') ×
-				| {{alert.login.message}}
+				ng-click='loginCtrl.error.login=false') ×
+				p(ng-bind-html='loginCtrl.error.login.message | trusted_html')
 			input(type='text',
 			autocapitalize='none',
-			ng-model='loginData.username',
+			ng-model='loginCtrl.loginData.username',
 			placeholder='{{ui.login.ph_username}}',
 			autofocus='')
 			input(type='password',
-			ng-model='loginData.password',
+			ng-model='loginCtrl.loginData.password',
 			placeholder='{{ui.login.ph_password}}')
 			label.checkbox.span3
 				input(type='checkbox',
-				ng-model='loginData.remember')
+				ng-model='loginCtrl.loginData.remember')
 				| {{ui.login.label_rememberMe}}
 			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
 			span.version

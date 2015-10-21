@@ -36,7 +36,8 @@
     "web-lib-offline": "https://github.com/askcs/web-lib-offline.git",
     "web-lib-session": "https://github.com/askcs/web-lib-session.git",
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
-    "web-lib-vis": "https://github.com/askcs/web-lib-vis.git"
+    "web-lib-vis": "https://github.com/askcs/web-lib-vis.git",
+    "ladda": "~0.9.8"
   },
   "devDependencies": {}
 }

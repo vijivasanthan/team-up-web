@@ -7,11 +7,15 @@ define(
     services.factory(
       'TeamUp',
       [
-        '$resource', '$q',
-        function ($resource, $q)
+        '$resource', '$q', 'Settings',
+        function ($resource, $q, Settings)
         {
-          var TeamUp = $resource(
-              config.app.host + config.app.namespace + ':first/:second/:third/:fourth',
+          var TeamUp = function() {};
+
+          TeamUp.prototype.get = function()
+          {
+            return $resource(
+              Settings.getBackEnd() + config.app.namespace + ':first/:second/:third/:fourth',
               {},
               {
                 /**
@@ -120,6 +124,18 @@ define(
                     excludeAdaptersWithDialog: ''
                   },
                   isArray: true
+                },
+
+                /**
+                 * Post a Team phonenumber and it will return the room id for a videoconversation
+                 */
+                TTvideo : {
+                  method: 'POST',
+                  params: {
+                    first: 'teamTelephone',
+                    second: 'call',
+                    phoneNumber: '',
+                  },
                 },
 
                 /**
@@ -452,6 +468,16 @@ define(
                 },
 
 
+                // Sync teamembers nedap
+                teamSync: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'sync'
+                  }
+                },
+
+
                 /**
                  * Team-Status
                  */
@@ -626,7 +652,8 @@ define(
                 }
 
               }
-          );
+            );
+          };
 
           TeamUp.prototype._ = function (proxy, params, data, callback)
           {
@@ -641,7 +668,9 @@ define(
 
             try
             {
-              TeamUp[proxy](
+              var service = TeamUp.prototype.get();
+
+              service[proxy](
                 params,
                 data,
                 function (result)
@@ -659,6 +688,7 @@ define(
             }
             catch (err)
             {
+              console.log('error', err);
               // Log.error(err)
             }
 

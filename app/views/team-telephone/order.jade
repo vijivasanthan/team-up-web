@@ -8,15 +8,15 @@ section
 		label.control-label {{ ui.teamup.selectTeam }}
 		.controls
 			select(
-				ng-model='currentTeam',
-				ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
-				ng-selected='currentTeam',
-				ng-change='fetchOrder()')
+			ng-model='currentTeam',
+			ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
+			ng-selected='currentTeam',
+			ng-change='fetchOrder()')
 
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 			include ../agenda/tabs
-			
+
 		.tab-content
 			#order.tab-pane.active
 				div(ng-show='currentTeam === ""')
@@ -31,9 +31,9 @@ section
 						.form-group.has-feedback()
 							.controls
 								select(ng-model='orderType',
-									required,
-									ng-options='orderType.id as orderType.name for orderType in orderTypes',
-									ng-selected='orderTypes[0]')
+								required,
+								ng-options='orderType.id as orderType.name for orderType in orderTypes',
+								ng-selected='orderTypes[0]')
 								span.help-block(ng-show='orderType == "FIXED"')
 									small
 										i
@@ -46,22 +46,19 @@ section
 									small
 										i
 											| {{ ui.order.evenOrderFeedback }}
-								
+
 					button.btn.btn-info(ng-show='orderedMembers.length > 6 && orderType == "FIXED"',
-						type='button', ng-click='saveOrder()')
-							| {{ ui.order.confirmation }}
-					
+					type='button', ng-click='saveOrder()')
+						| {{ ui.order.confirmation }}
+
 					p(ng-show='orderedMembers.length == 0 && orderType == "FIXED"') {{ ui.order.noMembers }}
-					
-					//div(class="sortable-container" sv-root sv-part="test")
-					//	div(ng-repeat="item in test" sv-element="opts" class="well") {{ item }}
-					
+
 					table.table.table-striped.orderTable(ng-show='orderType == "FIXED" && orderedMembers.length > 0')
 						thead
 							tr
 								th
 									a {{ui.tasks.orderType1}}
-								th 
+								th
 								th
 								th {{ui.teamup.name}}
 								th {{ui.teamup.phone}}
@@ -74,7 +71,7 @@ section
 									.dragIcon
 								td
 									.roundedPicSmall(class='{{member.states|stateColor}}',
-										back-img = '{{member.uuid | avatar:"team":"80" }}')
+									back-img = '{{member.uuid | avatar:"team":"80" }}')
 										span.badge(ng-show='member.states|stateReachable')
 											i.glyphicon.glyphicon-earphone
 								td
@@ -82,7 +79,7 @@ section
 										| {{member.firstName}} {{member.lastName}}
 								td
 									| {{member.phoneE164}}
-					
+
 					div(style='margin-top: 20px;')
 						//ul(ng-sortable="{animation:150}")
 						//	li(ng-repeat="item in items") {{item}}

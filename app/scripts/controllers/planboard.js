@@ -10,6 +10,7 @@ define(
         '$scope',
         '$location',
         '$filter',
+        'Settings',
         'Dater',
         'Store',
         'Teams',
@@ -18,7 +19,7 @@ define(
         'Session',
         'CurrentSelection',
         'moment',
-        function ($rootScope, $scope, $location, $filter, Dater, Store,
+        function ($rootScope, $scope, $location, $filter, Settings, Dater, Store,
                   Teams, Clients, TeamUp, Session, CurrentSelection, moment)
         {
           var params = $location.search();
@@ -113,7 +114,7 @@ define(
                   {
                     var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
                       'style="float: left; background-image: url(' +
-                      config.app.host +
+                      Settings.getBackEnd() +
                       config.app.namespace +
                       '/client/' +
                       member.uuid +
@@ -219,6 +220,22 @@ define(
             }
           };
 
+          $scope.getTasks = function (section, currentGroup, startTime, endTime)
+          {
+            var taskProvider = (section == 'teams')
+              ? 'teamTaskQuery'
+              : 'clientGroupTasksQuery';
+
+            getTaskProvider(taskProvider,
+              currentGroup,
+              startTime,
+              endTime)
+              .then(function(tasks)
+              {
+                storeTask(tasks, startTime, endTime);
+              });
+          };
+
           function getTaskProvider(query, sectionId, startTime, endTime)
           {
             return TeamUp._(
@@ -266,7 +283,7 @@ define(
 
             $rootScope.$broadcast(
               'timelinerTasks',
-              (periods) ? periods : {start: startTime, end: endTime}
+              periods || {start: startTime, end: endTime}
             );
           };
 
@@ -492,7 +509,7 @@ define(
                 var avatar = '<div class="task-planboard roundedPicSmall ' + avatarColorClass +
                   '" ' +
                   'style="float: left; background-image: url(' +
-                  config.app.host +
+                  Settings.getBackEnd() +
                   config.app.namespace +
                   '/team/member/' +
                   member.uuid +

@@ -380,20 +380,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									data-arrow-behavior="picker")
 									i.icon-time
 
-							.form-group(ng-class="{ 'has-error' : taskForm.description.$invalid && !taskForm.description.$pristine }")
+							.form-group
 								label.control-label {{ui.task.description}}
 								.controls
 									textarea.span8.form-control(
 										style='height: 150px', 
 										ng-model='task.description',
-										name='description',
-										ng-minlength=8,
-										ng-maxlength=500)
-									span.help-block(ng-show='taskForm.description.$invalid && !taskForm.description.$pristine')
-										small(ng-show="taskForm.description.$error.minlength")
-											i {{ui.task.taskDescriptionMinChars}} 
-										small(ng-show="taskForm.description.$error.maxlength")
-											i {{ui.task.taskDescriptionMaxChars}}
+										name='description')
 
 					.span6
 						fieldset

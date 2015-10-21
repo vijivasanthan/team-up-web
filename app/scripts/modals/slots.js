@@ -5,67 +5,81 @@ define(['services/services', 'config'],
 
     services.factory(
       'Slots',
-        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams, moment)
+        function ($rootScope, $resource, $q, Dater, Sloter, Store, Stats, Teams, moment, Settings)
         {
-          var Slots = $resource(config.app.host + 'askatars/:user/slots', {user: ''}, {
-            query: {
-              method: 'GET',
-              params: {start: '', end: ''},
-              isArray: true
-            },
-            change: {
-              method: 'PUT',
-              params: {start: '', end: '', text: '', recursive: ''},
-              isArray: true
-            },
-            save: {
-              method: 'POST',
-              params: {},
-              isArray: true
-            },
-            remove: {
-              method: 'DELETE',
-              params: {}
-            }
-          });
+          var Slots = function() {};
 
-          var Aggs = $resource(config.app.host + 'calc_planning/:id', {}, {
-            query: {
-              method: 'GET',
-              params: {id: '', start: '', end: ''},
-              isArray: true
-            }
-          });
+          Slots.prototype.resourceSlots = function ()
+          {
+            return $resource(Settings.getBackEnd() + 'askatars/:user/slots', {user: ''}, {
+              query: {
+                method: 'GET',
+                params: {start: '', end: ''},
+                isArray: true
+              },
+              change: {
+                method: 'PUT',
+                params: {start: '', end: '', text: '', recursive: ''},
+                isArray: true
+              },
+              save: {
+                method: 'POST',
+                params: {},
+                isArray: true
+              },
+              remove: {
+                method: 'DELETE',
+                params: {}
+              }
+            });
+          };
 
-          var Wishes = $resource(config.app.host + 'network/:id/wish', {}, {
-            query: {
-              method: 'GET',
-              params: {id: '', start: '', end: ''},
-              isArray: true
-            },
-            save: {
-              method: 'PUT',
-              params: {id: ''}
-            }
-          });
+          Slots.prototype.resourceAggs = function ()
+          {
+            return $resource(Settings.getBackEnd() + 'calc_planning/:id', {}, {
+              query: {
+                method: 'GET',
+                params: {id: '', start: '', end: ''},
+                isArray: true
+              }
+            });
+          };
 
-          var MemberSlots = $resource(config.app.host + 'network/:id/member/slots2', {}, {
-            query: {
-              method: 'GET',
-              params: {id: '', start: '', end: ''}
-            },
-            get: {
-              method: 'GET',
-              params: {id: '', start: '', end: ''},
-              interceptor: {
-                response: function (response)
-                {
-                  // expose response
-                  return response;
+          Slots.prototype.resourceWishes = function ()
+          {
+            return $resource(Settings.getBackEnd() + 'network/:id/wish', {}, {
+              query: {
+                method: 'GET',
+                params: {id: '', start: '', end: ''},
+                isArray: true
+              },
+              save: {
+                method: 'PUT',
+                params: {id: ''}
+              }
+            });
+          };
+
+          Slots.prototype.resourceMemberSlots = function ()
+          {
+            return $resource(Settings.getBackEnd() + 'network/:id/member/slots2', {}, {
+              query: {
+                method: 'GET',
+                params: {id: '', start: '', end: ''}
+              },
+              get: {
+                method: 'GET',
+                params: {id: '', start: '', end: ''},
+                interceptor: {
+                  response: function (response)
+                  {
+                    // expose response
+                    return response;
+                  }
                 }
               }
-            }
-          });
+            });
+          };
 
           Slots.prototype.wishes = function (options)
           {
@@ -77,7 +91,9 @@ define(['services/services', 'config'],
                 end: options.end
               };
 
-            Wishes.query(
+            var wishesResource = Slots.prototype.resourceWishes();
+
+            wishesResource.query(
               params,
               function (result)
               {
@@ -101,8 +117,8 @@ define(['services/services', 'config'],
                 wish: options.wish,
                 recurring: options.recursive
               };
-
-            Wishes.save(
+            var wishesResource = Slots.prototype.resourceWishes();
+            wishesResource.save(
               {id: options.id}, params,
               function (result)
               {
@@ -164,9 +180,10 @@ define(['services/services', 'config'],
 
           Slots.prototype.agg = function (options)
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+              aggsResource = Slots.prototype.resourceAggs();
 
-            Aggs.query(
+            aggsResource.query(
               options,
               function (result)
               {
@@ -216,7 +233,9 @@ define(['services/services', 'config'],
 
             if (options.division != 'both') params.stateGroup = options.division;
 
-            Aggs.query(
+            var aggsResource = Slots.prototype.resourceAggs();
+
+            aggsResource.query(
               params,
               function (results)
               {
@@ -400,7 +419,7 @@ define(['services/services', 'config'],
             if (resources)
             {
               // TODO: Use mathematical formula to calculate it
-              var now = moment().unix();;
+              var now = moment().unix();
 
               //now = String(Date.now().getTime());
               //now = Number(now.substr(0, now.length - 3));
@@ -410,8 +429,9 @@ define(['services/services', 'config'],
                 start: now,
                 end: now + 1
               };
+              var slotsResource = Slots.prototype.resourceSlots();
 
-              Slots.query(params, function (result)
+              slotsResource.query(params, function (result)
               {
                 deferred.resolve(
                   (result.length > 0) ?
@@ -520,7 +540,9 @@ define(['services/services', 'config'],
                   _options.type = options.type;
                 }
 
-                Slots.query(
+                var slotsResource = Slots.prototype.resourceSlots();
+
+                slotsResource.query(
                   _options,
                   function (result)
                   {
@@ -567,8 +589,8 @@ define(['services/services', 'config'],
                 end: moment(options.stamps.end).unix()
               },
               data = {};
-
-            Slots.query(
+            var slotsResource = Slots.prototype.resourceSlots();
+            slotsResource.query(
               params,
               function (user)
               {
@@ -610,7 +632,8 @@ define(['services/services', 'config'],
                             var allMembers = Store('app').get(options.groupId),
                               calls = [];
 
-                            MemberSlots.get
+                            var resource = Slots.prototype.resourceMemberSlots();
+                            resource.get
                             (
                               {
                                 id: options.groupId,
@@ -712,9 +735,10 @@ define(['services/services', 'config'],
           Slots.prototype.getMemberAvailabilitiesPerTeam = function (groupID, divisionID)
           {
             var deferred = $q.defer(),
-              now = Math.floor(moment().valueOf() / 1000);
+              now = Math.floor(moment().valueOf() / 1000),
+              resource = Slots.prototype.resourceMemberSlots();
 
-            MemberSlots.get({
+            resource.get({
                 id: groupID,
                 type: divisionID,
                 start: now,
@@ -737,9 +761,10 @@ define(['services/services', 'config'],
           Slots.prototype.MemberReachabilitiesByTeam = function(groupId, startTime)
           {
             var deferred = $q.defer(),
-              now = startTime || Math.floor(moment().valueOf() / 1000);
+              now = startTime || Math.floor(moment().valueOf() / 1000),
+              resource = Slots.prototype.resourceMemberSlots();
 
-            MemberSlots.get
+            resource.get
             (
               {
                 id: groupId,
@@ -769,8 +794,9 @@ define(['services/services', 'config'],
             {
               var membersDeferred = $q.defer();
               teamDeferred.push(membersDeferred.promise);
+              var resource = Slots.prototype.resourceMemberSlots();
 
-              MemberSlots.get
+              resource.get
               (
                 {
                   id: team.uuid,
@@ -816,8 +842,8 @@ define(['services/services', 'config'],
           Slots.prototype.user = function (params)
           {
             var deferred = $q.defer();
-
-            Slots.query(
+            var slotsResource = Slots.prototype.resourceSlots();
+            slotsResource.query(
               params,
               function (result)
               {
@@ -848,7 +874,9 @@ define(['services/services', 'config'],
               var memberDeferred = $q.defer();
               memDeferred.push(memberDeferred.promise);
 
-              Slots.query(
+              var slotsResource = Slots.prototype.resourceSlots();
+
+              slotsResource.query(
                 {
                   user: member.uuid,
                   start: now,
@@ -900,7 +928,9 @@ define(['services/services', 'config'],
             var start = moment.unix(slot.start).seconds(0);
             slot.start = start.unix();
 
-            Slots.save(
+            var slotsResource = Slots.prototype.resourceSlots();
+
+            slotsResource.save(
               {user: user}, slot,
               function (result)
               {
@@ -917,9 +947,10 @@ define(['services/services', 'config'],
 
           Slots.prototype.change = function (original, changed, user)
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+              slotsResource = Slots.prototype.resourceSlots();
 
-            Slots.change(
+            slotsResource.change(
               angular.extend(naturalize(changed), {user: user}), naturalize(original),
               function (result)
               {
@@ -930,15 +961,15 @@ define(['services/services', 'config'],
                 deferred.resolve({error: error});
               }
             );
-
             return deferred.promise;
           };
 
           Slots.prototype.remove = function (slot, user)
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+              slotsResource = Slots.prototype.resourceSlots();
 
-            Slots.remove(
+            slotsResource.remove(
               angular.extend(naturalize(slot), {user: user}),
               function (result)
               {

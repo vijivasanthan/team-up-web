@@ -1,0 +1,100 @@
+div(ng-controller='team as team', style='padding-top: 1px;')
+	.page-header
+		h2.nullable {{ui.teamup.teams}}
+		.selectGroup(ng-if='team.list.length > 1')
+			span.selectTitles
+				strong
+					| {{ ui.teamup.selectTeam }}
+			select(ng-model='team.current.teamId',
+			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
+			ng-selected='team.current.teamId',
+			ng-change='team.init(team.current.teamId)')
+		
+	.teams-section.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include ../teams/tabs
+		.tab-content
+			#newMemberTab.tab-pane(class="active")
+				.tab-header
+					h3.pull-left {{ui.teamup.newMember}}
+				hr
+				form(name='member.form', novalidate)
+					fieldset
+						.row
+							.span6
+								fieldset
+									.form-group
+										label.control-label {{ui.profile.firstName}}
+										.controls
+											input.span4(type='text', 
+												focus
+												ng-model='member.form.firstName')
+									.form-group
+										label.control-label {{ui.profile.lastName}}
+										.controls
+											input.span4(type='text',
+											ng-model='member.form.lastName')
+									.form-group(ng-if='member.roles.length > 1')
+										label.control-label {{ui.teamup.role}}
+										.controls
+											select(ng-model='member.form.role',
+											ng-options='r.id as r.label for r in member.roles')
+												option(value='') {{ui.teamup.chooseRole}}
+									.form-group(ng-class="{ 'has-error' : member.form.email.$invalid && !member.form.email.$pristine }")
+										label.control-label {{ ui.profile.email }}
+										.controls
+											input.span3.form-control(type='email',
+											name='email',
+											required,
+											ng-model='member.form.email')
+											span.help-block(ng-show='member.form.email.$invalid && !member.form.email.$pristine')
+												small(ng-show="member.form.$error.email")
+													i
+													| {{ ui.validation.email.notValid }}
+									.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
+										label.control-label {{ui.teamup.phone}}
+										.controls
+											input.span3.form-control.inputPhoneNumber(type='text',
+											ng-model='member.form.phone',
+											ng-change='parsePhoneNumber(member.form.phone)')
+											span.help-block
+												small
+													i {{phoneNumberParsed.message}}
+							.span6
+								fieldset
+									.form-group(
+									ng-class="{'has-error' : member.UserNameWrong}")
+										label.control-label {{ui.profile.username}}
+										.controls
+											input.span3.form-control(type='text', ng-change="member.checkUserName()", ng-blur='member.UserNameWrong=false',
+											ng-model='member.form.userName')
+										p.text-danger
+											small(ng-show='member.UserNameWrong')
+												i {{ui.validation.userName.regex }}
+									.form-group(ng-class="{ 'has-error' : member.form.password.$invalid && !member.form.password.$pristine }")
+										label.control-label {{ui.profile.password}}
+										.controls
+											input.span3.form-control(type='password',
+											ng-model='member.form.password',
+											name='password',
+											required,
+											ng-minlength="8",
+											ng-maxlength="20")
+											span.help-block(ng-show='member.form.password.$invalid && !member.form.password.$pristine')
+												small
+													i
+													| {{ ui.validation.password.required }}
+												small(ng-show="member.form.password.$error.minlength")
+													i
+													| {{ ui.validation.password.amountMinChars(8) }} 
+												small(ng-show="member.form.password.$error.maxlength")
+													i
+													| {{ ui.validation.password.amountMaxChars(20) }}
+									.form-group
+										label.control-label {{ui.profile.retypePassword}}
+										.controls
+											input.span3(type='password',
+											ng-model='member.form.reTypePassword')
+						.form-actions
+							button.btn.btn-success(type='submit',
+							ng-click='member.create(member.form, team.current.teamId)') {{ui.teamup.saveMember}}

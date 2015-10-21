@@ -206,7 +206,7 @@ section#profile
 								ng-model='edit.userName')
 								
 						.form-group(ng-class="{ 'has-error' : profileForm.phone0.$invalid && !profileForm.phone0.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[0]) ? ui.profile.default : ui.profile.extra  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon
@@ -233,7 +233,7 @@ section#profile
 							//		i {{ui.edit.pincodeInfoPhone}}
 										
 						.form-group(ng-show='view.phoneNumbers[1]', ng-class="{ 'has-error' : profileForm.phone1.$invalid && !profileForm.phone1.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[1]) ? ui.profile.default : ui.profile.extra  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon
@@ -259,7 +259,7 @@ section#profile
 										i {{parsedPhoneNumbers[1].message}}
 										
 						.form-group(ng-show='view.phoneNumbers[2]', ng-class="{ 'has-error' : profileForm.phone2.$invalid && !profileForm.phone2.$pristine }")
-							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? ui.profile.extra : ui.profile.default  }} {{ui.profile.phone}}
+							label.control-label {{ (edit.phoneNumbers[edit.defaultPhone] == edit.phoneNumbers[2]) ? ui.profile.default : ui.profile.extra  }} {{ui.profile.phone}}
 							.controls
 								.input-group.phoneNumbers
 									span.input-group-addon

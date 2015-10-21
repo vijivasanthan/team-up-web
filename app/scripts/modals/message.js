@@ -6,9 +6,9 @@ define(['services/services', 'config'],
     services.factory
     (
       'Message',
-        function ($rootScope, $resource, $q, Store, $location)
+        function ($rootScope, $resource, Settings, $q)
         {
-          var Message = $resource(config.app.host + 'team/teamMessage/:teamId', {},
+          var Message = $resource(Settings.getBackEnd() + 'team/teamMessage/:teamId', {},
               {
                 get: {
                   method: 'GET',

@@ -66,7 +66,8 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            var videoRegex = /video\/([A-Za-z0-9-_/#]+)/g;
+            //([A-Za-z0-9-_/#]+)/g;
+            var videoRegex = /video\/()/g;
 
             switch (true)
             {
@@ -894,7 +895,8 @@ define(
             console.log('roomId', roomId);
 
 
-            var url = 'http://webrtc.ask-cs.com/?room=' + roomId;
+            var url = config.app.videoCallUrl + '/?room=' + roomId
+            url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
 
             $rootScope.video = {
@@ -925,29 +927,20 @@ define(
           $rootScope.hangup = null;
 
           function displayMessage (evt) {
-            if (evt.origin === "http://webrtc.ask-cs.com" ||
-              evt.origin === "http://localhost:9001")
+            console.error('evt', evt);
+            
+            if (evt.origin === config.app.videoCallUrl)
             {
-              $rootScope.hangup = evt.data;
-              $rootScope.$apply();
 
-              if(!_.isNull($rootScope.hangup))
+              console.error('Hangup triggerd');
+              if(evt.data == 'left')
               {
-                var location = $location.path().split('/');
-
-                if(location[1] === 'video'
-                  && ! Session.check())
-                {
-                  $location.path("/login");
-                  $rootScope.$apply();
-
-                }
-                else
-                {
-                  $rootScope.closeVideoCall();
-                }
+                $rootScope.hangup = evt.data;
+                $rootScope.$apply();
+                $rootScope.closeVideoCall();
                 $rootScope.hangup = null;
               }
+
 
 
             }

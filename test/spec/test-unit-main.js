@@ -28,8 +28,10 @@ requirejs.config(
       'angular-cookie':    '../vendors/angular-cookie/angular-cookie',
       'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
-      domReady:     '../vendors/requirejs-domready/domReady',
-      moment: '../vendors/moment/moment',
+      'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
+      'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
+      moment: '../vendors/moment/min/moment-with-locales',
+      'moment-timezone': '../vendors/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       'lawnchair-dom': '../vendors/lawnchair/src/adapters/dom',
       'lodash': '../vendors/lodash/lodash.min',
@@ -38,6 +40,8 @@ requirejs.config(
       'ng-sortable': '../vendors/Sortable/ng-sortable',
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       domReady:     '../vendors/requirejs-domready/domReady',
+      session: '../vendors/web-lib-session/dist/session',
+      'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-mocks': '../vendors/angular-mocks/angular-mocks',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
       // unitTest:     '../../test/spec'
@@ -55,6 +59,9 @@ requirejs.config(
       'angular-strap': { deps: ['angular'] },
       'angular-strap-tpl': { deps: ['angular','angular-strap'] },
       'angular-cookie': { deps: ['angular'] },
+      'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
+      'angular-sortable-view': { deps: ['angular'], exports: 'angular' },
+      'angular-md5': { deps: ['angular'], exports: 'angular' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },
@@ -70,6 +77,7 @@ requirejs.config(
       lodash: { exports: '_'},
       lawnchair: { deps: [], exports: 'lawnchair' },
       'lawnchair-dom': { deps: ['lawnchair'], exports: 'dom' },
+      session: { deps: ['angular'] },
       mask: { deps: ['angular'] }
     },
 
@@ -86,27 +94,3 @@ requirejs.config({
     config: 'configTeamUp'
   }
 });
-
-var testConfig = {
-  host: 'http://test.ask-cs.com/',
-  userResources: {
-    "uuid": "henkie",
-    "userName": "henkie",
-    "firstName": "henk",
-    "lastName": "R00ijen",
-    "phone": "+31654789522",
-    "email": "hgvanrooijen@gmail.com",
-    "role": "1",
-    "function": "1",
-    "birthDate": 1420498800000,
-    "phoneAddresses": null,
-    "emailAddresses": null,
-    "teamUuids": [
-      "b3915de1-f29c-4609-a67f-73aaef529902"
-    ],
-    "extraInfo": {
-      "photoUUID": "04ecc3e9-c049-4df6-8054-93a26b443917"
-    },
-    "fullName": "henk R00ijen"
-  }
-};

@@ -411,7 +411,6 @@ define(
             {
               return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw');
             },
-
             cancelAdd: function ()
             {
               $scope.self.timeline.cancelAdd()
@@ -744,7 +743,7 @@ define(
                 groupId: $scope.currentClientGroup,
                 name: $scope.currentName,
                 group: 'clientgroep',
-                range: range
+                range: {}
               };
             }
             else if ($location.hash() == 'teams')
@@ -754,7 +753,7 @@ define(
                 groupId: $scope.currentTeam,
                 name: $scope.currentName,
                 group: 'team',
-                range: range
+                range: {}
               };
             }
 
@@ -858,12 +857,21 @@ define(
                       {
                         console.log('failed to remove task ', task);
                       }
+                      else
+                      {
+                        var group = ($scope.section == 'teams')
+                          ? $scope.currentTeam
+                          : $scope.currentClientGroup;
 
-                      $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
+                        $scope.getTasks(
+                          $scope.section,
+                          group,
+                          moment($scope.timeline.range.start).valueOf(),
+                          moment($scope.timeline.range.end).valueOf()
+                        );
+                        $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
+                      }
                       $rootScope.statusBar.off();
-                      $scope.resetInlineForms();
-                      console.log(123);
-                      $rootScope.planboardSync.start();
                     });
                   }
               });
@@ -1444,43 +1452,36 @@ define(
                   {
                     $rootScope.notifier.success($rootScope.ui.planboard.timeslotDeleted);
 
-                    if ($scope.section == 'teams')
-                    {
-                      $scope.changeCurrent(
-                        $scope.currentTeam, {
-                          start: $scope.timeline.range.start,
-                          end: $scope.timeline.range.end
-                        });
-                    }
-                    else if ($scope.section == 'clients')
-                    {
-                      $scope.changeCurrent(
-                        $scope.currentClientGroup, {
-                          start: $scope.timeline.range.start,
-                          end: $scope.timeline.range.end
-                        });
-                    }
+                    var group = ($scope.section == 'teams')
+                      ? $scope.currentTeam
+                      : $scope.currentClientGroup;
+
+                    $scope.getTasks(
+                      $scope.section,
+                      group,
+                      moment($scope.timeline.range.start).valueOf(),
+                      moment($scope.timeline.range.end).valueOf()
+                    );
                   }
 
-                  // $scope.timeliner.refresh();
+                  //TODO needs to be fixed, why trying to get a deleted task if it's already deleted
                   $scope.refreshTasks(content.id, "delete");
-
                   $rootScope.statusBar.off();
-                  $rootScope.planboardSync.start();
                 }
               );
             }
           };
 
-          if ($scope.timeline && $scope.timeline.main)
-          {
-            setTimeout(
-              function ()
-              {
-                $scope.self.timeline.redraw()
-              }, 100
-            );
-          }
+          //if ($scope.timeline && $scope.timeline.main)
+          //{
+          //  console.error('123', 123);
+          //  setTimeout(
+          //    function ()
+          //    {
+          //      $scope.self.timeline.redraw()
+          //    }, 100
+          //  );
+          //}
 
           $rootScope.planboardSync = {
             start: function ()
@@ -1493,7 +1494,6 @@ define(
                     $scope.slot = {};
 
                     $rootScope.$broadcast('resetPlanboardViewsTasks');
-
                     $scope.timeliner.render(
                       {
                         start: $scope.data.periods.start,

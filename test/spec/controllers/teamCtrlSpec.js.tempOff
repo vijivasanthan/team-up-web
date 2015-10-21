@@ -11,7 +11,10 @@ define(
     'controllers/teams',
     'services/teams',
     'services/currentSelection',
-    'modals/permission'
+    'services/sloter',
+    'services/stats',
+    'modals/permission',
+
   ],
   function() {
     'use strict';
@@ -444,6 +447,7 @@ define(
         scope.current = teamId;
 
         console.log('scope.current', scope.current);
+        console.log('scope.members', scope.members);
 
         $httpBackend.expectGET(testConfig.host + 'team/status/' + rootScope.app.resources.teamUuids[0]).respond(scope.members[rootScope.app.resources.teamUuids[0]]);
 

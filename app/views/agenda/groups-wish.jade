@@ -1,8 +1,20 @@
 section#groups-wish
-	form.form-inline
+	form(name='wishForm').form-inline
 		fieldset
-			.form-group
-				//- TODO: rearrange to remove inline style
-				input.form-control(type='text', ng-model='popover.wish', style='width: 50px;')
-				button.btn.btn-primary.btn-sm(type='button', ng-click='saveWish(popover.id, popover.wish); $hide()') {{ui.teamup.save}}
-				button.btn.btn-default.btn-sm(type='button', ng-click='$hide()') {{ui.teamup.cancel}}
+			.form-group(ng-class="{'has-error' : wishForm.wish_field.$invalid}")
+				input.form-control(
+					type='number',
+					ng-model='popover.wish', 
+					ng-pattern="/^([0-9]|[1-2][0-9]|3[0-0])$/",
+					name='wish_field'
+					ng-minlength="0",
+					ng-maxlength="30"
+					required
+					style='width: 50px;')
+				button.btn.btn-primary.btn-sm(style="margin-bottom: 10px" type='button', ng-disabled='wishForm.wish_field.$invalid' ng-click='saveWish(popover.id, popover.wish); $hide()') {{ui.teamup.save}}
+				button.btn.btn-default.btn-sm(style="margin-bottom: 10px" type='button', ng-click='$hide()') {{ui.teamup.cancel}}
+				br
+				span.help-block(ng-show='wishForm.wish_field.$invalid')
+					small
+						i
+						| Geef een nummer van 0 t/m 30 

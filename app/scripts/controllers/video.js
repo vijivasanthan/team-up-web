@@ -1,37 +1,41 @@
 define(
-  ['controllers/controllers'],
-  function (controllers)
+  ['controllers/controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
     controllers.controller(
       'videoCtrl',
-        function ($rootScope, $route, $scope, $filter, check)
+        function ($rootScope, $scope, $filter, data, $timeout)
         {
+          console.error('data', data);
+          $scope.hasCall = (data.callId);
+
           $rootScope.fixStyles();
 
           angular.element('.navbar').show();
           angular.element('body').css('background-color', '');
           angular.element('#footer').show();
 
-          //Ook implementatie als er geen room name wordt meegegeven
-          $scope.getRoom = function()
+          //Ook implementatie als er geen callid wordt meegegeven
+          $scope.getCall = function(callback)
           {
             var videoCall = null;
+            var url = config.app.videoCallUrl + '/?room=' + (data.callId || 123) + '&username=' + data.fullName;
+            (callback && callback());
+            return $filter('trusted_url')(url);
+          };
 
-            if($route.current.params.videoId)
-            {
-              //http://webrtc.ask-fast.com
-              //http://webrtc.ask-cs.com
-              //http://localhost:9001
-              videoCall = $filter('trusted_url')('http://localhost:9001/?room=' + $route.current.params.videoId + '&username=Joop');
-            }
-            else
-            {
-              //$rootScope.notifier.error("Er is geen roomnummer opgegeven");
-            }
+          $scope.sendHeight = function ()
+          {
+            var height = angular.element('.responsive_video iframe').css('min-height');
+            console.error('height', height);
 
-            return videoCall;
+            $timeout(function ()
+            {
+              console.error('send ', height);
+              window.parent.postMessage(height, "*");
+            }, 1000);
           };
         }
     );

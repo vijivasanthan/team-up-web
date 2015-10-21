@@ -9,12 +9,12 @@ define(['services/services', 'config'],
       [
         '$resource',
         '$q',
-        'Store',
-        function ($resource, $q, Store)
+        'Settings',
+        function ($resource, $q, Settings)
         {
 
           var Report = $resource(
-            config.app.host + 'clients/:clientId/reports/:idReport',
+            Settings.getBackEnd() + 'clients/:clientId/reports/:idReport',
             {
               clientId: '',
               idReport: ''
@@ -41,7 +41,7 @@ define(['services/services', 'config'],
           );
 
           var reportByClientGroup = $resource(
-            config.app.host + 'clientGroup/:clientGroupId/reports', {clientGroupId: ''},
+            Settings.getBackEnd() + 'clientGroup/:clientGroupId/reports', {clientGroupId: ''},
             {
               get: {
                 method: 'GET',

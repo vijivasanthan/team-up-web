@@ -31,7 +31,7 @@ define(
           loading_Group: 'Loading groups...',
           loading_Members: 'Loading team members...',
           loading_everything: 'Finished loading!',
-          loggingOff: 'Logging off',
+          loggingOff: 'Logging off...',
           logout: 'Log out',
           loading: 'Loading..',
           loading_clientGroups: 'Loading client groups...',
@@ -68,6 +68,7 @@ define(
           accessible: 'Accessible'
         },
         agenda: {
+          customDates: 'Custom dates',
           planboard: 'Agenda',
           currentAmountReachable: 'Current amount reachable ',
           amountOfPeopleWished: 'Amount of people wished',
@@ -88,7 +89,9 @@ define(
           noMembers: 'This team has no members',
           wished: 'Wished',
           combine_reoccuring: 'This is a combined planning row with consecutive rows.',
-          sendMsgToMember: 'Send Message To Members',
+          sendMsgToMember: 'Send message to members',
+          noMembers: 'There are no members in this team',
+          noClients: 'There are no clients in this client group.',
           add: 'Add',
           del: 'Delete',
           change: 'Edit',
@@ -103,20 +106,31 @@ define(
           members: 'Members',
           teamMembers: 'Team members',
           bothAvailable: 'Both available',
-          northAavailable: 'available North',
-          southAvailable: 'available South',
-          skipperOutService: 'Skipper Of Service',
-          notAvailable: 'Not available', // Niet Beschikbaar
-          notachieve: 'Not archived',
+          northAavailable: 'Available North',
+          southAvailable: 'Available South',
+          skipperOutService: 'Skipper out of service',
+          notAvailable: 'Not available',
+          notachieve: 'Not achieved',
           legendaLabels: {
-            morePeople: 'More people',
-            enoughPeople: 'Enough people',
-            lessPeople: 'Less people'
+            morePeople: 'more people',
+            enoughPeople: 'exactly enough people',
+            lessPeople: 'less people'
           },
-          lastSyncTime: 'Last sync time:',
+          lastSyncTime: 'latest sync time:',
           dataRangeStart: 'Date range start: ',
           DataRangeEnd: 'Date range end: ',
-          loadingTimeline: 'Loading Timeline...',
+          daterangerToday: 'Today',
+          daterangerTomorrow: 'Tomorrow',
+          daterangerLast7Days: 'Last 7 days',
+          daterangerYesterday: 'Yesterday',
+          daterangerNext3Days: 'Next 3 days',
+          daterangerNext7Days: 'Next 7 days',
+          loadingTimeline: 'Loading timeline...',
+          rangeInfoTotalSelectedDays: 'Total amount of selected days: ',
+          rangeInfoTime: 'Time: ',
+          rangeInfoWeekNumber: 'Week number: ',
+          rangeInfoMonth: 'Month: ',
+          rangeInfoTotalDays: ', Total amount of days: ',
           addTimeSlot: 'Add time slot...',
           slotAdded: 'New time slot is successfully added',
           changingSlot: 'Edit time slot...',
@@ -126,8 +140,9 @@ define(
           deletingTimeslot: 'Deleting time slot...',
           timeslotDeleted: 'Time slot is successfully deleted.',
           refreshTimeline: 'Refresh timeline...',
-          preCompilingStortageMessage: 'Precompiling Stortage Message',
-          weeklyPlanning: 'Weekly planning',
+          preCompilingStortageMessage: 'Precompiling stortage message',
+          weeklyPlanning: 'My weekly planning',
+          weeklyPlanningOf: 'Weekly planning of ',
           planning: 'My planning',
           planningOf: 'Planning of ',
           minNumber: 'Minimum number needed',
@@ -135,6 +150,35 @@ define(
           statHours: 'hours',
           statMinutes: 'minutes',
           statPeopleLess: 'Less people than expected',
+          time: 'Time: ',
+          weekNumber: 'Week number: ',
+          monthNumber: 'Month number: ',
+          totalDays: 'Total days: ',
+          removeTasksRange: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'Are you sure you want to delete the tasks of ' + options.range.start + ' till ' + options.range.end;
+              html += ' from ' + options.group + ' ' + options.name;
+              html += '?';
+            }
+
+            return html;
+          },
+          tasksDeleted: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'Tasks of ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' from ' + options.group + ' ' + options.name;
+              html += ' are removed.';
+            }
+
+            return html;
+          },
+          noTasksFounded: 'No tasks found in given range.',
+          removeTasksTitle: 'Remove tasks',
+          removeTasksTitle: 'Remove tasks',
           statPeopleEven: 'exactly enough people',
           statPeopleMore: 'More people than expected',
           getWishes: 'Get minimum needed value...',
@@ -351,6 +395,7 @@ define(
           groups: 'Groups',
           newGroup: 'New group',
           newMember: 'New team member',
+          searchMember: 'Search team member',
           serach: 'Search',
           addNewGroup: 'Add new group',
           editGroup: 'Edit group',
@@ -522,7 +567,9 @@ define(
           settings: 'settings'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Client group',
+          extraInfo: 'Extra info',
           client: 'Client',
           coordinator: 'Coordinator',
           teamMember: 'Team member',
@@ -557,6 +604,7 @@ define(
           teamName: 'Team name',
           createTeam: 'Create team',
           newMember: 'New team member',
+          searchMember: 'Search team member',
           noMembersFound: 'No members found with the given search criteria',
           name: 'Name',
           role: 'Role',
@@ -570,6 +618,22 @@ define(
           states: 'States',
           saveTeam: 'Save team',
           save: 'Save',
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: function(email)
+          {
+            var text = "Het is niet gelukt om verbinding te maken met de server.<br />"
+            text += "Als u problemen blijft ervaren, kunt u een  <a href='mailto:" + email;
+            text += "?subject=Melding van een probleem met TeamUp / TeamTelefoon";
+            text += "&body=Beste%20support%2C%0A%0AHelaas%20ervaar%20ik%20problemen%20met%20TeamTelefoon.";
+            text += "%20Ik%20krijg%20de%20melding%20%u201CHet%20is%20niet%20gelukt%20om%20verbinding";
+            text += "%20te%20maken%20met%20de%20server.%u201D%0A%0AKunt%20u%20mij%20hiermee%20helpen";
+            text += "%3F%0A%0AMet%20vriendelijke%20groet%2C%0A%0A%5Buw%20naam";
+            text += "%5D%0A%5Buw%20team%5D%0A%5Buw%20organisatie%5D%20";
+            text += "'>email</a> sturen naar onze support afdeling."
+
+            return text;
+          },
+          statusCodeNotRegonized: "Status-code not regonized",
           refreshing: 'Refreshing team information',
           dataChanged: 'Data is changed',
           teamSubmitError: 'Error while creating: ',
@@ -652,7 +716,7 @@ define(
             deleteClientTitle: 'Delete client',
             deleteClient: 'Are u sure that you would like to delete the client?',
             deleteClientFromTeamTitle: 'Delete client from team',
-            deleteClientFromTeam: 'Are you sure you want to delete the client form the team?',
+            deleteClientFromTeam: 'Are you sure you want to delete the client from the team?',
             deleteReportTitle: 'Delete report',
             deleteReport: 'Are you sure you want to delete the report?',
             deleteProfileTitle: 'delete profile',
@@ -678,7 +742,7 @@ define(
             no: 'No, cancel',
             cancel: 'Cancel',
             day: {
-            sunday: 'Sunday',
+              sunday: 'Sunday',
               monday: 'Monday',
               tuesday: 'Tuesday',
               wednesday: 'Wednesday',
@@ -694,7 +758,7 @@ define(
               th: "Th",
               fr: "Fr",
               sa: "Sa"
-          }
+            }
           },
           deletingTeam: 'Deleting team...',
           deletingMember: 'Deleting member ...',
@@ -735,12 +799,12 @@ define(
           sessionTimeout: 'Your session has ended. Please login again',
           errorCode: {
             '1': 'Unknown error',
-            '2': 'The domain agent could not be found’. Please try to login again',
+            '2': 'The domain agent could not be found. Please try to login again',
             '3': 'This member should have the coordinator role, before a new team is created',
             '4': 'An agent ID can only exist of alphanumeric characters, underscores and dashes',
             '5': 'Can not parse the JSON body',
             '6': 'One or more parameters are missing',
-            '7': 'The group ‘’members’’ is not found',
+            '7': 'The group "members" is not found',
             '8': 'Team with the given teamUuid does not exist',
             '9': 'This member is not a part of the team',
             '10': 'Team with the given teamUuid does not exist',
@@ -767,9 +831,10 @@ define(
             '31': 'TeamTelephone is already activated for this team',
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
-            '34': 'Could not generate scenario'
+            '34': 'Could not generate scenario',
+            '36': 'A unexpected parameter of type'
           }
-      },
+        },
         upload: {
           chooseFile: 'Choose file',
           processFile: 'Process file',
@@ -794,32 +859,32 @@ define(
           afternoon: "afternoon",
           night: "night",
           importedFromASpreadSheet: 'Imported from spreadsheet',
-          expectationTime: function(cellName)
+          expectationTime: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there is a point in time expected.";
           },
-          expectationClientName: function(cellName)
+          expectationClientName: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there was a client name expected.";
           },
-          expectationMinutes: function(cellName)
+          expectationMinutes: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there are a amount of minutes expected";
           },
           foundIntNeedString: "There is a error found in ",
-          readError: function(cellName)
+          readError: function (cellName)
           {
             return "It's not possible to read a timestamp in cell " + cellName + ".";
           },
-          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          nofUnassignedRoutes: function (nofUnassignedRoutes)
           {
-            return  "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
+            return "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
           },
           unknownError: "A unknown error is occurred: ",
           errors: 'Errors'
         },
         options: {
-          title: 'Settings ',
+          title: 'Options ',
           teamEmail: 'Team email',
           pickAPhoneNumber: 'Pick a phone number',
           phoneNumberAlias: 'Phone number alias',
@@ -863,9 +928,9 @@ define(
           showArchivedTasks: 'Show archived tasks',
           showOnlyNotAssignedTasks: 'Show only the not assigned tasks',
           member: 'Member',
-          thereAreAmountTasks: function(amountTasks)
+          thereAreAmountTasks: function (amountTasks)
           {
-            if(amountTasks == 1)
+            if (amountTasks == 1)
             {
               return "There is " + amountTasks + " task.";
             }
@@ -922,9 +987,9 @@ define(
           loadLogs: 'Loading logs..',
           empty: 'There are no logs',
           filter: 'Filter logs...',
-          amountLogs: function(amount)
+          amountLogs: function (amount)
           {
-            if(amount == 1)
+            if (amount == 1)
             {
               return 'There is ' + amount + ' log shown';
             }
@@ -1000,13 +1065,13 @@ define(
           label_rememberMe: 'Passwort speichern',
           button_login: 'Anmelden',
           button_loggingIn: 'Anmelden...',
-          forgot_password: 'Wachtwoord vergeten?',
-          forgetPassword: 'Wachtwoord vergeten',
-          emailAddress: 'Emailadres',
-          resetPassword: 'Wachtwoord opnieuw instellen',
-          returnLogin: 'Terugkeren om in te loggen',
+          forgot_password: 'Passwort vergessen?',
+          forgetPassword: 'Passwort vergessen',
+          emailAddress: 'Email-Adresse',
+          resetPassword: 'Passwort erneut eingeben',
+          returnLogin: 'Zurück zum Login',
           changePassword: 'Passwort ändern',
-          downloadApp: 'Download mobiele app',
+          downloadApp: 'App downloaden',
           ph_username: 'Anwendername',
           ph_password: 'Passwort',
           ph_newPass: 'Passwort ändern',
@@ -1018,7 +1083,7 @@ define(
           loading_Group: 'Gruppen laden...',
           loading_Members: 'Team-Mitglieder laden...',
           loading_everything: 'Alles geladen!',
-          loggingOff: 'Logging off',
+          loggingOff: 'Abmelden',
           logout: 'Abmelden',
           loading: 'Laden..',
           loading_clientGroups: 'Patientengruppen laden...',
@@ -1028,7 +1093,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Your videocall could not be loaded.',
+          videoNotLoaded: 'Videokonferenz konnte nicht gestartet werden.',
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -1039,39 +1104,40 @@ define(
           goToInbox: 'Zum Posteingang',
           loadingPie: 'Kreisdiagramm laden...',
           possiblyReachable: 'Nicht geplant',
-          noPlanning: 'Keine planung',
+          noPlanning: 'Keine Planung',
           load: 'laden...',
           time: {
-            days: 'd',
-            hours: 'h',
-            minutes: 'min',
-            seconds: 'sec'
+            days: 'T',
+            hours: 'S',
+            minutes: 'M',
+            seconds: 'S'
           },
-          accessibilityStatement: 'Übersicht verfügbarkeit',
+          accessibilityStatement: 'Übersicht Verfügbarkeit',
           loading: 'laden...',
           accessible: 'Verfügbarkeit'
         },
         agenda: {
+          requiredPeople: 'Bedarf',
+          customDates: 'definierter Zeitraum',
           planboard: 'Agenda',
-          currentAmountReachable: 'Aktuell verfügbar (ist)',
-          amountOfPeopleWished: 'Gewünscht (soll)',
-          requiredPeople: 'Erforderliches',
-          newAvail: 'Neue verfügbarkeit',
+          currentAmountReachable: 'aktuell verfügbar (ist)',
+          amountOfPeopleWished: 'gewünscht (soll)',
+          newAvail: 'neue Verfügbarkeit',
           query: 'Synchronisierung des Terminkalenders fehlgeschlagen. Bitte den Browser aktualisieren (F5).',
           day: 'Tag',
           week: 'Woche',
           month: 'Monat',
           updateAvail: 'Verfügbarkeit aktualisieren',
-          from: 'Ab',
-          till: 'Bis',
+          from: 'ab',
+          till: 'bis',
           state: 'Status',
           selectAState: 'Status wählen',
-          reoccuring: 'Jede Woche',
+          reoccuring: 'jede woche',
           lessPeople: 'Es fehlen $v Personen.',
           samePeople: 'Es sind ausreichend Personen vorhanden.',
-          morePeople: 'E sind $v Personen zu viel.',
+          morePeople: 'Es sind $v Personen zu viel.',
           wished: 'Bedarf',
-          combine_reoccuring: 'Es betrifft eine kombinierte planung mit mehreren reihen ?????? ',
+          combine_reoccuring: 'Es betrifft eine kombinierte Planung mit mehreren Reihen ?????? ',
           sendMsgToMember: 'Nachricht an Gruppe senden',
           add: 'hinzufügen',
           del: 'löschen',
@@ -1086,26 +1152,26 @@ define(
           groups: 'Team',
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
-          bothAvailable: 'Both available',
-          northAavailable: 'available North',
-          southAvailable: 'available South',
-          skipperOutService: 'Skipper Of Service',
+          bothAvailable: 'beide verfügbar',
+          northAavailable: 'verfügbar Nord',
+          southAvailable: 'verfügbar Süd',
+          skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
           legendaLabels: {
-            morePeople: 'Mehr als notwendig',
-            enoughPeople: 'Exakt',
-            lessPeople: 'Zu wenig'
+            morePeople: 'mehr als notwendig',
+            enoughPeople: 'exakt',
+            lessPeople: 'zu wenig'
           },
           lastSyncTime: 'Letzte Synchronisierung:',
           dataRangeStart: 'Anfang Daten-Skala: ',
           DataRangeEnd: 'Ende Daten-Skala: ',
-          daterangerToday: 'Heute',
-          daterangerTomorrow: 'Morgen',
+          daterangerToday: 'heute',
+          daterangerTomorrow: 'morgen',
           daterangerLast7Days: 'Letzte 7 Tage',
-          daterangerYesterday: 'Gestern',
-          daterangerNext3Days: 'Nächste 3 Tage',
-          daterangerNext7Days: 'Nächste 7 Tage',
+          daterangerYesterday: 'gestern',
+          daterangerNext3Days: 'nächste 3 Tage',
+          daterangerNext7Days: 'nächste 7 Tage',
           loadingTimeline: 'Zeitspanne laden...',
           rangeInfoTotalSelectedDays: 'Zeitraum (Tage): ',
           rangeInfoTime: 'Zeit: ',
@@ -1122,9 +1188,9 @@ define(
           timeslotDeleted: 'Planung erfolgreich gelöscht.',
           refreshTimeline: 'Zeitachse aktualisieren...',
           preCompilingStortageMessage: 'Bedarfsbericht erstellen',
-          weeklyPlanning: 'Meine wöchentliche Planung',
-          weeklyPlanningOf: 'Wöchentliche Planung von ',
-          planning: 'Meine Planung',
+          weeklyPlanning: 'meine wöchentliche Planung',
+          weeklyPlanningOf: 'wöchentliche Planung von ',
+          planning: 'meine Planung',
           planningOf: 'Planung von ',
           minNumber: 'Minimum Anzahl benötigt ',
           time: 'Zeit: ',
@@ -1153,42 +1219,45 @@ define(
 
             return html;
           },
-          noTasksFounded: 'in diesem Zeitraum gibt es keine aufgaben ',
+          noTasksFounded: 'in diesem Zeitraum gibt es keine Aufgaben ',
           removeTasksTitle: 'Aufgaben löschen',
           pastAdding: 'eine Planung in der Vergangenheit ist nicht möglich!',
           errorAdd: 'neue Planung kann nicht gespeichert werden!',
           errorChange: 'Fehler beim Ändern der Planung!',
           pastChanging: 'eine Planung in der Vergangenheit kann nicht geändert werden!',
-          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!!',
+          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!',
           remove: 'Fehler beim Löschen einer Planung!',
           wisher: 'Fehler beim Ändern des Bedarfes',
           editTimeline: 'Zeitspanne ändern  von ',
-          notAuth: 'Nur wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
-          the: 'Die',
-          reachabilityChangedSentence: 'Planung Ihrer Verfügbarkeit kann geändert werden',
+          notAuth: 'Nur, wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
+          reachabilityChangedSentence: 'Die Planung Ihrer Verfügbarkeit kann geändert werden',
           byThe: 'durch',
           doubleClick: 'Doppelklick auf eine bereits',
-          byDragging: 'vorhandene planung oder durch markierung der Planung mit der maus und anschließender Verschiebung',
-          leftButtonMouse: 'mit der maus und anschließender Verschiebung',
+          byDragging: 'vorhandene Planung oder durch Markierung der Planung ',
+          leftButtonMouse: 'mit der Maus und anschließender Verschiebung',
           or: 'bei ',
           buttonPushed: 'gedrückter linker Maustaste.'
         },
         planboard: {
-          planboard: 'Agenda',
           requiredPeople: 'Bedarf',
-          newAvail: 'Neue verfügbarkeit',
+          customDates: 'definierter Zeitraum',
+          planboard: 'Agenda',
+          currentAmountReachable: 'aktuell verfügbar (ist)',
+          amountOfPeopleWished: 'gewünscht (soll)',
+          newAvail: 'neue Verfügbarkeit',
+          query: 'Synchronisierung des Terminkalenders fehlgeschlagen. Bitte den Browser aktualisieren (F5).',
           day: 'Tag',
           week: 'Woche',
           month: 'Monat',
           updateAvail: 'Verfügbarkeit aktualisieren',
-          from: 'Ab',
-          till: 'Bis',
+          from: 'ab',
+          till: 'bis',
           state: 'Status',
           selectAState: 'Status wählen',
-          reoccuring: 'Jede woche',
+          reoccuring: 'jede woche',
           lessPeople: 'Es fehlen $v Personen.',
           samePeople: 'Es sind ausreichend Personen vorhanden.',
-          morePeople: 'E sind $v Personen zu viel.',
+          morePeople: 'Es sind $v Personen zu viel.',
           wished: 'Bedarf',
           combine_reoccuring: 'Es betrifft eine kombinierte Planung mit mehreren Reihen ?????? ',
           sendMsgToMember: 'Nachricht an Gruppe senden',
@@ -1205,10 +1274,10 @@ define(
           groups: 'Team',
           members: 'Mitglieder',
           teamMembers: 'Team-Mitglieder',
-          bothAvailable: 'Both available',
-          northAavailable: 'available North',
-          southAvailable: 'available South',
-          skipperOutService: 'Skipper Of Service',
+          bothAvailable: 'beide verfügbar',
+          northAavailable: 'verfügbar Nord',
+          southAvailable: 'verfügbar Süd',
+          skipperOutService: 'Skipper oder Service',
           notAvailable: 'nicht verfügbar', // nicht verfügbar
           notachieve: 'nicht gespeichert',
           legendaLabels: {
@@ -1219,19 +1288,18 @@ define(
           lastSyncTime: 'Letzte Synchronisierung:',
           dataRangeStart: 'Anfang Daten-Skala: ',
           DataRangeEnd: 'Ende Daten-Skala: ',
-          daterangerToday: 'Heute',
-          daterangerTomorrow: 'Morgen',
+          daterangerToday: 'heute',
+          daterangerTomorrow: 'morgen',
           daterangerLast7Days: 'Letzte 7 Tage',
-          daterangerYesterday: 'Gestern',
-          daterangerNext3Days: 'Nächste 3 Tage',
-          daterangerNext7Days: 'Nächste 7 Tage',
+          daterangerYesterday: 'gestern',
+          daterangerNext3Days: 'nächste 3 Tage',
+          daterangerNext7Days: 'nächste 7 Tage',
           loadingTimeline: 'Zeitspanne laden...',
           rangeInfoTotalSelectedDays: 'Zeitraum (Tage): ',
           rangeInfoTime: 'Zeit: ',
           rangeInfoWeekNumber: 'Woche: ',
           rangeInfoMonth: 'Monat: ',
           rangeInfoTotalDays: ', Anzahl Tage: ',
-          customDates: 'Definierter Zeitraum',
           addTimeSlot: 'Planung hinzufügen...',
           slotAdded: 'Planung erfolgreich hinzugefügt.',
           changingSlot: 'Planung ändern...',
@@ -1242,11 +1310,11 @@ define(
           timeslotDeleted: 'Planung erfolgreich gelöscht.',
           refreshTimeline: 'Zeitachse aktualisieren...',
           preCompilingStortageMessage: 'Bedarfsbericht erstellen',
-          weeklyPlanning: 'Neine wöchentliche planung',
-          weeklyPlanningOf: 'Wöchentliche planung von ',
-          planning: 'Meine planung',
+          weeklyPlanning: 'meine wöchentliche Planung',
+          weeklyPlanningOf: 'wöchentliche Planung von ',
+          planning: 'meine Planung',
           planningOf: 'Planung von ',
-          minNumber: 'Minimum anzahl benötigt ',
+          minNumber: 'Minimum Anzahl benötigt ',
           time: 'Zeit: ',
           weekNumber: 'Woche: ',
           monthNumber: 'Monat: ',
@@ -1273,127 +1341,144 @@ define(
 
             return html;
           },
-          noTasksFounded: 'in diesem zeitraum gibt es keine Aufgaben ',
-          removeTasksTitle: 'Aufgaben löschen'
+          noTasksFounded: 'in diesem Zeitraum gibt es keine Aufgaben ',
+          removeTasksTitle: 'Aufgaben löschen',
+          pastAdding: 'eine Planung in der Vergangenheit ist nicht möglich!',
+          errorAdd: 'neue Planung kann nicht gespeichert werden!',
+          errorChange: 'Fehler beim Ändern der Planung!',
+          pastChanging: 'eine Planung in der Vergangenheit kann nicht geändert werden!',
+          pastDeleting: 'eine Planung in der Vergangenheit kann nicht gelöscht werden!',
+          remove: 'Fehler beim Löschen einer Planung!',
+          wisher: 'Fehler beim Ändern des Bedarfes',
+          editTimeline: 'Zeitspanne ändern  von ',
+          notAuth: 'Nur, wenn Sie Koordinator sind, können Sie die Planung von anderen Personen ändern. Dazu wählen Sie die gewünschte Person aus der Liste. Es erscheint daraufhin eine neue Seite, auf der Sie die Planung anpassen können.',
+          reachabilityChangedSentence: 'Die Planung Ihrer Verfügbarkeit kann geändert werden',
+          byThe: 'durch',
+          doubleClick: 'Doppelklick auf eine bereits',
+          byDragging: 'vorhandene Planung oder durch Markierung der Planung ',
+          leftButtonMouse: 'mit der Maus und anschließender Verschiebung',
+          or: 'bei ',
+          buttonPushed: 'gedrückter linker Maustaste.'
         },
         options: {
           title: 'Einstellungen ',
           teamEmail: 'E-Mail an das Team',
-          activateTeamTelephone: "Aktivieren TeamTelefon für ",
-          phoneNumberAlias: 'Telefonnummer alias',
-          smsMissedCall: 'SMS bei verpasstem Anruf oder neue Voice mailbox-nachricht',
-          receiveReachableMembers: 'Verfügbare gruppen-mitglieder empfangen',
-          teamTelephoneNotActivated: "Team-Telefon wurde für dieses Team nicht aktiviert",
-          missedOrVoicemail: 'SMS falls das gruppe ein anruf verpasst hat oder bei Eingang einer neuen voice-mailbox-nachricht',
+          activateTeamTelephone: "Aktiviere TeamTelefon für ",
+
+          teamTelephoneNotActivated: "TeamTelefon aktiviert",
+          phoneNumberTeamAlias: "bekannte Telefonnummer",
+          phoneNumberTeam: "Telefonnummer für das Team",
+          phoneNumberTeamDescription: "Wählen Sie eine der folgenden Telefonnummern, über die das Team erreichbar sein soll.",
+          phoneNumberTeamAlias: "bekannte Telefonnummer",
+          phoneNumberTeamAliasDescription: "Feld ist freiwillig. Sofern bekannt, kann die Telefonnummer des Klienten eingetragen werden, bspw. die 06 Nummer des Teamtelefons.",
+          voicemailEmailAddress: "Sprachbox Email-Adresse",
+          voicemailEmailAddressDescription: "Bei einer Sprachnachricht wird oder einem verpassten Anruf wird eine Email an die Adresse gesendet.",
+          requiredFields: "obligatorische Felder",
+
+          smsMissedCall: 'SMS bei verpasstem Anruf oder neuer Sprachnachricht',
+          receiveReachableMembers: 'verfügbare Gruppen-Mitglieder empfangen',
+          missedOrVoicemail: 'SMS, falls das Team ein Anruf verpasst hat oder bei Eingang einer neuen Sprachnachricht',
           noPhoneNumbers: "Keine Telefonnummern vorhanden",
           pickAPhoneNumber: "Wählen Sie eine Telefonnummer",
           durationDialTone: 'Geben Sie die Dauer der Freizeichen an!',
           dialToneNumber: "Das Freizeichen kann nur eine Zahl sein",
-          phoneNumberTeam: "Telephone number for the team",
-          phoneNumberTeamDescription: "Choose one of the following numbers, which the team will be reached.",
-          phoneNumberTeamAlias: "Known public telephone number",
-          phoneNumberTeamAliasDescription: "This field is optional. The telephone number can be filled in what is known to the clients. For example, the 06 number of the current relay phone.",
-          voicemailEmailAddress: "Voicemail e-mailaddress",
-          voicemailEmailAddressDescription: "A e-mail will be sent to this e-mailaddress if a voicemail is left or the team has a missed call.",
-          requiredFields: "required fields",
           hasSms: function (sms)
           {
             return (sms)
               ? 'ein'
               : 'kein';
           },
-          on: 'An',
-          off: 'Aus',
+          on: 'an',
+          off: 'aus',
           ringingTimeOut: {
             title: 'Anruf-Dauer',
-            short: 'Bei einer längeren anruf-dauer haben die gruppen-Mitglieder mehr zeit, ans telefon zu gehen, die wartezeit für den patienten kann dadurch jedoch länger werden.',
-            long: 'Bei einer anruf-dauer von mehr als 15 Sekunden wird empfohlen, dass die gruppen-Mitglieder Ihre voice-mail abschalten.',
+            short: 'bei einer längeren Anruf-Dauer haben die Gruppen-Mitglieder mehr Zeit, ans Telefon zu gehen, die Wartezeit für den Patienten kann dadurch jedoch länger werden.',
+            long: 'Bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass die Gruppen-Mitglieder Ihre Voice-Mail abschalten.',
           },
-          personalVoicemailPrevention: 'Persönliche voicemail präferenz',
-          personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das gespräch entgegen nehmen möchten. Wenn diese option eingeschaltet ist, vermeidet man, dass ein patient eine Nachricht auf einer voice-mailbox eines mitglieds hinterlassen kann.',
-          voicemailDetectionInfo: 'Bei einer anruf-dauer von mehr als 15 sekunden wird empfohlen, dass alle mitglieder Ihre voice-mailbox abschalten, oder die persönliche voicemail präferenz einschalten. Bei Ihrem provider erfahren Sie, wie Sie die voice-mailbox abschalten können.'
+          personalVoicemailPrevention: 'persönliche Voicemail Präferenz',
+          personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das Gespräch entgegen nehmen möchten. Wenn diese Option eingeschaltet ist, vermeidet man, dass ein Patient eine Nachricht auf einer Voice-Mailbox eines Mitglieds hinterlassen kann.',
+          voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder ihre Voice-Mailbox abschalten oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
         },
         message: {
           title: 'CHAT',
-          messagesLoaded: 'Loading messages...',
-          videoStartedBy: 'Video message started by ',
+          messagesLoaded: 'Nachrichten laden...',
+          videoStartedBy: 'Videokonferenz gestartet von ',
           messages: 'Nachrichten',
           composeAMessage: 'Nachricht erstellen',
-          compose: 'Erstellen',
-          inbox: 'Empfangen',
-          outbox: 'Gesendet',
-          trash: 'Gelöscht',
+          compose: 'erstellen',
+          inbox: 'empfangen',
+          outbox: 'gesendet',
+          trash: 'gelöscht',
           composeMessage: 'Nachricht erstellen',
-          close: 'Beenden',
+          close: 'beenden',
           broadcast: 'Extra Medium',
           sms: 'SMS',
           email: 'Email',
           receviers: 'Empfänger',
-          webTRCWebLink: 'Eine Video Konferenz wurde gestartet',
+          webTRCWebLink: 'Eine Video Konferenz wurde gestartet, teilnehmen? ',
           subject: 'Subjekt',
           message: 'Nachricht',
           sendMessage: 'Nachricht versenden',
           sender: 'Absender',
           date: 'Datum',
           questionText: 'Nachricht',
-          reply: 'Beantworten',
-          del: 'Löschen',
-          noMessage: 'Keine Nachrichten.',
-          from: 'Von',
-          newMsg: 'Neu',
-          deleteSelected: 'Markierte nachrichten löschen',
-          someMessage: 'Es gibt $v nachrichten',
-          emptyTrash: 'Gelöschte nachrichten endgültig löschen',
-          noMsgInTrash: 'keine gelöschten nachrichten.',
+          reply: 'beantworten',
+          del: 'löschen',
+          noMessage: 'keine Nachrichten.',
+          from: 'von',
+          newMsg: 'neu',
+          deleteSelected: 'markierte Nachrichten löschen',
+          someMessage: 'Es gibt $v Nachrichten',
+          emptyTrash: 'gelöschte Nachrichten endgültig löschen',
+          noMsgInTrash: 'keine gelöschten Nachrichten.',
           box: 'Box',
           persons: 'Personen',
-          restoreSelected: 'Markierte nachrichten wiederherstellen',
+          restoreSelected: 'markierte Nachrichten wiederherstellen',
           loadingMessage: 'Nachricht laden...',
-          escalation: 'Escalations-nachricht',
-          reportMessage: 'Neue nachricht',
+          escalation: 'Eskalations-Nachricht',
+          reportMessage: 'neue Nachricht',
           escalationBody: function (diff, startDate, startTime, endDate, endTime)
           {
             return 'Es fehlen ' +
               diff +
-              ' personen zwischen ' +
+              ' Personen zwischen ' +
               startDate + ' ' +
               startTime + ' und ' +
               endDate + ' ' +
               endTime + '. ' +
-              'bitte stellen Sie sich, falls möglich, für diesen zeitraum verfügbar';
+              'Bitte stellen Sie sich, falls möglich, für diesen Zeitraum verfügbar';
           },
           removed: 'Nachricht wurde gelöscht.',
           removing: 'Nachricht löschen...',
           refreshing: 'Nachricht aktualisieren...',
-          removingSelected: 'Markierte nachrichten löschen...',
+          removingSelected: 'markierte Nachrichten löschen...',
           restoring: 'Nachricht wiederherstellen...',
           restored: 'Nachricht erfolgreich wiederhergestellt.',
-          restoringSelected: 'Markierte nachrichten wiederherstellen...',
+          restoringSelected: 'markierte Nachrichten wiederherstellen...',
           emptying: 'Nachrichten endgültig löschen...',
           emptied: 'Nachrichten endgültig gelöscht.',
           sending: 'Nachricht versenden...',
           sent: 'Nachricht versenden.',
           typeSubject: 'Subjekt eintragen.',
-          // messages: 'Nachrichten',
           ph_filterMessage: 'Nachrichten filtern...',
           noReceivers: 'Empfänger festlegen',
-          emptyMessageBody: 'Bitte Text zu dieser Nachricht eintragen.',
-          send: 'Versenden'
+          emptyMessageBody: 'bitte Text zu dieser Nachricht eintragen.',
+          send: 'versenden'
         },
         groups: {
-          changeMemberShip: 'Change membership',
-          doYou: 'Do you ',
-          memberOfATeam: ' like to be part of a team ',
-          personPartOfTeams: 'This person will be part of the following teams ',
-          replace: 'Replace',
-          personPartOfTeam: 'This person will only be part of team ',
+          changeMemberShip: 'Mitgliedschaft ändern',
+          doYou: 'Möchten Sie ',
+          memberOfATeam: ' in das Team ',
+          personPartOfTeams: 'Diese Person wird folgenden Teams zugeordnet ',
+          replace: 'Ersetzen',
+          personPartOfTeam: 'Diese Person wird nur Teil des Teams ',
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
-          search: 'Zoeken',
+          search: 'Suchen',
           addNewGroup: 'neue Gruppe hinzufügen',
           editGroup: 'Gruppe ändern',
-          searchResults: 'Zoekresultaten',
+          searchResults: 'Suchergebnisse',
           group: 'Gruppe',
           close: 'beenden',
           name: 'Name',
@@ -1401,9 +1486,6 @@ define(
           registerMember: 'Mitglied hinzufügen',
           role: 'Funktion',
           selectRole: 'Funktion hinzufügen',
-          // troubled
-          // selectGroup: 'Gruppe auswählen',
-          //
           email: 'Email',
           phone: 'Telefon',
           address: 'Adresse',
@@ -1413,11 +1495,11 @@ define(
           userName: 'Anwendername',
           password: 'Passwort',
           saveMember: 'Mitglied speichern',
-          serachFor: 'Suchergebnis für ',
+          serachFor: 'Suchergebnis für: ',
           sorryCanNotFind: 'Leider kein Ergebnis.',
           addToGroup: 'der Gruppe hinzufügen',
           addMemberToGroup: 'ausgewählte(n) Teilnehmer der Gruppe hinzufügen',
-          resultCount: 'Er zijn $v resultaten.',
+          resultCount: 'Es gibt $v Ergebnisse.',
           deleteGroup: 'Gruppe löschen',
           noMembers: 'keine Mitglieder in dieser Gruppe.',
           removeSelectedMembers: 'ausgewählte Mitglieder löschen',
@@ -1435,18 +1517,18 @@ define(
           memberRegstered: 'Mitglied erfolgreich hinzugefügt.',
           deleting: 'Gruppe löschen...',
           deleted: 'Gruppe erfolgreich gelöscht.',
-          filterMembers: 'Teamleden filteren...',
-          searchfor: 'voornaam, achternaam..'
+          filterMembers: 'Teammitglieder filtern...',
+          searchfor: 'Vorname, Nachname..'
         },
         profile: {
-          noTeamSelected: 'No team selected',
+          noTeamSelected: 'kein Team ausgewählt',
           extra: 'Extra',
-          default: 'Default',
-          back: 'Back',
+          default: 'Standard',
+          back: 'Zurück',
+          password: 'Passwort',
+          timeline: 'Zeitverlauf',
           profile: 'Profil',
           edit: 'ändern',
-          password: 'Wachtwoord',
-          timeline: 'Tijdlijn',
           profileView: 'Profilwiedergabe',
           userGroups: 'Anwendergruppen',
           role: 'Funktion',
@@ -1463,11 +1545,10 @@ define(
           newPass: 'neues Passwort',
           newPassRepeat: 'neues Passwort wiederholen',
           changePass: 'Passwort ändern',
-          newAvail: 'Nieuwe bereikbaarheid',
+          newAvail: 'neue Verfügbarkeit',
           userName: 'Anwendername',
-          pincode: 'teamlidcode',
-          // saveProfile: 'Profilinformationen speichern...',
-          refreshing: 'Profielinformatie vernieuwen...',
+          pincode: 'Teammitgliedscode',
+          refreshing: 'Profil aktualisieren...',
           dataChanged: 'Profildaten erfolgreich geändert.',
           savingPassword: 'neues Passwort speichern...',
           passwordChanged: 'Passwort erfolgreich aktualisiert.',
@@ -1478,7 +1559,7 @@ define(
           passChanged: 'Passwort erfolgreich geändert.',
           passwrong: 'Passwort ist inkorrekt. Eingabe wiederholen.',
           currentPassWrong: 'Das aktuelle Passwort ist inkorrekt. Eingabe wiederholen.',
-          newTimeslotAdded: 'Neue Planung erfolgreich hinzugefügt.',
+          newTimeslotAdded: 'neue Planung erfolgreich hinzugefügt.',
           changingTimeslot: 'Planung ändern...',
           timeslotChanged: 'Planung erfolgreich geändert.',
           exampleBirthDate: 'Beispiel: 31-12-2001 ',
@@ -1497,22 +1578,22 @@ define(
           changePassWord: 'Passwort ändern',
           safePassword: 'Passwort speichern',
           oldPassword: 'altes Passwort',
-          pincode: 'Teamlidcode',
-          pincodeInUse: 'Deze teamlidcode is in gebruik. Kies een andere.',
-          pincodeNotValid: 'Vul a.u.b. een geldige teamlidcode van maximaal 8 cijfers in!',
-          pincodeCorrect: 'Deze teamlidcode is in gebruik of niet geldig! Vul a.u.b. een geldige teamlidcode.',
-          pincodeInfo: 'Bovenstaande code kunt u telefonisch gebruiken om u aan te melden als TeamTelefoon uw nummer niet herkent.',
-          duplicateNumber: 'Nummer bestaat al. Andere nummer invoeren aub.',
-          pincodeInfoPhone: 'De laatste vier cijfers van dit telefoonnummer worden gebruikt voor de teamlidcode, tenzij deze zelf wordt opgegeven.'
+          pincode: 'Teammitgliedskode',
+          pincodeInUse: 'Teammitgliedskode bereits vergeben, geben Sie einen anderen ein.',
+          pincodeNotValid: 'Geben Sie den Teammitgliedskode mit maximal 8 Ziffern an',
+          pincodeCorrect: 'Teammitgliedskode vergeben oder ungültig, gebene Sie den korrekten Teammitgliedskode an.',
+          pincodeInfo: 'Mit dem oben angegebenen Kode können Sie sich bei Teamtelefon anmelden, falls Teamtelefon Ihre Telefonnummer nicht erkennt.',
+          duplicateNumber: 'Nummer bereits vorhanden, bitte geben Sie eine andere Nummer an.',
+          pincodeInfoPhone: 'Sofern Sie keinen Kode selbst angegeben haben, werden die letzten 4 Ziffern der Telefonnummer als Teammitgliedkode üebrnommen.'
         },
         settings: {
           settings: 'Einstellungen',
           user: 'Anwender',
-          application: 'Applicatie',
-          userSettings: 'Gebruikersinstellingen',
-          appSettings: 'Applicatie-instellingen',
-          saveSettings: 'Instellingen opslaan',
-          langSetting: 'Taal',
+          application: 'Anwendung',
+          userSettings: 'Anwendereinstellungen',
+          appSettings: 'App-Einstellungen',
+          saveSettings: 'Einstellungen speichern',
+          langSetting: 'Sprache',
           saving: 'Einstellungen speichern...',
           refreshing: 'Einstellungen aktualisieren...',
           saved: 'Einstellungen erfolgreich gespeichert.',
@@ -1551,7 +1632,6 @@ define(
           }
         },
         downloads: {
-          app: 'Binnenkort te downloaden.',
           manual: 'Handbuch herunterladen'
         },
         loading: {
@@ -1565,23 +1645,27 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          notFound: 'Not found',
           clientGroup: 'Clientgrupe',
           client: 'Client',
+          extraInfo: 'Extra info',
           coordinator: 'Coordinator',
-          teamMember: 'Team member',
-          teamMembers: 'Team members',
-          help: "Help",
-          new: 'New',
-          existing: 'Existing',
+          teamMember: 'Team Mitglied',
+          teamMembers: 'Team Mitglieder',
           apply: 'Anwenden',
           hour: 'Stunde',
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
-          selectMember: 'Select member',
           clients: 'Patienten',
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
+          help: "Hilfe",
+          new: 'neu',
+          existing: 'vorhanden',
+          teams: 'Gruppen',
+          selectTeam: 'Gruppe auswählen',
+          clients: 'Patienten',
           selectClientGroup: 'Patientengruppe wählen',
           loadMembersByName: 'Mitglieder laden...',
           loadingMembers: 'Mitglieder suchen...',
@@ -1596,12 +1680,30 @@ define(
           editTeam: 'Gruppe bearbeiten',
           team: 'Gruppe',
           del: 'löschen',
-          noMembers: 'Keine Gruppen-Mitglieder',
-          newTeam: 'Neue gruppe',
+          noMembers: 'keine Gruppen-Mitglieder',
+          newTeam: 'neue Gruppe',
           teamName: 'Gruppen-Name',
-          createTeam: 'Speichern',
-          newMember: 'Neues Gruppen-Mitglied',
+          createTeam: 'speichern',
+          newMember: 'neues Gruppen-Mitglied',
           noMembersFound: 'kein Ergebnis für diese Suche.',
+          //start TODO
+          backEndUnavailable: "The back-end is temporarily unavailable, try to login again. If the problem continues to occur, contact your system administrator.",
+          noBackend: function(email)
+          {
+            var text = "Het is niet gelukt om verbinding te maken met de server.<br />"
+            text += "Als u problemen blijft ervaren, kunt u een  <a href='mailto:" + email;
+            text += "?subject=Melding van een probleem met TeamUp / TeamTelefoon";
+            text += "&body=Beste%20support%2C%0A%0AHelaas%20ervaar%20ik%20problemen%20met%20TeamTelefoon.";
+            text += "%20Ik%20krijg%20de%20melding%20%u201CHet%20is%20niet%20gelukt%20om%20verbinding";
+            text += "%20te%20maken%20met%20de%20server.%u201D%0A%0AKunt%20u%20mij%20hiermee%20helpen";
+            text += "%3F%0A%0AMet%20vriendelijke%20groet%2C%0A%0A%5Buw%20naam";
+            text += "%5D%0A%5Buw%20team%5D%0A%5Buw%20organisatie%5D%20";
+            text += "'>email</a> sturen naar onze support afdeling."
+
+            return text;
+          },
+          statusCodeNotRegonized: "Status-code not regonized",
+          //end
           name: 'Name',
           role: 'Rolle',
           phone: 'Telefon',
@@ -1621,7 +1723,7 @@ define(
           queryTeamError: 'Fehler bei Gruppe-Suche aufgetreten.',
           teamNamePrompt1: 'Gruppen-Namen eintragen.',
           teamNamePrompt2: 'Kontaktdaten hinzufügen',
-          cancel: 'Abbrechen',
+          cancel: 'abbrechen',
           chooseRole: 'Rolle wählen',
           func: 'Funktion',
           chooseFunction: 'Funktion wählen',
@@ -1687,7 +1789,7 @@ define(
           // delTeamConfirm: 'Soll diese Gruppe tatsächlich gelöscht werden? Dies kann einen Moment dauern.',
           deletingClientGroup: 'Gruppe löschen... ',
           from: 'von',
-          to: 'Bis',
+          to: 'bis',
           time: 'Zeit',
           duration: 'Dauer',
           coordinatorNoTeam: 'Sie sind in keiner Gruppe; Tragen Sie sich in eine Gruppe ein.',
@@ -1697,28 +1799,28 @@ define(
             deleteClientTitle: 'Patient löschen',
             deleteClient: 'Soll dieser Patient tatsächlich gelöscht werden?',
             deleteClientFromTeamTitle: 'Patient aus Gruppe löschen',
-            deleteClientFromTeam: 'Sind Sie sicher, dass dieser patient aus dieser gruppe gelöscht werden soll?',
+            deleteClientFromTeam: 'Sind Sie sicher, dass dieser Patient aus dieser Gruppe gelöscht werden soll?',
             deleteReportTitle: 'Bericht löschen',
-            deleteReport: 'Sind Sie sicher, dass dieser bericht gelöscht werden soll?',
+            deleteReport: 'Sind Sie sicher, dass dieser Bericht gelöscht werden soll?',
             deleteProfileTitle: 'Profil löschen',
-            deleteProfile: 'Sind Sie sicher, dass dieses profil gelöscht werden soll?',
-            deleteMemberFromTeamTitle: 'Mitglied aus allen gruppen löschen',
-            deleteMemberFromTeam: 'Sind Sie sicher, dass dieses Mitglied aus allen gruppen gelöscht werden soll? Achtung, wer nicht in einer Gruppe ist, kann TeamUp nicht anwenden!',
+            deleteProfile: 'Sind Sie sicher, dass dieses Profil gelöscht werden soll?',
+            deleteMemberFromTeamTitle: 'Mitglied aus allen Gruppen löschen',
+            deleteMemberFromTeam: 'Sind Sie sicher, dass dieses Mitglied aus allen Gruppen gelöscht werden soll? Achtung, wer nicht in einer Gruppe ist, kann TeamUp nicht anwenden!',
             deleteMemberTitle: 'Mitglied löschen',
-            deleteMember: ' Sind Sie sicher, dass dieses Mitglied aus der gruppe gelöscht werden soll?',
+            deleteMember: ' Sind Sie sicher, dass dieses Mitglied aus der Gruppe gelöscht werden soll?',
             deleteClientGroupTitle: 'Kunden-Gruppe löschen',
-            deleteClientGroup: ' Sind Sie sicher, dass diese kunden-gruppe gelöscht werden soll? Dies kann einen moment dauern.',
+            deleteClientGroup: ' Sind Sie sicher, dass diese Kunden-Gruppe gelöscht werden soll? Dies kann einen Moment dauern.',
             deleteTeamTitle: 'Gruppe löschen',
-            deleteTeam: ' Sind Sie sicher, dass diese Gruppe gelöscht werden soll? Dies kann einen moment dauern.',
+            deleteTeam: ' Sind Sie sicher, dass diese Gruppe gelöscht werden soll? Dies kann einen Moment dauern.',
             deleteTaskTitle: 'Aufgabe löschen',
             deleteTask: ' Sind Sie sicher, dass diese Aufgabe gelöscht werden soll? ',
             deleteContactTitle: 'Ansprechpartner löschen',
-            deleteContact: ' Sind Sie sicher, dass dieser ansprechpartner gelöscht werden soll?',
+            deleteContact: ' Sind Sie sicher, dass dieser Ansprechpartner gelöscht werden soll?',
             remove: 'löschen',
-            addTeamMemberCodeAsPhoneTitle: 'Teamlidcode wijzigen',
-            addTeamMemberCodeAsPhone: 'Er is een eigen teamlidcode ingevoerd, die niet overeen komt met de laatste vier cijfers van uw standaard telefoonnummer?',
+            addTeamMemberCodeAsPhoneTitle: 'Teammitgliedskode ändern',
+            addTeamMemberCodeAsPhone: 'Es wurde ein eigener Teammitgliedskode angegeben, der anders lautet, las die 4 letzten Ziffern Ihrer Teamtelefonnummer?',
             photoRemoveTitle: 'Profilbild löschen',
-            photoRemoveBody: ' Sind Sie sicher, dass Ihr profilbild gelöscht werden soll?',
+            photoRemoveBody: ' Sind Sie sicher, dass Ihr Profilbild gelöscht werden soll?',
             yes: 'Ja, das möchte ich',
             no: 'Nein, abbrechen',
             cancel: 'abbrechen',
@@ -1763,22 +1865,23 @@ define(
           pageLast: 'letzte',
           refresh: 'aktualisieren',
           stateValue: {
-            'reachable': 'Erreichbar',
-            'available': 'Verfügbar',
-            'working': 'Eeschäftigt',
-            'offline': 'Off-line',
-            'not_reachable': 'Nicht erreichbar',
-            'on_the_phone': 'Am Telefon',
-            'unknown': 'Unbekannt',
-            'possibly_reachable': 'Nichts geplant',
-            'unreachable': 'Nicht erreichbar',
-            'unavailable': 'Nicht verfügbar',
-            'unknown': 'Off-line'
+            'reachable': 'erreichbar',
+            'available': 'verfügbar',
+            'working': 'beschäftigt',
+            'offline': 'offline',
+            'not_reachable': 'nicht erreichbar',
+            'on_the_phone': 'am Telefon',
+            'unknown': 'unbekannt',
+            'reachable': 'erreichbar',
+            'possibly_reachable': 'nichts geplant',
+            'unreachable': 'nicht erreichbar',
+            'unavailable': 'nicht verfügbar',
+            'unknown': 'offline'
           },
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
           errorCode: {
-            '1': 'Unbekannte Fehlermeldung',
+            '1': 'unbekannte Fehlermeldung',
             '2': 'Domainagent nicht gefunden. Erneutes Anmelden könnte das Problem beheben.',
             '3': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '4': 'Agent ID darf nur Buchstaben und Zahlen enthalten.',
@@ -1790,19 +1893,19 @@ define(
             '10': 'Gruppe mit  teamUuid existiert nicht',
             '11': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '12': 'Team-Agent konnte nicht erstellt werden',
-            '13': 'Uuid Parameter und uuid in payload sind nicht identisch',
-            '14': 'Es gibt bereits ein Mitglied mit dieser benutzername ',
-            '15': 'Einer der Werte ist unbekannt',
-            '16': 'Eine der Eingaben ist NULL, d.h. ungültig',
-            '17': 'Einer der Werte ist von einem unbekannten Typ.',
-            '18': 'Ein Anwender mit dieser ID existiert nicht',
-            '19': 'Das vorherige und aktuelle Passwort stimmen nicht überein',
+            '13': 'uuid Parameter und uuid in payload sind nicht identisch',
+            '14': 'Es gibt bereits ein Mitglied mit dieser uuid ',
+            '15': 'einer der Werte ist unbekannt',
+            '16': 'eine der Eingaben ist NULL, d.h. ungültig',
+            '17': 'einer der Werte ist von einem unbekannten Typ.',
+            '18': 'ein Anwender mit dieser ID existiert nicht',
+            '19': 'das vorherige und aktuelle Passwort stimmen nicht überein',
             '20': 'Dieses Mitglied muss die Koordinator-Rolle besitzen, um das Passwort eines anderen Mitgliedes zu ändern.',
             '21': 'Ein Parameter kann nicht bearbeitet werden',
             '22': 'Dieser Teilnehmer ist in keiner Gruppe',
-            '23': 'No valid body, some attributes are missing',
-            '24': 'Something is not configured properly,AskFast can not be reached',
-            '25': 'The phonenumber is already in use',
+            '23': 'Ungültig, es fehlen Angaben',
+            '24': 'Konfigurationsfehler, AskFast nicht möglich',
+            '25': 'Telefonnummer wird schon verwendet',
             '26': 'One of the conditions to activate TeamTelephone was unsuccessful',
             '27': 'The scenario could not be created for this team',
             '28': 'AskFast error',
@@ -1811,7 +1914,8 @@ define(
             '31': 'TeamTelefoon is already activated for this team',
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
-            '34': 'Could not generate scenario'
+            '34': 'Could not generate scenario',
+            '36': 'A unexpected parameter of type'
           },
         },
         upload: {
@@ -1838,102 +1942,102 @@ define(
           afternoon: "afternoon",
           night: "night",
           importedFromASpreadSheet: 'Imported from spreadsheet',
-          expectationTime: function(cellName)
+          expectationTime: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there is a point in time expected.";
           },
-          expectationClientName: function(cellName)
+          expectationClientName: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there was a clientname expected.";
           },
-          expectationMinutes: function(cellName)
+          expectationMinutes: function (cellName)
           {
             return "There is a yes/no value found in cell " + cellName + ", while there are a amount of minutes expected";
           },
           foundIntNeedString: "There is a error found in ",
-          readError: function(cellName)
+          readError: function (cellName)
           {
             return "It's not possible to read a point in time in cell " + cellName + " te lezen.";
           },
-          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          nofUnassignedRoutes: function (nofUnassignedRoutes)
           {
-            return  "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
+            return "There are " + nofUnassignedRoutes + " routes where a team member is assigned to.";
           },
           unknownError: "A unknown error is occured: ",
           errors: 'Errors'
         },
         task: {
-          timeframe: 'Tijdsbestek',
+          timeframe: 'Zeitspanne',
           status: 'Status',
-          description: 'Beschrijving',
-          createdBy: 'Gemaakt door',
-          name: 'Naam',
-          hasToload: ' aan het laden..',
-          showArchivedTasks: 'Toon gearchiveerde taken',
-          showOnlyNotAssignedTasks: 'Toon alleen niet toegewezen taken',
-          member: 'Lid',
-          thereAreAmountTasks: function(amountTasks)
+          description: 'Beschreibung',
+          createdBy: 'Erstellt durch',
+          name: 'Name',
+          hasToload: ' läd..',
+          showArchivedTasks: 'archivierte Aufgaben anzeigen',
+          showOnlyNotAssignedTasks: 'Nur nicht zugewiesene Aufgaben anzeigen',
+          member: 'Mitglied',
+          thereAreAmountTasks: function (amountTasks)
           {
-            if(amountTasks == 1)
+            if (amountTasks == 1)
             {
-              return "Er is " + amountTasks + " taak.";
+              return "Es gibt eine " + amountTasks + " Aufgabe.";
             }
             else
             {
-              return "Er zijn " + amountTasks + " taken."
+              return "Es gibt " + amountTasks + " Aufgaben."
             }
           },
-          carer: 'Verzorger',
-          information: 'Informatie',
-          noTasks: 'Geen taken',
-          clientName: 'Cliënt',
-          memberName: 'Lid',
-          orderType1: 'Standaard volgorde',
-          orderType2: 'Tijd',
-          tasks: 'Taken',
-          myTask: 'Mijn taken',
-          newTask: 'Nieuwe Taak',
-          orderby: 'Sorteer op',
-          allTasks: 'Alle taken',
-          description: 'Opmerkingen',
-          filltheTime: 'Vul de start- en eindtijd in voor de taak.',
-          startTimeEmpty: 'Vul de startdatum en -tijd in.',
-          endTimeEmpty: 'Vul de einddatum en -tijd in.',
-          planTaskInFuture: 'U kunt geen taak in het verleden aanmaken. Selecteer een start- en eindtijd in de toekomst.',
-          startLaterThanEnd: 'Beginttijd moet eerder zijn dan de eindtijd.',
-          specifyClient: 'Selecteer een cliënt voor deze taak.',
-          creatingTask: 'Taak wordt aangemaakt',
-          editingTask: 'Taak wordt gewijzigd',
-          taskSaved: 'Taak is opgeslagen.',
-          deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
-          taskDeleted: 'Taak verwijderd.',
-          planningTime: 'Tijdsbestek',
-          refreshTask: 'Het herladen van de taken',
-          upload: 'Upload taken',
-          deleteTasksConfirm: 'Weet u zeker dat u deze taken permanent wilt verwijderen?',
-          taskDescriptionMinChars: 'Opmerkingen moeten uit minimaal 8 karakters bestaan.',
-          taskDescriptionMaxChars: 'Het maximaal aantal karakters voor opmerkingen is 500.',
-          taskFormValide: 'De nieuwe taak is niet valide! Ga de eisen onder elk veld na.'
+          carer: 'Betreuer',
+          information: 'Information',
+          noTasks: 'Keine Aufgaben',
+          clientName: 'Klient',
+          memberName: 'Mitglied',
+          orderType1: 'Standard -Reihenfolge',
+          orderType2: 'Zeit',
+          tasks: 'Aufgaben',
+          myTask: 'Meine Aufgaben',
+          newTask: 'Neue Aufgabe',
+          orderby: 'Aufsteigend sortieren',
+          allTasks: 'Alle Aufgaben',
+          description: 'Anmerkungen',
+          filltheTime: 'Geben Sie Start- und Endzeit der Aufgabe ein.',
+          startTimeEmpty: 'Geben Sie Startdatum und Startzeit ein.',
+          endTimeEmpty: 'Geben Sie Enddatum und Endzeit ein.',
+          planTaskInFuture: 'Sie können keine Aufgabe in der Vergangenheit einrichten. Wählen Sie Start und Ende in der Zukunft',
+          startLaterThanEnd: 'Beginn muss vor dem Ende liegen.',
+          specifyClient: 'Wählen Sie einen Klienten für die Aufgabe.',
+          creatingTask: 'Aufgabe wird erstellt',
+          editingTask: 'Aufgabe wird geändert',
+          taskSaved: 'Aufgabe gespeichert.',
+          deleteTaskConfirm: 'Sind Sie sicher, dass Sie diese Aufgabe endügltig löschen möchten?',
+          taskDeleted: 'Aufgabe gelöscht.',
+          planningTime: 'Zeitspanne',
+          refreshTask: 'Das Laden von Aufgaben',
+          upload: 'Aufgaben hochladen',
+          deleteTasksConfirm: 'Sind Sie sicher, dass Sie diese Anmerkungen löschen möchten?',
+          taskDescriptionMinChars: 'Anmerkungen müssen mindestens 8 Zeichen umfassen.',
+          taskDescriptionMaxChars: 'Anmerkungen können maximal 500 Zeichen umfassen.',
+          taskFormValide: 'Neue Aufgabe ungültig! Folgen Sie schrittweise den Anweisungen.'
         },
         order: {
-          randomOrder: 'Willkürlich',
+          randomOrder: 'willkürlich',
           fixedOrder: 'Reihenfolge selbst bestimmen',
-          evenOrder: 'Gleichmäßig',
+          evenOrder: 'Evenly',
           confirmation: 'Auswahl bestätigen',
           loadTeam: 'Gruppe laden...',
           orderSaved: 'Reihenfolge gespeichert',
-          noMembers: 'Keine Mitglieder in dieser Gruppe.',
+          noMembers: 'keine Mitglieder in dieser Gruppe.',
           evenOrderFeedback: "With this option, the caller is transferred to the team member that least recently called to.",
           randomFeedback: 'With this option, a caller is always connected to any team member.',
           fixedOrderFeedback: 'With this option, the team can determine the sequence.'
         },
         logs: {
           loadLogs: 'Logs laden...',
-          empty: 'Keine Logs vorhanden',
+          empty: 'keine Logs vorhanden',
           filter: 'Logs filtern...',
-          amountLogs: function(amount)
+          amountLogs: function (amount)
           {
-            if(amount == 1)
+            if (amount == 1)
             {
               return 'There is ' + amount + ' log shown';
             }
@@ -1943,11 +2047,11 @@ define(
             }
           },
           status: {
-            sent: 'Ausgehend',
-            received: 'Eingehend',
-            finished: 'Beendet',
-            missed: 'Verpasst',
-            delivered: 'Empfangen',
+            sent: 'ausgehend',
+            received: 'eingehend',
+            finished: 'beendet',
+            missed: 'verpasst',
+            delivered: 'empfangen',
             error: 'Fehler'
           }
         },
@@ -1956,18 +2060,18 @@ define(
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
-            tooShort: ' (Fehlerhafte Telefonnummer: zu wenig Ziffern.)',
-            tooLong: ' (Fehlerhafte Telefonnummer: zu viele Ziffern.)',
-            notValidOnSubmit: 'Es muss minimal eine korrekte Telefonnummer eingetragen werden, bevor die Daten gespeichert werden.',
-            message: 'Fehlerhafte Telefonnummer. Die Nummer ist bereits vorhanden ',
+            tooShort: ' (fehlerhafte Telefonnummer: zu wenig Ziffern.)',
+            tooLong: ' (fehlerhafte Telefonnummer: zu viele Ziffern.)',
+            notValidOnSubmit: 'es muss minimal eine korrekte Telefonnummer eingetragen werden, bevor die Daten gespeichert werden.',
+            message: 'fehlerhafte Telefonnummer. Die Nummer ist bereits vorhanden ',
             as: ' als ',
-            multipleNotvalid: 'Eine oder mehrere fehlerhafte Telefonnummer(n)!',
-            fixedLine: 'Eine Festnetznummer',
-            mobile: 'Eine mobile Telefonnummer',
-            mobileOrFixedLine: 'Eine Festnetz- oder mobile Telefonnummer'
+            multipleNotvalid: 'eine oder mehrere fehlerhafte Telefonnummer(n)!',
+            fixedLine: 'eine Festnetznummer',
+            mobile: 'eine mobile Telefonnummer',
+            mobileOrFixedLine: 'eine Festnetz- oder mobile Telefonnummer'
           },
           pincode: {
-            exists: 'Dieser Mitglieder-Kode ist bereits vergeben. Wählen Sie einen anderen!'
+            exists: 'Dieser Mitgliedskode ist bereits vergeben. Wählen Sie einen anderen!'
           },
           password: {
             amountMinChars: function (chars)
@@ -1979,24 +2083,24 @@ define(
               return ' und maximal ' + chars + ' Zeichen enthalten'
             },
             oldPassMatch: 'Das eingetragene alte Passwort ist nicht identisch mit dem aktuellen Passwort.',
-            required: 'Es muss ein Passwort eingetragen werden'
+              required: 'Es muss ein Passwort eingetragen werden'
           },
           email: {
             notValid: 'E-Mail Adresse ist fehlerhaft!',
-            required: 'Es muss eine E-Mail Adresse eingetragen werden'
+              required: 'Es muss eine E-Mail Adresse eingetragen werden'
           },
           role: 'Rolle festlegen',
-          birthDate: {
+            birthDate: {
             notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
-            regex: 'Der Anwender Name darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
-            valid: 'Es muss ein Anwender Name festgelegt werden'
+            regex: 'Der Anwendername darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
+              valid: 'Es muss ein Anwendernamen festgelegt werden'
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
           },
-        }
+        },
       },
       nl: {
         meta: {
@@ -2029,7 +2133,7 @@ define(
           loading_Members: 'Teamleden laden...',
           loading_everything: 'Alles is geladen!',
           logout: 'Uitloggen',
-          loggingOff: 'Logging off',
+          loggingOff: 'Uitloggen',
           loading: 'Laden..',
           loading_clientGroups: 'Cliëntengroepen laden...',
           loading_clients: 'Cliënten laden',
@@ -2039,7 +2143,7 @@ define(
         video: {
           title: 'Video',
           videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
-          stop: 'Het videogesprek is gestopt.'
+          stop: 'Het videogesprek is beëindigd.'
         },
         dashboard: {
           thisWeek: 'Deze week',
@@ -2068,6 +2172,8 @@ define(
           currentAmountReachable: 'Huidig aantal beschikbaar ',
           amountOfPeopleWished: 'Gewenst aantal mensen',
           requiredPeople: 'Benodigd',
+          customDates: 'Aangepaste periode',
+          planboard: 'Agenda',
           newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
@@ -2076,15 +2182,16 @@ define(
           from: 'Vanaf',
           till: 'Tot',
           state: 'Status',
-          selectAState: 'Selecteer een status',
-          reoccuring: 'Elke week',
-          lessPeople: 'Er zijn $v mensen te weinig als nodig.',
-          samePeople: 'Er zijn net zoveel mensen als nodig.',
-          morePeople: 'Er zijn $v mensen meer als nodig.',
-          noMembers: 'Dit team heeft geen leden',
-          wished: 'Behoefte',
+          selectAState: 'selecteer een status',
+          reoccuring: 'Herhaling',
+          lessPeople: 'Er is een tekort van $v mens(en)!',
+          samePeople: 'Er zijn precies genoeg mensen.',
+          morePeople: 'Er is een overschot van $v mens(en)!',
+          wished: 'Gewenst',
           combine_reoccuring: 'Dit is een gecombineerde planning rij met opeenvolgende rijen.',
           sendMsgToMember: 'Stuur bericht naar teamleden',
+          noMembers: 'Er zijn geen leden in dit team.',
+          noClients: 'Er zijn geen cliënten in deze cliëntgroep.',
           add: 'Toevoegen',
           del: 'Verwijderen',
           change: 'Wijzigen',
@@ -2095,7 +2202,7 @@ define(
           wishes: 'Behoefte',
           legenda: 'Legenda',
           group: 'Team',
-          groups: 'Team',
+          groups: 'Teams',
           members: 'Leden',
           teamMembers: 'Teamleden',
           bothAvailable: 'Beide beschikbaar',
@@ -2134,83 +2241,6 @@ define(
           statPeopleEven: 'Precies genoeg mensen',
           statPeopleMore: 'Meer mensen dan verwacht',
           getWishes: 'Pak de minimale benodigde waarde...',
-          daterangerToday: 'Vandaag',
-          daterangerTomorrow: 'Morgen',
-          daterangerYesterday: 'Gisteren',
-          daterangerNext3Days: 'Volgende 3 dagen',
-          daterangerNext7Days: 'Volgende 7 dagen',
-          rangeInfoTotalSelectedDays: 'Totaal geselecteerde dagen: ',
-          rangeInfoTime: 'Tijd: ',
-          rangeInfoWeekNumber: 'Weeknummer: ',
-          rangeInfoMonth: 'Maand: ',
-          rangeInfoTotalDays: ', Totaal aantal dagen: ',
-          query: 'Er zijn wat problemen met het synchroniseren van de agenda. Kunt u alstublieft uw browser verversen om de laatste informatie op te halen.',
-          pastAdding: 'Het is niet mogelijk in het verleden te plannen!',
-          errorAdd: 'Fout opgetreden tijdens het toevoegen van een planning!',
-          errorChange: 'Fout opgetreden tijdens het wijzigen van een planning!',
-          pastChanging: 'Het wijzigen van een planning in het verleden is niet mogelijk!',
-          pastDeleting: 'Het verwijderen van een planning in het verleden is niet mogelijk!',
-          remove: 'Fout(en) met het verwijderen van de planning!',
-          wisher: 'Fout(en) met het wijzigen van de behoefte',
-          editTimeline: 'Wijzig de tijdlijn van ',
-          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coördinator. Als coördinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.',
-          the: 'De',
-          reachabilityChangedSentence: 'bereikbaarheid kan gewijzigd worden',
-          byThe: 'door te',
-          doubleClick: 'dubbelklikken op reeds bestaande blokken of ',
-          byDragging: 'door te slepen',
-          leftButtonMouse: 'met uw muis. Met de linkermuisknop en de',
-          or: 'of',
-          buttonPushed: 'knop tegelijkertijd ingedrukt.'
-        },
-        planboard: {
-          planboard: 'Agenda',
-          newAvail: 'Nieuwe bereikbaarheid',
-          day: 'Dag',
-          week: 'Week',
-          month: 'Maand',
-          updateAvail: 'Update bereikbaarheid',
-          from: 'Van',
-          till: 'Tot',
-          state: 'Status',
-          customDates: 'Aangepaste periode',
-          selectAState: 'selecteer een status',
-          reoccuring: 'Herhaling',
-          lessPeople: 'Er is een tekort van $v mens(en)!',
-          samePeople: 'Er zijn precies genoeg mensen.',
-          morePeople: 'Er is een overschot van $v mens(en)!',
-          wished: 'Gewenst',
-          combine_reoccuring: 'Dit is een gecombineerde planning.',
-          sendMsgToMember: 'Stuur bericht naar leden',
-          noMembers: 'Er zijn geen leden in dit team.',
-          noClients: 'Er zijn geen cliënten in deze cliëntgroep.',
-          add: 'Toevoegen',
-          del: 'Verwijderen',
-          change: 'Wijzigen',
-          setWish: 'Behoefte instellen',
-          timeline: 'Tijdlijn',
-          statistics: 'Statistieken',
-          barCharts: 'Staafdiagrammen',
-          wishes: 'Behoefte',
-          legenda: 'Legenda',
-          group: 'Groep',
-          groups: 'Groepen',
-          members: 'Leden',
-          teamMembers: 'Teamleden',
-          bothAvailable: 'Beide bereikbaar',
-          northAavailable: 'Beschikbaar Noord',
-          southAvailable: 'Beschikbaar Zuid',
-          skipperOutService: 'Schipper van dienst',
-          notAvailable: 'Niet bereikbaar',
-          notachieve: 'Niet behaald',
-          legendaLabels: {
-            morePeople: 'Meer mensen',
-            enoughPeople: 'Precies genoeg mensen',
-            lessPeople: 'Te weinig mensen'
-          },
-          lastSyncTime: 'Laatste synchronisatietijd:',
-          dataRangeStart: 'Begin gegevensscala: ',
-          DataRangeEnd: 'Eind gegevensscala: ',
           daterangerToday: 'Vandaag',
           daterangerTomorrow: 'Morgen',
           daterangerLast7Days: 'Laatste 7 dagen',
@@ -2265,7 +2295,172 @@ define(
             return html;
           },
           noTasksFounded: 'Geen taken gevonden in de opgegeven range.',
-          removeTasksTitle: 'Taken verwijderen'
+          removeTasksTitle: 'Taken verwijderen',
+          query: 'Er zijn wat problemen met het synchroniseren van de agenda. Kunt u alstublieft uw browser verversen om de laatste informatie op te halen.',
+          pastAdding: 'Het is niet mogelijk in het verleden te plannen!',
+          errorAdd: 'Fout opgetreden tijdens het toevoegen van een planning!',
+          errorChange: 'Fout opgetreden tijdens het wijzigen van een planning!',
+          pastChanging: 'Het wijzigen van een planning in het verleden is niet mogelijk!',
+          pastDeleting: 'Het verwijderen van een planning in het verleden is niet mogelijk!',
+          remove: 'Fout(en) met het verwijderen van de planning!',
+          wisher: 'Fout(en) met het wijzigen van de behoefte',
+          editTimeline: 'Wijzig de tijdlijn van ',
+          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coördinator. Als coördinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.',
+          the: 'De',
+          reachabilityChangedSentence: 'bereikbaarheid kan gewijzigd worden',
+          byThe: 'door te',
+          doubleClick: 'dubbelklikken op reeds bestaande blokken of ',
+          byDragging: 'door te slepen',
+          leftButtonMouse: 'met uw muis. Met de linkermuisknop en de',
+          or: 'of',
+          buttonPushed: 'knop tegelijkertijd ingedrukt.'
+        },
+        planboard: {
+          currentAmountReachable: 'Huidig aantal beschikbaar ',
+          amountOfPeopleWished: 'Gewenst aantal mensen',
+          requiredPeople: 'Benodigd',
+          customDates: 'Aangepaste periode',
+          planboard: 'Agenda',
+          newAvail: 'Nieuwe bereikbaarheid',
+          day: 'Dag',
+          week: 'Week',
+          month: 'Maand',
+          updateAvail: 'Update bereikbaarheid',
+          from: 'Vanaf',
+          till: 'Tot',
+          state: 'Status',
+          selectAState: 'selecteer een status',
+          reoccuring: 'Herhaling',
+          lessPeople: 'Er is een tekort van $v mens(en)!',
+          samePeople: 'Er zijn precies genoeg mensen.',
+          morePeople: 'Er is een overschot van $v mens(en)!',
+          wished: 'Gewenst',
+          combine_reoccuring: 'Dit is een gecombineerde planning rij met opeenvolgende rijen.',
+          sendMsgToMember: 'Stuur bericht naar teamleden',
+          noMembers: 'Er zijn geen leden in dit team.',
+          noClients: 'Er zijn geen cliënten in deze cliëntgroep.',
+          add: 'Toevoegen',
+          del: 'Verwijderen',
+          change: 'Wijzigen',
+          setWish: 'Behoefte opslaan',
+          timeline: 'Tijdlijn',
+          statistics: 'Statistieken',
+          barCharts: 'Staafdiagrammen',
+          wishes: 'Behoefte',
+          legenda: 'Legenda',
+          group: 'Team',
+          groups: 'Teams',
+          members: 'Leden',
+          teamMembers: 'Teamleden',
+          bothAvailable: 'Beide beschikbaar',
+          northAavailable: 'beschikbaar Noord',
+          southAvailable: 'beschikbaar Zuid',
+          skipperOutService: 'Skipper Of Service',
+          notAvailable: 'Niet bereikbaar', // Niet Beschikbaar
+          notachieve: 'Niet gearchiveerd',
+          legendaLabels: {
+            morePeople: 'Ruim genoeg mensen',
+            enoughPeople: 'Precies genoeg mensen',
+            lessPeople: 'Te weinig mensen'
+          },
+          lastSyncTime: 'Laatste synchronisatie tijd:',
+          dataRangeStart: 'Datumbereik start: ',
+          DataRangeEnd: 'Datumbereik eind: ',
+          loadingTimeline: 'Tijdlijn laden...',
+          addTimeSlot: 'Tijdslot toevoegen...',
+          slotAdded: 'Nieuw tijdslot is succesvol toegevoegd',
+          changingSlot: 'Tijdslot wijzigen...',
+          slotChanged: 'Tijdslot succesvol gewijzigd.',
+          changingWish: 'Behofte wordt veranderd...',
+          wishChanged: 'De behoefte is succesvol gewijzigd.',
+          deletingTimeslot: 'Tijdslot verwijderen...',
+          timeslotDeleted: 'Tijdslot is succesvol verwijderd.',
+          refreshTimeline: 'Tijdlijn verversen...',
+          preCompilingStortageMessage: 'Voor gecompileert kort bericht',
+          weeklyPlanning: 'Weekelijkse planninng',
+          planning: 'Mijn planning',
+          planningOf: 'Planning van ',
+          minNumber: 'Minimum aantal benodigden',
+          statDays: 'dagen',
+          statHours: 'uren',
+          statMinutes: 'minuten',
+          statPeopleLess: 'Minder mensen dan verwacht',
+          statPeopleEven: 'Precies genoeg mensen',
+          statPeopleMore: 'Meer mensen dan verwacht',
+          getWishes: 'Pak de minimale benodigde waarde...',
+          daterangerToday: 'Vandaag',
+          daterangerTomorrow: 'Morgen',
+          daterangerLast7Days: 'Laatste 7 dagen',
+          daterangerYesterday: 'Gisteren',
+          daterangerNext3Days: 'Volgende 3 dagen',
+          daterangerNext7Days: 'Volgende 7 dagen',
+          loadingTimeline: 'Tijdlijn laden...',
+          rangeInfoTotalSelectedDays: 'Totaal aantal geselecteerde dagen: ',
+          rangeInfoTime: 'Tijd: ',
+          rangeInfoWeekNumber: 'Weeknummer: ',
+          rangeInfoMonth: 'Maand: ',
+          rangeInfoTotalDays: ', Totaal aantal dagen: ',
+          addTimeSlot: 'Tijdslot toevoegen...',
+          slotAdded: 'Tijdslot succesvol toegevoegd.',
+          changingSlot: 'Tijdslot wijzigen...',
+          slotChanged: 'Tijdslot succesvol gewijzigd.',
+          changingWish: 'Behoefte wijzigen...',
+          wishChanged: 'Behoefte succesvol gewijzigd.',
+          deletingTimeslot: 'Tijdslot verwijderen...',
+          timeslotDeleted: 'Tijdslot succesvol verwijderd.',
+          refreshTimeline: 'Tijdlijn vernieuwen...',
+          preCompilingStortageMessage: 'Opstellen tekortbericht',
+          weeklyPlanning: 'Mijn wekelijkse planning',
+          weeklyPlanningOf: 'Wekelijkse planning van ',
+          planning: 'Mijn planning',
+          planningOf: 'Planning van ',
+          minNumber: 'Minimum aantal benodigde mensen',
+          time: 'Time: ',
+          weekNumber: 'Weeknummer: ',
+          monthNumber: 'Maand nummer: ',
+          totalDays: 'Totaal dagen: ',
+          removeTasksRange: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'Weet u zeker dat u de taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' wilt verwijderen?';
+            }
+
+            return html;
+          },
+          tasksDeleted: function (options)
+          {
+            if (!_.isUndefined(options))
+            {
+              var html = 'De taken van ' + options.range.start + ' t/m ' + options.range.end;
+              html += ' van ' + options.group + ' ' + options.name;
+              html += ' zijn verwijderd.';
+            }
+
+            return html;
+          },
+          noTasksFounded: 'Geen taken gevonden in de opgegeven range.',
+          removeTasksTitle: 'Taken verwijderen',
+          query: 'Er zijn wat problemen met het synchroniseren van de agenda. Kunt u alstublieft uw browser verversen om de laatste informatie op te halen.',
+          pastAdding: 'Het is niet mogelijk in het verleden te plannen!',
+          errorAdd: 'Fout opgetreden tijdens het toevoegen van een planning!',
+          errorChange: 'Fout opgetreden tijdens het wijzigen van een planning!',
+          pastChanging: 'Het wijzigen van een planning in het verleden is niet mogelijk!',
+          pastDeleting: 'Het verwijderen van een planning in het verleden is niet mogelijk!',
+          remove: 'Fout(en) met het verwijderen van de planning!',
+          wisher: 'Fout(en) met het wijzigen van de behoefte',
+          editTimeline: 'Wijzig de tijdlijn van ',
+          notAuth: 'Het is niet mogelijk om iemands anders planning te wijzigen, behalve als de rol van coördinator. Als coördinator kan je de planning van andere wijzigen  door op hun naam te klikken in de lijst. Je wordt naar een andere pagina genavigeerd waar de planning van het betreffende lid is te wijzigen.',
+          the: 'De',
+          reachabilityChangedSentence: 'bereikbaarheid kan gewijzigd worden',
+          byThe: 'door te',
+          doubleClick: 'dubbelklikken op reeds bestaande blokken of ',
+          byDragging: 'door te slepen',
+          leftButtonMouse: 'met uw muis. Met de linkermuisknop en de',
+          or: 'of',
+          buttonPushed: 'knop tegelijkertijd ingedrukt.'
         },
         message: {
           title: 'CHAT',
@@ -2518,8 +2713,10 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          notFound: 'Niet gevonden',
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
+          extraInfo: 'Extra info',
           coordinator: 'Coördinator',
           teamMember: 'Teamlid',
           teamMembers: 'Teamleden',
@@ -2550,10 +2747,11 @@ define(
           del: 'Verwijder',
           seconds: "seconden",
           noMembers: 'Geen leden in dit team.',
-          newTeam: 'Nieuw Team',
+          newTeam: 'Nieuw team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
           newMember: 'Nieuw teamlid',
+          searchMember: 'Zoek teamlid',
           noMembersFound: 'Geen leden gevonden met de opgegeven zoekterm.',
           name: 'Naam',
           role: 'Rol',
@@ -2567,6 +2765,24 @@ define(
           states: 'Status',
           saveTeam: 'Team opslaan',
           save: 'Opslaan',
+          //start TODO
+          backEndUnavailable: "De back-end is tijdelijk buiten gebruik, probeer opnieuw in te loggen. Als het probleem blijft voorkomen, neem dan contact op met uw systeembeheerder.",
+          noBackend: function(email)
+          {
+            var text = "Het is niet gelukt om verbinding te maken met de server.<br />"
+            text += "Als u problemen blijft ervaren, kunt u een  <a href='mailto:" + email;
+            text += "?subject=Melding van een probleem met TeamUp / TeamTelefoon";
+            text += "&body=Beste%20support%2C%0A%0AHelaas%20ervaar%20ik%20problemen%20met%20TeamTelefoon.";
+            text += "%20Ik%20krijg%20de%20melding%20%u201CHet%20is%20niet%20gelukt%20om%20verbinding";
+            text += "%20te%20maken%20met%20de%20server.%u201D%0A%0AKunt%20u%20mij%20hiermee%20helpen";
+            text += "%3F%0A%0AMet%20vriendelijke%20groet%2C%0A%0A%5Buw%20naam";
+            text += "%5D%0A%5Buw%20team%5D%0A%5Buw%20organisatie%5D%20";
+            text += "'>email</a> sturen naar onze support afdeling."
+
+            return text;
+          },
+          statusCodeNotRegonized: "Status-code is niet bekend.",
+          //end
           refreshing: 'Teaminformatie opnieuw ophalen',
           dataChanged: 'Data is veranderd.',
           teamSubmitError: 'Fouten tijdens het aanmaken: ',
@@ -2765,7 +2981,8 @@ define(
             '31': 'TeamTelefoon is al geactiveerd voor dit team',
             '32': 'Agent niet gevonden',
             '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
-            '34': 'Kon het scenario niet genereren'
+            '34': 'Kon het scenario niet genereren',
+            '36': 'Een niet verwachte parameter "type"'
           }
         },
         options: {
@@ -2815,9 +3032,9 @@ define(
           showArchivedTasks: 'Toon gearchiveerde taken',
           showOnlyNotAssignedTasks: 'Toon alleen niet toegewezen taken',
           member: 'Lid',
-          thereAreAmountTasks: function(amountTasks)
+          thereAreAmountTasks: function (amountTasks)
           {
-            if(amountTasks == 1)
+            if (amountTasks == 1)
             {
               return "Er is " + amountTasks + " taak.";
             }
@@ -2826,7 +3043,6 @@ define(
               return "Er zijn " + amountTasks + " taken."
             }
           },
-
           carer: 'Verzorger',
           employee: 'Team en medewerker',
           information: 'Informatie',
@@ -2896,26 +3112,26 @@ define(
           afternoon: "middag",
           night: "nacht",
           importedFromASpreadSheet: 'Geïmporteerd vanuit een spreadsheet',
-          expectationTime: function(cellName)
+          expectationTime: function (cellName)
           {
             return "Er is een ja/nee waarde gevonden in cel " + cellName + ", terwijl er een tijdstip werd verwacht.";
           },
-          expectationClientName: function(cellName)
+          expectationClientName: function (cellName)
           {
             return "Er is een ja/nee waarde gevonden in cel " + cellName + ", terwijl er een cliëntnaam werd verwacht.";
           },
-          expectationMinutes: function(cellName)
+          expectationMinutes: function (cellName)
           {
             return "Er is een ja/nee waarde gevonden in cel " + cellName + ", terwijl er een aantal minuten werd verwacht.";
           },
           foundIntNeedString: "Er is een fout gevonden in cel ",
-          readError: function(cellName)
+          readError: function (cellName)
           {
             return "Het is niet mogelijk om het tijdstip in cel " + cellName + " te lezen.";
           },
-          nofUnassignedRoutes: function(nofUnassignedRoutes)
+          nofUnassignedRoutes: function (nofUnassignedRoutes)
           {
-            return  "Er zijn " + nofUnassignedRoutes + " routes waaraan nog geen teamlid is toegekend.";
+            return "Er zijn " + nofUnassignedRoutes + " routes waaraan nog geen teamlid is toegekend.";
           },
           unknownError: "Er is een onbekende fout opgetreden: ",
           errors: 'Fouten'
@@ -2924,9 +3140,9 @@ define(
           loadLogs: 'Logs laden...',
           empty: 'Er zijn geen logs',
           filter: 'Filter logs...',
-          amountLogs: function(amount)
+          amountLogs: function (amount)
           {
-            if(amount == 1)
+            if (amount == 1)
             {
               return 'Er is ' + amount + ' log getoond.';
             }

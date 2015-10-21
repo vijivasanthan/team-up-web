@@ -7,16 +7,33 @@ define(
     controllers.controller(
       'teamCtrl',
       function ($rootScope, $scope, $location, Teams, data, $route, $routeParams, Store, Dater,
-                TeamUp, $timeout, MD5, Profile, CurrentSelection, Permission)
+                TeamUp, $timeout, MD5, Profile, $interval, CurrentSelection, Permission)
       {
         $rootScope.fixStyles();
+
+
+        // Example without progress Bar
+        $scope.loadingWithProgress = function () {
+          // Set progress 0;
+          $scope.laddaLoadingBar = 0;
+          // Run in every 30 milliseconds
+          var interval = $interval(function () {
+            // Increment by 1;
+            $scope.laddaLoadingBar++;
+            if ($scope.laddaLoadingBar >= 100) {
+              // Cancel interval if progress is 100
+              $interval.cancel(interval);
+              //Set ladda loading false
+              $scope.laddaLoadingBar = false;
+            }
+          }, 30);
+        };
 
         $scope.data = {
           teams: data.teams,
           members: checkLocationMembers(data.members)
         };
         $scope.current = data.teamId;
-        $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
         $location.search({ uuid: $scope.current }).hash($location.hash() || 'team');
         setView($location.hash());
 
@@ -222,7 +239,6 @@ define(
               $scope.data.members = $scope.data.members || [];
               $scope.data.members.push(currentMember);
               $scope.data.members = checkLocationMembers($scope.data.members);
-              $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf($scope.current) >= 0);
 
               $scope.setViewTo('team');
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
@@ -574,7 +590,6 @@ define(
         function loadCurrentTeam(teamId)
         {
           $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-          $scope.isLoggedUserTeam = ($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0);
 
           Teams.getSingle(teamId)
             .then(function(members)

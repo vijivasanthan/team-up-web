@@ -12,9 +12,22 @@ define(['services/services', 'config'],
         '$q',
         'Store',
         '$location',
-        function ($rootScope, $resource, $q, Store, $location)
+        'Settings',
+        function ($rootScope, $resource, $q, Store, $location, Settings)
         {
-          var Permission = $resource(config.app.host + 'acl', {},
+          var Permission = function() {},
+            profile = {
+              teams: true,
+              clients: true,
+              tasks: true,
+              clientReports: true,
+              teamTelephoneBasic: true,
+              chat: false
+            };
+
+          Permission.prototype.getResource = function ()
+          {
+            return $resource(Settings.getBackEnd() + 'acl', {},
               {
                 get: {
                   method: 'GET',
@@ -30,21 +43,15 @@ define(['services/services', 'config'],
                   params: {}
                 }
               }
-            ),//Only for test purposes
-            profile = {
-              teams: true,
-              clients: true,
-              tasks: true,
-              clientReports: true,
-              teamTelephoneBasic: true,
-              chat: false
-            };
+            );
+          }
 
           Permission.prototype.getDefaultProfile = function ()
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                permissionService = Permission.prototype.getResource();
 
-            Permission.get(
+            permissionService.get(
               function (response)
               {
                 deferred.resolve(response.data);
@@ -60,9 +67,10 @@ define(['services/services', 'config'],
           //For testpurposes only
           Permission.prototype.saveDefaultProfile = function ()
           {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+              permissionService = Permission.prototype.getResource();
 
-            Permission.save(profile,
+            permissionService.save(profile,
               function (result)
               {
                 deferred.resolve(result);
@@ -92,7 +100,7 @@ define(['services/services', 'config'],
           /**
            * Checks the where the user has access to
            */
-          Permission.prototype.getAccess = function ()
+          Permission.prototype.getAccess = function (callback)
           {
             this.getDefaultProfile()
               .then(
@@ -123,6 +131,8 @@ define(['services/services', 'config'],
 
                 Store('app').save('permissionProfile', permission);
                 $rootScope.app.domainPermission = permission;
+
+                (callback && callback(permission));
 
                 permissionLocation(accessList);
               }

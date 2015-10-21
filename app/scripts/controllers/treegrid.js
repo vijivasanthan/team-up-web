@@ -32,7 +32,8 @@ define(
 
             areas: function ()
             {
-              this.options.grid.height = angular.element('#wrap').height() - (270 + 200) + 'px'
+              var windowHeight = (angular.element($window).height() - 450);
+              this.options.grid.height = windowHeight + 'px';
             },
 
             build: function (id, data)

@@ -576,8 +576,8 @@ define(
     filters.filter(
       'avatar',
       [
-        'Session', 'Store',
-        function (Session, Store)
+        'Session', 'Store', 'Settings',
+        function (Session, Store, Settings)
         {
           return function (id, type, size)
           {
@@ -629,7 +629,7 @@ define(
 
               if (type == 'avatar' || type == 'image')
               {
-                var _url = config.app.host +
+                var _url = Settings.getBackEnd() +
                            path +
                            id +
                            '?sid=' + session;
@@ -643,7 +643,7 @@ define(
               }
               else
               {
-                return config.app.host +
+                return Settings.getBackEnd() +
                        config.app.namespace +
                        path +
                        id +

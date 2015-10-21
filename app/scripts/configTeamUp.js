@@ -16,10 +16,8 @@ define(['profile'], function(profile){
 
       host: localConfig.host,
 
-      //analytics: {
-      //  status: profile.analytics.status,
-      //  code: profile.analytics.code
-      //},
+      videoCallUrl: 'https://webrtc.ask-fast.com',//'http://localhost:9001',
+      supportEmail: 'support@ask-cs.com',
 
       formats: {
         date: 'dd-MM-yyyy',
@@ -211,6 +209,9 @@ define(['profile'], function(profile){
         lang = val;
       }
     });
+    if(currentHost.indexOf('teamtelephone.ask-cs.nl') > -1)
+	    lang = 'en';
+
     return lang;
   }
 });
