@@ -26,38 +26,35 @@ define(
               function (task)
               {
                 task.statusLabel = config.app.taskStates[task.status];
+                if($rootScope.app.domainPermission.clients) {
+                  task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                  if (task.relatedClient == null) {
+                    task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
+                  }
 
-                task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
-                if (task.relatedClient == null)
-                {
-                  task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
+                  task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
+
+                  if (task.relatedClient.address != null) {
+                    task.relatedClient.fullAddress = task.relatedClient.address.street +
+                      ' ' +
+                      task.relatedClient.address.no +
+                      ', ' +
+                      task.relatedClient.address.city;
+                  }
+                  else {
+                    task.relatedClient.address = {
+                      'address': {
+                        'street': null,
+                        'no': null,
+                        'zip': null,
+                        'city': null,
+                        'country': null,
+                        'latitude': 0,
+                        'longitude': 0
+                      }
+                    };
+                  }
                 }
-
-                task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
-
-                if (task.relatedClient.address != null)
-                {
-                  task.relatedClient.fullAddress = task.relatedClient.address.street +
-                  ' ' +
-                  task.relatedClient.address.no +
-                  ', ' +
-                  task.relatedClient.address.city;
-                }
-                else
-                {
-                  task.relatedClient.address = {
-                    'address': {
-                      'street': null,
-                      'no': null,
-                      'zip': null,
-                      'city': null,
-                      'country': null,
-                      'latitude': 0,
-                      'longitude': 0
-                    }
-                  };
-                }
-
                 task.plannedTaskDuration = {
                   difference: task.plannedEndVisitTime - task.plannedStartVisitTime
                 };

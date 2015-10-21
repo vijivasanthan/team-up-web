@@ -97,6 +97,7 @@ define(
               case 'editTask':
                 break;
               case 'newTask':
+                setDates();
                 break;
               case 'upload':
                 break;
@@ -218,7 +219,7 @@ define(
             }
           };
 
-          var convertDateTimeToLocal = function (d)
+          function convertDateTimeToLocal(d)
           {
             var d1 = new Date(d);
 
@@ -228,7 +229,7 @@ define(
           };
 
           //date and time methods if a new task is creating
-          if ($scope.views.newTask == true)
+          function setDates()
           {
             var currentStartTime = updateTime(new Date(), 15);
             var currentEndTime = updateTime(new Date(), 30);

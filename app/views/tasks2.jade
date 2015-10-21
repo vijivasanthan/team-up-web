@@ -301,8 +301,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										option(value='') {{ ui.teamup.selectTeam }}
 									select(ng-model='task.member',
 									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
-									ng-selected='currentMember')
-										option(value='') {{ ui.teamup.member }}
+									ng-selected='task.member')
+										option(value='') {{ ui.teamup.selectMember }}
 
 							.form-group(ng-if='app.domainPermission.clients')
 								label.control-label {{ ui.teamup.client }}
