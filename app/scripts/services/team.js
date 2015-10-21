@@ -244,8 +244,8 @@ define(['services/services', 'config'],
             {
               var notifier = $rootScope.notifier;
               (sync && sync.isSyncing)
-                ? notifier.success('Bezig met syncen uit Nedap')
-                : notifier.error('Het syncen uit Nedap is mislukt');
+                ? notifier.success('De teaminformatie wordt nu gesynchroniseerd.')
+                : notifier.error('Het synchroniseren van teaminformatie is mislukt.');
               return sync;
             });
           };
