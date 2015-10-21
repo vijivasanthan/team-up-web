@@ -108,7 +108,9 @@ define(
          */
         self.addMember = function(member, teamOption, confirm)
         {
-          (! confirm && member.teamUuids.length)
+          (! confirm
+            && member.teamUuids &&
+            member.teamUuids.length)
             ? angular.element('#confirmMemberAddModal').modal('show')
             : Team.addMember(member, teamOption);
         };
