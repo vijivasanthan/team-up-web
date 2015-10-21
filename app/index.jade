@@ -67,7 +67,7 @@ block navbar
 						li.teamMenu(ng-show='app.domainPermission.teams',
 							data-match-route='/team.?')
 							a(ng-click='nav("team")') {{ui.teamup.teams}}
-						li#clientMenu(ng-if='app.domainPermission.clients',
+						li#clientMenu(ng-show='app.domainPermission.clients',
 							data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
 						li(data-match-route='/manage',

@@ -224,7 +224,7 @@ define(
 
 
                           // FIXME: Organise this one!
-                          if(app.domainPermission.clients){
+                          if($rootScope.app.domainPermission.clients){
                             var content = '<span>' + slotContent + '</span>' +
                               "<input type=hidden value='" +
                               angular.toJson(

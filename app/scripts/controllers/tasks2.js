@@ -33,7 +33,8 @@ define(
               myTasks: false,
               allTasks: false,
               newTask: false,
-              editTask: false
+              editTask: false,
+              upload: false
             };
 
             $scope.showAllTasks = false;
@@ -102,6 +103,8 @@ define(
                 break;
               case 'newTask':
                 break;
+              case 'upload':
+                break;
             }
           };
 
@@ -138,6 +141,7 @@ define(
               uuid: task.uuid,
               team: task.assignedTeamUuid,
               member: task.assignedTeamMemberUuid,
+              client: task.relatedClientUuid,
               start: {
                 date: new Date(task.plannedStartVisitTime),
                 time: task.plannedStartVisitTime,
@@ -400,7 +404,6 @@ define(
 
             task.assignedTeamMemberUuid = null;
             //task.assignedTeamUuid = null;
-
             updateTask(task);
           };
 
@@ -587,14 +590,12 @@ define(
               $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
               return false;
             }
-            //We need a feature toggle here. Show or hide clients in task selection menu
-
-            /*if (!task.client || task.client == null)
-            {
-              $rootScope.notifier.error($rootScope.ui.task.specifyClient);
-              return false;
-            }*/
-
+            if($rootScope.app.domainPermission.clients) {
+              if (!task.client || task.client == null) {
+                $rootScope.notifier.error($rootScope.ui.task.specifyClient);
+                return false;
+              }
+            }
             return true;
           };
 

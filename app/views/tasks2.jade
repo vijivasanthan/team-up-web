@@ -25,7 +25,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only {{ ui.message.close }}
 				h4#taskModalLabel.modal-title
-					span.text-turq(ng-if='app.domainPermission.clients') {{task.relatedClient.fullName}}
+					span.text-turq(ng-show='app.domainPermission.clients') {{task.relatedClient.fullName}}
 					br
 					| {{task.plannedTaskDuration.label}}
 			.modal-body
@@ -46,10 +46,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							a(href='index.html#/profile/{{task.authorUuid}}#profile')
 								| {{author}}
 
-				hr(ng-if='app.domainPermission.clients')
+				hr(ng-show='app.domainPermission.clients')
 
 				//h4.pull-right Cliëntinformatie
-				dl(ng-if='app.domainPermission.clients')
+				dl(ng-show='app.domainPermission.clients')
 					dt {{ ui.teamup.client }}
 						dd
 							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
@@ -103,7 +103,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 			a(data-toggle='tab', ng-click='setViewTo("newTask")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
-		li(class="{{(views.upload==true) && 'active'}}" ng-if='app.domainPermission.clients')
+		li(class="{{(views.upload==true) && 'active'}}" ng-show='app.domainPermission.clients')
 			a(data-toggle='tab', ng-click='setViewTo("upload")')
 				span.entypo &#59213;
 				| {{ui.task.upload}}
@@ -407,4 +407,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
 					
 		
-					
+		#upload.tab-pane(ng-if='app.domainPermission.clients' class="{{(views.upload==true) && 'active'}}"
+		ng-controller='uploadCtrl')
+			include upload/upload.jade
