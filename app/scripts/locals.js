@@ -919,6 +919,7 @@ define(
           voicemailDetectionInfo: 'When the ringing timeout is 15 seconds or more, it is recommended for team members to disable their personal voice mail, or to use the personal voice mail prevention. Enabling / disabling the personal voice mail can be done via the phone provider.'
         },
         task: {
+          employee: 'Team and employee',
           timeframe: 'Time frame',
           status: 'Status',
           description: 'Description',
@@ -1967,6 +1968,7 @@ define(
           errors: 'Errors'
         },
         task: {
+          employee: 'Team and employee',
           timeframe: 'Zeitspanne',
           status: 'Status',
           description: 'Beschreibung',
