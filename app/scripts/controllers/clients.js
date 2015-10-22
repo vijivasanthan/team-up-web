@@ -334,6 +334,19 @@ define(
               client.phone = $rootScope.phoneNumberParsed.format;
             }
 
+            if ($scope.newClientForm.email.$error.pattern) {
+              $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+
+              return;
+            }
+
+            if ( client.password == "" || client.password !== client.reTypePassword ) // if passwords are filled in and not identical
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+
+              return;
+            }
+
             client.clientGroupUuid = $scope.clientGroup.id;
 
             $rootScope.statusBar.display($rootScope.ui.teamup.savingClient);
@@ -355,12 +368,19 @@ define(
                 {
                   if (result.error)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.clientSubmitError);
+                    var errorMessage = $rootScope.ui.teamup.clientSubmitError;
+                    console.error(client);
+
+                    if(result.error.data.indexOf(client.email) >= 0) {
+                      errorMessage = $rootScope.ui.teamup.clientSubmitEmailExists;
+                    }
+                    $rootScope.notifier.error(errorMessage);
                   }
                   else
                   {
                     Store('app').save(result.id, result);
                     $scope.contactForm = null;
+                    $scope.newClientForm = null;
                     $rootScope.resetPhoneNumberChecker();
                     reloadGroup({'uuid': result.clientGroupUuid});
                   }
@@ -838,7 +858,7 @@ define(
             $scope.currentCLient = clientId;
             $scope.currentMonth = moment(createDate).format('M');
             $scope.requestReportsByFilter();
-          };
+          }
 
           /**
            * Get the url params like clientgroup url and the hash (view)
@@ -915,6 +935,11 @@ define(
                 $scope.currentMonth = '0';
 
                 loadGroupReports();
+                break;
+              case 'newClient':
+                $scope.clientForm = {
+                  birthDate: (moment()).format("DD-MM-YYYY")
+                };
                 break;
             }
 
