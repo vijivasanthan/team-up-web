@@ -36,24 +36,25 @@ define(
         };
 
         /**
-         * Update a team by id
+         * Update the team by the id, If the team object is not specified,
+         * The edit button is pressed, so the team info is requested
          * @param teamId The id of the team
-         * @param confirmation in showing the current teamname in a textfield
+         * @param team The team object with the name and id
          */
-        self.update = function (teamId, confirm)
+        self.update = function (teamId, team)
         {
-          if(! confirm)
+          if(! team)
           {
+            var selectedTeam =  _.findWhere(self.list, {uuid: teamId});
             self.updateForm = true;
-            var team =  _.findWhere(self.list, {uuid: teamId});
             self.editForm = {
-              name: team.name,
-              uuid: team.uuid
+              name: selectedTeam.name,
+              uuid: selectedTeam.uuid
             };
           }
           else
           {
-            Team.update(teamId)
+            Team.update(team)
               .then(function()
               {
                 self.updateForm = false;

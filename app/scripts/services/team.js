@@ -142,31 +142,35 @@ define(['services/services', 'config'],
            */
           this.update = function (team)
           {
-            var self = this;
+            var self = this,
+              deferred = $q.defer();
 
             if (!team.name)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              return;
+              deferred.reject(false);
             }
+            else
+            {
+              $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
-
-            return TeamUp._('teamUpdate', {second: team.uuid}, team)
-              .then(function (result)
-              {
-                self.updateList(team, result);
-                return result.error && result || Teams.getAll();
-              })
-              .then(function (teams)
-              {
-                if (!teams.error)
+              TeamUp._('teamUpdate', {second: team.uuid}, team)
+                .then(function (result)
                 {
-                  $rootScope.statusBar.off();
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  return teams;
-                }
-              });
+                  self.updateList(team, result);
+                  return result.error && result || Teams.getAll();
+                })
+                .then(function (teams)
+                {
+                  if (!teams.error)
+                  {
+                    $rootScope.statusBar.off();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    deferred.resolve(teams);
+                  }
+                });
+            }
+            return deferred.promise;
           };
 
           this.delete = function (teamId)

@@ -51,7 +51,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			select(ng-model='team.current.teamId',
 			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
 			ng-selected='team.current.teamId',
-			ng-change='member.init(team.current.teamId, null, team.read)')
+			ng-change='member.init(team.current.teamId, null, team.read); team.updateForm = false')
 	
 	
 	.teams-section.tabbable.tabs-left
@@ -77,7 +77,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 						button.btn.pull-right.btn-info.marginLeftTen(type='reset',
 						ng-click='team.updateForm = false') {{ui.teamup.cancel}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-						ng-click='team.update(team.editForm, true)') {{ui.teamup.save}}
+						ng-click='team.update(team.current.teamId, team.editForm)') {{ui.teamup.save}}
 				hr
 				
 				p(ng-hide='member.list.length > 0') {{ui.teamup.noMembers}}
