@@ -1019,7 +1019,8 @@ define(
               return ' and can contain a maximum of ' + chars + ' characters'
             },
             oldPassMatch: 'The entered old password does not match the current password.',
-            required: 'A password is required'
+            required: 'A password is required',
+            identical: 'The passwords must be identical'
           },
           email: {
             notValid: 'Enter a valid password!',
@@ -2052,7 +2053,8 @@ define(
               return ' und maximal ' + chars + ' Zeichen enthalten'
             },
             oldPassMatch: 'Das eingetragene alte Passwort ist nicht identisch mit dem aktuellen Passwort.',
-              required: 'Es muss ein Passwort eingetragen werden'
+            required: 'Es muss ein Passwort eingetragen werden',
+            identical: 'Das Passwort müssen identisch sein'
           },
           email: {
             notValid: 'E-Mail Adresse ist fehlerhaft!',
@@ -3142,7 +3144,8 @@ define(
               return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
             oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
-            required: 'Een wachtwoord is verplicht'
+            required: 'Een wachtwoord is verplicht',
+            identical: 'Wachtworden zijn niet identiek'
           },
           email: {
             notValid: 'Voer een valide e-mailadres in!',
