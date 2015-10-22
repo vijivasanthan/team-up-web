@@ -13,7 +13,7 @@
 			.alert.alert-error(ng-show='loginCtrl.error.login.display')
 				button.close(type='button',
 				ng-click='loginCtrl.error.login=false') ×
-				| {{ loginCtrl.error.login.message}}
+				p(ng-bind-html='loginCtrl.error.login.message | trusted_html')
 			input(type='text',
 			autocapitalize='none',
 			ng-model='loginCtrl.loginData.username',

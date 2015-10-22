@@ -100,7 +100,7 @@ define(['services/services', 'config'],
           /**
            * Checks the where the user has access to
            */
-          Permission.prototype.getAccess = function ()
+          Permission.prototype.getAccess = function (callback)
           {
             this.getDefaultProfile()
               .then(
@@ -131,6 +131,8 @@ define(['services/services', 'config'],
 
                 Store('app').save('permissionProfile', permission);
                 $rootScope.app.domainPermission = permission;
+
+                (callback && callback(permission));
 
                 permissionLocation(accessList);
               }

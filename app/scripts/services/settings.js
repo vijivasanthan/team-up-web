@@ -1,4 +1,4 @@
-define(['services/services'], function (services)
+define(['services/services', 'config'], function (services, config)
 {
   'use strict';
 
@@ -109,21 +109,16 @@ define(['services/services'], function (services)
           case undefined:
             result.valid = true;
             break;
+          case 503:
           case 0:
             result.valid = false;
-            result.errorMessage = $rootScope.ui.teamup.noBackend;
+            result.errorMessage = $rootScope.ui.teamup.noBackend(config.app.supportEmail);
             break;
-
           case 400:
           case 403:
           case 404:
             result.valid = false;
             result.errorMessage = $rootScope.ui.login.alert_wrongUserPass;
-            break;
-
-          case 503:
-            result.valid = false;
-            result.errorMessage = $rootScope.ui.teamup.backEndUnavailable;
             break;
         }
         return result;

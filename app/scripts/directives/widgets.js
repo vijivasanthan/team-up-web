@@ -243,28 +243,22 @@ define(
       ]
     );
 
+    /**
+     * Focus the selected field
+     */
     directives.directive(
       'focus',
       function ($timeout)
       {
 
         return {
-          scope: {
-            trigger: '@focus'
-          },
           link: function (scope, element)
           {
-            scope.$watch('trigger', function (value)
-            {
-              if (value === "true")
+              $timeout(function ()
               {
-                $timeout(function ()
-                {
-                  element[0].autoFocus = true;
-                  element[0].focus();
-                });
-              }
-            });
+                element[0].autoFocus = true;
+                element[0].focus();
+              });
           }
         };
       }

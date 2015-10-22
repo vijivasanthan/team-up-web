@@ -176,7 +176,7 @@ div.bar span {
 }
 
 .fast-availability .square {
-  margin-top: 5px;
+  margin-top: 4px;
   width: 10px;
   height: 10px;
 }
@@ -1540,5 +1540,17 @@ Order
 //      text-align: center;
 //    }
 //  }
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  background-color: $grayLighter !important;
+}
+
+.fast-availability {
+  li {
+    &:hover {
+      background-color: $grayLighter !important;
+    }
+  }
 }
 

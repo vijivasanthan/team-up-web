@@ -7,6 +7,7 @@ define(
     'services/teamup',
     'services/teams',
     'modals/permission',
+    'services/moment',
     'session',
     'services/md5',
     'lawnchair',
@@ -38,7 +39,8 @@ define(
           Store,
           $httpBackend,
           md5Service,
-          loginService;
+          loginService,
+          momentService;
 
       // Initialize the controller and a mock scope
       beforeEach(
@@ -50,7 +52,8 @@ define(
             _Login_,
             _$httpBackend_,
             _Store_,
-            _MD5_
+            _MD5_,
+            _moment_
           )
           {
             rootScope = _$rootScope_;
@@ -79,6 +82,7 @@ define(
             Store = _Store_;
             $httpBackend = _$httpBackend_;
             md5Service = _MD5_;
+            momentService = _moment_;
           }
         )
       );

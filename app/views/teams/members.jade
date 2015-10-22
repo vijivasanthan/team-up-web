@@ -16,7 +16,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 					button.btn.btn-default(type='button',
 					data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 					button.btn.btn-primary(type='button',
-					ng-click='member.delete(member.current, true, team.current.teamId)') {{ui.teamup.confirms.remove}}
+					ng-click='member.delete(member.current, team.current.teamId, true)') {{ui.teamup.confirms.remove}}
 	
 	#confirmTeamModal.modal.fade(tabindex='-1',
 	role='dialog',
@@ -39,6 +39,11 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 	
 	.page-header
 		h2.nullable {{ui.teamup.teams}}
+		button(class="ladda-button btn btn-success"
+			ng-click="team.sync(team.current.teamId);"
+				ladda-button="team.laddaLoadingBar"
+				data-style="zoom-in")
+				span(class="ladda-label") Synchroniseren
 		.selectGroup(ng-if='team.list.length > 1')
 			span.selectTitles
 				strong 
@@ -49,7 +54,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			ng-change='member.init(team.current.teamId, null, team.read)')
 	
 	
-	.tabbable.tabs-left
+	.teams-section.tabbable.tabs-left
 	
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 			include ../teams/tabs
@@ -115,7 +120,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											button.btn-primary.btn-mini
 												i.icon-edit
 										button.btn-primary.btn-mini(type='submit',
-										ng-click='member.delete(m)',
+										ng-click='member.delete(m); member.current = m',
 										ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
 											i.icon-trash
 					ul#teams-legenda

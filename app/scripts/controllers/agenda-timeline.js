@@ -176,9 +176,9 @@ define(
                     $scope.divisions,
                     $scope.timeline.user.id,
                     $scope.timeline.user.role,
-                    $scope.timeline.user.fullName,
+                    $scope.timeline.user,
                     $scope.timeline.current,
-                    $rootScope.app.resources.uuid
+                    $rootScope.app.resources
                   ),
                   $scope.timeline.options
                 );

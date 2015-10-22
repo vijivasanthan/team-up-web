@@ -233,7 +233,10 @@ define(['services/services', 'config'],
               //TODO for testpurposes only
               //Permission.saveProfile();
 
-              Permission.getAccess();
+              Permission.getAccess(function (permissionProfile)
+              {
+                if(permissionProfile.chat) $rootScope.$broadcast('loadChatsCurrentTeam');
+              });
 
               setTimeout(
                 function ()

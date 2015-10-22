@@ -468,6 +468,16 @@ define(
                 },
 
 
+                // Sync teamembers nedap
+                teamSync: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'sync'
+                  }
+                },
+
+
                 /**
                  * Team-Status
                  */

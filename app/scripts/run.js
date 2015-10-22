@@ -927,6 +927,8 @@ define(
           $rootScope.hangup = null;
 
           function displayMessage (evt) {
+            console.error('evt', evt);
+            
             if (evt.origin === config.app.videoCallUrl)
             {
 

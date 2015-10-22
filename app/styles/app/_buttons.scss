@@ -169,6 +169,10 @@ input[type="button"] {
     background-color: $orange;
     color: $offwhite;
   }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $orange !important;
+  }
 }
 
 /*// Warning appears are orange   */
