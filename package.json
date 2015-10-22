@@ -45,7 +45,8 @@
     "karma-script-launcher": "0.1.0",
     "marked": "0.3.2",
     "matchdep": "0.3.0",
-    "semver": "3.0.1"
+    "semver": "3.0.1",
+    "try-thread-sleep": "^1.0.0"
   },
   "engines": {
     "node": ">=0.8.0"
