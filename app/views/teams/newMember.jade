@@ -17,8 +17,10 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			#newMemberTab.tab-pane(class="active")
 				.tab-header
 					h3.pull-left {{ui.teamup.newMember}}
+					p {{ member.form }}
+					
 				hr
-				form(name='member.form', novalidate)
+				form(name='newMemberForm', novalidate)
 					fieldset
 						.row
 							.span6
@@ -40,15 +42,15 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											select(ng-model='member.form.role',
 											ng-options='r.id as r.label for r in member.roles')
 												option(value='') {{ui.teamup.chooseRole}}
-									.form-group(ng-class="{ 'has-error' : member.form.email.$invalid && !member.form.email.$pristine }")
+									.form-group(ng-class="{ 'has-error' : newMemberForm.email.$invalid && !newMemberForm.email.$pristine }")
 										label.control-label {{ ui.profile.email }}
 										.controls
 											input.span3.form-control(type='email',
 											name='email',
 											required,
 											ng-model='member.form.email')
-											span.help-block(ng-show='member.form.email.$invalid && !member.form.email.$pristine')
-												small(ng-show="member.form.$error.email")
+											span.help-block(ng-show='newMemberForm.email.$invalid && !newMemberForm.email.$pristine')
+												small(ng-show="newMemberForm.$error.email")
 													i
 													| {{ ui.validation.email.notValid }}
 									.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
@@ -71,7 +73,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 										p.text-danger
 											small(ng-show='member.UserNameWrong')
 												i {{ui.validation.userName.regex }}
-									.form-group(ng-class="{ 'has-error' : member.form.password.$invalid && !member.form.password.$pristine }")
+									.form-group(ng-class="{ 'has-error' : newMemberForm.password.$invalid && !newMemberForm.password.$pristine }")
 										label.control-label {{ui.profile.password}}
 										.controls
 											input.span3.form-control(type='password',
@@ -80,21 +82,25 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											required,
 											ng-minlength="8",
 											ng-maxlength="20")
-											span.help-block(ng-show='member.form.password.$invalid && !member.form.password.$pristine')
+											span.help-block(ng-show='newMemberForm.password.$invalid && !newMemberForm.password.$pristine')
 												small
 													i
 													| {{ ui.validation.password.required }}
-												small(ng-show="member.form.password.$error.minlength")
+												small(ng-show="newMemberForm.password.$error.minlength")
 													i
 													| {{ ui.validation.password.amountMinChars(8) }} 
-												small(ng-show="member.form.password.$error.maxlength")
+												small(ng-show="newMemberForm.password.$error.maxlength")
 													i
 													| {{ ui.validation.password.amountMaxChars(20) }}
-									.form-group
+									.form-group(ng-class="{ 'has-error' : (member.form.reTypePassword !== member.form.password) && !newMemberForm.reTypePassword.$pristine }")
 										label.control-label {{ui.profile.retypePassword}}
 										.controls
-											input.span3(type='password',
-											ng-model='member.form.reTypePassword')
+											input.span3.form-control(type='password',
+											ng-model='member.form.reTypePassword', name='reTypePassword')
+											span.help-block(ng-show='(member.form.reTypePassword !== member.form.password) && !newMemberForm.reTypePassword.$pristine')
+												small
+													i
+													| {{ ui.teamup.passNotSame }}
 						.form-actions
 							button.btn.btn-success(type='submit',
 							ng-click='member.create(member.form, team.current.teamId)') {{ui.teamup.saveMember}}
