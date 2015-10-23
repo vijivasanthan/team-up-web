@@ -29,7 +29,6 @@ define(
                 if($rootScope.app.domainPermission.clients) {
                   task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
 
-                  console.log('task.relatedClient', task.relatedClient);
                   if (task.relatedClient == null)
                   {
                     task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound, writable: true};

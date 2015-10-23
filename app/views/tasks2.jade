@@ -25,7 +25,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 					span(aria-hidden='true') ×
 					span.sr-only {{ ui.message.close }}
 				h4#taskModalLabel.modal-title
-					span.text-turq(ng-show='app.domainPermission.clients') {{task.relatedClient.fullName}}
+					span.text-turq {{task.relatedClient.fullName}}
 					br
 					| {{task.plannedTaskDuration.label}}
 			.modal-body
@@ -46,30 +46,30 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							a(href='index.html#/profile/{{task.authorUuid}}#profile')
 								| {{author}}
 
-				hr(ng-show='app.domainPermission.clients')
+				hr
 
 				//h4.pull-right Cliëntinformatie
-				dl(ng-show='app.domainPermission.clients')
-					dt {{ ui.teamup.client }}
+				dl
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.client }} 
 						dd
 							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 								| {{task.relatedClient.fullName}}
-					dt {{ ui.teamup.clientGroup }}
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.clientGroup }}
 						dd
 							a(href='index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client')
 								| {{task.relatedClient.clientGroupName}}
-					dt {{ ui.groups.address }}
+					dt(ng-show='app.domainPermission.clients') {{ ui.groups.address }}
 						dd {{task.relatedClient.fullAddress}}
-					dt {{ ui.teamup.phone }}
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.phone }}
 						dd {{task.relatedClient.phone}}
 
-				hr
+				hr(ng-show='app.domainPermission.clients')
 
 				dl
 					dt(ng-show='task.assignedTeamMember') {{ ui.teamup.name }}
 						dd
 							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
-								| {{task.assignedTeamMember.fullName}}
+									| {{task.assignedTeamMember.fullName}}
 					dt Team
 						dd
 							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
@@ -78,10 +78,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
-	.selectGroup(ng-show='views.allTasks (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
+	.selectGroup(ng-show='views.allTasks && (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
-		select( ng-model='task.team',
+		select(current_selection='team' ng-model='task.team',
 		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 		ng-selected='currentTeam',
 		ng-change='changeTeam(task.team)')
