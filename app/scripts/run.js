@@ -360,19 +360,23 @@ define(
           {
             var result = null;
 
-            angular.forEach(
-              Store('app').get('clients'),
-              function (client)
-              {
-                if (clientId == client.uuid)
+            if(Store('app').has('clients'))
+            {
+              angular.forEach(
+                Store('app').get('clients'),
+                function (client)
                 {
-                  result = client;
+                  console.log('client', client);
+                  if (clientId == client.uuid)
+                  {
+                    result = client;
 
-                  // TODO: return is needed here?
-                  return false;
+                    // TODO: return is needed here?
+                    return false;
+                  }
                 }
-              }
-            );
+              );
+            }
 
             if (result == null)
             {
@@ -928,7 +932,7 @@ define(
 
           function displayMessage (evt) {
             console.error('evt', evt);
-            
+
             if (evt.origin === config.app.videoCallUrl)
             {
 

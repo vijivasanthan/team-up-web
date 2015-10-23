@@ -145,26 +145,26 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							th
 								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
-							th(ng-if='app.domainPermission.clients')
-							th(ng-if='app.domainPermission.clients')
+							th(ng-show='app.domainPermission.clients')
+							th(ng-show='app.domainPermission.clients')
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort
-							th(ng-if='app.domainPermission.clients'){{ui.task.information}}
+							th(ng-show='app.domainPermission.clients') {{ui.task.information}}
 							th
-								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
+								a( ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
 									i.icon-sort
 							th(colspan='1')
 
 					tbody
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
-							td(ng-if='app.domainPermission.clients')
+							td(ng-show='app.domainPermission.clients')
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
-							td(ng-if='app.domainPermission.clients')
+							td(ng-show='app.domainPermission.clients')
 								small
 									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
 										| {{task.relatedClient.fullName}}
-							td(ng-if='app.domainPermission.clients')
+							td(ng-show='app.domainPermission.clients')
 								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress'  aria-hidden='true', data-icon='')
 								small {{task.relatedClient.fullAddress}}
 							td
@@ -215,8 +215,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a(ng-click='orderBy("status")') {{ ui.task.status }}
 									i.icon-sort
 							th
-								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
-									i.icon-sort
 							th(ng-if='app.domainPermission.clients')
 								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
 									i.icon-sort

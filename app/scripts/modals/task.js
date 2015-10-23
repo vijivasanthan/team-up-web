@@ -28,12 +28,14 @@ define(
                 task.statusLabel = config.app.taskStates[task.status];
                 if($rootScope.app.domainPermission.clients) {
                   task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
-                  if (task.relatedClient == null) {
-                    task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
+
+                  console.log('task.relatedClient', task.relatedClient);
+                  if (task.relatedClient == null)
+                  {
+                    task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound, writable: true};
                   }
 
                   task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
-
                   if (task.relatedClient.address != null) {
                     task.relatedClient.fullAddress = task.relatedClient.address.street +
                       ' ' +
@@ -441,14 +443,12 @@ define(
                   group,
                   function (task)
                   {
-                    if (typeof(task) === 'object')
-                    {
-                      var client = $rootScope.getClientByID(task.relatedClientUuid);
+                    if (typeof(task) === 'object') {
+                        var client = $rootScope.getClientByID(task.relatedClientUuid);
 
-                      if (client != null)
-                      {
-                        task.relatedClientName = client.firstName + ' ' + client.lastName;
-                      }
+                        if (client != null) {
+                          task.relatedClientName = client.firstName + ' ' + client.lastName;
+                        }
                     }
                   }
                 );
