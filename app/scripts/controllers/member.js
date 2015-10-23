@@ -36,8 +36,7 @@ define(
         {
           if (Member.valid(member))
           {
-            console.error('VALIDateddd');
-            //Member.create(member, teamId);
+            Member.create(member, teamId);
           }
         }
 
@@ -74,16 +73,17 @@ define(
          */
         function checkUserName()
         {
-          var regUserName = /([A-Za-z0-9-_])/g,
-            matchesUserName = (self.form.userName.match(regUserName));
-
-          if (!_.isNull(matchesUserName))
+          if(!_.isEmpty(self.form.userName))
           {
-            matchesUserName = matchesUserName.join('');
+            var regUserName = /([A-Za-z0-9-_])/g,
+              matchesUserName = (self.form.userName.match(regUserName));
+            if (!_.isNull(matchesUserName))
+            {
+              matchesUserName = matchesUserName.join('');
+            }
+            self.UserNameWrong = (self.form.userName !== matchesUserName);
+            self.form.userName = matchesUserName || '';
           }
-
-          self.UserNameWrong = (self.form.userName !== matchesUserName);
-          self.form.userName = matchesUserName || '';
         }
 
         /**

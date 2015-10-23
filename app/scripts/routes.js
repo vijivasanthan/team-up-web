@@ -203,16 +203,22 @@ define(
             '/team/member/new',
             {
               templateUrl: 'views/teams/newMember.html',
-              controller: 'newMember as member',
+              controller: 'member as member',
               reloadOnSearch: false,
+              resolve: {
+                data: function () { return null; }
+              }
             })
 
             .when(
             '/team/member/search',
             {
               templateUrl: 'views/teams/searchMember.html',
-              controller: 'searchMember as member',
+              controller: 'member as member',
               reloadOnSearch: false,
+              resolve: {
+                data: function (){ return null; }
+              }
             })
 
             .when(
@@ -228,7 +234,7 @@ define(
                   {
                     return ($route.current.params.local && $route.current.params.local == 'true') ?
                       Clients.queryLocal() :
-                      Clients.query(false, $route.current.params);
+                      Clients.query();
                   }
                 ]
               }

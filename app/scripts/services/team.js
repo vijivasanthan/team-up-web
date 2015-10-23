@@ -148,7 +148,7 @@ define(['services/services', 'config'],
             if (!team.name)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              deferred.reject(false);
+              deferred.reject($rootScope.ui.teamup.teamNamePrompt1);
             }
             else
             {
@@ -178,7 +178,10 @@ define(['services/services', 'config'],
             var self = this,
               deferred = $q.defer();
 
+            //console.error("angular.element('#confirmTeamModal')", angular.element('#confirmTeamModal'));
+
             angular.element('#confirmTeamModal').modal('hide');
+
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
             TeamUp._('teamDelete', {second: teamId})
