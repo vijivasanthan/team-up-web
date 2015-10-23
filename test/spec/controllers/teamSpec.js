@@ -83,7 +83,7 @@ define(
             };
             rootScope.ui = {
               teamup: {
-                teamNamePrompt1: 'Gruppen-Namen eintragen.',
+                teamNamePrompt1: 'Vul een teamnaam in.',
                 saveTeam: 'Team opslaan'
               },
               login: {
@@ -256,7 +256,39 @@ define(
           .toEqual(teamCtrl.list[1].name);
       });
 
-      it("should check if the teamname couldn't be empty by a update", function ()
+      //it("should check if the teamname couldn't be empty by a update", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  var teamId = teamCtrl.current.teamId;
+      //  var payload = {
+      //    name: "",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  };
+      //  var errorMessage = null;
+      //
+      //
+      //  teamService.update(teamId, payload)
+      //    .then(null, function (error)
+      //    {
+      //      errorMessage = error;
+      //    });
+      //  rootScope.$apply();
+      //
+      //  expect('Vul een teamnaam in.')
+      //    .toEqual(errorMessage);
+      //});
+
+      it('should initialize the list of teams and the current team', function ()
       {
         var teams = [{
           name: "Stefan Team",
@@ -269,18 +301,69 @@ define(
         Store('app').save('teams', teams);
         teamCtrl.init(teams[0].uuid);
 
-        var teamId = teamCtrl.current.teamId;
-        var payload = {
-          name: "",
-          uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
-        };
-
-        teamCtrl.update(teamId, payload);
+        expect(teams[0].uuid)
+          .toEqual(teamCtrl.current.teamId);
+        expect(teams[0].name)
+          .toEqual(teamCtrl.list[1].name);
       });
 
-      //should check if the validation of a updated team works
 
-      //check if validation work if no teamname is found
+
+
+      //it("should check if a team could be removed", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId, true);
+      //
+      //  console.error('teamCtrl.list', teamCtrl.list);
+      //
+      //});
+
+
+      //it("should check if the confirmation appears if the user tries to delete a team", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId);
+      //  rootScope.$apply();
+      //});
+
+      //it("should check if the confirmation appears if the user tries to delete a team", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId);
+      //  rootScope.$apply();
+      //});
+
+      //Check if the the editform closes by changing a team
 
       //it('should add a member to team', function ()
       //{

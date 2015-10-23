@@ -70,6 +70,9 @@ define(
                 teamUuids: testConfig.userResources.teamUuids
               }
             };
+            rootScope.browser = {
+              mobile: true
+            };
             rootScope.showChangedAvatar = function(team, uuid)
             {
               return null;
