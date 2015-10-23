@@ -222,13 +222,14 @@ define(
               controller: 'clientCtrl',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Clients', '$route',
-                  function (Clients, $route)
+                data:
+                  function (Clients, $route, $q)
                   {
-                    return Clients.query(false, $route.current.params || null);
+
+                    return ($route.current.params.local && $route.current.params.local == 'true') ?
+                      Clients.queryLocal() :
+                      Clients.query();
                   }
-                ]
               }
             })
 
