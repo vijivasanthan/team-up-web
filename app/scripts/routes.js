@@ -232,9 +232,9 @@ define(
                   'Clients', '$route',
                   function (Clients, $route)
                   {
-                    return ($route.current.params.local && $route.current.params.local == 'true') ?
-                      Clients.queryLocal() :
-                      Clients.query();
+                    return ($route.current.params)
+                      ? Clients.query(false, $route.current.params)
+                      : Clients.query();
                   }
                 ]
               }

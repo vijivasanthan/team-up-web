@@ -50,7 +50,7 @@ define(
                     Store('app').get(team.uuid),
                     function (member)
                     {
-                      if (typeof member.uuid != "undefined")
+                      if (!_.isUndefined(member) && !_.isUndefined(member.uuid))
                       {
                         memberIds.push(member.uuid);
                         members.push(
