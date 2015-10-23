@@ -182,7 +182,7 @@ define(['services/services', 'config'],
              */
             this.valid = function (member)
             {
-              if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
+              if (typeof member == 'undefined')
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
                 return false;
@@ -191,18 +191,6 @@ define(['services/services', 'config'],
               if (!member.role && $rootScope.app.resources.role == 1)
               {
                 $rootScope.notifier.error($rootScope.ui.validation.role);
-                return false;
-              }
-
-              if (member.password != member.reTypePassword)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-                return false;
-              }
-
-              if (member.password.length < 8 || member.password.length > 20)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
                 return false;
               }
 
@@ -223,6 +211,32 @@ define(['services/services', 'config'],
                 $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
                 return false;
               }
+
+              if(!member.userName || (member.userName && member.userName.length < 4))
+              {
+                $rootScope
+                  .notifier
+                  .error(
+                    $rootScope.ui.validation.userName.valid + $rootScope.ui.validation.userName.amountMinChars(4)
+                  );
+                return false;
+              }
+
+              if (! member.password || (member.password.length < 8 || member.password.length > 20) )
+              {
+                var error = $rootScope.ui.validation.password.required + ' ';
+                error += $rootScope.ui.validation.password.amountMinChars(8);
+                error += $rootScope.ui.validation.password.amountMaxChars(20);
+                $rootScope.notifier.error(error);
+                return false;
+              }
+
+              if (member.password !== member.reTypePassword)
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+                return false;
+              }
+
               return true;
             };
 
@@ -246,7 +260,6 @@ define(['services/services', 'config'],
                 }
               );
             }
-
             return deferred.promise;
           };
 

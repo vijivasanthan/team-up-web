@@ -1045,11 +1045,18 @@ define(
             notValid: 'Enter a valid birthday!'
           },
           userName: {
-            regex: 'The user name may only contain alphanumeric characters, including scores and underscores',
-            valid: 'A username is required'
+            regex: 'and may only contain alphanumeric characters, including scores and underscores',
+            valid: 'A username is required',
+            amountMinChars: function (number)
+            {
+              return ' and must have a minimum of ' + number + ' characters'
+            }
           },
           search: {
             notValid: 'Fill in a name and/or surname!'
+          },
+          wish : {
+            integer: 'Give a number in the range of 0 to 30 '
           }
         }
       },
@@ -2091,12 +2098,19 @@ define(
             notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
-            regex: 'Der Anwendername darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
-              valid: 'Es muss ein Anwendernamen festgelegt werden'
+            regex: 'AND darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
+            valid: 'Es muss ein Anwendernamen festgelegt werden',
+            amountMinChars: function (number)
+            {
+              return ' and must have a minimum of ' + number + ' characters'
+            }
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
           },
+          wish : {
+            integer: 'Give a number in the range of 0 to 30 '
+          }
         },
       },
       nl: {
@@ -3181,7 +3195,7 @@ define(
             },
             amountMaxChars: function (chars)
             {
-              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+              return ' en uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
             oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
             required: 'Een wachtwoord is verplicht'
@@ -3195,11 +3209,18 @@ define(
             notValid: 'Voer een valide geboortedatum in!'
           },
           userName: {
-            regex: "De gebruikersnaam mag alleen uit alfanummerieke tekens bestaan, inclusief streepjes ('-') en lage streepjes ('_')",
-            valid: 'Een gebruikersnaam is vereist'
+            regex: "en mag alleen uit alfanummerieke tekens bestaan, inclusief streepjes ('-') en lage streepjes ('_')",
+            valid: 'Een gebruikersnaam is vereist',
+            amountMinChars: function (number)
+            {
+              return ' en moet uit minimaal ' + number + ' karakters bestaan'
+            }
           },
           search: {
             notValid: 'Voer een voor- en/of achternaam in!'
+          },
+          wish : {
+            integer: 'Geef een nummer van 0 t/m 30 '
           }
         }
       }

@@ -17,10 +17,8 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			#newMemberTab.tab-pane(class="active")
 				.tab-header
 					h3.pull-left {{ui.teamup.newMember}}
-					p {{ member.form }}
-					
 				hr
-				form(name='newMemberForm', novalidate)
+				form.new-member-form(name='newMemberForm', novalidate)
 					fieldset
 						.row
 							.span6
@@ -42,15 +40,16 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											select(ng-model='member.form.role',
 											ng-options='r.id as r.label for r in member.roles')
 												option(value='') {{ui.teamup.chooseRole}}
-									.form-group(ng-class="{ 'has-error' : newMemberForm.email.$invalid && !newMemberForm.email.$pristine }")
+									.form-group(ng-class="{ 'has-error' : newMemberForm.$error.pattern && !newMemberForm.email.$pristine }")
 										label.control-label {{ ui.profile.email }}
 										.controls
 											input.span3.form-control(type='email',
 											name='email',
 											required,
-											ng-model='member.form.email')
-											span.help-block(ng-show='newMemberForm.email.$invalid && !newMemberForm.email.$pristine')
-												small(ng-show="newMemberForm.$error.email")
+											ng-model='member.form.email',
+											ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+											span.help-block(ng-show='newMemberForm.$error.pattern && !newMemberForm.email.$pristine')
+												small
 													i
 													| {{ ui.validation.email.notValid }}
 									.form-group(ng-class="{'has-error': phoneNumberParsed.result == false}")
@@ -65,15 +64,19 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 							.span6
 								fieldset
 									.form-group(
-									ng-class="{'has-error' : member.UserNameWrong}")
+									ng-class="{'has-error' : member.UserNameWrong || (!newMemberForm.username.$pristine && member.form.userName.length < 4)}")
 										label.control-label {{ui.profile.username}}
 										.controls
-											input.span3.form-control(type='text', ng-change="member.checkUserName()", ng-blur='member.UserNameWrong=false',
-											ng-model='member.form.userName')
+											input.span3.form-control(type='text', 
+												name='username'
+												ng-change="member.checkUserName()", 
+												ng-blur='member.UserNameWrong=false',
+												ng-model='member.form.userName',
+												required)
 										p.text-danger
-											small(ng-show='member.UserNameWrong')
-												i {{ui.validation.userName.regex }}
-									.form-group(ng-class="{ 'has-error' : newMemberForm.password.$invalid && !newMemberForm.password.$pristine }")
+											small(ng-show='member.UserNameWrong || (!newMemberForm.username.$pristine && member.form.userName.length < 4)')
+												i {{ ui.validation.userName.valid }} {{ ui.validation.userName.amountMinChars(4) }} {{ui.validation.userName.regex }}
+									.form-group(ng-class="{ 'has-error' : newMemberForm.password.$invalid && !newMemberForm.password.$pristine  }")
 										label.control-label {{ui.profile.password}}
 										.controls
 											input.span3.form-control(type='password',
