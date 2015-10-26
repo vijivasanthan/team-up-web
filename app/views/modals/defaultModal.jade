@@ -1,0 +1,16 @@
+.modal(tabindex='-1',
+role='dialog')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true', ng-click='$hide()') ×
+					span.sr-only {{ ui.message.close }}
+				h4#confirmMemberModalLabel.modal-title {{ui.teamup.confirms.deleteMemberTitle}} 
+			.modal-body
+				| {{ui.teamup.confirms.deleteMember}} {{ member }} {{ test }} {{ member.test }}
+			.modal-footer
+				button.btn.btn-default(type='button',
+				ng-click='$hide()') {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button',
+				ng-click='member.delete(member.current, team.current.teamId, true)') {{ui.teamup.confirms.remove}}
