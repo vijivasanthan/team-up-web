@@ -731,7 +731,7 @@ define(
               {
                 template: 'views/reportTemplate.html',
                 scope: $scope,
-                animation: 'am-fade'
+                animation: 'am-fade-and-slide-top'
               }
             );
           }
