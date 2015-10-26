@@ -58,7 +58,7 @@ define(
          */
         function search(value)
         {
-          self.findMembersLoad = true;
+          self.load = true;
           Member.search(value)
             .then(function (result)
             {

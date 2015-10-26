@@ -115,10 +115,10 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 										button.btn-primary.btn-mini(ng-click='createVideoCall(m)',
 											ng-show='app.resources.uuid != m.uuid && app.domainPermission.videoChat && (app.resources.teamUuids.indexOf(team.current.teamId) >= 0)')
 											i.icon-facetime-video
-										a(href='#/profile/{{m.uuid}}#edit',
-										ng-show='app.resources.role == 1 || app.resources.uuid == m.uuid')
-											button.btn-primary.btn-mini
-												i.icon-edit
+										a(href='#/profile/{{m.uuid}}#edit', style='text-decoration:none'
+											ng-show='app.resources.role == 1 || app.resources.uuid == m.uuid')
+												button.btn-primary.btn-mini
+													i.icon-edit
 										button.btn-primary.btn-mini(type='submit',
 										ng-click='member.delete(m); member.current = m',
 										ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
