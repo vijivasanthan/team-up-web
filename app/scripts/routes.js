@@ -183,10 +183,16 @@ define(
               controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
-                data: function ($q, $location, Teams)
+                data: function ($q, $location, Teams, Member)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-                  return  Teams.getSingle(teamId);
+
+                  return Teams.getSingle(teamId)
+                    .then(function (members)
+                    {
+                      Member.setList(members);
+                      return members;
+                    });
                 }
               }
             })
@@ -204,10 +210,7 @@ define(
             {
               templateUrl: 'views/teams/newMember.html',
               controller: 'member as member',
-              reloadOnSearch: false,
-              resolve: {
-                data: function () { return null; }
-              }
+              reloadOnSearch: false
             })
 
             .when(
@@ -215,10 +218,7 @@ define(
             {
               templateUrl: 'views/teams/searchMember.html',
               controller: 'member as member',
-              reloadOnSearch: false,
-              resolve: {
-                data: function (){ return null; }
-              }
+              reloadOnSearch: false
             })
 
             .when(
