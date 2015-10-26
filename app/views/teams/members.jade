@@ -39,7 +39,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 	
 	.page-header
 		h2.nullable {{ui.teamup.teams}}
-		button(class="ladda-button btn btn-success"
+		button(ng-if='team.current.externallySyncable' class="ladda-button btn btn-success"
 			ng-click="team.sync(team.current.teamId);"
 				ladda-button="team.laddaLoadingBar"
 				data-style="zoom-in")
@@ -47,7 +47,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 		.selectGroup(ng-if='team.list.length > 1')
 			span.selectTitles
 				strong 
-					| {{ ui.teamup.selectTeam }}
+					| {{ ui.teamup.selectTeam }} 
 			select(ng-model='team.current.teamId',
 			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
 			ng-selected='team.current.teamId',

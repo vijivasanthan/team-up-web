@@ -69,7 +69,10 @@ define(['services/services', 'config'],
           this.setCurrent = function (teamId)
           {
             CurrentSelection.local = teamId;
+            var team = _.findWhere(this.list, {'uuid': teamId});
+
             this.current.teamId = teamId;
+            this.current.externallySyncable = team.externallySyncable;
           };
 
           /**
