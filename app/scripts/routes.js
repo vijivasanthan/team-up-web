@@ -69,7 +69,7 @@ define(
             .when(
             '/login',
             {
-              templateUrl: 'views/login.html',
+              templateUrl: 'views/login/loginForm.html',
               controller: 'login as loginCtrl'
             })
 
@@ -87,6 +87,13 @@ define(
                   }
                 ]
               }
+            })
+
+            .when(
+            '/password',
+            {
+              templateUrl: 'views/login/forgotPassword.html',
+              controller: 'password as password'
             })
 
             .when(
