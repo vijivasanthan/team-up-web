@@ -27,6 +27,8 @@
 				ng-model='loginCtrl.loginData.remember')
 				| {{ui.login.label_rememberMe}}
 			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
-			span.version
-				//TODO: Create a version file later on or disable the link
-				a(href='index.html') v{{config.app.version}}
+		span.version
+			a(class='login-link' href='index.html#/password') Wachtwoord vergeten?
+			br 
+			a(class='version-link' href='index.html') v{{config.app.version}}
+			//TODO: Create a version file later on or disable the link

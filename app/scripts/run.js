@@ -66,15 +66,8 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            switch ($location.path())
-            {
-              case '/video/':
-                break;
-              case '/password':
-                break;
-              default:
-                $location.path("/login");
-            }
+            return ($location.path() === '/video/' ||
+            $location.path() === '/password')
           };
 
           $rootScope.checkLocation($location.path());
