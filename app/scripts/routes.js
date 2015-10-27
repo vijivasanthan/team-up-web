@@ -92,7 +92,7 @@ define(
             .when(
             '/password',
             {
-              templateUrl: 'views/login/forgotPassword.html',
+              templateUrl: 'views/login/password.html',
               controller: 'password as password'
             })
 

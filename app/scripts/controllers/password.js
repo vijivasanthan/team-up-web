@@ -6,8 +6,56 @@ define(
 
     controllers.controller(
       'password',
-      function (Login)
+      function ($routeParams, Login)
       {
+        var self = this;
+
+        //properties
+        self.views = {
+          forgot: false,
+          change: false
+        };
+
+        //methods
+        self.forgot = forgot;
+        self.change = change;
+        self.init = init;
+
+        self.init();
+
+        //$scope.alert = {
+        //  login: {
+        //    display: false,
+        //    type: '',
+        //    message: ''
+        //  },
+        //  forgot: {
+        //    display: false,
+        //    type: '',
+        //    message: ''
+        //  }
+        //};
+
+        function forgot()
+        {
+
+        }
+
+        function change()
+        {
+
+        }
+
+        function init()
+        {
+          ($routeParams &&
+          $routeParams.uuid &&
+          $routeParams.key)
+            ? self.views.change = true
+            : self.views.forgot = true;
+        }
+
+
         this.login = function ()
         {
           this.error = Login.validate(this.loginData);
