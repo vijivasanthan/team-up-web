@@ -219,6 +219,7 @@ require(
     'controllers/newMember',
     'controllers/searchMember',
     'controllers/team',
+    'controllers/password',
 
     'bootstrap',
     'lawnchair',
