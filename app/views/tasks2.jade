@@ -122,23 +122,24 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
 			.tab-header
 				h3.pull-left {{ui.task.myTask}}
-
+				
 			hr
 
 			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
 
 			article(ng-hide='tasks.mine.loading')
+			
 				.well(style='padding-top: 25px',
-				ng-show='tasks.mine.archieve')
+					ng-show='tasks.mine.archieve')
 					label
-						input(type='checkbox',
-						name='showAllTasks'
-						ng-model='showAllTasks',
-						ng-change='showTasks(showAllTasks, "mine")')
+						input(type='checkbox', 
+							name='showAllTasks' 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "mine")')
 						small &nbsp; {{ ui.task.showArchivedTasks }}
-
+				
 				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
-
+						
 				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
 					thead
 						tr
@@ -154,6 +155,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
 									i.icon-sort
 							th(ng-hide='app.domainPermission.clients') {{ui.task.description}}
+							th(colspan='1')
+
 					tbody
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
@@ -169,8 +172,8 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 							td
 								span.taskIcon.icon-time(aria-hidden='true')
 								small {{task.plannedTaskDuration.label}}
-							td
-								small(ng-hide='app.domainPermission.clients') {{task.description | cut: true : 120:'...'}}
+							td(ng-hide='app.domainPermission.clients')
+								small {{task.description | cut: true : 80:'...'}}
 							td
 									.pull-right
 											button.btn-primary.btn-mini(type='button', ng-click='unAssignTask(task)')
@@ -203,9 +206,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						input(type='checkbox', ng-model='showOnlyAvailable')
 						small &nbsp;{{ ui.task.showOnlyNotAssignedTasks }}
 					label
-						input(type='checkbox',
-						ng-model='showAllTasks',
-						ng-change='showTasks(showAllTasks, "all")')
+						input(type='checkbox', 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "all")')
 						small &nbsp;{{ ui.task.showArchivedTasks }}
 
 				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
@@ -268,12 +271,13 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button',
-									ng-click='modifyTask(task)')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)')
 										i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
+					//small: i Er zijn {{tasks.all.list.length}} taken.
 					small: i {{ ui.task.thereAreAmountTasks((tasks.all.list | filter: task.team ).length) }} 
 
 		#newTask.tab-pane(class="{{(views.newTask==true || views.editTask==true) && 'active'}}")
@@ -292,7 +296,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								label.control-label(ng-if='app.domainPermission.clients != true') {{ ui.task.employee }}
 								label.control-label(ng-if='app.domainPermission.clients') {{ ui.task.carer }}
 								.controls
-									select(current_selection='team',
+									select(current_selection='team', 
 									ng-model='task.team',
 									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
 									ng-selected='currentTeam',
@@ -336,28 +340,28 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-change='newTime(task.start.time);',
 									bs-timepicker='',
 									data-date-type='string',
-									data-time-format="H:mm",
+									data-time-format="H:mm", 
 									data-length="1",
 									data-minute-step="15",
 									data-arrow-behavior="picker")
 									i.icon-time
-
+									
 							.form-group.dater-mobile(ng-show='browser.mobile')
 								label.control-label {{ui.planboard.from}}
 								.controls
 									input.form-control.input-sm(
-									name='date-start',
-									type='datetime-local',
+									name='date-start', 
+									type='datetime-local', 
 									ng-model='task.start.datetime',
 									ng-change='newDate(task.start.datetime, true)')
-
+									
 							.form-group.dater-mobile(ng-show='browser.mobile')
 								label.control-label {{ui.planboard.till}} 
 								.controls
-									input.form-control.input-sm(name='date-end',
-									type='datetime-local',
+									input.form-control.input-sm(name='date-end', 
+									type='datetime-local', 
 									ng-model='task.end.datetime')
-
+																		
 							.form-group.dater(ng-hide='browser.mobile')
 								label.control-label {{ui.planboard.till}}
 								.controls
@@ -383,16 +387,16 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								label.control-label {{ui.task.description}}
 								.controls
 									textarea.span8.form-control(
-									style='height: 150px',
-									ng-model='task.description',
-									name='description')
+										style='height: 150px', 
+										ng-model='task.description',
+										name='description')
 
 					.span6
 						fieldset
 							.control-group
 							//google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
-									marker(coords = 'clientCoords')
-									markers(models = 'memberMarkers' )
+								marker(coords = 'clientCoords')
+								markers(models = 'memberMarkers' )
 
 				hr
 				.form-actions
