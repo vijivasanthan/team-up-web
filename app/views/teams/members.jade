@@ -35,7 +35,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 					button.btn.btn-default(type='button',
 					data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 					button.btn.btn-primary(type='button',
-					ng-click='team.delete(team.current.teamId, true)') {{ui.teamup.confirms.remove}}
+					ng-click='team.delete(team.current.teamId, true, member.init)') {{ui.teamup.confirms.remove}}
 	
 	.page-header
 		h2.nullable {{ui.teamup.teams}}

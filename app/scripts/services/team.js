@@ -58,7 +58,8 @@ define(['services/services', 'config'],
             {
               this.list.splice(index, 1);
               Store('app').save('teams', this.list);
-              this.setCurrent(this.list[0].uuid);
+              if(this.list.length) this.setCurrent(this.list[0].uuid);
+              else if($rootScope.app.resources.role > 1) Permission.getAccess();
             }
           };
 
@@ -181,8 +182,6 @@ define(['services/services', 'config'],
             var self = this,
               deferred = $q.defer();
 
-            //console.error("angular.element('#confirmTeamModal')", angular.element('#confirmTeamModal'));
-
             angular.element('#confirmTeamModal').modal('hide');
 
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
@@ -195,20 +194,17 @@ define(['services/services', 'config'],
               })
               .then(function (teams)
               {
-                if (!teams.error)
-                {
-                  //Check if there are teams left
+                (! teams.length)
+                  ? deferred.reject(false)
+                  : self.read()
+                      .then(function(members)
+                      {
+                        deferred.resolve(self.getCurrent(), members);
+                      });
 
-                  //Yes
-                  //Load the first teams
-
-
-                  deferred.resolve(self.getCurrent());
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  $rootScope.statusBar.off();
-                }
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                $rootScope.statusBar.off();
               });
-
             return deferred.promise;
           };
 

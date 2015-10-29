@@ -86,9 +86,9 @@ define(
           else
           {
             Team.delete(teamId)
-              .then(function (newTeamId)
+              .then(function (membersNewCurrentTeam)
               {
-                (callback && callback(newTeamId));
+                (callback && callback(membersNewCurrentTeam));
               });
           }
         }
