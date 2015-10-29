@@ -49,7 +49,6 @@ require.config(
       session: '../vendors/web-lib-session/dist/session',
       'jquery-form': '../vendors/jquery-form/jquery.form',
       'locale': 'i18n/angular-locale_nl',
-      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
@@ -82,7 +81,6 @@ require.config(
       log: { deps: ['angular'] },
       phone: { deps: ['angular'] },
       session: { deps: ['angular'] },
-      'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
       'locale': { deps: ['angular'] }
     },
     config: {
@@ -233,7 +231,6 @@ require(
     'session',
     'jquery-form',
     'lodash',
-    'jquery-ui',
     'angular-sortable-view',
     'locale',
     'clj-fuzzy',
