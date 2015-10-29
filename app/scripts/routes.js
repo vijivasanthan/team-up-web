@@ -183,10 +183,16 @@ define(
               controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
-                data: function ($q, $location, Teams)
+                data: function ($q, $location, Teams, Member)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-                  return  Teams.getSingle(teamId);
+
+                  return Teams.getSingle(teamId)
+                    .then(function (members)
+                    {
+                      Member.setList(members);
+                      return members;
+                    });
                 }
               }
             })
@@ -203,16 +209,16 @@ define(
             '/team/member/new',
             {
               templateUrl: 'views/teams/newMember.html',
-              controller: 'newMember as member',
-              reloadOnSearch: false,
+              controller: 'member as member',
+              reloadOnSearch: false
             })
 
             .when(
             '/team/member/search',
             {
               templateUrl: 'views/teams/searchMember.html',
-              controller: 'searchMember as member',
-              reloadOnSearch: false,
+              controller: 'member as member',
+              reloadOnSearch: false
             })
 
             .when(
@@ -222,14 +228,15 @@ define(
               controller: 'clientCtrl',
               reloadOnSearch: false,
               resolve: {
-                data:
-                  function (Clients, $route, $q)
+                data: [
+                  'Clients', '$route',
+                  function (Clients, $route)
                   {
-
-                    return ($route.current.params.local && $route.current.params.local == 'true') ?
-                      Clients.queryLocal() :
-                      Clients.query();
+                    return ($route.current.params)
+                      ? Clients.query(false, $route.current.params)
+                      : Clients.query();
                   }
+                ]
               }
             })
 

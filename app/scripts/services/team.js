@@ -69,7 +69,10 @@ define(['services/services', 'config'],
           this.setCurrent = function (teamId)
           {
             CurrentSelection.local = teamId;
+            var team = _.findWhere(this.list, {'uuid': teamId});
+
             this.current.teamId = teamId;
+            this.current.externallySyncable = team.externallySyncable;
           };
 
           /**
@@ -142,31 +145,35 @@ define(['services/services', 'config'],
            */
           this.update = function (team)
           {
-            var self = this;
+            var self = this,
+              deferred = $q.defer();
 
             if (!team.name)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              return;
+              deferred.reject($rootScope.ui.teamup.teamNamePrompt1);
             }
+            else
+            {
+              $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
-
-            return TeamUp._('teamUpdate', {second: team.uuid}, team)
-              .then(function (result)
-              {
-                self.updateList(team, result);
-                return result.error && result || Teams.getAll();
-              })
-              .then(function (teams)
-              {
-                if (!teams.error)
+              TeamUp._('teamUpdate', {second: team.uuid}, team)
+                .then(function (result)
                 {
-                  $rootScope.statusBar.off();
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  return teams;
-                }
-              });
+                  self.updateList(team, result);
+                  return result.error && result || Teams.getAll();
+                })
+                .then(function (teams)
+                {
+                  if (!teams.error)
+                  {
+                    $rootScope.statusBar.off();
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    deferred.resolve(teams);
+                  }
+                });
+            }
+            return deferred.promise;
           };
 
           this.delete = function (teamId)
@@ -174,7 +181,10 @@ define(['services/services', 'config'],
             var self = this,
               deferred = $q.defer();
 
+            //console.error("angular.element('#confirmTeamModal')", angular.element('#confirmTeamModal'));
+
             angular.element('#confirmTeamModal').modal('hide');
+
             $rootScope.statusBar.display($rootScope.ui.teamup.deletingTeam);
 
             TeamUp._('teamDelete', {second: teamId})

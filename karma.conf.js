@@ -11,6 +11,7 @@ module.exports = function (karma)
       {pattern: 'app/vendors/bootstrap/dist/js/bootstrap.js', included: false},
       {pattern: 'app/vendors/angular-resource/angular-resource.min.js', included: false },
       {pattern: 'app/vendors/angular-route/angular-route.min.js', included: false },
+      {pattern: 'app/vendors/angular-animate/angular-animate.min.js', included: false },
       {pattern: 'app/vendors/angular-md5/angular-md5.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.tpl.min.js', included: false },

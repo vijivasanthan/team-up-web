@@ -205,17 +205,19 @@ aria-hidden='true')
 			.tab-header
 				h3.pull-left {{ui.teamup.newClient}}
 			hr
-			form(name='newClientForm')
+			form(name='newClientForm' novalidate)
 				fieldset
 					.control-group
 						label.control-label {{ui.profile.firstName}}
 						.controls
 							input.span4(type='text',
+							required,
 							ng-model='clientForm.firstName')
 					.control-group
 						label.control-label {{ui.profile.lastName}}
 						.controls
 							input.span4(type='text',
+							required,
 							ng-model='clientForm.lastName')
 					.form-group.dater(ng-class="{ 'has-error' : newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine }")
 						label.control-label {{ui.profile.birthday}}
@@ -245,6 +247,47 @@ aria-hidden='true')
 							p.text-success(ng-show='phoneNumberParsed.result')
 								small
 									i {{phoneNumberParsed.message}}
+					.control-group(ng-if="app.domainPermission.clientLogin" ng-class="{ 'has-error' : newClientForm.email.$invalid && !newClientForm.email.$pristine }")
+						label.control-label {{ui.profile.email}} 
+						.controls
+							input.span4.form-control(
+								type='text',
+								name='email',
+								ng-model='clientForm.email',
+								ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+						span.help-block(ng-show='!newClientForm.email.$pristine && newClientForm.email.$error.pattern')
+							small(ng-show="newClientForm.email.$error")
+								i
+								| {{ ui.validation.email.notValid }}
+					.control-group(ng-if="app.domainPermission.clientLogin" ng-class="{ 'has-error' : newClientForm.password.$invalid && !newClientForm.password.$pristine }")
+						label.control-label {{ui.profile.newPass}} 
+						.controls
+							input.span4.form-control(type='password',
+								ng-model='clientForm.password',
+								name='password',
+								ng-minlength="8",
+								ng-maxlength="20")
+							span.help-block(ng-show='newClientForm.password.$invalid && !newClientForm.password.$pristine')
+								small
+									i
+									| {{ ui.validation.password.required }}
+								small(ng-show="newClientForm.password.$error.minlength")
+									i
+									| {{ ui.validation.password.amountMinChars(8) }} 
+								small(ng-show="newClientForm.password.$error.maxlength")
+									i
+									| {{ ui.validation.password.amountMaxChars(20) }}
+					.control-group(ng-if="app.domainPermission.clientLogin" ng-class="{ 'has-error' : newClientForm.newRepeat.$invalid && !newClientForm.newRepeat.$pristine || (clientForm.reTypePassword !== clientForm.password) }")
+						label.control-label {{ui.profile.newPassRepeat}}
+						.controls
+							input.span4(type='password',
+								ng-model='clientForm.reTypePassword',
+								name="reTypePassword",
+								matchField="clientForm.password")
+							span.help-block(ng-show='(clientForm.reTypePassword !== clientForm.password) && !newClientForm.newRepeat.$pristine')
+								small
+									i
+									| {{ ui.validation.password.identical }}
 					.control-group
 						label.control-label {{ui.teamup.street}}
 						.controls
@@ -359,6 +402,10 @@ aria-hidden='true')
 							
 						dt {{ui.teamup.phone}}
 						dd {{client.phone}}
+						
+						dt(ng-if="client.email") {{ui.teamup.email}}
+						dd(ng-if="client.email") {{client.email}}
+						
 						dt(ng-show="client.address") {{ui.profile.address}}
 						dd(ng-show="client.address")
 							| {{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}

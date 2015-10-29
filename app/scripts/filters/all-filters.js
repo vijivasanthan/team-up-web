@@ -78,12 +78,12 @@ define(
       {
         return function (teamsUuids, searchTeams)
         {
-          if(! _.isUndefined(teamsUuids))
+          var userTeams = [];
+          if(! _.isUndefined(teamsUuids) && ! _.isNull(teamsUuids))
           {
             var teams = (searchTeams && searchTeams.length)
                 ? searchTeams
                 : Store('app').get('teams');
-            var userTeams = [];
 
             if(teamsUuids.length)
             {
@@ -93,10 +93,9 @@ define(
                 return team && team.name || $rootScope.ui.teamup.noTeamNameFound;
               });
             }
-
-            return  userTeams.length && $filter('commaSeperated')(userTeams)
-              || $rootScope.ui.teamup.noTeam;
           }
+          return  userTeams.length && $filter('commaSeperated')(userTeams)
+            || $rootScope.ui.teamup.noTeam;
         }
       }
     );
