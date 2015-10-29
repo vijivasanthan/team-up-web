@@ -66,8 +66,8 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 					.tab-header(ng-hide='team.updateForm')
 						h3.pull-left {{[team.current.teamId] | getTeamNameById:allTeams=true}}
 						div(ng-show='app.resources.role == 1')
-							//button.btn.pull-right.btn-info.marginLeftTen(type='button',
-							//ng-click='team.delete(team.current.teamId)') {{ui.teamup.del}}
+							button.btn.pull-right.btn-info.marginLeftTen(type='button',
+							ng-click='team.delete(team.current.teamId)') {{ui.teamup.del}}
 							button.btn.pull-right.btn-info(type='button',
 							ng-click='team.update(team.current.teamId)') {{ui.teamup.edit}}
 					

@@ -197,6 +197,12 @@ define(['services/services', 'config'],
               {
                 if (!teams.error)
                 {
+                  //Check if there are teams left
+
+                  //Yes
+                  //Load the first teams
+
+
                   deferred.resolve(self.getCurrent());
                   $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
                   $rootScope.statusBar.off();
