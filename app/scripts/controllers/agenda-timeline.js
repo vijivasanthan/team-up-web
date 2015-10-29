@@ -610,6 +610,8 @@ define(
                     .then(
                     function(members)
                     {
+                      console.error('members', members);
+                      
                       if(! members.length)
                       {
                         $scope.timeline.current.layouts.members = false;
