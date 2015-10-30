@@ -126,8 +126,7 @@ define(['services/services', 'config'],
           {
             $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
 
-            var _teamId = teamId || this.getCurrent();
-
+            var _teamId = teamId || (this.getCurrent()).teamId;
             this.setCurrent(_teamId);
 
             return Teams.getSingle(_teamId)
@@ -156,7 +155,7 @@ define(['services/services', 'config'],
             }
             else
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam)
+              $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
               TeamUp._('teamUpdate', {second: team.uuid}, team)
                 .then(function (result)
@@ -189,20 +188,29 @@ define(['services/services', 'config'],
             TeamUp._('teamDelete', {second: teamId})
               .then(function (teamDelete)
               {
-                self.removeFromList(teamId);
                 return teamDelete.error && teamDelete || Teams.getAll();
               })
               .then(function (teams)
               {
-                (! teams.length)
-                  ? deferred.reject(false)
-                  : self.read()
-                      .then(function(members)
-                      {
-                        deferred.resolve(self.getCurrent(), members);
-                      });
-
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                if (teams && teams.error)
+                {
+                  $rootScope.notifier.error($rootScope.ui.groups.deleteTeamError);
+                  deferred.reject(false);
+                }
+                else
+                {
+                  self.removeFromList(teamId);
+                  self.read()
+                    .then(function(members)
+                    {
+                      var data = {
+                        teamId: (self.getCurrent()).teamId,
+                        members: members
+                      };
+                      deferred.resolve(data);
+                      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                    });
+                }
                 $rootScope.statusBar.off();
               });
             return deferred.promise;
@@ -256,8 +264,8 @@ define(['services/services', 'config'],
             {
               var notifier = $rootScope.notifier;
               (sync && sync.isSyncing)
-                ? notifier.success('De teaminformatie wordt nu gesynchroniseerd.')
-                : notifier.error('Het synchroniseren van teaminformatie is mislukt.');
+                ? notifier.success($rootScope.ui.teamup.syncSucces)
+                : notifier.error($rootScope.ui.teamup.syncError);
               return sync;
             });
           };

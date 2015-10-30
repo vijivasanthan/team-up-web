@@ -398,6 +398,7 @@ define(
           searchMember: 'Search team member',
           serach: 'Search',
           addNewGroup: 'Add new group',
+          deleteTeamError: 'There appears to be a problem while deleting the team',
           editGroup: 'Edit group',
           searchResults: 'Search results',
           group: 'Group',
@@ -567,6 +568,8 @@ define(
           settings: 'settings'
         },
         teamup: {
+          syncSucces: 'The teaminfo is syncing.',
+          syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
           clientGroup: 'Client group',
           extraInfo: 'Extra info',
@@ -1483,6 +1486,7 @@ define(
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
+          deleteTeamError: 'There appears to be a problem while deleting the team',
           search: 'Suchen',
           addNewGroup: 'neue Gruppe hinzufügen',
           editGroup: 'Gruppe ändern',
@@ -1653,6 +1657,8 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          syncSucces: 'The teaminfo is syncing.',
+          syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
           clientGroup: 'Clientgrupe',
           client: 'Client',
@@ -2552,6 +2558,7 @@ define(
           personPartOfTeams: 'Deze persoon zal deel uitmaken van de volgende teams ',
           replace: 'Verplaatsen',
           personPartOfTeam: 'Deze persoon zal alleen deel uit maken van team ',
+          deleteTeamError: 'Het verwijderen van het team is mislukt',
           groups: 'Groepen',
           newGroup: 'Nieuwe groep',
           newMember: 'Nieuw teamlid',
@@ -2726,6 +2733,8 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          syncSucces: 'De teaminformatie wordt nu gesynchroniseerd.',
+          syncError: 'Het synchroniseren van teaminformatie is mislukt.',
           notFound: 'Niet gevonden',
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
