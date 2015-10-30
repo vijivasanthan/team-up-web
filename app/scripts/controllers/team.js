@@ -15,7 +15,7 @@ define(
         self.update = update;
         self.delete = _delete;
         self.sync = sync;
-        self.addMembers = addMember;
+        self.addMember = addMember;
         self.init = init;
 
         self.init();

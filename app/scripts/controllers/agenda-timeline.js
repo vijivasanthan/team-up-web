@@ -14,6 +14,7 @@ define(
         '$timeout',
         '$window',
         'Slots',
+        'Teams',
         'Profile',
         'Dater',
         'Sloter',
@@ -22,8 +23,8 @@ define(
         'CurrentSelection',
         '$filter',
         'moment',
-        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Profile,
-                  Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
+        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Teams,
+                  Profile, Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
         {
           // TODO: Define diff in the watcher maybe?
           var range = null,
@@ -233,18 +234,23 @@ define(
 
               if ($scope.timeline.main)
               {
+                var options = {
+                  groupId: $scope.timeline.current.group,
+                  division: $scope.timeline.current.division,
+                  layouts: $scope.timeline.current.layouts,
+                  month: $scope.timeline.current.month,
+                  stamps: stamps,
+                  user: $route.current.params.userId
+                };
+
                 //TODO load and render at the same time, two times the same call
-                Slots.all(
+                Teams.getSingle($scope.timeline.current.group)
+                  .then(function(members)
                   {
-                    groupId: $scope.timeline.current.group,
-                    division: $scope.timeline.current.division,
-                    layouts: $scope.timeline.current.layouts,
-                    month: $scope.timeline.current.month,
-                    stamps: stamps,
-                    user: $route.current.params.userId
-                  }
-                ).then(
-                  function (data)
+                    options.members = members;
+                    return Slots.all(options);
+                  })
+                  .then(function (data)
                   {
                     if (data.error)
                     {
@@ -256,10 +262,8 @@ define(
                       $scope.data = data;
                       _this.render(stamps, remember);
                     }
-
                     $rootScope.statusBar.off();
-                  }
-                );
+                  });
               }
               else
               {
@@ -605,10 +609,12 @@ define(
                 if($scope.timeline.current.layouts.members)
                 {
                   $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-
-                  Slots.members($scope.timeline.current.group, periods)
-                    .then(
-                    function(members)
+                  Teams.getSingle($scope.timeline.current.group)
+                    .then(function(membersGroup)
+                    {
+                        return Slots.members($scope.timeline.current.group, periods, membersGroup);
+                    })
+                    .then(function(members)
                     {
                       if(! members.length)
                       {
@@ -619,8 +625,7 @@ define(
                       $scope.data.members = members;
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
                       $rootScope.statusBar.off();
-                    }
-                  );
+                    });
                 }
                 else
                 {
