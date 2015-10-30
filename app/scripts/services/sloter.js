@@ -121,41 +121,43 @@ define(['services/services', 'config'],
                 weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + routeUser.fullName;
               }
 
-              _.each(data.user, function (slot, index)
+              var currentSelectedUser = [];
+
+              if(((routeUser.teamUuids).indexOf(current.group) >= 0))
               {
-                _.each(config.legenda, function (value, legenda)
+                _.each(data.user, function (slot, index)
                 {
-                  if (slot.text == legenda && value)
+                  _.each(config.legenda, function (value, legenda)
                   {
-                    timedata.push({
-                      start: Math.round(slot.start * 1000),
-                      end: Math.round(slot.end * 1000),
-                      group: (slot.recursive) ?
-                      _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
-                      _this.wrapper('a') + planning + _this.wrapper('planning'),
-                      content: this.tooltip({start: slot.start, end: slot.end}) +
-                      _this.secret(
-                        angular.toJson({
-                          type: 'slot',
-                          id: index, // slot.id,
-                          recursive: slot.recursive,
-                          state: slot.text
-                        })
-                      ),
-                      className: 'slot-' + index + ' ' + config.states[slot.text].className,
-                      editable: true
-                    });
-                  }
+                    if (slot.text == legenda && value)
+                    {
+                      timedata.push({
+                        start: Math.round(slot.start * 1000),
+                        end: Math.round(slot.end * 1000),
+                        group: (slot.recursive) ?
+                        _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
+                        _this.wrapper('a') + planning + _this.wrapper('planning'),
+                        content: this.tooltip({start: slot.start, end: slot.end}) +
+                        _this.secret(
+                          angular.toJson({
+                            type: 'slot',
+                            id: index, // slot.id,
+                            recursive: slot.recursive,
+                            state: slot.text
+                          })
+                        ),
+                        className: 'slot-' + index + ' ' + config.states[slot.text].className,
+                        editable: true
+                      });
+                    }
+                  }.bind(this));
                 }.bind(this));
-              }.bind(this));
 
-              var currentSelectedUser = ((routeUser.teamUuids).indexOf(current.group) >= 0)
-                  ? [
-                    _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
-                    _this.wrapper('a') + planning + _this.wrapper('planning')
-                    ]
-                  : [];
-
+                currentSelectedUser = [
+                  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
+                  _this.wrapper('a') + planning + _this.wrapper('planning')
+                ];
+              }
               timedata = _this.addLoading(data, timedata, currentSelectedUser);
 
               return timedata;
