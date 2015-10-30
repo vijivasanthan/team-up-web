@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'password',
-      function ($routeParams, Login)
+      function ($routeParams, Login, Password)
       {
         var self = this;
 
@@ -20,32 +20,63 @@ define(
         self.forgot = forgot;
         self.change = change;
         self.init = init;
-
+        //initialisation
         self.init();
 
-        //$scope.alert = {
-        //  login: {
-        //    display: false,
-        //    type: '',
-        //    message: ''
-        //  },
-        //  forgot: {
-        //    display: false,
-        //    type: '',
-        //    message: ''
-        //  }
-        //};
-
+        /**
+         * Password forgotten
+         */
         function forgot()
         {
-
+          Password.forgot(self.username)
+            .then(function(result)
+            {
+              //email onderweg
+              notify('success', 'email onderweg');
+            }, function (error)
+            {
+              notify('error', error);
+            });
         }
 
+        /**
+         * Changed password
+         */
         function change()
         {
-
+          var passwordData = {
+            keyPassword: $routeParams.key,
+            newPassword: self.new,
+            repeatPassword: self.repeat
+          };
+          Password.change(passwordData)
+            .then(
+            null,
+            function (error)
+            {
+              notify('error', 'errorrr');
+            });
         }
 
+        /**
+         * Notify the user, he or she is aware of the situation
+         * @param type
+         * @param message
+         */
+        function notify(type, message)
+        {
+          self.error = null;
+          self.success = null;
+          console.error('type', type);
+          self[type] = {
+            show: true,
+            message: message
+          }
+        }
+
+        /**
+         * Inititalisation
+         */
         function init()
         {
           ($routeParams &&
@@ -54,40 +85,6 @@ define(
             ? self.views.change = true
             : self.views.forgot = true;
         }
-
-
-        this.login = function ()
-        {
-          this.error = Login.validate(this.loginData);
-
-          if (!this.error)
-          {
-            var loginData = Login.reSaveInitials(this.loginData),
-              self = this;
-
-            Login
-              .authenticate(loginData.userName, loginData.password)
-              .then(null, function (error)
-              {
-                self.error = error;
-              });
-          }
-        };
-
-        this.init = function ()
-        {
-          this.error = Login.checkSessionTimeout();
-
-          if (!this.error)
-          {
-            this.loginData = Login.getInitials();
-
-            if (this.loginData && this.loginData.password)
-            {
-              this.login();
-            }
-          }
-        }.call(this);
       }
     );
   }

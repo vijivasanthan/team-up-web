@@ -160,6 +160,7 @@ require(
     'services/login',
     'services/team',
     'services/member',
+    'services/password',
 
     'directives/widgets',
     'directives/date-range-picker',
