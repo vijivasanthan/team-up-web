@@ -14,7 +14,6 @@
     "angular-strap": "~2.1.1",
     "bootstrap-daterangepicker": "~1.3.13",
     "bootstrap-sass-official": "~3.3.0",
-    "chap-links-library": "https://github.com/almende/chap-links-library.git",
     "clj-fuzzy": "~0.1.8",
     "es5-shim": "~2.3.0",
     "jquery": "~2.1.0",
@@ -22,11 +21,13 @@
     "js-xlsx": "~0.7.10",
     "json3": "~3.3.1",
     "lawnchair": "~0.6.3",
+    "ladda": "~0.9.8",
     "lodash": "~3.6.0",
     "moment-timezone": "~0.4.0",
     "momentjs": "~2.6.0",
     "requirejs": "~2.1.11",
     "requirejs-domready": "~2.0.1",
+    "chap-links-library": "https://github.com/almende/chap-links-library.git",
     "web-lib-interceptor": "https://github.com/askcs/web-lib-interceptor.git",
     "web-lib-log": "https://github.com/askcs/web-lib-log.git",
     "web-lib-phonenumber": "https://github.com/askcs/web-lib-phonenumber.git",
@@ -34,8 +35,7 @@
     "web-lib-offline": "https://github.com/askcs/web-lib-offline.git",
     "web-lib-session": "https://github.com/askcs/web-lib-session.git",
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
-    "web-lib-vis": "https://github.com/askcs/web-lib-vis.git",
-    "ladda": "~0.9.8"
+    "web-lib-vis": "https://github.com/askcs/web-lib-vis.git"
   },
   "devDependencies": {}
 }
