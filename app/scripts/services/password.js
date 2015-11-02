@@ -23,7 +23,7 @@ define(['services/services', 'config'],
 
           $rootScope
             .statusBar
-            .display('Wachtwoord veranderen');
+            .display($rootScope.ui.profile.changePass);
 
           if(! data.newPassword || ! data.repeatPassword)
           {
@@ -36,7 +36,9 @@ define(['services/services', 'config'],
 
           (error)
             ? deferred.reject(error)
-            : deferred.resolve(true);//save new password
+            : deferred
+              .resolve($rootScope.ui.profile.passChanged);
+              //save new password
 
           $rootScope.statusBar.off();
           return deferred.promise;
@@ -48,14 +50,13 @@ define(['services/services', 'config'],
 
           $rootScope
             .statusBar
-            .display('Wachtwoord vergeten');
+            .display($rootScope.ui.profile.forgot_password);
 
           (! userName)
             ? deferred
                 .reject($rootScope.ui.validation.userName.valid)
             : deferred
-                .resolve('Er is een email verzonden met de nodige informatie');
-          //Er is een email verzonden met de nodige informatie
+                .resolve($rootScope.ui.profile.forgotPassInfoSend);
           //check if userName exist
 
           $rootScope.statusBar.off();
