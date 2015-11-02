@@ -28,14 +28,8 @@ define(
          */
         function forgot()
         {
-          Password.forgot(self.username)
-            .then(function(result)
-            {
-              notify('success', result);
-            }, function (error)
-            {
-              notify('error', error);
-            });
+          var promise = Password.forgot(self.username);
+          promiseResult(promise);
         }
 
         /**
@@ -48,9 +42,21 @@ define(
             newPassword: passwordData.new,
             repeatPassword: passwordData.repeat
           };
+          var promise = Password.change(_passwordData);
+          promiseResult(promise);
+        }
 
-          Password.change(_passwordData)
-            .then(null,
+        /**
+         * Handle the result of the promise
+         * @param promise
+         */
+        function promiseResult(promise)
+        {
+          promise
+            .then(function(result)
+            {
+              notify('success', result);
+            },
             function (error)
             {
               notify('error', error);
