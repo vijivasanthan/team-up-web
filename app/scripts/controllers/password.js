@@ -31,8 +31,7 @@ define(
           Password.forgot(self.username)
             .then(function(result)
             {
-              //email onderweg
-              notify('success', 'email onderweg');
+              notify('success', result);
             }, function (error)
             {
               notify('error', error);
@@ -42,19 +41,19 @@ define(
         /**
          * Changed password
          */
-        function change()
+        function change(passwordData)
         {
-          var passwordData = {
+          var _passwordData = {
             keyPassword: $routeParams.key,
-            newPassword: self.new,
-            repeatPassword: self.repeat
+            newPassword: passwordData.new,
+            repeatPassword: passwordData.repeat
           };
-          Password.change(passwordData)
-            .then(
-            null,
+
+          Password.change(_passwordData)
+            .then(null,
             function (error)
             {
-              notify('error', 'errorrr');
+              notify('error', error);
             });
         }
 
@@ -67,7 +66,6 @@ define(
         {
           self.error = null;
           self.success = null;
-          console.error('type', type);
           self[type] = {
             show: true,
             message: message
