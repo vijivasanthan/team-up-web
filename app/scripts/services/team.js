@@ -158,10 +158,11 @@ define(['services/services', 'config'],
               $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
               TeamUp._('teamUpdate', {second: team.uuid}, team)
-                .then(function (result)
+                .then(function (updatedTeam)
                 {
-                  self.updateList(team, result);
-                  return result.error && result || Teams.getAll();
+                  self.updateList(team, updatedTeam);
+                  self.current.name = updatedTeam.name;
+                  return updatedTeam.error && updatedTeam || Teams.getAll();
                 })
                 .then(function (teams)
                 {

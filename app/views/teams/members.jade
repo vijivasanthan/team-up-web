@@ -64,7 +64,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			#viewTeamTab.tab-pane(class="active")
 				div
 					.tab-header(ng-hide='team.updateForm')
-						h3.pull-left {{[team.current.teamId] | getTeamNameById:allTeams=true}}
+						h3.pull-left {{ team.current.name }}
 						div(ng-show='app.resources.role == 1')
 							button.btn.pull-right.btn-info.marginLeftTen(type='button',
 							ng-click='team.delete(team.current.teamId)') {{ui.teamup.del}}
