@@ -26,9 +26,11 @@ define(
         /**
          * Password forgotten
          */
-        function forgot()
+        function forgot(passwordData)
         {
-          var promise = Password.forgot(self.username);
+          var promise = Password.forgot(
+            passwordData.username
+          );
           promiseResult(promise);
         }
 
@@ -70,12 +72,11 @@ define(
          */
         function notify(type, message)
         {
-          self.error = null;
-          self.success = null;
           self[type] = {
             show: true,
             message: message
-          }
+          };
+          console.error("self", self);
         }
 
         /**

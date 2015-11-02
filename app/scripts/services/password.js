@@ -1,5 +1,5 @@
-define(['services/services', 'config'],
-  function (services, config)
+define(['services/services'],
+  function (services)
   {
     'use strict';
 
