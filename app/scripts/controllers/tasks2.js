@@ -523,7 +523,7 @@ define(
             return false;
           }
           if ($rootScope.app.domainPermission.clients) {
-            if (!task.client || task.client == null) {
+            if (!task.client) {
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
               return false;
             }
