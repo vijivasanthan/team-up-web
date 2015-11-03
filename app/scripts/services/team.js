@@ -73,6 +73,7 @@ define(['services/services', 'config'],
             var team = _.findWhere(this.list, {'uuid': teamId});
 
             this.current.teamId = teamId;
+            this.current.name = team.name;
             this.current.externallySyncable = team.externallySyncable;
           };
 
