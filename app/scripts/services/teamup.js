@@ -675,8 +675,8 @@ define(
                 data,
                 function (result)
                 {
+                  result = JSON.parse(angular.toJson(result));
                   ((callback && callback.success)) && callback.success.call(this, result);
-
                   deferred.resolve(result);
                 },
                 function (result)

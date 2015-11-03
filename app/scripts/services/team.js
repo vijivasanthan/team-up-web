@@ -235,14 +235,17 @@ define(['services/services', 'config'],
                   'teamMemberAdd',
                   {second: teamId},
                   {ids: [memberId]}
-                ).then(function ()
-                  {
-                    return Profile.fetchUserData(memberId);
-                  })
-                  .then(function ()
-                  {
-                    $location.path('team/members');
-                  });
+                ).then(function (result)
+                {
+                  console.error('memberId', memberId);
+                  console.error('teamId', teamId);
+                  console.error('result', result);
+                  return Profile.fetchUserData(memberId);
+                })
+                .then(function ()
+                {
+                  $location.path('team/members');
+                });
               };
 
             angular.element('#confirmMemberAddModal').modal('hide');

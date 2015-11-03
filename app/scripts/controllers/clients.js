@@ -9,6 +9,7 @@ define(
         function ($rootScope, $scope, $location, Settings, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
                   $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection, Message)
         {
+          console.error('data', data);
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
           var modalInstance = null;

@@ -353,6 +353,8 @@ define(
               {
                 success: function (clients)
                 {
+                  console.error('clients', clients);
+
                   Store('app').save(
                     clientGroupId,
                     (clients.length == 4 &&
@@ -406,6 +408,7 @@ define(
           {
             return TeamUp._('clientGroupsQuery', null, null)
               .then(function (clientGroups) {
+                console.error('clientGroups', clientGroups);
                 Store('app').save('ClientGroups', clientGroups);
                 return clientGroups;
               });

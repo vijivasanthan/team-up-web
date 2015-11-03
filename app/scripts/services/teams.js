@@ -647,9 +647,7 @@ define(
               .then(function(teams)
               {
                 Store('app').save(
-                  'teams',
-                  JSON.parse(angular.toJson(teams))
-                );
+                  'teams', teams);
                 return teams;
               });
           };

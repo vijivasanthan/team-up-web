@@ -79,7 +79,6 @@ define(
         return function (teamsUuids, searchTeams)
         {
           var userTeams = [];
-          console.error('123');
           if(! _.isUndefined(teamsUuids) && ! _.isNull(teamsUuids))
           {
             var teams = (searchTeams && searchTeams.length)
