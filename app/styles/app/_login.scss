@@ -80,6 +80,29 @@
     }
   }
 
+  span.version {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: -12px;
+    font-size: 11px;
+
+    a {
+      color: #aaa;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .version-link {
+      display: block;
+      text-align: right;
+    }
+    .login-link {
+      color: $brown;
+    }
+  }
+
   form {
     input[type=text], input[type=password] {
       margin-bottom: 2px;

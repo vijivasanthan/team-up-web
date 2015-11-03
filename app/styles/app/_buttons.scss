@@ -166,7 +166,7 @@ input[type="button"] {
   &:active,
   &.active,
   &.dropdown-toggle {
-    background-color: $orange;
+    background-color: $orange !important;
     color: $offwhite;
   }
   &:disabled {

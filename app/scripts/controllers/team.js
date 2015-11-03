@@ -15,7 +15,7 @@ define(
         self.update = update;
         self.delete = _delete;
         self.sync = sync;
-        self.addMembers = addMember;
+        self.addMember = addMember;
         self.init = init;
 
         self.init();
@@ -86,9 +86,9 @@ define(
           else
           {
             Team.delete(teamId)
-              .then(function (newTeamId)
+              .then(function (data)
               {
-                (callback && callback(newTeamId));
+                ( callback && callback(data.teamId, data.members) );
               });
           }
         }

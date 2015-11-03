@@ -42,7 +42,6 @@ requirejs.config(
       'ui.bootstrap.pagination': '../vendors/angular-ui-bootstrap/src/pagination/pagination',
       domReady:     '../vendors/requirejs-domready/domReady',
       session: '../vendors/web-lib-session/dist/session',
-      'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-mocks': '../vendors/angular-mocks/angular-mocks',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
       // unitTest:     '../../test/spec'
@@ -63,7 +62,6 @@ requirejs.config(
       'angular-cookie': { deps: ['angular'] },
       'angular-dynamic-locale': { deps: ['angular'], exports: 'angular' },
       'angular-sortable-view': { deps: ['angular'], exports: 'angular' },
-      'angular-md5': { deps: ['angular'], exports: 'angular' },
       daterangepicker: { deps: ['jquery', 'moment'], exports: 'daterangepicker' },
       'jquery-ui':        { deps: ['jquery'], exports: 'jquery-ui'},
       //moment: { deps: [], exports: 'moment' },

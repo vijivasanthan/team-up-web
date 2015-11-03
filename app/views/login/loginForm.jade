@@ -1,0 +1,34 @@
+#welcomeLogoTeamTelefoon(class="{{ config.app.lang }}",
+	ng-show="config.app.profileName == 'TeamTelefoon'")
+#welcomeLogoTeamUp(ng-show='config.app.profileName == "TeamUp"')
+#welcomeArrow
+#welcome
+	#preloader
+		h4 {{ui.login.setting_up_app}}
+		.progress.progress-striped.active
+			.bar
+		span.muted
+	#login.boxed
+		form(ng-submit='loginCtrl.login()')
+			.alert.alert-error(ng-show='loginCtrl.error.login.display')
+				button.close(type='button',
+				ng-click='loginCtrl.error.login=false') ×
+				p(ng-bind-html='loginCtrl.error.login.message | trusted_html')
+			input(type='text',
+			autocapitalize='none',
+			ng-model='loginCtrl.loginData.username',
+			placeholder='{{ui.login.ph_username}}',
+			autofocus='')
+			input(type='password',
+			ng-model='loginCtrl.loginData.password',
+			placeholder='{{ui.login.ph_password}}')
+			label.checkbox.span3
+				input(type='checkbox',
+				ng-model='loginCtrl.loginData.remember')
+				| {{ui.login.label_rememberMe}}
+			button.btn.btn-large.btn-block.btn-primary(type='submit') {{ui.login.button_login}}
+		span.version
+			//a(class='login-link' href='index.html#/password') {{ ui.login.forgot_password }}
+			//br 
+			a(class='version-link' href='index.html') v{{config.app.version}}
+			//TODO: Create a version file later on or disable the link
