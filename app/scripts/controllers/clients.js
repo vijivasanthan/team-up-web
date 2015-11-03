@@ -334,7 +334,9 @@ define(
               client.phone = $rootScope.phoneNumberParsed.format;
             }
 
-            if ($scope.newClientForm.email.$error.pattern) {
+            var validationEmail = $scope.newClientForm.email;
+
+            if (validationEmail && validationEmail.$error && validationEmail.$error.pattern) {
               $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
 
               return;
