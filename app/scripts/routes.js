@@ -236,12 +236,34 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Clients', '$route',
-                  function (Clients, $route)
+                  'Clients', 'CurrentSelection', '$route', '$q',
+                  function (Clients, CurrentSelection, $route, $q)
                   {
-                    return ($route.current.params)
+                    var deferred = $q.defer();
+                    var clientResult, clientGroupId;
+                    var promise = ($route.current.params)
                       ? Clients.query(false, $route.current.params)
                       : Clients.query();
+
+                    promise
+                      .then(function(result)
+                      {
+                        clientResult  = result;
+                        clientGroupId = ($route.current.params).uuid
+                                              || CurrentSelection.getClientGroupId()
+                                              || Object.keys(clientResult.clients)[0];
+                        return Clients.getSingle(clientGroupId);
+                      })
+                      .then(function(clients)
+                      {
+                        clientResult.clients[clientGroupId] = clients;
+                        deferred.resolve({
+                          clientGroups: clientResult.clientGroups,
+                          clients: clientResult.clients,
+                          currentClientGroupId: clientGroupId
+                        });
+                      });
+                    return deferred.promise;
                   }
                 ]
               }

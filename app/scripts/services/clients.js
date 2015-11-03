@@ -353,8 +353,6 @@ define(
               {
                 success: function (clients)
                 {
-                  console.error('clients', clients);
-
                   Store('app').save(
                     clientGroupId,
                     (clients.length == 4 &&

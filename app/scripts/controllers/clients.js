@@ -9,7 +9,6 @@ define(
         function ($rootScope, $scope, $location, Settings, Report, Clients, Teams, data, $route, $routeParams, Store, Dater,
                   $filter, $modal, TeamUp, $timeout, Reports, moment, CurrentSelection, Message)
         {
-          console.error('data', data);
           $rootScope.fixStyles();
           $rootScope.resetPhoneNumberChecker();
           var modalInstance = null;
@@ -874,20 +873,22 @@ define(
 
             if (! uuid && !$location.hash())
             {
-              uuid = CurrentSelection.getClientGroupId();
+              uuid = $scope.data.currentClientGroupId;
               $location.search({uuid: uuid}).hash(view);
             }
             else
             {
               if(_.isUndefined( getCurrentClientGroup(uuid) ))
               {
-                uuid = CurrentSelection.getClientGroupId();
+                uuid = $scope.data.currentClientGroupId;
                 $location.search({uuid: uuid});
               }
             }
 
             setView(view);
-            setCurrentClientGroup(uuid);
+            $scope.current = $scope.data.currentClientGroupId;
+            $scope.clients = data.clients[$scope.current];
+            $scope.clientGroup = _.findWhere(data.clientGroups, {id: $scope.current});
           }
 
           /**
@@ -896,7 +897,7 @@ define(
            */
           function getCurrentClientGroup(clientGroupId)
           {
-            return _.findWhere(data.clientGroups, {id: clientGroupId});
+            return  Clients.getSingle(clientGroupId);
           }
 
           /**
@@ -906,8 +907,13 @@ define(
           function setCurrentClientGroup(id)
           {
             $scope.current = id;
-            $scope.clientGroup = getCurrentClientGroup(id);
-            $scope.clients = data.clients[id];
+            getCurrentClientGroup(id)
+              .then(function(clients)
+              {
+                $scope.clientGroup = _.findWhere(data.clientGroups, {id: id});
+                data.clients[id] = clients;
+                $scope.clients = data.clients[id];
+              });
           }
 
           /**
