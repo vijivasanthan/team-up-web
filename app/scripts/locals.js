@@ -917,6 +917,10 @@ define(
           },
           on: 'On',
           off: 'Off',
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
+          },
           ringingTimeOut: {
             title: 'Ringing timeout',
             short: 'When the ringing timeout is long the team members will have more time to pick up their phone, but the total waiting time for clients can be longer when many team members are reachable.',
@@ -1424,6 +1428,10 @@ define(
             title: 'Anruf-Dauer',
             short: 'bei einer längeren Anruf-Dauer haben die Gruppen-Mitglieder mehr Zeit, ans Telefon zu gehen, die Wartezeit für den Patienten kann dadurch jedoch länger werden.',
             long: 'Bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass die Gruppen-Mitglieder Ihre Voice-Mail abschalten.',
+          },
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
           },
           personalVoicemailPrevention: 'persönliche Voicemail Präferenz',
           personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das Gespräch entgegen nehmen möchten. Wenn diese Option eingeschaltet ist, vermeidet man, dass ein Patient eine Nachricht auf einer Voice-Mailbox eines Mitglieds hinterlassen kann.',
@@ -3083,6 +3091,10 @@ define(
             title: 'Rinkeltijd',
             short: 'Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cliënten kan langer zijn als er veel teamleden zijn aangemeld.',
             long: 'Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.',
+          },
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
           },
           personalVoicemailPrevention: 'Persoonlijke voicemailpreventie',
           personalVoicemailPreventionInfo: 'Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.',
