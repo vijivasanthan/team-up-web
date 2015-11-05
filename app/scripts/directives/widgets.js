@@ -526,6 +526,20 @@ define(
     );
 
     directives.directive(
+      'required',
+      function ()
+      {
+        return {
+          restrict: 'A', // only for attributes
+          compile: function(element) {
+            // insert asterisk after elment
+            element.after("<span class='required'>*</span>");
+          }
+        };
+      }
+    );
+
+    directives.directive(
       'inputRuleToggle',
       function ()
       {

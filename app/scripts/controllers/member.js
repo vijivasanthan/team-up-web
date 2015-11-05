@@ -33,10 +33,11 @@ define(
          */
         function create(member, teamId)
         {
-          if (Member.valid(member))
-          {
-            Member.create(member, teamId);
-          }
+          console.error('self.newForm', self.newForm);
+          //if (Member.valid(member))
+          //{
+          //  Member.create(member, teamId);
+          //}
         }
 
         /**
