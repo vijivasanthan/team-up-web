@@ -1015,6 +1015,20 @@ define(
           }
         },
         validation: {
+          default: {
+            required: function (fieldName)
+            {
+              return 'A ' + fieldName.toLowerCase() + ' is required';
+            },
+            minLength: function (fieldName)
+            {
+              return 'The ' + fieldName.toLowerCase() + ' has not enough characters';
+            },
+            maxLength: function (fieldName)
+            {
+              return 'De ' + fieldName.toLowerCase() + ' has to many characters';
+            }
+          },
           phone: {
             notValid: 'Fill in a valid phone number!',
             invalidCountry: 'Invalid country code! Only Dutch (+31) numbers allowed.',
@@ -2075,6 +2089,20 @@ define(
         },
         validation: {
           data: "Eine oder mehrere Eingaben sind nicht abgeschlossen",
+          default: {
+            required: function (fieldName)
+            {
+              return 'A ' + fieldName.toLowerCase() + ' is required';
+            },
+            minLength: function (fieldName)
+            {
+              return 'The ' + fieldName.toLowerCase() + ' has not enough characters';
+            },
+            maxLength: function (fieldName)
+            {
+              return 'De ' + fieldName.toLowerCase() + ' has to many characters';
+            }
+          },
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
@@ -2849,7 +2877,7 @@ define(
           contactCount: 'Er zijn $v contactpersonen.',
           reportCount: 'Er zijn $v rapporten.',
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
-          passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
+          passNotSame: 'Wachtwoorden zijn niet hetzelfde',
           savingMember: 'Lid aan het opslaan...',
           selectTeam: 'Selecteer een team',
           clinetInfoFill: 'Vul de cliëntinformatie (naam en telefoon) in a.u.b.',
@@ -3196,6 +3224,20 @@ define(
         },
         validation: {
           data: "Een of meerdere velden zijn niet ingevuld",
+          default: {
+              required: function (fieldName)
+              {
+                return 'Een ' + fieldName.toLowerCase() + ' is verplicht';
+              },
+              minLength: function (fieldName)
+              {
+                return 'De ' + fieldName.toLowerCase() + ' heeft te weinig karakters';
+              },
+              maxLength: function (fieldName)
+              {
+                return 'De ' + fieldName.toLowerCase() + ' heeft teveel karakters';
+              }
+          },
           phone: {
             notValid: 'Voer een valide telefoonnummer in!',
             invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
