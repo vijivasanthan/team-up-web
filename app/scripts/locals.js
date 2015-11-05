@@ -3281,6 +3281,10 @@ define(
             amountMinChars: function (number)
             {
               return ' en moet uit minimaal ' + number + ' karakters bestaan'
+            },
+            amountMaxChars: function (number)
+            {
+              return ' en maximaal ' + number + ' karakters '
             }
           },
           search: {

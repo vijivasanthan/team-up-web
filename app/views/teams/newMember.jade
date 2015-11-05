@@ -103,7 +103,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 							.span6
 								fieldset
 									.form-group(
-									ng-class="{'has-error' : (member.UserNameWrong || ! member.form.userName || member.form.userName.length < 4) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)}")
+									ng-class="{'has-error' : (member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)}")
 										label.control-label {{ui.profile.username}}
 										.controls
 											input.span3.form-control(type='text', 
@@ -111,11 +111,16 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												ng-change="member.checkUserName()", 
 												ng-blur='member.UserNameWrong=false',
 												ng-model='member.form.userName',
+												ng-minlength="3"
+												ng-maxlength="20"
 												required)
 										p.text-danger
-											small(
-												ng-if='(member.UserNameWrong || ! member.form.userName || member.form.userName.length < 4) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)')
-												i {{ ui.validation.userName.valid }} {{ ui.validation.userName.amountMinChars(4) }} {{ui.validation.userName.regex }}
+											small(ng-messages='member.newForm.username.$error'
+												ng-if='(member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)')
+												i(ng-if='member.UserNameWrong && !member.newForm.username.$error.required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
+												i(ng-message='required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
+												i(ng-message='minlength') {{ ui.validation.default.minLength(ui.profile.username) }}
+												i(ng-message='maxlength') {{ ui.validation.default.maxLength(ui.profile.username) }}
 									
 									.form-group(ng-class="{ 'has-error' : member.newForm.password.$invalid && (member.newForm.password.$touched || member.newForm.password.$dirty || member.newForm.$submitted)  }")
 										label.control-label {{ui.profile.password}}
