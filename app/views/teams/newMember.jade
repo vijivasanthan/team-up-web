@@ -31,10 +31,17 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											input.span3.form-control(type='text',
 												name='firstname',
 												ng-model='member.form.firstName',
-												required='')
-											span.help-block(ng-if="(member.newForm.firstname.$touched || member.newForm.firstname.$dirty || member.newForm.$submitted) && member.newForm.firstname.$invalid")
-												small
-													i Yeeeeyyy
+												required='',
+												ng-minlength="5"
+												ng-maxlength="20")
+											span.help-block(ng-if="(member.newForm.firstname.$touched || member.newForm.firstname.$dirty || member.newForm.$submitted) && member.newForm.firstname.$invalid",
+												ng-messages="member.newForm.firstname.$error")
+												small(ng-message="required")
+													i Your name is required.
+												small(ng-message="minlength")
+													i Your name is too short.
+												small(ng-message="maxlength")
+													i Your name is too short.
 										
 									.form-group
 										label.control-label {{ui.profile.lastName}}
