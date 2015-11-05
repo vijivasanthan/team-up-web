@@ -35,6 +35,7 @@ define(
         {
           if (self.newForm.$valid)
           {
+            member.resetValidation(self.newForm);
             Member.create(member, teamId);
           }
         }

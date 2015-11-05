@@ -176,6 +176,18 @@ define(['services/services', 'config'],
           };
 
           /**
+           * Reset validation form
+           * @param form
+           */
+          this.resetValidation = function (form)
+          {
+            form.$setPristine();
+            form.$setUntouched();
+            form.$submitted = false;
+            form.$setValidity();
+          };
+
+          /**
            * Add member validation
            * @param member All the data of the added member
            * @returns {boolean} valid true of false
