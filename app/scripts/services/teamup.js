@@ -46,6 +46,16 @@ define(
 
 
                 /**
+                 * Password
+                 */
+                password: {
+                  method: 'GET',
+                  params: {
+                    first: 'passwordReset'
+                  }
+                },
+
+                /**
                  * Messaging
                  */
                 chats: {

@@ -526,7 +526,7 @@ define(
     );
 
     directives.directive(
-      'required',
+      'requiredForm',
       function ()
       {
         return {

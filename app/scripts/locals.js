@@ -839,7 +839,8 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
-            '36': 'A unexpected parameter of type'
+            '36': 'A unexpected parameter of type',
+            '39': 'The given resetKey is invalid'
           }
         },
         upload: {
@@ -1947,7 +1948,8 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
-            '36': 'A unexpected parameter of type'
+            '36': 'A unexpected parameter of type',
+            '39': 'The given resetKey is invalid'
           },
         },
         upload: {
@@ -3045,7 +3047,8 @@ define(
             '32': 'Agent niet gevonden',
             '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
-            '36': 'Een niet verwachte parameter "type"'
+            '36': 'Een niet verwachte parameter "type"',
+            '39': 'The given resetKey is invalid'
           }
         },
         options: {

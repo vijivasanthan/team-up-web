@@ -31,6 +31,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												name='firstname',
 												ng-model='member.form.firstName',
 												required='',
+												required-form,
 												ng-minlength="3"
 												ng-maxlength="20")
 											span.help-block(ng-if="(member.newForm.firstname.$touched || member.newForm.firstname.$dirty || member.newForm.$submitted) && member.newForm.firstname.$invalid",
@@ -64,6 +65,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 										.controls
 											select.span3.form-control(ng-model='member.form.role',
 												required='',
+												required-form,
 												name='role',
 												ng-options='r.id as r.label for r in member.roles')
 												option(value='') {{ui.teamup.chooseRole}}
@@ -78,6 +80,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											input.span3.form-control(type='email',
 											name='email',
 											required,
+											required-form,
 											ng-model='member.form.email',
 											ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
 											span.help-block(ng-messages="member.newForm.email.$error",
@@ -93,6 +96,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											input.span3.form-control.inputPhoneNumber(type='text',
 												name='phone',
 												required,
+												required-form,
 												ng-model='member.form.phone',
 												ng-change='parsePhoneNumber(member.form.phone)')
 											span.help-block
@@ -113,7 +117,8 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												ng-model='member.form.userName',
 												ng-minlength="3"
 												ng-maxlength="20"
-												required)
+												required='',
+												required-form)
 										p.text-danger
 											small(ng-messages='member.newForm.username.$error'
 												ng-if='(member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)')
@@ -129,6 +134,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											ng-model='member.form.password',
 											name='password',
 											required,
+											required-form,
 											ng-minlength="8",
 											ng-maxlength="20")
 											span.help-block(ng-messages='member.newForm.password.$error',
@@ -149,6 +155,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 										.controls
 											input.span3.form-control(type='password',
 												required='',
+												required-form,
 												ng-model='member.form.reTypePassword', name='repeatPass')
 											span.help-block(ng-show='(member.form.reTypePassword !== member.form.password || member.newForm.repeatPass.$invalid) && (member.newForm.repeatPass.$dirty || member.newForm.repeatPass.$touched  ||  member.newForm.$submitted)')
 												small

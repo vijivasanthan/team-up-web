@@ -39,13 +39,25 @@ define(
          */
         function change(passwordData)
         {
-          var _passwordData = {
-            keyPassword: $routeParams.key,
-            newPassword: passwordData.new,
-            repeatPassword: passwordData.repeat
-          };
-          var promise = Password.change(_passwordData);
-          promiseResult(promise);
+          console.error('self.forgotForm', self.forgotForm);
+
+          if(self.forgotForm.$valid)
+          {
+            var _passwordData = {
+              keyPassword: $routeParams.key,
+              userName: $routeParams.uuid,
+              newPassword: passwordData.new,
+              repeatPassword: passwordData.repeat
+            };
+
+            self.passwordForgotForm.$setPristine();
+            self.passwordForgotForm.$setUntouched();
+            self.passwordForgotForm.$submitted = false;
+            self.passwordForgotForm.$setValidity();
+
+            var promise = Password.change(_passwordData);
+            promiseResult(promise);
+          }
         }
 
         /**
@@ -58,11 +70,30 @@ define(
             .then(function(result)
             {
               notify('success', result);
+              resetForms();
+
             },
             function (error)
             {
               notify('error', error);
             });
+        }
+
+        /**
+         * Reset models and validation form
+         */
+        function resetForms()
+        {
+          self.username = null;
+          self.new = null;
+          self.repeat = null;
+          //if(angular.isDefined(self.passwordForgotForm))
+          //{
+          //  passwordForgotForm.$setPristine();
+          //  passwordForgotForm.$setUntouched();
+          //  passwordForgotForm.$submitted = false;
+          //  passwordForgotForm.$setValidity();
+          //}
         }
 
         /**
@@ -72,11 +103,12 @@ define(
          */
         function notify(type, message)
         {
+          self.success = null;
+          self.error = null;
           self[type] = {
             show: true,
             message: message
           };
-          console.error("self", self);
         }
 
         /**
@@ -84,6 +116,7 @@ define(
          */
         function init()
         {
+          console.error('$routeParams', $routeParams);
           ($routeParams &&
           $routeParams.uuid &&
           $routeParams.key)
