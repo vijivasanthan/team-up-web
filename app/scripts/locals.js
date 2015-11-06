@@ -840,7 +840,7 @@ define(
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
             '36': 'A unexpected parameter of type',
-            '39': 'The given resetKey is invalid'
+            '39': 'The key to reset the password is expired'
           }
         },
         upload: {
@@ -1957,7 +1957,7 @@ define(
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
             '36': 'A unexpected parameter of type',
-            '39': 'The given resetKey is invalid'
+            '39': 'The key to reset the password is expired'
           },
         },
         upload: {
@@ -3056,7 +3056,7 @@ define(
             '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
             '36': 'Een niet verwachte parameter "type"',
-            '39': 'The given resetKey is invalid'
+            '39': 'De sleutel om het wachtwoord te resetten is verlopen'
           }
         },
         options: {
