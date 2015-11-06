@@ -127,9 +127,10 @@ aria-hidden='true')
 			.tab-header(ng-hide='views.editClientGroup')
 				h3.pull-left {{clientGroup.name}} 
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
-				ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
-				button.btn.pull-right.btn-info(type='button',
-				ng-click='editClientGroup(clientGroup)') {{ui.teamup.edit}}
+					ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
+				//button.btn.pull-right.btn-info(type='button',
+				//	ng-click='editClientGroup(clientGroup)') 
+				//		| {{ui.teamup.edit}}
 			.tab-header(ng-show='views.editClientGroup')
 				input.pull-left(type='text',
 				ng-model='cGroupEditForm.name')
