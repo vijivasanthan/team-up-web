@@ -185,7 +185,7 @@ define(
               voicemailDetection: options["voicemail-detection-menu"] || false,
               sms: options["sms-on-missed-call"] || false,
               ringingTimeOut: options["ringing-timeout"] || 20,
-              useExternalId: options["useExternalId"]
+              useExternalId: options["useExternalId"] || false
             };
             vm.activateTTForm = false;
             tabs.removeClass('ng-hide');
