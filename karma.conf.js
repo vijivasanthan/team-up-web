@@ -16,6 +16,7 @@ module.exports = function (karma)
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.min.js', included: false },
       {pattern: 'app/vendors/angular-strap/dist/angular-strap.tpl.min.js', included: false },
       {pattern: 'app/vendors/angular-cookie/angular-cookie.js', included: false },
+      {pattern: 'app/vendors/angular-messages/angular-messages.min.js', included: false },
       {pattern: 'app/vendors/angular-dynamic-locale/tmhDynamicLocale.min.js', included: false },
       {pattern: 'app/vendors/angular-sortable-view/src/angular-sortable-view.js', included: false },
       {pattern: 'app/vendors/jquery-ui/ui/jquery-ui.js', included: false },
