@@ -61,7 +61,8 @@ define(
               controller = controller[controller.length - 1];
 
               $rootScope.statusBar.off();
-              if(controller != 'login' || controller != 'passwordReset')
+
+              if(controller !== 'login' && controller !== 'passwordReset')
               {
                 $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
               }
