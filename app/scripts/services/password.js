@@ -13,57 +13,51 @@ define(['services/services', 'config'],
                 Profile,
                 MD5)
       {
+        //interface of all public methods and properties
         return {
           change: change,
           forgot: forgot
         };
 
         //// Methods \\\\
+
+        /**
+         * Change the password
+         * @param data username, key and the new pass
+         * @returns {*}
+         */
         function change(data)
         {
           var deferred = $q.defer(),
-              error = null;
-          var backEnd = Settings.setBackEnd('http://192.168.128.7:8080/');
+              options = {
+                uuid: data.userName,
+                key: data.keyPassword,
+                pass: MD5(data.newPassword)
+              };
 
           $rootScope
             .statusBar
             .display($rootScope.ui.profile.changePass);
 
-          if(! data.newPassword || ! data.repeatPassword)
-          {
-            error = $rootScope.ui.profile.pleaseFill;
-          }
-          else if(data.newPassword !== data.repeatPassword)
-          {
-            error = $rootScope.ui.profile.passNotMatch;
-          }
-
-          (error)
-            ? deferred.reject(error)
-            : initBackEnd(config.app.host, {
-              uuid: data.userName,
-              key: data.keyPassword,
-              pass: MD5(data.newPassword)
-            })
+          initBackEnd(config.app.host, options)
             .then(function(result)
             {
-              console.error('result.data', result);
               (result && result.data)
                 ? deferred.reject(result.data.errorMessage)
                 : deferred.resolve($rootScope.ui.profile.passChanged);
-              //data: Object
-              //error: true
-              //errorCode: 39
-              //errorMessage: "The given resetKey is invalid"
             });
-
           return deferred.promise;
         }
 
+        /**
+         *
+         * @param userName the username from
+         * the user who forgot his or her password
+         * @returns {*}
+         */
         function forgot(userName)
         {
           var deferred = $q.defer();
-          var backEnd = Settings.setBackEnd('http://192.168.128.7:8080/');
 
           $rootScope
             .statusBar
@@ -77,16 +71,23 @@ define(['services/services', 'config'],
                 path: $location.absUrl(),
                 type: 'teamtelephone'
               })
-            .then(function(result)
-            {
-              console.error('result', result);
-              (result.error)
-                ? deferred.reject('De gebruikersnaam is niet gevonden')
-                : deferred.resolve($rootScope.ui.profile.forgotPassInfoSend);
-            });
+              .then(function(result)
+              {
+                console.error('result', result);
+                (result.error)
+                  ? deferred.reject('De gebruikersnaam is niet gevonden')
+                  : deferred.resolve($rootScope.ui.profile.forgotPassInfoSend);
+              });
           return deferred.promise;
         }
 
+        /**
+         * Check the different backends, because there isn't
+         * a default backend selected before the login
+         * @param backEnds
+         * @param params
+         * @returns {*}
+         */
         function initBackEnd (backEnds, params)
         {
           var deferred = $q.defer(),
@@ -94,13 +95,12 @@ define(['services/services', 'config'],
             requestCall = function(backEndDir, params)
             {
               var $resource = $injector.get('$resource'),
-                request = $resource(backEndDir + 'passwordReset/', {}, {
-                  get: {
-                    method: 'GET',
-                    params: {}
-                  }
-                });
-
+                  request = $resource(backEndDir + 'passwordReset/', {}, {
+                    get: {
+                      method: 'GET',
+                      params: {}
+                    }
+                  });
               return request.get(params).$promise;
             };
 
