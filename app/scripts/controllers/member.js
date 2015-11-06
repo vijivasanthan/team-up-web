@@ -33,9 +33,10 @@ define(
          */
         function create(member, teamId)
         {
+          console.error('self.newForm', self.newForm);
           if (self.newForm.$valid)
           {
-            member.resetValidation(self.newForm);
+            Member.resetValidation(self.newForm);
             Member.create(member, teamId);
           }
         }

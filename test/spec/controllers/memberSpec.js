@@ -196,6 +196,24 @@ define(
         delete memberData.reTypePassword;
         delete memberData.team;
 
+
+        memberCtrl.newForm = {
+          "$valid": true,
+          $setPristine: function ()
+          {
+            return true;
+          },
+          "$setUntouched": function ()
+          {
+            return true;
+          },
+          "$submitted": false,
+          "$setValidity": function ()
+          {
+            return true;
+          }
+        };
+
         $httpBackend
           .expectPOST(testConfig.host + 'team/member', memberData)
           .respond(200, {});
