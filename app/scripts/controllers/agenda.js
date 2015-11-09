@@ -5,7 +5,23 @@ define(
     'use strict';
 
     controllers.controller(
-      'agenda',
+      'agenda', [
+        '$rootScope',
+        '$scope',
+        '$q',
+        '$window',
+        '$location',
+        'Dater',
+        '$timeout',
+        'Store',
+        'Teams',
+        'Clients',
+        'TeamUp',
+        'Session',
+        'Slots',
+        'data',
+        'ipCookie',
+        'moment',
         function ($rootScope, $scope, $q, $window, $location, Dater, $timeout, Store,
                   Teams, Clients, TeamUp, Session, Slots, data, ipCookie, moment)
         {
@@ -238,6 +254,7 @@ define(
           //  $location.path('/messages').search({ escalate: true }).hash('compose');
           //};
         }
+      ]
     );
   }
 );
