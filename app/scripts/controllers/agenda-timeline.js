@@ -1013,30 +1013,6 @@ define(
           /**
            * Show the duration of the slot
            */
-          $scope.showDuration = function()
-          {
-            var startDate = $scope.slot.start.date + $scope.slot.start.time,
-                endDate = $scope.slot.end.date + $scope.slot.end.time,
-                dateTimeFormat = 'DD-MM-YYYY HH:mm',
-                startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-                endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf(),
-                duration = $filter('calculateDeltaTime')(endUnixTimeStamp, startUnixTimeStamp),
-                durationEl = angular.element('.duration'),
-                dangerClass = 'label-danger';
-
-            $scope.duration = '';
-
-            if(startUnixTimeStamp > endUnixTimeStamp)
-            {
-              durationEl.addClass(dangerClass);
-              $scope.duration += '-';
-            }
-            else
-            {
-              durationEl.removeClass(dangerClass);
-            }
-            $scope.duration += duration;
-          };
 
           /**
            * Set the end date depending on the start date
@@ -1271,12 +1247,57 @@ define(
             );
           };
 
+          $scope.showDuration = function()
+          {
+            var dates = getUnixTimeStamps($scope.slot),
+              duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+              durationEl = angular.element('.duration'),
+              dangerClass = 'label-danger';
+
+            $scope.duration = '';
+
+            if(dates.start > dates.end)
+            {
+              durationEl.addClass(dangerClass);
+              $scope.duration += '-';
+            }
+            else
+            {
+              durationEl.removeClass(dangerClass);
+            }
+            $scope.duration += duration;
+          };
+
+          function getUnixTimeStamps(slot)
+          {
+            var startDate = slot.start.date + slot.start.time,
+              endDate = slot.end.date + slot.end.time,
+              dateTimeFormat = 'DD-MM-YYYY HH:mm',
+              startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+              endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+            return {
+              start: startUnixTimeStamp,
+              end: endUnixTimeStamp
+            }
+          }
+
+          function slotValid(slot)
+          {
+            var dates = getUnixTimeStamps(slot);
+            return (dates.end > dates.start);
+          }
 
           /**
           * Timeline on change
           */
           $scope.timelineOnChange = function (direct, original, slot, changed)
           {
+            if(! slotValid(slot))
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return;
+            }
+
             $rootScope.planboardSync.clear();
 
             var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
