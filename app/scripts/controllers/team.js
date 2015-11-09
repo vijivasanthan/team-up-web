@@ -26,7 +26,7 @@ define(
          */
         function create(teamName)
         {
-          Team.create(teamName);
+          if(self.new.$valid) Team.create(teamName);
         }
 
         /**

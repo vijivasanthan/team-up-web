@@ -161,6 +161,9 @@ define(
         ];
 
         teamCtrl.list = teamService.list;
+        teamCtrl.new = {
+          $valid: true
+        };
         var newTeam = {name: 'Test team'};
 
         $httpBackend

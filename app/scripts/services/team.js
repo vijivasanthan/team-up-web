@@ -19,55 +19,83 @@ define(['services/services', 'config'],
         {
         };
 
-        // public methods \\
         (function ()
         {
-          /**
-           * Update a single team in the list
-           * @param oldEditedTeam The team before the update
-           * @param newEditedTeam The team after the update
-           */
-          this.updateList = function (oldEditedTeam, newEditedTeam)
-          {
-            var index = _.findIndex(this.list, {uuid: oldEditedTeam.uuid});
+          // public methods \\
+          this.updateList = updateList;
+          this.getList = getList;
+          this.removeFromList = removeFromList;
+          this.setCurrent = setCurrent;
+          this.getCurrent = getCurrent;
+          this.create = create;
+          this.read = read;
+          this.update = update;
+          this.delete = _delete;
+          this.addMember = addMember;
+          this.sync = sync;
+          this.init = init;
 
-            if (this.list.length)
-            {
-              this.list[index] = newEditedTeam;
-            }
+
+          /**
+           * Initialize the current team and list of all teams
+           * @param teamId
+           */
+          function init(teamId)
+          {
+            var _teamId = teamId || CurrentSelection.getTeamId();
+
+            this.list = Store('app').get('teams');
+            this.current = {};
+            this.setCurrent(_teamId);
           };
 
           /**
-           * Get the list of teams
-           * @returns {*}
+           * Add a member to a team
+           * teamOption 1: Removes member from all his
+           *  teams before adding to the current selected team
+           * teamOption 2: Add member to the current selected team
+           * @param member member the userobject
+           * @param teamOption could be 1 or 2 replace or add
            */
-          this.getList = function ()
+          function addMember(member, teamOption)
           {
-            return this.list;
-          };
-
-          /**
-           * Remove a team from the list
-           * @param currentTeam
-           */
-          this.removeFromList = function (teamId)
-          {
-            var index = _.findIndex(this.list, {uuid: teamId});
-
-            if (index >= 0)
+            var self = this;
+            var add = function (memberId, teamId)
             {
-              this.list.splice(index, 1);
-              Store('app').save('teams', this.list);
-              if(this.list.length) this.setCurrent(this.list[0].uuid);
-              else if($rootScope.app.resources.role > 1) Permission.getAccess();
-            }
+              TeamUp._(
+                'teamMemberAdd',
+                {second: teamId},
+                {ids: [memberId]}
+              ).then(function (result)
+                {
+                  console.error('memberId', memberId);
+                  console.error('teamId', teamId);
+                  console.error('result', result);
+                  return Profile.fetchUserData(memberId);
+                })
+                .then(function ()
+                {
+                  $location.path('team/members');
+                });
+            };
+
+            angular.element('#confirmMemberAddModal').modal('hide');
+            $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
+
+            (teamOption == 2)
+              ? add(member.uuid, self.current.teamId)
+              : Teams.removeAll(member)
+              .then(function (result)
+              {
+                add(member.uuid, self.current.teamId);
+              });
           };
 
           /**
            * Set the current team
            * @param teamId
            */
-          this.setCurrent = function (teamId)
+          function setCurrent(teamId)
           {
             CurrentSelection.local = teamId;
             var team = _.findWhere(this.list, {'uuid': teamId});
@@ -77,65 +105,18 @@ define(['services/services', 'config'],
             this.current.externallySyncable = team.externallySyncable;
           };
 
-          /**
-           * Get the current team
-           * @returns {*}
-           */
-          this.getCurrent = function ()
+          function sync(teamId)
           {
-            return this.current;
-          };
-
-          /**
-           * Create a new team
-           * @param team the data of the new team, (Only a name)
-           * @returns {*}
-           */
-          this.create = function (team)
-          {
-            var self = this;
-            if (!team)
-            {
-              $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              return;
-            }
-            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
-
-            TeamUp._('teamAdd',
-              {id: $rootScope.app.resources.uuid},
-              team)
-              .then(function (newTeam)
+            return TeamUp._(
+              'teamSync',
+              {second: teamId}
+            ).then(function(sync)
               {
-                self.list.push(newTeam);
-                Store('app').save('teams', self.list);
-                return Teams.getAll();
-              })
-              .then(function (teams)
-              {
-                //The last added team is the current one
-                self.setCurrent(self.list[self.list.length - 1].uuid);
-                $location.path('team/members');
-              });
-          };
-
-          /**
-           * Get a single team by id
-           * @param teamId The id of the team
-           * @returns {*} A promise with the members of the team
-           */
-          this.read = function (teamId)
-          {
-            $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-
-            var _teamId = teamId || (this.getCurrent()).teamId;
-            this.setCurrent(_teamId);
-
-            return Teams.getSingle(_teamId)
-              .then(function (members)
-              {
-                $location.search('teamId', _teamId);
-                $rootScope.statusBar.off();
-                return members;
+                var notifier = $rootScope.notifier;
+                (sync && sync.isSyncing)
+                  ? notifier.success($rootScope.ui.teamup.syncSucces)
+                  : notifier.error($rootScope.ui.teamup.syncError);
+                return sync;
               });
           };
 
@@ -144,7 +125,7 @@ define(['services/services', 'config'],
            * @param team
            * @returns {*}
            */
-          this.update = function (team)
+          function update(team)
           {
             var self = this,
               deferred = $q.defer();
@@ -178,7 +159,7 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          this.delete = function (teamId)
+          function _delete(teamId)
           {
             var self = this,
               deferred = $q.defer();
@@ -219,73 +200,101 @@ define(['services/services', 'config'],
           };
 
           /**
-           * Add a member to a team
-           * teamOption 1: Removes member from all his
-           *  teams before adding to the current selected team
-           * teamOption 2: Add member to the current selected team
-           * @param member member the userobject
-           * @param teamOption could be 1 or 2 replace or add
+           * Create a new team
+           * @param team the data of the new team, (Only a name)
+           * @returns {*}
            */
-          this.addMember = function (member, teamOption)
+          function create(team)
           {
             var self = this;
-            var add = function (memberId, teamId)
+            $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
+
+            TeamUp._('teamAdd',
+              {id: $rootScope.app.resources.uuid},
+              team)
+              .then(function (newTeam)
               {
-                TeamUp._(
-                  'teamMemberAdd',
-                  {second: teamId},
-                  {ids: [memberId]}
-                ).then(function (result)
-                {
-                  console.error('memberId', memberId);
-                  console.error('teamId', teamId);
-                  console.error('result', result);
-                  return Profile.fetchUserData(memberId);
-                })
-                .then(function ()
-                {
-                  $location.path('team/members');
-                });
-              };
-
-            angular.element('#confirmMemberAddModal').modal('hide');
-            $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
-
-            (teamOption == 2)
-              ? add(member.uuid, self.current.teamId)
-              : Teams.removeAll(member)
-                  .then(function (result)
-                  {
-                    add(member.uuid, self.current.teamId);
-                  });
-          };
-
-          this.sync = function (teamId)
-          {
-            return TeamUp._(
-              'teamSync',
-              {second: teamId}
-            ).then(function(sync)
-            {
-              var notifier = $rootScope.notifier;
-              (sync && sync.isSyncing)
-                ? notifier.success($rootScope.ui.teamup.syncSucces)
-                : notifier.error($rootScope.ui.teamup.syncError);
-              return sync;
-            });
+                self.list.push(newTeam);
+                Store('app').save('teams', self.list);
+                return Teams.getAll();
+              })
+              .then(function (teams)
+              {
+                //The last added team is the current one
+                self.setCurrent(self.list[self.list.length - 1].uuid);
+                $location.path('team/members');
+              });
           };
 
           /**
-           * Initialize the current team and list of all teams
-           * @param teamId
+           * Get a single team by id
+           * @param teamId The id of the team
+           * @returns {*} A promise with the members of the team
            */
-          this.init = function (teamId)
+          function read(teamId)
           {
-            var _teamId = teamId || CurrentSelection.getTeamId();
+            $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
 
-            this.list = Store('app').get('teams');
-            this.current = {};
+            var _teamId = teamId || (this.getCurrent()).teamId;
             this.setCurrent(_teamId);
+
+            return Teams.getSingle(_teamId)
+              .then(function (members)
+              {
+                $location.search('teamId', _teamId);
+                $rootScope.statusBar.off();
+                return members;
+              });
+          };
+
+          /**
+           * Get the current team
+           * @returns {*}
+           */
+          function getCurrent()
+          {
+            return this.current;
+          };
+
+          /**
+           * Update a single team in the list
+           * @param oldEditedTeam The team before the update
+           * @param newEditedTeam The team after the update
+           */
+          function getList()
+          {
+            return this.list;
+          };
+
+          /**
+           * Get the list of teams
+           * @returns {*}
+           */
+          function updateList(oldEditedTeam, newEditedTeam)
+          {
+            var index = _.findIndex(this.list, {uuid: oldEditedTeam.uuid});
+
+            if (this.list.length)
+            {
+              this.list[index] = newEditedTeam;
+            }
+          };
+
+          /**
+           * Remove a team from the list
+           * @param currentTeam
+           */
+          function removeFromList(teamId)
+          {
+            var index = _.findIndex(this.list, {uuid: teamId});
+
+            if (index >= 0)
+            {
+              this.list.splice(index, 1);
+              Store('app').save('teams', this.list);
+              if(this.list.length) this.setCurrent(this.list[0].uuid);
+              else if($rootScope.app.resources.role > 1) Permission.getAccess();
+            }
           };
         }).call(teamService.prototype);
 
