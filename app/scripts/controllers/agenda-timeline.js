@@ -5,24 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'agenda-timeline', [
-        '$rootScope',
-        '$scope',
-        '$q',
-        '$location',
-        '$route',
-        '$timeout',
-        '$window',
-        'Slots',
-        'Teams',
-        'Profile',
-        'Dater',
-        'Sloter',
-        'TeamUp',
-        'Store',
-        'CurrentSelection',
-        '$filter',
-        'moment',
+      'agenda-timeline',
         function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Teams,
                   Profile, Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
         {
@@ -779,6 +762,7 @@ define(
                   switch (content.type)
                   {
                     case 'group':
+                      content.diff = content.diff.toString();
                       $scope.slot.diff = content.diff;
                       $scope.slot.group = content.group;
                       break;
@@ -1847,7 +1831,6 @@ define(
           */
           $rootScope.planboardSync.start();
         }
-      ]
     );
   }
 );
