@@ -81,10 +81,13 @@ define(
           self.username = null;
           self.new = null;
           self.repeat = null;
-          self.forgotForm.$setPristine();
-          self.forgotForm.$setUntouched();
-          self.forgotForm.$submitted = false;
-          self.forgotForm.$setValidity();
+          if(angular.isDefined(self.forgotForm))
+          {
+            self.forgotForm.$setPristine();
+            self.forgotForm.$setUntouched();
+            self.forgotForm.$submitted = false;
+            self.forgotForm.$setValidity();
+          }
         }
 
         /**

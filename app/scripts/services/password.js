@@ -31,6 +31,7 @@ define(['services/services', 'config'],
           var deferred = $q.defer(),
               options = {
                 uuid: data.userName,
+                type: getType(),
                 key: data.keyPassword,
                 pass: MD5(data.newPassword)
               };
@@ -42,9 +43,16 @@ define(['services/services', 'config'],
           initBackEnd(config.app.host, options)
             .then(function(result)
             {
-              (result && result.data)
-                ? deferred.reject(result.data.errorMessage)
-                : deferred.resolve($rootScope.ui.profile.passChanged);
+              console.error('result', result);
+              if(result && result.data)
+              {
+                var errorCode,
+                  error = (result.data.errorCode)
+                  ? $rootScope.ui.teamup.errorCode[result.data.errorCode] || result.data.errorMessage
+                  : $rootScope.ui.profile.keyUsernameWrong;
+                deferred.reject(error)
+              }
+              else deferred.resolve($rootScope.ui.profile.passChanged);
             });
           return deferred.promise;
         }
@@ -69,16 +77,26 @@ define(['services/services', 'config'],
             : initBackEnd(config.app.host, {
                 uuid: userName,
                 path: $location.absUrl(),
-                type: 'teamtelephone'
+                type: getType()
               })
               .then(function(result)
               {
-                console.error('result', result);
                 (result.error)
                   ? deferred.reject('De gebruikersnaam is niet gevonden')
                   : deferred.resolve($rootScope.ui.profile.forgotPassInfoSend);
               });
           return deferred.promise;
+        }
+
+        /**
+         * Return the type of app the user is using at this moment
+         * @returns {string}
+         */
+        function getType()
+        {
+          return ($rootScope.app.domainPermission.tasks)
+            ? 'TeamUp'
+            : 'TeamTelephone';
         }
 
         /**
