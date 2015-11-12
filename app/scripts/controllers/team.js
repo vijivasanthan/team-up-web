@@ -10,56 +10,66 @@ define(
       {
         //view model
         var self = this;
+        self.create = create;
+        self.read = read;
+        self.update = update;
+        self.delete = _delete;
+        self.sync = sync;
+        self.addMember = addMember;
+        self.init = init;
+
+        self.init();
 
         /**
          * Create a team
          * @param teamName The name of the team
          */
-        self.create = function(teamName)
+        function create(teamName)
         {
-          Team.create(teamName);
-        };
+          if(self.new.$valid) Team.create(teamName);
+        }
 
         /**
          * Get a team by id
          * @param teamId the id of the team
          * @param callback initialize the team and a callback with the members result as parameter
          */
-        self.read = function (teamId, callback)
+        function read(teamId, callback)
         {
           Team.read(teamId)
-            .then(function(members)
+            .then(function (members)
             {
               (callback && callback(members));
               self.init(teamId);
             });
-        };
+        }
 
         /**
-         * Update a team by id
+         * Update the team by the id, If the team object is not specified,
+         * The edit button is pressed, so the team info is requested
          * @param teamId The id of the team
-         * @param confirmation in showing the current teamname in a textfield
+         * @param team The team object with the name and id
          */
-        self.update = function (teamId, confirm)
+        function update(teamId, team)
         {
-          if(! confirm)
+          if (!team)
           {
+            var selectedTeam = _.findWhere(self.list, {uuid: teamId});
             self.updateForm = true;
-            var team =  _.findWhere(self.list, {uuid: teamId});
             self.editForm = {
-              name: team.name,
-              uuid: team.uuid
+              name: selectedTeam.name,
+              uuid: selectedTeam.uuid
             };
           }
           else
           {
-            Team.update(teamId)
-              .then(function()
+            Team.update(team)
+              .then(function ()
               {
                 self.updateForm = false;
               });
           }
-        };
+        }
 
         /**
          * Delete a team by id
@@ -67,35 +77,35 @@ define(
          * @param confirm confirmation if the user is sure to delete the team
          * @param callback
          */
-        self.delete = function (teamId, confirm, callback)
+        function _delete(teamId, confirm, callback)
         {
-          if(! confirm)
+          if (!confirm)
           {
             angular.element('#confirmTeamModal').modal('show');
           }
           else
           {
             Team.delete(teamId)
-              .then(function(newTeamId)
+              .then(function (data)
               {
-                (callback && callback(newTeamId));
+                ( callback && callback(data.teamId, data.members) );
               });
           }
-        };
+        }
 
         /**
          * Syncen team, members and slots from Nedap
          * @param teamId The id of the team
          * @param callback
          */
-        self.sync = function (teamId, callback)
+        function sync(teamId, callback)
         {
           Team.sync(teamId)
-            .then(function(sync)
+            .then(function (sync)
             {
               (callback && callback(sync));
             });
-        };
+        }
 
         /**
          * Confirm to add a member
@@ -106,14 +116,14 @@ define(
          * @param teamOption
          * @confirm
          */
-        self.addMember = function(member, teamOption, confirm)
+        function addMember(member, teamOption, confirm)
         {
-          (! confirm
-            && member.teamUuids &&
-            member.teamUuids.length)
+          (!confirm
+          && member.teamUuids &&
+          member.teamUuids.length)
             ? angular.element('#confirmMemberAddModal').modal('show')
             : Team.addMember(member, teamOption);
-        };
+        }
 
         //self.loadingWithProgress = function ()
         //{
@@ -137,14 +147,12 @@ define(
          * Initialize the current team and a list of all teams
          * @param teamId
          */
-        self.init = function (teamId)
+        function init(teamId)
         {
           Team.init(teamId);
           self.list = Team.getList();
           self.current = Team.getCurrent();
-        };
-
-        self.init();
+        }
       }
     );
   }

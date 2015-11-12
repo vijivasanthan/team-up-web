@@ -451,9 +451,9 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          Slots.prototype.members = function(groupId, periods)
+          Slots.prototype.members = function(groupId, periods, membersCurrentGroup)
           {
-            var allMembers = Store('app').get(groupId),
+            var allMembers = membersCurrentGroup || Store('app').get(groupId),
               deferred = $q.defer();
 
             Slots.prototype.memberSlots2.query({
@@ -629,7 +629,7 @@ define(['services/services', 'config'],
 
                           if (options.layouts.members)
                           {
-                            var allMembers = Store('app').get(options.groupId),
+                            var allMembers = options.members || Store('app').get(options.groupId),
                               calls = [];
 
                             var resource = Slots.prototype.resourceMemberSlots();

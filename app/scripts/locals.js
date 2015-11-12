@@ -14,7 +14,7 @@ define(
           button_login: 'Login',
           button_loggingIn: 'Login...',
           forgot_password: 'Forgot password?',
-          forgetPassword: 'forgot password',
+          forgetPassword: 'Forgot password',
           emailAddress: 'Email address',
           resetPassword: 'Reset password',
           returnLogin: 'Return to log in',
@@ -398,6 +398,7 @@ define(
           searchMember: 'Search team member',
           serach: 'Search',
           addNewGroup: 'Add new group',
+          deleteTeamError: 'There appears to be a problem while deleting the team',
           editGroup: 'Edit group',
           searchResults: 'Search results',
           group: 'Group',
@@ -503,6 +504,11 @@ define(
           changePassWord: 'Change password',
           safePassword: 'Save password',
           oldPassword: 'Old password',
+          changePass: 'Wachtwoord wijzigen',
+          forgotPassword: 'Wachtwoord vergeten',
+          forgotPassInfo: 'We will send you a email with the instructions to reset your password',
+          forgotPassInfoSend: 'If the user exists and has an email address, an email is sent to the user with further instructions to change the password',
+          keyUsernameWrong: 'The combination of the given key and username is wrong',
           pincode: 'pin code',
           pincodeInUse: 'This pin code is in use. Please choose another one',
           pincodeNotValid: 'Please enter a valid pin code! (At least 4 digits, maximum 8 digits)',
@@ -567,6 +573,8 @@ define(
           settings: 'settings'
         },
         teamup: {
+          syncSucces: 'The teaminfo is syncing.',
+          syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
           clientGroup: 'Client group',
           extraInfo: 'Extra info',
@@ -832,7 +840,8 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
-            '36': 'A unexpected parameter of type'
+            '36': 'A unexpected parameter of type',
+            '39': 'The key to reset the password is expired'
           }
         },
         upload: {
@@ -909,6 +918,10 @@ define(
           },
           on: 'On',
           off: 'Off',
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
+          },
           ringingTimeOut: {
             title: 'Ringing timeout',
             short: 'When the ringing timeout is long the team members will have more time to pick up their phone, but the total waiting time for clients can be longer when many team members are reachable.',
@@ -1008,6 +1021,20 @@ define(
           }
         },
         validation: {
+          default: {
+            required: function (fieldName)
+            {
+              return 'A ' + fieldName.toLowerCase() + ' is required';
+            },
+            minLength: function (fieldName)
+            {
+              return 'The ' + fieldName.toLowerCase() + ' has not enough characters';
+            },
+            maxLength: function (fieldName)
+            {
+              return 'De ' + fieldName.toLowerCase() + ' has to many characters';
+            }
+          },
           phone: {
             notValid: 'Fill in a valid phone number!',
             invalidCountry: 'Invalid country code! Only Dutch (+31) numbers allowed.',
@@ -1046,11 +1073,18 @@ define(
             notValid: 'Enter a valid birthday!'
           },
           userName: {
-            regex: 'The user name may only contain alphanumeric characters, including scores and underscores',
-            valid: 'A username is required'
+            regex: 'and may only contain alphanumeric characters, including scores and underscores',
+            valid: 'A username is required',
+            amountMinChars: function (number)
+            {
+              return ' and must have a minimum of ' + number + ' characters'
+            }
           },
           search: {
             notValid: 'Fill in a name and/or surname!'
+          },
+          wish : {
+            integer: 'Give a number in the range of 0 to 30 '
           }
         }
       },
@@ -1396,6 +1430,10 @@ define(
             short: 'bei einer längeren Anruf-Dauer haben die Gruppen-Mitglieder mehr Zeit, ans Telefon zu gehen, die Wartezeit für den Patienten kann dadurch jedoch länger werden.',
             long: 'Bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass die Gruppen-Mitglieder Ihre Voice-Mail abschalten.',
           },
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
+          },
           personalVoicemailPrevention: 'persönliche Voicemail Präferenz',
           personalVoicemailPreventionInfo: 'Gruppenmitglieder werden zuerst gefragt, ob Sie das Gespräch entgegen nehmen möchten. Wenn diese Option eingeschaltet ist, vermeidet man, dass ein Patient eine Nachricht auf einer Voice-Mailbox eines Mitglieds hinterlassen kann.',
           voicemailDetectionInfo: 'bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass alle Mitglieder ihre Voice-Mailbox abschalten oder die persönliche Voicemail Präferenz einschalten. Bei Ihrem Provider erfahren Sie, wie Sie die Voice-Mailbox abschalten können.'
@@ -1476,6 +1514,7 @@ define(
           groups: 'Gruppen',
           newGroup: 'neue Gruppe',
           newMember: 'neues Team-Mitglied',
+          deleteTeamError: 'There appears to be a problem while deleting the team',
           search: 'Suchen',
           addNewGroup: 'neue Gruppe hinzufügen',
           editGroup: 'Gruppe ändern',
@@ -1579,6 +1618,10 @@ define(
           changePassWord: 'Passwort ändern',
           safePassword: 'Passwort speichern',
           oldPassword: 'altes Passwort',
+          forgotPassword: 'Wachtwoord vergeten',
+          forgotPassInfo: 'We will send you a email with the instructions to reset your password',
+          forgotPassInfoSend: 'If the user exists and has an email address, an email is sent to the user with further instructions to change the password',
+          keyUsernameWrong: 'The combination of the given key and username is wrong',
           pincode: 'Teammitgliedskode',
           pincodeInUse: 'Teammitgliedskode bereits vergeben, geben Sie einen anderen ein.',
           pincodeNotValid: 'Geben Sie den Teammitgliedskode mit maximal 8 Ziffern an',
@@ -1646,6 +1689,8 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          syncSucces: 'The teaminfo is syncing.',
+          syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
           clientGroup: 'Clientgrupe',
           client: 'Client',
@@ -1913,7 +1958,8 @@ define(
             '32': 'Agent not found',
             '33': 'No templates found in the ScenarioTemplateAgent',
             '34': 'Could not generate scenario',
-            '36': 'A unexpected parameter of type'
+            '36': 'A unexpected parameter of type',
+            '39': 'The key to reset the password is expired'
           },
         },
         upload: {
@@ -2055,6 +2101,20 @@ define(
         },
         validation: {
           data: "Eine oder mehrere Eingaben sind nicht abgeschlossen",
+          default: {
+            required: function (fieldName)
+            {
+              return 'A ' + fieldName.toLowerCase() + ' is required';
+            },
+            minLength: function (fieldName)
+            {
+              return 'The ' + fieldName.toLowerCase() + ' has not enough characters';
+            },
+            maxLength: function (fieldName)
+            {
+              return 'De ' + fieldName.toLowerCase() + ' has to many characters';
+            }
+          },
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
             invalidCountry: 'Ländervorwahl ist inkorrekt! Es dürfen nur niederländische (+31) Nummern verwendet werden.',
@@ -2093,12 +2153,19 @@ define(
             notValid: 'Geburtsdatum ist fehlerhaft!'
           },
           userName: {
-            regex: 'Der Anwendername darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
-              valid: 'Es muss ein Anwendernamen festgelegt werden'
+            regex: 'AND darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
+            valid: 'Es muss ein Anwendernamen festgelegt werden',
+            amountMinChars: function (number)
+            {
+              return ' and must have a minimum of ' + number + ' characters'
+            }
           },
           search: {
             notValid: 'Vor- und Nachname festlegen!'
           },
+          wish : {
+            integer: 'Give a number in the range of 0 to 30 '
+          }
         },
       },
       nl: {
@@ -2538,6 +2605,7 @@ define(
           personPartOfTeams: 'Deze persoon zal deel uitmaken van de volgende teams ',
           replace: 'Verplaatsen',
           personPartOfTeam: 'Deze persoon zal alleen deel uit maken van team ',
+          deleteTeamError: 'Het verwijderen van het team is mislukt',
           groups: 'Groepen',
           newGroup: 'Nieuwe groep',
           newMember: 'Nieuw teamlid',
@@ -2613,7 +2681,13 @@ define(
           currentPass: 'Huidig wachtwoord',
           newPass: 'Nieuw wachtwoord',
           newPassRepeat: 'Herhaal nieuw wachtwoord',
+
           changePass: 'Wachtwoord wijzigen',
+          forgotPassword: 'Wachtwoord vergeten',
+          forgotPassInfo: 'We verzenden u een email met de instructies om uw wachtwoord te resetten.',
+          forgotPassInfoSend: 'Als de gebruiker bestaat en een e-mailadres heeft, dan is een e-mailtje naar de gebruiker verstuurd met instructies om het wachtwoord te wijzigen.',
+          keyUsernameWrong: 'De combinatie van de opgegeven sleutel en gebruikersnaam klopt niet',
+
           newAvail: 'Nieuwe bereikbaarheid',
           userName: 'Gebruikersnaam',
           pincode: 'teamlidcode',
@@ -2626,9 +2700,10 @@ define(
           pleaseFill: 'Alle velden dienen valide ingevuld te worden!',
           passNotMatch: 'Het nieuwe wachtwoord en de herhaling komen niet overeen.',
           changingPass: 'Wachtwoord wijzigen...',
-          passChanged: 'Wachtwoord succesvol gewijzigd.',
+          passChanged: 'Wachtwoord succesvol gewijzigd',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
           currentPassWrong: 'Het ingevulde oude wachtwoord komt niet overeen met het huidige! Probeer opnieuw.',
+          passRecover: 'Wachtwoord herstellen',
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
@@ -2712,6 +2787,8 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          syncSucces: 'De teaminformatie wordt nu gesynchroniseerd.',
+          syncError: 'Het synchroniseren van teaminformatie is mislukt.',
           notFound: 'Niet gevonden',
           clientGroup: 'Cliëntgroep',
           client: 'Cliënt',
@@ -2813,7 +2890,7 @@ define(
           contactCount: 'Er zijn $v contactpersonen.',
           reportCount: 'Er zijn $v rapporten.',
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
-          passNotSame: 'Wachtwoorden zijn niet hetzelfde.',
+          passNotSame: 'Wachtwoorden zijn niet hetzelfde',
           savingMember: 'Lid aan het opslaan...',
           selectTeam: 'Selecteer een team',
           clinetInfoFill: 'Vul de cliëntinformatie (naam en telefoon) in a.u.b.',
@@ -2981,7 +3058,8 @@ define(
             '32': 'Agent niet gevonden',
             '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
-            '36': 'Een niet verwachte parameter "type"'
+            '36': 'Een niet verwachte parameter "type"',
+            '39': 'De sleutel om het wachtwoord te resetten is verlopen'
           }
         },
         options: {
@@ -3016,6 +3094,10 @@ define(
             title: 'Rinkeltijd',
             short: 'Bij een langere rinkeltijd hebben teamleden meer tijd om op te nemen, maar de totale wachttijd voor cliënten kan langer zijn als er veel teamleden zijn aangemeld.',
             long: 'Bij een rinkeltijd van meer dan 15 seconden is het aanbevolen dat alle teamleden hun persoonlijke voicemail uitschakelen.',
+          },
+          useExternalId: {
+            title: 'Telefoonnummer van de beller',
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
           },
           personalVoicemailPrevention: 'Persoonlijke voicemailpreventie',
           personalVoicemailPreventionInfo: 'Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.',
@@ -3160,6 +3242,20 @@ define(
         },
         validation: {
           data: "Een of meerdere velden zijn niet ingevuld",
+          default: {
+              required: function (fieldName)
+              {
+                return 'Een ' + fieldName.toLowerCase() + ' is verplicht';
+              },
+              minLength: function (fieldName)
+              {
+                return 'De ' + fieldName.toLowerCase() + ' heeft te weinig karakters';
+              },
+              maxLength: function (fieldName)
+              {
+                return 'De ' + fieldName.toLowerCase() + ' heeft teveel karakters';
+              }
+          },
           phone: {
             notValid: 'Voer een valide telefoonnummer in!',
             invalidCountry: 'Landcode incorrect! Alleen Nederlandse (+31) nummers toegestaan.',
@@ -3183,7 +3279,7 @@ define(
             },
             amountMaxChars: function (chars)
             {
-              return ' en mag uit maximaal ' + chars + ' tekens(s) te bestaan'
+              return ' en uit maximaal ' + chars + ' tekens(s) te bestaan'
             },
             oldPassMatch: 'Het ingevulde oude wachtwoord komt niet overheen met het huidige.',
             required: 'Een wachtwoord is verplicht',
@@ -3198,11 +3294,22 @@ define(
             notValid: 'Voer een valide geboortedatum in!'
           },
           userName: {
-            regex: "De gebruikersnaam mag alleen uit alfanummerieke tekens bestaan, inclusief streepjes ('-') en lage streepjes ('_')",
-            valid: 'Een gebruikersnaam is vereist'
+            regex: "en mag alleen uit alfanummerieke tekens bestaan, inclusief streepjes ('-') en lage streepjes ('_')",
+            valid: 'Een gebruikersnaam is vereist',
+            amountMinChars: function (number)
+            {
+              return ' en moet uit minimaal ' + number + ' karakters bestaan'
+            },
+            amountMaxChars: function (number)
+            {
+              return ' en maximaal ' + number + ' karakters '
+            }
           },
           search: {
             notValid: 'Voer een voor- en/of achternaam in!'
+          },
+          wish : {
+            integer: 'Geef een nummer van 0 t/m 30 '
           }
         }
       }

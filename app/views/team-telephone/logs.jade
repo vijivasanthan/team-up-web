@@ -10,7 +10,7 @@ section#logs
 				ng-selected='logs.current',
 				ng-change='logs.fetchLogs()')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
-			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger)
+			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 		.form-group.has-feedback.pull-right.headerTop
 			input.form-control.search-query(type='text', placeholder='{{ ui.logs.filter }}', ng-model='logs.filtered')

@@ -27,6 +27,8 @@ require.config(
       bootstrap: '../vendors/bootstrap/dist/js/bootstrap',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route': '../vendors/angular-route/angular-route.min',
+      'angular-animate': '../vendors/angular-animate/angular-animate.min',
+      'angular-messages': '../vendors/angular-messages/angular-messages.min',
       'angular-cookie': '../vendors/angular-cookie/angular-cookie',
       'angular-md5': '../vendors/angular-md5/angular-md5.min',
       'angular-dynamic-locale': '../vendors/angular-dynamic-locale/tmhDynamicLocale.min',
@@ -48,7 +50,6 @@ require.config(
       session: '../vendors/web-lib-session/dist/session',
       'jquery-form': '../vendors/jquery-form/jquery.form',
       'locale': 'i18n/angular-locale_nl',
-      'jquery-ui':        '../vendors/jquery-ui/ui/jquery-ui',
       'clj-fuzzy': '../vendors/clj-fuzzy/src-js/clj-fuzzy',
       mask: 'removables/angular-ui-utils/modules/mask/mask'
     },
@@ -60,6 +61,8 @@ require.config(
       angular: { deps: ['jquery'], exports: 'angular' },
       'angular-resource': { deps: ['angular'], exports: 'angular' },
       'angular-route': { deps: ['angular'], exports: 'angular' },
+      'angular-animate': { deps: ['angular'], exports: 'angular' },
+      'angular-messages': { deps: ['angular'], exports: 'angular' },
       'angular-strap': { deps: ['angular'], exports: 'angular' },
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
@@ -80,7 +83,6 @@ require.config(
       log: { deps: ['angular'] },
       phone: { deps: ['angular'] },
       session: { deps: ['angular'] },
-      'jquery-ui':        { deps: ['jquery'], exports: '$.Widget'},
       'locale': { deps: ['angular'] }
     },
     config: {
@@ -123,7 +125,9 @@ require(
     'plugins',
     'angular-resource',
     'angular-route',
+    'angular-animate',
     'angular-md5',
+    'angular-messages',
     'angular-strap',
     'angular-strap-tpl',
     'angular-dynamic-locale',
@@ -159,6 +163,7 @@ require(
     'services/login',
     'services/team',
     'services/member',
+    'services/password',
 
     'directives/widgets',
     'directives/date-range-picker',
@@ -216,6 +221,7 @@ require(
     'controllers/newMember',
     'controllers/searchMember',
     'controllers/team',
+    'controllers/password',
 
     'bootstrap',
     'lawnchair',
@@ -230,7 +236,6 @@ require(
     'session',
     'jquery-form',
     'lodash',
-    'jquery-ui',
     'angular-sortable-view',
     'locale',
     'clj-fuzzy',

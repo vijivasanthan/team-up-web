@@ -406,6 +406,7 @@ define(
           {
             return TeamUp._('clientGroupsQuery', null, null)
               .then(function (clientGroups) {
+                console.error('clientGroups', clientGroups);
                 Store('app').save('ClientGroups', clientGroups);
                 return clientGroups;
               });

@@ -69,7 +69,7 @@ define(
             .when(
             '/login',
             {
-              templateUrl: 'views/login.html',
+              templateUrl: 'views/login/loginForm.html',
               controller: 'login as loginCtrl'
             })
 
@@ -87,6 +87,13 @@ define(
                   }
                 ]
               }
+            })
+
+            .when(
+            '/password',
+            {
+              templateUrl: 'views/login/password.html',
+              controller: 'password as password'
             })
 
             .when(
@@ -183,10 +190,16 @@ define(
               controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
-                data: function ($q, $location, Teams)
+                data: function ($q, $location, Teams, Member)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-                  return  Teams.getSingle(teamId);
+
+                  return Teams.getSingle(teamId)
+                    .then(function (members)
+                    {
+                      Member.setList(members);
+                      return members;
+                    });
                 }
               }
             })
@@ -203,16 +216,16 @@ define(
             '/team/member/new',
             {
               templateUrl: 'views/teams/newMember.html',
-              controller: 'newMember as member',
-              reloadOnSearch: false,
+              controller: 'member as member',
+              reloadOnSearch: false
             })
 
             .when(
             '/team/member/search',
             {
               templateUrl: 'views/teams/searchMember.html',
-              controller: 'searchMember as member',
-              reloadOnSearch: false,
+              controller: 'member as member',
+              reloadOnSearch: false
             })
 
             .when(
@@ -223,12 +236,34 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Clients', '$route',
-                  function (Clients, $route)
+                  'Clients', 'CurrentSelection', '$route', '$q',
+                  function (Clients, CurrentSelection, $route, $q)
                   {
-                    return ($route.current.params)
+                    var deferred = $q.defer();
+                    var clientResult, clientGroupId;
+                    var promise = ($route.current.params)
                       ? Clients.query(false, $route.current.params)
                       : Clients.query();
+
+                    promise
+                      .then(function(result)
+                      {
+                        clientResult  = result;
+                        clientGroupId = ($route.current.params).uuid
+                                              || CurrentSelection.getClientGroupId()
+                                              || Object.keys(clientResult.clients)[0];
+                        return Clients.getSingle(clientGroupId);
+                      })
+                      .then(function(clients)
+                      {
+                        clientResult.clients[clientGroupId] = clients;
+                        deferred.resolve({
+                          clientGroups: clientResult.clientGroups,
+                          clients: clientResult.clients,
+                          currentClientGroupId: clientGroupId
+                        });
+                      });
+                    return deferred.promise;
                   }
                 ]
               }

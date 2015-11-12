@@ -18,10 +18,12 @@ define(
     'lawnchair-dom',
     'services/dater'
   ],
-  function() {
+  function ()
+  {
     'use strict';
 
-    describe('Team Controller', function () {
+    describe('Team Controller', function ()
+    {
 
       beforeEach(
         module(
@@ -31,34 +33,32 @@ define(
         )
       );
 
-      afterEach(inject(function($httpBackend)
+      afterEach(inject(function ($httpBackend)
       {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
       }));
 
       var teamCtrl,
-          rootScope,
-          scope,
-          Store,
-          $httpBackend,
-          md5Service,
-          teamService,
-          momentService;
+        rootScope,
+        scope,
+        Store,
+        $httpBackend,
+        md5Service,
+        teamService,
+        momentService;
 
       // Initialize the controller and a mock scope
       beforeEach(
         inject
         (
-          function (
-            $controller,
-            _$rootScope_,
-            _Team_,
-            _$httpBackend_,
-            _Store_,
-            _MD5_,
-            _moment_
-          )
+          function ($controller,
+                    _$rootScope_,
+                    _Team_,
+                    _$httpBackend_,
+                    _Store_,
+                    _MD5_,
+                    _moment_)
           {
             rootScope = _$rootScope_;
             rootScope.statusBar = {
@@ -75,14 +75,18 @@ define(
               error: function (error)
               {
                 return error;
+              },
+              success: function ()
+              {
+                return 'success';
               }
             };
             rootScope.ui = {
               teamup: {
-                teamNamePrompt1: 'Gruppen-Namen eintragen.',
+                teamNamePrompt1: 'Vul een teamnaam in.',
                 saveTeam: 'Team opslaan'
               },
-              login : {
+              login: {
                 loading_Members: 'Loading team members...'
               }
             };
@@ -94,11 +98,11 @@ define(
                 clients: false
               }
             };
-            rootScope.showChangedAvatar = function(team, uuid)
+            rootScope.showChangedAvatar = function (team, uuid)
             {
               return null;
             };
-            rootScope.infoUserWithoutTeam = function()
+            rootScope.infoUserWithoutTeam = function ()
             {
               return null;
             }
@@ -114,7 +118,7 @@ define(
               }
             ];
 
-            teamService.getList = function()
+            teamService.getList = function ()
             {
               return teamService.list;
             };
@@ -123,12 +127,12 @@ define(
               teamId: rootScope.app.resources.teamUuids[0]
             };
 
-            teamService.getCurrent = function()
+            teamService.getCurrent = function ()
             {
               return teamService.current;
             };
 
-            teamService.setCurrent = function(teamId)
+            teamService.setCurrent = function (teamId)
             {
               teamService.current.teamId = teamId;
             };
@@ -157,6 +161,9 @@ define(
         ];
 
         teamCtrl.list = teamService.list;
+        teamCtrl.new = {
+          $valid: true
+        };
         var newTeam = {name: 'Test team'};
 
         $httpBackend
@@ -170,9 +177,9 @@ define(
         $httpBackend
           .expectGET(testConfig.host + 'team')
           .respond(200, [{
-              name: "Stefan Team",
-              uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
-            },
+            name: "Stefan Team",
+            uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+          },
             {
               name: "Suki Team",
               uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
@@ -189,9 +196,9 @@ define(
       it('should be a new list of members, because a new team is loaded', function ()
       {
         teamService.list = [{
-            name: "Stefan Team",
-            uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
-          },
+          name: "Stefan Team",
+          uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+        },
           {
             name: "Suki Team",
             uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
@@ -216,24 +223,165 @@ define(
           .toEqual(teamCtrl.current.teamId);
       });
 
-        it('should check if the current teamname could be updated', function ()
-        {
-          var teams = [{
-            name: "Stefan Team",
-            uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
-          },
+      it('should check if the current teamname could be updated', function ()
+      {
+        var teams = [{
+          name: "Stefan Team",
+          uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+        },
           {
             name: "Suki Team",
             uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
           }];
-          Store('app').save('teams', teams);
+        Store('app').save('teams', teams);
+        teamCtrl.init(teams[0].uuid);
 
-          expect(true)
-            .toEqual(true);
-        });
+        var teamId = teamCtrl.current.teamId;
+        var payload = {
+          name: "This is the TestTeam",
+          uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+        };
+        var respondResult = teams;
+        respondResult[0] = payload;
+
+        $httpBackend
+          .expect('PUT', testConfig.host + 'team/' + teamId, payload)
+          .respond(200, payload);
+
+        $httpBackend
+          .expectGET(testConfig.host + 'team')
+          .respond(200, respondResult);
+
+        teamCtrl.update(teamId, payload);
+        $httpBackend.flush();
+
+        expect(respondResult[0].name)
+          .toEqual(teamCtrl.list[1].name);
+      });
+
+      //it("should check if the teamname couldn't be empty by a update", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  var teamId = teamCtrl.current.teamId;
+      //  var payload = {
+      //    name: "",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  };
+      //  var errorMessage = null;
+      //
+      //
+      //  teamService.update(teamId, payload)
+      //    .then(null, function (error)
+      //    {
+      //      errorMessage = error;
+      //    });
+      //  rootScope.$apply();
+      //
+      //  expect('Vul een teamnaam in.')
+      //    .toEqual(errorMessage);
+      //});
+
+      it('should initialize the list of teams and the current team', function ()
+      {
+        var teams = [{
+          name: "Stefan Team",
+          uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+        },
+          {
+            name: "Suki Team",
+            uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+          }];
+        Store('app').save('teams', teams);
+        teamCtrl.init(teams[0].uuid);
+
+        expect(teams[0].uuid)
+          .toEqual(teamCtrl.current.teamId);
+        expect(teams[0].name)
+          .toEqual(teamCtrl.list[1].name);
+      });
 
 
 
+
+      //it("should check if a team could be removed", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId, true);
+      //
+      //  console.error('teamCtrl.list', teamCtrl.list);
+      //
+      //});
+
+
+      //it("should check if the confirmation appears if the user tries to delete a team", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId);
+      //  rootScope.$apply();
+      //});
+
+      //it("should check if the confirmation appears if the user tries to delete a team", function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //  teamCtrl.init(teams[0].uuid);
+      //
+      //  teamCtrl.delete(teamCtrl.current.teamId);
+      //  rootScope.$apply();
+      //});
+
+      //Check if the the editform closes by changing a team
+
+      //it('should add a member to team', function ()
+      //{
+      //  var teams = [{
+      //    name: "Stefan Team",
+      //    uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
+      //  },
+      //    {
+      //      name: "Suki Team",
+      //      uuid: "d05e4ace-9ac6-4d74-b20e-6423e9de4bd4"
+      //    }];
+      //  Store('app').save('teams', teams);
+      //
+      //
+      //})
 
 
 
@@ -310,7 +458,7 @@ define(
       function loginRequests(loginData)
       {
         $httpBackend
-          .expectGET(testConfig.host + 'login?pass=' +  loginData.password + '&uuid=' + loginData.username)
+          .expectGET(testConfig.host + 'login?pass=' + loginData.password + '&uuid=' + loginData.username)
           .respond({});
 
         $httpBackend

@@ -158,73 +158,99 @@ define(['services/services', 'config'],
            * return true of false if the deleted user was the logged one,
            * has atleast one team and is a team member
            */
-            this.updateLocalTeams = function (memberId, teamId)
+          this.updateLocalTeams = function (memberId, teamId)
+          {
+            //update local resources by removing the current team
+            $rootScope.app.resources.teamUuids.splice(
+              $rootScope.app.resources.teamUuids.indexOf(teamId),
+              1
+            );
+            Store('get').save('resources', $rootScope.app.resources);
+
+            //if the removed team was the logged user his last team, he or she needs to get
+            //their accesslist updated, permission is limited without a team
+            if ($rootScope.app.resources.teamUuids.length === 0)
             {
-              //update local resources by removing the current team
-              $rootScope.app.resources.teamUuids.splice(
-                $rootScope.app.resources.teamUuids.indexOf(teamId),
-                1
-              );
-              Store('get').save('resources', $rootScope.app.resources);
+              Permission.getAccess();
+            }
+          };
 
-              //if the removed team was the logged user his last team, he or she needs to get
-              //their accesslist updated, permission is limited without a team
-              if ($rootScope.app.resources.teamUuids.length === 0)
-              {
-                Permission.getAccess();
-              }
-            };
+          /**
+           * Reset validation form
+           * @param form
+           */
+          this.resetValidation = function (form)
+          {
+            form.$setPristine();
+            form.$setUntouched();
+            form.$submitted = false;
+            form.$setValidity();
+          };
 
-            /**
-             * Add member validation
-             * @param member All the data of the added member
-             * @returns {boolean} valid true of false
-             */
-            this.valid = function (member)
+          /**
+           * Add member validation
+           * @param member All the data of the added member
+           * @returns {boolean} valid true of false
+           */
+          this.valid = function (member)
+          {
+            if (typeof member == 'undefined')
             {
-              if (typeof member == 'undefined' || !member.userName || !member.password || !member.reTypePassword)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
-                return false;
-              }
+              $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
+              return false;
+            }
 
-              if (!member.role && $rootScope.app.resources.role == 1)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.role);
-                return false;
-              }
+            if (!member.role && $rootScope.app.resources.role == 1)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.role);
+              return false;
+            }
 
-              if (member.password != member.reTypePassword)
-              {
-                $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-                return false;
-              }
+            if (_.isUndefined(member.email) || member.email == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+              return false;
+            }
 
-              if (member.password.length < 8 || member.password.length > 20)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.password.required + ' ' + $rootScope.ui.validation.password.amountMinChars(8));
-                return false;
-              }
+            if (!member.phone)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+              return false;
+            }
 
-              if (_.isUndefined(member.email) || member.email == false)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-                return false;
-              }
+            if ($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+              return false;
+            }
 
-              if (!member.phone)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-                return false;
-              }
+            if(!member.userName || (member.userName && member.userName.length < 4))
+            {
+              $rootScope
+                .notifier
+                .error(
+                  $rootScope.ui.validation.userName.valid + $rootScope.ui.validation.userName.amountMinChars(4)
+                );
+              return false;
+            }
 
-              if ($rootScope.phoneNumberParsed.result == false)
-              {
-                $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-                return false;
-              }
-              return true;
-            };
+            if (! member.password || (member.password.length < 8 || member.password.length > 20) )
+            {
+              var error = $rootScope.ui.validation.password.required + ' ';
+              error += $rootScope.ui.validation.password.amountMinChars(8);
+              error += $rootScope.ui.validation.password.amountMaxChars(20);
+              $rootScope.notifier.error(error);
+              return false;
+            }
+
+            if (member.password !== member.reTypePassword)
+            {
+              $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
+              return false;
+            }
+
+            return true;
+          };
 
           this.search = function (name)
           {
@@ -246,7 +272,6 @@ define(['services/services', 'config'],
                 }
               );
             }
-
             return deferred.promise;
           };
 
@@ -254,10 +279,10 @@ define(['services/services', 'config'],
            * Initialize member list
            * @param members
            */
-            this.init = function (members)
-            {
-              this.setList(members);
-            };
+          this.init = function (members)
+          {
+            this.setList(members);
+          };
 
         }).call(memberService.prototype);
 

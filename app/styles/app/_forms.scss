@@ -356,3 +356,20 @@ input[type="color"],
     margin-left: 20px;
   }
 }
+
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.form-group {
+  select {
+    display: inline;
+  }
+}
+
+.required {
+  color: $red;
+  font-size: 25px;
+  padding-left: 5px;
+  vertical-align: middle;
+}

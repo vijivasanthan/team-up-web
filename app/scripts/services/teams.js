@@ -646,7 +646,8 @@ define(
             return TeamUp._('teamQuery')
               .then(function(teams)
               {
-                Store('app').save('teams', teams);
+                Store('app').save(
+                  'teams', teams);
                 return teams;
               });
           };

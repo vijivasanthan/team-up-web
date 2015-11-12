@@ -66,19 +66,8 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            //([A-Za-z0-9-_/#]+)/g;
-            var videoRegex = /video\/()/g;
-
-            switch (true)
-            {
-              case videoRegex.test(location):
-                break;
-              default:
-                if(false == Session.check())
-                {
-                  $location.path("/login");
-                }
-            }
+            return ($location.path() === '/video/' ||
+            $location.path() === '/password')
           };
 
           $rootScope.checkLocation($location.path());
@@ -928,7 +917,7 @@ define(
 
           function displayMessage (evt) {
             console.error('evt', evt);
-            
+
             if (evt.origin === config.app.videoCallUrl)
             {
 

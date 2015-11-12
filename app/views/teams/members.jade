@@ -1,4 +1,4 @@
-div(ng-controller='team as team', style='padding-top: 1px;')
+div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 	#confirmMemberModal.modal.fade(tabindex='-1',
 	role='dialog',
 	aria-labelledby='confirmMemberModalLabel',
@@ -35,24 +35,24 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 					button.btn.btn-default(type='button',
 					data-dismiss='modal') {{ui.teamup.confirms.cancel}}
 					button.btn.btn-primary(type='button',
-					ng-click='team.delete(team.current.teamId, true)') {{ui.teamup.confirms.remove}}
+					ng-click='team.delete(team.current.teamId, true, member.init)') {{ui.teamup.confirms.remove}}
 	
 	.page-header
 		h2.nullable {{ui.teamup.teams}}
-		button(class="ladda-button btn btn-success"
-			ng-click="team.sync(team.current.teamId);"
-				ladda-button="team.laddaLoadingBar"
-				data-style="zoom-in")
-				span(class="ladda-label") Synchroniseren
 		.selectGroup(ng-if='team.list.length > 1')
 			span.selectTitles
 				strong 
-					| {{ ui.teamup.selectTeam }}
+					| {{ ui.teamup.selectTeam }} 
 			select(ng-model='team.current.teamId',
 			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
 			ng-selected='team.current.teamId',
-			ng-change='member.init(team.current.teamId, null, team.read)')
-	
+			ng-change='member.init(team.current.teamId, null, team.read); team.updateForm = false')
+		button(ng-if='team.current.externallySyncable',
+			class="ladda-button btn btn-success"
+			ng-click="team.sync(team.current.teamId);"
+			ladda-button="team.laddaLoadingBar"
+			data-style="zoom-in")
+			span(class="ladda-label") Synchroniseren
 	
 	.teams-section.tabbable.tabs-left
 	
@@ -64,12 +64,12 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 			#viewTeamTab.tab-pane(class="active")
 				div
 					.tab-header(ng-hide='team.updateForm')
-						h3.pull-left {{[team.current.teamId] | getTeamNameById:allTeams=true}}
+						h3.pull-left {{ team.current.name }}
 						div(ng-show='app.resources.role == 1')
 							button.btn.pull-right.btn-info.marginLeftTen(type='button',
-							ng-click='team.delete(team.current.teamId)') {{ui.teamup.del}}
+								ng-click='team.delete(team.current.teamId)') {{ui.teamup.del}}
 							button.btn.pull-right.btn-info(type='button',
-							ng-click='team.update(team.current.teamId)') {{ui.teamup.edit}}
+								ng-click='team.update(team.current.teamId)') {{ui.teamup.edit}}
 					
 					.tab-header(ng-show='team.updateForm')
 						input.pull-left(type='text',
@@ -77,7 +77,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 						button.btn.pull-right.btn-info.marginLeftTen(type='reset',
 						ng-click='team.updateForm = false') {{ui.teamup.cancel}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-						ng-click='team.update(team.editForm, true)') {{ui.teamup.save}}
+						ng-click='team.update(team.current.teamId, team.editForm)') {{ui.teamup.save}}
 				hr
 				
 				p(ng-hide='member.list.length > 0') {{ui.teamup.noMembers}}
@@ -115,10 +115,10 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 										button.btn-primary.btn-mini(ng-click='createVideoCall(m)',
 											ng-show='app.resources.uuid != m.uuid && app.domainPermission.videoChat && (app.resources.teamUuids.indexOf(team.current.teamId) >= 0)')
 											i.icon-facetime-video
-										a(href='#/profile/{{m.uuid}}#edit',
-										ng-show='app.resources.role == 1 || app.resources.uuid == m.uuid')
-											button.btn-primary.btn-mini
-												i.icon-edit
+										a(href='#/profile/{{m.uuid}}#edit', style='text-decoration:none'
+											ng-show='app.resources.role == 1 || app.resources.uuid == m.uuid')
+												button.btn-primary.btn-mini
+													i.icon-edit
 										button.btn-primary.btn-mini(type='submit',
 										ng-click='member.delete(m); member.current = m',
 										ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')

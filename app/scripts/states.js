@@ -280,6 +280,7 @@ define(
               }
             }
           );
+          return true;
         }
       ]
     );

@@ -475,11 +475,10 @@ $spinnerSize: 32px;
 }
 
 .page-header {
-  width: 100%;
+  //width: 97%;
   .ladda-button {
-    position: absolute;
-    right: 30px;
-    top: 25px;
+    float: right;
+    margin-top: 26px;
     font-size: 17px;
     background: #1dc8b6;
   }

@@ -104,7 +104,8 @@ define(
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
               "sms-on-missed-call": newOptions.sms,
               "sms-on-new-team-voicemail": newOptions.sms,
-              "voicemail-detection-menu": newOptions.voicemailDetection
+              "voicemail-detection-menu": newOptions.voicemailDetection,
+              "useExternalId": newOptions.useExternalId
             }
           ).then(function (result)
             {
@@ -183,7 +184,8 @@ define(
             vm.scenarios = {
               voicemailDetection: options["voicemail-detection-menu"] || false,
               sms: options["sms-on-missed-call"] || false,
-              ringingTimeOut: options["ringing-timeout"] || 20
+              ringingTimeOut: options["ringing-timeout"] || 20,
+              useExternalId: options["useExternalId"] || false
             };
             vm.activateTTForm = false;
             tabs.removeClass('ng-hide');

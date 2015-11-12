@@ -1,0 +1,15 @@
+//
+// Modals
+// --------------------------------------------------
+
+
+.modal-backdrop {
+  background-color: transparent;
+  z-index: -1;
+}
+
+.modal {
+  top: 0px;
+  bottom: 50px;
+  padding-top: 35px;
+}

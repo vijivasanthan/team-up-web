@@ -5,25 +5,9 @@ define(
     'use strict';
 
     controllers.controller(
-      'agenda-timeline', [
-        '$rootScope',
-        '$scope',
-        '$q',
-        '$location',
-        '$route',
-        '$timeout',
-        '$window',
-        'Slots',
-        'Profile',
-        'Dater',
-        'Sloter',
-        'TeamUp',
-        'Store',
-        'CurrentSelection',
-        '$filter',
-        'moment',
-        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Profile,
-                  Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
+      'agenda-timeline',
+        function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Teams,
+                  Profile, Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment)
         {
           // TODO: Define diff in the watcher maybe?
           var range = null,
@@ -233,18 +217,23 @@ define(
 
               if ($scope.timeline.main)
               {
+                var options = {
+                  groupId: $scope.timeline.current.group,
+                  division: $scope.timeline.current.division,
+                  layouts: $scope.timeline.current.layouts,
+                  month: $scope.timeline.current.month,
+                  stamps: stamps,
+                  user: $route.current.params.userId
+                };
+
                 //TODO load and render at the same time, two times the same call
-                Slots.all(
+                Teams.getSingle($scope.timeline.current.group)
+                  .then(function(members)
                   {
-                    groupId: $scope.timeline.current.group,
-                    division: $scope.timeline.current.division,
-                    layouts: $scope.timeline.current.layouts,
-                    month: $scope.timeline.current.month,
-                    stamps: stamps,
-                    user: $route.current.params.userId
-                  }
-                ).then(
-                  function (data)
+                    options.members = members;
+                    return Slots.all(options);
+                  })
+                  .then(function (data)
                   {
                     if (data.error)
                     {
@@ -256,10 +245,8 @@ define(
                       $scope.data = data;
                       _this.render(stamps, remember);
                     }
-
                     $rootScope.statusBar.off();
-                  }
-                );
+                  });
               }
               else
               {
@@ -605,10 +592,12 @@ define(
                 if($scope.timeline.current.layouts.members)
                 {
                   $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
-
-                  Slots.members($scope.timeline.current.group, periods)
-                    .then(
-                    function(members)
+                  Teams.getSingle($scope.timeline.current.group)
+                    .then(function(membersGroup)
+                    {
+                        return Slots.members($scope.timeline.current.group, periods, membersGroup);
+                    })
+                    .then(function(members)
                     {
                       if(! members.length)
                       {
@@ -619,8 +608,7 @@ define(
                       $scope.data.members = members;
                       $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
                       $rootScope.statusBar.off();
-                    }
-                  );
+                    });
                 }
                 else
                 {
@@ -774,6 +762,7 @@ define(
                   switch (content.type)
                   {
                     case 'group':
+                      content.diff = content.diff.toString();
                       $scope.slot.diff = content.diff;
                       $scope.slot.group = content.group;
                       break;
@@ -1024,30 +1013,6 @@ define(
           /**
            * Show the duration of the slot
            */
-          $scope.showDuration = function()
-          {
-            var startDate = $scope.slot.start.date + $scope.slot.start.time,
-                endDate = $scope.slot.end.date + $scope.slot.end.time,
-                dateTimeFormat = 'DD-MM-YYYY HH:mm',
-                startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-                endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf(),
-                duration = $filter('calculateDeltaTime')(endUnixTimeStamp, startUnixTimeStamp),
-                durationEl = angular.element('.duration'),
-                dangerClass = 'label-danger';
-
-            $scope.duration = '';
-
-            if(startUnixTimeStamp > endUnixTimeStamp)
-            {
-              durationEl.addClass(dangerClass);
-              $scope.duration += '-';
-            }
-            else
-            {
-              durationEl.removeClass(dangerClass);
-            }
-            $scope.duration += duration;
-          };
 
           /**
            * Set the end date depending on the start date
@@ -1282,12 +1247,57 @@ define(
             );
           };
 
+          $scope.showDuration = function()
+          {
+            var dates = getUnixTimeStamps($scope.slot),
+              duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+              durationEl = angular.element('.duration'),
+              dangerClass = 'label-danger';
+
+            $scope.duration = '';
+
+            if(dates.start > dates.end)
+            {
+              durationEl.addClass(dangerClass);
+              $scope.duration += '-';
+            }
+            else
+            {
+              durationEl.removeClass(dangerClass);
+            }
+            $scope.duration += duration;
+          };
+
+          function getUnixTimeStamps(slot)
+          {
+            var startDate = slot.start.date + slot.start.time,
+              endDate = slot.end.date + slot.end.time,
+              dateTimeFormat = 'DD-MM-YYYY HH:mm',
+              startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+              endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+            return {
+              start: startUnixTimeStamp,
+              end: endUnixTimeStamp
+            }
+          }
+
+          function slotValid(slot)
+          {
+            var dates = getUnixTimeStamps(slot);
+            return (dates.end > dates.start);
+          }
 
           /**
           * Timeline on change
           */
           $scope.timelineOnChange = function (direct, original, slot, changed)
           {
+            if(! slotValid(slot))
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return;
+            }
+
             $rootScope.planboardSync.clear();
 
             var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
@@ -1842,7 +1852,6 @@ define(
           */
           $rootScope.planboardSync.start();
         }
-      ]
     );
   }
 );
