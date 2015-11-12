@@ -22,21 +22,28 @@ define(
             {
               $scope.slot = {};
 
+              var coeff = 1000 * 60 * 5;
+              var date = new Date();  //or use any other date
+              var rounded = new Date(Math.round(date.getTime() / coeff) * coeff)
+
               $scope.slot = {
                 start: {
-                  date: new Date().toString(config.app.formats.date),
-                  time: new Date().toString(config.app.formats.time),
-                  datetime: new Date().toISOString()
+                  date: rounded.toString(config.app.formats.date),
+                  time: rounded.toString(config.app.formats.time),
+                  datetime: rounded.toISOString()
                 },
                 end: {
-                  date: new Date().toString(config.app.formats.date),
-                  time: new Date().addHours(1).toString(config.app.formats.time),
-                  datetime: new Date().toISOString()
+                  date: rounded.toString(config.app.formats.date),
+                  time: rounded.addHours(1).toString(config.app.formats.time),
+                  datetime: rounded.toISOString()
                 },
                 state: 'com.ask-cs.State.Available',
                 recursive: false,
                 id: ''
               };
+
+              console.log($scope.slot);
+
             }
           );
 
