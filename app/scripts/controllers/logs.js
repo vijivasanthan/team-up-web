@@ -14,6 +14,7 @@ define(
         TeamUp,
         Logs,
         CurrentSelection,
+        Teams,
         data)
       {
         $rootScope.fixStyles();
@@ -74,16 +75,35 @@ define(
             .then(function (TeamTelephoneSettings)
             {
               options.adapterId = TeamTelephoneSettings.adapterId;
-              var promise = Logs.fetch(options);
 
               if (! TeamTelephoneSettings.adapterId)
               {
                 $location.path('team-telefoon/options');
-                promise = $q.reject();
               }
-              return promise;
-            })
-            .then(receiveLogs);
+              else
+              {
+                var _teams = null;
+
+                Teams.getSingle(vm.current)
+                  .then(function(members)
+                  {
+                    return Logs.fetch(
+                      _.extend(options, {
+                          adapterId: options.adapterId,
+                          members: _.map(members, _.partialRight(_.pick,['fullName','phone'])),
+                          currentTeam: {
+                            fullName: (_.findWhere(
+                                vm.data.teams, {uuid: vm.current})
+                            ).name,
+                            phone: TeamTelephoneSettings.phoneNumber
+                          }
+                        }
+                      )
+                    );
+                  })
+                  .then(receiveLogs);
+              }
+            });
         }
 
         /**

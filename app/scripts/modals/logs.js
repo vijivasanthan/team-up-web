@@ -169,12 +169,19 @@ define(['services/services', 'config'],
 
             $filter('orderBy')(uniques, 'started.stamp');
 
-            var groupCalls = groupByCall(uniques);
+            uniques = getNameByPhoneNumber(uniques);
 
-            return groupCalls;
+            return uniques;
           };
 
-          /**
+          function getNameByPhoneNumber(logs)
+          {
+            var _logs = angular.copy(logs);
+
+            return logs
+          }
+
+        /**
            * Group parent-child calls
            * @param logs A array with log objects
            * @returns {*} logs A array with log objects,
@@ -252,6 +259,11 @@ define(['services/services', 'config'],
             }
           }
 
+          function getNamesAndPhoneNumbers()
+          {
+
+          }
+
           Logs.prototype.fetch = function (options)
           {
             var deferred = $q.defer(),
@@ -263,12 +275,31 @@ define(['services/services', 'config'],
                     : null
                 };
             var resource = Logs.prototype.get();
+            var teamMembersNames = null;
+
+            if(options.adapterId && options.members)
+            {
+              options.members.push(options.currentTeam);
+              var teamMembersNames = _.indexBy(options.members, 'phone');
+            }
+
             resource.get(
               _options,
               function (result)
               {
+                result = normalize(result);
+                if(options.adapterId)
+                {
+                  _.each(result, function (log)
+                  {
+                    if(teamMembersNames[log.from]) log.from = teamMembersNames[log.from]['fullName'];
+                    if(teamMembersNames[log.to]) log.to = teamMembersNames[log.to]['fullName'];
+                  })
+                }
+                result = groupByCall(result);
+
                 var returned = {
-                  logs: normalize(result),
+                  logs: result,
                   synced: moment.valueOf(),
                   periods: {
                     startTime: _options.startTime,

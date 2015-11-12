@@ -542,14 +542,28 @@ define(
                       }
                       else
                       {
-                        var teams = Teams.getAllLocal(),
-                          logsPerTeam = Logs.fetch({adapterId: options.adapterId});
-                        $q.all([teams, logsPerTeam])
-                          .then(function (result)
+                        var _teams = null;
+
+                        Teams.getAllLocal()
+                          .then(function(teams) {
+                            _teams = teams;
+                            return Teams.getSingle(teamId);
+                          })
+                          .then(function(members) {
+                            return Logs.fetch({
+                              adapterId: options.adapterId,
+                              members: _.map(members,_.partialRight(_.pick,['fullName','phone'])),
+                              currentTeam: {
+                                fullName: (_.findWhere(_teams, {uuid: teamId})).name,
+                                phone: options.phoneNumber
+                              }
+                            });
+                          })
+                          .then(function (logs)
                           {
                             deferred.resolve({
-                              teams: result[0],
-                              logData: result[1]
+                              teams: _teams,
+                              logData: logs
                             });
                           });
                       }
