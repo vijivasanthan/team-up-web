@@ -53,36 +53,36 @@ section#logs
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
 						tbody
-							tr(ng-repeat-start='(key, log) in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+							tr(ng-repeat-start='log in logs.data.logData.logs track by log.groupId | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
 								td(style="cursor:pointer;")
-									span(ng-if='!log[0].expanding && log.length > 1', ng-click="log[0].expanding = true" ) ►
-									span(ng-if='log[0].expanding && log.length > 1', ng-click="log[0].expanding = false" ) ▼
+									span(ng-if='!log.expanding && log.childs.length > 1', ng-click="log.expanding = true" ) ►
+									span(ng-if='log.expanding && log.childs.length > 1', ng-click="log.expanding = false" ) ▼
 								td
-									span.label.label-inverse(class='log-{{log[0].status}}') {{log[0].status | translateStatusLogs}}
-									span(ng-show='log[0].records.length > 0')
-										span(ng-repeat='record in log[0].records')
+									span.label.label-inverse(class='log-{{log.status}}') {{log.status | translateStatusLogs}}
+									span(ng-show='log.records.length > 0')
+										span(ng-repeat='record in log.records')
 											br
 											| ∟
 											span.label.label-inverse(class='log-{{record.status}}') {{record.status | translateStatusLogs}}
 								td
 									// <pre><small>{{log | json}}</small></pre>
-									| {{log[0].from}}
-									span(ng-show='log[0].records.length > 0', ng-repeat='record in log[0].records')
+									| {{log.from}}
+									span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
 										br
 										| {{record.from}}
 								td
-									| {{log[0].to}}
-									span(ng-show='log[0].records.length > 0', ng-repeat='record in log[0].records')
+									| {{log.to}}
+									span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
 										br
 										| {{record.to}}
 								td
-									| {{log[0].started.date}}
+									| {{log.started.date}}
 								td
-									| {{log[0].duration.presentation}}
+									| {{log.duration.presentation}}
 							tr(style='background:#fffaf0;',
-								ng-if="log[0].expanding",
+								ng-if="log.expanding",
 								ng-repeat-end="", 
-								ng-repeat="call in logs.data.logData.logs[key].slice(1, logs.data.logData.logs[key].length)")
+								ng-repeat="call in log.childs")
 								td ∟
 								td
 									span.label.label-inverse(class='log-{{call.status}}') {{call.status | translateStatusLogs}}

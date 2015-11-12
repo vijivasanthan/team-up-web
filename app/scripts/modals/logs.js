@@ -72,7 +72,9 @@ define(['services/services', 'config'],
                     date: $filter('date')(log.start, 'medium'),
                     stamp: log.start
                   },
-                  groupId: log.parentId || log._id
+                  groupId: log.parentId || log._id,
+                  parent: (!log.parentId),
+                  childs: []
                 };
 
                 angular.forEach(
@@ -177,7 +179,29 @@ define(['services/services', 'config'],
             var _logs = angular.copy(logs);
             var groupCalls = _.groupBy(_logs, 'groupId');
 
-            console.error("grouped before", groupCalls);
+            //console.error("grouped before", groupCalls);
+            console.log('logs before', logs);
+
+            logs = logs.filter(function (el) {
+              return (el.parent);
+            });
+
+            _.each(logs, function (log, index) {
+              //groupCalls[log.groupId] && log.parent == true
+              if(groupCalls[log.groupId].length > 1)
+              {
+                log.childs = groupCalls[log.groupId];
+                log.childs = $filter('orderBy')(log.childs, 'started.stamp');
+                var logIndexLength = log.childs.length - 1;
+                log.childs[0].status = log.childs[logIndexLength].status;
+                log.childs[0].to = log.childs[logIndexLength].to;
+                log.childs[0].duration = howLong(
+                  log.childs[0].duration.stamp + log.childs[logIndexLength].duration.stamp
+                );
+              }
+            });
+
+            console.log('logs after', logs);
 
             var groupCallsSorted = _.map(groupCalls, function (call) {
               var sortedCall = null;
@@ -194,9 +218,11 @@ define(['services/services', 'config'],
               return sortedCall || call;
             })
 
-            console.error("grouped after", groupCallsSorted);
+            //console.error("grouped after", groupCallsSorted);
 
-            return groupCallsSorted;
+
+
+            return logs;
           }
 
           function howLong(period)
