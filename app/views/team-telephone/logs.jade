@@ -27,6 +27,7 @@ section#logs
 						thead
 							tr
 								th
+								th
 									a(ng-click='logs.ordered = "status"; logs.reversed = !logs.reversed') {{ ui.teamup.state }}
 									span(ng-show='(logs.ordered=="status")')
 										span(ng-hide='logs.reversed') ▲
@@ -52,29 +53,59 @@ section#logs
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
 						tbody
-							tr(ng-repeat='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+							tr(ng-repeat-start='(key, log) in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+								td(style="cursor:pointer;")
+									span(ng-if='!log[0].expanding && log.length > 1', ng-click="log[0].expanding = true" ) ►
+									span(ng-if='log[0].expanding && log.length > 1', ng-click="log[0].expanding = false" ) ▼
 								td
-									span.label.label-inverse(class='log-{{log.status}}') {{log.status | translateStatusLogs}}
-									span(ng-show='log.records.length > 0')
-										span(ng-repeat='record in log.records')
+									span.label.label-inverse(class='log-{{log[0].status}}') {{log[0].status | translateStatusLogs}}
+									span(ng-show='log[0].records.length > 0')
+										span(ng-repeat='record in log[0].records')
 											br
 											| ∟
 											span.label.label-inverse(class='log-{{record.status}}') {{record.status | translateStatusLogs}}
 								td
 									// <pre><small>{{log | json}}</small></pre>
-									| {{log.from}}
-									span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+									| {{log[0].from}}
+									span(ng-show='log[0].records.length > 0', ng-repeat='record in log[0].records')
 										br
 										| {{record.from}}
 								td
-									| {{log.to}}
-									span(ng-show='log.records.length > 0', ng-repeat='record in log.records')
+									| {{log[0].to}}
+									span(ng-show='log[0].records.length > 0', ng-repeat='record in log[0].records')
 										br
 										| {{record.to}}
 								td
-									| {{log.started.date}}
+									| {{log[0].started.date}}
 								td
-									| {{log.duration.presentation}}
+									| {{log[0].duration.presentation}}
+							tr(style='background:#fffaf0;',
+								ng-if="log[0].expanding",
+								ng-repeat-end="", 
+								ng-repeat="call in logs.data.logData.logs[key].slice(1, logs.data.logData.logs[key].length)")
+								td ∟
+								td
+									span.label.label-inverse(class='log-{{call.status}}') {{call.status | translateStatusLogs}}
+									span(ng-show='call.records.length > 0')
+										span(ng-repeat='record in call.records')
+											br
+											| ∟
+											span.label.label-inverse(class='log-{{record.status}}') {{record.status | translateStatusLogs}}
+								td
+									// <pre><small>{{log | json}}</small></pre>
+									| {{call.from}}
+									span(ng-show='call.records.length > 0', ng-repeat='record in call.records')
+										br
+										| {{record.from}}
+								td
+									| {{call.to}}
+									span(ng-show='log.records.length > 0', ng-repeat='record in log[0].records')
+										br
+										| {{record.to}}
+								td
+									| {{call.started.date}}
+								td
+									| {{call.duration.presentation}}
 				hr
 				small.pull-left(ng-show='logs.data.logData.logs.length > 0')
 					span.text-warning {{ui.planboard.lastSyncTime}}

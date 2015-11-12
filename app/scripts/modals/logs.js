@@ -42,33 +42,6 @@ define(['services/services', 'config'],
               return (/@/.test(number)) ? number.split('@')[0] : number;
             };
 
-            var howLong = function (period)
-            {
-              if (period && period != 0)
-              {
-                var duration = moment.duration(period);
-
-                var doubler = function (num)
-                {
-                  return (String(num).length == 1) ? '0' + String(num) : num;
-                };
-
-                return {
-                  presentation: ((duration.hours() == 0) ? '00' : doubler(duration.hours())) + ':' +
-                  ((duration.minutes() == 0) ? '00' : doubler(duration.minutes())) + ':' +
-                  doubler(duration.seconds()),
-                  stamp: period
-                }
-              }
-              else
-              {
-                return {
-                  presentation: '00:00:00',
-                  stamp: 0
-                }
-              }
-            };
-
             var trackingID = null;
 
             angular.forEach(
@@ -98,7 +71,8 @@ define(['services/services', 'config'],
                   started: {
                     date: $filter('date')(log.start, 'medium'),
                     stamp: log.start
-                  }
+                  },
+                  groupId: log.parentId || log._id
                 };
 
                 angular.forEach(
@@ -193,8 +167,64 @@ define(['services/services', 'config'],
 
             $filter('orderBy')(uniques, 'started.stamp');
 
-            return uniques;
+            var groupCalls = groupByCall(uniques);
+
+            return groupCalls;
           };
+
+          function groupByCall(logs)
+          {
+            var _logs = angular.copy(logs);
+            var groupCalls = _.groupBy(_logs, 'groupId');
+
+            console.error("grouped before", groupCalls);
+
+            var groupCallsSorted = _.map(groupCalls, function (call) {
+              var sortedCall = null;
+              if(call.length > 1)
+              {
+                sortedCall = $filter('orderBy')(call, 'started.stamp');
+                var callIndexLength = call.length - 1;
+                sortedCall[0].status = sortedCall[callIndexLength].status;
+                sortedCall[0].to = sortedCall[callIndexLength].to;
+                sortedCall[0].duration = howLong(
+                  sortedCall[0].duration.stamp + sortedCall[callIndexLength].duration.stamp
+                );
+              }
+              return sortedCall || call;
+            })
+
+            console.error("grouped after", groupCallsSorted);
+
+            return groupCallsSorted;
+          }
+
+          function howLong(period)
+          {
+            if (period && period != 0)
+            {
+              var duration = moment.duration(period);
+
+              var doubler = function (num)
+              {
+                return (String(num).length == 1) ? '0' + String(num) : num;
+              };
+
+              return {
+                presentation: ((duration.hours() == 0) ? '00' : doubler(duration.hours())) + ':' +
+                ((duration.minutes() == 0) ? '00' : doubler(duration.minutes())) + ':' +
+                doubler(duration.seconds()),
+                stamp: period
+              }
+            }
+            else
+            {
+              return {
+                presentation: '00:00:00',
+                stamp: 0
+              }
+            }
+          }
 
           Logs.prototype.fetch = function (options)
           {
