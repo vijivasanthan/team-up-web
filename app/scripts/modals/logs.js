@@ -174,54 +174,54 @@ define(['services/services', 'config'],
             return groupCalls;
           };
 
+          /**
+           * Group parent-child calls
+           * @param logs A array with log objects
+           * @returns {*} logs A array with log objects,
+           * some of them could have some child objects
+           */
           function groupByCall(logs)
           {
-            var _logs = angular.copy(logs);
-            var groupCalls = _.groupBy(_logs, 'groupId');
+            //group all calls by groupId
+            var groupCalls = _.groupBy(
+              angular.copy(logs),
+              'groupId'
+            );
 
-            //console.error("grouped before", groupCalls);
-            console.log('logs before', logs);
-
-            logs = logs.filter(function (el) {
-              return (el.parent);
+            //filter out all the parentcalls
+            logs = _.filter(logs, function (log) {
+              return (log.parent);
             });
 
-            _.each(logs, function (log, index) {
-              //groupCalls[log.groupId] && log.parent == true
+            _.each(logs, function (log)
+            {
+              // check grouped calls by groupId
+              // They need a length over 1,
+              // because the first one is the parent
               if(groupCalls[log.groupId].length > 1)
               {
+                //save the childscalls in the parentobject
                 log.childs = groupCalls[log.groupId];
+                //filter the childs by time ascending
                 log.childs = $filter('orderBy')(log.childs, 'started.stamp');
+                //total index length of the childcalls
                 var logIndexLength = log.childs.length - 1;
-                log.childs[0].status = log.childs[logIndexLength].status;
-                log.childs[0].to = log.childs[logIndexLength].to;
-                log.childs[0].duration = howLong(
-                  log.childs[0].duration.stamp + log.childs[logIndexLength].duration.stamp
-                );
+                //The final status of the callsequence
+                log.status = log.childs[logIndexLength].status;
+                //The final number of the callsequence
+                log.to = log.childs[logIndexLength].to;
+                //get all the duration timestamps of the child calls
+                var totalDuration = _.map(log.childs, function (child) {
+                  return child.duration.stamp;
+                });
+                //count the total duration of the childcalls
+                totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
+                  return previousValue + currentValue;
+                });
+                //set the parsed to timestring duration
+                log.duration = howLong(totalDuration);
               }
             });
-
-            console.log('logs after', logs);
-
-            var groupCallsSorted = _.map(groupCalls, function (call) {
-              var sortedCall = null;
-              if(call.length > 1)
-              {
-                sortedCall = $filter('orderBy')(call, 'started.stamp');
-                var callIndexLength = call.length - 1;
-                sortedCall[0].status = sortedCall[callIndexLength].status;
-                sortedCall[0].to = sortedCall[callIndexLength].to;
-                sortedCall[0].duration = howLong(
-                  sortedCall[0].duration.stamp + sortedCall[callIndexLength].duration.stamp
-                );
-              }
-              return sortedCall || call;
-            })
-
-            //console.error("grouped after", groupCallsSorted);
-
-
-
             return logs;
           }
 

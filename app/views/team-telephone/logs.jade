@@ -53,7 +53,7 @@ section#logs
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
 						tbody
-							tr(ng-repeat-start='log in logs.data.logData.logs track by log.groupId | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+							tr(ng-repeat-start='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
 								td(style="cursor:pointer;")
 									span(ng-if='!log.expanding && log.childs.length > 1', ng-click="log.expanding = true" ) ►
 									span(ng-if='log.expanding && log.childs.length > 1', ng-click="log.expanding = false" ) ▼
