@@ -1,21 +1,21 @@
 .label-inverse, .badge-inverse {
-  background-color: #333333;
+  background-color: $brown;
 }
 
 .log-RECEIEVED {
-  background-color: #6cad6c;
+  background-color: $turq;
 }
 
 .log-RECEIVED {
-  background-color: #6cad6c;
+  background-color: $turq;
 }
 
 .log-MISSED {
-  background-color: #d34545;
+  background-color: $red;
 }
 
 .log-SENT {
-  background-color: #e09131;
+  background-color: $orange;
 }
 
 #logs .headerTop{
