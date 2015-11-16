@@ -1001,6 +1001,7 @@ define(
           loadLogs: 'Loading logs..',
           empty: 'There are no logs',
           filter: 'Filter logs...',
+          to: 'To',
           amountLogs: function (amount)
           {
             if (amount == 1)
@@ -2080,6 +2081,7 @@ define(
           loadLogs: 'Logs laden...',
           empty: 'keine Logs vorhanden',
           filter: 'Logs filtern...',
+          to: 'To',
           amountLogs: function (amount)
           {
             if (amount == 1)
@@ -3222,6 +3224,7 @@ define(
           loadLogs: 'Logs laden...',
           empty: 'Er zijn geen logs',
           filter: 'Filter logs...',
+          to: 'Naar',
           amountLogs: function (amount)
           {
             if (amount == 1)
