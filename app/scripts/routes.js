@@ -266,26 +266,31 @@ define(
               controller: 'manageCtrl',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Clients', 'Teams', '$location',
-                  function (Clients, Teams, $location)
+                data:
+                function (Clients, Teams, $location)
+                {
+                  // TODO: Lose short property names and make them more readable!
+                  return (($location.hash() && $location.hash() == 'reload')) ?
                   {
-                    // TODO: Lose short property names and make them more readable!
-                    return (($location.hash() && $location.hash() == 'reload')) ?
-                    {
-                      t: Teams.query(),
-                      cg: Clients.query()
-                    } :
-                    {local: true};
-                  }
-                ],
-                dataMembers: function ($q, TeamUp, Teams)
+                    t: Teams.query(),
+                    cg: Clients.query()
+                  } :
+                  {local: true};
+                },
+                dataMembers: function ($rootScope, $q, TeamUp, Teams)
                 {
                   var deferred = $q.defer();
-                  $q.all([
+                  var promises = [
                     TeamUp._('allTeamMembers'),
                     Teams.getAllWithMembers()
-                  ]).then(function (result)
+                  ];
+
+                  if($rootScope.app.domainPermission.clients)
+                  {
+                    promises.push(Clients.queryAllLocally());
+                  }
+
+                  $q.all(promises).then(function (result)
                   {
                     deferred.resolve(result[0]);
                   });
