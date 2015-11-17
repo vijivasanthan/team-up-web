@@ -146,6 +146,7 @@ define(
                     .then(function (GroupsAndClients)
                     {
                       data.clients = GroupsAndClients;
+                      console.error('data', data);
                       deferred.resolve(data);
                     });
                   return deferred.promise;
@@ -299,7 +300,7 @@ define(
                   } :
                   {local: true};
                 },
-                dataMembers: function ($rootScope, $q, TeamUp, Teams)
+                dataMembers: function ($rootScope, $q, TeamUp, Teams, Clients)
                 {
                   var deferred = $q.defer();
                   var promises = [
