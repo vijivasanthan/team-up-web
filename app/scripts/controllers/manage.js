@@ -73,11 +73,6 @@ define(
                 }
               );
 
-              // console.log('dat.teams ->', data.teams);
-              // console.log('memberGlobalIds ->', memberGlobalIds);
-              // console.log('connections ->', connections);
-              // console.log('-------------------------------------------');
-
               angular.forEach(
                 dataMembers,
                 function (member)
@@ -201,21 +196,12 @@ define(
               //    }
               //  );
 
+              //clients = _.groupBy(clients, 'clientGroupUuid');
+              //data.clients = clients[null];
+
               data.clients = clients;
 
-
-
-
-              // console.log('clients ->', clients);
-              // console.log('clientIds ->', clientIds);
-              // console.log('-------------------------------------------');
-
               connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
-
-              // console.log('********************************************');
-              // console.log('connections ->', connections);
-              // console.log('data ->', data);
-              // console.log('-------------------------------------------');
 
               $scope.connections = connections;
 
@@ -243,8 +229,6 @@ define(
           var localData = loadData(data);
           data = localData.data;
           var connections = localData.con;
-
-          console.error('localData', localData);
 
           $scope.data = {
             left: [],
