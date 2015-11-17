@@ -348,20 +348,13 @@ define(
           ClientsService.prototype.getSingle = function(clientGroupId)
           {
             return TeamUp._('clientsByGroupIDQuery',
-              { third: clientGroupId },
-              null,
+              {third: clientGroupId},
+              null
+              )
+              .then(function(clients)
               {
-                success: function (clients)
-                {
-                  Store('app').save(
-                    clientGroupId,
-                    (clients.length == 4 &&
-                    clients[0][0] == 'n' &&
-                    clients[1][0] == 'u') ?
-                      [] :
-                      clients
-                  );
-                }
+                Store('app').save(clientGroupId, clients);
+                return clients;
               });
           };
 
