@@ -6,11 +6,9 @@ define(
 
     controllers.controller(
       'videoCtrl',
-        function ($rootScope, $scope, $filter, data, $timeout)
+        function ($rootScope, $scope, $filter, data)
         {
-          console.error('data', data);
-          $scope.hasCall = (data.callId);
-
+          $scope.hasCall = (!! data.callId);
           $rootScope.fixStyles();
 
           angular.element('.navbar').show();
@@ -26,17 +24,7 @@ define(
             return $filter('trusted_url')(url);
           };
 
-          $scope.sendHeight = function ()
-          {
-            var height = angular.element('.responsive_video iframe').css('min-height');
-            console.error('height', height);
-
-            $timeout(function ()
-            {
-              console.error('send ', height);
-              window.parent.postMessage(height, "*");
-            }, 1000);
-          };
+          //Show get back button if the one of the users hangsup
         }
     );
   }
