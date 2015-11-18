@@ -66,8 +66,9 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            return ($location.path() === '/video/' ||
-            $location.path() === '/password')
+            var routeExceptions = ['video', 'password'];
+            var route = (location.indexOf(routeExceptions[0]) > -1 || location.indexOf(routeExceptions[1]) > -1);
+            return (! route) ? Session.check() : route;
           };
 
           $rootScope.checkLocation($location.path());

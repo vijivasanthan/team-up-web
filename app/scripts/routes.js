@@ -803,7 +803,7 @@ define(
                         });
                   };
                   //This routing is only for the ones without session
-                  (Session.check())
+                  (Session.get())
                     ? $location.path($rootScope.currentLocation)
                     : video.getCallIdRequest(backEnds.shift(), teamPhoneNumber);
 
