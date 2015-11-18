@@ -1433,7 +1433,7 @@ define(
             long: 'Bei einer Anruf-Dauer von mehr als 15 Sekunden wird empfohlen, dass die Gruppen-Mitglieder Ihre Voice-Mail abschalten.',
           },
           useExternalId: {
-            title: 'Telefoonnummer van de beller',
+            title: 'Telefoonnummer van de beller weergeven',
             info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
           },
           personalVoicemailPrevention: 'persönliche Voicemail Präferenz',
@@ -3079,7 +3079,7 @@ define(
           pickAPhoneNumber: "Kies een telefoonnummer",
           durationDialTone: 'Geef de duur van de kiestoon aan!',
           dialToneNumber: "De duur van de kiestoon kan alleen een nummer zijn!",
-          phoneNumberTeam: "Telefoonnummer voor het team",
+          phoneNumberTeam: "Telefoonnummer van het team",
           phoneNumberTeamDescription: "Kies één van de volgende telefoonnummers waarop het team bereikbaar zal zijn.",
           phoneNumberTeamAlias: "Publiek bekend telefoonnummer",
           phoneNumberTeamAliasDescription: "Dit veld is optioneel. Hier kan het telefoonnummer worden ingevuld dat bij de cliënten bekend is. Bijvoorbeeld het 06-nummer van de huidige doorgeef-telefoon.",
@@ -3101,7 +3101,7 @@ define(
           },
           useExternalId: {
             title: 'Telefoonnummer van de beller',
-            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u in het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u in het scherm het telefoonnummer van het team.'
+            info: 'Als deze optie is ingeschakeld en u wordt gebeld via TeamTelefoon, dan ziet u op het scherm van uw telefoon het telefoonnummer van de beller. Als deze instelling is uitgeschakeld, dan ziet u op het scherm het telefoonnummer van het team.'
           },
           personalVoicemailPrevention: 'Persoonlijke voicemailpreventie',
           personalVoicemailPreventionInfo: 'Als deze optie is ingeschakeld, krijgen teamleden eerst de vraag of ze het gesprek willen aannemen van een cli&euml;nt. Door deze optie aan te zetten, kan worden voorkomen dat een cli&euml;nt wordt doorverbonden met de persoonlijke voicemail van een teamlid.',
