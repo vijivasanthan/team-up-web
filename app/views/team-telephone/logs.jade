@@ -13,7 +13,11 @@ section#logs
 			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 		.form-group.has-feedback.pull-right.headerTop
-			input.form-control.search-query(type='text', placeholder='{{ ui.logs.filter }}', ng-model='logs.filtered')
+			input.form-control.search-query(
+			type='text', 
+			placeholder='{{ ui.logs.filter }}',
+			ng-change="logs.expandedLog = logs.data.logData.logs.length; logs.showAllGroups = (logs.filtered.length > 1); logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs); ",
+			ng-model='logs.filtered')
 			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
@@ -22,13 +26,18 @@ section#logs
 		.tab-content
 			#groupTab.tab-pane.active
 				p(ng-hide='logs.data.logData.logs.length > 0') {{ ui.logs.empty }}
+				//p aantal open {{ logs.expandedLog }} totaal log {{ logs.data.logData.logs.length }}
 				div(ng-show='logs.data.logData.logs.length > 0')
 					table.table.table-striped
 						thead
 							tr
-								th
-									//span() ►
-									span() ▼
+								th(style="cursor:pointer;") 
+									span(ng-init='logs.expandedLog = 0',
+										ng-if="logs.data.logData.hasGroupedLogs && !logs.showAllGroups",
+										ng-click="logs.showAllGroups = true; logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs);") ►
+									span(
+										ng-if="logs.data.logData.hasGroupedLogs && logs.showAllGroups",
+										ng-click="logs.showAllGroups = false; logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs);") ▼
 								th
 									a(ng-click='logs.ordered = "status"; logs.reversed = !logs.reversed') {{ ui.teamup.state }}
 									span(ng-show='(logs.ordered=="status")')
@@ -57,8 +66,8 @@ section#logs
 						tbody
 							tr(ng-repeat-start='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
 								td(style="cursor:pointer;")
-									span(ng-if='!log.expanding && log.childs.length > 1', ng-click="log.expanding = true" ) ►
-									span(ng-if='log.expanding && log.childs.length > 1', ng-click="log.expanding = false" ) ▼
+									span(ng-if='!log.expanding && log.childs.length > 1', ng-click="log.expanding = true; logs.expandedLog = logs.expandedLog + 1;" ) ►
+									span(ng-if='log.expanding && log.childs.length > 1', ng-click="log.expanding = false; logs.showAllGroups = false; logs.expandedLog = logs.expandedLog - 1;" ) ▼
 								td
 									span.label.label-inverse(class='log-{{log.status}}') {{log.status | translateStatusLogs}}
 									span(ng-show='log.records.length > 0')
@@ -120,4 +129,4 @@ section#logs
 					span.text-muted  {{logs.data.logData.periods.endTime | date: 'medium'}}
 				small.text-muted.pull-right(ng-show='logs.data.logData.logs.length > 0')
 					br
-					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter:filtered).length) }}
+					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter: logs.filtered).length) }}

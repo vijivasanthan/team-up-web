@@ -180,16 +180,24 @@ define(['services/services', 'config'],
            */
           function groupByCall(logs)
           {
+            var data = {
+              logs: null,
+              hasGroupedLogs: false
+            };
+
             //group all calls by groupId
             var groupCalls = _.groupBy(
               angular.copy(logs),
               'groupId'
             );
 
+            data.hasGroupedLogs = logs.length;
+
             //filter out all the parentcalls
             logs = _.filter(logs, function (log) {
               return (log.parent);
             });
+            data.hasGroupedLogs = (data.hasGroupedLogs != logs.length);
 
             _.each(logs, function (log)
             {
@@ -220,7 +228,9 @@ define(['services/services', 'config'],
                 log.duration = howLong(totalDuration);
               }
             });
-            return logs;
+
+            data.logs = logs;
+            return data;
           }
 
           function howLong(period)
@@ -287,11 +297,12 @@ define(['services/services', 'config'],
                     if(teamMembersNames[log.to]) log.to = teamMembersNames[log.to]['fullName'];
                   })
                 }
-                result = groupByCall(result);
+                var logData = groupByCall(result);
 
                 var returned = {
-                  logs: result,
+                  logs: logData.logs,
                   synced: moment.valueOf(),
+                  hasGroupedLogs: logData.hasGroupedLogs,
                   periods: {
                     startTime: _options.startTime,
                     endTime:  _options.endTime

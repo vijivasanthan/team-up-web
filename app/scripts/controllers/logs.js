@@ -32,6 +32,7 @@ define(
 
         //methods
         vm.fetchLogs = fetchLogs;
+        vm.toggleGroupedLogs = toggleGroupedLogs;
         vm.init = init;
 
         //initialisation
@@ -132,6 +133,20 @@ define(
         }
 
         /**
+         * Toggle groups logs
+         * @param showAll hide/show logs
+         * @param logViews the logs
+         */
+        function toggleGroupedLogs(showAll, logViews)
+        {
+          _.each(logViews, function (log)
+          {
+            log.expanding = showAll;
+          })
+          vm.data.logData.logs = logViews;
+        }
+
+        /**
          * Initialisation
          */
         function init()
@@ -144,8 +159,6 @@ define(
               name: $rootScope.ui.dashboard.everyone,
               uuid: 'all'
             });
-
-            console.error('vm.data', vm.data.logData);
           }
         }
       }
