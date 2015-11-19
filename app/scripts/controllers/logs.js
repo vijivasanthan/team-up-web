@@ -19,24 +19,25 @@ define(
       {
         $rootScope.fixStyles();
 
+        //viewmodel
         var vm = this;
+
+        //properties
         vm.data = data;
-
-        if ($rootScope.app.resources.role == 1)
-        {
-          vm.data.teams.unshift({
-            name: $rootScope.ui.dashboard.everyone,
-            uuid: 'all'
-          });
-        }
-
         vm.current = CurrentSelection.getTeamId();
-
         vm.ordered = 'started.stamp';
         vm.reversed = true;
         vm.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
-        $filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
+          $filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
 
+        //methods
+        vm.fetchLogs = fetchLogs;
+        vm.init = init;
+
+        //initialisation
+        vm.init();
+
+        //event receiver
         $rootScope.$on('getLogRange', function ()
         {
           var periods = arguments[1];
@@ -46,7 +47,11 @@ define(
           vm.fetchLogs();
         });
 
-        vm.fetchLogs = function ()
+        /**
+         * Fetch logs by range for everyone or per team,
+         * the last option depends on the logged user role
+         */
+        function fetchLogs()
         {
           var options = {
             startTime: data.logData.periods.startTime,
@@ -62,7 +67,7 @@ define(
           (vm.current == 'all')
             ? fetchForAllTeams(options)
             : fetchForSingleTeam(options);
-        };
+        }
 
         /**
          * Fetch logs per team
@@ -124,6 +129,24 @@ define(
           vm.data.logData = logData;
 
           $rootScope.statusBar.off();
+        }
+
+        /**
+         * Initialisation
+         */
+        function init()
+        {
+          //If the logged user has a role as teammember
+          // don't add the everyone option in the selectbar
+          if ($rootScope.app.resources.role == 1)
+          {
+            vm.data.teams.unshift({
+              name: $rootScope.ui.dashboard.everyone,
+              uuid: 'all'
+            });
+
+            console.error('vm.data', vm.data.logData);
+          }
         }
       }
     );

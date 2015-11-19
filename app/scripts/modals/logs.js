@@ -169,17 +169,8 @@ define(['services/services', 'config'],
 
             $filter('orderBy')(uniques, 'started.stamp');
 
-            uniques = getNameByPhoneNumber(uniques);
-
             return uniques;
           };
-
-          function getNameByPhoneNumber(logs)
-          {
-            var _logs = angular.copy(logs);
-
-            return logs
-          }
 
         /**
            * Group parent-child calls
