@@ -69,41 +69,38 @@ define(
          */
         function fetchForSingleTeam(options)
         {
+          var _TeamTelephoneSettings = null;
           CurrentSelection.local = vm.current;
 
+          //Check if the requested team has teamtelephone functionality by the adapterId
           TeamUp._('TTOptionsGet', {second: vm.current})
             .then(function (TeamTelephoneSettings)
             {
+              _TeamTelephoneSettings = TeamTelephoneSettings;
               options.adapterId = TeamTelephoneSettings.adapterId;
 
-              if (! TeamTelephoneSettings.adapterId)
-              {
-                $location.path('team-telefoon/options');
-              }
-              else
-              {
-                var _teams = null;
-
-                Teams.getSingle(vm.current)
-                  .then(function(members)
-                  {
-                    return Logs.fetch(
-                      _.extend(options, {
-                          adapterId: options.adapterId,
-                          members: _.map(members, _.partialRight(_.pick,['fullName','phone'])),
-                          currentTeam: {
-                            fullName: (_.findWhere(
-                                vm.data.teams, {uuid: vm.current})
-                            ).name,
-                            phone: TeamTelephoneSettings.phoneNumber
-                          }
-                        }
-                      )
-                    );
-                  })
-                  .then(receiveLogs);
-              }
-            });
+              return (! TeamTelephoneSettings.adapterId)
+                ? $location.path('team-telefoon/options')
+                : Teams.getSingle(vm.current);//get the members of the team, so the phonenumbers could be translated to names
+            })
+            .then(function(members)
+            {
+                return Logs.fetch(
+                  _.extend(options,
+                    {
+                      adapterId: options.adapterId,
+                      members: _.map(members, _.partialRight(_.pick,['fullName','phone'])),//get only the fullname and phonenumber of the members
+                      currentTeam: {
+                        fullName: (_.findWhere(
+                            vm.data.teams, {uuid: vm.current})
+                        ).name,//find the name of the requested team by the teamId(vm.current)
+                        phone: _TeamTelephoneSettings.phoneNumber
+                      }
+                    }
+                  )
+                );
+            })
+            .then(receiveLogs);
         }
 
         /**
