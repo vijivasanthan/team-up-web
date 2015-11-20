@@ -324,6 +324,7 @@ define(
               })
               .then(function()
               {
+                tempResources.phoneAddresses = tempResources.phoneNumbers;
                 delete tempResources.phoneNumbers;
                 //delete tempResources.pincode;
                 $scope.profileForm.$setPristine();

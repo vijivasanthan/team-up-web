@@ -577,6 +577,9 @@ define(
            */
           TeamsService.prototype.addMember = function(member)
           {
+            //memberResources.phoneAddresses = [$rootScope.phoneNumberParsed.format];
+            //memberResources.emailAddresses = [memberResources.email];
+
             return TeamUp._(
               'memberAdd',
               null,
@@ -586,8 +589,8 @@ define(
                 passwordHash: member.password,
                 firstName: member.firstName,
                 lastName: member.lastName,
-                phone: member.phone,
-                email: member.email,
+                phoneAddresses: [member.phone],
+                emailAddresses: [member.email],
                 teamUuids: member.teamUuids,
                 role: member.role,
                 birthDate: 0

@@ -332,6 +332,7 @@ define(
             else if ($rootScope.phoneNumberParsed.result == true)
             {
               client.phone = $rootScope.phoneNumberParsed.format;
+              client.phoneAddresses = [$rootScope.phoneNumberParsed.format];
             }
 
             var validationEmail = $scope.newClientForm.email;
@@ -364,6 +365,13 @@ define(
 
               return;
             }
+
+            if(client.email) {
+              client.emailAddresses = [client.email];
+              delete client.email;
+            }
+            delete client.reTypePassword;
+            delete client.phone;
 
             Clients.add(client)
               .then(function (result)
