@@ -8,11 +8,12 @@
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
 		li(class="{{'active'}}")
 			a(data-toggle='tab', ng-click='setViewTo("web")')
-				span.icomoon(data-icon='', aria-hidden='true')
-				| {{ ui.video.title }}
+				span.icomoon(data-icon='', aria-hidden='true')
+				| {{ ui.video.title }} 
 
 	.tab-content.video-conversation
-		.tab-header(ng-if='! hasCall')
+		.tab-header(ng-if='! hasCall', style='min-height: 100px;text-align:center;')
 			p {{ ui.video.videoNotLoaded }}
-		div(class="responsive_video")
+			button.button.btn.btn-success(onclick='window.history.back()') {{ ui.profile.back}}
+		div(ng-if='hasCall' class="responsive_video")
 			iframe(data-ng-src="{{ getCall(sendHeight) }}" frameborder="0" allowfullscreen)
