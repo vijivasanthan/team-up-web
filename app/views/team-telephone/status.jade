@@ -6,10 +6,10 @@ section#dashboard
 			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			label.control-label {{ ui.teamup.selectTeam }}
 			.controls
-				select(ng-model='currentTeam',
-				ng-options='team.uuid as team.name for team in teams | orderBy:"name"',
-				ng-selected='currentTeam',
-				ng-change='getGroupReachability()')
+				select(ng-model='status.currentTeam',
+				ng-options='team.uuid as team.name for team in status.teams | orderBy:"name"',
+				ng-selected='status.currentTeam',
+				ng-change='status.getGroupReachability()')
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
 			include ../agenda/tabs
@@ -18,24 +18,24 @@ section#dashboard
 			#availabilities.sa.widget
 				div.head
 					h4
-						| {{ ui.dashboard.accessibilityStatement }} {{current.group | groupIdToName:true | toTitleCase}} {{ loadGroup }}
-					.pull-right(ng-hide='loadingReachability')
+						| {{ ui.dashboard.accessibilityStatement }} {{status.currentTeam | getGroupNameById:true | toTitleCase}} {{ status.loadGroup }}
+					.pull-right(ng-hide='status.loadingReachability')
 						//select(ng-model='current.group',
 						//ng-options='group.uuid as group.name for group in groups',
 						//ng-selected='current.group',
 						//ng-change='getGroupReachability()',
 						//style='width: 160px;')
 				div(
-				ng-show='teamMembers.length == 0')
+				ng-show='status.teamMembers.length == 0')
 					hr
 					p {{ ui.order.noMembers }}
-				section(ng-hide='loadingReachability')
+				section(ng-hide='status.loadingReachability')
 					div(
-						ng-show='reachability.members.reachable.length > 0')
+						ng-show='status.reachability.members.reachable.length > 0')
 						hr
 						ul.sa-setup
 							li.sa-truck
-								.sa-member(ng-repeat='member in reachability.members.reachable')
+								.sa-member(ng-repeat='member in status.reachability.members.reachable')
 									span.sa-member-icon.roundedPicSmall(
 										class='{{member.states|stateColor}}',
 										back-img='{{member.id | avatar:"client":"80"}}')
@@ -46,15 +46,15 @@ section#dashboard
 											a(href='#/profile/{{member.id}}#profile')
 												| {{member.name | toTitleCase}}
 										hr
-										span {{states[member.state].label}}
+										span {{status.states[member.state].label}}
 										br
 										small
 											strong {{member.end | calculateDeltaTime}}
-					div(ng-show='reachability.members.unreachable.length > 0')
+					div(ng-show='status.reachability.members.unreachable.length > 0')
 						hr
 						ul.sa-setup
 							li.sa-truck
-								.sa-member(ng-repeat='member in reachability.members.unreachable',
+								.sa-member(ng-repeat='member in status.reachability.members.unreachable',
 								ng-show='(member.state != "no-state")')
 									span.sa-member-icon.roundedPicSmall(
 										class='{{member.states|stateColor}}',
@@ -63,15 +63,15 @@ section#dashboard
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
 										hr
-										span {{states[member.state].label}}
+										span {{status.states[member.state].label}}
 										br
 										small
 											strong {{member.end | calculateDeltaTime}}
-					div(ng-show='reachability.members.possible.length > 0')
+					div(ng-show='status.reachability.members.possible.length > 0')
 						hr
 						ul.sa-setup
 							li.sa-truck
-								.sa-member(ng-repeat='member in reachability.members.possible')
+								.sa-member(ng-repeat='member in status.reachability.members.possible')
 									span.sa-member-icon.roundedPicSmall(
 										class='{{member.states|stateColor}}', 
 										back-img='{{member.id | avatar:"team":"80"}}')
@@ -79,9 +79,9 @@ section#dashboard
 										h5
 											a(href='#/profile/{{member.id}}#profile') {{member.name | toTitleCase}}
 										hr
-										span {{states[member.state].label}}
+										span {{status.states[member.state].label}}
 				p
 					hr
-					small.pull-left(style='margin-top: -10px;', ng-hide='loadingReachability')
+					small.pull-left(style='margin-top: -10px;', ng-hide='status.loadingReachability')
 						span.text-warning {{ui.planboard.lastSyncTime}}
-						span.text-muted &nbsp; {{reachability.synced | nicelyDate}}
+						span.text-muted &nbsp; {{ status.reachability.synced | nicelyDate}}

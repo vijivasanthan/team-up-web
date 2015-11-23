@@ -630,7 +630,7 @@ define(
             '/team-telefoon/status',
             {
               templateUrl: 'views/team-telephone/status.html',
-              controller: 'status',
+              controller: 'status as status',
               reloadOnSearch: false,
               resolve: {
                 data: function ($q, $location, CurrentSelection, TeamUp, Teams, Slots)
@@ -642,26 +642,21 @@ define(
                   TeamUp._('TTOptionsGet', {second: teamId})
                     .then(function (options)
                     {
-                      //team telephone not activated
-                      if (!options.adapterId)
-                      {
-                        $location.path('team-telefoon/options');
-                      }
-                      else
-                      {
-                        $q.all([
-                          Teams.getSingle(teamId),
-                          Slots.MemberReachabilitiesByTeam(teamId, null),
-                          Teams.getAllLocal()
-                        ]).then(function (result)
-                        {
-                          deferred.resolve({
-                            members: result[0],
-                            membersReachability: result[1],
-                            teams: result[2]
+                      //Check if team telephone is activated (has adapterId)
+                      (! options.adapterId)
+                        ? $location.path('team-telefoon/options')
+                        : $q.all([
+                            Teams.getSingle(teamId),
+                            Slots.MemberReachabilitiesByTeam(teamId, null),
+                            Teams.getAllLocal()
+                          ]).then(function (result)
+                          {
+                            deferred.resolve({
+                              members: result[0],
+                              membersReachability: result[1],
+                              teams: result[2]
+                            });
                           });
-                        });
-                      }
                     });
                   return deferred.promise;
                 }

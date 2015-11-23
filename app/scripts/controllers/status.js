@@ -4,45 +4,43 @@ define(['controllers/controllers'], function (controllers)
 
   controllers.controller(
     'status',
-      function ($scope, $rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
+      function ($rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
         //rootScope
         $rootScope.notification.status = false;
         $rootScope.fixStyles();
 
+        //viewmodel
+        var self = this;
 
+        //properties
+        self.teams = data.teams;
+        self.states = angular.copy($rootScope.config.app.timeline.config.states);
+        self.currentTeam = CurrentSelection.getTeamId();
+        self.teamMembers = data.members;
 
-        $scope.teams = data.teams;
-        $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
+        //methods
+        self.getGroupReachability = getGroupReachability;
 
-        $scope.states['no-state'] = {
-          className: 'no-state',
-          label: $rootScope.ui.teamup.stateValue.possibly_reachable,
-          color: '#ececec',
-          type: $rootScope.ui.teamup.stateValue.possibly_reachable,
-          display: false
-        };
-
-        $scope.currentTeam = CurrentSelection.getTeamId();
-        $scope.teamMembers = data.members;
-        getReachability(data.membersReachability, setKeyAsUsername(data.members));
+        //initialisation
+        init();
 
         /**
          * Load the current team(s) including the slots
          */
-        $scope.getGroupReachability = function ()
+        function getGroupReachability()
         {
-          $scope.loadGroup = $rootScope.ui.dashboard.load;
+          self.loadGroup = $rootScope.ui.dashboard.load;
           $rootScope.statusBar.display('team(s) ' + $rootScope.ui.dashboard.loading);
 
-          CurrentSelection.local = $scope.currentTeam;
+          CurrentSelection.local = self.currentTeam;
 
-          TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+          TeamUp._('TTOptionsGet', {second: self.currentTeam})
             .then(function (options)
             {
               var promise = $q.all([
-                Teams.getSingle($scope.currentTeam),
-                Slots.MemberReachabilitiesByTeam($scope.currentTeam, null)
+                Teams.getSingle(self.currentTeam),
+                Slots.MemberReachabilitiesByTeam(self.currentTeam, null)
               ]);
 
               if (!options.adapterId)
@@ -54,8 +52,8 @@ define(['controllers/controllers'], function (controllers)
             })
             .then(function (result)
             {
-              $scope.teamMembers = result[0];
-              getReachability(result[1], setKeyAsUsername($scope.teamMembers));
+              self.teamMembers = result[0];
+              normalizeReachability(result[1], setKeyAsUsername(self.teamMembers));
             });
         };
 
@@ -63,12 +61,12 @@ define(['controllers/controllers'], function (controllers)
          * merge the member reachability data with the personal data of the member
          * @param reachabilityData reachability data
          */
-        function getReachability(currentReachability, currentMembers)
+        function normalizeReachability(currentReachability, currentMembers)
         {
           var ordered = {};
-          $scope.loadingReachability = true;
+          self.loadingReachability = true;
 
-          $scope.loadGroup = '';
+          self.loadGroup = '';
           $rootScope.statusBar.off();
 
           _.each(currentReachability.members, function (slots, id)
@@ -79,7 +77,7 @@ define(['controllers/controllers'], function (controllers)
               var _member = {
                 id: id,
                 state: (slots.length > 0) ? slots[0].state : 'no-state',
-                label: (slots.length > 0) ? $scope.states[slots[0].state].label[0] : '',
+                label: (slots.length > 0) ? self.states[slots[0].state].label[0] : '',
                 end: (slots.length > 0 && slots[0].end !== undefined) ?
                 slots[0].end * 1000 :
                   $rootScope.ui.dashboard.possiblyReachable,
@@ -174,9 +172,9 @@ define(['controllers/controllers'], function (controllers)
 
           ordered.reachable = _reachables;
 
-          $scope.loadingReachability = false;
+          self.loadingReachability = false;
 
-          $scope.reachability = {
+          self.reachability = {
             members: ordered,
             synced: currentReachability.synced * 1000
           };
@@ -189,14 +187,22 @@ define(['controllers/controllers'], function (controllers)
          */
         function setKeyAsUsername(members)
         {
-          var newMembers = [];
+          return _.indexBy(members, 'uuid');
+        }
 
-          _.each(members, function (member)
-          {
-            newMembers[member.uuid] = member;
-          });
-
-          return newMembers;
+        /**
+         * Iitialize a extra state and set the reachability of the members
+         */
+        function init()
+        {
+          self.states['no-state'] = {
+            className: 'no-state',
+            label: $rootScope.ui.teamup.stateValue.possibly_reachable,
+            color: '#ececec',
+            type: $rootScope.ui.teamup.stateValue.possibly_reachable,
+            display: false
+          };
+          normalizeReachability(data.membersReachability, setKeyAsUsername(data.members));
         }
       }
   );
