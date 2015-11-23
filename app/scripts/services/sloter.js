@@ -517,7 +517,8 @@ define(['services/services', 'config'],
 
               _.each(data.members, function (member)
                 {
-                  var link = _this.wrapper('d-' + member.lastName[0].toLowerCase()) +
+                  console.error('member', member);
+                  var link = _this.wrapper('d-' + member.fullName[0].toLowerCase()) +
                   '<a href="#/profile/' +
                   member.id +
                   '#profile">' +
