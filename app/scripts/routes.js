@@ -97,16 +97,9 @@ define(
             })
 
             .when(
-            '/tasks',
-            {
-              templateUrl: 'views/tasks.html',
-              controller: 'tasksCtrl'
-            })
-
-            .when(
             '/tasks2',
             {
-              templateUrl: 'views/tasks2.html',
+              templateUrl: 'views/task/tasks2.html',
               controller: 'tasks2Ctrl',
               reloadOnSearch: false,
               resolve: {
@@ -186,7 +179,7 @@ define(
             .when(
             '/team/members',
             {
-              templateUrl: 'views/teams/members.html',
+              templateUrl: 'views/team/members.html',
               controller: 'member as member',
               reloadOnSearch: false,
               resolve: {
@@ -207,7 +200,7 @@ define(
             .when(
             '/team/new',
             {
-              templateUrl: 'views/teams/newTeam.html',
+              templateUrl: 'views/team/newTeam.html',
               controller: 'team as team',
               reloadOnSearch: false
             })
@@ -215,7 +208,7 @@ define(
             .when(
             '/team/member/new',
             {
-              templateUrl: 'views/teams/newMember.html',
+              templateUrl: 'views/team/newMember.html',
               controller: 'member as member',
               reloadOnSearch: false
             })
@@ -223,7 +216,7 @@ define(
             .when(
             '/team/member/search',
             {
-              templateUrl: 'views/teams/searchMember.html',
+              templateUrl: 'views/team/searchMember.html',
               controller: 'member as member',
               reloadOnSearch: false
             })
@@ -291,7 +284,7 @@ define(
             .when(
             '/manage',
             {
-              templateUrl: 'views/manage.html',
+              templateUrl: 'views/manage/manage.html',
               controller: 'manageCtrl',
               reloadOnSearch: false,
               resolve: {
@@ -591,7 +584,7 @@ define(
             .when(
             '/tasks2/planboard',
             {
-              templateUrl: 'views/planboard.html',
+              templateUrl: 'views/task/planboard/planboard.html',
               controller: 'planboard',
               reloadOnSearch: false
             })

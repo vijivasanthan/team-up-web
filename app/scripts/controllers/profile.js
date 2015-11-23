@@ -6,24 +6,6 @@ define(
 
     controllers.controller(
       'profileCtrl',
-      [
-        '$rootScope',
-        '$scope',
-        '$q',
-        '$location',
-        '$window',
-        '$route',
-        'data',
-        'Store',
-        'Teams',
-        'Dater',
-        '$filter',
-        'TeamUp',
-        '$timeout',
-        'MD5',
-        'Profile',
-        'Permission',
-        '$injector',
         function ($rootScope, $scope, $q, $location, $window, $route, data, Store, Teams,
                   Dater, $filter, TeamUp, $timeout, MD5, Profile, Permission, $injector)
         {
@@ -467,7 +449,6 @@ define(
               });
           };
         }
-      ]
     );
   }
 );
