@@ -11,17 +11,17 @@ define(
         $rootScope.fixStyles();
 
         //view model
-        var vm = this;
+        var self = this;
 
         //properties
-        vm.data = data;
-        vm.currentTeamId = CurrentSelection.getTeamId();
-        vm.currentTeam = setTeamIdToName(vm.currentTeamId);
+        self.data = data;
+        self.currentTeamId = CurrentSelection.getTeamId();
+        self.currentTeam = setTeamIdToName(self.currentTeamId);
 
-        //public methods
-        vm.fetch = fetch;
-        vm.activate = activate;
-        vm.save = save;
+        //methods
+        self.fetch = fetch;
+        self.activate = activate;
+        self.save = save;
 
         //initialisation
         show(data.teamTelephoneOptions);
@@ -31,17 +31,17 @@ define(
          */
         function fetch()
         {
-          CurrentSelection.local = vm.currentTeamId;
-          vm.currentTeam = setTeamIdToName(vm.currentTeamId);
+          CurrentSelection.local = self.currentTeamId;
+          self.currentTeam = setTeamIdToName(self.currentTeamId);
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
           TeamUp._(
             'TTOptionsGet',
-            {second: vm.currentTeamId}
+            {second: self.currentTeamId}
           ).then(function (options)
             {
-              vm.data.teamTelephoneOptions = options;
-              return (vm.data.teamTelephoneOptions.adapterId)
+              self.data.teamTelephoneOptions = options;
+              return (self.data.teamTelephoneOptions.adapterId)
                 ? $q.defer()
                 : TeamUp._('TTAdaptersGet', {
                     adapterType: 'call',
@@ -50,8 +50,8 @@ define(
             })
             .then(function (phoneNumbers)
             {
-              vm.data.phoneNumbers = phoneNumbers;
-              show(vm.data.teamTelephoneOptions);
+              self.data.phoneNumbers = phoneNumbers;
+              show(self.data.teamTelephoneOptions);
               $rootScope.statusBar.off();
             });
         }
@@ -73,7 +73,7 @@ define(
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
           TeamUp._(
             'TTOptionsActivate',
-            {second: vm.currentTeamId},
+            {second: self.currentTeamId},
             options
           ).then(function (newOptions)
             {
@@ -88,18 +88,18 @@ define(
          */
         function save(newOptions)
         {
-          vm.error = false;
+          self.error = false;
 
           if (!newOptions.ringingTimeOut)
           {
             $rootScope.notifier.error($rootScope.ui.options.durationDialTone);
-            vm.error = true;
+            self.error = true;
             return;
           }
 
           if ($filter('number')(newOptions.ringingTimeOut, 0) == '')
           {
-            vm.error = true;
+            self.error = true;
             $rootScope.notifier.error($rootScope.ui.options.dialToneNumber);
             return;
           }
@@ -108,7 +108,7 @@ define(
 
           TeamUp._(
             'TTOptionsSave',
-            {second: vm.currentTeamId},
+            {second: self.currentTeamId},
             {
               "ringing-timeout": parseInt(newOptions.ringingTimeOut),
               "sms-on-missed-call": newOptions.sms,
@@ -121,7 +121,7 @@ define(
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               $rootScope.statusBar.off();
             });
-        }
+        };
 
         /**
          * Filter to get the team name by id and finally set the firstletter as capital
@@ -148,7 +148,7 @@ define(
           }
           else if (!options.adapterId)
           {//Another check if there are phonenumbers in the pool
-            error = (vm.data.phoneNumbers.length)
+            error = (self.data.phoneNumbers.length)
               ? $rootScope.ui.validation.phone.notValid //Error if no phonenumber is chosen
               : $rootScope.ui.options.noPhoneNumbers;//No phonenumbers error
           }
@@ -176,27 +176,27 @@ define(
 
           if (!options || !options.adapterId)
           {
-            if (angular.isDefined(vm.activateTTForm))
+            if (angular.isDefined(self.activateTTForm))
             {//Empty form validation by changing the team
               $scope.formActivateTT.$setPristine();
             }
 
-            if ($rootScope.app.resources.role == 1 && !vm.data.phoneNumbers.length)
+            if ($rootScope.app.resources.role == 1 && !self.data.phoneNumbers.length)
             {
               $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
             }
-            vm.activateTTForm = true;
+            self.activateTTForm = true;
             tabs.addClass('ng-hide');
           }
           else
           {
-            vm.scenarios = {
+            self.scenarios = {
               voicemailDetection: options["voicemail-detection-menu"] || false,
               sms: options["sms-on-missed-call"] || false,
               ringingTimeOut: options["ringing-timeout"] || 20,
               useExternalId: options["useExternalId"] || false
             };
-            vm.activateTTForm = false;
+            self.activateTTForm = false;
             tabs.removeClass('ng-hide');
           }
         }
