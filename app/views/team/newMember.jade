@@ -1,0 +1,167 @@
+div(ng-controller='team as team', style='padding-top: 1px;')
+	.page-header
+		h2.nullable {{ui.teamup.teams}}
+		.selectGroup(ng-if='team.list.length > 1')
+			span.selectTitles
+				strong
+					| {{ ui.teamup.selectTeam }}
+			select(ng-model='team.current.teamId',
+			ng-options='t.uuid as t.name for t in team.list | orderBy:"name"',
+			ng-selected='team.current.teamId',
+			ng-change='team.init(team.current.teamId)')
+		
+	.teams-section.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+			include tabs
+		.tab-content
+			#newMemberTab.tab-pane(class="active")
+				.tab-header
+					h3.pull-left {{ui.teamup.newMember}}
+				hr
+				form.new-member-form(name='member.newForm', novalidate)
+					fieldset
+						.row
+							.span6
+								fieldset
+									.form-group(
+										ng-class="{ 'has-error' : (member.newForm.firstname.$dirty || member.newForm.$submitted || member.newForm.firstname.$touched) && member.newForm.firstname.$invalid }")
+										label.control-label {{ui.profile.firstName}}
+										.controls
+											input.span3.form-control(type='text',
+												name='firstname',
+												ng-model='member.form.firstName',
+												required='',
+												focus,
+												required-form,
+												ng-minlength="2"
+												ng-maxlength="20")
+											span.help-block(ng-if="(member.newForm.firstname.$touched || member.newForm.firstname.$dirty || member.newForm.$submitted) && member.newForm.firstname.$invalid",
+												ng-messages="member.newForm.firstname.$error")
+												small(ng-message="required")
+													i {{ ui.validation.default.required(ui.profile.firstName) }}
+												small(ng-message="minlength")
+													i {{ ui.validation.default.minLength(ui.profile.firstName) }}
+												small(ng-message="maxlength")
+													i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
+									
+									.form-group(
+									ng-class="{ 'has-error' : (member.newForm.lastname.$dirty || member.newForm.$submitted || member.newForm.lastname.$touched) && member.newForm.lastname.$invalid }")
+										label.control-label {{ui.profile.lastName}}
+										.controls
+											input.span3.form-control(type='text',
+											name='lastname',
+											ng-model='member.form.lastName',
+											ng-minlength="2"
+											ng-maxlength="20")
+											span.help-block(ng-if="(member.newForm.lastname.$touched || member.newForm.lastname.$dirty || member.newForm.$submitted) && member.newForm.lastname.$invalid",
+											ng-messages="member.newForm.lastname.$error")
+												small(ng-message="minlength")
+													i {{ ui.validation.default.minLength(ui.profile.lastName) }}
+												small(ng-message="maxlength")
+													i {{ ui.validation.default.maxLength(ui.profile.lastName) }}
+											
+									.form-group(ng-if='member.roles.length > 1',
+										ng-class="{ 'has-error' : (member.newForm.role.$touched || member.newForm.role.$dirty || member.newForm.$submitted) && !member.form.role}")
+										label.control-label {{ui.teamup.role}}
+										.controls
+											select.span3.form-control(ng-model='member.form.role',
+												required='',
+												required-form,
+												name='role',
+												ng-options='r.id as r.label for r in member.roles')
+												option(value='') {{ui.teamup.chooseRole}}
+											span.help-block(ng-messages="member.newForm.role.$error",
+												ng-if="(member.newForm.role.$touched || member.newForm.role.$dirty || member.newForm.$submitted) && !member.form.role")
+												small(ng-message="required")
+													i {{ ui.validation.default.required(ui.teamup.role) }}
+												
+									.form-group(ng-class="{ 'has-error' : (member.newForm.email.$touched || member.newForm.email.$dirty || member.newForm.$submitted) && member.newForm.email.$invalid }")
+										label.control-label {{ ui.profile.email }}
+										.controls
+											input.span3.form-control(type='email',
+											name='email',
+											required,
+											required-form,
+											ng-model='member.form.email',
+											ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+											span.help-block(ng-messages="member.newForm.email.$error",
+												ng-if='(member.newForm.email.$touched || member.newForm.email.$dirty || member.newForm.$submitted) && member.newForm.email.$invalid')
+												small(ng-message="pattern")
+													i {{ ui.validation.email.notValid }}
+												small(ng-message="required")
+													i {{ ui.validation.email.notValid }}
+		
+									.form-group(ng-class="{'has-error': (member.newForm.phone.$touched || member.newForm.phone.$dirty || member.newForm.$submitted) && (! phoneNumberParsed.result || (phoneNumberParsed.all && phoneNumberParsed.all.error))}")
+										label.control-label {{ui.teamup.phone}}
+										.controls
+											input.span3.form-control.inputPhoneNumber(type='text',
+												name='phone',
+												required,
+												required-form,
+												ng-model='member.form.phone',
+												ng-change='parsePhoneNumber(member.form.phone)')
+											span.help-block
+												small(ng-if='phoneNumberParsed.message')
+													i {{ phoneNumberParsed.message }}
+												small(ng-if='(!phoneNumberParsed.message) && (member.newForm.phone.$touched || member.newForm.phone.$dirty || member.newForm.$submitted)')
+													i {{ ui.validation.phone.notValid }}
+							.span6
+								fieldset
+									.form-group(
+									ng-class="{'has-error' : (member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)}")
+										label.control-label {{ui.profile.username}}
+										.controls
+											input.span3.form-control(type='text', 
+												name='username'
+												ng-change="member.checkUserName()", 
+												ng-blur='member.UserNameWrong=false',
+												ng-model='member.form.userName',
+												ng-minlength="2"
+												ng-maxlength="20"
+												required='',
+												required-form)
+										p.text-danger
+											small(ng-messages='member.newForm.username.$error'
+												ng-if='(member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)')
+												i(ng-if='member.UserNameWrong && !member.newForm.username.$error.required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
+												i(ng-message='required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
+												i(ng-message='minlength') {{ ui.validation.default.minLength(ui.profile.username) }}
+												i(ng-message='maxlength') {{ ui.validation.default.maxLength(ui.profile.username) }}
+									
+									.form-group(ng-class="{ 'has-error' : member.newForm.password.$invalid && (member.newForm.password.$touched || member.newForm.password.$dirty || member.newForm.$submitted)  }")
+										label.control-label {{ui.profile.password}}
+										.controls
+											input.span3.form-control(type='password',
+											ng-model='member.form.password',
+											name='password',
+											required,
+											required-form,
+											ng-minlength="8",
+											ng-maxlength="20")
+											span.help-block(ng-messages='member.newForm.password.$error',
+												ng-if='member.newForm.password.$invalid && (member.newForm.password.$touched || member.newForm.password.$dirty || member.newForm.$submitted)')
+												small(ng-message='required')
+													i
+													| {{ ui.validation.password.required }}
+												small(ng-message="minlength")
+													i
+													| {{ ui.validation.password.required }} {{ ui.validation.password.amountMinChars(8) }} 
+												small(ng-message="maxlength")
+													i
+													| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(20) }}
+
+									.form-group(
+										ng-class="{ 'has-error' : (member.form.reTypePassword !== member.form.password || member.newForm.repeatPass.$invalid) && (member.newForm.repeatPass.$dirty || member.newForm.repeatPass.$touched  ||  member.newForm.$submitted) }")
+										label.control-label {{ui.profile.retypePassword}}
+										.controls
+											input.span3.form-control(type='password',
+												required='',
+												required-form,
+												ng-model='member.form.reTypePassword', name='repeatPass')
+											span.help-block(ng-show='(member.form.reTypePassword !== member.form.password || member.newForm.repeatPass.$invalid) && (member.newForm.repeatPass.$dirty || member.newForm.repeatPass.$touched  ||  member.newForm.$submitted)')
+												small
+													i
+													| {{ ui.teamup.passNotSame }}
+						.form-actions
+							button.btn.btn-success(type='submit',
+							ng-click='member.create(member.form, team.current.teamId)') {{ui.teamup.saveMember}}

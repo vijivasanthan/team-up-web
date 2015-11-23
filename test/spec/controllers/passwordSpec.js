@@ -2,7 +2,7 @@ define(
   [
     'angular-mocks',
     'app',
-    'controllers/password',
+    'controllers/login/password',
     'services/password',
     'services/login',
     'modals/profile',

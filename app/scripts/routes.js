@@ -708,10 +708,10 @@ define(
             })
 
             .when(
-            '/messages',
+            '/chat',
             {
-              templateUrl: 'views/messages.html',
-              controller: 'messages',
+              //templateUrl: 'views/messages.html',
+              controller: 'chat',
               reloadOnSearch: false
             })
 
