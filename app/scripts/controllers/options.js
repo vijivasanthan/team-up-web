@@ -12,15 +12,24 @@ define(
 
         //view model
         var vm = this;
+
+        //properties
         vm.data = data;
         vm.currentTeamId = CurrentSelection.getTeamId();
         vm.currentTeam = setTeamIdToName(vm.currentTeamId);
+
+        //public methods
+        vm.fetch = fetch;
+        vm.activate = activate;
+        vm.save = save;
+
+        //initialisation
         show(data.teamTelephoneOptions);
 
         /**
          * Fetch team-telephone options
          */
-        vm.fetch = function ()
+        function fetch()
         {
           CurrentSelection.local = vm.currentTeamId;
           vm.currentTeam = setTeamIdToName(vm.currentTeamId);
@@ -45,12 +54,12 @@ define(
               show(vm.data.teamTelephoneOptions);
               $rootScope.statusBar.off();
             });
-        };
+        }
 
         /**
          * activate teamTelefone
          */
-        vm.activate = function (options)
+        function activate(options)
         {
           var error = validate(options);
           if (error)
@@ -71,13 +80,13 @@ define(
               show(newOptions);
               $rootScope.statusBar.off();
             });
-        };
+        }
 
         /**
          * Save team-telephone options
          * @param newOptions The options to be saved
          */
-        vm.save = function (newOptions)
+        function save(newOptions)
         {
           vm.error = false;
 
@@ -112,7 +121,7 @@ define(
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               $rootScope.statusBar.off();
             });
-        };
+        }
 
         /**
          * Filter to get the team name by id and finally set the firstletter as capital
