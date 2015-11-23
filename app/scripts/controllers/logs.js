@@ -20,23 +20,23 @@ define(
         $rootScope.fixStyles();
 
         //viewmodel
-        var vm = this;
+        var self = this;
 
         //properties
-        vm.data = data;
-        vm.current = CurrentSelection.getTeamId();
-        vm.ordered = 'started.stamp';
-        vm.reversed = true;
-        vm.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
+        self.data = data;
+        self.current = CurrentSelection.getTeamId();
+        self.ordered = 'started.stamp';
+        self.reversed = true;
+        self.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
           $filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
 
         //methods
-        vm.fetchLogs = fetchLogs;
-        vm.toggleGroupedLogs = toggleGroupedLogs;
-        vm.init = init;
+        self.fetchLogs = fetchLogs;
+        self.toggleGroupedLogs = toggleGroupedLogs;
+        self.init = init;
 
         //initialisation
-        vm.init();
+        self.init();
 
         //event receiver
         $rootScope.$on('getLogRange', function ()
@@ -45,7 +45,7 @@ define(
           data.logData.periods.startTime = periods.startTime;
           data.logData.periods.endTime = periods.endTime;
 
-          vm.fetchLogs();
+          self.fetchLogs();
         });
 
         /**
@@ -62,10 +62,10 @@ define(
           $timeout(function ()
           {
             $rootScope.statusBar.display($rootScope.ui.logs.loadLogs);
-            vm.loadLogs = true;
+            self.loadLogs = true;
           });
 
-          (vm.current == 'all')
+          (self.current == 'all')
             ? fetchForAllTeams(options)
             : fetchForSingleTeam(options);
         }
@@ -76,10 +76,10 @@ define(
         function fetchForSingleTeam(options)
         {
           var _TeamTelephoneSettings = null;
-          CurrentSelection.local = vm.current;
+          CurrentSelection.local = self.current;
 
           //Check if the requested team has teamtelephone functionality by the adapterId
-          TeamUp._('TTOptionsGet', {second: vm.current})
+          TeamUp._('TTOptionsGet', {second: self.current})
             .then(function (TeamTelephoneSettings)
             {
               _TeamTelephoneSettings = TeamTelephoneSettings;
@@ -87,7 +87,7 @@ define(
 
               return (! TeamTelephoneSettings.adapterId)
                 ? $location.path('team-telefoon/options')
-                : Teams.getSingle(vm.current);//get the members of the team, so the phonenumbers could be translated to names
+                : Teams.getSingle(self.current);//get the members of the team, so the phonenumbers could be translated to names
             })
             .then(function(members)
             {
@@ -98,8 +98,8 @@ define(
                       members: _.map(members, _.partialRight(_.pick,['fullName','phone'])),//get only the fullname and phonenumber of the members
                       currentTeam: {
                         fullName: (_.findWhere(
-                            vm.data.teams, {uuid: vm.current})
-                        ).name,//find the name of the requested team by the teamId(vm.current)
+                            self.data.teams, {uuid: self.current})
+                        ).name,//find the name of the requested team by the teamId(self.current)
                         phone: _TeamTelephoneSettings.phoneNumber
                       }
                     }
@@ -126,8 +126,8 @@ define(
          */
         function receiveLogs(logData)
         {
-          vm.loadLogs = false;
-          vm.data.logData = logData;
+          self.loadLogs = false;
+          self.data.logData = logData;
 
           $rootScope.statusBar.off();
         }
@@ -143,7 +143,7 @@ define(
           {
             log.expanding = showAll;
           })
-          vm.data.logData.logs = logViews;
+          self.data.logData.logs = logViews;
         }
 
         /**
@@ -155,7 +155,7 @@ define(
           // don't add the everyone option in the selectbar
           if ($rootScope.app.resources.role == 1)
           {
-            vm.data.teams.unshift({
+            self.data.teams.unshift({
               name: $rootScope.ui.dashboard.everyone,
               uuid: 'all'
             });
