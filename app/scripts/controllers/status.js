@@ -6,8 +6,12 @@ define(['controllers/controllers'], function (controllers)
     'status',
       function ($scope, $rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
+        //rootScope
         $rootScope.notification.status = false;
         $rootScope.fixStyles();
+
+
+
         $scope.teams = data.teams;
         $scope.states = angular.copy($rootScope.config.app.timeline.config.states);
 
