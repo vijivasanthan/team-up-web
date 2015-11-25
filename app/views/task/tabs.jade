@@ -1,0 +1,24 @@
+li(class="{{(views.myTasks==true) && 'active'}}")
+	a(data-toggle='tab', ng-click='nav("tasks2")')
+		span.icomoon(data-icon='', aria-hidden='true')
+		| {{ui.task.myTask}}
+li(class="{{(views.allTasks==true) && 'active'}}")
+	a(data-toggle='tab', ng-click='nav("tasks2/alltasks")')
+		span.icomoon(data-icon='', aria-hidden='true')
+		| {{ui.task.allTasks}}
+li(data-match-route='/task/new'
+ng-show="app.resources.role == 1")
+	a(data-toggle='tab',
+	ng-click='nav("task/new")')
+		span.icomoon(data-icon='',
+		aria-hidden='true')
+		| {{ui.task.newTask}}
+li(ng-if='app.domainPermission.clients' class="{{(views.upload==true) && 'active'}}")
+	a(data-toggle='tab', ng-click='nav("tasks2/upload")')
+		span.entypo &#59213;
+		| {{ui.task.upload}}
+li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
+data-match-route='/tasks2')
+	a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
+		span.entypo &#128340;
+		| {{ ui.planboard.planboard }}
