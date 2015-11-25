@@ -90,6 +90,8 @@ define(
                 }
               );
 
+              data.members = $filter('orderBy')(members, 'lastName');
+
               data.groups = Store('app').get('ClientGroups');
 
               // console.log('members ->', members);
