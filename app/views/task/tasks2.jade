@@ -1,0 +1,408 @@
+#confirmTaskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteTask}}
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal')
+					| {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button', ng-click='deleteTask(_task)')
+					| {{ui.teamup.confirms.remove}}
+
+
+#taskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='taskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#taskModalLabel.modal-title
+					span.text-turq {{task.relatedClient.fullName}}
+					br
+					| {{task.plannedTaskDuration.label}}
+			.modal-body
+
+				//pre: small {{task | json}}
+
+				//h4.pull-right Taakinformatie
+				dl
+					dt {{ ui.task.status }}
+						dd {{task.statusLabel}}
+					dt {{ ui.task.timeframe }}
+						dd {{task.plannedTaskDuration.label}}
+					dt(ng-show='task.description') {{ ui.task.description }}
+						dd(class="description") {{task.description}}
+					dt {{ ui.task.createdBy }}
+						dd
+							span(ng-hide="author") {{ui.profile.authorInfo}}
+							a(href='index.html#/profile/{{task.authorUuid}}#profile')
+								| {{author}}
+
+				hr
+
+				//h4.pull-right Cliëntinformatie
+				dl
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.client }} 
+						dd
+							a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+								| {{task.relatedClient.fullName}}
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.clientGroup }}
+						dd
+							a(href='index.html#/client?uuid={{task.relatedClient.clientGroupUuid}}#client')
+								| {{task.relatedClient.clientGroupName}}
+					dt(ng-show='app.domainPermission.clients') {{ ui.groups.address }}
+						dd {{task.relatedClient.fullAddress}}
+					dt(ng-show='app.domainPermission.clients') {{ ui.teamup.phone }}
+						dd {{task.relatedClient.phone}}
+
+				hr(ng-show='app.domainPermission.clients')
+
+				dl
+					dt(ng-show='task.assignedTeamMember') {{ ui.teamup.name }}
+						dd
+							a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
+								| {{task.assignedTeamMember.fullName}}
+					dt Team
+						dd
+							a(href='index.html#/team?uuid={{task.assignedTeamUuid}}#team')
+								| {{task.assignedTeamFullName}}
+
+.page-header
+	h2.nullable
+		| {{ui.task.tasks}}
+	.selectGroup(ng-show='views.allTasks && (app.resources.teamUuids.length > 1 || app.resources.role == 1)')
+		span.selectTitle
+			| {{ ui.teamup.selectTeam }}
+		select(current_selection='team' ng-model='task.team',
+		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+		ng-selected='currentTeam',
+		ng-change='changeTeam(task.team)')
+
+
+.tabbable.tabs-left
+
+
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+		li(class="{{(views.myTasks==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("myTasks")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| {{ui.task.myTask}}
+		li(class="{{(views.allTasks==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("allTasks")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| {{ui.task.allTasks}}
+		li(class="{{(views.newTask==true) && 'active'}}")
+			a(data-toggle='tab', ng-click='setViewTo("newTask")')
+				span.icomoon(data-icon='', aria-hidden='true')
+				| {{ui.task.newTask}}
+		li(class="{{(views.upload==true) && 'active'}}" ng-show='app.domainPermission.clients')
+			a(data-toggle='tab', ng-click='setViewTo("upload")')
+				span.entypo &#59213;
+				| {{ui.task.upload}}
+		li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
+		data-match-route='/tasks2')
+			a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
+				span.entypo &#128340;
+				| {{ ui.planboard.planboard }}
+
+
+	.tab-content
+
+
+
+
+		#myTasks.tab-pane(class="{{(views.myTasks==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ui.task.myTask}}
+				
+			hr
+
+			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
+
+			article(ng-hide='tasks.mine.loading')
+			
+				.well(style='padding-top: 25px',
+					ng-show='tasks.mine.archieve')
+					label
+						input(type='checkbox', 
+							name='showAllTasks' 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "mine")')
+						small &nbsp; {{ ui.task.showArchivedTasks }}
+				
+				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
+						
+				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
+					thead
+						tr
+							th
+								a(ng-click='orderBy("status")') {{ ui.task.status }}
+									i.icon-sort
+							th(ng-show='app.domainPermission.clients')
+							th(ng-show='app.domainPermission.clients')
+								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
+									i.icon-sort
+							th(ng-show='app.domainPermission.clients') {{ui.task.information}}
+							th
+								a(ng-click='orderBy("plannedStartVisitTime")') {{ui.task.planningTime}}
+									i.icon-sort
+							th(ng-hide='app.domainPermission.clients') {{ui.task.description}}
+							th(colspan='1')
+
+					tbody
+						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
+							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
+							td(ng-show='app.domainPermission.clients')
+								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
+							td(ng-show='app.domainPermission.clients')
+								small
+									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+										| {{task.relatedClient.fullName}}
+							td(ng-show='app.domainPermission.clients')
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress'  aria-hidden='true', data-icon='')
+								small {{task.relatedClient.fullAddress}}
+							td
+								span.taskIcon.icon-time(aria-hidden='true')
+								small {{task.plannedTaskDuration.label}}
+							td(ng-hide='app.domainPermission.clients')
+								small {{task.description | cut: true : 80:'...'}}
+							td
+									.pull-right
+											button.btn-primary.btn-mini(type='button', ng-click='unAssignTask(task)')
+													i.icon-minus
+											button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+													i.icon-info(style='margin-top:1px')
+											button.btn-primary.btn-mini(type='button', 
+													ng-click='modifyTask(task)')
+													i.icon-edit
+											button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
+													i.icon-trash
+				span.muted.pull-right
+					small: i {{ ui.task.thereAreAmountTasks(tasks.mine.list.length) }}
+
+		#allTasks.tab-pane(class="{{(views.allTasks==true) && 'active'}}")
+			.tab-header
+				h3.pull-left {{ui.task.allTasks}}
+			hr
+
+			article(ng-show='tasks.all.loading'): p {{ ui.task.tasks }} {{ ui.task.hasToLoad }}
+
+			article(ng-hide='tasks.all.loading')
+
+				//p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
+				p(ng-hide='(tasks.all.list | filter: task.team ).length > 0') {{ui.task.noTasks}}
+				//pre: small {{tasks.all.list[0] | json}}
+
+				.well(style='padding-top: 25px', ng-show='tasks.all.archieve')
+					label(style='margin-right: 15px; display: none')
+						input(type='checkbox', ng-model='showOnlyAvailable')
+						small &nbsp;{{ ui.task.showOnlyNotAssignedTasks }}
+					label
+						input(type='checkbox', 
+							ng-model='showAllTasks',
+							ng-change='showTasks(showAllTasks, "all")')
+						small &nbsp;{{ ui.task.showArchivedTasks }}
+
+				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				table.table.table-striped.taskTable(ng-show='(tasks.all.list | filter: task.team ).length > 0')
+					thead
+						tr
+							th
+								a(ng-click='orderBy("status")') {{ ui.task.status }}
+									i.icon-sort
+							th(ng-if='app.domainPermission.clients')
+							th(ng-hide='app.domainPermission.clients') {{ui.task.information}}
+							th(ng-if='app.domainPermission.clients')
+								a(ng-click='orderBy("relatedClient.fullName")') {{ui.task.clientName}}
+									i.icon-sort
+							th(ng-if='app.domainPermission.clients') {{ui.task.information}}
+							th(colspan='2')
+							th
+								a(ng-click='orderBy("assignedTeamMember.fullName")') {{ ui.task.member }}
+									i.icon-sort
+							th(colspan='1')
+
+					tbody
+						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
+						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
+						tr(ng-repeat='task in tasks.all.list | orderBy:ordered : reversed | filter: task.team')
+							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
+							td(ng-if='app.domainPermission.clients')
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.relatedClientUuid |  avatar:"client":"80"}}'
+								)
+							td(ng-if='app.domainPermission.clients')
+								small
+									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+										| {{task.relatedClient.fullName}}
+							td
+								span.taskIcon.icon-location4(ng-if='app.domainPermission.clients' ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
+								small {{task.relatedClient.fullAddress}}
+								br(ng-if='app.domainPermission.clients')
+								span.taskIcon.icon-time(aria-hidden='true')
+								small {{task.plannedTaskDuration.label}}
+							td
+								a.taskAssignIcon(href='')
+									span.icomoon.icon-link(link-icon-hovered='',
+									aria-hidden='true',
+									ng-show='task.assignedTeamMember',
+									ng-click='unAssignTask(task)')
+							td
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
+								ng-show='task.assignedTeamMember'
+								)
+							td
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
+									| {{task.assignedTeamMember.fullName}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(type='button',
+									ng-hide='task.assignedTeamMember',
+									ng-click='assignTask(task)')
+										i.icon-plus
+									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+										i.icon-info(style='margin-top:1px')
+									button.btn-primary.btn-mini(type='button', 
+										ng-click='modifyTask(task)')
+										i.icon-edit
+									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
+										i.icon-trash
+				span.muted.pull-right
+					//small: i Er zijn {{tasks.all.list.length}} taken.
+					small: i {{ ui.task.thereAreAmountTasks((tasks.all.list | filter: task.team ).length) }} 
+
+		#newTask.tab-pane(class="{{(views.newTask==true || views.editTask==true) && 'active'}}")
+			.tab-header
+				h3.pull-left(ng-hide='task.uuid') {{ui.task.newTask}}
+				h3.pull-Left(ng-show='task.uuid') {{ui.teamup.updateTask}}
+			hr
+
+			form(name='taskForm', novalidate, ng-submit='saveTask(task)')
+				.row
+					.span6
+
+						fieldset
+
+							.form-group
+								label.control-label(ng-if='app.domainPermission.clients != true') {{ ui.task.employee }}
+								label.control-label(ng-if='app.domainPermission.clients') {{ ui.task.carer }}
+								.controls
+									select(current_selection='team', 
+									ng-model='task.team',
+									ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
+									ng-selected='currentTeam',
+									ng-change='changeTeam(task.team)')
+										option(value='') {{ ui.teamup.selectTeam }}
+									select(ng-model='task.member',
+									ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in members | orderBy:"lastName" ',
+									ng-selected='task.member')
+										option(value='') {{ ui.teamup.selectMember }}
+
+							.form-group(ng-if='app.domainPermission.clients')
+								label.control-label {{ ui.teamup.client }}
+								.controls
+									select(ng-model='currentGroup',
+									ng-options='g.id as g.name for g in groups | orderBy:"name"',
+									ng-selected='currentGroup',
+									ng-change='changeClientGroup(currentGroup)')
+										option(value='') {{ ui.teamup.clientGroup }}
+									select(ng-model='task.client',
+									ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in clients | orderBy:"lastName" ',
+									ng-selected='currentClient',
+									ng-change='changeClient(task.client)')
+										option(value='') {{ ui.teamup.client }}
+
+						fieldset
+
+							.form-group.dater(ng-hide='browser.mobile')
+								label.control-label {{ui.planboard.from}}
+								.controls
+									input(name='date-start',
+									type='text',
+									ng-model='task.start.date',
+									data-date-type='string',
+									data-date-format='d-M-yyyy',
+									bs-datepicker='',
+									ng-change='newDate(task.start.date)')
+									i.icon-calendar
+									input(name='time-start',
+									type='text',
+									ng-model='task.start.time',
+									ng-change='newTime(task.start.time);',
+									bs-timepicker='',
+									data-date-type='string',
+									data-time-format="H:mm", 
+									data-length="1",
+									data-minute-step="15",
+									data-arrow-behavior="picker")
+									i.icon-time
+									
+							.form-group.dater-mobile(ng-show='browser.mobile')
+								label.control-label {{ui.planboard.from}}
+								.controls
+									input.form-control.input-sm(
+									name='date-start', 
+									type='datetime-local', 
+									ng-model='task.start.datetime',
+									ng-change='newDate(task.start.datetime, true)')
+									
+							.form-group.dater-mobile(ng-show='browser.mobile')
+								label.control-label {{ui.planboard.till}} 
+								.controls
+									input.form-control.input-sm(name='date-end', 
+									type='datetime-local', 
+									ng-model='task.end.datetime')
+																		
+							.form-group.dater(ng-hide='browser.mobile')
+								label.control-label {{ui.planboard.till}}
+								.controls
+									input(name='date-end',
+									type='text',
+									ng-model='task.end.date',
+									data-date-type='string',
+									data-date-format='d-M-yyyy',
+									bs-datepicker='')
+									i.icon-calendar
+									input(name='time-end',
+									type='text',
+									ng-model='task.end.time',
+									bs-timepicker='',
+									data-date-type='string',
+									data-time-format="H:mm",
+									data-length="1",
+									data-minute-step="15",
+									data-arrow-behavior="picker")
+									i.icon-time
+
+							.form-group
+								label.control-label {{ui.task.description}}
+								.controls
+									textarea.span8.form-control(
+										style='height: 150px', 
+										ng-model='task.description',
+										name='description')
+
+					.span6
+						fieldset
+							.control-group
+							//google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+								marker(coords = 'clientCoords')
+								markers(models = 'memberMarkers' )
+
+				hr
+				.form-actions
+					button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}
+
+
+		#upload.tab-pane(ng-if='app.domainPermission.clients' class="{{(views.upload==true) && 'active'}}"
+		ng-controller='uploadCtrl')
+			include upload

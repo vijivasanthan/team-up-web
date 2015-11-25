@@ -1,13 +1,13 @@
 section#planboard(ng-controller='agenda-timeline', scroll)
 	.agenda-timeline.page-header
 		h2.nullable {{ui.planboard.planboard}}
-		include ../agenda/time-quick-availability
-	include ../agenda/time-travel
-	include ../agenda/time-slot
+		include timeline/time-quick-availability
+	include timeline/time-travel
+	include timeline/time-slot
 		
 	.agenda-timeline-tabs.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
-			include ../agenda/tabs
+			include tabs
 		
 		.tab-content
 		
@@ -112,7 +112,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 		
 					#mainTimeline(set-position-slot-form)
 					div.legends-agenda
-						include ../agenda/time-legends
+						include timeline/time-legends
 				p
 					small.pull-left
 						span.text-warning {{ui.agenda.lastSyncTime}}

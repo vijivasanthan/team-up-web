@@ -36,11 +36,11 @@ module.exports = (grunt) ->
           pretty: true
         files:
           '.tmp/versions.html': ['<%= paths.app %>/versions.jade']
-      logout:
-        options:
-          pretty: true
-        files:
-          '.tmp/logout.html': ['<%= paths.app %>/logout.jade']
+#      logout:
+#        options:
+#          pretty: true
+#        files:
+#          '.tmp/logout.html': ['<%= paths.app %>/logout.jade']
       views:
         options:
           pretty: true

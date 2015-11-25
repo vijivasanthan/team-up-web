@@ -203,7 +203,7 @@ block notifications
 block chat
 	#chat.ng-cloak(
 	ng-hide='(location=="login" || location=="forgotpass" || location=="register" || location=="logout") || browser.mobile || ! app.domainPermission.chat', 
-	ng-controller='messagesCtrl')
+	ng-controller='chat')
 		#chat-btn(ng-click='openChat();')
 			span {{ ui.message.title }} {{newCountShow}}
 		#message-content(ng-show='toggleChat')

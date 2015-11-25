@@ -717,13 +717,12 @@ define(
         {
           return function (id)
           {
-            var teams = Store('app').get('teams');
-
-            return (_.findWhere(teams, {uuid: id})).name;
+            var teams = Store('app').get('teams'),
+                currentTeam = _.findWhere(teams, {uuid: id});
+            return currentTeam && currentTeam.name;
           }
         }
       ])
-
 
     /**
      * Convert group id to name
