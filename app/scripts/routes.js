@@ -224,7 +224,7 @@ define(
             .when(
             '/client',
             {
-              templateUrl: 'views/clients.html',
+              templateUrl: 'views/client/clients.html',
               controller: 'clientCtrl',
               reloadOnSearch: false,
               resolve: {
@@ -265,7 +265,7 @@ define(
             .when(
             '/clientProfile/:clientId',
             {
-              templateUrl: 'views/clients.html',
+              templateUrl: 'views/client/clients.html',
               controller: 'clientCtrl',
               reloadOnSearch: false,
               resolve: {
@@ -324,7 +324,7 @@ define(
             .when(
             '/treegrid',
             {
-              templateUrl: 'views/treegrid.html',
+              templateUrl: 'views/manage/treegrid.html',
               controller: 'treegridCtrl',
               reloadOnSearch: false,
               resolve: {
@@ -592,7 +592,7 @@ define(
             .when(
             '/team-telefoon/status/phones',
             {
-              templateUrl: 'views/phones.html',
+              templateUrl: 'views/team-telephone/phones.html',
               controller: 'phones',
               reloadOnSearch: false,
               resolve: {
