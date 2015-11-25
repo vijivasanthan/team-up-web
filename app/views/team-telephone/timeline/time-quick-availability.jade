@@ -11,9 +11,21 @@ div.btn-group.pull-right
 				.square.available
 				| {{ ui.teamup.stateValue.reachable }} (1 {{ ui.teamup.hour }})
 		li
+			a(ng-click='setAvailability(true, 4)')
+				.square.available
+				| {{ ui.teamup.stateValue.reachable }} (4 {{ ui.teamup.hour }})
+		li
 			a(ng-click='setAvailability(true, 6)')
 				.square.available
 				| {{ ui.teamup.stateValue.reachable }} (6 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability(true, 8)')
+				.square.available
+				| {{ ui.teamup.stateValue.reachable }} (8 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability(true, 16)')
+				.square.available
+				| {{ ui.teamup.stateValue.reachable }} (16 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(true, 24)')
 				.square.available
@@ -24,9 +36,21 @@ div.btn-group.pull-right
 				.square.unavailable
 				| {{ ui.teamup.stateValue.not_reachable }} (1 {{ ui.teamup.hour }})
 		li
+			a(ng-click='setAvailability(false, 4)')
+				.square.unavailable
+				| {{ ui.teamup.stateValue.not_reachable }} (4 {{ ui.teamup.hour }})
+		li
 			a(ng-click='setAvailability(false, 6)')
 				.square.unavailable
 				| {{ ui.teamup.stateValue.not_reachable }} (6 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability(false, 8)')
+				.square.unavailable
+				| {{ ui.teamup.stateValue.not_reachable }} (8 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability(false, 16)')
+				.square.unavailable
+				| {{ ui.teamup.stateValue.not_reachable }} (16 {{ ui.teamup.hour }})
 		li
 			a(ng-click='setAvailability(false, 24)')
 				.square.unavailable
