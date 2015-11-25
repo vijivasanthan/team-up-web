@@ -7,7 +7,7 @@ li(class="{{(views.allTasks==true) && 'active'}}")
 		span.icomoon(data-icon='', aria-hidden='true')
 		| {{ui.task.allTasks}}
 li(data-match-route='/task/new'
-ng-show="app.resources.role == 1")
+ng-if="app.resources.role == 1")
 	a(data-toggle='tab',
 	ng-click='nav("task/new")')
 		span.icomoon(data-icon='',

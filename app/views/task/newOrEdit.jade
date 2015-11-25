@@ -35,12 +35,12 @@
 								ng-options='g.id as g.name for g in task.teamClientgroupLinks | orderBy:"name"',
 								ng-selected='task.form.currentGroup',
 								ng-change='task.changeClientGroup(currentGroup)')
-									option(value='') {{ ui.teamup.clientGroup }}
+									option(value='') {{ ui.teamup.selectClientGroup }}
 								select(ng-model='task.form.currentClient',
 								ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in task.currentGroupClients | orderBy:"lastName" ',
 								ng-selected='task.form.currentClient',
 								ng-change='task.changeClient(task.currentClient)')
-									option(value='') {{ ui.teamup.client }}
+									option(value='') {{ ui.teamup.selectClient }}
 					fieldset
 						.form-group.dater(ng-hide='browser.mobile')
 							label.control-label {{ui.planboard.from}}

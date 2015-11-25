@@ -4,7 +4,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'newTask',
+      'saveTask',
       function ($rootScope,
                 $location,
                 $timeout,
@@ -16,7 +16,8 @@ define(
                 Dater,
                 moment,
                 Clients,
-                NewTask,
+                TaskService,
+                CurrentSelection,
                 data) {
 
         var self = this;
@@ -27,6 +28,7 @@ define(
         self.currentGroupClients = data.currentGroupClients;
 
         //methods
+        self.setTeam = setTeam;
         self.changeTeam = changeTeam;
         self.newDate = newDate;
         self.newTime = newTime;
@@ -37,6 +39,10 @@ define(
         //initialisation
         self.init(data.currentTeamId);
 
+        function setTeam(teamId){
+          Team.read(teamId)
+        }
+
 
         /**
          * get team and client related data after input
@@ -45,17 +51,19 @@ define(
         function changeTeam(teamId) {
           Team.read(teamId)
             .then(function (members) {
+              CurrentSelection.local = teamId;
               self.currentTeamMembers = members;
               return Clients.getAllLocal();
             })
             .then(function (clientGroups) {
               data.clientGroups = clientGroups;
-              return NewTask.teamClientLink(teamId, clientGroups);
+              return TaskService.teamClientLink(teamId, clientGroups);
             })
-            .then(function (teamClientgroupLinks) {
+            .then(function (teamClientgroupLinks)
+            {
               self.teamClientgroupLinks = teamClientgroupLinks;
-              var clientGroupId = teamClientgroupLinks[0].id;
-              return Clients.getSingle(clientGroupId);
+              self.form.currentGroup = teamClientgroupLinks[0].id;
+              return Clients.getSingle(self.form.currentGroup);
             })
             .then(function (currentGroupClients) {
               self.currentGroupClients = currentGroupClients;
@@ -97,24 +105,23 @@ define(
             return moment(date).format('DD-MM-YYYY');
           };
 
-          self.form = {
-            startDate: {
+
+          self.form.startDate = {
               date: setDefaultDate(new Date()),
               time: currentStartTime,
               datetime: updateMobileDateTime(moment().toDate(), 15)
-            },
-            endDate: {
+          };
+          self.form.endDate = {
               date: setDefaultDate(new Date()),
               time: currentEndTime,
               datetime: updateMobileDateTime(moment().toDate(), 30)
-            }
           };
         }
 
         //update the time
         function newTime(newTime) {
           self.form.endDate.time = updateTime(newTime, 15);
-        };
+        }
 
         //update the date
         function newDate(newDate, mobile) {
@@ -174,59 +181,35 @@ define(
             description: form.description,
             assignedTeamMemberUuid: form.member
           };
-          console.log(taskValues);
-
           createTask(taskValues);
         }
 
         function createTask(task) {
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
-          TeamUp._('taskAdd', null, task);
-          //redirect();
+          TeamUp._('taskAdd', null, task)
+            .then(function (result) {
+              if(! result.error) {
+                redirect(task.assignedTeamMemberUuid);
+              }
+            });
         }
 
-
-
-
-        //function redirect(){
-        //  if (result.error) {
-        //    if (result.error.data) {
-        //      $rootScope.notifier.error($rootScope.transError(result.error.data.result));
-        //    }
-        //    else {
-        //      $rootScope.notifier.error($rootScope.transError(result.error));
-        //    }
-        //    $rootScope.statusBar.off();
-        //  }
-        //  else {
-        //    if (task.assignedTeamMemberUuid == $rootScope.app.resources.uuid) {
-        //      queryMine(
-        //        true,
-        //        function () {
-        //          //setView('myTasks');
-        //
-        //          $rootScope.notifier.success($rootScope.ui.task.taskSaved);
-        //        }
-        //      );
-        //    }
-        //    else {
-        //      queryAll(
-        //        function () {
-        //          //setView('allTasks');
-        //
-        //          $rootScope.notifier.success($rootScope.ui.task.taskSaved);
-        //        }
-        //      );
-        //    }
-        //    $rootScope.statusBar.off();
-        //  }
-        //}
-
+        function redirect(assignedTeamMember){
+          var location = (assignedTeamMember === $rootScope.app.resources.uuid)
+            ? '/tasks2#myTasks'
+            : '/tasks2#allTasks'
+          $location.path(location);
+        }
 
         //initialise the team and dates
         function init(teamId) {
           Team.init(teamId);
           self.teams = Team.list;
+          self.form = {};
+          self.form.team = data.currentTeamId;
+          if(data.teamClientgroupLinks && data.teamClientgroupLinks.length) {
+            self.form.currentGroup = data.teamClientgroupLinks[0].id;
+          }
           setDates();
         }
       });
