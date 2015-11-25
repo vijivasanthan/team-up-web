@@ -164,6 +164,7 @@ require(
     'services/team',
     'services/member',
     'services/password',
+    'services/newTask',
 
     'directives/widgets',
     'directives/date-range-picker',
@@ -202,6 +203,7 @@ require(
     'controllers/old/teams',
     'controllers/old/tasks',
     'controllers/task/tasks2',
+    'controllers/task/newTask',
     'controllers/task/planboard/timeline',
     'controllers/task/planboard/timeline-navigation',
     'controllers/team-telephone/timeline/agenda-timeline',
