@@ -731,7 +731,7 @@ define(
 
             return $modal(
               {
-                template: 'views/reportTemplate.html',
+                template: 'views/client/reportTemplate.html',
                 scope: $scope,
                 animation: 'am-fade-and-slide-top'
               }

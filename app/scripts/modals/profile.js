@@ -105,16 +105,21 @@ define(['services/services', 'config'], function (services, config)
       var UserExists = $resource(config.app.host + 'user_exists', {}, {
         check: {
           method: 'GET',
-          params: {username: ''}
+          params: {username: ''},
+          transformResponse: function (data)
+          {
+            console.error('data', data);
+            return {'userExist': ( ! data)};
+          }
         }
       });
 
       return UserExists.check({username: username},
-        function ()
+        function (result)
         {
           return true
         },
-        function ()
+        function (error)
         {
           return false;
         }).$promise;

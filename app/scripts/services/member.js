@@ -29,10 +29,11 @@ define(['services/services', 'config'],
            */
           this.create = function (member, teamId)
           {
+            var deferred = $q.defer();
+
             $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
             var roles = this.getRoles();
             member.role = member.role || (roles[0]).id;
-
 
             var memberResources = angular.copy(member);
             memberResources.phone = $rootScope.phoneNumberParsed.format;
@@ -42,13 +43,18 @@ define(['services/services', 'config'],
             memberResources.teamUuids = [teamId];
 
             Teams.addMember(memberResources)
-              .then(function ()
+              .then(function (result)
               {
-                $rootScope.resetPhoneNumberChecker();
-                $location.path('team/members');
-                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                if(! result.error)
+                {
+                  $rootScope.resetPhoneNumberChecker();
+                  deferred.resolve(result);
+                  $location.path('team/members');
+                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                }
                 $rootScope.statusBar.off();
               });
+            return deferred.promise;
           };
 
           /**
