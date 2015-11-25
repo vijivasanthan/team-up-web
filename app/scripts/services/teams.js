@@ -577,7 +577,8 @@ define(
            */
           TeamsService.prototype.addMember = function(member)
           {
-            return TeamUp._(
+            var deferred = $q.defer();
+            TeamUp._(
               'memberAdd',
               null,
               {
@@ -593,7 +594,13 @@ define(
                 birthDate: 0
                 //function: member.function
               }
-            );
+            )
+            .then(function(result)
+            {
+              deferred.resolve(result);
+            });
+
+            return deferred.promise;
           };
 
           /**
