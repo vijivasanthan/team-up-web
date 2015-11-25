@@ -37,6 +37,7 @@ define(['services/services', 'config'],
             var memberResources = angular.copy(member);
             memberResources.phone = $rootScope.phoneNumberParsed.format;
             memberResources.team = teamId;
+            memberResources.lastName = memberResources.lastName || "";
             memberResources.password = MD5(memberResources.password);
             memberResources.teamUuids = [teamId];
 
@@ -173,6 +174,18 @@ define(['services/services', 'config'],
             {
               Permission.getAccess();
             }
+          };
+
+          /**
+           * Reset validation form
+           * @param form
+           */
+          this.resetValidation = function (form)
+          {
+            form.$setPristine();
+            form.$setUntouched();
+            form.$submitted = false;
+            form.$setValidity();
           };
 
           /**

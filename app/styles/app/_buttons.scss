@@ -210,6 +210,16 @@ input[type="button"] {
   }
 }
 
+.btn-success:active:hover, .btn-success:active:focus,
+.btn-success:active.focus, .btn-success.active:hover,
+.btn-success.active:focus, .btn-success.active.focus,
+.open > .btn-success.dropdown-toggle:hover,
+.open > .btn-success.dropdown-toggle:focus,
+.open > .btn-success.dropdown-toggle.focus {
+  background-color: $turq !important;
+  color: $white !important;
+}
+
 // Info appears as a neutral blue
 .btn-info {
   background-color: $brown;

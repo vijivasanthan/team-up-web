@@ -2,7 +2,7 @@ div#timeline-controls(ng-controller='agenda-timeline-navigation')
 	.pull-left(style='margin-top: 10px;')
 
 		.form-group.has-feedback.pull-left.dateranger
-			input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='')
+			input.form-control(type='text', name='daterange', ng-model='daterange', daterangepicker='', readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 
 		.btn-group.pull-left(style='margin-right: 5px;')

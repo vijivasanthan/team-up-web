@@ -236,12 +236,34 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: [
-                  'Clients', '$route',
-                  function (Clients, $route)
+                  'Clients', 'CurrentSelection', '$route', '$q',
+                  function (Clients, CurrentSelection, $route, $q)
                   {
-                    return ($route.current.params)
+                    var deferred = $q.defer();
+                    var clientResult, clientGroupId;
+                    var promise = ($route.current.params)
                       ? Clients.query(false, $route.current.params)
                       : Clients.query();
+
+                    promise
+                      .then(function(result)
+                      {
+                        clientResult  = result;
+                        clientGroupId = ($route.current.params).uuid
+                                              || CurrentSelection.getClientGroupId()
+                                              || Object.keys(clientResult.clients)[0];
+                        return Clients.getSingle(clientGroupId);
+                      })
+                      .then(function(clients)
+                      {
+                        clientResult.clients[clientGroupId] = clients;
+                        deferred.resolve({
+                          clientGroups: clientResult.clientGroups,
+                          clients: clientResult.clients,
+                          currentClientGroupId: clientGroupId
+                        });
+                      });
+                    return deferred.promise;
                   }
                 ]
               }
@@ -273,26 +295,31 @@ define(
               controller: 'manageCtrl',
               reloadOnSearch: false,
               resolve: {
-                data: [
-                  'Clients', 'Teams', '$location',
-                  function (Clients, Teams, $location)
+                data:
+                function (Clients, Teams, $location)
+                {
+                  // TODO: Lose short property names and make them more readable!
+                  return (($location.hash() && $location.hash() == 'reload')) ?
                   {
-                    // TODO: Lose short property names and make them more readable!
-                    return (($location.hash() && $location.hash() == 'reload')) ?
-                    {
-                      t: Teams.query(),
-                      cg: Clients.query()
-                    } :
-                    {local: true};
-                  }
-                ],
-                dataMembers: function ($q, TeamUp, Teams)
+                    t: Teams.query(),
+                    cg: Clients.query()
+                  } :
+                  {local: true};
+                },
+                dataMembers: function ($rootScope, $q, TeamUp, Teams, Clients)
                 {
                   var deferred = $q.defer();
-                  $q.all([
+                  var promises = [
                     TeamUp._('allTeamMembers'),
                     Teams.getAllWithMembers()
-                  ]).then(function (result)
+                  ];
+
+                  if($rootScope.app.domainPermission.clients)
+                  {
+                    promises.push(Clients.queryAllLocally());
+                  }
+
+                  $q.all(promises).then(function (result)
                   {
                     deferred.resolve(result[0]);
                   });
@@ -520,14 +547,28 @@ define(
                       }
                       else
                       {
-                        var teams = Teams.getAllLocal(),
-                          logsPerTeam = Logs.fetch({adapterId: options.adapterId});
-                        $q.all([teams, logsPerTeam])
-                          .then(function (result)
+                        var _teams = null;
+
+                        Teams.getAllLocal()
+                          .then(function(teams) {
+                            _teams = teams;
+                            return Teams.getSingle(teamId);
+                          })
+                          .then(function(members) {
+                            return Logs.fetch({
+                              adapterId: options.adapterId,
+                              members: _.map(members,_.partialRight(_.pick,['fullName','phone'])),
+                              currentTeam: {
+                                fullName: (_.findWhere(_teams, {uuid: teamId})).name,
+                                phone: options.phoneNumber
+                              }
+                            });
+                          })
+                          .then(function (logs)
                           {
                             deferred.resolve({
-                              teams: result[0],
-                              logData: result[1]
+                              teams: _teams,
+                              logData: logs
                             });
                           });
                       }
@@ -762,7 +803,7 @@ define(
                         });
                   };
                   //This routing is only for the ones without session
-                  (Session.check())
+                  (Session.get())
                     ? $location.path($rootScope.currentLocation)
                     : video.getCallIdRequest(backEnds.shift(), teamPhoneNumber);
 

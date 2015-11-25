@@ -73,6 +73,23 @@ section
 										small
 											i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
 												| {{ ui.options.ringingTimeOut.long }}
+							hr
+							
+							.form-group
+								label.control-label {{ ui.options.useExternalId.title }}
+								.controls
+									label.radio-inline
+										input(type="radio" ng-model='options.scenarios.useExternalId',
+										name="useExternalId", ng-value='true')
+										| {{ ui.options.on }}
+									label.radio-inline
+										input(type="radio" ng-model='options.scenarios.useExternalId',
+										name="useExternalId", ng-value='false')
+										| {{ ui.options.off }}
+									span.help-block
+										small
+											i
+												| {{ ui.options.useExternalId.info }}
 							
 							//
 							//.form-group

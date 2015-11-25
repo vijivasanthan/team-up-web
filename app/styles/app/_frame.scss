@@ -267,6 +267,16 @@ section {
   }
 }
 
+#pageTop {
+  .page-header {
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .tabbable {
+    margin-top: 0;
+  }
+}
+
 .video-conversation {
   .responsive_video {
     iframe {

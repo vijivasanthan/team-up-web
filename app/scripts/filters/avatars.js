@@ -360,12 +360,12 @@ define(
 
             var dates = {
                   start: {
-                    real: $filter('date')(startTime, 'EEEE, MMMM d'),
+                    real: $filter('date')(startTime, 'EEEE, d MMMM'),
                     month: $filter('date')(startTime, 'MMMM'),
                     day: $filter('date')(startTime, 'd')
                   },
                   end: {
-                    real: $filter('date')(endTime, 'EEEE, MMMM d'),
+                    real: $filter('date')(endTime, 'EEEE, d MMMM'),
                     month: $filter('date')(endTime, 'MMMM'),
                     day: $filter('date')(endTime, 'd')
                   }

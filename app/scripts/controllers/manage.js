@@ -56,6 +56,7 @@ define(
                         members.push(
                           {
                             'name': member.firstName + ' ' + member.lastName,
+                            'lastName': member.lastName,
                             'id': member.uuid
                           }
                         );
@@ -71,11 +72,6 @@ define(
                   connections.teams[team.uuid] = memberIds;
                 }
               );
-
-              // console.log('dat.teams ->', data.teams);
-              // console.log('memberGlobalIds ->', memberGlobalIds);
-              // console.log('connections ->', connections);
-              // console.log('-------------------------------------------');
 
               angular.forEach(
                 dataMembers,
@@ -94,8 +90,6 @@ define(
                 }
               );
 
-              data.members = $filter('orderBy')(members, 'lastName');
-
               data.groups = Store('app').get('ClientGroups');
 
               // console.log('members ->', members);
@@ -105,6 +99,31 @@ define(
               var groupIds = [],
                 clients = [],
                 clientIds = [];
+
+              var allClients = Store('app').get('clients');
+              allClients = $filter('orderBy')(allClients, 'lastName');
+
+              angular.forEach(
+                allClients,
+                function (client)
+                {
+                  if (clientIds.indexOf(client.uuid) == -1)
+                  {
+                    clientIds.push(client.uuid);
+
+                    clients.push(
+                      {
+                        'name': client.firstName + ' ' + client.lastName,
+                        'clientGroupUuid': client.clientGroupUuid || null,
+                        'id': client.uuid
+                      }
+                    );
+                  }
+                }
+              );
+
+              //TODO clientsGrouped
+              //var clientsGrouped = _.groupBy(clients, 'clientGroupUuid');
 
               angular.forEach(
                 data.groups,
@@ -120,12 +139,12 @@ define(
                       {
                         cIds.push(client.uuid);
 
-                        clients.push(
-                          {
-                            'name': client.firstName + ' ' + client.lastName,
-                            'id': client.uuid
-                          }
-                        );
+                        //clients.push(
+                        //  {
+                        //    'name': client.firstName + ' ' + client.lastName,
+                        //    'id': client.uuid
+                        //  }
+                        //);
                       }
 
                       if (client != null && clientIds.indexOf(client.uuid) == - 1)
@@ -136,45 +155,53 @@ define(
                   );
 
                   connections.clients[group.id] = cIds;
+
+                  //TODO clientsGrouped
+                  //if(clientsGrouped[group.id] && clientsGrouped[group.id].length)
+                  //{
+                  //  _.each(clientsGrouped[group.id], function (groupedClient)
+                  //  {
+                  //    connections.clients[group.id].push(groupedClient.id);
+                  //  })
+                  //}
+
+
                   groupIds.push(group.id);
                 }
               );
 
-              // console.log('clientIds ->', clientIds);
-              // console.log('groupIds ->', groupIds);
-              // console.log('connections ->', connections);
-              // console.log('-------------------------------------------');
+              //TODO clientsGrouped
+              //console.error('connections.clients', connections.clients);
+              //var addClients = {};
+              //
+              //_.each(connections.clients, function (clientsSingleGroup, clientGroupid)
+              //{
+              //  addClients[clientGroupid] = {
+              //    a: clientsSingleGroup,
+              //    r: []
+              //  };
+              //})
+              //
+              //console.error('addClients', addClients);
 
-              angular.forEach(
-                Store('app').get('clients'),
-                function (client)
-                {
-                  if (clientIds.indexOf(client.uuid) == - 1)
-                  {
-                    clientIds.push(client.uuid);
+              //Clients.manage(addClients)
+              //  .then(
+              //    function (result)
+              //    {
+              //      console.error('result', result);
+              //      $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              //      $rootScope.statusBar.off();
+              //
+              //      $timeout(function () { $route.reload() }, 250);
+              //    }
+              //  );
 
-                    clients.push(
-                      {
-                        'name': client.firstName + ' ' + client.lastName,
-                        'id': client.uuid
-                      }
-                    );
-                  }
-                }
-              );
-
-              // console.log('clients ->', clients);
-              // console.log('clientIds ->', clientIds);
-              // console.log('-------------------------------------------');
+              //clients = _.groupBy(clients, 'clientGroupUuid');
+              //data.clients = clients[null];
 
               data.clients = clients;
 
               connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
-
-              // console.log('********************************************');
-              // console.log('connections ->', connections);
-              // console.log('data ->', data);
-              // console.log('-------------------------------------------');
 
               $scope.connections = connections;
 
@@ -234,6 +261,13 @@ define(
 
                 return false;
               }
+            }
+
+            switch (hash)
+            {
+              case "clients":
+                console.log("clients is on ");
+                break;
             }
 
             $scope.$watch(
@@ -738,6 +772,8 @@ define(
               else
               {
                 $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+
+                console.error('changes', changes);
 
                 Clients.manage(changes)
                   .then(

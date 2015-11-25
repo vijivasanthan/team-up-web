@@ -336,7 +336,9 @@ define(
               client.phone = $rootScope.phoneNumberParsed.format;
             }
 
-            if ($scope.newClientForm.email.$error.pattern) {
+            var validationEmail = $scope.newClientForm.email;
+
+            if (validationEmail && validationEmail.$error && validationEmail.$error.pattern) {
               $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
 
               return;
@@ -875,20 +877,22 @@ define(
 
             if (! uuid && !$location.hash())
             {
-              uuid = CurrentSelection.getClientGroupId();
+              uuid = $scope.data.currentClientGroupId;
               $location.search({uuid: uuid}).hash(view);
             }
             else
             {
               if(_.isUndefined( getCurrentClientGroup(uuid) ))
               {
-                uuid = CurrentSelection.getClientGroupId();
+                uuid = $scope.data.currentClientGroupId;
                 $location.search({uuid: uuid});
               }
             }
 
             setView(view);
-            setCurrentClientGroup(uuid);
+            $scope.current = $scope.data.currentClientGroupId;
+            $scope.clients = data.clients[$scope.current];
+            $scope.clientGroup = _.findWhere(data.clientGroups, {id: $scope.current});
           }
 
           /**
@@ -897,7 +901,7 @@ define(
            */
           function getCurrentClientGroup(clientGroupId)
           {
-            return _.findWhere(data.clientGroups, {id: clientGroupId});
+            return  Clients.getSingle(clientGroupId);
           }
 
           /**
@@ -907,8 +911,13 @@ define(
           function setCurrentClientGroup(id)
           {
             $scope.current = id;
-            $scope.clientGroup = getCurrentClientGroup(id);
-            $scope.clients = data.clients[id];
+            getCurrentClientGroup(id)
+              .then(function(clients)
+              {
+                $scope.clientGroup = _.findWhere(data.clientGroups, {id: id});
+                data.clients[id] = clients;
+                $scope.clients = data.clients[id];
+              });
           }
 
           /**

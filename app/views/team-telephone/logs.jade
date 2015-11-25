@@ -10,10 +10,14 @@ section#logs
 				ng-selected='logs.current',
 				ng-change='logs.fetchLogs()')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
-			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger)
+			input.form-control(type='text', name='logs.daterange', ng-model='logs.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 		.form-group.has-feedback.pull-right.headerTop
-			input.form-control.search-query(type='text', placeholder='{{ ui.logs.filter }}', ng-model='logs.filtered')
+			input.form-control.search-query(
+			type='text', 
+			placeholder='{{ ui.logs.filter }}',
+			ng-change="logs.expandedLog = logs.data.logData.logs.length; logs.showAllGroups = (logs.filtered.length > 1); logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs); ",
+			ng-model='logs.filtered')
 			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
@@ -22,10 +26,18 @@ section#logs
 		.tab-content
 			#groupTab.tab-pane.active
 				p(ng-hide='logs.data.logData.logs.length > 0') {{ ui.logs.empty }}
+				//p aantal open {{ logs.expandedLog }} totaal log {{ logs.data.logData.logs.length }}
 				div(ng-show='logs.data.logData.logs.length > 0')
 					table.table.table-striped
 						thead
 							tr
+								th(style="cursor:pointer;") 
+									span(ng-init='logs.expandedLog = 0',
+										ng-if="logs.data.logData.hasGroupedLogs && !logs.showAllGroups",
+										ng-click="logs.showAllGroups = true; logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs);") ►
+									span(
+										ng-if="logs.data.logData.hasGroupedLogs && logs.showAllGroups",
+										ng-click="logs.showAllGroups = false; logs.toggleGroupedLogs(logs.showAllGroups, logs.data.logData.logs);") ▼
 								th
 									a(ng-click='logs.ordered = "status"; logs.reversed = !logs.reversed') {{ ui.teamup.state }}
 									span(ng-show='(logs.ordered=="status")')
@@ -37,7 +49,7 @@ section#logs
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
 								th
-									a(ng-click='logs.ordered = "to"; logs.reversed = !logs.reversed') {{ui.teamup.to }}
+									a(ng-click='logs.ordered = "to"; logs.reversed = !logs.reversed') {{ui.logs.to }}
 									span(ng-show='(logs.ordered=="to")')
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
@@ -52,7 +64,10 @@ section#logs
 										span(ng-hide='logs.reversed') ▲
 										span(ng-show='logs.reversed') ▼
 						tbody
-							tr(ng-repeat='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+							tr(ng-repeat-start='log in logs.data.logData.logs | filter : logs.filtered | orderBy:logs.ordered : logs.reversed')
+								td(style="cursor:pointer;")
+									span(ng-if='!log.expanding && log.childs.length > 1', ng-click="log.expanding = true; logs.expandedLog = logs.expandedLog + 1;" ) ►
+									span(ng-if='log.expanding && log.childs.length > 1', ng-click="log.expanding = false; logs.showAllGroups = false; logs.expandedLog = logs.expandedLog - 1;" ) ▼
 								td
 									span.label.label-inverse(class='log-{{log.status}}') {{log.status | translateStatusLogs}}
 									span(ng-show='log.records.length > 0')
@@ -75,6 +90,33 @@ section#logs
 									| {{log.started.date}}
 								td
 									| {{log.duration.presentation}}
+							tr(style='background:#E9E7E6;',
+								ng-if="log.expanding",
+								ng-repeat-end="", 
+								ng-repeat="call in log.childs")
+								td ∟
+								td
+									span.label.label-inverse(class='log-{{call.status}}') {{call.status | translateStatusLogs}}
+									span(ng-show='call.records.length > 0')
+										span(ng-repeat='record in call.records')
+											br
+											| ∟
+											span.label.label-inverse(class='log-{{record.status}}') {{record.status | translateStatusLogs}}
+								td
+									// <pre><small>{{log | json}}</small></pre>
+									| {{call.from}}
+									span(ng-show='call.records.length > 0', ng-repeat='record in call.records')
+										br
+										| {{record.from}}
+								td
+									| {{call.to}}
+									span(ng-show='log.records.length > 0', ng-repeat='record in log[0].records')
+										br
+										| {{record.to}}
+								td
+									| {{call.started.date}}
+								td
+									| {{call.duration.presentation}}
 				hr
 				small.pull-left(ng-show='logs.data.logData.logs.length > 0')
 					span.text-warning {{ui.planboard.lastSyncTime}}
@@ -87,4 +129,4 @@ section#logs
 					span.text-muted  {{logs.data.logData.periods.endTime | date: 'medium'}}
 				small.text-muted.pull-right(ng-show='logs.data.logData.logs.length > 0')
 					br
-					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter:filtered).length) }}
+					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter: logs.filtered).length) }}

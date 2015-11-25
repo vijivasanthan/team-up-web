@@ -25,8 +25,9 @@ define(
         '$injector',
         'moment',
         'tmhDynamicLocale',
+        '$resource',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, $resource)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -66,8 +67,9 @@ define(
            */
           $rootScope.checkLocation = function(location)
           {
-            return ($location.path() === '/video/' ||
-            $location.path() === '/password')
+            var routeExceptions = ['video', 'password'];
+            var route = (location.indexOf(routeExceptions[0]) > -1 || location.indexOf(routeExceptions[1]) > -1);
+            return (! route) ? Session.check() : route;
           };
 
           $rootScope.checkLocation($location.path());
@@ -887,9 +889,21 @@ define(
           {
             console.log('roomId', roomId);
 
-
-            var url = config.app.videoCallUrl + '/?room=' + roomId
-            url += '&username=' + $rootScope.app.resources.fullName;
+            //var joinRoom = $resource(config.app.videoCallUrl + '/join/' + roomId, {}, {
+            //  post: {
+            //    method: 'POST',
+            //    params: {}
+            //  }
+            //});
+            //
+            //joinRoom.post().$promise
+            //  .then(function(result)
+            //  {
+            //
+            //  });
+            //?room=' + roomId
+            var url = config.app.videoCallUrl + '/r/' + roomId;
+            //url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
 
             $rootScope.video = {
@@ -905,6 +919,7 @@ define(
               content.removeClass('ng-hide');
               clickChatBtn();
             }
+
           };
 
           $rootScope.closeVideoCall = function()

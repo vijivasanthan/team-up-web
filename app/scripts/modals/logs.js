@@ -42,33 +42,6 @@ define(['services/services', 'config'],
               return (/@/.test(number)) ? number.split('@')[0] : number;
             };
 
-            var howLong = function (period)
-            {
-              if (period && period != 0)
-              {
-                var duration = moment.duration(period);
-
-                var doubler = function (num)
-                {
-                  return (String(num).length == 1) ? '0' + String(num) : num;
-                };
-
-                return {
-                  presentation: ((duration.hours() == 0) ? '00' : doubler(duration.hours())) + ':' +
-                  ((duration.minutes() == 0) ? '00' : doubler(duration.minutes())) + ':' +
-                  doubler(duration.seconds()),
-                  stamp: period
-                }
-              }
-              else
-              {
-                return {
-                  presentation: '00:00:00',
-                  stamp: 0
-                }
-              }
-            };
-
             var trackingID = null;
 
             angular.forEach(
@@ -98,7 +71,10 @@ define(['services/services', 'config'],
                   started: {
                     date: $filter('date')(log.start, 'medium'),
                     stamp: log.start
-                  }
+                  },
+                  groupId: log.parentId || log._id,
+                  parent: (!log.parentId),
+                  childs: []
                 };
 
                 angular.forEach(
@@ -196,6 +172,99 @@ define(['services/services', 'config'],
             return uniques;
           };
 
+        /**
+           * Group parent-child calls
+           * @param logs A array with log objects
+           * @returns {*} logs A array with log objects,
+           * some of them could have some child objects
+           */
+          function groupByCall(logs)
+          {
+            var data = {
+              logs: null,
+              hasGroupedLogs: false
+            };
+
+            //group all calls by groupId
+            var groupCalls = _.groupBy(
+              angular.copy(logs),
+              'groupId'
+            );
+
+            data.hasGroupedLogs = logs.length;
+
+            //filter out all the parentcalls
+            logs = _.filter(logs, function (log) {
+              return (log.parent);
+            });
+            data.hasGroupedLogs = (data.hasGroupedLogs != logs.length);
+
+            _.each(logs, function (log)
+            {
+              // check grouped calls by groupId
+              // They need a length over 1,
+              // because the first one is the parent
+              if(groupCalls[log.groupId].length > 1)
+              {
+                //save the childscalls in the parentobject
+                log.childs = groupCalls[log.groupId];
+                //filter the childs by time ascending
+                log.childs = $filter('orderBy')(log.childs, 'started.stamp');
+                //total index length of the childcalls
+                var logIndexLength = log.childs.length - 1;
+                //The final status of the callsequence
+                log.status = log.childs[logIndexLength].status;
+                //The final number of the callsequence
+                log.to = log.childs[logIndexLength].to;
+                //get all the duration timestamps of the child calls
+                var totalDuration = _.map(log.childs, function (child) {
+                  return child.duration.stamp;
+                });
+                //count the total duration of the childcalls
+                totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
+                  return previousValue + currentValue;
+                });
+                //set the parsed to timestring duration
+                log.duration = howLong(totalDuration);
+              }
+            });
+
+            data.logs = logs;
+            return data;
+          }
+
+          function howLong(period)
+          {
+            if (period && period != 0)
+            {
+              var duration = moment.duration(period);
+
+              var doubler = function (num)
+              {
+                return (String(num).length == 1) ? '0' + String(num) : num;
+              };
+
+              return {
+                presentation: ((duration.hours() == 0) ? '00' : doubler(duration.hours())) + ':' +
+                ((duration.minutes() == 0) ? '00' : doubler(duration.minutes())) + ':' +
+                doubler(duration.seconds()),
+                stamp: period
+              }
+            }
+            else
+            {
+              return {
+                presentation: '00:00:00',
+                stamp: 0
+              }
+            }
+          }
+
+          function getNamesAndPhoneNumbers()
+          {
+
+          }
+
           Logs.prototype.fetch = function (options)
           {
             var deferred = $q.defer(),
@@ -207,13 +276,33 @@ define(['services/services', 'config'],
                     : null
                 };
             var resource = Logs.prototype.get();
+            var teamMembersNames = null;
+
+            if(options.adapterId && options.members)
+            {
+              options.members.push(options.currentTeam);
+              var teamMembersNames = _.indexBy(options.members, 'phone');
+            }
+
             resource.get(
               _options,
               function (result)
               {
+                result = normalize(result);
+                if(options.adapterId)
+                {
+                  _.each(result, function (log)
+                  {
+                    if(teamMembersNames[log.from]) log.from = teamMembersNames[log.from]['fullName'];
+                    if(teamMembersNames[log.to]) log.to = teamMembersNames[log.to]['fullName'];
+                  })
+                }
+                var logData = groupByCall(result);
+
                 var returned = {
-                  logs: normalize(result),
+                  logs: logData.logs,
                   synced: moment.valueOf(),
+                  hasGroupedLogs: logData.hasGroupedLogs,
                   periods: {
                     startTime: _options.startTime,
                     endTime:  _options.endTime

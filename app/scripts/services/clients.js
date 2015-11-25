@@ -348,21 +348,14 @@ define(
           ClientsService.prototype.getSingle = function(clientGroupId)
           {
             return TeamUp._('clientsByGroupIDQuery',
-              { third: clientGroupId },
-              null,
-              {
-                success: function (clients)
-                {
-                  Store('app').save(
-                    clientGroupId,
-                    (clients.length == 4 &&
-                    clients[0][0] == 'n' &&
-                    clients[1][0] == 'u') ?
-                      [] :
-                      clients
-                  );
-                }
-              });
+              {third: clientGroupId},
+              null
+            )
+            .then(function(clients)
+            {
+              Store('app').save(clientGroupId, clients);
+              return clients;
+            });
           };
 
           /**
@@ -406,6 +399,7 @@ define(
           {
             return TeamUp._('clientGroupsQuery', null, null)
               .then(function (clientGroups) {
+                console.error('clientGroups', clientGroups);
                 Store('app').save('ClientGroups', clientGroups);
                 return clientGroups;
               });
