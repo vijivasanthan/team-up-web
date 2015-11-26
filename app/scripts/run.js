@@ -884,20 +884,6 @@ define(
           $rootScope.startVideoCall = function(roomId)
           {
             console.log('roomId', roomId);
-
-            //var joinRoom = $resource(config.app.videoCallUrl + '/join/' + roomId, {}, {
-            //  post: {
-            //    method: 'POST',
-            //    params: {}
-            //  }
-            //});
-            //
-            //joinRoom.post().$promise
-            //  .then(function(result)
-            //  {
-            //
-            //  });
-            //?room=' + roomId
             var url = config.app.videoCallUrl + '/r/' + roomId;
             //url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
