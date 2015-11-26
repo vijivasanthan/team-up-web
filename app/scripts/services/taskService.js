@@ -24,6 +24,14 @@ define(['services/services', 'config'],
               {second: currentTeamId}
             );
           }
+
+          this.taskData = function(taskId)
+          {
+            return TeamUp._(
+              'taskById',
+              {second: taskId}
+            );
+          }
         }).call(taskService.prototype);
 
         return new taskService();

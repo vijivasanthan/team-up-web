@@ -26,6 +26,7 @@ define(
         self.clientGroups = data.clientGroups;
         self.teamClientgroupLinks = data.teamClientgroupLinks;
         self.currentGroupClients = data.currentGroupClients;
+        self.task = data.task;
 
         //methods
         self.setTeam = setTeam;
@@ -35,14 +36,15 @@ define(
         self.setDates = setDates;
         self.save = save;
         self.init = init;
-
         //initialisation
         self.init(data.currentTeamId);
+
+        console.log(self.task);
+
 
         function setTeam(teamId){
           Team.read(teamId)
         }
-
 
         /**
          * get team and client related data after input
@@ -201,6 +203,34 @@ define(
           $location.path(location);
         }
 
+        /**
+         * Mody a task and prepare the form with the right values
+         * @param task
+         */
+        function modifyTask(task)
+        {
+          self.form.uuid = task.uuid;
+          self.form.team = task.assignedTeamUuid;
+          self.form.member = task.assignedTeamMemberUuid;
+          self.form.currentClient = task.relatedClientUuid;
+          self.form.startDate = {
+              date: new Date(task.plannedStartVisitTime),
+              time: task.plannedStartVisitTime,
+              datetime: convertDateTimeToLocal(
+                moment(task.plannedStartVisitTime)
+              )
+          };
+          self.form.endDate = {
+              date: new Date(task.plannedEndVisitTime),
+              time: task.plannedEndVisitTime,
+              datetime: convertDateTimeToLocal(
+                moment(task.plannedEndVisitTime)
+              )
+          };
+          self.form.description = task.description;
+          console.log(self.form);
+        }
+
         //initialise the team and dates
         function init(teamId) {
           Team.init(teamId);
@@ -211,6 +241,9 @@ define(
             self.form.currentGroup = data.teamClientgroupLinks[0].id;
           }
           setDates();
+          modifyTask(self.task);
+          console.log(self.form.start);
+
         }
       });
   });

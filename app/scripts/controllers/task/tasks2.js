@@ -130,6 +130,7 @@ define(
            */
           $scope.modifyTask = function (task)
           {
+            console.log('task', task);
             $scope.changeTeam(task.assignedTeamUuid);
 
             $scope.task = {
