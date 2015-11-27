@@ -196,7 +196,6 @@ define(
                     .then(function (currentGroupClients)
                     {
                       data.currentGroupClients = currentGroupClients;
-                      console.log(data);
                       deferred.resolve(data);
                     });
 

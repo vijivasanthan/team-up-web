@@ -87,11 +87,9 @@ define(
         }
 
         function convertDateTimeToLocal(d) {
-          console.log(d);
           var d1 = new Date(d);
 
           d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-          console.log(d1);
           return d1.toISOString().replace("Z", "");
         }
 
@@ -102,7 +100,6 @@ define(
           var setDefaultDate = function (date) {
             return moment(date).format('DD-MM-YYYY');
           };
-
 
           self.form.startDate = {
               date: setDefaultDate(new Date()),
@@ -123,19 +120,19 @@ define(
 
         //update the date
         function newDate(newDate) {
-          if (mobile) {
-            self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
-
-          }
-          else {
-            self.form.endDate.datetime = newDate;
-          }
+          self.form.endDate.datetime = newDate;
+         // if (mobile) {
+         //   console.log("mobile");
+         //   self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
+         //
+         // }
+         //else {
+         //   self.form.endDate.datetime = newDate;
+         //}
         }
 
         //validate the task properties, and store them in a object
         function save(form) {
-          console.log(form.startDate);
-          console.log("test");
           form.startTime = ($rootScope.browser.mobile) ?
             moment(form.startDate.datetime).utc().valueOf() :
             Dater.convert.absolute(formatDateTime(form.startDate.date, 'dd-MM-yyyy'), formatDateTime(form.startDate.time, 'HH:mm'), false);
@@ -221,7 +218,6 @@ define(
 
         //creates a new task
         function createTask(task) {
-          console.log(task);
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
           TeamUp._('taskAdd', null, task)
             .then(function (result) {
