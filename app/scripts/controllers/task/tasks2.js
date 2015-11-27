@@ -292,6 +292,7 @@ define(
               {
                 $scope.task.end.date = newDate;
               }
+            console.log($scope.task.end);
 
           };
 

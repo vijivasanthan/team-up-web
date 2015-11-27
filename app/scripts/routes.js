@@ -209,9 +209,8 @@ define(
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
-                data: function ($route, Teams, Clients, TaskService, Task, TeamUp, CurrentSelection, $q) {
+                data: function ($route, $rootScope, Teams, Clients, TaskService, Task, TeamUp, CurrentSelection, $location, $q) {
                   var selectedTask = $route.current.params.taskId;
-                  //var taskInfo = TaskService.taskData(selectedTask);
 
                   var deferred = $q.defer(),
                   teamId = CurrentSelection.getTeamId(),
@@ -222,11 +221,15 @@ define(
                       teamClientgroupLinks: null,
                       clientGroups: null,
                       currentGroupClients: null,
-                      task: null,
+                      task: null
                     };
+
                   TaskService.taskData(selectedTask)
                     .then(function(task){
                       data.task = task;
+                      if(!data.task.uuid){
+                        $location.path('/task/new');
+                      }
                     });
                   Teams.getAllLocal()
                     .then(function (teams) {
@@ -261,7 +264,9 @@ define(
               }
             })
 
-
+            .when('/task', {
+              redirectTo: '/task/new'
+            })
 
             .when('/admin', {
               templateUrl: 'views/admin.html',

@@ -39,13 +39,9 @@ define(
         //initialisation
         self.init(data.currentTeamId);
 
-        console.log(self.task);
-
-
         function setTeam(teamId){
           Team.read(teamId)
         }
-
         /**
          * get team and client related data after input
          * @param teamId
@@ -87,15 +83,15 @@ define(
           var start = moment(newDate),
             roundMinutes = (start.minute() % 15),
             newEndDateTime = moment(start).subtract(roundMinutes, "minutes").add(minutes, "minutes");
-
           return convertDateTimeToLocal(newEndDateTime);
         }
 
         function convertDateTimeToLocal(d) {
+          console.log(d);
           var d1 = new Date(d);
 
           d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
+          console.log(d1);
           return d1.toISOString().replace("Z", "");
         }
 
@@ -126,18 +122,20 @@ define(
         }
 
         //update the date
-        function newDate(newDate, mobile) {
+        function newDate(newDate) {
           if (mobile) {
             self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
+
           }
           else {
-            self.form.endDate.date = newDate;
+            self.form.endDate.datetime = newDate;
           }
-
         }
 
         //validate the task properties, and store them in a object
         function save(form) {
+          console.log(form.startDate);
+          console.log("test");
           form.startTime = ($rootScope.browser.mobile) ?
             moment(form.startDate.datetime).utc().valueOf() :
             Dater.convert.absolute(formatDateTime(form.startDate.date, 'dd-MM-yyyy'), formatDateTime(form.startDate.time, 'HH:mm'), false);
@@ -151,7 +149,8 @@ define(
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
             return;
           }
-          //TODO
+
+
           if ($rootScope.app.domainPermission.clients) {
             if (!form.currentGroup) {
               $rootScope.notifier.error($rootScope.ui.teamup.selectClientGroup);
@@ -162,19 +161,20 @@ define(
               return;
             }
           }
-
           var now = new Date().getTime();
-          if (form.startDate.time <= now || form.endDate.time <= now) {
+          if (form.startTime <= now || form.endTime <= now) {
             $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
             return false;
           }
 
-          if (form.startDate.time >= form.endDate.time) {
+          if (form.startTime >= form.endTime) {
             $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
             return false;
           }
 
+
           var taskValues = {
+            uuid: (form.uuid) ? form.uuid : '',
             status: 2,
             plannedStartVisitTime: form.startTime,
             plannedEndVisitTime: form.endTime,
@@ -183,10 +183,45 @@ define(
             description: form.description,
             assignedTeamMemberUuid: form.member
           };
-          createTask(taskValues);
+          if (! _.isEmpty(form.uuid))
+          {
+            editTask(taskValues);
+          }
+          else
+          {
+            createTask(taskValues);
+          }
         }
 
+        /**
+         * Fill the form with values of an existing task
+         * @param task uuid
+         */
+        function modifyExistingTask(task)
+        {
+
+          self.form = {
+            uuid: task.uuid,
+            team: task.assignedTeamUuid,
+            member: task.assignedTeamMemberUuid,
+            currentClient: task.relatedClientUuid,
+            startDate: {
+              date: new Date(task.plannedStartVisitTime),
+              time: task.plannedStartVisitTime,
+              datetime: task.plannedStartVisitTime
+            },
+            endDate: {
+              date: new Date(task.plannedEndVisitTime),
+              time: task.plannedEndVisitTime,
+              datetime: task.plannedEndVisitTime
+            },
+            description: task.description
+          };
+        }
+
+        //creates a new task
         function createTask(task) {
+          console.log(task);
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
           TeamUp._('taskAdd', null, task)
             .then(function (result) {
@@ -196,54 +231,49 @@ define(
             });
         }
 
+        //performs the edit to a existing task
+        function editTask(task)
+        {
+          $rootScope.statusBar.display($rootScope.ui.task.editingTask);
+
+          Task.update(task)
+            .then(function (result) {
+              if(! result.error) {
+                redirect(task.assignedTeamMemberUuid);
+              }
+            });
+        }
+
+        //Redirect to my tasks or all tasks pages after creating task
         function redirect(assignedTeamMember){
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
             ? '/tasks2#myTasks'
-            : '/tasks2#allTasks'
+            : '/tasks2#allTasks';
           $location.path(location);
-        }
+          $rootScope.notifier.success($rootScope.ui.task.taskSaved);
 
-        /**
-         * Mody a task and prepare the form with the right values
-         * @param task
-         */
-        function modifyTask(task)
-        {
-          self.form.uuid = task.uuid;
-          self.form.team = task.assignedTeamUuid;
-          self.form.member = task.assignedTeamMemberUuid;
-          self.form.currentClient = task.relatedClientUuid;
-          self.form.startDate = {
-              date: new Date(task.plannedStartVisitTime),
-              time: task.plannedStartVisitTime,
-              datetime: convertDateTimeToLocal(
-                moment(task.plannedStartVisitTime)
-              )
-          };
-          self.form.endDate = {
-              date: new Date(task.plannedEndVisitTime),
-              time: task.plannedEndVisitTime,
-              datetime: convertDateTimeToLocal(
-                moment(task.plannedEndVisitTime)
-              )
-          };
-          self.form.description = task.description;
-          console.log(self.form);
         }
 
         //initialise the team and dates
         function init(teamId) {
           Team.init(teamId);
           self.teams = Team.list;
-          self.form = {};
-          self.form.team = data.currentTeamId;
+
+          //check if there is a task present that has to be modified
+          if(data.task)
+          {
+            modifyExistingTask(self.task);
+          }
+          else
+          {
+            self.form = {};
+            self.form.team = data.currentTeamId;
+            setDates();
+          }
+
           if(data.teamClientgroupLinks && data.teamClientgroupLinks.length) {
             self.form.currentGroup = data.teamClientgroupLinks[0].id;
           }
-          setDates();
-          modifyTask(self.task);
-          console.log(self.form.start);
-
         }
       });
   });

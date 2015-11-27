@@ -7,9 +7,10 @@
 	.tab-content
 		#newTask.tab-pane(class="active")
 		.tab-header
-			h3.pull-left(ng-hide='task.uuid') {{ui.task.newTask}} {{task.number}}
-			h3.pull-Left(ng-show='task.uuid') {{ui.teamup.updateTask}}
+			h3.pull-left(ng-hide='task.form.uuid') {{ui.task.newTask}} {{task.number}}
+			h3.pull-Left(ng-show='task.form.uuid') {{ui.teamup.updateTask}}
 		hr
+
 		form(name='taskForm', novalidate, ng-submit='task.save(task.form)')
 			.row
 				.span6
@@ -31,12 +32,14 @@
 						.form-group(ng-if='app.domainPermission.clients')
 							label.control-label {{ ui.teamup.client }}
 							.controls
-								select(ng-model='task.form.currentGroup',
+								select(
+								ng-model='task.form.currentGroup',
 								ng-options='g.id as g.name for g in task.teamClientgroupLinks | orderBy:"name"',
 								ng-selected='task.form.currentGroup',
 								ng-change='task.changeClientGroup(currentGroup)')
 									option(value='') {{ ui.teamup.selectClientGroup }}
-								select(ng-model='task.form.currentClient',
+								select(
+								ng-model='task.form.currentClient',
 								ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in task.currentGroupClients | orderBy:"lastName" ',
 								ng-selected='task.form.currentClient',
 								ng-change='task.changeClient(task.currentClient)')
@@ -71,7 +74,7 @@
 								name='date-start',
 								type='datetime-local',
 								ng-model='task.form.startDate.datetime',
-								ng-change='task.newDate(startDate.datetime, true)')
+								ng-change='task.newDate(task.form.startDate.datetime, true)')
 						.form-group.dater-mobile(ng-show='browser.mobile')
 							label.control-label {{ui.planboard.till}} 
 							.controls
