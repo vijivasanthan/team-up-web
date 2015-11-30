@@ -30,20 +30,17 @@ define(
               start: {
                 date: rounded.toString(config.app.formats.date),
                 time: rounded.toString(config.app.formats.time),
-                datetime: rounded.toISOString()
+                datetime: convertDateTimeToLocal(rounded)
               },
               end: {
                 date: rounded.toString(config.app.formats.date),
                 time: rounded.addHours(1).toString(config.app.formats.time),
-                datetime: rounded.toISOString()
+                datetime: convertDateTimeToLocal(rounded)
               },
               state: 'com.ask-cs.State.Available',
               recursive: false,
               id: ''
             };
-
-            console.log($scope.slot);
-
           }
         );
 
@@ -728,14 +725,14 @@ define(
                 }
               }
 
-              var getDateTimeToPicker = function (d)
-              {
-                var d1 = new Date(d);
-                // var offset = d.getTimezoneOffset() / 60;
-                d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
-                return d1.toISOString().replace("Z", "");
-              };
+              //var getDateTimeToPicker = function (d)
+              //{
+              //  var d1 = new Date(d);
+              //  // var offset = d.getTimezoneOffset() / 60;
+              //  d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+              //  //d1.toISOString().replace("Z", "")
+              //  return d1;
+              //};
 
               $scope.slot = {
                 start: {
@@ -744,7 +741,7 @@ define(
                   // datetime: new Date(values.start).toISOString().replace("Z", "")
 
                   // datetime: new Date(values.start).toUTCString()
-                  datetime: getDateTimeToPicker(values.start)
+                  datetime: convertDateTimeToLocal(values.start)
                 },
                 end: {
                   date: new Date(values.end).toString(config.app.formats.date),
@@ -752,7 +749,7 @@ define(
                   // datetime: new Date(values.end).toISOString().replace("Z", "")
 
                   // datetime: new Date(values.end).toUTCString()
-                  datetime: getDateTimeToPicker(values.end)
+                  datetime: convertDateTimeToLocal(values.end)
                 },
                 state: content.state,
                 recursive: content.recursive,
@@ -1105,6 +1102,8 @@ define(
                     state: 'com.ask-cs.State.Available'
                   };
 
+                  console.error('$scope.slot.date', $scope.slot.start);
+
                   $scope.setEndDate($scope.slot.start.date);
                   $scope.setEndTime($scope.slot.start.time);
                   $scope.showDuration();
@@ -1145,11 +1144,11 @@ define(
             }
 
             var start = ($rootScope.browser.mobile) ?
-              Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.start.datetime)).getTime() / 1000)) :
+              Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
               Dater.convert.absolute(slot.start.date, slot.start.time, true);
 
             var end = ($rootScope.browser.mobile) ?
-              Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.end.datetime)).getTime() / 1000)) :
+              Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
               Dater.convert.absolute(slot.end.date, slot.end.time, true);
 
             if (start < nowStamp && end < nowStamp && slot.recursive == false)
@@ -1224,14 +1223,13 @@ define(
           return (dates.end > dates.start);
         }
 
-        var convertDateTimeToLocal = function (d)
+        function convertDateTimeToLocal(d)
         {
-          var d1 = new Date(d);
-
-          d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
-          return d1.toISOString().replace("Z", "");
-        };
+          //var d1 = new Date(d);
+          //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+          ////return d1.toISOString().replace("Z", "");
+          return moment(d).toDate();
+        }
 
         /**
          * Timeline on changing
@@ -1333,10 +1331,10 @@ define(
           {
             changed = {
               start: ($rootScope.browser.mobile) ?
-                new Date(getDateTimeFromPicker(slot.start.datetime)).getTime() :
+                new Date(slot.start.datetime).getTime() :
                 Dater.convert.absolute(slot.start.date, slot.start.time, false),
               end: ($rootScope.browser.mobile) ?
-                new Date(getDateTimeFromPicker(slot.end.datetime)).getTime() :
+                new Date(slot.end.datetime).getTime() :
                 Dater.convert.absolute(slot.end.date, slot.end.time, false),
               content: {
                 recursive: slot.recursive,
