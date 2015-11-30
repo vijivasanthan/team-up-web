@@ -157,17 +157,6 @@ define(
                   );
 
                   connections.clients[group.id] = cIds;
-
-                  //TODO clientsGrouped
-                  //if(clientsGrouped[group.id] && clientsGrouped[group.id].length)
-                  //{
-                  //  _.each(clientsGrouped[group.id], function (groupedClient)
-                  //  {
-                  //    connections.clients[group.id].push(groupedClient.id);
-                  //  })
-                  //}
-
-
                   groupIds.push(group.id);
                 }
               );
@@ -197,10 +186,6 @@ define(
               //      $timeout(function () { $route.reload() }, 250);
               //    }
               //  );
-
-              //clients = _.groupBy(clients, 'clientGroupUuid');
-              //data.clients = clients[null];
-
               data.clients = clients;
 
               connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
