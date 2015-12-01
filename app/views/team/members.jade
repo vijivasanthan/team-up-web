@@ -73,11 +73,11 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 					
 					.tab-header(ng-show='team.updateForm')
 						input.pull-left(type='text',
-						ng-model='team.editForm.name')
+							ng-model='team.editForm.name')
 						button.btn.pull-right.btn-info.marginLeftTen(type='reset',
-						ng-click='team.updateForm = false') {{ui.teamup.cancel}}
+							ng-click='team.updateForm = false') {{ui.teamup.cancel}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
-						ng-click='team.update(team.current.teamId, team.editForm)') {{ui.teamup.save}}
+							ng-click='team.update(team.current.teamId, team.editForm)') {{ui.teamup.save}}
 				hr
 				
 				p(ng-hide='member.list.length > 0') {{ui.teamup.noMembers}}
