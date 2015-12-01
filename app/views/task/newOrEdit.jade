@@ -45,7 +45,7 @@
 								ng-change='task.changeClient(task.currentClient)')
 									option(value='') {{ ui.teamup.selectClient }}
 					fieldset
-						.form-group.dater(ng-hide='browser.mobile')
+						.form-group.dater(ng-if='!browser.mobile')
 							label.control-label {{ui.planboard.from}}
 							.controls
 								input(name='date-start',
@@ -67,7 +67,7 @@
 								data-minute-step="15",
 								data-arrow-behavior="picker")
 								i.icon-time
-						.form-group.dater-mobile(ng-show='browser.mobile')
+						.form-group.dater-mobile(ng-if='browser.mobile')
 							label.control-label {{ui.planboard.from}}
 							.controls
 								input.form-control.input-sm(
@@ -75,13 +75,13 @@
 								type='datetime-local',
 								ng-model='task.form.startDate.datetime',
 								ng-change='task.newDate(task.form.startDate.datetime, true)')
-						.form-group.dater-mobile(ng-show='browser.mobile')
+						.form-group.dater-mobile(ng-if='browser.mobile')
 							label.control-label {{ui.planboard.till}} 
 							.controls
 								input.form-control.input-sm(name='date-end',
 								type='datetime-local',
 								ng-model='task.form.endDate.datetime')
-						.form-group.dater(ng-hide='browser.mobile')
+						.form-group.dater(ng-if='!browser.mobile')
 							label.control-label {{ui.planboard.till}}
 							.controls
 								input(name='date-end',

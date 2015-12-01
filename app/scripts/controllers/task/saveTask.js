@@ -119,16 +119,17 @@ define(
         }
 
         //update the date
-        function newDate(newDate) {
-          self.form.endDate.datetime = newDate;
-         // if (mobile) {
-         //   console.log("mobile");
-         //   self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
-         //
-         // }
-         //else {
-         //   self.form.endDate.datetime = newDate;
-         //}
+        function newDate(newDate, mobile) {
+          (mobile)
+            ? self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"))
+            : self.form.endDate.datetime = newDate;
+          //if (mobile) {
+          //  self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
+          //
+          //}
+          //else {
+            //self.form.endDate.datetime = newDate;
+          //}
         }
 
         //validate the task properties, and store them in a object
