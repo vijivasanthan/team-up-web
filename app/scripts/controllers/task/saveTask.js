@@ -123,13 +123,6 @@ define(
           (mobile)
             ? self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"))
             : self.form.endDate.datetime = newDate;
-          //if (mobile) {
-          //  self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"));
-          //
-          //}
-          //else {
-            //self.form.endDate.datetime = newDate;
-          //}
         }
 
         //validate the task properties, and store them in a object
@@ -206,15 +199,20 @@ define(
             startDate: {
               date: new Date(task.plannedStartVisitTime),
               time: task.plannedStartVisitTime,
-              datetime: task.plannedStartVisitTime
+              datetime: convertDateTimeToLocal(
+                moment(task.plannedStartVisitTime)
+              )
             },
             endDate: {
               date: new Date(task.plannedEndVisitTime),
               time: task.plannedEndVisitTime,
-              datetime: task.plannedEndVisitTime
+              datetime: convertDateTimeToLocal(
+                moment(task.plannedEndVisitTime)
+              )
             },
             description: task.description
           };
+          console.log(self.form.startDate.datetime);
         }
 
         //creates a new task
