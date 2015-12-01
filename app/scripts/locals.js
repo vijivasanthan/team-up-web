@@ -3060,7 +3060,7 @@ define(
             '30': 'Een item in de TeamTelephone configuratie kon niet beschreven worden',
             '31': 'TeamTelefoon is al geactiveerd voor dit team',
             '32': 'Agent niet gevonden',
-            '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
+            '33': 'Geen templates gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
             '36': 'Een niet verwachte parameter "type"',
             '39': 'De sleutel om het wachtwoord te resetten is verlopen'

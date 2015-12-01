@@ -217,6 +217,10 @@ define(
                 $location.path('/team-telefoon/options').search({}).hash('');
                 break;
 
+              case 'team-telefoon/scenario':
+                $location.path('/team-telefoon/scenario').search({}).hash('');
+                break;
+
               case 'vis':
                 $location.path('/vis').search({local: 'true'}).hash('teams');
                 break;

@@ -14,6 +14,10 @@ li(data-match-route='/team-telefoon/logs')
 	a(href='planboard#timelineTab', data-toggle='tab', ng-click='nav("team-telefoon/logs")')
 		span.entypo &#59392;
 		| {{ ui.teamup.logs }}
+li(data-match-route='/team-telefoon/scenario', show-hide-on-role)
+	a(href='planboard#timelineTab',  data-toggle='tab', ng-click='nav("team-telefoon/scenario")')
+		span.icomoon(data-icon='', aria-hidden='true')
+		|  Scenario
 li(data-match-route='/team-telefoon/options')
 	a(href='planboard#timelineTab',  data-toggle='tab', ng-click='nav("team-telefoon/options")')
 		span.entypo &#9881;
