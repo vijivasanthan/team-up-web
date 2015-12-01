@@ -2,18 +2,18 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 	form.form-inline.form-toggled.well
 		button.close(ng-click='refreshCurrentTimeline()') ×
 		h4(ng-show='views.slot.add') {{ui.agenda.newAvail}} 
-			span.duration.label.label-info {{ duration}}
+			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}}
 		h4(ng-show='views.slot.edit') {{ui.agenda.updateAvail}} 
-			span.duration.label.label-info {{ duration}} 
-		h4(ng-show='views.group') {{slot.group|stripHtml}} 
-			span.duration.label.label-info {{ duration}} 
-		h4(ng-show='views.wish') {{slot.group|stripHtml}} ({{ ui.agenda.wished }}) 
-			span.duration.label.label-info {{ duration}}
+			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}} 
+		h4(ng-show='views.group') {{slot.group|stripHtml }} 
+			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}} 
+		h4(ng-show='views.wish') {{slot.group|stripHtml}} ({{ ui.agenda.wished}}) 
+			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}}
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}} 
-			span.duration.label.label-info {{ duration}}
+			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}}
 		hr
 		.form-elements-group(ng-show='browser.mobile')
-			label {{ui.agenda.from}}
+			label {{ui.agenda.from}} 
 			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.start.datetime')
 			.form-group.dater-mobile(ng-show='views.group || views.member')
