@@ -130,7 +130,7 @@ define(['services/services', 'config'],
             var self = this,
               deferred = $q.defer(),
               message, error = false;
-            console.error('team', team.name.length);
+
             if (!team.name)
             {
               message = $rootScope.ui.teamup.teamNamePrompt1;
