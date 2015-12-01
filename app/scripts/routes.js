@@ -353,8 +353,8 @@ define(
                 reloadOnSearch: false,
                 resolve: {
                   data: [
-                    'Teams', 'TeamUp', 'CurrentSelection', '$q', '$location',
-                    function (Teams, TeamUp, CurrentSelection, $q, $location)
+                    'Teams', 'TeamUp', 'CurrentSelection', '$rootScope', '$q', '$location',
+                    function (Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
                     {
                       removeActiveClass('.teamMenu');
 
@@ -369,7 +369,7 @@ define(
                         .then(function (options)
                         {
                           //Check if team telephone is activated (has adapterId)
-                          (!options.adapterId)
+                          (!options.adapterId || $rootScope.app.resources.role > 1)
                             ? $location.path('team-telefoon/options')
                             : $q.all(promises)
                                 .then(function(result)
