@@ -80,7 +80,7 @@ aria-hidden='true')
 			span.selectTitle
 				| {{ ui.teamup.selectClientGroup }}
 			select(ng-model='current',
-			ng-options='c.id as c.name for c in clientGroups',
+			ng-options='c.id as c.name for c in clientGroups | orderBy:"name"',
 			ng-selected='current',
 			ng-change='requestClientGroup(current)')
 			
