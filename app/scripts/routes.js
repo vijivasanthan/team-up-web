@@ -257,7 +257,7 @@ define(
             })
 
             .when('/task/:taskId/edit', {
-              templateUrl: 'views/task/newOrEdit.html',
+              templateUrl: 'views/task/saveTask.html',
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
