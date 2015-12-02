@@ -215,6 +215,11 @@ define(
             };
             self.activateTTForm = false;
             tabs.removeClass('ng-hide');
+            //TODO fix this in a directive
+            (! $rootScope.app.domainPermission.teamSelfManagement
+              || $rootScope.app.resources.role > 1)
+              ? angular.element('.scenarioTab').addClass('ng-hide')
+              : angular.element('.scenarioTab').removeClass('ng-hide');
           }
         }
       }
