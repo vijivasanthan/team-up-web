@@ -355,3 +355,7 @@ input[type="submit"].btn {
   height: 40px;
   @include border-radius('5px')
 }
+
+.button-anchor {
+  text-decoration: none !important;
+}

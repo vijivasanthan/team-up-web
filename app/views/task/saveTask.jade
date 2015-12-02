@@ -1,0 +1,118 @@
+.page-header
+	h2.nullable
+		| {{ui.task.tasks}}
+.tabbable.tabs-left
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+		include ../task/tabs
+	.tab-content
+		#newTask.tab-pane(class="active")
+		.tab-header
+			h3.pull-left(ng-hide='task.form.uuid') {{ui.task.newTask}} {{task.number}}
+			h3.pull-Left(ng-show='task.form.uuid') {{ui.teamup.updateTask}}
+		hr
+		form(name='taskForm', novalidate, ng-submit='task.save(task.form)')
+			.row
+				.span6
+					fieldset
+						.form-group
+							label.control-label(ng-if='app.domainPermission.clients != true') {{ ui.task.employee }}
+							label.control-label(ng-if='app.domainPermission.clients') {{ ui.task.carer }}
+							.controls
+								select(
+								ng-model='task.form.team',
+								ng-options='t.uuid as t.name for t in task.teams | orderBy:"name" ',
+								ng-selected='task.form.team',
+								ng-change='task.changeTeam(task.form.team)')
+									option(value='') {{ ui.teamup.selectTeam }}
+								select(ng-model='task.form.member',
+								ng-options='m.uuid as (m.firstName + " " + m.lastName) for m in task.currentTeamMembers | orderBy:"lastName" ',
+								ng-selected='task.form.member')
+									option(value='') {{ ui.teamup.selectMember }}
+						.form-group(ng-if='app.domainPermission.clients')
+							label.control-label {{ ui.teamup.client }}
+							.controls
+								select(
+								ng-model='task.form.currentGroup',
+								ng-options='g.id as g.name for g in task.teamClientgroupLinks | orderBy:"name"',
+								ng-selected='task.form.currentGroup',
+								ng-change='task.changeClientGroup(currentGroup)')
+									option(value='') {{ ui.teamup.selectClientGroup }}
+								select(
+								ng-model='task.form.currentClient',
+								ng-options='c.uuid as (c.firstName + " " + c.lastName) for c in task.currentGroupClients | orderBy:"lastName" ',
+								ng-selected='task.form.currentClient',
+								ng-change='task.changeClient(task.currentClient)')
+									option(value='') {{ ui.teamup.selectClient }}
+					fieldset
+						.form-group.dater(ng-if='!browser.mobile')
+							label.control-label {{ui.planboard.from}}
+							.controls
+								input(name='date-start',
+								type='text',
+								ng-model='task.form.startDate.date',
+								data-date-type='string',
+								data-date-format='d-M-yyyy',
+								bs-datepicker='',
+								ng-change='task.newDate(task.form.startDate.date)')
+								i.icon-calendar
+								input(name='time-start',
+								type='text',
+								ng-model='task.form.startDate.time',
+								ng-change='task.newTime(task.form.startDate.time);',
+								bs-timepicker='',
+								data-date-type='string',
+								data-time-format="H:mm",
+								data-length="1",
+								data-minute-step="15",
+								data-arrow-behavior="picker")
+								i.icon-time
+						.form-group.dater-mobile(ng-if='browser.mobile')
+							label.control-label {{ui.planboard.from}}
+							.controls
+								input.form-control.input-sm(
+								name='date-start',
+								type='datetime-local',
+								ng-model='task.form.startDate.datetime',
+								ng-change='task.newDate(task.form.startDate.datetime, true)')
+						.form-group.dater-mobile(ng-if='browser.mobile')
+							label.control-label {{ui.planboard.till}} 
+							.controls
+								input.form-control.input-sm(name='date-end',
+								type='datetime-local',
+								ng-model='task.form.endDate.datetime')
+						.form-group.dater(ng-if='!browser.mobile')
+							label.control-label {{ui.planboard.till}}
+							.controls
+								input(name='date-end',
+								type='text',
+								ng-model='task.form.endDate.date',
+								data-date-type='string',
+								data-date-format='d-M-yyyy',
+								bs-datepicker='')
+								i.icon-calendar
+								input(name='time-end',
+								type='text',
+								ng-model='task.form.endDate.time',
+								bs-timepicker='',
+								data-date-type='string',
+								data-time-format="H:mm",
+								data-length="1",
+								data-minute-step="15",
+								data-arrow-behavior="picker")
+								i.icon-time
+						.form-group
+							label.control-label {{ui.task.description}}
+							.controls
+								textarea.span8.form-control(
+								style='height: 150px',
+								ng-model='task.form.description',
+								name='description')
+				.span6
+					fieldset
+						.control-group
+						//google-map(center = 'map.center' zoom="map.zoom" id='task-map' draggable="true" dragging="map.dragging")
+																																																																						marker(coords = 'clientCoords')
+																																																																						markers(models = 'memberMarkers' )
+			hr
+			.form-actions
+				button.btn.btn-success(type='submit') {{ui.teamup.saveMember}}

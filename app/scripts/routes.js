@@ -146,12 +146,178 @@ define(
                     .then(function (GroupsAndClients)
                     {
                       data.clients = GroupsAndClients;
-                      console.error('data', data);
                       deferred.resolve(data);
                     });
                   return deferred.promise;
                 }
               }
+            })
+
+            .when('/task/mytasks', {
+              templateUrl: 'views/task/myTasks.html',
+              controller: 'myTasks as mytasks',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, Clients, Task, $q)
+                {
+                  var deferred = $q.defer(),
+                    data = {
+                      teams: null,
+                      myTasks: null,
+                      members: null,
+                      teamClientsGroups: null,
+                      clientGroups: null,
+                      clients: null
+                    };
+
+                  Teams.getAllLocal()
+                    .then(function (teams)
+                    {
+                      data.teams = teams;
+                      return Teams.getAllWithMembers()
+                    })
+                    .then(function (members)
+                    {
+                      data.members = members;
+                      return $q.all([
+                        Task.queryMine(),
+                        Teams.relationClientGroups(data.teams)
+                      ])
+                    })
+                    .then(function (teamsTasksData)
+                    {
+                      data.myTasks = teamsTasksData[0];
+                      data.teamClientsGroups = teamsTasksData[1];
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups)
+                    {
+                      data.clientGroups = clientGroups;
+                      return Clients.getAllWithClients();
+                    })
+                    .then(function (GroupsAndClients)
+                    {
+                      data.clients = GroupsAndClients;
+                      console.log('data', data);
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
+                }
+              }
+            })
+
+            .when('/task/new', {
+              templateUrl: 'views/task/saveTask.html',
+              controller: 'saveTask as task',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
+                  var deferred = $q.defer(),
+                    teamId = CurrentSelection.getTeamId(),
+                    data = {
+                      teams: null,
+                      currentTeamId: teamId,
+                      currentTeamMembers: null,
+                      teamClientgroupLinks: null,
+                      clientGroups: null,
+                      currentGroupClients: null
+                    };
+
+                  Teams.getAllLocal()
+                    .then(function (teams) {
+                      data.teams = teams;
+                      return Teams.getSingle(teamId);
+                    })
+                    .then(function (members) {
+                      data.currentTeamMembers = members;
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups) {
+                      data.clientGroups = clientGroups;
+                      return TaskCRUD.teamClientLink(data.currentTeamId, clientGroups);
+                    })
+                    .then(function (teamClientgroupLinks)
+                    {
+                      if (teamClientgroupLinks.length)
+                      {
+                        data.teamClientgroupLinks = teamClientgroupLinks;
+                        var clientGroupId = teamClientgroupLinks[0].id;
+                        return Clients.getSingle(clientGroupId);
+                      }
+                    })
+                    .then(function (currentGroupClients)
+                    {
+                      data.currentGroupClients = currentGroupClients;
+                      deferred.resolve(data);
+                    });
+
+                  return deferred.promise;
+                }
+              }
+            })
+
+            .when('/task/:taskId/edit', {
+              templateUrl: 'views/task/newOrEdit.html',
+              controller: 'saveTask as task',
+              reloadOnSearch: false,
+              resolve: {
+                data: function ($route, $rootScope, Teams, Clients, TaskCRUD, Task, TeamUp, CurrentSelection, $location, $q) {
+                  var selectedTask = $route.current.params.taskId;
+
+                  var deferred = $q.defer(),
+                  teamId = CurrentSelection.getTeamId(),
+                    data = {
+                      teams: null,
+                      currentTeamId: teamId,
+                      currentTeamMembers: null,
+                      teamClientgroupLinks: null,
+                      clientGroups: null,
+                      currentGroupClients: null,
+                      task: null
+                    };
+
+                  TaskCRUD.taskData(selectedTask)
+                    .then(function(task){
+                      data.task = task;
+                      if(!data.task.uuid){
+                        $location.path('/task/new');
+                      }
+                    });
+                  Teams.getAllLocal()
+                    .then(function (teams) {
+                      data.teams = teams;
+                      return Teams.getSingle(teamId);
+                    })
+                    .then(function (members) {
+                      data.currentTeamMembers = members;
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups) {
+                      data.clientGroups = clientGroups;
+                      return TaskCRUD.teamClientLink(data.currentTeamId, clientGroups);
+                    })
+                    .then(function (teamClientgroupLinks)
+                    {
+                      if (teamClientgroupLinks.length)
+                      {
+                        data.teamClientgroupLinks = teamClientgroupLinks;
+                        var clientGroupId = teamClientgroupLinks[0].id;
+                        return Clients.getSingle(clientGroupId);
+                      }
+                    })
+                    .then(function (currentGroupClients)
+                    {
+                      data.currentGroupClients = currentGroupClients;
+                      deferred.resolve(data);
+                    });
+
+                  return deferred.promise;
+                }
+              }
+            })
+
+            .when('/task', {
+              redirectTo: 'task/new'
             })
 
             .when('/admin', {

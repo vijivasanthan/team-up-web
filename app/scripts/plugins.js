@@ -50,7 +50,6 @@
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(window.navigator.userAgent))
   {
     browser.mobile = true;
-
     browser.android = (/Android/i.test(window.navigator.userAgent)) ? true : false;
 
     browser.ios = (/iPhone|iPad|iPod/i.test(window.navigator.userAgent)) ? true : false;
