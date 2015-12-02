@@ -806,8 +806,11 @@ define(
           },
           reportNotExists: 'Report does not exist',
           sessionTimeout: 'Your session has ended. Please login again',
+          error: {
+            support: 'Contact the support team of TeamUp / TeamTelephone'
+          },
           errorCode: {
-            '1': 'Unknown error',
+            '1': "A error has been appeared. The requested data couldn't be loaded. ",
             '2': 'The domain agent could not be found. Please try to login again',
             '3': 'This member should have the coordinator role, before a new team is created',
             '4': 'An agent ID can only exist of alphanumeric characters, underscores and dashes',
@@ -1925,8 +1928,11 @@ define(
           },
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
+          error: {
+            support: 'Contact the support team of TeamUp / TeamTelephone'
+          },
           errorCode: {
-            '1': 'unbekannte Fehlermeldung',
+            '1': "A error has been appeared. The requested data couldn't be loaded. ",
             '2': 'Domainagent nicht gefunden. Erneutes Anmelden könnte das Problem beheben.',
             '3': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '4': 'Agent ID darf nur Buchstaben und Zahlen enthalten.',
@@ -3027,8 +3033,11 @@ define(
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.',
           menu: 'Menu',
+          error: {
+            support: 'Neem contact op met de support van  TeamUp / TeamTelefoon'
+          },
           errorCode: {
-            '1': 'Onbekende foutmelding',
+            '1': 'Er heeft zich een foutmelding voorgedaan, waardoor de opgevraagde data helaas niet geladen kon worden. ',
             '2': 'De Domeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
             '3': 'Dit lid moet de rol van coördinator hebben, voordat er een team aangemaakt kan worden',
             '4': 'Eeen agent id mag alleen uit alfanummerieke karakters, onder- en streepjes bestaan',

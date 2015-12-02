@@ -71,8 +71,11 @@ define(
             .then(function (result)
             {
               console.error('result', result);
+              (!result.error)
+                ?  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged)
+                : $rootScope.notifier.error($rootScope.ui.teamup.errorCode[0] + $rootScope.ui.teamup.error.support);
               // save the scenarioId of the team locally newOptions.scenarioId
-              $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+
               $rootScope.statusBar.off();
             });
         }
