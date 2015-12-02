@@ -164,7 +164,7 @@ require(
     'services/team',
     'services/member',
     'services/password',
-    'services/taskService',
+    'services/taskCRUD',
 
     'directives/widgets',
     'directives/date-range-picker',

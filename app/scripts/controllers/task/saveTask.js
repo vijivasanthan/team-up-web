@@ -16,7 +16,7 @@ define(
                 Dater,
                 moment,
                 Clients,
-                TaskService,
+                TaskCRUD,
                 CurrentSelection,
                 data) {
 
@@ -36,6 +36,7 @@ define(
         self.setDates = setDates;
         self.save = save;
         self.init = init;
+
         //initialisation
         self.init(data.currentTeamId);
 
@@ -68,35 +69,36 @@ define(
             });
         }
 
+        /**
+         * format date and time using filter
+         * @param date
+         * @param dateFormat
+         * @returns {*}
+         */
         function formatDateTime(date, dateFormat) {
           return $filter('date')(date, dateFormat);
         }
 
-        function updateTime(date, minutes) {
+        /**
+         * set and update time values
+         * @param date
+         * @param minutes
+         * @returns {Date}
+         */
+        function setTime(date, minutes) {
           var roundMinutes = formatDateTime(date, 'm');
           roundMinutes = (roundMinutes % 15);
 
           return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
         }
 
-        function updateMobileDateTime(newDate, minutes) {
-          var start = moment(newDate),
-            roundMinutes = (start.minute() % 15),
-            newEndDateTime = moment(start).subtract(roundMinutes, "minutes").add(minutes, "minutes");
-          return convertDateTimeToLocal(newEndDateTime);
-        }
 
-        function convertDateTimeToLocal(d) {
-          var d1 = new Date(d);
-
-          d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-          return d1.toISOString().replace("Z", "");
-        }
-
-        //set start and end date objects with default values
+        /**
+         * prepare start and end date objects with default values
+         */
         function setDates() {
-          var currentStartTime = updateTime(new Date(), 15);
-          var currentEndTime = updateTime(new Date(), 30);
+          var currentStartTime = setTime(new Date(), 15);
+          var currentEndTime = setTime(new Date(), 30);
           var setDefaultDate = function (date) {
             return moment(date).format('DD-MM-YYYY');
           };
@@ -104,28 +106,57 @@ define(
           self.form.startDate = {
               date: setDefaultDate(new Date()),
               time: currentStartTime,
-              datetime: updateMobileDateTime(moment().toDate(), 15)
+              datetime: setMobileDatetime(new Date(), 15)
           };
           self.form.endDate = {
               date: setDefaultDate(new Date()),
               time: currentEndTime,
-              datetime: updateMobileDateTime(moment().toDate(), 30)
+              datetime: setMobileDatetime(new Date(), 30)
           };
         }
 
-        //update the time
+        /**
+         * set datetime values (for mobile devices)
+         * @param datetime
+         * @param minutes
+         * @returns {*}
+         */
+        function setMobileDatetime(datetime, minutes){
+          var dateTime = moment(datetime);
+          var roundMinutes = (dateTime.minute() % 15);
+          dateTime = moment(dateTime).subtract(roundMinutes, "minutes").add(minutes, "minutes");
+          return dateTime.toDate();
+        }
+
+
+        /**
+         * update time
+         * @param newTime
+         */
         function newTime(newTime) {
-          self.form.endDate.time = updateTime(newTime, 15);
+          self.form.endDate.time = setTime(newTime, 15);
         }
 
-        //update the date
+        /**
+         * update date or datetime
+         * @param newDate
+         * @param mobile
+         */
         function newDate(newDate, mobile) {
-          (mobile)
-            ? self.form.endDate.datetime = convertDateTimeToLocal(moment(newDate).add(15, "minutes"))
-            : self.form.endDate.datetime = newDate;
+          if(mobile) {
+            self.form.endDate.datetime = moment(self.form.startDate.datetime).add(15, "minutes").toDate();
+          }
+          else
+          {
+            self.form.endDate.date = newDate;
+          }
         }
 
-        //validate the task properties, and store them in a object
+        /**
+         * validate the task properties and store them in a object
+         * @param form
+         * @returns {boolean}
+         */
         function save(form) {
           form.startTime = ($rootScope.browser.mobile) ?
             moment(form.startDate.datetime).utc().valueOf() :
@@ -174,6 +205,7 @@ define(
             description: form.description,
             assignedTeamMemberUuid: form.member
           };
+
           if (! _.isEmpty(form.uuid))
           {
             editTask(taskValues);
@@ -185,12 +217,11 @@ define(
         }
 
         /**
-         * Fill the form with values of an existing task
+         * fill the form object with values of an existing task
          * @param task uuid
          */
         function modifyExistingTask(task)
         {
-
           self.form = {
             uuid: task.uuid,
             team: task.assignedTeamUuid,
@@ -199,23 +230,21 @@ define(
             startDate: {
               date: new Date(task.plannedStartVisitTime),
               time: task.plannedStartVisitTime,
-              datetime: convertDateTimeToLocal(
-                moment(task.plannedStartVisitTime)
-              )
+              datetime: setMobileDatetime(task.plannedStartVisitTime)
             },
             endDate: {
               date: new Date(task.plannedEndVisitTime),
               time: task.plannedEndVisitTime,
-              datetime: convertDateTimeToLocal(
-                moment(task.plannedEndVisitTime)
-              )
+              datetime: setMobileDatetime(task.plannedEndVisitTime)
             },
             description: task.description
           };
-          console.log(self.form.startDate.datetime);
         }
 
-        //creates a new task
+        /**
+         * create a new task
+         * @param task
+         */
         function createTask(task) {
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
           TeamUp._('taskAdd', null, task)
@@ -226,7 +255,10 @@ define(
             });
         }
 
-        //performs the edit to a existing task
+        /**
+         * do edit to an existing task
+         * @param task
+         */
         function editTask(task)
         {
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
@@ -239,7 +271,10 @@ define(
             });
         }
 
-        //Redirect to my tasks or all tasks pages after creating task
+        /**
+         * redirect to mytasks or alltasks after task save
+         * @param assignedTeamMember
+         */
         function redirect(assignedTeamMember){
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
             ? '/tasks2#myTasks'
@@ -249,12 +284,14 @@ define(
 
         }
 
-        //initialise the team and dates
+        /**
+         * check if a task has to be edited. if not, initialise default team and date values
+         * @param teamId
+         */
         function init(teamId) {
           Team.init(teamId);
           self.teams = Team.list;
 
-          //check if there is a task present that has to be modified
           if(data.task)
           {
             modifyExistingTask(self.task);

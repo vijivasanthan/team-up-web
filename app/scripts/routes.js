@@ -207,11 +207,11 @@ define(
             })
 
             .when('/task/new', {
-              templateUrl: 'views/task/newOrEdit.html',
+              templateUrl: 'views/task/saveTask.html',
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, TaskService, Task, CurrentSelection, $q) {
+                data: function (Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
                   var deferred = $q.defer(),
                     teamId = CurrentSelection.getTeamId(),
                     data = {
@@ -234,7 +234,7 @@ define(
                     })
                     .then(function (clientGroups) {
                       data.clientGroups = clientGroups;
-                      return TaskService.teamClientLink(data.currentTeamId, clientGroups);
+                      return TaskCRUD.teamClientLink(data.currentTeamId, clientGroups);
                     })
                     .then(function (teamClientgroupLinks)
                     {

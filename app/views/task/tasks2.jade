@@ -267,9 +267,9 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-plus
 									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button', 
-										ng-click='modifyTask(task)')
-										i.icon-edit
+									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
+										button.btn-primary.btn-mini(type='button')
+											i.icon-edit
 									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right

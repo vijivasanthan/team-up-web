@@ -10,7 +10,6 @@
 			h3.pull-left(ng-hide='task.form.uuid') {{ui.task.newTask}} {{task.number}}
 			h3.pull-Left(ng-show='task.form.uuid') {{ui.teamup.updateTask}}
 		hr
-
 		form(name='taskForm', novalidate, ng-submit='task.save(task.form)')
 			.row
 				.span6

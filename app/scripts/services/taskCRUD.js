@@ -2,7 +2,7 @@ define(['services/services', 'config'],
   function (services, config) {
     'use strict';
 
-    services.factory('TaskService',
+    services.factory('TaskCRUD',
       function ($rootScope,
                 $location,
                 $timeout,
@@ -10,21 +10,29 @@ define(['services/services', 'config'],
                 Store,
                 TeamUp
       ) {
-        // constructor \\
+        //constructor
         var taskService = function () {
         };
 
-        // public methods \\
+        //public methods
         (function () {
 
-          this.teamClientLink = function(currentTeamId, clientGroups)
+          /**
+           * get related clientgroups for teamid
+           * @param currentTeamId
+           */
+          this.teamClientLink = function(currentTeamId)
           {
             return TeamUp._(
               'teamClientGroupQuery',
               {second: currentTeamId}
             );
-          }
+          };
 
+          /**
+           * get task data for taskid
+           * @param taskId
+           */
           this.taskData = function(taskId)
           {
             return TeamUp._(
@@ -32,6 +40,7 @@ define(['services/services', 'config'],
               {second: taskId}
             );
           }
+
         }).call(taskService.prototype);
 
         return new taskService();
