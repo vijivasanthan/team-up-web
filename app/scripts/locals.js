@@ -41,7 +41,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Your videocall could not be loaded.',
+          videoNotLoaded: 'The entered phonenumber is not right. The phonenumber is not known by a team with videocalling.',
           stop: 'Video has stopped'
         },
         dashboard: {
@@ -1133,7 +1133,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Videokonferenz konnte nicht gestartet werden.',
+          videoNotLoaded: 'The entered phonenumber is not right. The phonenumber is not known by a team with videocalling.',
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -2217,7 +2217,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
+          videoNotLoaded: 'Het ingevoerde nummer is onjuist. Dit nummer is niet bekend bij een team met videobellen.',
           stop: 'Het videogesprek is beëindigd.'
         },
         dashboard: {
