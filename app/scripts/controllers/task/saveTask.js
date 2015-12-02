@@ -56,7 +56,7 @@ define(
             })
             .then(function (clientGroups) {
               data.clientGroups = clientGroups;
-              return TaskService.teamClientLink(teamId, clientGroups);
+              return TaskCRUD.teamClientLink(teamId, clientGroups);
             })
             .then(function (teamClientgroupLinks)
             {

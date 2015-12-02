@@ -11,7 +11,7 @@ define(['services/services', 'config'],
                 TeamUp
       ) {
         //constructor
-        var taskService = function () {
+        var taskCRUD = function () {
         };
 
         //public methods
@@ -41,9 +41,9 @@ define(['services/services', 'config'],
             );
           }
 
-        }).call(taskService.prototype);
+        }).call(taskCRUD.prototype);
 
-        return new taskService();
+        return new taskCRUD();
       });
   })
 ;

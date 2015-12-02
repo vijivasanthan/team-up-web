@@ -261,7 +261,7 @@ define(
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
-                data: function ($route, $rootScope, Teams, Clients, TaskService, Task, TeamUp, CurrentSelection, $location, $q) {
+                data: function ($route, $rootScope, Teams, Clients, TaskCRUD, Task, TeamUp, CurrentSelection, $location, $q) {
                   var selectedTask = $route.current.params.taskId;
 
                   var deferred = $q.defer(),
@@ -276,7 +276,7 @@ define(
                       task: null
                     };
 
-                  TaskService.taskData(selectedTask)
+                  TaskCRUD.taskData(selectedTask)
                     .then(function(task){
                       data.task = task;
                       if(!data.task.uuid){
@@ -294,7 +294,7 @@ define(
                     })
                     .then(function (clientGroups) {
                       data.clientGroups = clientGroups;
-                      return TaskService.teamClientLink(data.currentTeamId, clientGroups);
+                      return TaskCRUD.teamClientLink(data.currentTeamId, clientGroups);
                     })
                     .then(function (teamClientgroupLinks)
                     {
