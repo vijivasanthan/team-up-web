@@ -91,12 +91,12 @@ define(
         {
           self.error = false;
 
-          if (self.scenarioTemplates.length && !newOptions.scenarioId)
-          {
-            $rootScope.notifier.error("Kies een scenario");
-            self.error = true;
-            return;
-          }
+          //if (self.scenarioTemplates.length && !newOptions.scenarioId)
+          //{
+          //  $rootScope.notifier.error("Kies een scenario");
+          //  self.error = true;
+          //  return;
+          //}
 
           if (!newOptions.ringingTimeOut)
           {
