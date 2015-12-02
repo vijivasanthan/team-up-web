@@ -122,6 +122,27 @@ define(
                   }
                 },
 
+                //Put Scenario templates
+                TTScenarioTemplateSave : {
+                  method: 'PUT',
+                  params: {
+                    first: 'team',
+                    third: 'teamTelephone',
+                    fourth: 'scenario',
+                    templateId: ''
+                  }
+                },
+
+                //Get Scenario templates
+                TTScenarioTemplateGet : {
+                  method: 'GET',
+                  params: {
+                    first: 'teamTelephone',
+                    second: 'templateIds'
+                  },
+                  isArray: true
+                },
+
                 /**
                  * Get free phonenumbers
                  */

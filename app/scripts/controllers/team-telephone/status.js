@@ -55,7 +55,7 @@ define(['../controllers'], function (controllers)
               self.teamMembers = result[0];
               normalizeReachability(result[1], setKeyAsUsername(self.teamMembers));
             });
-        };
+        }
 
         /**
          * merge the member reachability data with the personal data of the member

@@ -17,6 +17,7 @@ define(
         self.data = data;
         self.currentTeamId = CurrentSelection.getTeamId();
         self.currentTeam = setTeamIdToName(self.currentTeamId);
+        //self.scenarioTemplates = data.scenarioTemplates;
 
         //methods
         self.fetch = fetch;
@@ -90,6 +91,13 @@ define(
         {
           self.error = false;
 
+          if (self.scenarioTemplates.length && !newOptions.scenarioId)
+          {
+            $rootScope.notifier.error("Kies een scenario");
+            self.error = true;
+            return;
+          }
+
           if (!newOptions.ringingTimeOut)
           {
             $rootScope.notifier.error($rootScope.ui.options.durationDialTone);
@@ -106,7 +114,7 @@ define(
 
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-          TeamUp._(
+          var teamTelephoneOptionsPromise = TeamUp._(
             'TTOptionsSave',
             {second: self.currentTeamId},
             {
@@ -114,14 +122,22 @@ define(
               "sms-on-missed-call": newOptions.sms,
               "sms-on-new-team-voicemail": newOptions.sms,
               "voicemail-detection-menu": newOptions.voicemailDetection,
-              "useExternalId": newOptions.useExternalId
-            }
-          ).then(function (result)
+              "useExternalId": newOptions.useExternalId,
+            })
+          //var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
+          //    second: self.currentTeamId,
+          //    templateId: newOptions.scenarioId
+          //  });
+
+          $q.all([teamTelephoneOptionsPromise])
+            .then(function (result)
             {
+              // save the scenarioId of the team locally newOptions.scenarioId
+
               $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               $rootScope.statusBar.off();
             });
-        };
+        }
 
         /**
          * Filter to get the team name by id and finally set the firstletter as capital
@@ -194,7 +210,8 @@ define(
               voicemailDetection: options["voicemail-detection-menu"] || false,
               sms: options["sms-on-missed-call"] || false,
               ringingTimeOut: options["ringing-timeout"] || 20,
-              useExternalId: options["useExternalId"] || false
+              useExternalId: options["useExternalId"] || false,
+              scenarioTemplates: options['test'] || []
             };
             self.activateTTForm = false;
             tabs.removeClass('ng-hide');

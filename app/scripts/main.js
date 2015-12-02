@@ -220,6 +220,7 @@ require(
     'controllers/team-telephone/phones',
     'controllers/video',
     'controllers/team-telephone/options',
+    'controllers/team-telephone/scenario',
     'controllers/team/member',
     'controllers/team/newMember',
     'controllers/team/searchMember',

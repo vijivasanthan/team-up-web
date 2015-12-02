@@ -41,7 +41,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Your videocall could not be loaded.',
+          videoNotLoaded: 'The entered phonenumber is not right. The phonenumber is not known by a team with videocalling.',
           stop: 'Video has stopped'
         },
         dashboard: {
@@ -806,8 +806,11 @@ define(
           },
           reportNotExists: 'Report does not exist',
           sessionTimeout: 'Your session has ended. Please login again',
+          error: {
+            support: 'Contact the support team of TeamUp / TeamTelephone'
+          },
           errorCode: {
-            '1': 'Unknown error',
+            '1': "A error has been appeared. The requested data couldn't be loaded. ",
             '2': 'The domain agent could not be found. Please try to login again',
             '3': 'This member should have the coordinator role, before a new team is created',
             '4': 'An agent ID can only exist of alphanumeric characters, underscores and dashes',
@@ -1130,7 +1133,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Videokonferenz konnte nicht gestartet werden.',
+          videoNotLoaded: 'The entered phonenumber is not right. The phonenumber is not known by a team with videocalling.',
           stop: 'Videokonferenz wurde beendet.'
         },
         dashboard: {
@@ -1925,8 +1928,11 @@ define(
           },
           reportNotExists: 'Bericht nicht vorhanden.',
           sessionTimeout: 'Sitzung beendet, Sie müssen sich erneut anmelden.',
+          error: {
+            support: 'Contact the support team of TeamUp / TeamTelephone'
+          },
           errorCode: {
-            '1': 'unbekannte Fehlermeldung',
+            '1': "A error has been appeared. The requested data couldn't be loaded. ",
             '2': 'Domainagent nicht gefunden. Erneutes Anmelden könnte das Problem beheben.',
             '3': 'Bevor eine Gruppe erstellt werden kann, muss diesem Mitglied die Koordinator-Rolle zugeteilt werden.',
             '4': 'Agent ID darf nur Buchstaben und Zahlen enthalten.',
@@ -2211,7 +2217,7 @@ define(
         },
         video: {
           title: 'Video',
-          videoNotLoaded: 'Uw videogesprek kon niet worden geladen.',
+          videoNotLoaded: 'Het ingevoerde nummer is onjuist. Dit nummer is niet bekend bij een team met videobellen.',
           stop: 'Het videogesprek is beëindigd.'
         },
         dashboard: {
@@ -3027,8 +3033,11 @@ define(
           reportNotExists: 'Rapport bestaat niet.',
           sessionTimeout: 'Uw sessie is verlopen. Graag nogmaals inloggen.',
           menu: 'Menu',
+          error: {
+            support: 'Neem contact op met de support van  TeamUp / TeamTelefoon'
+          },
           errorCode: {
-            '1': 'Onbekende foutmelding',
+            '1': 'Er heeft zich een foutmelding voorgedaan, waardoor de opgevraagde data helaas niet geladen kon worden. ',
             '2': 'De Domeinagent is niet gevonden. Opnieuw inloggen zou dit probleem op kunnen lossen.',
             '3': 'Dit lid moet de rol van coördinator hebben, voordat er een team aangemaakt kan worden',
             '4': 'Eeen agent id mag alleen uit alfanummerieke karakters, onder- en streepjes bestaan',
@@ -3060,7 +3069,7 @@ define(
             '30': 'Een item in de TeamTelephone configuratie kon niet beschreven worden',
             '31': 'TeamTelefoon is al geactiveerd voor dit team',
             '32': 'Agent niet gevonden',
-            '33': 'Geen templated gevonden in de ScenarioTemplateAgent',
+            '33': 'Geen templates gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
             '36': 'Een niet verwachte parameter "type"',
             '39': 'De sleutel om het wachtwoord te resetten is verlopen'

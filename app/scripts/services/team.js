@@ -128,14 +128,31 @@ define(['services/services', 'config'],
           function update(team)
           {
             var self = this,
-              deferred = $q.defer();
+              deferred = $q.defer(),
+              message, error = false;
 
             if (!team.name)
             {
-              $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
-              deferred.reject($rootScope.ui.teamup.teamNamePrompt1);
+              message = $rootScope.ui.teamup.teamNamePrompt1;
+              error = true;
+
             }
-            else
+            if(team.name.length < 2)
+            {
+              message = $rootScope.ui.validation.default.minLength(
+                $rootScope.ui.teamup.teamName
+              );
+              error = true;
+            }
+            if(team.name.length > 40)
+            {
+              message = $rootScope.ui.validation.default.maxLength(
+                $rootScope.ui.teamup.teamName
+              );
+              error = true;
+            }
+
+            if(! error)
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
 
@@ -156,8 +173,13 @@ define(['services/services', 'config'],
                   }
                 });
             }
+            else
+            {
+              $rootScope.notifier.error(message);
+              deferred.reject(error);
+            }
             return deferred.promise;
-          };
+          }
 
           function _delete(teamId)
           {

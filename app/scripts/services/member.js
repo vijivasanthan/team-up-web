@@ -30,30 +30,53 @@ define(['services/services', 'config'],
           this.create = function (member, teamId)
           {
             var deferred = $q.defer();
+            var error  = false;
+            console.error('member', member);
 
-            $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
-            var roles = this.getRoles();
-            member.role = member.role || (roles[0]).id;
+            if (!member.phone)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+              error = true;
+            }
+            if ($rootScope.phoneNumberParsed.result == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+              error = true;
+            }
 
-            var memberResources = angular.copy(member);
-            memberResources.phone = $rootScope.phoneNumberParsed.format;
-            memberResources.team = teamId;
-            memberResources.lastName = memberResources.lastName || "";
-            memberResources.password = MD5(memberResources.password);
-            memberResources.teamUuids = [teamId];
+            if(! error)
+            {
+              $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
+              var roles = this.getRoles();
+              member.role = member.role || (roles[0]).id;
 
-            Teams.addMember(memberResources)
-              .then(function (result)
-              {
-                if(! result.error)
+              var memberResources = angular.copy(member);
+              memberResources.phone = $rootScope.phoneNumberParsed.format;
+              memberResources.team = teamId;
+              memberResources.lastName = memberResources.lastName || "";
+              memberResources.password = MD5(memberResources.password);
+              memberResources.teamUuids = [teamId];
+
+              Teams.addMember(memberResources)
+                .then(function (result)
                 {
-                  $rootScope.resetPhoneNumberChecker();
-                  deferred.resolve(result);
-                  $location.path('team/members');
-                  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                }
-                $rootScope.statusBar.off();
-              });
+                  if(! result.error)
+                  {
+                    $rootScope.resetPhoneNumberChecker();
+                    deferred.resolve(result);
+                    $location.path('team/members');
+                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                  }
+                  $rootScope.statusBar.off();
+                });
+            }
+            else
+            {
+              deferred.reject(false);
+            }
+
+
+
             return deferred.promise;
           };
 

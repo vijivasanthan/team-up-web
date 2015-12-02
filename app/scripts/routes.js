@@ -512,6 +512,48 @@ define(
             })
 
             .when(
+              '/team-telefoon/scenario',
+              {
+                templateUrl: 'views/team-telephone/scenario.html',
+                controller: 'scenario as scenario',
+                reloadOnSearch: false,
+                resolve: {
+                  data: [
+                    'Teams', 'TeamUp', 'CurrentSelection', '$rootScope', '$q', '$location',
+                    function (Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
+                    {
+                      removeActiveClass('.teamMenu');
+
+                      var deferred = $q.defer();
+                      var teamId = CurrentSelection.getTeamId();
+                      var promises = [
+                        Teams.getAllLocal(),
+                        TeamUp._('TTScenarioTemplateGet')
+                      ];
+
+                      TeamUp._('TTOptionsGet', {second: teamId})
+                        .then(function (options)
+                        {
+                          //Check if team telephone is activated (has adapterId)
+                          (!options.adapterId || $rootScope.app.resources.role > 1)
+                            ? $location.path('team-telefoon/options')
+                            : $q.all(promises)
+                                .then(function(result)
+                                {
+                                  deferred.resolve({
+                                    teams: result[0],
+                                    templates: result[1] || []
+                                  });
+                                });
+
+                        });
+                      return deferred.promise;
+                    }
+                  ]
+                }
+              })
+
+            .when(
             '/team-telefoon/options',
             {
               templateUrl: 'views/team-telephone/options.html',
@@ -532,7 +574,11 @@ define(
                       {
                         teamTelephoneOptions = options;
 
-                        var promises = [Teams.getAllLocal()];
+                        var promises = [
+                          Teams.getAllLocal(),
+                          TeamUp._('TTScenarioTemplateGet')
+                        ];
+                        //if a team is not a team-telephone team, add open phonenumbers
                         if (options.error && options.error.status === 404)
                         {
                           promises.push(
@@ -546,10 +592,12 @@ define(
                       })
                       .then(function (result)
                       {
+                        console.error('result', result);
                         return {
                           teams: result[0],
-                          phoneNumbers: result[1] || [],
-                          teamTelephoneOptions: teamTelephoneOptions
+                          phoneNumbers: result[2] || [],
+                          teamTelephoneOptions: teamTelephoneOptions,
+                          scenarioTemplates: result[1] || []
                         }
                       });
                   }

@@ -502,23 +502,41 @@ define(
       }
     );
 
+    //directives.directive(
+    //  'hideTeamTelephoneTabs',
+    //  function ()
+    //  {
+    //    return {
+    //      restrict: 'A',
+    //      link: function (scope, element, attrs)
+    //      {
+    //        var tabsParent = angular.element('li:not(:last)', element);
+    //
+    //        if (attrs.hideTeamTelephoneTabs)
+    //        {
+    //          tabsParent.addClass('ng-hide');
+    //        }
+    //        else
+    //        {
+    //          tabsParent.removeClass('ng-hide');
+    //        }
+    //      }
+    //    };
+    //  }
+    //);
+
     directives.directive(
-      'hideTeamTelephoneTabs',
-      function ()
+      'showHideOnRole',
+      function ($rootScope)
       {
+        //
         return {
           restrict: 'A',
-          link: function (scope, element, attrs)
+          link: function (scope, element)
           {
-            var tabsParent = angular.element('li:not(:last)', element);
-
-            if (attrs.hideTeamTelephoneTabs)
+            if(! element.hasClass('ng-hide') && $rootScope.app.resources.role > 1)
             {
-              tabsParent.addClass('ng-hide');
-            }
-            else
-            {
-              tabsParent.removeClass('ng-hide');
+              element.addClass('ng-hide');
             }
           }
         };
