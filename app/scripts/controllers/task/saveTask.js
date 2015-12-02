@@ -92,7 +92,6 @@ define(
           return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
         }
 
-
         /**
          * prepare start and end date objects with default values
          */
@@ -172,7 +171,6 @@ define(
             return;
           }
 
-
           if ($rootScope.app.domainPermission.clients) {
             if (!form.currentGroup) {
               $rootScope.notifier.error($rootScope.ui.teamup.selectClientGroup);
@@ -208,11 +206,11 @@ define(
 
           if (! _.isEmpty(form.uuid))
           {
-            editTask(taskValues);
+            edit(taskValues);
           }
           else
           {
-            createTask(taskValues);
+            create(taskValues);
           }
         }
 
@@ -245,8 +243,9 @@ define(
          * create a new task
          * @param task
          */
-        function createTask(task) {
+        function create(task) {
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
+
           TeamUp._('taskAdd', null, task)
             .then(function (result) {
               if(! result.error) {
@@ -259,7 +258,7 @@ define(
          * do edit to an existing task
          * @param task
          */
-        function editTask(task)
+        function edit(task)
         {
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
 
@@ -281,7 +280,6 @@ define(
             : '/tasks2#allTasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
-
         }
 
         /**
@@ -292,10 +290,8 @@ define(
           Team.init(teamId);
           self.teams = Team.list;
 
-          if(data.task)
-          {
-            modifyExistingTask(self.task);
-          }
+          //create tasks object
+          if(data.task) modifyExistingTask(self.task);
           else
           {
             self.form = {};
@@ -303,6 +299,7 @@ define(
             setDates();
           }
 
+          //Set the clientGroups who has a relation with the selected team
           if(data.teamClientgroupLinks && data.teamClientgroupLinks.length) {
             self.form.currentGroup = data.teamClientgroupLinks[0].id;
           }

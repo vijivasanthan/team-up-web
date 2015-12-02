@@ -534,7 +534,9 @@ define(
           restrict: 'A',
           link: function (scope, element)
           {
-            if(! element.hasClass('ng-hide') && $rootScope.app.resources.role > 1)
+            if(! element.hasClass('ng-hide')
+              && (! $rootScope.app.domainPermission.teamSelfManagement
+              || $rootScope.app.resources.role > 1))
             {
               element.addClass('ng-hide');
             }
