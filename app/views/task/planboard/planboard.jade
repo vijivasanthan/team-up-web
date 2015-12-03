@@ -203,7 +203,7 @@ div(ng-controller='timeline as taskPlanboard')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.allTasks}}
 				li(class="{{(views.newTask==true) && 'active'}}")
-					a(data-toggle='tab', ng-click='nav("tasks2/newtask")')
+					a(data-toggle='tab', ng-click='nav("task/new")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.newTask}}
 				li(class="{{(views.upload==true) && 'active'}}")

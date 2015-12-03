@@ -28,6 +28,9 @@ define(
         self.currentGroupClients = data.currentGroupClients;
         self.task = data.task;
 
+        //check if a date is changed when user is editing an existing task, unedited tasks can be saved regardless of date value
+        var dateChanged = false;
+
         //methods
         self.setTeam = setTeam;
         self.changeTeam = changeTeam;
@@ -44,6 +47,7 @@ define(
         {
           Team.read(teamId)
         }
+
         /**
          * get team and client related data after input
          * @param teamId
@@ -104,14 +108,14 @@ define(
           };
 
           self.form.startDate = {
-              date: setDefaultDate(new Date()),
-              time: currentStartTime,
-              datetime: setMobileDatetime(new Date(), 15)
+            date: setDefaultDate(new Date()),
+            time: currentStartTime,
+            datetime: setMobileDatetime(new Date(), 15)
           };
           self.form.endDate = {
-              date: setDefaultDate(new Date()),
-              time: currentEndTime,
-              datetime: setMobileDatetime(new Date(), 30)
+            date: setDefaultDate(new Date()),
+            time: currentEndTime,
+            datetime: setMobileDatetime(new Date(), 30)
           };
         }
 
@@ -154,8 +158,9 @@ define(
               return;
             }
           }
+
           var now = new Date().getTime();
-          if (form.startTime <= now || form.endTime <= now) {
+          if ((dateChanged) && form.startTime <= now || form.endTime <= now) {
             $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
             return false;
           }
@@ -202,6 +207,16 @@ define(
               time: task.plannedEndVisitTime,
               datetime: setMobileDatetime(task.plannedEndVisitTime)
             },
+            oldStartDate: {
+              date: new Date(task.plannedStartVisitTime),
+              time: task.plannedStartVisitTime,
+              datetime: setMobileDatetime(task.plannedStartVisitTime)
+            },
+            oldEndDate: {
+              date: new Date(task.plannedEndVisitTime),
+              time: task.plannedEndVisitTime,
+              datetime: setMobileDatetime(task.plannedEndVisitTime)
+            },
             description: task.description
           };
         }
@@ -229,7 +244,7 @@ define(
         {
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
 
-          Task.update(task)
+          TaskCRUD.update(task)
             .then(function (result) {
               if(! result.error) {
                 redirect(task.assignedTeamMemberUuid);
@@ -271,6 +286,7 @@ define(
          */
         function newTime(newTime)
         {
+          dateChanged = true;
           self.form.endDate.time = setTime(newTime, 15);
         }
 
@@ -281,6 +297,7 @@ define(
          */
         function newDate(newDate, mobile)
         {
+          dateChanged = true;
           (mobile)
             ? self.form.endDate.datetime = moment(self.form.startDate.datetime)
             .add(15, "minutes")

@@ -37,6 +37,24 @@ define(['services/services', 'config'],
             );
           };
 
+          this.strip = function(task)
+          {
+            _.each(
+              [
+                'statusLabel',
+                'relatedClient',
+                'plannedTaskDuration',
+                'assignedTeamMember'
+              ],
+              function (eliminated)
+              {
+                delete task[eliminated]
+              }
+            );
+
+            return task;
+          };
+
           /**
            * get related clientgroups for teamid
            * @param currentTeamId
@@ -284,23 +302,7 @@ define(['services/services', 'config'],
               return merged;
             };
 
-            this.strip = function(task)
-            {
-              _.each(
-                [
-                  'statusLabel',
-                  'relatedClient',
-                  'plannedTaskDuration',
-                  'assignedTeamMember'
-                ],
-                function (eliminated)
-                {
-                  delete task[eliminated]
-                }
-              );
 
-              return task;
-            };
 
             return deferred.promise;
           };

@@ -296,38 +296,6 @@ define(
 
           };
 
-          //$scope.$watch(function() {
-          //  return $scope.task.start.date;
-          //}, function(newDate) {
-          //  $scope.task.end.date = newDate;
-          //});
-
-          //          $scope.$watch(
-          //            'showOnlyAvailable',
-          //            function (toggle)
-          //            {
-          //              console.log('coming in here?');
-          //
-          //              $scope.filtered = !$scope.filtered;
-          //
-          ////              if (toggle)
-          ////              {
-          ////                 = { assignedTeamMemberUuid: null };
-          ////              }
-          ////              else
-          ////              {
-          ////                $scope.filtered = { assignedTeamMemberUuid: null };
-          ////              }
-          //            }
-          //          );
-
-          //          $scope.filterFn = function (task)
-          //          {
-          //            return ($scope.showOnlyAvailable && task.assignedTeamMemberUuid != null) ?
-          //                   true :
-          //                   false;
-          //          };
-
           $scope.openTask = function (task)
           {
             $scope.task = task;
