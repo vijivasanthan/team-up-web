@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'tasks2Ctrl',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, Task,
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, TaskCRUD,
                   Teams, Clients, Dater, moment, data)
         {
           $rootScope.fixStyles();
@@ -162,7 +162,7 @@ define(
 
           function queryMine(only, callback)
           {
-            Task.queryMine()
+            TaskCRUD.queryMine()
               .then(
               function (tasks)
               {
@@ -188,7 +188,7 @@ define(
           {
             queryMine(true);
 
-            Task.queryAll()
+            TaskCRUD.queryAll()
               .then(
               function (tasks)
               {
@@ -361,7 +361,7 @@ define(
 
           function updateTask(task, only)
           {
-            Task.update(task)
+            TaskCRUD.update(task)
               .then(
               function (result)
               {
@@ -537,7 +537,7 @@ define(
           //change team depends on the default team
           $scope.changeTeam($scope.currentTeam);
 
-          Task.chains();
+          TaskCRUD.chains();
 
             // Validation of the task form
           $scope.validateTaskForm = function (task)

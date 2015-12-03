@@ -100,7 +100,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.allTasks}}
 		li(class="{{(views.newTask==true) && 'active'}}")
-			a(data-toggle='tab', ng-click='setViewTo("newTask")')
+			a(data-toggle='tab', ng-click='nav("task/new")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.newTask}}
 		li(class="{{(views.upload==true) && 'active'}}")

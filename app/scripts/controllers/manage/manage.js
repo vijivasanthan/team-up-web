@@ -657,7 +657,8 @@ define(
                   results,
                   function (result)
                   {
-                    if (result.error)
+                    console.error('result', result);
+                    if (result.error && result.error.data)
                     {
                       error += result.error.data.error;
                     }

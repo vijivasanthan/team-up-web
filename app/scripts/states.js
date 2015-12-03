@@ -169,8 +169,8 @@ define(
                 $location.path('/tasks2').search({}).hash('allTasks');
                 break;
 
-              case 'tasks2/newtask':
-                $location.path('/tasks2').search({}).hash('newTask');
+              case 'task/new':
+                $location.path('/task/new').search({}).hash('');
                 break;
 
               case 'tasks2/upload':
