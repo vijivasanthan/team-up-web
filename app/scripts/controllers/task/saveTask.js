@@ -40,14 +40,16 @@ define(
         //initialisation
         self.init(data.currentTeamId);
 
-        function setTeam(teamId){
+        function setTeam(teamId)
+        {
           Team.read(teamId)
         }
         /**
          * get team and client related data after input
          * @param teamId
          */
-        function changeTeam(teamId) {
+        function changeTeam(teamId)
+        {
           Team.read(teamId)
             .then(function (members) {
               CurrentSelection.local = teamId;
@@ -88,7 +90,6 @@ define(
         function setTime(date, minutes) {
           var roundMinutes = formatDateTime(date, 'm');
           roundMinutes = (roundMinutes % 15);
-
           return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
         }
 
@@ -120,19 +121,22 @@ define(
          * @param minutes
          * @returns {*}
          */
-        function setMobileDatetime(datetime, minutes){
-          var dateTime = moment(datetime);
+        function setMobileDatetime(datetime, minutes)
+        {
+          var dateTime = moment(datetime);//TODO two times a moment object?
           var roundMinutes = (dateTime.minute() % 15);
-          dateTime = moment(dateTime).subtract(roundMinutes, "minutes").add(minutes, "minutes");
-          return dateTime.toDate();
+          return moment(dateTime)//TODO two times a moment object?
+                  .subtract(roundMinutes, "minutes")
+                  .add(minutes, "minutes")
+                  .toDate();
         }
-
 
         /**
          * update time
          * @param newTime
          */
-        function newTime(newTime) {
+        function newTime(newTime)
+        {
           self.form.endDate.time = setTime(newTime, 15);
         }
 
@@ -141,14 +145,13 @@ define(
          * @param newDate
          * @param mobile
          */
-        function newDate(newDate, mobile) {
-          if(mobile) {
-            self.form.endDate.datetime = moment(self.form.startDate.datetime).add(15, "minutes").toDate();
-          }
-          else
-          {
-            self.form.endDate.date = newDate;
-          }
+        function newDate(newDate, mobile)
+        {
+          (mobile)
+            ? self.form.endDate.datetime = moment(self.form.startDate.datetime)
+                                            .add(15, "minutes")
+                                            .toDate()
+            : self.form.endDate.date = newDate;
         }
 
         /**
@@ -156,7 +159,8 @@ define(
          * @param form
          * @returns {boolean}
          */
-        function save(form) {
+        function save(form)
+        {
           form.startTime = ($rootScope.browser.mobile) ?
             moment(form.startDate.datetime).utc().valueOf() :
             Dater.convert.absolute(formatDateTime(form.startDate.date, 'dd-MM-yyyy'), formatDateTime(form.startDate.time, 'HH:mm'), false);
@@ -204,14 +208,9 @@ define(
             assignedTeamMemberUuid: form.member
           };
 
-          if (! _.isEmpty(form.uuid))
-          {
-            edit(taskValues);
-          }
-          else
-          {
-            create(taskValues);
-          }
+          (! _.isEmpty(form.uuid))
+            ? edit(taskValues)
+            : create(taskValues);
         }
 
         /**
