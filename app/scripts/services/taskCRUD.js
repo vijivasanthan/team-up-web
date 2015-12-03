@@ -29,10 +29,11 @@ define(['services/services', 'config'],
            */
           this.update = function (task)
           {
+            var self = this;
             return TeamUp._(
               'taskUpdate',
               {second: task.uuid},
-              strip(_.clone(task))
+              self.strip(_.clone(task))
             );
           };
 
@@ -283,7 +284,7 @@ define(['services/services', 'config'],
               return merged;
             };
 
-            function strip(task)
+            this.strip = function(task)
             {
               _.each(
                 [

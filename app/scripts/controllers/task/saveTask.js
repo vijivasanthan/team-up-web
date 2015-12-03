@@ -116,58 +116,27 @@ define(
         }
 
         /**
-         * set datetime values (for mobile devices)
-         * @param datetime
-         * @param minutes
-         * @returns {*}
-         */
-        function setMobileDatetime(datetime, minutes)
-        {
-          var dateTime = moment(datetime);//TODO two times a moment object?
-          var roundMinutes = (dateTime.minute() % 15);
-          return moment(dateTime)//TODO two times a moment object?
-                  .subtract(roundMinutes, "minutes")
-                  .add(minutes, "minutes")
-                  .toDate();
-        }
-
-        /**
-         * update time
-         * @param newTime
-         */
-        function newTime(newTime)
-        {
-          self.form.endDate.time = setTime(newTime, 15);
-        }
-
-        /**
-         * update date or datetime
-         * @param newDate
-         * @param mobile
-         */
-        function newDate(newDate, mobile)
-        {
-          (mobile)
-            ? self.form.endDate.datetime = moment(self.form.startDate.datetime)
-                                            .add(15, "minutes")
-                                            .toDate()
-            : self.form.endDate.date = newDate;
-        }
-
-        /**
          * validate the task properties and store them in a object
          * @param form
          * @returns {boolean}
          */
         function save(form)
         {
-          form.startTime = ($rootScope.browser.mobile) ?
-            moment(form.startDate.datetime).utc().valueOf() :
-            Dater.convert.absolute(formatDateTime(form.startDate.date, 'dd-MM-yyyy'), formatDateTime(form.startDate.time, 'HH:mm'), false);
+          form.startTime = ($rootScope.browser.mobile)
+            ? moment(form.startDate.datetime).utc().valueOf()
+            : Dater.convert.absolute(
+              formatDateTime(form.startDate.date, 'dd-MM-yyyy'),
+              formatDateTime(form.startDate.time, 'HH:mm'),
+              false
+            );
 
           form.endTime = ($rootScope.browser.mobile) ?
             moment(form.endDate.datetime).utc().valueOf() :
-            Dater.convert.absolute(formatDateTime(form.endDate.date, 'dd-MM-yyyy'), formatDateTime(form.endDate.time, 'HH:mm'), false);
+            Dater.convert.absolute(
+              formatDateTime(form.endDate.date, 'dd-MM-yyyy'),
+              formatDateTime(form.endDate.time, 'HH:mm'),
+              false
+            );
 
 
           if (!form.team) {
@@ -195,7 +164,6 @@ define(
             $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
             return false;
           }
-
 
           var taskValues = {
             uuid: (form.uuid) ? form.uuid : '',
@@ -279,6 +247,45 @@ define(
             : '/tasks2#allTasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
+        }
+
+        /**
+         * set datetime values (for mobile devices)
+         * @param datetime
+         * @param minutes
+         * @returns {*}
+         */
+        function setMobileDatetime(datetime, minutes)
+        {
+          var dateTime = moment(datetime);//TODO two times a moment object?
+          var roundMinutes = (dateTime.minute() % 15);
+          return moment(dateTime)//TODO two times a moment object?
+            .subtract(roundMinutes, "minutes")
+            .add(minutes, "minutes")
+            .toDate();
+        }
+
+        /**
+         * update time
+         * @param newTime
+         */
+        function newTime(newTime)
+        {
+          self.form.endDate.time = setTime(newTime, 15);
+        }
+
+        /**
+         * update date or datetime
+         * @param newDate
+         * @param mobile
+         */
+        function newDate(newDate, mobile)
+        {
+          (mobile)
+            ? self.form.endDate.datetime = moment(self.form.startDate.datetime)
+            .add(15, "minutes")
+            .toDate()
+            : self.form.endDate.date = newDate;
         }
 
         /**
