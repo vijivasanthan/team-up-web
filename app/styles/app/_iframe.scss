@@ -33,7 +33,7 @@
 #video-content {
   iframe {
     position: inherit;
-    height: calc(100% + 51px);
+    height: 100%;
     z-index: 3;
   }
 }
