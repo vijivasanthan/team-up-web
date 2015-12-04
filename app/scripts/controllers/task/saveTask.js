@@ -229,7 +229,7 @@ define(
         {
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
 
-          Task.update(task)
+          TaskCRUD.update(task)
             .then(function (result) {
               if(! result.error) {
                 redirect(task.assignedTeamMemberUuid);
