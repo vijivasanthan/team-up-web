@@ -869,7 +869,7 @@ define(
 
           $rootScope.createVideoCall = function(receiver)
           {
-            var room = randomString(32),
+            var room = Math.random().toString(36).slice(2), //randomString(32),
               user = receiver || 'anonymous',
               MessageModal = $injector.get('Message'),
               type = 'VIDEO_CHAT',
@@ -886,8 +886,7 @@ define(
           {
             //url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
-
-            var url = config.app.videoCallUrl + '/r/' + Math.random().toString(36).slice(2);
+            var url = config.app.videoCallUrl + '/r/' + roomId;
             url = filterUrl(url);
             $rootScope.video = {
               url: url,
