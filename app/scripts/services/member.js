@@ -31,7 +31,6 @@ define(['services/services', 'config'],
           {
             var deferred = $q.defer();
             var error  = false;
-            console.error('member', member);
 
             if (!member.phone)
             {

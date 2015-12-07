@@ -3059,7 +3059,7 @@ define(
             '20': 'Dit lid moet de rol van coördinator hebben, voordat er een wachtwoord van een ander lid gewijzigd kan worden',
             '21': 'Een parameter kan niet geparsed worden',
             '22': 'Dit lid is in geen enkel team',
-            '23': 'Geen valide body, er worden een aantal attributen gemist',
+            '23': 'Een of meerdere attributen worden gemist',
             '24': 'Er is iets niet goed geconfigureerd, waardoor AskFast niet kan worden bereikt',
             '25': 'Het telefoonnummer is reeds in gebruik',
             '26': 'Een van de condities om TeamTelefoon te activeren is niet gelukt',
