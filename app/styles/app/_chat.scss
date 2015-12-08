@@ -73,16 +73,16 @@
       height: calc(100% + 52px);
       float: left;
       position: relative;
-      @include border-bottom-left-radius(15px);
-      @include border-top-left-radius(15px);
+      //@include border-bottom-left-radius(15px);
+      //@include border-top-left-radius(15px);
       border-right: 7px solid $turq;
 
       .video-content-wrap {
         position: inherit;
         overflow: hidden;
         height: 100%;
-        @include border-bottom-left-radius(15px);
-        @include border-top-left-radius(15px);
+        @include border-bottom-left-radius(8px);
+        @include border-top-left-radius(8px);
         z-index: 6;
       }
 

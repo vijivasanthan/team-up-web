@@ -427,12 +427,8 @@ define(
 
             angular.element('#confirmTaskModal').modal('hide');
 
-            TeamUp._(
-              'taskDelete',
-              {second: task.uuid},
-              task
-            ).then(
-              function (result)
+            TaskCRUD.delete(task.uuid)
+              .then(function(result)
               {
                 if (result.error)
                 {
@@ -457,9 +453,7 @@ define(
 
                   queryMine();
                 }
-
-              }
-            );
+              });
           };
 
           $scope.members = data.members[$scope.currentTeam];

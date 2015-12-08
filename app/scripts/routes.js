@@ -233,7 +233,7 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data: function ($route, $rootScope, Teams, Clients, TaskCRUD, Task, TeamUp, CurrentSelection, $location, $q) {
-                  var selectedTask = $route.current.params.taskId;
+                  var taskId = $route.current.params.taskId;
 
                   var deferred = $q.defer(),
                   teamId = CurrentSelection.getTeamId(),
@@ -247,10 +247,12 @@ define(
                       task: null
                     };
 
-                  TaskCRUD.taskData(selectedTask)
-                    .then(function(task){
+                  TaskCRUD.read(taskId)
+                    .then(function(task)
+                    {
                       data.task = task;
-                      if(!data.task.uuid){
+                      if(!data.task.uuid)
+                      {
                         $location.path('/task/new');
                       }
                     });
