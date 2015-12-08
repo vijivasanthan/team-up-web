@@ -61,8 +61,8 @@ block navbar
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
 						li.tasks2(ng-show='app.domainPermission.tasks',
-							data-match-route='/tasks2.*')
-							a(ng-click='nav("tasks2")') {{ ui.task.tasks }}
+							data-match-route='/task.*')
+							a(ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 						li.teamMenu(ng-show='app.domainPermission.teams',
 							data-match-route='/team.?')
 							a(ng-click='nav("team/members")') {{ui.teamup.teams}}

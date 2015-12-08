@@ -194,15 +194,15 @@ div(ng-controller='timeline as taskPlanboard')
 	
 			ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
 	
-				li(class="{{(views.myTasks==true) && 'active'}}")
-					a(data-toggle='tab', ng-click='nav("tasks2")')
+				li(class="" data-match-route='/task/mytasks')
+					a(data-toggle='tab', ng-click='nav("task/mytasks")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.myTask}}
 				li(class="{{(views.allTasks==true) && 'active'}}")
 					a(data-toggle='tab', ng-click='nav("tasks2/alltasks")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.allTasks}}
-				li(class="{{(views.newTask==true) && 'active'}}")
+				li(class="" data-match-route='/task/new')
 					a(data-toggle='tab', ng-click='nav("task/new")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.newTask}}

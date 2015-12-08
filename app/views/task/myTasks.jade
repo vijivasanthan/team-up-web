@@ -1,3 +1,74 @@
+#confirmTaskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteTask}}
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal')
+					| {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button', ng-click='mytasks.deleteTask(mytasks.taskToRemove)')
+					| {{ui.teamup.confirms.remove}}
+				
+				
+#taskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='taskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#taskModalLabel.modal-title
+					span.text-turq {{task.relatedClient.fullName}}
+					br
+					| {{task.plannedTaskDuration.label}}
+			.modal-body
+				//pre: small {{task | json}}
+				//h4.pull-right Taakinformatie
+				dl
+				
+					dt {{ ui.task.status }}
+						dd {{mytasks.currentTask.statusLabel}}
+					dt {{ ui.task.timeframe }}
+						dd {{mytasks.currentTask.plannedTaskDuration.label}}
+					dt(ng-show='task.description') {{ ui.task.description }}
+						dd(class="description") {{mytasks.currentTask.description}}
+					dt {{ ui.task.createdBy }}
+						dd
+							a(href='index.html#/profile/{{task.authorUuid}}#profile')
+								| {{mytasks.author}}
+				hr 
+				//h4.pull-right Cliëntinformatie
+				dl
+					dt {{ ui.teamup.client }}
+						dd
+							a(href='index.html#/clientProfile/{{mytasks.currentTask.relatedClientUuid}}#viewClient')
+								| {{mytasks.currentTask.relatedClient.fullName}}
+					dt {{ ui.teamup.clientGroup }}
+						dd
+							a(href='index.html#/client?uuid={{mytasks.currentTask.relatedClient.clientGroupUuid}}#client')
+								| {{mytasks.currentTask.relatedClient.clientGroupName}}
+					dt {{ ui.groups.address }}
+						dd {{mytasks.currentTask.relatedClient.fullAddress}}
+					dt {{ ui.teamup.phone }}
+						dd {{mytasks.currentTask.relatedClient.phone}}
+				hr
+				dl
+					dt(ng-show='mytasks.currentTask.assignedTeamMember') {{ ui.teamup.name }}
+						dd
+							a(href='index.html#/profile/{{mytasks.currentTask.assignedTeamMemberUuid}}#profile')
+								| {{mytasks.currentTask.assignedTeamMember.fullName}}
+					dt Team
+						dd
+							a(href='index.html#/team?uuid={{mytasks.currentTask.assignedTeamUuid}}#team')
+								| {{mytasks.currentTask.assignedTeamFullName}}
+							
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
@@ -6,27 +77,23 @@
 		include ../task/tabs
 	.tab-content
 		#myTasks.tab-pane(class="active")
-			.tab-header
+			.tab-header {{currentTask}}
 				h3.pull-left {{ui.task.myTask}}
-
 			hr
+			article(ng-show='mytasks.tasks.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
 
-			article(ng-show='tasks.mine.loading'): p {{ui.task.myTask}} {{ ui.task.hasToLoad }}
-
-			article(ng-hide='tasks.mine.loading')
+			article(ng-hide='mytasks.tasks.loading')
 
 				.well(style='padding-top: 25px',
-				ng-show='tasks.mine.archieve')
+				ng-show='mytasks.tasks.archieve')
 					label
 						input(type='checkbox',
-						name='showAllTasks'
-						ng-model='showAllTasks',
-						ng-change='showTasks(showAllTasks, "mine")')
+							name='mytasks.tasks',
+							ng-model='mytasks.tasks')
 						small &nbsp; {{ ui.task.showArchivedTasks }}
+				p(ng-hide='mytasks.tasks.list.length > 0') {{ui.task.noTasks}}
 
-				p(ng-hide='tasks.mine.list.length > 0') {{ui.task.noTasks}}
-
-				table.table.table-striped.taskTable(ng-show='tasks.mine.list.length > 0')
+				table.table.table-striped.taskTable(ng-show='mytasks.tasks.list.length > 0')
 					thead
 						tr
 							th
@@ -43,7 +110,7 @@
 							th(colspan='1')
 
 					tbody
-						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
+						tr(ng-repeat='task in mytasks.tasks.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
 								.roundedPicSmall.memberStateBusy(back-img='{{task.relatedClientUuid | avatar:"client":"80"}}')
@@ -59,15 +126,15 @@
 								small {{task.plannedTaskDuration.label}}
 							td
 								.pull-right
-									button.btn-primary.btn-mini(type='button', ng-click='unAssignTask(task)')
+									button.btn-primary.btn-mini(type='button', ng-click='mytasks.unAssignTask(task)')
 										i.icon-minus
-									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+									button.btn-primary.btn-mini(type='button', ng-click='mytasks.viewTaskData(task)')
 										i.icon-info(style='margin-top:1px')
-									button.btn-primary.btn-mini(type='button',
-									ng-click='modifyTask(task)')
-										i.icon-edit
-									button.btn-primary.btn-mini(type='button', ng-click='confirmDeleteTask(task)')
+									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
+										button.btn-primary.btn-mini(type='button')
+											i.icon-edit
+									button.btn-primary.btn-mini(type='button', ng-click='mytasks.confirmDeleteTask(task)')
 										i.icon-trash
 				span.muted.pull-right
-					small: i {{ ui.task.thereAreAmountTasks(tasks.mine.list.length) }}
+					small: i {{ ui.task.thereAreAmountTasks(mytasks.tasks.list.length) }}
 					

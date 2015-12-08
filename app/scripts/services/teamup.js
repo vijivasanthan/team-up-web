@@ -316,6 +316,15 @@ define(
                 /**
                  * Client-Group
                  */
+                /**
+                 * Get clientgroup by id
+                 */
+                clientGroupGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
                 // create a new client group
                 clientGroupAdd: {
                   method: 'POST',

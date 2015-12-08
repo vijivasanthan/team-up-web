@@ -158,9 +158,25 @@ define(
               controller: 'myTasks as mytasks',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, Task, $q)
+                data: function (TaskCRUD, $q)
                 {
 
+                  var deferred = $q.defer(),
+                    data = {
+                      myTasks: null
+                    };
+
+                  TaskCRUD.queryMine()
+                    .then(function (tasks)
+                    {
+                      data.myTasks = {
+                        loading: false,
+                        list: tasks['on'],
+                        archieve: (tasks.off.length > 0)
+                      };
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
                 }
               }
             })
@@ -170,7 +186,7 @@ define(
               controller: 'allTasks as alltasks',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, Task, $q)
+                data: function (Teams, Clients, Task, TaskCRUD, $q)
                 {
 
                 }

@@ -11,6 +11,7 @@ define(['services/services', 'config'],
                 Store,
                 TeamUp,
                 Task,
+                Clients,
                 $q)
       {
         //constructor
@@ -246,6 +247,7 @@ define(['services/services', 'config'],
             return Task.mine(statuses)
               .then(function(tasks)
               {
+                console.log('my tasks', tasks);
                 tasks = normalize(tasks);
                 Store('app').save('myTasks2', tasks);
                 return tasks;

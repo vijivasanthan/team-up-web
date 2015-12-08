@@ -274,7 +274,7 @@ define(
         function redirect(assignedTeamMember)
         {
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
-            ? '/tasks2#myTasks'
+            ? '/task/mytasks'
             : '/tasks2#allTasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
