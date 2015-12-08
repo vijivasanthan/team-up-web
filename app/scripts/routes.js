@@ -30,11 +30,17 @@ define(
               {
                 return function (exception, cause)
                 {
+                  console.error('exceptionq', exception);
                   trackGa('send', 'exception', {
                     exDescription: exception.message,
                     exFatal: false,
-                    exStack: exception.stack
+                    stack: exception.stack,
+                    line: '123'
+                    //exStack: exception.stack
                   });
+
+                  trackGa('send', 'event', 'JavaScript Error',
+                    exception.message, exception.stack, { 'nonInteraction': 1 });
 
                   $delegate(exception, cause);
                 };
