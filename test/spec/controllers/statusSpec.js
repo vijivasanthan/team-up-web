@@ -6,7 +6,7 @@ define(
     'moment',
     'lawnchair',
     'lawnchair-dom',
-    'controllers/status',
+    'controllers/team-telephone/status',
     'modals/slots',
     'services/settings'
   ],

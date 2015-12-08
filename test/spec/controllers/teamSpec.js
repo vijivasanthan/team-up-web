@@ -2,7 +2,7 @@ define(
   [
     'angular-mocks',
     'app',
-    'controllers/team',
+    'controllers/team/team',
     'services/team',
     'services/teamup',
     'services/teams',
