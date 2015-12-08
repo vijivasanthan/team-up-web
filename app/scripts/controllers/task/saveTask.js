@@ -1,6 +1,7 @@
 define(
   ['../controllers'],
-  function (controllers) {
+  function (controllers)
+  {
     'use strict';
 
     controllers.controller(
@@ -18,18 +19,17 @@ define(
                 Clients,
                 TaskCRUD,
                 CurrentSelection,
-                data) {
-
+                data)
+      {
+        //viewmodel
         var self = this;
-        //props
+
+        //properties
         self.currentTeamMembers = data.currentTeamMembers;
         self.clientGroups = data.clientGroups;
         self.teamClientgroupLinks = data.teamClientgroupLinks;
         self.currentGroupClients = data.currentGroupClients;
         self.task = data.task;
-
-        //check if a date is changed when user is editing an existing task, unedited tasks can be saved regardless of date value
-        var dateChanged = false;
 
         //methods
         self.setTeam = setTeam;
@@ -47,7 +47,6 @@ define(
         {
           Team.read(teamId)
         }
-
         /**
          * get team and client related data after input
          * @param teamId
@@ -55,12 +54,14 @@ define(
         function changeTeam(teamId)
         {
           Team.read(teamId)
-            .then(function (members) {
+            .then(function (members)
+            {
               CurrentSelection.local = teamId;
               self.currentTeamMembers = members;
               return Clients.getAllLocal();
             })
-            .then(function (clientGroups) {
+            .then(function (clientGroups)
+            {
               data.clientGroups = clientGroups;
               return TaskCRUD.teamClientLink(teamId, clientGroups);
             })
@@ -70,7 +71,8 @@ define(
               self.form.currentGroup = teamClientgroupLinks[0].id;
               return Clients.getSingle(self.form.currentGroup);
             })
-            .then(function (currentGroupClients) {
+            .then(function (currentGroupClients)
+            {
               self.currentGroupClients = currentGroupClients;
             });
         }
@@ -81,7 +83,8 @@ define(
          * @param dateFormat
          * @returns {*}
          */
-        function formatDateTime(date, dateFormat) {
+        function formatDateTime(date, dateFormat)
+        {
           return $filter('date')(date, dateFormat);
         }
 
@@ -91,7 +94,8 @@ define(
          * @param minutes
          * @returns {Date}
          */
-        function setTime(date, minutes) {
+        function setTime(date, minutes)
+        {
           var roundMinutes = formatDateTime(date, 'm');
           roundMinutes = (roundMinutes % 15);
           return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
@@ -100,10 +104,12 @@ define(
         /**
          * prepare start and end date objects with default values
          */
-        function setDates() {
+        function setDates()
+        {
           var currentStartTime = setTime(new Date(), 15);
           var currentEndTime = setTime(new Date(), 30);
-          var setDefaultDate = function (date) {
+          var setDefaultDate = function (date)
+          {
             return moment(date).format('DD-MM-YYYY');
           };
 
@@ -129,10 +135,10 @@ define(
           form.startTime = ($rootScope.browser.mobile)
             ? moment(form.startDate.datetime).utc().valueOf()
             : Dater.convert.absolute(
-              formatDateTime(form.startDate.date, 'dd-MM-yyyy'),
-              formatDateTime(form.startDate.time, 'HH:mm'),
-              false
-            );
+            formatDateTime(form.startDate.date, 'dd-MM-yyyy'),
+            formatDateTime(form.startDate.time, 'HH:mm'),
+            false
+          );
 
           form.endTime = ($rootScope.browser.mobile) ?
             moment(form.endDate.datetime).utc().valueOf() :
@@ -143,29 +149,34 @@ define(
             );
 
 
-          if (!form.team) {
+          if (!form.team)
+          {
             $rootScope.notifier.error($rootScope.ui.teamup.teamNamePrompt1);
             return;
           }
 
-          if ($rootScope.app.domainPermission.clients) {
-            if (!form.currentGroup) {
+          if ($rootScope.app.domainPermission.clients)
+          {
+            if (!form.currentGroup)
+            {
               $rootScope.notifier.error($rootScope.ui.teamup.selectClientGroup);
               return;
             }
-            if (!form.currentClient) {
+            if (!form.currentClient)
+            {
               $rootScope.notifier.error($rootScope.ui.task.specifyClient);
               return;
             }
           }
-
           var now = new Date().getTime();
-          if ((dateChanged) && form.startTime <= now || form.endTime <= now) {
+          if (form.startTime <= now || form.endTime <= now)
+          {
             $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
             return false;
           }
 
-          if (form.startTime >= form.endTime) {
+          if (form.startTime >= form.endTime)
+          {
             $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
             return false;
           }
@@ -181,7 +192,7 @@ define(
             assignedTeamMemberUuid: form.member
           };
 
-          (! _.isEmpty(form.uuid))
+          (!_.isEmpty(form.uuid))
             ? edit(taskValues)
             : create(taskValues);
         }
@@ -207,16 +218,6 @@ define(
               time: task.plannedEndVisitTime,
               datetime: setMobileDatetime(task.plannedEndVisitTime)
             },
-            oldStartDate: {
-              date: new Date(task.plannedStartVisitTime),
-              time: task.plannedStartVisitTime,
-              datetime: setMobileDatetime(task.plannedStartVisitTime)
-            },
-            oldEndDate: {
-              date: new Date(task.plannedEndVisitTime),
-              time: task.plannedEndVisitTime,
-              datetime: setMobileDatetime(task.plannedEndVisitTime)
-            },
             description: task.description
           };
         }
@@ -225,15 +226,27 @@ define(
          * create a new task
          * @param task
          */
-        function create(task) {
+        function create(task)
+        {
           $rootScope.statusBar.display($rootScope.ui.task.creatingTask);
 
-          TeamUp._('taskAdd', null, task)
-            .then(function (result) {
-              if(! result.error) {
+          TaskCRUD.create(task)
+            .then(function(result)
+            {
+              if (!result.error)
+              {
                 redirect(task.assignedTeamMemberUuid);
               }
             });
+
+          //TeamUp._('taskAdd', null, task)
+          //  .then(function (result)
+          //  {
+          //    if (!result.error)
+          //    {
+          //      redirect(task.assignedTeamMemberUuid);
+          //    }
+          //  });
         }
 
         /**
@@ -245,8 +258,10 @@ define(
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
 
           TaskCRUD.update(task)
-            .then(function (result) {
-              if(! result.error) {
+            .then(function (result)
+            {
+              if (!result.error)
+              {
                 redirect(task.assignedTeamMemberUuid);
               }
             });
@@ -256,7 +271,8 @@ define(
          * redirect to mytasks or alltasks after task save
          * @param assignedTeamMember
          */
-        function redirect(assignedTeamMember){
+        function redirect(assignedTeamMember)
+        {
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
             ? '/tasks2#myTasks'
             : '/tasks2#allTasks';
@@ -275,9 +291,9 @@ define(
           var dateTime = moment(datetime);//TODO two times a moment object?
           var roundMinutes = (dateTime.minute() % 15);
           return moment(dateTime)//TODO two times a moment object?
-            .subtract(roundMinutes, "minutes")
-            .add(minutes, "minutes")
-            .toDate();
+                  .subtract(roundMinutes, "minutes")
+                  .add(minutes, "minutes")
+                  .toDate();
         }
 
         /**
@@ -286,7 +302,6 @@ define(
          */
         function newTime(newTime)
         {
-          dateChanged = true;
           self.form.endDate.time = setTime(newTime, 15);
         }
 
@@ -297,11 +312,10 @@ define(
          */
         function newDate(newDate, mobile)
         {
-          dateChanged = true;
           (mobile)
             ? self.form.endDate.datetime = moment(self.form.startDate.datetime)
-            .add(15, "minutes")
-            .toDate()
+                                              .add(15, "minutes")
+                                              .toDate()
             : self.form.endDate.date = newDate;
         }
 
@@ -309,12 +323,16 @@ define(
          * check if a task has to be edited. if not, initialise default team and date values
          * @param teamId
          */
-        function init(teamId) {
+        function init(teamId)
+        {
           Team.init(teamId);
           self.teams = Team.list;
 
           //create tasks object
-          if(data.task) modifyExistingTask(self.task);
+          if (data.task)
+          {
+            modifyExistingTask(self.task);
+          }
           else
           {
             self.form = {};
@@ -323,7 +341,8 @@ define(
           }
 
           //Set the clientGroups who has a relation with the selected team
-          if(data.teamClientgroupLinks && data.teamClientgroupLinks.length) {
+          if (data.teamClientgroupLinks && data.teamClientgroupLinks.length)
+          {
             self.form.currentGroup = data.teamClientgroupLinks[0].id;
           }
         }

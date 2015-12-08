@@ -857,7 +857,8 @@ define(
 
           function randomString(length)
           {
-            return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+            var max = 20;
+            return Math.round((Math.pow(max, length + 1) - Math.random() * Math.pow(max, length))).toString(max).slice(1);
           }
 
           var filterUrl = function(url)
@@ -868,7 +869,7 @@ define(
 
           $rootScope.createVideoCall = function(receiver)
           {
-            var room = randomString(32),
+            var room = Math.random().toString(36).slice(2), //randomString(32),
               user = receiver || 'anonymous',
               MessageModal = $injector.get('Message'),
               type = 'VIDEO_CHAT',
@@ -883,14 +884,13 @@ define(
 
           $rootScope.startVideoCall = function(roomId)
           {
-            console.log('roomId', roomId);
-            var url = config.app.videoCallUrl + '/r/' + roomId;
             //url += '&username=' + $rootScope.app.resources.fullName;
             //username aan de url toevoegen
-
+            var url = config.app.videoCallUrl + '/r/' + roomId;
+            url = filterUrl(url);
             $rootScope.video = {
-              url: filterUrl(url),
-              src: filterUrl(url)
+              url: url,
+              src: url
             };
 
             var content = angular.element('#message-content');

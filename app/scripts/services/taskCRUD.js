@@ -21,23 +21,60 @@ define(['services/services', 'config'],
         //public methods
         (function ()
         {
+          this.create = create;
+          this.read = read;
+          this.update = update;
+          this.delete = _delete;
+          this.teamClientLink = teamClientLink;
+          this.chains = chains;
+          this.queryMine = queryMine;
+          this.queryAll = queryAll;
+
+          /**
+           * Create a task
+           * @param task The newly created task
+           * @returns {*}
+           */
+          function create(task)
+          {
+            return Task.create(task);
+          }
+
+          /**
+           * Get task by id
+           * @param taskId
+           * @returns {*}
+           */
+          function read(taskId)
+          {
+            return Task.get(taskId);
+          }
 
           /**
            * Update a task
            * @param The editable task
            * @returns {*} promise after updating the task
            */
-          this.update = function (task)
+          function update(task)
           {
-            var self = this;
-            return TeamUp._(
-              'taskUpdate',
-              {second: task.uuid},
-              self.strip(_.clone(task))
+            return Task.update(
+              task.uuid,
+              strip(_.clone(task))
             );
-          };
+          }
 
-          this.strip = function(task)
+          /**
+           * Delete the task by the given id
+           * @param taskId The id of the task
+           * @returns {*|{method, params}}
+           * @private
+           */
+          function _delete(taskId)
+          {
+            return Task.delete(taskId);
+          }
+
+          function strip(task)
           {
             _.each(
               [
@@ -51,35 +88,127 @@ define(['services/services', 'config'],
                 delete task[eliminated]
               }
             );
-
             return task;
-          };
+          }
 
           /**
            * get related clientgroups for teamid
            * @param currentTeamId
            */
-          this.teamClientLink = function (currentTeamId)
+          function teamClientLink(currentTeamId)
           {
             return TeamUp._(
               'teamClientGroupQuery',
               {second: currentTeamId}
             );
-          };
+          }
 
-          /**
-           * get task data for taskid
-           * @param taskId
-           */
-          this.taskData = function (taskId)
+          function mergeOnStatus(tasks)
           {
-            return TeamUp._(
-              'taskById',
-              {second: taskId}
+            var merged = {on: [], off: []};
+            if (tasks.length > 0)
+            {
+              var grouped = _.groupBy(tasks, function (task)
+              {
+                return task.status
+              });
+
+              if (grouped[1] != null)
+              {
+                merged.on = merged.on.concat(grouped[1]);
+              }
+              if (grouped[2] != null)
+              {
+                merged.on = merged.on.concat(grouped[2]);
+              }
+
+              if (grouped[3] != null)
+              {
+                merged.off = merged.off.concat(grouped[3]);
+              }
+              if (grouped[4] != null)
+              {
+                merged.off = merged.off.concat(grouped[4]);
+              }
+            }
+
+            return merged;
+          }
+
+          function processTasks(tasks)
+          {
+            _.each(
+              tasks,
+              function (task)
+              {
+                task.statusLabel = config.app.taskStates[task.status];
+
+                task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                if (task.relatedClient == null)
+                {
+                  task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
+                }
+
+                task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
+
+                if (task.relatedClient.address != null)
+                {
+                  task.relatedClient.fullAddress = task.relatedClient.address.street +
+                    ' ' +
+                    task.relatedClient.address.no +
+                    ', ' +
+                    task.relatedClient.address.city;
+                }
+                else
+                {
+                  task.relatedClient.address = {
+                    'address': {
+                      'street': null,
+                      'no': null,
+                      'zip': null,
+                      'city': null,
+                      'country': null,
+                      'latitude': 0,
+                      'longitude': 0
+                    }
+                  };
+                }
+
+                task.plannedTaskDuration = {
+                  difference: task.plannedEndVisitTime - task.plannedStartVisitTime
+                };
+
+                task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' - ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur' :
+                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                ' uur - ' +
+                $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                ' ' +
+                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                ' uur';
+
+                if (task.assignedTeamMemberUuid != '')
+                {
+                  task.assignedTeamMember = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
+                }
+              }
             );
           }
 
-          this.chains = function ()
+          function chains()
           {
             var data = {},
               teams = Store('app').get('teams'),
@@ -94,37 +223,72 @@ define(['services/services', 'config'],
               {
                 group = Store('app').get('teamGroup_' + team.uuid)[0];
 
-                // console.log('group ->', group);
-
                 data[team.uuid] = {
                   team: team,
                   members: Store('app').get(team.uuid)
                 };
               }
             );
-          };
+          }
 
-          this.queryMine = function ()
+          /**
+           * Query the tasks of the logged member
+           * @param returns only the tasks with statuses being set
+           * ACTIVE : 1
+           * PLANNING : 2
+           * FINISHED: 3
+           * CANCELLED: 4
+           * Default: 1,2
+           * @returns {*}
+           */
+          function queryMine(statuses)
           {
-            var self = this;
-            return TeamUp._('taskMineQuery')
-              .then(
-                function (tasks)
-                {
-                  tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+            return Task.mine(statuses)
+              .then(function(tasks)
+              {
+                tasks = normalize(tasks);
+                Store('app').save('myTasks2', tasks);
+                return tasks;
+              });
+          }
 
-                  self.processTasks(tasks);
+          /**
+           * Query the tasks of a single team
+           * @param teamId the id of the team
+           * @param returns only the tasks with statuses being set
+           * ACTIVE : 1
+           * PLANNING : 2
+           * FINISHED: 3
+           * CANCELLED: 4
+           * Default: 1,2
+           * @returns {*}
+           */
+          function queryByTeam(teamId, statuses)
+          {
+            return Task.team(teamId, statuses)
+              .then(function(tasks)
+              {
+                tasks = normalize(tasks);
+                Store('app').save('myTasks2', tasks);
+                return tasks;
+              });
+          }
 
-                  var merged = self.mergeOnStatus(tasks);
+          /**
+           * sort the tasks by plannedStartVisitTime and ad the right client
+           * and teammember to the task object
+           * merge it afterwards on status
+           * @param tasks The requested tasks
+           * @returns {*}
+           */
+          function normalize(tasks)
+          {
+            tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+            processTasks(tasks);
+            return mergeOnStatus(tasks);
+          }
 
-                  Store('app').save('myTasks2', merged);
-
-                  return merged;
-                }.bind(this)
-              );
-          };
-
-          this.queryAll = function ()
+          function queryAll()
           {
             var deferred = $q.defer(),
               calls = [],
@@ -136,10 +300,8 @@ define(['services/services', 'config'],
               function (team)
               {
                 calls.push(
-                  TeamUp._(
-                    'taskByTeam',
-                    {fourth: team.uuid} // statuses: '1, 2, 3, 4'
-                  ).then(
+                  Task.team(team.uuid)
+                  .then(
                     function (allTasks)
                     {
                       bulks[team.uuid] = allTasks;
@@ -187,9 +349,9 @@ define(['services/services', 'config'],
                     }
                   );
 
-                  self.processTasks(tasks);
+                  processTasks(tasks);
 
-                  var merged = self.mergeOnStatus(tasks);
+                  var merged = mergeOnStatus(tasks);
 
                   Store('app').save('allTasks2', merged);
 
@@ -197,115 +359,8 @@ define(['services/services', 'config'],
                 }.bind(bulks)
               );
 
-            this.processTasks = function(tasks)
-            {
-              _.each(
-                tasks,
-                function (task)
-                {
-                  task.statusLabel = config.app.taskStates[task.status];
-
-                  task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
-                  if (task.relatedClient == null)
-                  {
-                    task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
-                  }
-
-                  task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
-
-                  if (task.relatedClient.address != null)
-                  {
-                    task.relatedClient.fullAddress = task.relatedClient.address.street +
-                      ' ' +
-                      task.relatedClient.address.no +
-                      ', ' +
-                      task.relatedClient.address.city;
-                  }
-                  else
-                  {
-                    task.relatedClient.address = {
-                      'address': {
-                        'street': null,
-                        'no': null,
-                        'zip': null,
-                        'city': null,
-                        'country': null,
-                        'latitude': 0,
-                        'longitude': 0
-                      }
-                    };
-                  }
-
-                  task.plannedTaskDuration = {
-                    difference: task.plannedEndVisitTime - task.plannedStartVisitTime
-                  };
-
-                  task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
-                  $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                  ' ' +
-                  $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                  ' ' +
-                  $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                  ' - ' +
-                  $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                  ' uur' :
-                  $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                  ' ' +
-                  $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                  ' ' +
-                  $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                  ' uur - ' +
-                  $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                  ' ' +
-                  $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                  ' ' +
-                  $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                  ' uur';
-
-                  if (task.assignedTeamMemberUuid != '')
-                  {
-                    task.assignedTeamMember = $rootScope.getTeamMemberById(task.assignedTeamMemberUuid);
-                  }
-                }
-              );
-            };
-
-            this.mergeOnStatus = function(tasks)
-            {
-              var merged = {on: [], off: []};
-              if (tasks.length > 0)
-              {
-                var grouped = _.groupBy(tasks, function (task)
-                {
-                  return task.status
-                });
-
-                if (grouped[1] != null)
-                {
-                  merged.on = merged.on.concat(grouped[1]);
-                }
-                if (grouped[2] != null)
-                {
-                  merged.on = merged.on.concat(grouped[2]);
-                }
-
-                if (grouped[3] != null)
-                {
-                  merged.off = merged.off.concat(grouped[3]);
-                }
-                if (grouped[4] != null)
-                {
-                  merged.off = merged.off.concat(grouped[4]);
-                }
-              }
-
-              return merged;
-            };
-
-
-
             return deferred.promise;
-          };
+          }
 
         }).call(taskCRUD.prototype);
 

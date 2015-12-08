@@ -1,3 +1,16 @@
-/**
- * Created by ask-intern on 27-Nov-15.
- */
+define(
+  ['../controllers'],
+  function (controllers)
+  {
+    'use strict';
+
+    controllers.controller(
+      'allTasks',
+      function ()
+      {
+        var self = this;
+        console.log("alltasks controller called");
+      }
+    );
+  }
+);
