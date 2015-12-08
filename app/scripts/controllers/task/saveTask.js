@@ -28,6 +28,7 @@ define(
         self.currentGroupClients = data.currentGroupClients;
         self.task = data.task;
 
+
         //methods
         self.setTeam = setTeam;
         self.changeTeam = changeTeam;
@@ -37,6 +38,7 @@ define(
         self.save = save;
         self.init = init;
 
+
         //initialisation
         self.init(data.currentTeamId);
 
@@ -44,6 +46,7 @@ define(
         {
           Team.read(teamId)
         }
+
         /**
          * get team and client related data after input
          * @param teamId
@@ -104,14 +107,14 @@ define(
           };
 
           self.form.startDate = {
-              date: setDefaultDate(new Date()),
-              time: currentStartTime,
-              datetime: setMobileDatetime(new Date(), 15)
+            date: setDefaultDate(new Date()),
+            time: currentStartTime,
+            datetime: setMobileDatetime(new Date(), 15)
           };
           self.form.endDate = {
-              date: setDefaultDate(new Date()),
-              time: currentEndTime,
-              datetime: setMobileDatetime(new Date(), 30)
+            date: setDefaultDate(new Date()),
+            time: currentEndTime,
+            datetime: setMobileDatetime(new Date(), 30)
           };
         }
 
@@ -154,12 +157,38 @@ define(
               return;
             }
           }
-          var now = new Date().getTime();
-          if (form.startTime <= now || form.endTime <= now) {
-            $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
-            return false;
-          }
+          //if(!_.isEmpty(form.uuid)) {
+          //  if (!_.isEqual(self.form.startDate, self.form.oldStartDate) && !_.isEqual(self.form.endDate, self.form.oldEndDate)) {
+          //    console.log("start " + self.form.startTime + " oldstart " + self.form.oldStartDate.time);
+          //    console.log("end " + self.form.startTime + " oldend " + self.form.oldEndDate.time);
+          //    var now = new Date().getTime();
+          //    if (form.startTime <= now || form.endTime <= now) {
+          //      console.log("changed is true");
+          //      $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
+          //      return false;
+          //    }
+          //  }
+          //}
 
+            var now = new Date().getTime();
+            console.log('form.oldStartDate ', form.oldStartDate);
+            console.log('form.startTime ', form.startTime);
+
+          console.log('form.oldEndDate ', form.oldEndDate);
+          console.log('form.endTime ', form.endTime);
+          console.log(form.oldStartDate && (form.oldStartDate !== form.startTime &&  form.oldEndDate !== form.endTime));
+          if ((form.oldStartDate && (form.oldStartDate !== form.startTime &&  form.oldEndDate !== form.endTime))){
+            if (form.startTime <= now || form.endTime <= now) {
+              $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
+              return false;
+            }
+          }
+          else if (form.startTime <= now || form.endTime <= now) {
+            console.log("hoi");
+                $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
+                return false;
+
+          }
           if (form.startTime >= form.endTime) {
             $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
             return false;
@@ -176,9 +205,17 @@ define(
             assignedTeamMemberUuid: form.member
           };
 
-          (! _.isEmpty(form.uuid))
-            ? edit(taskValues)
-            : create(taskValues);
+          if(! _.isEmpty(form.uuid))
+          {
+            (form.oldStartDate !== form.startTime &&  form.oldEndDate !== form.endTime)
+              ? edit(taskValues)
+              : $rootScope.notifier.error($rootScope.ui.task.planTaskInFuture);
+
+          }
+          else
+          {
+            create(taskValues);
+          }
         }
 
         /**
@@ -202,6 +239,8 @@ define(
               time: task.plannedEndVisitTime,
               datetime: setMobileDatetime(task.plannedEndVisitTime)
             },
+            oldStartDate: task.plannedStartVisitTime,
+            oldEndDate: task.plannedEndVisitTime,
             description: task.description
           };
         }
@@ -229,7 +268,7 @@ define(
         {
           $rootScope.statusBar.display($rootScope.ui.task.editingTask);
 
-          Task.update(task)
+          TaskCRUD.update(task)
             .then(function (result) {
               if(! result.error) {
                 redirect(task.assignedTeamMemberUuid);

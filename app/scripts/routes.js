@@ -160,48 +160,19 @@ define(
               resolve: {
                 data: function (Teams, Clients, Task, $q)
                 {
-                  var deferred = $q.defer(),
-                    data = {
-                      teams: null,
-                      myTasks: null,
-                      members: null,
-                      teamClientsGroups: null,
-                      clientGroups: null,
-                      clients: null
-                    };
 
-                  Teams.getAllLocal()
-                    .then(function (teams)
-                    {
-                      data.teams = teams;
-                      return Teams.getAllWithMembers()
-                    })
-                    .then(function (members)
-                    {
-                      data.members = members;
-                      return $q.all([
-                        Task.queryMine(),
-                        Teams.relationClientGroups(data.teams)
-                      ])
-                    })
-                    .then(function (teamsTasksData)
-                    {
-                      data.myTasks = teamsTasksData[0];
-                      data.teamClientsGroups = teamsTasksData[1];
-                      return Clients.getAllLocal();
-                    })
-                    .then(function (clientGroups)
-                    {
-                      data.clientGroups = clientGroups;
-                      return Clients.getAllWithClients();
-                    })
-                    .then(function (GroupsAndClients)
-                    {
-                      data.clients = GroupsAndClients;
-                      console.log('data', data);
-                      deferred.resolve(data);
-                    });
-                  return deferred.promise;
+                }
+              }
+            })
+
+            .when('/task/alltasks', {
+              templateUrl: 'views/task/allTasks.html',
+              controller: 'allTasks as alltasks',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, Clients, Task, $q)
+                {
+
                 }
               }
             })

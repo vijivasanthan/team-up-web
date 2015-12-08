@@ -9,8 +9,7 @@ define(
       function ()
       {
         var self = this;
-
-
+        console.log("mytasks controller called");
       }
     );
   }
