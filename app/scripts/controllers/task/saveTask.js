@@ -238,15 +238,6 @@ define(
                 redirect(task.assignedTeamMemberUuid);
               }
             });
-
-          //TeamUp._('taskAdd', null, task)
-          //  .then(function (result)
-          //  {
-          //    if (!result.error)
-          //    {
-          //      redirect(task.assignedTeamMemberUuid);
-          //    }
-          //  });
         }
 
         /**

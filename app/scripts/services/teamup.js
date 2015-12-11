@@ -352,6 +352,12 @@ define(
                  * Client
                  */
                 // add a client
+                clientGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'client'
+                  }
+                },
                 clientAdd: {
                   method: 'POST',
                   params: {

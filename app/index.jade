@@ -106,10 +106,10 @@ block navbar
 								aria-labelledby="dropdownMenu1")
 									li(role="presentation",
 										ng-show='app.domainPermission.tasks',
-										data-match-route='/tasks2.*')
+										data-match-route='/task.*')
 										a(role="menuitem",
 											tabindex="-1",
-											ng-click='nav("tasks2")') {{ ui.task.tasks }}
+											ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 									li.teamMenu(role="presentation",
 										ng-show='app.domainPermission.teams',
 										data-match-route='/team')

@@ -136,7 +136,7 @@ define(['services/services', 'config'],
             return merged;
           }
 
-          function processTasks(tasks)
+          function processTasks(tasks, tasksClients)
           {
             _.each(
               tasks,
@@ -144,7 +144,7 @@ define(['services/services', 'config'],
               {
                 task.statusLabel = config.app.taskStates[task.status];
 
-                task.relatedClient = $rootScope.getClientByID(task.relatedClientUuid);
+                task.relatedClient = tasksClients[task.relatedClientUuid];
                 if (task.relatedClient == null)
                 {
                   task.relatedClient = {firstName: "*", lastName: $rootScope.ui.teamup.notFound};
@@ -207,6 +207,8 @@ define(['services/services', 'config'],
                 }
               }
             );
+
+            return tasks;
           }
 
           function chains()
@@ -244,14 +246,61 @@ define(['services/services', 'config'],
            */
           function queryMine(statuses)
           {
-            return Task.mine(statuses)
+            var deferred = $q.defer(),
+                data = {};
+
+            Task.mine(statuses)
               .then(function(tasks)
               {
-                console.log('my tasks', tasks);
-                tasks = normalize(tasks);
-                Store('app').save('myTasks2', tasks);
-                return tasks;
+                data.tasks = tasks;
+                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+                var clientUuids = _.pluck(tasks, 'relatedClientUuid');
+                var uniqueClients = _.uniq(clientUuids);
+                return getTasksClients(uniqueClients);
+              })
+              .then(function (tasksClients) {
+                tasksClients = _.indexBy(tasksClients, 'uuid');
+
+                data.tasks = processTasks(data.tasks, tasksClients);
+                deferred.resolve(data.tasks);
+                getFinishedTasks();
               });
+
+            return deferred.promise;
+          }
+
+          function getFinishedTasks(tasks){
+            Task.mine(3)
+              .then(function(result)
+              {
+                console.log(result);
+
+              });
+          }
+
+
+          //function normalize2(tasks)
+          //{
+          //  tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+          //  var clientUuids = _.pluck(tasks, 'relatedClientUuid');
+          //  var uniqueClients = _.uniq(clientUuids);
+          //  console.log(uniqueClients);
+          //  getTasksClients(uniqueClients)
+          //    .then(function (result) {
+          //      console.log('result', result);
+          //    })
+          //}
+
+          function getTasksClients(clients)
+          {
+            var promises = [];
+            _.each(clients, function (clientId)
+            {
+              var promise = Clients.getClient(clientId);
+              promises.push(promise);
+            });
+
+            return $q.all(promises);
           }
 
           /**

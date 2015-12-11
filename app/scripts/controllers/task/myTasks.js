@@ -20,16 +20,22 @@ define(
 
         //properties
         self.tasks = data.myTasks;
-        console.log(self.tasks);
+        self.reversed = true;
+
         //methods
+        self.orderBy = orderBy;
         self.assignTask = assignTask;
         self.unAssignTask = unAssignTask;
         self.confirmDeleteTask = confirmDeleteTask;
         self.viewTaskData = viewTaskData;
         self.deleteTask = deleteTask;
 
+        function orderBy(ordered)
+        {
+          self.ordered = ordered;
 
-        //"524fd0a0-fe77-432c-b949-22b6179bf7a8"
+          self.reversed = !self.reversed;
+        }
 
         function assignTask(task)
         {
@@ -79,13 +85,8 @@ define(
         {
           //get the clientgroupdUuid from the client
 
-          //Clients.getGroup(clientgroupdUuid)
-          //  .then(function (clientGroup) {
-          //  //clientGroup
-          //    })
-
           self.currentTask = task;
-          console.log(task);
+
           if (task.assignedTeamUuid)
           {
             self.currentTask.assignedTeamFullName = $rootScope.getTeamName(task.assignedTeamUuid);

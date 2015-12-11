@@ -156,7 +156,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									i.icon-sort
 							th(colspan='1')
 
-					tbody
+					tbody 
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td

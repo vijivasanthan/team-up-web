@@ -167,12 +167,16 @@ define(
                     };
 
                   TaskCRUD.queryMine()
-                    .then(function (tasks)
+                    .then(function (taskData)
                     {
+                      var tasks = {
+                        on: taskData
+                      }
+
                       data.myTasks = {
                         loading: false,
-                        list: tasks['on'],
-                        archieve: (tasks.off.length > 0)
+                        list: tasks['on']
+                        //archive: (tasks.off.length > 0)
                       };
                       deferred.resolve(data);
                     });
