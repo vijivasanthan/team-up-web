@@ -85,12 +85,10 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 			article(ng-hide='mytasks.tasks.loading')
 
-				.well(style='padding-top: 25px',
-				ng-show='mytasks.tasks.archieve')
+				.well(style='padding-top: 25px')
 					label
 						input(type='checkbox',
-							name='mytasks.tasks',
-							ng-model='mytasks.tasks')
+							ng-model='mytasks.isStatusFinished' ng-change='mytasks.toggleStatusFinished()')
 						small &nbsp; {{ ui.task.showArchivedTasks }}
 				p(ng-hide='mytasks.tasks.list.length > 0') {{ui.task.noTasks}}
 

@@ -9,7 +9,6 @@ define(
       function ()
       {
         var self = this;
-        console.log("alltasks controller called");
       }
     );
   }

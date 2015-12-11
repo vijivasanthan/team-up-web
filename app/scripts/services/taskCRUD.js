@@ -253,42 +253,32 @@ define(['services/services', 'config'],
               .then(function(tasks)
               {
                 data.tasks = tasks;
-                tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-                var clientUuids = _.pluck(tasks, 'relatedClientUuid');
-                var uniqueClients = _.uniq(clientUuids);
-                return getTasksClients(uniqueClients);
+                return findUniqueClientsByTasks(tasks);
               })
               .then(function (tasksClients) {
                 tasksClients = _.indexBy(tasksClients, 'uuid');
-
                 data.tasks = processTasks(data.tasks, tasksClients);
                 deferred.resolve(data.tasks);
-                getFinishedTasks();
               });
 
             return deferred.promise;
           }
 
-          function getFinishedTasks(tasks){
-            Task.mine(3)
-              .then(function(result)
-              {
-                console.log(result);
-
-              });
+          function findUniqueClientsByTasks(tasks)
+          {
+            tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+            var clientUuids = _.pluck(tasks, 'relatedClientUuid');
+            var uniqueClients = _.uniq(clientUuids);
+            return getTasksClients(uniqueClients);
           }
 
-
-          //function normalize2(tasks)
-          //{
-          //  tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-          //  var clientUuids = _.pluck(tasks, 'relatedClientUuid');
-          //  var uniqueClients = _.uniq(clientUuids);
-          //  console.log(uniqueClients);
-          //  getTasksClients(uniqueClients)
-          //    .then(function (result) {
-          //      console.log('result', result);
-          //    })
+          //function getFinishedTasks(tasks){
+          //  Task.mine(3)
+          //    .then(function(result)
+          //    {
+          //      console.log(result);
+          //
+          //    });
           //}
 
           function getTasksClients(clients)

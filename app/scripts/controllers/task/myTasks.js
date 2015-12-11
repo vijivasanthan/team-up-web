@@ -29,6 +29,7 @@ define(
         self.confirmDeleteTask = confirmDeleteTask;
         self.viewTaskData = viewTaskData;
         self.deleteTask = deleteTask;
+        self.toggleStatusFinished = toggleStatusFinished;
 
         function orderBy(ordered)
         {
@@ -36,6 +37,33 @@ define(
 
           self.reversed = !self.reversed;
         }
+
+        function toggleStatusFinished()
+        {
+          console.log(self.isStatusFinished);
+          if(self.isStatusFinished) {
+            TaskCRUD.queryMine(3)
+              .then(function (finishedTasks)
+              {
+                if(finishedTasks.length) {
+                  self.tasks.list = self.tasks.list.concat(finishedTasks);
+                  self.tasks.list = _.unique(self.tasks.list);
+                }
+                else{
+                  $rootScope.notifier.success("Geen gearchiveerde taken aanwezig");
+                  self.isStatusFinished = false;
+                }
+              });
+          }
+          else{
+            self.tasks.list = self.tasks.list.filter(function(task)
+            {
+              return task.status !== 3;
+            });
+          }
+        }
+
+
 
         function assignTask(task)
         {

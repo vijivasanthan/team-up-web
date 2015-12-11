@@ -171,7 +171,7 @@ define(
                     {
                       var tasks = {
                         on: taskData
-                      }
+                      };
 
                       data.myTasks = {
                         loading: false,
