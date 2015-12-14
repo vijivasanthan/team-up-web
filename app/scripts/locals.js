@@ -3078,7 +3078,7 @@ define(
         options: {
           title: 'Instellingen ',
           teamEmail: 'E-mail van het team',
-          activateTeamTelephone: "Activeer TeamTelefoon voor het ",
+          activateTeamTelephone: "Activeer TeamTelefoon voor ",
           phoneNumberAlias: 'Telefoonnummer alias',
           teamTelephoneNotActivated: "TeamTelefoon is niet geactiveerd voor dit team",
           smsMissedCall: 'SMS bij een gemist gesprek of nieuwe voicemail',
