@@ -227,6 +227,7 @@ define(['services/services', 'config'],
                 //});
 
                 //The duration of the call is the total length of how long the caller has been calling to teamtelefoon.
+                //The first child log is always the one to the teamtelefoon
                 log.duration = howLong(log.childs[0].duration.stamp);//set the parsed to timestring duration
               }
             });
