@@ -82,7 +82,7 @@ define(
             .when(
             '/logout',
             {
-              //templateUrl: 'views/logout.html',
+              templateUrl: 'views/logout.html',
               resolve: {
                 data: [
                   '$rootScope',
