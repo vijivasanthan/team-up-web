@@ -216,16 +216,18 @@ define(['services/services', 'config'],
                 log.status = log.childs[logIndexLength].status;
                 //The final number of the callsequence
                 log.to = log.childs[logIndexLength].to;
+
                 //get all the duration timestamps of the child calls
-                var totalDuration = _.map(log.childs, function (child) {
-                  return child.duration.stamp;
-                });
-                //count the total duration of the childcalls
-                totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
-                  return previousValue + currentValue;
-                });
-                //set the parsed to timestring duration
-                log.duration = howLong(totalDuration);
+                //var totalDuration = _.map(log.childs, function (child) {
+                //  return child.duration.stamp;
+                //});
+                ////count the total duration of the childcalls
+                //totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
+                //  return previousValue + currentValue;
+                //});
+
+                //The duration of the call is the total length of how long the caller has been calling to teamtelefoon.
+                log.duration = howLong(log.childs[0].duration.stamp);//set the parsed to timestring duration
               }
             });
 
