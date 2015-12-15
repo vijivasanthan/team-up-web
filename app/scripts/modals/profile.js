@@ -100,53 +100,6 @@ define(['services/services', 'config'], function (services, config)
       }, resources).$promise;
     };
 
-    Profile.prototype.userExists = function (username)
-    {
-      var UserExists = $resource(config.app.host + 'user_exists', {}, {
-        check: {
-          method: 'GET',
-          params: {username: ''},
-          transformResponse: function (data)
-          {
-            console.error('data', data);
-            return {'userExist': ( ! data)};
-          }
-        }
-      });
-
-      return UserExists.check({username: username},
-        function (result)
-        {
-          return true
-        },
-        function (error)
-        {
-          return false;
-        }).$promise;
-    };
-
-    Profile.prototype.pincodeExists = function (id, pincode, assignedId)
-    {
-      //TODO validation check in controller
-      if (pincode != '' || pincode.length > 0)
-      {
-        var pincode = Profile.prototype.resourcePincode();
-        return pincode.check({
-            id: id,
-            pincode: pincode,
-            returnExistsWhenAssignedToUuid: assignedId
-          },
-          function ()
-          {
-            return true;
-          },
-          function ()
-          {
-            return false;
-          }).$promise;
-      }
-    };
-
     Profile.prototype.changePassword = function (memberId, oldPass, newPass)
     {
       var changePassword = Profile.prototype.resourceChangePassword();
@@ -169,61 +122,6 @@ define(['services/services', 'config'], function (services, config)
         }).$promise;
     };
 
-    Profile.prototype.getWithSlots = function (id, localize, params)
-    {
-      var deferred = $q.defer();
-      var resource = Profile.prototype.resourceProfile();
-
-      resource.prototype.get(id, localize).then(function (resources)
-      {
-        Slots.user({
-          user: id,
-          start: params.start,
-          end: params.end
-        }).then(function (slots)
-        {
-          deferred.resolve(angular.extend(resources, {
-            slots: slots,
-            synced: new Date().getTime(),
-            periods: {
-              start: params.start * 1000,
-              end: params.end * 1000
-            }
-          }));
-        });
-      });
-
-      return deferred.promise;
-    };
-
-    Profile.prototype.getSlots = function (id, params)
-    {
-      var deferred = $q.defer();
-
-      Slots.user({
-        user: id,
-        start: params.start / 1000,
-        end: params.end / 1000
-      }).then(function (slots)
-      {
-        deferred.resolve({
-          slots: slots,
-          synced: new Date().getTime(),
-          periods: {
-            start: params.start,
-            end: params.end
-          }
-        });
-      });
-
-      return deferred.promise;
-    };
-
-    Profile.prototype.local = function ()
-    {
-      return Store('app').get('resources');
-    };
-
     Profile.prototype.save = function (id, resources)
     {
       var resource = Profile.prototype.resourceProfile();
@@ -234,5 +132,106 @@ define(['services/services', 'config'], function (services, config)
 
     return new Profile;
 
+    //Profile.prototype.userExists = function (username)
+    //{
+    //  var UserExists = $resource(config.app.host + 'user_exists', {}, {
+    //    check: {
+    //      method: 'GET',
+    //      params: {username: ''},
+    //      transformResponse: function (data)
+    //      {
+    //        console.error('data', data);
+    //        return {'userExist': ( ! data)};
+    //      }
+    //    }
+    //  });
+    //
+    //  return UserExists.check({username: username},
+    //    function (result)
+    //    {
+    //      return true
+    //    },
+    //    function (error)
+    //    {
+    //      return false;
+    //    }).$promise;
+    //};
+
+    //Profile.prototype.pincodeExists = function (id, pincode, assignedId)
+    //{
+    //  //TODO validation check in controller
+    //  if (pincode != '' || pincode.length > 0)
+    //  {
+    //    var pincode = Profile.prototype.resourcePincode();
+    //    return pincode.check({
+    //        id: id,
+    //        pincode: pincode,
+    //        returnExistsWhenAssignedToUuid: assignedId
+    //      },
+    //      function ()
+    //      {
+    //        return true;
+    //      },
+    //      function ()
+    //      {
+    //        return false;
+    //      }).$promise;
+    //  }
+    //};
+
+    //Profile.prototype.getWithSlots = function (id, localize, params)
+    //{
+    //  var deferred = $q.defer();
+    //  var resource = Profile.prototype.resourceProfile();
+    //
+    //  resource.prototype.get(id, localize).then(function (resources)
+    //  {
+    //    Slots.user({
+    //      user: id,
+    //      start: params.start,
+    //      end: params.end
+    //    }).then(function (slots)
+    //    {
+    //      deferred.resolve(angular.extend(resources, {
+    //        slots: slots,
+    //        synced: new Date().getTime(),
+    //        periods: {
+    //          start: params.start * 1000,
+    //          end: params.end * 1000
+    //        }
+    //      }));
+    //    });
+    //  });
+    //
+    //  return deferred.promise;
+    //};
+
+    //Profile.prototype.getSlots = function (id, params)
+    //{
+    //  var deferred = $q.defer();
+    //
+    //  Slots.user({
+    //    user: id,
+    //    start: params.start / 1000,
+    //    end: params.end / 1000
+    //  }).then(function (slots)
+    //  {
+    //    deferred.resolve({
+    //      slots: slots,
+    //      synced: new Date().getTime(),
+    //      periods: {
+    //        start: params.start,
+    //        end: params.end
+    //      }
+    //    });
+    //  });
+    //
+    //  return deferred.promise;
+    //};
+
+    //Profile.prototype.local = function ()
+    //{
+    //  return Store('app').get('resources');
+    //};
   });
 });
