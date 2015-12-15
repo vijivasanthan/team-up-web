@@ -830,7 +830,7 @@ define(
           $rootScope.unique = function (collection)
           {
             var filter = function (result) {
-              return result.role > 0 && result.role < 4;
+              return result;
             };
 
             return _.indexBy(_.filter(
