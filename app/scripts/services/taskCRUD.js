@@ -29,7 +29,7 @@ define(['services/services', 'config'],
           this.teamClientLink = teamClientLink;
           this.chains = chains;
           this.queryMine = queryMine;
-          this.queryAll = queryAll;
+          this.queryByTeam = queryByTeam;
 
           /**
            * Create a task
@@ -264,35 +264,6 @@ define(['services/services', 'config'],
             return deferred.promise;
           }
 
-          function findUniqueClientsByTasks(tasks)
-          {
-            tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-            var clientUuids = _.pluck(tasks, 'relatedClientUuid');
-            var uniqueClients = _.uniq(clientUuids);
-            return getTasksClients(uniqueClients);
-          }
-
-          //function getFinishedTasks(tasks){
-          //  Task.mine(3)
-          //    .then(function(result)
-          //    {
-          //      console.log(result);
-          //
-          //    });
-          //}
-
-          function getTasksClients(clients)
-          {
-            var promises = [];
-            _.each(clients, function (clientId)
-            {
-              var promise = Clients.getClient(clientId);
-              promises.push(promise);
-            });
-
-            return $q.all(promises);
-          }
-
           /**
            * Query the tasks of a single team
            * @param teamId the id of the team
@@ -306,102 +277,135 @@ define(['services/services', 'config'],
            */
           function queryByTeam(teamId, statuses)
           {
-            return Task.team(teamId, statuses)
+            var deferred = $q.defer(),
+              data = {};
+
+            Task.team(teamId, statuses)
               .then(function(tasks)
               {
-                tasks = normalize(tasks);
-                Store('app').save('myTasks2', tasks);
-                return tasks;
+
+                data.tasks = tasks;
+                return findUniqueClientsByTasks(tasks);
+              })
+              .then(function (tasksClients) {
+                tasksClients = _.indexBy(tasksClients, 'uuid');
+                data.tasks = processTasks(data.tasks, tasksClients);
+                deferred.resolve(data.tasks);
               });
-          }
-
-          /**
-           * sort the tasks by plannedStartVisitTime and ad the right client
-           * and teammember to the task object
-           * merge it afterwards on status
-           * @param tasks The requested tasks
-           * @returns {*}
-           */
-          function normalize(tasks)
-          {
-            tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-            processTasks(tasks);
-            return mergeOnStatus(tasks);
-          }
-
-          function queryAll()
-          {
-            var deferred = $q.defer(),
-              calls = [],
-              bulks = {},
-              self = this;
-
-            _.each(
-              Store('app').get('teams'),
-              function (team)
-              {
-                calls.push(
-                  Task.team(team.uuid)
-                  .then(
-                    function (allTasks)
-                    {
-                      bulks[team.uuid] = allTasks;
-                    }
-                  )
-                );
-              }
-            );
-
-            $q.all(calls)
-              .then(
-                function ()
-                {
-                  var basket = [];
-
-                  /**
-                   * All tasks
-                   * @type {Array}
-                   */
-                  _.each(
-                    bulks,
-                    function (tasks)
-                    {
-                      if (tasks.length > 0)
-                      {
-                        _.each(
-                          tasks,
-                          function (task)
-                          {
-                            basket.push(task);
-                          }
-                        );
-                      }
-                    }
-                  );
-
-                  var tasks = _.map(
-                    _.indexBy(basket, function (node)
-                    {
-                      return node.uuid
-                    }),
-                    function (task)
-                    {
-                      return task
-                    }
-                  );
-
-                  processTasks(tasks);
-
-                  var merged = mergeOnStatus(tasks);
-
-                  Store('app').save('allTasks2', merged);
-
-                  deferred.resolve(merged);
-                }.bind(bulks)
-              );
 
             return deferred.promise;
           }
+
+
+
+          function findUniqueClientsByTasks(tasks)
+          {
+            tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+            var clientUuids = _.pluck(tasks, 'relatedClientUuid');
+            var uniqueClients = _.uniq(clientUuids);
+            return getTasksClients(uniqueClients);
+          }
+
+          function getTasksClients(clients)
+          {
+            var promises = [];
+            _.each(clients, function (clientId)
+            {
+              var promise = Clients.getClient(clientId);
+              promises.push(promise);
+            });
+
+            return $q.all(promises);
+          }
+
+
+          ///**
+          // * sort the tasks by plannedStartVisitTime and ad the right client
+          // * and teammember to the task object
+          // * merge it afterwards on status
+          // * @param tasks The requested tasks
+          // * @returns {*}
+          // */
+          //function normalize(tasks)
+          //{
+          //  tasks = _.sortBy(tasks, 'plannedStartVisitTime');
+          //  processTasks(tasks);
+          //  return mergeOnStatus(tasks);
+          //}
+
+          //function queryAll()
+          //{
+          //  var deferred = $q.defer(),
+          //    calls = [],
+          //    bulks = {},
+          //    self = this;
+          //
+          //  _.each(
+          //    TeamUp._('teamQuery'),
+          //    function (team)
+          //    {
+          //      calls.push(
+          //        Task.team(team.uuid)
+          //        .then(
+          //          function (allTasks)
+          //          {
+          //            bulks[team.uuid] = allTasks;
+          //          }
+          //        )
+          //      );
+          //    }
+          //  );
+          //
+          //  $q.all(calls)
+          //    .then(
+          //      function ()
+          //      {
+          //        var basket = [];
+          //
+          //        /**
+          //         * All tasks
+          //         * @type {Array}
+          //         */
+          //        _.each(
+          //          bulks,
+          //          function (tasks)
+          //          {
+          //            if (tasks.length > 0)
+          //            {
+          //              _.each(
+          //                tasks,
+          //                function (task)
+          //                {
+          //                  basket.push(task);
+          //                }
+          //              );
+          //            }
+          //          }
+          //        );
+          //
+          //        var tasks = _.map(
+          //          _.indexBy(basket, function (node)
+          //          {
+          //            return node.uuid
+          //          }),
+          //          function (task)
+          //          {
+          //            return task
+          //          }
+          //        );
+          //
+          //        processTasks(tasks);
+          //
+          //        var merged = mergeOnStatus(tasks);
+          //
+          //        Store('app').save('allTasks2', merged);
+          //
+          //        deferred.resolve(merged);
+          //      }.bind(bulks)
+          //    );
+          //
+          //  return deferred.promise;
+          //}
 
         }).call(taskCRUD.prototype);
 

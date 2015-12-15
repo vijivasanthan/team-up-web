@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'myTasks',
+      'viewTasks',
       function ($rootScope,
                 $timeout,
                 $filter,
@@ -20,8 +20,10 @@ define(
 
         //properties
         self.tasks = data.myTasks;
+        self.teams = data.teams;
+        self.currentTeamUuid = data.currentTeam;
         self.reversed = true;
-
+        console.log(self.teams);
         //methods
         self.orderBy = orderBy;
         self.assignTask = assignTask;
@@ -40,7 +42,7 @@ define(
 
         function toggleStatusFinished()
         {
-          console.log(self.isStatusFinished);
+          console.log("finished tasks " + self.isStatusFinished);
           if(self.isStatusFinished) {
             TaskCRUD.queryMine(3)
               .then(function (finishedTasks)
@@ -85,7 +87,7 @@ define(
           updateTask(task);
         }
 
-        function updateTask(task, only)
+        function updateTask(task, only, callback)
         {
           TaskCRUD.update(task)
             .then(
@@ -103,8 +105,8 @@ define(
 
                 return;
               }
-
-              queryMine(only);
+              TaskCRUD.queryMine(only);
+              (callback && callback.call(this, task));
             }
           );
         }
