@@ -17,7 +17,7 @@ define(
         $scope.getCall = function(callback)
         {
           var params = $location.search();
-          var url = config.app.videoCallUrl + '/r/' + (params.roomId || 123) + "?teamupName="; + params.fullName;
+          var url = config.app.videoCallUrl + '/r/' + (params.roomId || 123) + "?teamupName=" + params.fullName;
           (callback && callback());
           return $filter('trusted_url')(url);
         };
