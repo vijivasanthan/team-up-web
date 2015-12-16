@@ -60,7 +60,7 @@ block navbar
 					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
-						li.tasks2(ng-show='app.domainPermission.tasks',
+						li.taskMenu(ng-show='app.domainPermission.tasks',
 							data-match-route='/task.*')
 							a(ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 						li.teamMenu(ng-show='app.domainPermission.teams',
@@ -106,7 +106,7 @@ block navbar
 								aria-labelledby="dropdownMenu1")
 									li(role="presentation",
 										ng-show='app.domainPermission.tasks',
-										data-match-route='/task.*')
+										data-match-route='/task')
 										a(role="menuitem",
 											tabindex="-1",
 											ng-click='nav("task/mytasks")') {{ ui.task.tasks }}

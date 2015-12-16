@@ -9,6 +9,7 @@ define(
       function ($rootScope,
                 $timeout,
                 $filter,
+                $window,
                 $location,
                 Store,
                 TaskCRUD,
@@ -23,7 +24,7 @@ define(
         self.teams = data.teams;
         self.currentTeamUuid = data.currentTeam;
         self.reversed = true;
-        console.log(self.teams);
+
         //methods
         self.orderBy = orderBy;
         self.assignTask = assignTask;
@@ -43,21 +44,25 @@ define(
         function toggleStatusFinished()
         {
           console.log("finished tasks " + self.isStatusFinished);
-          if(self.isStatusFinished) {
+          if(self.isStatusFinished)
+          {
             TaskCRUD.queryMine(3)
               .then(function (finishedTasks)
               {
-                if(finishedTasks.length) {
+                if(finishedTasks.length)
+                {
                   self.tasks.list = self.tasks.list.concat(finishedTasks);
                   self.tasks.list = _.unique(self.tasks.list);
                 }
-                else{
-                  $rootScope.notifier.success("Geen gearchiveerde taken aanwezig");
+                else
+                {
+                  $rootScope.notifier.success($rootScope.ui.task.noArchivedTask);
                   self.isStatusFinished = false;
                 }
               });
           }
-          else{
+          else
+          {
             self.tasks.list = self.tasks.list.filter(function(task)
             {
               return task.status !== 3;
@@ -65,19 +70,17 @@ define(
           }
         }
 
-
-
-        function assignTask(task)
+        function assignTask(task, viewType)
         {
           trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
 
           task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
 
-          updateTask(task, true);
+          updateTask(task);
           $location.path("/task/mytasks");
         }
 
-        function unAssignTask(task)
+        function unAssignTask(task, viewType)
         {
           trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
 
@@ -87,7 +90,7 @@ define(
           updateTask(task);
         }
 
-        function updateTask(task, only, callback)
+        function updateTask(task, viewType)
         {
           TaskCRUD.update(task)
             .then(
@@ -105,8 +108,11 @@ define(
 
                 return;
               }
-              TaskCRUD.queryMine(only);
-              (callback && callback.call(this, task));
+              TaskCRUD.queryMine()
+                .then(function (tasks)
+                {
+                  self.tasks.list = tasks;
+                });
             }
           );
         }
@@ -146,8 +152,10 @@ define(
           );
         }
 
+
+
         // Remove a task
-        function deleteTask(task)
+        function deleteTask(task, viewType)
         {
           self.taskToRemove = {};
 
@@ -167,9 +175,24 @@ define(
                 {
                   console.log('this tasks was archieved');
                 }
-                TaskCRUD.queryMine();
-                location.reload();
+                if(!viewType){
+                TaskCRUD.queryMine()
+                  .then(function (tasks)
+                  {
+                    self.tasks.list = tasks;
+                  });
+                  console.log(viewType);
+                }
+                if(viewType){
+                  TaskCRUD.queryByTeam(self.currentTeamUuid)
+                    .then(function (tasks)
+                    {
+                      self.tasks.list = tasks;
+                    });
+                  console.log(viewType);
+                }
               }
+
             });
         }
       }

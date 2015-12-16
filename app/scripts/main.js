@@ -165,6 +165,8 @@ require(
     'services/member',
     'services/password',
     'services/taskCRUD',
+    'services/taskCRUDold',
+
 
     'directives/widgets',
     'directives/date-range-picker',
@@ -207,7 +209,6 @@ require(
     'controllers/task/tasks2',
     'controllers/task/saveTask',
     'controllers/task/viewTasks',
-    'controllers/task/allTasks',
     'controllers/task/planboard/timeline',
     'controllers/task/planboard/timeline-navigation',
     'controllers/team-telephone/timeline/agenda-timeline',

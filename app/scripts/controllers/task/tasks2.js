@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'tasks2Ctrl',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, TaskCRUD,
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, TaskCRUDold,
                   Teams, Clients, Dater, moment, data)
         {
           $rootScope.fixStyles();
@@ -162,7 +162,7 @@ define(
 
           function queryMine(only, callback)
           {
-            TaskCRUD.queryMine()
+            TaskCRUDold.queryMine()
               .then(
               function (tasks)
               {
@@ -188,7 +188,7 @@ define(
           {
             queryMine(true);
 
-            TaskCRUD.queryAll()
+            TaskCRUDold.queryAll()
               .then(
               function (tasks)
               {
@@ -296,6 +296,38 @@ define(
 
           };
 
+          //$scope.$watch(function() {
+          //  return $scope.task.start.date;
+          //}, function(newDate) {
+          //  $scope.task.end.date = newDate;
+          //});
+
+          //          $scope.$watch(
+          //            'showOnlyAvailable',
+          //            function (toggle)
+          //            {
+          //              console.log('coming in here?');
+          //
+          //              $scope.filtered = !$scope.filtered;
+          //
+          ////              if (toggle)
+          ////              {
+          ////                 = { assignedTeamMemberUuid: null };
+          ////              }
+          ////              else
+          ////              {
+          ////                $scope.filtered = { assignedTeamMemberUuid: null };
+          ////              }
+          //            }
+          //          );
+
+          //          $scope.filterFn = function (task)
+          //          {
+          //            return ($scope.showOnlyAvailable && task.assignedTeamMemberUuid != null) ?
+          //                   true :
+          //                   false;
+          //          };
+
           $scope.openTask = function (task)
           {
             $scope.task = task;
@@ -329,7 +361,7 @@ define(
 
           function updateTask(task, only)
           {
-            TaskCRUD.update(task)
+            TaskCRUDold.update(task)
               .then(
               function (result)
               {
@@ -395,7 +427,7 @@ define(
 
             angular.element('#confirmTaskModal').modal('hide');
 
-            TaskCRUD.delete(task.uuid)
+            TaskCRUDold.delete(task.uuid)
               .then(function(result)
               {
                 if (result.error)
@@ -499,7 +531,7 @@ define(
           //change team depends on the default team
           $scope.changeTeam($scope.currentTeam);
 
-          TaskCRUD.chains();
+          TaskCRUDold.chains();
 
             // Validation of the task form
           $scope.validateTaskForm = function (task)

@@ -266,7 +266,7 @@ define(
         {
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
             ? '/task/mytasks'
-            : '/tasks2#allTasks';
+            : '/task/alltasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
         }
