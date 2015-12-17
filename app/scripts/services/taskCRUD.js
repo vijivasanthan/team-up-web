@@ -140,7 +140,6 @@ define(['services/services', 'config'],
 
           function getDetails(task)
           {
-            console.log('task', task);
             var deferred = $q.defer();
             var promises = [
               Profile.fetchUserData(task.authorUuid)
@@ -167,7 +166,6 @@ define(['services/services', 'config'],
             $q.all(promises)
               .then(function (data)
               {
-                console.log(data);
                 task.author = data[0].firstName + ' ' + data[0].lastName;
                 if(assignedTask) task.assignedTeamFullName = data[1].name;
                 task.relatedClient.clientGroupName = data[data.length - 1].name;
