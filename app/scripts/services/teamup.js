@@ -19,6 +19,17 @@ define(
               {},
               {
                 /**
+                 * Alarmnumbers
+                 */
+                alarmNumbersGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'alarmNumbers'
+                  },
+                  isArray: true
+                },
+
+                /**
                  * Account calls
                  */
                 login: {
