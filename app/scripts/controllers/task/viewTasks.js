@@ -41,6 +41,9 @@ define(
           self.reversed = !self.reversed;
         }
 
+        /**
+         * show/hide finished tasks
+         */
         function toggleStatusFinished()
         {
           console.log("finished tasks " + self.isStatusFinished);
@@ -70,6 +73,11 @@ define(
           }
         }
 
+        /**
+         * assign task to team member
+         * @param task
+         * @param viewType
+         */
         function assignTask(task, viewType)
         {
           trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
@@ -80,6 +88,11 @@ define(
           $location.path("/task/mytasks");
         }
 
+        /**
+         * unassign task to team member
+         * @param task
+         * @param viewType
+         */
         function unAssignTask(task, viewType)
         {
           trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
@@ -90,6 +103,11 @@ define(
           updateTask(task);
         }
 
+        /**
+         * update task with changes and requery
+         * @param task
+         * @param viewType
+         */
         function updateTask(task, viewType)
         {
           TaskCRUD.update(task)
@@ -117,6 +135,10 @@ define(
           );
         }
 
+        /**
+         * view task details
+         * @param task
+         */
         function viewTaskData(task)
         {
           self.currentTask = task;
@@ -126,6 +148,10 @@ define(
             })
         }
 
+        /**
+         * confirm deleting the task
+         * @param task
+         */
         function confirmDeleteTask(task)
         {
           $timeout(
@@ -139,8 +165,11 @@ define(
         }
 
 
-
-        // Remove a task
+        /**
+         * delete a task
+         * @param task
+         * @param viewType
+         */
         function deleteTask(task, viewType)
         {
           self.taskToRemove = {};
