@@ -27,7 +27,7 @@ define(
 
         //methods
         self.orderBy = orderBy;
-        self.assignTask = assignTask;
+        //self.assignTask = assignTask;
         self.unAssignTask = unAssignTask;
         self.confirmDeleteTask = confirmDeleteTask;
         self.viewTaskData = viewTaskData;
@@ -77,15 +77,15 @@ define(
          * assign task to team member
          * @param task
          */
-        function assignTask(task)
-        {
-          trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
-
-          task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
-
-          updateTask(task);
-          $location.path("/task/mytasks");
-        }
+        //function assignTask(task)
+        //{
+        //  trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
+        //
+        //  task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
+        //
+        //  updateTask(task);
+        //  $location.path("/task/mytasks");
+        //}
 
         /**
          * unassign task to team member
@@ -94,7 +94,6 @@ define(
         function unAssignTask(task)
         {
           trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
-
           task.assignedTeamMemberUuid = null;
           task.assignedTeamUuid = null;
           delete task.author;
@@ -108,16 +107,13 @@ define(
         function updateTask(task)
         {
           TaskCRUD.update(task)
-            .then(
-            function (result)
-            {
+            .then(function (result) {
               if (! result.error)
               {
                 var index = _.findIndex(self.tasks.list, { uuid: task.uuid });
                 self.tasks.list.splice(index, 1);
               }
-            }
-          );
+            });
         }
 
         /**
@@ -143,7 +139,6 @@ define(
             function ()
             {
               self.taskToRemove = task;
-
               angular.element('#confirmTaskModal').modal('show');
             }
           );
@@ -164,35 +159,12 @@ define(
           TaskCRUD.delete(task.uuid)
             .then(function(result)
             {
-              if (result.error)
+              if (! result.error)
               {
-                  $rootScope.notifier.error(result.error);
-              }
-              else
-              {
+                var index = _.findIndex(self.tasks.list, { uuid: task.uuid });
+                self.tasks.list.splice(index, 1);
                 $rootScope.notifier.success($rootScope.ui.task.taskDeleted);
-                if(task.status == 3)
-                {
-                  console.log('this tasks was archieved');
-                }
-                if(!viewType){
-                TaskCRUD.queryMine()
-                  .then(function (tasks)
-                  {
-                    self.tasks.list = tasks;
-                  });
-                  console.log(viewType);
-                }
-                if(viewType){
-                  TaskCRUD.queryByTeam(self.currentTeamUuid)
-                    .then(function (tasks)
-                    {
-                      self.tasks.list = tasks;
-                    });
-                  console.log(viewType);
-                }
               }
-
             });
         }
       }
