@@ -119,25 +119,11 @@ define(
 
         function viewTaskData(task)
         {
-          //get the clientgroupdUuid from the client
-
           self.currentTask = task;
-
-          if (task.assignedTeamUuid)
-          {
-            self.currentTask.assignedTeamFullName = $rootScope.getTeamName(task.assignedTeamUuid);
-          }
-
-          if (task.relatedClient.clientGroupUuid)
-          {
-            self.currentTask.relatedClient.clientGroupName = $rootScope.getClientGroupName(task.relatedClient.clientGroupUuid);
-          }
-
-          if(task.authorUuid) {
-            var authordata = $rootScope.getTeamMemberById(task.authorUuid);
-            self.author = authordata.firstName + ' ' + authordata.lastName;
-          }
-          angular.element('#taskModal').modal('show');
+          TaskCRUD.getDetails(task)
+            .then(function (taskData) {
+              self.currentTask = taskData;
+            })
         }
 
         function confirmDeleteTask(task)

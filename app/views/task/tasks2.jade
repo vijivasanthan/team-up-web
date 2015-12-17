@@ -269,7 +269,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-hide='task.assignedTeamMember',
 									ng-click='assignTask(task)')
 										i.icon-plus
-									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+									button.btn-primary.btn-mini(type='button', ng-controller='taskDetail as detail' ng-click='detail.getTaskDetails(task)')
 										i.icon-info(style='margin-top:1px')
 									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
 										button.btn-primary.btn-mini(type='button')

@@ -283,6 +283,14 @@ define(
                 /**
                  * Client-Group
                  */
+                clientGroupNameGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'client',
+                    second: 'clientGroups',
+                    third: ''
+                  }
+                },
                 // get list of all the client groups
                 clientGroupsQuery: {
                   method: 'GET',
@@ -490,6 +498,13 @@ define(
                     first: 'team'
                   }
                 },
+                teamGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    id: ''
+                  }
+                },
                 // add a team
                 teamAdd: {
                   method: 'POST',
@@ -541,6 +556,15 @@ define(
                 /**
                  * Team-Member
                  */
+                // get a member of a team
+                teamMemberGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'member'
+                  }
+                },
+
                 // add a member to a team
                 teamMemberAdd: {
                   method: 'POST',

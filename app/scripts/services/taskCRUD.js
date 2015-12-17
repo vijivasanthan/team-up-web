@@ -12,6 +12,7 @@ define(['services/services', 'config'],
                 TeamUp,
                 Task,
                 Clients,
+                Profile,
                 $q)
       {
         //constructor
@@ -30,6 +31,7 @@ define(['services/services', 'config'],
           this.chains = chains;
           this.queryMine = queryMine;
           this.queryByTeam = queryByTeam;
+          this.getDetails = getDetails;
 
           /**
            * Create a task
@@ -134,6 +136,52 @@ define(['services/services', 'config'],
             }
 
             return merged;
+          }
+
+          function getDetails(task)
+          {
+            console.log('task', task);
+            var deferred = $q.defer();
+            var promises = [
+              Profile.fetchUserData(task.authorUuid)
+            ];
+            var assignedTask = false;
+
+            if(task.assignedTeamUuid && task.assignedTeamMemberUuid)
+            {
+              assignedTask = true;
+              promises.push(
+                TeamUp._('teamGet',
+                  {
+                    second: task.assignedTeamUuid
+                  })
+              );
+            }
+            if(task.relatedClient.clientGroupUuid)
+            {
+              promises.push(TeamUp._('clientGroupGet',
+                  {second: task.relatedClient.clientGroupUuid})
+              );
+            }
+
+            $q.all(promises)
+              .then(function (data)
+              {
+                console.log(data);
+                task.author = data[0].firstName + ' ' + data[0].lastName;
+                if(assignedTask) task.assignedTeamFullName = data[1].name;
+                task.relatedClient.clientGroupName = data[data.length - 1].name;
+
+                $timeout(
+                  function ()
+                  {
+                    angular.element('#taskModal').modal('show');
+                  }
+                );
+
+                deferred.resolve(task);
+              });
+            return deferred.promise;
           }
 
           function processTasks(tasks, tasksClients)

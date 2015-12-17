@@ -147,7 +147,7 @@ define(['services/services', 'config'],
           {
             if (_.has(permissionProfile, 'tasks'))
             {
-              $location.path('/tasks2').hash('myTasks');
+              $location.path('/task/mytasks');
             }
             else if (_.has(permissionProfile, 'teamTelephoneBasic'))
             {

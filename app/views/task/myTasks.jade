@@ -37,12 +37,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{mytasks.currentTask.statusLabel}}
 					dt {{ ui.task.timeframe }}
 						dd {{mytasks.currentTask.plannedTaskDuration.label}}
-					dt(ng-show='task.description') {{ ui.task.description }}
+					dt(ng-show='mytasks.currentTask.description') {{ ui.task.description }}
 						dd(class="description") {{mytasks.currentTask.description}}
 					dt {{ ui.task.createdBy }}
 						dd
-							a(href='index.html#/profile/{{task.authorUuid}}#profile')
-								| {{mytasks.author}}
+							a(href='index.html#/profile/{{mytasks.currentTask.authorUuid}}#profile')
+								| {{mytasks.currentTask.author}}
 				hr 
 				//h4.pull-right Cliëntinformatie
 				dl
