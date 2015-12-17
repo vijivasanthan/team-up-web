@@ -91,8 +91,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 
 
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
-		li(class="{{(views.myTasks==true) && 'active'}}")
-			a(data-toggle='tab', ng-click='setViewTo("myTasks")')
+		//li(class="{{(views.myTasks==true) && 'active'}}")
+		//	a(data-toggle='tab', ng-click='setViewTo("myTasks")')
+		//		span.icomoon(data-icon='', aria-hidden='true')
+		//		| {{ui.task.myTask}}
+		li(class="" data-match-route='/task/mytasks')
+			a(data-toggle='tab', ng-click='nav("task/mytasks")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| {{ui.task.myTask}}
 		li(class="{{(views.allTasks==true) && 'active'}}")
@@ -156,7 +160,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									i.icon-sort
 							th(colspan='1')
 
-					tbody
+					tbody 
 						tr(ng-repeat='task in tasks.mine.list | orderBy:ordered : reversed')
 							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
 							td
@@ -175,7 +179,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								.pull-right
 									button.btn-primary.btn-mini(type='button', ng-click='unAssignTask(task)')
 										i.icon-minus
-									button.btn-primary.btn-mini(type='button', ng-click='openTask(task)')
+									button.btn-primary.btn-mini(type='button', ng-click='viewTaskData(task)')
 										i.icon-info(style='margin-top:1px')
 									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
 										button.btn-primary.btn-mini(type='button')

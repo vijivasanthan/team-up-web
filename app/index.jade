@@ -54,15 +54,15 @@ block navbar
 					span.icon-bar
 					span.icon-bar
 					// span.icon-bar {{ui.message.messages}}
-				a.navbar-brand.header-logo-teamup(ng-click='nav("tasks2")' ng-show='app.domainPermission.tasks') TeamUp
+				a.navbar-brand.header-logo-teamup(ng-click='nav("task/mytasks")' ng-show='app.domainPermission.tasks') TeamUp
 				a.navbar-brand.header-logo-teamtelefoon(ng-click='nav("team-telefoon/status")' ng-show='! app.domainPermission.tasks') TeamTelefoon
 				#main-navbar.navbar-collapse.collapse
 					ul.nav.navbar-nav(ng-hide='browser.mobile')
 						// li(data-match-route='/tasks')
 							// a(ng-click='nav("tasks")') Taken
-						li.tasks2(ng-show='app.domainPermission.tasks',
-							data-match-route='/tasks2.*')
-							a(ng-click='nav("tasks2")') {{ ui.task.tasks }}
+						li.taskMenu(ng-show='app.domainPermission.tasks',
+							data-match-route='/task.*')
+							a(ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 						li.teamMenu(ng-show='app.domainPermission.teams',
 							data-match-route='/team.?')
 							a(ng-click='nav("team/members")') {{ui.teamup.teams}}
@@ -106,10 +106,10 @@ block navbar
 								aria-labelledby="dropdownMenu1")
 									li(role="presentation",
 										ng-show='app.domainPermission.tasks',
-										data-match-route='/tasks2.*')
+										data-match-route='/task')
 										a(role="menuitem",
 											tabindex="-1",
-											ng-click='nav("tasks2")') {{ ui.task.tasks }}
+											ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 									li.teamMenu(role="presentation",
 										ng-show='app.domainPermission.teams',
 										data-match-route='/team')

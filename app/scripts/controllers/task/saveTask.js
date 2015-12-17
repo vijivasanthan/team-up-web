@@ -47,7 +47,6 @@ define(
         {
           Team.read(teamId)
         }
-
         /**
          * get team and client related data after input
          * @param teamId
@@ -239,15 +238,6 @@ define(
                 redirect(task.assignedTeamMemberUuid);
               }
             });
-
-          //TeamUp._('taskAdd', null, task)
-          //  .then(function (result)
-          //  {
-          //    if (!result.error)
-          //    {
-          //      redirect(task.assignedTeamMemberUuid);
-          //    }
-          //  });
         }
 
         /**
@@ -275,8 +265,8 @@ define(
         function redirect(assignedTeamMember)
         {
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
-            ? '/tasks2#myTasks'
-            : '/tasks2#allTasks';
+            ? '/task/mytasks'
+            : '/task/alltasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
         }

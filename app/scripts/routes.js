@@ -109,7 +109,7 @@ define(
               controller: 'tasks2Ctrl',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, TaskCRUD, $q)
+                data: function (Teams, Clients, TaskCRUDold, $q)
                 {
                   var deferred = $q.defer(),
                     data = {
@@ -132,8 +132,8 @@ define(
                     {
                       data.members = members;
                       return $q.all([
-                        TaskCRUD.queryMine(),
-                        TaskCRUD.queryAll(),
+                        TaskCRUDold.queryMine(),
+                        TaskCRUDold.queryAll(),
                         Teams.relationClientGroups(data.teams)
                       ])
                     })
@@ -161,50 +161,68 @@ define(
 
             .when('/task/mytasks', {
               templateUrl: 'views/task/myTasks.html',
-              controller: 'myTasks as mytasks',
+              controller: 'viewTasks as mytasks',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, Task, $q)
+                data: function (TaskCRUD, $q)
                 {
+
                   var deferred = $q.defer(),
                     data = {
-                      teams: null,
+                      myTasks: null
+                    };
+
+                  TaskCRUD.queryMine()
+                    .then(function (taskData)
+                    {
+                      var tasks = {
+                        on: taskData
+                      };
+
+                      data.myTasks = {
+                        loading: false,
+                        list: tasks['on']
+                      };
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
+                }
+              }
+            })
+
+            .when('/task/alltasks', {
+              templateUrl: 'views/task/allTasks.html',
+              controller: 'viewTasks as alltasks',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (TaskCRUD, Teams, CurrentSelection, $q)
+                {
+                  var deferred = $q.defer(),
+                    teamId = CurrentSelection.getTeamId(),
+                    data = {
                       myTasks: null,
-                      members: null,
-                      teamClientsGroups: null,
-                      clientGroups: null,
-                      clients: null
+                      teams: null,
+                      currentTeam: teamId
                     };
 
                   Teams.getAllLocal()
                     .then(function (teams)
                     {
                       data.teams = teams;
-                      return Teams.getAllWithMembers()
-                    })
-                    .then(function (members)
+                    });
+
+                  TaskCRUD.queryByTeam(teamId)
+                    .then(function (taskData)
                     {
-                      data.members = members;
-                      return $q.all([
-                        Task.queryMine(),
-                        Teams.relationClientGroups(data.teams)
-                      ])
-                    })
-                    .then(function (teamsTasksData)
-                    {
-                      data.myTasks = teamsTasksData[0];
-                      data.teamClientsGroups = teamsTasksData[1];
-                      return Clients.getAllLocal();
-                    })
-                    .then(function (clientGroups)
-                    {
-                      data.clientGroups = clientGroups;
-                      return Clients.getAllWithClients();
-                    })
-                    .then(function (GroupsAndClients)
-                    {
-                      data.clients = GroupsAndClients;
-                      console.log('data', data);
+                      var tasks = {
+                        on: taskData
+                      };
+
+                      data.myTasks = {
+                        loading: false,
+                        list: tasks['on']
+                        //archive: (tasks.off.length > 0)
+                      };
                       deferred.resolve(data);
                     });
                   return deferred.promise;
@@ -291,6 +309,7 @@ define(
                         $location.path('/task/new');
                       }
                     });
+
                   Teams.getAllLocal()
                     .then(function (teams) {
                       data.teams = teams;

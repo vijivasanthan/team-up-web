@@ -471,6 +471,22 @@ define(
             }
           };
 
+          ClientsService.prototype.getGroup = function(clientGroupId)
+          {
+            return TeamUp._(
+              'clientGroupGet', {
+                second: clientGroupId
+              });
+          };
+
+          ClientsService.prototype.getClient = function (clientId)
+          {
+            return TeamUp._(
+              'clientGet', {
+                second: clientId
+              });
+          };
+
           /**
            * query all clients, if there not locally call them from the backend
            */
