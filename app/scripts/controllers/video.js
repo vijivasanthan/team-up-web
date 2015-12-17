@@ -21,6 +21,13 @@ define(
           (callback && callback());
           return $filter('trusted_url')(url);
         };
+
+        window.addEventListener("message", function ()
+        {
+          console.error('tester de test');
+        }, false);
+
+        //Show get back button if the one of the users hangsup
       }
     );
   }

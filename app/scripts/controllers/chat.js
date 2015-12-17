@@ -390,6 +390,27 @@ define(
               : loggedUserTeams[0];
           }
 
+          window.addEventListener("message", displayMessage, false);
+
+          function displayMessage (evt)
+          {
+            console.error('evt', evt);
+
+            if (evt.origin === config.app.videoCallUrl)
+            {
+
+              console.error('Hangup triggerd from chat control');
+              if(evt.data == 'left')
+              {
+                console.error('$rootScope', $rootScope);
+                $rootScope.hangup = evt.data;
+                $rootScope.$apply();
+                $rootScope.closeVideoCall();
+                $rootScope.hangup = null;
+              }
+            }
+          }
+
         }
     );
   }

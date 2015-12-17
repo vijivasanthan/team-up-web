@@ -16,7 +16,7 @@ define(['profile'], function(profile){
 
       host: localConfig.host,
 
-      videoCallUrl: 'https://askwebrtc.appspot.com',
+      videoCallUrl: 'http://localhost:11080',//'https://askwebrtc.appspot.com',
       //'https://apprtc.appspot.com',
       //'http://localhost:9001',
       supportEmail: 'support@ask-cs.com',
