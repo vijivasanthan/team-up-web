@@ -106,38 +106,12 @@ define(['services/services', 'config'],
             );
           }
 
-          function mergeOnStatus(tasks)
-          {
-            var merged = {on: [], off: []};
-            if (tasks.length > 0)
-            {
-              var grouped = _.groupBy(tasks, function (task)
-              {
-                return task.status
-              });
 
-              if (grouped[1] != null)
-              {
-                merged.on = merged.on.concat(grouped[1]);
-              }
-              if (grouped[2] != null)
-              {
-                merged.on = merged.on.concat(grouped[2]);
-              }
-
-              if (grouped[3] != null)
-              {
-                merged.off = merged.off.concat(grouped[3]);
-              }
-              if (grouped[4] != null)
-              {
-                merged.off = merged.off.concat(grouped[4]);
-              }
-            }
-
-            return merged;
-          }
-
+          /**
+           * get extra data for task details
+           * @param task
+           * @returns {*}
+           */
           function getDetails(task)
           {
             var deferred = $q.defer();
@@ -182,6 +156,12 @@ define(['services/services', 'config'],
             return deferred.promise;
           }
 
+          /**
+           * process and initialise task data
+           * @param tasks
+           * @param tasksClients
+           * @returns {*}
+           */
           function processTasks(tasks, tasksClients)
           {
             _.each(
@@ -343,7 +323,11 @@ define(['services/services', 'config'],
           }
 
 
-
+          /**
+           * get unique client uuids for tasks
+           * @param tasks
+           * @returns {*}
+           */
           function findUniqueClientsByTasks(tasks)
           {
             tasks = _.sortBy(tasks, 'plannedStartVisitTime');
@@ -352,6 +336,11 @@ define(['services/services', 'config'],
             return getTasksClients(uniqueClients);
           }
 
+          /**
+           * get client data
+           * @param clients
+           * @returns {Promise}
+           */
           function getTasksClients(clients)
           {
             var promises = [];
@@ -363,95 +352,6 @@ define(['services/services', 'config'],
 
             return $q.all(promises);
           }
-
-
-          ///**
-          // * sort the tasks by plannedStartVisitTime and ad the right client
-          // * and teammember to the task object
-          // * merge it afterwards on status
-          // * @param tasks The requested tasks
-          // * @returns {*}
-          // */
-          //function normalize(tasks)
-          //{
-          //  tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-          //  processTasks(tasks);
-          //  return mergeOnStatus(tasks);
-          //}
-
-          //function queryAll()
-          //{
-          //  var deferred = $q.defer(),
-          //    calls = [],
-          //    bulks = {},
-          //    self = this;
-          //
-          //  _.each(
-          //    TeamUp._('teamQuery'),
-          //    function (team)
-          //    {
-          //      calls.push(
-          //        Task.team(team.uuid)
-          //        .then(
-          //          function (allTasks)
-          //          {
-          //            bulks[team.uuid] = allTasks;
-          //          }
-          //        )
-          //      );
-          //    }
-          //  );
-          //
-          //  $q.all(calls)
-          //    .then(
-          //      function ()
-          //      {
-          //        var basket = [];
-          //
-          //        /**
-          //         * All tasks
-          //         * @type {Array}
-          //         */
-          //        _.each(
-          //          bulks,
-          //          function (tasks)
-          //          {
-          //            if (tasks.length > 0)
-          //            {
-          //              _.each(
-          //                tasks,
-          //                function (task)
-          //                {
-          //                  basket.push(task);
-          //                }
-          //              );
-          //            }
-          //          }
-          //        );
-          //
-          //        var tasks = _.map(
-          //          _.indexBy(basket, function (node)
-          //          {
-          //            return node.uuid
-          //          }),
-          //          function (task)
-          //          {
-          //            return task
-          //          }
-          //        );
-          //
-          //        processTasks(tasks);
-          //
-          //        var merged = mergeOnStatus(tasks);
-          //
-          //        Store('app').save('allTasks2', merged);
-          //
-          //        deferred.resolve(merged);
-          //      }.bind(bulks)
-          //    );
-          //
-          //  return deferred.promise;
-          //}
 
         }).call(taskCRUD.prototype);
 
