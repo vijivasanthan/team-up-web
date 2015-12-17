@@ -76,9 +76,8 @@ define(
         /**
          * assign task to team member
          * @param task
-         * @param viewType
          */
-        function assignTask(task, viewType)
+        function assignTask(task)
         {
           trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
 
@@ -91,46 +90,32 @@ define(
         /**
          * unassign task to team member
          * @param task
-         * @param viewType
          */
-        function unAssignTask(task, viewType)
+        function unAssignTask(task)
         {
           trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
 
           task.assignedTeamMemberUuid = null;
           task.assignedTeamUuid = null;
-
+          delete task.author;
           updateTask(task);
         }
 
         /**
          * update task with changes and requery
          * @param task
-         * @param viewType
          */
-        function updateTask(task, viewType)
+        function updateTask(task)
         {
           TaskCRUD.update(task)
             .then(
             function (result)
             {
-              if (result.error)
+              if (! result.error)
               {
-                $rootScope.notifier.error(
-                  $rootScope.transError(
-                    (result.error.data) ? result.error.data.result : result.error
-                  )
-                );
-
-                task.assignedTeamMemberUuid = null;
-
-                return;
+                var index = _.findIndex(self.tasks.list, { uuid: task.uuid });
+                self.tasks.list.splice(index, 1);
               }
-              TaskCRUD.queryMine()
-                .then(function (tasks)
-                {
-                  self.tasks.list = tasks;
-                });
             }
           );
         }
