@@ -9,6 +9,7 @@ define(
     'modals/permission',
     'modals/profile',
     'services/moment',
+    'services/settings',
     'services/currentSelection',
     'services/sloter',
     'services/stats',
@@ -46,7 +47,8 @@ define(
         $httpBackend,
         md5Service,
         teamService,
-        momentService;
+        momentService,
+        settingsService;
 
       // Initialize the controller and a mock scope
       beforeEach(
@@ -58,8 +60,10 @@ define(
                     _$httpBackend_,
                     _Store_,
                     _MD5_,
-                    _moment_)
+                    _moment_,
+                    _Settings_)
           {
+            settingsService = _Settings_;
             rootScope = _$rootScope_;
             rootScope.statusBar = {
               display: function (message)
@@ -142,7 +146,7 @@ define(
             md5Service = _MD5_;
             momentService = _moment_;
             teamCtrl = $controller('team', {
-              Team: teamService,
+              Team: teamService
             });
           }
         )
@@ -150,6 +154,8 @@ define(
 
       it('should return the uuid of the newly added team as current team', function ()
       {
+        settingsService.setBackEnd(testConfig.host);
+
         teamService.list = [{
           name: "Stefan Team",
           uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
@@ -195,6 +201,7 @@ define(
 
       it('should be a new list of members, because a new team is loaded', function ()
       {
+        settingsService.setBackEnd(testConfig.host);
         teamService.list = [{
           name: "Stefan Team",
           uuid: "b3915de1-f29c-4609-a67f-73aaef529902"
@@ -225,6 +232,7 @@ define(
 
       it('should check if the current teamname could be updated', function ()
       {
+        settingsService.setBackEnd(testConfig.host);
         var teams = [{
           name: "Stefan Team",
           uuid: "b3915de1-f29c-4609-a67f-73aaef529902"

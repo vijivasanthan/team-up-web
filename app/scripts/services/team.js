@@ -47,8 +47,7 @@ define(['services/services', 'config'],
             this.list = Store('app').get('teams');
             this.current = {};
             this.setCurrent(_teamId);
-          };
-
+          }
           /**
            * Add a member to a team
            * teamOption 1: Removes member from all his
@@ -89,8 +88,7 @@ define(['services/services', 'config'],
               {
                 add(member.uuid, self.current.teamId);
               });
-          };
-
+          }
           /**
            * Set the current team
            * @param teamId
@@ -103,7 +101,7 @@ define(['services/services', 'config'],
             this.current.teamId = teamId;
             this.current.name = team.name;
             this.current.externallySyncable = team.externallySyncable;
-          };
+          }
 
           function sync(teamId)
           {
@@ -118,7 +116,7 @@ define(['services/services', 'config'],
                   : notifier.error($rootScope.ui.teamup.syncError);
                 return sync;
               });
-          };
+          }
 
           /**
            * Update the current team
@@ -219,7 +217,7 @@ define(['services/services', 'config'],
                 $rootScope.statusBar.off();
               });
             return deferred.promise;
-          };
+          }
 
           /**
            * Create a new team
@@ -246,7 +244,7 @@ define(['services/services', 'config'],
                 self.setCurrent(self.list[self.list.length - 1].uuid);
                 $location.path('team/members');
               });
-          };
+          }
 
           /**
            * Get a single team by id
@@ -267,7 +265,7 @@ define(['services/services', 'config'],
                 $rootScope.statusBar.off();
                 return members;
               });
-          };
+          }
 
           /**
            * Get the current team
@@ -276,7 +274,7 @@ define(['services/services', 'config'],
           function getCurrent()
           {
             return this.current;
-          };
+          }
 
           /**
            * Update a single team in the list
@@ -286,7 +284,7 @@ define(['services/services', 'config'],
           function getList()
           {
             return this.list;
-          };
+          }
 
           /**
            * Get the list of teams
@@ -300,7 +298,7 @@ define(['services/services', 'config'],
             {
               this.list[index] = newEditedTeam;
             }
-          };
+          }
 
           /**
            * Remove a team from the list
@@ -317,7 +315,7 @@ define(['services/services', 'config'],
               if(this.list.length) this.setCurrent(this.list[0].uuid);
               else if($rootScope.app.resources.role > 1) Permission.getAccess();
             }
-          };
+          }
         }).call(teamService.prototype);
 
         return new teamService();

@@ -143,30 +143,30 @@ define(
 
       //delete a member
 
-      it('should give a error, because the e-mailfield is not filled', function ()
-      {
-        var member = {
-          "uuid": "Jansen",
-          "userName": "Jansen",
-          "passWord": md5Service('123123123'),
-          "firstName": "Jan",
-          "lastName": "Jansen",
-          "phone": "+3165321312",
-          "email": "",
-          "role": "1",
-          "team": [
-            "b3915de1-f29c-4609-a67f-73aaef529902"
-          ],
-          teamUuids: [ "b3915de1-f29c-4609-a67f-73aaef529902"],
-          "extraInfo": {
-            "photoUUID": "04ecc3e9-c049-4df6-8054-93a26b443917"
-          }
-        };
-
-        var memberValid = memberService.valid(member);
-        expect(memberValid)
-          .toEqual(false);
-      });
+      //it('should give a error, because the e-mailfield is not filled', function ()
+      //{
+      //  var member = {
+      //    "uuid": "Jansen",
+      //    "userName": "Jansen",
+      //    "passWord": md5Service('123123123'),
+      //    "firstName": "Jan",
+      //    "lastName": "Jansen",
+      //    "phone": "+3165321312",
+      //    "email": "",
+      //    "role": "1",
+      //    "team": [
+      //      "b3915de1-f29c-4609-a67f-73aaef529902"
+      //    ],
+      //    teamUuids: [ "b3915de1-f29c-4609-a67f-73aaef529902"],
+      //    "extraInfo": {
+      //      "photoUUID": "04ecc3e9-c049-4df6-8054-93a26b443917"
+      //    }
+      //  };
+      //
+      //  var memberValid = memberService.valid(member);
+      //  expect(memberValid)
+      //    .toEqual(false);
+      //});
 
       //create a member
       it("should add a member to the team", function ()
