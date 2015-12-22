@@ -70,12 +70,9 @@ define(
 
           $scope.slot = {};
 
-          var stamps = (Dater.current.today() > 360) ? {
-            start: $scope.periods.days[358].last.timeStamp,
-            end: $scope.periods.days[365].last.timeStamp
-          } : {
-            start: $scope.periods.days[Dater.current.today() - 1].last.timeStamp,
-            end: $scope.periods.days[Dater.current.today() + 6].last.timeStamp
+          var stamps = {
+            start: moment({ hour:0, minute:0 }).weekday(1).unix() * 1000,
+            end: moment({ hour:0, minute:0 }).weekday(8).unix() * 1000
           };
 
           var timelineCfg = config.app.timeline;

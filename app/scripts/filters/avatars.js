@@ -342,57 +342,68 @@ define(
     filters.filter(
       'rangeMainFilter',
       [
-        'Dater', '$filter',
-        function (Dater, $filter)
-        {
-          var periods = Dater.getPeriods();
+        'Dater', 'moment',
+        function (Dater, moment) {
 
-          return function (dates)
-          {
-            var startTime = new Date(dates.start).getTime();
-            var endTime = new Date(dates.end).getTime();
-            if (( endTime - startTime ) == 86401000)
-            {
-              dates.start = new Date(dates.end).addDays(- 1);
-              startTime = new Date(dates.start).getTime();
+          return function (dates) {
+            if ((new Date(dates.end).getTime() - new Date(dates.start).getTime()) == 86401000) {
+              dates.start = moment(dates.end).subtract(1, 'days').toDate();
             }
 
+            var cFirst = function (str) {
+              return str.charAt(0).toUpperCase() + str.substr(1);
+            };
 
-            var dates = {
-                  start: {
-                    real: $filter('date')(startTime, 'EEEE, d MMMM'),
-                    month: $filter('date')(startTime, 'MMMM'),
-                    day: $filter('date')(startTime, 'd')
-                  },
-                  end: {
-                    real: $filter('date')(endTime, 'EEEE, d MMMM'),
-                    month: $filter('date')(endTime, 'MMMM'),
-                    day: $filter('date')(endTime, 'd')
-                  }
+            var ndates = {
+              start: {
+                real: cFirst(Dater.translateToDutch(moment(new Date(dates.start)).format('dddd D MMMM'))),
+                month: cFirst(Dater.translateToDutch(moment(new Date(dates.start)).format('MMMM'))),
+                day: cFirst(Dater.translateToDutch(moment(new Date(dates.start)).format('D'))),
+                year: moment(new Date(dates.start)).format('YYYY')
+              },
+              end: {
+                real: cFirst(Dater.translateToDutch(moment(new Date(dates.end)).format('dddd D MMMM'))),
+                month: cFirst(Dater.translateToDutch(moment(new Date(dates.end)).format('MMMM'))),
+                day: cFirst(Dater.translateToDutch(moment(new Date(dates.end)).format('D'))),
+                year: moment(new Date(dates.end)).format('YYYY')
+              }
+            };
+
+            var _dates = {
+                start: {
+                  real: moment(new Date(dates.start)).format('dddd D MMMM'),
+                  month: moment(new Date(dates.start)).format('MMMM'),
+                  day: moment(new Date(dates.start)).format('D')
                 },
-                monthNumber = $filter('date')(endTime, 'M') - 1;
+                end: {
+                  real: moment(new Date(dates.end)).format('dddd D MMMM'),
+                  month: moment(new Date(dates.end)).format('MMMM'),
+                  day: moment(new Date(dates.end)).format('D')
+                }
+              },
+              monthNumber = moment(new Date(dates.start)).month();
 
-            if ((((Math.round(dates.start.day) + 1) == dates.end.day && dates.start.hour == dates.end.hour) ||
-                 dates.start.day == dates.end.day) && dates.start.month == dates.end.month)
-            {
-              return  dates.start.real +
-                      ', ' +
-                      Dater.getThisYear();
+            if ((((Math.round(_dates.start.day) + 1) == _dates.end.day && _dates.start.hour == _dates.end.hour) || _dates.start.day == _dates.end.day) &&
+              _dates.start.month == _dates.end.month) {
+              return  ndates.start.real +
+                ', ' +
+                ndates.start.year;
             }
-            else if (dates.start.day == 1 && dates.end.day == periods.months[monthNumber + 1].totalDays)
-            {
-              return  dates.start.month +
-                      ', ' +
-                      Dater.getThisYear();
+            else if (_dates.start.day == 1 && _dates.end.day == moment().month(monthNumber).endOf('month').date()) {
+              return  ndates.start.month +
+                ', ' +
+                ndates.start.year;
             }
-            else
-            {
-              return  dates.start.real +
-                      ' / ' +
-                      dates.end.real +
-                      ', ' +
-                      Dater.getThisYear();
+            else {
+              return  ndates.start.real +
+                ', ' +
+                ndates.start.year +
+                ' / ' +
+                ndates.end.real +
+                ', ' +
+                ndates.end.year;
             }
+
           }
         }
       ]
