@@ -266,10 +266,7 @@ block footer
 					small Ask Community Systems, 2015
 						br
 						i
-							| TeamUp&nbsp;
-							a(href='versions.html',
-								title="{{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}",
-								target='_blank') v{{config.app.version}}
+							| TeamUp&nbsp; v{{config.app.version}}
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')
 				small
