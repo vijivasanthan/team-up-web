@@ -524,7 +524,7 @@ define(['services/services', 'config'],
                   member.fullName +
                   '</a>';
 
-                  if(routeUserId !== member.id)
+                  if(routeUserId !== member.id && member.id.indexOf('voicemail') === -1)
                   {
                     link += '<a class="edit-timeline-icon" title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
