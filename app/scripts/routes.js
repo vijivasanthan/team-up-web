@@ -23,61 +23,61 @@ define(
 
           $provide
             .decorator(
-            "$exceptionHandler",
-            [
-              "$delegate",
-              function ($delegate)
-              {
-                return function (exception, cause)
+              "$exceptionHandler",
+              [
+                "$delegate",
+                function ($delegate)
                 {
-                  console.error('exceptionq', exception);
-                  trackGa('send', 'exception', {
-                    exDescription: exception.message,
-                    exFatal: false,
-                    stack: exception.stack,
-                    line: '123'
-                    //exStack: exception.stack
-                  });
+                  return function (exception, cause)
+                  {
+                    console.error('exceptionq', exception);
+                    trackGa('send', 'exception', {
+                      exDescription: exception.message,
+                      exFatal: false,
+                      stack: exception.stack,
+                      line: '123'
+                      //exStack: exception.stack
+                    });
 
-                  trackGa('send', 'event', 'JavaScript Error',
-                    exception.message, exception.stack, { 'nonInteraction': 1 });
+                    trackGa('send', 'event', 'JavaScript Error',
+                      exception.message, exception.stack, { 'nonInteraction': 1 });
 
-                  $delegate(exception, cause);
-                };
-              }
-            ]
-          );
+                    $delegate(exception, cause);
+                  };
+                }
+              ]
+            );
 
           //Chrome Ipad solution in case of using $location.hash()
           $provide
             .decorator(
-            '$browser',
-            [
-              '$delegate',
-              function ($delegate)
-              {
-                var originalUrl = $delegate.url;
-                $delegate.url = function ()
+              '$browser',
+              [
+                '$delegate',
+                function ($delegate)
                 {
-                  var result = originalUrl.apply(this, arguments);
-                  if (result && result.replace)
+                  var originalUrl = $delegate.url;
+                  $delegate.url = function ()
                   {
-                    result = result.replace(/%23/g, '#');
-                  }
-                  return result;
-                };
-                return $delegate;
-              }
-            ]
-          );
+                    var result = originalUrl.apply(this, arguments);
+                    if (result && result.replace)
+                    {
+                      result = result.replace(/%23/g, '#');
+                    }
+                    return result;
+                  };
+                  return $delegate;
+                }
+              ]
+            );
 
           $routeProvider
             .when(
-            '/login',
-            {
-              templateUrl: 'views/login/loginForm.html',
-              controller: 'login as loginCtrl'
-            })
+              '/login',
+              {
+                templateUrl: 'views/login/loginForm.html',
+                controller: 'login as loginCtrl'
+              })
 
             .when(
             '/logout',
@@ -103,61 +103,61 @@ define(
             })
 
             .when(
-            '/tasks2',
-            {
-              templateUrl: 'views/task/tasks2.html',
-              controller: 'tasks2Ctrl',
-              reloadOnSearch: false,
-              resolve: {
-                data: function (Teams, Clients, TaskCRUDold, $q)
-                {
-                  var deferred = $q.defer(),
-                    data = {
-                      teams: null,
-                      myTasks: null,
-                      allTasks: null,
-                      members: null,
-                      teamClientsGroups: null,
-                      clientGroups: null,
-                      clients: null
-                    };
+              '/tasks2',
+              {
+                templateUrl: 'views/task/tasks2.html',
+                controller: 'tasks2Ctrl',
+                reloadOnSearch: false,
+                resolve: {
+                  data: function (Teams, Clients, TaskCRUDold, $q)
+                  {
+                    var deferred = $q.defer(),
+                      data = {
+                        teams: null,
+                        myTasks: null,
+                        allTasks: null,
+                        members: null,
+                        teamClientsGroups: null,
+                        clientGroups: null,
+                        clients: null
+                      };
 
-                  Teams.getAllLocal()
-                    .then(function (teams)
-                    {
-                      data.teams = teams;
-                      return Teams.getAllWithMembers()
-                    })
-                    .then(function (members)
-                    {
-                      data.members = members;
-                      return $q.all([
-                        TaskCRUDold.queryMine(),
-                        TaskCRUDold.queryAll(),
-                        Teams.relationClientGroups(data.teams)
-                      ])
-                    })
-                    .then(function (teamsTasksData)
-                    {
-                      data.myTasks = teamsTasksData[0];
-                      data.allTasks = teamsTasksData[1];
-                      data.teamClientsGroups = teamsTasksData[2];
-                      return Clients.getAllLocal();
-                    })
-                    .then(function (clientGroups)
-                    {
-                      data.clientGroups = clientGroups;
-                      return Clients.getAllWithClients();
-                    })
-                    .then(function (GroupsAndClients)
-                    {
-                      data.clients = GroupsAndClients;
-                      deferred.resolve(data);
-                    });
-                  return deferred.promise;
+                    Teams.getAllLocal()
+                      .then(function (teams)
+                      {
+                        data.teams = teams;
+                        return Teams.getAllWithMembers()
+                      })
+                      .then(function (members)
+                      {
+                        data.members = members;
+                        return $q.all([
+                          TaskCRUDold.queryMine(),
+                          TaskCRUDold.queryAll(),
+                          Teams.relationClientGroups(data.teams)
+                        ])
+                      })
+                      .then(function (teamsTasksData)
+                      {
+                        data.myTasks = teamsTasksData[0];
+                        data.allTasks = teamsTasksData[1];
+                        data.teamClientsGroups = teamsTasksData[2];
+                        return Clients.getAllLocal();
+                      })
+                      .then(function (clientGroups)
+                      {
+                        data.clientGroups = clientGroups;
+                        return Clients.getAllWithClients();
+                      })
+                      .then(function (GroupsAndClients)
+                      {
+                        data.clients = GroupsAndClients;
+                        deferred.resolve(data);
+                      });
+                    return deferred.promise;
+                  }
                 }
-              }
-            })
+              })
 
             .when('/task/mytasks', {
               templateUrl: 'views/task/myTasks.html',
@@ -309,7 +309,6 @@ define(
                         $location.path('/task/new');
                       }
                     });
-
                   Teams.getAllLocal()
                     .then(function (teams) {
                       data.teams = teams;

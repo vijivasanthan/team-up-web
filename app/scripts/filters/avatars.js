@@ -13,8 +13,8 @@ define(
           return function (string)
           {
             return (! string || string.indexOf('.') == - 1) ?
-                   string :
-                   string.replace('.', '').replace('@', '');
+              string :
+              string.replace('.', '').replace('@', '');
           }
         }
       ]
@@ -316,7 +316,7 @@ define(
             if (angular.lowercase(state.name) == 'location')
             {
               var value = state.value,
-                  match = value.match(/\((.*?)\)/);
+                match = value.match(/\((.*?)\)/);
 
               if (match == null)
               {
@@ -325,8 +325,8 @@ define(
               else
               {
                 return (type == 'data') ?
-                       match[1] :
-                       value.replace(match[0], '');
+                  match[1] :
+                  value.replace(match[0], '');
               }
             }
             else
@@ -426,10 +426,10 @@ define(
               };
 
               return  _dates.start +
-                      ' / ' +
-                      _dates.end +
-                      ', ' +
-                      Dater.getThisYear();
+                ' / ' +
+                _dates.end +
+                ', ' +
+                Dater.getThisYear();
             }
           }
         }
@@ -467,21 +467,21 @@ define(
                 if (hours.end == '00:00') hours.end = '24:00';
 
                 return  $rootScope.ui.planboard.time +
-                        hours.start +
-                        ' / ' +
-                        hours.end;
+                  hours.start +
+                  ' / ' +
+                  hours.end;
               }
               else if (timeline.scope.week)
               {
                 return  $rootScope.ui.planboard.weekNumber +
-                        timeline.current.week;
+                  timeline.current.week;
               }
               else if (timeline.scope.month)
               {
                 return  $rootScope.ui.planboard.monthNumber +
-                        timeline.current.month +
-                        ',' + $rootScope.ui.planboard.totalDays +
-                        periods.months[timeline.current.month].totalDays;
+                  timeline.current.month +
+                  ',' + $rootScope.ui.planboard.totalDays +
+                  periods.months[timeline.current.month].totalDays;
               }
             }
           };
@@ -641,25 +641,25 @@ define(
               if (type == 'avatar' || type == 'image')
               {
                 var _url = Settings.getBackEnd() +
-                           path +
-                           id +
-                           '?sid=' + session;
+                  path +
+                  id +
+                  '?sid=' + session;
 
-//                if (type == 'avatar')
-//                {
-//                  _url += '&width=' + newsize + '&height=' + newsize;
-//                }
+                //                if (type == 'avatar')
+                //                {
+                //                  _url += '&width=' + newsize + '&height=' + newsize;
+                //                }
 
                 return _url;
               }
               else
               {
                 return Settings.getBackEnd() +
-                       config.app.namespace +
-                       path +
-                       id +
-                       '/photo?width=' + newsize + '&height=' + newsize + '&sid=' +
-                       session;
+                  config.app.namespace +
+                  path +
+                  id +
+                  '/photo?width=' + newsize + '&height=' + newsize + '&sid=' +
+                  session;
               }
             }
           }
@@ -688,39 +688,39 @@ define(
               if (itemName == 'name')
               {
                 return client.firstName +
-                       ' ' +
-                       client.lastName;
+                  ' ' +
+                  client.lastName;
               }
               else if (itemName == 'address')
               {
                 return client.address.street +
-                       ' ' +
-                       client.address.no +
-                       ', ' +
-                       client.address.zip +
-                       ' ' +
-                       client.address.city;
+                  ' ' +
+                  client.address.no +
+                  ', ' +
+                  client.address.zip +
+                  ' ' +
+                  client.address.city;
               }
               else if (itemName == 'latlong')
               {
                 if (typeof client.address.latitude == 'undefined' ||
-                    typeof client.address.longitude == 'undefined' ||
-                    (client.address.longitude == 0 && client.address.latitude == 0)
-                  )
+                  typeof client.address.longitude == 'undefined' ||
+                  (client.address.longitude == 0 && client.address.latitude == 0)
+                )
                 {
                   return client.address.street +
-                         ' ' +
-                         client.address.no +
-                         ', ' +
-                         client.address.zip +
-                         ' ,' +
-                         client.address.city;
+                    ' ' +
+                    client.address.no +
+                    ', ' +
+                    client.address.zip +
+                    ' ,' +
+                    client.address.city;
                 }
                 else
                 {
                   return client.address.latitude +
-                         ',' +
-                         client.address.longitude;
+                    ',' +
+                    client.address.longitude;
                 }
               }
             }
@@ -736,8 +736,8 @@ define(
               if (itemName == 'name')
               {
                 return member.firstName +
-                       ' ' +
-                       member.lastName;
+                  ' ' +
+                  member.lastName;
               }
               else if (itemName == 'states')
               {
@@ -886,7 +886,5 @@ define(
         }
       ]
     );
-
-
   }
 );
