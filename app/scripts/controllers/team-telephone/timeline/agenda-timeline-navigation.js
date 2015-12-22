@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'agenda-timeline-navigation',
       [
-        '$rootScope', '$scope', '$window',
-        function ($rootScope, $scope, $window)
+        '$rootScope', '$scope', '$window', 'moment',
+        function ($rootScope, $scope, $window, moment)
         {
           /**
            * Day & Week & Month toggle actions
@@ -20,7 +20,7 @@ define(
             $scope.timeline.current.week = $scope.current.week;
             $scope.timeline.current.month = $scope.current.month;
 
-            $scope.timeline.current.year = Number(new Date().toString('yyyy'));
+            $scope.timeline.current.year = moment().year();
 
             switch (period)
             {
@@ -33,8 +33,8 @@ define(
 
                 $scope.timeliner.load(
                   {
-                    start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                    start: +moment().startOf('day'),
+                    end: +moment().endOf('day').add(1, 'ms')
                   });
                 break;
 
@@ -47,8 +47,8 @@ define(
 
                 $scope.timeliner.load(
                   {
-                    start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                    start: +moment().startOf('week'),
+                    end: +moment().endOf('week').add(1, 'ms')
                   });
                 break;
 
@@ -61,8 +61,8 @@ define(
 
                 $scope.timeliner.load(
                   {
-                    start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                    start: +moment().startOf('month'),
+                    end: +moment().endOf('month').add(1, 'ms')
                   });
                 break;
             }
@@ -74,22 +74,22 @@ define(
            */
           $scope.timelineBefore = function ()
           {
-            var thisYear = new Date().toString('yyyy');
+            var thisYear = moment().year();
 
             if ($scope.timeline.scope.day)
             {
-              if ($scope.timeline.current.year === Number(thisYear) + 1)
+              if ($scope.timeline.current.year === thisYear + 1)
               {
                 if ($scope.timeline.current.day === 1)
                 {
                   $scope.timeline.current.year = thisYear;
 
-                  $scope.timeline.current.day = $scope.periods.days.total;
+                  $scope.timeline.current.day = moment().endOf('year').dayOfYear();
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                      end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                     });
                 }
                 else
@@ -98,8 +98,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.days[$scope.timeline.current.day].first.timeStamp,
-                      end: $scope.periodsNext.days[$scope.timeline.current.day].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                     });
                 }
               }
@@ -111,15 +111,15 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                      end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                     });
                 }
               }
             }
             else if ($scope.timeline.scope.week)
             {
-              if ($scope.timeline.current.year === Number(thisYear) + 1)
+              if ($scope.timeline.current.year === thisYear + 1)
               {
                 if ($scope.timeline.current.week === 1)
                 {
@@ -129,8 +129,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
                 else
@@ -139,8 +139,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periodsNext.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
               }
@@ -152,26 +152,27 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
                 else if ($scope.timeline.current.month == 12)
                 {
+                  // TODO double check if can be removed and remove this block
                   $scope.timeline.current.week = 53;
                   $scope.timeline.current.week--;
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
               }
             }
             else if ($scope.timeline.scope.month)
             {
-              if ($scope.timeline.current.year === Number(thisYear) + 1)
+              if ($scope.timeline.current.year === thisYear + 1)
               {
                 if ($scope.timeline.current.month === 1)
                 {
@@ -181,8 +182,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
                 else
@@ -191,8 +192,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periodsNext.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
               }
@@ -204,8 +205,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
               }
@@ -218,48 +219,48 @@ define(
            */
           $scope.timelineAfter = function ()
           {
-            var thisYear = new Date().toString('yyyy');
+            var thisYear = moment().year();
 
             if ($scope.timeline.scope.day)
             {
-              if ($scope.timeline.current.year === Number(thisYear))
+              if ($scope.timeline.current.year === thisYear)
               {
                 /**
                  * Total days in a month can change so get it start periods cache
                  */
-                if ($scope.timeline.current.day != $scope.periods.days.total)
+                if ($scope.timeline.current.day != moment().endOf('year').dayOfYear())
                 {
                   $scope.timeline.current.day++;
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                      end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                     });
                 }
                 else
                 {
-                  $scope.timeline.current.year = Number(thisYear) + 1;
+                  $scope.timeline.current.year = thisYear + 1;
 
                   $scope.timeline.current.day = 1;
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.days[$scope.timeline.current.day].first.timeStamp,
-                      end: $scope.periodsNext.days[$scope.timeline.current.day].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                     });
                 }
               }
               else
               {
-                $scope.timeline.current.year = Number(thisYear) + 1;
+                $scope.timeline.current.year = thisYear + 1;
 
                 $scope.timeline.current.day++;
 
                 $scope.timeliner.load(
                   {
-                    start: $scope.periodsNext.days[$scope.timeline.current.day].first.timeStamp,
-                    end: $scope.periodsNext.days[$scope.timeline.current.day].last.timeStamp
+                    start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                    end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
                   });
               }
             }
@@ -279,20 +280,20 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
                 else
                 {
-                  $scope.timeline.current.year = Number(thisYear) + 1;
+                  $scope.timeline.current.year = thisYear + 1;
 
                   $scope.timeline.current.week = 1;
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periodsNext.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
               }
@@ -304,8 +305,8 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.weeks[$scope.timeline.current.week].first.timeStamp,
-                      end: $scope.periodsNext.weeks[$scope.timeline.current.week].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                     });
                 }
               }
@@ -320,20 +321,20 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
                 else
                 {
-                  $scope.timeline.current.year = Number(thisYear) + 1;
+                  $scope.timeline.current.year = thisYear + 1;
 
                   $scope.timeline.current.month = 1;
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periodsNext.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
               }
@@ -345,31 +346,33 @@ define(
 
                   $scope.timeliner.load(
                     {
-                      start: $scope.periodsNext.months[$scope.timeline.current.month].first.timeStamp,
-                      end: $scope.periodsNext.months[$scope.timeline.current.month].last.timeStamp
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
                     });
                 }
               }
             }
           };
 
-
           /**
            * Go to this week
            */
           $scope.timelineThisWeek = function ()
           {
-            if ($scope.timeline.current.week != new Date().getWeek())
+            if ($scope.timeline.current.week != moment().week())
             {
+
+              $scope.timeline.current.week = moment().week();
+
               $scope.timeliner.load(
                 {
-                  start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,
-                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp
+                  start: +moment().startOf('week'),
+                  end: +moment().endOf('week').add(1, 'ms')
                 });
 
               $scope.timeline.range = {
-                start: $scope.periods.weeks[new Date().getWeek()].first.day,
-                end: $scope.periods.weeks[new Date().getWeek()].last.day
+                start: moment().startOf('week').toISOString(),
+                end: moment().endOf('week').add(1, 'ms').toISOString()
               };
             }
           };
@@ -386,14 +389,14 @@ define(
 
               $scope.timeliner.load(
                 {
-                  start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                  start: +moment().week($scope.timeline.current.week).startOf('week'),
+                  end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                 });
             }
 
             $scope.timeline.range = {
-              start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
+              start: moment().week($scope.timeline.current.week).startOf('week').toISOString(),
+              end: moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms').toISOString()
             };
           };
 
@@ -409,14 +412,14 @@ define(
 
               $scope.timeliner.load(
                 {
-                  start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
+                  start: +moment().week($scope.timeline.current.week).startOf('week'),
+                  end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
                 });
             }
 
             $scope.timeline.range = {
-              start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
+              start: moment().week($scope.timeline.current.week).startOf('week').toISOString(),
+              end: moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms').toISOString()
             };
           };
 

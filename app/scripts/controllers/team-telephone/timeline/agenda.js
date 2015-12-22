@@ -5,254 +5,455 @@ define(
     'use strict';
 
     controllers.controller(
-      'agenda', [
-        '$rootScope',
-        '$scope',
-        '$q',
-        '$window',
-        '$location',
-        'Dater',
-        '$timeout',
-        'Store',
-        'Teams',
-        'Clients',
-        'TeamUp',
-        'Session',
-        'Slots',
-        'data',
-        'ipCookie',
-        'moment',
-        function ($rootScope, $scope, $q, $window, $location, Dater, $timeout, Store,
-                  Teams, Clients, TeamUp, Session, Slots, data, ipCookie, moment)
+      'agenda-timeline-navigation',
+      [
+        '$rootScope', '$scope', '$window', 'moment',
+        function ($rootScope, $scope, $window, moment)
         {
-          $rootScope.notification.status = false;
+          /**
+           * Day & Week & Month toggle actions
+           */
 
-          $rootScope.fixStyles();
+          $scope.timelineScoper = function (period)
+          {
+            $scope.timeline.current.day = $scope.current.day;
+            $scope.timeline.current.week = $scope.current.week;
+            $scope.timeline.current.month = $scope.current.month;
 
-          $scope.self = this;
+            $scope.timeline.current.year = moment().year();
 
-          $scope.data = data.timeline;
+            switch (period)
+            {
+              case 'day':
+                $scope.timeline.scope = {
+                  day: true,
+                  week: false,
+                  month: false
+                };
 
-          $scope.current = {
-            layouts: {
-              user: true,
-              group: true,
-              members: (data.user.uuid != $rootScope.app.resources.uuid)
-            },
-            day: moment().format('DDD'),
-            week: moment().week(),
-            month: Dater.current.month(),
-            year: Dater.current.year(),
-            group: $scope.data.groupId,
-            division: 'all'
+                $scope.timeliner.load(
+                  {
+                    start: +moment().startOf('day'),
+                    end: +moment().endOf('day').add(1, 'ms')
+                  });
+                break;
+
+              case 'week':
+                $scope.timeline.scope = {
+                  day: false,
+                  week: true,
+                  month: false
+                };
+
+                $scope.timeliner.load(
+                  {
+                    start: +moment().startOf('week'),
+                    end: +moment().endOf('week').add(1, 'ms')
+                  });
+                break;
+
+              case 'month':
+                $scope.timeline.scope = {
+                  day: false,
+                  week: false,
+                  month: true
+                };
+
+                $scope.timeliner.load(
+                  {
+                    start: +moment().startOf('month'),
+                    end: +moment().endOf('month').add(1, 'ms')
+                  });
+                break;
+            }
           };
 
-          $scope.periods = Dater.getPeriods();
-          $scope.periodsNext = Dater.getPeriods(true);
 
-          var cookieKey = 'infoTimeline' + $rootScope.app.resources.uuid,
-              setCookie = function(infoCheck)
+          /**
+           * Go one period in past
+           */
+          $scope.timelineBefore = function ()
+          {
+            var thisYear = moment().year();
+
+            if ($scope.timeline.scope.day)
+            {
+              if ($scope.timeline.current.year === thisYear + 1)
               {
-                ipCookie(cookieKey, infoCheck, {expires: 365});
-                $rootScope.infoAvailibility = infoCheck;
+                if ($scope.timeline.current.day === 1)
+                {
+                  $scope.timeline.current.year = thisYear;
+
+                  $scope.timeline.current.day = moment().endOf('year').dayOfYear();
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.day--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                if ($scope.timeline.current.day != 1)
+                {
+                  $scope.timeline.current.day--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                    });
+                }
+              }
+            }
+            else if ($scope.timeline.scope.week)
+            {
+              if ($scope.timeline.current.year === thisYear + 1)
+              {
+                if ($scope.timeline.current.week === 1)
+                {
+                  $scope.timeline.current.year = thisYear;
+
+                  $scope.timeline.current.week = 52;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.week--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                if ($scope.timeline.current.week != 1)
+                {
+                  $scope.timeline.current.week--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+                else if ($scope.timeline.current.month == 12)
+                {
+                  // TODO double check if can be removed and remove this block
+                  $scope.timeline.current.week = 53;
+                  $scope.timeline.current.week--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+              }
+            }
+            else if ($scope.timeline.scope.month)
+            {
+              if ($scope.timeline.current.year === thisYear + 1)
+              {
+                if ($scope.timeline.current.month === 1)
+                {
+                  $scope.timeline.current.year = thisYear;
+
+                  $scope.timeline.current.month = 12;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.month--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                if ($scope.timeline.current.month != 1)
+                {
+                  $scope.timeline.current.month--;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+              }
+            }
+          };
+
+
+          /**
+           * Go one period in future
+           */
+          $scope.timelineAfter = function ()
+          {
+            var thisYear = moment().year();
+
+            if ($scope.timeline.scope.day)
+            {
+              if ($scope.timeline.current.year === thisYear)
+              {
+                /**
+                 * Total days in a month can change so get it start periods cache
+                 */
+                if ($scope.timeline.current.day != moment().endOf('year').dayOfYear())
+                {
+                  $scope.timeline.current.day++;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.year = thisYear + 1;
+
+                  $scope.timeline.current.day = 1;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                      end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                $scope.timeline.current.year = thisYear + 1;
+
+                $scope.timeline.current.day++;
+
+                $scope.timeliner.load(
+                  {
+                    start: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).startOf('day'),
+                    end: +moment().year($scope.timeline.current.year).dayOfYear($scope.timeline.current.day).endOf('day').add(1, 'ms')
+                  });
+              }
+            }
+            else if ($scope.timeline.scope.week)
+            {
+              if ($scope.timeline.current.year == thisYear)
+              {
+                if ($scope.timeline.current.week == 1 && $scope.timeline.current.month == 12)
+                {
+                  // deal with situation that last days in the end of the year share the first week with starting days in the next year.
+                  $scope.timeline.current.week = 53;
+                }
+
+                if ($scope.timeline.current.week != 53)
+                {
+                  $scope.timeline.current.week++;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.year = thisYear + 1;
+
+                  $scope.timeline.current.week = 1;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                if ($scope.timeline.current.week != 53)
+                {
+                  $scope.timeline.current.week++;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).startOf('week'),
+                      end: +moment().year($scope.timeline.current.year).week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                    });
+                }
+              }
+            }
+            else if ($scope.timeline.scope.month)
+            {
+              if ($scope.timeline.current.year == thisYear)
+              {
+                if ($scope.timeline.current.month != 12)
+                {
+                  $scope.timeline.current.month++;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+                else
+                {
+                  $scope.timeline.current.year = thisYear + 1;
+
+                  $scope.timeline.current.month = 1;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+              }
+              else
+              {
+                if ($scope.timeline.current.month != 12)
+                {
+                  $scope.timeline.current.month++;
+
+                  $scope.timeliner.load(
+                    {
+                      start: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).startOf('month'),
+                      end: +moment().year($scope.timeline.current.year).month($scope.timeline.current.month - 1).endOf('month').add(1, 'ms')
+                    });
+                }
+              }
+            }
+          };
+
+          /**
+           * Go to this week
+           */
+          $scope.timelineThisWeek = function ()
+          {
+            if ($scope.timeline.current.week != moment().week())
+            {
+
+              $scope.timeline.current.week = moment().week();
+
+              $scope.timeliner.load(
+                {
+                  start: +moment().startOf('week'),
+                  end: +moment().endOf('week').add(1, 'ms')
+                });
+
+              $scope.timeline.range = {
+                start: moment().startOf('week').toISOString(),
+                end: moment().endOf('week').add(1, 'ms').toISOString()
               };
-
-          $rootScope.infoAvailibility = ipCookie(cookieKey);
-
-          if(_.isUndefined($rootScope.infoAvailibility))
-          {
-            setCookie(true);
-          }
-
-          $rootScope.disableInfoAvailibility = function() {
-            setCookie(false);
-          };
-
-          $scope.slot = {};
-
-          var stamps = (Dater.current.today() > 360) ? {
-            start: $scope.periods.days[358].last.timeStamp,
-            end: $scope.periods.days[365].last.timeStamp
-          } : {
-            start: $scope.periods.days[Dater.current.today() - 1].last.timeStamp,
-            end: $scope.periods.days[Dater.current.today() + 6].last.timeStamp
-          };
-
-          var timelineCfg = config.app.timeline;
-
-          $scope.timeline = {
-            id: 'mainTimeline',
-            main: true,
-            user: {
-              id: data.user.uuid,
-              role: data.user.role,
-              fullName: data.user.firstName + ' ' + data.user.lastName,
-              teamUuids: data.user.teamUuids
-            },
-            current: $scope.current,
-            options: {
-              start: stamps.start,
-              end: stamps.end,
-              min: stamps.start,
-              max: stamps.end
-            },
-            range: {
-              start: stamps.start,
-              end: stamps.end
-            },
-            scope: {
-              day: false,
-              week: true,
-              month: false
-            },
-            config: {
-              bar: timelineCfg.config.bar,
-              layouts: timelineCfg.config.layouts,
-              wishes: timelineCfg.config.wishes,
-              legenda: {},
-              legendarer: timelineCfg.config.legendarer,
-              states: timelineCfg.config.states,
-              divisions: timelineCfg.config.divisions,
-              densities: timelineCfg.config.densities
             }
           };
 
-          if ($.browser.msie && $.browser.version == '8.0')
+
+          /**
+           * Go one week in past
+           */
+          $scope.timelineWeekBefore = function ()
           {
-            $scope.timeline.options = {
-              start: $scope.periods.days[Dater.current.today()].last.timeStamp,
-              end: $scope.periods.days[Dater.current.today() + 7].last.timeStamp,
-              min: $scope.periods.days[Dater.current.today()].last.timeStamp,
-              max: $scope.periods.days[Dater.current.today() + 7].last.timeStamp
-            };
-          }
-
-          _.each(config.app.statesall, function (state, index)
-          {
-            $scope.timeline.config.legenda[index] = true
-          });
-
-          $scope.timeline.config.legenda.groups = {
-            more: true,
-            even: true,
-            less: true
-          };
-
-          $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-          Dater.readable.date($scope.timeline.range.end);
-
-          $timeout(function ()
-          {
-            $scope.states = {};
-
-            _.each($scope.timeline.config.states, function (state, key)
+            if ($scope.timeline.current.week != 1)
             {
-              $scope.states[key] = state.label;
-            });
+              $scope.timeline.current.week--;
 
-          });
-
-          $scope.groups = data.teams;
-
-          $scope.divisions = $scope.timeline.config.divisions;
-
-          if ($scope.timeline.config.divisions.length > 0)
-          {
-            if ($scope.divisions[0].id !== 'all')
-            {
-              $scope.divisions.unshift({
-                id: 'all',
-                label: 'Alle divisies'
-              });
+              $scope.timeliner.load(
+                {
+                  start: +moment().week($scope.timeline.current.week).startOf('week'),
+                  end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                });
             }
 
-            $scope.groupPieHide = {};
-
-            _.each($scope.divisions, function (division)
-            {
-              $scope.groupPieHide[division.id] = false
-            });
-          }
-
-
-          $scope.resetViews = function ()
-          {
-            $scope.views = {
-              slot: {
-                add: false,
-                edit: false
-              },
-              group: false,
-              wish: false,
-              member: false
+            $scope.timeline.range = {
+              start: moment().week($scope.timeline.current.week).startOf('week').toISOString(),
+              end: moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms').toISOString()
             };
           };
 
-          $scope.resetViews();
 
-          $rootScope.$on('resetPlanboardViews', $scope.resetViews);
-
-          $scope.toggleSlotForm = function ()
+          /**
+           * Go one week in future
+           */
+          $scope.timelineWeekAfter = function ()
           {
-            if ($scope.views.slot.add)
+            if ($scope.timeline.current.week != 53)
             {
-              $rootScope.planboardSync.start();
+              $scope.timeline.current.week++;
 
-              $scope.resetInlineForms();
-            }
-            else
-            {
-              $rootScope.planboardSync.clear();
-
-              $rootScope.$broadcast('slotInitials');
-
-              $scope.resetViews();
-
-              $scope.views.slot.add = true;
+              $scope.timeliner.load(
+                {
+                  start: +moment().week($scope.timeline.current.week).startOf('week'),
+                  end: +moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms')
+                });
             }
 
-            $scope.$broadcast('showDuration');
+            $scope.timeline.range = {
+              start: moment().week($scope.timeline.current.week).startOf('week').toISOString(),
+              end: moment().week($scope.timeline.current.week).endOf('week').add(1, 'ms').toISOString()
+            };
           };
 
-          $scope.refreshCurrentTimeline = function()
+
+          /**
+           * Timeline zoom in
+           */
+          $scope.timelineZoomIn = function ()
           {
-            $scope.resetInlineForms();
-            $rootScope.$broadcast('resetTimeline');
+            $scope.self.timeline.zoom(config.app.timeline.config.zoom, Date.now());
           };
 
-          $scope.resetInlineForms = function ()
+
+          /**
+           * Timeline zoom out
+           */
+          $scope.timelineZoomOut = function ()
           {
-            $scope.slot = {};
-
-            $scope.original = {};
-
-            $scope.resetViews();
+            $scope.self.timeline.zoom(-config.app.timeline.config.zoom, Date.now());
           };
 
-          $scope.redirectOwnTimeline = function()
+
+          /**
+           * Redraw timeline on window resize
+           */
+          $window.onresize = function ()
           {
-            $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+            $scope.self.timeline.redraw();
           };
 
-          //$scope.sendShortageMessage = function (slot)
-          //{
-          //  $rootScope.statusBar.display($rootScope.ui.agenda.preCompilingStortageMessage);
-          //
-          //  Store('environment').save('escalation', {
-          //    group: slot.group,
-          //    start: {
-          //      date: slot.start.date,
-          //      time: slot.start.time
-          //    },
-          //    end: {
-          //      date: slot.end.date,
-          //      time: slot.end.time
-          //    },
-          //    diff: slot.diff
-          //  });
-          //
-          //  $location.path('/messages').search({ escalate: true }).hash('compose');
-          //};
+          $scope.fullWidth = function ()
+          {
+            $scope.self.timeline.redraw();
+          }
         }
       ]
     );
