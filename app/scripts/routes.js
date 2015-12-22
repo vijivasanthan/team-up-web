@@ -109,7 +109,7 @@ define(
                 controller: 'tasks2Ctrl',
                 reloadOnSearch: false,
                 resolve: {
-                  data: function (Teams, Clients, TaskCRUDold, $q)
+                  data: function (Teams, Clients, TaskCRUD, $q)
                   {
                     var deferred = $q.defer(),
                       data = {
@@ -132,8 +132,8 @@ define(
                       {
                         data.members = members;
                         return $q.all([
-                          TaskCRUDold.queryMine(),
-                          TaskCRUDold.queryAll(),
+                          TaskCRUD.queryMine(),
+                          TaskCRUD.queryAll(),
                           Teams.relationClientGroups(data.teams)
                         ])
                       })
