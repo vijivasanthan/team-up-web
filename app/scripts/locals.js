@@ -2195,7 +2195,7 @@ define(
           forgetPassword: 'Wachtwoord vergeten',
           emailAddress: 'E-mailadres',
           resetPassword: 'Wachtwoord opnieuw instellen',
-          returnLogin: 'Terugkeren om in te loggen',
+          returnLogin: 'Naar het inlogscherm',
           changePassword: 'Wachtwoord wijzigen',
           downloadApp: 'Download mobiele app',
           ph_username: 'Gebruikersnaam',
@@ -2695,8 +2695,8 @@ define(
 
           changePass: 'Wachtwoord wijzigen',
           forgotPassword: 'Wachtwoord vergeten',
-          forgotPassInfo: 'We verzenden u een email met de instructies om uw wachtwoord te resetten.',
-          forgotPassInfoSend: 'Als de gebruiker bestaat en een e-mailadres heeft, dan is een e-mailtje naar de gebruiker verstuurd met instructies om het wachtwoord te wijzigen.',
+          forgotPassInfo: 'Verstuur uw gebruikersnaam',
+          forgotPassInfoSend: 'Als de gebruiker bestaat en een e-mailadres heeft, is een e-mail naar de gebruiker verstuurd met instructies om het wachtwoord te wijzigen.',
           keyUsernameWrong: 'De combinatie van de opgegeven sleutel en gebruikersnaam klopt niet',
 
           newAvail: 'Nieuwe bereikbaarheid',
@@ -2714,7 +2714,7 @@ define(
           passChanged: 'Wachtwoord succesvol gewijzigd',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
           currentPassWrong: 'Het ingevulde oude wachtwoord komt niet overeen met het huidige! Probeer opnieuw.',
-          passRecover: 'Wachtwoord herstellen',
+          passRecover: 'Verzenden',
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
@@ -3074,7 +3074,7 @@ define(
             '33': 'Geen templates gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
             '36': 'Een niet verwachte parameter "type"',
-            '39': 'De sleutel om het wachtwoord te resetten is verlopen'
+            '39': 'De link om uw wachtwoord opnieuw in te stellen is niet meer geldig.'
           }
         },
         options: {
