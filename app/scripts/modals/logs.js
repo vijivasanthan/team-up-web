@@ -263,11 +263,6 @@ define(['services/services', 'config'],
             }
           }
 
-          function getNamesAndPhoneNumbers()
-          {
-
-          }
-
           Logs.prototype.fetch = function (options)
           {
             var deferred = $q.defer(),
