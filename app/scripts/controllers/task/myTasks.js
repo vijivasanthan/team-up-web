@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'viewTasks',
+      'myTasks',
       function ($rootScope,
                 $timeout,
                 $filter,
@@ -27,7 +27,6 @@ define(
 
         //methods
         self.orderBy = orderBy;
-        //self.assignTask = assignTask;
         self.unAssignTask = unAssignTask;
         self.confirmDeleteTask = confirmDeleteTask;
         self.viewTaskData = viewTaskData;
@@ -72,20 +71,6 @@ define(
             });
           }
         }
-
-        /**
-         * assign task to team member
-         * @param task
-         */
-        //function assignTask(task)
-        //{
-        //  trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
-        //
-        //  task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
-        //
-        //  updateTask(task);
-        //  $location.path("/task/mytasks");
-        //}
 
         /**
          * unassign task to team member
@@ -150,7 +135,7 @@ define(
          * @param task
          * @param viewType
          */
-        function deleteTask(task, viewType)
+        function deleteTask(task)
         {
           self.taskToRemove = {};
 
