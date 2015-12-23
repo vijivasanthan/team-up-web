@@ -35,9 +35,6 @@ define(
         self.toggleStatusFinished = toggleStatusFinished;
         self.getTasksForTeam = getTasksForTeam;
 
-
-        console.log(data.teams);
-
         function orderBy(ordered)
         {
           self.ordered = ordered;
@@ -68,13 +65,11 @@ define(
          */
         function toggleStatusFinished()
         {
-          console.log("finished tasks " + self.isStatusFinished);
           if(self.isStatusFinished)
           {
             TaskCRUD.queryByTeam(self.selectedTeam, 3)
               .then(function (finishedTasks)
               {
-                console.log(finishedTasks);
                 if(finishedTasks.length)
                 {
                   self.tasks.list = self.tasks.list.concat(finishedTasks);
@@ -102,12 +97,8 @@ define(
          */
         function assignTask(task)
         {
-          trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
-
-          task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
-
+          TaskCRUD.assign(task);
           updateTask(task);
-          $location.path("/task/mytasks");
         }
 
         /**
@@ -116,10 +107,7 @@ define(
          */
         function unAssignTask(task)
         {
-          trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
-          task.assignedTeamMemberUuid = null;
-          task.assignedTeamUuid = null;
-          delete task.author;
+          TaskCRUD.unassign(task);
           updateTask(task);
         }
 
@@ -161,7 +149,6 @@ define(
           self.taskToRemove = task;
           TaskCRUD.confirmDeleteTaskMessage();
         }
-
 
         /**
          * delete a task

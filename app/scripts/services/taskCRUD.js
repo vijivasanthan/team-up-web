@@ -33,6 +33,8 @@ define(['services/services', 'config'],
           this.queryByTeam = queryByTeam;
           this.getDetails = getDetails;
           this.confirmDeleteTaskMessage = confirmDeleteTaskMessage;
+          this.assign = assign;
+          this.unassign = unassign;
 
           /**
            * Create a task
@@ -335,10 +337,22 @@ define(['services/services', 'config'],
           }
 
 
+          //assign a task to a member
+          function assign(task)
+          {
+            trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
+            task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
+            $location.path("/task/mytasks");
+          }
 
-
-
-
+          //unassign a task to a member
+          function unassign(task)
+          {
+            trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
+            task.assignedTeamMemberUuid = null;
+            task.assignedTeamUuid = null;
+            delete task.author;
+          }
 
           /**
            * get unique client uuids for tasks

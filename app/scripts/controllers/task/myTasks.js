@@ -78,10 +78,7 @@ define(
          */
         function unAssignTask(task)
         {
-          trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
-          task.assignedTeamMemberUuid = null;
-          task.assignedTeamUuid = null;
-          delete task.author;
+          TaskCRUD.unassign(task);
           updateTask(task);
         }
 
@@ -120,15 +117,9 @@ define(
          */
         function confirmDeleteTask(task)
         {
-          $timeout(
-            function ()
-            {
-              self.taskToRemove = task;
-              angular.element('#confirmTaskModal').modal('show');
-            }
-          );
+          self.taskToRemove = task;
+          TaskCRUD.confirmDeleteTaskMessage();
         }
-
 
         /**
          * delete a task
