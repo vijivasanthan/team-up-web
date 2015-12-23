@@ -25,8 +25,17 @@ section#dashboard
 						//ng-selected='current.group',
 						//ng-change='getGroupReachability()',
 						//style='width: 160px;')
-				div(
-				ng-show='status.teamMembers.length == 0')
+				div
+					form(ng-submit='status.messageReceived(status.socketMessage); status.socketMessage = "";')
+						input(type='text' ng-model='status.socketMessage')
+						br
+						input(type='submit') Verzenden
+					hr
+					ul
+						li(ng-repeat='item in status.socketData')
+							p {{ item.content }}
+							span {{ item.timeStamp }}
+				div(ng-show='status.teamMembers.length == 0')
 					hr
 					p {{ ui.order.noMembers }}
 				section(ng-hide='status.loadingReachability')

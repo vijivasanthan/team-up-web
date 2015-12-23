@@ -35,6 +35,7 @@ require.config(
       'angular-strap':    '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl':    '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
+      'angular-websocket': '../vendors/angular-websocket/angular-websocket.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
       timeline: 'removables/timeline',
@@ -63,6 +64,7 @@ require.config(
       'angular-route': { deps: ['angular'], exports: 'angular' },
       'angular-animate': { deps: ['angular'], exports: 'angular' },
       'angular-messages': { deps: ['angular'], exports: 'angular' },
+      'angular-websocket': { deps: ['angular'], exports: 'angular' },
       'angular-strap': { deps: ['angular'], exports: 'angular' },
       'angular-strap-tpl': { deps: ['angular','angular-strap'], exports: 'angular' },
       'angular-cookie': { deps: ['angular'], exports: 'angular' },
@@ -131,6 +133,7 @@ require(
     'angular-strap',
     'angular-strap-tpl',
     'angular-dynamic-locale',
+    'angular-websocket',
 
     'locals',
     'profile',
@@ -165,8 +168,7 @@ require(
     'services/member',
     'services/password',
     'services/taskCRUD',
-    'services/taskCRUDold',
-
+    'services/Socket',
 
     'directives/widgets',
     'directives/date-range-picker',

@@ -15,7 +15,8 @@ define(
     'angular-strap',
     'angular-dynamic-locale',
     'angular-sortable-view',
-    'angular-cookie'
+    'angular-cookie',
+    'angular-websocket'
   ],
   function (angular)
   {
@@ -35,7 +36,8 @@ define(
         'ui.mask',
         'angular-sortable-view',
         'ipCookie',
-        'tmh.dynamicLocale'
+        'tmh.dynamicLocale',
+        'ngWebSocket'
       ]);
   }
 );

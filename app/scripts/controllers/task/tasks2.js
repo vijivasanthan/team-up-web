@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'tasks2Ctrl',
-        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, TaskCRUDold,
+        function ($rootScope, $scope, $location, $timeout, $filter, Store, TeamUp, TaskCRUD,
                   Teams, Clients, Dater, moment, data)
         {
           $rootScope.fixStyles();
@@ -162,7 +162,7 @@ define(
 
           function queryMine(only, callback)
           {
-            TaskCRUDold.queryMine()
+            TaskCRUD.queryMine()
               .then(
               function (tasks)
               {
@@ -188,7 +188,7 @@ define(
           {
             queryMine(true);
 
-            TaskCRUDold.queryAll()
+            TaskCRUD.queryAll()
               .then(
               function (tasks)
               {
@@ -361,7 +361,7 @@ define(
 
           function updateTask(task, only)
           {
-            TaskCRUDold.update(task)
+            TaskCRUD.update(task)
               .then(
               function (result)
               {
@@ -427,7 +427,7 @@ define(
 
             angular.element('#confirmTaskModal').modal('hide');
 
-            TaskCRUDold.delete(task.uuid)
+            TaskCRUD.delete(task.uuid)
               .then(function(result)
               {
                 if (result.error)
@@ -531,7 +531,7 @@ define(
           //change team depends on the default team
           $scope.changeTeam($scope.currentTeam);
 
-          TaskCRUDold.chains();
+          TaskCRUD.chains();
 
             // Validation of the task form
           $scope.validateTaskForm = function (task)

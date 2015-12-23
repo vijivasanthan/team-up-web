@@ -4,7 +4,8 @@ define(['../controllers'], function (controllers)
 
   controllers.controller(
     'status',
-      function ($rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
+      function ($scope, $rootScope, $location, TeamUp, $q,
+                Slots, Store, data, Teams, CurrentSelection, Socket)
       {
         //rootScope
         $rootScope.notification.status = false;
@@ -18,6 +19,12 @@ define(['../controllers'], function (controllers)
         self.states = angular.copy($rootScope.config.app.timeline.config.states);
         self.currentTeam = CurrentSelection.getTeamId();
         self.teamMembers = data.members;
+        self.socketData = Socket.collection;
+
+        self.messageReceived = function (message)
+        {
+          if(message && message.length) Socket.send(message);
+        };
 
         //methods
         self.getGroupReachability = getGroupReachability;
