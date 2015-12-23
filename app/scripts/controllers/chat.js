@@ -7,8 +7,15 @@ define(
     controllers.controller(
       'chat',
         function ($scope, $rootScope, $q, $location, $route, $filter,
-                  $timeout, Teams, TeamUp, CurrentSelection, moment, Settings)
+                  $timeout, Teams, TeamUp, CurrentSelection, moment,
+                  Settings, socketService)
         {
+          $scope.$on('socket:message', function(event, data) {
+            console.error('event, data', event, data);
+            if($scope.chatTeamId === data.teamUuid) $scope.renderMessage();
+          });
+
+
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 2000; // * 60;
@@ -29,7 +36,7 @@ define(
                 $scope.chatTeamId =  $rootScope.app.resources.teamUuids[0];
                 if (! $scope.toggleChat && ! _.isUndefined( Settings.getBackEnd()) )
                 {
-                  $scope.checkMessage();
+                  //$scope.checkMessage();
                 }
               }
             });
@@ -198,7 +205,7 @@ define(
                     $scope.latestMsgTime = messages[messages.length - 1].sendTime;
                   }
 
-                  $timeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
+                  //$timeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
                 }
 
                 // scroll to the bottom of the chat window
@@ -284,7 +291,7 @@ define(
                   var lastMsg = messages[messages.length - 1];
                   $scope.latestMsgTime = lastMsg && lastMsg.sendTime ||  (moment().valueOf() - REFRESH_CHAT_MESSAGES);
 
-                  $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+                  //$timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
                 }
               });
           };
@@ -331,7 +338,8 @@ define(
               }
               else
               {
-                $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+                $scope.checkMessage();
+                //$timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
               }
             }
             else

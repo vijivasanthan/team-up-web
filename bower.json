@@ -37,7 +37,9 @@
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
     "web-lib-vis": "https://github.com/askcs/web-lib-vis.git",
     "angular-messages": "~1.4.7",
-    "angular-websocket": "~1.0.14"
+    "angular-websocket": "~1.0.14",
+    "angular-socket-io": "~0.7.0",
+    "socket.io-client": "~1.3.7"
   },
   "devDependencies": {}
 }

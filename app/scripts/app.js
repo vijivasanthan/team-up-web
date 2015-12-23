@@ -37,7 +37,7 @@ define(
         'angular-sortable-view',
         'ipCookie',
         'tmh.dynamicLocale',
-        'ngWebSocket'
+        'btford.socket-io'
       ]);
   }
 );
