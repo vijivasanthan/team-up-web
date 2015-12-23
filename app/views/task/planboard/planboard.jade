@@ -198,8 +198,8 @@ div(ng-controller='timeline as taskPlanboard')
 					a(data-toggle='tab', ng-click='nav("task/mytasks")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.myTask}}
-				li(class="{{(views.allTasks==true) && 'active'}}")
-					a(data-toggle='tab', ng-click='nav("tasks2/alltasks")')
+				li(class="" data-match-route='/task/alltasks')
+					a(data-toggle='tab', ng-click='nav("task/alltasks")')
 						span.icomoon(data-icon='', aria-hidden='true')
 						| {{ui.task.allTasks}}
 				li(class="" data-match-route='/task/new')

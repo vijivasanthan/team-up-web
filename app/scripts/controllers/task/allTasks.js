@@ -150,8 +150,6 @@ define(
             .then(function (taskData) {
               self.currentTask = taskData;
             })
-          console.log(self.currentTask);
-
         }
 
         /**
@@ -160,13 +158,8 @@ define(
          */
         function confirmDeleteTask(task)
         {
-          $timeout(
-            function ()
-            {
-              self.taskToRemove = task;
-              angular.element('#confirmTaskModal').modal('show');
-            }
-          );
+          self.taskToRemove = task;
+          TaskCRUD.confirmDeleteTaskMessage();
         }
 
 

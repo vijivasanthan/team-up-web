@@ -32,6 +32,7 @@ define(['services/services', 'config'],
           this.queryMine = queryMine;
           this.queryByTeam = queryByTeam;
           this.getDetails = getDetails;
+          this.confirmDeleteTaskMessage = confirmDeleteTaskMessage;
 
           /**
            * Create a task
@@ -321,6 +322,22 @@ define(['services/services', 'config'],
 
             return deferred.promise;
           }
+
+          function confirmDeleteTaskMessage()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+
+          }
+
+
+
+
+
 
 
           /**
