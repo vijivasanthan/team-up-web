@@ -43,7 +43,7 @@ define(
                 case '/client':
                   $rootScope.loaderIcons.client = true;
 
-                  $rootScope.location = 'cilent';
+                  $rootScope.location = 'client';
                   break;
 
                 case '/messages':
