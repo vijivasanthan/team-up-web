@@ -16,6 +16,7 @@ define(['services/services', 'config'],
         function ($resource, $q, $filter, $injector, moment, Settings)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
+          //typeId 5390d362e4b02c61014547e3 = purchase phonenumber
           var Logs = function() {};
 
           Logs.prototype.get = function ()
@@ -26,7 +27,9 @@ define(['services/services', 'config'],
               {
                 get: {
                   method: 'GET',
-                  params: {},
+                  params: {
+                    typeId: '5390d362e4b02c61014547e4,5390d362e4b02c61014547e5'
+                  },
                   isArray: true
                 }
               }
