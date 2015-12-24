@@ -993,7 +993,13 @@ define(
               reloadOnSearch: false
             })
 
-            .otherwise({redirectTo: '/login'});
+            .when(
+              '/404',
+              {
+                templateUrl: 'views/404.html'
+              })
+
+            .otherwise({redirectTo: '/404'});
 
           $httpProvider.interceptors.push(function ($location, Store, $injector, $q)
           {
