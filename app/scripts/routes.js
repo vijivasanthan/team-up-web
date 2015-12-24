@@ -379,7 +379,7 @@ define(
                 data: function ($q, $location, Teams, Member)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-
+                  $location.search('teamId', teamId);
                   return Teams.getSingle(teamId)
                     .then(function (members)
                     {
@@ -992,6 +992,12 @@ define(
               controller: 'videoCtrl',
               reloadOnSearch: false
             })
+
+            .when(
+              '/',
+              {
+                redirectTo: '/team'
+              })
 
             .when(
               '/404',
