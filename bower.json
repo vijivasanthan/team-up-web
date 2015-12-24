@@ -35,8 +35,9 @@
     "web-lib-offline": "https://github.com/askcs/web-lib-offline.git",
     "web-lib-session": "https://github.com/askcs/web-lib-session.git",
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
-    "web-lib-vis": "https://github.com/askcs/web-lib-vis.git",
-    "angular-messages": "~1.4.7"
+    "angular-messages": "~1.4.7",
+    "vis": "~3.12.0"
   },
   "devDependencies": {}
 }
+
