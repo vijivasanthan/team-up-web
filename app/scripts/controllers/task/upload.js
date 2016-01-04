@@ -19,26 +19,24 @@ define(
         '$modal',
         'TeamUp',
         '$timeout',
-        function ($rootScope, $q, $location, Clients, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp, $timeout)
+        function ($rootScope, $scope, $q, $location, Clients, $route, $routeParams, Store, Dater, $filter, $modal, TeamUp, $timeout)
         {
-          var self = this;
-
-          self.step = 'SelectFile';
-          self.workbook = {};
-          self.tuSheet = {};
-          self.matchedTeamMembersByName = {};
-          self.matchedClientsByName = {};
-          self.taskCreateErrors = [];
+          $scope.step = 'SelectFile';
+          $scope.workbook = {};
+          $scope.tuSheet = {};
+          $scope.matchedTeamMembersByName = {};
+          $scope.matchedClientsByName = {};
+          $scope.taskCreateErrors = [];
 
           var currentTeam = $rootScope.app.resources.teamUuids[0],
             tasksSheet = [];
 
-          self.handleFile = function (files)
+          $scope.handleFile = function (files)
           {
             handleFiles(files);
           }
 
-          self.handleDragover = function (evnt)
+          $scope.handleDragover = function (evnt)
           {
             evnt.stopPropagation();
             evnt.preventDefault();
@@ -47,7 +45,7 @@ define(
             evnt.dataTransfer.dropEffect = 'copy';
           }
 
-          self.handleDragenter = function (evnt)
+          $scope.handleDragenter = function (evnt)
           {
             evnt.stopPropagation();
             evnt.preventDefault();
@@ -55,7 +53,7 @@ define(
             evnt.dataTransfer.dropEffect = 'copy';
           }
 
-          self.handleDrop = function (evnt)
+          $scope.handleDrop = function (evnt)
           {
             evnt.stopPropagation();
             evnt.preventDefault();
@@ -128,7 +126,7 @@ define(
                     });
                   }
                   process_wb(wb);
-                  self.$apply();
+                  $scope.$apply();
                 }
               };
               if (rABS)
@@ -139,9 +137,9 @@ define(
               {
                 reader.readAsArrayBuffer(f);
               }
-              self.step = "ProcessFile";
+              $scope.step = "ProcessFile";
               addBreadcrumb($rootScope.ui.upload.processFile, 'file');
-              self.$apply();
+              $scope.$apply();
             }
           }
 
@@ -295,14 +293,14 @@ define(
           function process_wb(workbook)
           {
             addBreadcrumb($rootScope.ui.upload.choiceWeek, 'chooseWeek');
-            self.step = "SelectSheet";
-            self.sheetNames = Object.keys(workbook.Sheets);
-            self.workbook = workbook;
+            $scope.step = "SelectSheet";
+            $scope.sheetNames = Object.keys(workbook.Sheets);
+            $scope.workbook = workbook;
           }
 
-          self.selectSheet = function (sheetName)
+          $scope.selectSheet = function (sheetName)
           {
-            self.step = "ProcessSheet";
+            $scope.step = "ProcessSheet";
             addBreadcrumb($rootScope.ui.upload.processSheet, 'processSheet');
 
             function processSheet()
@@ -312,7 +310,7 @@ define(
               setTimeout(function ()
               {
                 console.log("Start analysing sheet data");
-                self.tuSheet = new TeamUpSpreadsheet(self.workbook.Sheets[sheetName]);
+                $scope.tuSheet = new TeamUpSpreadsheet($scope.workbook.Sheets[sheetName]);
                 defer.resolve();
               }, 100);
 
@@ -322,30 +320,30 @@ define(
             $q.when(processSheet())
               .then(function ()
               {
-                self.uploadStepCheckStructure();
+                $scope.uploadStepCheckStructure();
               });
           };
 
-          self.uploadStepCheckStructure = function ()
+          $scope.uploadStepCheckStructure = function ()
           {
-            self.step = "CheckStructure";
+            $scope.step = "CheckStructure";
             addBreadcrumb($rootScope.ui.upload.checkRoutes, 'checkRoutes');
-            //showRoutes(self.tuSheet);
+            //showRoutes($scope.tuSheet);
           }
 
-          self.uploadStepCheckNames = function ()
+          $scope.uploadStepCheckNames = function ()
           {
-            self.step = "CheckNames";
+            $scope.step = "CheckNames";
             addBreadcrumb($rootScope.ui.upload.checkNames, 'checkNames');
             //TODO check check check
-            self.tuSheet.matchTeamMembers();
-            self.tuSheet.matchClients();
-            self.matchedTeamMembersByName = orderMatches(self.tuSheet.matchedTeamMemberForName);
+            $scope.tuSheet.matchTeamMembers();
+            $scope.tuSheet.matchClients();
+            $scope.matchedTeamMembersByName = orderMatches($scope.tuSheet.matchedTeamMemberForName);
 
-            self.matchedClientsByName = orderMatches(self.tuSheet.matchedClientForName);
+            $scope.matchedClientsByName = orderMatches($scope.tuSheet.matchedClientForName);
           }
 
-          self.textForTaskUploadStatus = function (stat)
+          $scope.textForTaskUploadStatus = function (stat)
           {
             var translations = {
               "failed": $rootScope.ui.upload.failed,
@@ -356,11 +354,11 @@ define(
             return translations[stat];
           }
 
-          self.uploadStepConfirmNames = function ()
+          $scope.uploadStepConfirmNames = function ()
           {
-            self.step = "CreateTasks";
+            $scope.step = "CreateTasks";
             addBreadcrumb($rootScope.ui.upload.createTasks, 'createTasks');
-            self.tuSheet.uploadTasks();
+            $scope.tuSheet.uploadTasks();
           }
 
           function orderMatches(matchedPersons)
@@ -477,7 +475,7 @@ define(
               if (cell.t == "n" && typeof cell.v === "number" && typeof cell.w === "string" && cell.v > 0 && cell.v < 2958465)
               {
                 var dateValue = XLSX.SSF.parse_date_code(cell.v, {
-                  date1904: (self.workbook.Workbook.WBProps.date1904 == "1")
+                  date1904: ($scope.workbook.Workbook.WBProps.date1904 == "1")
                 }, false);
                 return new Date(dateValue.y, dateValue.m - 1, dateValue.d);
               }
@@ -669,12 +667,12 @@ define(
                foundTask.uploadStatus = 'failed';
                if (result.error.data) {
                if(result.error.data.result)
-               self.taskCreateErrors.push({ code:1010, text:$rootScope.transError(result.error.data.result)});
+               $scope.taskCreateErrors.push({ code:1010, text:$rootScope.transError(result.error.data.result)});
                else
-               self.taskCreateErrors.push({ code:1012, text:result.error.data});
+               $scope.taskCreateErrors.push({ code:1012, text:result.error.data});
                }
                else
-               self.taskCreateErrors.push({ code:1011, text:$rootScope.transError(result.error)});
+               $scope.taskCreateErrors.push({ code:1011, text:$rootScope.transError(result.error)});
                }
                else
                var foundTask = result.config.data;
@@ -697,7 +695,7 @@ define(
                     {
                       console.log('error for ' + foundTask.clientName);
                       foundTask.error = result.error.data;
-                      self.taskCreateErrors.push(foundTask);
+                      $scope.taskCreateErrors.push(foundTask);
                       foundTask.uploadStatus = 'failed';
                     }
                     else
@@ -709,10 +707,10 @@ define(
               });
             }
 
-            //self.deleteWeek = function ()
+            //$scope.deleteWeek = function ()
             //{
             //  //TODO the user can't pick the team he likes to upload the sheet
-            //  var sheetFirstDate = moment(self.tuSheet.days[0].startDate);
+            //  var sheetFirstDate = moment($scope.tuSheet.days[0].startDate);
             //
             //  Task.getWeek(currentTeam, sheetFirstDate.week(), moment().get('year'))
             //    .then(
@@ -1131,7 +1129,7 @@ define(
 
             this.parseSheet = parseSheet;
 
-            self.toggleDayInsert = function(day)
+            $scope.toggleDayInsert = function(day)
             {
               angular.forEach(day.routes, function(route) {
                 route.doInsert = day.doInsert;
@@ -1142,7 +1140,7 @@ define(
               });
             };
 
-            self.toggleRouteInsert = function ()
+            $scope.toggleRouteInsert = function ()
             {
               for (var c = 0; c < this.route.tasks.length; c++)
               {
