@@ -68,8 +68,16 @@ define(
             .then(function (teamClientgroupLinks)
             {
               self.teamClientgroupLinks = teamClientgroupLinks;
-              self.form.currentGroup = teamClientgroupLinks[0].id;
-              return Clients.getSingle(self.form.currentGroup);
+              if(!teamClientgroupLinks[0])
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.noClientGroupFound);
+                return null;
+              }
+              else
+              {
+                self.form.currentGroup = teamClientgroupLinks[0].id;
+                return Clients.getSingle(self.form.currentGroup);
+              }
             })
             .then(function (currentGroupClients)
             {

@@ -241,7 +241,7 @@ define(
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
+                data: function ($rootScope, Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
                   var deferred = $q.defer(),
                     teamId = CurrentSelection.getTeamId(),
                     data = {
@@ -268,9 +268,14 @@ define(
                     })
                     .then(function (teamClientgroupLinks)
                     {
-                      if (teamClientgroupLinks.length)
+                      data.teamClientgroupLinks = teamClientgroupLinks;
+                      if(!teamClientgroupLinks[0])
                       {
-                        data.teamClientgroupLinks = teamClientgroupLinks;
+                        $rootScope.notifier.error($rootScope.ui.teamup.noClientGroupFound);
+                        return null;
+                      }
+                      else
+                      {
                         var clientGroupId = teamClientgroupLinks[0].id;
                         return Clients.getSingle(clientGroupId);
                       }

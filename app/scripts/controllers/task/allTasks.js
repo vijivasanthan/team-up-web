@@ -136,6 +136,7 @@ define(
           self.currentTask = task;
           TaskCRUD.getDetails(task)
             .then(function (taskData) {
+              console.log('taskData', taskData);
               self.currentTask = taskData;
             })
         }
