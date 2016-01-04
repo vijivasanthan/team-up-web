@@ -420,7 +420,7 @@ define(['services/services', 'config'],
           {
             trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
             task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
-            $location.path("/task/mytasks");
+            return task;
           }
 
           //unassign a task to a member
@@ -430,6 +430,7 @@ define(['services/services', 'config'],
             task.assignedTeamMemberUuid = null;
             task.assignedTeamUuid = null;
             delete task.author;
+            return task;
           }
 
           /**

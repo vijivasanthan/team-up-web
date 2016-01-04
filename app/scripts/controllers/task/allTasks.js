@@ -97,8 +97,10 @@ define(
          */
         function assignTask(task)
         {
-          TaskCRUD.assign(task);
-          updateTask(task);
+          task = TaskCRUD.assign(task);
+          updateTask(task, function () {
+            $location.path("/task/mytasks");
+          });
         }
 
         /**
@@ -107,7 +109,7 @@ define(
          */
         function unAssignTask(task)
         {
-          TaskCRUD.unassign(task);
+          task = TaskCRUD.unassign(task);
           updateTask(task);
         }
 
@@ -115,7 +117,7 @@ define(
          * update task with changes and requery
          * @param task
          */
-        function updateTask(task)
+        function updateTask(task, callBack)
         {
           TaskCRUD.update(task)
             .then(function (result) {
@@ -123,6 +125,8 @@ define(
               {
                 var index = _.findIndex(self.tasks.list, { uuid: task.uuid });
                 self.tasks.list.splice(index, 1);
+
+                (callBack && callBack());
               }
             });
         }

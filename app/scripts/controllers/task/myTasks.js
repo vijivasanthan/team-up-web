@@ -78,7 +78,7 @@ define(
          */
         function unAssignTask(task)
         {
-          TaskCRUD.unassign(task);
+          task = TaskCRUD.unassign(task);
           updateTask(task);
         }
 
