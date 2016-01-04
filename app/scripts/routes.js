@@ -23,61 +23,61 @@ define(
 
           $provide
             .decorator(
-              "$exceptionHandler",
-              [
-                "$delegate",
-                function ($delegate)
+            "$exceptionHandler",
+            [
+              "$delegate",
+              function ($delegate)
+              {
+                return function (exception, cause)
                 {
-                  return function (exception, cause)
-                  {
-                    console.error('exceptionq', exception);
-                    trackGa('send', 'exception', {
-                      exDescription: exception.message,
-                      exFatal: false,
-                      stack: exception.stack,
-                      line: '123'
-                      //exStack: exception.stack
-                    });
+                  console.error('exceptionq', exception);
+                  trackGa('send', 'exception', {
+                    exDescription: exception.message,
+                    exFatal: false,
+                    stack: exception.stack,
+                    line: '123'
+                    //exStack: exception.stack
+                  });
 
-                    trackGa('send', 'event', 'JavaScript Error',
-                      exception.message, exception.stack, { 'nonInteraction': 1 });
+                  trackGa('send', 'event', 'JavaScript Error',
+                    exception.message, exception.stack, { 'nonInteraction': 1 });
 
-                    $delegate(exception, cause);
-                  };
-                }
-              ]
-            );
+                  $delegate(exception, cause);
+                };
+              }
+            ]
+          );
 
           //Chrome Ipad solution in case of using $location.hash()
           $provide
             .decorator(
-              '$browser',
-              [
-                '$delegate',
-                function ($delegate)
+            '$browser',
+            [
+              '$delegate',
+              function ($delegate)
+              {
+                var originalUrl = $delegate.url;
+                $delegate.url = function ()
                 {
-                  var originalUrl = $delegate.url;
-                  $delegate.url = function ()
+                  var result = originalUrl.apply(this, arguments);
+                  if (result && result.replace)
                   {
-                    var result = originalUrl.apply(this, arguments);
-                    if (result && result.replace)
-                    {
-                      result = result.replace(/%23/g, '#');
-                    }
-                    return result;
-                  };
-                  return $delegate;
-                }
-              ]
-            );
+                    result = result.replace(/%23/g, '#');
+                  }
+                  return result;
+                };
+                return $delegate;
+              }
+            ]
+          );
 
           $routeProvider
             .when(
-              '/login',
-              {
-                templateUrl: 'views/login/loginForm.html',
-                controller: 'login as loginCtrl'
-              })
+            '/login',
+            {
+              templateUrl: 'views/login/loginForm.html',
+              controller: 'login as loginCtrl'
+            })
 
             .when(
             '/logout',
@@ -103,65 +103,71 @@ define(
             })
 
             .when(
-              '/tasks2',
-              {
-                templateUrl: 'views/task/tasks2.html',
-                controller: 'tasks2Ctrl',
-                reloadOnSearch: false,
-                resolve: {
-                  data: function (Teams, Clients, TaskCRUD, $q)
-                  {
-                    var deferred = $q.defer(),
-                      data = {
-                        teams: null,
-                        myTasks: null,
-                        allTasks: null,
-                        members: null,
-                        teamClientsGroups: null,
-                        clientGroups: null,
-                        clients: null
-                      };
+            '/tasks2',
+            {
+              templateUrl: 'views/task/tasks2.html',
+              controller: 'tasks2Ctrl',
+              reloadOnSearch: false,
+              resolve: {
+                data: function (Teams, Clients, TaskCRUDold, $q)
+                {
+                  var deferred = $q.defer(),
+                    data = {
+                      teams: null,
+                      myTasks: null,
+                      allTasks: null,
+                      members: null,
+                      teamClientsGroups: null,
+                      clientGroups: null,
+                      clients: null
+                    };
 
-                    Teams.getAllLocal()
-                      .then(function (teams)
-                      {
-                        data.teams = teams;
-                        return Teams.getAllWithMembers()
-                      })
-                      .then(function (members)
-                      {
-                        data.members = members;
-                        return $q.all([
-                          TaskCRUD.queryMine(),
-                          TaskCRUD.queryAll(),
-                          Teams.relationClientGroups(data.teams)
-                        ])
-                      })
-                      .then(function (teamsTasksData)
-                      {
-                        data.myTasks = teamsTasksData[0];
-                        data.allTasks = teamsTasksData[1];
-                        data.teamClientsGroups = teamsTasksData[2];
-                        return Clients.getAllLocal();
-                      })
-                      .then(function (clientGroups)
-                      {
-                        data.clientGroups = clientGroups;
-                        return Clients.getAllWithClients();
-                      })
-                      .then(function (GroupsAndClients)
-                      {
-                        data.clients = GroupsAndClients;
-                        deferred.resolve(data);
-                      });
-                    return deferred.promise;
-                  }
+                  Teams.getAllLocal()
+                    .then(function (teams)
+                    {
+                      data.teams = teams;
+                      return Teams.getAllWithMembers()
+                    })
+                    .then(function (members)
+                    {
+                      data.members = members;
+                      return $q.all([
+                        TaskCRUDold.queryMine(),
+                        TaskCRUDold.queryAll(),
+                        Teams.relationClientGroups(data.teams)
+                      ])
+                    })
+                    .then(function (teamsTasksData)
+                    {
+                      data.myTasks = teamsTasksData[0];
+                      data.allTasks = teamsTasksData[1];
+                      data.teamClientsGroups = teamsTasksData[2];
+                      return Clients.getAllLocal();
+                    })
+                    .then(function (clientGroups)
+                    {
+                      data.clientGroups = clientGroups;
+                      return Clients.getAllWithClients();
+                    })
+                    .then(function (GroupsAndClients)
+                    {
+                      data.clients = GroupsAndClients;
+                      deferred.resolve(data);
+                    });
+                  return deferred.promise;
                 }
-              })
+              }
+            })
+
+            .when('/task/upload', {
+              templateUrl: 'views/task/upload.html',
+              controller: 'upload as upload',
+              reloadOnSearch: false,
+            })
 
             .when('/task/mytasks', {
               templateUrl: 'views/task/myTasks.html',
-              controller: 'viewTasks as mytasks',
+              controller: 'myTasks as mytasks',
               reloadOnSearch: false,
               resolve: {
                 data: function (TaskCRUD, $q)
@@ -192,7 +198,7 @@ define(
 
             .when('/task/alltasks', {
               templateUrl: 'views/task/allTasks.html',
-              controller: 'viewTasks as alltasks',
+              controller: 'allTasks as alltasks',
               reloadOnSearch: false,
               resolve: {
                 data: function (TaskCRUD, Teams, CurrentSelection, $q)
@@ -200,9 +206,9 @@ define(
                   var deferred = $q.defer(),
                     teamId = CurrentSelection.getTeamId(),
                     data = {
-                      myTasks: null,
+                      tasks: null,
                       teams: null,
-                      currentTeam: teamId
+                      currentTeamId: teamId
                     };
 
                   Teams.getAllLocal()
@@ -218,7 +224,7 @@ define(
                         on: taskData
                       };
 
-                      data.myTasks = {
+                      data.tasks = {
                         loading: false,
                         list: tasks['on']
                         //archive: (tasks.off.length > 0)
@@ -235,7 +241,7 @@ define(
               controller: 'saveTask as task',
               reloadOnSearch: false,
               resolve: {
-                data: function (Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
+                data: function ($rootScope, Teams, Clients, TaskCRUD, Task, CurrentSelection, $q) {
                   var deferred = $q.defer(),
                     teamId = CurrentSelection.getTeamId(),
                     data = {
@@ -262,9 +268,14 @@ define(
                     })
                     .then(function (teamClientgroupLinks)
                     {
-                      if (teamClientgroupLinks.length)
+                      data.teamClientgroupLinks = teamClientgroupLinks;
+                      if(!teamClientgroupLinks[0])
                       {
-                        data.teamClientgroupLinks = teamClientgroupLinks;
+                        $rootScope.notifier.error($rootScope.ui.teamup.noClientGroupFound);
+                        return null;
+                      }
+                      else
+                      {
                         var clientGroupId = teamClientgroupLinks[0].id;
                         return Clients.getSingle(clientGroupId);
                       }
@@ -289,7 +300,7 @@ define(
                   var taskId = $route.current.params.taskId;
 
                   var deferred = $q.defer(),
-                  teamId = CurrentSelection.getTeamId(),
+                    teamId = CurrentSelection.getTeamId(),
                     data = {
                       teams: null,
                       currentTeamId: teamId,
@@ -309,6 +320,7 @@ define(
                         $location.path('/task/new');
                       }
                     });
+
                   Teams.getAllLocal()
                     .then(function (teams) {
                       data.teams = teams;
@@ -436,8 +448,8 @@ define(
                       {
                         clientResult  = result;
                         clientGroupId = ($route.current.params).uuid
-                                              || CurrentSelection.getClientGroupId()
-                                              || Object.keys(clientResult.clients)[0];
+                          || CurrentSelection.getClientGroupId()
+                          || Object.keys(clientResult.clients)[0];
                         return Clients.getSingle(clientGroupId);
                       })
                       .then(function(clients)
@@ -482,16 +494,16 @@ define(
               reloadOnSearch: false,
               resolve: {
                 data:
-                function (Clients, Teams, $location)
-                {
-                  // TODO: Lose short property names and make them more readable!
-                  return (($location.hash() && $location.hash() == 'reload')) ?
+                  function (Clients, Teams, $location)
                   {
-                    t: Teams.query(),
-                    cg: Clients.query()
-                  } :
-                  {local: true};
-                },
+                    // TODO: Lose short property names and make them more readable!
+                    return (($location.hash() && $location.hash() == 'reload')) ?
+                    {
+                      t: Teams.query(),
+                      cg: Clients.query()
+                    } :
+                    {local: true};
+                  },
                 dataMembers: function ($rootScope, $q, TeamUp, Teams, Clients)
                 {
                   var deferred = $q.defer();
@@ -538,46 +550,46 @@ define(
             })
 
             .when(
-              '/team-telefoon/scenario',
-              {
-                templateUrl: 'views/team-telephone/scenario.html',
-                controller: 'scenario as scenario',
-                reloadOnSearch: false,
-                resolve: {
-                  data: [
-                    'Teams', 'TeamUp', 'CurrentSelection', '$rootScope', '$q', '$location',
-                    function (Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
-                    {
-                      removeActiveClass('.teamMenu');
+            '/team-telefoon/scenario',
+            {
+              templateUrl: 'views/team-telephone/scenario.html',
+              controller: 'scenario as scenario',
+              reloadOnSearch: false,
+              resolve: {
+                data: [
+                  'Teams', 'TeamUp', 'CurrentSelection', '$rootScope', '$q', '$location',
+                  function (Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
+                  {
+                    removeActiveClass('.teamMenu');
 
-                      var deferred = $q.defer();
-                      var teamId = CurrentSelection.getTeamId();
-                      var promises = [
-                        Teams.getAllLocal(),
-                        TeamUp._('TTScenarioTemplateGet')
-                      ];
+                    var deferred = $q.defer();
+                    var teamId = CurrentSelection.getTeamId();
+                    var promises = [
+                      Teams.getAllLocal(),
+                      TeamUp._('TTScenarioTemplateGet')
+                    ];
 
-                      TeamUp._('TTOptionsGet', {second: teamId})
-                        .then(function (options)
-                        {
-                          //Check if team telephone is activated (has adapterId)
-                          (!options.adapterId || $rootScope.app.resources.role > 1)
-                            ? $location.path('team-telefoon/options')
-                            : $q.all(promises)
-                                .then(function(result)
-                                {
-                                  deferred.resolve({
-                                    teams: result[0],
-                                    templates: result[1] || []
-                                  });
-                                });
+                    TeamUp._('TTOptionsGet', {second: teamId})
+                      .then(function (options)
+                      {
+                        //Check if team telephone is activated (has adapterId)
+                        (!options.adapterId || $rootScope.app.resources.role > 1)
+                          ? $location.path('team-telefoon/options')
+                          : $q.all(promises)
+                          .then(function(result)
+                          {
+                            deferred.resolve({
+                              teams: result[0],
+                              templates: result[1] || []
+                            });
+                          });
 
-                        });
-                      return deferred.promise;
-                    }
-                  ]
-                }
-              })
+                      });
+                    return deferred.promise;
+                  }
+                ]
+              }
+            })
 
             .when(
             '/team-telefoon/options',
@@ -636,8 +648,7 @@ define(
               controller: 'agenda',
               resolve: {
                 data: function ($route, Slots, Storage, Dater, Store, Teams,
-                                $q, $rootScope, $location,
-                                CurrentSelection, Profile, TeamUp, moment)
+                                $q, $rootScope, $location, CurrentSelection, Profile, TeamUp)
                 {
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
@@ -730,9 +741,12 @@ define(
 
                     return Slots.all({
                       groupId: groupId,
-                      stamps: {
-                        start: moment({ hour:0, minute:0 }).weekday(1).unix() * 1000,
-                        end: moment({ hour:0, minute:0 }).weekday(8).unix() * 1000
+                      stamps: (Dater.current.today() > 360) ? {
+                        start: periods.days[358].last.timeStamp,
+                        end: periods.days[365].last.timeStamp
+                      } : {
+                        start: periods.days[Dater.current.today() - 1].last.timeStamp,
+                        end: periods.days[Dater.current.today() + 6].last.timeStamp
                       },
                       month: Dater.current.month(),
                       layouts: {
@@ -750,7 +764,7 @@ define(
                   function redirectLocationLoggedUser()
                   {
                     $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
-                  }
+                  };
                 }
               },
               reloadOnSearch: false
@@ -821,7 +835,7 @@ define(
             })
 
             .when(
-            '/tasks2/planboard',
+            '/task/planboard',
             {
               templateUrl: 'views/task/planboard/planboard.html',
               controller: 'planboard',
@@ -878,17 +892,17 @@ define(
                       (! options.adapterId)
                         ? $location.path('team-telefoon/options')
                         : $q.all([
-                            Teams.getSingle(teamId),
-                            Slots.MemberReachabilitiesByTeam(teamId, null),
-                            Teams.getAllLocal()
-                          ]).then(function (result)
-                          {
-                            deferred.resolve({
-                              members: result[0],
-                              membersReachability: result[1],
-                              teams: result[2]
-                            });
-                          });
+                        Teams.getSingle(teamId),
+                        Slots.MemberReachabilitiesByTeam(teamId, null),
+                        Teams.getAllLocal()
+                      ]).then(function (result)
+                      {
+                        deferred.resolve({
+                          members: result[0],
+                          membersReachability: result[1],
+                          teams: result[2]
+                        });
+                      });
                     });
                   return deferred.promise;
                 }

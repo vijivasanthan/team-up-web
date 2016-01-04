@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'viewTasks',
+      'myTasks',
       function ($rootScope,
                 $timeout,
                 $filter,
@@ -27,17 +27,19 @@ define(
 
         //methods
         self.orderBy = orderBy;
-        //self.assignTask = assignTask;
         self.unAssignTask = unAssignTask;
         self.confirmDeleteTask = confirmDeleteTask;
         self.viewTaskData = viewTaskData;
         self.deleteTask = deleteTask;
         self.toggleStatusFinished = toggleStatusFinished;
 
+        /**
+         * order tasks in the view on their properties
+         * @param ordered
+         */
         function orderBy(ordered)
         {
           self.ordered = ordered;
-
           self.reversed = !self.reversed;
         }
 
@@ -46,7 +48,6 @@ define(
          */
         function toggleStatusFinished()
         {
-          console.log("finished tasks " + self.isStatusFinished);
           if(self.isStatusFinished)
           {
             TaskCRUD.queryMine(3)
@@ -74,29 +75,12 @@ define(
         }
 
         /**
-         * assign task to team member
-         * @param task
-         */
-        //function assignTask(task)
-        //{
-        //  trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
-        //
-        //  task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
-        //
-        //  updateTask(task);
-        //  $location.path("/task/mytasks");
-        //}
-
-        /**
          * unassign task to team member
          * @param task
          */
         function unAssignTask(task)
         {
-          trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
-          task.assignedTeamMemberUuid = null;
-          task.assignedTeamUuid = null;
-          delete task.author;
+          task = TaskCRUD.unassign(task);
           updateTask(task);
         }
 
@@ -135,22 +119,16 @@ define(
          */
         function confirmDeleteTask(task)
         {
-          $timeout(
-            function ()
-            {
-              self.taskToRemove = task;
-              angular.element('#confirmTaskModal').modal('show');
-            }
-          );
+          self.taskToRemove = task;
+          TaskCRUD.confirmDeleteTaskMessage();
         }
-
 
         /**
          * delete a task
          * @param task
          * @param viewType
          */
-        function deleteTask(task, viewType)
+        function deleteTask(task)
         {
           self.taskToRemove = {};
 
