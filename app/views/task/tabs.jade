@@ -10,13 +10,13 @@ li(class="active" data-match-route='/task/new')
 	a(data-toggle='tab', ng-click='nav("task/new")')
 		span.icomoon(data-icon='', aria-hidden='true')
 		| {{ui.task.newTask}}
-li(ng-if='app.domainPermission.clients' class="{{(views.upload==true) && 'active'}}")
-	a(data-toggle='tab', ng-click='nav("tasks2/upload")')
+li(class="active" data-match-route='/task/upload')
+	a(data-toggle='tab', ng-click='nav("task/upload")')
 		span.entypo &#59213;
 		| {{ui.task.upload}}
 li(class="{{(views.agenda==true || views.teams==true || views.clients==true) && 'active'}}",
-data-match-route='/tasks2')
-	a(data-toggle='tab', ng-click='nav("tasks2/planboard")')
+data-match-route='/tasks')
+	a(data-toggle='tab', ng-click='nav("task/planboard")')
 		span.entypo &#128340;
 		| {{ ui.planboard.planboard }}
 

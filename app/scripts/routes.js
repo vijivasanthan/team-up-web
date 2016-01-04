@@ -159,6 +159,12 @@ define(
               }
             })
 
+            .when('/task/upload', {
+              templateUrl: 'views/task/upload.html',
+              controller: 'upload as upload',
+              reloadOnSearch: false,
+            })
+
             .when('/task/mytasks', {
               templateUrl: 'views/task/myTasks.html',
               controller: 'myTasks as mytasks',
@@ -824,7 +830,7 @@ define(
             })
 
             .when(
-            '/tasks2/planboard',
+            '/task/planboard',
             {
               templateUrl: 'views/task/planboard/planboard.html',
               controller: 'planboard',

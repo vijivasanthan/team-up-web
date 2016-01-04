@@ -31,6 +31,7 @@ define(['services/services', 'config'],
           this.chains = chains;
           this.queryMine = queryMine;
           this.queryByTeam = queryByTeam;
+          this.queryAll = queryAll;
           this.getDetails = getDetails;
           this.confirmDeleteTaskMessage = confirmDeleteTaskMessage;
           this.assign = assign;
@@ -324,6 +325,83 @@ define(['services/services', 'config'],
 
             return deferred.promise;
           }
+
+          function queryAll()
+          {
+            var deferred = $q.defer(),
+              calls = [],
+              bulks = {},
+              self = this;
+
+            _.each(
+              Store('app').get('teams'),
+              function (team)
+              {
+                calls.push(
+                  Task.team(team.uuid)
+                    .then(
+                    function (allTasks)
+                    {
+                      bulks[team.uuid] = allTasks;
+                    }
+                  )
+                );
+              }
+            );
+
+            $q.all(calls)
+              .then(
+              function ()
+              {
+                var basket = [];
+
+                /**
+                 * All tasks
+                 * @type {Array}
+                 */
+                _.each(
+                  bulks,
+                  function (tasks)
+                  {
+                    if (tasks.length > 0)
+                    {
+                      _.each(
+                        tasks,
+                        function (task)
+                        {
+                          basket.push(task);
+                        }
+                      );
+                    }
+                  }
+                );
+
+                var tasks = _.map(
+                  _.indexBy(basket, function (node)
+                  {
+                    return node.uuid
+                  }),
+                  function (task)
+                  {
+                    return task
+                  }
+                );
+
+                processTasks(tasks);
+
+                var merged = mergeOnStatus(tasks);
+
+                Store('app').save('allTasks2', merged);
+
+                deferred.resolve(merged);
+              }.bind(bulks)
+            );
+
+            return deferred.promise;
+          }
+
+
+
 
           function confirmDeleteTaskMessage()
           {
