@@ -51,6 +51,24 @@ define(
           return 0;
         };
 
+        /* Check if startdate is before the enddate
+         * @param slot The current selected slot
+         * @returns {boolean} startdate is before the enddate returns true
+         */
+        function slotDatesValid(slot)
+        {
+          var dates = getUnixTimeStamps(slot);
+          return (dates.end > dates.start);
+        }
+
+        function convertDateTimeToLocal(d)
+        {
+          //var d1 = new Date(d);
+          //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+          ////return d1.toISOString().replace("Z", "");
+          return moment(d).toDate();
+        }
+
         // adapted from VisJS
         var timelineSnap = function (date, scale, step)
         {
@@ -310,6 +328,40 @@ define(
           }
         );
 
+        function getUnixTimeStamps(slot)
+        {
+          var startDate = slot.start.date + slot.start.time,
+            endDate = slot.end.date + slot.end.time,
+            dateTimeFormat = 'DD-MM-YYYY HH:mm',
+            startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+            endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+          return {
+            start: startUnixTimeStamp,
+            end: endUnixTimeStamp
+          }
+        }
+
+        $scope.showDuration = function ()
+        {
+          var dates = getUnixTimeStamps($scope.slot),
+            duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+            durationEl = angular.element('.duration'),
+            dangerClass = 'label-danger';
+
+          $scope.duration = '';
+
+          if (dates.start > dates.end)
+          {
+            durationEl.addClass(dangerClass);
+            $scope.duration += '-';
+          }
+          else
+          {
+            durationEl.removeClass(dangerClass);
+          }
+          $scope.duration += duration;
+        };
+
         /**
          * TODO: Stress-test this!
          * Hot fix against not-dom-ready problem for timeline
@@ -486,6 +538,108 @@ define(
             {
               this.getRange(props);
             }.bind(this));
+
+            /**
+             * Timeline on remove
+             */
+            $scope.timelineOnRemove = function (slot, item, callback)
+            {
+              $rootScope.planboardSync.clear();
+
+              if (newSlot.length)
+              {
+                callback(item);
+                newSlot = [];
+
+                $scope.$apply($scope.resetInlineForms());
+              }
+              else
+              {
+                if (angular.isUndefined(item) && angular.isUndefined(callback))
+                {
+                  // function was called from button, get ID of selected item and remove from dataset on success
+                  item = $scope.self.timeline.getSelection()[0]; // will be the id of the selected item
+
+                  callback = function (itemId)
+                  {
+                    if (itemId)
+                    {
+                      visDataSet.remove(itemId);
+                    }
+                  }
+                }
+
+                var successCallback = function (result)
+                {
+                  $rootScope.$broadcast('resetPlanboardViews');
+
+                  if (result.error)
+                  {
+                    $rootScope.notifier.error($rootScope.ui.errors.timeline.remove);
+                    callback(null);
+                    console.warn('error ->', result);
+                  }
+                  else
+                  {
+                    $rootScope.notifier.success($rootScope.ui.agenda.timeslotDeleted);
+                    if (newSlot.length)
+                    {
+                      newSlot = [];
+                    }
+                    callback(item);
+                  }
+
+                  $scope.timeliner.refresh();
+
+                  $rootScope.planboardSync.start();
+                };
+
+                var now = moment().valueOf(),
+                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
+                  changedEndDate = new Date(now - 10000);
+
+                if ($scope.original.end <= now && $scope.original.recursive == false)
+                {
+                  $rootScope.notifier.error($rootScope.ui.agenda.pastDeleting);
+
+                  $scope.timeliner.refresh();
+                }
+                else if ($scope.original.start <= now &&
+                  $scope.original.end >= now &&
+                  $scope.original.recursive == false)
+                {
+                  Slots.change(
+                    $scope.original,
+                    {
+                      start: Math.abs(Math.floor(new Date($scope.original.start).getTime())),
+                      end: Math.abs(Math.floor(changedEndDate)),
+                      recursive: $scope.original.content.recursive,
+                      state: $scope.original.content.state
+                    },
+                    currentSlotUser
+                  ).then(
+                    function (result)
+                    {
+                      updateLoggedUser(currentSlotUser);
+                      successCallback(result)
+                    }
+                  );
+                }
+                else
+                {
+                  $rootScope.statusBar.display($rootScope.ui.agenda.deletingTimeslot);
+
+                  Slots.remove($scope.original, currentSlotUser)
+                    .then(
+                      function (result)
+                      {
+                        updateLoggedUser(currentSlotUser);
+                        successCallback(result)
+                      }
+                    );
+                }
+              }
+            };
 
             // add background behind axis
             // TODO: add event listener for vis 'finishedRedraw' and determine if resize needed
@@ -1271,16 +1425,13 @@ define(
 
             $scope.slot = {
               start: {
-                date: moment(selectedItem.start).format($rootScope.StandBy.config.formats.date),
-                time: moment(selectedItem.start).format($rootScope.StandBy.config.formats.time),
-                datetime: getDateTimeToPicker(selectedItem.start)
+                date: moment(selectedItem.start).format(config.app.formats.date),
+                time: moment(selectedItem.start).format(config.app.formats.time),
+                datetime: convertDateTimeToLocal(selectedItem.start)
               },
               end: {
-                date: moment(selectedItem.end).format($rootScope.StandBy.config.formats.date),
-                time: moment(selectedItem.end).format($rootScope.StandBy.config.formats.time),
-                // datetime: new Date(values.end).toISOString().replace("Z", "")
-
-                // datetime: new Date(values.end).toUTCString()
+                date: moment(selectedItem.end).format(config.app.formats.date),
+                time: moment(selectedItem.end).format(config.app.formats.time),
                 datetime: convertDateTimeToLocal(selectedItem.end)
               },
               state: selectedItem.state,
@@ -1637,9 +1788,7 @@ define(
         $scope.timelineOnAdd = function (form, slot, item, callback)
         {
           $rootScope.planboardSync.clear();
-
           var values, groupId, recursive;
-
           var now = moment().valueOf(),
             nowStamp = Math.abs(Math.floor(now / 1000));
 
@@ -1661,7 +1810,6 @@ define(
                 $scope.timeliner.refresh();
               }
             }
-
             values = item;
 
             if (values.recursive ||
@@ -1707,311 +1855,112 @@ define(
 
               //update values with the last drawn item in the timeline
               values = item;
-              var element = angular.element(values.content),
-                secret = angular.fromJson(element.html());
-              console.error('element', element);
+              var element = angular.element(values.content);
 
-              if (secret.recursive ||
-                (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
-              {
-                if ($scope.timeliner.isAdded() > 1) $scope.self.timeline.cancelAdd();
+              $scope.$apply(
+                function ()
+                {
+                  var id = item.id;
 
-                $scope.$apply(
-                  function ()
+                  // Insert element, fixes IE9 not displaying on new slot.
+                  // The span.secret gives no height, and changing it messes up other slots.
+                  // This should only be applied once.
+                  // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
+                  //   .before("<div class='time-tip' style='padding: 0;'></div>");
+
+                  item.content = Sloter.tooltip({
+                    start: moment(item.start).unix(),
+                    end: moment(item.end).unix()
+                  }, true);
+
+                  if ($scope.timeline.main)
                   {
+                    $rootScope.$broadcast('resetPlanboardViews');
 
-                    var id = item.id;
-
-                    // Insert element, fixes IE9 not displaying on new slot.
-                    // The span.secret gives no height, and changing it messes up other slots.
-                    // This should only be applied once.
-                    // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
-                    //   .before("<div class='time-tip' style='padding: 0;'></div>");
-
-                    item.content = Sloter.tooltip({
-                      start: moment(item.start).unix(),
-                      end: moment(item.end).unix()
-                    }, true);
-
-                    if ($scope.timeline.main)
-                    {
-                      $rootScope.$broadcast('resetPlanboardViews');
-
-                      $scope.views.slot.add = true;
-                    }
-                    else
-                    {
-                      $scope.forms = {
-                        add: true,
-                        edit: false
-                      };
-                    }
-
-                    // Check if groupId matches selected locale week strings
-                    if (groupId && ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) || groupId.match($rootScope.ui.planboard.weeklyPlanning)))
-                    {
-                      recursive = true;
-                    }
-
-                    $scope.slot = {
-                      start: {
-                        date: moment(values.start).format(config.app.formats.date),
-                        time: moment(values.start).format(config.app.formats.time),
-                        datetime: convertDateTimeToLocal(values.start)
-                      },
-                      end: {
-                        date: moment(values.end).format(config.app.formats.date),
-                        time: moment(values.end).format(config.app.formats.time),
-                        datetime: convertDateTimeToLocal(values.end)
-                      },
-                      recursive: recursive,
-                      state: 'com.ask-cs.State.Available'
+                    $scope.views.slot.add = true;
+                  }
+                  else
+                  {
+                    $scope.forms = {
+                      add: true,
+                      edit: false
                     };
-                    $scope.setEndDate($scope.slot.start.date);
-                    $scope.setEndTime($scope.slot.start.time);
-                    $scope.showDuration();
+                  }
 
-                    $scope.original = {
-                      start: new Date(values.start),
-                      end: new Date(values.end),
-                      recursive: $scope.slot.recursive,
-                      state: $scope.slot.state
-                    };
+                  // Check if groupId matches selected locale week strings
+                  if (groupId && ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) || groupId.match($rootScope.ui.planboard.weeklyPlanning)))
+                  {
+                    recursive = true;
+                  }
 
-                    item.state = $scope.slot.state;
-                    item.recursive = recursive;
-                    item.className = $scope.timeline.config.states[item.state].className;
-                    item.className += ' has-slot-tooltip';
+                  $scope.slot = {
+                    start: {
+                      date: moment(values.start).format(config.app.formats.date),
+                      time: moment(values.start).format(config.app.formats.time),
+                      datetime: convertDateTimeToLocal(values.start)
+                    },
+                    end: {
+                      date: moment(values.end).format(config.app.formats.date),
+                      time: moment(values.end).format(config.app.formats.time),
+                      datetime: convertDateTimeToLocal(values.end)
+                    },
+                    recursive: recursive,
+                    state: 'com.ask-cs.State.Available'
+                  };
 
-                    // make sure that the user can modify the element
-                    $scope.self.timeline.setOptions({
-                      editable: {
-                        remove: true,
-                        updateTime: true
-                      }
-                    });
+                  console.log($scope.slot);
+                  //$scope.setEndDate($scope.slot.start.date);
+                  //$scope.setEndTime($scope.slot.start.time);
+                  //$scope.showDuration();
 
-                    //callback(item);
-                    //update visDataSet with the new item
-                    visDataSet.update(item);
+                  $scope.original = {
+                    start: new Date(values.start),
+                    end: new Date(values.end),
+                    recursive: $scope.slot.recursive,
+                    state: $scope.slot.state
+                  };
 
-                    $timeout(function ()
-                    {
-                      $scope.self.timeline.setSelection(id);
-                    });
+                  item.state = $scope.slot.state;
+                  item.recursive = recursive;
+                  item.className = $scope.timeline.config.states[item.state].className;
+                  item.className += ' has-slot-tooltip';
 
+                  // make sure that the user can modify the element
+                  $scope.self.timeline.setOptions({
+                    editable: {
+                      remove: true,
+                      updateTime: true
+                    }
                   });
-              }
-              else
-              {
-                var errorMessage = (/#timeline/.test(values.group)) ?
-                  $rootScope.ui.agenda.notAuth :
-                  $rootScope.ui.agenda.pastAdding;
 
-                $scope.self.timeline.cancelAdd();
+                  //callback(item);
+                  //update visDataSet with the new item
+                  visDataSet.update(item);
 
-                $rootScope.notifier.error(errorMessage);
+                  $timeout(function ()
+                  {
+                    $scope.self.timeline.setSelection(id);
+                  });
 
-                $rootScope.$apply();
-              }
-            }
-            /**
-             * Add new slot through the form
-             */
-            else
-            {
-              if (!slotDatesValid(slot))
-              {
-                $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-                return;
-              }
+                });
 
-              var start = ($rootScope.browser.mobile) ?
-                Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
-                Dater.convert.absolute(slot.start.date, slot.start.time, true);
-
-              var end = ($rootScope.browser.mobile) ?
-                Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
-                Dater.convert.absolute(slot.end.date, slot.end.time, true);
-
-
-              if (typeof start == "undefined" || isNaN(start) || start == 0 || typeof end == "undefined" || isNaN(end) || end == 0)
-              {
-                $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
-
-                // Dont call the refresh; keep the timeslot update box open so it can be corrected
-                //$scope.timeliner.refresh();
-              }
-              else if (start < nowStamp && end < nowStamp && slot.recursive == false)
-              {
-                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
-
-                $scope.timeliner.refresh();
-              }
-              else
-              {
-                if (start < nowStamp && slot.recursive == false)
-                {
-                  start = nowStamp;
-                }
-
-                values = {
-                  start: start,
-                  end: end,
-                  recursive: (slot.recursive) ? true : false,
-                  text: slot.state
-                };
-
-                /**
-                 * Two minutes waiting time to take an action
-                 */
-                if ((values.start * 1000) + 60000 * 2 < now && values.recursive == false)
-                {
-                  $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
-
-                  $scope.timeliner.refresh();
-                }
-                else
-                {
-                  $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
-
-                  Slots.add(
-                    values,
-                    $scope.timeline.user.id
-                  ).then(
-                    function (result)
-                    {
-                      $rootScope.$broadcast('resetPlanboardViews');
-
-                      if (result.error)
-                      {
-                        $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
-                        console.warn('error ->', result);
-                      }
-                      else
-                      {
-                        updateLoggedUser($scope.timeline.user.id);
-                        $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
-                      }
-                      newSlot = [];
-                      $scope.timeliner.refresh();
-
-                      $rootScope.planboardSync.start();
-                    }
-                  );
-                }
-              }
-            }
-          };
-
-          /* Check if startdate is before the enddate
-           * @param slot The current selected slot
-           * @returns {boolean} startdate is before the enddate returns true
-           */
-          function slotDatesValid(slot)
-          {
-            var dates = getUnixTimeStamps(slot);
-            return (dates.end > dates.start);
-          }
-
-          function convertDateTimeToLocal(d)
-          {
-            //var d1 = new Date(d);
-            //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-            ////return d1.toISOString().replace("Z", "");
-            return moment(d).toDate();
-          }
-
-          /**
-           * Timeline on changing
-           */
-          $scope.timelineChanging = function (item, callback)
-          {
-            $rootScope.planboardSync.clear();
-            var values = item;
-            //var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-            //  options = {
-            //    start: values.start,
-            //    end: values.end,
-            //    content: angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
-            //  };
-
-            $scope.$apply(
-              function ()
-              {
-                item.content = Sloter.tooltip({
-                  start: moment(item.start).unix(),
-                  end: moment(item.end).unix()
-                }, true);
-
-                // change hover tooltip to constant tooltip
-                if (item.className)
-                { // won't have if created by ctrl/shift-drag
-                  item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
-                }
-
-                callback(item);
-
-                $scope.slot = {
-                  start: {
-                    date: moment(values.start).format(config.app.formats.date),
-                    time: moment(values.start).format(config.app.formats.time),
-                    // datetime: new Date(values.start).toISOString()
-                    datetime: convertDateTimeToLocal(values.start)
-                  },
-                  end: {
-                    date: moment(values.end).format(config.app.formats.date),
-                    time: moment(values.end).format(config.app.formats.time),
-                    // datetime: new Date(values.end).toISOString()
-                    datetime: convertDateTimeToLocal(values.end)
-                  },
-                  state: values.state,
-                  recursive: values.recursive,
-                  id: values.id
-                };
-                $scope.showDuration();
-              }
-            );
-          };
-
-          $scope.showDuration = function ()
-          {
-            var dates = getUnixTimeStamps($scope.slot),
-              duration = $filter('calculateDeltaTime')(dates.end, dates.start),
-              durationEl = angular.element('.duration'),
-              dangerClass = 'label-danger';
-
-            $scope.duration = '';
-
-            if (dates.start > dates.end)
-            {
-              durationEl.addClass(dangerClass);
-              $scope.duration += '-';
             }
             else
             {
-              durationEl.removeClass(dangerClass);
-            }
-            $scope.duration += duration;
-          };
+              var errorMessage = (/#timeline/.test(values.group)) ?
+                $rootScope.ui.agenda.notAuth :
+                $rootScope.ui.agenda.pastAdding;
 
-          function getUnixTimeStamps(slot)
-          {
-            var startDate = slot.start.date + slot.start.time,
-              endDate = slot.end.date + slot.end.time,
-              dateTimeFormat = 'DD-MM-YYYY HH:mm',
-              startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-              endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
-            return {
-              start: startUnixTimeStamp,
-              end: endUnixTimeStamp
+              $scope.self.timeline.cancelAdd();
+
+              $rootScope.notifier.error(errorMessage);
+
+              $rootScope.$apply();
             }
           }
-
-          /**
-           * Timeline on change
+          else/**
+           * Add new slot through the form
            */
-          $scope.timelineOnChange = function (direct, original, slot, changed)
           {
             if (!slotDatesValid(slot))
             {
@@ -2019,493 +1968,337 @@ define(
               return;
             }
 
-            $rootScope.planboardSync.clear();
+            var start = ($rootScope.browser.mobile) ?
+              Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
+              Dater.convert.absolute(slot.start.date, slot.start.time, true);
 
-            var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
+            var end = ($rootScope.browser.mobile) ?
+              Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
+              Dater.convert.absolute(slot.end.date, slot.end.time, true);
 
-            if (!direct)
+
+            if (typeof start == "undefined" || isNaN(start) || start == 0 || typeof end == "undefined" || isNaN(end) || end == 0)
             {
-              //changed = {
-              //  start: values.start,
-              //  end: values.end,
-              //  content: angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
-              //};
+              $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
 
-              changed = values;
+              // Dont call the refresh; keep the timeslot update box open so it can be corrected
+              //$scope.timeliner.refresh();
+            }
+            else if (start < nowStamp && end < nowStamp && slot.recursive == false)
+            {
+              $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
+
+              $scope.timeliner.refresh();
             }
             else
             {
-              changed = {
-                start: ($rootScope.browser.mobile) ?
-                  new Date(slot.start.datetime).getTime() :
-                  Dater.convert.absolute(slot.start.date, slot.start.time, false),
-                end: ($rootScope.browser.mobile) ?
-                  new Date(slot.end.datetime).getTime() :
-                  Dater.convert.absolute(slot.end.date, slot.end.time, false),
-                content: {
-                  recursive: slot.recursive,
-                  state: slot.state
-                }
+              if (start < nowStamp && slot.recursive == false)
+              {
+                start = nowStamp;
+              }
+
+              values = {
+                start: start,
+                end: end,
+                recursive: (slot.recursive) ? true : false,
+                text: slot.state
               };
 
-              // Invalid timeslot?
-              //console.log(changed.start);
-              //console.log(changed.end);
-              if (typeof changed.start == "undefined" || isNaN(changed.start) || changed.start == 0 || typeof changed.end == "undefined" || isNaN(changed.end) || changed.end == 0)
+              /**
+               * Two minutes waiting time to take an action
+               */
+              if ((values.start * 1000) + 60000 * 2 < now && values.recursive == false)
               {
-                $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
+                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
 
-                // Dont call the refresh; keep the timeslot update box open so it can be corrected
-                //$scope.timeliner.refresh();
-                return;
-              }
-
-              // Swapped time inputs?
-              if (changed.end < changed.start)
-              {
-                $rootScope.notifier.error($rootScope.ui.errors.timeline.swappedStartEnd);
-                return;
-              }
-            }
-
-            original.start = new Date(original.start).getTime();
-            original.end = new Date(original.end).getTime();
-
-            var now = moment().valueOf();
-
-            var callback = function (result, messages, added)
-            {
-              $rootScope.$broadcast('resetPlanboardViews');
-
-              if (result.error)
-              {
-                $rootScope.notifier.error(messages.error);
-                console.warn('error ->', result);
+                $scope.timeliner.refresh();
               }
               else
               {
+                $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
 
-                if (result == true)
-                {
-                  !added && $rootScope.notifier.success(messages.success);
-                }
-                else
-                {
-                  !added && $rootScope.notifier.error(messages.error);
-                }
+                Slots.add(
+                  values,
+                  $scope.timeline.user.id
+                ).then(
+                  function (result)
+                  {
+                    $rootScope.$broadcast('resetPlanboardViews');
 
-                added && add(added);
-              }
-
-              $scope.timeliner.refresh();
-
-              $rootScope.planboardSync.start();
-            };
-
-            var change = function (changed, added)
-            {
-              $rootScope.statusBar.display($rootScope.ui.agenda.changingSlot);
-
-              Slots.change(
-                $scope.original,
-                changed,
-                (slot && slot.member) ? slot.member : $scope.timeline.user.id
-              ).then(
-                function (result)
-                {
-                  updateLoggedUser($scope.timeline.user.id);
-
-                  callback(
-                    result,
+                    if (result.error)
                     {
-                      error: $rootScope.ui.agenda.errorChange,
-                      success: $rootScope.ui.agenda.slotChanged
-                    },
-                    added
-                  );
-                }
-              );
-            };
-
-            var add = function (options)
-            {
-              Slots.add(
-                options,
-                $scope.timeline.user.id
-              ).then(
-                function (result)
-                {
-                  updateLoggedUser($scope.timeline.user.id);
-                  callback(
-                    result,
-                    {
-                      error: $rootScope.ui.agenda.errorAdd,
-                      success: $rootScope.ui.agenda.slotChanged
+                      $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
+                      console.warn('error ->', result);
                     }
-                  );
-                }
-              );
+                    else
+                    {
+                      updateLoggedUser($scope.timeline.user.id);
+                      $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
+                    }
+                    newSlot = [];
+                    $scope.timeliner.refresh();
+
+                    $rootScope.planboardSync.start();
+                  }
+                );
+              }
+            }
+          }
+        };
+
+        /**
+         * Timeline on change
+         */
+        $scope.timelineOnChange = function (direct, original, slot, changed)
+        {
+          if (!slotDatesValid(slot))
+          {
+            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+            return;
+          }
+
+          $rootScope.planboardSync.clear();
+
+          var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
+
+          if (!direct)
+          {
+            changed = {
+              start: values.start,
+              end: values.end,
+              content: angular.fromJson(values.content.match(/<span class="secret">(.*)<\/span>/)[1])
+            };
+          }
+          else
+          {
+            changed = {
+              start: ($rootScope.browser.mobile) ?
+                new Date(slot.start.datetime).getTime() :
+                Dater.convert.absolute(slot.start.date, slot.start.time, false),
+              end: ($rootScope.browser.mobile) ?
+                new Date(slot.end.datetime).getTime() :
+                Dater.convert.absolute(slot.end.date, slot.end.time, false),
+              recursive: slot.recursive,
+              state: slot.state
             };
 
-            var changeAndAdd = function (changed, added)
+            // Invalid timeslot?
+            //console.log(changed.start);
+            //console.log(changed.end);
+            if (typeof changed.start == "undefined" || isNaN(changed.start) || changed.start == 0 || typeof changed.end == "undefined" || isNaN(changed.end) || changed.end == 0) {
+              $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
+
+              // Dont call the refresh; keep the timeslot update box open so it can be corrected
+              //$scope.timeliner.refresh();
+              return;
+            }
+
+            // Swapped time inputs?
+            if (changed.end < changed.start) {
+              $rootScope.notifier.error($rootScope.ui.errors.timeline.swappedStartEnd);
+              return;
+            }
+          }
+
+          original.start = new Date(original.start).getTime();
+          original.end = new Date(original.end).getTime();
+
+          var now = moment().valueOf();
+
+          var callback = function (result, messages, added)
+          {
+            $rootScope.$broadcast('resetPlanboardViews');
+
+            if (result.error)
             {
-              change(
-                changed,
-                {
-                  start: Math.abs(Math.floor(added.start / 1000)),
-                  end: Math.abs(Math.floor(added.end / 1000)),
-                  recursive: (added.recursive) ? true : false,
-                  text: added.state
-                }
-              );
-            };
-
-            var notAllowedForPast = function ()
-            {
-              $rootScope.notifier.error($rootScope.ui.agenda.pastChanging);
-
-              $scope.timeliner.refresh();
-            };
-
-            // It is already blocked at time-line level but for in case
-            if (/#timeline/.test(values.group))
-            {
-              $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
-
-              $scope.timeliner.refresh();
+              $rootScope.notifier.error(messages.error);
+              console.warn('error ->', result);
             }
             else
             {
-              if (changed.recursive)
+              !added && $rootScope.notifier.success(messages.success);
+
+              added && add(added);
+            }
+
+            $scope.timeliner.refresh();
+
+            $rootScope.planboardSync.start();
+          };
+
+          var change = function (changed, added)
+          {
+            $rootScope.statusBar.display($rootScope.ui.agenda.changingSlot);
+
+            Slots.change(
+              $scope.original,
+              changed,
+              (slot && slot.member) ? slot.member : $scope.timeline.user.id
+            ).then(
+              function (result)
               {
-                change(changed);
+                updateLoggedUser($scope.timeline.user.id);
+
+                callback(
+                  result,
+                  {
+                    error: $rootScope.ui.agenda.errorChange,
+                    success: $rootScope.ui.agenda.slotChanged
+                  },
+                  added
+                );
               }
-              else
+            );
+          };
+
+          var add = function (options)
+          {
+            Slots.add(
+              options,
+              $scope.timeline.user.id
+            ).then(
+              function (result)
               {
-                if (changed.start < now && changed.end < now)
+                updateLoggedUser($scope.timeline.user.id);
+                callback(
+                  result,
+                  {
+                    error: $rootScope.ui.agenda.errorAdd,
+                    success: $rootScope.ui.agenda.slotChanged
+                  }
+                );
+              }
+            );
+          };
+
+          var changeAndAdd = function (changed, added)
+          {
+            change(
+              changed,
+              {
+                start: Math.abs(Math.floor(added.start / 1000)),
+                end: Math.abs(Math.floor(added.end / 1000)),
+                recursive: (added.content.recursive) ? true : false,
+                text: added.content.state
+              }
+            );
+          };
+
+          var notAllowedForPast = function ()
+          {
+            $rootScope.notifier.error($rootScope.ui.agenda.pastChanging);
+
+            $scope.timeliner.refresh();
+          };
+
+          // It is already blocked at time-line level but for in case
+          if (/#timeline/.test(values.group))
+          {
+            $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
+
+            $scope.timeliner.refresh();
+          }
+          else
+          {
+            if (changed.recursive)
+            {
+              change(changed);
+            }
+            else
+            {
+              if (changed.start < now && changed.end < now)
+              {
+                notAllowedForPast();
+                return;
+              }
+
+              if (changed.start > now && changed.end > now)
+              {
+                if (original.start < now && original.end < now)
                 {
                   notAllowedForPast();
                   return;
                 }
 
-                if (changed.start > now && changed.end > now)
+                if (original.start < now && original.end > now)
                 {
-                  if (original.start < now && original.end < now)
-                  {
-                    notAllowedForPast();
-                    return;
-                  }
+                  changeAndAdd(
+                    {
+                      start: $scope.original.start,
+                      end: now,
+                      recursive: $scope.original.content.recursive,
+                      state: $scope.original.content.state
+                    },
+                    {
+                      start: changed.start + (now - $scope.original.start),
+                      end: changed.end,
+                      recursive: changed.content.recursive,
+                      state: changed.content.state
+                    }
+                  );
+                }
 
-                  if (original.start < now && original.end > now)
+                if (original.start > now && original.end > now)
+                {
+                  change(changed);
+                }
+              }
+
+              if (changed.start < now && changed.end > now)
+              {
+                if (original.start < now && original.end < now)
+                {
+                  notAllowedForPast();
+                  return;
+                }
+
+                if (original.start < now && original.end > now)
+                {
+                  if (changed.content.state == original.content.state)
+                  {
+                    change(
+                      {
+                        start: $scope.original.start,
+                        end: changed.end,
+                        recursive: changed.content.recursive,
+                        state: changed.content.state
+                      }
+                    );
+                  }
+                  else
                   {
                     changeAndAdd(
                       {
                         start: $scope.original.start,
                         end: now,
-                        recursive: $scope.original.recursive,
-                        state: $scope.original.state
+                        recursive: $scope.original.content.recursive,
+                        state: $scope.original.content.state
                       },
-                      {
-                        start: changed.start + (now - $scope.original.start),
-                        end: changed.end,
-                        recursive: changed.recursive,
-                        state: changed.state
-                      }
-                    );
-                  }
-
-                  if (original.start > now && original.end > now)
-                  {
-                    change(changed);
-                  }
-                }
-
-                if (changed.start < now && changed.end > now)
-                {
-                  if (original.start < now && original.end < now)
-                  {
-                    notAllowedForPast();
-                    return;
-                  }
-
-                  if (original.start < now && original.end > now)
-                  {
-                    if (changed.state == original.state)
-                    {
-                      change(
-                        {
-                          start: $scope.original.start,
-                          end: changed.end,
-                          recursive: changed.recursive,
-                          state: changed.state
-                        }
-                      );
-                    }
-                    else
-                    {
-                      changeAndAdd(
-                        {
-                          start: $scope.original.start,
-                          end: now,
-                          recursive: $scope.original.recursive,
-                          state: $scope.original.state
-                        },
-                        {
-                          start: now,
-                          end: changed.end,
-                          recursive: changed.recursive,
-                          state: changed.state
-                        }
-                      );
-                    }
-                  }
-
-                  if (original.start > now && original.end > now)
-                  {
-                    change(
                       {
                         start: now,
                         end: changed.end,
-                        recursive: changed.recursive,
-                        state: changed.state
+                        recursive: changed.content.recursive,
+                        state: changed.content.state
                       }
                     );
                   }
                 }
-              }
-            }
-          };
 
-
-          /**
-           * Timeline on remove
-           */
-          $scope.timelineOnRemove = function (slot, item, callback)
-          {
-
-            console.log('slot', slot);
-
-            $rootScope.planboardSync.clear();
-
-            if (newSlot.length)
-            {
-              callback(item);
-              newSlot = [];
-
-              $scope.$apply($scope.resetInlineForms());
-            }
-            else
-            {
-              if (angular.isUndefined(item) && angular.isUndefined(callback))
-              {
-                // function was called from button, get ID of selected item and remove from dataset on success
-                item = $scope.self.timeline.getSelection()[0]; // will be the id of the selected item
-
-                callback = function (itemId)
+                if (original.start > now && original.end > now)
                 {
-                  if (itemId)
-                  {
-                    visDataSet.remove(itemId);
-                  }
-                }
-              }
-
-              var successCallback = function (result)
-              {
-                $rootScope.$broadcast('resetPlanboardViews');
-
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.errors.timeline.remove);
-                  callback(null);
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  $rootScope.notifier.success($rootScope.ui.agenda.timeslotDeleted);
-                  if (newSlot.length)
-                  {
-                    newSlot = [];
-                  }
-                  callback(item);
-                }
-
-                $scope.timeliner.refresh();
-
-                $rootScope.planboardSync.start();
-              };
-
-              var now = moment().valueOf(),
-                currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
-                changedEndDate = new Date(now - 10000);
-
-              if ($scope.original.end <= now && $scope.original.recursive == false)
-              {
-                $rootScope.notifier.error($rootScope.ui.agenda.pastDeleting);
-
-                $scope.timeliner.refresh();
-              }
-              else if ($scope.original.start <= now &&
-                $scope.original.end >= now &&
-                $scope.original.recursive == false)
-              {
-                Slots.change(
-                  $scope.original,
-                  {
-                    start: Math.abs(Math.floor(new Date($scope.original.start).getTime())),
-                    end: Math.abs(Math.floor(changedEndDate)),
-                    recursive: $scope.original.content.recursive,
-                    state: $scope.original.content.state
-                  },
-                  currentSlotUser
-                ).then(
-                  function (result)
-                  {
-                    updateLoggedUser(currentSlotUser);
-                    successCallback(result)
-                  }
-                );
-              }
-              else
-              {
-                $rootScope.statusBar.display($rootScope.ui.agenda.deletingTimeslot);
-
-                Slots.remove($scope.original, currentSlotUser)
-                  .then(
-                    function (result)
+                  change(
                     {
-                      updateLoggedUser(currentSlotUser);
-                      successCallback(result)
+                      start: now,
+                      end: changed.end,
+                      recursive: changed.content.recursive,
+                      state: changed.content.state
                     }
                   );
-              }
-            }
-          };
-
-          /**
-           * Get wishes
-           */
-          function getWishes()
-          {
-            if ($scope.timeline.current.layouts.group)
-            {
-              $rootScope.statusBar.display($rootScope.ui.message.getWishes);
-
-              Slots.wishes(
-                {
-                  id: $scope.timeline.current.group,
-                  start: $scope.data.periods.start / 1000,
-                  end: $scope.data.periods.end / 1000
-                }).then(
-                function (wishes)
-                {
-                  $rootScope.statusBar.off();
-
-                  $scope.data.aggs.wishes = wishes;
-
-                  $scope.timeliner.render(
-                    {
-                      start: $scope.timeline.range.start,
-                      end: $scope.timeline.range.end
-                    }, true);
                 }
-              );
+              }
             }
           }
-
-          /**
-           *
-           * @param id teamId
-           * @param wish wish amount
-           */
-          $scope.saveWish = function (id, wish)
-          {
-            $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
-
-            Slots.setWish({
-              id: id,
-              start: 255600,
-              end: 860400,
-              recursive: true,
-              wish: wish
-            }).then(function (result)
-            {
-              $rootScope.statusBar.off();
-
-              if (result.error)
-              {
-                $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
-
-                console.warn('error ->', result);
-              }
-              else
-              {
-                $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
-              }
-              wisher(id);
-              getWishes();
-            });
-
-          };
-
-          /**
-           * Set wish
-           */
-          $scope.wisher = function (slot)
-          {
-            $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
-
-            Slots.setWish(
-              {
-                id: slot.groupId,
-                start: ($rootScope.browser.mobile) ?
-                new Date(slot.start.datetime).getTime() / 1000 :
-                  Dater.convert.absolute(slot.start.date, slot.start.time, true),
-                end: ($rootScope.browser.mobile) ?
-                new Date(slot.end.datetime).getTime() / 1000 :
-                  Dater.convert.absolute(slot.end.date, slot.end.time, true),
-                recursive: (!_.isUndefined(slot.recursive)),
-                wish: slot.wish
-              })
-              .then(
-                function (result)
-                {
-                  $rootScope.$broadcast('resetPlanboardViews');
-
-                  if (result.error)
-                  {
-                    $rootScope.notifier.error($rootScope.ui.agenda.wisher);
-                    console.warn('error ->', result);
-                  }
-                  else
-                  {
-                    $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
-                  }
-
-                  $scope.timeliner.refresh();
-                }
-              );
-          };
-
-          $rootScope.$on('resetTimeline', function ()
-          {
-            $scope.timeliner.render(
-              {
-                start: $scope.timeline.range.start,
-                end: $scope.timeline.range.end
-              }, true);
-          });
-
-          $scope.$on('showDuration', function ()
-          {
-            $scope.showDuration();
-          });
-
-          /**
-           * Start planboard sync
-           */
-          $rootScope.planboardSync.start();
-        }
+        };
       });
   }
 );

@@ -8,7 +8,8 @@ define(['services/services', 'config'],
       [
         '$rootScope',
         'Store',
-        function ($rootScope, Store)
+        'moment',
+        function ($rootScope, Store, moment)
         {
           return {
             get: {
@@ -76,7 +77,7 @@ define(['services/services', 'config'],
               return timedata;
             },
 
-            tooltip: function (periods)
+            tooltip: function (periods, tooltips)
             {
               var convertTimestamp = function (stamp)
               {
@@ -85,6 +86,9 @@ define(['services/services', 'config'],
 
               var content = convertTimestamp(periods.start) + ' / ' +
                 convertTimestamp(periods.end);
+
+              var startTooltip = moment(periods.start * 1000).format('HH:mm');
+              var endTooltip = moment(periods.end * 1000).format('HH:mm');
 
               if (periods.hasOwnProperty('min'))
               {
@@ -106,7 +110,14 @@ define(['services/services', 'config'],
                 content += ' / ' + periods.state;
               }
 
-              return '<div class="time-tip" title="' + content + '">' + content + '</div>'
+              if(tooltips){
+                content += '<div class="slot-tooltip slot-tooltip--start">' + startTooltip + '</div>';
+                content += '<div class="slot-tooltip slot-tooltip--end">' + endTooltip + '</div>';
+
+                return '<div class="time-tip">' + content + '</div>';
+              }
+
+              return '<div class="time-tip" title="' + content + '">' + content + '</div>';
             },
 
             user: function (data, timedata, config, routeUserId, routeUser, loggedUser, current)
@@ -134,87 +145,43 @@ define(['services/services', 'config'],
                       timedata.push({
                         start: Math.round(slot.start * 1000),
                         end: Math.round(slot.end * 1000),
-                        group: (slot.recursive) ?
-                        _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
-                        _this.wrapper('a') + planning + _this.wrapper('planning'),
-                        content: this.tooltip({start: slot.start, end: slot.end}) +
-                        _this.secret(
-                          angular.toJson({
-                            type: 'slot',
-                            id: index, // slot.id,
-                            recursive: slot.recursive,
-                            state: slot.text
-                          })
-                        ),
-                        className: 'slot-' + index + ' ' + config.states[slot.text].className,
-                        editable: true
+                        itemType: 'slot',
+                        group: (slot.recursive) ? weekPlanning : planning,
+                        content: this.tooltip({ start: slot.start, end: slot.end }, true),
+                        id: '' + routeUserId + index,
+                        state: slot.text,
+                        className: 'slot-' + index + ' ' + config.states[slot.text].className + ' has-hover-slot-tooltip',
+                        editable: true,
+                        recursive: (slot.recursive) ? true : false
                       });
+                      //timedata.push({
+                      //  start: Math.round(slot.start * 1000),
+                      //  end: Math.round(slot.end * 1000),
+                      //  group: (slot.recursive) ?
+                      //  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
+                      //  _this.wrapper('a') + planning + _this.wrapper('planning'),
+                      //  content: this.tooltip({start: slot.start, end: slot.end}) +
+                      //  _this.secret(
+                      //    angular.toJson({
+                      //      type: 'slot',
+                      //      id: index, // slot.id,
+                      //      recursive: slot.recursive,
+                      //      state: slot.text
+                      //    })
+                      //  ),
+                      //  className: 'slot-' + index + ' ' + config.states[slot.text].className,
+                      //  editable: true
+                      //});
                     }
                   }.bind(this));
                 }.bind(this));
 
-                currentSelectedUser = [
-                  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
-                  _this.wrapper('a') + planning + _this.wrapper('planning')
-                ];
+                //currentSelectedUser = [
+                //  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
+                //  _this.wrapper('a') + planning + _this.wrapper('planning')
+                //];
               }
-              timedata = _this.addLoading(data, timedata, currentSelectedUser);
-
-              return timedata;
-            },
-
-            profile: function (data, config)
-            {
-              var _this = this,
-                timedata = [];
-
-              _.each(data, function (slot, index)
-              {
-                _.each(config.legenda, function (value, legenda)
-                {
-                  if (slot.text == legenda && value)
-                  {
-                    timedata.push({
-                      start: Math.round(slot.start * 1000),
-                      end: Math.round(slot.end * 1000),
-                      group: (slot.recursive) ?
-                      _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive') :
-                      _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
-                      content: _this.secret(
-                        angular.toJson(
-                          {
-                            type: 'slot',
-                            id: index, // slot.id,
-                            recursive: slot.recursive,
-                            state: slot.text
-                          }
-                        )
-                      ),
-                      className: 'slot-' + index + ' ' + config.states[slot.text].className,
-                      editable: true
-                    });
-                  }
-                });
-              });
-
-              timedata.push({
-                start: 0,
-                end: 1,
-                group: _this.wrapper('b') + $rootScope.ui.planboard.weeklyPlanning + _this.wrapper('recursive'),
-                content: '',
-                className: null,
-                editable: false
-              });
-
-              timedata.push({
-                start: 0,
-                end: 1,
-                group: _this.wrapper('a') + $rootScope.ui.planboard.planning + _this.wrapper('planning'),
-                content: '',
-                className: null,
-                editable: false
-              });
-
+              timedata = _this.addLoading(data, timedata, [weekPlanning , planning]);
               return timedata;
             },
 
@@ -549,21 +516,22 @@ define(['services/services', 'config'],
                           start: Math.round(slot.start * 1000),
                           end: Math.round(slot.end * 1000),
                           group: link,
-                          content: this.tooltip(tooltip) +
-                          _this.secret(
-                            angular.toJson(
-                              {
-                                type: 'member',
-                                id: slot.id,
-                                mid: member.id,
-                                recursive: slot.recursive,
-                                state: slot.text
-                              }
-                            )
-                          ),
+                          content: this.tooltip(tooltip),
                           className: config.states[slot.text].className,
                           editable: false
                         });
+                        //content: this.tooltip(tooltip) +
+                        //_this.secret(
+                        //  angular.toJson(
+                        //    {
+                        //      type: 'member',
+                        //      id: slot.id,
+                        //      mid: member.id,
+                        //      recursive: slot.recursive,
+                        //      state: slot.text
+                        //    }
+                        //  )
+                        //),
                       }
                     }.bind(this));
                   }.bind(this));

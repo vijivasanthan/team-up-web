@@ -22,10 +22,10 @@ define(['profile'], function(profile){
       supportEmail: 'support@ask-cs.com',
 
       formats: {
-        date: 'dd-MM-yyyy',
+        date: 'DD-MM-YYYY',
         time: 'HH:mm',
-        datetime: 'dd-MM-yyyy HH:mm',
-        datetimefull: 'dd-MM-yyyy HH:mm'
+        datetime: 'DD-MM-YYYY HH:mm',
+        datetimefull: 'DD-MM-YYYY HH:mm:ss'
       },
 
       roles: profile.roles,
