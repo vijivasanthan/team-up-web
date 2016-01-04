@@ -648,7 +648,8 @@ define(
               controller: 'agenda',
               resolve: {
                 data: function ($route, Slots, Storage, Dater, Store, Teams,
-                                $q, $rootScope, $location, CurrentSelection, Profile, TeamUp)
+                                $q, $rootScope, $location, moment,
+                                CurrentSelection, Profile, TeamUp)
                 {
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
@@ -741,12 +742,9 @@ define(
 
                     return Slots.all({
                       groupId: groupId,
-                      stamps: (Dater.current.today() > 360) ? {
-                        start: periods.days[358].last.timeStamp,
-                        end: periods.days[365].last.timeStamp
-                      } : {
-                        start: periods.days[Dater.current.today() - 1].last.timeStamp,
-                        end: periods.days[Dater.current.today() + 6].last.timeStamp
+                      stamps: {
+                        start: moment({ hour:0, minute:0 }).weekday(1).unix() * 1000,
+                        end: moment({ hour:0, minute:0 }).weekday(8).unix() * 1000
                       },
                       month: Dater.current.month(),
                       layouts: {
