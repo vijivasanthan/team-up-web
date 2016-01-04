@@ -1554,3 +1554,73 @@ Order
   }
 }
 
+
+
+.time-tip {
+  position:relative;
+  top:0;
+  left:0;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  text-indent: 9999px;
+  font-size: 14px;
+
+  .slot-tooltip {
+    position: absolute;
+    height: 20px;
+    width: 45px;
+    background-color: white;
+    border: 2px solid #e5e5e5;
+    font-size: 1em;
+    text-indent: 0;
+
+    &--start {
+      left: -45px;
+      bottom: -20px;
+    }
+    &--end {
+      right: -45px;
+      bottom: -20px;
+    }
+  }
+}
+
+/**
+ * Vis Custom CSS for Wish Timeline
+ */
+.vis.timeline{
+  .item {
+    background-color: #6cad6c;
+    border-width: 0px;
+    border-radius: 0px;
+
+    &:hover {
+      background-color: lighten(#6cad6c, 10%);
+    }
+  }
+
+  .delete {
+    background-image: url("../images/glyphicons-halflings.png");
+    background-position: -48px -97px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+    margin-top: 2px;
+    padding: 0 0 0 3px;
+    vertical-align: text-top;
+    width: 14px;
+    z-index: 10000;
+    right: 2px;
+  }
+}
+
+.vis.timeline .vispanel.background {
+  background: #676153;
+}
+
+.vis.timeline .vispanel.background.horizontal {
+  background: #ffffff;
+}
+

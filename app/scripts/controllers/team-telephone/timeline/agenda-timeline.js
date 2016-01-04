@@ -1709,6 +1709,7 @@ define(
               values = item;
               var element = angular.element(values.content),
                 secret = angular.fromJson(element.html());
+              console.error('element', element);
 
               if (secret.recursive ||
                 (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
