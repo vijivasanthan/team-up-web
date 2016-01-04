@@ -116,7 +116,9 @@ define(
         function unAssignTask(task)
         {
           task = TaskCRUD.unassign(task);
-          updateTask(task);
+          updateTask(task, function () {
+            getTasksForTeam(self.selectedTeam);
+          });
         }
 
         /**
@@ -129,9 +131,6 @@ define(
             .then(function (result) {
               if (! result.error)
               {
-                var index = _.findIndex(self.tasks.list, { uuid: task.uuid });
-                self.tasks.list.splice(index, 1);
-
                 (callBack && callBack());
               }
             });

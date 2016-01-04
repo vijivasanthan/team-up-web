@@ -285,7 +285,6 @@ define(['services/services', 'config'],
                   return findUniqueClientsByTasks(tasks);
                 })
                 .then(function (tasksClients) {
-                  console.log(tasksClients);
                   tasksClients = _.indexBy(tasksClients, 'uuid');
                   data.tasks = processTasks(data.tasks, tasksClients);
                   deferred.resolve(data.tasks);
