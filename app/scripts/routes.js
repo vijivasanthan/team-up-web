@@ -380,7 +380,7 @@ define(
                 data: function ($q, $location, Teams, Member)
                 {
                   var teamId = Teams.checkExistence(($location.search()).teamId);
-
+                  $location.search('teamId', teamId);
                   return Teams.getSingle(teamId)
                     .then(function (members)
                     {
@@ -996,7 +996,19 @@ define(
               reloadOnSearch: false
             })
 
-            .otherwise({redirectTo: '/login'});
+            .when(
+              '/',
+              {
+                redirectTo: '/team'
+              })
+
+            .when(
+              '/404',
+              {
+                templateUrl: 'views/404.html'
+              })
+
+            .otherwise({redirectTo: '/404'});
 
           $httpProvider.interceptors.push(function ($location, Store, $injector, $q)
           {

@@ -170,6 +170,12 @@ block loading
 				| {{ui.loading.general}}
 				br
 				| {{ui.loading.messages}}
+		div(ng-show='loaderIcons.client')
+			span.entypo 👥
+			p
+				| {{ui.loading.general}}
+				br
+				| {{ui.teamup.clients.toLowerCase()}}
 		div(ng-show='loaderIcons.team')
 			span.entypo 👥
 			p
