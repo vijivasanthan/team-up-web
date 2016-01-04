@@ -14,7 +14,6 @@ aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
 					| {{ui.teamup.confirms.cancel}}
 				button.btn.btn-primary(type='button', ng-click='alltasks.deleteTask(alltasks.taskToRemove, true)')
 					| {{ui.teamup.confirms.remove}}
-				
 #taskModal.modal.fade(tabindex='-1', role='dialog',
 aria-labelledby='taskModalLabel', aria-hidden='true')
 	.modal-dialog
@@ -35,12 +34,12 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd {{alltasks.currentTask.statusLabel}}
 					dt {{ ui.task.timeframe }}
 						dd {{alltasks.currentTask.plannedTaskDuration.label}}
-					dt(ng-show='task.description') {{ ui.task.description }}
+					dt(ng-show='alltasks.currentTask.description') {{ ui.task.description }}
 						dd(class="description") {{alltasks.currentTask.description}}
 					dt {{ ui.task.createdBy }}
 						dd
-							a(href='index.html#/profile/{{task.authorUuid}}#profile')
-								| {{alltasks.author}}
+							a(href='index.html#/profile/{{alltasks.currentTask.authorUuid}}#profile')
+								| {{alltasks.currentTask.author}}
 				hr
 				//h4.pull-right Cliëntinformatie
 				dl
@@ -66,49 +65,35 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 						dd
 							a(href='index.html#/team?uuid={{alltasks.currentTask.assignedTeamUuid}}#team')
 								| {{alltasks.currentTask.assignedTeamFullName}}
-
-
-
 .page-header
 	h2.nullable
 		| {{ui.task.tasks}}
 	.selectGroup
 		span.selectTitle
 			| {{ ui.teamup.selectTeam }}
-		select(current_selection='team' ng-model='task.team',
-		ng-options='t.uuid as t.name for t in teams | orderBy:"name" ',
-		ng-selected='currentTeam',
-		ng-change='changeTeam(task.team)')
-		
+		select(ng-model='alltasks.selectedTeam',
+		ng-options='t.uuid as t.name for t in alltasks.teams | orderBy:"name" ',
+		ng-selected='alltasks.selectedTeam',
+		ng-change='alltasks.getTasksForTeam(alltasks.selectedTeam)')
 .tabbable.tabs-left
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 		include ../task/tabs
 	.tab-content
-		
 		#allTasks.tab-pane(class="active")
-			.tab-header 
+			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
 			hr
-
 			article(ng-show='alltasks.tasks.loading'): p {{ ui.task.tasks }} {{ ui.task.hasToLoad }}
-
 			article(ng-hide='alltasks.tasks.loading')
-
-				//p(ng-hide='tasks.all.list.length > 0') {{ui.task.noTasks}}
-				p(ng-hide='alltasks.tasks.list.length > 0') {{ui.task.noTasks}}
-				//pre: small {{tasks.all.list[0] | json}}
-
 				.well(style='padding-top: 25px')
 					label(style='margin-right: 15px; display: none')
-						input(type='checkbox',
-							ng-model='alltasks.isStatusFinished' ng-change='alltasks.toggleStatusFinished()')
+						input(type='checkbox', ng-model='showOnlyAvailable')
 						small &nbsp;{{ ui.task.showOnlyNotAssignedTasks }}
 					label
 						input(type='checkbox',
-						ng-model='showAllTasks',
-						ng-change='showTasks(showAllTasks, "all")')
-						small &nbsp;{{ ui.task.showArchivedTasks }}
-
+						ng-model='alltasks.isStatusFinished' ng-change='alltasks.toggleStatusFinished()')
+						small &nbsp; {{ ui.task.showArchivedTasks }}
+				p(ng-hide='alltasks.tasks.list.length > 0') {{ui.task.noTasks}}
 				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
 				table.table.table-striped.taskTable(ng-show='(alltasks.tasks.list | filter: task.team ).length > 0')
 					thead
@@ -126,7 +111,6 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 								a(ng-click='alltasks.orderBy("assignedTeamMember.fullName")') {{ ui.task.member }}
 									i.icon-sort
 							th(colspan='1')
-
 					tbody
 						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
 						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
@@ -166,7 +150,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 									ng-hide='task.assignedTeamMember',
 									ng-click='alltasks.assignTask(task, true)')
 										i.icon-plus
-									button.btn-primary.btn-mini(type='button', ng-controller='taskDetail as detail' ng-click='detail.getTaskDetails(task)')
+									button.btn-primary.btn-mini(type='button', ng-click='alltasks.viewTaskData(task)')
 										i.icon-info(style='margin-top:1px')
 									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
 										button.btn-primary.btn-mini(type='button')

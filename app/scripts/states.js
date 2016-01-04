@@ -173,12 +173,12 @@ define(
                 $location.path('/task/alltasks').search({}).hash('');
                 break;
 
-              case 'tasks2/upload':
-                $location.path('/tasks2').search({}).hash('upload');
+              case 'task/upload':
+                $location.path('/task/upload').search({}).hash('');
                 break;
 
-              case 'tasks2/planboard':
-                $location.path('/tasks2/planboard').search({}).hash('');
+              case 'task/planboard':
+                $location.path('/task/planboard').search({}).hash('');
                 break;
 
               case 'team/members':

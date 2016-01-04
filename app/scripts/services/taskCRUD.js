@@ -31,7 +31,11 @@ define(['services/services', 'config'],
           this.chains = chains;
           this.queryMine = queryMine;
           this.queryByTeam = queryByTeam;
+          this.queryAll = queryAll;
           this.getDetails = getDetails;
+          this.confirmDeleteTaskMessage = confirmDeleteTaskMessage;
+          this.assign = assign;
+          this.unassign = unassign;
 
           /**
            * Create a task
@@ -322,6 +326,112 @@ define(['services/services', 'config'],
             return deferred.promise;
           }
 
+          function queryAll()
+          {
+            var deferred = $q.defer(),
+              calls = [],
+              bulks = {},
+              self = this;
+
+            _.each(
+              Store('app').get('teams'),
+              function (team)
+              {
+                calls.push(
+                  Task.team(team.uuid)
+                    .then(
+                    function (allTasks)
+                    {
+                      bulks[team.uuid] = allTasks;
+                    }
+                  )
+                );
+              }
+            );
+
+            $q.all(calls)
+              .then(
+              function ()
+              {
+                var basket = [];
+
+                /**
+                 * All tasks
+                 * @type {Array}
+                 */
+                _.each(
+                  bulks,
+                  function (tasks)
+                  {
+                    if (tasks.length > 0)
+                    {
+                      _.each(
+                        tasks,
+                        function (task)
+                        {
+                          basket.push(task);
+                        }
+                      );
+                    }
+                  }
+                );
+
+                var tasks = _.map(
+                  _.indexBy(basket, function (node)
+                  {
+                    return node.uuid
+                  }),
+                  function (task)
+                  {
+                    return task
+                  }
+                );
+
+                processTasks(tasks);
+
+                var merged = mergeOnStatus(tasks);
+
+                Store('app').save('allTasks2', merged);
+
+                deferred.resolve(merged);
+              }.bind(bulks)
+            );
+
+            return deferred.promise;
+          }
+
+
+
+
+          function confirmDeleteTaskMessage()
+          {
+            $timeout(
+              function ()
+              {
+                angular.element('#confirmTaskModal').modal('show');
+              }
+            );
+
+          }
+
+
+          //assign a task to a member
+          function assign(task)
+          {
+            trackGa('send', 'event', 'Task-assign', $rootScope.app.resources.uuid, task.uuid);
+            task.assignedTeamMemberUuid = $rootScope.app.resources.uuid;
+            return task;
+          }
+
+          //unassign a task to a member
+          function unassign(task)
+          {
+            trackGa('send', 'event', 'Task-unassign', $rootScope.app.resources.uuid, task.uuid);
+            task.assignedTeamMemberUuid = null;
+            task.assignedTeamUuid = null;
+            delete task.author;
+            return task;
+          }
 
           /**
            * get unique client uuids for tasks
