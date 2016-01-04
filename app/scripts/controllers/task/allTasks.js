@@ -35,6 +35,10 @@ define(
         self.toggleStatusFinished = toggleStatusFinished;
         self.getTasksForTeam = getTasksForTeam;
 
+        /**
+         * order tasks in the view on their properties
+         * @param ordered
+         */
         function orderBy(ordered)
         {
           self.ordered = ordered;
@@ -42,19 +46,19 @@ define(
           self.reversed = !self.reversed;
         }
 
+        /**
+         * get all tasks for a given team
+         * @param team
+         */
         function getTasksForTeam(team)
         {
           self.selectedTeam = team;
           TaskCRUD.queryByTeam(self.selectedTeam)
             .then(function (taskData)
             {
-              var tasks = {
-                on: taskData
-              };
-
               self.tasks = {
                 loading: false,
-                list: tasks['on']
+                list: taskData
               };
             });
         }
@@ -67,6 +71,7 @@ define(
         {
           if(self.isStatusFinished)
           {
+            //get all finished tasks, and insert them in the current tasklist
             TaskCRUD.queryByTeam(self.selectedTeam, 3)
               .then(function (finishedTasks)
               {
@@ -84,6 +89,7 @@ define(
           }
           else
           {
+            //get all tasks without status 3
             self.tasks.list = self.tasks.list.filter(function(task)
             {
               return task.status !== 3;
@@ -140,7 +146,6 @@ define(
           self.currentTask = task;
           TaskCRUD.getDetails(task)
             .then(function (taskData) {
-              console.log('taskData', taskData);
               self.currentTask = taskData;
             })
         }

@@ -33,10 +33,13 @@ define(
         self.deleteTask = deleteTask;
         self.toggleStatusFinished = toggleStatusFinished;
 
+        /**
+         * order tasks in the view on their properties
+         * @param ordered
+         */
         function orderBy(ordered)
         {
           self.ordered = ordered;
-
           self.reversed = !self.reversed;
         }
 
@@ -45,7 +48,6 @@ define(
          */
         function toggleStatusFinished()
         {
-          console.log("finished tasks " + self.isStatusFinished);
           if(self.isStatusFinished)
           {
             TaskCRUD.queryMine(3)
