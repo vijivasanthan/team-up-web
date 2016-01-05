@@ -461,6 +461,51 @@ define(
         });
 
         /**
+         * Timeline on changing
+         */
+        $scope.timelineChanging = function (item, callback)
+        {
+          $rootScope.planboardSync.clear();
+
+          var values = item;
+          $scope.$apply(
+            function ()
+            {
+              item.content = Sloter.tooltip({
+                start: moment(item.start).unix(),
+                end: moment(item.end).unix()
+              }, true);
+
+              // change hover tooltip to constant tooltip
+              if(item.className){ // won't have if created by ctrl/shift-drag
+                item.className = item.className.replace('has-hover-slot-tooltip','has-slot-tooltip');
+              }
+
+              callback(item);
+
+              $scope.slot = {
+                start: {
+                  date: moment(values.start).format(config.app.formats.date),
+                  time: moment(values.start).format(config.app.formats.time),
+                  // datetime: new Date(values.start).toISOString()
+                  datetime: convertDateTimeToLocal(values.start)
+                },
+                end: {
+                  date: moment(values.end).format(config.app.formats.date),
+                  time: moment(values.end).format(config.app.formats.time),
+                  // datetime: new Date(values.end).toISOString()
+                  datetime: convertDateTimeToLocal(values.end)
+                },
+                state: values.state,
+                recursive: values.recursive,
+                id: values.id
+              };
+              $scope.showDuration();
+            }
+          );
+        };
+
+        /**
          * Timeliner listener
          */
         $rootScope.$on(
@@ -650,7 +695,7 @@ define(
             var bgMax = 40; // * 100 ms = 2 s
 
             var axisBg = document.createElement('div');
-            axisBg.className = 'vispanel background standby';
+            axisBg.className = 'vispanel background teamup';
             if (axisHeight !== 0)
             {
               axisBg.style.height = axisHeight + 'px';
@@ -1043,7 +1088,7 @@ define(
               element = document.createElement('div');
               element.className = 'vis-timeline-tooltip';
               element.appendChild(document.createTextNode(this.tooltipValue));
-              document.getElementById('timeline').appendChild(element);
+              document.getElementById('mainTimeline').appendChild(element);
 
               this.tooltipElement = document.getElementsByClassName('vis-timeline-tooltip')[0];
               this.tooltipText = this.tooltipElement.firstChild;
@@ -1069,8 +1114,8 @@ define(
                 else
                 {
                   style.display = 'block';
-                  style.top = props.pageY + 15 + 'px';
-                  style.left = props.pageX + 15 + 'px';
+                  style.top = props.pageY - 238 + 15 + 'px';
+                  style.left = props.pageX - 20 + 15 + 'px';
                 }
               }
             };
@@ -1090,7 +1135,7 @@ define(
           },
           removeTooltip: function ()
           {
-            document.getElementById('timeline').removeChild(this.tooltipElement);
+            document.getElementById('mainTimeline').removeChild(this.tooltipElement);
             this.tooltipElement = null;
           }
         };
