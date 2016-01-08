@@ -15,7 +15,7 @@ div(style='padding-top: 1px;')
 				hr
 				form.form(name='team.new', novalidate='')
 					.form-group(
-					ng-class="{ 'has-error' : (team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid }"
+					ng-class="{ 'has-error' : (team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid || team.newForm.hasUnwantedChars }"
 					)
 						input.span3.input-xlarge.search-query.controls.form-control(
 							type='text',
@@ -24,9 +24,10 @@ div(style='padding-top: 1px;')
 							required='',
 							focus,
 							ng-minlength="2",
-							ng-maxlength="40",
-							ng-model='editForm.name')
-						span.help-block(ng-if='(team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid'
+							ng-maxlength="50",
+							ng-model='editForm.name',
+							ng-change='team.newForm = team.removeUnwantedChars(editForm.name); editForm.name = team.newForm.formVar;')
+						span.help-block(ng-if='(team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid || team.newForm.hasUnwantedChars'
 							ng-messages="team.new.name.$error")
 							small(ng-message="required")
 								i {{ ui.validation.default.required(ui.teamup.teamName) }}
@@ -34,7 +35,9 @@ div(style='padding-top: 1px;')
 								i {{ ui.validation.default.minLength(ui.teamup.teamName) }}
 							small(ng-message="maxlength")
 								i {{ ui.validation.default.maxLength(ui.teamup.teamName) }}
-							
+							small.error-block(ng-if='team.newForm.hasUnwantedChars')
+								i {{ ui.validation.default.regularPunctuation }}
+								
 					.control-group
 						button.btn.btn-success.confirmButton.controls(type='submit',
 						ng-click='team.create(editForm)') {{ui.teamup.createTeam}}

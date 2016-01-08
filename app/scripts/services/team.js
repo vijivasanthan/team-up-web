@@ -140,11 +140,16 @@ define(['services/services', 'config'],
               );
               error = true;
             }
-            if(team.name.length > 40)
+            if(team.name.length > 50)
             {
               message = $rootScope.ui.validation.default.maxLength(
                 $rootScope.ui.teamup.teamName
               );
+              error = true;
+            }
+            if(team.name.match(config.app.regularPunction))
+            {
+              message =  $rootScope.ui.validation.default.regularPunctuation;
               error = true;
             }
 

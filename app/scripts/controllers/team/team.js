@@ -1,6 +1,6 @@
 define(
-  ['../controllers'],
-  function (controllers)
+  ['../controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -16,6 +16,7 @@ define(
         self.delete = _delete;
         self.sync = sync;
         self.addMember = addMember;
+        self.removeUnwantedChars = removeUnwantedChars;
         self.init = init;
 
         self.init();
@@ -86,6 +87,32 @@ define(
             }//show confirmation if the teamname already exist, so the user have the choice to add it or not
             else addTeamModal.modal('show');
           }
+        }
+
+        /**
+         * Remove characters who are unwanted
+         * @param formVar the formvariable who is added as param
+         * @returns {{hasUnwantedChars: boolean, formVar: String}}
+         */
+        function removeUnwantedChars(formVar)
+        {
+          var formCheck = {
+            hasUnwantedChars: false,
+            formVar: formVar
+          };
+
+          if(!_.isEmpty(formVar))
+          {
+            var regEx = config.app.regularPunction,
+              matchesFormVar = (formVar.match(regEx));
+            if (!_.isNull(matchesFormVar))
+            {
+              matchesFormVar = matchesFormVar.join('');
+            }
+            formCheck.hasUnwantedChars = (formVar !== matchesFormVar);
+            formCheck.formVar = matchesFormVar || '';
+          }
+          return formCheck;
         }
 
         /**

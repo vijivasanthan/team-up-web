@@ -588,6 +588,8 @@ define(
           'existing': 'Existing',
           teams: 'Teams',
           selectTeam: 'Select a team',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           seconds: 'seconds',
           hour: 'hour',
           clients: 'Clients',
@@ -1043,7 +1045,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Fill in a valid phone number!',
@@ -1713,6 +1716,8 @@ define(
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           help: "Hilfe",
           new: 'neu',
           existing: 'vorhanden',
@@ -2132,7 +2137,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
@@ -3285,7 +3291,8 @@ define(
               maxLength: function (fieldName)
               {
                 return 'De ' + fieldName.toLowerCase() + ' heeft teveel karakters';
-              }
+              },
+            regularPunctuation: "Alleen reguliere interpunctie is toegestaan, zoals -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Voer een valide telefoonnummer in!',
