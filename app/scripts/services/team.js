@@ -256,7 +256,10 @@ define(['services/services', 'config'],
            */
           function checkNameExist(team)
           {
-            return  _.findWhere(this.list, {'name': team.name});
+            var teamName = team.name.toLowerCase();
+            return _.result(_.find(this.list, function(team) {
+                        return team.name.toLowerCase() === teamName;
+                      }), 'name');
           }
 
           /**

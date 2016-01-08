@@ -76,7 +76,9 @@ define(
           {
             var addTeamModal = angular.element('#confirmAddTeamModal');
             //check if the new teamname already exist, one exception for the current teamname
-            if(confirm || selectedTeam.name === team.name || !Team.checkNameExist(team))
+            if(confirm
+              || selectedTeam.name.toLowerCase() === team.name.toLowerCase()
+              || !Team.checkNameExist(team))
             {
               addTeamModal.modal('hide');
               Team.update(team)
