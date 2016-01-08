@@ -67,14 +67,6 @@ Timeline agenda
   color: #fff;
 }
 
-.timeline-groups-text {
-  width: 100%;
-  .edit-timeline-icon {
-    float: right;
-    margin-right: 4px;
-  }
-}
-
 #timeline-controls {
   overflow: hidden;
   padding-bottom: 9px;
@@ -1622,8 +1614,13 @@ Order
 $wishMax: 10;
 $step: 7;
 
+
+.vis.timeline.root {
+  border-radius: 4px !important;
+}
+
 .vis.timeline {
-  font-size: 0.8em;
+  font-size: 14px;
 
   .vispanel.background.teamup {
     background-color: $brown !important;
@@ -1631,14 +1628,25 @@ $step: 7;
     width: 100% !important;
   }
 
-  .vispanel.top .text {
-    color: #fff;
+  .inner {
+    width: 100%;
+    .edit-timeline-icon {
+      float: right;
+      margin-right: 4px;
+    }
+  }
+
+  .vispanel.top {
+    font-size: 0.8em !important;
+    .text {
+      color: #fff !important;
+    }
   }
 
   .vispanel.left {
-    width: 150px;
+    width: 200px;
     .content {
-      width: 150px;
+      width: 200px;
     }
   }
 
@@ -1942,15 +1950,30 @@ $step: 7;
     opacity: 0.5;
   }
 
+
   .timeaxis  .grid.minor,
   .labelset .vlabel,
   .foreground .group{
     border-color: #e5e5e5;
   }
 
-  .item.background{
-    background-color: rgba(107, 100, 90, 0.1) !important;
+  .timeaxis .grid.vertical {
+    border-left: 1px solid black !important;
   }
+
+  .background {
+    background: none;
+  }
+}
+
+.vis.timeline .timeaxis .text.major {
+  font-weight: bold;
+}
+.vis.timeline .timeaxis .grid.minor {
+  border: 2px solid black;
+}
+.vis.timeline .timeaxis .grid.major {
+  border: 2px solid black;
 }
 
 .vis-timeline-tooltip{

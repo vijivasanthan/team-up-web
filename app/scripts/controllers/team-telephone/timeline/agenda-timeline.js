@@ -377,6 +377,8 @@ define(
           );
         }
 
+        $rootScope.intervals = $rootScope.intervals || [];
+
         /**
          * Background sync in every 60 sec
          */
@@ -407,6 +409,9 @@ define(
                   );
                 }
               }, config.app.timers.PLANBOARD_SYNC);
+
+            // Record interval for cleanup when switching controllers
+            $rootScope.intervals.push($window.planboardSync);
           },
 
           /**
@@ -414,18 +419,15 @@ define(
            */
           clear: function ()
           {
+            var index;
             $window.clearInterval($window.planboardSync);
-            //var index;
-            //
-            //$window.clearInterval($window.planboardSync);
-            //
-            //index = $rootScope.intervals.indexOf($window.planboardSync);
-            //if (index !== -1)
-            //{
-            //  $rootScope.intervals.splice(index, 1);
-            //}
-            //
-            //$window.planboardSync = null;
+
+            index = $rootScope.intervals.indexOf($window.planboardSync);
+            if(index !== -1){
+              $rootScope.intervals.splice(index, 1);
+            }
+
+            $window.planboardSync = null;
           }
         };
 
@@ -477,8 +479,9 @@ define(
               }, true);
 
               // change hover tooltip to constant tooltip
-              if(item.className){ // won't have if created by ctrl/shift-drag
-                item.className = item.className.replace('has-hover-slot-tooltip','has-slot-tooltip');
+              if (item.className)
+              { // won't have if created by ctrl/shift-drag
+                item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
               }
 
               callback(item);
@@ -1398,38 +1401,14 @@ define(
          */
         $scope.selectedSlot = function (props)
         {
-          var selection;
-
-          // if ($scope.mode == 'edit')
-          // {
-          //  console.log('in edit mode');
-          // }
-          // else
-          // {
-          //  console.log('not in editing mode');
-          // }
-
-          /**
-           * TODO (Not working!!)
-           */
-          // $scope.self.timeline.cancelAdd();
-
-          if ($scope.timeliner.isAdded() > 0)
-          {
-            // console.log('there is one newly added slot');
-            // $scope.self.timeline.prototype.cancelAdd();
-            // links.Timeline.prototype.cancelAdd();
-            // $scope.self.timeline.applyAdd = false;
-            // $scope.resetInlineForms();
-          }
-
           var selectedItem = visDataSet.get(props.items[0]);
+          console.error('selectedItem', selectedItem);
 
           $scope.original = {
             start: selectedItem.start,
             end: selectedItem.end,
             recursive: selectedItem.recursive,
-            state: selectedItem.state,
+            state: selectedItem.state
           };
 
           if ($scope.timeline.main)
@@ -1447,6 +1426,7 @@ define(
             };
           }
 
+          console.error('selectedItem.itemType', selectedItem.itemType);
           if (selectedItem.itemType)
           {
             if ($scope.timeline.main)
@@ -1512,7 +1492,6 @@ define(
               }
             }
           }
-
           return selectedItem;
         };
 
@@ -1522,6 +1501,7 @@ define(
          */
         $scope.timelineOnSelect = function (props)
         {
+          console.error('props', props);
           var groupId;
           $rootScope.planboardSync.clear();
 
@@ -1569,8 +1549,13 @@ define(
           // check for locale strings in groupId
           // (will break if someone's name matches)
           // TODO: this is silly, use an exposed attribute with visJS ASAP
-          else if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
-            groupId && !groupId.match($rootScope.ui.planboard.myPlanning) && !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) && !groupId.match($rootScope.ui.planboard.planning) && !groupId.match($rootScope.ui.planboard.weeklyPlanning))
+          else if ($scope.currentUser
+            && $scope.currentUser.rolenumber > 1
+            && groupId
+            && !groupId.match($rootScope.ui.planboard.myPlanning)
+            && !groupId.match($rootScope.ui.planboard.myWeeklyPlanning)
+            && !groupId.match($rootScope.ui.planboard.planning)
+            && !groupId.match($rootScope.ui.planboard.weeklyPlanning))
           {
             $scope.self.timeline.setOptions({
               editable: {
@@ -1588,7 +1573,7 @@ define(
                 updateTime: true
               }
             });
-            $scope.self.timeline.setSelection(props.items[0]);
+
           }
 
           $scope.$apply(
@@ -2130,7 +2115,8 @@ define(
             // Invalid timeslot?
             //console.log(changed.start);
             //console.log(changed.end);
-            if (typeof changed.start == "undefined" || isNaN(changed.start) || changed.start == 0 || typeof changed.end == "undefined" || isNaN(changed.end) || changed.end == 0) {
+            if (typeof changed.start == "undefined" || isNaN(changed.start) || changed.start == 0 || typeof changed.end == "undefined" || isNaN(changed.end) || changed.end == 0)
+            {
               $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
 
               // Dont call the refresh; keep the timeslot update box open so it can be corrected
@@ -2139,7 +2125,8 @@ define(
             }
 
             // Swapped time inputs?
-            if (changed.end < changed.start) {
+            if (changed.end < changed.start)
+            {
               $rootScope.notifier.error($rootScope.ui.errors.timeline.swappedStartEnd);
               return;
             }

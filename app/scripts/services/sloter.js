@@ -154,24 +154,6 @@ define(['services/services', 'config'],
                         editable: true,
                         recursive: (slot.recursive) ? true : false
                       });
-                      //timedata.push({
-                      //  start: Math.round(slot.start * 1000),
-                      //  end: Math.round(slot.end * 1000),
-                      //  group: (slot.recursive) ?
-                      //  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive') :
-                      //  _this.wrapper('a') + planning + _this.wrapper('planning'),
-                      //  content: this.tooltip({start: slot.start, end: slot.end}) +
-                      //  _this.secret(
-                      //    angular.toJson({
-                      //      type: 'slot',
-                      //      id: index, // slot.id,
-                      //      recursive: slot.recursive,
-                      //      state: slot.text
-                      //    })
-                      //  ),
-                      //  className: 'slot-' + index + ' ' + config.states[slot.text].className,
-                      //  editable: true
-                      //});
                     }
                   }.bind(this));
                 }.bind(this));
@@ -517,21 +499,18 @@ define(['services/services', 'config'],
                           end: Math.round(slot.end * 1000),
                           group: link,
                           content: this.tooltip(tooltip),
+                          // TODO: Check if slot.id is ever used,
+                          // when logging, it's always undefined.
+                          // It's provided as slotId in case it's needed
+                          // (used to be part of secret's JSON content)
+                          slotId: slot.id,
+                          itemType: 'member',
+                          mid: member.id,
+                          recursive: slot.recursive,
+                          state: slot.text,
                           className: config.states[slot.text].className,
                           editable: false
                         });
-                        //content: this.tooltip(tooltip) +
-                        //_this.secret(
-                        //  angular.toJson(
-                        //    {
-                        //      type: 'member',
-                        //      id: slot.id,
-                        //      mid: member.id,
-                        //      recursive: slot.recursive,
-                        //      state: slot.text
-                        //    }
-                        //  )
-                        //),
                       }
                     }.bind(this));
                   }.bind(this));
