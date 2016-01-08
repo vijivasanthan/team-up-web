@@ -2849,6 +2849,8 @@ define(
           newTeam: 'Nieuw team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
+          teamNameExistTitle: 'Teamnaam bestaat al',
+          teamNameExistContent: 'Weet u zeker dat u een team wilt aanmaken met een naam die al vaker voorkomt?',
           newMember: 'Nieuw teamlid',
           searchMember: 'Zoek teamlid',
           noMembersFound: 'Geen leden gevonden met de opgegeven zoekterm.',

@@ -1,3 +1,7 @@
+include confirmAddTeamModal
+	button.btn.btn-success(type='button',
+		ng-click='team.create(editForm, true)') {{ui.teamup.save}}
+
 div(style='padding-top: 1px;')
 	.page-header
 		h2.nullable {{ui.teamup.teams}}

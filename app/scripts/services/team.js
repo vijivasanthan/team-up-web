@@ -32,6 +32,7 @@ define(['services/services', 'config'],
           this.update = update;
           this.delete = _delete;
           this.addMember = addMember;
+          this.checkNameExist = checkNameExist;
           this.sync = sync;
           this.init = init;
 
@@ -67,9 +68,6 @@ define(['services/services', 'config'],
                 {ids: [memberId]}
               ).then(function (result)
                 {
-                  console.error('memberId', memberId);
-                  console.error('teamId', teamId);
-                  console.error('result', result);
                   return Profile.fetchUserData(memberId);
                 })
                 .then(function ()
@@ -244,6 +242,16 @@ define(['services/services', 'config'],
                 self.setCurrent(self.list[self.list.length - 1].uuid);
                 $location.path('team/members');
               });
+          }
+
+          /**
+           * Check if the teamname already exist
+           * @param team teamobject with the name
+           * @returns {*} the team object or undefined
+           */
+          function checkNameExist(team)
+          {
+            return  _.findWhere(this.list, {'name': team.name});
           }
 
           /**

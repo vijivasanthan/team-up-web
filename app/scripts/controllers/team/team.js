@@ -22,11 +22,21 @@ define(
 
         /**
          * Create a team
-         * @param teamName The name of the team
+         * @param team object {name: example}
          */
-        function create(teamName)
+        function create(team, confirm)
         {
-          if(self.new.$valid) Team.create(teamName);
+          if(self.new.$valid)
+          {
+            var addTeamModal = angular.element('#confirmAddTeamModal');
+
+            if(confirm || !Team.checkNameExist(team))
+            {
+              addTeamModal.modal('hide');
+              Team.create(team);
+            }
+            else addTeamModal.modal('show');
+          }
         }
 
         /**
@@ -50,11 +60,11 @@ define(
          * @param teamId The id of the team
          * @param team The team object with the name and id
          */
-        function update(teamId, team)
+        function update(teamId, team, confirm)
         {
+          var selectedTeam = _.findWhere(self.list, {uuid: teamId});
           if (!team)
           {
-            var selectedTeam = _.findWhere(self.list, {uuid: teamId});
             self.updateForm = true;
             self.editForm = {
               name: selectedTeam.name,
@@ -63,11 +73,18 @@ define(
           }
           else
           {
-            Team.update(team)
-              .then(function ()
-              {
-                self.updateForm = false;
-              });
+            var addTeamModal = angular.element('#confirmAddTeamModal');
+            //check if the new teamname already exist, one exception for the current teamname
+            if(confirm || selectedTeam.name === team.name || !Team.checkNameExist(team))
+            {
+              addTeamModal.modal('hide');
+              Team.update(team)
+                .then(function ()
+                {
+                  self.updateForm = false;
+                });
+            }//show confirmation if the teamname already exist, so the user have the choice to add it or not
+            else addTeamModal.modal('show');
           }
         }
 
