@@ -69,7 +69,8 @@ block navbar
 						li#clientMenu(ng-show='app.domainPermission.clients',
 							data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
-						li(data-match-route='/manage',
+						//
+							li(data-match-route='/manage',
 							ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
 							a(href='#manage') {{ui.teamup.manage}}
 						li(data-match-route='/team-telefoon.*',
@@ -122,7 +123,8 @@ block navbar
 										a(role="menuitem",
 										tabindex="-1",
 										ng-click='nav("client")') {{ui.teamup.clients}}
-									li(role="presentation",
+									//
+										li(role="presentation",
 										data-match-route='/manage',
 										ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
 										a(href='#manage',
