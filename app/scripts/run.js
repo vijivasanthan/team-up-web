@@ -562,22 +562,15 @@ define(
               .then(
               function (result)
               {
-                if (result && result.error)
-                {
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  Session.clear();
+                console.warn('error ->', result.error);
+                Session.clear();
 
-                  Store('app').nuke();
+                Store('app').nuke();
 
-                  Store('app').save('loginData', {
-                    username: loginData.username
-                  });
-
-                  $window.location.href = 'index.html';
-                }
+                Store('app').save('loginData', {
+                  username: loginData.username
+                });
+                $window.location.href = 'index.html';
               }
             );
           };
