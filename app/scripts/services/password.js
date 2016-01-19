@@ -75,7 +75,7 @@ define(['services/services', 'config'],
             ? deferred
                 .reject($rootScope.ui.validation.userName.valid)
             : initBackEnd(config.app.host, {
-                uuid: userName,
+                uuid: userName.toLowerCase(),
                 path: $location.absUrl(),
                 type: getType()
               })
