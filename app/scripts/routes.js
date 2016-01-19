@@ -73,91 +73,91 @@ define(
 
           $routeProvider
             .when(
-            '/login',
-            {
-              templateUrl: 'views/login/loginForm.html',
-              controller: 'login as loginCtrl'
-            })
+              '/login',
+              {
+                templateUrl: 'views/login/loginForm.html',
+                controller: 'login as loginCtrl'
+              })
 
             .when(
-            '/logout',
-            {
-              templateUrl: 'views/logout.html',
-              resolve: {
-                data: [
-                  '$rootScope',
-                  function ($rootScope)
-                  {
-                    trackGa('send', 'event', 'Logout', 'User logout', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
-                    $rootScope.logout();
-                  }
-                ]
-              }
-            })
-
-            .when(
-            '/password',
-            {
-              templateUrl: 'views/login/password.html',
-              controller: 'password as password'
-            })
-
-            .when(
-            '/tasks2',
-            {
-              templateUrl: 'views/task/tasks2.html',
-              controller: 'tasks2Ctrl',
-              reloadOnSearch: false,
-              resolve: {
-                data: function (Teams, Clients, TaskCRUDold, $q)
-                {
-                  var deferred = $q.defer(),
-                    data = {
-                      teams: null,
-                      myTasks: null,
-                      allTasks: null,
-                      members: null,
-                      teamClientsGroups: null,
-                      clientGroups: null,
-                      clients: null
-                    };
-
-                  Teams.getAllLocal()
-                    .then(function (teams)
+              '/logout',
+              {
+                templateUrl: 'logout.html',
+                resolve: {
+                  data: [
+                    '$rootScope',
+                    function ($rootScope)
                     {
-                      data.teams = teams;
-                      return Teams.getAllWithMembers()
-                    })
-                    .then(function (members)
-                    {
-                      data.members = members;
-                      return $q.all([
-                        TaskCRUDold.queryMine(),
-                        TaskCRUDold.queryAll(),
-                        Teams.relationClientGroups(data.teams)
-                      ])
-                    })
-                    .then(function (teamsTasksData)
-                    {
-                      data.myTasks = teamsTasksData[0];
-                      data.allTasks = teamsTasksData[1];
-                      data.teamClientsGroups = teamsTasksData[2];
-                      return Clients.getAllLocal();
-                    })
-                    .then(function (clientGroups)
-                    {
-                      data.clientGroups = clientGroups;
-                      return Clients.getAllWithClients();
-                    })
-                    .then(function (GroupsAndClients)
-                    {
-                      data.clients = GroupsAndClients;
-                      deferred.resolve(data);
-                    });
-                  return deferred.promise;
+                      trackGa('send', 'event', 'Logout', 'User logout', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
+                      $rootScope.logout();
+                    }
+                  ]
                 }
-              }
-            })
+              })
+
+            .when(
+              '/password',
+              {
+                templateUrl: 'views/login/password.html',
+                controller: 'password as password'
+              })
+
+            .when(
+              '/tasks2',
+              {
+                templateUrl: 'views/task/tasks2.html',
+                controller: 'tasks2Ctrl',
+                reloadOnSearch: false,
+                resolve: {
+                  data: function (Teams, Clients, TaskCRUD, $q)
+                  {
+                    var deferred = $q.defer(),
+                      data = {
+                        teams: null,
+                        myTasks: null,
+                        allTasks: null,
+                        members: null,
+                        teamClientsGroups: null,
+                        clientGroups: null,
+                        clients: null
+                      };
+
+                    Teams.getAllLocal()
+                      .then(function (teams)
+                      {
+                        data.teams = teams;
+                        return Teams.getAllWithMembers()
+                      })
+                      .then(function (members)
+                      {
+                        data.members = members;
+                        return $q.all([
+                          TaskCRUD.queryMine(),
+                          TaskCRUD.queryAll(),
+                          Teams.relationClientGroups(data.teams)
+                        ])
+                      })
+                      .then(function (teamsTasksData)
+                      {
+                        data.myTasks = teamsTasksData[0];
+                        data.allTasks = teamsTasksData[1];
+                        data.teamClientsGroups = teamsTasksData[2];
+                        return Clients.getAllLocal();
+                      })
+                      .then(function (clientGroups)
+                      {
+                        data.clientGroups = clientGroups;
+                        return Clients.getAllWithClients();
+                      })
+                      .then(function (GroupsAndClients)
+                      {
+                        data.clients = GroupsAndClients;
+                        deferred.resolve(data);
+                      });
+                    return deferred.promise;
+                  }
+                }
+              })
 
             .when('/task/upload', {
               templateUrl: 'views/task/upload.html',
@@ -224,7 +224,7 @@ define(
                         on: taskData
                       };
 
-                      data.tasks = {
+                      data.myTasks = {
                         loading: false,
                         list: tasks['on']
                         //archive: (tasks.off.length > 0)

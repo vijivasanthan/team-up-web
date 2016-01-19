@@ -236,7 +236,6 @@ define(
 
               case 'logout':
                 $location.path('/logout');
-                $rootScope.logout();
                 break;
 
               default:
