@@ -12,7 +12,22 @@ define(
             Settings.getBackEnd() + config.app.namespace + 'tasks/:id/:teamId', {},
             {
               create: { method: 'POST', params: {} },
-              read: { method: 'GET', params: {}, isArray: true },
+              read: {
+                method: 'GET',
+                params: {},
+                transformResponse: function(data)
+                {
+                  data = angular.fromJson(data);
+                  //TODO remove this if it's fixed in the backend
+                  //check if is no tasks is responded in a object
+                  return (data &&
+                  data.result &&
+                  data.result === "No tasks")
+                    ? []//create empty array as response
+                    : data;
+                },
+                isArray: true
+              },
               update: { method: 'PUT', params: {} },
               delete: { method: 'DELETE', params: {} }
             });
