@@ -871,7 +871,32 @@ define(
               {
                 templateUrl: 'views/task/planboard/planboard.html',
                 controller: 'planboard',
-                reloadOnSearch: false
+                reloadOnSearch: false,
+                resolve: {
+                  data: function(Clients, Teams, CurrentSelection, $q)
+                  {
+                    var teamId = Teams.checkExistence(CurrentSelection.getTeamId()),
+                        currentMembers = null;
+                    return Teams.getSingle(teamId)
+                                .then(function(members)
+                                      {
+                                        currentMembers = members;
+                                        return $q.all([
+                                                  Teams.getAllLocal(),
+                                                  Clients.getAll()
+                                              ]);
+                                      })
+                                .then(function(result)
+                                      {
+                                        return {
+                                          teams: result[0],
+                                          clientGroups: result[1],
+                                          currentTeamId: teamId,
+                                          currentTeamMembers: currentMembers
+                                        };
+                                      });
+                  }
+                }
               })
 
             .when(
