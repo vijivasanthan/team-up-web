@@ -15,15 +15,15 @@ define(
                 TaskCRUD,
                 TeamUp,
                 Task,
+                CurrentSelection,
                 data)
       {
         var self = this;
 
         //properties
-        self.tasks = data.tasks;
+        self.selectedTeam = data.currentTeamId
         self.teams = data.teams;
         self.reversed = true;
-        self.selectedTeam = data.currentTeamId;
 
         //methods
         self.orderBy = orderBy;
@@ -34,6 +34,16 @@ define(
         self.deleteTask = deleteTask;
         self.toggleStatusFinished = toggleStatusFinished;
         self.getTasksForTeam = getTasksForTeam;
+
+        //initialization
+        init();
+
+        function init()
+        {
+          self.tasks = {
+            list: data.myTasks && data.myTasks.list
+          };
+        }
 
         /**
          * order tasks in the view on their properties
@@ -52,6 +62,7 @@ define(
          */
         function getTasksForTeam(team)
         {
+          CurrentSelection.local = team;
           self.selectedTeam = team;
           TaskCRUD.queryByTeam(self.selectedTeam)
             .then(function (taskData)

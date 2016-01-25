@@ -201,36 +201,40 @@ define(
               controller: 'allTasks as alltasks',
               reloadOnSearch: false,
               resolve: {
-                data: function(TaskCRUD, Teams, CurrentSelection, $q)
+                data: function(TaskCRUD, Teams, CurrentSelection, $q, $location)
                 {
                   var deferred = $q.defer(),
-                      teamId   = CurrentSelection.getTeamId(),
+                      teamId   = Teams.checkExistence(
+                                  ($location.search()).teamId ||
+                                  CurrentSelection.getTeamId()
+                                ),
                       data     = {
                         tasks: null,
                         teams: null,
                         currentTeamId: teamId
                       };
+                  console.error("teamId ->", teamId);
 
                   Teams.getAllLocal()
                        .then(function(teams)
                              {
                                data.teams = teams;
-                             });
+                               return TaskCRUD.queryByTeam(teamId);
+                             })
+                      .then(function(taskData)
+                            {
+                              var tasks = {
+                                on: taskData
+                              };
 
-                  TaskCRUD.queryByTeam(teamId)
-                          .then(function(taskData)
-                                {
-                                  var tasks = {
-                                    on: taskData
-                                  };
+                              data.myTasks = {
+                                loading: false,
+                                list: tasks['on']
+                                //archive: (tasks.off.length > 0)
+                              };
+                              deferred.resolve(data);
+                            });
 
-                                  data.myTasks = {
-                                    loading: false,
-                                    list: tasks['on']
-                                    //archive: (tasks.off.length > 0)
-                                  };
-                                  deferred.resolve(data);
-                                });
                   return deferred.promise;
                 }
               }
