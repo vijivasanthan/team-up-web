@@ -354,6 +354,7 @@ define(
             try
             {
               client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              console.error("client.birthDate ->", client.birthDate);
             }
             catch (error)
             {

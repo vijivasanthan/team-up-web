@@ -230,6 +230,7 @@ aria-hidden='true')
 								ng-model='clientForm.birthDate', 
 								data-date-type='string',
 								data-date-format='d-M-yyyy',
+								data-max-date="today"
 								bs-datepicker='')
 								i.icon-calendar
 								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
