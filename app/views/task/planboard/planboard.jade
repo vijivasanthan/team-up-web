@@ -65,12 +65,12 @@ div(ng-controller='timeline')
 			
 				// TODO: Look at to this later on!
 				//div(ng-show='relatedUsers.length > 0')
-				.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+				.form-elements-group(ng-show='(views.slot.add || views.slot.edit || views.member) && relatedUsers.length')
 					label {{relatedUserLabel}}
 					select(ng-model='slot.relatedUser',
-					ng-options='r.uuid as r.name for r in relatedUsers',
-					ng-change='redrawSlot(slot)',
-					ng-show='views.slot.add || views.slot.edit')
+						ng-options='r.uuid as r.name for r in relatedUsers',
+						ng-change='redrawSlot(slot)',
+						ng-show='views.slot.add || views.slot.edit')
 					select(ng-model='slot.relatedUser',
 					disabled='',
 					ng-options='r.uuid as r.name for r in relatedUsers',

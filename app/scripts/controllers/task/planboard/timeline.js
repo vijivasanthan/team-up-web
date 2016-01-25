@@ -923,6 +923,11 @@ define(
                       state: 'com.ask-cs.State.Available'
                     };
 
+                    if($scope.relatedUsers && $scope.relatedUsers.length)
+                    {
+                      $scope.slot.relatedUser = $scope.relatedUsers[0].uuid
+                    }
+
                     $scope.original = {
                       start: new Date(values.start),
                       end: new Date(values.end),
@@ -977,12 +982,18 @@ define(
                 {
                   if ($scope.views.teams)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
+                    var message = ($scope.relatedUsers && $scope.relatedUsers.length)
+                      ? $rootScope.ui.teamup.selectMember
+                      : $rootScope.ui.planboard.noAffectedClientGroup;
+                    $rootScope.notifier.error(message);
                     return;
                   }
                   else if ($scope.views.clients)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+                    var message = ($scope.relatedUsers && $scope.relatedUsers.length)
+                      ? $rootScope.ui.teamup.selectClient
+                      : $rootScope.ui.planboard.noAffectedTeam;
+                    $rootScope.notifier.error(message);
                     return;
                   }
 
