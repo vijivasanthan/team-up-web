@@ -148,11 +148,11 @@ define(['services/services', 'config'],
               error = true;
             }
 
-            if(team.name.match(config.app.regularPunction).length !== team.name.length)
-            {
-              message =  $rootScope.ui.validation.default.regularPunctuation;
-              error = true;
-            }
+            //if(team.name.match(config.app.regularPunction).length !== team.name.length)
+            //{
+            //  message =  $rootScope.ui.validation.default.regularPunctuation;
+            //  error = true;
+            //}
 
             if(! error)
             {
