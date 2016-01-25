@@ -24,20 +24,60 @@ define(
                   Teams, Clients, TeamUp, Session, CurrentSelection, moment, data)
         {
           var params = $location.search();
+          $scope.currentTeam = data.currentTeamId;
+          $scope.currentClientGroup = null;
 
           init();
 
           function init()
           {
-            console.error("data ->", data);
-            $scope.currentTeam = data.currentTeamId;
-            $scope.currentClientGroup = null;
-
             setInitialDefaults();
             setAllTeams();
             setAllClientGroups();
             setCurrentTeam(data.currentTeamId, data.currentTeamMembers);
           }
+
+          // Change a time-slot
+          $scope.changeCurrent = function (current, periods)
+          {
+            CurrentSelection.local = current;
+            $scope.currentTeam = CurrentSelection.getTeamId();
+            $scope.currentClientGroup = current;
+
+            loadData(periods);
+          };
+
+          $scope.setViewTo = function (uuid, hash)
+          {
+            $location.hash(hash);
+            $scope.section = hash;
+            $scope.load = true;
+            $scope.list = $scope.data[$scope.section].list;
+
+            //TODO Remove the multiple section checks
+            //TODO planboard and timeline have the same $scope var, this is not only confusing but the two way binding don't works well anymore
+            //if($scope.section === "clients")
+            //{
+            //  var clientGroupByParamUrl = _.findWhere($scope.list, {uuid: uuid});
+            //
+            //  (clientGroupByParamUrl)
+            //    ? setCurrentClientGroup(clientGroupByParamUrl, function()
+            //  {
+            //    loadData();
+            //  })
+            //    : teamRelationClientGroup(function()
+            //                              {
+            //                                loadData();
+            //                              })
+            //}
+            //else loadData();
+
+            var clientGroupId = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
+            $scope.currentClientGroup = clientGroupId || ($scope.list[0]).uuid;
+
+            loadData();
+            setView(hash);
+          };
 
 	        /**
            * Set the current team data
@@ -52,45 +92,6 @@ define(
             {
               getMemberSlots(teamId, members);
             }
-          }
-
-	        /**
-           * Get the slots of the clients of the current ClientGroup
-           * @param clientGroupId
-           * @param clients
-	         */
-          function getClientSlots(clientGroupId, clients)
-          {
-            $scope.data.clients.members[clientGroupId] = [];
-
-            _.each(clients, function(_client)
-            {
-              var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
-                'style="float: left; background-image: url(' +
-                Settings.getBackEnd() +
-                config.app.namespace +
-                '/client/' +
-                _client.uuid +
-                '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
-                Session.get() +
-                ');" memberId="' +
-                _client.uuid +
-                '"></div>';
-
-              var name = avatar +
-                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
-                _client.firstName +
-                ' ' +
-                _client.lastName
-              '</div>';
-
-              $scope.data.clients.members[clientGroupId].push(
-                {
-                  'head': name,
-                  'memId': _client.uuid
-                }
-              );
-            });
           }
 
 	        /**
@@ -173,121 +174,111 @@ define(
             };
           }
 
-          // switch agenda (timeline) between Team view or Client view
-          function switchData()
-          {
-            switch ($scope.section)
-            {
-              case 'teams':
-                $scope.list = $scope.data.teams.list;
-                loadData()
-                break;
-
-              case 'clients':
-                $scope.list = $scope.data.clients.list;
-                loadData();
-                break;
-            }
-          }
-
-          // Change a time-slot
-          $scope.changeCurrent = function (current, periods)
-          {
-            CurrentSelection.local = current;
-            $scope.currentTeam = CurrentSelection.getTeamId();
-
-            loadData(periods);
-          };
-
+	        /**
+           * Load data depending if the section clients or teams is on
+           * @param periods
+           */
           var loadData = function(periods)
           {
             var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
               endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 
+            $scope.load = true;
             $scope.data.section = $scope.section;
 
-            if ($scope.section == 'teams')
+            if ($scope.section == 'teams') loadMembers(startTime, endTime, prepareTasks);
+            else if ($scope.section == 'clients') loadClients(startTime, endTime, prepareTasks);
+
+	          /**
+             * Prepare tasks
+             * @param queryName
+             * @param groupId
+             * @param startTime
+	           * @param endTime
+	           */
+            function prepareTasks(queryName, groupId, startTime, endTime)
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
-              $scope.load = true;
-
-              $scope.currentName = getGroupName($scope.currentTeam);
-              $scope.data[$scope.section].members[$scope.currentTeam] = [];
-
-              TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
-                .then(function(members) {
-                  getMemberSlots($scope.currentTeam, members);
-                  $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
-
-                  return getTaskProvider('teamTaskQuery', $scope.currentTeam, startTime, endTime);
-                })
-                .then(function(tasks) {
-                  $location.search({uuid: $scope.currentTeam}).hash('teams');
-                  storeTask(tasks, startTime, endTime, periods);
-
-                  $rootScope.statusBar.off();
-                  $scope.load = false;
-                });
+              getTasksByProvider(queryName, groupId, startTime, endTime)
+                .then(showTasks);
             }
-            else if ($scope.section == 'clients')
+
+	          /**
+             * Show tasks
+             * @param tasks
+             */
+            function showTasks(tasks)
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.loadClients);
-              $scope.load = true;
-              if($scope.currentClientGroup)
-              {
-                $scope.data.clients.members[$scope.currentClientGroup] = [];
-                $scope.data.members = [];
-              }
-
-              //check if current is equal to the last selected currentClientGroup
-              //if nog select that clientgroup
-
-              Teams.getRelationClientGroup($scope.currentTeam)
-                   .then(function(relation)
-                        {
-                          //show the clientGroup which has a relation wich the last selected team
-                          var currentClientGroup = (relation && relation.length)
-                            ? relation[0]
-                            : ($scope.data[$scope.section].list)[0];//if no relation pick the first clientGroup
-
-                          console.error("currentClientGroup ->", currentClientGroup);
-                          $scope.currentClientGroup = currentClientGroup.id || currentClientGroup.uuid;
-                          $scope.currentName = currentClientGroup.name;
-                          $location.search({uuid: $scope.currentClientGroup}).hash('clients');
-
-                          return Clients.getSingle($scope.currentClientGroup);
-                        })
-                   .then(function(clients)
-                         {
-                           if (clients && clients.length > 0)
-                           {
-                             getClientSlots($scope.currentClientGroup, clients);
-                             $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
-
-                             return getTaskProvider('clientGroupTasksQuery', $scope.currentClientGroup, startTime, endTime);
-                           }
-                           else
-                           {
-                             console.error("clients ->", clients);
-                           }
-                         })
-                   .then(function(tasks)
-                         {
-                           storeTask(tasks, startTime, endTime, periods)
-
-                           $rootScope.statusBar.off();
-                           $scope.load = false;
-                         })
+              storeTask(tasks, startTime, endTime, periods);
+              $rootScope.statusBar.off();
+              $scope.load = false;
             }
           };
 
+	        /**
+           * Load Clients
+           * @param startTime
+           * @param endTime
+           * @param callBack
+	         */
+          function loadClients(startTime, endTime, callBack)
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadClients);
+
+            $scope.currentName = getGroupName($scope.currentClientGroup);
+            $scope.data.clients.members = [];
+            $scope.data[$scope.section].members[$scope.currentClientGroup] = [];
+
+            Clients.getSingle($scope.currentClientGroup)
+                   .then(function(clients)
+                         {
+                           $scope.hasClients = (!! clients.length);
+
+                           getClientSlots($scope.currentClientGroup, clients);
+                           $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+                           $location.search({uuid: $scope.currentClientGroup}).hash('clients');
+
+                           (callBack && callBack('clientGroupTasksQuery', $scope.currentClientGroup, startTime, endTime));
+                         })
+          }
+
+	        /**
+           * Load members
+           * @param startTime
+           * @param endTime
+           * @param callBack
+	         */
+          function loadMembers(startTime, endTime, callBack)
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
+
+            $scope.currentName = getGroupName($scope.currentTeam);
+            $scope.data[$scope.section].members[$scope.currentTeam] = [];
+
+            TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
+                  .then(function(members)
+                        {
+                          getMemberSlots($scope.currentTeam, members);
+                          $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+                          $location.search({uuid: $scope.currentTeam}).hash('teams');
+
+                          (callBack && callBack('teamTaskQuery', $scope.currentTeam, startTime, endTime))
+                        })
+          }
+
+	        /**
+           * Get tasks
+           * @param section
+           * @param currentGroup
+           * @param startTime
+           * @param endTime
+	         */
           $scope.getTasks = function (section, currentGroup, startTime, endTime)
           {
             var taskProvider = (section == 'teams')
               ? 'teamTaskQuery'
               : 'clientGroupTasksQuery';
 
-            getTaskProvider(taskProvider,
+            getTasksByProvider(taskProvider,
               currentGroup,
               startTime,
               endTime)
@@ -297,24 +288,12 @@ define(
               });
           };
 
-          function getTaskProvider(query, sectionId, startTime, endTime)
-          {
-            return TeamUp._(
-              query,
-              {
-                second: sectionId,
-                from: startTime,
-                to: endTime
-              }
-            );
-          }
-
-          var storeTask = function (tasks, startTime, endTime, periods)
+          function storeTask (tasks, startTime, endTime, periods)
           {
             // clear the array to keep tasks sync with sever side after changing
             $scope.data[$scope.section].tasks = [];
 
-            angular.forEach(
+            _.each(
               tasks,
               function (task)
               {
@@ -346,7 +325,19 @@ define(
               'timelinerTasks',
               periods || {start: startTime, end: endTime}
             );
-          };
+          }
+
+          function getTasksByProvider(query, sectionId, startTime, endTime)
+          {
+            return TeamUp._(
+              query,
+              {
+                second: sectionId,
+                from: startTime,
+                to: endTime
+              }
+            );
+          }
 
           function setView(hash)
           {
@@ -363,22 +354,28 @@ define(
             $scope.views[hash] = true;
           }
 
-          $scope.setViewTo = function (uuid, hash)
+
+
+          function teamRelationClientGroup(callBack)
           {
-            $scope.$watch(
-              hash,
-              function ()
-              {
-                $location.hash(hash);
+              Teams.getRelationClientGroup($scope.currentTeam)
+                   .then(function(relation)
+                         {
+                           //show the clientGroup which has a relation with the last selected team
+                           var currentClientGroup = (relation && relation.length)
+                             ? relation[0]
+                             : ($scope.data["clients"].list)[0];//if no relation pick the first clientGroup
 
-                $scope.section = hash;
+                           setCurrentClientGroup(currentClientGroup);
+                           (callBack && callBack())
+                         })
+          }
 
-                switchData();
-
-                setView(hash);
-              }
-            );
-          };
+          function setCurrentClientGroup(currentClientGroup, callBack)
+          {
+            $scope.currentClientGroup = currentClientGroup.id || currentClientGroup.uuid;
+            (callBack && callBack());
+          }
 
           function getGroupName(groupId)
           {
@@ -386,7 +383,6 @@ define(
               $scope.data[$scope.section].list,
               {uuid: groupId}
             );
-
             return group && group.name;
           }
 
@@ -597,6 +593,43 @@ define(
                 );
               }
             );
+          }
+
+          /**
+           * Get the slots of the clients of the current ClientGroup
+           * @param clientGroupId
+           * @param clients
+           */
+          function getClientSlots(clientGroupId, clients)
+          {
+            _.each(clients, function(_client)
+            {
+              var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
+                'style="float: left; background-image: url(' +
+                Settings.getBackEnd() +
+                config.app.namespace +
+                '/client/' +
+                _client.uuid +
+                '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
+                Session.get() +
+                ');" memberId="' +
+                _client.uuid +
+                '"></div>';
+
+              var name = avatar +
+                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                _client.firstName +
+                ' ' +
+                _client.lastName
+              '</div>';
+
+              $scope.data.clients.members[clientGroupId].push(
+                {
+                  'head': name,
+                  'memId': _client.uuid
+                }
+              );
+            });
           }
         }
       ]

@@ -1,4 +1,4 @@
-div(ng-controller='timeline as taskPlanboard')
+div(ng-controller='timeline')
 	#confirmTasksDeleteModal.modal.fade(tabindex='-1', role='dialog',
 	aria-labelledby='confirmTasksDeleteModalLabel', aria-hidden='true')
 		.modal-dialog
@@ -35,8 +35,9 @@ div(ng-controller='timeline as taskPlanboard')
 				span.nullable.pull-left(ng-show='views.clients')
 					.selectGroup
 						span.selectTitle
-							| {{ ui.teamup.selectClientGroup }}
-						select(ng-model='currentClientGroup'
+							| {{ ui.teamup.selectClientGroup }} 
+						select(
+						ng-model='currentClientGroup'
 						ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
 						ng-selected='currentClientGroup',
 						ng-change='changeCurrent(currentClientGroup)')
@@ -273,23 +274,23 @@ div(ng-controller='timeline as taskPlanboard')
 					#timeline
 						//include planboard/time-toolbar.jade
 						#mainTimeline(set-position-slot-form)
-					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length && ! load')
+					div.alert.alert-warning(ng-show='section === "teams" && ! data.teams.members[currentTeam].length && ! load')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.planboard.noMembers }}
 
-					div.alert.alert-warning(ng-show='section == "clients" && ! data.clients.members[currentClientGroup].length')
+					div.alert.alert-warning(ng-show='section === "clients" && ! hasClients && ! load')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.planboard.noClients }}
 					hr
 					p
 						small.pull-left
-							span.timeline-footer-text {{ui.planboard.lastSyncTime}}
-							span.timeline-footer-text {{data.synced | nicelyDate}}
+							span.timeline-footer-text {{ui.planboard.lastSyncTime}}  
+							span.timeline-footer-text {{data.synced | nicelyDate}} 
 						small.pull-right
 							span.timeline-footer-text {{ui.planboard.dataRangeStart}}
-							span.timeline-footer-text {{data.periods.start | nicelyDate}}
+							span.timeline-footer-text {{data.periods.start | nicelyDate}}  
 							| |
-							span.timeline-footer-text {{ui.planboard.dataRangeEnd}}
-							span.timeline-footer-text {{data.periods.end | nicelyDate}}
+							span.timeline-footer-text {{ui.planboard.dataRangeEnd}} 
+							span.timeline-footer-text {{data.periods.end | nicelyDate}} 
