@@ -862,11 +862,12 @@ define(
 
           var getDateTimeToPicker = function (d)
           {
-            var d1 = new Date(d);
-            // var offset = d.getTimezoneOffset() / 60;
-            d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
-            return d1.toISOString().replace("Z", "");
+            //var d1 = new Date(d);
+            //// var offset = d.getTimezoneOffset() / 60;
+            //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+            //
+            //return d1.toISOString().replace("Z", "");
+            return moment(d).toDate();
           };
 
           $scope.timelineOnAdd = function (form, slot)
