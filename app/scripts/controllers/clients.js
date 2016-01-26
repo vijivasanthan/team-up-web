@@ -639,6 +639,11 @@ define(
           // filter the report by client or the created month
           $scope.requestReportsByFilter = function ()
           {
+
+
+
+
+            console.error(" ->", $scope.currentMonth);
             angular.forEach(
               $scope.groupReports,
               function (report)
@@ -1072,22 +1077,25 @@ define(
             // TODO: Remove it later on!
             var months = Dater.getMonthTimeStamps();
 
+
             $scope.Months = [];
 
             angular.forEach(
               months,
               function (month, i)
               {
-                $scope.Months[i] = {
+                var parsedIndex = parseInt(i - 1);
+                var currentMonth = moment().months(parsedIndex).format("MMMM");
+                $scope.Months[parsedIndex] = {
                   number: i,
-                  name: i,
+                  name: currentMonth,
                   start: month.first.timeStamp,
                   end: month.last.timeStamp
                 };
               }
             );
-
-            $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
+            console.error("moment().months(); ->", moment().months(3).format("MMMM"));
+            console.error("$scope.Months ->", $scope.Months);
           }
         }
     );
