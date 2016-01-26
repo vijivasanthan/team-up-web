@@ -639,11 +639,6 @@ define(
           // filter the report by client or the created month
           $scope.requestReportsByFilter = function ()
           {
-
-
-
-
-            console.error(" ->", $scope.currentMonth);
             angular.forEach(
               $scope.groupReports,
               function (report)
