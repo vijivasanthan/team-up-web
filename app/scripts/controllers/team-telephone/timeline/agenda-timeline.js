@@ -489,8 +489,18 @@ define(
 
             if (periods.start == periods.end)
             {
-              periods.end = moment(new Date(arguments[1].end)).add(1, 'days');
+              periods.end = moment(
+                new Date(arguments[1].end)
+              )
+                .add(1, 'days')
+                .valueOf();
             }
+
+            var shownRangeDate = moment(periods.start);
+            $scope.timeline.current.day = shownRangeDate.format("DDD");
+            $scope.timeline.current.week = shownRangeDate.week();
+            $scope.timeline.current.month = (shownRangeDate.month() + 1);
+            $scope.timeline.current.year = shownRangeDate.year();
 
             $scope.timeliner.load(periods);
           }

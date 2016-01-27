@@ -407,9 +407,18 @@ define(
             'timelinerTasks',
             function ()
             {
+              var start = new Date(arguments[1].start).getTime(),
+                  shownRangeDate = moment(start);
+
+              $scope.timeline.current.day = shownRangeDate.format("DDD");
+              $scope.timeline.current.week = shownRangeDate.week();
+              $scope.timeline.current.month = (shownRangeDate.month() + 1);
+              $scope.timeline.current.year = shownRangeDate.year();
+
+
               $scope.timeliner.render(
                 {
-                  start: new Date(arguments[1].start).getTime(),
+                  start: start,
                   end: new Date(arguments[1].end).getTime()
                 }
               );

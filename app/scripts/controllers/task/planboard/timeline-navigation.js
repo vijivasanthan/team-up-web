@@ -1,223 +1,88 @@
 define(
   ['../../controllers', 'config'],
-  function (controllers, config)
+  function(controllers, config)
   {
     'use strict';
 
     controllers.controller(
       'timeline-navigation',
       [
-        '$rootScope', '$scope', '$window',
-        function ($rootScope, $scope, $window)
+        '$rootScope', '$scope', '$window', 'TimelineNavigation',
+        function($rootScope, $scope, $window, TimelineNavigation)
         {
-          $scope.timelineScoper = function (period)
+          $scope.timelineScoper = function(period)
           {
-            $scope.timeline.current.day = $scope.current.day;
-            $scope.timeline.current.week = $scope.current.week;
+            $scope.timeline.current.day   = $scope.current.day;
+            $scope.timeline.current.week  = $scope.current.week;
             $scope.timeline.current.month = $scope.current.month;
+            $scope.timeline.current.year  = moment().year();
 
-            $scope.timeline.current.year = Number(new Date().toString('yyyy'));
+            var scope = TimelineNavigation
+                          .setScope(
+                            period,
+                            $scope.timeline.current
+                          );
 
-            switch (period)
-            {
-              case 'day':
-                $scope.timeline.scope = {
-                  day: true,
-                  week: false,
-                  month: false
-                };
+            $scope.timeline.scope = scope.periods;
+            $scope.timeliner.render(scope.range);
 
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
-                  });
-                break;
-
-              case 'week':
-                $scope.timeline.scope = {
-                  day: false,
-                  week: true,
-                  month: false
-                };
-
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
-                  });
-                break;
-
-              case 'month':
-                $scope.timeline.scope = {
-                  day: false,
-                  week: false,
-                  month: true
-                };
-
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
-                  });
-                break;
-            }
           };
 
-          $scope.timelineBefore = function ()
+          $scope.timelineBefore = function()
           {
-            if ($scope.timeline.scope.day)
-            {
-              if ($scope.timeline.current.day != 1)
-              {
-                $scope.timeline.current.day --;
+            var scope = TimelineNavigation
+                          .previousScope(
+                            $scope.timeline.scope,
+                            $scope.timeline.current
+                          );
 
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
-                  });
-              }
-            }
-            else if ($scope.timeline.scope.week)
-            {
-              if ($scope.timeline.current.week != 1)
-              {
-                $scope.timeline.current.week --;
+            $scope.timeline.current.day   = scope.dates.day;
+            $scope.timeline.current.week  = scope.dates.week;
+            $scope.timeline.current.month = scope.dates.month;
+            $scope.timeline.current.year  = scope.dates.year;
 
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
-                  });
-              }
-            }
-            else if ($scope.timeline.scope.month)
-            {
-              if ($scope.timeline.current.month != 1)
-              {
-                $scope.timeline.current.month --;
-
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
-                  });
-              }
-            }
+            $scope.timeliner.render(scope.range);
           };
 
-          $scope.timelineAfter = function ()
+          /**
+           * Go one period in future
+           */
+          $scope.timelineAfter = function()
           {
-            if ($scope.timeline.scope.day)
-            {
-              if ($scope.timeline.current.day != $scope.periods.days.total)
-              {
-                $scope.timeline.current.day ++;
+            var scope = TimelineNavigation
+              .nextScope(
+                $scope.timeline.scope,
+                $scope.timeline.current
+              );
 
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.days[$scope.timeline.current.day].first.timeStamp,
-                    end: $scope.periods.days[$scope.timeline.current.day].last.timeStamp
-                  });
-              }
-            }
-            else if ($scope.timeline.scope.week)
-            {
-              if ($scope.timeline.current.week != 53)
-              {
-                $scope.timeline.current.week ++;
+            $scope.timeline.current.day   = scope.dates.day;
+            $scope.timeline.current.week  = scope.dates.week;
+            $scope.timeline.current.month = scope.dates.month;
+            $scope.timeline.current.year  = scope.dates.year;
+            $scope.timeline.scope         = scope.periods;
 
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                    end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
-                  });
-              }
-            }
-            else if ($scope.timeline.scope.month)
-            {
-              if ($scope.timeline.current.month != 12)
-              {
-                $scope.timeline.current.month ++;
-
-                $scope.timeliner.render(
-                  {
-                    start: $scope.periods.months[$scope.timeline.current.month].first.timeStamp,
-                    end: $scope.periods.months[$scope.timeline.current.month].last.timeStamp
-                  });
-              }
-            }
+            $scope.timeliner.render(scope.range);
           };
 
-          $scope.timelineThisWeek = function ()
-          {
-            if ($scope.timeline.current.week != new Date().getWeek())
-            {
-              $scope.timeliner.render(
-                {
-                  start: $scope.periods.weeks[new Date().getWeek()].first.timeStamp,
-                  end: $scope.periods.weeks[new Date().getWeek()].last.timeStamp
-                });
-
-              $scope.timeline.range = {
-                start: $scope.periods.weeks[new Date().getWeek()].first.day,
-                end: $scope.periods.weeks[new Date().getWeek()].last.day
-              };
-            }
-          };
-
-          $scope.timelineWeekBefore = function ()
-          {
-            if ($scope.timeline.current.week != 1)
-            {
-              $scope.timeline.current.week --;
-
-              $scope.timeliner.render(
-                {
-                  start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
-                });
-            }
-
-            $scope.timeline.range = {
-              start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
-            };
-          };
-
-          $scope.timelineWeekAfter = function ()
-          {
-            if ($scope.timeline.current.week != 53)
-            {
-              $scope.timeline.current.week ++;
-
-              $scope.timeliner.render(
-                {
-                  start: $scope.periods.weeks[$scope.timeline.current.week].first.timeStamp,
-                  end: $scope.periods.weeks[$scope.timeline.current.week].last.timeStamp
-                });
-            }
-
-            $scope.timeline.range = {
-              start: $scope.periods.weeks[$scope.timeline.current.week].first.day,
-              end: $scope.periods.weeks[$scope.timeline.current.week].last.day
-            };
-          };
-
-          $scope.timelineZoomIn = function ()
+          $scope.timelineZoomIn = function()
           {
             $scope.self.timeline.zoom(config.app.timeline.config.zoom, Date.now());
           };
 
-          $scope.timelineZoomOut = function ()
+          $scope.timelineZoomOut = function()
           {
             $scope.self.timeline.zoom(- config.app.timeline.config.zoom, Date.now());
           };
 
-          $window.onresize = function () { $scope.self.timeline.redraw() };
+          $window.onresize = function()
+          {
+            $scope.self.timeline.redraw()
+          };
 
-          $scope.fullWidth = function () { $scope.self.timeline.redraw() }
+          $scope.fullWidth = function()
+          {
+            $scope.self.timeline.redraw()
+          }
         }
       ]);
   }

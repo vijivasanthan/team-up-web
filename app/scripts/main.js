@@ -165,6 +165,7 @@ require(
     'services/member',
     'services/password',
     'services/taskCRUD',
+    'services/timelineNavigation',
 
     'directives/widgets',
     'directives/date-range-picker',
