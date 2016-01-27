@@ -1147,12 +1147,6 @@ define(
            */
           else
           {
-            if (!slotDatesValid(slot))
-            {
-              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-              return;
-            }
-
             var start = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
               Dater.convert.absolute(slot.start.date, slot.start.time, true);
@@ -1160,6 +1154,12 @@ define(
             var end = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
               Dater.convert.absolute(slot.end.date, slot.end.time, true);
+
+            if (!slotDatesValid( {start: start, end: end} ))
+            {
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return;
+            }
 
             if (start < nowStamp && end < nowStamp && slot.recursive == false)
             {
@@ -1229,8 +1229,7 @@ define(
          */
         function slotDatesValid(slot)
         {
-          var dates = getUnixTimeStamps(slot);
-          return (dates.end > dates.start);
+          return (slot.end > slot.start);
         }
 
         function convertDateTimeToLocal(d)
@@ -1319,12 +1318,6 @@ define(
          */
         $scope.timelineOnChange = function (direct, original, slot, changed)
         {
-          if (!slotDatesValid(slot))
-          {
-            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-            return;
-          }
-
           $rootScope.planboardSync.clear();
 
           var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
@@ -1351,6 +1344,12 @@ define(
                 state: slot.state
               }
             };
+          }
+
+          if (!slotDatesValid( {start: changed.start, end: changed.end} ))
+          {
+            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+            return;
           }
 
           original.start = new Date(original.start).getTime();
