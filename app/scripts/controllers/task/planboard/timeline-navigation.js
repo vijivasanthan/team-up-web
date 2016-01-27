@@ -18,10 +18,10 @@ define(
             $scope.timeline.current.year  = moment().year();
 
             var scope = TimelineNavigation
-                          .setScope(
-                            period,
-                            $scope.timeline.current
-                          );
+              .setScope(
+                period,
+                $scope.timeline.current
+              );
 
             $scope.timeline.scope = scope.periods;
             $scope.timeliner.render(scope.range);
@@ -31,10 +31,10 @@ define(
           $scope.timelineBefore = function()
           {
             var scope = TimelineNavigation
-                          .previousScope(
-                            $scope.timeline.scope,
-                            $scope.timeline.current
-                          );
+              .previousScope(
+                $scope.timeline.scope,
+                $scope.timeline.current
+              );
 
             $scope.timeline.current.day   = scope.dates.day;
             $scope.timeline.current.week  = scope.dates.week;

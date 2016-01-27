@@ -21,12 +21,12 @@ define(
             this.nextScope = nextScope;
             this.previousScope = previousScope;
 
-	          /**
+            /**
              * Set the scope of the timeline in one of the three ['day', 'week', 'month']
              * @param period current period ['day', 'week', 'month']
              * @param dates current dates example: {day: 12, week: 34, year: 2016}
              * @returns {{periods: {day: boolean, week: boolean, month: boolean}, range: *}}
-	           */
+             */
             function setScope(period, dates)
             {
               var scope, range;
@@ -75,12 +75,12 @@ define(
               }
             }
 
-	          /**
+            /**
              * Set next scope [day, week, month]
              * @param periods
              * @param dates
              * @returns {{dates: *, periods: *}}
-	           */
+             */
             function nextScope(periods, dates)
             {
               console.error("next ->");
@@ -96,18 +96,18 @@ define(
                     dates.day++;
 
                     range = {
-                        start: +moment().dayOfYear(dates.day).startOf('day'),
-                        end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
-                      };
+                      start: +moment().dayOfYear(dates.day).startOf('day'),
+                      end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
+                    };
                   }
                   else
                   {
                     dates.year = thisYear + 1;
                     dates.day = 1;
                     range = {
-                        start: +moment().year(dates.year).dayOfYear(dates.day).startOf('day'),
-                        end: +moment().year(dates.year).dayOfYear(dates.day).endOf('day').add(1, 'ms')
-                      };
+                      start: +moment().year(dates.year).dayOfYear(dates.day).startOf('day'),
+                      end: +moment().year(dates.year).dayOfYear(dates.day).endOf('day').add(1, 'ms')
+                    };
                   }
                 }
               }
@@ -126,9 +126,9 @@ define(
                     dates.week++;
 
                     range = {
-                        start: +moment().week(dates.week).startOf('week'),
-                        end: +moment().week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                      start: +moment().week(dates.week).startOf('week'),
+                      end: +moment().week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                   else
                   {
@@ -137,9 +137,9 @@ define(
                     dates.week = 1;
 
                     range = {
-                        start: +moment().year(dates.year).week(dates.week).startOf('week'),
-                        end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                      start: +moment().year(dates.year).week(dates.week).startOf('week'),
+                      end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                 }
                 else
@@ -149,9 +149,9 @@ define(
                     dates.week++;
 
                     range = {
-                        start: +moment().year(dates.year).week(dates.week).startOf('week'),
-                        end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                      start: +moment().year(dates.year).week(dates.week).startOf('week'),
+                      end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                 }
               }
@@ -164,9 +164,9 @@ define(
                     dates.month++;
 
                     range = {
-                        start: +moment().month(dates.month - 1).startOf('month'),
-                        end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                      start: +moment().month(dates.month - 1).startOf('month'),
+                      end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                   else
                   {
@@ -175,9 +175,9 @@ define(
                     dates.month = 1;
 
                     range = {
-                        start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
-                        end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                      start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
+                      end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                 }
                 else
@@ -187,9 +187,9 @@ define(
                     dates.month++;
 
                     range = {
-                        start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
-                        end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                      start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
+                      end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                 }
               }
@@ -218,20 +218,20 @@ define(
                     dates.day = moment().endOf('year').dayOfYear();
 
                     range =
-                      {
-                        start: +moment().dayOfYear(dates.day).startOf('day'),
-                        end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().dayOfYear(dates.day).startOf('day'),
+                      end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
+                    };
                   }
                   else
                   {
                     dates.day--;
 
                     range =
-                      {
-                        start: +moment().year(dates.year).dayOfYear(dates.day).startOf('day'),
-                        end: +moment().year(dates.year).dayOfYear(dates.day).endOf('day').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().year(dates.year).dayOfYear(dates.day).startOf('day'),
+                      end: +moment().year(dates.year).dayOfYear(dates.day).endOf('day').add(1, 'ms')
+                    };
                   }
                 }
                 else
@@ -241,10 +241,10 @@ define(
                     dates.day--;
 
                     range =
-                      {
-                        start: +moment().dayOfYear(dates.day).startOf('day'),
-                        end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().dayOfYear(dates.day).startOf('day'),
+                      end: +moment().dayOfYear(dates.day).endOf('day').add(1, 'ms')
+                    };
                   }
                 }
               }
@@ -259,20 +259,20 @@ define(
                     dates.week = 52;
 
                     range =
-                      {
-                        start: +moment().week(dates.week).startOf('week'),
-                        end: +moment().week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().week(dates.week).startOf('week'),
+                      end: +moment().week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                   else
                   {
                     dates.week--;
 
                     range =
-                      {
-                        start: +moment().year(dates.year).week(dates.week).startOf('week'),
-                        end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().year(dates.year).week(dates.week).startOf('week'),
+                      end: +moment().year(dates.year).week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                 }
                 else
@@ -282,10 +282,10 @@ define(
                     dates.week--;
 
                     range =
-                      {
-                        start: +moment().week(dates.week).startOf('week'),
-                        end: +moment().week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().week(dates.week).startOf('week'),
+                      end: +moment().week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                   else if (dates.month == 12)
                   {
@@ -294,10 +294,10 @@ define(
                     dates.week--;
 
                     range =
-                      {
-                        start: +moment().week(dates.week).startOf('week'),
-                        end: +moment().week(dates.week).endOf('week').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().week(dates.week).startOf('week'),
+                      end: +moment().week(dates.week).endOf('week').add(1, 'ms')
+                    };
                   }
                 }
               }
@@ -312,20 +312,20 @@ define(
                     dates.month = 12;
 
                     range =
-                      {
-                        start: +moment().month(dates.month - 1).startOf('month'),
-                        end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().month(dates.month - 1).startOf('month'),
+                      end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                   else
                   {
                     dates.month--;
 
                     range =
-                      {
-                        start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
-                        end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().year(dates.year).month(dates.month - 1).startOf('month'),
+                      end: +moment().year(dates.year).month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                 }
                 else
@@ -335,10 +335,10 @@ define(
                     dates.month--;
 
                     range =
-                      {
-                        start: +moment().month(dates.month - 1).startOf('month'),
-                        end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
-                      };
+                    {
+                      start: +moment().month(dates.month - 1).startOf('month'),
+                      end: +moment().month(dates.month - 1).endOf('month').add(1, 'ms')
+                    };
                   }
                 }
               }

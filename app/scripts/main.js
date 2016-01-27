@@ -111,10 +111,10 @@ switch (localConfig.wantedProfile)
 }
 
 require.config({
-    paths: {
-      profile: profile
-    }
-});
+                 paths: {
+                   profile: profile
+                 }
+               });
 
 // TODO: Look for ways to reduce the number of files loaded
 require(

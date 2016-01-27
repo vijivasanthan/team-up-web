@@ -37,10 +37,10 @@ define(
           $scope.timelineBefore = function()
           {
             var scope = TimelineNavigation
-                          .previousScope(
-                            $scope.timeline.scope,
-                            $scope.timeline.current
-                          );
+              .previousScope(
+                $scope.timeline.scope,
+                $scope.timeline.current
+              );
 
             $scope.timeline.current.day   = scope.dates.day;
             $scope.timeline.current.week  = scope.dates.week;
@@ -56,10 +56,10 @@ define(
           $scope.timelineAfter = function()
           {
             var scope = TimelineNavigation
-                          .nextScope(
-                            $scope.timeline.scope,
-                            $scope.timeline.current
-                          );
+              .nextScope(
+                $scope.timeline.scope,
+                $scope.timeline.current
+              );
 
             $scope.timeline.current.day   = scope.dates.day;
             $scope.timeline.current.week  = scope.dates.week;
