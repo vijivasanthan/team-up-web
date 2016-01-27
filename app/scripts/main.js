@@ -201,8 +201,6 @@ require(
     'controllers/task/planboard/planboard',
     'controllers/old/vis',
     'controllers/profile',
-    'controllers/profile/profileUpdate',
-    'controllers/profile/profileRead',
     'controllers/old/teams',
     'controllers/old/tasks',
     'controllers/task/tasks2',
