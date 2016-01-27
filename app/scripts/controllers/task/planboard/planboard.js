@@ -10,6 +10,7 @@ define(
         '$scope',
         '$location',
         '$filter',
+        '$q',
         'Settings',
         'Dater',
         'Store',
@@ -20,12 +21,13 @@ define(
         'CurrentSelection',
         'moment',
         'data',
-        function ($rootScope, $scope, $location, $filter, Settings, Dater, Store,
+        function ($rootScope, $scope, $location, $filter, $q, Settings, Dater, Store,
                   Teams, Clients, TeamUp, Session, CurrentSelection, moment, data)
         {
           var params = $location.search();
           $scope.currentTeam = data.currentTeamId;
           $scope.currentClientGroup = null;
+          $scope.relatedUsers = [];
 
           init();
 
@@ -35,6 +37,91 @@ define(
             setAllTeams();
             setAllClientGroups();
             setCurrentTeam(data.currentTeamId, data.currentTeamMembers);
+          }
+
+          function setRelatedUsers()
+          {
+            var deferred = $q.defer();
+
+            console.error("$scope.section  ->", $scope.section );
+            if ($scope.section === "teams")
+            {
+              //Get affected clients
+              Teams.getRelationClientGroup($scope.currentTeam)
+                   .then(function(relations)
+                         {
+
+                           console.error("relations ->", relations);
+                           if(relations && relations.length >= 1)
+                           {
+                             return Clients.getSingle(relations[0].id);
+                           }
+                           else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
+                         })
+                   .then(function(clients)
+                         {
+
+                           var _clients = [];
+                           console.error("clients ->", clients);
+                           if(clients && clients.length)
+                           {
+                             $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
+
+                             _clients = setNameUsers(clients);
+                           }
+                           else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
+
+                           console.error("_clients ->", _clients);
+
+                           deferred.resolve(_clients);
+                         });
+            }
+            else if ($scope.section === "clients")
+            {
+              //Get affected members
+              Clients.getRelationsTeams($scope.currentClientGroup)
+                     .then(function(relations)
+                           {
+
+                             console.error("relations ->", relations);
+                             if(relations && relations.length >= 1)
+                             {
+                               return Teams.getSingle(relations[0].id);
+                             }
+                             else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedTeam);
+                           })
+                     .then(function(members)
+                           {
+
+                             var _members = [];
+                             console.error("members ->", members);
+                             if(members && members.length)
+                             {
+                               $scope.relatedUserLabel = $rootScope.ui.planboard.members;
+
+                               _members = setNameUsers(members);
+                             }
+                             else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedTeam);
+
+                             console.error("_members ->", _members);
+
+                             deferred.resolve(_members);
+                           });
+
+            }
+
+            return deferred.promise;
+
+            function setNameUsers(users)
+            {
+              return _.map(users, function(user)
+              {
+                return {
+                  uuid: user.uuid,
+                  name: user.firstName + ' ' + user.lastName
+                };
+              })
+            }
           }
 
           // Change a time-slot
@@ -71,12 +158,18 @@ define(
             //                              })
             //}
             //else loadData();
-
             var clientGroupId = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
             $scope.currentClientGroup = clientGroupId || ($scope.list[0]).uuid;
 
-            loadData();
-            setView(hash);
+            setRelatedUsers()
+              .then(function(users)
+                    {
+                      $scope.relatedUsers = users;
+                      console.error("$scope.relatedUsers ->", $scope.relatedUsers);
+
+                      loadData();
+                      setView(hash);
+                    })
           };
 
 	        /**
@@ -498,35 +591,60 @@ define(
 
           // return the related user when select a time slot, etc, return client object
           // when select a time slot from Team view , return member object when select a time slot from client view.
-          $scope.processRelatedUsers = function (selectedSlot)
+          $scope.processRelatedUsers = function ()
           {
-            var relatedUsers = [],
-              memberId = angular.element(selectedSlot.group).attr('memberId');
+            var deferred = $q.defer();
 
             if ($scope.views.teams)
             {
-              $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
+              //Get affected clients
+              Teams.getRelationClientGroup($scope.currentTeam)
+                .then(function(relations)
+                      {
 
-              var member = $rootScope.getTeamMemberById(memberId);
+                        console.error("relations ->", relations);
+                        if(relations && relations.length >= 1)
+                        {
+                          return Clients.getSingle(relations[0].id);
+                        }
+                        else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
+                      })
+                  .then(function(clients)
+                        {
 
-              if (typeof member.teamUuids != 'undefined' && member.teamUuids.length > 0)
-              {
-                relatedUsers = $rootScope.getClientsByTeam(member.teamUuids);
-              }
+                          var _clients = [];
+                          console.error("clients ->", clients);
+                          if(clients && clients.length)
+                          {
+                            $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
+
+                            _clients = setNameUsers(clients);
+                          }
+                          else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
+
+                          console.error("_clients ->", _clients);
+
+                          deferred.resolve(_clients);
+                        });
             }
             else if ($scope.views.clients)
             {
-              $scope.relatedUserLabel = $rootScope.ui.planboard.members;
+              //Get affected members
 
-              var client = $rootScope.getClientByID(memberId);
-
-              if (typeof client.clientGroupUuid != 'undefined' && client.clientGroupUuid != '')
-              {
-                relatedUsers = $rootScope.getMembersByClient(client.clientGroupUuid);
-              }
             }
 
-            return relatedUsers;
+            return deferred.promise;
+
+            function setNameUsers(users)
+            {
+              return _.map(users, function(user)
+              {
+                return {
+                  uuid: user.uuid,
+                  name: user.firstName + ' ' + user.lastName
+                };
+              })
+            }
           };
 
           $scope.resetInlineForms = function ()

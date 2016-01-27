@@ -138,6 +138,7 @@ define(
                 return;
               }
             }
+            console.error("tabName ->", tabName);
 
             switch (tabName)
             {

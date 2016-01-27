@@ -879,6 +879,76 @@ define(
             return moment(d).toDate();
           };
 
+
+          function setSlot(values, now, nowStamp)
+          {
+            if ((new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
+            {
+              if ($scope.timeliner.isAdded() > 1)
+              {
+                $scope.self.timeline.cancelAdd();
+              }
+
+              $scope.$apply(
+                function ()
+                {
+                  if ($scope.timeline.main)
+                  {
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
+
+                    $scope.views.slot.add = true;
+                  }
+                  else
+                  {
+                    $scope.forms = {
+                      add: true,
+                      edit: false
+                    };
+                  }
+
+                  $scope.slot = {
+                    start: {
+                      date: new Date(values.start).toString(config.app.formats.date),
+                      time: new Date(values.start).toString(config.app.formats.time),
+                      datetime: getDateTimeToPicker(new Date(values.start).toISOString())
+                    },
+                    end: {
+                      date: new Date(values.end).toString(config.app.formats.date),
+                      time: new Date(values.end).toString(config.app.formats.time),
+                      datetime: getDateTimeToPicker(new Date(values.end).toISOString())
+                    },
+                    recursive: (values.group.match(/recursive/)) ? true : false,
+                    state: 'com.ask-cs.State.Available'
+                  };
+
+                  if($scope.relatedUsers && $scope.relatedUsers.length)
+                  {
+                    $scope.slot.relatedUser = $scope.relatedUsers[0].uuid
+                  }
+
+                  $scope.original = {
+                    start: new Date(values.start),
+                    end: new Date(values.end),
+                    content: {
+                      recursive: $scope.slot.recursive,
+                      state: $scope.slot.state
+                    }
+                  };
+
+                  $scope.redrawSlot();
+                }
+              );
+            }
+            else
+            {
+              $scope.self.timeline.cancelAdd();
+
+              $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
+
+              $rootScope.$apply();
+            }
+          }
+
           $scope.timelineOnAdd = function (form, slot)
           {
             $rootScope.planboardSync.clear();
@@ -889,75 +959,10 @@ define(
 
             if (!form)
             {
+              //TODO find a better solution, this is way to heavy to load all afected users everytime
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-
-              $scope.relatedUsers = $scope.processRelatedUsers(values);
-
-              if ((new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
-              {
-                if ($scope.timeliner.isAdded() > 1)
-                {
-                  $scope.self.timeline.cancelAdd();
-                }
-
-                $scope.$apply(
-                  function ()
-                  {
-                    if ($scope.timeline.main)
-                    {
-                      $rootScope.$broadcast('resetPlanboardViewsTasks');
-
-                      $scope.views.slot.add = true;
-                    }
-                    else
-                    {
-                      $scope.forms = {
-                        add: true,
-                        edit: false
-                      };
-                    }
-
-                    $scope.slot = {
-                      start: {
-                        date: new Date(values.start).toString(config.app.formats.date),
-                        time: new Date(values.start).toString(config.app.formats.time),
-                        datetime: getDateTimeToPicker(new Date(values.start).toISOString())
-                      },
-                      end: {
-                        date: new Date(values.end).toString(config.app.formats.date),
-                        time: new Date(values.end).toString(config.app.formats.time),
-                        datetime: getDateTimeToPicker(new Date(values.end).toISOString())
-                      },
-                      recursive: (values.group.match(/recursive/)) ? true : false,
-                      state: 'com.ask-cs.State.Available'
-                    };
-
-                    if($scope.relatedUsers && $scope.relatedUsers.length)
-                    {
-                      $scope.slot.relatedUser = $scope.relatedUsers[0].uuid
-                    }
-
-                    $scope.original = {
-                      start: new Date(values.start),
-                      end: new Date(values.end),
-                      content: {
-                        recursive: $scope.slot.recursive,
-                        state: $scope.slot.state
-                      }
-                    };
-
-                    $scope.redrawSlot();
-                  }
-                );
-              }
-              else
-              {
-                $scope.self.timeline.cancelAdd();
-
-                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
-
-                $rootScope.$apply();
-              }
+              console.error("$scope.relatedUsers ->", $scope.relatedUsers);
+              setSlot(values, now, nowStamp);
             }
             else
             {
