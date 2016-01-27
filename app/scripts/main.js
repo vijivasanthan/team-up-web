@@ -111,10 +111,10 @@ switch (localConfig.wantedProfile)
 }
 
 require.config({
-    paths: {
-      profile: profile
-    }
-});
+                 paths: {
+                   profile: profile
+                 }
+               });
 
 // TODO: Look for ways to reduce the number of files loaded
 require(
@@ -165,6 +165,7 @@ require(
     'services/member',
     'services/password',
     'services/taskCRUD',
+    'services/timelineNavigation',
 
     'directives/widgets',
     'directives/date-range-picker',
@@ -200,18 +201,21 @@ require(
     'controllers/task/planboard/planboard',
     'controllers/old/vis',
     'controllers/profile',
+    'controllers/profile/profileUpdate',
+    'controllers/profile/profileRead',
     'controllers/old/teams',
     'controllers/old/tasks',
     'controllers/task/tasks2',
     'controllers/task/saveTask',
     'controllers/task/myTasks',
+    'controllers/task/allTasks',
+    'controllers/task/upload',
     'controllers/task/planboard/timeline',
     'controllers/task/planboard/timeline-navigation',
     'controllers/team-telephone/timeline/agenda-timeline',
     'controllers/team-telephone/timeline/agenda-timeline-navigation',
     'controllers/manage/treegrid',
     'controllers/help',
-    'controllers/task/upload',
     'controllers/old/admin',
     'controllers/team-telephone/logs',
     'controllers/team-telephone/order',
