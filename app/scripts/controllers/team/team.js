@@ -98,10 +98,7 @@ define(
          */
         function _delete(teamId, confirm, callback)
         {
-          if (!confirm)
-          {
-            angular.element('#confirmTeamModal').modal('show');
-          }
+          if (!confirm) angular.element('#confirmTeamModal').modal('show');
           else
           {
             Team.delete(teamId)
@@ -138,8 +135,8 @@ define(
         function addMember(member, teamOption, confirm)
         {
           (!confirm
-          && member.teamUuids &&
-          member.teamUuids.length)
+            && member.teamUuids &&
+            member.teamUuids.length)
             ? angular.element('#confirmMemberAddModal').modal('show')
             : Team.addMember(member, teamOption);
         }
