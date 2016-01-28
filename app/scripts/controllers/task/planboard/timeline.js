@@ -498,10 +498,7 @@ define(
             if (selection = $scope.self.timeline.getSelection()[0])
             {
               var values = $scope.self.timeline.getItem(selection.row);
-
               var content = $scope.getSlotContentJSON(values.content);
-
-              $scope.relatedUsers = $scope.processRelatedUsers(values);
 
               $scope.original = {
                 start: values.start,
@@ -961,7 +958,7 @@ define(
             {
               //TODO find a better solution, this is way to heavy to load all afected users everytime
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
-              console.error("$scope.relatedUsers ->", $scope.relatedUsers);
+
               setSlot(values, now, nowStamp);
             }
             else

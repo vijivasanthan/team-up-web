@@ -39,91 +39,6 @@ define(
             setCurrentTeam(data.currentTeamId, data.currentTeamMembers);
           }
 
-          function setRelatedUsers()
-          {
-            var deferred = $q.defer();
-
-            console.error("$scope.section  ->", $scope.section );
-            if ($scope.section === "teams")
-            {
-              //Get affected clients
-              Teams.getRelationClientGroup($scope.currentTeam)
-                   .then(function(relations)
-                         {
-
-                           console.error("relations ->", relations);
-                           if(relations && relations.length >= 1)
-                           {
-                             return Clients.getSingle(relations[0].id);
-                           }
-                           else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
-                         })
-                   .then(function(clients)
-                         {
-
-                           var _clients = [];
-                           console.error("clients ->", clients);
-                           if(clients && clients.length)
-                           {
-                             $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
-
-                             _clients = setNameUsers(clients);
-                           }
-                           else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
-
-                           console.error("_clients ->", _clients);
-
-                           deferred.resolve(_clients);
-                         });
-            }
-            else if ($scope.section === "clients")
-            {
-              //Get affected members
-              Clients.getRelationsTeams($scope.currentClientGroup)
-                     .then(function(relations)
-                           {
-
-                             console.error("relations ->", relations);
-                             if(relations && relations.length >= 1)
-                             {
-                               return Teams.getSingle(relations[0].id);
-                             }
-                             else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedTeam);
-                           })
-                     .then(function(members)
-                           {
-
-                             var _members = [];
-                             console.error("members ->", members);
-                             if(members && members.length)
-                             {
-                               $scope.relatedUserLabel = $rootScope.ui.planboard.members;
-
-                               _members = setNameUsers(members);
-                             }
-                             else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedTeam);
-
-                             console.error("_members ->", _members);
-
-                             deferred.resolve(_members);
-                           });
-
-            }
-
-            return deferred.promise;
-
-            function setNameUsers(users)
-            {
-              return _.map(users, function(user)
-              {
-                return {
-                  uuid: user.uuid,
-                  name: user.firstName + ' ' + user.lastName
-                };
-              })
-            }
-          }
-
           // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
@@ -158,18 +73,11 @@ define(
             //                              })
             //}
             //else loadData();
-            var clientGroupId = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
-            $scope.currentClientGroup = clientGroupId || ($scope.list[0]).uuid;
+            var clientGroup = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
+            $scope.currentClientGroup = clientGroup && clientGroup.id || ($scope.list[0]).uuid;
 
-            setRelatedUsers()
-              .then(function(users)
-                    {
-                      $scope.relatedUsers = users;
-                      console.error("$scope.relatedUsers ->", $scope.relatedUsers);
-
-                      loadData();
-                      setView(hash);
-                    })
+            loadData();
+            setView(hash);
           };
 
 	        /**
@@ -279,8 +187,38 @@ define(
             $scope.load = true;
             $scope.data.section = $scope.section;
 
-            if ($scope.section == 'teams') loadMembers(startTime, endTime, prepareTasks);
-            else if ($scope.section == 'clients') loadClients(startTime, endTime, prepareTasks);
+            if ($scope.section == 'teams')
+            {
+              loadMembers(startTime, endTime, prepareTasks);
+
+              resolveRelationsGroups(
+                Teams.getRelationClientGroup($scope.currentTeam),
+                Clients.getSingle,
+                $rootScope.ui.teamup.clients,
+                $rootScope.ui.planboard.noAffectedClientGroup
+              );
+            }
+            else if ($scope.section == 'clients')
+            {
+              loadClients(startTime, endTime, prepareTasks);
+
+              resolveRelationsGroups(
+                Clients.getRelationsTeams($scope.currentClientGroup),
+                Teams.getSingle,
+                $rootScope.ui.planboard.members,
+                $rootScope.ui.planboard.noAffectedTeam
+              );
+            }
+
+
+            //setRelatedUsers()
+            //  .then(function(users)
+            //        {
+            //          $scope.relatedUsers = users;
+            //          console.error("$scope.relatedUsers ->", $scope.relatedUsers);
+            //
+            //
+            //        })
 
 	          /**
              * Prepare tasks
@@ -589,64 +527,6 @@ define(
           $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
           Dater.readable.date($scope.timeline.range.end);
 
-          // return the related user when select a time slot, etc, return client object
-          // when select a time slot from Team view , return member object when select a time slot from client view.
-          $scope.processRelatedUsers = function ()
-          {
-            var deferred = $q.defer();
-
-            if ($scope.views.teams)
-            {
-              //Get affected clients
-              Teams.getRelationClientGroup($scope.currentTeam)
-                .then(function(relations)
-                      {
-
-                        console.error("relations ->", relations);
-                        if(relations && relations.length >= 1)
-                        {
-                          return Clients.getSingle(relations[0].id);
-                        }
-                        else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
-                      })
-                  .then(function(clients)
-                        {
-
-                          var _clients = [];
-                          console.error("clients ->", clients);
-                          if(clients && clients.length)
-                          {
-                            $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
-
-                            _clients = setNameUsers(clients);
-                          }
-                          else $rootScope.notifier.error($rootScope.ui.planboard.noAffectedClientGroup);
-
-                          console.error("_clients ->", _clients);
-
-                          deferred.resolve(_clients);
-                        });
-            }
-            else if ($scope.views.clients)
-            {
-              //Get affected members
-
-            }
-
-            return deferred.promise;
-
-            function setNameUsers(users)
-            {
-              return _.map(users, function(user)
-              {
-                return {
-                  uuid: user.uuid,
-                  name: user.firstName + ' ' + user.lastName
-                };
-              })
-            }
-          };
-
           $scope.resetInlineForms = function ()
           {
             $scope.slot = {};
@@ -660,6 +540,53 @@ define(
             $scope.resetInlineForms();
             $rootScope.$broadcast('resetTaskTimeline');
           };
+
+	        /**
+           * Resolve group relation and load the first affected team or clientgroup
+           * @param groupRelationPromise resource to get the affected team or clientgroup
+           * @param fetchGroupPromise resource to get fetch the members or clients from the affected team or clientgroup
+           * @param labelForm The label shown in the form
+           * @param errorMessage message to inform the user, if there is no affected group, members or clients
+           * @returns {deferred.promise|{then, always}} the affected group users
+	         */
+          function resolveRelationsGroups(groupRelationPromise,
+                                          fetchGroupPromise,
+                                          labelForm,
+                                          errorMessage)
+          {
+            var setNameUsers = function(users)
+            {
+              return _.map(users, function(user)
+              {
+                return {
+                  uuid: user.uuid,
+                  name: user.firstName + ' ' + user.lastName
+                };
+              })
+            };
+
+            return groupRelationPromise
+                 .then(function(relations)
+                       {
+                         return (relations && relations.length >= 1)
+                           ? fetchGroupPromise(relations[0].id)
+                           : $rootScope.notifier.error(errorMessage);
+                       })
+                 .then(function(users)
+                       {
+                         var _users = [];
+
+                         if(users && users.length)
+                         {
+                           $scope.relatedUserLabel = labelForm;
+                           _users = setNameUsers(users);
+                         }
+                         else $rootScope.notifier.error(errorMessage);
+
+                         $scope.relatedUsers = _users;
+                         return _users;
+                       });
+          }
 
           /**
            * Create the members spots for sticking them to the timeline
