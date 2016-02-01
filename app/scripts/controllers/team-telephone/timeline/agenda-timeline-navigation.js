@@ -16,17 +16,13 @@ define(
            */
           $scope.timelineScoper = function(period)
           {
-            $scope.timeline.current.day   = $scope.current.day;
-            $scope.timeline.current.week  = $scope.current.week;
-            $scope.timeline.current.month = $scope.current.month;
-            $scope.timeline.current.year  = moment().year();
-
             var scope = TimelineNavigation
               .setScope(
                 period,
                 $scope.timeline.current
               );
 
+            setCurrentDates(scope.dates);
             $scope.timeline.scope = scope.periods;
             $scope.timeliner.load(scope.range);
           };
@@ -42,11 +38,7 @@ define(
                 $scope.timeline.current
               );
 
-            $scope.timeline.current.day   = scope.dates.day;
-            $scope.timeline.current.week  = scope.dates.week;
-            $scope.timeline.current.month = scope.dates.month;
-            $scope.timeline.current.year  = scope.dates.year;
-
+            setCurrentDates(scope.dates);
             $scope.timeliner.load(scope.range);
           };
 
@@ -61,10 +53,7 @@ define(
                 $scope.timeline.current
               );
 
-            $scope.timeline.current.day   = scope.dates.day;
-            $scope.timeline.current.week  = scope.dates.week;
-            $scope.timeline.current.month = scope.dates.month;
-            $scope.timeline.current.year  = scope.dates.year;
+            setCurrentDates(scope.dates);
             $scope.timeline.scope         = scope.periods;
 
             $scope.timeliner.load(scope.range);
@@ -97,6 +86,18 @@ define(
           $scope.fullWidth = function()
           {
             $scope.self.timeline.redraw();
+          };
+
+	        /**
+           * Update timeline dates with the current day, week, month and year
+           * @param currentDates
+           */
+          function setCurrentDates(currentDates)
+          {
+            $scope.timeline.current.day   = currentDates.day;
+            $scope.timeline.current.week  = currentDates.week;
+            $scope.timeline.current.month = currentDates.month;
+            $scope.timeline.current.year  = currentDates.year;
           }
         }
       ]

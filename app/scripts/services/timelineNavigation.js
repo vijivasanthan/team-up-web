@@ -42,36 +42,44 @@ define(
                 dates.year,
                 "DDD-MM-YYYY")
                 .valueOf();
+              var rangedMomentObj = moment(rangedDate);
 
               //switch periods and set the right daterange
               switch(period)
               {
                 case 'day':
                   range = {
-                    start: + moment(rangedDate).startOf('day'),
-                    end: + moment(rangedDate).endOf('day').add(1, 'ms')
+                    start: +rangedMomentObj.startOf('day'),
+                    end: +rangedMomentObj.endOf('day').add(1, 'ms')
                   };
                   break;
 
                 case 'week':
                   range = {
-                    start: + moment(rangedDate).startOf('week'),
-                    end: + moment(rangedDate).endOf('week').add(1, 'ms')
+                    start: +rangedMomentObj.startOf('week'),
+                    end: +rangedMomentObj.endOf('week').add(1, 'ms')
                   };
                   break;
 
                 case 'month':
                   range = {
-                    start: + moment(rangedDate).startOf('month'),
-                    end: + moment(rangedDate).endOf('month').add(1, 'ms')
+                    start: +rangedMomentObj.startOf('month'),
+                    end: +rangedMomentObj.endOf('month').add(1, 'ms')
                   };
                   break;
               }
 
               periods[period] = true;
+
+              dates.day = moment(range.start).format("DDD");
+              dates.week = moment(range.start).week();
+              dates.month = (moment(range.start).month() + 1);
+              dates.year = moment(range.start).year();
+
               return {
                 periods: periods,
-                range: range
+                range: range,
+                dates: dates
               }
             }
 
@@ -83,7 +91,6 @@ define(
              */
             function nextScope(periods, dates)
             {
-              console.error("next ->");
               var thisYear = moment().year(),
                   range = null;
 
@@ -102,7 +109,7 @@ define(
                   }
                   else
                   {
-                    dates.year = thisYear + 1;
+                    dates.year++;
                     dates.day = 1;
                     range = {
                       start: +moment().year(dates.year).dayOfYear(dates.day).startOf('day'),
@@ -194,6 +201,11 @@ define(
                 }
               }
 
+              dates.day = moment(range.start).format("DDD");
+              dates.week = moment(range.start).week();
+              dates.month = (moment(range.start).month() + 1);
+              dates.year = moment(range.start).year();
+
               return {
                 dates: dates,
                 periods: periods,
@@ -203,7 +215,6 @@ define(
 
             function previousScope(periods, dates)
             {
-              console.error("previous ->");
               var thisYear = moment().year(),
                   range = null;
 
@@ -342,6 +353,11 @@ define(
                   }
                 }
               }
+
+              dates.day = moment(range.start).format("DDD");
+              dates.week = moment(range.start).week();
+              dates.month = (moment(range.start).month() + 1);
+              dates.year = moment(range.start).year();
 
               return {
                 dates: dates,
