@@ -7,8 +7,9 @@ define(['services/services', 'config'],
       'Sloter',
       [
         '$rootScope',
+        '$filter',
         'Store',
-        function ($rootScope, Store)
+        function ($rootScope, $filter, Store)
         {
           return {
             get: {
@@ -433,11 +434,11 @@ define(['services/services', 'config'],
               var _this = this;
 
               var groups = this.get.groups(),
-                name = groups[data.aggs[0].id],
-                link = '<a style="text-transform: capitalize" href="#/team?uuid=' +
+                name = $filter('toTitleCase')(groups[data.aggs[0].id]),
+                link = '<a href="#/team?uuid=' +
                   data.aggs[0].id +
                   '#view">' +
-                  name +
+                  name[0].toUpperCase() + name.slice(1) +
                   '</a>',
                 title;
 
