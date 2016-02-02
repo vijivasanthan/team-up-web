@@ -687,9 +687,7 @@ define(
           {
             var teams = Store('app').get('teams'),
                 currentTeam = _.findWhere(teams, {uuid: id});
-            return currentTeam &&
-              currentTeam.name &&
-              (currentTeam.name[0].toUpperCase() + currentTeam.name.slice(1));//set the first letter uppercase
+            return currentTeam && currentTeam.name
           }
         }
       ])
@@ -720,8 +718,6 @@ define(
                 names += groups[i].name;
               }
             }
-
-            // if (names[0] == ',' && names[1] == '')
             return names;
           }
         }
