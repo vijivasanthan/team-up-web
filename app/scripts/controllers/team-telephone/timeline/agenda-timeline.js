@@ -411,7 +411,6 @@ define(
               if ($scope.self.timeline)
               {
                 range = $scope.self.timeline.getVisibleChartRange();
-                console.error("range ->", range);
 
                 $scope.timeline.range = {
                   start: new Date(range.start).toString(),
@@ -1114,10 +1113,17 @@ define(
                     state: 'com.ask-cs.State.Available'
                   };
 
-                  console.error('$scope.slot.date', $scope.slot.start);
-
-                  $scope.setEndDate($scope.slot.start.date);
-                  $scope.setEndTime($scope.slot.start.time);
+                  //By double clicking in the timeline the slot time will be 6 hours by default,
+                  //this do not make any difference on the size of created slot, so the size of the slot(div)
+                  // on the timeline is not the same as the current selected time
+                  var currentEventParams = $scope.self.timeline.eventParams;
+                  if(currentEventParams &&
+                    currentEventParams.hasOwnProperty('moved') &&
+                    $scope.self.timeline.eventParams.moved === false)
+                  {
+                    $scope.setEndDate($scope.slot.start.date);
+                    $scope.setEndTime($scope.slot.start.time);
+                  }
                   $scope.showDuration();
 
                   $scope.original = {
