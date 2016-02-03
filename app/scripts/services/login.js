@@ -235,7 +235,7 @@ define(['services/services', 'config'],
 
               Permission.getAccess(function (permissionProfile)
               {
-                if(permissionProfile.chat) $rootScope.$broadcast('loadChatsCurrentTeam');
+                if(permissionProfile.chat && ! $rootScope.browser.mobile) $rootScope.$broadcast('loadChatsCurrentTeam');
               });
 
               setTimeout(
@@ -244,10 +244,7 @@ define(['services/services', 'config'],
                   angular.element('.navbar').show();
                   angular.element('body').addClass('background');
 
-                  if (!$rootScope.browser.mobile)
-                  {
-                    angular.element('#footer').show();
-                  }
+                  if (!$rootScope.browser.mobile) angular.element('#footer').show();
                 }, 100);
             });
 
