@@ -43,7 +43,7 @@ define(
             this.mine = mine;
             this.range = range;
             this.team = team;
-            this.get = get;
+            this.get = _get;
 
             /**
              * Create a task
@@ -145,7 +145,7 @@ define(
              * @param taskId The id of the task
              * @returns {*}
              */
-            function get(taskId)
+            function _get(taskId)
             {
               return Task.get({
                 id: taskId
