@@ -188,7 +188,7 @@ define(
               //  );
               data.clients = clients;
 
-              connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
+              connections.teamClients = data.teamsClientGroupRelations;//Teams.queryLocalClientGroup(teamsLocal);
 
               $scope.connections = connections;
 

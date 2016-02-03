@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'uploadCtrl', [
+      'upload', [
         '$rootScope',
         '$scope',
         '$q',

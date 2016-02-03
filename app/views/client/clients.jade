@@ -230,6 +230,7 @@ aria-hidden='true')
 								ng-model='clientForm.birthDate', 
 								data-date-type='string',
 								data-date-format='d-M-yyyy',
+								data-max-date="today"
 								bs-datepicker='')
 								i.icon-calendar
 								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
@@ -337,12 +338,10 @@ aria-hidden='true')
 						value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
 	
 					| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
-					select(ng-init='currentMonth=0',
-					ng-model='currentMonth',
-					ng-selected='currentMonth',
-					ng-change='requestReportsByFilter()')
-						option(ng-repeat='month in Months|orderBy:number',
-						value='{{month.number}}') {{month.name}}
+					select(ng-model='currentMonth',
+						ng-change='requestReportsByFilter()',
+						ng-options='month.number as month.name for month in Months')
+						option(value="" selected="selected" label="{{ ui.teamup.selectMonth }}") {{ ui.teamup.selectMonth }}
 				button.btn.pull-right.btn-info.marginLeftTen(type='button', 
 					data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
 			hr

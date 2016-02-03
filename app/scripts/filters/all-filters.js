@@ -687,7 +687,7 @@ define(
           {
             var teams = Store('app').get('teams'),
                 currentTeam = _.findWhere(teams, {uuid: id});
-            return currentTeam && currentTeam.name;
+            return currentTeam && currentTeam.name
           }
         }
       ])
@@ -718,8 +718,6 @@ define(
                 names += groups[i].name;
               }
             }
-
-            // if (names[0] == ',' && names[1] == '')
             return names;
           }
         }

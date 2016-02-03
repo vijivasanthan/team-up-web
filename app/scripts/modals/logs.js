@@ -16,6 +16,7 @@ define(['services/services', 'config'],
         function ($resource, $q, $filter, $injector, moment, Settings)
         {
           // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
+          //typeId 5390d362e4b02c61014547e3 = purchase phonenumber
           var Logs = function() {};
 
           Logs.prototype.get = function ()
@@ -26,7 +27,9 @@ define(['services/services', 'config'],
               {
                 get: {
                   method: 'GET',
-                  params: {},
+                  params: {
+                    typeId: '5390d362e4b02c61014547e4,5390d362e4b02c61014547e5'
+                  },
                   isArray: true
                 }
               }
@@ -216,16 +219,19 @@ define(['services/services', 'config'],
                 log.status = log.childs[logIndexLength].status;
                 //The final number of the callsequence
                 log.to = log.childs[logIndexLength].to;
+
                 //get all the duration timestamps of the child calls
-                var totalDuration = _.map(log.childs, function (child) {
-                  return child.duration.stamp;
-                });
-                //count the total duration of the childcalls
-                totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
-                  return previousValue + currentValue;
-                });
-                //set the parsed to timestring duration
-                log.duration = howLong(totalDuration);
+                //var totalDuration = _.map(log.childs, function (child) {
+                //  return child.duration.stamp;
+                //});
+                ////count the total duration of the childcalls
+                //totalDuration = _.reduce(totalDuration, function (previousValue, currentValue) {
+                //  return previousValue + currentValue;
+                //});
+
+                //The duration of the call is the total length of how long the caller has been calling to teamtelefoon.
+                //The first child log is always the one to the teamtelefoon
+                log.duration = howLong(log.childs[0].duration.stamp);//set the parsed to timestring duration
               }
             });
 
@@ -258,11 +264,6 @@ define(['services/services', 'config'],
                 stamp: 0
               }
             }
-          }
-
-          function getNamesAndPhoneNumbers()
-          {
-
           }
 
           Logs.prototype.fetch = function (options)

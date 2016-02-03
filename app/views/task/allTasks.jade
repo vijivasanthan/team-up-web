@@ -1,0 +1,162 @@
+#confirmTaskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='confirmTaskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#confirmTaskModalLabel.modal-title {{ui.teamup.confirms.deleteTaskTitle}}
+			.modal-body
+				| {{ui.teamup.confirms.deleteTask}}
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal')
+					| {{ui.teamup.confirms.cancel}}
+				button.btn.btn-primary(type='button', ng-click='alltasks.deleteTask(alltasks.taskToRemove, true)')
+					| {{ui.teamup.confirms.remove}}
+#taskModal.modal.fade(tabindex='-1', role='dialog',
+aria-labelledby='taskModalLabel', aria-hidden='true')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+					span.sr-only {{ ui.message.close }}
+				h4#taskModalLabel.modal-title
+					span.text-turq {{alltasks.currentTask.relatedClient.fullName}}
+					br
+					| {{alltasks.currentTask.plannedTaskDuration.label}}
+			.modal-body
+				//pre: small {{task | json}}
+				//h4.pull-right Taakinformatie
+				dl
+					dt {{ ui.task.status }}
+						dd {{alltasks.currentTask.statusLabel}}
+					dt {{ ui.task.timeframe }}
+						dd {{alltasks.currentTask.plannedTaskDuration.label}}
+					dt(ng-show='alltasks.currentTask.description') {{ ui.task.description }}
+						dd(class="description") {{alltasks.currentTask.description}}
+					dt {{ ui.task.createdBy }}
+						dd
+							a(href='index.html#/profile/{{alltasks.currentTask.authorUuid}}#profile')
+								| {{alltasks.currentTask.author}}
+				hr
+				//h4.pull-right Cliëntinformatie
+				dl
+					dt {{ ui.teamup.client }}
+						dd
+							a(href='index.html#/clientProfile/{{alltasks.currentTask.relatedClientUuid}}#viewClient')
+								| {{alltasks.currentTask.relatedClient.fullName}}
+					dt {{ ui.teamup.clientGroup }}
+						dd
+							a(href='index.html#/client?uuid={{alltasks.currentTask.relatedClient.clientGroupUuid}}#client')
+								| {{alltasks.currentTask.relatedClient.clientGroupName}}
+					dt {{ ui.groups.address }}
+						dd {{alltasks.currentTask.relatedClient.fullAddress}}
+					dt {{ ui.teamup.phone }}
+						dd {{alltasks.currentTask.relatedClient.phone}}
+				hr
+				dl
+					dt(ng-show='alltasks.currentTask.assignedTeamMember') {{ ui.teamup.name }}
+						dd
+							a(href='index.html#/profile/{{alltasks.currentTask.assignedTeamMemberUuid}}#profile')
+								| {{alltasks.currentTask.assignedTeamMember.fullName}}
+					dt Team
+						dd
+							a(href='index.html#/team?uuid={{alltasks.currentTask.assignedTeamUuid}}#team')
+								| {{alltasks.currentTask.assignedTeamFullName}}
+.page-header
+	h2.nullable
+		| {{ui.task.tasks}}
+	.selectGroup
+		span.selectTitle
+			| {{ ui.teamup.selectTeam }}
+		select(ng-model='alltasks.selectedTeam',
+		ng-options='t.uuid as t.name for t in alltasks.teams | orderBy:"name" ',
+		ng-selected='alltasks.selectedTeam',
+		ng-change='alltasks.getTasksForTeam(alltasks.selectedTeam)')
+.tabbable.tabs-left
+	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
+		include ../task/tabs
+	.tab-content.tab-medium-size
+		#allTasks.tab-pane(class="active")
+			.tab-header
+				h3.pull-left {{ui.task.allTasks}}
+			hr
+			article(ng-show='alltasks.tasks.loading'): p {{ ui.task.tasks }} {{ ui.task.hasToLoad }}
+			article(ng-hide='alltasks.tasks.loading')
+				.well(style='padding-top: 25px')
+					label(style='margin-right: 15px; display: none')
+						input(type='checkbox', ng-model='showOnlyAvailable')
+						small &nbsp;{{ ui.task.showOnlyNotAssignedTasks }}
+					label
+						input(type='checkbox',
+						ng-model='alltasks.isStatusFinished' ng-change='alltasks.toggleStatusFinished()')
+						small &nbsp; {{ ui.task.showArchivedTasks }}
+				p(ng-hide='alltasks.tasks.list.length > 0') {{ui.task.noTasks}}
+				//table.table.table-striped.taskTable(ng-show='tasks.all.list.length > 0')
+				table.table.table-striped.taskTable(ng-show='(alltasks.tasks.list | filter: task.team ).length > 0')
+					thead
+						tr
+							th
+								a(ng-click='alltasks.orderBy("status")') {{ ui.task.status }}
+									i.icon-sort
+							th
+							th
+								a(ng-click='alltasks.orderBy("relatedClient.fullName")') {{ui.task.clientName}}
+									i.icon-sort
+							th {{ui.task.information}}
+							th(colspan='2')
+							th
+								a(ng-click='alltasks.orderBy("assignedTeamMember.fullName")') {{ ui.task.member }}
+									i.icon-sort
+							th(colspan='1')
+					tbody
+						// tr(ng-repeat='task in tasks.all.list | filter: filterFn | orderBy:ordered : reversed')
+						// tr(ng-repeat='task in tasks.all.list | filter: {assignedTeamMemberUuid: null} | orderBy:ordered : reversed')
+						tr(ng-repeat='task in alltasks.tasks.list | orderBy : alltasks.ordered : alltasks.reversed | filter: task.team')
+							td: span.label(class='label-task-state-{{task.status}}') {{task.statusLabel}}
+							td
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.relatedClientUuid |  avatar:"client":"80"}}'
+								)
+							td
+								small
+									a(href='index.html#/clientProfile/{{task.relatedClientUuid}}#viewClient')
+										| {{task.relatedClient.fullName}}
+							td
+								span.taskIcon.icon-location4(ng-show='task.relatedClient.fullAddress' aria-hidden='true', data-icon='')
+								small {{task.relatedClient.fullAddress}}
+								br
+								span.taskIcon.icon-time(aria-hidden='true')
+								small {{task.plannedTaskDuration.label}}
+							td
+								a.taskAssignIcon(href='')
+									span.icomoon.icon-link(link-icon-hovered='',
+									aria-hidden='true',
+									ng-show='task.assignedTeamMember',
+									ng-click='alltasks.unAssignTask(task, true)')
+							td
+								.roundedPicSmall.memberStateBusy(
+								back-img='{{task.assignedTeamMemberUuid | avatar:"team":"80"}}',
+								ng-show='task.assignedTeamMember'
+								)
+							td
+								a(href='index.html#/profile/{{task.assignedTeamMemberUuid}}#profile')
+									| {{task.assignedTeamMember.fullName}}
+							td
+								.pull-right
+									button.btn-primary.btn-mini(type='button',
+									ng-hide='task.assignedTeamMember',
+									ng-click='alltasks.assignTask(task, true)')
+										i.icon-plus
+									button.btn-primary.btn-mini(type='button', ng-click='alltasks.viewTaskData(task)')
+										i.icon-info(style='margin-top:1px')
+									a.button-anchor(href='index.html#/task/{{task.uuid}}/edit')
+										button.btn-primary.btn-mini(type='button')
+											i.icon-edit
+									button.btn-primary.btn-mini(type='button', ng-click='alltasks.confirmDeleteTask(task)')
+										i.icon-trash
+				span.muted.pull-right
+					//small: i Er zijn {{tasks.all.list.length}} taken.
+					small: i {{ ui.task.thereAreAmountTasks(alltasks.tasks.list && (alltasks.tasks.list | filter: task.team ).length || 0 ) }} 

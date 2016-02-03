@@ -1,48 +1,49 @@
 define(
   ['services/services', 'config'],
-  function (services, config)
+  function(services, config)
   {
     'use strict';
 
     services.factory(
       'Task',
-        function ($rootScope, $resource, $q, Settings)
-        {
-          var Task = $resource(
-            Settings.getBackEnd() + config.app.namespace + 'tasks/:id/:teamId', {},
-            {
-              create: { method: 'POST', params: {} },
-              read: {
-                method: 'GET',
-                params: {},
-                transformResponse: function(data)
-                {
-                  data = angular.fromJson(data);
-                  //TODO remove this if it's fixed in the backend
-                  //check if is no tasks is responded in a object
-                  return (data &&
-                  data.result &&
-                  data.result === "No tasks")
-                    ? []//create empty array as response
-                    : data;
-                },
-                isArray: true
-              },
-              update: { method: 'PUT', params: {} },
-              delete: { method: 'DELETE', params: {} }
-            });
-
-          (function()
+      function($rootScope, $resource, $q, Settings)
+      {
+        var Task = $resource(
+          Settings.getBackEnd() + config.app.namespace + 'tasks/:id/:teamId', {},
           {
-            this.create = create;
-            this.read = read;
-            this.update = update;
-            this.delete = _delete;
+            create: {method: 'POST', params: {}},
+            read: {
+              method: 'GET',
+              params: {},
+              transformResponse: function(data)
+              {
+                data = angular.fromJson(data);
+                console.error("data ->", data);
+                //TODO remove this if it's fixed in the backend
+                //check if is no tasks is responded in a object
+                return (data &&
+                        data.result &&
+                        data.result === "No tasks")
+                  ? []//create empty array as response
+                  : data;
+              },
+              isArray: true
+            },
+            update: {method: 'PUT', params: {}},
+            delete: {method: 'DELETE', params: {}}
+          });
+
+        (function()
+        {
+          this.create = create;
+          this.read   = read;
+          this.update = update;
+          this.delete = _delete;
 
             this.mine = mine;
             this.range = range;
             this.team = team;
-            this.get = get;
+            this.get = _get;
 
             /**
              * Create a task
@@ -144,7 +145,7 @@ define(
              * @param taskId The id of the task
              * @returns {*}
              */
-            function get(taskId)
+            function _get(taskId)
             {
               return Task.get({
                 id: taskId

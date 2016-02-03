@@ -338,6 +338,7 @@ define(
         };
 
         /**
+         * TODO check for cleaningggg!!!
          * Watch for changes in timeline range
          */
         $scope.$watch(
@@ -418,43 +419,43 @@ define(
               }
             }
 
-            if ($scope.timeline)
-            {
-              var max = new Date(Number(Dater.current.year()) + 1, 11).moveToLastDayOfMonth().addDays(1),
-                  diff = max - new Date(range.end);
-
-              if (diff <= 0)
-              {
-                $('#timelineAfterBtn').attr('disabled', 'disabled');
-              }
-              else if (
-                $scope.timeline.current.year == Dater.current.year()
-                &&
-                (($scope.timeline.scope.month && $scope.timeline.current.month === 1) ||
-                (($scope.timeline.scope.week && $scope.timeline.current.week === 1 && $scope.timeline.current.month != 12)) ||
-                ($scope.timeline.scope.day && $scope.timeline.current.day === 1))
-              )
-              {
-                $('#timelineBeforeBtn').attr('disabled', 'disabled');
-              }
-              else
-              {
-                var timelineBeforeBtn = $('#timelineBeforeBtn'),
-                    timelineAfterBtn = $('#timelineAfterBtn'),
-                    timelineBeforeBtnAttr = timelineBeforeBtn.attr('disabled'),
-                    timelineAfterBtnAttr = timelineAfterBtn.attr('disabled');
-
-                if (typeof timelineBeforeBtnAttr !== 'undefined' && timelineBeforeBtnAttr !== false)
-                {
-                  timelineBeforeBtn.removeAttr('disabled');
-                }
-
-                if (typeof timelineAfterBtnAttr !== 'undefined' && timelineAfterBtnAttr !== false)
-                {
-                  timelineAfterBtn.removeAttr('disabled');
-                }
-              }
-            }
+            //if ($scope.timeline)
+            //{
+            //  var max = new Date(Number(Dater.current.year()) + 1, 11).moveToLastDayOfMonth().addDays(1),
+            //      diff = max - new Date(range.end);
+            //
+            //  if (diff <= 0)
+            //  {
+            //    $('#timelineAfterBtn').attr('disabled', 'disabled');
+            //  }
+            //  else if (
+            //    $scope.timeline.current.year == Dater.current.year()
+            //    &&
+            //    (($scope.timeline.scope.month && $scope.timeline.current.month === 1) ||
+            //    (($scope.timeline.scope.week && $scope.timeline.current.week === 1 && $scope.timeline.current.month != 12)) ||
+            //    ($scope.timeline.scope.day && $scope.timeline.current.day === 1))
+            //  )
+            //  {
+            //    $('#timelineBeforeBtn').attr('disabled', 'disabled');
+            //  }
+            //  else
+            //  {
+            //    var timelineBeforeBtn = $('#timelineBeforeBtn'),
+            //        timelineAfterBtn = $('#timelineAfterBtn'),
+            //        timelineBeforeBtnAttr = timelineBeforeBtn.attr('disabled'),
+            //        timelineAfterBtnAttr = timelineAfterBtn.attr('disabled');
+            //
+            //    if (typeof timelineBeforeBtnAttr !== 'undefined' && timelineBeforeBtnAttr !== false)
+            //    {
+            //      timelineBeforeBtn.removeAttr('disabled');
+            //    }
+            //
+            //    if (typeof timelineAfterBtnAttr !== 'undefined' && timelineAfterBtnAttr !== false)
+            //    {
+            //      timelineAfterBtn.removeAttr('disabled');
+            //    }
+            //  }
+            //}
           });
 
 
@@ -1112,10 +1113,17 @@ define(
                     state: 'com.ask-cs.State.Available'
                   };
 
-                  console.error('$scope.slot.date', $scope.slot.start);
-
-                  $scope.setEndDate($scope.slot.start.date);
-                  $scope.setEndTime($scope.slot.start.time);
+                  //By double clicking in the timeline the slot time will be 6 hours by default,
+                  //this do not make any difference on the size of created slot, so the size of the slot(div)
+                  // on the timeline is not the same as the current selected time
+                  var currentEventParams = $scope.self.timeline.eventParams;
+                  if(currentEventParams &&
+                    currentEventParams.hasOwnProperty('moved') &&
+                    $scope.self.timeline.eventParams.moved === false)
+                  {
+                    $scope.setEndDate($scope.slot.start.date);
+                    $scope.setEndTime($scope.slot.start.time);
+                  }
                   $scope.showDuration();
 
                   $scope.original = {

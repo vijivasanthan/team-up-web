@@ -218,6 +218,8 @@ define(
           week: 'Week',
           month: 'Month',
           updateAvail: 'Update availability',
+          noAffectedTeam: 'This clientgroup has no affected team or members',
+          noAffectedClientGroup: 'This tean has no affected clientgroup or clients',
           from: 'From',
           till: 'Till',
           state: 'State',
@@ -588,9 +590,14 @@ define(
           'existing': 'Existing',
           teams: 'Teams',
           selectTeam: 'Select a team',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           seconds: 'seconds',
           hour: 'hour',
           clients: 'Clients',
+          title404: 'Oops',
+          header404: "Sorry, The page could not found",
+          content404: 'It looks like the page does not exist (anymore) or is moved',
           order: 'Order',
           logs: 'Logs',
           options: 'Options',
@@ -659,6 +666,7 @@ define(
           report: 'Report',
           noClients: 'No clients in this group',
           noClientGroup: 'No client group',
+          noClientGroupFound: 'No client group found for this team',
           TeamClients: 'TEAMS - CLIENTS',
           createClientGroup: 'Save',
           contacts: 'Contacts',
@@ -958,7 +966,7 @@ define(
           },
           carer: 'Carer',
           information: 'Information',
-          noTasks: 'No tasks',
+          noTasks: 'No active or planned tasks',
           clientName: 'Client',
           memberName: 'Member',
           orderType1: 'Standard order',
@@ -978,6 +986,7 @@ define(
           creatingTask: 'Creating task',
           editingTask: 'Editing task',
           taskSaved: 'Task is saved.',
+          noArchivedTask: 'No finished tasks found.',
           deleteTaskConfirm: 'Are you sure you want to delete this task?',
           taskDeleted: 'Task deleted.',
           planningTime: 'Time needed',
@@ -1038,7 +1047,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Fill in a valid phone number!',
@@ -1163,6 +1173,8 @@ define(
           currentAmountReachable: 'aktuell verfügbar (ist)',
           amountOfPeopleWished: 'gewünscht (soll)',
           newAvail: 'neue Verfügbarkeit',
+          noAffectedTeam: 'This clientgroup has no affected team or members',
+          noAffectedClientGroup: 'This tean has no affected clientgroup or clients',
           query: 'Synchronisierung des Terminkalenders fehlgeschlagen. Bitte den Browser aktualisieren (F5).',
           day: 'Tag',
           week: 'Woche',
@@ -1708,12 +1720,17 @@ define(
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           help: "Hilfe",
           new: 'neu',
           existing: 'vorhanden',
           teams: 'Gruppen',
           selectTeam: 'Gruppe auswählen',
           clients: 'Patienten',
+          title404: 'Oops',
+          header404: "Sorry, The page could not found",
+          content404: 'It looks like the page does not exist (anymore) or is moved',
           selectClientGroup: 'Patientengruppe wählen',
           loadMembersByName: 'Mitglieder laden...',
           loadingMembers: 'Mitglieder suchen...',
@@ -1781,6 +1798,7 @@ define(
           report: 'Bericht',
           noClients: 'keine Patienten in dieser Gruppe',
           noClientGroup: 'keine Patienten-Gruppe',
+          noClientGroupFound: 'No client group found for this team',
           TeamClients: 'Gruppe - Patienten',
           createClientGroup: 'speichern',
           contacts: 'Kontakte',
@@ -2041,7 +2059,7 @@ define(
           },
           carer: 'Betreuer',
           information: 'Information',
-          noTasks: 'Keine Aufgaben',
+          noTasks: 'No active or planned tasks',
           clientName: 'Klient',
           memberName: 'Mitglied',
           orderType1: 'Standard -Reihenfolge',
@@ -2061,6 +2079,7 @@ define(
           creatingTask: 'Aufgabe wird erstellt',
           editingTask: 'Aufgabe wird geändert',
           taskSaved: 'Aufgabe gespeichert.',
+          noArchivedTask: 'No finished tasks found.',
           deleteTaskConfirm: 'Sind Sie sicher, dass Sie diese Aufgabe endügltig löschen möchten?',
           taskDeleted: 'Aufgabe gelöscht.',
           planningTime: 'Zeitspanne',
@@ -2122,7 +2141,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
@@ -2193,7 +2213,7 @@ define(
           forgetPassword: 'Wachtwoord vergeten',
           emailAddress: 'E-mailadres',
           resetPassword: 'Wachtwoord opnieuw instellen',
-          returnLogin: 'Terugkeren om in te loggen',
+          returnLogin: 'Naar het inlogscherm',
           changePassword: 'Wachtwoord wijzigen',
           downloadApp: 'Download mobiele app',
           ph_username: 'Gebruikersnaam',
@@ -2396,6 +2416,8 @@ define(
           requiredPeople: 'Benodigd',
           customDates: 'Aangepaste periode',
           planboard: 'Agenda',
+          noAffectedTeam: 'Deze clientgroep heeft geen gelieerd team of leden',
+          noAffectedClientGroup: 'Dit team heeft geen gelieerde clientgroep of clienten',
           newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
@@ -2693,8 +2715,8 @@ define(
 
           changePass: 'Wachtwoord wijzigen',
           forgotPassword: 'Wachtwoord vergeten',
-          forgotPassInfo: 'We verzenden u een email met de instructies om uw wachtwoord te resetten.',
-          forgotPassInfoSend: 'Als de gebruiker bestaat en een e-mailadres heeft, dan is een e-mailtje naar de gebruiker verstuurd met instructies om het wachtwoord te wijzigen.',
+          forgotPassInfo: 'Verstuur uw gebruikersnaam',
+          forgotPassInfoSend: 'Als de gebruiker bestaat en een e-mailadres heeft, is een e-mail naar de gebruiker verstuurd met instructies om het wachtwoord te wijzigen.',
           keyUsernameWrong: 'De combinatie van de opgegeven sleutel en gebruikersnaam klopt niet',
 
           newAvail: 'Nieuwe bereikbaarheid',
@@ -2712,7 +2734,7 @@ define(
           passChanged: 'Wachtwoord succesvol gewijzigd',
           passwrong: 'Ingevoerd wachtwoord is foutief! Probeer het opnieuw.',
           currentPassWrong: 'Het ingevulde oude wachtwoord komt niet overeen met het huidige! Probeer opnieuw.',
-          passRecover: 'Wachtwoord herstellen',
+          passRecover: 'Verzenden',
           newTimeslotAdded: 'Nieuw tijdslot succesvol toegevoegd.',
           changingTimeslot: 'Tijdslot wijzigen...',
           timeslotChanged: 'Tijdslot succesvol gewijzigd.',
@@ -2814,6 +2836,9 @@ define(
           selectTeam: 'Selecteer team',
           hour: 'uur',
           clients: 'Cliënten',
+          title404: 'Oeps',
+          header404: 'Sorry, de pagina kan niet gevonden worden',
+          content404: 'Het lijkt erop dat deze pagina niet (meer) bestaat of misschien verhuisd is.',
           order: 'Volgorde',
           logs: 'Logs',
           options: 'Instellingen',
@@ -2836,6 +2861,8 @@ define(
           newTeam: 'Nieuw team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
+          teamNameExistTitle: 'Teamnaam bestaat al',
+          teamNameExistContent: 'Weet u zeker dat u een team wilt aanmaken met een naam die al vaker voorkomt?',
           newMember: 'Nieuw teamlid',
           searchMember: 'Zoek teamlid',
           noMembersFound: 'Geen leden gevonden met de opgegeven zoekterm.',
@@ -2885,6 +2912,7 @@ define(
           report: 'Rapport',
           noClients: 'Geen cliënten in deze groep',
           noClientGroup: 'Geen cliëntgroep',
+          noClientGroupFound: 'Geen cliëntgroep gevonden voor dit team',
           TeamClients: 'TEAMS - CLIËNTEN',
           createClientGroup: 'Opslaan',
           contacts: 'Contacten',
@@ -3072,13 +3100,13 @@ define(
             '33': 'Geen templates gevonden in de ScenarioTemplateAgent',
             '34': 'Kon het scenario niet genereren',
             '36': 'Een niet verwachte parameter "type"',
-            '39': 'De sleutel om het wachtwoord te resetten is verlopen'
+            '39': 'De link om uw wachtwoord opnieuw in te stellen is niet meer geldig.'
           }
         },
         options: {
           title: 'Instellingen ',
           teamEmail: 'E-mail van het team',
-          activateTeamTelephone: "Activeer TeamTelefoon voor het ",
+          activateTeamTelephone: "Activeer TeamTelefoon voor ",
           phoneNumberAlias: 'Telefoonnummer alias',
           teamTelephoneNotActivated: "TeamTelefoon is niet geactiveerd voor dit team",
           smsMissedCall: 'SMS bij een gemist gesprek of nieuwe voicemail',
@@ -3139,7 +3167,7 @@ define(
           },
           carer: 'Verzorger',
           information: 'Informatie',
-          noTasks: 'Geen taken',
+          noTasks: 'Geen actieve of geplande taken',
           clientName: 'Cliënt ',
           memberName: 'Lid',
           orderType1: 'Standaard volgorde',
@@ -3159,6 +3187,7 @@ define(
           creatingTask: 'Taak wordt aangemaakt',
           editingTask: 'Taak wordt gewijzigd',
           taskSaved: 'Taak is opgeslagen.',
+          noArchivedTask: 'Geen gearchiveerde taken gevonden.',
           deleteTaskConfirm: 'Weet u zeker dat u deze taak permanent wilt verwijderen?',
           taskDeleted: 'Taak verwijderd.',
           planningTime: 'Tijdsbestek',
@@ -3268,7 +3297,8 @@ define(
               maxLength: function (fieldName)
               {
                 return 'De ' + fieldName.toLowerCase() + ' heeft teveel karakters';
-              }
+              },
+            regularPunctuation: "Alleen reguliere interpunctie is toegestaan, zoals -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Voer een valide telefoonnummer in!',

@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'view',
+      'profileEdit',
       function (Member)
       {
         var self = this;

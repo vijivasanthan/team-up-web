@@ -51,11 +51,11 @@ define(
           $scope.periodsNext = Dater.getPeriods(true);
 
           var cookieKey = 'infoTimeline' + $rootScope.app.resources.uuid,
-            setCookie = function(infoCheck)
-            {
-              ipCookie(cookieKey, infoCheck, {expires: 365});
-              $rootScope.infoAvailibility = infoCheck;
-            };
+              setCookie = function(infoCheck)
+              {
+                ipCookie(cookieKey, infoCheck, {expires: 365});
+                $rootScope.infoAvailibility = infoCheck;
+              };
 
           $rootScope.infoAvailibility = ipCookie(cookieKey);
 
@@ -136,7 +136,7 @@ define(
           };
 
           $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-            Dater.readable.date($scope.timeline.range.end);
+          Dater.readable.date($scope.timeline.range.end);
 
           $timeout(function ()
           {

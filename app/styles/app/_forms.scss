@@ -373,3 +373,13 @@ input[type="color"],
   padding-left: 5px;
   vertical-align: middle;
 }
+
+#newTeamTab .help-block {
+  small {
+    display: block;
+  }
+}
+
+.error-block {
+  color: $red;
+}

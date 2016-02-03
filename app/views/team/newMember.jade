@@ -34,7 +34,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												focus,
 												required-form,
 												ng-minlength="2"
-												ng-maxlength="20")
+												ng-maxlength="30")
 											span.help-block(ng-if="(member.newForm.firstname.$touched || member.newForm.firstname.$dirty || member.newForm.$submitted) && member.newForm.firstname.$invalid",
 												ng-messages="member.newForm.firstname.$error")
 												small(ng-message="required")
@@ -52,7 +52,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											name='lastname',
 											ng-model='member.form.lastName',
 											ng-minlength="2"
-											ng-maxlength="20")
+											ng-maxlength="30")
 											span.help-block(ng-if="(member.newForm.lastname.$touched || member.newForm.lastname.$dirty || member.newForm.$submitted) && member.newForm.lastname.$invalid",
 											ng-messages="member.newForm.lastname.$error")
 												small(ng-message="minlength")
@@ -117,7 +117,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												ng-blur='member.UserNameWrong=false',
 												ng-model='member.form.userName',
 												ng-minlength="2"
-												ng-maxlength="20"
+												ng-maxlength="30"
 												required='',
 												required-form)
 										p.text-danger
@@ -137,7 +137,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											required,
 											required-form,
 											ng-minlength="8",
-											ng-maxlength="20")
+											ng-maxlength="40")
 											span.help-block(ng-messages='member.newForm.password.$error',
 												ng-if='member.newForm.password.$invalid && (member.newForm.password.$touched || member.newForm.password.$dirty || member.newForm.$submitted)')
 												small(ng-message='required')
@@ -148,7 +148,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 													| {{ ui.validation.password.required }} {{ ui.validation.password.amountMinChars(8) }} 
 												small(ng-message="maxlength")
 													i
-													| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(20) }}
+													| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
 
 									.form-group(
 										ng-class="{ 'has-error' : (member.form.reTypePassword !== member.form.password || member.newForm.repeatPass.$invalid) && (member.newForm.repeatPass.$dirty || member.newForm.repeatPass.$touched  ||  member.newForm.$submitted) }")

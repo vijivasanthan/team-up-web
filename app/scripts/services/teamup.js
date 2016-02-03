@@ -19,6 +19,17 @@ define(
               {},
               {
                 /**
+                 * Alarmnumbers
+                 */
+                alarmNumbersGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'alarmNumbers'
+                  },
+                  isArray: true
+                },
+
+                /**
                  * Account calls
                  */
                 login: {
@@ -283,6 +294,14 @@ define(
                 /**
                  * Client-Group
                  */
+                clientGroupNameGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'client',
+                    second: 'clientGroups',
+                    third: ''
+                  }
+                },
                 // get list of all the client groups
                 clientGroupsQuery: {
                   method: 'GET',
@@ -316,6 +335,15 @@ define(
                 /**
                  * Client-Group
                  */
+                /**
+                 * Get clientgroup by id
+                 */
+                clientGroupGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'clientGroup'
+                  }
+                },
                 // create a new client group
                 clientGroupAdd: {
                   method: 'POST',
@@ -343,6 +371,12 @@ define(
                  * Client
                  */
                 // add a client
+                clientGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'client'
+                  }
+                },
                 clientAdd: {
                   method: 'POST',
                   params: {
@@ -475,6 +509,13 @@ define(
                     first: 'team'
                   }
                 },
+                teamGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    id: ''
+                  }
+                },
                 // add a team
                 teamAdd: {
                   method: 'POST',
@@ -526,6 +567,15 @@ define(
                 /**
                  * Team-Member
                  */
+                // get a member of a team
+                teamMemberGet: {
+                  method: 'GET',
+                  params: {
+                    first: 'team',
+                    third: 'member'
+                  }
+                },
+
                 // add a member to a team
                 teamMemberAdd: {
                   method: 'POST',
@@ -616,7 +666,15 @@ define(
                     third: 'unAssignClientGroups'
                   }
                 },
-
+                // get all the link between a team and a clientgroup
+                clientGroupTeamQuery: {
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clientGroup',
+                    third: 'teams'
+                  }
+                },
 
                 /**
                  * Team-Task

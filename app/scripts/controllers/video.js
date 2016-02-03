@@ -6,23 +6,26 @@ define(
 
     controllers.controller(
       'videoCtrl',
-      function ($rootScope, $scope, $filter, data)
+      function ($rootScope, $scope, $filter, $location)
       {
-        $scope.hasCall = (!! data.callId);
         $rootScope.fixStyles();
 
         angular.element('.navbar').show();
         angular.element('body').css('background-color', '');
         angular.element('#footer').show();
 
-        //Ook implementatie als er geen callid wordt meegegeven
         $scope.getCall = function(callback)
         {
-          var videoCall = null;
-          var url = config.app.videoCallUrl + '/r/' + (data.callId || 123); // + '&username=' + data.fullName;
+          var params = $location.search();
+          var url = config.app.videoCallUrl + '/r/' + (params.roomId || 123) + "?teamupName=" + params.fullName;
           (callback && callback());
           return $filter('trusted_url')(url);
         };
+
+        window.addEventListener("message", function ()
+        {
+          console.error('tester de test');
+        }, false);
 
         //Show get back button if the one of the users hangsup
       }

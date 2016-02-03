@@ -1,0 +1,135 @@
+//#confirmProfileModal.modal.fade(tabindex='-1',
+//role='dialog',
+//aria-labelledby='confirmProfileModalLabel',
+//aria-hidden='true')
+//	.modal-dialog
+//		.modal-content
+//			.modal-header
+//				button.close(type='button', data-dismiss='modal')
+//					span(aria-hidden='true') ×
+//					span.sr-only {{ ui.message.close }}
+//				h4#confirmProfileModalLabel.modal-title {{ui.teamup.confirms.deleteMemberFromTeamTitle}}
+//			.modal-body
+//				| {{ui.teamup.confirms.deleteMemberFromTeam}}
+//			.modal-footer
+//				button.btn.btn-default(type='button',
+//				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+//				button.btn.btn-primary(type='button',
+//				ng-click='deleteProfile()') {{ui.teamup.confirms.remove}}
+//
+//#confirmTeamMemberCodeAsPhoneModal.modal.fade(tabindex='-1',
+//role='dialog',
+//aria-labelledby='confirmTeamMemberCodeAsPhone',
+//aria-hidden='true')
+//	.modal-dialog
+//		.modal-content
+//			.modal-header
+//				button.close(type='button', data-dismiss='modal')
+//					span(aria-hidden='true') ×
+//					span.sr-only {{ ui.message.close }}
+//				h4#confirmTeamMemberCodeAsPhone.modal-title {{ui.teamup.confirms.addTeamMemberCodeAsPhoneTitle}}
+//			.modal-body
+//				| {{ui.teamup.confirms.addTeamMemberCodeAsPhone}}
+//			.modal-footer
+//				button.btn.btn-default.non-capitalize(type='button',
+//				data-dismiss='modal') {{ui.teamup.confirms.no}}
+//				button.btn.btn-primary.non-capitalize(type='button',
+//				ng-click='teamMemberCodeConfirmed()') {{ui.teamup.confirms.yes}}
+//
+//#confirmDeleteAvatar.modal.fade(tabindex='-1',
+//role='dialog',
+//aria-labelledby='confirmDeleteAvatarLabel',
+//aria-hidden='true')
+//	.modal-dialog
+//		.modal-content
+//			.modal-header
+//				button.close(type='button', data-dismiss='modal')
+//					span(aria-hidden='true') ×
+//					span.sr-only {{ ui.message.close }}
+//				h4#confirmDeleteAvatarLabel.modal-title {{ui.teamup.confirms.photoRemoveTitle}}
+//			.modal-body
+//				| {{ui.teamup.confirms.photoRemoveBody}}
+//			.modal-footer
+//				button.btn.btn-default(type='button',
+//				data-dismiss='modal') {{ui.teamup.confirms.cancel}}
+//				button.btn.btn-primary(type='button',
+//				ng-click='deleteAvatar()') {{ui.teamup.confirms.remove}}
+
+section#profile
+	.page-header: h2 {{view.name}}
+
+	.row-fluid
+
+		.tabbable.tabs-left
+
+			ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
+				li(class="{{(views.profile==true || views.edit==true || views.editImg==true || views.editPassword==true) && 'active'}}")
+					a(data-toggle='tab',
+					ng-click='fixTabHeight("profileTab"); setViewTo("profile")')
+						span.entypo 👤
+						| {{ui.profile.profile}}
+
+			//.tab-content
+			//
+			//	#profileTab.tab-pane(class="{{(views.profile==true) && 'active'}}")
+			//		.tab-header
+			//			h3.pull-left {{view.firstName}} {{view.lastName}}
+			//			//div(dynamic='test') {{test}}
+			//			button.btn.pull-right.btn-info.marginLeftTen(type='button',
+			//			ng-click='confirmModal("#confirmProfileModal")',
+			//			ng-hide='app.resources.role > 1 && edit.uuid != app.resources.uuid || ! app.resources.teamUuids.length')
+			//				| {{ui.teamup.del}}
+			//			button.btn.pull-right.btn-info(type='button',
+			//			ng-click='setViewTo("edit")',
+			//			ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)') {{ui.profile.edit}}
+			//		hr
+			//		.row-fluid
+			//			.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
+			//				dl
+			//					dt {{ui.teamup.teams}}
+			//					dd(ng-show='! teams || teams.length == 0') {{ ui.profile.noTeamSelected }} 
+			//					dd(ng-show='teams.length == 1')
+			//						span(ng-repeat='team in teams')
+			//							a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+			//					dd
+			//						ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+			//							li(ng-repeat='team in teams')
+			//								span
+			//									a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+			//						//TODO wait until stefan approves to use the default team option
+			//						//.phones(ng-show='teams.length > 1', ng-repeat='team in teams' style='width: 137px;')
+			//						//span(class="label label-inverse") {{ ($index > 0) ? ui.profile.extra : ui.profile.default }}  
+			//						//span.phone-description
+			//						//	a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+			//
+			//						//ol(ng-show='teams.length > 1' style='padding-left: 21px;')
+			//						//	li(ng-repeat='team in teams| orderBy:"name"')
+			//						//		span
+			//						//				a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+			//						//span(ng-repeat='team in teams')
+			//						//		a(href='#/team?uuid={{team.uuid}}#team') {{team.name}}
+			//						//	span(ng-hide = '{{((teams.length-1) == $index)}}') ,
+			//						//	span(ng-show = 'app.resources.role > 1') {{team.name}}
+			//					dt {{ui.teamup.role}}
+			//					dd {{view.role|translateRole}}
+			//					dt {{ ui.profile.email }}
+			//					dd {{view.email }}
+			//					dt(ng-show='view.phoneNumbers.length > 0') {{ui.profile.phone}}
+			//					dd(class='phones', ng-repeat='phone in view.phoneNumbers')
+			//						span(class="label label-inverse") {{ ($index > 0 && phone != null) ? ui.profile.extra : ui.profile.default }}  
+			//						span(class='phone-description') {{phone}}
+			//					//dt {{ui.teamup.func}}                                                                                    //dd {{view.function|translateFunc}}
+			//					//dt {{ui.profile.birthday}}
+			//					//dd {{view.birthDate}}
+			//					dt {{ui.profile.userName}}
+			//					dd {{view.userName}}
+			//					//dt {{ui.profile.pincode}}
+			//					//dd {{view.pincode}}
+			//			.widget.profilePic(class="{{(!browser.mobile) && 'span3' || 'span12'}}")
+			//				.roundedPicLarge(back-img = '{{view.uuid | avatar:"team":"368" }}' class='{{view.states|stateColor}}')
+			//				div
+			//					a(href='#/profile/{{view.uuid}}#editImg')
+			//						button.btn.btn-mini.btn-primary(
+			//						ng-click='editImg()',
+			//						ng-hide='(app.resources.role > 1 && edit.uuid != app.resources.uuid)')
+			//							i.icon-edit

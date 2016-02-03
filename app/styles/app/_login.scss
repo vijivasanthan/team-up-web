@@ -94,9 +94,10 @@
         text-decoration: underline;
       }
     }
-    .version-link {
+    .version-number {
       display: block;
       text-align: right;
+      margin: 0;
     }
     .login-link {
       color: $brown;

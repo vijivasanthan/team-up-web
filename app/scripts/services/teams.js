@@ -603,6 +603,14 @@ define(
             return deferred.promise;
           };
 
+          TeamsService.prototype.getRelationClientGroup = function(teamId)
+          {
+            return TeamUp._(
+              'teamClientGroupQuery',
+              {second: teamId}
+            );
+          };
+
           /**
            *
            * @param teams

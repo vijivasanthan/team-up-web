@@ -9,12 +9,12 @@
 var localConfig = {
   /* The host parameter defines which backend is used. Most common
      values are:
-	host: ["http://dev.ask-cs.com/"],
-	host: ["http://test.ask-cs.com/"],
-	host: ["http://demo.ask-cs.com/"],
+	host: ["https://teamup-dev.ask-cs.nl/proxy/"],
+	host: ["https://teamup-test.ask-cs.nl/proxy/"],
+	host: ["https://teamup-demo.ask-cs.nl/proxy/"],
   	host: [ "https://backend.ask-cs.nl/", "https://bz-backend.ask-cs.nl/" ],
    */
-	host: ["http://dev.ask-cs.com/"],
+	host: ["https://teamup-test.ask-cs.nl/proxy/"],
 
   /* The otapRole parameter tells what kind of backend we're using. Most
      common values are:

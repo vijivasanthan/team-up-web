@@ -25,9 +25,9 @@ define(
         '$injector',
         'moment',
         'tmhDynamicLocale',
-        '$resource',
+        'ipCookie',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, $resource)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -562,8 +562,9 @@ define(
               .then(
               function (result)
               {
-                console.warn('error ->', result.error);
+                console.warn('result ->', result);
                 Session.clear();
+                ipCookie.remove('X-SESSION_ID');
 
                 Store('app').nuke();
 
@@ -908,34 +909,6 @@ define(
           };
 
           $rootScope.hangup = null;
-
-          function displayMessage (evt) {
-            console.error('evt', evt);
-
-            if (evt.origin === config.app.videoCallUrl)
-            {
-
-              console.error('Hangup triggerd');
-              if(evt.data == 'left')
-              {
-                $rootScope.hangup = evt.data;
-                $rootScope.$apply();
-                $rootScope.closeVideoCall();
-                $rootScope.hangup = null;
-              }
-
-
-
-            }
-          }
-
-          if (window.addEventListener) {
-            // For standards-compliant web browsers
-            window.addEventListener("message", displayMessage, false);
-          }
-          else {
-            window.attachEvent("onmessage", displayMessage);
-          }
         }
       ]
     );

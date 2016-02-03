@@ -223,8 +223,6 @@ define(['services/services', 'config'],
               var groups = this.get.groups(),
                 name = groups[agg.id];
 
-              name = name.charAt(0).toUpperCase() + name.slice(1);
-
               var link = '<a href="#/team?uuid=' +
                   agg.id +
                   '#team">' +
@@ -434,7 +432,7 @@ define(['services/services', 'config'],
 
               var groups = this.get.groups(),
                 name = groups[data.aggs[0].id],
-                link = '<a style="text-transform: capitalize" href="#/team?uuid=' +
+                link = '<a href="#/team?uuid=' +
                   data.aggs[0].id +
                   '#view">' +
                   name +

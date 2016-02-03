@@ -47,7 +47,6 @@ define(
         {
           Team.read(teamId)
         }
-
         /**
          * get team and client related data after input
          * @param teamId
@@ -69,8 +68,16 @@ define(
             .then(function (teamClientgroupLinks)
             {
               self.teamClientgroupLinks = teamClientgroupLinks;
-              self.form.currentGroup = teamClientgroupLinks[0].id;
-              return Clients.getSingle(self.form.currentGroup);
+              if(!teamClientgroupLinks[0])
+              {
+                $rootScope.notifier.error($rootScope.ui.teamup.noClientGroupFound);
+                return null;
+              }
+              else
+              {
+                self.form.currentGroup = teamClientgroupLinks[0].id;
+                return Clients.getSingle(self.form.currentGroup);
+              }
             })
             .then(function (currentGroupClients)
             {
@@ -239,15 +246,6 @@ define(
                 redirect(task.assignedTeamMemberUuid);
               }
             });
-
-          //TeamUp._('taskAdd', null, task)
-          //  .then(function (result)
-          //  {
-          //    if (!result.error)
-          //    {
-          //      redirect(task.assignedTeamMemberUuid);
-          //    }
-          //  });
         }
 
         /**
@@ -275,8 +273,8 @@ define(
         function redirect(assignedTeamMember)
         {
           var location = (assignedTeamMember === $rootScope.app.resources.uuid)
-            ? '/tasks2#myTasks'
-            : '/tasks2#allTasks';
+            ? '/task/mytasks'
+            : '/task/alltasks';
           $location.path(location);
           $rootScope.notifier.success($rootScope.ui.task.taskSaved);
         }
