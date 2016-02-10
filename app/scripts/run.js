@@ -567,6 +567,8 @@ define(
                 ipCookie.remove('X-SESSION_ID');
 
                 Store('app').nuke();
+                //clear authentication cache
+                document.execCommand('ClearAuthenticationCache', 'false');
 
                 Store('app').save('loginData', {
                   username: loginData.username
