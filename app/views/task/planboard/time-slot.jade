@@ -50,6 +50,9 @@
 				type='text',
 				ng-model='slot.start.time',
 				ng-change='redrawSlot(slot)',
+				data-minute-step="5",
+				data-arrow-behavior="picker",
+				data-length='1',
 				bs-timepicker='')
 				i.icon-time
 			.control-group.timer(ng-show='views.group || views.member')
@@ -92,6 +95,9 @@
 				type='text',
 				ng-model='slot.end.time',
 				ng-change='redrawSlot(slot)',
+				data-minute-step="5",
+				data-arrow-behavior="picker",
+				data-length='1',
 				bs-timepicker='')
 				i.icon-time
 			.control-group.timer(ng-show='views.group || views.member')

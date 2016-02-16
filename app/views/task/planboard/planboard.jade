@@ -97,10 +97,12 @@ div(ng-controller='timeline')
 						input(name='time-start',
 						type='text',
 						ng-model='slot.start.time',
-						data-length='3',
+						data-length='1',
 						data-time-type="string",
 						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
+						data-minute-step="5",
+						data-arrow-behavior="picker",
 						bs-timepicker='')
 						i.icon-time
 					.control-group.timer(ng-show='views.group || views.member')
@@ -155,10 +157,12 @@ div(ng-controller='timeline')
 						input(name='time-end',
 						type='text',
 						ng-model='slot.end.time',
-						data-length='3',
+						data-length='1',
 						data-time-type="string",
 						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
+						data-minute-step="5",
+						data-arrow-behavior="picker",
 						bs-timepicker='')
 						i.icon-time
 					.control-group.timer(ng-show='views.group || views.member')
