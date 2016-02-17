@@ -69,9 +69,10 @@ define(
                     }
                   );
 
-                  connections.teams[team.uuid] = memberIds;
+                  connections.teams[team.uuid] =  $filter('orderBy')(memberIds);
                 }
               );
+              data.teams = $filter('orderBy')(data.teams, 'name');
 
               angular.forEach(
                 dataMembers,
@@ -93,6 +94,10 @@ define(
               data.members = $filter('orderBy')(members, 'lastName');
 
               data.groups = Store('app').get('ClientGroups');
+
+              data.groups = $filter('orderBy')(data.groups, 'name');
+
+              console.log('data.groups', data.groups);
 
               // console.log('members ->', members);
               // console.log('ClientGroups ->', data.groups);
@@ -156,7 +161,7 @@ define(
                     }
                   );
 
-                  connections.clients[group.id] = cIds;
+                  connections.clients[group.id] = $filter('orderBy')(cIds);
                   groupIds.push(group.id);
                 }
               );
