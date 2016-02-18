@@ -407,10 +407,12 @@ define(['services/services', 'config'],
                     '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
                     itemType: 'wish',
                     className: cn,
+                    groupId: data.aggs[0].id,
+                    wish: wish.count,
                     editable: false
                   });
 
-                  timedata = _this.addLoading(data, timedata, [_this.wrapper('c') + title]);
+                  timedata = _this.addLoading(data, timedata, [title]);
                 }.bind(this)
               );
 
