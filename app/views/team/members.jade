@@ -1,4 +1,8 @@
 div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
+	include confirmAddTeamModal
+		button.btn.btn-info(type='button',
+		ng-click='team.update(team.current.teamId, team.editForm, true)') {{ui.teamup.save}}
+	
 	#confirmMemberModal.modal.fade(tabindex='-1',
 	role='dialog',
 	aria-labelledby='confirmMemberModalLabel',

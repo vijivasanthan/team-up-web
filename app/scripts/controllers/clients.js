@@ -312,21 +312,18 @@ define(
             if (typeof client == 'undefined' || !client.firstName || !client.lastName)
             {
               $rootScope.notifier.error($rootScope.ui.teamup.clinetInfoFill);
-
               return;
             }
 
             if(! client.phone)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-
               return;
             }
 
             if ($rootScope.phoneNumberParsed.result == false)
             {
               $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-
               return;
             }
             else if ($rootScope.phoneNumberParsed.result == true)
@@ -334,18 +331,19 @@ define(
               client.phone = $rootScope.phoneNumberParsed.format;
             }
 
-            var validationEmail = $scope.newClientForm.email;
+            if($scope.newClientForm && $scope.newClientForm.email)
+            {
+              var validationEmail = $scope.newClientForm.email;
 
-            if (validationEmail && validationEmail.$error && validationEmail.$error.pattern) {
-              $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-
-              return;
+              if (validationEmail && validationEmail.$error && validationEmail.$error.pattern) {
+                $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
+                return;
+              }
             }
 
             if ( client.password == "" || client.password !== client.reTypePassword ) // if passwords are filled in and not identical
             {
               $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-
               return;
             }
 
@@ -356,12 +354,12 @@ define(
             try
             {
               client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              console.error("client.birthDate ->", client.birthDate);
             }
             catch (error)
             {
               // console.log(error);
               $rootScope.notifier.error($rootScope.ui.teamup.birthdayError);
-
               return;
             }
 
@@ -373,7 +371,8 @@ define(
                     var errorMessage = $rootScope.ui.teamup.clientSubmitError;
                     console.error(client);
 
-                    if(result.error.data.indexOf(client.email) >= 0) {
+                    if(result.error.data.indexOf(client.email) >= 0)
+                    {
                       errorMessage = $rootScope.ui.teamup.clientSubmitEmailExists;
                     }
                     $rootScope.notifier.error(errorMessage);
@@ -1073,22 +1072,25 @@ define(
             // TODO: Remove it later on!
             var months = Dater.getMonthTimeStamps();
 
+
             $scope.Months = [];
 
             angular.forEach(
               months,
               function (month, i)
               {
-                $scope.Months[i] = {
+                var parsedIndex = parseInt(i - 1);
+                var currentMonth = moment().months(parsedIndex).format("MMMM");
+                $scope.Months[parsedIndex] = {
                   number: i,
-                  name: i,
+                  name: currentMonth,
                   start: month.first.timeStamp,
                   end: month.last.timeStamp
                 };
               }
             );
-
-            $scope.Months[0] = {number: 0, name: $rootScope.ui.teamup.selectMonth};
+            console.error("moment().months(); ->", moment().months(3).format("MMMM"));
+            console.error("$scope.Months ->", $scope.Months);
           }
         }
     );

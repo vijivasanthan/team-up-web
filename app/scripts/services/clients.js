@@ -487,6 +487,17 @@ define(
               });
           };
 
+	        /**
+           * Get the affected teams of a clientgroup
+           */
+          ClientsService.prototype.getRelationsTeams = function(clientGroupId)
+          {
+            return TeamUp._(
+              'clientGroupTeamQuery', {
+                second: clientGroupId
+              });
+          }
+
           /**
            * query all clients, if there not locally call them from the backend
            */

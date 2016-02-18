@@ -10,6 +10,7 @@ define(
         '$scope',
         '$location',
         '$filter',
+        '$q',
         'Settings',
         'Dater',
         'Store',
@@ -19,214 +20,296 @@ define(
         'Session',
         'CurrentSelection',
         'moment',
-        function ($rootScope, $scope, $location, $filter, Settings, Dater, Store,
-                  Teams, Clients, TeamUp, Session, CurrentSelection, moment)
+        'data',
+        function ($rootScope, $scope, $location, $filter, $q, Settings, Dater, Store,
+                  Teams, Clients, TeamUp, Session, CurrentSelection, moment, data)
         {
           var params = $location.search();
+          $scope.currentTeam = data.currentTeamId;
+          $scope.currentClientGroup = null;
+          $scope.relatedUsers = [];
 
-          var teams = Store('app').get('teams'),
-            clients = Store('app').get('ClientGroups');
+          init();
 
-          $scope.currentTeam = CurrentSelection.getTeamId();
-          $scope.currentClientGroup = CurrentSelection.getClientGroupId();
-
-          $scope.data = {
-            teams: {
-              list: [],
-              members: {},
-              tasks: []
-            },
-            clients: {
-              list: [],
-              members: {},
-              tasks: []
-            },
-            user: [
-              {
-                'count': 0,
-                'end': 1378681200,
-                'recursive': true,
-                'start': 1378504800,
-                'text': 'com.ask-cs.State.Available',
-                'type': 'availability',
-                'wish': 0
-              },
-              {
-                'count': 0,
-                'end': 1378850400,
-                'recursive': true,
-                'start': 1378720800,
-                'text': 'com.ask-cs.State.Available',
-                'type': 'availability',
-                'wish': 0
-              }
-            ],
-            members: [],
-            synced: Number(Date.today()),
-            periods: {
-              start: Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
-              end: Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
-            }
-          };
-
-          angular.forEach(
-            teams,
-            function (team)
-            {
-              var members = Store('app').get(team.uuid);
-
-              $scope.data.teams.list.push(
-                {
-                  uuid: team.uuid,
-                  name: team.name
-                }
-              );
-
-              $scope.data.teams.members[team.uuid] = [];
-
-              if (members && members.length > 0)
-              {
-                getMemberSpots(team.uuid, members);
-              }
-            }
-          );
-
-          angular.forEach(
-            clients,
-            function (client)
-            {
-              var members = Store('app').get(client.id);
-
-              $scope.data.clients.list.push(
-                {
-                  uuid: client.id,
-                  name: client.name
-                }
-              );
-
-              $scope.data.clients.members[client.id] = [];
-
-              if (members && members.length > 0)
-              {
-                angular.forEach(
-                  members,
-                  function (member)
-                  {
-                    var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
-                      'style="float: left; background-image: url(' +
-                      Settings.getBackEnd() +
-                      config.app.namespace +
-                      '/client/' +
-                      member.uuid +
-                      '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
-                      Session.get() +
-                      ');" memberId="' +
-                      member.uuid +
-                      '"></div>';
-
-                    var name = avatar +
-                      '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
-                      member.firstName +
-                      ' ' +
-                      member.lastName
-                    '</div>';
-
-                    $scope.data.clients.members[client.id].push(
-                      {
-                        'head': name,
-                        'memId': member.uuid
-                      }
-                    );
-                  }
-                );
-              }
-            }
-          );
-
-          // switch agenda (timeline) between Team view or Client view
-          function switchData()
+          function init()
           {
-            switch ($scope.section)
-            {
-              case 'teams':
-                $scope.list = $scope.data.teams.list;
-                loadData()
-                break;
-
-              case 'clients':
-                $scope.list = $scope.data.clients.list;
-                loadData();
-                break;
-            }
+            setInitialDefaults();
+            setAllTeams();
+            setAllClientGroups();
+            setCurrentTeam(data.currentTeamId, data.currentTeamMembers);
           }
 
           // Change a time-slot
           $scope.changeCurrent = function (current, periods)
           {
             CurrentSelection.local = current;
-
             $scope.currentTeam = CurrentSelection.getTeamId();
-            $scope.currentClientGroup = CurrentSelection.getClientGroupId();
-
-            $scope.currentName = getGroupName();
+            $scope.currentClientGroup = current;
 
             loadData(periods);
           };
 
+          $scope.setViewTo = function (uuid, hash)
+          {
+            $location.hash(hash);
+            $scope.section = hash;
+            $scope.load = true;
+            $scope.list = $scope.data[$scope.section].list;
+
+            //TODO Remove the multiple section checks
+            //TODO planboard and timeline have the same $scope var, this is not only confusing but the two way binding don't works well anymore
+            //if($scope.section === "clients")
+            //{
+            //  var clientGroupByParamUrl = _.findWhere($scope.list, {uuid: uuid});
+            //
+            //  (clientGroupByParamUrl)
+            //    ? setCurrentClientGroup(clientGroupByParamUrl, function()
+            //  {
+            //    loadData();
+            //  })
+            //    : teamRelationClientGroup(function()
+            //                              {
+            //                                loadData();
+            //                              })
+            //}
+            //else loadData();
+            var clientGroup = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
+            $scope.currentClientGroup = clientGroup && clientGroup.id || ($scope.list[0]).uuid;
+
+            loadData();
+            setView(hash);
+          };
+
+	        /**
+           * Set the current team data
+           * @param teamId The id of the team
+           * @param members The members of the current team
+	         */
+          function setCurrentTeam(teamId, members)
+          {
+            $scope.data.teams.members[teamId] = [];
+
+            if (members && members.length > 0)
+            {
+              getMemberSlots(teamId, members);
+            }
+          }
+
+	        /**
+           * Set all teams data
+           */
+          function setAllTeams()
+          {
+            angular.forEach(
+              data.teams,
+              function (team)
+              {
+                $scope.data.teams.list.push(
+                  {
+                    uuid: team.uuid,
+                    name: team.name
+                  }
+                );
+              }
+            );
+          }
+
+	        /**
+           * Set all clientgroups data
+           */
+          function setAllClientGroups()
+          {
+            _.forEach(data.clientGroups, function(clientGroup)
+            {
+              $scope.data.clients.list.push(
+                {
+                  uuid: clientGroup.id,
+                  name: clientGroup.name
+                }
+              );
+            })
+          }
+
+	        /**
+           * Set intial Scope data
+           */
+          function setInitialDefaults()
+          {
+            $scope.data = {
+              teams: {
+                list: [],
+                members: {},
+                tasks: []
+              },
+              clients: {
+                list: [],
+                members: {},
+                tasks: []
+              },
+              user: [
+                {
+                  'count': 0,
+                  'end': 1378681200,
+                  'recursive': true,
+                  'start': 1378504800,
+                  'text': 'com.ask-cs.State.Available',
+                  'type': 'availability',
+                  'wish': 0
+                },
+                {
+                  'count': 0,
+                  'end': 1378850400,
+                  'recursive': true,
+                  'start': 1378720800,
+                  'text': 'com.ask-cs.State.Available',
+                  'type': 'availability',
+                  'wish': 0
+                }
+              ],
+              members: [],
+              synced: Number(Date.today()),
+              periods: {
+                start: Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
+                end: Number(Date.today()) + (7 * 24 * 60 * 60 * 1000)
+              }
+            };
+          }
+
+	        /**
+           * Load data depending if the section clients or teams is on
+           * @param periods
+           */
           var loadData = function(periods)
           {
             var startTime = Number(Date.today()) - (7 * 24 * 60 * 60 * 1000),
               endTime = Number(Date.today()) + (7 * 24 * 60 * 60 * 1000);
 
+            $scope.load = true;
             $scope.data.section = $scope.section;
 
             if ($scope.section == 'teams')
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
-              $scope.load = true;
+              loadMembers(startTime, endTime, prepareTasks);
 
-              $scope.data[$scope.section].members[$scope.currentTeam] = [];
-
-              TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
-                .then(function(members) {
-                  getMemberSpots($scope.currentTeam, members);
-                  $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
-
-                  return getTaskProvider('teamTaskQuery', $scope.currentTeam, startTime, endTime);
-                })
-                .then(function(tasks) {
-                  $location.search({uuid: $scope.currentTeam}).hash('teams');
-                  storeTask(tasks, startTime, endTime, periods);
-
-                  $rootScope.statusBar.off();
-                  $scope.load = false;
-                });
+              resolveRelationsGroups(
+                Teams.getRelationClientGroup($scope.currentTeam),
+                Clients.getSingle,
+                $rootScope.ui.teamup.clients,
+                $rootScope.ui.planboard.noAffectedClientGroup
+              );
             }
             else if ($scope.section == 'clients')
             {
-              $rootScope.statusBar.display($rootScope.ui.teamup.loadClients);
-              $scope.load = true;
+              loadClients(startTime, endTime, prepareTasks);
 
-              $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+              resolveRelationsGroups(
+                Clients.getRelationsTeams($scope.currentClientGroup),
+                Teams.getSingle,
+                $rootScope.ui.planboard.members,
+                $rootScope.ui.planboard.noAffectedTeam
+              );
+            }
 
-              getTaskProvider('clientGroupTasksQuery', $scope.currentClientGroup, startTime, endTime)
-                .then(function(tasks){
-                  $location.search({uuid: $scope.currentClientGroup}).hash('clients');
-                  storeTask(tasks, startTime, endTime, periods)
 
-                  $rootScope.statusBar.off();
-                  $scope.load = false;
-                });
+            //setRelatedUsers()
+            //  .then(function(users)
+            //        {
+            //          $scope.relatedUsers = users;
+            //          console.error("$scope.relatedUsers ->", $scope.relatedUsers);
+            //
+            //
+            //        })
+
+	          /**
+             * Prepare tasks
+             * @param queryName
+             * @param groupId
+             * @param startTime
+	           * @param endTime
+	           */
+            function prepareTasks(queryName, groupId, startTime, endTime)
+            {
+              getTasksByProvider(queryName, groupId, startTime, endTime)
+                .then(showTasks);
+            }
+
+	          /**
+             * Show tasks
+             * @param tasks
+             */
+            function showTasks(tasks)
+            {
+              storeTask(tasks, startTime, endTime, periods);
+              $rootScope.statusBar.off();
+              $scope.load = false;
             }
           };
 
+	        /**
+           * Load Clients
+           * @param startTime
+           * @param endTime
+           * @param callBack
+	         */
+          function loadClients(startTime, endTime, callBack)
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadClients);
+
+            $scope.currentName = getGroupName($scope.currentClientGroup);
+            $scope.data.clients.members = [];
+            $scope.data[$scope.section].members[$scope.currentClientGroup] = [];
+
+            Clients.getSingle($scope.currentClientGroup)
+                   .then(function(clients)
+                         {
+                           $scope.hasClients = (!! clients.length);
+
+                           getClientSlots($scope.currentClientGroup, clients);
+                           $scope.data.members = $scope.data[$scope.section].members[$scope.currentClientGroup];
+                           $location.search({uuid: $scope.currentClientGroup}).hash('clients');
+
+                           (callBack && callBack('clientGroupTasksQuery', $scope.currentClientGroup, startTime, endTime));
+                         })
+          }
+
+	        /**
+           * Load members
+           * @param startTime
+           * @param endTime
+           * @param callBack
+	         */
+          function loadMembers(startTime, endTime, callBack)
+          {
+            $rootScope.statusBar.display($rootScope.ui.teamup.loadMembersByName);
+
+            $scope.currentName = getGroupName($scope.currentTeam);
+            $scope.data[$scope.section].members[$scope.currentTeam] = [];
+
+            TeamUp._('teamStatusQuery', {third: $scope.currentTeam})
+                  .then(function(members)
+                        {
+                          getMemberSlots($scope.currentTeam, members);
+                          $scope.data.members = $scope.data[$scope.section].members[$scope.currentTeam];
+                          $location.search({uuid: $scope.currentTeam}).hash('teams');
+
+                          (callBack && callBack('teamTaskQuery', $scope.currentTeam, startTime, endTime))
+                        })
+          }
+
+	        /**
+           * Get tasks
+           * @param section
+           * @param currentGroup
+           * @param startTime
+           * @param endTime
+	         */
           $scope.getTasks = function (section, currentGroup, startTime, endTime)
           {
             var taskProvider = (section == 'teams')
               ? 'teamTaskQuery'
               : 'clientGroupTasksQuery';
 
-            getTaskProvider(taskProvider,
+            getTasksByProvider(taskProvider,
               currentGroup,
               startTime,
               endTime)
@@ -236,24 +319,12 @@ define(
               });
           };
 
-          function getTaskProvider(query, sectionId, startTime, endTime)
-          {
-            return TeamUp._(
-              query,
-              {
-                second: sectionId,
-                from: startTime,
-                to: endTime
-              }
-            );
-          }
-
-          var storeTask = function (tasks, startTime, endTime, periods)
+          function storeTask (tasks, startTime, endTime, periods)
           {
             // clear the array to keep tasks sync with sever side after changing
             $scope.data[$scope.section].tasks = [];
 
-            angular.forEach(
+            _.each(
               tasks,
               function (task)
               {
@@ -285,7 +356,19 @@ define(
               'timelinerTasks',
               periods || {start: startTime, end: endTime}
             );
-          };
+          }
+
+          function getTasksByProvider(query, sectionId, startTime, endTime)
+          {
+            return TeamUp._(
+              query,
+              {
+                second: sectionId,
+                from: startTime,
+                to: endTime
+              }
+            );
+          }
 
           function setView(hash)
           {
@@ -302,37 +385,36 @@ define(
             $scope.views[hash] = true;
           }
 
-          $scope.setViewTo = function (uuid, hash)
+
+
+          function teamRelationClientGroup(callBack)
           {
-            $scope.$watch(
-              hash,
-              function ()
-              {
-                $location.hash(hash);
+              Teams.getRelationClientGroup($scope.currentTeam)
+                   .then(function(relation)
+                         {
+                           //show the clientGroup which has a relation with the last selected team
+                           var currentClientGroup = (relation && relation.length)
+                             ? relation[0]
+                             : ($scope.data["clients"].list)[0];//if no relation pick the first clientGroup
 
-                $scope.section = hash;
+                           setCurrentClientGroup(currentClientGroup);
+                           (callBack && callBack())
+                         })
+          }
 
-                $scope.currentName = getGroupName();
-
-                switchData();
-
-                setView(hash);
-              }
-            );
-          };
-
-          function getGroupName()
+          function setCurrentClientGroup(currentClientGroup, callBack)
           {
-            var current = ($scope.section == 'teams')
-              ? $scope.currentTeam
-              : $scope.currentClientGroup;
+            $scope.currentClientGroup = currentClientGroup.id || currentClientGroup.uuid;
+            (callBack && callBack());
+          }
 
+          function getGroupName(groupId)
+          {
             var group = _.findWhere(
               $scope.data[$scope.section].list,
-              {uuid: current}
+              {uuid: groupId}
             );
-
-            return group.name;
+            return group && group.name;
           }
 
           $scope.resetViews = function ()
@@ -445,39 +527,6 @@ define(
           $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
           Dater.readable.date($scope.timeline.range.end);
 
-          // return the related user when select a time slot, etc, return client object
-          // when select a time slot from Team view , return member object when select a time slot from client view.
-          $scope.processRelatedUsers = function (selectedSlot)
-          {
-            var relatedUsers = [],
-              memberId = angular.element(selectedSlot.group).attr('memberId');
-
-            if ($scope.views.teams)
-            {
-              $scope.relatedUserLabel = $rootScope.ui.teamup.clients;
-
-              var member = $rootScope.getTeamMemberById(memberId);
-
-              if (typeof member.teamUuids != 'undefined' && member.teamUuids.length > 0)
-              {
-                relatedUsers = $rootScope.getClientsByTeam(member.teamUuids);
-              }
-            }
-            else if ($scope.views.clients)
-            {
-              $scope.relatedUserLabel = $rootScope.ui.planboard.members;
-
-              var client = $rootScope.getClientByID(memberId);
-
-              if (typeof client.clientGroupUuid != 'undefined' && client.clientGroupUuid != '')
-              {
-                relatedUsers = $rootScope.getMembersByClient(client.clientGroupUuid);
-              }
-            }
-
-            return relatedUsers;
-          };
-
           $scope.resetInlineForms = function ()
           {
             $scope.slot = {};
@@ -492,12 +541,59 @@ define(
             $rootScope.$broadcast('resetTaskTimeline');
           };
 
+	        /**
+           * Resolve group relation and load the first affected team or clientgroup
+           * @param groupRelationPromise resource to get the affected team or clientgroup
+           * @param fetchGroupPromise resource to get fetch the members or clients from the affected team or clientgroup
+           * @param labelForm The label shown in the form
+           * @param errorMessage message to inform the user, if there is no affected group, members or clients
+           * @returns {deferred.promise|{then, always}} the affected group users
+	         */
+          function resolveRelationsGroups(groupRelationPromise,
+                                          fetchGroupPromise,
+                                          labelForm,
+                                          errorMessage)
+          {
+            var setNameUsers = function(users)
+            {
+              return _.map(users, function(user)
+              {
+                return {
+                  uuid: user.uuid,
+                  name: user.firstName + ' ' + user.lastName
+                };
+              })
+            };
+
+            return groupRelationPromise
+                 .then(function(relations)
+                       {
+                         return (relations && relations.length >= 1)
+                           ? fetchGroupPromise(relations[0].id)
+                           : $rootScope.notifier.error(errorMessage);
+                       })
+                 .then(function(users)
+                       {
+                         var _users = [];
+
+                         if(users && users.length)
+                         {
+                           $scope.relatedUserLabel = labelForm;
+                           _users = setNameUsers(users);
+                         }
+                         else $rootScope.notifier.error(errorMessage);
+
+                         $scope.relatedUsers = _users;
+                         return _users;
+                       });
+          }
+
           /**
            * Create the members spots for sticking them to the timeline
            * @param teamId the current teamId of the members
            * @param members the members of the team
            */
-          function getMemberSpots(teamId, members)
+          function getMemberSlots(teamId, members)
           {
             angular.forEach(
               members,
@@ -542,6 +638,43 @@ define(
                 );
               }
             );
+          }
+
+          /**
+           * Get the slots of the clients of the current ClientGroup
+           * @param clientGroupId
+           * @param clients
+           */
+          function getClientSlots(clientGroupId, clients)
+          {
+            _.each(clients, function(_client)
+            {
+              var avatar = '<div class="task-planboard roundedPicSmall memberStateNone" ' +
+                'style="float: left; background-image: url(' +
+                Settings.getBackEnd() +
+                config.app.namespace +
+                '/client/' +
+                _client.uuid +
+                '/photo?width=' + 80 + '&height=' + 80 + '&sid=' +
+                Session.get() +
+                ');" memberId="' +
+                _client.uuid +
+                '"></div>';
+
+              var name = avatar +
+                '<div style="float: left; margin: 15px 0 0 5px; font-size: 14px;">' +
+                _client.firstName +
+                ' ' +
+                _client.lastName
+              '</div>';
+
+              $scope.data.clients.members[clientGroupId].push(
+                {
+                  'head': name,
+                  'memId': _client.uuid
+                }
+              );
+            });
           }
         }
       ]

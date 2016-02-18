@@ -146,8 +146,7 @@ define(
          */
         function setTeamIdToName(teamId)
         {
-          var teamName = $filter('groupIdToName')(teamId);
-          return $filter('toTitleCase')(teamName);
+          return $filter('groupIdToName')(teamId);
         }
 
         /**

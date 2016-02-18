@@ -275,7 +275,8 @@
 }
 
 .navbar .nav .dropdown-toggle .caret {
-  margin-top: 8px;
+  margin-top: 1px;
+  margin-left: 4px;
 }
 
 // Hover/focus
@@ -504,6 +505,16 @@
   .nav li.dropdown.open.active > .dropdown-toggle .caret {
     border-top-color: $navbarInverseLinkColorActive;
     border-bottom-color: $navbarInverseLinkColorActive;
+  }
+
+  .dropdown-menu li a {
+    color: $brown;
+    font-weight: 500;
+    text-shadow: none;
+  }
+
+  .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: $brown;
   }
 
   // Navbar search

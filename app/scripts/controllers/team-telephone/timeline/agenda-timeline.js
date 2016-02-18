@@ -966,25 +966,25 @@ define(
 
               //TODO load and render at the same time, two times the same call
               Teams.getSingle($scope.timeline.current.group)
-                .then(function (members)
-                {
-                  options.members = members;
-                  return Slots.all(options);
-                })
-                .then(function (data)
-                {
-                  if (data.error)
-                  {
-                    $rootScope.notifier.error($rootScope.ui.agenda.query);
-                    console.warn('error ->', data);
-                  }
-                  else
-                  {
-                    $scope.data = data;
-                    _this.render(stamps, remember);
-                  }
-                  $rootScope.statusBar.off();
-                });
+                   .then(function (members)
+                         {
+                           options.members = members;
+                           return Slots.all(options);
+                         })
+                   .then(function (data)
+                         {
+                           if (data.error)
+                           {
+                             $rootScope.notifier.error($rootScope.ui.agenda.query);
+                             console.warn('error ->', data);
+                           }
+                           else
+                           {
+                             $scope.data = data;
+                             _this.render(stamps, remember);
+                           }
+                           $rootScope.statusBar.off();
+                         });
             }
             else
             {
@@ -1217,8 +1217,18 @@ define(
 
             if (periods.start == periods.end)
             {
-              periods.end = moment(new Date(arguments[1].end)).add(1, 'days');
+              periods.end = moment(
+                new Date(arguments[1].end)
+              )
+                .add(1, 'days')
+                .valueOf();
             }
+
+            var shownRangeDate = moment(periods.start);
+            $scope.timeline.current.day = shownRangeDate.format("DDD");
+            $scope.timeline.current.week = shownRangeDate.week();
+            $scope.timeline.current.month = (shownRangeDate.month() + 1);
+            $scope.timeline.current.year = shownRangeDate.year();
 
 
             $scope.timeliner.load(periods);
@@ -1328,22 +1338,22 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.login.loading_Members);
                 Teams.getSingle($scope.timeline.current.group)
-                  .then(function (membersGroup)
-                  {
-                    return Slots.members($scope.timeline.current.group, periods, membersGroup);
-                  })
-                  .then(function (members)
-                  {
-                    if (!members.length)
-                    {
-                      $scope.timeline.current.layouts.members = false;
-                      $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
-                    }
+                     .then(function (membersGroup)
+                           {
+                             return Slots.members($scope.timeline.current.group, periods, membersGroup);
+                           })
+                     .then(function (members)
+                           {
+                             if (!members.length)
+                             {
+                               $scope.timeline.current.layouts.members = false;
+                               $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
+                             }
 
-                    $scope.data.members = members;
-                    $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
-                    $rootScope.statusBar.off();
-                  });
+                             $scope.data.members = members;
+                             $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                             $rootScope.statusBar.off();
+                           });
               }
               else
               {
@@ -1727,30 +1737,30 @@ define(
           $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
 
           Slots.add(values, $scope.timeline.user.id)
-            .then(
-              function (result)
-              {
-                Store('environment').remove('setPrefixedAvailability');
+               .then(
+                 function (result)
+                 {
+                   Store('environment').remove('setPrefixedAvailability');
 
-                $rootScope.$broadcast('resetPlanboardViews');
+                   $rootScope.$broadcast('resetPlanboardViews');
 
-                if (result.error)
-                {
-                  $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  updateLoggedUser($scope.timeline.user.id);
+                   if (result.error)
+                   {
+                     $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
+                     console.warn('error ->', result);
+                   }
+                   else
+                   {
+                     updateLoggedUser($scope.timeline.user.id);
 
-                  $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
-                }
+                     $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
+                   }
 
-                $scope.timeliner.refresh();
+                   $scope.timeliner.refresh();
 
-                $rootScope.planboardSync.start();
-              }
-            );
+                   $rootScope.planboardSync.start();
+                 }
+               );
         };
 
 
@@ -1973,7 +1983,6 @@ define(
                   });
 
                 });
-
             }
             else
             {
@@ -2076,17 +2085,28 @@ define(
           }
         };
 
+        /* Check if startdate is before the enddate
+         * @param slot The current selected slot
+         * @returns {boolean} startdate is before the enddate returns true
+         */
+        function slotDatesValid(slot)
+        {
+          return (slot.end > slot.start);
+        }
+
+        function convertDateTimeToLocal(d)
+        {
+          //var d1 = new Date(d);
+          //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+          ////return d1.toISOString().replace("Z", "");
+          return moment(d).toDate();
+        }
+
         /**
          * Timeline on change
          */
         $scope.timelineOnChange = function (direct, original, slot, changed)
         {
-          if (!slotDatesValid(slot))
-          {
-            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-            return;
-          }
-
           $rootScope.planboardSync.clear();
 
           var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
@@ -2130,6 +2150,12 @@ define(
               $rootScope.notifier.error($rootScope.ui.errors.timeline.swappedStartEnd);
               return;
             }
+          }
+
+          if (!slotDatesValid( {start: changed.start, end: changed.end} ))
+          {
+            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+            return;
           }
 
           original.start = new Date(original.start).getTime();

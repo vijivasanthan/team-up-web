@@ -218,6 +218,8 @@ define(
           week: 'Week',
           month: 'Month',
           updateAvail: 'Update availability',
+          noAffectedTeam: 'This clientgroup has no affected team or members',
+          noAffectedClientGroup: 'This tean has no affected clientgroup or clients',
           from: 'From',
           till: 'Till',
           state: 'State',
@@ -588,6 +590,8 @@ define(
           'existing': 'Existing',
           teams: 'Teams',
           selectTeam: 'Select a team',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           seconds: 'seconds',
           hour: 'hour',
           clients: 'Clients',
@@ -1043,7 +1047,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Fill in a valid phone number!',
@@ -1168,6 +1173,8 @@ define(
           currentAmountReachable: 'aktuell verfügbar (ist)',
           amountOfPeopleWished: 'gewünscht (soll)',
           newAvail: 'neue Verfügbarkeit',
+          noAffectedTeam: 'This clientgroup has no affected team or members',
+          noAffectedClientGroup: 'This tean has no affected clientgroup or clients',
           query: 'Synchronisierung des Terminkalenders fehlgeschlagen. Bitte den Browser aktualisieren (F5).',
           day: 'Tag',
           week: 'Woche',
@@ -1713,6 +1720,8 @@ define(
           logs: 'Logs',
           order: 'Auftrag',
           options: 'Einstellungen',
+          teamNameExistTitle: 'Team name already exist',
+          teamNameExistContent: 'Are you sure to add a team which name already exist?',
           help: "Hilfe",
           new: 'neu',
           existing: 'vorhanden',
@@ -2132,7 +2141,8 @@ define(
             maxLength: function (fieldName)
             {
               return 'De ' + fieldName.toLowerCase() + ' has to many characters';
-            }
+            },
+            regularPunctuation: "Only regular punctuation is allowed, like -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Bitte eine gültige Telefonnummer eintragen!',
@@ -2406,6 +2416,8 @@ define(
           requiredPeople: 'Benodigd',
           customDates: 'Aangepaste periode',
           planboard: 'Agenda',
+          noAffectedTeam: 'Deze clientgroep heeft geen gelieerd team of leden',
+          noAffectedClientGroup: 'Dit team heeft geen gelieerde clientgroep of clienten',
           newAvail: 'Nieuwe bereikbaarheid',
           day: 'Dag',
           week: 'Week',
@@ -2849,6 +2861,8 @@ define(
           newTeam: 'Nieuw team',
           teamName: 'Teamnaam',
           createTeam: 'Opslaan',
+          teamNameExistTitle: 'Teamnaam bestaat al',
+          teamNameExistContent: 'Weet u zeker dat u een team wilt aanmaken met een naam die al vaker voorkomt?',
           newMember: 'Nieuw teamlid',
           searchMember: 'Zoek teamlid',
           noMembersFound: 'Geen leden gevonden met de opgegeven zoekterm.',
@@ -3283,7 +3297,8 @@ define(
               maxLength: function (fieldName)
               {
                 return 'De ' + fieldName.toLowerCase() + ' heeft teveel karakters';
-              }
+              },
+            regularPunctuation: "Alleen reguliere interpunctie is toegestaan, zoals -_,!@#$%^&*()"
           },
           phone: {
             notValid: 'Voer een valide telefoonnummer in!',

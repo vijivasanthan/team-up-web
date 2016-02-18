@@ -62,7 +62,7 @@ define(
                 };
 
                 $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-                Dater.readable.date($scope.timeline.range.end);
+                  Dater.readable.date($scope.timeline.range.end);
 
               }
               else if ($route.current.params.userId != $rootScope.app.resources.uuid)
@@ -281,7 +281,7 @@ define(
             render: function (options, remember)
             {
               var start,
-                end;
+                  end;
 
               if ($scope.timeline.range)
               {
@@ -407,9 +407,18 @@ define(
             'timelinerTasks',
             function ()
             {
+              var start = new Date(arguments[1].start).getTime(),
+                  shownRangeDate = moment(start);
+
+              $scope.timeline.current.day = shownRangeDate.format("DDD");
+              $scope.timeline.current.week = shownRangeDate.week();
+              $scope.timeline.current.month = (shownRangeDate.month() + 1);
+              $scope.timeline.current.year = shownRangeDate.year();
+
+
               $scope.timeliner.render(
                 {
-                  start: new Date(arguments[1].start).getTime(),
+                  start: start,
                   end: new Date(arguments[1].end).getTime()
                 }
               );
@@ -489,10 +498,7 @@ define(
             if (selection = $scope.self.timeline.getSelection()[0])
             {
               var values = $scope.self.timeline.getItem(selection.row);
-
               var content = $scope.getSlotContentJSON(values.content);
-
-              $scope.relatedUsers = $scope.processRelatedUsers(values);
 
               $scope.original = {
                 start: values.start,
@@ -773,7 +779,7 @@ define(
           $scope.deleteTasksByRange = function (options)
           {
             var allTasks = Store('app').get('allTasks'),
-              myTasks = Store('app').get('myTasks');
+                myTasks = Store('app').get('myTasks');
 
             $rootScope.planboardSync.clear();
 
@@ -804,70 +810,141 @@ define(
             var calls = [];
 
             Teams.getTasksRange(options)
-              .then(function (tasks)
-              {
-                if(tasks.length == 0)
-                {
-                  $rootScope.notifier.error($rootScope.ui.planboard.noTasksFounded);
-                  $rootScope.statusBar.off();
-                }
-                else if (tasks.error)
-                {
-                  $rootScope.notifier.error(result.error);
-                }
-                else
-                {
-                  angular.forEach(tasks, function (task)
-                  {
+                 .then(function (tasks)
+                       {
+                         if(tasks.length == 0)
+                         {
+                           $rootScope.notifier.error($rootScope.ui.planboard.noTasksFounded);
+                           $rootScope.statusBar.off();
+                         }
+                         else if (tasks.error)
+                         {
+                           $rootScope.notifier.error(result.error);
+                         }
+                         else
+                         {
+                           angular.forEach(tasks, function (task)
+                           {
 
-                    allTasks = deleteTask(allTasks, task.uuid);
-                    myTasks = deleteTask(myTasks, task.uuid);
+                             allTasks = deleteTask(allTasks, task.uuid);
+                             myTasks = deleteTask(myTasks, task.uuid);
 
-                    calls.push(
-                      TeamUp._
-                      (
-                        'taskDelete',
-                        {second: task.uuid},
-                        task
-                      )
-                    );
-                  });
+                             calls.push(
+                               TeamUp._
+                                     (
+                                       'taskDelete',
+                                       {second: task.uuid},
+                                       task
+                                     )
+                             );
+                           });
 
-                  $q.all(calls)
-                    .then(function (result)
-                    {
-                      if (result.error)
-                      {
-                        console.log('failed to remove task ', task);
-                      }
-                      else
-                      {
-                        var group = ($scope.section == 'teams')
-                          ? $scope.currentTeam
-                          : $scope.currentClientGroup;
+                           $q.all(calls)
+                             .then(function (result)
+                                   {
+                                     if (result.error)
+                                     {
+                                       console.log('failed to remove task ', task);
+                                     }
+                                     else
+                                     {
+                                       var group = ($scope.section == 'teams')
+                                         ? $scope.currentTeam
+                                         : $scope.currentClientGroup;
 
-                        $scope.getTasks(
-                          $scope.section,
-                          group,
-                          moment($scope.timeline.range.start).valueOf(),
-                          moment($scope.timeline.range.end).valueOf()
-                        );
-                        $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
-                      }
-                      $rootScope.statusBar.off();
-                    });
-                  }
-              });
+                                       $scope.getTasks(
+                                         $scope.section,
+                                         group,
+                                         moment($scope.timeline.range.start).valueOf(),
+                                         moment($scope.timeline.range.end).valueOf()
+                                       );
+                                       $rootScope.notifier.success($rootScope.ui.planboard.tasksDeleted(options));
+                                     }
+                                     $rootScope.statusBar.off();
+                                   });
+                         }
+                       });
           };
 
           var getDateTimeToPicker = function (d)
           {
-            var d1 = new Date(d);
-            // var offset = d.getTimezoneOffset() / 60;
-            d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
-
-            return d1.toISOString().replace("Z", "");
+            //var d1 = new Date(d);
+            //// var offset = d.getTimezoneOffset() / 60;
+            //d1.setMinutes(d1.getMinutes() - d1.getTimezoneOffset());
+            //
+            //return d1.toISOString().replace("Z", "");
+            return moment(d).toDate();
           };
+
+
+          function setSlot(values, now, nowStamp)
+          {
+            if ((new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
+            {
+              if ($scope.timeliner.isAdded() > 1)
+              {
+                $scope.self.timeline.cancelAdd();
+              }
+
+              $scope.$apply(
+                function ()
+                {
+                  if ($scope.timeline.main)
+                  {
+                    $rootScope.$broadcast('resetPlanboardViewsTasks');
+
+                    $scope.views.slot.add = true;
+                  }
+                  else
+                  {
+                    $scope.forms = {
+                      add: true,
+                      edit: false
+                    };
+                  }
+
+                  $scope.slot = {
+                    start: {
+                      date: new Date(values.start).toString(config.app.formats.date),
+                      time: new Date(values.start).toString(config.app.formats.time),
+                      datetime: getDateTimeToPicker(new Date(values.start).toISOString())
+                    },
+                    end: {
+                      date: new Date(values.end).toString(config.app.formats.date),
+                      time: new Date(values.end).toString(config.app.formats.time),
+                      datetime: getDateTimeToPicker(new Date(values.end).toISOString())
+                    },
+                    recursive: (values.group.match(/recursive/)) ? true : false,
+                    state: 'com.ask-cs.State.Available'
+                  };
+
+                  if($scope.relatedUsers && $scope.relatedUsers.length)
+                  {
+                    $scope.slot.relatedUser = $scope.relatedUsers[0].uuid
+                  }
+
+                  $scope.original = {
+                    start: new Date(values.start),
+                    end: new Date(values.end),
+                    content: {
+                      recursive: $scope.slot.recursive,
+                      state: $scope.slot.state
+                    }
+                  };
+
+                  $scope.redrawSlot();
+                }
+              );
+            }
+            else
+            {
+              $scope.self.timeline.cancelAdd();
+
+              $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
+
+              $rootScope.$apply();
+            }
+          }
 
           $scope.timelineOnAdd = function (form, slot)
           {
@@ -879,70 +956,10 @@ define(
 
             if (!form)
             {
+              //TODO find a better solution, this is way to heavy to load all afected users everytime
               values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row);
 
-              $scope.relatedUsers = $scope.processRelatedUsers(values);
-
-              if ((new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
-              {
-                if ($scope.timeliner.isAdded() > 1)
-                {
-                  $scope.self.timeline.cancelAdd();
-                }
-
-                $scope.$apply(
-                  function ()
-                  {
-                    if ($scope.timeline.main)
-                    {
-                      $rootScope.$broadcast('resetPlanboardViewsTasks');
-
-                      $scope.views.slot.add = true;
-                    }
-                    else
-                    {
-                      $scope.forms = {
-                        add: true,
-                        edit: false
-                      };
-                    }
-
-                    $scope.slot = {
-                      start: {
-                        date: new Date(values.start).toString(config.app.formats.date),
-                        time: new Date(values.start).toString(config.app.formats.time),
-                        datetime: getDateTimeToPicker(new Date(values.start).toISOString())
-                      },
-                      end: {
-                        date: new Date(values.end).toString(config.app.formats.date),
-                        time: new Date(values.end).toString(config.app.formats.time),
-                        datetime: getDateTimeToPicker(new Date(values.end).toISOString())
-                      },
-                      recursive: (values.group.match(/recursive/)) ? true : false,
-                      state: 'com.ask-cs.State.Available'
-                    };
-
-                    $scope.original = {
-                      start: new Date(values.start),
-                      end: new Date(values.end),
-                      content: {
-                        recursive: $scope.slot.recursive,
-                        state: $scope.slot.state
-                      }
-                    };
-
-                    $scope.redrawSlot();
-                  }
-                );
-              }
-              else
-              {
-                $scope.self.timeline.cancelAdd();
-
-                $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
-
-                $rootScope.$apply();
-              }
+              setSlot(values, now, nowStamp);
             }
             else
             {
@@ -976,12 +993,18 @@ define(
                 {
                   if ($scope.views.teams)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.selectMember);
+                    var message = ($scope.relatedUsers && $scope.relatedUsers.length)
+                      ? $rootScope.ui.teamup.selectMember
+                      : $rootScope.ui.planboard.noAffectedClientGroup;
+                    $rootScope.notifier.error(message);
                     return;
                   }
                   else if ($scope.views.clients)
                   {
-                    $rootScope.notifier.error($rootScope.ui.teamup.selectClient);
+                    var message = ($scope.relatedUsers && $scope.relatedUsers.length)
+                      ? $rootScope.ui.teamup.selectClient
+                      : $rootScope.ui.planboard.noAffectedTeam;
+                    $rootScope.notifier.error(message);
                     return;
                   }
 
@@ -1001,7 +1024,7 @@ define(
                 }
 
                 var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                  memberId = angular.element(selected.group).attr('memberId');
+                    memberId = angular.element(selected.group).attr('memberId');
 
                 if (typeof memberId == 'undefined')
                 {
@@ -1078,8 +1101,8 @@ define(
             // console.log('rawSlot ->', rawSlot);
 
             var teamMemberId,
-              clientId,
-              team;
+                clientId,
+                team;
 
             if ($scope.views.teams)
             {
@@ -1119,7 +1142,7 @@ define(
           $scope.redrawSlot = function ()
           {
             var start = Dater.convert.absolute($scope.slot.start.date, $scope.slot.start.time, false),
-              end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
+                end = Dater.convert.absolute($scope.slot.end.date, $scope.slot.end.time, false);
 
             var selectedSlot = $scope.self.timeline.getSelection()[0];
 
@@ -1197,7 +1220,7 @@ define(
             $rootScope.planboardSync.clear();
 
             var values = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-              content = $scope.getSlotContentJSON(values.content);
+                content = $scope.getSlotContentJSON(values.content);
 
             if (content != undefined)
             {
@@ -1253,9 +1276,9 @@ define(
             $rootScope.planboardSync.clear();
 
             var options,
-              selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-              content = $scope.getSlotContentJSON(selected.content),
-              memberId = angular.element(selected.group).attr('memberId');
+                selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
+                content = $scope.getSlotContentJSON(selected.content),
+                memberId = angular.element(selected.group).attr('memberId');
 
             if (!direct)
             {
@@ -1402,8 +1425,8 @@ define(
             else
             {
               var selected = $scope.self.timeline.getItem($scope.self.timeline.getSelection()[0].row),
-                content = $scope.getSlotContentJSON(selected.content),
-                memberId = angular.element(selected.group).attr('memberId');
+                  content = $scope.getSlotContentJSON(selected.content),
+                  memberId = angular.element(selected.group).attr('memberId');
 
               if (typeof content == 'undefined')
               {

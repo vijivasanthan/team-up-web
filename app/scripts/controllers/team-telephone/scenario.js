@@ -9,7 +9,7 @@ define(
       function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, data)
       {
         $rootScope.fixStyles();
-
+        //TODO fix the localized string in this controller
         //view model
         var self = this;
 
@@ -87,8 +87,7 @@ define(
          */
         function setTeamIdToName(teamId)
         {
-          var teamName = $filter('groupIdToName')(teamId);
-          return $filter('toTitleCase')(teamName);
+          return $filter('groupIdToName')(teamId);
         }
 
         /**

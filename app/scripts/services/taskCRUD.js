@@ -308,17 +308,20 @@ define(['services/services', 'config'],
           {
             var deferred = $q.defer(),
               data = {};
+            $rootScope.statusBar.display($rootScope.ui.login.loading_tasks);
 
             Task.team(teamId, statuses)
               .then(function(tasks)
               {
-
                 data.tasks = tasks;
                 return findUniqueClientsByTasks(tasks);
               })
               .then(function (tasksClients) {
                 tasksClients = _.indexBy(tasksClients, 'uuid');
                 data.tasks = processTasks(data.tasks, tasksClients);
+
+                $location.search('teamId', teamId);//add the teamId as url param
+                $rootScope.statusBar.off();
                 deferred.resolve(data.tasks);
               });
 

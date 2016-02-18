@@ -27,6 +27,7 @@ define(['profile'], function(profile){
       },
 
       roles: profile.roles,
+      regularPunction: /([A-Za-z0-9-_,!@#$%^&*()\u9999])/g,
 
       mfunctions: [
         {

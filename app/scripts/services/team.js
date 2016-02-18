@@ -32,6 +32,7 @@ define(['services/services', 'config'],
           this.update = update;
           this.delete = _delete;
           this.addMember = addMember;
+          this.checkNameExist = checkNameExist;
           this.sync = sync;
           this.init = init;
 
@@ -67,9 +68,6 @@ define(['services/services', 'config'],
                 {ids: [memberId]}
               ).then(function (result)
                 {
-                  console.error('memberId', memberId);
-                  console.error('teamId', teamId);
-                  console.error('result', result);
                   return Profile.fetchUserData(memberId);
                 })
                 .then(function ()
@@ -142,13 +140,19 @@ define(['services/services', 'config'],
               );
               error = true;
             }
-            if(team.name.length > 40)
+            if(team.name.length > 50)
             {
               message = $rootScope.ui.validation.default.maxLength(
                 $rootScope.ui.teamup.teamName
               );
               error = true;
             }
+
+            //if(team.name.match(config.app.regularPunction).length !== team.name.length)
+            //{
+            //  message =  $rootScope.ui.validation.default.regularPunctuation;
+            //  error = true;
+            //}
 
             if(! error)
             {
@@ -244,6 +248,19 @@ define(['services/services', 'config'],
                 self.setCurrent(self.list[self.list.length - 1].uuid);
                 $location.path('team/members');
               });
+          }
+
+          /**
+           * Check if the teamname already exist
+           * @param team teamobject with the name
+           * @returns {*} the team object or undefined
+           */
+          function checkNameExist(team)
+          {
+            var teamName = team.name.toLowerCase();
+            return _.result(_.find(this.list, function(team) {
+                        return team.name.toLowerCase() === teamName;
+                      }), 'name');
           }
 
           /**

@@ -25,9 +25,9 @@ define(
         '$injector',
         'moment',
         'tmhDynamicLocale',
-        '$resource',
+        'ipCookie',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, $resource)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -562,22 +562,18 @@ define(
               .then(
               function (result)
               {
-                if (result && result.error)
-                {
-                  console.warn('error ->', result);
-                }
-                else
-                {
-                  Session.clear();
+                console.warn('result ->', result);
+                Session.clear();
+                ipCookie.remove('X-SESSION_ID');
 
-                  Store('app').nuke();
+                Store('app').nuke();
+                //clear authentication cache
+                document.execCommand('ClearAuthenticationCache', 'false');
 
-                  Store('app').save('loginData', {
-                    username: loginData.username
-                  });
-
-                  $window.location.href = 'index.html';
-                }
+                Store('app').save('loginData', {
+                  username: loginData.username
+                });
+                $window.location.href = 'index.html';
               }
             );
           };

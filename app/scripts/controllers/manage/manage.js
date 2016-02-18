@@ -45,9 +45,11 @@ define(
                   );
 
                   var memberIds = [];
+                  var currentTeam = Store('app').get(team.uuid);
+                  currentTeam = $filter('orderBy')(currentTeam, 'firstName');
 
                   angular.forEach(
-                    Store('app').get(team.uuid),
+                    currentTeam,
                     function (member)
                     {
                       if (!_.isUndefined(member) && !_.isUndefined(member.uuid))
@@ -72,6 +74,7 @@ define(
                   connections.teams[team.uuid] = memberIds;
                 }
               );
+              data.teams = $filter('orderBy')(data.teams, 'name');
 
               angular.forEach(
                 dataMembers,
@@ -90,9 +93,13 @@ define(
                 }
               );
 
-              data.members = $filter('orderBy')(members, 'lastName');
+              data.members = $filter('orderBy')(members, 'name');
 
               data.groups = Store('app').get('ClientGroups');
+
+              data.groups = $filter('orderBy')(data.groups, 'name');
+
+              console.log('data.groups', data.groups);
 
               // console.log('members ->', members);
               // console.log('ClientGroups ->', data.groups);
@@ -103,7 +110,7 @@ define(
                 clientIds = [];
 
               var allClients = Store('app').get('clients');
-              allClients = $filter('orderBy')(allClients, 'lastName');
+              allClients = $filter('orderBy')(allClients, 'firstName');
 
               angular.forEach(
                 allClients,
@@ -132,9 +139,11 @@ define(
                 function (group)
                 {
                   var cIds = [];
+                  var currentClientGroup = Store('app').get(group.id);
+                  currentClientGroup = $filter('orderBy')(currentClientGroup, 'firstName');
 
                   angular.forEach(
-                    Store('app').get(group.id),
+                    currentClientGroup,
                     function (client)
                     {
                       if (client != null && cIds.indexOf(client.uuid) == - 1 && typeof client.uuid != "undefined")
@@ -188,7 +197,7 @@ define(
               //  );
               data.clients = clients;
 
-              connections.teamClients = Teams.queryLocalClientGroup(teamsLocal);
+              connections.teamClients = data.teamsClientGroupRelations;//Teams.queryLocalClientGroup(teamsLocal);
 
               $scope.connections = connections;
 

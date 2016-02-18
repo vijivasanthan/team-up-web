@@ -69,10 +69,8 @@ define(['services/services', 'config'],
                   $rootScope.statusBar.off();
                 });
             }
-            else
-            {
-              deferred.reject(false);
-            }
+            else deferred.reject(false);
+
             return deferred.promise;
           };
 
@@ -217,71 +215,6 @@ define(['services/services', 'config'],
             form.$submitted = false;
             form.$setValidity();
           };
-
-          /**
-           * Add member validation
-           * @param member All the data of the added member
-           * @returns {boolean} valid true of false
-           */
-          //this.valid = function (member)
-          //{
-          //  if (typeof member == 'undefined')
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.teamup.accountInfoFill);
-          //    return false;
-          //  }
-          //
-          //  if (!member.role && $rootScope.app.resources.role == 1)
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.validation.role);
-          //    return false;
-          //  }
-          //
-          //  if (_.isUndefined(member.email) || member.email == false)
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.validation.email.notValid);
-          //    return false;
-          //  }
-          //
-          //  if (!member.phone)
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-          //    return false;
-          //  }
-          //
-          //  if ($rootScope.phoneNumberParsed.result == false)
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-          //    return false;
-          //  }
-          //
-          //  if(!member.userName || (member.userName && member.userName.length < 4))
-          //  {
-          //    $rootScope
-          //      .notifier
-          //      .error(
-          //        $rootScope.ui.validation.userName.valid + $rootScope.ui.validation.userName.amountMinChars(4)
-          //      );
-          //    return false;
-          //  }
-          //
-          //  if (! member.password || (member.password.length < 8 || member.password.length > 20) )
-          //  {
-          //    var error = $rootScope.ui.validation.password.required + ' ';
-          //    error += $rootScope.ui.validation.password.amountMinChars(8);
-          //    error += $rootScope.ui.validation.password.amountMaxChars(20);
-          //    $rootScope.notifier.error(error);
-          //    return false;
-          //  }
-          //
-          //  if (member.password !== member.reTypePassword)
-          //  {
-          //    $rootScope.notifier.error($rootScope.ui.teamup.passNotSame);
-          //    return false;
-          //  }
-          //
-          //  return true;
-          //};
 
           this.search = function (name)
           {

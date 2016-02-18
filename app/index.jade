@@ -69,9 +69,8 @@ block navbar
 						li#clientMenu(ng-show='app.domainPermission.clients',
 							data-match-route='/(:?client)')
 							a(ng-click='nav("client")') {{ui.teamup.clients}}
-						li(data-match-route='/manage',
-							ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
-							a(href='#manage') {{ui.teamup.manage}}
+						li(data-match-route='/manage', ng-if='(app.domainPermission.tasks && app.resources.role == 1) || (app.resources.role == 1 && app.resources.teamUuids.length == 0)')
+							a(href='#manage') {{ui.teamup.manage}} 
 						li(data-match-route='/team-telefoon.*',
 							ng-show='app.domainPermission.teamTelephoneBasic')
 							a(ng-click='nav("team-telefoon/status")') {{ ui.teamup.teamTelephone }}
@@ -124,7 +123,7 @@ block navbar
 										ng-click='nav("client")') {{ui.teamup.clients}}
 									li(role="presentation",
 										data-match-route='/manage',
-										ng-hide='(app.resources.role === undefined) || app.resources.role > 1')
+										ng-if='(app.domainPermission.tasks && app.resources.role == 1) || (app.resources.role == 1 && app.resources.teamUuids.length == 0)')
 										a(href='#manage',
 											tabindex="-1",) {{ui.teamup.manage}}
 									li(role="presentation",
@@ -269,10 +268,9 @@ block footer
 		.container-fluid
 			#copyrights
 				span.muted
-					small Ask Community Systems, 2015
-						br
+					small Ask Community Systems, 
 						i
-							| TeamUp&nbsp; v{{config.app.version}}
+							| {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp; v{{config.app.version}}
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')
 				small

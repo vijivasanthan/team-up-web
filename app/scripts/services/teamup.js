@@ -666,7 +666,15 @@ define(
                     third: 'unAssignClientGroups'
                   }
                 },
-
+                // get all the link between a team and a clientgroup
+                clientGroupTeamQuery: {
+                  method: 'GET',
+                  isArray: true,
+                  params: {
+                    first: 'clientGroup',
+                    third: 'teams'
+                  }
+                },
 
                 /**
                  * Team-Task

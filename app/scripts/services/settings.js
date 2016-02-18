@@ -140,6 +140,17 @@ define(['services/services', 'config'], function (services, config)
               params: {
                 uuid: '',
                 pass: ''
+              },
+              transformResponse: function(data)
+              {
+                try
+                {
+                  return angular.fromJson(data);
+                }
+                catch (e)
+                {
+                  return {message: data};
+                }
               }
             }
           });

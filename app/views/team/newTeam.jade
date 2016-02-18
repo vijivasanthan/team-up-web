@@ -1,3 +1,7 @@
+include confirmAddTeamModal
+	button.btn.btn-success(type='button',
+		ng-click='team.create(editForm, true)') {{ui.teamup.save}}
+
 div(style='padding-top: 1px;')
 	.page-header
 		h2.nullable {{ui.teamup.teams}}
@@ -11,7 +15,7 @@ div(style='padding-top: 1px;')
 				hr
 				form.form(name='team.new', novalidate='')
 					.form-group(
-					ng-class="{ 'has-error' : (team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid }"
+					ng-class="{ 'has-error' : (team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid}"
 					)
 						input.span3.input-xlarge.search-query.controls.form-control(
 							type='text',
@@ -20,7 +24,7 @@ div(style='padding-top: 1px;')
 							required='',
 							focus,
 							ng-minlength="2",
-							ng-maxlength="40",
+							ng-maxlength="50",
 							ng-model='editForm.name')
 						span.help-block(ng-if='(team.new.name.$dirty || team.new.$submitted || team.new.name.$touched) && team.new.name.$invalid'
 							ng-messages="team.new.name.$error")
@@ -30,7 +34,7 @@ div(style='padding-top: 1px;')
 								i {{ ui.validation.default.minLength(ui.teamup.teamName) }}
 							small(ng-message="maxlength")
 								i {{ ui.validation.default.maxLength(ui.teamup.teamName) }}
-							
+								
 					.control-group
 						button.btn.btn-success.confirmButton.controls(type='submit',
 						ng-click='team.create(editForm)') {{ui.teamup.createTeam}}

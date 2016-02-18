@@ -226,12 +226,20 @@ input[type="button"] {
   color: $offwhite;
   &:hover,
   &:focus,
-  &:active,
-  &.active {
+  &:active {
     background-color: $brown;
     color: $orange;
   }
 
+}
+
+.btn-info:active:hover,
+.btn-info:active:focus,
+.btn-info:active.focus, .btn-info.active:hover, .btn-info.active:focus,
+.btn-info.active.focus, .open > .btn-info.dropdown-toggle:hover,
+.open > .btn-info.dropdown-toggle:focus, .open > .btn-info.dropdown-toggle.focus {
+  background-color: $brown;
+  color: $orange;
 }
 
 // Inverse appears as dark gray

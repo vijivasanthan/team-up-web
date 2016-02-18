@@ -1,4 +1,4 @@
-div(ng-controller='timeline as taskPlanboard')
+div(ng-controller='timeline')
 	#confirmTasksDeleteModal.modal.fade(tabindex='-1', role='dialog',
 	aria-labelledby='confirmTasksDeleteModalLabel', aria-hidden='true')
 		.modal-dialog
@@ -35,8 +35,9 @@ div(ng-controller='timeline as taskPlanboard')
 				span.nullable.pull-left(ng-show='views.clients')
 					.selectGroup
 						span.selectTitle
-							| {{ ui.teamup.selectClientGroup }}
-						select(ng-model='currentClientGroup'
+							| {{ ui.teamup.selectClientGroup }} 
+						select(
+						ng-model='currentClientGroup'
 						ng-options='t.uuid as t.name for t in data.clients.list | orderBy:"name"',
 						ng-selected='currentClientGroup',
 						ng-change='changeCurrent(currentClientGroup)')
@@ -64,12 +65,12 @@ div(ng-controller='timeline as taskPlanboard')
 			
 				// TODO: Look at to this later on!
 				//div(ng-show='relatedUsers.length > 0')
-				.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
+				.form-elements-group(ng-show='(views.slot.add || views.slot.edit || views.member) && relatedUsers.length')
 					label {{relatedUserLabel}}
 					select(ng-model='slot.relatedUser',
-					ng-options='r.uuid as r.name for r in relatedUsers',
-					ng-change='redrawSlot(slot)',
-					ng-show='views.slot.add || views.slot.edit')
+						ng-options='r.uuid as r.name for r in relatedUsers',
+						ng-change='redrawSlot(slot)',
+						ng-show='views.slot.add || views.slot.edit')
 					select(ng-model='slot.relatedUser',
 					disabled='',
 					ng-options='r.uuid as r.name for r in relatedUsers',
@@ -96,10 +97,12 @@ div(ng-controller='timeline as taskPlanboard')
 						input(name='time-start',
 						type='text',
 						ng-model='slot.start.time',
-						data-length='3',
+						data-length='1',
 						data-time-type="string",
 						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
+						data-minute-step="5",
+						data-arrow-behavior="picker",
 						bs-timepicker='')
 						i.icon-time
 					.control-group.timer(ng-show='views.group || views.member')
@@ -154,10 +157,12 @@ div(ng-controller='timeline as taskPlanboard')
 						input(name='time-end',
 						type='text',
 						ng-model='slot.end.time',
-						data-length='3',
+						data-length='1',
 						data-time-type="string",
 						data-time-format="H:mm",
 						ng-change='redrawSlot(slot)',
+						data-minute-step="5",
+						data-arrow-behavior="picker",
 						bs-timepicker='')
 						i.icon-time
 					.control-group.timer(ng-show='views.group || views.member')
@@ -215,7 +220,7 @@ div(ng-controller='timeline as taskPlanboard')
 						span.entypo &#128340;
 						| {{ ui.agenda.planboard }}
 	
-			.tab-content.treegrid-container(ng-controller='treegrid')
+			.tab-content.tab-medium-size.treegrid-container(ng-controller='treegrid')
 	
 	
 				#viewTeamsTab.tab-pane(class="{{(views.teams==true || views.clients==true) && 'active'}}")
@@ -273,23 +278,23 @@ div(ng-controller='timeline as taskPlanboard')
 					#timeline
 						//include planboard/time-toolbar.jade
 						#mainTimeline(set-position-slot-form)
-					div.alert.alert-warning(ng-show='section == "teams" && ! data.teams.members[currentTeam].length && ! load')
+					div.alert.alert-warning(ng-show='section === "teams" && ! data.teams.members[currentTeam].length && ! load')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.planboard.noMembers }}
 
-					div.alert.alert-warning(ng-show='section == "clients" && ! data.clients.members[currentClientGroup].length')
+					div.alert.alert-warning(ng-show='section === "clients" && ! hasClients && ! load')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.planboard.noClients }}
 					hr
 					p
 						small.pull-left
-							span.timeline-footer-text {{ui.planboard.lastSyncTime}}
-							span.timeline-footer-text {{data.synced | nicelyDate}}
+							span.timeline-footer-text {{ui.planboard.lastSyncTime}}  
+							span.timeline-footer-text {{data.synced | nicelyDate}} 
 						small.pull-right
 							span.timeline-footer-text {{ui.planboard.dataRangeStart}}
-							span.timeline-footer-text {{data.periods.start | nicelyDate}}
+							span.timeline-footer-text {{data.periods.start | nicelyDate}}  
 							| |
-							span.timeline-footer-text {{ui.planboard.dataRangeEnd}}
-							span.timeline-footer-text {{data.periods.end | nicelyDate}}
+							span.timeline-footer-text {{ui.planboard.dataRangeEnd}} 
+							span.timeline-footer-text {{data.periods.end | nicelyDate}} 

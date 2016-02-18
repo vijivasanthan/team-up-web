@@ -78,7 +78,7 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 .tabbable.tabs-left
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;', bs-navbar)
 		include ../task/tabs
-	.tab-content
+	.tab-content.tab-medium-size
 		#allTasks.tab-pane(class="active")
 			.tab-header
 				h3.pull-left {{ui.task.allTasks}}
@@ -159,4 +159,4 @@ aria-labelledby='taskModalLabel', aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					//small: i Er zijn {{tasks.all.list.length}} taken.
-					small: i {{ ui.task.thereAreAmountTasks((alltasks.tasks.list | filter: task.team ).length) }} 
+					small: i {{ ui.task.thereAreAmountTasks(alltasks.tasks.list && (alltasks.tasks.list | filter: task.team ).length || 0 ) }} 
