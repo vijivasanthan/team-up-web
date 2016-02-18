@@ -280,22 +280,17 @@ define(['services/services', 'config'],
                     timedata.push({
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),
-                      itemType: 'group',
                       group: name,
                       content: requirement +
-                      actual +
-                      _this.secret(angular.toJson(
-                        {
-                          type: 'group',
-                          diff: slot.diff,
-                          group: name
-                        })),
+                      actual,
+                      itemType: 'group',
+                      diff: slot.diff,
                       className: 'group-aggs',
                       editable: false
                     });
                   }
 
-                  timedata = _this.addLoading(data, timedata, [_this.wrapper('c') + name]);
+                  timedata = _this.addLoading(data, timedata, [name]);
                 });
               });
 
