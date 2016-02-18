@@ -45,9 +45,11 @@ define(
                   );
 
                   var memberIds = [];
+                  var currentTeam = Store('app').get(team.uuid);
+                  currentTeam = $filter('orderBy')(currentTeam, 'lastName');
 
                   angular.forEach(
-                    Store('app').get(team.uuid),
+                    currentTeam,
                     function (member)
                     {
                       if (!_.isUndefined(member) && !_.isUndefined(member.uuid))
@@ -69,7 +71,7 @@ define(
                     }
                   );
 
-                  connections.teams[team.uuid] =  $filter('orderBy')(memberIds);
+                  connections.teams[team.uuid] = memberIds;
                 }
               );
               data.teams = $filter('orderBy')(data.teams, 'name');
@@ -137,9 +139,11 @@ define(
                 function (group)
                 {
                   var cIds = [];
+                  var currentClientGroup = Store('app').get(group.id);
+                  currentClientGroup = $filter('orderBy')(currentClientGroup, 'lastName');
 
                   angular.forEach(
-                    Store('app').get(group.id),
+                    currentClientGroup,
                     function (client)
                     {
                       if (client != null && cIds.indexOf(client.uuid) == - 1 && typeof client.uuid != "undefined")
@@ -161,7 +165,7 @@ define(
                     }
                   );
 
-                  connections.clients[group.id] = $filter('orderBy')(cIds);
+                  connections.clients[group.id] = cIds;
                   groupIds.push(group.id);
                 }
               );
