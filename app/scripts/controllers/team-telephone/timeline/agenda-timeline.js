@@ -2007,11 +2007,11 @@ define(
 
             var start = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
-              Dater.convert.absolute(slot.start.date, slot.start.time, true);
+              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix()
 
             var end = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
-              Dater.convert.absolute(slot.end.date, slot.end.time, true);
+                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix()
 
 
             if (typeof start == "undefined" || isNaN(start) || start == 0 || typeof end == "undefined" || isNaN(end) || end == 0)
@@ -2122,10 +2122,10 @@ define(
             changed = {
               start: ($rootScope.browser.mobile) ?
                 new Date(slot.start.datetime).getTime() :
-                Dater.convert.absolute(slot.start.date, slot.start.time, false),
+                +moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime),
               end: ($rootScope.browser.mobile) ?
                 new Date(slot.end.datetime).getTime() :
-                Dater.convert.absolute(slot.end.date, slot.end.time, false),
+                +moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
               recursive: slot.recursive,
               state: slot.state
             };
@@ -2398,6 +2398,105 @@ define(
                  }
                );
         };
+
+        /**
+         *
+         * @param id teamId
+         * @param wish wish amount
+         */
+        $scope.saveWish = function (id, wish)
+        {
+          $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
+
+          Slots.setWish({
+                          id: id,
+                          start: 255600,
+                          end: 860400,
+                          recursive: true,
+                          wish: wish
+                        }).then(function (result)
+                                {
+                                  $rootScope.statusBar.off();
+
+                                  if (result.error)
+                                  {
+                                    $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
+
+                                    console.warn('error ->', result);
+                                  }
+                                  else
+                                  {
+                                    $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
+                                  }
+                                  wisher(id);
+                                  getWishes();
+                                });
+
+        };
+
+        function wish(id)
+        {
+          var deferred = $q.defer(),
+              count = 0;
+
+          Slots.wishes(
+            {
+              id: id,
+              start: 255600,
+              end: 860400
+            }).then(
+            function (results)
+            {
+              angular.forEach(
+                results,
+                function (slot)
+                {
+                  if (slot.start == 255600 &&
+                    slot.end == 860400 &&
+                    slot.count != null)
+                  {
+                    count = slot.count;
+                  }
+                }
+              );
+
+              deferred.resolve({count: count});
+            }
+          );
+
+          return deferred.promise;
+        }
+
+        /**
+         * Get wishes
+         */
+        function getWishes()
+        {
+          if ($scope.timeline.current.layouts.group)
+          {
+            $rootScope.statusBar.display($rootScope.ui.message.getWishes);
+
+            Slots.wishes(
+              {
+                id: $scope.timeline.current.group,
+                start: $scope.data.periods.start / 1000,
+                end: $scope.data.periods.end / 1000
+              }).then(
+              function (wishes)
+              {
+                $rootScope.statusBar.off();
+
+                $scope.data.aggs.wishes = wishes;
+
+                $scope.timeliner.render(
+                  {
+                    start: $scope.timeline.range.start,
+                    end: $scope.timeline.range.end
+                  }, true);
+              }
+            );
+          }
+        }
       });
   }
 );

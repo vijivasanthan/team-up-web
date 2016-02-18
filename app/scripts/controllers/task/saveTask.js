@@ -1,6 +1,6 @@
 define(
-  ['../controllers'],
-  function (controllers)
+  ['../controllers', 'config'],
+  function (controllers, config)
   {
     'use strict';
 
@@ -142,20 +142,13 @@ define(
         {
           form.startTime = ($rootScope.browser.mobile)
             ? moment(form.startDate.datetime).utc().valueOf()
-            : Dater.convert.absolute(
-            formatDateTime(form.startDate.date, 'dd-MM-yyyy'),
-            formatDateTime(form.startDate.time, 'HH:mm'),
-            false
-          );
+            : +moment(form.startDate.date +' '+ form.startDate.time, config.app.formats.datetime);
 
           form.endTime = ($rootScope.browser.mobile) ?
             moment(form.endDate.datetime).utc().valueOf() :
-            Dater.convert.absolute(
-              formatDateTime(form.endDate.date, 'dd-MM-yyyy'),
-              formatDateTime(form.endDate.time, 'HH:mm'),
-              false
-            );
+            +moment(form.endDate.date +' '+ form.endDate.time, config.app.formats.datetime);
 
+          console.error("form.startTime ->", form.startTime);
 
           if (!form.team)
           {

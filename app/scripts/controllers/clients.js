@@ -353,7 +353,7 @@ define(
 
             try
             {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              client.birthDate = +moment(client.birthDate, config.app.formats.date);
               console.error("client.birthDate ->", client.birthDate);
             }
             catch (error)
@@ -423,7 +423,7 @@ define(
             try
             {
               //convert birthdate into miliseconds for saving
-              changedClient.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              changedClient.birthDate = +moment(client.birthDate, config.app.formats.date);
             }
             catch (error)
             {
@@ -462,7 +462,7 @@ define(
 
             try
             {
-              client.birthDate = Dater.convert.absolute(client.birthDate, 0);
+              client.birthDate = +moment(client.birthDate, config.app.formats.date);
             }
             catch (error)
             {
