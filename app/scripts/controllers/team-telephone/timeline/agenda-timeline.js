@@ -2355,6 +2355,49 @@ define(
             }
           }
         };
+
+
+        /* Wish section */
+
+        /**
+         * Set wish
+         */
+        $scope.wisher = function (slot)
+        {
+          $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
+
+          var formattedSlot = {
+            id: slot.groupId,
+            start: ($rootScope.browser.mobile) ?
+              new Date(slot.start.datetime).getTime() / 1000 :
+              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
+            end: ($rootScope.browser.mobile) ?
+              new Date(slot.end.datetime).getTime() / 1000 :
+              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
+            recursive: (!_.isUndefined(slot.recursive)),
+            wish: slot.wish
+          };
+
+          Slots.setWish(formattedSlot)
+               .then(
+                 function (result)
+                 {
+                   $rootScope.$broadcast('resetPlanboardViews');
+
+                   if (result.error)
+                   {
+                     $rootScope.notifier.error($rootScope.ui.agenda.wisher);
+                     console.warn('error ->', result);
+                   }
+                   else
+                   {
+                     $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
+                   }
+
+                   $scope.timeliner.refresh();
+                 }
+               );
+        };
       });
   }
 );
