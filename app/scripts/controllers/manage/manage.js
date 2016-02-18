@@ -46,7 +46,7 @@ define(
 
                   var memberIds = [];
                   var currentTeam = Store('app').get(team.uuid);
-                  currentTeam = $filter('orderBy')(currentTeam, 'lastName');
+                  currentTeam = $filter('orderBy')(currentTeam, 'firstName');
 
                   angular.forEach(
                     currentTeam,
@@ -93,7 +93,7 @@ define(
                 }
               );
 
-              data.members = $filter('orderBy')(members, 'lastName');
+              data.members = $filter('orderBy')(members, 'name');
 
               data.groups = Store('app').get('ClientGroups');
 
@@ -110,7 +110,7 @@ define(
                 clientIds = [];
 
               var allClients = Store('app').get('clients');
-              allClients = $filter('orderBy')(allClients, 'lastName');
+              allClients = $filter('orderBy')(allClients, 'firstName');
 
               angular.forEach(
                 allClients,
@@ -140,7 +140,7 @@ define(
                 {
                   var cIds = [];
                   var currentClientGroup = Store('app').get(group.id);
-                  currentClientGroup = $filter('orderBy')(currentClientGroup, 'lastName');
+                  currentClientGroup = $filter('orderBy')(currentClientGroup, 'firstName');
 
                   angular.forEach(
                     currentClientGroup,
