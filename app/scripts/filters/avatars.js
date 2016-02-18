@@ -143,7 +143,8 @@ define(
     filters.filter(
       'nicelyDate',
       [
-        function ()
+        'moment',
+        function (moment)
         {
           return function (date)
           {
@@ -157,7 +158,7 @@ define(
               date *= 1000
             }
 
-            return new Date(date).toString(config.app.formats.date);
+            return moment(date).format(config.app.formats.date);
           };
         }
       ]
@@ -167,13 +168,14 @@ define(
     filters.filter(
       'nicelyTime',
       [
-        function ()
+        'moment',
+        function (moment)
         {
           return function (date)
           {
             if (typeof date == 'string') date = Number(date);
 
-            return new Date(date).toString(config.app.formats.time);
+            return moment(date).format(config.app.formats.time);
           };
         }
       ]

@@ -1076,6 +1076,9 @@ div.timeline-event.wishes-even {
 /* Agenda date range picker*/
 #planboard .dateranger {
   margin-right: 10px;
+  input[type=text] {
+    width: 215px;
+  }
 }
 
 //#viewTeamsTab .dateranger{
@@ -1467,7 +1470,7 @@ Order
 }
 
 .time-tip {
-  z-index: 100000;
+  //z-index: 9999;
   background-color: transparent;
   display: inline-block;
   padding: 4px 0;
@@ -1573,14 +1576,14 @@ Order
  */
 .vis.timeline{
   .item {
-    background-color: #6cad6c;
+    background-color: $orange;
     border-width: 0px !important;
     border-radius: 0px !important;
     //border-color: lighten($brown, 20%) !important;
     //color: lighten($brown, 20%) !important;
 
     &:hover {
-      background-color: lighten(#6cad6c, 10%);
+      background-color: lighten($orange, 10%);
     }
   }
 

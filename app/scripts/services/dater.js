@@ -32,23 +32,28 @@ define(
             readable: {
               date: function (date)
               {
-                return new Date(date).toString(config.app.formats.date);
+                return moment(new Date(date)).format(config.app.formats.date);
               }
             },
             //TODO timezones
             convert: {
               absolute: function (date, time, flag)
               {
-                var dates = date.split('-'),
-                  result = new Date(
-                    Date.parse(
-                      dates[2] +
-                      '-' +
-                      dates[1] +
-                      '-' +
-                      dates[0] +
-                      ' ' +
-                      time)).getTime();
+                var dates, result, offset;
+
+                if(typeof date == "undefined"){
+                  return;
+                }
+
+                // TODO: Find a more dynamic way (in case of other timezones)
+                offset = moment.tz(date +' '+ time, 'DD-MM-YYYY HH:mm', 'Europe/Amsterdam').format('Z');
+
+                try{
+                  dates = date.split('-');
+                  result = new Date(Date.parse(dates[2] + '-' + dates[1] + '-' + dates[0] + 'T' + time + offset)).getTime();
+                }catch(err){
+                  console.warn(err);
+                }
 
                 return (flag) ? result / 1000 : result;
               }

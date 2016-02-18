@@ -134,7 +134,7 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.group')
 			small
-				i(ng-show="(slot.diff < 0)") {{slot.diff.substr(1) | i18n_spec:'planboard.lessPeople'}}
+				i(ng-show="(slot.diff < 0)") {{slot.diff.toString().substr(1) | i18n_spec:'planboard.lessPeople'}}
 				i(ng-show="(slot.diff == 0)") {{ui.agenda.samePeople}}
 				i(ng-show="(slot.diff > 0)") {{slot.diff | i18n_spec:'planboard.morePeople'}}
 		.form-elements-group.wish-amount(ng-show='views.wish')

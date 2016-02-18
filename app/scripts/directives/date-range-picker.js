@@ -17,8 +17,8 @@ define(
               //element.val(startDate.format('{MM}-{dd}-{yyyy}') + ' / ' + endDate.format('{MM}-{dd}-{yyyy}'));
 
               var options = {
-                startDate:      Date.today(),
-                endDate:        Date.today(),
+                startDate:      moment().startOf('day'),
+                endDate:        moment().startOf('day'),
                 format:         'DD-MM-YYYY',
                 separator:      ' / ',
                 minDate:        false,
@@ -41,35 +41,28 @@ define(
                 ranges: {}
               };
 
-              // lose this sugerJs related stuff later on!
-              //          options.ranges[$rootScope.ui.planboard.daterangerToday] = ['today', 'tomorrow'];
-              //          options.ranges[$rootScope.ui.planboard.daterangerTomorrow] = ['tomorrow', new Date.today().addDays(2)];
-              //          options.ranges[$rootScope.ui.planboard.daterangerYesterday] = ['yesterday', 'today'];
-              //          options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = ['today', new Date.create().addDays(3)];
-              //          options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = ['today', new Date.create().addDays(7)];
-
               options.ranges[$rootScope.ui.planboard.daterangerToday] = [
-                new Date.today(),
-                new Date.today().addDays(1)
+                moment().startOf('day').toDate(),
+                moment().add(1, 'days').startOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerTomorrow] = [
-                new Date.today().addDays(1),
-                new Date.today().addDays(2)
+                moment().add(1, 'days').startOf('day').toDate(),
+                moment().add(2, 'days').startOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerYesterday] = [
-                new Date.today().addDays(-1),
-                new Date.today()
+                moment().subtract(1, 'days').startOf('day').toDate(),
+                moment().startOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
-                new Date.today(),
-                moment().add(3, 'day').toDate()
+                moment().startOf('day').toDate(),
+                moment().add(3, 'days').startOf('day').toDate()
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
-                new Date.today(),
-                moment().add(7, 'day').toDate()
+                moment().startOf('day').toDate(),
+                moment().add(1, 'weeks').startOf('day').toDate()
               ];
 
               element.daterangepicker(

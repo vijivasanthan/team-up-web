@@ -684,7 +684,7 @@ define(['services/services', 'config'],
                                 groupId: options.groupId,
                                 aggs: _aggs,
                                 members: mems,
-                                synced: new Date().getTime(),
+                                synced: +moment(),
                                 periods: {
                                   start: options.stamps.start,
                                   end: options.stamps.end
@@ -703,7 +703,7 @@ define(['services/services', 'config'],
                             user: user,
                             groupId: options.groupId,
                             aggs: _aggs,
-                            synced: new Date().getTime(),
+                            synced: +moment(),
                             periods: {
                               start: options.stamps.start,
                               end: options.stamps.end
@@ -718,7 +718,7 @@ define(['services/services', 'config'],
               {
                 deferred.resolve({
                   user: user,
-                  synced: new Date().getTime(),
+                  synced: +moment(),
                   periods: {
                     start: options.stamps.start,
                     end: options.stamps.end
@@ -890,7 +890,7 @@ define(['services/services', 'config'],
                 {
                   member.state = member.text;
                   member.text = null;
-                })
+                });
                 memberDeferred.resolve({uuid: member.uuid, content: result});
               },
               function (error)

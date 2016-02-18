@@ -6,7 +6,8 @@ define(
 
     controllers.controller(
       'agenda-timeline',
-      function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots, Teams, Profile, Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment, vis)
+      function ($rootScope, $scope, $q, $location, $route, $timeout, $window, Slots,
+                Teams, Profile, Dater, Sloter, TeamUp, Store, CurrentSelection, $filter, moment, vis)
       {
         // TODO: Define diff in the watcher maybe?
         var range,
@@ -625,7 +626,6 @@ define(
                   {
                     $rootScope.notifier.error($rootScope.ui.errors.timeline.remove);
                     callback(null);
-                    console.warn('error ->', result);
                   }
                   else
                   {
@@ -976,7 +976,6 @@ define(
                            if (data.error)
                            {
                              $rootScope.notifier.error($rootScope.ui.agenda.query);
-                             console.warn('error ->', data);
                            }
                            else
                            {
@@ -1412,7 +1411,6 @@ define(
         $scope.selectedSlot = function (props)
         {
           var selectedItem = visDataSet.get(props.items[0]);
-          console.error('selectedItem', selectedItem);
 
           $scope.original = {
             start: selectedItem.start,
@@ -1436,7 +1434,6 @@ define(
             };
           }
 
-          console.error('selectedItem.itemType', selectedItem.itemType);
           if (selectedItem.itemType)
           {
             if ($scope.timeline.main)
@@ -1511,7 +1508,6 @@ define(
          */
         $scope.timelineOnSelect = function (props)
         {
-          console.error('props', props);
           var groupId;
           $rootScope.planboardSync.clear();
 
@@ -1877,7 +1873,10 @@ define(
               // (will break if someone's name matches)
               // TODO: this is silly, use an exposed attribute with visJS ASAP
               if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
-                groupId && !groupId.match($rootScope.ui.planboard.myPlanning) && !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) && !groupId.match($rootScope.ui.planboard.planning) && !groupId.match($rootScope.ui.planboard.weeklyPlanning))
+                groupId && !groupId.match($rootScope.ui.planboard.myPlanning) &&
+                !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) &&
+                !groupId.match($rootScope.ui.planboard.planning) &&
+                !groupId.match($rootScope.ui.planboard.weeklyPlanning))
               {
                 callback(null);
                 return;
@@ -1948,7 +1947,6 @@ define(
                     state: 'com.ask-cs.State.Available'
                   };
 
-                  console.log($scope.slot);
                   //$scope.setEndDate($scope.slot.start.date);
                   //$scope.setEndTime($scope.slot.start.time);
                   //$scope.showDuration();
@@ -2001,11 +1999,11 @@ define(
            * Add new slot through the form
            */
           {
-            if (!slotDatesValid(slot))
-            {
-              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-              return;
-            }
+            //if (!slotDatesValid(slot))
+            //{
+            //  $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+            //  return;
+            //}
 
             var start = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :

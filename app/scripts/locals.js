@@ -211,6 +211,31 @@ define(
           or: 'or',
           buttonPushed: 'button pushed simultaneously.'
         },
+        timeline: {
+          query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
+          pastAdding: 'It is not allowed to add a timeslot in the past!',
+          swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
+          invalidTimeslot: 'Invalid timeslot. The format of the start/end date and/or time may be incorrect.',
+          add: 'Error with adding a new timeslot!',
+          change: 'Error with changing timeslot!',
+          pastChanging: 'Changing timeslot in the past is not allowed!',
+          pastDeleting: 'Removing a timeslot in the past is not allowed!',
+          remove: 'Error with removing timeslot!',
+          wisher: 'Error with changing minimum required staff value!',
+          notAuth: 'It is not allowed to alter someone else\'s agenda unless you have a planning role. As a administrator/planner you can change the planning of others by clicking on their name from the list of users. You will be directed to another page for changing the planning of that user.'
+        },
+        required: {
+          pastAdding: 'It is not allowed to add a minimum required staff value in the past!',
+          pastDeleting: 'It is not allowed to remove a minimum required staff value in the past!',
+          pastChanging: 'It is not allowed to change a minimum required staff value in the past!',
+          add: 'Error with adding new minimum required staff value!',
+          change: 'Error with changing minimum required staff value!',
+          remove: 'Error with removing minimum required staff value!',
+          emptyReq: 'Please fill in the minimum required staff value',
+          invalidDate: 'The format of the start/end date and/or time may be incorrect.',
+          swappedDate: 'The end time is earlier than the start time. Did you swap the start and end time?',
+          invalidReq: 'Please fill in a valid value'
+        },
         planboard: {
           planboard: 'Agenda',
           newAvail: 'New availability',
@@ -1289,6 +1314,31 @@ define(
           leftButtonMouse: 'mit der Maus und anschließender Verschiebung',
           or: 'bei ',
           buttonPushed: 'gedrückter linker Maustaste.'
+        },
+        timeline: {
+          query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
+          pastAdding: 'It is not allowed to add a timeslot in the past!',
+          swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
+          invalidTimeslot: 'Invalid timeslot. The format of the start/end date and/or time may be incorrect.',
+          add: 'Error with adding a new timeslot!',
+          change: 'Error with changing timeslot!',
+          pastChanging: 'Changing timeslot in the past is not allowed!',
+          pastDeleting: 'Removing a timeslot in the past is not allowed!',
+          remove: 'Error with removing timeslot!',
+          wisher: 'Error with changing minimum required staff value!',
+          notAuth: 'It is not allowed to alter someone else\'s agenda unless you have a planning role. As a administrator/planner you can change the planning of others by clicking on their name from the list of users. You will be directed to another page for changing the planning of that user.'
+        },
+        required: {
+          pastAdding: 'It is not allowed to add a minimum required staff value in the past!',
+          pastDeleting: 'It is not allowed to remove a minimum required staff value in the past!',
+          pastChanging: 'It is not allowed to change a minimum required staff value in the past!',
+          add: 'Error with adding new minimum required staff value!',
+          change: 'Error with changing minimum required staff value!',
+          remove: 'Error with removing minimum required staff value!',
+          emptyReq: 'Please fill in the minimum required staff value',
+          invalidDate: 'The format of the start/end date and/or time may be incorrect.',
+          swappedDate: 'The end time is earlier than the start time. Did you swap the start and end time?',
+          invalidReq: 'Please fill in a valid value'
         },
         planboard: {
           requiredPeople: 'Bedarf',
@@ -2558,6 +2608,31 @@ define(
           leftButtonMouse: 'met uw muis. Met de linkermuisknop en de',
           or: 'of',
           buttonPushed: 'knop tegelijkertijd ingedrukt.'
+        },
+        timeline: {
+          query: 'Fout bij het laden van de tijdlijndata. Vernieuw deze webpagina om het nogmaals te proberen.',
+          pastAdding: 'Invoer van tijden in het verleden is niet toegestaan!',
+          swappedStartEnd: 'De eindtijd is eerder dan de starttijd. Zijn de start- en eindtijd omgewisseld?',
+          invalidTimeslot: 'Ongeldig tijdslot. De manier waarop de begin- of eindtijd en/of -datum zijn ingevuld zijn mogelijk incorrect.',
+          add: 'Fout bij het toevoegen van een planning.',
+          change: 'Fout bij het wijzigen van een planning.',
+          pastChanging: 'Veranderen van planning in het verleden is niet toegestaan!',
+          pastDeleting: 'Verwijderen van planning in het verleden is niet toegestaan!',
+          remove: 'Fout bij het verwijderen van een planning.',
+          wisher: 'Fout bij het wijzigen van de minimale bezetting.',
+          notAuth: 'Het is niet toegestaan om wijzigingen in de agenda van anderen aan te brengen, tenzij u planner of beheerder bent. Als beheerder/planner kunt u de planning van anderen wijzigen door links van agendabalk de gebruikersnaam te selecteren. U krijgt dan de mogelijkheid om in een apart scherm de wijzigingen aan te brengen.'
+        },
+        required: {
+          pastAdding: 'Het is niet toegestaan de minimale bezetting in het verleden in te stellen!',
+          pastDeleting: 'Het is niet toegestaan de minimale bezetting in het verleden te verwijderen!',
+          pastChanging: 'Het is niet toegestaan de minimale bezetting in het verleden in te wijzigen!',
+          add: 'Toevoegen van minimale bezetting mislukt!',
+          change: 'Wijzigen van minimale bezetting mislukt!',
+          remove: 'Verwijderen van minimale bezetting mislukt!',
+          emptyReq: 'Vul a.u.b. het gewenste aantal in.',
+          invalidDate: 'De begin- of eindtijd en/of -datum zijn mogelijk ongeldig.',
+          swappedDate: 'De eindtijd is eerder dan de starttijd. Zijn de start- en eindtijd omgewisseld?',
+          invalidReq: 'Vul a.u.b. een geldige waarde in'
         },
         message: {
           title: 'CHAT',

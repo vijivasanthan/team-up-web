@@ -81,7 +81,7 @@ define(['services/services', 'config'],
             {
               var convertTimestamp = function (stamp)
               {
-                return new Date(stamp * 1000).toString(config.app.formats.datetime)
+                return moment(stamp * 1000).format(config.app.formats.datetime);
               };
 
               var content = convertTimestamp(periods.start) + ' / ' +
@@ -280,7 +280,8 @@ define(['services/services', 'config'],
                     timedata.push({
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),
-                      group: _this.wrapper('c') + name,
+                      itemType: 'group',
+                      group: name,
                       content: requirement +
                       actual +
                       _this.secret(angular.toJson(
@@ -356,13 +357,10 @@ define(['services/services', 'config'],
                     timedata.push({
                       start: Math.round(slot.start * 1000),
                       end: Math.round(slot.end * 1000),
-                      group: _this.wrapper('c') + name,
-                      content: this.tooltip({start: slot.start, end: slot.end, min: slot.wish + slot.diff}) +
-                      _this.secret(angular.toJson({
-                        type: 'group',
-                        diff: slot.diff,
-                        group: name
-                      })),
+                      group: name,
+                      content: this.tooltip({ start: slot.start, end: slot.end, min: slot.wish + slot.diff }),
+                      itemType: 'group',
+                      diff: slot.diff,
                       className: 'agg-' + cn,
                       editable: false
                     });
@@ -409,15 +407,10 @@ define(['services/services', 'config'],
                   timedata.push({
                     start: Math.round(wish.start * 1000),
                     end: Math.round(wish.end * 1000),
-                    group: _this.wrapper('c') + title,
-                    content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}) +
-                    '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>' +
-                    _this.secret(angular.toJson({
-                      type: 'wish',
-                      wish: wish.count,
-                      group: title,
-                      groupId: data.aggs[0].id
-                    })),
+                    group: title,
+                    content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }) +
+                    '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
+                    itemType: 'wish',
                     className: cn,
                     editable: false
                   });

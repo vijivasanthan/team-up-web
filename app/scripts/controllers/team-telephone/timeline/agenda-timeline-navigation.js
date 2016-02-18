@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'agenda-timeline-navigation',
       [
-        '$rootScope', '$scope', '$window', 'moment',
-        function ($rootScope, $scope, $window, moment)
+        '$rootScope', '$scope', '$window', 'moment', 'TimelineNavigation',
+        function ($rootScope, $scope, $window, moment, TimelineNavigation)
         {
           /**
            * Toggle by period of [day, week, month]
