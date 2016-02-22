@@ -171,14 +171,14 @@
   color: #1A1A1A;
   border-color: #97B0F8;
   border-width: 1px;
-  background-color: #D5DDF6;
+  background-color: $turq;
   display: inline-block;
   padding: 5px;
 }
 
 .vis.timeline .item.selected {
-  border-color: #FFC200;
-  background-color: #FFF785;
+  border-color: $turq;
+  background-color: $turq;
 
   /* z-index must be higher than the z-index of custom time bar and current time bar */
   z-index: 2;
@@ -189,7 +189,7 @@
 }
 
 .vis.timeline .item.point.selected {
-  background-color: #FFF785;
+  background-color: $turq;
 }
 
 .vis.timeline .item.box {
@@ -306,7 +306,7 @@
 
 .vis.timeline .timeaxis .text {
   position: absolute;
-  color: #4d4d4d;
+  color: $brown;
   padding: 3px;
   white-space: nowrap;
 }

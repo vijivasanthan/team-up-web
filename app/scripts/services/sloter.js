@@ -123,13 +123,13 @@ define(['services/services', 'config'],
             user: function (data, timedata, config, routeUserId, routeUser, loggedUser, current)
             {
               var _this = this,
-                planning = $rootScope.ui.planboard.planning,
-                weekPlanning = $rootScope.ui.planboard.weeklyPlanning;
+                planning = $rootScope.ui.planboard.myPlanning,
+                weekPlanning = $rootScope.ui.planboard.myWeeklyPlanning;
 
-              if(routeUserId != loggedUser.uuid)
+              if(routeUserId !== loggedUser.uuid)
               {
-                planning = $rootScope.ui.planboard.planningOf + routeUser.fullName;
-                weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + routeUser.fullName;
+                planning = $rootScope.ui.planboard.planningOf + '' + routeUser.fullName;
+                weekPlanning = $rootScope.ui.planboard.weeklyPlanningOf + '' + routeUser.fullName;
               }
 
               var currentSelectedUser = [];
@@ -158,12 +158,10 @@ define(['services/services', 'config'],
                   }.bind(this));
                 }.bind(this));
 
-                //currentSelectedUser = [
-                //  _this.wrapper('b') + weekPlanning + _this.wrapper('recursive'),
-                //  _this.wrapper('a') + planning + _this.wrapper('planning')
-                //];
+                currentSelectedUser = [weekPlanning, planning];
               }
-              timedata = _this.addLoading(data, timedata, [weekPlanning , planning]);
+
+              timedata = _this.addLoading(data, timedata, currentSelectedUser);
               return timedata;
             },
 
@@ -172,7 +170,7 @@ define(['services/services', 'config'],
               var groups = this.get.groups(),
                 name = groups[agg.id];
 
-              var link = '<a href="#/team?uuid=' +
+              var link = '<span style="display: none">a-a</span><a href="#/team?uuid=' +
                   agg.id +
                   '#team">' +
                   name +
@@ -181,13 +179,13 @@ define(['services/services', 'config'],
 
               if (!agg.division)
               {
-                title = (privilage <= 1) ? link : '<span>' + name + '</span>';
+                title = (privilage <= 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
               }
               else
               {
                 var label;
 
-                title = (privilage <= 1) ? link : '<span>' + name + '</span>';
+                title = (privilage <= 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
 
                 title += ' <span class="label label-default">' + agg.division.label + '</span>';
               }
@@ -361,7 +359,7 @@ define(['services/services', 'config'],
                     });
                   }
 
-                  timedata = _this.addLoading(data, timedata, [_this.wrapper('c') + name]);
+                  timedata = _this.addLoading(data, timedata, [ name ]);
                 }.bind(this));
               }.bind(this));
 
@@ -374,14 +372,14 @@ define(['services/services', 'config'],
 
               var groups = this.get.groups(),
                 name = groups[data.aggs[0].id],
-                link = '<a href="#/team?uuid=' +
+                link = '<span style="display: none">a-a</span><a href="#/team?uuid=' +
                   data.aggs[0].id +
                   '#view">' +
                   name +
                   '</a>',
                 title;
 
-              title = (privilage == 1) ? link : '<span>' + name + '</span>';
+              title = (privilage == 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
 
               title += ' <span class="label label-default">' + $rootScope.ui.agenda.wished;
               title += '</span>';
@@ -628,7 +626,6 @@ define(['services/services', 'config'],
                   timedata = _this.aggs(data, timedata, _config, privilage, current);
                 }
               }
-
 
               if (_config.wishes && data.aggs)
               {

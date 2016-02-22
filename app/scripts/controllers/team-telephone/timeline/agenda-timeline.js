@@ -853,6 +853,7 @@ define(
             if ($scope.timeline.main)
             {
               visDataSet.clear();
+
               visDataSet.add(
                 Sloter.process(
                   $scope.data,
@@ -864,6 +865,8 @@ define(
                   $scope.timeline.current,
                   $rootScope.app.resources
                 ));
+
+              //console.error("visDataSet ->", visDataSet);
 
               visGroupsDataSet.clear();
 
@@ -1590,26 +1593,6 @@ define(
           );
         };
 
-
-        /**
-         * Prevent re-rendering issues with timeline
-         */
-        $scope.destroy = {
-          timeline: function ()
-          {
-            // Not working !! :(
-            // Sloter.pies($scope.data);
-          },
-          statistics: function ()
-          {
-            setTimeout(
-              function ()
-              {
-                $scope.timeliner.redraw();
-              },
-              config.app.timers.TICKER);
-          }
-        };
 
         //$scope.$emit(
         //  'destroy',
