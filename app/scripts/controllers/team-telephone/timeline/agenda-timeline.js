@@ -1237,6 +1237,15 @@ define(
           }
         );
 
+        $rootScope.$on('resetTimeline', function ()
+        {
+          $scope.timeliner.render(
+            {
+              start: $scope.timeline.range.start,
+              end: $scope.timeline.range.end
+            }, true);
+        });
+
         /**
          * Gets Aggs and the wish
          * @param periods
