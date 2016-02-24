@@ -97,7 +97,7 @@ Timeline agenda
   background-color: $white;//#f5f4ee;
   padding-top: 10px;
   margin: 0 auto 25px;
-  margin-top: -20px;
+  margin-top: -10px;
   max-width: 605px;
 }
 
@@ -142,10 +142,10 @@ Timeline agenda
       label {
         font-size: 11px;
 
-        &:hover {
-          cursor: pointer;
-          color: #65619b;
-        }
+        //&:hover {
+        //  cursor: pointer;
+        //  color: #65619b;
+        //}
       }
 
       input {
@@ -443,6 +443,8 @@ div.timeline-navigation-move-right {
 div.timeline-event.state-available {
   margin: 0;
   background-color: #f5a962;
+  text-align: center;
+  color: $white;
 }
 
 .agenda-timeline-tabs {
@@ -1577,13 +1579,14 @@ Order
 .vis.timeline{
   .item {
     background-color: $orange;
-    border-width: 0px !important;
-    border-radius: 0px !important;
+    //border-width: 1px !important;
+    //border-radius: 1px !important;
+
     //border-color: lighten($brown, 20%) !important;
     //color: lighten($brown, 20%) !important;
 
     &:hover {
-      background-color: lighten($orange, 10%);
+      background-color: lighten($turq, 10%);
     }
   }
 
@@ -1626,6 +1629,10 @@ $step: 7;
 .vis.timeline {
   font-size: 14px;
 
+  .background {
+    background: none;
+  }
+
   .vispanel.background.teamup {
     background-color: $brown !important;
     height: 43px !important; // reasonable default, will be overridden by JS
@@ -1658,10 +1665,12 @@ $step: 7;
     // ONLY item states/colors
     &.state-available {
       margin: 0;
-      background-color: #1dc8b6;
+      background-color: $turq;
+      text-align: center;
+      color: $white;
 
       &:hover {
-        background-color: lighten(#1dc8b6, 10%);
+        background-color: lighten($turq, 10%);
       }
     }
 
@@ -1961,23 +1970,16 @@ $step: 7;
     border-color: #e5e5e5;
   }
 
-  .timeaxis .grid.vertical {
-    border-left: 1px solid black !important;
-  }
-
-  .background {
-    background: none;
+  .item.background{
+    background-color: rgba(107, 100, 90, 0.1);
   }
 }
 
-.vis.timeline .timeaxis .text.major {
-  font-weight: bold;
-}
-.vis.timeline .timeaxis .grid.minor {
-  border: 2px solid black;
-}
-.vis.timeline .timeaxis .grid.major {
-  border: 2px solid black;
+.vis.timeline .timeaxis .text{
+  border-left: 1px solid $white;
+  .major {
+    font-weight: bold;
+  }
 }
 
 .vis-timeline-tooltip{

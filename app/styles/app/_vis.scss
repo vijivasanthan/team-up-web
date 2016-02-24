@@ -174,6 +174,10 @@
   background-color: $turq;
   display: inline-block;
   padding: 5px;
+
+  &:hover {
+    background-color: lighten($turq, 10%) !important;
+  }
 }
 
 .vis.timeline .item.selected {
@@ -214,7 +218,9 @@
   border-style: solid;
   border-radius: 2px;
   box-sizing: border-box;
-  background-color: $turq;
+  text-align: center;
+  color: $white;
+  //background-color: $turq;
 }
 
 .vis.timeline .item.background {
@@ -247,6 +253,15 @@
   width: 0;
   border-left-width: 1px;
   border-left-style: solid;
+}
+
+.vis-time-axis .vis-grid.vis-minor {
+  border-color: #e5e5e5;
+}
+
+.vis-time-axis .vis-grid.vis-vertical {
+  position: absolute;
+  border-left: 1px solid;
 }
 
 .vis.timeline .item .content {

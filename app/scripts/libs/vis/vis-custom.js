@@ -8921,7 +8921,7 @@
       type: 'range',
       start: start,
       end: end,
-      content: 'new item'
+      content: 'Nieuw'
     };
 
     var id = util.randomUUID();
@@ -9180,7 +9180,7 @@
 
       var newItem = {
         start: snap ? snap(start, scale, step) : start,
-        content: 'new item'
+        content: 'Nieuw'
       };
 
       // when default type is a range, add a default end date to the new item

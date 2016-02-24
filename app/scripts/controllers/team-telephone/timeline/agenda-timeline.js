@@ -17,6 +17,128 @@ define(
         var visDataSet = new vis.DataSet();
         var visGroupsDataSet = new vis.DataSet();
 
+        /**
+         * Watch for changes in timeline range
+         */
+        $scope.$watch(
+          function ()
+          {
+            /**
+             * If main timeline
+             */
+            if ($scope.timeline && $scope.timeline.main)
+            {
+              range = $scope.self.timeline.getWindow();
+
+              var period = {
+                hour: 1000 * 60 * 60,
+                day: 1000 * 60 * 60 * 24,
+                week: 1000 * 60 * 60 * 24 * 7
+              };
+
+              diff = Dater.calculate.diff(range) - period.hour;
+
+              /**
+               * Scope is a day
+               */
+              if (diff <= period.day)
+              {
+                $scope.timeline.scope = {
+                  day: true,
+                  week: false,
+                  month: false
+                };
+              }
+              /**
+               * Scope is less than a week
+               */
+              else if (diff <= period.week)
+              {
+                $scope.timeline.scope = {
+                  day: false,
+                  week: true,
+                  month: false
+                };
+              }
+              /**
+               * Scope is more than a week
+               */
+              else
+              {
+                $scope.timeline.scope = {
+                  day: false,
+                  week: false,
+                  month: true
+                };
+              }
+
+              $scope.timeline.range = {
+                start: new Date(range.start).toString(),
+                end: new Date(range.end).toString()
+              };
+
+              $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
+                Dater.readable.date($scope.timeline.range.end);
+            }
+            /**
+             * User timeline
+             * Allow only if it is not user
+             */
+            else if ($route.current.params.userId != $rootScope.app.resources.uuid)
+            {
+              if ($scope.self.timeline)
+              {
+                range = $scope.self.timeline.getWindow();
+
+                $scope.timeline.range = {
+                  start: new Date(range.start).toString(),
+                  end: new Date(range.end).toString()
+                };
+              }
+            }
+
+            if ($scope.timeline)
+            {
+              // moment returns epoch offset(milliseconds) when 'cast' to number
+              var _diff = moment().add(1, 'years').endOf('year').add(1, 'ms') - moment(new Date(range.end));
+              // used new Date above because range.end was made by browser's Date,
+              // which is not always consistent across browsers
+
+              if (_diff <= 0)
+              {
+                $('#timelineAfterBtn').attr('disabled', 'disabled');
+              }
+              else if (
+                $scope.timeline.current.year == Dater.current.year()
+                &&
+                (($scope.timeline.scope.month && $scope.timeline.current.month === 1) ||
+                (($scope.timeline.scope.week && $scope.timeline.current.week === 1 && $scope.timeline.current.month != 12)) ||
+                ($scope.timeline.scope.day && $scope.timeline.current.day === 1))
+              )
+              {
+                $('#timelineBeforeBtn').attr('disabled', 'disabled');
+              }
+              else
+              {
+                var timelineBeforeBtn = $('#timelineBeforeBtn'),
+                    timelineAfterBtn = $('#timelineAfterBtn'),
+                    timelineBeforeBtnAttr = timelineBeforeBtn.attr('disabled'),
+                    timelineAfterBtnAttr = timelineAfterBtn.attr('disabled');
+
+                if (typeof timelineBeforeBtnAttr !== 'undefined' && timelineBeforeBtnAttr !== false)
+                {
+                  timelineBeforeBtn.removeAttr('disabled');
+                }
+
+                if (typeof timelineAfterBtnAttr !== 'undefined' && timelineAfterBtnAttr !== false)
+                {
+                  timelineAfterBtn.removeAttr('disabled');
+                }
+              }
+            }
+          }
+        );
+
         var groupSort = function (a, b)
         {
           if ((a.id === $rootScope.ui.planboard.myPlanning) || a.id.match($rootScope.ui.planboard.planning))
@@ -207,128 +329,6 @@ define(
 
         var weekendBackgrounds = [];
 
-        /**
-         * Watch for changes in timeline range
-         */
-        $scope.$watch(
-          function ()
-          {
-            /**
-             * If main timeline
-             */
-            if ($scope.timeline && $scope.timeline.main)
-            {
-              range = $scope.self.timeline.getWindow();
-
-              var period = {
-                hour: 1000 * 60 * 60,
-                day: 1000 * 60 * 60 * 24,
-                week: 1000 * 60 * 60 * 24 * 7
-              };
-
-              diff = Dater.calculate.diff(range) - period.hour;
-
-              /**
-               * Scope is a day
-               */
-              if (diff <= period.day)
-              {
-                $scope.timeline.scope = {
-                  day: true,
-                  week: false,
-                  month: false
-                };
-              }
-              /**
-               * Scope is less than a week
-               */
-              else if (diff <= period.week)
-              {
-                $scope.timeline.scope = {
-                  day: false,
-                  week: true,
-                  month: false
-                };
-              }
-              /**
-               * Scope is more than a week
-               */
-              else
-              {
-                $scope.timeline.scope = {
-                  day: false,
-                  week: false,
-                  month: true
-                };
-              }
-
-              $scope.timeline.range = {
-                start: new Date(range.start).toString(),
-                end: new Date(range.end).toString()
-              };
-
-              $scope.daterange = Dater.readable.date($scope.timeline.range.start) + ' / ' +
-                Dater.readable.date($scope.timeline.range.end);
-            }
-            /**
-             * User timeline
-             * Allow only if it is not user
-             */
-            else if ($route.current.params.userId != $rootScope.app.resources.uuid)
-            {
-              if ($scope.self.timeline)
-              {
-                range = $scope.self.timeline.getWindow();
-
-                $scope.timeline.range = {
-                  start: new Date(range.start).toString(),
-                  end: new Date(range.end).toString()
-                };
-              }
-            }
-
-            if ($scope.timeline)
-            {
-              // moment returns epoch offset(milliseconds) when 'cast' to number
-              var _diff = moment().add(1, 'years').endOf('year').add(1, 'ms') - moment(new Date(range.end));
-              // used new Date above because range.end was made by browser's Date,
-              // which is not always consistent across browsers
-
-              if (_diff <= 0)
-              {
-                $('#timelineAfterBtn').attr('disabled', 'disabled');
-              }
-              else if (
-                $scope.timeline.current.year == Dater.current.year()
-                &&
-                (($scope.timeline.scope.month && $scope.timeline.current.month === 1) ||
-                (($scope.timeline.scope.week && $scope.timeline.current.week === 1 && $scope.timeline.current.month != 12)) ||
-                ($scope.timeline.scope.day && $scope.timeline.current.day === 1))
-              )
-              {
-                $('#timelineBeforeBtn').attr('disabled', 'disabled');
-              }
-              else
-              {
-                var timelineBeforeBtn = $('#timelineBeforeBtn'),
-                  timelineAfterBtn = $('#timelineAfterBtn'),
-                  timelineBeforeBtnAttr = timelineBeforeBtn.attr('disabled'),
-                  timelineAfterBtnAttr = timelineAfterBtn.attr('disabled');
-
-                if (typeof timelineBeforeBtnAttr !== 'undefined' && timelineBeforeBtnAttr !== false)
-                {
-                  timelineBeforeBtn.removeAttr('disabled');
-                }
-
-                if (typeof timelineAfterBtnAttr !== 'undefined' && timelineAfterBtnAttr !== false)
-                {
-                  timelineAfterBtn.removeAttr('disabled');
-                }
-              }
-            }
-          }
-        );
-
         function getUnixTimeStamps(slot)
         {
           var startDate = slot.start.date + slot.start.time,
@@ -478,6 +478,8 @@ define(
                 start: moment(item.start).unix(),
                 end: moment(item.end).unix()
               }, true);
+              
+              console.error("item.content ->", item.content);
 
               // change hover tooltip to constant tooltip
               if (item.className)
@@ -1061,18 +1063,9 @@ define(
             //            }).length;
             return $('.state-new').length;
           },
-
-          /**
-           * TODO: Still being used?
-           * Cancel add
-           */
-          cancelAdd: function ()
-          {
-            $scope.self.timeline.cancelAdd();
-          },
           updateTooltip: function (props)
           {
-            var tooltipVal = moment(props.snappedTime).format('HH:mm');
+            var tooltipVal = moment(props.snappedTime).format('DD-MM-YYYY || HH:mm');
             var element,
               style,
               update = false,
@@ -1089,7 +1082,8 @@ define(
             }
             else
             {
-              this.tooltipValue = moment(props.snappedTime).format('HH:mm');
+
+              this.tooltipValue = moment(props.snappedTime).format('DD-MM-YYYY || HH:mm');
               element = document.createElement('div');
               element.className = 'vis-timeline-tooltip';
               element.appendChild(document.createTextNode(this.tooltipValue));
@@ -1239,11 +1233,14 @@ define(
 
         $rootScope.$on('resetTimeline', function ()
         {
-          $scope.timeliner.render(
-            {
-              start: $scope.timeline.range.start,
-              end: $scope.timeline.range.end
-            }, true);
+          if($scope.timeline.range)
+          {
+            $scope.timeliner.render(
+              {
+                start: $scope.timeline.range.start,
+                end: $scope.timeline.range.end
+              }, true);
+          }
         });
 
         /**
@@ -1825,7 +1822,6 @@ define(
            */
           if (!form)
           {
-
             //can not add new slots in the past
             if (moment(item.start) < now)
             {
@@ -1904,6 +1900,8 @@ define(
                     end: moment(item.end).unix()
                   }, true);
 
+                  console.error(" item.content  ->", item.content );
+
                   if ($scope.timeline.main)
                   {
                     $rootScope.$broadcast('resetPlanboardViews');
@@ -1979,8 +1977,6 @@ define(
               var errorMessage = (/#timeline/.test(values.group)) ?
                 $rootScope.ui.agenda.notAuth :
                 $rootScope.ui.agenda.pastAdding;
-
-              $scope.self.timeline.cancelAdd();
 
               $rootScope.notifier.error(errorMessage);
 
