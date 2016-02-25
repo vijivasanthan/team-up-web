@@ -1841,7 +1841,8 @@ define(
             }
             values = item;
 
-            if (values.recursive ||
+            console.error("values ->", values);
+            if ( (values.recursive || values.group === $rootScope.ui.agenda.weeklyPlanning) ||
               (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
             {
 
