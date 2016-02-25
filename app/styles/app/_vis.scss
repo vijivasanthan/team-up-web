@@ -175,9 +175,9 @@
   display: inline-block;
   padding: 5px;
 
-  &:hover {
-    background-color: lighten($turq, 10%) !important;
-  }
+  //&:hover {
+  //  background-color: lighten($turq, 10%) !important;
+  //}
 }
 
 .vis.timeline .item.selected {
