@@ -856,6 +856,9 @@ define(
           {
             if (string)
             {
+              //get the anchor part where the group name is in
+              string = string.substring(string.indexOf('<a'), string.length);
+              //cut the groupname of in between the tags
               return string.split('>')[1].split('<')[0];
             }
           }
