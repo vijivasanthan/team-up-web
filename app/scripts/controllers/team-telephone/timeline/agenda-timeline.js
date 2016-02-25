@@ -180,6 +180,7 @@ define(
          */
         function slotDatesValid(slot)
         {
+          console.error("slot ->", slot);
           var dates = getUnixTimeStamps(slot);
           return (dates.end > dates.start);
         }
@@ -1993,22 +1994,29 @@ define(
            * Add new slot through the form
            */
           {
-            //if (!slotDatesValid(slot))
-            //{
-            //  $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-            //  return;
-            //}
+            console.error("slot before  ->", slot);
+            if (! slotDatesValid(slot))
+            {
+              console.error("slot after  ->", slot);
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
+              return;
+            }
 
             var start = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
-              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix()
+              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix();
 
             var end = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
-                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix()
+                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
 
 
-            if (typeof start == "undefined" || isNaN(start) || start == 0 || typeof end == "undefined" || isNaN(end) || end == 0)
+            if (typeof start == "undefined" ||
+              isNaN(start) ||
+              start == 0 ||
+              typeof end == "undefined" ||
+              isNaN(end) ||
+              end == 0)
             {
               $rootScope.notifier.error($rootScope.ui.errors.timeline.invalidTimeslot);
 
@@ -2023,7 +2031,7 @@ define(
             }
             else
             {
-              if (start < nowStamp && slot.recursive == false)
+              if (start < nowStamp && ! slot.recursive)
               {
                 start = nowStamp;
               }
@@ -2038,7 +2046,7 @@ define(
               /**
                * Two minutes waiting time to take an action
                */
-              if ((values.start * 1000) + 60000 * 2 < now && values.recursive == false)
+              if ((values.start * 1000) + 60000 * 2 < now && ! values.recursive)
               {
                 $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
 
@@ -2081,11 +2089,6 @@ define(
          * @param slot The current selected slot
          * @returns {boolean} startdate is before the enddate returns true
          */
-        function slotDatesValid(slot)
-        {
-          return (slot.end > slot.start);
-        }
-
         function convertDateTimeToLocal(d)
         {
           //var d1 = new Date(d);
@@ -2137,17 +2140,11 @@ define(
             }
 
             // Swapped time inputs?
-            if (changed.end < changed.start)
+            if (changed.end <= changed.start)
             {
-              $rootScope.notifier.error($rootScope.ui.errors.timeline.swappedStartEnd);
+              $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
               return;
             }
-          }
-
-          if (!slotDatesValid( {start: changed.start, end: changed.end} ))
-          {
-            $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
-            return;
           }
 
           original.start = new Date(original.start).getTime();
