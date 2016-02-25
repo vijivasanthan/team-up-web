@@ -478,7 +478,7 @@ define(
                 start: moment(item.start).unix(),
                 end: moment(item.end).unix()
               }, true);
-              
+
               console.error("item.content ->", item.content);
 
               // change hover tooltip to constant tooltip
@@ -595,6 +595,7 @@ define(
              */
             $scope.timelineOnRemove = function (slot, item, callback)
             {
+              console.error("item ->", item);
               $rootScope.planboardSync.clear();
 
               if (newSlot.length)
@@ -648,6 +649,8 @@ define(
                   currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
                   changedEndDate = new Date(now - 10000);
 
+                console.error("$scope.original ->", $scope.original);
+
                 if ($scope.original.end <= now && $scope.original.recursive == false)
                 {
                   $rootScope.notifier.error($rootScope.ui.agenda.pastDeleting);
@@ -658,13 +661,15 @@ define(
                   $scope.original.end >= now &&
                   $scope.original.recursive == false)
                 {
+                  console.error("$scope.original.content ->", $scope.original);
+
                   Slots.change(
                     $scope.original,
                     {
                       start: Math.abs(Math.floor(new Date($scope.original.start).getTime())),
                       end: Math.abs(Math.floor(changedEndDate)),
-                      recursive: $scope.original.content.recursive,
-                      state: $scope.original.content.state
+                      recursive: $scope.original.recursive,
+                      state: $scope.original.state
                     },
                     currentSlotUser
                   ).then(
@@ -2222,8 +2227,8 @@ define(
               {
                 start: Math.abs(Math.floor(added.start / 1000)),
                 end: Math.abs(Math.floor(added.end / 1000)),
-                recursive: (added.content.recursive) ? true : false,
-                text: added.content.state
+                recursive: (added.recursive) ? true : false,
+                text: added.state
               }
             );
           };
@@ -2270,14 +2275,14 @@ define(
                     {
                       start: $scope.original.start,
                       end: now,
-                      recursive: $scope.original.content.recursive,
-                      state: $scope.original.content.state
+                      recursive: $scope.original.recursive,
+                      state: $scope.original.state
                     },
                     {
                       start: changed.start + (now - $scope.original.start),
                       end: changed.end,
-                      recursive: changed.content.recursive,
-                      state: changed.content.state
+                      recursive: changed.recursive,
+                      state: changed.state
                     }
                   );
                 }
@@ -2298,14 +2303,14 @@ define(
 
                 if (original.start < now && original.end > now)
                 {
-                  if (changed.content.state == original.content.state)
+                  if (changed.state == original.state)
                   {
                     change(
                       {
                         start: $scope.original.start,
                         end: changed.end,
-                        recursive: changed.content.recursive,
-                        state: changed.content.state
+                        recursive: changed.recursive,
+                        state: changed.state
                       }
                     );
                   }
@@ -2315,14 +2320,14 @@ define(
                       {
                         start: $scope.original.start,
                         end: now,
-                        recursive: $scope.original.content.recursive,
-                        state: $scope.original.content.state
+                        recursive: $scope.original.recursive,
+                        state: $scope.original.state
                       },
                       {
                         start: now,
                         end: changed.end,
-                        recursive: changed.content.recursive,
-                        state: changed.content.state
+                        recursive: changed.recursive,
+                        state: changed.state
                       }
                     );
                   }
@@ -2334,8 +2339,8 @@ define(
                     {
                       start: now,
                       end: changed.end,
-                      recursive: changed.content.recursive,
-                      state: changed.content.state
+                      recursive: changed.recursive,
+                      state: changed.state
                     }
                   );
                 }

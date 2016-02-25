@@ -1927,6 +1927,7 @@ define(
 
             var values = item,
                 content = $scope.getSlotContentJSON(values.content);
+            //content = {} bij nieuw, de check in getSlotContentJSON gaat niet goed
 
             if (content != undefined)
             {
