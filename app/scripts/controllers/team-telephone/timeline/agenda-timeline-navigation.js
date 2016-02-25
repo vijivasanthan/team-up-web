@@ -17,7 +17,8 @@ define(
 
           // both 'zoom' and 'applyRange' taken from chaps links.Timeline
           // TODO: feature request for vis.js or refactor
-          var zoom = function(zoomFactor, zoomAroundDate){
+          var zoom = function(zoomFactor, zoomAroundDate)
+          {
             var currentRange = $scope.self.timeline.getWindow();
             var start = currentRange.start;
             var end = currentRange.end;
@@ -61,7 +62,7 @@ define(
             // determine maximum and minimum interval
             var options = {};
             var year = 1000 * 60 * 60 * 24 * 365;
-            var intervalMin = $rootScope.StandBy.config.timeline.options.intervalMin;
+            var intervalMin = $rootScope.config.app.timeline.options.intervalMin;
             if (intervalMin < 10) {
               intervalMin = 10;
             }
@@ -187,7 +188,7 @@ define(
            */
           $scope.timelineZoomIn = function()
           {
-            $scope.self.timeline.zoom(config.app.timeline.config.zoom, Date.now());
+            zoom(config.app.timeline.config.zoom, Date.now());
           };
 
           /**
@@ -195,7 +196,7 @@ define(
            */
           $scope.timelineZoomOut = function()
           {
-            $scope.self.timeline.zoom(- config.app.timeline.config.zoom, Date.now());
+            zoom(-config.app.timeline.config.zoom, Date.now());
           };
 
           /**

@@ -180,7 +180,6 @@ define(
          */
         function slotDatesValid(slot)
         {
-          console.error("slot ->", slot);
           var dates = getUnixTimeStamps(slot);
           return (dates.end > dates.start);
         }
@@ -469,12 +468,22 @@ define(
          */
         $scope.timelineChanging = function (item, callback)
         {
-          $rootScope.planboardSync.clear();
-
           var values = item;
+
+          console.error("values ->", values);
+
+          //console.error(" values.group.match($rootScope.ui.planboard.planning) ->",
+          //              values.group.match($rootScope.ui.planboard.planning));
+          //if (values.group && (values.group.match($rootScope.ui.planboard.planning) ||
+          //   values.group.match($rootScope.ui.planboard.myPlanning) ||
+          //   values.group.match($rootScope.ui.planboard.myWeeklyPlanning) ||
+          //   values.group.match($rootScope.ui.planboard.weeklyPlanning))) return;
+
           $scope.$apply(
             function ()
             {
+              $rootScope.planboardSync.clear();
+
               item.content = Sloter.tooltip({
                 start: moment(item.start).unix(),
                 end: moment(item.end).unix()
@@ -583,6 +592,7 @@ define(
 
             $scope.self.timeline.on('select', function (props)
             {
+              console.error("props ->", props);
               $scope.timelineOnSelect(props);
             });
 
@@ -1907,8 +1917,6 @@ define(
                     end: moment(item.end).unix()
                   }, true);
 
-                  console.error(" item.content  ->", item.content );
-
                   if ($scope.timeline.main)
                   {
                     $rootScope.$broadcast('resetPlanboardViews');
@@ -1946,7 +1954,7 @@ define(
 
                   //$scope.setEndDate($scope.slot.start.date);
                   //$scope.setEndTime($scope.slot.start.time);
-                  //$scope.showDuration();
+                  $scope.showDuration();
 
                   $scope.original = {
                     start: new Date(values.start),
@@ -1997,7 +2005,6 @@ define(
             console.error("slot before  ->", slot);
             if (! slotDatesValid(slot))
             {
-              console.error("slot after  ->", slot);
               $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
               return;
             }
