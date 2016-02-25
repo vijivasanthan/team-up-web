@@ -374,3 +374,9 @@ input[type="submit"].btn {
     text-transform:uppercase !important;
   }
 }
+
+.btn:focus, .btn.focus, .btn:active:focus,
+.btn:active.focus, .btn.active:focus, .btn.active.focus {
+  outline: none;
+  outline-offset: 0px;
+}
