@@ -581,7 +581,6 @@ define(
 
             $scope.self.timeline.on('select', function (props)
             {
-              console.error("props ->", props);
               $scope.timelineOnSelect(props);
             });
 
@@ -1426,6 +1425,7 @@ define(
         {
           var selectedItem = visDataSet.get(props.items[0]);
 
+          console.error("selectedItem ->", selectedItem);
           $scope.original = {
             start: selectedItem.start,
             end: selectedItem.end,
@@ -1485,6 +1485,10 @@ define(
               id: selectedItem.id
             };
 
+            if(selectedItem.groupName)
+            {
+              $scope.slot.groupName = selectedItem.groupName;
+            }
             $scope.showDuration();
 
             /**
