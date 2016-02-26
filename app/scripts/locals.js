@@ -2537,7 +2537,7 @@ define(
           timeslotDeleted: 'Tijdslot is succesvol verwijderd.',
           refreshTimeline: 'Tijdlijn verversen...',
           preCompilingStortageMessage: 'Voor gecompileert kort bericht',
-          weeklyPlanning: 'Weekelijkse planninng',
+          weeklyPlanning: 'Wekelijkse planninng',
           planning: 'Mijn planning',
           planningOf: 'Planning van ',
           minNumber: 'Minimum aantal benodigden',

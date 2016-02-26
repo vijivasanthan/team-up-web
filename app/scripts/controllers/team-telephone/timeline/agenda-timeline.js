@@ -468,57 +468,46 @@ define(
          */
         $scope.timelineChanging = function (item, callback)
         {
-          var values = item;
+          if(/<\/?[^>]*>/.test(item.group) ) callback(null);
+          else
+          {
+            $scope.$apply(
+              function ()
+              {
+                $rootScope.planboardSync.clear();
 
-          console.error("values ->", values);
+                item.content = Sloter.tooltip({
+                                                start: moment(item.start).unix(),
+                                                end: moment(item.end).unix()
+                                              }, true);
 
-          //console.error(" values.group.match($rootScope.ui.planboard.planning) ->",
-          //              values.group.match($rootScope.ui.planboard.planning));
-          //if (values.group && (values.group.match($rootScope.ui.planboard.planning) ||
-          //   values.group.match($rootScope.ui.planboard.myPlanning) ||
-          //   values.group.match($rootScope.ui.planboard.myWeeklyPlanning) ||
-          //   values.group.match($rootScope.ui.planboard.weeklyPlanning))) return;
+                // change hover tooltip to constant tooltip
+                if (item.className)
+                { // won't have if created by ctrl/shift-drag
+                  item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
+                }
 
-          $scope.$apply(
-            function ()
-            {
-              $rootScope.planboardSync.clear();
+                $scope.slot = {
+                  start: {
+                    date: moment(item.start).format(config.app.formats.date),
+                    time: moment(item.start).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal(item.start)
+                  },
+                  end: {
+                    date: moment(item.end).format(config.app.formats.date),
+                    time: moment(item.end).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal(item.end)
+                  },
+                  state: item.state,
+                  recursive: item.recursive,
+                  id: item.id
+                };
+                $scope.showDuration();
 
-              item.content = Sloter.tooltip({
-                start: moment(item.start).unix(),
-                end: moment(item.end).unix()
-              }, true);
-
-              console.error("item.content ->", item.content);
-
-              // change hover tooltip to constant tooltip
-              if (item.className)
-              { // won't have if created by ctrl/shift-drag
-                item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
+                callback(item);
               }
-
-              callback(item);
-
-              $scope.slot = {
-                start: {
-                  date: moment(values.start).format(config.app.formats.date),
-                  time: moment(values.start).format(config.app.formats.time),
-                  // datetime: new Date(values.start).toISOString()
-                  datetime: convertDateTimeToLocal(values.start)
-                },
-                end: {
-                  date: moment(values.end).format(config.app.formats.date),
-                  time: moment(values.end).format(config.app.formats.time),
-                  // datetime: new Date(values.end).toISOString()
-                  datetime: convertDateTimeToLocal(values.end)
-                },
-                state: values.state,
-                recursive: values.recursive,
-                id: values.id
-              };
-              $scope.showDuration();
-            }
-          );
+            );
+          }
         };
 
         /**
@@ -1838,7 +1827,7 @@ define(
            */
           if (!form)
           {
-            //can not add new slots in the past
+            //can not add new slots in the past!!
             if (moment(item.start) < now)
             {
               callback(null);
@@ -1850,13 +1839,19 @@ define(
                 $scope.timeliner.refresh();
               }
             }
-            values = item;
+            if(/<\/?[^>]*>/.test(item.group))
+            {
+              callback(null);
+              return;
+            }
 
+            values = item;
+            ///
             console.error("values ->", values);
-            if ( (values.recursive || values.group === $rootScope.ui.agenda.weeklyPlanning) ||
+            if ( (values.recursive || values.group.match($rootScope.ui.planboard.weeklyPlanning)) ||
               (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
             {
-
+              console.error("BINNEN ->");
               // cancel adding if not own planning
               groupId = item.group;
               // other groups have a hyperlink
@@ -1932,7 +1927,9 @@ define(
                   }
 
                   // Check if groupId matches selected locale week strings
-                  if (groupId && ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) || groupId.match($rootScope.ui.planboard.weeklyPlanning)))
+                  if (groupId &&
+                    ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) ||
+                    groupId.match($rootScope.ui.planboard.weeklyPlanning)))
                   {
                     recursive = true;
                   }
