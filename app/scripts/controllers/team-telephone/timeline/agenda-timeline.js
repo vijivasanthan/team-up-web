@@ -1852,10 +1852,11 @@ define(
             values = item;
             ///
             console.error("values ->", values);
-            if ( (values.recursive || values.group.match($rootScope.ui.planboard.weeklyPlanning)) ||
+            if (values.recursive ||
+              values.group.match($rootScope.ui.planboard.weeklyPlanning) ||
+              values.group === $rootScope.ui.planboard.myWeeklyPlanning ||
               (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
             {
-              console.error("BINNEN ->");
               // cancel adding if not own planning
               groupId = item.group;
               // other groups have a hyperlink
