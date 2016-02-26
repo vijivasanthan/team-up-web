@@ -591,6 +591,7 @@ define(['services/services', 'config'],
               end: moment(options.stamps.end).unix()
             },
             data = {};
+
           var slotsResource = Slots.prototype.resourceSlots();
           slotsResource.query(
             params,

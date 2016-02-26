@@ -1230,7 +1230,6 @@ define(
             $scope.timeline.current.month = (shownRangeDate.month() + 1);
             $scope.timeline.current.year = shownRangeDate.year();
 
-
             $scope.timeliner.load(periods);
           }
         );
@@ -1607,28 +1606,6 @@ define(
             }
           );
         };
-
-
-        //$scope.$emit(
-        //  'destroy',
-        //  {
-        //    timeline: function ()
-        //    {
-        //      // Not working !! :(
-        //      // Sloter.pies($scope.data);
-        //    },
-        //    statistics: function ()
-        //    {
-        //      console.log('destroy');
-        //      setTimeout(
-        //        function ()
-        //        {
-        //          $scope.timeliner.redraw();
-        //        },
-        //        config.app.timers.TICKER);
-        //    }
-        //  }
-        //);
 
         /**
          * Change division

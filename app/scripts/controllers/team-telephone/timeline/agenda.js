@@ -71,11 +71,6 @@ define(
 
           $scope.slot = {};
 
-          var stamps = {
-            start: moment({ hour:0, minute:0 }).weekday(1).unix() * 1000,
-            end: moment({ hour:0, minute:0 }).weekday(8).unix() * 1000
-          };
-
           var timelineCfg = config.app.timeline;
 
           $scope.timeline = {
@@ -89,14 +84,14 @@ define(
             },
             current: $scope.current,
             options: {
-              start: stamps.start,
-              end: stamps.end,
-              min: stamps.start,
-              max: stamps.end
+              start: data.timeline.periods.start,
+              end: data.timeline.periods.end,
+              min: data.timeline.periods.start,
+              max: data.timeline.periods.end
             },
             range: {
-              start: stamps.start,
-              end: stamps.end
+              start: data.timeline.periods.start,
+              end: data.timeline.periods.end
             },
             scope: {
               day: false,

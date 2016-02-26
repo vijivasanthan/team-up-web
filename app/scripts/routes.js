@@ -780,13 +780,11 @@ define(
                    */
                   function getAllSlots(userId, groupId)
                   {
-                    var periods = Store('app').get('periods');
-
                     return Slots.all({
                                        groupId: groupId,
                                        stamps: {
-                                         start: moment({hour: 0, minute: 0}).weekday(1).unix() * 1000,
-                                         end: moment({hour: 0, minute: 0}).weekday(8).unix() * 1000
+                                         start: +moment({hour: 0, minute: 0}).weekday(0),
+                                         end: +moment({hour: 0, minute: 0}).weekday(7)
                                        },
                                        month: Dater.current.month(),
                                        layouts: {
