@@ -380,3 +380,11 @@ input[type="submit"].btn {
   outline: none;
   outline-offset: 0px;
 }
+
+.btn.active.focus,
+.btn.active:focus, .btn.focus,
+.btn:active.focus, .btn:active:focus,
+.btn:focus {
+  outline: none;
+  outline-offset: 0px;
+}
