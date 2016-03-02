@@ -55,6 +55,13 @@ define(
                   }
                 },
 
+                //version info
+                versionInfo: {
+                  method: "GET",
+                  params: {
+                    first: 'version'
+                  }
+                },
 
                 /**
                  * Password

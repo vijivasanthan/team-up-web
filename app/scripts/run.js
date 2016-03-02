@@ -26,8 +26,9 @@ define(
         'moment',
         'tmhDynamicLocale',
         'ipCookie',
+        'Version',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie, Version)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -909,6 +910,29 @@ define(
           };
 
           $rootScope.hangup = null;
+
+          $rootScope.getVersionInfo = function()
+          {
+            Version.getVersionInfo()
+                   .then(function(versionInfo)
+                         {
+                           console.error("versionInfo ->", versionInfo);
+                           //set version Info
+                           if(versionInfo)
+                           {
+                             $rootScope.backEndVersion = versionInfo;
+                             $rootScope.backEndVersion.title = "<span>Version:</span> " + $rootScope.backEndVersion.releaseNr;
+                             $rootScope.backEndVersion.title += "<br /><span>Datum:</span> " +  $rootScope.backEndVersion.buildDate;
+                             $rootScope.backEndVersion.title += "<br /><span>Branch:</span> " +  $rootScope.backEndVersion.currentBranch;
+
+                             //releaseNr: "1.19",
+                             //  buildDate: buildDate,
+                             //currentBranch: unformattedVersionInfo.git_branch
+                           }
+                         });
+          };
+
+          if(Session.check()) $rootScope.getVersionInfo();
         }
       ]
     );

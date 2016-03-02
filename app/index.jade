@@ -268,9 +268,11 @@ block footer
 		.container-fluid
 			#copyrights
 				span.muted
-					small Ask Community Systems, 
+					small Ask Community Systems, {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp;
+						i(data-html="true" bs-tooltip="backEndVersion") {{ backEndVersion.releaseNr }} 
 						i
-							| {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp; v{{config.app.version}}
+							|  v{{config.app.version}}
+					
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')
 				small
