@@ -269,9 +269,9 @@ block footer
 			#copyrights
 				span.muted
 					small Ask Community Systems, {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp;
-						i(data-html="true" bs-tooltip="backEndVersion") {{ backEndVersion.releaseNr }} 
-						i
-							|  v{{config.app.version}}
+						i.version_nr(data-html="true" bs-tooltip="backEndVersion") v{{ backEndVersion.releaseNr }} 
+						i.version_nr(data-html="true" bs-tooltip="frontEndVersion")
+							|  v{{ frontEndVersion.releaseNr }}
 					
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')

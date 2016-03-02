@@ -134,7 +134,7 @@
 
   #copyrights {
     position: absolute;
-    right: 25px;
+    left: 25px;
     margin-top: 0px;
     text-align: right;
     line-height: 14px;
@@ -142,14 +142,17 @@
     span.muted {
       position: absolute;
       top: -2px;
-      right: -20px;;
-      width: 290px;
+      width: 370px;
       color: $offwhite;
       small {
         float: left;
       }
       a {
         color: $orange;
+      }
+
+      .version_nr {
+        cursor: help;
       }
     }
   }

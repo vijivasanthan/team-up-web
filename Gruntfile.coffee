@@ -424,12 +424,12 @@ module.exports = (grunt) ->
         options:
           variables:
             version: '<%= pkg.version %>'
-            released: grunt.template.today('dd-mm-yyyy, hh:MM:ss')
-            versionInfo: [
+            released: grunt.template.today('dd-mm-yyyy, hh:MM:ss TT')
+            versionInfo: {
               releaseNr: '<%= pkg.version %>',
-              buildDate: grunt.template.today('dd-mm-yyyy, hh:MM:ss'),
-              branch: '<%= gitinfo.local.branch.current.name %>'
-            ]
+              buildDate: grunt.template.today('dd-mm-yyyy, hh:MM:ss TT'),
+              currentBranch: '<%= gitinfo.local.branch.current.name %>'
+            }
           prefix: '@@'
         files: [
           expand: true
@@ -482,6 +482,7 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask 'build', [
+    'gitinfo',
     'clean:dist'
     'coffee:dist'
     'coffee:testUnit'
