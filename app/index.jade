@@ -271,7 +271,7 @@ block footer
 					small Ask Community Systems, {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp;
 						i.version_nr(data-html="true" bs-tooltip="backEndVersion") v{{ backEndVersion.releaseNr }} 
 						i.version_nr(data-html="true" bs-tooltip="frontEndVersion")
-							|  v{{ frontEndVersion.releaseNr }}
+							|  v{{ config.app.version }}
 					
 			p.muted(ng-show='loading.status')
 				img(src='images/ajax-loader.gif')

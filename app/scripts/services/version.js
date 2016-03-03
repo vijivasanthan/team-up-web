@@ -31,6 +31,21 @@ define(
                                      }
                                    });
               }
+            },
+
+	          /**
+             * set the html output for the tooltip
+             * @param versionInfo
+             * @returns {string}
+             */
+            setVersionToolTip : function(versionInfo)
+            {
+              var output = "<span>App&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> " + versionInfo.app;
+              output += "<br /><span>Version:</span> v" + versionInfo.releaseNr;
+              output += "<br /><span>Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> " +  versionInfo.buildDate;
+              output += "<br /><span>Branch&nbsp;:</span> " +  versionInfo.currentBranch;
+
+              return output;
             }
           };
 
