@@ -269,7 +269,7 @@ block footer
 			#copyrights
 				span.muted
 					small Ask Community Systems, {{ app.domainPermission.tasks ? 'TeamUp' : 'TeamTelefoon' }}&nbsp;
-						i.version_nr(data-html="true" bs-tooltip="backEndVersion") v{{ backEndVersion.releaseNr }} 
+						i.version_nr(data-html="true" bs-tooltip="backEndVersion") {{ backEndVersion.releaseNr ? "v" + backEndVersion.releaseNr : backEndVersion.currentBranch }} 
 						i.version_nr(data-html="true" bs-tooltip="frontEndVersion")
 							|  v{{ config.app.version }}
 					
