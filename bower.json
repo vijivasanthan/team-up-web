@@ -27,7 +27,6 @@
     "momentjs": "~2.6.0",
     "requirejs": "~2.1.11",
     "requirejs-domready": "~2.0.1",
-    "chap-links-library": "https://github.com/almende/chap-links-library.git",
     "web-lib-interceptor": "https://github.com/askcs/web-lib-interceptor.git",
     "web-lib-log": "https://github.com/askcs/web-lib-log.git",
     "web-lib-phonenumber": "https://github.com/askcs/web-lib-phonenumber.git",

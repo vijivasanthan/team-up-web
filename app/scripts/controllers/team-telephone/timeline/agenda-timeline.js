@@ -566,7 +566,6 @@ define(
               onRemove: this.onRemove,
               onMoving: this.onChange,
               stack: false,
-              padding: 0,
               margin: {
                 axis: 5
               },
@@ -697,38 +696,39 @@ define(
 
             // add background behind axis
             // TODO: add event listener for vis 'finishedRedraw' and determine if resize needed
-            var axisHeight = document.querySelector('.vis.timeline .vispanel.top').getBoundingClientRect().height;
+
+            var axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
 
             var bgInterval = null;
             var bgCount = 0;
             var bgMax = 40; // * 100 ms = 2 s
 
             var axisBg = document.createElement('div');
-            axisBg.className = 'vispanel background teamup';
+            axisBg.className = 'vis-panel vis-background teamup';
             if (axisHeight !== 0)
             {
               axisBg.style.height = axisHeight + 'px';
-              document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+              document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
             }
             else
             {
               bgInterval = $window.setInterval(function ()
               {
                 bgCount += 1;
-                axisHeight = document.querySelector('.vis.timeline .vispanel.top').getBoundingClientRect().height;
+                axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
                 if (axisHeight === 0)
                 {
                   if (bgCount > bgMax)
                   {
                     // don't set height, css has fallback
-                    document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+                    document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
                     $window.clearInterval(bgInterval);
                     bgInterval = null;
                   }
                   return;
                 }
                 axisBg.style.height = axisHeight + 'px';
-                document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+                document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
                 $window.clearInterval(bgInterval);
                 bgInterval = null;
               }, 50);
@@ -746,7 +746,7 @@ define(
           initTooltip: function (visElement)
           {
 
-            var timelineElement = visElement.getElementsByClassName('vispanel center')[0];
+            var timelineElement = visElement.getElementsByClassName('vis-panel vis-center')[0];
 
             timelineElement.addEventListener('mousemove', function (e)
             {
@@ -885,6 +885,8 @@ define(
               {
                 visGroupsDataSet.add({id: id, content: id});
               });
+
+              console.error("visGroupsDataSet ->", visGroupsDataSet);
 
               visDataSet.add(weekendBackgrounds);
 

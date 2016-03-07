@@ -9,6 +9,7 @@
    */
   exports.DataSet  = require('../../../vendors/vis/lib/DataSet');
   exports.Timeline = require('../../../vendors/vis/lib/timeline/Timeline');
+  console.error("exports.Timeline ->", exports.Timeline);
   exports.Graph2d = require('../../../vendors/vis/lib/timeline/Graph2d');
 },{"../../../vendors/vis/lib/DataSet":3,"../../../vendors/vis/lib/timeline/Graph2d":13,"../../../vendors/vis/lib/timeline/Timeline":17}],2:[function(require,module,exports){
   // DOM utility methods

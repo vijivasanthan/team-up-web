@@ -1576,8 +1576,8 @@ Order
 /**
  * Vis Custom CSS for Wish Timeline
  */
-.vis.timeline{
-  .item {
+.vis-timeline{
+  .vis-item {
     background-color: $orange;
     //border-width: 1px !important;
     //border-radius: 1px !important;
@@ -1590,7 +1590,7 @@ Order
     //}
   }
 
-  .delete {
+  .vis-delete {
     background-image: url("../images/glyphicons-halflings.png");
     background-position: -48px -97px;
     background-repeat: no-repeat;
@@ -1602,19 +1602,19 @@ Order
     vertical-align: text-top;
     width: 14px;
     z-index: 10000;
-    right: 2px;
+    right: -5px;
   }
 }
 
-.vis.timeline .vispanel.background {
+.vis-timeline .vis-panel.vis-background {
   background: $brown !important;
 }
 
-.vis.timeline .timeaxis.foreground {
+.vis-timeline .vis-time-axis.vis-foreground {
   background: $brown !important;
 }
 
-.vis.timeline .vispanel.background.horizontal {
+.vis-timeline .vis-panel.vis-background.vis-horizontal {
   background: #ffffff !important;
 }
 
@@ -1622,24 +1622,24 @@ $wishMax: 10;
 $step: 7;
 
 
-.vis.timeline.root {
+.vis-timeline {
   border-radius: 4px !important;
 }
 
-.vis.timeline {
+.vis-timeline {
   font-size: 14px;
 
-  .background {
-    background: none;
-  }
+  //.background {
+  //  background: none;
+  //}
 
-  .vispanel.background.teamup {
+  .vis-panel.vis-background.teamup {
     background-color: $brown !important;
     height: 43px !important; // reasonable default, will be overridden by JS
     width: 100% !important;
   }
 
-  .inner {
+  .vis-inner {
     width: 100%;
     .edit-timeline-icon {
       float: right;
@@ -1647,21 +1647,21 @@ $step: 7;
     }
   }
 
-  .vispanel.top {
+  .vis-panel.vis-top {
     font-size: 0.8em !important;
-    .text {
+    .vis-text {
       color: #fff !important;
     }
   }
 
-  .vispanel.left {
+  .vis-panel.left {
     width: 200px;
-    .content {
+    .vis-content {
       width: 200px;
     }
   }
 
-  .item.range {
+  .vis-item.vis-range {
     // ONLY item states/colors
     &.state-available {
       margin: 0;
@@ -1885,18 +1885,18 @@ $step: 7;
     }
   }
 
-  .item {
+  .vis-item {
     padding: 0;
 
-    &.selected {
+    &.vis-selected {
       opacity: 0.8;
     }
 
-    &.range {
+    &.vis-range {
       border-radius: 0;
       border-style: none;
 
-      .delete {
+      .vis-delete {
         padding: 0px;
         padding-left: 5px;
         display: inline-block;
@@ -1914,20 +1914,20 @@ $step: 7;
         z-index: 10000;
       }
 
-      .delete:hover {
+      .vis-delete:hover {
         cursor: pointer
       }
 
-      .content {
+      .vis-content {
         position: static;
       }
 
       &.has-slot-tooltip,
       &.has-hover-slot-tooltip:hover {
-        height: 23px;
+        //height: 23px;
 
-        .content {
-          height: 23px;
+        .vis-item-content {
+          //height: 23px;
           overflow: visible;
         }
       }
@@ -1941,7 +1941,7 @@ $step: 7;
     }
   }
 
-  .item.range .bar {
+  .vis-item.vis-range .vis-bar {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1952,7 +1952,7 @@ $step: 7;
     text-align: center;
   }
 
-  .item.range .requirement {
+  .vis-item.vis-range .vis-requirement {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1963,19 +1963,22 @@ $step: 7;
     opacity: 0.5;
   }
 
-
-  .timeaxis  .grid.minor,
-  .labelset .vlabel,
-  .foreground .group{
+  .vis-time-axis  .vis-grid.vis-minor,
+  .vis-labelset .vis-label,
+  .vis-foreground .vis-group{
     border-color: #e5e5e5;
   }
 
-  .item.background{
+  .vis-label {
+    color: $brown;
+  }
+
+  .vis-item.vis-background{
     background-color: rgba(107, 100, 90, 0.1);
   }
 }
 
-.vis.timeline .timeaxis .text{
+.vis-timeline .vis-time-axis .vis-text{
   border-left: 1px solid $white;
   .major {
     font-weight: bold;
