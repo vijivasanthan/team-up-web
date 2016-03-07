@@ -386,8 +386,6 @@ define(
                 onAdd: this.onAdd,
                 onRemove: this.onRemove,
                 onMoving: this.onChange,
-                stack: false,
-                padding: 0,
                 margin: {
                   axis: 5
                 },
@@ -504,38 +502,38 @@ define(
 
               // add background behind axis
               // TODO: add event listener for vis 'finishedRedraw' and determine if resize needed
-              var axisHeight = document.querySelector('.vis.timeline .vispanel.top').getBoundingClientRect().height;
+              var axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
 
               var bgInterval = null;
               var bgCount = 0;
               var bgMax = 40; // * 100 ms = 2 s
 
               var axisBg = document.createElement('div');
-              axisBg.className = 'vispanel background teamup';
+              axisBg.className = 'vis-panel vis-background teamup';
               if (axisHeight !== 0)
               {
                 axisBg.style.height = axisHeight + 'px';
-                document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+                document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
               }
               else
               {
                 bgInterval = $window.setInterval(function ()
                                                  {
                                                    bgCount += 1;
-                                                   axisHeight = document.querySelector('.vis.timeline .vispanel.top').getBoundingClientRect().height;
+                                                   axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
                                                    if (axisHeight === 0)
                                                    {
                                                      if (bgCount > bgMax)
                                                      {
                                                        // don't set height, css has fallback
-                                                       document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+                                                       document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
                                                        $window.clearInterval(bgInterval);
                                                        bgInterval = null;
                                                      }
                                                      return;
                                                    }
                                                    axisBg.style.height = axisHeight + 'px';
-                                                   document.querySelector('.vis.timeline .vispanel.background').appendChild(axisBg);
+                                                   document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
                                                    $window.clearInterval(bgInterval);
                                                    bgInterval = null;
                                                  }, 50);
@@ -558,7 +556,7 @@ define(
             initTooltip: function (visElement)
             {
 
-              var timelineElement = visElement.getElementsByClassName('vispanel center')[0];
+              var timelineElement = visElement.getElementsByClassName('vis-panel vis-center')[0];
 
               timelineElement.addEventListener('mousemove', function (e)
               {
@@ -840,7 +838,7 @@ define(
 
             isAdded: function ()
             {
-              return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'Nieuw');
+              return (angular.element('.timeline-event-selected .timeline-event-content').text() == 'new item');
             },
 
             updateTooltip: function (props)
@@ -993,11 +991,11 @@ define(
                 content: content
               };
 
-              if ($scope.timeline.main && ! values.content.match(/Nieuw/))
+              if ($scope.timeline.main && ! values.content.match(/new item/))
               {
                 $rootScope.$broadcast('resetPlanboardViewsTasks');
               }
-              else if (! values.content.match(/Nieuw/))
+              else if (! values.content.match(/new item/))
               {
                 $scope.forms = {
                   add: false,
@@ -1005,7 +1003,7 @@ define(
                 };
               }
 
-              if (values.content.match(/Nieuw/))
+              if (values.content.match(/new item/))
               {
                 content = {type: 'slot'};
               }
@@ -1021,7 +1019,7 @@ define(
                   switch (content.type)
                   {
                     case 'slot':
-                      if (values.content.match(/Nieuw/) || (content.relatedUser && typeof content.id == 'undefined'))
+                      if (values.content.match(/new item/) || (content.relatedUser && typeof content.id == 'undefined'))
                       {
                         $scope.views.slot.add = true;
                       }
@@ -1754,7 +1752,7 @@ define(
 
             var itemContent = item.content;
 
-            if (itemContent != 'Nieuw')
+            if (itemContent != 'new item')
             {
               itemContent = $scope.getSlotContentJSON(item.content);
               itemContent.clientUuid = $scope.slot.clientUuid;
@@ -1768,7 +1766,7 @@ define(
               };
             }
 
-            var content = '<span>Nieuw</span>';
+            var content = '<span>new item</span>';
 
             //if ((typeof $scope.slot.clientUuid == 'undefined' && $scope.views.teams ) ||
             //  (typeof $scope.slot.memberId == 'undefined' && $scope.views.clients))
@@ -2014,7 +2012,7 @@ define(
           {
             //|| content.indexOf('{}') >= 1
 
-            if (content && content !== 'Nieuw')
+            if (content && content !== 'new item')
             {
               return angular.fromJson(
                 content.substring(content.indexOf('value=') + 7, content.length - 2)

@@ -1471,16 +1471,16 @@ Order
 
 }
 
-.time-tip {
-  //z-index: 9999;
-  background-color: transparent;
-  display: inline-block;
-  padding: 4px 0;
-  width: 100%;
-  height: 100%;
-  text-indent: -9999px;
-  position: relative;
-}
+//.time-tip {
+//  //z-index: 9999;
+//  background-color: transparent;
+//  display: inline-block;
+//  padding: 4px 0;
+//  width: 100%;
+//  height: 100%;
+//  text-indent: -9999px;
+//  position: relative;
+//}
 
 #timeline-controls {
   .btn-primary.disabled,
@@ -1539,11 +1539,14 @@ Order
     }
   }
 }
-
-
+//Tooltip temp off
+.vis-item .vis-item-content {
+  height: 31px;
+}
 
 .time-tip {
   position:relative;
+  display: none; //remove in order to show the timetips
   top:0;
   left:0;
   background-color: transparent;
@@ -1602,7 +1605,7 @@ Order
     vertical-align: text-top;
     width: 14px;
     z-index: 10000;
-    right: -5px;
+    right: -5px !important;
   }
 }
 
@@ -1941,7 +1944,7 @@ $step: 7;
     }
   }
 
-  .vis-item.vis-range .vis-bar {
+  .vis-item.vis-range .bar {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1952,7 +1955,7 @@ $step: 7;
     text-align: center;
   }
 
-  .vis-item.vis-range .vis-requirement {
+  .vis-item.vis-range .requirement {
     position: absolute;
     bottom: 0;
     left: 0;
