@@ -1,14 +1,6 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.vis = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-  /**
-   * To build/bundle the files, install browserify globally,
-   * do 'npm install' in the vis vendor directory,
-   * then run the following command in this directory
-   *   browserify custom.js -t babelify -o vis-custom.js -s vis -x moment
-   * Then delete node_modules in the vis vendor directory so it's
-   * not accidentally committed.
-   */
 exports.DataSet = require('../../../vendors/vis/lib/DataSet');
 exports.Timeline = require('../../../vendors/vis/lib/timeline/Timeline');
 exports.Graph2d = require('../../../vendors/vis/lib/timeline/Graph2d');
@@ -4954,7 +4946,7 @@ module.exports = Core;
 
 /**
  * used in Core to convert the options into a volatile variable
- *
+ * 
  * @param {function} moment
  * @param {Object} body
  * @param {Array | Object} hiddenDates
@@ -5422,6 +5414,24 @@ exports.isHidden = function (time, hiddenDates) {
 },{}],16:[function(require,module,exports){
 'use strict';
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _sharedConfigurator = require('../shared/Configurator');
+
+var _sharedConfigurator2 = _interopRequireDefault(_sharedConfigurator);
+
+var _sharedValidator = require('../shared/Validator');
+
+var _sharedValidator2 = _interopRequireDefault(_sharedValidator);
+
+/**
+ * Create a timeline visualization
+ * @param {HTMLElement} container
+ * @param {vis.DataSet | Array} [items]
+ * @param {Object} [options]  See Graph2d.setOptions for the available options.
+ * @constructor
+ * @extends Core
+ */
 var Emitter = require('emitter-component');
 var Hammer = require('../module/hammer');
 var moment = require('../module/moment');
@@ -5435,20 +5445,10 @@ var CurrentTime = require('./component/CurrentTime');
 var CustomTime = require('./component/CustomTime');
 var LineGraph = require('./component/LineGraph');
 
-var Configurator = require('../shared/Configurator');
-var Validator = require('../shared/Validator')['default'];
 var printStyle = require('../shared/Validator').printStyle;
 var allOptions = require('./optionsGraph2d').allOptions;
 var configureOptions = require('./optionsGraph2d').configureOptions;
 
-/**
- * Create a timeline visualization
- * @param {HTMLElement} container
- * @param {vis.DataSet | Array} [items]
- * @param {Object} [options]  See Graph2d.setOptions for the available options.
- * @constructor
- * @extends Core
- */
 function Graph2d(container, items, groups, options) {
   // if the third element is options, the forth is groups (optionally);
   if (!(Array.isArray(groups) || groups instanceof DataSet || groups instanceof DataView) && groups instanceof Object) {
@@ -5557,7 +5557,7 @@ Graph2d.prototype = new Core();
 
 Graph2d.prototype.setOptions = function (options) {
   // validate options
-  var errorFound = Validator.validate(options, allOptions);
+  var errorFound = _sharedValidator2['default'].validate(options, allOptions);
   if (errorFound === true) {
     console.log('%cErrors have been found in the supplied options object.', printStyle);
   }
@@ -5751,7 +5751,7 @@ Graph2d.prototype.getEventProperties = function (event) {
  * @private
  */
 Graph2d.prototype._createConfigurator = function () {
-  return new Configurator(this, this.dom.container, configureOptions);
+  return new _sharedConfigurator2['default'](this, this.dom.container, configureOptions);
 };
 
 module.exports = Graph2d;
@@ -7295,6 +7295,25 @@ module.exports = TimeStep;
 },{"../module/moment":8,"../util":44,"./DateUtil":15}],20:[function(require,module,exports){
 'use strict';
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _sharedConfigurator = require('../shared/Configurator');
+
+var _sharedConfigurator2 = _interopRequireDefault(_sharedConfigurator);
+
+var _sharedValidator = require('../shared/Validator');
+
+var _sharedValidator2 = _interopRequireDefault(_sharedValidator);
+
+/**
+ * Create a timeline visualization
+ * @param {HTMLElement} container
+ * @param {vis.DataSet | vis.DataView | Array} [items]
+ * @param {vis.DataSet | vis.DataView | Array} [groups]
+ * @param {Object} [options]  See Timeline.setOptions for the available options.
+ * @constructor
+ * @extends Core
+ */
 var Emitter = require('emitter-component');
 var Hammer = require('../module/hammer');
 var moment = require('../module/moment');
@@ -7308,21 +7327,10 @@ var CurrentTime = require('./component/CurrentTime');
 var CustomTime = require('./component/CustomTime');
 var ItemSet = require('./component/ItemSet');
 
-var Configurator = require('../shared/Configurator');
-var Validator = require('../shared/Validator')['default'];
 var printStyle = require('../shared/Validator').printStyle;
 var allOptions = require('./optionsTimeline').allOptions;
 var configureOptions = require('./optionsTimeline').configureOptions;
 
-/**
- * Create a timeline visualization
- * @param {HTMLElement} container
- * @param {vis.DataSet | vis.DataView | Array} [items]
- * @param {vis.DataSet | vis.DataView | Array} [groups]
- * @param {Object} [options]  See Timeline.setOptions for the available options.
- * @constructor
- * @extends Core
- */
 function Timeline(container, items, groups, options) {
   if (!(this instanceof Timeline)) {
     throw new SyntaxError('Constructor must be called with the new operator');
@@ -7467,7 +7475,7 @@ Timeline.prototype = new Core();
  * @private
  */
 Timeline.prototype._createConfigurator = function () {
-  return new Configurator(this, this.dom.container, configureOptions);
+  return new _sharedConfigurator2['default'](this, this.dom.container, configureOptions);
 };
 
 /**
@@ -7484,7 +7492,7 @@ Timeline.prototype.redraw = function () {
 
 Timeline.prototype.setOptions = function (options) {
   // validate options
-  var errorFound = Validator.validate(options, allOptions);
+  var errorFound = _sharedValidator2['default'].validate(options, allOptions);
   if (errorFound === true) {
     console.log('%cErrors have been found in the supplied options object.', printStyle);
   }
