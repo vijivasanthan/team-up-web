@@ -37,7 +37,7 @@ require.config(
       'angular-sortable-view': '../vendors/angular-sortable-view/src/angular-sortable-view',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom',
-      vis: '../vendors/vis/dist/vis',//'libs/vis/vis-custom',
+      vis: 'libs/vis/vis-custom',
       treegrid: 'removables/treegrid',
       config: 'configTeamUp',
       'lodash': '../vendors/lodash/lodash.min',
