@@ -885,9 +885,6 @@ define(
                   {
                     var teamId = Teams.checkExistence(CurrentSelection.getTeamId());
 
-
-
-
                     return $q.all([
                                     Teams.getAllLocal(),
                                     Clients.getAll(),

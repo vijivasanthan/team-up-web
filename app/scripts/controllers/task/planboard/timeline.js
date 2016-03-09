@@ -386,6 +386,7 @@ define(
                 onAdd: this.onAdd,
                 onRemove: this.onRemove,
                 onMoving: this.onChange,
+                stack: false,
                 margin: {
                   axis: 5
                 },
@@ -618,6 +619,7 @@ define(
                     tasks,
                     function (memberTasks)
                     {
+                      console.error("memberTasks ->", memberTasks);
                       angular.forEach(
                         memberTasks,
                         function (task)
@@ -670,7 +672,7 @@ define(
                               group: member.head,
                               content: content,
                               className: 'state-available',
-                              editable: false
+                              editable: true
                             }
                           );
                         }
@@ -759,6 +761,14 @@ define(
                 }
               };
 
+              //if($scope.data && $scope.data.periods)
+              //{
+              //  $scope.data.periods = {
+              //    start: start,
+              //    end: end
+              //  }
+              //}
+
               if ($.browser.msie && $.browser.version == '8.0')
               {
                 $scope.timeline.options.start = new Date(options.start);
@@ -771,6 +781,8 @@ define(
               {
                 visDataSet.clear();
 
+                console.error("$scope.data ->", $scope.data);
+                //periods of Scope.data blijven zelfde
                 visDataSet.add(
                   this.process($scope.data),
                   $scope.timeline.options
@@ -1490,6 +1502,8 @@ define(
                       state: 'com.ask-cs.State.Available'
                     };
 
+                    console.error("$scope.slot.end.datetime ->", $scope.slot.end.datetime);
+
                     if($scope.relatedUsers && $scope.relatedUsers.length)
                     {
                       $scope.slot.relatedUser = $scope.relatedUsers[0].uuid
@@ -1544,10 +1558,10 @@ define(
             {
               values = {
                 startTime: ($rootScope.browser.mobile) ?
-                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.start.datetime)).getTime())) :
+                  +moment(slot.start.datetime) :
                   +moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime),
                 endTime: ($rootScope.browser.mobile) ?
-                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.end.datetime)).getTime())) :
+                  +moment(slot.end.datetime) :
                   +moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
                 description: (typeof slot.description == 'undefined') ? '' : slot.description,
                 relatedUserId: slot.relatedUser
@@ -1707,10 +1721,10 @@ define(
           $scope.redrawSlot = function (slot)
           {
             var start = ($rootScope.browser.mobile)
-              ?   Math.abs(Math.floor(new Date($scope.slot.start.datetime).getTime() / 1000))
+              ?   +moment($scope.slot.start.datetime)
               :   +moment($scope.slot.start.date +' '+ $scope.slot.start.time, config.app.formats.datetime);
             var end = ($rootScope.browser.mobile)
-              ?   Math.abs(Math.floor(new Date($scope.slot.end.datetime).getTime() / 1000))
+              ?   +moment($scope.slot.end.datetime)
               :   +moment($scope.slot.end.date +' '+ $scope.slot.end.time, config.app.formats.datetime);
 
             var selectedSlot = $scope.self.timeline.getSelection()[0] || slot.id;
@@ -1826,10 +1840,10 @@ define(
             {
               options = {
                 startTime: ($rootScope.browser.mobile) ?
-                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.start.datetime)).getTime())) :
+                  +moment(slot.start.datetime) :
                   +moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime),
                 endTime: ($rootScope.browser.mobile) ?
-                  Math.abs(Math.floor(new Date(getDateTimeFromPicker(slot.end.datetime)).getTime())) :
+                  +moment(slot.end.datetime) :
                   +moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
                 description: slot.description,
                 relatedUserId: slot.relatedUser,
