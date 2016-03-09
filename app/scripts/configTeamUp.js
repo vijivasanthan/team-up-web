@@ -3,6 +3,7 @@ define(['profile'], function(profile){
     app: {
       version: '@@version',
       released: '@@released',
+      versionInfo: '@@versionInfo',
 
       title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
       lang: getLanguage(),

@@ -26,8 +26,9 @@ define(
         'moment',
         'tmhDynamicLocale',
         'ipCookie',
+        'Version',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie)
+                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie, Version)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -911,6 +912,44 @@ define(
           };
 
           $rootScope.hangup = null;
+
+	        /**
+           * Get version info for front as back-end
+           */
+          $rootScope.getVersionInfo = function()
+          {
+            Version.getVersionInfo()
+                   .then(function(versionInfo)
+                         {
+                           //set version Info
+                           if(versionInfo)
+                           {
+                             $rootScope.backEndVersion = versionInfo;
+
+                             $rootScope.backEndVersion.title = Version.setVersionToolTip({app: "Back-end",
+                                                                                   releaseNr: versionInfo.releaseNr,
+                                                                                   buildDate: versionInfo.buildDate,
+                                                                                   currentBranch: versionInfo.currentBranch
+                                                                                 });
+
+                             $rootScope.frontEndVersion = {};
+                             try {
+                               $rootScope.frontEndVersion = angular.fromJson(config.app.versionInfo);
+                                 //angular.fromJson('{"releaseNr":"1.19.0","buildDate":"02-03-2016, 08:34:31 PM","currentBranch":"feature_version_info"}');
+                               $rootScope.frontEndVersion.title = Version.setVersionToolTip({app: "Front-end",
+                                                                                             releaseNr: $rootScope.frontEndVersion.releaseNr,
+                                                                                             buildDate: $rootScope.frontEndVersion.buildDate,
+                                                                                             currentBranch: $rootScope.frontEndVersion.currentBranch
+                                                                                           });
+                             } catch (e) {
+                               $rootScope.frontEndVersion.title = "<span>App&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> Front-end";
+                               $rootScope.frontEndVersion.title += "<br /><span>Version:</span> v" + $rootScope.config.app.version;
+                             }
+                           }
+                         });
+          };
+
+          if(Session.check()) $rootScope.getVersionInfo();
         }
       ]
     );

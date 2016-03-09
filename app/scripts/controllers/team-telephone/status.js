@@ -6,6 +6,12 @@ define(['../controllers'], function (controllers)
     'status',
       function ($rootScope, $location, TeamUp, $q, Slots, Store, data, Teams, CurrentSelection)
       {
+        //Login.getVerionsInfo()
+        //  .then(function(versionInfo)
+        //        {
+        //          console.error("versionInfo ->", versionInfo);
+        //        })
+
         //rootScope
         $rootScope.notification.status = false;
         $rootScope.fixStyles();

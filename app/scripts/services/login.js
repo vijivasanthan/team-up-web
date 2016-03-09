@@ -14,7 +14,8 @@ define(['services/services', 'config'],
                 Dater,
                 Session,
                 $location,
-                MD5)
+                MD5,
+                Version)
       {
         // constructor \\
         var loginService = function ()
@@ -183,7 +184,7 @@ define(['services/services', 'config'],
                   }
                 });
               return deferred.promise;
-            }
+            };
 
         }).call(loginService.prototype);
 
@@ -237,6 +238,9 @@ define(['services/services', 'config'],
               {
                 if(permissionProfile.chat && ! $rootScope.browser.mobile) $rootScope.$broadcast('loadChatsCurrentTeam');
               });
+
+              //Set current version stuff Back end
+              $rootScope.getVersionInfo();
 
               setTimeout(
                 function ()

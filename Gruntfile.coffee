@@ -23,7 +23,10 @@ module.exports = (grunt) ->
 
     pkg: grunt.file.readJSON('package.json')
 
+
     paths: appConfig
+
+    gitinfo: {}
 
     jade:
       index:
@@ -421,7 +424,12 @@ module.exports = (grunt) ->
         options:
           variables:
             version: '<%= pkg.version %>'
-            released: grunt.template.today('dddd, mmmm dS, yyyy, h:MM:ss TT')
+            released: grunt.template.today('dd-mm-yyyy, hh:MM:ss TT')
+            versionInfo: {
+              releaseNr: '<%= pkg.version %>',
+              buildDate: grunt.template.today('dd-mm-yyyy, hh:MM:ss TT'),
+              currentBranch: '<%= gitinfo.local.branch.current.name %>'
+            }
           prefix: '@@'
         files: [
           expand: true
@@ -474,6 +482,7 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask 'build', [
+    'gitinfo',
     'clean:dist'
     'coffee:dist'
     'coffee:testUnit'

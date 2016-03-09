@@ -134,7 +134,7 @@
 
   #copyrights {
     position: absolute;
-    right: 20px;
+    left: 25px;
     margin-top: 0px;
     text-align: right;
     line-height: 14px;
@@ -142,16 +142,34 @@
     span.muted {
       position: absolute;
       top: -2px;
-      right: 5px;
-      float: right;
-      width: 300px;
+      width: 370px;
       color: $offwhite;
-
+      small {
+        float: left;
+      }
       a {
         color: $orange;
       }
+
+      .version_nr {
+        cursor: help;
+      }
     }
   }
+}
+
+.tooltip-inner {
+  background-color: $orange;
+  max-width: 300px;
+  text-align: left;
+  span {
+    color: $brown;
+    font-weight: bold;
+  }
+}
+
+.tooltip.top .tooltip-arrow {
+  border-top-color: $orange;
 }
 
 #download-footer {
