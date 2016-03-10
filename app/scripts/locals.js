@@ -2340,7 +2340,7 @@ define(
           lessPeople: 'Er is een tekort van $v mens(en)!',
           samePeople: 'Er zijn precies genoeg mensen.',
           morePeople: 'Er is een overschot van $v mens(en)!',
-          wished: 'Gewenst',
+          wished: 'Benodigd',
           combine_reoccuring: 'Dit is een gecombineerde planning rij met opeenvolgende rijen.',
           sendMsgToMember: 'Stuur bericht naar teamleden',
           noMembers: 'Er zijn geen leden in dit team.',
