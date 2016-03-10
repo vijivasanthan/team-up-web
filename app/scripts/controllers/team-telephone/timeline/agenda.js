@@ -190,7 +190,6 @@ define(
             if ($scope.views.slot.add)
             {
               $rootScope.planboardSync.start();
-
               $scope.resetInlineForms();
             }
             else
@@ -203,8 +202,6 @@ define(
 
               $scope.views.slot.add = true;
             }
-
-            $scope.$broadcast('showDuration');
           };
 
           $scope.refreshCurrentTimeline = function()

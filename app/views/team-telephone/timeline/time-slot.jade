@@ -71,7 +71,7 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 				bs-timepicker='',
 				data-minute-step="5",
 				data-arrow-behavior="picker",
-				ng-change='setEndTime(slot.start.time); showDuration()')
+				ng-change='setEndTime(slot.start.date, slot.start.time); showDuration()')
 				i.glyphicon.glyphicon-time.form-control-feedback
 			.form-group.has-feedback.timer(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='time-start', type='text', ng-model='slot.start.time', disabled='disabled')

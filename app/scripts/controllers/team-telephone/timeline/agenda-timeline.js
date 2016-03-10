@@ -331,8 +331,8 @@ define(
 
         function getUnixTimeStamps(slot)
         {
-          var startDate = slot.start.date + slot.start.time,
-            endDate = slot.end.date + slot.end.time,
+          var startDate = slot.start.date + " " + slot.start.time,
+            endDate = slot.end.date + " " + slot.end.time,
             dateTimeFormat = 'DD-MM-YYYY HH:mm',
             startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
             endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
@@ -522,18 +522,21 @@ define(
             $scope.slot = {
               start: {
                 date: moment().format(config.app.formats.date),
-                time: moment().format(config.app.formats.time),
-                datetime: moment().format("YYYY-MM-DDTHH:mm:ss")
+                time: moment().format('HH:00'),
+                datetime: moment().toDate()
               },
               end: {
                 date: moment().format(config.app.formats.date),
                 time: moment().add(1, 'hours').format('HH:00'),
-                datetime: moment().add(1, 'hours').format("YYYY-MM-DDTHH:00:00")
+                datetime: moment().add(1, 'hours').toDate()
               },
               state: 'com.ask-cs.State.Available',
               recursive: false,
               id: ''
             };
+            $scope.setEndDate($scope.slot.start.date);
+            $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
+            $scope.showDuration();
           }
         );
 
@@ -1930,6 +1933,7 @@ define(
                     $scope.setEndDate($scope.slot.start.date);
                     $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
                   }
+
                   $scope.showDuration();
 
                   $scope.original = {
