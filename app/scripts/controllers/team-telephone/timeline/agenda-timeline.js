@@ -593,7 +593,6 @@ define(
              */
             $scope.timelineOnRemove = function (slot, item, callback)
             {
-              console.error("item ->", item);
               $rootScope.planboardSync.clear();
 
               if (newSlot.length)
@@ -647,8 +646,6 @@ define(
                   currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
                   changedEndDate = new Date(now - 10000);
 
-                console.error("$scope.original ->", $scope.original);
-
                 if ($scope.original.end <= now && $scope.original.recursive == false)
                 {
                   $rootScope.notifier.error($rootScope.ui.agenda.pastDeleting);
@@ -659,8 +656,6 @@ define(
                   $scope.original.end >= now &&
                   $scope.original.recursive == false)
                 {
-                  console.error("$scope.original.content ->", $scope.original);
-
                   Slots.change(
                     $scope.original,
                     {
@@ -872,8 +867,6 @@ define(
                   $rootScope.app.resources
                 ));
 
-              //console.error("visDataSet ->", visDataSet);
-
               visGroupsDataSet.clear();
 
               angular.forEach(visDataSet.get(), function (item)
@@ -885,8 +878,6 @@ define(
               {
                 visGroupsDataSet.add({id: id, content: id});
               });
-
-              console.error("visGroupsDataSet ->", visGroupsDataSet);
 
               visDataSet.add(weekendBackgrounds);
 
@@ -1426,7 +1417,6 @@ define(
         {
           var selectedItem = visDataSet.get(props.items[0]);
 
-          console.error("selectedItem ->", selectedItem);
           $scope.original = {
             start: selectedItem.start,
             end: selectedItem.end,
@@ -1786,13 +1776,16 @@ define(
          * Set the end time depending on the start time
          * @param startDate
          */
-        $scope.setEndTime = function (startTime)
+        $scope.setEndTime = function (startDate, startTime)
         {
           var dateFormat = 'DD-MM-YYYY',
             timeFormat = 'HH:mm';
-          $scope.slot.end.time = moment(startTime, timeFormat)
-            .add(6, 'hours')
-            .format(timeFormat);
+
+          $scope.slot.end.time = moment(startDate + " " + startTime,
+                                        dateFormat + " " + timeFormat)
+            .add(6, 'hours');
+          $scope.slot.end.date = $scope.slot.end.time.format(dateFormat);
+          $scope.slot.end.time = $scope.slot.end.time.format(timeFormat);
         };
 
         /**
@@ -1829,8 +1822,7 @@ define(
             }
 
             values = item;
-            ///
-            console.error("values ->", values);
+
             if (values.recursive ||
               values.group.match($rootScope.ui.planboard.weeklyPlanning) ||
               values.group === $rootScope.ui.planboard.myWeeklyPlanning ||
@@ -1933,8 +1925,11 @@ define(
                     state: 'com.ask-cs.State.Available'
                   };
 
-                  //$scope.setEndDate($scope.slot.start.date);
-                  //$scope.setEndTime($scope.slot.start.time);
+                  if(! item.type || item.type !== 'range')
+                  {
+                    $scope.setEndDate($scope.slot.start.date);
+                    $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
+                  }
                   $scope.showDuration();
 
                   $scope.original = {
@@ -1983,7 +1978,6 @@ define(
            * Add new slot through the form
            */
           {
-            console.error("slot before  ->", slot);
             if (! slotDatesValid(slot))
             {
               $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
