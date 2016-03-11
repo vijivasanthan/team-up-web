@@ -1610,15 +1610,15 @@ Order
 }
 
 .vis-timeline .vis-panel.vis-background {
-  background: $brown !important;
+  //background: $brown !important;
 }
 
 .vis-timeline .vis-time-axis.vis-foreground {
-  background: $brown !important;
+  //background: $brown !important;
 }
 
 .vis-timeline .vis-panel.vis-background.vis-horizontal {
-  background: #ffffff !important;
+  //background: #ffffff !important;
 }
 
 $wishMax: 10;
@@ -1638,7 +1638,7 @@ $step: 7;
 
   .vis-panel.vis-background.teamup {
     background-color: $brown !important;
-    height: 43px !important; // reasonable default, will be overridden by JS
+    //height: 43px !important; // reasonable default, will be overridden by JS
     width: 100% !important;
   }
 
@@ -1982,10 +1982,10 @@ $step: 7;
 }
 
 .vis-timeline .vis-time-axis .vis-text{
-  border-left: 1px solid $white;
-  .major {
-    font-weight: bold;
-  }
+  //border-left: 1px solid $white;
+  //.major {
+  //  font-weight: bold;
+  //}
 }
 
 .vis-timeline-tooltip{
