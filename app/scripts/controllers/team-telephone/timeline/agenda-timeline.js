@@ -434,34 +434,112 @@ define(
 
         $scope.$watch('slot.state', function (newValue, oldValue)
         {
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.state = newValue;
+            item.className = $scope.timeline.config.states[item.state].className;
+            item.className += ' has-slot-tooltip';
+            return item;
+          });
+        });
+
+
+        $scope.$watch('slot.start.date', function (newValue, oldValue)
+        {
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.start = moment(newValue + " " + $scope.slot.start.time,
+                                config.app.formats.date + " " + config.app.formats.time).toDate();
+            return item;
+          });
+        });
+
+        $scope.$watch('slot.end.date', function (newValue, oldValue)
+        {
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.end = moment(newValue + " " + $scope.slot.end.time,
+                                config.app.formats.date + " " + config.app.formats.time).toDate();
+            return item;
+          });
+        });
+
+        $scope.$watch('slot.start.time', function (newValue, oldValue)
+        {
+          //update day if the hour is midnight
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.start = moment($scope.slot.start.date + " " + newValue,
+                                config.app.formats.date + " " + config.app.formats.time).toDate();
+            return item;
+          });
+        });
+
+        $scope.$watch('slot.end.time', function (newValue, oldValue)
+        {
+          //update day if the hour is midnight
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.end = moment($scope.slot.end.date + " " + newValue,
+                              config.app.formats.date + " " + config.app.formats.time).toDate();
+            return item;
+          });
+        });
+
+        $scope.$watch('slot.end.time', function (newValue, oldValue)
+        {
+          //update day if the hour is midnight
+          updateSlot(newValue, oldValue, function(item, newValue)
+          {
+            item.end = moment($scope.slot.end.date + " " + newValue,
+                              config.app.formats.date + " " + config.app.formats.time).toDate();
+            return item;
+          });
+        });
+
+        if($rootScope.browser.mobile)
+        {
+          $scope.$watch('slot.start.datetime', function (newValue, oldValue)
+          {
+            //update day if the hour is midnight
+            updateSlot(newValue, oldValue, function(item, newValue)
+            {
+              item.start = moment(newValue).toDate();
+              return item;
+            });
+          });
+
+          $scope.$watch('slot.end.datetime', function (newValue, oldValue)
+          {
+            //update day if the hour is midnight
+            updateSlot(newValue, oldValue, function(item, newValue)
+            {
+              item.end = moment(newValue).toDate();
+              return item;
+            });
+          });
+        }
+
+        function updateSlot(newValue, oldValue, callback)
+        {
           var ids, item;
 
-          if (newValue === oldValue)
-          {
-            return;
-          }
-
-          if (typeof newValue === 'undefined')
-          {
-            return;
-          }
+          if (newValue === oldValue) return;
+          if (typeof newValue === 'undefined') return;
 
           if (($scope.views.slot && ($scope.views.slot.add === true || $scope.views.slot.edit === true)) || //planboard
             ($scope.forms && ($scope.forms.add === true || $scope.forms.edit === true))) //profile
           {
-
             ids = $scope.self.timeline.getSelection();
+
             if (ids.length === 1)
             {
               item = visDataSet.get(ids)[0];
-              item.state = newValue;
-              item.className = $scope.timeline.config.states[item.state].className;
-              item.className += ' has-slot-tooltip';
-
+              item = callback(item, newValue);
               visDataSet.update(item);
             }
           }
-        });
+        }
 
         /**
          * Timeline on changing
@@ -1785,8 +1863,10 @@ define(
             timeFormat = 'HH:mm';
 
           $scope.slot.end.time = moment(startDate + " " + startTime,
-                                        dateFormat + " " + timeFormat)
-            .add(6, 'hours');
+                                        dateFormat + " " + timeFormat).add(6, 'hours');
+          $scope.slot.end.datetime = moment(startDate + " " + startTime,
+                                            dateFormat + " " + timeFormat).add(6, 'hours').toDate();
+
           $scope.slot.end.date = $scope.slot.end.time.format(dateFormat);
           $scope.slot.end.time = $scope.slot.end.time.format(timeFormat);
         };
@@ -1869,7 +1949,6 @@ define(
               }
 
               newSlot.push(item.id);
-              visDataSet.add(item);
 
               //update values with the last drawn item in the timeline
               values = item;
@@ -1885,11 +1964,6 @@ define(
                   // This should only be applied once.
                   // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
                   //   .before("<div class='time-tip' style='padding: 0;'></div>");
-
-                  item.content = Sloter.tooltip({
-                    start: moment(item.start).unix(),
-                    end: moment(item.end).unix()
-                  }, true);
 
                   if ($scope.timeline.main)
                   {
@@ -1932,7 +2006,13 @@ define(
                   {
                     $scope.setEndDate($scope.slot.start.date);
                     $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
+                    item.end = $scope.slot.end.datetime;
                   }
+
+                  item.content = Sloter.tooltip({
+                                                  start: moment(item.start).unix(),
+                                                  end: moment(item.end).unix()
+                                                }, true);
 
                   $scope.showDuration();
 
@@ -1958,7 +2038,7 @@ define(
 
                   //callback(item);
                   //update visDataSet with the new item
-                  visDataSet.update(item);
+                  visDataSet.add(item);
 
                   $timeout(function ()
                   {
