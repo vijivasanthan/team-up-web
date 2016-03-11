@@ -463,10 +463,13 @@ define(['services/services', 'config'],
 
                   if(routeUserId !== member.id && member.id.indexOf('voicemail') === -1)
                   {
-                    link += '<a class="edit-timeline-icon" title="'
+                    //class="edit-timeline-icon"
+
+                    link += '<button class="btn-primary btn-mini" style="float: right;">'
+                    link += '<a title="'
                     + $rootScope.ui.agenda.editTimeline + member.id + '"';
                     link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
-                    link += '><i class="icon-edit"></a>';
+                    link += '><i class="icon-edit"></a></button>';
                   }
 
                   _.each(member.data, function (slot)
