@@ -1743,26 +1743,26 @@ $step: 7;
 
     &.agg-even {
       margin: 0;
-      background-color: #e09131;
+      background-color: $orange;
       /*border:1px solid #ba6a24;*/
       /*border-bottom: 10px solid #ba6a24;*/
       // text-indent: -9999px;
 
       &:hover {
-        background-color: lighten(#e09131, 10%);
+        background-color: lighten($orange, 10%);
       }
     }
 
     &.agg-1 {
       margin: 0;
       // background-color: #415e6b;
-      background-color: #6cad6c;
+      background-color: $turq;
       /*border:1px solid #415e6b;*/
       /*border-bottom: 10px solid #415e6b;*/
       // text-indent: -9999px;
 
       &:hover {
-        background-color: lighten(#6cad6c, 10%);
+        background-color: lighten($turq, 10%);
       }
     }
 
