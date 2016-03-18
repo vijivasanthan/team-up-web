@@ -2,7 +2,7 @@ section#dashboard
 	.page-header.agenda-timeline
 		h2.nullable Nieuw TeamTelefoon team
 		button.btn.btn-info.pull-right.btn-newttteam(type='button',
-			//ng-if='teamtelefoon.created',
+			ng-if='teamtelefoon.created',
 			ng-click="teamtelefoon.createAgain()" ) {{ui.teamup.newTeam}} 
 				i(class="glyphicon glyphicon-white glyphicon-plus")
 	div(style='margin-top: 20px;')
