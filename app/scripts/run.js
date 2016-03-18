@@ -773,7 +773,8 @@ define(
                             result.validation.phoneNumberRegion +
                             $rootScope.ui.validation.phone.as +
                             numberType,
-                            format: result.formatting.e164
+                            format: result.formatting.e164,
+                            formatNational: result.formatting.national
                           };
 
                           angular.element(className)
