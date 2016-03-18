@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'team',
-      function ($interval, Team)
+      function ($location, $interval, Team)
       {
         //view model
         var self = this;
@@ -33,7 +33,10 @@ define(
             if(confirm || !Team.checkNameExist(team))
             {
               addTeamModal.modal('hide');
-              Team.create(team);
+              Team.create(team, function()
+              {
+                $location.path('team/members');
+              });
             }
             else addTeamModal.modal('show');
           }

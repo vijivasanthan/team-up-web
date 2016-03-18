@@ -228,16 +228,17 @@ define(['services/services', 'config'],
            * @param team the data of the new team, (Only a name)
            * @returns {*}
            */
-          function create(team)
+          function create(team, callback)
           {
-            var self = this;
+            var self = this,
+                newTeamData = null;
             $rootScope.statusBar.display($rootScope.ui.teamup.saveTeam);
-
-            TeamUp._('teamAdd',
+            return TeamUp._('teamAdd',
               {id: $rootScope.app.resources.uuid},
               team)
               .then(function (newTeam)
               {
+                newTeamData = newTeam;
                 self.list.push(newTeam);
                 Store('app').save('teams', self.list);
                 return Teams.getAll();
@@ -246,7 +247,8 @@ define(['services/services', 'config'],
               {
                 //The last added team is the current one
                 self.setCurrent(self.list[self.list.length - 1].uuid);
-                $location.path('team/members');
+                (callback && callback());
+                return newTeamData;
               });
           }
 
