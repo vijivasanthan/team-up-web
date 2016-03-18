@@ -577,23 +577,25 @@ define(
            */
           TeamsService.prototype.addMember = function(member)
           {
+            var memberData = {
+              uuid: member.userName,
+              userName: member.userName,
+              passwordHash: member.password,
+              firstName: member.firstName,
+              lastName: member.lastName,
+              phone: member.phone,
+              email: member.email,
+              teamUuids: member.teamUuids,
+              role: member.role,
+              birthDate: 0
+              //function: member.function
+            };
+
             var deferred = $q.defer();
             TeamUp._(
               'memberAdd',
               null,
-              {
-                uuid: member.userName,
-                userName: member.userName,
-                passwordHash: member.password,
-                firstName: member.firstName,
-                lastName: member.lastName,
-                phone: member.phone,
-                email: member.email,
-                teamUuids: member.teamUuids,
-                role: member.role,
-                birthDate: 0
-                //function: member.function
-              }
+              memberData
             )
             .then(function(result)
             {
