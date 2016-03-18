@@ -57,8 +57,12 @@ define(
            */
           function formatVersionInfo(unformattedVersionInfo)
           {
-            var release = 'release';
-            var indexBranch = unformattedVersionInfo.git_branch.indexOf('release');
+            var branch = (unformattedVersionInfo.git_branch.indexOf("release") === -1)
+              ? "hotfix"
+              : "release";
+
+            var indexBranch = unformattedVersionInfo.git_branch.indexOf(branch);
+            console.error("indexBranch ->", indexBranch);
             var formattedVersion = {
               releaseNr: '',
               buildDate: unformattedVersionInfo.date,
@@ -70,9 +74,9 @@ define(
 
             if(indexBranch >= 0)
             {
-              formattedVersion.currentBranch = unformattedVersionInfo.git_branch.substr(0, (indexBranch + release.length));
+              formattedVersion.currentBranch = unformattedVersionInfo.git_branch.substr(0, (indexBranch + branch.length));
               formattedVersion.releaseNr = unformattedVersionInfo.git_branch.substr(
-                                                              (indexBranch + (release.length + 1)),
+                                                              (indexBranch + (branch.length + 1)),
                                                               unformattedVersionInfo.git_branch.length
                                                             );
             }
