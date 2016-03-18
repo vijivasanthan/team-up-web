@@ -560,6 +560,20 @@ define(
     );
 
     directives.directive(
+      'requiredFormOneLine',
+      function ()
+      {
+        return {
+          restrict: 'A', // only for attributes
+          compile: function(element) {
+            // insert asterisk after elment
+            element.after("<span class='required required-small'>*</span>");
+          }
+        };
+      }
+    );
+
+    directives.directive(
       'inputRuleToggle',
       function ()
       {
