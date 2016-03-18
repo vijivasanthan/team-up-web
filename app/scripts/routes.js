@@ -870,6 +870,12 @@ define(
               {
                 templateUrl: 'views/team-telephone/create.html',
                 controller: 'create as teamtelefoon',
+                resolve: {
+                  data: function()
+                  {
+                    removeActiveClass('.teamMenu');
+                  }
+                },
                 reloadOnSearch: false
               })
 

@@ -23,7 +23,6 @@ define(
         self.create = function(member)
         {
           var error = "";
-
           if( ! self.ttPhoneNumbers.length ) error = $rootScope.ui.options.noPhoneNumbers;
           //check if a teamname is given
           else if( self.newForm.teamName['$invalid'] )
@@ -111,12 +110,12 @@ define(
           //self.form = {
           //  teamName: "heemraadssingel",
           //  voicemail: "lala@lala.nl",
-          //  firstName: ["", "henkie", "", ""],
-          //  lastName: ["", "watdenkie", "", ""],
+          //  firstName: ["", "henkie", "suki", ""],
+          //  lastName: ["", "watdenkie", "tuki", ""],
           //  email: ["", "lala@lala.nl", "", ""],
-          //  phone: ["", "+31650587992", "", ""],
-          //  password: ["", "askaskask", "", ""],
-          //  reTypePassword: ["", "askaskask", "", ""]
+          //  phone: ["", "+31650587992", "+31650587992", ""],
+          //  password: ["", "askaskask", "askaskask", ""],
+          //  reTypePassword: ["", "askaskask", "askaskask", ""]
           //};
 
           //Check if the last selected team is a teamtelephone team
@@ -362,11 +361,10 @@ define(
             case "maxlength":
               errorMessage = errorLocalization.maxLength(fieldName);
               break;
+            case "email":
             case "pattern":
-              if( fieldName === "e-mail" ) error = $rootScope.ui.validation.email.notValid;
+              errorMessage = $rootScope.ui.validation.email.notValid;
               break;
-              errorMessage = "Geen " + fieldName + " opgegeven";
-            default:
           }
           return errorMessage;
         }
@@ -446,7 +444,7 @@ define(
               if( error.length )
               {
                 goToPart('part' + index);
-                return error;
+                return error + " " + $rootScope.ui.teamup.teamMember.toLocaleLowerCase() + " " + index;
               }
             }
           }

@@ -53,6 +53,7 @@ section#dashboard
 													name='voicemail',
 													required,
 													required-form-one-line,
+													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
 													ng-model='teamtelefoon.form.voicemail')
 													span.help-block(ng-show='teamtelefoon.newForm.voicemail.$invalid && (teamtelefoon.newForm.voicemail.$dirty || teamtelefoon.newForm.voicemail.$touched)')
 														small(ng-show="teamtelefoon.newForm.voicemail.$error")
@@ -425,8 +426,8 @@ section#dashboard
 						h2.tt-shownumber {{ teamtelefoon.createdData.ttPhoneNr }}
 						br
 						br
-						h4.tt-showteam is het nieuwe nummer van
-						h5(style="font-size: 25px; margin-top: 25px;") {{ ui.teamup.team }} {{ teamtelefoon.createdData.teamName }}
+						h4.tt-showteam {{ ui.teamup.newNumberOf }}
+						h5(style="font-size: 25px; margin-top: 25px;") {{ ui.teamup.team.toLowerCase() }} {{ teamtelefoon.createdData.teamName }}
 						br
 					div(class="row grid-divider")
 					div(ng-class="teamtelefoon.showMemberSpanClass" ng-repeat='memberForm in teamtelefoon.createdData.memberForms' )
