@@ -222,8 +222,8 @@ define(
                 $location.path('/team-telefoon/scenario').search({}).hash('');
                 break;
 
-              case 'vis':
-                $location.path('/vis').search({local: 'true'}).hash('teams');
+              case 'team-telefoon/create':
+                $location.path('/team-telefoon/create').search({}).hash('');
                 break;
 
               case 'help':

@@ -866,6 +866,14 @@ define(
               })
 
             .when(
+              '/team-telefoon/create',
+              {
+                templateUrl: 'views/team-telephone/create.html',
+                controller: 'create as teamtelefoon',
+                reloadOnSearch: false
+              })
+
+            .when(
               '/team-telefoon',
               {
                 redirectTo: function(route, path)

@@ -215,6 +215,7 @@ require(
     'controllers/task/myTasks',
     'controllers/task/allTasks',
     'controllers/task/upload',
+    'controllers/team-telephone/create',
     'controllers/task/planboard/timeline',
     'controllers/task/planboard/timeline-navigation',
     'controllers/team-telephone/timeline/agenda-timeline',
