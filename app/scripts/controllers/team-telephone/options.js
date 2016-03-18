@@ -187,7 +187,9 @@ define(
         function show(options)
         {
           //TODO fix directive
-          var tabs = angular.element('.nav-tabs-app li:not(:last)');
+          var tabs       = angular.element('.nav-tabs-app li');
+          var tabsLength = tabs.length;
+          tabs = angular.element('.nav-tabs-app li').slice(0, tabsLength - 2);
 
           if (!options || !options.adapterId)
           {

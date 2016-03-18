@@ -305,7 +305,7 @@ define(
               newMemberData.name = self.form.firstName[index] + " " + self.form.lastName[index];
               newMemberData.email = self.form.email[index];
               newMemberData.phone = self.form.phone[index];
-              newMemberData.password = member.password[index];
+              newMemberData.password = self.form.password[index];
               self.createdData.memberForms['memberForm' + (index - 1)] = newMemberData;
             }
           }
