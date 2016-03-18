@@ -142,6 +142,7 @@ define(
                     {
                       $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
                     }
+                    self.created = false;
                   });
         }
 
@@ -314,12 +315,18 @@ define(
           self.created = true;
           //count how many boxed needed, it depends on the amount of members added
           self.showMemberSpanClass = "col-sm-" + (12 / _.keys(self.createdData.memberForms).length);
-
           //reset form
           self.newForm.$setPristine();
           $rootScope.resetPhoneNumberChecker();
-          init();
         }
+
+	      /**
+         * create again button after creating a teamtelefoon team
+         */
+        self.createAgain = function()
+        {
+          init();
+        };
 
         /**
          * Check if there are phonenumbers left after applying the new TeamTelefoon team
