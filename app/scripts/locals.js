@@ -604,6 +604,9 @@ define(
           settings: 'settings'
         },
         teamup: {
+          minimumOneMember: "Atleast one member must be added",
+          newNumberOf: "is the new number of ",
+          newTeamTelefoonTeam: "New TeamTelephone team",
           syncSucces: 'The teaminfo is syncing.',
           syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
@@ -1764,6 +1767,9 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          minimumOneMember: "Atleast one member must be added",
+          newNumberOf: "is the new number of ",
+          newTeamTelefoonTeam: "New TeamTelephone team",
           syncSucces: 'The teaminfo is syncing.',
           syncError: "The teaminfo couldn't sync",
           notFound: 'Not found',
@@ -2910,6 +2916,9 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          minimumOneMember: "Minimaal één teamlid moet toegevoegd worden",
+          newNumberOf: "is het nieuwe nummer van ",
+          newTeamTelefoonTeam: "Nieuw TeamTelefoon team",
           syncSucces: 'De teaminformatie wordt nu gesynchroniseerd.',
           syncError: 'Het synchroniseren van teaminformatie is mislukt.',
           notFound: 'Niet gevonden',

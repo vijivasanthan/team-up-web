@@ -441,7 +441,7 @@ define(
                   error = $rootScope.ui.profile.passNotMatch;
                 }
               }
-              else error = "Een team moet in iedergeval een teamlid hebben";
+              else error = $rootScope.ui.teamup.minimumOneMember;
 
               if( error.length )
               {

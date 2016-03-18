@@ -16,7 +16,7 @@ section#dashboard
 				div(ng-if='! teamtelefoon.created')
 					form.new-member-form(name='teamtelefoon.newForm', novalidate)
 						fieldset
-							h4(id="part0"  style="color: #f5a962") Team 
+							h4(id="part0"  style="color: #f5a962") {{ ui.teamup.team }} 
 								span(style="color: #c85a3c") *
 							.row
 								div
@@ -25,7 +25,7 @@ section#dashboard
 											.form-group(
 											ng-class="{ 'has-error' : (teamtelefoon.newForm.teanName.$dirty || teamtelefoon.newForm.teamName.$touched) && teamtelefoon.newForm.teamName.$invalid}"
 											)
-												label.control-label Teamnaam
+												label.control-label {{ ui.teamup.teamName }}
 												.controls
 													input.span3.form-control(
 													type='text',
@@ -63,7 +63,7 @@ section#dashboard
 															i {{ ui.options.voicemailEmailAddressDescription }}
 	
 							hr
-							h4(id="part1" style="color: #f5a962") Teamlid 1 
+							h4(id="part1" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;1 
 								span(style="color: #c85a3c") *
 							.row(ng-form="memberFieldForm1")
 								div
@@ -179,7 +179,7 @@ section#dashboard
 															| {{ ui.teamup.passNotSame }}
 															
 							hr
-							h4(id="part2" style="color: #f5a962") Teamlid 2 
+							h4(id="part2" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;2 
 								span(style="color: #c85a3c") *
 							.row(ng-form="memberFieldForm2")
 								div
@@ -296,7 +296,7 @@ section#dashboard
 															| {{ ui.teamup.passNotSame }}
 	
 							hr
-							h4(id="part3" style="color: #f5a962") Teamlid 3 
+							h4(id="part3" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;3 
 								span(style="color: #c85a3c") *
 							.row(ng-form="memberFieldForm3")
 								div
@@ -426,12 +426,12 @@ section#dashboard
 						br
 						br
 						h4.tt-showteam is het nieuwe nummer van
-						h5(style="font-size: 25px; margin-top: 25px;") team {{ teamtelefoon.createdData.teamName }}
+						h5(style="font-size: 25px; margin-top: 25px;") {{ ui.teamup.team }} {{ teamtelefoon.createdData.teamName }}
 						br
 					div(class="row grid-divider")
 					div(ng-class="teamtelefoon.showMemberSpanClass" ng-repeat='memberForm in teamtelefoon.createdData.memberForms' )
 						div(class="col-padding member-center")
-							h3 Teamlid {{ $index + 1 }}
+							h3 {{ ui.teamup.teamMember }}&nbsp;{{ $index + 1 }}
 							table
 								tr
 									td {{ memberForm.name }}
