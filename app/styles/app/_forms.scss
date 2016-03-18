@@ -374,6 +374,10 @@ input[type="color"],
   vertical-align: middle;
 }
 
+.required-small {
+  position: absolute;
+}
+
 #newTeamTab .help-block {
   small {
     display: block;
@@ -383,3 +387,65 @@ input[type="color"],
 .error-block {
   color: $red;
 }
+
+//adding TT team plus member
+.tt-shownumber {
+  color: $orange;
+  font-size: 100px;
+}
+.tt-showteam {
+  font-weight: lighter;
+  font-size: 30px;
+}
+
+.member-center {
+  width: 51%;
+  margin: auto;
+  text-align: center;
+  padding: 0 5px !important;
+  table {
+    width: 100%;
+  }
+}
+
+.btn-newttteam{
+  margin-top: 25px;
+}
+
+.col-sm-4 .member-center {
+  width: 51%;
+}
+
+.col-sm-6 .member-center {
+  width: 35%;
+}
+
+.col-sm-12 .member-center {
+  width: 17%;
+}
+
+.page-header-strap {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eeeeee;
+  text-align: center;
+}
+.grid-divider {
+  position: relative;
+  padding: 0;
+}
+.grid-divider>[class*='col-'] {
+  position: static;
+}
+.grid-divider>[class*='col-']:nth-child(n+2):before {
+  content: "";
+  border-left: 1px solid #DDD;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.col-padding {
+  padding: 0 15px;
+}
+
+

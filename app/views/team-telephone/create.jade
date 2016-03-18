@@ -1,0 +1,443 @@
+section#dashboard
+	.page-header.agenda-timeline
+		h2.nullable Nieuw TeamTelefoon team
+		button.btn.btn-info.pull-right.btn-newttteam(type='button',
+			ng-if='teamtelefoon.created',
+			ng-click="teamtelefoon.created = false" ) {{ui.teamup.newTeam}} 
+				i(class="glyphicon glyphicon-white glyphicon-plus")
+	div(style='margin-top: 20px;')
+
+	.tabbable.tabs-left
+		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', bs-navbar)
+			include tabs
+
+		.tab-content(style="min-height: 575px;")
+			#newMemberTab.tab-pane(class="active")
+				div(ng-if='! teamtelefoon.created')
+					form.new-member-form(name='teamtelefoon.newForm', novalidate)
+						fieldset
+							h4(id="part0"  style="color: #f5a962") Team 
+								span(style="color: #c85a3c") *
+							.row
+								div
+									.span3
+										fieldset
+											.form-group(
+											ng-class="{ 'has-error' : (teamtelefoon.newForm.teanName.$dirty || teamtelefoon.newForm.teamName.$touched) && teamtelefoon.newForm.teamName.$invalid}"
+											)
+												label.control-label Teamnaam
+												.controls
+													input.span3.form-control(
+													type='text',
+													name='teamName',
+													required='',
+													focus,
+													required-form-one-line,
+													ng-minlength="2",
+													ng-maxlength="50",
+													ng-model='teamtelefoon.form.teamName')
+													span.help-block(ng-if='(teamtelefoon.newForm.teamName.$dirty || teamtelefoon.newForm.teamName.$touched) && teamtelefoon.newForm.teamName.$invalid'
+													ng-messages="teamtelefoon.newForm.teamName.$error")
+														small(ng-message="required")
+															i {{ ui.validation.default.required(ui.teamup.teamName) }}
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.teamup.teamName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.teamup.teamName) }}
+									.span3
+										fieldset
+											.form-group(ng-class="{ 'has-error' : teamtelefoon.newForm.voicemail.$invalid && (teamtelefoon.newForm.voicemail.$dirty || teamtelefoon.newForm.voicemail.$touched) }")
+												label.control-label {{ ui.options.voicemailEmailAddress }}
+												.controls
+													input.span3.form-control(type='email',
+													name='voicemail',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.voicemail')
+													span.help-block(ng-show='teamtelefoon.newForm.voicemail.$invalid && (teamtelefoon.newForm.voicemail.$dirty || teamtelefoon.newForm.voicemail.$touched)')
+														small(ng-show="teamtelefoon.newForm.voicemail.$error")
+															i
+															| {{ ui.validation.email.notValid }}
+													span.help-block
+														small
+															i {{ ui.options.voicemailEmailAddressDescription }}
+	
+							hr
+							h4(id="part1" style="color: #f5a962") Teamlid 1 
+								span(style="color: #c85a3c") *
+							.row(ng-form="memberFieldForm1")
+								div
+									.span3
+										fieldset
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm1.firstname.$dirty || memberFieldForm1.firstname.$touched) && memberFieldForm1.firstname.$invalid }")
+												label.control-label {{ui.profile.firstName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='firstname',
+													ng-model='teamtelefoon.form.firstName[1]',
+													required='',
+													required-form-one-line,
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm1.firstname.$touched || memberFieldForm1.firstname.$dirty) && memberFieldForm1.firstname.$invalid",
+													ng-messages="memberFieldForm1.firstname.$error")
+														small(ng-message="required")
+															i {{ ui.validation.default.required(ui.profile.firstName) }}
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.firstName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
+									.span3
+										fieldset		
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm1.lastname.$dirty || memberFieldForm1.lastname.$touched) && memberFieldForm1.lastname.$invalid }")
+												label.control-label {{ui.profile.lastName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='lastname',
+													ng-model='teamtelefoon.form.lastName[1]',
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm1.lastname.$touched || memberFieldForm1.lastname.$dirty) && memberFieldForm1.lastname.$invalid",
+													ng-messages="memberFieldForm1.lastname.$error")
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.lastName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : (memberFieldForm1.email.$touched || memberFieldForm1.email.$dirty) && memberFieldForm1.email.$invalid }")
+												label.control-label {{ ui.profile.email }}
+												.controls
+													input.span3.form-control(type='email',
+													name='email',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.email[1]',
+													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+													span.help-block(ng-messages="memberFieldForm1.email.$error",
+													ng-if='(memberFieldForm1.email.$touched || memberFieldForm1.email.$dirty) && memberFieldForm1.email.$invalid')
+														small(ng-message="pattern")
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="required")
+															i {{ ui.validation.email.notValid }}		
+									.span3
+										fieldset
+											.form-group(ng-class="{'has-error': (memberFieldForm1.phone.$touched || memberFieldForm1.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[0].result || (teamtelefoon.parsedPhoneNumbers[0].all && teamtelefoon.parsedPhoneNumbers[0].all.error))}")
+												label.control-label {{ui.teamup.phone}}
+												.controls
+													input.span3.form-control.inputPhoneNumber(type='text',
+													name='phone',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.phone[1]',
+													ng-change='teamtelefoon.checkPhoneNumber(teamtelefoon.form.phone[1], 0)')
+													span.help-block
+														small(ng-if='teamtelefoon.parsedPhoneNumbers[0].message')
+															i {{ teamtelefoon.parsedPhoneNumbers[0].message }}
+														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[0].message) && (memberFieldForm1.phone.$touched || memberFieldForm1.phone.$dirty)')
+															i {{ ui.validation.phone.notValid }}
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : memberFieldForm1.password.$invalid && (memberFieldForm1.password.$touched || memberFieldForm1.password.$dirty)  }")
+												label.control-label {{ui.profile.password}}
+												.controls
+													input.span3.form-control(type='password',
+													ng-model='teamtelefoon.form.password[1]',
+													name='password',
+													required,
+													required-form-one-line,
+													ng-minlength="8",
+													ng-maxlength="40")
+													span.help-block(ng-messages='memberFieldForm1.password.$error',
+													ng-if='memberFieldForm1.password.$invalid && (memberFieldForm1.password.$touched || memberFieldForm1.password.$dirty)')
+														small(ng-message='required')
+															i
+															| {{ ui.validation.password.required }}
+														small(ng-message="minlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMinChars(8) }} 
+														small(ng-message="maxlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
+										
+									.span3
+										fieldset		
+											.form-group(
+											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[1] !== teamtelefoon.form.password[1] || memberFieldForm1.repeatPass.$invalid) && (memberFieldForm1.repeatPass.$dirty || memberFieldForm1.repeatPass.$touched) }")
+												label.control-label {{ui.profile.retypePassword}}
+												.controls
+													input.span3.form-control(type='password',
+													required='',
+													required-form-one-line,
+													ng-model='teamtelefoon.form.reTypePassword[1]',
+													name='repeatPass')
+													span.help-block(ng-show='(teamtelefoon.form.reTypePassword[1] !== teamtelefoon.form.password[1] || memberFieldForm1.repeatPass.$invalid) && (memberFieldForm1.repeatPass.$dirty || memberFieldForm1.repeatPass.$touched)')
+														small
+															i
+															| {{ ui.teamup.passNotSame }}
+															
+							hr
+							h4(id="part2" style="color: #f5a962") Teamlid 2 
+								span(style="color: #c85a3c") *
+							.row(ng-form="memberFieldForm2")
+								div
+									.span3
+										fieldset
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm2.firstname.$dirty || memberFieldForm2.firstname.$touched) && memberFieldForm2.firstname.$invalid }")
+												label.control-label {{ui.profile.firstName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='firstname',
+													ng-model='teamtelefoon.form.firstName[2]',
+													required='',
+													required-form-one-line,
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm2.firstname.$touched || memberFieldForm2.firstname.$dirty) && memberFieldForm2.firstname.$invalid",
+													ng-messages="memberFieldForm2.firstname.$error")
+														small(ng-message="required")
+															i {{ ui.validation.default.required(ui.profile.firstName) }}
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.firstName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
+									.span3
+										fieldset
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm2.lastname.$dirty || memberFieldForm2.lastname.$touched) && memberFieldForm2.lastname.$invalid }")
+												label.control-label {{ui.profile.lastName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='lastname',
+													ng-model='teamtelefoon.form.lastName[2]',
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm2.lastname.$touched || memberFieldForm2.lastname.$dirty) && memberFieldForm2.lastname.$invalid",
+													ng-messages="memberFieldForm2.lastname.$error")
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.lastName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
+											
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : (memberFieldForm2.email.$touched || memberFieldForm2.email.$dirty) && memberFieldForm2.email.$invalid }")
+												label.control-label {{ ui.profile.email }}
+												.controls
+													input.span3.form-control(type='email',
+													name='email',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.email[2]',
+													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{2,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+													span.help-block(ng-messages="memberFieldForm2.email.$error",
+													ng-if='(memberFieldForm2.email.$touched || memberFieldForm2.email.$dirty) && memberFieldForm2.email.$invalid')
+														small(ng-message="pattern")
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="required")
+															i {{ ui.validation.email.notValid }}		
+									.span3
+										fieldset
+											.form-group(ng-class="{'has-error': (memberFieldForm2.phone.$touched || memberFieldForm2.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[1].result || (teamtelefoon.parsedPhoneNumbers[1].all && teamtelefoon.parsedPhoneNumbers[1].all.error))}")
+												label.control-label {{ui.teamup.phone}}
+												.controls
+													input.span3.form-control.inputPhoneNumber(type='text',
+													name='phone',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.phone[2]',
+													ng-change='teamtelefoon.checkPhoneNumber(teamtelefoon.form.phone[2], 1)')
+													span.help-block
+														small(ng-if='teamtelefoon.parsedPhoneNumbers[1].message')
+															i {{ teamtelefoon.parsedPhoneNumbers[1].message }}
+														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[1].message) && (memberFieldForm2.phone.$touched || memberFieldForm2.phone.$dirty)')
+															i {{ ui.validation.phone.notValid }}
+											
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : memberFieldForm2.password.$invalid && (memberFieldForm2.password.$touched || memberFieldForm2.password.$dirty)  }")
+												label.control-label {{ui.profile.password}}
+												.controls
+													input.span3.form-control(type='password',
+													ng-model='teamtelefoon.form.password[2]',
+													name='password',
+													required,
+													required-form-one-line,
+													ng-minlength="8",
+													ng-maxlength="40")
+													span.help-block(ng-messages='memberFieldForm2.password.$error',
+													ng-if='memberFieldForm2.password.$invalid && (memberFieldForm2.password.$touched || memberFieldForm2.password.$dirty)')
+														small(ng-message='required')
+															i
+															| {{ ui.validation.password.required }}
+														small(ng-message="minlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMinChars(8) }} 
+														small(ng-message="maxlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
+									.span3
+										fieldset					
+											.form-group(
+											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[2] !== teamtelefoon.form.password[2] || memberFieldForm2.repeatPass.$invalid) && (memberFieldForm2.repeatPass.$dirty || memberFieldForm2.repeatPass.$touched) }")
+												label.control-label {{ui.profile.retypePassword}}
+												.controls
+													input.span3.form-control(type='password',
+													required='',
+													required-form-one-line,
+													ng-model='teamtelefoon.form.reTypePassword[2]',
+													name='repeatPass')
+													span.help-block(ng-show='(teamtelefoon.form.reTypePassword[2] !== teamtelefoon.form.password[2] || memberFieldForm2.repeatPass.$invalid) && (memberFieldForm2.repeatPass.$dirty || memberFieldForm2.repeatPass.$touched)')
+														small
+															i
+															| {{ ui.teamup.passNotSame }}
+	
+							hr
+							h4(id="part3" style="color: #f5a962") Teamlid 3 
+								span(style="color: #c85a3c") *
+							.row(ng-form="memberFieldForm3")
+								div
+									.span3
+										fieldset
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm3.firstname.$dirty || memberFieldForm3.firstname.$touched) && memberFieldForm3.firstname.$invalid }")
+												label.control-label {{ui.profile.firstName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='firstname',
+													ng-model='teamtelefoon.form.firstName[3]',
+													required='',
+													required-form-one-line,
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm3.firstname.$touched || memberFieldForm3.firstname.$dirty) && memberFieldForm3.firstname.$invalid",
+													ng-messages="memberFieldForm3.firstname.$error")
+														small(ng-message="required")
+															i {{ ui.validation.default.required(ui.profile.firstName) }}
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.firstName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
+	
+									.span3
+										fieldset		
+											.form-group(
+											ng-class="{ 'has-error' : (memberFieldForm3.lastname.$dirty || memberFieldForm3.lastname.$touched) && memberFieldForm3.lastname.$invalid }")
+												label.control-label {{ui.profile.lastName}}
+												.controls
+													input.span3.form-control(type='text',
+													name='lastname',
+													ng-model='teamtelefoon.form.lastName[3]',
+													ng-minlength="2"
+													ng-maxlength="30")
+													span.help-block(ng-if="(memberFieldForm3.lastname.$touched || memberFieldForm3.lastname.$dirty) && memberFieldForm3.lastname.$invalid",
+													ng-messages="memberFieldForm3.lastname.$error")
+														small(ng-message="minlength")
+															i {{ ui.validation.default.minLength(ui.profile.lastName) }}
+														small(ng-message="maxlength")
+															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
+											
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : (memberFieldForm3.email.$touched || memberFieldForm3.email.$dirty) && memberFieldForm3.email.$invalid }")
+												label.control-label {{ ui.profile.email }}
+												.controls
+													input.span3.form-control(type='email',
+													name='email',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.email[3]',
+													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{2,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+													span.help-block(ng-messages="memberFieldForm3.email.$error",
+													ng-if='(memberFieldForm3.email.$touched || memberFieldForm3.email.$dirty) && memberFieldForm3.email.$invalid')
+														small(ng-message="pattern")
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="required")
+															i {{ ui.validation.email.notValid }}		
+															
+									.span3
+										fieldset
+											.form-group(ng-class="{'has-error': (memberFieldForm3.phone.$touched || memberFieldForm3.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[2].result || (teamtelefoon.parsedPhoneNumbers[2].all && teamtelefoon.parsedPhoneNumbers[2].all.error))}")
+												label.control-label {{ui.teamup.phone}}
+												.controls
+													input.span3.form-control.inputPhoneNumber(type='text',
+													name='phone',
+													required,
+													required-form-one-line,
+													ng-model='teamtelefoon.form.phone[3]',
+													ng-change='teamtelefoon.checkPhoneNumber(teamtelefoon.form.phone[3], 2)')
+													span.help-block
+														small(ng-if='teamtelefoon.parsedPhoneNumbers[2].message')
+															i {{ teamtelefoon.parsedPhoneNumbers[2].message }}
+														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[2].message) && (memberFieldForm3.phone.$touched || memberFieldForm3.phone.$dirty)')
+															i {{ ui.validation.phone.notValid }}
+											
+									.span3
+										fieldset		
+											.form-group(ng-class="{ 'has-error' : memberFieldForm3.password.$invalid && (memberFieldForm3.password.$touched || memberFieldForm3.password.$dirty)  }")
+												label.control-label {{ui.profile.password}}
+												.controls
+													input.span3.form-control(type='password',
+													ng-model='teamtelefoon.form.password[3]',
+													name='password',
+													required,
+													required-form-one-line,
+													ng-minlength="8",
+													ng-maxlength="40")
+													span.help-block(ng-messages='memberFieldForm3.password.$error',
+													ng-if='memberFieldForm3.password.$invalid && (memberFieldForm3.password.$touched || memberFieldForm3.password.$dirty)')
+														small(ng-message='required')
+															i
+															| {{ ui.validation.password.required }}
+														small(ng-message="minlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMinChars(8) }} 
+														small(ng-message="maxlength")
+															i
+															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
+	
+									.span3
+										fieldset		
+											.form-group(
+											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[3] !== teamtelefoon.form.password[3] || memberFieldForm3.repeatPass.$invalid) && (memberFieldForm3.repeatPass.$dirty || memberFieldForm3.repeatPass.$touched) }")
+												label.control-label {{ui.profile.retypePassword}}
+												.controls
+													input.span3.form-control(type='password',
+													required='',
+													required-form-one-line,
+													ng-model='teamtelefoon.form.reTypePassword[3]',
+													name='repeatPass')
+													span.help-block(ng-show='(teamtelefoon.form.reTypePassword[3] !== teamtelefoon.form.password[3] || memberFieldForm3.repeatPass.$invalid) && (memberFieldForm3.repeatPass.$dirty || memberFieldForm3.repeatPass.$touched)')
+														small
+															i
+															| {{ ui.teamup.passNotSame }}
+	
+							hr
+							.form-actions
+								button.btn.btn-success(type='submit',
+								ng-click='teamtelefoon.create(teamtelefoon.form)') {{ui.teamup.saveMember}}
+				
+				div(ng-if='teamtelefoon.created', style="position: relative;")
+					div(class="page-header-strap")
+						h2.tt-shownumber {{ teamtelefoon.createdData.ttPhoneNr }}
+						br
+						br
+						h4.tt-showteam is het nieuwe nummer van
+						h5(style="font-size: 25px; margin-top: 25px;") team {{ teamtelefoon.createdData.teamName }}
+						br
+					div(class="row grid-divider")
+					div(ng-class="teamtelefoon.showMemberSpanClass" ng-repeat='memberForm in teamtelefoon.createdData.memberForms' )
+						div(class="col-padding member-center")
+							h3 Teamlid {{ $index + 1 }}
+							table
+								tr
+									td {{ memberForm.name }}
+								tr
+									td {{ memberForm.email }}
+								tr
+									td {{ memberForm.password }}
+								tr
+									td {{ memberForm.phone }}
