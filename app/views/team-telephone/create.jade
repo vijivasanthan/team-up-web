@@ -13,7 +13,7 @@ section#dashboard
 
 		.tab-content(style="min-height: 575px;")
 			#newMemberTab.tab-pane(class="active")
-				div(ng-if='! teamtelefoon.created')
+				div(ng-if='! teamtelefoon.created' class="am-fade-and-slide-top")
 					form.new-member-form(name='teamtelefoon.newForm', novalidate)
 						fieldset
 							h4(id="part0"  style="color: #f5a962") {{ ui.teamup.team }} 
@@ -181,7 +181,6 @@ section#dashboard
 															
 							hr
 							h4(id="part2" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;2 
-								span(style="color: #c85a3c") *
 							.row(ng-form="memberFieldForm2")
 								div
 									.span3
@@ -297,8 +296,7 @@ section#dashboard
 															| {{ ui.teamup.passNotSame }}
 	
 							hr
-							h4(id="part3" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;3 
-								span(style="color: #c85a3c") *
+							h4(id="part3" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;3
 							.row(ng-form="memberFieldForm3")
 								div
 									.span3
@@ -421,7 +419,7 @@ section#dashboard
 								button.btn.btn-success(type='submit',
 								ng-click='teamtelefoon.create(teamtelefoon.form)') {{ui.teamup.saveMember}}
 				
-				div(ng-if='teamtelefoon.created', style="position: relative;")
+				div(ng-if='teamtelefoon.created', style="position: relative;" class="am-fade-and-slide-top")
 					div(class="page-header-strap")
 						h2.tt-shownumber {{ teamtelefoon.createdData.ttPhoneNr }}
 						br

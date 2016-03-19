@@ -27,7 +27,7 @@ define(
         'services',
         'filters',
         'directives',
-        //'ngAnimate',
+        'ngAnimate',
         'ngResource',
         'ngRoute',
         'ngMessages',
