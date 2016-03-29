@@ -158,10 +158,6 @@ define(
                 $location.path('/logs').search({}).hash('');
                 break;
 
-              case 'tasks2/alltasks':
-                $location.path('/tasks2').search({}).hash('allTasks');
-                break;
-
               case 'task/new':
                 $location.path('/task/new').search({}).hash('');
                 break;
