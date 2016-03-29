@@ -18,7 +18,6 @@ define(
               transformResponse: function(data)
               {
                 data = angular.fromJson(data);
-                console.error("data ->", data);
                 //TODO remove this if it's fixed in the backend
                 //check if is no tasks is responded in a object
                 return (data &&

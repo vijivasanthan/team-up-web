@@ -14,7 +14,6 @@ define(
                 TeamUp,
                 Task,
                 Team,
-                Dater,
                 moment,
                 Clients,
                 TaskCRUD,
@@ -109,6 +108,11 @@ define(
           return new Date(date.getTime() - (roundMinutes * 60000) + (minutes * 60000));
         }
 
+        function setDefaultDate(date)
+        {
+          return moment(date).format('DD-MM-YYYY');
+        }
+
         /**
          * prepare start and end date objects with default values
          */
@@ -116,10 +120,6 @@ define(
         {
           var currentStartTime = setTime(new Date(), 15);
           var currentEndTime = setTime(new Date(), 30);
-          var setDefaultDate = function (date)
-          {
-            return moment(date).format('DD-MM-YYYY');
-          };
 
           self.form.startDate = {
             date: setDefaultDate(new Date()),
@@ -142,13 +142,15 @@ define(
         {
           form.startTime = ($rootScope.browser.mobile)
             ? moment(form.startDate.datetime).utc().valueOf()
-            : +moment(form.startDate.date +' '+ form.startDate.time, config.app.formats.datetime);
+            : +moment(
+                  form.startDate.date +' '+ moment(form.startDate.time).format(config.app.formats.time),
+                  config.app.formats.datetime
+              );
 
           form.endTime = ($rootScope.browser.mobile) ?
             moment(form.endDate.datetime).utc().valueOf() :
-            +moment(form.endDate.date +' '+ form.endDate.time, config.app.formats.datetime);
-
-          console.error("form.startTime ->", form.startTime);
+            +moment(form.endDate.date +' '+ moment(form.endDate.time).format(config.app.formats.time),
+                    config.app.formats.datetime);
 
           if (!form.team)
           {
@@ -210,12 +212,12 @@ define(
             member: task.assignedTeamMemberUuid,
             currentClient: task.relatedClientUuid,
             startDate: {
-              date: new Date(task.plannedStartVisitTime),
-              time: task.plannedStartVisitTime,
+              date: setDefaultDate(new Date(task.plannedStartVisitTime)),
+              time: new Date(task.plannedStartVisitTime),
               datetime: setMobileDatetime(task.plannedStartVisitTime)
             },
             endDate: {
-              date: new Date(task.plannedEndVisitTime),
+              date: setDefaultDate(new Date(task.plannedEndVisitTime)),
               time: task.plannedEndVisitTime,
               datetime: setMobileDatetime(task.plannedEndVisitTime)
             },

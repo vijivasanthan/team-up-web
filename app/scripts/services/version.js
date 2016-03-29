@@ -62,12 +62,11 @@ define(
               : "release";
 
             var indexBranch = unformattedVersionInfo.git_branch.indexOf(branch);
-            console.error("indexBranch ->", indexBranch);
             var formattedVersion = {
               releaseNr: '',
               buildDate: unformattedVersionInfo.date,
               currentBranch: unformattedVersionInfo.git_branch
-            }
+            };
 
             formattedVersion.buildDate = formattedVersion.buildDate.substr(0, formattedVersion.buildDate.length - 6);
             formattedVersion.buildDate = moment(unformattedVersionInfo.date, "YYYY-MM-DD hh:mm:ss").format("DD-MM-YYYY hh:mm");

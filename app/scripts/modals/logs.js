@@ -67,6 +67,7 @@ define(['services/services', 'config'],
                 trackingID = trackingToken;
 
                 var record = {
+                  id: log._id,
                   adapterId: log.adapterId,
                   trackingToken: trackingToken,
                   tracked: tracked,
@@ -79,6 +80,12 @@ define(['services/services', 'config'],
                   parent: (!log.parentId),
                   childs: []
                 };
+
+                //if(record.id === "56f29acae4b019382c6df4e8" || record.groupId === "56f29acae4b019382c6df4e8")
+                //{
+                //  console.error("log ->", log);
+                //  console.error("record ->", record);
+                //}
 
                 angular.forEach(
                   log.statusPerAddress,
