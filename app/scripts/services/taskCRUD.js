@@ -13,6 +13,7 @@ define(['services/services', 'config'],
                 Task,
                 Clients,
                 Profile,
+                moment,
                 $q)
       {
         //constructor
@@ -209,27 +210,34 @@ define(['services/services', 'config'],
                   difference: task.plannedEndVisitTime - task.plannedStartVisitTime
                 };
 
-                task.plannedTaskDuration.label = (task.plannedTaskDuration.difference / 1000 / 60 / 60 <= 24) ?
-                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                ' ' +
-                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                ' ' +
-                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                ' - ' +
-                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                ' uur' :
-                $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
-                ' ' +
-                $filter('date')(task.plannedStartVisitTime, 'EEEE') +
-                ' ' +
-                $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
-                ' uur - ' +
-                $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
-                ' ' +
-                $filter('date')(task.plannedEndVisitTime, 'EEEE') +
-                ' ' +
-                $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
-                ' uur';
+                var formatDate = function(dateInMili)
+                {
+                  return moment(dateInMili).format(config.app.formats.date);
+                };
+
+                task.plannedTaskDuration.label = (formatDate(task.plannedStartVisitTime) === formatDate(task.plannedEndVisitTime))
+                  ?
+                    $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                    ' ' +
+                    $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                    ' ' +
+                    $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                    ' - ' +
+                    $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                    ' uur'
+                  :
+                    $filter('date')(task.plannedStartVisitTime, 'd MMM y') +
+                    ' ' +
+                    $filter('date')(task.plannedStartVisitTime, 'EEEE') +
+                    ' ' +
+                    $filter('date')(task.plannedStartVisitTime, 'HH:mm') +
+                    ' uur - ' +
+                    $filter('date')(task.plannedEndVisitTime, 'd MMM y') +
+                    ' ' +
+                    $filter('date')(task.plannedEndVisitTime, 'EEEE') +
+                    ' ' +
+                    $filter('date')(task.plannedEndVisitTime, 'HH:mm') +
+                    ' uur';
 
                 if (task.assignedTeamMemberUuid != '')
                 {
