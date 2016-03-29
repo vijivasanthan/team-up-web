@@ -176,6 +176,8 @@ define(
            */
           $scope.save = function (resources)
           {
+            if(! $scope.profileForm.firstname.$valid || ! $scope.profileForm.lastname.$valid) return;
+
             //Check if there is atleast one phonenumber
             if (! resources.phoneNumbers[0])
             {

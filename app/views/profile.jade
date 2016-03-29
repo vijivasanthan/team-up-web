@@ -147,18 +147,44 @@ section#profile
 							ng-click='setViewTo("editPassword")') {{ui.profile.changePassWord}}
 					hr
 					form.form-vertical(name='profileForm', novalidate)
-						.control-group
+						.form-group(
+						ng-class="{ 'has-error' : (profileForm.firstname.$dirty || profileForm.$submitted || profileForm.firstname.$touched) && profileForm.firstname.$invalid }")
 							label.control-label {{ui.profile.firstName}}
 							.controls
-								input.span4(type='text',
-								ng-model='edit.firstName',
-								value='{{view.firstName}}')
-						.control-group
+								input.span4.form-control(type='text',
+									ng-model='edit.firstName',
+									required='',
+									name='firstname',
+									focus,
+									ng-minlength="2",
+									ng-maxlength="30",
+										ng-value='view.firstName')
+								span.help-block(ng-if="(profileForm.firstname.$touched || profileForm.firstname.$dirty || profileForm.$submitted) && profileForm.firstname.$invalid",
+									ng-messages="profileForm.firstname.$error")
+									small(ng-message="required")
+										i {{ ui.validation.default.required(ui.profile.firstName) }}
+									small(ng-message="minlength")
+										i {{ ui.validation.default.minLength(ui.profile.firstName) }}
+									small(ng-message="maxlength")
+										i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
+										
+						.form-group(
+						ng-class="{ 'has-error' : (profileForm.lastname.$dirty || profileForm.$submitted || profileForm.lastname.$touched) && profileForm.lastname.$invalid }")
 							label.control-label {{ui.profile.lastName}}
 							.controls
-								input.span4(type='text',
+								input.span4.form-control(type='text',
+								name='lastname',
 								ng-model='edit.lastName',
-								value='{{view.lastName}}')
+								ng-value='view.lastName',
+								ng-minlength="2"
+								ng-maxlength="30")
+								span.help-block(ng-if="(profileForm.lastname.$touched || profileForm.lastname.$dirty || profileForm.$submitted) && profileForm.lastname.$invalid",
+								ng-messages="profileForm.lastname.$error")
+									small(ng-message="minlength")
+										i {{ ui.validation.default.minLength(ui.profile.lastName) }}
+									small(ng-message="maxlength")
+										i {{ ui.validation.default.maxLength(ui.profile.lastName) }}
+
 						.control-group(ng-hide='(app.resources.role > 1)')
 							label.control-label {{ui.teamup.role}}
 							.controls
