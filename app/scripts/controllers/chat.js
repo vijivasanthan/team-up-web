@@ -175,6 +175,19 @@ define(
             $scope.messagesShow = [];
           };
 
+	        /**
+           * Remove all call events from the messages
+           * @param messages
+           * @returns {Array} return the messages without the call_event type messages
+	         */
+          function removeCallEvents(messages)
+          {
+            return _.remove(messages, function(message)
+            {
+              if(message.type !== "CALL_EVENT") return message;
+            });
+          }
+
           // Polling message from the server every 2 or 5 seconds base on the chat tab status, open or close.
           $scope.renderMessage = function (latestMsgTime)
           {
@@ -185,6 +198,7 @@ define(
               function (messages)
               {
                 messages = $filter('orderBy')(messages, 'sendTime');
+                messages = removeCallEvents(messages);
 
                 if ($scope.toggleChat)
                 {
@@ -237,6 +251,7 @@ define(
                   $rootScope.notifier.error(messages.error.data);
                   return;
                 }
+                removeCallEvents(messages);
 
                 $scope.newCount = 0;
                 angular.forEach(
