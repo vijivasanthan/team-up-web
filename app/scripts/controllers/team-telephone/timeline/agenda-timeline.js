@@ -1220,13 +1220,14 @@ define(
         function wish(id)
         {
           var deferred = $q.defer(),
-            count = 0;
+            count = 0,
+            end = moment().add(1, 'years').unix();
 
           Slots.wishes(
             {
               id: id,
               start: 255600,
-              end: 860400
+              end: end
             }).then(
             function (results)
             {
@@ -1235,7 +1236,7 @@ define(
                 function (slot)
                 {
                   if (slot.start == 255600 &&
-                    slot.end == 860400 &&
+                    slot.end == end &&
                     slot.count != null)
                   {
                     count = slot.count;
