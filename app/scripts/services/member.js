@@ -12,6 +12,7 @@ define(['services/services', 'config'],
                 Teams,
                 Permission,
                 Store,
+                Profile,
                 MD5)
       {
         // constructor \\
@@ -31,18 +32,34 @@ define(['services/services', 'config'],
           {
             var deferred = $q.defer();
             var error  = false;
+            var self = this;
 
-            if (!member.phone)
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-              error = true;
-            }
-            if ($rootScope.phoneNumberParsed.result == false)
-            {
-              $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
-              error = true;
-            }
+            Profile.userExists(member.userName)
+              .then(function()
+                    {
+                      if (!member.phone)
+                      {
+                        $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+                        error = true;
+                      }
+                      if ($rootScope.phoneNumberParsed.result == false)
+                      {
+                        $rootScope.notifier.error($rootScope.ui.validation.phone.notValid);
+                        error = true;
+                      }
+                      deferred = fullFillMemberData.call(self, member, teamId, error, deferred);
+                    },
+                    function()
+                    {
+                      $rootScope.notifier.error($rootScope.ui.teamup.errorCode["14"]);
+                      deferred = fullFillMemberData.call(self, member, teamId, true, deferred);
+                    });
 
+            return deferred.promise;
+          };
+
+          function fullFillMemberData(member, teamId, error, deferred)
+          {
             if(! error)
             {
               $rootScope.statusBar.display($rootScope.ui.teamup.savingMember);
@@ -56,23 +73,31 @@ define(['services/services', 'config'],
               memberResources.password = MD5(memberResources.password);
               memberResources.teamUuids = [teamId];
 
-              Teams.addMember(memberResources)
-                .then(function (result)
-                {
-                  if(! result.error)
-                  {
-                    $rootScope.resetPhoneNumberChecker();
-                    deferred.resolve(result);
-                    $location.path('team/members');
-                    $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
-                  }
-                  $rootScope.statusBar.off();
-                });
+              return Teams.addMember(memberResources)
+                   .then(function (result)
+                         {
+                           if(! result.error)
+                           {
+                             $rootScope.resetPhoneNumberChecker();
+                             deferred.resolve(result);
+                             $location.path('team/members');
+                             $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+                             return deferred;
+                           }
+                           else
+                           {
+                             deferred.reject(false);
+                             return deferred;
+                           }
+                           $rootScope.statusBar.off();
+                         });
             }
-            else deferred.reject(false);
-
-            return deferred.promise;
-          };
+            else
+            {
+              deferred.reject(false);
+              return deferred;
+            }
+          }
 
           this.read = function (memberId)
           {

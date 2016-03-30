@@ -130,32 +130,28 @@ define(['services/services', 'config'], function (services, config)
         .$promise;
     };
 
-    return new Profile;
+    Profile.prototype.userExists = function (username)
+    {
+      var UserExists = $resource(config.app.host + 'user_exists', {}, {
+        check: {
+          method: 'GET',
+          params: {username: ''}
+        }
+      });
 
-    //Profile.prototype.userExists = function (username)
-    //{
-    //  var UserExists = $resource(config.app.host + 'user_exists', {}, {
-    //    check: {
-    //      method: 'GET',
-    //      params: {username: ''},
-    //      transformResponse: function (data)
-    //      {
-    //        console.error('data', data);
-    //        return {'userExist': ( ! data)};
-    //      }
-    //    }
-    //  });
-    //
-    //  return UserExists.check({username: username},
-    //    function (result)
-    //    {
-    //      return true
-    //    },
-    //    function (error)
-    //    {
-    //      return false;
-    //    }).$promise;
-    //};
+      return UserExists.check({username: username},
+        function (result)
+        {
+          return false;
+        },
+        function (error)
+        {
+          return true;
+        }).$promise;
+    };
+
+    return new Profile;
+    return new Profile;
 
     //Profile.prototype.pincodeExists = function (id, pincode, assignedId)
     //{
