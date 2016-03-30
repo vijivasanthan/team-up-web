@@ -45,103 +45,51 @@ block navbar
 	ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
 	bs-navbar='',
 	role="navigation")
+		
+		
 		.navbar-inner
 			.container-fluid
-				button.navbar-toggle(type='button',
-				data-toggle='collapse',
-				data-target='#main-navbar')
-					span.icon-bar
-					span.icon-bar
-					span.icon-bar
-					// span.icon-bar {{ui.message.messages}}
-				a.navbar-brand.header-logo-teamup(ng-click='nav("task/mytasks")' ng-show='app.domainPermission.tasks') TeamUp
-				a.navbar-brand.header-logo-teamtelefoon(ng-click='nav("team-telefoon/status")' ng-show='! app.domainPermission.tasks') TeamTelefoon
+				div.navbar-header
+					a.navbar-brand.header-logo-teamup(ng-click='nav("task/mytasks")' ng-show='app.domainPermission.tasks') TeamUp
+					a.navbar-brand.header-logo-teamtelefoon(ng-click='nav("team-telefoon/status")' ng-show='! app.domainPermission.tasks') TeamTelefoon
+					button.navbar-toggle(type='button',
+						data-toggle='collapse',
+						data-target='#main-navbar')
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+						// span.icon-bar {{ui.message.messages}}
 				#main-navbar.navbar-collapse.collapse
-					ul.nav.navbar-nav(ng-hide='browser.mobile')
-						// li(data-match-route='/tasks')
-							// a(ng-click='nav("tasks")') Taken
+					ul.nav.navbar-nav
 						li.taskMenu(ng-show='app.domainPermission.tasks',
-							data-match-route='/task.*')
+						data-match-route='/task.*')
 							a(ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
 						li.teamMenu(ng-show='app.domainPermission.teams',
-							data-match-route='/team.?')
+						data-match-route='/team.?')
 							a(ng-click='nav("team/members")') {{ui.teamup.teams}}
-						li#clientMenu(ng-show='app.domainPermission.clients',
-							data-match-route='/(:?client)')
-							a(ng-click='nav("client")') {{ui.teamup.clients}}
 						li(data-match-route='/manage', ng-if='(app.domainPermission.tasks && app.resources.role == 1) || (app.resources.role == 1 && app.resources.teamUuids.length == 0)')
 							a(href='#manage') {{ui.teamup.manage}} 
 						li(data-match-route='/team-telefoon.*',
-							ng-show='app.domainPermission.teamTelephoneBasic')
+						ng-show='app.domainPermission.teamTelephoneBasic')
 							a(ng-click='nav("team-telefoon/status")') {{ ui.teamup.teamTelephone }}
 						li(data-match-route='/help', ng-hide='(app.resources.role === undefined)')
 							a(ng-click='nav("help")') {{ ui.teamup.help }}
-
-					ul.nav.pull-right(ng-hide='browser.mobile')
+							
+					ul.nav.navbar-nav.pull-right.profile-nav
 						//Disabled temporarily till the functionailty exists
 						//li.navbar-btn
 						//	a(href='#search')
 						//		i.icon-search
 						li(data-match-route='/profile', ng-hide='(app.resources.role === undefined)')
 							a#account(ng-click='nav("profile")')
-									.roundedPicxSmall(back-img = '{{app.resources.uuid | avatar:"team":"80" }}',
-									class='{{app.resources.states|stateColor}} profile-avatar')
-										span.badge(ng-show='app.resources.states|stateReachable')
-											i.glyphicon.glyphicon-earphone
-									span#show-name {{app.resources.firstName}} {{app.resources.lastName}}
+								.roundedPicxSmall(back-img = '{{app.resources.uuid | avatar:"team":"80" }}',
+								class='{{app.resources.states|stateColor}} profile-avatar')
+									span.badge(ng-show='app.resources.states|stateReachable')
+										i.glyphicon.glyphicon-earphone
+								span#show-name {{app.resources.firstName}} {{app.resources.lastName}}
 						li(ng-hide='(app.resources.role === undefined)').navbar-btn
 							a(ng-click='nav("logout")')
 								i.icon-off
-					ul.nav.pull-right.mobile-nav-bar(ng-show='browser.mobile', style='{{(browser.landscape) && "margin-right:-20px"}}')
-						li
-							.dropdown
-								button.btn.btn-default.dropdown-toggle(type="button",
-									id="dropdownMenu1",
-									data-toggle="dropdown",
-									aria-expanded="true",
-									style='margin-right: 10px;') {{ ui.teamup.menu }}
-									span.caret
-								ul.dropdown-menu(role='menu',
-								aria-labelledby="dropdownMenu1")
-									li(role="presentation",
-										ng-show='app.domainPermission.tasks',
-										data-match-route='/task')
-										a(role="menuitem",
-											tabindex="-1",
-											ng-click='nav("task/mytasks")') {{ ui.task.tasks }}
-									li.teamMenu(role="presentation",
-										ng-show='app.domainPermission.teams',
-										data-match-route='/team')
-										a(role="menuitem",
-											tabindex="-1",
-											ng-click='nav("team/members")') {{ui.teamup.teams}}
-									li(role="presentation",
-									ng-show='app.domainPermission.clients',
-									data-match-route='/(:?client)')
-										a(role="menuitem",
-										tabindex="-1",
-										ng-click='nav("client")') {{ui.teamup.clients}}
-									li(role="presentation",
-										data-match-route='/manage',
-										ng-if='(app.domainPermission.tasks && app.resources.role == 1) || (app.resources.role == 1 && app.resources.teamUuids.length == 0)')
-										a(href='#manage',
-											tabindex="-1",) {{ui.teamup.manage}}
-									li(role="presentation",
-										data-match-route='/team-telefoon.*',
-										ng-show='app.domainPermission.teamTelephoneBasic')
-										a(ng-click='nav("team-telefoon/status")',
-											tabindex="-1",) {{ ui.teamup.teamTelephone }}
-									li(role="presentation", ng-hide='(app.resources.role === undefined)',
-										data-match-route='/help')
-										a(ng-click='nav("help")',
-											tabindex="-1",) {{ ui.teamup.help }}
-							
-						li(data-match-route='/profile')
-							a(ng-click='nav("profile")')
-								i.icon-user.icon-white
-						li
-							a(href='#logout')
-								i.icon-off.icon-white
 
 
 

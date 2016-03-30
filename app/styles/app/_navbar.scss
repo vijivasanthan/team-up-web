@@ -15,6 +15,10 @@
   *z-index: 2;
 }
 
+#main-navbar {
+  overflow-y: hidden;
+}
+
 // Inner for background effects
 // Gradient is applied to its own element because overflow visible is not honored by IE when filter is present
 .navbar-inner {
@@ -246,7 +250,7 @@
   .navbar-btn {
     background-color: $offwhite;
     width: 40px;
-    height: 40px;
+    height: 40px !important;
     border-radius: 20px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;

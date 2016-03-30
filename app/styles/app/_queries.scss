@@ -1,5 +1,13 @@
 /* Lastly, apply responsive CSS fixes as necessary */
 
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+  background-color: $brown;
+  span {
+    background-color: $orange;
+    color: $orange;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 979px) {
   .navbar-inverse .nav > li {
     margin-left: 0;
@@ -66,6 +74,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .profile-nav {
+    margin: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .navbar-fixed-top {
     position: absolute;
@@ -84,14 +98,39 @@
     height: 160px;
   }
 
-  .navbar {
+  .navbar, .navbar-nav {
     width: 100%;
   }
 
   .navbar .navbar-inner {
     margin-right: -20px;
     padding-right: 15px;
-    padding-left: 25px;
+    //padding-left: 25px;
+  }
+
+  .navbar-inverse .nav > li {
+    margin-left: 0;
+    width: 100%;
+    //height: 45px !important;
+  }
+
+  #main-navbar {
+    margin-bottom: 15px;
+  }
+
+  .profile-nav {
+    padding-left: 15px;
+    .navbar-btn {
+      padding-left: 0px;
+      margin-left: 5px !important;
+      margin-top: 3px !important;
+    }
+  }
+
+  nav.navbar-nav.pull-right {
+    li {
+      margin-left: 10px;
+    }
   }
 
   #footer {
@@ -144,7 +183,7 @@
   .navbar .navbar-inner {
     margin-right: -20px;
     padding-right: 15px;
-    padding-left: 25px;
+    //padding-left: 25px;
   }
 
   #footer {
