@@ -201,7 +201,10 @@ define(['services/services', 'config'],
               {
                 if (teams && teams.error)
                 {
-                  $rootScope.notifier.error($rootScope.ui.groups.deleteTeamError);
+                  var errorMessage = (teams.error.status === 409)
+                        ? $rootScope.ui.teamup.removingTeamWithTasks
+                        : $rootScope.ui.groups.deleteTeamError;
+                  $rootScope.notifier.error(errorMessage);
                   deferred.reject(false);
                 }
                 else

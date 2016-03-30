@@ -604,6 +604,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
           newTeamTelefoonTeam: "New TeamTelephone team",
@@ -1767,6 +1768,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
           newTeamTelefoonTeam: "New TeamTelephone team",
@@ -2916,6 +2918,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          removingTeamWithTasks: "Er staan nog taken in de planning voor het te verwijderen team, verwijder deze eerst!",
           minimumOneMember: "Minimaal één teamlid moet toegevoegd worden",
           newNumberOf: "is het nieuwe nummer van ",
           newTeamTelefoonTeam: "Nieuw TeamTelefoon team",
