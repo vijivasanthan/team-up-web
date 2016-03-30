@@ -251,8 +251,7 @@ define(
                   $rootScope.notifier.error(messages.error.data);
                   return;
                 }
-                removeCallEvents(messages);
-                console.error("messages ->", messages);
+                messages = removeCallEvents(messages);
                 if(messages.length) showMessages(messages);
               });
           };
