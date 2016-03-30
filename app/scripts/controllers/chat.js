@@ -252,57 +252,66 @@ define(
                   return;
                 }
                 removeCallEvents(messages);
-
-                $scope.newCount = 0;
-                angular.forEach(
-                  messages, function (newMsg)
-                  {
-                    if (! $filter('getByUuid')($scope.messages, newMsg.uuid))
-                    {
-                      $scope.newCount ++;
-                    }
-                  });
-
-                // if the message is not appied to the scope , then make the message count 0 .
-                if ($scope.newCount == 0 || $scope.messages.length == 0)
-                {
-                  if ($scope.unReadCount == 0 || typeof $scope.unReadCount == 'undefined')
-                  {
-                    $scope.newCountShow = '';
-                  }
-                  else
-                  {
-                    $scope.newCountShow = "(" + $scope.unReadCount + ")";
-                  }
-                }
-                else
-                {
-                  $scope.unReadCount = $scope.newCount + (typeof $scope.unReadCount == 'undefined' ?
-                                                          0 :
-                                                          $scope.unReadCount);
-                  $scope.newCountShow = "(" + $scope.unReadCount + ")";
-                }
-
-                // flash the tab ?  TODO : turing the color here
-                // you might need Jquery UI to make this work.
-                $('#chat-btn').animate({ 'background-color': "yellow" }, "slow").animate({ 'background-color': "#1dc8b6" }, "slow");
-
-                if (! $scope.toggleChat)
-                {
-                  // get the latest message
-                  messages = $filter('orderBy')(messages, 'sendTime');
-                  if ($scope.messages.length == 0 || (! $scope.newCount == 0 && ! $scope.newCount == ''))
-                  {
-                    $scope.formatMessage(messages);
-                  }
-
-                  var lastMsg = messages[messages.length - 1];
-                  $scope.latestMsgTime = lastMsg && lastMsg.sendTime ||  (moment().valueOf() - REFRESH_CHAT_MESSAGES);
-
-                  $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
-                }
+                console.error("messages ->", messages);
+                if(messages.length) showMessages(messages);
               });
           };
+
+	        /**
+           * Shoq messages and the counter on the chat button
+           * @param messages
+           */
+          function showMessages(messages)
+          {
+            $scope.newCount = 0;
+            angular.forEach(
+              messages, function (newMsg)
+              {
+                if (! $filter('getByUuid')($scope.messages, newMsg.uuid))
+                {
+                  $scope.newCount ++;
+                }
+              });
+
+            // if the message is not appied to the scope , then make the message count 0 .
+            if ($scope.newCount == 0 || $scope.messages.length == 0)
+            {
+              if ($scope.unReadCount == 0 || typeof $scope.unReadCount == 'undefined')
+              {
+                $scope.newCountShow = '';
+              }
+              else
+              {
+                $scope.newCountShow = "(" + $scope.unReadCount + ")";
+              }
+            }
+            else
+            {
+              $scope.unReadCount = $scope.newCount + (typeof $scope.unReadCount == 'undefined' ?
+                  0 :
+                  $scope.unReadCount);
+              $scope.newCountShow = "(" + $scope.unReadCount + ")";
+            }
+
+            // flash the tab ?  TODO : turing the color here
+            // you might need Jquery UI to make this work.
+            $('#chat-btn').animate({ 'background-color': "yellow" }, "slow").animate({ 'background-color': "#1dc8b6" }, "slow");
+
+            if (! $scope.toggleChat)
+            {
+              // get the latest message
+              messages = $filter('orderBy')(messages, 'sendTime');
+              if ($scope.messages.length == 0 || (! $scope.newCount == 0 && ! $scope.newCount == ''))
+              {
+                $scope.formatMessage(messages);
+              }
+
+              var lastMsg = messages[messages.length - 1];
+              $scope.latestMsgTime = lastMsg && lastMsg.sendTime ||  (moment().valueOf() - REFRESH_CHAT_MESSAGES);
+
+              $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+            }
+          }
 
           // Open the chat box and initiate loaders
           $scope.openChat = function()
