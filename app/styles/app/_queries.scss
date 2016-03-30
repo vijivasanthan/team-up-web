@@ -86,10 +86,13 @@
     margin-bottom: 0;
   }
 
+  .tab-header {
+    overflow: inherit;
+  }
+
   #reportsTab, #newMemberTab
   {
     .tab-header {
-      overflow: inherit;
       min-height: 40px;
     }
   }
@@ -103,8 +106,8 @@
   }
 
   .navbar .navbar-inner {
-    margin-right: -20px;
-    padding-right: 15px;
+    //margin-right: -20px;
+    //padding-right: 15px;
     //padding-left: 25px;
   }
 
@@ -181,8 +184,8 @@
   }
 
   .navbar .navbar-inner {
-    margin-right: -20px;
-    padding-right: 15px;
+    //margin-right: -20px;
+    //padding-right: 15px;
     //padding-left: 25px;
   }
 
