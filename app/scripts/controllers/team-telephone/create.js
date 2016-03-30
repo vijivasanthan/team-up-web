@@ -211,7 +211,7 @@ define(
             if( member.firstName[index] )
             {
               member.teamUuids = [teamId];
-              member.uuid      = member.firstName[index] + _.random(1, 100) + _.random(101, 200);//member.email[index];
+              member.uuid      = member.email[index];
               member.userName  = member.uuid;
               member.role      = 2;
 
