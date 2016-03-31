@@ -380,6 +380,52 @@ define(
       }
     );
 
+    directives.directive(
+      'checkAvailabilityUsername',
+      function (Profile, $parse, $q)
+      {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function (scope, element, attr, ngModel)
+          {
+            if(ngModel)
+            {
+              if(! ngModel.$asyncValidators)
+              {
+                ngModel.$validators = {};
+                ngModel.$asyncValidators = {};
+                ngModel.$error = [];
+              }
+
+              ngModel.$asyncValidators.invalidUsername = function(modelValue, viewValue)
+              {
+                var username = viewValue,
+                    deferred = $q.defer();
+
+                if(attr.checkAvailabilityUsername)
+                {
+                  //check if the username is already used in the form
+                  var usernamesForm = attr.checkAvailabilityUsername;
+                  if(usernamesForm.split(viewValue).length > 1) deferred.reject();
+                }
+                Profile.userExists(username)
+                       .then(function()
+                             {
+                               deferred.resolve();
+                             },
+                             function()
+                             {
+                                deferred.reject();
+                             });
+                return deferred.promise;
+              }
+            }
+          }
+        };
+      }
+    );
+
 
     directives.directive(
       'linkIconHovered',

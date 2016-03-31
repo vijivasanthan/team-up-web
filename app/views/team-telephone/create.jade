@@ -113,16 +113,20 @@ section#dashboard
 												.controls
 													input.span3.form-control(type='email',
 													name='email',
+													ng-model='teamtelefoon.form.email[1]',
+													ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}",
+													check-availability-username="{{ teamtelefoon.form.email }}",
 													required,
 													required-form-one-line,
-													ng-model='teamtelefoon.form.email[1]',
 													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
 													span.help-block(ng-messages="memberFieldForm1.email.$error",
 													ng-if='(memberFieldForm1.email.$touched || memberFieldForm1.email.$dirty) && memberFieldForm1.email.$invalid')
 														small(ng-message="pattern")
 															i {{ ui.validation.email.notValid }}
 														small(ng-message="required")
-															i {{ ui.validation.email.notValid }}		
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="invalidUsername")
+															i {{ ui.teamup.errorCode["14"] }}	
 									.span3
 										fieldset
 											.form-group(ng-class="{'has-error': (memberFieldForm1.phone.$touched || memberFieldForm1.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[0].result || (teamtelefoon.parsedPhoneNumbers[0].all && teamtelefoon.parsedPhoneNumbers[0].all.error))}")
@@ -232,13 +236,17 @@ section#dashboard
 													required,
 													required-form-one-line,
 													ng-model='teamtelefoon.form.email[2]',
+													ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}",
+													check-availability-username="{{ teamtelefoon.form.email }}",
 													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{2,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
 													span.help-block(ng-messages="memberFieldForm2.email.$error",
 													ng-if='(memberFieldForm2.email.$touched || memberFieldForm2.email.$dirty) && memberFieldForm2.email.$invalid')
 														small(ng-message="pattern")
 															i {{ ui.validation.email.notValid }}
 														small(ng-message="required")
-															i {{ ui.validation.email.notValid }}		
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="invalidUsername")
+															i {{ ui.teamup.errorCode["14"] }}	
 									.span3
 										fieldset
 											.form-group(ng-class="{'has-error': (memberFieldForm2.phone.$touched || memberFieldForm2.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[1].result || (teamtelefoon.parsedPhoneNumbers[1].all && teamtelefoon.parsedPhoneNumbers[1].all.error))}")
@@ -349,13 +357,17 @@ section#dashboard
 													required,
 													required-form-one-line,
 													ng-model='teamtelefoon.form.email[3]',
+													ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}",
+													check-availability-username="{{ teamtelefoon.form.email }}",
 													ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{2,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
 													span.help-block(ng-messages="memberFieldForm3.email.$error",
 													ng-if='(memberFieldForm3.email.$touched || memberFieldForm3.email.$dirty) && memberFieldForm3.email.$invalid')
 														small(ng-message="pattern")
 															i {{ ui.validation.email.notValid }}
 														small(ng-message="required")
-															i {{ ui.validation.email.notValid }}		
+															i {{ ui.validation.email.notValid }}
+														small(ng-message="invalidUsername")
+															i {{ ui.teamup.errorCode["14"] }}	
 															
 									.span3
 										fieldset

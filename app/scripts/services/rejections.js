@@ -56,28 +56,31 @@ define(
             },
             trowError: function (error)
             {
-              var errorCode = error.data && error.data.errorCode || 1,
-                  controller = error.config.url.split('/');
-              controller = controller[controller.length - 1];
-
-              $rootScope.statusBar.off();
-
-              if(controller !== 'login' && controller !== 'passwordReset')
+              if(error.config && !error.config.ignore)
               {
-                $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
-              }
-              console.log('error -> ' + error.config.url, error);
+                var errorCode = error.data && error.data.errorCode || 1,
+                    controller = error.config.url.split('/');
+                controller = controller[controller.length - 1];
 
-              trackGa('send', 'exception', {
-                exDescription: error.statusText,
-                exFatal: false,
-                exError: 'Response error',
-                exStatus: error.status,
-                exUrl: error.config.url,
-                exData: error.data,
-                exParams: _.values(error.config.params).join() || '',
-                exMethodData: _.values(error.config.data).join() || ''
-              });
+                $rootScope.statusBar.off();
+
+                if(controller !== 'login' && controller !== 'passwordReset')
+                {
+                  $rootScope.notifier.error($rootScope.ui.teamup.errorCode[errorCode.toString()]);
+                }
+                console.log('error -> ' + error.config.url, error);
+
+                trackGa('send', 'exception', {
+                  exDescription: error.statusText,
+                  exFatal: false,
+                  exError: 'Response error',
+                  exStatus: error.status,
+                  exUrl: error.config.url,
+                  exData: error.data,
+                  exParams: _.values(error.config.params).join() || '',
+                  exMethodData: _.values(error.config.data).join() || ''
+                });
+              }
             }
           };
         }

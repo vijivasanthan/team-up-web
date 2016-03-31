@@ -365,6 +365,9 @@ define(
             case "pattern":
               errorMessage = $rootScope.ui.validation.email.notValid;
               break;
+            case "invalidUsername":
+              errorMessage = $rootScope.ui.teamup.errorCode["14"];
+              break;
           }
           return errorMessage;
         }

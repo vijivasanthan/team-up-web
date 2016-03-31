@@ -135,6 +135,7 @@ define(['services/services', 'config'], function (services, config)
       var UserExists = $resource(config.app.host + 'user_exists', {}, {
         check: {
           method: 'GET',
+          ignore: true,
           params: {username: ''}
         }
       });
