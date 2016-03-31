@@ -12,7 +12,7 @@ section#dashboard
 			include tabs
 
 		.tab-content(style="min-height: 575px;")
-			#newMemberTab.tab-pane(class="active")
+			#newTeamTelephoneTeam.tab-pane(class="active")
 				div(ng-if='! teamtelefoon.created' class="am-fade-and-slide-top")
 					form.new-member-form(name='teamtelefoon.newForm', novalidate)
 						fieldset
@@ -20,7 +20,7 @@ section#dashboard
 								span(style="color: #c85a3c") *
 							.row
 								div
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(
 											ng-class="{ 'has-error' : (teamtelefoon.newForm.teanName.$dirty || teamtelefoon.newForm.teamName.$touched) && teamtelefoon.newForm.teamName.$invalid}"
@@ -48,7 +48,7 @@ section#dashboard
 															i {{ ui.validation.default.maxLength(ui.teamup.teamName) }}
 														small(ng-message="invalidTeamname")
 															i {{ ui.teamup.teamNameExistTitle }}
-									.span3
+									.span3(style="height: 150px;")
 										fieldset
 											.form-group(ng-class="{ 'has-error' : teamtelefoon.newForm.voicemail.$invalid && (teamtelefoon.newForm.voicemail.$dirty || teamtelefoon.newForm.voicemail.$touched) }")
 												label.control-label {{ ui.options.voicemailEmailAddress }}
@@ -72,7 +72,7 @@ section#dashboard
 								span(style="color: #c85a3c") *
 							.row(ng-form="memberFieldForm1")
 								div
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm1.firstname.$dirty || memberFieldForm1.firstname.$touched) && memberFieldForm1.firstname.$invalid }")
@@ -93,7 +93,7 @@ section#dashboard
 															i {{ ui.validation.default.minLength(ui.profile.firstName) }}
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm1.lastname.$dirty || memberFieldForm1.lastname.$touched) && memberFieldForm1.lastname.$invalid }")
@@ -110,7 +110,7 @@ section#dashboard
 															i {{ ui.validation.default.minLength(ui.profile.lastName) }}
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : (memberFieldForm1.email.$touched || memberFieldForm1.email.$dirty) && memberFieldForm1.email.$invalid }")
 												label.control-label {{ ui.profile.email }}
@@ -131,7 +131,7 @@ section#dashboard
 															i {{ ui.validation.email.notValid }}
 														small(ng-message="invalidUsername")
 															i {{ ui.teamup.errorCode["14"] }}	
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(ng-class="{'has-error': (memberFieldForm1.phone.$touched || memberFieldForm1.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[0].result || (teamtelefoon.parsedPhoneNumbers[0].all && teamtelefoon.parsedPhoneNumbers[0].all.error))}")
 												label.control-label {{ui.teamup.phone}}
@@ -147,7 +147,7 @@ section#dashboard
 															i {{ teamtelefoon.parsedPhoneNumbers[0].message }}
 														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[0].message) && (memberFieldForm1.phone.$touched || memberFieldForm1.phone.$dirty)')
 															i {{ ui.validation.phone.notValid }}
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : memberFieldForm1.password.$invalid && (memberFieldForm1.password.$touched || memberFieldForm1.password.$dirty)  }")
 												label.control-label {{ui.profile.password}}
@@ -171,7 +171,7 @@ section#dashboard
 															i
 															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
 										
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(
 											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[1] !== teamtelefoon.form.password[1] || memberFieldForm1.repeatPass.$invalid) && (memberFieldForm1.repeatPass.$dirty || memberFieldForm1.repeatPass.$touched) }")
@@ -191,7 +191,7 @@ section#dashboard
 							h4(id="part2" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;2 
 							.row(ng-form="memberFieldForm2")
 								div
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm2.firstname.$dirty || memberFieldForm2.firstname.$touched) && memberFieldForm2.firstname.$invalid }")
@@ -212,7 +212,7 @@ section#dashboard
 															i {{ ui.validation.default.minLength(ui.profile.firstName) }}
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm2.lastname.$dirty || memberFieldForm2.lastname.$touched) && memberFieldForm2.lastname.$invalid }")
@@ -230,7 +230,7 @@ section#dashboard
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
 											
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : (memberFieldForm2.email.$touched || memberFieldForm2.email.$dirty) && memberFieldForm2.email.$invalid }")
 												label.control-label {{ ui.profile.email }}
@@ -251,7 +251,7 @@ section#dashboard
 															i {{ ui.validation.email.notValid }}
 														small(ng-message="invalidUsername")
 															i {{ ui.teamup.errorCode["14"] }}	
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(ng-class="{'has-error': (memberFieldForm2.phone.$touched || memberFieldForm2.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[1].result || (teamtelefoon.parsedPhoneNumbers[1].all && teamtelefoon.parsedPhoneNumbers[1].all.error))}")
 												label.control-label {{ui.teamup.phone}}
@@ -268,7 +268,7 @@ section#dashboard
 														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[1].message) && (memberFieldForm2.phone.$touched || memberFieldForm2.phone.$dirty)')
 															i {{ ui.validation.phone.notValid }}
 											
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : memberFieldForm2.password.$invalid && (memberFieldForm2.password.$touched || memberFieldForm2.password.$dirty)  }")
 												label.control-label {{ui.profile.password}}
@@ -291,7 +291,7 @@ section#dashboard
 														small(ng-message="maxlength")
 															i
 															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
-									.span3
+									.span3(style="height: 120px;")
 										fieldset					
 											.form-group(
 											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[2] !== teamtelefoon.form.password[2] || memberFieldForm2.repeatPass.$invalid) && (memberFieldForm2.repeatPass.$dirty || memberFieldForm2.repeatPass.$touched) }")
@@ -311,7 +311,7 @@ section#dashboard
 							h4(id="part3" style="color: #f5a962") {{ ui.teamup.teamMember }}&nbsp;3
 							.row(ng-form="memberFieldForm3")
 								div
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm3.firstname.$dirty || memberFieldForm3.firstname.$touched) && memberFieldForm3.firstname.$invalid }")
@@ -333,7 +333,7 @@ section#dashboard
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.firstName) }}
 	
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(
 											ng-class="{ 'has-error' : (memberFieldForm3.lastname.$dirty || memberFieldForm3.lastname.$touched) && memberFieldForm3.lastname.$invalid }")
@@ -351,7 +351,7 @@ section#dashboard
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.profile.lastName) }}				
 											
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : (memberFieldForm3.email.$touched || memberFieldForm3.email.$dirty) && memberFieldForm3.email.$invalid }")
 												label.control-label {{ ui.profile.email }}
@@ -373,7 +373,7 @@ section#dashboard
 														small(ng-message="invalidUsername")
 															i {{ ui.teamup.errorCode["14"] }}	
 															
-									.span3
+									.span3(style="height: 120px;")
 										fieldset
 											.form-group(ng-class="{'has-error': (memberFieldForm3.phone.$touched || memberFieldForm3.phone.$dirty) && (! teamtelefoon.parsedPhoneNumbers[2].result || (teamtelefoon.parsedPhoneNumbers[2].all && teamtelefoon.parsedPhoneNumbers[2].all.error))}")
 												label.control-label {{ui.teamup.phone}}
@@ -390,7 +390,7 @@ section#dashboard
 														small(ng-if='(!teamtelefoon.parsedPhoneNumbers[2].message) && (memberFieldForm3.phone.$touched || memberFieldForm3.phone.$dirty)')
 															i {{ ui.validation.phone.notValid }}
 											
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(ng-class="{ 'has-error' : memberFieldForm3.password.$invalid && (memberFieldForm3.password.$touched || memberFieldForm3.password.$dirty)  }")
 												label.control-label {{ui.profile.password}}
@@ -414,7 +414,7 @@ section#dashboard
 															i
 															| {{ ui.validation.password.required }} {{ ui.validation.password.amountMaxChars(40) }}
 	
-									.span3
+									.span3(style="height: 120px;")
 										fieldset		
 											.form-group(
 											ng-class="{ 'has-error' : (teamtelefoon.form.reTypePassword[3] !== teamtelefoon.form.password[3] || memberFieldForm3.repeatPass.$invalid) && (memberFieldForm3.repeatPass.$dirty || memberFieldForm3.repeatPass.$touched) }")
