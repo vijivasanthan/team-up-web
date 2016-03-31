@@ -35,7 +35,9 @@ section#dashboard
 													required-form-one-line,
 													ng-minlength="2",
 													ng-maxlength="50",
-													ng-model='teamtelefoon.form.teamName')
+													ng-model='teamtelefoon.form.teamName',
+													ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0}}",
+													check-availability-teamname)
 													span.help-block(ng-if='(teamtelefoon.newForm.teamName.$dirty || teamtelefoon.newForm.teamName.$touched) && teamtelefoon.newForm.teamName.$invalid'
 													ng-messages="teamtelefoon.newForm.teamName.$error")
 														small(ng-message="required")
@@ -44,6 +46,8 @@ section#dashboard
 															i {{ ui.validation.default.minLength(ui.teamup.teamName) }}
 														small(ng-message="maxlength")
 															i {{ ui.validation.default.maxLength(ui.teamup.teamName) }}
+														small(ng-message="invalidTeamname")
+															i {{ ui.teamup.teamNameExistTitle }}
 									.span3
 										fieldset
 											.form-group(ng-class="{ 'has-error' : teamtelefoon.newForm.voicemail.$invalid && (teamtelefoon.newForm.voicemail.$dirty || teamtelefoon.newForm.voicemail.$touched) }")

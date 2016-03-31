@@ -381,6 +381,45 @@ define(
     );
 
     directives.directive(
+      'checkAvailabilityTeamname',
+      function (Store)
+      {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function (scope, element, attr, ngModel)
+          {
+            if(ngModel)//testtttrrrTT
+            {
+              if(! ngModel.$asyncValidators)
+              {
+                ngModel.$validators = {};
+                ngModel.$asyncValidators = {};
+                ngModel.$error = [];
+              }
+
+              ngModel.$validators.invalidTeamname = function(modelValue, viewValue)
+              {
+                if(viewValue)
+                {
+                  //check if the teamname is available
+                  var teamName = viewValue.toLowerCase(),
+                      teams    = Store('app').get('teams'),
+                      exist = _.result(_.find(teams, function(team)
+                      {
+                        return team.name.toLowerCase() === teamName;
+                      }), 'name');
+                  //if false no errormessage is shown
+                  return (exist) ? false : true;
+                }
+              }
+            }
+          }
+        };
+      }
+    );
+
+    directives.directive(
       'checkAvailabilityUsername',
       function (Profile, $parse, $q)
       {
