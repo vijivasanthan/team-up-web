@@ -368,6 +368,9 @@ define(
             case "invalidUsername":
               errorMessage = $rootScope.ui.teamup.errorCode["14"];
               break;
+            case "invalidTeamname":
+              errorMessage = $rootScope.ui.teamup.teamNameExistTitle;
+              break;
           }
           return errorMessage;
         }
