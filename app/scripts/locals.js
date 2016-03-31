@@ -1123,6 +1123,7 @@ define(
           userName: {
             regex: 'and may only contain alphanumeric characters, including scores and underscores',
             valid: 'A username is required',
+            email: "A username is allowed ",
             amountMinChars: function (number)
             {
               return ' and must have a minimum of ' + number + ' characters'
@@ -2250,6 +2251,7 @@ define(
           userName: {
             regex: 'AND darf nur Buchstaben, Zahlen und die Zeichen “_” und  “-” enthalten',
             valid: 'Es muss ein Anwendernamen festgelegt werden',
+            email: "A username is allowed ",
             amountMinChars: function (number)
             {
               return ' and must have a minimum of ' + number + ' characters'
@@ -3443,7 +3445,8 @@ define(
           },
           userName: {
             regex: "en mag alleen uit alfanummerieke tekens bestaan, inclusief streepjes ('-') en lage streepjes ('_')",
-            valid: 'Een gebruikersnaam is vereist',
+            valid: 'Een gebruikersnaam is vereist ',
+            email: "Een gebruiksnaam kan een emailadres zijn ",
             amountMinChars: function (number)
             {
               return ' en moet uit minimaal ' + number + ' karakters bestaan'

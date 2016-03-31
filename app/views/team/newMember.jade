@@ -124,7 +124,7 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 											small(ng-messages='member.newForm.username.$error'
 												ng-if='(member.UserNameWrong || member.newForm.username.$invalid) && (member.newForm.username.$touched || member.newForm.username.$dirty || member.newForm.$submitted)')
 												i(ng-if='member.UserNameWrong && !member.newForm.username.$error.required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
-												i(ng-message='required') {{ ui.validation.userName.valid }} {{ui.validation.userName.regex }}
+												i(ng-message='required') {{ ui.validation.userName.email }} {{ui.validation.userName.regex }}
 												i(ng-message='minlength') {{ ui.validation.default.minLength(ui.profile.username) }}
 												i(ng-message='maxlength') {{ ui.validation.default.maxLength(ui.profile.username) }}
 									
