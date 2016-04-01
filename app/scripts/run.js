@@ -950,7 +950,7 @@ define(
                          });
           };
 
-          if(Session.check()) $rootScope.getVersionInfo();
+          if(Session.get()) $rootScope.getVersionInfo();
         }
       ]
     );
