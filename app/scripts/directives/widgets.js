@@ -108,7 +108,28 @@ define(
                     return false;
                   }
 
-                  console.log('angular.element(el).val()', angular.element(el).val());
+                  //var fileUpload = angular.element(el).val(),
+                  //    fileExtension = fileUpload.substr(fileUpload.lastIndexOf('.') + 1).toLocaleLowerCase().trim();
+                  //console.error("fileExtension ->", fileExtension);
+                  //console.error("file ->", (fileExtension != 'png' || fileExtension != 'jpg'));
+                  //if(fileExtension !== 'png' ||
+                  //  fileExtension !== 'jpg' )
+                  //{
+                  //  console.error("123 ->", 123);
+                  //  $scope.$apply(
+                  //    function ()
+                  //    {
+                  //      $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
+                  //    }
+                  //  );
+                  //  return;
+                  //}
+
+                  //||
+                  //fileExtension !== 'jpeg' ||
+                  //fileExtension !== 'gif' ||
+                  //fileExtension !== 'bpg' ||
+                  //fileExtension !== 'tiff'
 
                   $form.attr('action', $scope.action);
 
@@ -437,27 +458,56 @@ define(
                 ngModel.$error = [];
               }
 
-              ngModel.$asyncValidators.invalidUsername = function(modelValue, viewValue)
+              ngModel.$validators.invalidUsername = function(modelValue, viewValue)
               {
-                var username = viewValue,
-                    deferred = $q.defer();
-
-                if(attr.checkAvailabilityUsername)
+                if(attr.checkAvailabilityUsername && viewValue)
                 {
-                  //check if the username is already used in the form
-                  var usernamesForm = attr.checkAvailabilityUsername;
-                  if(usernamesForm.split(viewValue).length > 1) deferred.reject();
+                  var userName1 = scope['memberFieldForm1'].email,
+                      userName2 = scope['memberFieldForm2'].email,
+                      userName3 = scope['memberFieldForm3'].email,
+                      userNames = [userName1.$viewValue, userName2.$viewValue, userName3.$viewValue];
+
+
+                    //get the duplicate values and remove the "" empty values
+                    var duplicates = _.filter(
+                      _.without(userNames, ""),
+                      function (value, index, iteratee)
+                      {
+                        return _.includes(iteratee, value, index + 1);
+                      });
+
+                    //check the duplicates and show the error if the username already exist in the backend or
+                    //create teamtelefoon team form
+                    _.each(userNames, function(userNameVal, index)
+                    {
+                      var formIndex = (index + 1);
+                      //check if username has a duplicate in the form
+                      if(userNameVal === duplicates[0])
+                      {
+                        scope['memberFieldForm' + formIndex]
+                          .email
+                          .$setValidity("invalidUsername", false);
+                      }
+                      //if there is no duplicate in the form check if username exist in the backend
+                      else if(userNameVal) //only if the username is not empty
+                      {
+                        Profile.userExists(userNameVal)
+                               .then(function()
+                                     {
+                                       scope['memberFieldForm' + formIndex]
+                                         .email
+                                         .$setValidity("invalidUsername", true);
+                                     },
+                                     function()
+                                     {
+                                       scope['memberFieldForm' + formIndex]
+                                         .email
+                                         .$setValidity("invalidUsername", false);
+                                     });
+                      }
+                    });
+                    return false;//return something, the $setValidity, will result after this return
                 }
-                Profile.userExists(username)
-                       .then(function()
-                             {
-                               deferred.resolve();
-                             },
-                             function()
-                             {
-                                deferred.reject();
-                             });
-                return deferred.promise;
               }
             }
           }
