@@ -22,34 +22,46 @@ define(
          */
         self.create = function(member)
         {
-          var error = "";
-          if( ! self.ttPhoneNumbers.length ) error = $rootScope.ui.options.noPhoneNumbers;
-          //check if a teamname is given
-          else if( self.newForm.teamName['$invalid'] )
-          {
-            error = getLocalError(self.newForm.teamName.$error, $rootScope.ui.teamup.teamName);
-            goToPart('part0');
-          }
-          else if( self.newForm.voicemail['$invalid'] )//check if a voicemail e-mailaddress is given
-          {
-            var voicemailField      = self.newForm.voicemail;
-            error                   = getLocalError(voicemailField.$error, $rootScope.ui.options.voicemailEmailAddress);
-            voicemailField.$touched = true;
-            goToPart('part0');
-          }
-          else
-          {
-            error = validateNewMembers(member);
-            $anchorScroll();
-          }
+          //check phonenumbers again after saving the data
+          checkPhoneNumbers()
+            .then(function(notUsedPhoneNumbers)
+                  {
+                    self.ttPhoneNumbers = notUsedPhoneNumbers;
 
-          if( error.length ) $rootScope.notifier.error(error);
-          else
-          {
-            console.error("alles VALID");
-            //add the teamtelefoon team if no errors accurred
-            newTTTeamRequest(member)
-          }
+                    if( ! self.ttPhoneNumbers.length )
+                    {
+                      $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
+                    }
+
+                    var error = "";
+                    if( ! self.ttPhoneNumbers.length ) error = $rootScope.ui.options.noPhoneNumbers;
+                    //check if a teamname is given
+                    else if( self.newForm.teamName['$invalid'] )
+                    {
+                      error = getLocalError(self.newForm.teamName.$error, $rootScope.ui.teamup.teamName);
+                      goToPart('part0');
+                    }
+                    else if( self.newForm.voicemail['$invalid'] )//check if a voicemail e-mailaddress is given
+                    {
+                      var voicemailField      = self.newForm.voicemail;
+                      error                   = getLocalError(voicemailField.$error, $rootScope.ui.options.voicemailEmailAddress);
+                      voicemailField.$touched = true;
+                      goToPart('part0');
+                    }
+                    else
+                    {
+                      error = validateNewMembers(member);
+                      $anchorScroll();
+                    }
+
+                    if( error.length ) $rootScope.notifier.error(error);
+                    else
+                    {
+                      console.error("alles VALID");
+                      //add the teamtelefoon team if no errors accurred
+                      newTTTeamRequest(member)
+                    }
+                  });
         };
 
         /**
