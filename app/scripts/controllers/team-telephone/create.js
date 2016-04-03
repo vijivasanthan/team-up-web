@@ -22,6 +22,8 @@ define(
          */
         self.create = function(member)
         {
+          console.error('member', member);
+
           //check phonenumbers again after saving the data
           checkPhoneNumbers()
             .then(function(notUsedPhoneNumbers)
@@ -124,7 +126,7 @@ define(
           //  voicemail: "lala@lala.nl",
           //  firstName: ["", "henkie", "suki", ""],
           //  lastName: ["", "watdenkie", "tuki", ""],
-          //  email: ["", "lala@lala.nl", "", ""],
+          //  email: ["", "lala@lala.nl", "lala@lala.nl", ""],
           //  phone: ["", "+31650587992", "+31650587992", ""],
           //  password: ["", "askaskask", "askaskask", ""],
           //  reTypePassword: ["", "askaskask", "askaskask", ""]
@@ -283,19 +285,19 @@ define(
           //  memberForms: {
           //    memberForm1: {
           //      name: "Henk van Rooijen",
-          //      email: "hvrooijen@ask-cs.com",
+          //      email: "lala@lala.nl",
           //      phone: "+3164590334",
           //      password: "lala123"
           //    },
           //    memberForm2: {
           //      name: "Jan de Jong",
-          //      email: "hvrooijen@ask-cs.com",
+          //      email: "lala@lala.nl",
           //      phone: "+3164590334",
           //      password: "lala123"
           //    },
           //    memberForm3: {
           //      name: "Jan Visser",
-          //      email: "hvrooijen@ask-cs.com",
+          //      email: "lala@lala.nl",
           //      phone: "+3164590334",
           //      password: "lala123"
           //    }
@@ -401,7 +403,6 @@ define(
             var memberFormFilled = false,
                 error            = "";
             //check if which member form is filled
-
             if( member &&
               ( (member.firstName[index]) ||
               (member.email[index]) ||

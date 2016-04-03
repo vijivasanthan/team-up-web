@@ -412,7 +412,7 @@ define(
           {
             if(ngModel)//testtttrrrTT
             {
-              if(! ngModel.$asyncValidators)
+              if(! ngModel.$validators)
               {
                 ngModel.$validators = {};
                 ngModel.$asyncValidators = {};
@@ -451,22 +451,23 @@ define(
           {
             if(ngModel)
             {
-              if(! ngModel.$asyncValidators)
+              if(! ngModel.$validators)
               {
                 ngModel.$validators = {};
                 ngModel.$asyncValidators = {};
                 ngModel.$error = [];
               }
 
-              ngModel.$validators.invalidUsername = function(modelValue, viewValue)
+              ngModel.$asyncValidators.invalidUsername = function(modelValue, viewValue)
               {
                 if(attr.checkAvailabilityUsername && viewValue)
                 {
                   var userName1 = scope['memberFieldForm1'].email,
                       userName2 = scope['memberFieldForm2'].email,
                       userName3 = scope['memberFieldForm3'].email,
-                      userNames = [userName1.$viewValue, userName2.$viewValue, userName3.$viewValue];
-
+                      userNames = [userName1.$viewValue, userName2.$viewValue, userName3.$viewValue],
+                      deferred = $q.defer();
+                  attr.checkAvailabilityUsername = parseInt(attr.checkAvailabilityUsername);
 
                     //get the duplicate values and remove the "" empty values
                     var duplicates = _.filter(
@@ -481,12 +482,14 @@ define(
                     _.each(userNames, function(userNameVal, index)
                     {
                       var formIndex = (index + 1);
+
                       //check if username has a duplicate in the form
                       if(userNameVal === duplicates[0])
                       {
                         scope['memberFieldForm' + formIndex]
                           .email
                           .$setValidity("invalidUsername", false);
+                        if(attr.checkAvailabilityUsername === formIndex) deferred.reject();
                       }
                       //if there is no duplicate in the form check if username exist in the backend
                       else if(userNameVal) //only if the username is not empty
@@ -494,19 +497,21 @@ define(
                         Profile.userExists(userNameVal)
                                .then(function()
                                      {
+                                       if(attr.checkAvailabilityUsername === formIndex)  deferred.resolve();
                                        scope['memberFieldForm' + formIndex]
                                          .email
                                          .$setValidity("invalidUsername", true);
                                      },
                                      function()
                                      {
+                                       if(attr.checkAvailabilityUsername === formIndex) deferred.reject();
                                        scope['memberFieldForm' + formIndex]
                                          .email
                                          .$setValidity("invalidUsername", false);
                                      });
                       }
                     });
-                    return false;//return something, the $setValidity, will result after this return
+                    return deferred.promise;
                 }
               }
             }
