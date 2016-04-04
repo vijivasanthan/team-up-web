@@ -1134,6 +1134,9 @@ define(
           },
           wish : {
             integer: 'Give a number in the range of 0 to 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "The type of file you have uploaded is not allowed, Pick one of the following types: 'png', 'jpeg', 'jpg', 'gif', 'bpg' or 'tiff'"
           }
         }
       },
@@ -2262,6 +2265,9 @@ define(
           },
           wish : {
             integer: 'Give a number in the range of 0 to 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "The type of file you have uploaded is not allowed, Pick one of the following types: 'png', 'jpeg', 'jpg','gif', 'bpg' or 'tiff'"
           }
         },
       },
@@ -3461,6 +3467,9 @@ define(
           },
           wish : {
             integer: 'Geef een nummer van 0 t/m 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "Dit type bestand is niet toegestaan, kies een van de volgende types: 'png', 'jpeg', 'jpg', 'gif', 'bpg' of 'tiff'"
           }
         }
       }

@@ -108,28 +108,20 @@ define(
                     return false;
                   }
 
-                  //var fileUpload = angular.element(el).val(),
-                  //    fileExtension = fileUpload.substr(fileUpload.lastIndexOf('.') + 1).toLocaleLowerCase().trim();
-                  //console.error("fileExtension ->", fileExtension);
-                  //console.error("file ->", (fileExtension != 'png' || fileExtension != 'jpg'));
-                  //if(fileExtension !== 'png' ||
-                  //  fileExtension !== 'jpg' )
-                  //{
-                  //  console.error("123 ->", 123);
-                  //  $scope.$apply(
-                  //    function ()
-                  //    {
-                  //      $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
-                  //    }
-                  //  );
-                  //  return;
-                  //}
+                  var fileUpload = angular.element(el).val(),
+                      fileExtension = fileUpload.substr(fileUpload.lastIndexOf('.') + 1).toLocaleLowerCase(),
+                      whiteListFileTypes = ['png', 'jpeg', 'jpg', 'gif', 'bpg', 'tiff'];
 
-                  //||
-                  //fileExtension !== 'jpeg' ||
-                  //fileExtension !== 'gif' ||
-                  //fileExtension !== 'bpg' ||
-                  //fileExtension !== 'tiff'
+                  if(whiteListFileTypes.indexOf(fileExtension) === -1)
+                  {
+                    $scope.$apply(
+                        function ()
+                        {
+                          $rootScope.notifier.error($rootScope.ui.validation.upload.fileTypeNotAloud);
+                        }
+                      );
+                    return false;
+                  }
 
                   $form.attr('action', $scope.action);
 
@@ -159,10 +151,12 @@ define(
                       },
                       error: function (event, statusText, responseText, form)
                       {
+                        console.error("$scope.action error ->", $form.attr('action'));
                         $form.removeAttr('action');
                       },
                       success: function ()
                       {
+                        console.error("action success ->", $form.attr('action'));
                         var ar = angular.element(el).val().split('\\'),
                           filename = ar[ar.length - 1];
 
@@ -172,6 +166,7 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
+
                             var roundPicture = $('.roundedPicLarge');
                             var avatarTagStyle = roundPicture.attr('style');
                             var size = 0,
@@ -203,6 +198,9 @@ define(
                             }
 
                             $scope.$parent.$root.avatarChange(id);
+                            //empty value so the onchange will upload even the file with the same
+                            angular.element(el).val("");
+
                             $rootScope.notifier.success(message);
                             $rootScope.showChangedAvatar(type, id);
 
