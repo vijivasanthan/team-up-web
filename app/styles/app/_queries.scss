@@ -52,10 +52,6 @@
 }
 
 @media (max-width: 1200px) {
-  #show-name {
-    display: none;
-  }
-
   #viewTeamsTab .tab-header {
     height: 100px;
   }
@@ -154,6 +150,10 @@
 }
 
 @media (max-width: 979px) {
+
+  #show-name {
+    display: none;
+  }
 
   .navbar-fixed-top {
     position: absolute;
