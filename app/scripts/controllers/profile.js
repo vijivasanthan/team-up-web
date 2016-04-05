@@ -355,11 +355,12 @@ define(
             setView('edit');
           };
 
+          var Settings = $injector.get('Settings');
+          $scope.uploadURL = Settings.getBackEnd() + "team/member/" + $route.current.params.userId + "/photo?square=true";
+
           // Change an avatar
           $scope.editImg = function ()
           {
-            var Settings = $injector.get('Settings');
-            $scope.uploadURL = Settings.getBackEnd() + config.app.namespace + "/team/member/" + $route.current.params.userId + "/photo?square=true";
             $scope.setViewTo('editImg');
           };
 

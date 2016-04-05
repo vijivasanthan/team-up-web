@@ -57,12 +57,12 @@ define(
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
-                moment().startOf('day').toDate(),
-                moment().add(3, 'days').startOf('day').toDate()
+                moment().add(1, 'days').startOf('day').toDate(),
+                moment().add(4, 'days').startOf('day').toDate()
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
-                moment().startOf('day').toDate(),
-                moment().add(1, 'weeks').startOf('day').toDate()
+                moment().add(1, 'days').startOf('day').toDate(),
+                moment().add(8, 'days').startOf('day').toDate()
               ];
 
               element.daterangepicker(
@@ -77,7 +77,7 @@ define(
                         start = start.toDate();
                         // bootstrap-daterangepicker uses end of day,
                         // make it the beginning using moment's function
-                        end = (end.startOf('day')).toDate();
+                        end = (end.endOf('day')).toDate();
                       }
 
                       var diff = end.getTime() - start.getTime();
