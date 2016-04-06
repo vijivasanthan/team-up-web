@@ -103,28 +103,28 @@ dl {
 
 //TODO show scrollbar in the content even if the modal is shown
 //bug in angular if you change location without hiding the modal the scrollbar will never be shown again
-.modal-open {
-  overflow: hidden;
-}
+//.modal-open {
+//  overflow: hidden;
+//}
 
-.modal-body {
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    li {
-      margin-bottom: 5px;
-
-      label {
-        font-weight: normal;
-
-        input[type=checkbox] {
-          margin: -2px 3px 0 2px;
-        }
-      }
-    }
-  }
-}
+//.modal-body {
+//  ul {
+//    list-style: none;
+//    margin: 0;
+//    padding: 0;
+//    li {
+//      margin-bottom: 5px;
+//
+//      label {
+//        font-weight: normal;
+//
+//        input[type=checkbox] {
+//          margin: -2px 3px 0 2px;
+//        }
+//      }
+//    }
+//  }
+//}
 
 #versions {
 

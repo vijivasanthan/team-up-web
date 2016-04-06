@@ -768,11 +768,11 @@ div.timeline-event.wishes-even {
   opacity: 0.5;
 }
 
-#planboard {
-  #confirmTaskModal {
-    z-index: 10000;
-  }
-}
+//#planboard {
+//  #confirmTaskModal {
+//    z-index: 10000;
+//  }
+//}
 
 .timeline-footer-text {
   font-style: italic;
@@ -1184,16 +1184,16 @@ div.timeline-event.wishes-even {
   }
 }
 
-.modal.center .modal-dialog {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  min-width: 320px;
-  max-width: 630px;
-  width: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
-}
+//.modal.center .modal-dialog {
+//  position: fixed;
+//  top: 40%;
+//  left: 50%;
+//  min-width: 320px;
+//  max-width: 630px;
+//  width: 50%;
+//  -webkit-transform: translateX(-50%) translateY(-50%);
+//  transform: translateX(-50%) translateY(-50%);
+//}
 
 /*
 sortable

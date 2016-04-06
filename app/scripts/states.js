@@ -17,6 +17,9 @@ define(
             {
               $rootScope.checkLocation($location.path());
 
+              //TODO make some cleaner fix
+              angular.element('.modal-backdrop').remove();
+
               function resetLoaders ()
               {
                 $rootScope.loaderIcons = {

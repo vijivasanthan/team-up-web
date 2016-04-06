@@ -313,17 +313,17 @@ input[type="color"],
 
 /*----------REPORTS-----------*/
 
-.modal-header {
-  h4.reportTitle {
-    display: inline;
-  }
-}
-
-.modal-body {
-  table {
-    width: 100%;
-  }
-}
+//.modal-header {
+//  h4.reportTitle {
+//    display: inline;
+//  }
+//}
+//
+//.modal-body {
+//  table {
+//    width: 100%;
+//  }
+//}
 
 .description {
   -ms-word-break: break-all;
@@ -355,10 +355,6 @@ input[type="color"],
     font-weight: normal;
     margin-left: 20px;
   }
-}
-
-.modal-backdrop {
-  background-color: transparent;
 }
 
 .form-group {

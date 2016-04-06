@@ -2,14 +2,17 @@
 // Modals
 // --------------------------------------------------
 
-
-.modal-backdrop {
-  background-color: transparent;
-  z-index: -1;
-}
-
 .modal {
   top: 0px;
-  bottom: 50px;
   padding-top: 35px;
+}
+
+body.modal-open {
+  overflow-y: visible!important;
+}
+
+.modal-open.modal-with-am-fade-and-slide-top {
+  .am-fade {
+    opacity: 0.5;
+  }
 }
