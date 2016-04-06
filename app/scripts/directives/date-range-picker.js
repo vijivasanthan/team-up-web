@@ -43,26 +43,26 @@ define(
 
               options.ranges[$rootScope.ui.planboard.daterangerToday] = [
                 moment().startOf('day').toDate(),
-                moment().add(1, 'days').startOf('day').toDate()
+                moment().endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerTomorrow] = [
                 moment().add(1, 'days').startOf('day').toDate(),
-                moment().add(2, 'days').startOf('day').toDate()
+                moment().add(1, 'days').endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerYesterday] = [
                 moment().subtract(1, 'days').startOf('day').toDate(),
-                moment().startOf('day').toDate()
+                moment().subtract(1, 'days').endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
                 moment().add(1, 'days').startOf('day').toDate(),
-                moment().add(4, 'days').startOf('day').toDate()
+                moment().add(3, 'days').endOf('day').toDate()
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
                 moment().add(1, 'days').startOf('day').toDate(),
-                moment().add(8, 'days').startOf('day').toDate()
+                moment().add(7, 'days').endOf('day').toDate()
               ];
 
               element.daterangepicker(
