@@ -132,7 +132,7 @@ define(['services/services', 'config'], function (services, config)
 
     Profile.prototype.userExists = function (username)
     {
-      var UserExists = $resource(config.app.host + 'user_exists', {}, {
+      var UserExists = $resource(Settings.getBackEnd() + 'user_exists', {}, {
         check: {
           method: 'GET',
           ignore: true,
@@ -151,7 +151,6 @@ define(['services/services', 'config'], function (services, config)
         }).$promise;
     };
 
-    return new Profile;
     return new Profile;
 
     //Profile.prototype.pincodeExists = function (id, pincode, assignedId)
