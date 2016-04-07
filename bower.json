@@ -36,8 +36,8 @@
     "web-lib-session": "https://github.com/askcs/web-lib-session.git",
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
     "angular-messages": "~1.4.7",
-    "vis": "~4.15.0"
+    "vis": "~4.15.0",
+    "seiyria-bootstrap-slider": "~7.0.1"
   },
   "devDependencies": {}
 }
-
