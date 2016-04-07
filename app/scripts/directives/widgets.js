@@ -589,14 +589,14 @@ define(
           restrict: 'A',
           link: function (scope, element, attrs)
           {
-            element.bind(
-              'mouseup',
+            console.error('element', element);
+            element.on('click',
               function (ev)
               {
                 var footer = angular.element('#footer').height(),
                   form = angular.element('.time-slot-form'),
                   modal = form.height(),
-                  slot = 105,
+                  slot = 110,
 
                   minNeededHeight = (modal + slot),
                   clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)

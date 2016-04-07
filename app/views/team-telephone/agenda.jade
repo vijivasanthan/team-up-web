@@ -73,17 +73,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								//aria-hidden='true',
 								
 					hr
-					// alert-window
-					//div.alert.alert-warning(
-					//	ng-show='timeline.user.id != app.resources.uuid')
-					//	button.close(type='button',
-					//	data-dismiss='alert') ×
-					//	small
-					//		| U bekijkt de tijdlijn van 
-					//		strong
-					//			i  {{timeline.user.fullName}}
-					//		|  druk op annuleren om terug te gaan naar uw tijdlijn.
-					//	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren
 					
 					div.alert.alert-warning(ng-show='infoAvailibility')
 						button.close(type='button',
@@ -102,13 +91,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							|  {{ ui.agenda.or }}
 							strong  CTRL (Windows) 
 							|  {{ ui.agenda.buttonPushed }}
-						
-						
-						//Die Planung Ihrer Verfügbarkeit kann geändert werden, 
-						//durch Doppelklick auf eine bereits vorhandene Planung oder durch Markierung der 
-						//Planung mit der Maus und anschließender Verschiebung bei 
-						//gedrückter linker Maustaste (linker-Maustaste und 
-						//Shift bei MAC bzw. CTRL bei Windows).
 		
 					#mainTimeline(set-position-slot-form)
 					div.legends-agenda
