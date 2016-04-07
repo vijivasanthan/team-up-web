@@ -3,7 +3,6 @@ section
 		h2.nullable {{ ui.options.title }}
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
-			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			label.control-label {{ ui.teamup.selectTeam }} 
 			.controls
 				select(ng-model='options.currentTeamId',
@@ -61,10 +60,10 @@ section
 							.form-group
 								label.control-label {{ ui.options.ringingTimeOut.title }}
 								.controls
-									div.input-group(style='width: 250px;')
-										div.range
-											input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
-											output#range &nbsp; {{ options.scenarios.ringingTimeOut }} {{ ui.teamup.seconds }} &nbsp;
+									div.input-group(style='width: 350px;')
+										div.range(style="float:left;") 
+											input(id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="15" data-slider-max="30" data-slider-step="5") 
+										span &nbsp; &nbsp; {{ ui.teamup.seconds }}
 									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 										small
 											i
@@ -72,7 +71,7 @@ section
 									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 										small
 											i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
-												| {{ ui.options.ringingTimeOut.long }}
+												| &nbsp; {{ ui.options.ringingTimeOut.long }}
 							hr
 							
 							.form-group

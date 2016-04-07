@@ -122,8 +122,8 @@ define(
               "sms-on-missed-call": newOptions.sms,
               "sms-on-new-team-voicemail": newOptions.sms,
               "voicemail-detection-menu": newOptions.voicemailDetection,
-              "useExternalId": newOptions.useExternalId,
-            })
+              "useExternalId": newOptions.useExternalId
+            });
           //var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
           //    second: self.currentTeamId,
           //    templateId: newOptions.scenarioId
@@ -221,6 +221,25 @@ define(
               || $rootScope.app.resources.role > 1)
               ? angular.element('.scenarioTab').addClass('ng-hide')
               : angular.element('.scenarioTab').removeClass('ng-hide');
+
+            //TODO Add this one to a directive
+            //Use the range slider to selected the right amount of rinkeltijd
+            angular.element('#ex1').slider({
+              value: self.scenarios.ringingTimeOut,
+              tooltip: 'hide',
+              formatter: function(value)
+              {
+                angular.element(".slider-handle span").html(value);
+                self.scenarios.ringingTimeOut = value;
+                return value
+              }
+            });
+            //add the current value inside the handler
+            if(! angular.element(".slider-handle").children('span').length)
+            {
+              angular.element(".slider-handle").append('<span></span>');
+              angular.element(".slider-handle span").html(self.scenarios.ringingTimeOut);
+            }
           }
         }
       }
