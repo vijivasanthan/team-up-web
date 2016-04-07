@@ -78,7 +78,7 @@ define(
         {
           if(!_.isEmpty(self.form.userName))
           {
-            var regUserName = /([A-Za-z0-9-_@.])/g,
+            var regUserName = /([A-Za-z0-9-_])/g,
               matchesUserName = (self.form.userName.match(regUserName));
             if (!_.isNull(matchesUserName))
             {
