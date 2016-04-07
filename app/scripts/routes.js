@@ -871,9 +871,23 @@ define(
                 templateUrl: 'views/team-telephone/create.html',
                 controller: 'create as teamtelefoon',
                 resolve: {
-                  data: function()
+                  data: function($q, CurrentSelection, TeamUp)
                   {
                     removeActiveClass('.teamMenu');
+
+                    return $q.all([
+                      TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()}),
+                      TeamUp._('TTAdaptersGet', {
+                        adapterType: 'call',
+                        excludeAdaptersWithDialog: 'true'
+                      })
+                    ]).then(function(result)
+                    {
+                      return {
+                        teamTelephoneOptions: result[0],
+                        askFastPhoneNumbers: result[1]
+                      };
+                    });
                   }
                 },
                 reloadOnSearch: false
