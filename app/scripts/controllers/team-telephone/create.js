@@ -7,7 +7,7 @@ define(
     controllers.controller(
       'create',
       function($rootScope, $anchorScroll, $location, $q, Settings,
-               TeamUp, Team, Member, CurrentSelection, MD5)
+               TeamUp, Team, Member, CurrentSelection, MD5, data)
       {
         var self            = this;
         self.created        = false;
@@ -133,32 +133,41 @@ define(
           //  password: ["", "askaskask", "askaskask", ""],
           //  reTypePassword: ["", "askaskask", "askaskask", ""]
           //};
+          checkTeamTelephoneFunctionality(data.teamTelephoneOptions);
+          checkPhoneNumbersTT(data.askFastPhoneNumbers);
+        }
 
-          //Check if the last selected team is a teamtelephone team
-          TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()})
-                .then(function(options)
-                      {
-                        //if no teamtelephone team hide the tabs except the options and new tab,
-                        //because that's for activating a TeamTelephone team
-                        if( ! options.adapterId )
-                        {
-                          var tabs       = angular.element('.nav-tabs-app li');
-                          var tabsLength = tabs.length;
-                          angular.element('.nav-tabs-app li').slice(0, tabsLength - 2).hide();
-                        }
-                      });
-          //check if there are phonenumbers left to create a TeamTelefoon team
-          checkPhoneNumbers()
-            .then(function(notUsedPhoneNumbers)
-                  {
-                    self.ttPhoneNumbers = notUsedPhoneNumbers;
+        /**
+         * Check if teamTelefoon is available for this team
+         * @param options
+         */
+        function checkTeamTelephoneFunctionality(options)
+        {
+          //if no teamtelephone team hide the tabs except the options and new tab,
+          //because that's for activating a TeamTelephone team
+          if( ! options.adapterId )
+          {
+            var tabs       = angular.element('.nav-tabs-app li');
+            var tabsLength = tabs.length;
+            var visibleTabs = ($rootScope.app.resources.role == 1) ? 2 : 1;
 
-                    if( ! self.ttPhoneNumbers.length )
-                    {
-                      $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
-                    }
-                    self.created = false;
-                  });
+            tabs.slice(0, tabsLength - visibleTabs).hide();
+          }
+        }
+
+        /**
+         * Check if there are phonenumbers left to add the newly created TeamTelefoon team on
+         * @param notUsedPhoneNumbers
+         */
+        function checkPhoneNumbersTT(notUsedPhoneNumbers)
+        {
+          self.ttPhoneNumbers = notUsedPhoneNumbers;
+
+          if( ! self.ttPhoneNumbers.length )
+          {
+            $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
+          }
+          self.created = false;
         }
 
         /**
@@ -342,7 +351,15 @@ define(
          */
         self.createAgain = function()
         {
-          init();
+          //Check if the last selected team is a teamtelephone team
+          TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()})
+            .then(function(options)
+            {
+              checkTeamTelephoneFunctionality(options);
+              //check if there are phonenumbers left to create a TeamTelefoon team
+              return checkPhoneNumbers();
+            })
+            .then(checkPhoneNumbersTT);
         };
 
         /**

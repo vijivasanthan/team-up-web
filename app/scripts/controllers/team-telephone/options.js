@@ -189,7 +189,10 @@ define(
           //TODO fix directive
           var tabs       = angular.element('.nav-tabs-app li');
           var tabsLength = tabs.length;
-          tabs = angular.element('.nav-tabs-app li').slice(0, tabsLength - 2);
+
+          //Only show TeamTelefoon Nieuw tab is the user has the role of coordinator
+          var visibleTabs = ($rootScope.app.resources.role == 1) ? 2 : 1;
+          tabs = angular.element('.nav-tabs-app li').slice(0, tabsLength - visibleTabs);
 
           if (!options || !options.adapterId)
           {
