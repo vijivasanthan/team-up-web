@@ -1,5 +1,5 @@
 # TeamUp Web
-v1.20.3
+v1.20.4
 
 ## Prerequisits
 
