@@ -387,18 +387,11 @@ define(['services/services', 'config'],
 
               _.each(data.aggs.wishes, function (wish)
                 {
-                  var cn;
+                  var cn = (wish.count == 0)
+                    ? 'wishes-even'
+                    : 'wishes-' + wish.count;
 
-                  if (wish.count == 0)
-                  {
-                    cn = 'wishes-even';
-                  }
-                  else
-                  {
-                    cn = 'wishes-' + wish.count;
-                  }
-
-                  timedata.push({
+                  var wish = {
                     start: Math.round(wish.start * 1000),
                     end: Math.round(wish.end * 1000),
                     group: title,
@@ -410,8 +403,8 @@ define(['services/services', 'config'],
                     groupId: data.aggs[0].id,
                     wish: wish.count,
                     editable: false
-                  });
-
+                  };
+                  timedata.push(wish);
                   timedata = _this.addLoading(data, timedata, [title]);
                 }.bind(this)
               );
