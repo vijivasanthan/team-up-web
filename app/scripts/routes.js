@@ -219,7 +219,6 @@ define(
                         teams: null,
                         currentTeamId: teamId
                       };
-                  console.error("teamId ->", teamId);
 
                   Teams.getAllLocal()
                        .then(function(teams)
@@ -669,7 +668,6 @@ define(
                         })
                         .then(function (result)
                         {
-                          console.error('result', result);
                           return {
                             teams: result[0],
                             phoneNumbers: result[2] || [],

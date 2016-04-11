@@ -880,7 +880,6 @@ define(
             {
               visDataSet.remove(newSlot[0]);
               newSlot = [];
-              console.error('remove last slot');
             }
 
             /**
@@ -890,13 +889,11 @@ define(
             {
               if (typeof $scope.timeline.range.start != Date)
               {
-                console.error('date1');
                 $scope.timeline.range.start = new Date($scope.timeline.range.start);
               }
 
               if (typeof $scope.timeline.range.end != Date)
               {
-                console.error('date2');
                 $scope.timeline.range.end = new Date($scope.timeline.range.end);
               }
 
@@ -905,7 +902,6 @@ define(
             }
             else
             {
-              console.error('date3');
               start = new Date(options.start);
               end = new Date(options.end);
             }
@@ -930,7 +926,6 @@ define(
              */
             if ($.browser.msie && $.browser.version == '8.0')
             {
-              console.error('IE fix');
               $scope.timeline.options.start = new Date(options.start);
               $scope.timeline.options.end = new Date(options.end);
             }

@@ -140,8 +140,6 @@ define(
                       },
                       uploadProgress: function (event, position, total, percentComplete)
                       {
-                        console.log('event', event);
-
                         $scope.$apply(
                           function ()
                           {
@@ -151,12 +149,10 @@ define(
                       },
                       error: function (event, statusText, responseText, form)
                       {
-                        console.error("$scope.action error ->", $form.attr('action'));
                         $form.removeAttr('action');
                       },
                       success: function ()
                       {
-                        console.error("action success ->", $form.attr('action'));
                         var ar = angular.element(el).val().split('\\'),
                           filename = ar[ar.length - 1];
 
@@ -252,7 +248,7 @@ define(
             ],
             link: function (scope, elem, attrs, ctrl)
             {
-              console.log('profile directive ->', attrs.memberId);
+
             },
             replace: false,
             templateUrl: 'views/profileTemplate.html'
@@ -386,9 +382,6 @@ define(
       {
         return function (scope, element, attrs)
         {
-          //			console.log(element.parent('a'));
-          //			console.log('attrs-> ', attrs);
-          //			console.log('attrs->backImg-> ', attrs.backImg);
           var url = attrs.backImg;
           element.css(
             {
@@ -589,7 +582,6 @@ define(
           restrict: 'A',
           link: function (scope, element, attrs)
           {
-            console.error('element', element);
             element.on('click',
               function (ev)
               {
@@ -621,8 +613,6 @@ define(
       {
         return function (scope, element, attrs)
         {
-          console.log('attrs', attrs.dynamicType);
-
           var ensureCompileRunsOnce = scope.$watch(
             function (scope)
             {
@@ -630,7 +620,6 @@ define(
             },
             function (value)
             {
-              console.log('value', value);
               element.html(value);
               $compile(element.contents())(scope);
 
@@ -662,26 +651,6 @@ define(
     //    };
     //  }
     //);
-
-    directives.directive(
-      'showHideOnRole',
-      function ($rootScope)
-      {
-        //
-        return {
-          restrict: 'A',
-          link: function (scope, element)
-          {
-            if(! element.hasClass('ng-hide')
-              && (! $rootScope.app.domainPermission.teamSelfManagement
-              || $rootScope.app.resources.role > 1))
-            {
-              element.addClass('ng-hide');
-            }
-          }
-        };
-      }
-    );
 
     directives.directive(
       'requiredForm',
