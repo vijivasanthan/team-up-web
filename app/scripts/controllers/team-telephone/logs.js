@@ -79,15 +79,12 @@ define(
           CurrentSelection.local = self.current;
 
           //Check if the requested team has teamtelephone functionality by the adapterId
-          TeamUp._('TTOptionsGet', {second: self.current})
+          Teams.getTeamTelephoneOptions(self.current)
             .then(function (TeamTelephoneSettings)
             {
               _TeamTelephoneSettings = TeamTelephoneSettings;
               options.adapterId = TeamTelephoneSettings.adapterId;
-
-              return (! TeamTelephoneSettings.adapterId)
-                ? $location.path('team-telefoon/options')
-                : Teams.getSingle(self.current);//get the members of the team, so the phonenumbers could be translated to names
+              return Teams.getSingle(self.current);//get the members of the team, so the phonenumbers could be translated to names
             })
             .then(function(members)
             {

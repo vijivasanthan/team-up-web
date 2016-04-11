@@ -352,7 +352,7 @@ define(
         self.createAgain = function()
         {
           //Check if the last selected team is a teamtelephone team
-          TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()})
+          Teams.getTeamTelephoneOptions(CurrentSelection.getTeamId())
             .then(function(options)
             {
               checkTeamTelephoneFunctionality(options);

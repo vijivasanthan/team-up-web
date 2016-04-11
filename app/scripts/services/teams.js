@@ -6,7 +6,7 @@ define(
 
     services.factory(
       'Teams',
-        function ($resource, $q, Store, moment, $rootScope, TeamUp, $injector)
+        function ($resource, $q, Store, moment, $rootScope, TeamUp, $injector, $location)
         {
           var TeamsService = $resource();
 
@@ -782,6 +782,33 @@ define(
           TeamsService.prototype.updateAllTeamsView = function (teams)
           {
             TeamsService.prototype.all = teams;
+          };
+
+          TeamsService.prototype.getTeamTelephoneOptions = function (teamId)
+          {
+            var deferred = $q.defer();
+            TeamUp._('TTOptionsGet', {second: teamId})
+              .then(function(options)
+              {
+                if(options.adapterId)
+                {
+                  deferred.resolve(options);
+                  $rootScope.isTeamTelephoneTeam = true;
+                }
+                else
+                {
+                  $rootScope.isTeamTelephoneTeam = false;
+                  deferred.reject(options);
+
+                  var teamTelephoneOptionsTab = 'team-telefoon/options';
+
+                  if($location.path().indexOf(teamTelephoneOptionsTab) == -1)
+                  {
+                    $location.path(teamTelephoneOptionsTab);
+                  }
+                }
+              });
+            return deferred.promise;
           };
 
           return new TeamsService;

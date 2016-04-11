@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'options',
-      function ($scope, $rootScope, $filter, TeamUp, CurrentSelection, data, $q)
+      function ($scope, $rootScope, $filter, TeamUp, Teams, CurrentSelection, data, $q)
       {
         $rootScope.fixStyles();
 
@@ -36,18 +36,16 @@ define(
           self.currentTeam = setTeamIdToName(self.currentTeamId);
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-          TeamUp._(
-            'TTOptionsGet',
-            {second: self.currentTeamId}
-          ).then(function (options)
+          Teams.getTeamTelephoneOptions(self.currentTeamId)
+            .then(function (options)
             {
               self.data.teamTelephoneOptions = options;
               return (self.data.teamTelephoneOptions.adapterId)
                 ? $q.defer()
                 : TeamUp._('TTAdaptersGet', {
-                    adapterType: 'call',
-                    excludeAdaptersWithDialog: 'true'
-                  });
+                adapterType: 'call',
+                excludeAdaptersWithDialog: 'true'
+              });
             })
             .then(function (phoneNumbers)
             {
@@ -186,14 +184,6 @@ define(
          */
         function show(options)
         {
-          //TODO fix directive
-          var tabs       = angular.element('.nav-tabs-app li');
-          var tabsLength = tabs.length;
-
-          //Only show TeamTelefoon Nieuw tab is the user has the role of coordinator
-          var visibleTabs = ($rootScope.app.resources.role == 1) ? 2 : 1;
-          tabs = angular.element('.nav-tabs-app li').slice(0, tabsLength - visibleTabs);
-
           if (!options || !options.adapterId)
           {
             if (angular.isDefined(self.activateTTForm))
@@ -205,8 +195,6 @@ define(
             {
               $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
             }
-            self.activateTTForm = true;
-            tabs.addClass('ng-hide');
           }
           else
           {
@@ -217,15 +205,8 @@ define(
               useExternalId: options["useExternalId"] || false,
               scenarioTemplates: options['test'] || []
             };
-            self.activateTTForm = false;
-            tabs.removeClass('ng-hide');
-            //TODO fix this in a directive
-            (! $rootScope.app.domainPermission.teamSelfManagement
-              || $rootScope.app.resources.role > 1)
-              ? angular.element('.scenarioTab').addClass('ng-hide')
-              : angular.element('.scenarioTab').removeClass('ng-hide');
 
-            //TODO Add this one to a directive
+            //TODO make this a directive, dom manipulation is bad
             //Use the range slider to selected the right amount of rinkeltijd
             angular.element('#ex1').slider({
               value: self.scenarios.ringingTimeOut,

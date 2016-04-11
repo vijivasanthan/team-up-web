@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'scenario',
-      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, data)
+      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data)
       {
         $rootScope.fixStyles();
         //TODO fix the localized string in this controller
@@ -34,15 +34,10 @@ define(
           self.currentTeam = setTeamIdToName(self.currentTeamId);
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-          TeamUp._(
-            'TTOptionsGet',
-            {second: self.currentTeamId}
-          ).then(function (options)
+          Teams.getTeamTelephoneOptions(self.currentTeamId)
+            .then(function (options)
           {
-            (!options.adapterId)
-              ? $location.path('team-telefoon/options')
-              : show(self.data);
-
+            show(self.data);
             $rootScope.statusBar.off();
           })
         }

@@ -14,21 +14,20 @@ section
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', 
 		bs-navbar)
 			include tabs
-				//hide-team-telephone-tabs='{{options.activateTTForm}}'
 		.tab-content
 			#order.tab-pane.active
 				div
-					div(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
+					div(ng-show='(isTeamTelephoneTeam && app.resources.role > 1) || isTeamTelephoneTeam')
 						div.head
 							h3
 								| {{ ui.options.title }}{{ options.currentTeam }} 
 						hr
-					div.alert.alert-warning(ng-show='options.activateTTForm && app.resources.role > 1')
+					div.alert.alert-warning(ng-if='! isTeamTelephoneTeam && app.resources.role > 1')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.options.teamTelephoneNotActivated }}
 								
-					div(id='TTOptions' ng-hide='options.activateTTForm')
+					div(id='TTOptions' ng-show='isTeamTelephoneTeam')
 						.row-fluid
 							.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 								dl
@@ -123,8 +122,7 @@ section
 								
 								//&& !options.scenarios.voicemailDetection
 								// {{ ui.options.voicemailDetectionInfo }}
-				
-				div(id="activateTTForm" ng-show='options.activateTTForm && app.resources.role == 1')
+				div(id="activateTTForm" ng-if='app.resources.role == 1 && ! isTeamTelephoneTeam')
 					h3 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
 					hr
 					div

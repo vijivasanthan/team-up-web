@@ -1367,17 +1367,10 @@ define(
             end: ($scope.data.periods.end / 1000)
           };
 
-          TeamUp._('TTOptionsGet', {second: $scope.timeline.current.group})
+          Teams.getTeamTelephoneOptions($scope.timeline.current.group)
             .then(function (options)
             {
-              if (!options.adapterId)
-              {
-                $location.path('team-telefoon/options');
-              }
-              else
-              {
-                fetchTeamTimelineData(section, periods);
-              }
+              fetchTeamTimelineData(section, periods);
             });
         };
 

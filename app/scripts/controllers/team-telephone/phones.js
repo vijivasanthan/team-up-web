@@ -99,7 +99,7 @@ define(['../controllers'], function (controllers)
       {
         CurrentSelection.local = $scope.currentTeam;
 
-        TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+        Teams.getTeamTelephoneOptions($scope.currentTeam)
           .then(function (options)
           {
             var promise = $q.all([

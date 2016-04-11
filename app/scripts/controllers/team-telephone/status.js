@@ -41,20 +41,13 @@ define(['../controllers'], function (controllers)
 
           CurrentSelection.local = self.currentTeam;
 
-          TeamUp._('TTOptionsGet', {second: self.currentTeam})
+          Teams.getTeamTelephoneOptions(self.currentTeam)
             .then(function (options)
             {
-              var promise = $q.all([
+              return $q.all([
                 Teams.getSingle(self.currentTeam),
                 Slots.MemberReachabilitiesByTeam(self.currentTeam, null)
               ]);
-
-              if (!options.adapterId)
-              {
-                $location.path('team-telefoon/options');
-                promise = $q.reject();
-              }
-              return promise;
             })
             .then(function (result)
             {

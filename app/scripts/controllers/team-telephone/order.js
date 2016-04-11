@@ -54,16 +54,10 @@ define(
             var teamStatus = TeamUp._('teamStatusQuery', {third: groupID}),
               teamOrder = TeamUp._('callOrderGet', {second: groupID});
 
-            TeamUp._('TTOptionsGet', {second: $scope.currentTeam})
+            Teams.getTeamTelephoneOptions($scope.currentTeam)
               .then(function (options)
               {
-                var promise = $q.all([teamStatus, teamOrder]);
-                if (!options.adapterId)
-                {
-                  $location.path('team-telefoon/options');
-                  promise = $q.reject();
-                }
-                return promise;
+                return $q.all([teamStatus, teamOrder]);
               })
               .then(function (teamResult)
               {
