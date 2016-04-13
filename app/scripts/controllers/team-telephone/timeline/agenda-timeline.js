@@ -2415,6 +2415,9 @@ define(
          */
         $scope.wisher = function (slot)
         {
+          var wishAmount = parseInt(slot.wish);
+          if(! (wishAmount >= 0 && wishAmount <= 30) ) return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
+
           $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
           var formattedSlot = {
