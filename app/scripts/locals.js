@@ -417,6 +417,12 @@ define(
           send: 'send'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "There is " + amountMembers + " member."
+              : "There are " + amountMembers + " members.";
+          },
           changeMemberShip: 'Change membership',
           doYou: 'Do you ',
           memberOfATeam: ' like to be part of a team ',
@@ -604,6 +610,18 @@ define(
           settings: 'settings'
         },
         teamup: {
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "There is " + amountReports + " report."
+              : "There are " + amountReports + " reports.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "There is " + amountContacts + " contact person."
+              : "There are " + amountContacts + " contact persons.";
+          },
           removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
@@ -988,14 +1006,9 @@ define(
           member: 'Member',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "There is " + amountTasks + " task.";
-            }
-            else
-            {
-              return "There are " + amountTasks + " tasks."
-            }
+            return (amountTasks == 1)
+              ? "There is " + amountTasks + " task."
+              : "There are " + amountTasks + " tasks.";
           },
           carer: 'Carer',
           information: 'Information',
@@ -1588,6 +1601,12 @@ define(
           send: 'versenden'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "There is " + amountMembers + " member."
+              : "There are " + amountMembers + " members.";
+          },
           changeMemberShip: 'Mitgliedschaft ändern',
           doYou: 'Möchten Sie ',
           memberOfATeam: ' in das Team ',
@@ -1772,6 +1791,18 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "There is " + amountReports + " report."
+              : "There are " + amountReports + " reports.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "There is " + amountContacts + " contact person."
+              : "There are " + amountContacts + " contact persons.";
+          },
           removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
@@ -2118,14 +2149,9 @@ define(
           member: 'Mitglied',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "Es gibt eine " + amountTasks + " Aufgabe.";
-            }
-            else
-            {
-              return "Es gibt " + amountTasks + " Aufgaben."
-            }
+            return (amountTasks == 1)
+              ? "Es gibt eine " + amountTasks + " Aufgabe."
+              : "Es gibt " + amountTasks + " Aufgaben.";
           },
           carer: 'Betreuer',
           information: 'Information',
@@ -2738,6 +2764,12 @@ define(
           send: 'Versturen'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "Er is " + amountMembers + " lid."
+              : "Er zijn " + amountMembers + " leden.";
+          },
           changeMemberShip: 'Lidmaatschap wijzigen',
           doYou: 'Wilt u ',
           memberOfATeam: 'lid maken van team ',
@@ -2926,6 +2958,18 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "Er is " + amountReports + " rapport."
+              : "Er is " + amountReports + " rapports.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "Er is " + amountContacts + " contactpersoon."
+              : "Er zijn " + amountContacts + " contactpersonen.";
+          },
           removingTeamWithTasks: "Er staan nog taken in de planning voor het te verwijderen team, verwijder deze eerst!",
           minimumOneMember: "Minimaal één teamlid moet toegevoegd worden",
           newNumberOf: "is het nieuwe nummer van ",
@@ -3268,14 +3312,9 @@ define(
           member: 'Lid',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "Er is " + amountTasks + " taak.";
-            }
-            else
-            {
-              return "Er zijn " + amountTasks + " taken."
-            }
+            return (amountTasks == 1)
+              ? "Er is " + amountTasks + " taak."
+              : "Er zijn " + amountTasks + " taken.";
           },
           carer: 'Verzorger',
           information: 'Informatie',
