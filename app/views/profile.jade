@@ -77,11 +77,11 @@ section#profile
 						//div(dynamic='test') {{test}}
 						button.btn.pull-right.btn-info.marginLeftTen(type='button',
 							ng-click='confirmModal("#confirmProfileModal")',
-							ng-if='( (app.resources.role == 1 || edit.uuid === app.resources.uuid) && app.resources.teamUuids.length)') 
+							ng-if='( (app.resources.role == 1 || edit.uuid === app.resources.uuid) && edit.teamUuids.length)') 
 							| {{ui.teamup.del}}
 						button.btn.pull-right.btn-info(type='button',
 							ng-click='setViewTo("edit")',
-							ng-if='( (app.resources.role == 1 || edit.uuid === app.resources.uuid) && app.resources.teamUuids.length)') {{ui.profile.edit}}
+							ng-if='( (app.resources.role == 1 || edit.uuid === app.resources.uuid) && edit.teamUuids.length)') {{ui.profile.edit}}
 					hr
 					.row-fluid
 						.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
