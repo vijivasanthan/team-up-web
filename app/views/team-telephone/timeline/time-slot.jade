@@ -1,6 +1,7 @@
-div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views.member')
+div.time-slot-form(ng-init='removeReoccuringReachabilityForm = false',
+ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views.member')
 	form.form-inline.form-toggled.well
-		button.close(ng-click='refreshCurrentTimeline()') ×
+		button.close(ng-click='refreshCurrentTimeline(); removeReoccuringAll = null; removeReoccuringReachabilityForm = false;') ×
 		h4(ng-show='views.slot.add') {{ui.agenda.newAvail}} 
 			span.duration.label.label-info(ng-hide='browser.mobile') {{ duration}}
 		h4(ng-show='views.slot.edit') {{ui.agenda.updateAvail}} 
@@ -144,21 +145,43 @@ div.time-slot-form(ng-show='views.slot.add || views.slot.edit || views.group || 
 			ng-model='slot.wish')
 		.form-elements-group(ng-show='views.member')
 			small: i {{ui.agenda.combine_reoccuring}}
-		.form-elements-actions.pull-right
+		hr
+		.form-elements-actions
 			//div(ng-show='(slot.diff < 0)')
 			//	button.btn.btn-success(type='button',
 			//	ng-click='sendShortageMessage(slot)',
 			//	ng-hide='app.resources.role > 1') {{ui.agenda.sendMsgToMember}}
-			div(ng-show='views.slot.add')
+			div(ng-show='views.slot.add', style="float: right")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnAdd("true", slot)') {{ui.agenda.add}}
-			div(ng-show='views.slot.edit')
+			div(ng-show='views.slot.edit' style="width: 250px;float: right; text-align: right; position: relative;")
 				button.btn.btn-danger(type='button',
 				ng-click='timelineOnRemove()',
 				style='margin-right: 5px;') {{ui.agenda.del}}
+
+				div(class="popover am-fade bottom remove-reoccuring-reachability-form",
+				ng-show='removeReoccuringReachabilityForm',
+				ng-init='removeReoccuringAll = 1',
+				style="top: 29px; right: 15px; display: block;")
+					div(class="arrow")
+					div(class="popover-content")
+						p
+							strong Verwijder
+						div.radio(style="margin-bottom: 10px;")
+							label
+								input(type="radio" class="radioButton" value='1', name="reachability", ng-model='removeReoccuringAll')
+								i(style="margin-left: 5px;")  Alleen deze bereikbaarheid
+						div.radio(style="margin-bottom: 10px;")
+							label
+								input(type="radio" class="radioButton" value='2', name="reachability", ng-model='removeReoccuringAll')
+								i(style="margin-left: 5px;")  Alle herhaalde bereikbaarheid
+						button.btn.btn-danger.btn-sm(type='button', ng-click='toggleReoccuringReachabilityForm(removeReoccuringAll);') {{ui.agenda.del}}
+						button.btn.btn-default.btn-sm.btn-color-brown(type='button', ng-click='toggleReoccuringReachabilityForm(null);') {{ui.teamup.cancel}}
+					section(id="groups-wish")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
-			div(ng-show='views.wish')
+			div(ng-show='views.wish', style="float: right")
 				button.btn.btn-success(type='button',
 				ng-click='wisher(slot)')
 					| {{ui.agenda.setWish}}
+		div(style="clear: both;")

@@ -11,8 +11,8 @@ define(
       {
         // TODO: Define diff in the watcher maybe?
         var range,
-          diff,
-          newSlot = [];
+            diff,
+            newSlot = [];
 
         var visDataSet = new vis.DataSet();
         var visGroupsDataSet = new vis.DataSet();
@@ -312,11 +312,11 @@ define(
             for (var i = 1; i < 54; i++)
             {
               weekendBgs.push({
-                id: '' + m.year() + 'week' + i,
-                start: m.week(i).day(6).format('YYYY-MM-DD'),
-                end: m.add(2, 'days').format('YYYY-MM-DD'),
-                type: 'background'
-              });
+                                id: '' + m.year() + 'week' + i,
+                                start: m.week(i).day(6).format('YYYY-MM-DD'),
+                                end: m.add(2, 'days').format('YYYY-MM-DD'),
+                                type: 'background'
+                              });
             }
           }
 
@@ -332,10 +332,10 @@ define(
         function getUnixTimeStamps(slot)
         {
           var startDate = slot.start.date + " " + slot.start.time,
-            endDate = slot.end.date + " " + slot.end.time,
-            dateTimeFormat = 'DD-MM-YYYY HH:mm',
-            startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-            endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+              endDate = slot.end.date + " " + slot.end.time,
+              dateTimeFormat = 'DD-MM-YYYY HH:mm',
+              startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+              endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
           return {
             start: startUnixTimeStamp,
             end: endUnixTimeStamp
@@ -345,9 +345,9 @@ define(
         $scope.showDuration = function ()
         {
           var dates = getUnixTimeStamps($scope.slot),
-            duration = $filter('calculateDeltaTime')(dates.end, dates.start),
-            durationEl = angular.element('.duration'),
-            dangerClass = 'label-danger';
+              duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+              durationEl = angular.element('.duration'),
+              dangerClass = 'label-danger';
 
           $scope.duration = '';
 
@@ -459,7 +459,7 @@ define(
           updateSlot(newValue, oldValue, function(item, newValue)
           {
             item.end = moment(newValue + " " + $scope.slot.end.time,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
+                              config.app.formats.date + " " + config.app.formats.time).toDate();
             return item;
           });
         });
@@ -710,6 +710,7 @@ define(
                   }
                   else
                   {
+                    $scope.removeReoccuringAll = 1;
                     $rootScope.notifier.success($rootScope.ui.agenda.timeslotDeleted);
                     if (newSlot.length)
                     {
@@ -724,8 +725,8 @@ define(
                 };
 
                 var now = moment().valueOf(),
-                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
-                  changedEndDate = new Date(now - 10000);
+                    currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
+                    changedEndDate = new Date(now - 10000);
 
                 if ($scope.original.end <= now && $scope.original.recursive == false)
                 {
@@ -756,18 +757,53 @@ define(
                 }
                 else
                 {
+                  //check if the user likes to remove a recursive reachable Available slot
+                  if($scope.original.state === "com.ask-cs.State.Available" &&
+                    $scope.original.recursive &&
+                    $scope.removeReoccuringAll != 2)
+                  {
+                    $scope.removeReoccuringReachabilityForm = true;
+                    $scope.removeReoccuringAll = 1;
+
+                    //check if the digest cycle is running otherwise call
+                    if(!$scope.$$phase) {
+                      $scope.$digest();
+                    }
+                    return;
+                  }
                   $rootScope.statusBar.display($rootScope.ui.agenda.deletingTimeslot);
 
                   Slots.remove($scope.original, currentSlotUser)
-                    .then(
-                      function (result)
-                      {
-                        updateLoggedUser(currentSlotUser);
-                        successCallback(result)
-                      }
-                    );
+                       .then(
+                         function (result)
+                         {
+                           updateLoggedUser(currentSlotUser);
+                           successCallback(result);
+                         }
+                       );
                 }
               }
+            };
+
+            $scope.toggleReoccuringReachabilityForm = function (removeReoccuringAll)
+            {
+              $scope.removeReoccuringAll = removeReoccuringAll;
+
+              if($scope.removeReoccuringAll == 1)
+              {
+                //lala
+                var currentSlot = angular.copy($scope.slot);
+                currentSlot.state = 'com.ask-cs.State.Unavailable';
+                currentSlot.recursive = false;
+
+                $scope.timelineOnAdd("true", currentSlot, null, function()
+                {
+                  $rootScope.notifier.success("Er is een niet bereikbaar tijdslot toegevoegd op het tijdstip van het herhalende slot");
+                });
+              }
+              else if($scope.removeReoccuringAll == 2) $scope.timelineOnRemove();
+
+              $scope.removeReoccuringReachabilityForm = ! $scope.removeReoccuringReachabilityForm;
             };
 
             // add background behind axis
@@ -789,25 +825,25 @@ define(
             else
             {
               bgInterval = $window.setInterval(function ()
-              {
-                bgCount += 1;
-                axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
-                if (axisHeight === 0)
-                {
-                  if (bgCount > bgMax)
-                  {
-                    // don't set height, css has fallback
-                    document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
-                    $window.clearInterval(bgInterval);
-                    bgInterval = null;
-                  }
-                  return;
-                }
-                axisBg.style.height = axisHeight + 'px';
-                document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
-                $window.clearInterval(bgInterval);
-                bgInterval = null;
-              }, 50);
+                                               {
+                                                 bgCount += 1;
+                                                 axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
+                                                 if (axisHeight === 0)
+                                                 {
+                                                   if (bgCount > bgMax)
+                                                   {
+                                                     // don't set height, css has fallback
+                                                     document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
+                                                     $window.clearInterval(bgInterval);
+                                                     bgInterval = null;
+                                                   }
+                                                   return;
+                                                 }
+                                                 axisBg.style.height = axisHeight + 'px';
+                                                 document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
+                                                 $window.clearInterval(bgInterval);
+                                                 bgInterval = null;
+                                               }, 50);
               $rootScope.intervals = $rootScope.intervals || [];
               $rootScope.intervals.push(bgInterval);
             }
@@ -871,7 +907,7 @@ define(
           render: function (options, remember)
           {
             var start,
-              end;
+                end;
 
             var groupIds = {};
 
@@ -963,11 +999,11 @@ define(
               visDataSet.add(weekendBackgrounds);
 
               $scope.self.timeline.setOptions({
-                max: $scope.timeline.options.max,
-                min: $scope.timeline.options.min,
-                start: $scope.timeline.options.start,
-                end: $scope.timeline.options.end
-              });
+                                                max: $scope.timeline.options.max,
+                                                min: $scope.timeline.options.min,
+                                                start: $scope.timeline.options.start,
+                                                end: $scope.timeline.options.end
+                                              });
             }
             else
             {
@@ -1015,11 +1051,11 @@ define(
                   visDataSet.add(weekendBackgrounds);
 
                   $scope.self.timeline.setOptions({
-                    max: $scope.timeline.options.max,
-                    min: $scope.timeline.options.min,
-                    start: $scope.timeline.options.start,
-                    end: $scope.timeline.options.end
-                  });
+                                                    max: $scope.timeline.options.max,
+                                                    min: $scope.timeline.options.min,
+                                                    start: $scope.timeline.options.start,
+                                                    end: $scope.timeline.options.end
+                                                  });
 
                 }, timeout);
             }
@@ -1145,10 +1181,10 @@ define(
           {
             var tooltipVal = moment(props.snappedTime).format('DD-MM-YYYY || HH:mm');
             var element,
-              style,
-              update = false,
-              self = this,
-              what = props.what;
+                style,
+                update = false,
+                self = this,
+                what = props.what;
 
             if (this.tooltipValue && this.tooltipElement)
             {
@@ -1200,9 +1236,9 @@ define(
             if (window.requestAnimationFrame)
             {
               window.requestAnimationFrame(function ()
-              {
-                drawTooltip();
-              });
+                                           {
+                                             drawTooltip();
+                                           });
             }
             else
             {
@@ -1220,8 +1256,8 @@ define(
         function wish(id)
         {
           var deferred = $q.defer(),
-            count = 0,
-            end = moment().add(1, 'years').unix();
+              count = 0,
+              end = moment().add(1, 'years').unix();
 
           Slots.wishes(
             {
@@ -1269,13 +1305,13 @@ define(
         }
 
         $scope.$watch(function ()
-          {
-            return $scope.timeline.current.group;
-          },
-          function (currentTeamId)
-          {
-            wisher(currentTeamId);
-          });
+                      {
+                        return $scope.timeline.current.group;
+                      },
+                      function (currentTeamId)
+                      {
+                        wisher(currentTeamId);
+                      });
 
 
         /**
@@ -1329,11 +1365,11 @@ define(
         var groupSlots = function (periods)
         {
           var aggs = Slots.aggs({
-            id: $scope.timeline.current.group,
-            start: periods.start,
-            end: periods.end,
-            month: $scope.timeline.current.month
-          });
+                                  id: $scope.timeline.current.group,
+                                  start: periods.start,
+                                  end: periods.end,
+                                  month: $scope.timeline.current.month
+                                });
 
           var wishes = Slots.wishes(
             {
@@ -1343,12 +1379,12 @@ define(
             });
 
           return $q.all([aggs, wishes])
-            .then(
-              function (data)
-              {
-                return ({aggs: data[0], wishes: data[1]});
-              }
-            );
+                   .then(
+                     function (data)
+                     {
+                       return ({aggs: data[0], wishes: data[1]});
+                     }
+                   );
         };
 
         /**
@@ -1363,10 +1399,10 @@ define(
           };
 
           Teams.getTeamTelephoneOptions($scope.timeline.current.group)
-            .then(function (options)
-            {
-              fetchTeamTimelineData(section, periods);
-            });
+               .then(function (options)
+                     {
+                       fetchTeamTimelineData(section, periods);
+                     });
         };
 
         /**
@@ -1391,12 +1427,12 @@ define(
 
                 groupSlots(periods)
                   .then(function (data)
-                  {
-                    $scope.data.aggs = data.aggs;
-                    $scope.data.aggs.wishes = data.wishes;
-                    $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
-                    $rootScope.statusBar.off();
-                  });
+                        {
+                          $scope.data.aggs = data.aggs;
+                          $scope.data.aggs.wishes = data.wishes;
+                          $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                          $rootScope.statusBar.off();
+                        });
               }
               else
               {
@@ -1491,6 +1527,7 @@ define(
         $scope.selectedSlot = function (props)
         {
           var selectedItem = visDataSet.get(props.items[0]);
+          $scope.removeReoccuringReachabilityForm = false;
 
           $scope.original = {
             start: selectedItem.start,
@@ -1623,16 +1660,17 @@ define(
             $scope.self.timeline.setSelection(newSlot[0]);
             return;
           }
+
           // don't allow deletion if not own planning
           // other groups have a hyperlink
           else if (groupId && groupId.match('href='))
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: false,
-                updateTime: false
-              }
-            });
+                                              editable: {
+                                                remove: false,
+                                                updateTime: false
+                                              }
+                                            });
             $scope.self.timeline.setSelection(props.items[0]);
           }
           // if not a planner, the others don't have a hyperlink
@@ -1648,21 +1686,21 @@ define(
             && !groupId.match($rootScope.ui.planboard.weeklyPlanning))
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: false,
-                updateTime: false
-              }
-            });
+                                              editable: {
+                                                remove: false,
+                                                updateTime: false
+                                              }
+                                            });
             $scope.self.timeline.setSelection(props.items[0]);
           }
           else
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: true,
-                updateTime: true
-              }
-            });
+                                              editable: {
+                                                remove: true,
+                                                updateTime: true
+                                              }
+                                            });
 
           }
 
@@ -1757,7 +1795,7 @@ define(
         $scope.setAvailability = function (availability, period)
         {
           var now = Math.abs(Math.floor(moment().valueOf() / 1000)),
-            hour = 60 * 60;
+              hour = 60 * 60;
 
           var periods = {
             start: now,
@@ -1854,7 +1892,7 @@ define(
         $scope.setEndTime = function (startDate, startTime)
         {
           var dateFormat = 'DD-MM-YYYY',
-            timeFormat = 'HH:mm';
+              timeFormat = 'HH:mm';
 
           $scope.slot.end.time = moment(startDate + " " + startTime,
                                         dateFormat + " " + timeFormat).add(6, 'hours');
@@ -1873,7 +1911,7 @@ define(
           $rootScope.planboardSync.clear();
           var values, groupId, recursive;
           var now = moment().valueOf(),
-            nowStamp = Math.abs(Math.floor(now / 1000));
+              nowStamp = Math.abs(Math.floor(now / 1000));
 
           /**
            * Make view for new slot
@@ -2024,20 +2062,20 @@ define(
 
                   // make sure that the user can modify the element
                   $scope.self.timeline.setOptions({
-                    editable: {
-                      remove: true,
-                      updateTime: true
-                    }
-                  });
+                                                    editable: {
+                                                      remove: true,
+                                                      updateTime: true
+                                                    }
+                                                  });
 
                   //callback(item);
                   //update visDataSet with the new item
                   visDataSet.add(item);
 
                   $timeout(function ()
-                  {
-                    $scope.self.timeline.setSelection(id);
-                  });
+                           {
+                             $scope.self.timeline.setSelection(id);
+                           });
 
                 });
             }
@@ -2068,7 +2106,7 @@ define(
 
             var end = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
-                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
+              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
 
 
             if (typeof start == "undefined" ||
@@ -2134,9 +2172,10 @@ define(
                       updateLoggedUser($scope.timeline.user.id);
                       $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
                     }
+                    //nana
                     newSlot = [];
+                    (callback && callback());
                     $scope.timeliner.refresh();
-
                     $rootScope.planboardSync.start();
                   }
                 );
@@ -2415,18 +2454,15 @@ define(
          */
         $scope.wisher = function (slot)
         {
-          var wishAmount = parseInt(slot.wish);
-          if(! (wishAmount >= 0 && wishAmount <= 30) ) return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
-
           $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
           var formattedSlot = {
             id: slot.groupId,
             start: ($rootScope.browser.mobile) ?
-              new Date(slot.start.datetime).getTime() / 1000 :
+            new Date(slot.start.datetime).getTime() / 1000 :
               moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
             end: ($rootScope.browser.mobile) ?
-              new Date(slot.end.datetime).getTime() / 1000 :
+            new Date(slot.end.datetime).getTime() / 1000 :
               moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
             recursive: (!_.isUndefined(slot.recursive)),
             wish: slot.wish

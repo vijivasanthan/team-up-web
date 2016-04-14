@@ -35,10 +35,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								span.badge.badge-inset
 									| {{wish}}
 								| &nbsp;{{ui.agenda.requiredPeople}}
-							
-								
-						br(ng-show='browser.mobile')
-						br(ng-show='browser.mobile')
+						
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
 							//.btn-group(ng-show='timeline.current.layouts.group')

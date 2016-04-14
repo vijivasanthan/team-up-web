@@ -576,32 +576,57 @@ define(
 
     directives.directive(
       'setPositionSlotForm',
-      function ($window)
+      function ($rootScope, $window)
       {
         return {
           restrict: 'A',
           link: function (scope, element, attrs)
           {
-            element.on('click',
-              function (ev)
-              {
-                var footer = angular.element('#footer').height(),
-                  form = angular.element('.time-slot-form'),
-                  modal = form.height(),
-                  slot = 110,
+            ($rootScope.browser.mobile)
+              ? element.bind('touchstart click', moveFormToSLotMobile)
+              : element.bind('mousedown', moveFormToSLot);
 
-                  minNeededHeight = (modal + slot),
-                  clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+
+            function moveFormToSLotMobile(ev)
+            {
+              var footer = angular.element('#footer').height(),
+                  form = angular.element('.time-slot-form'),
+                  modal = form.css('min-height'),
+                  slot = 170,
+                  minNeededHeight = (parseInt(modal) + slot),
+                  clickY = (ev.originalEvent.touches[0].clientY + $window.pageYOffset),//(current view y + scroll top height)
                   heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
-                  position = (minNeededHeight > ev.clientY)
+                  position = (minNeededHeight > ev.originalEvent.touches[0].clientY)
                     ? clickY
-                    : (clickY - minNeededHeight);
+                    : ((clickY - ev.target.offsetHeight) - minNeededHeight);
+              form.hide();
+
+              //TODO FIx position bottom
+              //The height needed for the modal is less then the height in the current view
+              form.css('top', position + 'px').show();
+            }
+
+            function moveFormToSLot(ev)
+            {
+              if(ev.target.className === "vis-item-content")
+              {
+                var form = angular.element('.time-slot-form'),
+                    footer = angular.element('#footer').height(),
+                    modal = form.css('min-height'),
+                    slot = 140,
+                    minNeededHeight = (parseInt(modal) + slot),
+                    clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+                    heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
+                    position = (minNeededHeight > ev.clientY)
+                      ? clickY
+                      : (clickY - minNeededHeight);
+                form.hide();
 
                 //TODO FIx position bottom
                 //The height needed for the modal is less then the height in the current view
-                form.css('top', position + 'px');
+                form.css('top', position + 'px').show();
               }
-            );
+            }
           }
         };
       }
