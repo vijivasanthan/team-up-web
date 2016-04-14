@@ -791,8 +791,18 @@ define(
 
               if($scope.removeReoccuringAll == 1)
               {
-                //lala
+                //set the currentslot back to it's original state and make it non recursive
                 var currentSlot = angular.copy($scope.slot);
+                currentSlot.start = {
+                  date: moment($scope.original.start).format(config.app.formats.date),
+                    time: moment($scope.original.start).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal($scope.original.start)
+                };
+                currentSlot.end = {
+                  date: moment($scope.original.end).format(config.app.formats.date),
+                    time: moment($scope.original.end).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal($scope.original.end)
+                };
                 currentSlot.state = 'com.ask-cs.State.Unavailable';
                 currentSlot.recursive = false;
 
