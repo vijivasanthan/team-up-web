@@ -236,9 +236,7 @@ define(
             if( member.firstName[index] )
             {
               member.teamUuids = [teamId];
-              member.uuid      = ((member.firstName[index] + _.random(1, 1000))
-                                    .match(/([A-Za-z0-9-_])/g))
-                                    .join("");//member.email[index];
+              member.uuid      = member.email[index];
               member.userName  = member.uuid;
               member.role      = 2;
 
