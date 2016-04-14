@@ -166,15 +166,15 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 					div(class="arrow")
 					div(class="popover-content")
 						p
-							strong Verwijder
+							strong {{ ui.timeline.removeReoccuring }}
 						div.radio(style="margin-bottom: 10px;")
 							label
 								input(type="radio" class="radioButton" value='1', name="reachability", ng-model='removeReoccuringAll')
-								i(style="margin-left: 5px;")  Alleen deze bereikbaarheid
+								i(style="margin-left: 5px;")  {{ ui.timeline.onlySingleReoccuringSlot }}
 						div.radio(style="margin-bottom: 10px;")
 							label
 								input(type="radio" class="radioButton" value='2', name="reachability", ng-model='removeReoccuringAll')
-								i(style="margin-left: 5px;")  Alle herhaalde bereikbaarheid
+								i(style="margin-left: 5px;")  {{ ui.timeline.allReocurringSlots }} 
 						button.btn.btn-danger.btn-sm(type='button', ng-click='toggleReoccuringReachabilityForm(removeReoccuringAll);') {{ui.agenda.del}}
 						button.btn.btn-default.btn-sm.btn-color-brown(type='button', ng-click='toggleReoccuringReachabilityForm(null);') {{ui.teamup.cancel}}
 					section(id="groups-wish")

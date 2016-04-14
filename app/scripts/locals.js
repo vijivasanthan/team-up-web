@@ -212,6 +212,10 @@ define(
           buttonPushed: 'button pushed simultaneously.'
         },
         timeline: {
+          removeReoccuring: "Remove",
+          onlySingleReoccuringSlot: "Only this reachability",
+          allReocurringSlots : "Every reoccuring reachability",
+          removingSingleReoccuringSlot: "There is a slot with the state of non reachable added, on the same time as the reoccuring slot",
           query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
           pastAdding: 'It is not allowed to add a timeslot in the past!',
           swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
@@ -1341,6 +1345,10 @@ define(
           buttonPushed: 'gedrückter linker Maustaste.'
         },
         timeline: {
+          removeReoccuring: "Remove",
+          onlySingleReoccuringSlot: "Only this reachability",
+          allReocurringSlots : "Every reoccuring reachability",
+          removingSingleReoccuringSlot: "There is a slot with the state of non reachable added, on the same time as the reoccuring slot",
           query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
           pastAdding: 'It is not allowed to add a timeslot in the past!',
           swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
@@ -2669,6 +2677,10 @@ define(
           buttonPushed: 'knop tegelijkertijd ingedrukt.'
         },
         timeline: {
+          removeReoccuring: "Verwijder",
+          onlySingleReoccuringSlot: "Alleen deze bereikbaarheid",
+          allReocurringSlots : "Alle herhaalde bereikbaarheid",
+          removingSingleReoccuringSlot: "Er is een niet bereikbaar tijdslot toegevoegd op het tijdstip van het herhalende slot",
           query: 'Fout bij het laden van de tijdlijndata. Vernieuw deze webpagina om het nogmaals te proberen.',
           pastAdding: 'Invoer van tijden in het verleden is niet toegestaan!',
           swappedStartEnd: 'De eindtijd is eerder dan de starttijd. Zijn de start- en eindtijd omgewisseld?',

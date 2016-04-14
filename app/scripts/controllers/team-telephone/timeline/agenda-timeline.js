@@ -798,7 +798,7 @@ define(
 
                 $scope.timelineOnAdd("true", currentSlot, null, function()
                 {
-                  $rootScope.notifier.success("Er is een niet bereikbaar tijdslot toegevoegd op het tijdstip van het herhalende slot");
+                  $rootScope.notifier.success($rootScope.ui.timeline.removingSingleReoccuringSlot);
                 });
               }
               else if($scope.removeReoccuringAll == 2) $scope.timelineOnRemove();
