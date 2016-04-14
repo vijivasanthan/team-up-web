@@ -83,13 +83,13 @@ aria-hidden='true')
 			ng-options='c.id as c.name for c in clientGroups | orderBy:"name"',
 			ng-selected='current',
 			ng-change='requestClientGroup(current)')
-			
+
 .tabbable.tabs-left
 
 	ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0px;')
 
 		li(class="{{(views.client==true || views.viewClient==true || views.editClient) && 'active'}}",
-			ng-show='data.clientGroups.length')
+		ng-show='data.clientGroups.length')
 			a(data-toggle='tab',
 			ng-click='setViewTo("client")')
 				span.icomoon(data-icon='',
@@ -104,7 +104,7 @@ aria-hidden='true')
 				| {{ui.teamup.newClientGroup}} 
 
 		li(class="{{(views.newClient==true) && 'active'}}",
-			ng-show='data.clientGroups.length')
+		ng-show='data.clientGroups.length')
 			a(data-toggle='tab',
 			ng-click='setViewTo("newClient")')
 				span.icomoon(data-icon='',
@@ -127,7 +127,7 @@ aria-hidden='true')
 			.tab-header(ng-hide='views.editClientGroup')
 				h3.pull-left {{clientGroup.name}} 
 				button.btn.pull-right.btn-info.marginLeftTen(type='button',
-					ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
+				ng-click='confirmDeleteClientGroup()') {{ui.teamup.del}}
 				//button.btn.pull-right.btn-info(type='button',
 				//	ng-click='editClientGroup(clientGroup)') 
 				//		| {{ui.teamup.edit}}
@@ -227,7 +227,7 @@ aria-hidden='true')
 								input.form-control(type='text',
 								name='birthdate',
 								required,
-								ng-model='clientForm.birthDate', 
+								ng-model='clientForm.birthDate',
 								data-date-type='string',
 								data-date-format='d-M-yyyy',
 								data-max-date="today"
@@ -236,7 +236,7 @@ aria-hidden='true')
 								p.text-danger(ng-show='newClientForm.birthdate.$invalid && !newClientForm.birthdate.$pristine')
 									small
 										i {{ui.validation.birthDate.notValid }}
-										
+
 					.control-group
 						label.control-label {{ui.teamup.phone}}
 						.controls
@@ -253,10 +253,10 @@ aria-hidden='true')
 						label.control-label {{ui.profile.email}} 
 						.controls
 							input.span4.form-control(
-								type='text',
-								name='email',
-								ng-model='clientForm.email',
-								ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
+							type='text',
+							name='email',
+							ng-model='clientForm.email',
+							ng-pattern=/^([A-z0-9-]+(?:\.[A-z0-9-]+)*)@((?:[A-z0-9-]+\.)*[A-z0-9-]{1,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i)
 						span.help-block(ng-show='!newClientForm.email.$pristine && newClientForm.email.$error.pattern')
 							small(ng-show="newClientForm.email.$error")
 								i
@@ -265,10 +265,10 @@ aria-hidden='true')
 						label.control-label {{ui.profile.newPass}} 
 						.controls
 							input.span4.form-control(type='password',
-								ng-model='clientForm.password',
-								name='password',
-								ng-minlength="8",
-								ng-maxlength="20")
+							ng-model='clientForm.password',
+							name='password',
+							ng-minlength="8",
+							ng-maxlength="20")
 							span.help-block(ng-show='newClientForm.password.$invalid && !newClientForm.password.$pristine')
 								small
 									i
@@ -283,9 +283,9 @@ aria-hidden='true')
 						label.control-label {{ui.profile.newPassRepeat}}
 						.controls
 							input.span4(type='password',
-								ng-model='clientForm.reTypePassword',
-								name="reTypePassword",
-								matchField="clientForm.password")
+							ng-model='clientForm.reTypePassword',
+							name="reTypePassword",
+							matchField="clientForm.password")
 							span.help-block(ng-show='(clientForm.reTypePassword !== clientForm.password) && !newClientForm.newRepeat.$pristine')
 								small
 									i
@@ -329,21 +329,20 @@ aria-hidden='true')
 				div.pull-left
 					| {{ui.teamup.clients}}:
 					// ng-options="c.uuid as c.firstName+' '+c.lastName for c in clients"
-					select(ng-init='currentCLient=0',
-					ng-model='currentCLient',
+					select(ng-model='currentCLient',
 					ng-selected='currentCLient',
 					ng-change='requestReportsByFilter()')
 						option(value='0') {{ui.teamup.selectClient}}
 						option(ng-repeat='client in clients',
 						value='{{client.uuid}}') {{client.firstName}} {{client.lastName}}
-	
+
 					| &nbsp;&nbsp;&nbsp;&nbsp;{{ui.planboard.month}}:
 					select(ng-model='currentMonth',
-						ng-change='requestReportsByFilter()',
-						ng-options='month.number as month.name for month in Months')
+					ng-change='requestReportsByFilter()',
+					ng-options='month.number as month.name for month in Months')
 						option(value="" selected="selected" label="{{ ui.teamup.selectMonth }}") {{ ui.teamup.selectMonth }}
-				button.btn.pull-right.btn-info.marginLeftTen(type='button', 
-					data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
+				button.btn.pull-right.btn-info.marginLeftTen(type='button',
+				data-animation='', data-ng-click='newReport()') {{ui.teamup.newReport}}
 			hr
 			div(ng-show='groupReports.length > 0')
 				table.table.table-striped
@@ -399,13 +398,13 @@ aria-hidden='true')
 							span(ng-show='! client.clientGroupUuid') {{ ui.teamup.noClientGroup }}
 						dt {{ui.profile.birthday}}
 						dd {{client.birthDate}}
-							
+
 						dt {{ui.teamup.phone}}
 						dd {{client.phone}}
-						
+
 						dt(ng-if="client.email") {{ui.teamup.email}}
 						dd(ng-if="client.email") {{client.email}}
-						
+
 						dt(ng-show="client.address") {{ui.profile.address}}
 						dd(ng-show="client.address")
 							| {{[client.address.street, client.address.no, client.address.city, client.address.country] | commaSeperated }}
@@ -488,7 +487,7 @@ aria-hidden='true')
 								button.btn.btn-success.ng-binding(type='submit',
 								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
 				span.muted.pull-right
-					small: i {{ ui.teamup.amountContacts((contacts|filter:filtered).length) }}
+					small: i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
 
 			.tab-header(ng-show='app.domainPermission.clientReports')
 				h3.pull-left {{ui.teamup.reports}}
@@ -526,7 +525,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{ ui.teamup.amountReports((reports|filter:filtered).length) }}
+						i {{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
 
 
 		.tab-pane(ng-show='views.editClient',

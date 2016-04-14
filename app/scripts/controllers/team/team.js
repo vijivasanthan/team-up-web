@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'team',
-      function ($location, $interval, Team)
+      function ($location, Team)
       {
         //view model
         var self = this;
