@@ -110,4 +110,4 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 												span.icomoon(data-icon='')
 					span.muted.pull-right(ng-show='member.searchResults.length > 0')
 						small
-							i {{ member.searchResults.length | i18n_spec:'groups.memberCount'}}
+							i {{ ui.groups.amountMembers(member.searchResults.length) }}
