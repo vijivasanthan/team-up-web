@@ -372,7 +372,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{ ui.groups.amountContacts((groupReports|filter: {filtered:"false"}).length) }}
+						i {{ ui.teamup.amountReports((groupReports|filter: {filtered:"false"}).length) }}
 
 
 
@@ -486,7 +486,7 @@ aria-hidden='true')
 								button.btn.btn-success.ng-binding(type='submit',
 								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
 				span.muted.pull-right
-					small: i {{ ui.groups.amountContacts((contacts|filter:filtered).length) }}
+					small: i {{ ui.teamup.amountContacts((contacts|filter:filtered).length) }}
 
 			.tab-header(ng-show='app.domainPermission.clientReports')
 				h3.pull-left {{ui.teamup.reports}}
@@ -524,7 +524,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{ ui.groups.amountContacts((reports|filter:filtered).length) }}
+						i {{ui.teamup.amountReports((reports|filter:filtered).length) }}
 
 
 		.tab-pane(ng-show='views.editClient',

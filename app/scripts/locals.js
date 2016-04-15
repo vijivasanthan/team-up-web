@@ -2974,7 +2974,7 @@ define(
           {
             return (amountReports == 1)
               ? "Er is " + amountReports + " rapport."
-              : "Er is " + amountReports + " rapports.";
+              : "Er zijn " + amountReports + " rapporten.";
           },
           amountContacts: function(amountContacts)
           {
