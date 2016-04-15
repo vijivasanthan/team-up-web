@@ -1878,12 +1878,12 @@ $step: 7;
       }
     }
 
-    @for $i from 1 through $wishMax{
+    @for $i from 1 through 30{
       &.wishes-#{$i} {
         z-index: $i;
-        background-color: darken(#b1dbed, ($step * $i));
+        background-color: darken(#b1dbed, (3 * $i));
         &:hover {
-          background-color: darken(#b1dbed, (($step * $i) - 2));//- $step))
+          background-color: darken(#b1dbed, ((3 * $i) - 2));//- $step))
         }
       }
     }
