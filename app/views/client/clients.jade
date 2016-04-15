@@ -185,7 +185,7 @@ aria-hidden='true')
 								ng-click='deleteClient(_clientId)') {{ uit.agenda.del }}
 				span.muted.pull-right
 					small
-						i {{(data.clients[clientGroup.id]|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+						i {{ ui.groups.amountMembers((data.clients[clientGroup.id]|filter:filtered).length) }}
 
 
 		#newClientGroupTab.tab-pane(class="{{(views.newClientGroup==true) && 'active'}}")
@@ -372,8 +372,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{(groupReports|filter: {filtered:"false"}).length | i18n_spec:'teamup.reportCount'}}
-
+						i {{ ui.groups.amountContacts((groupReports|filter: {filtered:"false"}).length) }}
 
 
 
@@ -487,7 +486,7 @@ aria-hidden='true')
 								button.btn.btn-success.ng-binding(type='submit',
 								ng-click='saveContacts(contacts)') {{ui.teamup.saveContacts}}
 				span.muted.pull-right
-					small: i {{(contacts|filter:filtered).length | i18n_spec:'teamup.contactCount'}}
+					small: i {{ ui.groups.amountContacts((contacts|filter:filtered).length) }}
 
 			.tab-header(ng-show='app.domainPermission.clientReports')
 				h3.pull-left {{ui.teamup.reports}}
@@ -525,7 +524,7 @@ aria-hidden='true')
 										i.icon-trash
 				span.muted.pull-right
 					small
-						i {{(reports|filter:filtered).length | i18n_spec:'teamup.reportCount'}}
+						i {{ ui.groups.amountContacts((reports|filter:filtered).length) }}
 
 
 		.tab-pane(ng-show='views.editClient',
