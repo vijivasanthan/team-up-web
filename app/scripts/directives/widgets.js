@@ -584,7 +584,7 @@ define(
           {
             ($rootScope.browser.mobile)
               ? element.bind('touchstart click', moveFormToSLotMobile)
-              : element.bind('mousedown', moveFormToSLot);
+              : element.bind('mousedown dblclick', moveFormToSLot);
 
 
             function moveFormToSLotMobile(ev)
@@ -608,24 +608,21 @@ define(
 
             function moveFormToSLot(ev)
             {
-              if(ev.target.className === "vis-item-content")
-              {
-                var form = angular.element('.time-slot-form'),
-                    footer = angular.element('#footer').height(),
-                    modal = form.css('min-height'),
-                    slot = 140,
-                    minNeededHeight = (parseInt(modal) + slot),
-                    clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
-                    heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
-                    position = (minNeededHeight > ev.clientY)
-                      ? clickY
-                      : (clickY - minNeededHeight);
-                form.hide();
+              var form = angular.element('.time-slot-form'),
+                  footer = angular.element('#footer').height(),
+                  modal = form.css('min-height'),
+                  slot = (ev.target.className === "vis-item-content") ? 140 : 170,
+                  minNeededHeight = (parseInt(modal) + slot),
+                  clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
+                  heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
+                  position = (minNeededHeight > ev.clientY)
+                    ? clickY
+                    : (clickY - minNeededHeight);
+              form.hide();
 
-                //TODO FIx position bottom
-                //The height needed for the modal is less then the height in the current view
-                form.css('top', position + 'px').show();
-              }
+              //TODO FIx position bottom
+              //The height needed for the modal is less then the height in the current view
+              form.css('top', position + 'px').show();
             }
           }
         };

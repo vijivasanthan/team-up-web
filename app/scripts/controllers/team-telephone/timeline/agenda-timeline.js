@@ -331,11 +331,12 @@ define(
 
         function getUnixTimeStamps(slot)
         {
-          var startDate = slot.start.date + " " + slot.start.time,
-              endDate = slot.end.date + " " + slot.end.time,
-              dateTimeFormat = 'DD-MM-YYYY HH:mm',
+          var startDate          = slot.start.date + " " + slot.start.time,
+              endDate            = slot.end.date + " " + slot.end.time,
+              dateTimeFormat     = 'DD-MM-YYYY HH:mm',
               startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-              endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+              endUnixTimeStamp   = moment(endDate, dateTimeFormat).valueOf();
+
           return {
             start: startUnixTimeStamp,
             end: endUnixTimeStamp
@@ -344,8 +345,14 @@ define(
 
         $scope.showDuration = function ()
         {
-          var dates = getUnixTimeStamps($scope.slot),
-              duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+          var dates = (! $rootScope.browser.mobile)
+                ? getUnixTimeStamps($scope.slot)
+                : {
+                    start: moment($scope.slot.start.datetime).valueOf(),
+                    end: moment($scope.slot.end.datetime).valueOf()
+                  };
+
+              var duration = $filter('calculateDeltaTime')(dates.end, dates.start),
               durationEl = angular.element('.duration'),
               dangerClass = 'label-danger';
 
