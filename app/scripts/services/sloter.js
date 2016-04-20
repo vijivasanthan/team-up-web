@@ -83,7 +83,7 @@ define(['services/services', 'config'],
                    {
                      return moment(stamp * 1000).format(config.app.formats.datetime);
                    };
-
+                   
                    var content = convertTimestamp(periods.start) + ' / ' +
                      convertTimestamp(periods.end);
 
@@ -110,10 +110,14 @@ define(['services/services', 'config'],
                      content += ' / ' + periods.state;
                    }
 
-                   if(tooltips){
+                   //if(angular.element('.vis-item-content').hasClass('slot-tooltip'))
+                   //{
+                   //
+                   //}
+                   if(tooltips)
+                   {
                      content += '<div class="slot-tooltip slot-tooltip--start">' + startTooltip + '</div>';
                      content += '<div class="slot-tooltip slot-tooltip--end">' + endTooltip + '</div>';
-
                      return '<div class="time-tip">' + content + '</div>';
                    }
 
@@ -352,10 +356,10 @@ define(['services/services', 'config'],
                                          end: Math.round(slot.end * 1000),
                                          group: name,
                                          groupName: (this.get.groups())[data.aggs[0].id],
-                                         content: this.tooltip({ start: slot.start, end: slot.end, min: slot.wish + slot.diff }),
+                                         content: this.tooltip({ start: slot.start, end: slot.end, min: slot.wish + slot.diff }, true),
                                          itemType: 'group',
                                          diff: slot.diff,
-                                         className: 'agg-' + cn,
+                                         className: 'agg-' + cn + ' has-hover-slot-tooltip',
                                          editable: false
                                        });
                        }
@@ -396,10 +400,10 @@ define(['services/services', 'config'],
                               end: Math.round(wish.end * 1000),
                               group: title,
                               groupName: name,
-                              content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }) +
+                              content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }, true) +
                               '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
                               itemType: 'wish',
-                              className: cn,
+                              className: cn + ' has-hover-slot-tooltip',
                               groupId: data.aggs[0].id,
                               wish: wish.count,
                               editable: false
@@ -478,7 +482,7 @@ define(['services/services', 'config'],
                                                   start: Math.round(slot.start * 1000),
                                                   end: Math.round(slot.end * 1000),
                                                   group: link,
-                                                  content: this.tooltip(tooltip),
+                                                  content: this.tooltip(tooltip, true),
                                                   // TODO: Check if slot.id is ever used,
                                                   // when logging, it's always undefined.
                                                   // It's provided as slotId in case it's needed
@@ -488,7 +492,7 @@ define(['services/services', 'config'],
                                                   mid: member.id,
                                                   recursive: slot.recursive,
                                                   state: slot.text,
-                                                  className: config.states[slot.text].className,
+                                                  className: config.states[slot.text].className + ' has-hover-slot-tooltip',
                                                   editable: false
                                                 });
                                 }

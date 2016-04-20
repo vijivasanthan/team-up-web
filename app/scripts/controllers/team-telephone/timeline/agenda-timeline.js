@@ -370,75 +370,6 @@ define(
           $scope.duration += duration;
         };
 
-        /**
-         * TODO: Stress-test this!
-         * Hot fix against not-dom-ready problem for timeline
-         */
-        if ($scope.timeline && $scope.timeline.main)
-        {
-          setTimeout(
-            function ()
-            {
-              $scope.self.timeline.redraw()
-            },
-            config.app.timers.TICKER
-          );
-        }
-
-        $rootScope.intervals = $rootScope.intervals || [];
-
-        /**
-         * Background sync in every 60 sec
-         */
-        $rootScope.planboardSync = {
-          /**
-           * Start planboard sync
-           */
-          start: function ()
-          {
-            $window.planboardSync = $window.setInterval(
-              function ()
-              {
-                /**
-                 * Update planboard only in planboard is selected
-                 */
-                if ($location.path() == '/team-telefoon')
-                {
-                  $scope.slot = {};
-
-                  $rootScope.$broadcast('resetPlanboardViews');
-
-                  $scope.timeliner.load(
-                    {
-                      start: $scope.data.periods.start,
-                      end: $scope.data.periods.end
-                    },
-                    true
-                  );
-                }
-              }, config.app.timers.PLANBOARD_SYNC);
-
-            // Record interval for cleanup when switching controllers
-            $rootScope.intervals.push($window.planboardSync);
-          },
-
-          /**
-           * Clear planboard sync
-           */
-          clear: function ()
-          {
-            var index;
-            $window.clearInterval($window.planboardSync);
-
-            index = $rootScope.intervals.indexOf($window.planboardSync);
-            if(index !== -1){
-              $rootScope.intervals.splice(index, 1);
-            }
-
-            $window.planboardSync = null;
-          }
-        };
-
         $scope.$watch('slot.state', function (newValue, oldValue)
         {
           updateSlot(newValue, oldValue, function(item, newValue)
@@ -547,53 +478,6 @@ define(
             }
           }
         }
-
-        /**
-         * Timeline on changing
-         */
-        $scope.timelineChanging = function (item, callback)
-        {
-          if(/<\/?[^>]*>/.test(item.group) ) callback(null);
-          else
-          {
-            $scope.$apply(
-              function ()
-              {
-                $rootScope.planboardSync.clear();
-
-                item.content = Sloter.tooltip({
-                                                start: moment(item.start).unix(),
-                                                end: moment(item.end).unix()
-                                              }, true);
-
-                // change hover tooltip to constant tooltip
-                if (item.className)
-                { // won't have if created by ctrl/shift-drag
-                  item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
-                }
-
-                $scope.slot = {
-                  start: {
-                    date: moment(item.start).format(config.app.formats.date),
-                    time: moment(item.start).format(config.app.formats.time),
-                    datetime: convertDateTimeToLocal(item.start)
-                  },
-                  end: {
-                    date: moment(item.end).format(config.app.formats.date),
-                    time: moment(item.end).format(config.app.formats.time),
-                    datetime: convertDateTimeToLocal(item.end)
-                  },
-                  state: item.state,
-                  recursive: item.recursive,
-                  id: item.id
-                };
-                $scope.showDuration();
-
-                callback(item);
-              }
-            );
-          }
-        };
 
         /**
          * Timeliner listener
@@ -1640,6 +1524,53 @@ define(
           return selectedItem;
         };
 
+        /**
+         * Timeline on changing
+         */
+        $scope.timelineChanging = function (item, callback)
+        {
+          $rootScope.planboardSync.clear();
+          var values = item;
+
+          $scope.$apply(
+            function ()
+            {
+              item.content = _.random(0, 100).toString();
+
+                //Sloter.tooltip({
+                //                 start: moment(item.start).unix(),
+                //                 end: moment(item.end).unix()
+                //               }, true);
+
+              // change hover tooltip to constant tooltip
+              if (item.className)
+              { // won't have if created by ctrl/shift-drag
+                item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
+              }
+
+              console.error("item ->", item);
+              callback(item);
+
+              $scope.slot = {
+                start: {
+                  date: moment(values.start).format(config.app.formats.date),
+                  time: moment(values.start).format(config.app.formats.time),
+                  datetime: convertDateTimeToLocal(values.start)
+                },
+                end: {
+                  date: moment(values.end).format(config.app.formats.date),
+                  time: moment(values.end).format(config.app.formats.time),
+                  datetime: convertDateTimeToLocal(values.end)
+                },
+                state: values.state,
+                recursive: values.recursive,
+                id: values.id
+              };
+              //$scope.showDuration();
+            }
+          );
+        };
+
 
         /**
          * Timeline on select
@@ -2058,11 +1989,12 @@ define(
                     item.end = $scope.slot.end.datetime;
                   }
 
-                  item.content = Sloter.tooltip({
-                                                  start: moment(item.start).unix(),
-                                                  end: moment(item.end).unix()
-                                                }, true);
+                  //item.content = Sloter.tooltip({
+                  //                                start: moment(item.start).unix(),
+                  //                                end: moment(item.end).unix()
+                  //                              }, true);
 
+                  console.error("item.content ->", item.content);
                   $scope.showDuration();
 
                   $scope.original = {
@@ -2608,6 +2540,81 @@ define(
             );
           }
         }
+
+        /**
+         * TODO: Stress-test this!
+         * Hot fix against not-dom-ready problem for timeline
+         */
+        if ($scope.timeline && $scope.timeline.main)
+        {
+          setTimeout(
+            function ()
+            {
+              $scope.self.timeline.redraw()
+            },
+            config.app.timers.TICKER
+          );
+        }
+
+        $rootScope.intervals = $rootScope.intervals || [];
+
+        /**
+         * Background sync in every 60 sec
+         */
+        $rootScope.planboardSync = {
+          /**
+           * Start planboard sync
+           */
+          start: function ()
+          {
+            $window.planboardSync = $window.setInterval(
+              function ()
+              {
+                /**
+                 * Update planboard only in planboard is selected
+                 */
+                if ($location.path() == '/team-telefoon')
+                {
+                  $scope.slot = {};
+
+                  $rootScope.$broadcast('resetPlanboardViews');
+
+                  $scope.timeliner.load(
+                    {
+                      start: $scope.data.periods.start,
+                      end: $scope.data.periods.end
+                    },
+                    true
+                  );
+                }
+              }, config.app.timers.PLANBOARD_SYNC);
+
+            // Record interval for cleanup when switching controllers
+            $rootScope.intervals.push($window.planboardSync);
+          },
+
+          /**
+           * Clear planboard sync
+           */
+          clear: function ()
+          {
+            var index;
+            $window.clearInterval($window.planboardSync);
+
+            index = $rootScope.intervals.indexOf($window.planboardSync);
+            if(index !== -1){
+              $rootScope.intervals.splice(index, 1);
+            }
+
+            $window.planboardSync = null;
+          }
+        };
+
+        /**
+         * Start planboard sync
+         */
+        $rootScope.planboardSync.start();
+
       });
   }
 );
