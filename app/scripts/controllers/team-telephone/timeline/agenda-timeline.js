@@ -381,83 +381,6 @@ define(
           });
         });
 
-
-        $scope.$watch('slot.start.date', function (newValue, oldValue)
-        {
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.start = moment(newValue + " " + $scope.slot.start.time,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.date', function (newValue, oldValue)
-        {
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment(newValue + " " + $scope.slot.end.time,
-                              config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.start.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.start = moment($scope.slot.start.date + " " + newValue,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment($scope.slot.end.date + " " + newValue,
-                              config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment($scope.slot.end.date + " " + newValue,
-                              config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        if($rootScope.browser.mobile)
-        {
-          $scope.$watch('slot.start.datetime', function (newValue, oldValue)
-          {
-            //update day if the hour is midnight
-            updateSlot(newValue, oldValue, function(item, newValue)
-            {
-              item.start = moment(newValue).toDate();
-              return item;
-            });
-          });
-
-          $scope.$watch('slot.end.datetime', function (newValue, oldValue)
-          {
-            //update day if the hour is midnight
-            updateSlot(newValue, oldValue, function(item, newValue)
-            {
-              item.end = moment(newValue).toDate();
-              return item;
-            });
-          });
-        }
-
         function updateSlot(newValue, oldValue, callback)
         {
           var ids, item;
@@ -478,6 +401,30 @@ define(
             }
           }
         }
+
+        $scope.redrawSlot = function (slot)
+        {
+          var start = ($rootScope.browser.mobile)
+            ?   +moment($scope.slot.start.datetime)
+            :   +moment($scope.slot.start.date +' '+ $scope.slot.start.time, config.app.formats.datetime);
+          var end = ($rootScope.browser.mobile)
+            ?   +moment($scope.slot.end.datetime)
+            :   +moment($scope.slot.end.date +' '+ $scope.slot.end.time, config.app.formats.datetime);
+
+          var selectedSlot = $scope.self.timeline.getSelection()[0] || slot.id;
+
+          if (selectedSlot)
+          {
+            var item = visDataSet.get(selectedSlot);
+            item.start = start;
+            item.end = end;
+            item.content = Sloter.tooltip({
+              start: moment(item.start).unix(),
+              end: moment(item.end).unix()
+            }, true);
+            visDataSet.update(item);
+          }
+        };
 
         /**
          * Timeliner listener
@@ -1535,12 +1482,10 @@ define(
           $scope.$apply(
             function ()
             {
-              item.content = _.random(0, 100).toString();
-
-                //Sloter.tooltip({
-                //                 start: moment(item.start).unix(),
-                //                 end: moment(item.end).unix()
-                //               }, true);
+              item.content = Sloter.tooltip({
+                                 start: moment(item.start).unix(),
+                                 end: moment(item.end).unix()
+                               }, true);
 
               // change hover tooltip to constant tooltip
               if (item.className)
@@ -1548,7 +1493,6 @@ define(
                 item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
               }
 
-              console.error("item ->", item);
               callback(item);
 
               $scope.slot = {
@@ -1566,7 +1510,7 @@ define(
                 recursive: values.recursive,
                 id: values.id
               };
-              //$scope.showDuration();
+              $scope.showDuration();
             }
           );
         };
@@ -1989,12 +1933,11 @@ define(
                     item.end = $scope.slot.end.datetime;
                   }
 
-                  //item.content = Sloter.tooltip({
-                  //                                start: moment(item.start).unix(),
-                  //                                end: moment(item.end).unix()
-                  //                              }, true);
+                  item.content = Sloter.tooltip({
+                                                  start: moment(item.start).unix(),
+                                                  end: moment(item.end).unix()
+                                                }, true);
 
-                  console.error("item.content ->", item.content);
                   $scope.showDuration();
 
                   $scope.original = {
