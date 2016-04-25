@@ -2000,7 +2000,6 @@ define(
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
               moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
 
-
             if (typeof start == "undefined" ||
               isNaN(start) ||
               start == 0 ||
@@ -2046,35 +2045,109 @@ define(
               {
                 $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
 
-                Slots.add(
-                  values,
-                  $scope.timeline.user.id
-                ).then(
-                  function (result)
-                  {
-                    $rootScope.$broadcast('resetPlanboardViews');
-
-                    if (result.error)
-                    {
-                      $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
-                      console.warn('error ->', result);
-                    }
-                    else
-                    {
-                      updateLoggedUser($scope.timeline.user.id);
-                      $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
-                    }
-                    //nana
-                    newSlot = [];
-                    (callback && callback());
-                    $scope.timeliner.refresh();
-                    $rootScope.planboardSync.start();
-                  }
-                );
+                //lala
+                if(slot.state === "com.ask-cs.State.Alert")
+                {
+                  console.error("yesSs -> " + start, end);
+                  checkRedundantStateAlertSlots(values)
+                    .then(function(slots)
+                          {
+                            return (slots) ? false : addSlot(values);
+                          })
+                }
+                else addSlot(values);
               }
             }
           }
+
+          function addSlot(values)
+          {
+            Slots.add(
+              values,
+              $scope.timeline.user.id
+            ).then(
+              function (result)
+              {
+                $rootScope.$broadcast('resetPlanboardViews');
+
+                if (result.error)
+                {
+                  $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
+                  console.warn('error ->', result);
+                }
+                else
+                {
+                  updateLoggedUser($scope.timeline.user.id);
+                  $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
+                }
+                //nana
+                newSlot = [];
+                (callback && callback());
+                $scope.timeliner.refresh();
+                $rootScope.planboardSync.start();
+              }
+            );
+          }
         };
+
+        //dada
+        //start: '1461776400', end: '1461798000'
+        //checkRedundantStateAlertSlots({start: '1461798000', end: '1461798010'});
+        function checkRedundantStateAlertSlots(slot)
+        {
+          //set start and end new slot
+          slot.start = parseInt(slot.start);
+          slot.end = parseInt(slot.end);
+
+          return Teams.getSingle($scope.timeline.current.group)
+               .then(function (membersGroup)
+                     {
+                       return Slots.members($scope.timeline.current.group, {start: $scope.data.periods.start / 1000,
+                         end: $scope.data.periods.end / 1000}, membersGroup);
+                     })
+               .then(function (members)
+                     {
+                       $rootScope.statusBar.off();
+
+                       if (!members.length)
+                       {
+                         //het checken van redundante slots kon op dit moment niet uitgevoerd worden
+                         $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
+                         return false;
+                       }
+                       else
+                       {
+                         //remove id henk
+                         var indexUser = _.findIndex(members, {'id': $scope.timeline.user.id}),
+                             membersStateAlert = [];
+
+                         if(indexUser != -1) members.splice(indexUser, 1);
+
+                         _.each(members, function(member)
+                         {
+                           var stateAlertData = _.filter(member.data, function(data)
+                           {
+                             if(data.state === "com.ask-cs.State.Alert"
+                               && Math.min(slot.start, slot.end) <= Math.max(data.start, data.end)
+                               && Math.max(slot.start, slot.end) >= Math.min(data.start, data.end)) return data;
+                           });
+                           if(stateAlertData.length) membersStateAlert.push( {fullName: member.fullName, data: stateAlertData} );
+                         });
+
+                         console.error("membersStateAlert ->", membersStateAlert);
+
+                         if(membersStateAlert.length)
+                         {
+                           var user = membersStateAlert[0].fullName,
+                               start = moment(membersStateAlert[0].data[0].start, 'X').format(config.app.formats.date + " " + config.app.formats.time),
+                               end = moment(membersStateAlert[0].data[0].end, 'X').format(config.app.formats.date + " " + config.app.formats.time);
+                           $rootScope.notifier.error('De gebruiker ' + user + ' heeft al achterwacht van ' + start + ' t/m ' +  end);
+                           return true;
+                         }
+                         return false;
+                       }
+                     });
+        }
 
         /* Check if startdate is before the enddate
          * @param slot The current selected slot
@@ -2229,14 +2302,7 @@ define(
             $scope.timeliner.refresh();
           };
 
-          // It is already blocked at time-line level but for in case
-          if (/#timeline/.test(values.group))
-          {
-            $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
-
-            $scope.timeliner.refresh();
-          }
-          else
+          var validateSlot = function(changed)
           {
             if (changed.recursive)
             {
@@ -2335,6 +2401,28 @@ define(
                 }
               }
             }
+          };
+
+          // It is already blocked at time-line level but for in case
+          if (/#timeline/.test(values.group))
+          {
+            $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
+
+            $scope.timeliner.refresh();
+          }
+          else
+          {
+            if(changed.state === "com.ask-cs.State.Alert")
+            {
+              console.error("yesSs -> " + changed.start, changed.end);
+              console.error("changed ->", changed);
+              checkRedundantStateAlertSlots({start: changed.start / 1000, end: changed.end / 1000})
+                .then(function(slots)
+                      {
+                        return (slots) ? false : validateSlot(changed);
+                      })
+            }
+            else validateSlot(changed);
           }
         };
 

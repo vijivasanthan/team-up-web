@@ -204,6 +204,10 @@ div.bar span {
   background-color: $red;//#d34545;
 }
 
+.legenda-row .legenda-state-alert .square {
+  background-color: $orange;//#d34545;
+}
+
 .legenda-row .legenda-state-schipper-service .square {
   background-color: #f6e500;
 }
@@ -450,6 +454,12 @@ div.timeline-event.state-available {
 .agenda-timeline-tabs {
   div.timeline-event.state-available {
     background-color: $turq;//$green;
+  }
+}
+
+.agenda-timeline-tabs {
+  div.timeline-event.state-alert {
+    background-color: $orange;//$green;
   }
 }
 
@@ -1351,7 +1361,7 @@ sortable
   width: 100%;
   min-height: 180px;
   position: absolute;
-  z-index: 9999;
+  z-index: 9000;
   background-color: #fff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);

@@ -3217,6 +3217,7 @@ define(
             'available': 'Beschikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline',
+            'alert': 'Achterwacht',
             'not_reachable': 'Niet bereikbaar',
             'on_the_phone': 'Aan de telefoon',
             'unknown': 'Onbekend',
