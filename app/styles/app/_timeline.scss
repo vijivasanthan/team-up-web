@@ -204,13 +204,14 @@ div.bar span {
   background-color: $red;//#d34545;
 }
 
-.legenda-row .legenda-state-alert .square {
+.legenda-row .legenda-state-secondline .square {
   background-color: $orange;//#d34545;
 }
 
 .legenda-row .legenda-state-schipper-service .square {
   background-color: #f6e500;
 }
+
 
 //.legenda-row .legenda-state-unreached .square {
 //  background-color: #65619b;
@@ -458,7 +459,7 @@ div.timeline-event.state-available {
 }
 
 .agenda-timeline-tabs {
-  div.timeline-event.state-alert {
+  div.timeline-event.state-secondline {
     background-color: $orange;//$green;
   }
 }

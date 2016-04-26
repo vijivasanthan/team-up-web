@@ -20,10 +20,11 @@ var profile = {
       color: '#4f824f',
       type: 'Bereikbaar'
     },
-    'com.ask-cs.State.Alert': {
-      className: 'state-alert',
+    'com.ask-cs.State.Secondline': {
+      className: 'state-secondline',
       label: 'Achterwacht',
-      color: '#f5a962'
+      color: '#f5a962',
+      type: 'Bereikbaar'
     },
     'com.ask-cs.State.Unavailable': {
       className: 'state-unavailable',

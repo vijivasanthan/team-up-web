@@ -76,7 +76,7 @@ define(['../controllers'], function (controllers)
               var _member = {
                 id: id,
                 state: (slots.length > 0) ? slots[0].state : 'no-state',
-                label: (slots.length > 0) ? self.states[slots[0].state].label[0] : '',
+                label: (slots.length > 0 && self.states[slots[0].state]) ? self.states[slots[0].state].label[0] : '',
                 end: (slots.length > 0 && slots[0].end !== undefined) ?
                 slots[0].end * 1000 :
                   $rootScope.ui.dashboard.possiblyReachable,
@@ -103,10 +103,14 @@ define(['../controllers'], function (controllers)
                   ordered.reachable = [];
                 }
 
+                if (!ordered.secondline) ordered.secondline = [];
+
                 if (!ordered.unreachable)
                 {
                   ordered.unreachable = [];
                 }
+
+                if (slots[0].state == 'com.ask-cs.State.Secondline') ordered.secondline.push(_member);
 
                 if (slots[0].state == 'com.ask-cs.State.Unavailable')
                 {
@@ -118,6 +122,7 @@ define(['../controllers'], function (controllers)
                   {
                     _member.style = 'sa-icon-reserve-available';
                   }
+                  //else if(slots[0].state == 'com.ask-cs.State.Secondline') _member.style = 'sa-icon-reserve-secondline';
 
                   ordered.reachable.push(_member);
                 }
@@ -152,6 +157,11 @@ define(['../controllers'], function (controllers)
           if (ordered.hasOwnProperty('reachable'))
           {
             ordered.reachable.sort(sortByEnd);
+          }
+
+          if (ordered.hasOwnProperty('secondline'))
+          {
+            ordered.secondline.sort(sortByEnd);
           }
 
           if (ordered.hasOwnProperty('unreachable'))
