@@ -2044,18 +2044,7 @@ define(
               else
               {
                 $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
-
-                //lala
-                if(slot.state === "com.ask-cs.State.Alert")
-                {
-                  console.error("yesSs -> " + start, end);
-                  checkRedundantStateAlertSlots(values)
-                    .then(function(slots)
-                          {
-                            return (slots) ? false : addSlot(values);
-                          })
-                }
-                else addSlot(values);
+                addSlot(values);
               }
             }
           }
@@ -2090,64 +2079,74 @@ define(
           }
         };
 
-        //dada
-        //start: '1461776400', end: '1461798000'
+
+        //if(slot.state === "com.ask-cs.State.Alert")
+        //{
+        //  console.error("yesSs -> " + start, end);
+        //  checkRedundantStateAlertSlots(values)
+        //    .then(function(slots)
+        //          {
+        //            return (slots) ? false : addSlot(values);
+        //          })
+        //}
+
         //checkRedundantStateAlertSlots({start: '1461798000', end: '1461798010'});
-        function checkRedundantStateAlertSlots(slot)
-        {
-          //set start and end new slot
-          slot.start = parseInt(slot.start);
-          slot.end = parseInt(slot.end);
 
-          return Teams.getSingle($scope.timeline.current.group)
-               .then(function (membersGroup)
-                     {
-                       return Slots.members($scope.timeline.current.group, {start: $scope.data.periods.start / 1000,
-                         end: $scope.data.periods.end / 1000}, membersGroup);
-                     })
-               .then(function (members)
-                     {
-                       $rootScope.statusBar.off();
-
-                       if (!members.length)
-                       {
-                         //het checken van redundante slots kon op dit moment niet uitgevoerd worden
-                         $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
-                         return false;
-                       }
-                       else
-                       {
-                         //remove id henk
-                         var indexUser = _.findIndex(members, {'id': $scope.timeline.user.id}),
-                             membersStateAlert = [];
-
-                         if(indexUser != -1) members.splice(indexUser, 1);
-
-                         _.each(members, function(member)
-                         {
-                           var stateAlertData = _.filter(member.data, function(data)
-                           {
-                             if(data.state === "com.ask-cs.State.Alert"
-                               && Math.min(slot.start, slot.end) <= Math.max(data.start, data.end)
-                               && Math.max(slot.start, slot.end) >= Math.min(data.start, data.end)) return data;
-                           });
-                           if(stateAlertData.length) membersStateAlert.push( {fullName: member.fullName, data: stateAlertData} );
-                         });
-
-                         console.error("membersStateAlert ->", membersStateAlert);
-
-                         if(membersStateAlert.length)
-                         {
-                           var user = membersStateAlert[0].fullName,
-                               start = moment(membersStateAlert[0].data[0].start, 'X').format(config.app.formats.date + " " + config.app.formats.time),
-                               end = moment(membersStateAlert[0].data[0].end, 'X').format(config.app.formats.date + " " + config.app.formats.time);
-                           $rootScope.notifier.error('De gebruiker ' + user + ' heeft al achterwacht van ' + start + ' t/m ' +  end);
-                           return true;
-                         }
-                         return false;
-                       }
-                     });
-        }
+        //function checkRedundantStateAlertSlots(slot)
+        //{
+        //  //set start and end new slot
+        //  slot.start = parseInt(slot.start);
+        //  slot.end = parseInt(slot.end);
+        //
+        //  return Teams.getSingle($scope.timeline.current.group)
+        //       .then(function (membersGroup)
+        //             {
+        //               return Slots.members($scope.timeline.current.group, {start: $scope.data.periods.start / 1000,
+        //                 end: $scope.data.periods.end / 1000}, membersGroup);
+        //             })
+        //       .then(function (members)
+        //             {
+        //               $rootScope.statusBar.off();
+        //
+        //               if (!members.length)
+        //               {
+        //                 //het checken van redundante slots kon op dit moment niet uitgevoerd worden
+        //                 $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
+        //                 return false;
+        //               }
+        //               else
+        //               {
+        //                 //remove id henk
+        //                 var indexUser = _.findIndex(members, {'id': $scope.timeline.user.id}),
+        //                     membersStateAlert = [];
+        //
+        //                 if(indexUser != -1) members.splice(indexUser, 1);
+        //
+        //                 _.each(members, function(member)
+        //                 {
+        //                   var stateAlertData = _.filter(member.data, function(data)
+        //                   {
+        //                     if(data.state === "com.ask-cs.State.Alert"
+        //                       && Math.min(slot.start, slot.end) <= Math.max(data.start, data.end)
+        //                       && Math.max(slot.start, slot.end) >= Math.min(data.start, data.end)) return data;
+        //                   });
+        //                   if(stateAlertData.length) membersStateAlert.push( {fullName: member.fullName, data: stateAlertData} );
+        //                 });
+        //
+        //                 console.error("membersStateAlert ->", membersStateAlert);
+        //
+        //                 if(membersStateAlert.length)
+        //                 {
+        //                   var user = membersStateAlert[0].fullName,
+        //                       start = moment(membersStateAlert[0].data[0].start, 'X').format(config.app.formats.date + " " + config.app.formats.time),
+        //                       end = moment(membersStateAlert[0].data[0].end, 'X').format(config.app.formats.date + " " + config.app.formats.time);
+        //                   $rootScope.notifier.error('De gebruiker ' + user + ' heeft al achterwacht van ' + start + ' t/m ' +  end);
+        //                   return true;
+        //                 }
+        //                 return false;
+        //               }
+        //             });
+        //}
 
         /* Check if startdate is before the enddate
          * @param slot The current selected slot
@@ -2410,20 +2409,8 @@ define(
 
             $scope.timeliner.refresh();
           }
-          else
-          {
-            if(changed.state === "com.ask-cs.State.Alert")
-            {
-              console.error("yesSs -> " + changed.start, changed.end);
-              console.error("changed ->", changed);
-              checkRedundantStateAlertSlots({start: changed.start / 1000, end: changed.end / 1000})
-                .then(function(slots)
-                      {
-                        return (slots) ? false : validateSlot(changed);
-                      })
-            }
-            else validateSlot(changed);
-          }
+          else validateSlot(changed);
+
         };
 
 
