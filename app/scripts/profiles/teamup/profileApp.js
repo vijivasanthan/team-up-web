@@ -20,7 +20,7 @@ var profile = {
       color: '#4f824f',
       type: 'Bereikbaar'
     },
-    'com.ask-cs.State.Secondline': {
+    'secondline': {
       className: 'state-secondline',
       label: 'Achterwacht',
       color: '#f5a962',

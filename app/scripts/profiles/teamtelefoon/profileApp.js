@@ -18,7 +18,7 @@ var profile = {
       className: 'state-available',
       color: '#4f824f'
     },
-    'com.ask-cs.State.Secondline': {
+    'secondline': {
       className: 'state-secondline',
       label: 'Achterwacht',
       color: '#f5a962'

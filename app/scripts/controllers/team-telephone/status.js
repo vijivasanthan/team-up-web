@@ -110,7 +110,7 @@ define(['../controllers'], function (controllers)
                   ordered.unreachable = [];
                 }
 
-                if (slots[0].state == 'com.ask-cs.State.Secondline') ordered.secondline.push(_member);
+                if (slots[0].state == 'secondline') ordered.secondline.push(_member);
 
                 if (slots[0].state == 'com.ask-cs.State.Unavailable')
                 {
