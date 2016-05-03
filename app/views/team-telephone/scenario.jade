@@ -3,12 +3,27 @@ section
 		h2.nullable Scenario
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
-			label.control-label {{ ui.teamup.selectTeam }} 
+			//label.control-label {{ ui.teamup.selectTeam }}
 			.controls
-				select(ng-model='scenario.currentTeamId',
-					ng-options='team.uuid as team.name for team in scenario.data.teams | orderBy:"name"',
-					ng-selected='scenario.currentTeamId',
-					ng-change='scenario.fetch()')
+				button( type="button",
+					class="btn btn-info",
+					ng-model="scenario.selectedIcons",
+					bs-options="team.uuid as team.name for team in scenario.data.teams | orderBy:'name'",
+					data-multiple="1",
+					data-animation="am-flip-x",
+					data-placeholder="{{ ui.teamup.selectTeam | lowercase }}",
+					data-sort="true",
+					data-all-none-buttons="true",
+					data-max-length-html="geselecteerd",
+					data-all-text="Iedereen",
+					data-none-text="Geen",
+					bs-select)
+					ACTION
+					span(class="caret")
+				//select(ng-model='scenario.currentTeamId',
+				//	ng-options='team.uuid as team.name for team in scenario.data.teams | orderBy:"name"',
+				//	ng-selected='scenario.currentTeamId',
+				//	ng-change='scenario.fetch()')
 			
 	.tabbable.tabs-left
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', 

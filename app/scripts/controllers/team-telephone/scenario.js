@@ -23,7 +23,19 @@ define(
         self.save = save;
 
         //initialisation
+        init();
         show(data);
+
+        function init()
+        {
+          if ($rootScope.app.resources.role == 1)
+          {
+            self.data.teams.unshift({
+                                      name: $rootScope.ui.dashboard.everyone,
+                                      uuid: 'all'
+                                    });
+          }
+        }
 
         /**
          * Fetch team-telephone options
@@ -34,12 +46,34 @@ define(
           self.currentTeam = setTeamIdToName(self.currentTeamId);
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
-          Teams.getTeamTelephoneOptions(self.currentTeamId)
-            .then(function (options)
+          console.error("self.currentTeamId ->", self.currentTeamId);
+
+          if(self.currentTeamId === 'all')
           {
-            show(self.data);
+            self.currentTeam = $rootScope.ui.dashboard.everyone;
             $rootScope.statusBar.off();
-          })
+          }
+          else
+          {
+            Teams.getTeamTelephoneOptions(self.currentTeamId)
+              .then(function (options)
+            {
+              show(self.data);
+              $rootScope.statusBar.off();
+            })
+          }
+          
+
+        }
+
+
+        self.selectedIcon = "";
+        self.selectedIcons = []; //"Gear", "Globe", "Heart", "Camera"
+        self.icons = [{"value":"Gear","label":"<i class=\"fa fa-gear\"></i> Gear"},{"value":"Globe","label":"<i class=\"fa fa-globe\"></i> Globe"},{"value":"Heart","label":"<i class=\"fa fa-heart\"></i> Heart"},{"value":"Camera","label":"<i class=\"fa fa-camera\"></i> Camera"}];
+
+        function saveAllTeams(scenario)
+        {
+          console.error("self.data.teams ->", self.data.teams);
         }
 
         /**
@@ -56,6 +90,7 @@ define(
             self.error = true;
             return;
           }
+          if(self.currentTeamId === 'all') return saveAllTeams(scenario);
 
           $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
 
