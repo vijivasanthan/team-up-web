@@ -28,13 +28,7 @@ define(
 
         function init()
         {
-          if ($rootScope.app.resources.role == 1)
-          {
-            self.data.teams.unshift({
-                                      name: $rootScope.ui.dashboard.everyone,
-                                      uuid: 'all'
-                                    });
-          }
+          self.selectedTeams = [];
         }
 
         /**
@@ -66,11 +60,6 @@ define(
 
         }
 
-
-        self.selectedIcon = "";
-        self.selectedIcons = []; //"Gear", "Globe", "Heart", "Camera"
-        self.icons = [{"value":"Gear","label":"<i class=\"fa fa-gear\"></i> Gear"},{"value":"Globe","label":"<i class=\"fa fa-globe\"></i> Globe"},{"value":"Heart","label":"<i class=\"fa fa-heart\"></i> Heart"},{"value":"Camera","label":"<i class=\"fa fa-camera\"></i> Camera"}];
-
         function saveAllTeams(scenario)
         {
           console.error("self.data.teams ->", self.data.teams);
@@ -82,32 +71,34 @@ define(
          */
         function save(scernarioByTeam)
         {
-          self.error = false;
-
-          if (self.data.templates.length && !scernarioByTeam)
-          {
-            $rootScope.notifier.error("Kies een scenario");
-            self.error = true;
-            return;
-          }
-          if(self.currentTeamId === 'all') return saveAllTeams(scenario);
-
-          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-          var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
-              second: self.currentTeamId,
-              templateId: scernarioByTeam
-            })
-            .then(function (result)
-            {
-              console.error('result', result);
-              (!result.error)
-                ?  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged)
-                : $rootScope.notifier.error($rootScope.ui.teamup.errorCode[0] + $rootScope.ui.teamup.error.support);
-              // save the scenarioId of the team locally newOptions.scenarioId
-
-              $rootScope.statusBar.off();
-            });
+          console.error("self.selectedTeams ->", self.selectedTeams);
+          
+          //self.error = false;
+          //
+          //if (self.data.templates.length && !scernarioByTeam)
+          //{
+          //  $rootScope.notifier.error("Kies een scenario");
+          //  self.error = true;
+          //  return;
+          //}
+          //if(self.currentTeamId === 'all') return saveAllTeams(scenario);
+          //
+          //$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+          //
+          //var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
+          //    second: self.currentTeamId,
+          //    templateId: scernarioByTeam
+          //  })
+          //  .then(function (result)
+          //  {
+          //    console.error('result', result);
+          //    (!result.error)
+          //      ?  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged)
+          //      : $rootScope.notifier.error($rootScope.ui.teamup.errorCode[0] + $rootScope.ui.teamup.error.support);
+          //    // save the scenarioId of the team locally newOptions.scenarioId
+          //
+          //    $rootScope.statusBar.off();
+          //  });
         }
 
         /**
