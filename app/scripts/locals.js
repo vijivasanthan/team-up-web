@@ -614,6 +614,10 @@ define(
           settings: 'settings'
         },
         teamup: {
+          'and': 'and',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' are not updated' : ' is not updated';
+          },
           amountReports: function (amountReports)
           {
             return (amountReports == 1)
@@ -1799,6 +1803,10 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          'and': 'and',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' are not updated' : ' is not updated';
+          },
           amountReports: function (amountReports)
           {
             return (amountReports == 1)
@@ -2970,6 +2978,10 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          and: ' en ',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' zijn niet geupdate' : ' is niet geupdate';
+          },
           amountReports: function (amountReports)
           {
             return (amountReports == 1)

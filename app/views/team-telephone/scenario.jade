@@ -5,7 +5,7 @@ section
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			//label.control-label(style="height: 25px;", ng-if="scenario.selectedTeams.length > 0") {{ ui.teamup.selectTeam }}
 			.controls
-				button( type="button",
+				button#scenario-teams( type="button",
 					class="btn btn-info",
 					ng-model="scenario.selectedTeams",
 					bs-options="team.uuid as team.name for team in scenario.data.teams | orderBy:'name'",

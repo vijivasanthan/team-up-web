@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'scenario',
-      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data)
+      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data, $q, $compile)
       {
         $rootScope.fixStyles();
         //TODO fix the localized string in this controller
@@ -71,34 +71,54 @@ define(
          */
         function save(scernarioByTeam)
         {
+          self.error = false;
+
+          if (self.data.templates.length && !scernarioByTeam)
+          {
+            $rootScope.notifier.error("Kies een scenario");
+            self.error = true;
+            return;
+          }
+
           console.error("self.selectedTeams ->", self.selectedTeams);
-          
-          //self.error = false;
-          //
-          //if (self.data.templates.length && !scernarioByTeam)
-          //{
-          //  $rootScope.notifier.error("Kies een scenario");
-          //  self.error = true;
-          //  return;
-          //}
-          //if(self.currentTeamId === 'all') return saveAllTeams(scenario);
-          //
-          //$rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-          //
-          //var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
-          //    second: self.currentTeamId,
-          //    templateId: scernarioByTeam
-          //  })
-          //  .then(function (result)
-          //  {
-          //    console.error('result', result);
-          //    (!result.error)
-          //      ?  $rootScope.notifier.success($rootScope.ui.teamup.dataChanged)
-          //      : $rootScope.notifier.error($rootScope.ui.teamup.errorCode[0] + $rootScope.ui.teamup.error.support);
-          //    // save the scenarioId of the team locally newOptions.scenarioId
-          //
-          //    $rootScope.statusBar.off();
-          //  });
+
+          var scenarioByTeamPromises = _.map(self.selectedTeams, function(teamId)
+          {
+            return TeamUp._('TTScenarioTemplateSave', {
+                  second: teamId,
+                  templateId: scernarioByTeam
+                });
+          });
+
+          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+          $q.all(scenarioByTeamPromises)
+            .then(function (results)
+            {
+              var errors = [];
+
+              //get all the errors
+              _.each(results, function(result, index)
+              {
+                if(result.error)
+                {
+                  var teamId = self.selectedTeams[index],
+                      team = _.findWhere(self.data.teams, {uuid: teamId});
+                  console.error("team.name ->", team.name + ' is not updated, because of a error');
+                  errors.push(team.name);
+                  self.error = true;
+                }
+              });
+
+
+              if(! self.error) $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              else
+              {
+                var errorMessage = $filter('commaSeperatedWithEnding')(errors, $rootScope.ui.teamup.and);
+                $rootScope.notifier.error(errorMessage + $rootScope.ui.teamup.somethingUpdated(errors));
+              }
+
+              $rootScope.statusBar.off();
+            });
         }
 
         /**

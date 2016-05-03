@@ -393,10 +393,35 @@ input[type="submit"].btn {
   color: $brown;
 }
 
-.dropdown-menu > .active > a {
-  background: $brown;
+//.dropdown-menu > .active > a {
+//  background: $brown;
+//}
+
+// Hover/Focus state
+.dropdown-menu > li > a {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: $white;
+  }
 }
 
-.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
-  background-color: lighten($brown, 10%);
+// Active state
+.dropdown-menu > .active > a {
+  &,
+  &:hover,
+  &:focus {
+    color: $white;
+    text-decoration: none;
+    outline: 0;
+    background-color: $brown !important;
+  }
+}
+
+.dropdown-menu > li > a {
+  color: $brown;
+}
+
+.dropdown-menu > li > a:hover {
+  color: $orange !important;
 }

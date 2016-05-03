@@ -203,7 +203,7 @@ define(
                 function ()
                 {
                   $rootScope.notification.status = false;
-                }, 5000);
+                }, 7000);
             }
           };
 
