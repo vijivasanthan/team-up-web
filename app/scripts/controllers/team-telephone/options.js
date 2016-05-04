@@ -79,6 +79,7 @@ define(
 						options
 					).then(function(newOptions)
 					       {
+						       console.error("newOptions ->", newOptions);
 						       show(newOptions);
 						       $rootScope.statusBar.off();
 					       });
@@ -124,6 +125,7 @@ define(
 							"sms-on-new-team-voicemail": newOptions.sms,
 							"voicemail-detection-menu": newOptions.voicemailDetection,
 							"useExternalId": newOptions.useExternalId
+							//"phoneNumberAlias": newOptions.phoneNumberAlias || null
 						});
 					//var teamScenarioTemplateId = TeamUp._('TTScenarioTemplateSave', {
 					//    second: self.currentTeamId,
@@ -201,16 +203,19 @@ define(
 					}
 					else
 					{
+						console.error("TeamTelefoon team created ->");
+						//this team is clearly a team with teamtelefoon functionality
+						$rootScope.isTeamTelephoneTeam = true;
+
 						self.scenarios = {
 							voicemailDetection: options["voicemail-detection-menu"] || false,
 							sms: options["sms-on-missed-call"] || false,
 							ringingTimeOut: options["ringing-timeout"] || 20,
 							useExternalId: options["useExternalId"] || false,
 							scenarioTemplates: options['test'] || []
+							//phoneNumberAlias: options['phoneNumberAlias'] || null
 						};
-
-						//this team is clearly a team with teamtelefoon functionality
-						$rootScope.isTeamTelephoneTeam = true;
+						console.error("self.scenarios ->", self.scenarios);
 
 						//TODO make this a directive, dom manipulation is bad
 						//Use the range slider to selected the right amount of rinkeltijd

@@ -37,7 +37,21 @@ section
 									dd(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ options.data.teamTelephoneOptions.phoneNumberAlias }}
 									
 						form.form-vertical(name='optionsForm', novalidate)
-							
+
+							//.form-group(ng-class="{'has-error': phoneNumberParsed.result == false && options.scenarios.phoneNumberAlias}")
+							//	label.control-label {{ ui.options.phoneNumberTeamAlias }}
+							//	.controls
+							//		input.span3.form-control.inputPhoneNumber(type='text',
+							//		name='phone',
+							//		ng-model='options.scenarios.phoneNumberAlias',
+							//		ng-change='parsePhoneNumber(options.scenarios.phoneNumberAlias)')
+							//		span.help-block(ng-show='options.scenarios.phoneNumberAlias')
+							//			small
+							//				i {{phoneNumberParsed.message}}
+							//		span.help-block
+							//			small
+							//				i {{ ui.options.phoneNumberTeamAliasDescription }}
+
 							.form-group(ng-show='app.domainPermission.smsNotification')
 								label.control-label {{ ui.options.smsMissedCall }}
 								.controls
@@ -88,6 +102,7 @@ section
 										small
 											i
 												| {{ ui.options.useExternalId.info }}
+
 							//.form-group(ng-if='options.scenarioTemplates')
 							//	label.control-label Scenario
 							//	.controls
