@@ -60,11 +60,6 @@ define(
 
         }
 
-        function saveAllTeams(scenario)
-        {
-          console.error("self.data.teams ->", self.data.teams);
-        }
-
         /**
          * Save team-telephone options
          * @param newOptions The options to be saved
@@ -73,14 +68,8 @@ define(
         {
           self.error = false;
 
-          if (self.data.templates.length && !scernarioByTeam)
-          {
-            $rootScope.notifier.error("Kies een scenario");
-            self.error = true;
-            return;
-          }
-
-          console.error("self.selectedTeams ->", self.selectedTeams);
+          if(! self.selectedTeams.length) return $rootScope.notifier.error($rootScope.ui.teamup.selectTeams);
+          if (self.data.templates.length && !scernarioByTeam) return $rootScope.notifier.error("Kies een scenario");
 
           var scenarioByTeamPromises = _.map(self.selectedTeams, function(teamId)
           {
