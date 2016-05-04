@@ -139,8 +139,11 @@ define(
          */
         function AddSelectedTeamsToTitle()
         {
-          self.selectedTeams = $filter('orderBy')(self.selectedTeams);
-          self.currentTeam = _.pluck(self.selectedTeams, 'name').join(", ");
+          if(self.selectedTeams.length < 5)
+          {
+            self.selectedTeams = $filter('orderBy')(self.selectedTeams);
+            self.currentTeam = _.pluck(self.selectedTeams, 'name').join(", ");
+          }
         }
       }
     );
