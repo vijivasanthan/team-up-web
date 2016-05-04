@@ -8,7 +8,7 @@ section
 				button#scenario-teams( type="button",
 					class="btn btn-info",
 					ng-model="scenario.selectedTeams",
-					bs-options="team.uuid as team.name for team in scenario.data.teams | orderBy:'name'",
+					bs-options="team as team.name for team in scenario.data.teams | orderBy:'name'",
 					data-multiple="1",
 					data-animation="am-flip-x",
 					data-placeholder="{{ ui.teamup.selectTeams }}",
@@ -17,7 +17,8 @@ section
 					data-max-length-html="geselecteerd",
 					data-all-text="Iedereen",
 					data-none-text="Geen",
-					bs-select)
+					bs-select,
+					ng-change='scenario.AddSelectedTeamsToTitle()')
 					ACTION
 					span(class="caret")
 			

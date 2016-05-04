@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'scenario',
-      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data, $q, $compile)
+      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data, $q)
       {
         $rootScope.fixStyles();
         //TODO fix the localized string in this controller
@@ -21,6 +21,7 @@ define(
         //methods
         self.fetch = fetch;
         self.save = save;
+        self.AddSelectedTeamsToTitle = AddSelectedTeamsToTitle;
 
         //initialisation
         init();
@@ -28,7 +29,9 @@ define(
 
         function init()
         {
-          self.selectedTeams = [];
+          self.selectedTeams = [
+            _.findWhere(data.teams, {uuid: self.currentTeamId})
+          ];
         }
 
         /**
@@ -129,6 +132,15 @@ define(
         function show(data)
         {
           //not yet in use, because the scenario id of a team cannot be shown
+        }
+
+	      /**
+         * Order them asc and add them to the title
+         */
+        function AddSelectedTeamsToTitle()
+        {
+          self.selectedTeams = $filter('orderBy')(self.selectedTeams);
+          self.currentTeam = _.pluck(self.selectedTeams, 'name').join(", ");
         }
       }
     );
