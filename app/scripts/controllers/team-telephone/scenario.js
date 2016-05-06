@@ -73,11 +73,11 @@ define(
 
           if(! self.selectedTeams.length) return $rootScope.notifier.error($rootScope.ui.teamup.selectTeams);
           if (self.data.templates.length && !scernarioByTeam) return $rootScope.notifier.error("Kies een scenario");
-
-          var scenarioByTeamPromises = _.map(self.selectedTeams, function(teamId)
+          
+          var scenarioByTeamPromises = _.map(self.selectedTeams, function(team)
           {
             return TeamUp._('TTScenarioTemplateSave', {
-                  second: teamId,
+                  second: team.uuid,
                   templateId: scernarioByTeam
                 });
           });
@@ -93,14 +93,13 @@ define(
               {
                 if(result.error)
                 {
-                  var teamId = self.selectedTeams[index],
+                  var teamId = (self.selectedTeams[index]).uuid,
                       team = _.findWhere(self.data.teams, {uuid: teamId});
-                  console.error("team.name ->", team.name + ' is not updated, because of a error');
+                  console.error("team.name ->", team.name + ' is not updated, because of an error');
                   errors.push(team.name);
                   self.error = true;
                 }
               });
-
 
               if(! self.error) $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               else

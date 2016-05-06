@@ -48,11 +48,11 @@ define(
             var _arr = _.compact(arr),
                 result = null;
 
-            if(_arr.length == 0)
+            if(_arr.length == 1)
             {
               result = _arr[0];
             }
-            else if(_arr.length == 1)
+            else if(_arr.length == 2)
             {
               var last = _arr.pop();
               result = _arr[0] + ' ' + ending + ' ' + _arr[1];
