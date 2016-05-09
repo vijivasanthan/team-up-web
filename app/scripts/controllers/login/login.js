@@ -19,10 +19,11 @@ define(
 
             Login
               .authenticate(loginData.userName, loginData.password)
-              .then(null, function (error)
-              {
-                self.error = error;
-              });
+              .then(null,
+                    function (error)
+                    {
+                      self.error = error;
+                    });
           }
         };
 

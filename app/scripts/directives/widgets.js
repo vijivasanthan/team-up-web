@@ -37,6 +37,53 @@ define(
       }
     );
 
+	  /**
+     * Logo template directive
+     * //div.navbar-header(show-logo-functionality accessor="accessor")
+     */
+    directives.directive(
+      'showLogoFunctionality',
+      function ($rootScope)
+      {
+        return {
+          restrict: 'A',
+          scope: { accessor: '=' },
+          template: function()
+          {
+            return '<a class="navbar-brand header-logo-{{ logo.toLowerCase() }}" ng-click="navigation(navDirection)">{{ logo }}</a>';
+          },
+          link: function(scope)
+          {
+            var setLogoFunctionality = function()
+            {
+              scope.logo = "TeamTelefoon";
+              scope.navDirection = "";
+
+              if($rootScope.app.domainPermission.tasks)
+              {
+                scope.logo = 'TeamUp';
+                scope.navDirection = "task/mytasks";
+              }
+              else if($rootScope.app.domainPermission.teamTelephoneBasic) scope.navDirection = "team-telefoon/status";
+            };
+
+            scope.accessor = scope.accessor || {};
+
+            scope.accessor.showLogoFunctionality = function()
+            {
+              setLogoFunctionality();
+            };
+
+            scope.navigation = function(navDirection)
+            {
+              $rootScope.nav(navDirection);
+            };
+            setLogoFunctionality();
+          }
+        };
+      }
+    );
+
     //TODO custom team switch selectbox
     directives.directive(
       'selectBox', function ()
