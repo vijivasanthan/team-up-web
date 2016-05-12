@@ -43,7 +43,7 @@ define(
       'commaSeperatedWithEnding',
         function ()
         {
-          return function (arr, ending)
+          return function (arr, ending, cb)
           {
             var _arr = _.compact(arr),
                 result = null;
@@ -62,8 +62,9 @@ define(
               var last = _arr.pop();
               result = _arr.join(', ') + ' ' + ending + ' ' + last;
             }
-
-            return result;
+            return (! cb)
+              ? result
+              : cb(result);
           }
         }
     );
