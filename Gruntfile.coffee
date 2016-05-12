@@ -4,7 +4,7 @@ LIVERELOAD_PORT = 35729
 lrSnippet = require('connect-livereload')(port: LIVERELOAD_PORT)
 
 mountFolder = (connect, dir) ->
-  connect.static require('path').resolve(dir)
+  require('serve-static')(require('path').resolve(dir))
 
 markdown = require('marked')
 semver = require('semver')
