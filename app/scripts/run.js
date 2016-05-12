@@ -185,28 +185,28 @@ define(
                 message: message
               };
             },
-            success: function (message, permanent)
+            success: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-success', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            info: function (message, permanent)
+            info: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-info', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            error: function (message, permanent)
+            error: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-danger', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            destroy: function ()
+            destroy: function (destroyTime)
             {
               $timeout(
                 function ()
                 {
                   $rootScope.notification.status = false;
-                }, 7000);
+                }, destroyTime || 7000);
             }
           };
 
