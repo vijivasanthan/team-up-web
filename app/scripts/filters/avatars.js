@@ -52,7 +52,7 @@ define(
         {
           return function (states)
           {
-            var stateValues = _.pluck(states, 'value');
+            var stateValues = _.map(states, 'value');
 
             return (stateValues.indexOf('REACHABLE') >= 0)
           }
@@ -70,7 +70,7 @@ define(
           {
             var result = config.app.stateColors.none;
 
-            var stateValues = _.pluck(states, 'value');
+            var stateValues = _.map(states, 'value');
 
             if(stateValues.indexOf('available') >= 0)
             {

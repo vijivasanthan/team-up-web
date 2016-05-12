@@ -42,7 +42,7 @@ require.config(
       vis: 'libs/vis/vis-custom',
       treegrid: 'removables/treegrid',
       config: 'configTeamUp',
-      'lodash': '../vendors/lodash/lodash.min',
+      'lodash': '../vendors/lodash/dist/lodash.min',
       offline: '../vendors/web-lib-offline/dist/offline',
       daterangepicker: '../vendors/bootstrap-daterangepicker/daterangepicker',
       moment: '../vendors/moment/min/moment-with-locales',
