@@ -825,7 +825,7 @@ define(
                                                                      adapterId: options.adapterId,
                                                                      members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
                                                                      currentTeam: {
-                                                                       fullName: (_.findWhere(_teams, {uuid: teamId})).name,
+                                                                       fullName: (_.find(_teams, {uuid: teamId})).name,
                                                                        phone: options.phoneNumber
                                                                      }
                                                                    });

@@ -60,7 +60,7 @@ define(
             //TODO planboard and timeline have the same $scope var, this is not only confusing but the two way binding don't works well anymore
             //if($scope.section === "clients")
             //{
-            //  var clientGroupByParamUrl = _.findWhere($scope.list, {uuid: uuid});
+            //  var clientGroupByParamUrl = _.find($scope.list, {uuid: uuid});
             //
             //  (clientGroupByParamUrl)
             //    ? setCurrentClientGroup(clientGroupByParamUrl, function()
@@ -73,7 +73,7 @@ define(
             //                              })
             //}
             //else loadData();
-            var clientGroup = _.findWhere($scope.list, {uuid: $scope.currentClientGroup});
+            var clientGroup = _.find($scope.list, {uuid: $scope.currentClientGroup});
             $scope.currentClientGroup = clientGroup && clientGroup.id || ($scope.list[0]).uuid;
 
             loadData();
@@ -410,7 +410,7 @@ define(
 
           function getGroupName(groupId)
           {
-            var group = _.findWhere(
+            var group = _.find(
               $scope.data[$scope.section].list,
               {uuid: groupId}
             );

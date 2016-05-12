@@ -94,7 +94,7 @@ define(
                       adapterId: options.adapterId,
                       members: _.map(members, _.partialRight(_.pick,['fullName','phone'])),//get only the fullname and phonenumber of the members
                       currentTeam: {
-                        fullName: (_.findWhere(
+                        fullName: (_.find(
                             self.data.teams, {uuid: self.current})
                         ).name,//find the name of the requested team by the teamId(self.current)
                         phone: _TeamTelephoneSettings.phoneNumber

@@ -67,7 +67,7 @@ define(
          */
         $scope.editTeam = function (current)
         {
-          var team = _.findWhere($scope.data.teams, {uuid: current});
+          var team = _.find($scope.data.teams, {uuid: current});
 
           $scope.teamEditForm = {
             name: team.name,
@@ -370,7 +370,7 @@ define(
               if($rootScope.app.resources.role > 1
                 && memberId === $rootScope.app.resources.uuid)
               {
-                var currentTeam = _.findWhere($scope.data.teams, { uuid: $scope.current }),
+                var currentTeam = _.find($scope.data.teams, { uuid: $scope.current }),
                     indexTeam = $scope.data.teams.indexOf(currentTeam);
                 $scope.data.teams.splice(indexTeam, 1);
                 $scope.current = $scope.data.teams[0].uuid;
@@ -378,7 +378,7 @@ define(
               }
               else
               {
-                var deletedMember = _.findWhere($scope.data.members, {uuid: memberId}),
+                var deletedMember = _.find($scope.data.members, {uuid: memberId}),
                   memberIndex = $scope.data.members.indexOf(deletedMember);
 
                 $scope.data.members.splice(memberIndex, 1);

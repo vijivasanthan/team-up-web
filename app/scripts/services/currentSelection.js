@@ -20,7 +20,7 @@ define(
             update: function(id)
             {
               var teams = Store('app').get('teams'),
-                  team = _.findWhere(teams, {uuid: id}),
+                  team = _.find(teams, {uuid: id}),
                   teamId = team && team.uuid,
                   clientGroupId = null;
 
@@ -34,7 +34,7 @@ define(
                 if(_.isUndefined(teamId))
                 {
                   //find the clientGroup by id
-                  var clientGroup = _.findWhere(clientGroups, {id: id});
+                  var clientGroup = _.find(clientGroups, {id: id});
                   clientGroupId = clientGroup && clientGroup.id;
 
                   //find the teamId matching with the clientgroup id

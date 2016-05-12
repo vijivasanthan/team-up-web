@@ -339,7 +339,7 @@ define(['services/services', 'config'],
                   );
 
                   var tasks = _.map(
-                    _.indexBy(basket, function (node)
+                    _.keyBy(basket, function (node)
                     {
                       return node.uuid
                     }),

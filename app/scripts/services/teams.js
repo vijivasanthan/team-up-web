@@ -559,7 +559,7 @@ define(
             var CurrentSelection = $injector.get('CurrentSelection'),
                 teams = Store('app').get('teams');
 
-            if( ! teamId || ! _.findWhere(teams, {uuid: teamId}) )
+            if( ! teamId || ! _.find(teams, {uuid: teamId}) )
             {
               teamId = CurrentSelection.getTeamId();
             }
@@ -742,7 +742,7 @@ define(
                 if($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0)
                 {
                   var loggedMemberId = $rootScope.app.resources.uuid,
-                    loggedUserResources = _.findWhere(team, {uuid: loggedMemberId});
+                    loggedUserResources = _.find(team, {uuid: loggedMemberId});
 
                   if(!_.isUndefined(loggedUserResources))
                   {
@@ -766,7 +766,7 @@ define(
 
             _.each(teamsUuids, function (teamUuid)
             {
-              var team = _.findWhere(teams, {uuid: teamUuid});
+              var team = _.find(teams, {uuid: teamUuid});
 
               if(!_.isUndefined(team))
               {

@@ -90,7 +90,7 @@ define(
             {
               userTeams = _.map(teamsUuids, function (teamId)
               {
-                var team = _.findWhere(teams, {uuid: teamId});
+                var team = _.find(teams, {uuid: teamId});
                 return team && team.name || $rootScope.ui.teamup.noTeamNameFound;
               });
             }
@@ -286,7 +286,7 @@ define(
           return function (id)
           {
             var teams = Store('app').get('teams'),
-                currentTeam = _.findWhere(teams, {uuid: id});
+                currentTeam = _.find(teams, {uuid: id});
             return currentTeam && currentTeam.name
           }
         }

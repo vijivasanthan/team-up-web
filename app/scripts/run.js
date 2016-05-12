@@ -834,8 +834,8 @@ define(
               return result;
             };
 
-            return _.indexBy(_.filter(
-              _.map(_.indexBy(collection, function (node) {
+            return _.keyBy(_.filter(
+              _.map(_.keyBy(collection, function (node) {
                   return node.uuid;
                 }),
                 function (member) {

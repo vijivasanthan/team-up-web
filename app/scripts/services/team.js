@@ -94,7 +94,7 @@ define(['services/services', 'config'],
           function setCurrent(teamId)
           {
             CurrentSelection.local = teamId;
-            var team = _.findWhere(this.list, {'uuid': teamId});
+            var team = _.find(this.list, {'uuid': teamId});
 
             this.current.teamId = teamId;
             this.current.name = team.name;

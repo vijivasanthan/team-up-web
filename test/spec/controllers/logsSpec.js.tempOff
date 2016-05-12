@@ -127,7 +127,7 @@ define(
 
       var getOptions = function()
       {
-        var teamPhoneAdapterData = _.findWhere(logCtrl.data.teams, {teamId: rootScope.app.resources.teamUuids[0]});
+        var teamPhoneAdapterData = _.find(logCtrl.data.teams, {teamId: rootScope.app.resources.teamUuids[0]});
         return {
           startTime: logCtrl.data.logData.periods.startTime,
           endTime: logCtrl.data.logData.periods.endTime,

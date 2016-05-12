@@ -196,7 +196,7 @@ define(['../controllers'], function (controllers)
          */
         function setKeyAsUsername(members)
         {
-          return _.indexBy(members, 'uuid');
+          return _.keyBy(members, 'uuid');
         }
 
         /**

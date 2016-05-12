@@ -198,7 +198,7 @@ define(
                            $scope.clientGroups = queries.clientGroups;
                            $scope.clients = queries.clients;
 
-                           var clientGroup = _.findWhere($scope.clientGroups, {id: result.uuid});
+                           var clientGroup = _.find($scope.clientGroups, {id: result.uuid});
 
                            if(! _.isUndefined(clientGroup))
                            {
@@ -890,7 +890,7 @@ define(
           setView(view);
           $scope.current = $scope.data.currentClientGroupId;
           $scope.clients = data.clients[$scope.current];
-          $scope.clientGroup = _.findWhere(data.clientGroups, {id: $scope.current});
+          $scope.clientGroup = _.find(data.clientGroups, {id: $scope.current});
         }
 
         /**
@@ -912,7 +912,7 @@ define(
           getCurrentClientGroup(id)
             .then(function(clients)
                   {
-                    $scope.clientGroup = _.findWhere(data.clientGroups, {id: id});
+                    $scope.clientGroup = _.find(data.clientGroups, {id: id});
                     data.clients[id] = clients;
                     $scope.clients = data.clients[id];
                   });
@@ -1005,7 +1005,7 @@ define(
 
                         if (reportId)
                         {
-                          var report = (_.findWhere($scope.groupReports, {uuid: reportId})) || null;
+                          var report = (_.find($scope.groupReports, {uuid: reportId})) || null;
 
                           if (report == null)
                           {
@@ -1039,7 +1039,7 @@ define(
               function (clientGroup)
               {
                 data.clients[clientGroup.id] = Store('app').get(clientGroup.id);
-                var clientInTeam = _.findWhere(data.clients[clientGroup.id], {uuid: data.clientId});
+                var clientInTeam = _.find(data.clients[clientGroup.id], {uuid: data.clientId});
 
                 if(!_.isUndefined(clientInTeam))
                 {
@@ -1056,7 +1056,7 @@ define(
             if (!clientHasClientGroup)
             {
               data.clients = Store('app').get('clients');
-              data.client = _.findWhere(data.clients, {uuid: data.clientId});
+              data.client = _.find(data.clients, {uuid: data.clientId});
               data.client.birthDate = moment(data.client.birthDate).format('DD-MM-YYYY');
               $scope.client = data.client;
               Reports.clientId = $scope.client.uuid;

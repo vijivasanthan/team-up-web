@@ -30,7 +30,7 @@ define(
         function init()
         {
           self.selectedTeams = [
-            _.findWhere(data.teams, {uuid: self.currentTeamId})
+            _.find(data.teams, {uuid: self.currentTeamId})
           ];
         }
 
@@ -95,7 +95,7 @@ define(
                 if(result.error)
                 {
                   var teamId = (self.selectedTeams[index]).uuid,
-                      team = _.findWhere(self.data.teams, {uuid: teamId});
+                      team = _.find(self.data.teams, {uuid: teamId});
                   console.error("team.name ->", team.name + ' is not updated, because of an error');
                   errors.push(team.name);
                   self.error = true;
@@ -149,7 +149,7 @@ define(
           if(self.selectedTeams.length < 5)
           {
             self.selectedTeams = $filter('orderBy')(self.selectedTeams);
-            self.currentTeam = _.pluck(self.selectedTeams, 'name').join(", ");
+            self.currentTeam = _.map(self.selectedTeams, 'name').join(", ");
           }
         }
       }

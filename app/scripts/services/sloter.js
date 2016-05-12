@@ -204,7 +204,7 @@ define(['services/services', 'config'],
                    _.each(_this.filtered(data, current), function (agg)
                    {
 
-                     var aggData = _.pluck(agg.data, 'diff'),
+                     var aggData = _.map(agg.data, 'diff'),
                          minDiff = _.min(aggData),
                          maxDiff = _.max(aggData),
                          diffRangeData = (maxDiff - minDiff),
