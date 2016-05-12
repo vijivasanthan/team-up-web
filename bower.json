@@ -1,5 +1,5 @@
 {
-  "name": "TeamUp",
+  "name": "teamup",
   "version": "1.6.0",
   "dependencies": {
     "angular": "~1.4.9",
@@ -23,7 +23,7 @@
     "json3": "~3.3.1",
     "lawnchair": "~0.6.3",
     "ladda": "~0.9.8",
-    "lodash": "~3.6.0",
+    "lodash": "~4.12.0",
     "moment-timezone": "~0.4.0",
     "momentjs": "~2.6.0",
     "requirejs": "~2.1.11",
