@@ -130,6 +130,9 @@ define(
             $rootScope.config.app.statesall['com.ask-cs.State.Available']['label'] = $rootScope.ui.teamup.stateValue.reachable;
             $rootScope.config.app.statesall['com.ask-cs.State.Available']['type'] = $rootScope.ui.teamup.stateValue.reachable;
 
+            $rootScope.config.app.statesall['secondline']['label'] = $rootScope.ui.teamup.stateValue.secondline;
+            $rootScope.config.app.statesall['secondline']['type'] = $rootScope.ui.teamup.stateValue.secondline;
+
             $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['label'] = $rootScope.ui.teamup.stateValue.not_reachable;
             $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['type'] = $rootScope.ui.teamup.stateValue.not_reachable;
 

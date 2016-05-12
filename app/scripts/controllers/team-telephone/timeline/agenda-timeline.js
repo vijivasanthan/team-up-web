@@ -1694,6 +1694,7 @@ define(
             end: Number(now + period * hour),
             state: (availability) ? 'com.ask-cs.State.Available' : 'com.ask-cs.State.Unavailable'
           };
+          if(availability === 'secondline') periods.state = 'secondline';
 
           var values = {
             start: periods.start,
