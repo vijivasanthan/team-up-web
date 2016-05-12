@@ -78,6 +78,7 @@ define(
           {
             return TeamUp._('TTScenarioTemplateSave', {
                   second: team.uuid,
+                  ignore: true,
                   templateId: scernarioByTeam
                 });
           });
@@ -104,8 +105,15 @@ define(
               if(! self.error) $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
               else
               {
-                var errorMessage = $filter('commaSeperatedWithEnding')(errors, $rootScope.ui.teamup.and);
-                $rootScope.notifier.error(errorMessage + $rootScope.ui.teamup.somethingUpdated(errors));
+                var errorMessage = $filter('commaSeperatedWithEnding')(errors, $rootScope.ui.teamup.and, function(errorMessage)
+                {
+                  $rootScope.notifier.error(
+                    errorMessage + $rootScope.ui.teamup.somethingUpdated(errors),
+                    false,
+                    15000
+                  );
+                });
+
               }
 
               $rootScope.statusBar.off();
