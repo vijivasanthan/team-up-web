@@ -26,7 +26,15 @@ module.exports = (grunt) ->
 
     paths: appConfig
 
-    gitinfo: {}
+    gitinfo: {
+      local : {
+        branch : {
+          current : {
+            name : "Current branch name"
+          }
+        }
+      }
+    }
 
     jade:
       index:
@@ -401,20 +409,6 @@ module.exports = (grunt) ->
         dest: 'CHANGELOG.md'
         versionFile: 'package.json'
 
-    release:
-      options:
-        commitMessage: '<%= version %>'
-        tagName: 'v<%= version %>'
-        tagMessage: 'tagging version <%= version %>'
-        bump: false
-        file: 'package.json'
-        add: true
-        commit: true
-        tag: true
-        push: true
-        pushTags: true
-        npm: false
-
     stage:
       options:
         files: ['CHANGELOG.md']
@@ -438,29 +432,29 @@ module.exports = (grunt) ->
           dest: '<%= paths.dist %>/scripts/'
         ]
 
-  grunt.registerTask 'bump', 'bump manifest version', (type) ->
-    setup = (file, type) ->
-      pkg = grunt.file.readJSON(file)
-      newVersion = pkg.version = semver.inc(pkg.version, type or 'patch')
-      file: file
-      pkg: pkg
-      newVersion: newVersion
-    options = @options(file: grunt.config('pkgFile') or 'package.json')
-    config = setup(options.file, type)
-    grunt.file.write config.file, JSON.stringify(config.pkg, null, '  ') + '\n'
-    grunt.log.ok 'Version bumped to ' + config.newVersion
+#  grunt.registerTask 'bump', 'bump manifest version', (type) ->
+#    setup = (file, type) ->
+#      pkg = grunt.file.readJSON(file)
+#      newVersion = pkg.version = semver.inc(pkg.version, type or 'patch')
+#      file: file
+#      pkg: pkg
+#      newVersion: newVersion
+#    options = @options(file: grunt.config or 'package.json')
+#    config = setup(options.file, type)
+#    grunt.file.write config.file, JSON.stringify(config.pkg, null, '  ') + '\n'
+#    grunt.log.ok 'Version bumped to ' + config.newVersion
 
-  grunt.registerTask 'stage', 'git add files before running the release task', ->
-    files = @options().files
-    grunt.util.spawn
-# TODO (Test this if it is really needed git.cmd??)
-# cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
-      cmd: 'git'
-      args: ['add'].concat(files)
-    , grunt.task.current.async()
+#  grunt.registerTask 'stage', 'git add files before running the release task', ->
+#    files = @options().files
+#    grunt.util.spawn
+## TODO (Test this if it is really needed git.cmd??)
+## cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
+#      cmd: 'git'
+#      args: ['add'].concat(files)
+#    , grunt.task.current.async()
 
   grunt.registerTask 'serve', 'start a web server with extras', (target) ->
-    return grunt.task.run(['build', 'connect:dist:keepalive'])  if target is 'dist'
+    return grunt.task.run(['connect:dist:keepalive'])  if target is 'dist'
     grunt.task.run [
       'clean:server'
       'concurrent:server'
@@ -469,10 +463,10 @@ module.exports = (grunt) ->
       'watch'
     ]
 
-  grunt.registerTask 'server', [
-    'serve'
-    'replace'
-  ]
+#  grunt.registerTask 'server', [
+#    'serve'
+#    'replace'
+#  ]
 
   grunt.registerTask 'test', [
     'clean:server'
@@ -491,7 +485,7 @@ module.exports = (grunt) ->
     'jade'
     'useminPrepare'
     'imagemin'
-#    'svgmin'
+    #    'svgmin'
     'htmlmin'
     'concat'
     'copy:dist'
@@ -509,32 +503,32 @@ module.exports = (grunt) ->
     'clean:rest'
   ]
 
-  grunt.registerTask 'patch', [
-    'bump:patch'
-    'changelog'
-    'stage'
-    'release:patch'
-    'replace'
-  ]
-
-  grunt.registerTask 'minor', [
-    'bump:minor'
-    'changelog'
-    'stage'
-    'release:minor'
-    'replace'
-  ]
-
-  grunt.registerTask 'major', [
-    'bump:major'
-    'changelog'
-    'stage'
-    'release:major'
-    'replace'
-  ]
-
-  grunt.registerTask 'default', [
-    'jshint'
-    'test'
-    'build'
-  ]
+#  grunt.registerTask 'patch', [
+#    'bump:patch'
+#    'changelog'
+#    'stage'
+#    'release:patch'
+#    'replace'
+#  ]
+#
+#  grunt.registerTask 'minor', [
+#    'bump:minor'
+#    'changelog'
+#    'stage'
+#    'release:minor'
+#    'replace'
+#  ]
+#
+#  grunt.registerTask 'major', [
+#    'bump:major'
+#    'changelog'
+#    'stage'
+#    'release:major'
+#    'replace'
+#  ]
+#
+#  grunt.registerTask 'default', [
+#    'jshint'
+#    'test'
+#    'build'
+#  ]
