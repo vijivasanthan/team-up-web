@@ -3,7 +3,6 @@ section
 		h2.nullable {{ ui.options.title }}
 	div(style='margin-top: 20px;')
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
-			//input.form-control(type='text', name='daterange', ng-model='daterange', log-ranger='')
 			label.control-label {{ ui.teamup.selectTeam }} 
 			.controls
 				select(ng-model='options.currentTeamId',
@@ -15,21 +14,20 @@ section
 		ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;', 
 		bs-navbar)
 			include tabs
-				//hide-team-telephone-tabs='{{options.activateTTForm}}'
 		.tab-content
 			#order.tab-pane.active
 				div
-					div(ng-show='(options.activateTTForm && app.resources.role > 1) || ! options.activateTTForm')
+					div(ng-show='(isTeamTelephoneTeam && app.resources.role > 1) || isTeamTelephoneTeam')
 						div.head
 							h3
 								| {{ ui.options.title }}{{ options.currentTeam }} 
 						hr
-					div.alert.alert-warning(ng-show='options.activateTTForm && app.resources.role > 1')
+					div.alert.alert-warning(ng-if='! isTeamTelephoneTeam && app.resources.role > 1')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
 							i  {{ ui.options.teamTelephoneNotActivated }}
 								
-					div(id='TTOptions' ng-hide='options.activateTTForm')
+					div(id='TTOptions' ng-show='isTeamTelephoneTeam')
 						.row-fluid
 							.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
 								dl
@@ -39,7 +37,21 @@ section
 									dd(ng-show='options.data.teamTelephoneOptions.phoneNumberAlias') {{ options.data.teamTelephoneOptions.phoneNumberAlias }}
 									
 						form.form-vertical(name='optionsForm', novalidate)
-							
+
+							//.form-group(ng-class="{'has-error': phoneNumberParsed.result == false && options.scenarios.phoneNumberAlias}")
+							//	label.control-label {{ ui.options.phoneNumberTeamAlias }}
+							//	.controls
+							//		input.span3.form-control.inputPhoneNumber(type='text',
+							//		name='phone',
+							//		ng-model='options.scenarios.phoneNumberAlias',
+							//		ng-change='parsePhoneNumber(options.scenarios.phoneNumberAlias)')
+							//		span.help-block(ng-show='options.scenarios.phoneNumberAlias')
+							//			small
+							//				i {{phoneNumberParsed.message}}
+							//		span.help-block
+							//			small
+							//				i {{ ui.options.phoneNumberTeamAliasDescription }}
+
 							.form-group(ng-show='app.domainPermission.smsNotification')
 								label.control-label {{ ui.options.smsMissedCall }}
 								.controls
@@ -61,10 +73,10 @@ section
 							.form-group
 								label.control-label {{ ui.options.ringingTimeOut.title }}
 								.controls
-									div.input-group(style='width: 250px;')
-										div.range
-											input(type="range" name="range" min="15" max="30" step="5" ng-model='options.scenarios.ringingTimeOut')
-											output#range &nbsp; {{ options.scenarios.ringingTimeOut }} {{ ui.teamup.seconds }} &nbsp;
+									div.input-group(style='width: 350px;')
+										div.range(style="float:left;") 
+											input(id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="15" data-slider-max="30" data-slider-step="5") 
+										span &nbsp; &nbsp; {{ ui.teamup.seconds }}
 									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 										small
 											i
@@ -72,7 +84,7 @@ section
 									span.help-block(style='min-height: 14px; margin-bottom: 10px;')
 										small
 											i.text-danger(ng-show='options.scenarios.ringingTimeOut >= 20')
-												| {{ ui.options.ringingTimeOut.long }}
+												| &nbsp; {{ ui.options.ringingTimeOut.long }}
 							hr
 							
 							.form-group
@@ -90,6 +102,7 @@ section
 										small
 											i
 												| {{ ui.options.useExternalId.info }}
+
 							//.form-group(ng-if='options.scenarioTemplates')
 							//	label.control-label Scenario
 							//	.controls
@@ -124,8 +137,7 @@ section
 								
 								//&& !options.scenarios.voicemailDetection
 								// {{ ui.options.voicemailDetectionInfo }}
-				
-				div(id="activateTTForm" ng-show='options.activateTTForm && app.resources.role == 1')
+				div(id="activateTTForm" ng-if='app.resources.role == 1 && ! isTeamTelephoneTeam')
 					h3 {{ ui.options.activateTeamTelephone }}{{ options.currentTeam }}
 					hr
 					div

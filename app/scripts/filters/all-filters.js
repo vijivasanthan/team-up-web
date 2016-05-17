@@ -43,16 +43,16 @@ define(
       'commaSeperatedWithEnding',
         function ()
         {
-          return function (arr, ending)
+          return function (arr, ending, cb)
           {
             var _arr = _.compact(arr),
                 result = null;
 
-            if(_arr.length == 0)
+            if(_arr.length == 1)
             {
               result = _arr[0];
             }
-            else if(_arr.length == 1)
+            else if(_arr.length == 2)
             {
               var last = _arr.pop();
               result = _arr[0] + ' ' + ending + ' ' + _arr[1];
@@ -62,8 +62,9 @@ define(
               var last = _arr.pop();
               result = _arr.join(', ') + ' ' + ending + ' ' + last;
             }
-
-            return result;
+            return (! cb)
+              ? result
+              : cb(result);
           }
         }
     );
@@ -89,7 +90,7 @@ define(
             {
               userTeams = _.map(teamsUuids, function (teamId)
               {
-                var team = _.findWhere(teams, {uuid: teamId});
+                var team = _.find(teams, {uuid: teamId});
                 return team && team.name || $rootScope.ui.teamup.noTeamNameFound;
               });
             }
@@ -285,7 +286,7 @@ define(
           return function (id)
           {
             var teams = Store('app').get('teams'),
-                currentTeam = _.findWhere(teams, {uuid: id});
+                currentTeam = _.find(teams, {uuid: id});
             return currentTeam && currentTeam.name
           }
         }

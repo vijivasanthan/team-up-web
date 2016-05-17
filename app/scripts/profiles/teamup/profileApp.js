@@ -20,6 +20,12 @@ var profile = {
       color: '#4f824f',
       type: 'Bereikbaar'
     },
+    'secondline': {
+      className: 'state-secondline',
+      label: 'Achterwacht',
+      color: '#f5a962',
+      type: 'Bereikbaar'
+    },
     'com.ask-cs.State.Unavailable': {
       className: 'state-unavailable',
       label: 'Niet bereikbaar',
@@ -36,6 +42,7 @@ var profile = {
 
   states: [
     'com.ask-cs.State.Available',
+    'com.ask-cs.State.Alert',
     'com.ask-cs.State.Unavailable'
   ],
 

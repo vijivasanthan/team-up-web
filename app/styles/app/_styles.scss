@@ -103,28 +103,28 @@ dl {
 
 //TODO show scrollbar in the content even if the modal is shown
 //bug in angular if you change location without hiding the modal the scrollbar will never be shown again
-.modal-open {
-  overflow: hidden;
-}
+//.modal-open {
+//  overflow: hidden;
+//}
 
-.modal-body {
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    li {
-      margin-bottom: 5px;
-
-      label {
-        font-weight: normal;
-
-        input[type=checkbox] {
-          margin: -2px 3px 0 2px;
-        }
-      }
-    }
-  }
-}
+//.modal-body {
+//  ul {
+//    list-style: none;
+//    margin: 0;
+//    padding: 0;
+//    li {
+//      margin-bottom: 5px;
+//
+//      label {
+//        font-weight: normal;
+//
+//        input[type=checkbox] {
+//          margin: -2px 3px 0 2px;
+//        }
+//      }
+//    }
+//  }
+//}
 
 #versions {
 
@@ -356,5 +356,14 @@ dl {
 
 .tab-medium-size{
   min-height: 418px !important;
+}
+
+//add max-width or it's not gonna work max-width: 100% for example;
+.text-overlow {
+  -o-text-overflow: ellipsis;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 600px;
 }
 

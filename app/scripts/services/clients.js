@@ -462,7 +462,7 @@ define(
 
             if(allClients.length)
             {
-              var removedMember = _.findWhere(allClients, {uuid: clientId}),
+              var removedMember = _.find(allClients, {uuid: clientId}),
                 index = allClients.indexOf(removedMember);
 
               allClients.splice(index, 1);

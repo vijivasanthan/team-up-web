@@ -130,6 +130,9 @@ define(
             $rootScope.config.app.statesall['com.ask-cs.State.Available']['label'] = $rootScope.ui.teamup.stateValue.reachable;
             $rootScope.config.app.statesall['com.ask-cs.State.Available']['type'] = $rootScope.ui.teamup.stateValue.reachable;
 
+            $rootScope.config.app.statesall['secondline']['label'] = $rootScope.ui.teamup.stateValue.secondline;
+            $rootScope.config.app.statesall['secondline']['type'] = $rootScope.ui.teamup.stateValue.secondline;
+
             $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['label'] = $rootScope.ui.teamup.stateValue.not_reachable;
             $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['type'] = $rootScope.ui.teamup.stateValue.not_reachable;
 
@@ -182,28 +185,28 @@ define(
                 message: message
               };
             },
-            success: function (message, permanent)
+            success: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-success', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            info: function (message, permanent)
+            info: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-info', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            error: function (message, permanent)
+            error: function (message, permanent, destroyTime)
             {
               this.init(true, 'alert-danger', message);
-              if (!permanent) this.destroy();
+              if (!permanent) this.destroy(destroyTime);
             },
-            destroy: function ()
+            destroy: function (destroyTime)
             {
               $timeout(
                 function ()
                 {
                   $rootScope.notification.status = false;
-                }, 5000);
+                }, destroyTime || 7000);
             }
           };
 
@@ -831,8 +834,8 @@ define(
               return result;
             };
 
-            return _.indexBy(_.filter(
-              _.map(_.indexBy(collection, function (node) {
+            return _.keyBy(_.filter(
+              _.map(_.keyBy(collection, function (node) {
                   return node.uuid;
                 }),
                 function (member) {

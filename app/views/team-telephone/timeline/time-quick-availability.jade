@@ -32,6 +32,31 @@ div.btn-group.pull-right
 				| {{ ui.teamup.stateValue.reachable }} (24 {{ ui.teamup.hour }})
 		li.divider
 		li
+			a(ng-click='setAvailability("secondline", 1)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (1 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability("secondline", 4)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (4 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability("secondline", 6)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (6 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability("secondline", 8)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (8 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability("secondline", 16)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (16 {{ ui.teamup.hour }})
+		li
+			a(ng-click='setAvailability("secondline", 24)')
+				.square.secondline
+				| {{ ui.teamup.stateValue.secondline }} (24 {{ ui.teamup.hour }})
+		li.divider
+		li
 			a(ng-click='setAvailability(false, 1)')
 				.square.unavailable
 				| {{ ui.teamup.stateValue.not_reachable }} (1 {{ ui.teamup.hour }})

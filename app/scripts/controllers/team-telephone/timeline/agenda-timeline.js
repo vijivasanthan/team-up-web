@@ -11,8 +11,8 @@ define(
       {
         // TODO: Define diff in the watcher maybe?
         var range,
-          diff,
-          newSlot = [];
+            diff,
+            newSlot = [];
 
         var visDataSet = new vis.DataSet();
         var visGroupsDataSet = new vis.DataSet();
@@ -312,11 +312,11 @@ define(
             for (var i = 1; i < 54; i++)
             {
               weekendBgs.push({
-                id: '' + m.year() + 'week' + i,
-                start: m.week(i).day(6).format('YYYY-MM-DD'),
-                end: m.add(2, 'days').format('YYYY-MM-DD'),
-                type: 'background'
-              });
+                                id: '' + m.year() + 'week' + i,
+                                start: m.week(i).day(6).format('YYYY-MM-DD'),
+                                end: m.add(2, 'days').format('YYYY-MM-DD'),
+                                type: 'background'
+                              });
             }
           }
 
@@ -331,11 +331,12 @@ define(
 
         function getUnixTimeStamps(slot)
         {
-          var startDate = slot.start.date + " " + slot.start.time,
-            endDate = slot.end.date + " " + slot.end.time,
-            dateTimeFormat = 'DD-MM-YYYY HH:mm',
-            startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
-            endUnixTimeStamp = moment(endDate, dateTimeFormat).valueOf();
+          var startDate          = slot.start.date + " " + slot.start.time,
+              endDate            = slot.end.date + " " + slot.end.time,
+              dateTimeFormat     = 'DD-MM-YYYY HH:mm',
+              startUnixTimeStamp = moment(startDate, dateTimeFormat).valueOf(),
+              endUnixTimeStamp   = moment(endDate, dateTimeFormat).valueOf();
+
           return {
             start: startUnixTimeStamp,
             end: endUnixTimeStamp
@@ -344,10 +345,16 @@ define(
 
         $scope.showDuration = function ()
         {
-          var dates = getUnixTimeStamps($scope.slot),
-            duration = $filter('calculateDeltaTime')(dates.end, dates.start),
-            durationEl = angular.element('.duration'),
-            dangerClass = 'label-danger';
+          var dates = (! $rootScope.browser.mobile)
+                ? getUnixTimeStamps($scope.slot)
+                : {
+                    start: moment($scope.slot.start.datetime).valueOf(),
+                    end: moment($scope.slot.end.datetime).valueOf()
+                  };
+
+              var duration = $filter('calculateDeltaTime')(dates.end, dates.start),
+              durationEl = angular.element('.duration'),
+              dangerClass = 'label-danger';
 
           $scope.duration = '';
 
@@ -363,75 +370,6 @@ define(
           $scope.duration += duration;
         };
 
-        /**
-         * TODO: Stress-test this!
-         * Hot fix against not-dom-ready problem for timeline
-         */
-        if ($scope.timeline && $scope.timeline.main)
-        {
-          setTimeout(
-            function ()
-            {
-              $scope.self.timeline.redraw()
-            },
-            config.app.timers.TICKER
-          );
-        }
-
-        $rootScope.intervals = $rootScope.intervals || [];
-
-        /**
-         * Background sync in every 60 sec
-         */
-        $rootScope.planboardSync = {
-          /**
-           * Start planboard sync
-           */
-          start: function ()
-          {
-            $window.planboardSync = $window.setInterval(
-              function ()
-              {
-                /**
-                 * Update planboard only in planboard is selected
-                 */
-                if ($location.path() == '/team-telefoon')
-                {
-                  $scope.slot = {};
-
-                  $rootScope.$broadcast('resetPlanboardViews');
-
-                  $scope.timeliner.load(
-                    {
-                      start: $scope.data.periods.start,
-                      end: $scope.data.periods.end
-                    },
-                    true
-                  );
-                }
-              }, config.app.timers.PLANBOARD_SYNC);
-
-            // Record interval for cleanup when switching controllers
-            $rootScope.intervals.push($window.planboardSync);
-          },
-
-          /**
-           * Clear planboard sync
-           */
-          clear: function ()
-          {
-            var index;
-            $window.clearInterval($window.planboardSync);
-
-            index = $rootScope.intervals.indexOf($window.planboardSync);
-            if(index !== -1){
-              $rootScope.intervals.splice(index, 1);
-            }
-
-            $window.planboardSync = null;
-          }
-        };
-
         $scope.$watch('slot.state', function (newValue, oldValue)
         {
           updateSlot(newValue, oldValue, function(item, newValue)
@@ -442,83 +380,6 @@ define(
             return item;
           });
         });
-
-
-        $scope.$watch('slot.start.date', function (newValue, oldValue)
-        {
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.start = moment(newValue + " " + $scope.slot.start.time,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.date', function (newValue, oldValue)
-        {
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment(newValue + " " + $scope.slot.end.time,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.start.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.start = moment($scope.slot.start.date + " " + newValue,
-                                config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment($scope.slot.end.date + " " + newValue,
-                              config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        $scope.$watch('slot.end.time', function (newValue, oldValue)
-        {
-          //update day if the hour is midnight
-          updateSlot(newValue, oldValue, function(item, newValue)
-          {
-            item.end = moment($scope.slot.end.date + " " + newValue,
-                              config.app.formats.date + " " + config.app.formats.time).toDate();
-            return item;
-          });
-        });
-
-        if($rootScope.browser.mobile)
-        {
-          $scope.$watch('slot.start.datetime', function (newValue, oldValue)
-          {
-            //update day if the hour is midnight
-            updateSlot(newValue, oldValue, function(item, newValue)
-            {
-              item.start = moment(newValue).toDate();
-              return item;
-            });
-          });
-
-          $scope.$watch('slot.end.datetime', function (newValue, oldValue)
-          {
-            //update day if the hour is midnight
-            updateSlot(newValue, oldValue, function(item, newValue)
-            {
-              item.end = moment(newValue).toDate();
-              return item;
-            });
-          });
-        }
 
         function updateSlot(newValue, oldValue, callback)
         {
@@ -541,50 +402,27 @@ define(
           }
         }
 
-        /**
-         * Timeline on changing
-         */
-        $scope.timelineChanging = function (item, callback)
+        $scope.redrawSlot = function (slot)
         {
-          if(/<\/?[^>]*>/.test(item.group) ) callback(null);
-          else
+          var start = ($rootScope.browser.mobile)
+            ?   +moment($scope.slot.start.datetime)
+            :   +moment($scope.slot.start.date +' '+ $scope.slot.start.time, config.app.formats.datetime);
+          var end = ($rootScope.browser.mobile)
+            ?   +moment($scope.slot.end.datetime)
+            :   +moment($scope.slot.end.date +' '+ $scope.slot.end.time, config.app.formats.datetime);
+
+          var selectedSlot = $scope.self.timeline.getSelection()[0] || slot.id;
+
+          if (selectedSlot)
           {
-            $scope.$apply(
-              function ()
-              {
-                $rootScope.planboardSync.clear();
-
-                item.content = Sloter.tooltip({
-                                                start: moment(item.start).unix(),
-                                                end: moment(item.end).unix()
-                                              }, true);
-
-                // change hover tooltip to constant tooltip
-                if (item.className)
-                { // won't have if created by ctrl/shift-drag
-                  item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
-                }
-
-                $scope.slot = {
-                  start: {
-                    date: moment(item.start).format(config.app.formats.date),
-                    time: moment(item.start).format(config.app.formats.time),
-                    datetime: convertDateTimeToLocal(item.start)
-                  },
-                  end: {
-                    date: moment(item.end).format(config.app.formats.date),
-                    time: moment(item.end).format(config.app.formats.time),
-                    datetime: convertDateTimeToLocal(item.end)
-                  },
-                  state: item.state,
-                  recursive: item.recursive,
-                  id: item.id
-                };
-                $scope.showDuration();
-
-                callback(item);
-              }
-            );
+            var item = visDataSet.get(selectedSlot);
+            item.start = start;
+            item.end = end;
+            item.content = Sloter.tooltip({
+              start: moment(item.start).unix(),
+              end: moment(item.end).unix()
+            }, true);
+            visDataSet.update(item);
           }
         };
 
@@ -710,6 +548,7 @@ define(
                   }
                   else
                   {
+                    $scope.removeReoccuringAll = 1;
                     $rootScope.notifier.success($rootScope.ui.agenda.timeslotDeleted);
                     if (newSlot.length)
                     {
@@ -724,8 +563,8 @@ define(
                 };
 
                 var now = moment().valueOf(),
-                  currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
-                  changedEndDate = new Date(now - 10000);
+                    currentSlotUser = (slot && slot.member) ? slot.member : $scope.timeline.user.id,
+                    changedEndDate = new Date(now - 10000);
 
                 if ($scope.original.end <= now && $scope.original.recursive == false)
                 {
@@ -756,18 +595,63 @@ define(
                 }
                 else
                 {
+                  //check if the user likes to remove a recursive reachable Available slot
+                  if($scope.original.state === "com.ask-cs.State.Available" &&
+                    $scope.original.recursive &&
+                    $scope.removeReoccuringAll != 2)
+                  {
+                    $scope.removeReoccuringReachabilityForm = true;
+                    $scope.removeReoccuringAll = 1;
+
+                    //check if the digest cycle is running otherwise call
+                    if(!$scope.$$phase) {
+                      $scope.$digest();
+                    }
+                    return;
+                  }
                   $rootScope.statusBar.display($rootScope.ui.agenda.deletingTimeslot);
 
                   Slots.remove($scope.original, currentSlotUser)
-                    .then(
-                      function (result)
-                      {
-                        updateLoggedUser(currentSlotUser);
-                        successCallback(result)
-                      }
-                    );
+                       .then(
+                         function (result)
+                         {
+                           updateLoggedUser(currentSlotUser);
+                           successCallback(result);
+                         }
+                       );
                 }
               }
+            };
+
+            $scope.toggleReoccuringReachabilityForm = function (removeReoccuringAll)
+            {
+              $scope.removeReoccuringAll = removeReoccuringAll;
+
+              if($scope.removeReoccuringAll == 1)
+              {
+                //set the currentslot back to it's original state and make it non recursive
+                var currentSlot = angular.copy($scope.slot);
+                currentSlot.start = {
+                  date: moment($scope.original.start).format(config.app.formats.date),
+                    time: moment($scope.original.start).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal($scope.original.start)
+                };
+                currentSlot.end = {
+                  date: moment($scope.original.end).format(config.app.formats.date),
+                    time: moment($scope.original.end).format(config.app.formats.time),
+                    datetime: convertDateTimeToLocal($scope.original.end)
+                };
+                currentSlot.state = 'com.ask-cs.State.Unavailable';
+                currentSlot.recursive = false;
+
+                $scope.timelineOnAdd("true", currentSlot, null, function()
+                {
+                  $rootScope.notifier.success($rootScope.ui.timeline.removingSingleReoccuringSlot);
+                });
+              }
+              else if($scope.removeReoccuringAll == 2) $scope.timelineOnRemove();
+
+              $scope.removeReoccuringReachabilityForm = ! $scope.removeReoccuringReachabilityForm;
             };
 
             // add background behind axis
@@ -789,25 +673,25 @@ define(
             else
             {
               bgInterval = $window.setInterval(function ()
-              {
-                bgCount += 1;
-                axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
-                if (axisHeight === 0)
-                {
-                  if (bgCount > bgMax)
-                  {
-                    // don't set height, css has fallback
-                    document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
-                    $window.clearInterval(bgInterval);
-                    bgInterval = null;
-                  }
-                  return;
-                }
-                axisBg.style.height = axisHeight + 'px';
-                document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
-                $window.clearInterval(bgInterval);
-                bgInterval = null;
-              }, 50);
+                                               {
+                                                 bgCount += 1;
+                                                 axisHeight = document.querySelector('.vis-timeline .vis-panel.vis-top').getBoundingClientRect().height;
+                                                 if (axisHeight === 0)
+                                                 {
+                                                   if (bgCount > bgMax)
+                                                   {
+                                                     // don't set height, css has fallback
+                                                     document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
+                                                     $window.clearInterval(bgInterval);
+                                                     bgInterval = null;
+                                                   }
+                                                   return;
+                                                 }
+                                                 axisBg.style.height = axisHeight + 'px';
+                                                 document.querySelector('.vis-timeline .vis-panel.vis-background').appendChild(axisBg);
+                                                 $window.clearInterval(bgInterval);
+                                                 bgInterval = null;
+                                               }, 50);
               $rootScope.intervals = $rootScope.intervals || [];
               $rootScope.intervals.push(bgInterval);
             }
@@ -871,7 +755,7 @@ define(
           render: function (options, remember)
           {
             var start,
-              end;
+                end;
 
             var groupIds = {};
 
@@ -963,11 +847,11 @@ define(
               visDataSet.add(weekendBackgrounds);
 
               $scope.self.timeline.setOptions({
-                max: $scope.timeline.options.max,
-                min: $scope.timeline.options.min,
-                start: $scope.timeline.options.start,
-                end: $scope.timeline.options.end
-              });
+                                                max: $scope.timeline.options.max,
+                                                min: $scope.timeline.options.min,
+                                                start: $scope.timeline.options.start,
+                                                end: $scope.timeline.options.end
+                                              });
             }
             else
             {
@@ -1015,11 +899,11 @@ define(
                   visDataSet.add(weekendBackgrounds);
 
                   $scope.self.timeline.setOptions({
-                    max: $scope.timeline.options.max,
-                    min: $scope.timeline.options.min,
-                    start: $scope.timeline.options.start,
-                    end: $scope.timeline.options.end
-                  });
+                                                    max: $scope.timeline.options.max,
+                                                    min: $scope.timeline.options.min,
+                                                    start: $scope.timeline.options.start,
+                                                    end: $scope.timeline.options.end
+                                                  });
 
                 }, timeout);
             }
@@ -1145,10 +1029,10 @@ define(
           {
             var tooltipVal = moment(props.snappedTime).format('DD-MM-YYYY || HH:mm');
             var element,
-              style,
-              update = false,
-              self = this,
-              what = props.what;
+                style,
+                update = false,
+                self = this,
+                what = props.what;
 
             if (this.tooltipValue && this.tooltipElement)
             {
@@ -1200,9 +1084,9 @@ define(
             if (window.requestAnimationFrame)
             {
               window.requestAnimationFrame(function ()
-              {
-                drawTooltip();
-              });
+                                           {
+                                             drawTooltip();
+                                           });
             }
             else
             {
@@ -1220,8 +1104,8 @@ define(
         function wish(id)
         {
           var deferred = $q.defer(),
-            count = 0,
-            end = moment().add(1, 'years').unix();
+              count = 0,
+              end = moment().add(1, 'years').unix();
 
           Slots.wishes(
             {
@@ -1269,13 +1153,13 @@ define(
         }
 
         $scope.$watch(function ()
-          {
-            return $scope.timeline.current.group;
-          },
-          function (currentTeamId)
-          {
-            wisher(currentTeamId);
-          });
+                      {
+                        return $scope.timeline.current.group;
+                      },
+                      function (currentTeamId)
+                      {
+                        wisher(currentTeamId);
+                      });
 
 
         /**
@@ -1329,11 +1213,11 @@ define(
         var groupSlots = function (periods)
         {
           var aggs = Slots.aggs({
-            id: $scope.timeline.current.group,
-            start: periods.start,
-            end: periods.end,
-            month: $scope.timeline.current.month
-          });
+                                  id: $scope.timeline.current.group,
+                                  start: periods.start,
+                                  end: periods.end,
+                                  month: $scope.timeline.current.month
+                                });
 
           var wishes = Slots.wishes(
             {
@@ -1343,12 +1227,12 @@ define(
             });
 
           return $q.all([aggs, wishes])
-            .then(
-              function (data)
-              {
-                return ({aggs: data[0], wishes: data[1]});
-              }
-            );
+                   .then(
+                     function (data)
+                     {
+                       return ({aggs: data[0], wishes: data[1]});
+                     }
+                   );
         };
 
         /**
@@ -1362,18 +1246,11 @@ define(
             end: ($scope.data.periods.end / 1000)
           };
 
-          TeamUp._('TTOptionsGet', {second: $scope.timeline.current.group})
-            .then(function (options)
-            {
-              if (!options.adapterId)
-              {
-                $location.path('team-telefoon/options');
-              }
-              else
-              {
-                fetchTeamTimelineData(section, periods);
-              }
-            });
+          Teams.getTeamTelephoneOptions($scope.timeline.current.group)
+               .then(function (options)
+                     {
+                       fetchTeamTimelineData(section, periods);
+                     });
         };
 
         /**
@@ -1398,12 +1275,12 @@ define(
 
                 groupSlots(periods)
                   .then(function (data)
-                  {
-                    $scope.data.aggs = data.aggs;
-                    $scope.data.aggs.wishes = data.wishes;
-                    $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
-                    $rootScope.statusBar.off();
-                  });
+                        {
+                          $scope.data.aggs = data.aggs;
+                          $scope.data.aggs.wishes = data.wishes;
+                          $scope.timeliner.render({start: $scope.data.periods.start, end: $scope.data.periods.end});
+                          $rootScope.statusBar.off();
+                        });
               }
               else
               {
@@ -1498,6 +1375,7 @@ define(
         $scope.selectedSlot = function (props)
         {
           var selectedItem = visDataSet.get(props.items[0]);
+          $scope.removeReoccuringReachabilityForm = false;
 
           $scope.original = {
             start: selectedItem.start,
@@ -1593,6 +1471,50 @@ define(
           return selectedItem;
         };
 
+        /**
+         * Timeline on changing
+         */
+        $scope.timelineChanging = function (item, callback)
+        {
+          $rootScope.planboardSync.clear();
+          var values = item;
+
+          $scope.$apply(
+            function ()
+            {
+              item.content = Sloter.tooltip({
+                                 start: moment(item.start).unix(),
+                                 end: moment(item.end).unix()
+                               }, true);
+
+              // change hover tooltip to constant tooltip
+              if (item.className)
+              { // won't have if created by ctrl/shift-drag
+                item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
+              }
+
+              callback(item);
+
+              $scope.slot = {
+                start: {
+                  date: moment(values.start).format(config.app.formats.date),
+                  time: moment(values.start).format(config.app.formats.time),
+                  datetime: convertDateTimeToLocal(values.start)
+                },
+                end: {
+                  date: moment(values.end).format(config.app.formats.date),
+                  time: moment(values.end).format(config.app.formats.time),
+                  datetime: convertDateTimeToLocal(values.end)
+                },
+                state: values.state,
+                recursive: values.recursive,
+                id: values.id
+              };
+              $scope.showDuration();
+            }
+          );
+        };
+
 
         /**
          * Timeline on select
@@ -1630,16 +1552,17 @@ define(
             $scope.self.timeline.setSelection(newSlot[0]);
             return;
           }
+
           // don't allow deletion if not own planning
           // other groups have a hyperlink
           else if (groupId && groupId.match('href='))
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: false,
-                updateTime: false
-              }
-            });
+                                              editable: {
+                                                remove: false,
+                                                updateTime: false
+                                              }
+                                            });
             $scope.self.timeline.setSelection(props.items[0]);
           }
           // if not a planner, the others don't have a hyperlink
@@ -1655,21 +1578,21 @@ define(
             && !groupId.match($rootScope.ui.planboard.weeklyPlanning))
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: false,
-                updateTime: false
-              }
-            });
+                                              editable: {
+                                                remove: false,
+                                                updateTime: false
+                                              }
+                                            });
             $scope.self.timeline.setSelection(props.items[0]);
           }
           else
           {
             $scope.self.timeline.setOptions({
-              editable: {
-                remove: true,
-                updateTime: true
-              }
-            });
+                                              editable: {
+                                                remove: true,
+                                                updateTime: true
+                                              }
+                                            });
 
           }
 
@@ -1764,13 +1687,14 @@ define(
         $scope.setAvailability = function (availability, period)
         {
           var now = Math.abs(Math.floor(moment().valueOf() / 1000)),
-            hour = 60 * 60;
+              hour = 60 * 60;
 
           var periods = {
             start: now,
             end: Number(now + period * hour),
             state: (availability) ? 'com.ask-cs.State.Available' : 'com.ask-cs.State.Unavailable'
           };
+          if(availability === 'secondline') periods.state = 'secondline';
 
           var values = {
             start: periods.start,
@@ -1861,7 +1785,7 @@ define(
         $scope.setEndTime = function (startDate, startTime)
         {
           var dateFormat = 'DD-MM-YYYY',
-            timeFormat = 'HH:mm';
+              timeFormat = 'HH:mm';
 
           $scope.slot.end.time = moment(startDate + " " + startTime,
                                         dateFormat + " " + timeFormat).add(6, 'hours');
@@ -1880,7 +1804,7 @@ define(
           $rootScope.planboardSync.clear();
           var values, groupId, recursive;
           var now = moment().valueOf(),
-            nowStamp = Math.abs(Math.floor(now / 1000));
+              nowStamp = Math.abs(Math.floor(now / 1000));
 
           /**
            * Make view for new slot
@@ -2031,20 +1955,20 @@ define(
 
                   // make sure that the user can modify the element
                   $scope.self.timeline.setOptions({
-                    editable: {
-                      remove: true,
-                      updateTime: true
-                    }
-                  });
+                                                    editable: {
+                                                      remove: true,
+                                                      updateTime: true
+                                                    }
+                                                  });
 
                   //callback(item);
                   //update visDataSet with the new item
                   visDataSet.add(item);
 
                   $timeout(function ()
-                  {
-                    $scope.self.timeline.setSelection(id);
-                  });
+                           {
+                             $scope.self.timeline.setSelection(id);
+                           });
 
                 });
             }
@@ -2075,8 +1999,7 @@ define(
 
             var end = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
-                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
-
+              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
 
             if (typeof start == "undefined" ||
               isNaN(start) ||
@@ -2122,35 +2045,109 @@ define(
               else
               {
                 $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
-
-                Slots.add(
-                  values,
-                  $scope.timeline.user.id
-                ).then(
-                  function (result)
-                  {
-                    $rootScope.$broadcast('resetPlanboardViews');
-
-                    if (result.error)
-                    {
-                      $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
-                      console.warn('error ->', result);
-                    }
-                    else
-                    {
-                      updateLoggedUser($scope.timeline.user.id);
-                      $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
-                    }
-                    newSlot = [];
-                    $scope.timeliner.refresh();
-
-                    $rootScope.planboardSync.start();
-                  }
-                );
+                addSlot(values);
               }
             }
           }
+
+          function addSlot(values)
+          {
+            Slots.add(
+              values,
+              $scope.timeline.user.id
+            ).then(
+              function (result)
+              {
+                $rootScope.$broadcast('resetPlanboardViews');
+
+                if (result.error)
+                {
+                  $rootScope.notifier.error($rootScope.ui.agenda.errorAdd);
+                  console.warn('error ->', result);
+                }
+                else
+                {
+                  updateLoggedUser($scope.timeline.user.id);
+                  $rootScope.notifier.success($rootScope.ui.agenda.slotAdded);
+                }
+                //nana
+                newSlot = [];
+                (callback && callback());
+                $scope.timeliner.refresh();
+                $rootScope.planboardSync.start();
+              }
+            );
+          }
         };
+
+
+        //if(slot.state === "com.ask-cs.State.Alert")
+        //{
+        //  console.error("yesSs -> " + start, end);
+        //  checkRedundantStateAlertSlots(values)
+        //    .then(function(slots)
+        //          {
+        //            return (slots) ? false : addSlot(values);
+        //          })
+        //}
+
+        //checkRedundantStateAlertSlots({start: '1461798000', end: '1461798010'});
+
+        //function checkRedundantStateAlertSlots(slot)
+        //{
+        //  //set start and end new slot
+        //  slot.start = parseInt(slot.start);
+        //  slot.end = parseInt(slot.end);
+        //
+        //  return Teams.getSingle($scope.timeline.current.group)
+        //       .then(function (membersGroup)
+        //             {
+        //               return Slots.members($scope.timeline.current.group, {start: $scope.data.periods.start / 1000,
+        //                 end: $scope.data.periods.end / 1000}, membersGroup);
+        //             })
+        //       .then(function (members)
+        //             {
+        //               $rootScope.statusBar.off();
+        //
+        //               if (!members.length)
+        //               {
+        //                 //het checken van redundante slots kon op dit moment niet uitgevoerd worden
+        //                 $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
+        //                 return false;
+        //               }
+        //               else
+        //               {
+        //                 //remove id henk
+        //                 var indexUser = _.findIndex(members, {'id': $scope.timeline.user.id}),
+        //                     membersStateAlert = [];
+        //
+        //                 if(indexUser != -1) members.splice(indexUser, 1);
+        //
+        //                 _.each(members, function(member)
+        //                 {
+        //                   var stateAlertData = _.filter(member.data, function(data)
+        //                   {
+        //                     if(data.state === "com.ask-cs.State.Alert"
+        //                       && Math.min(slot.start, slot.end) <= Math.max(data.start, data.end)
+        //                       && Math.max(slot.start, slot.end) >= Math.min(data.start, data.end)) return data;
+        //                   });
+        //                   if(stateAlertData.length) membersStateAlert.push( {fullName: member.fullName, data: stateAlertData} );
+        //                 });
+        //
+        //                 console.error("membersStateAlert ->", membersStateAlert);
+        //
+        //                 if(membersStateAlert.length)
+        //                 {
+        //                   var user = membersStateAlert[0].fullName,
+        //                       start = moment(membersStateAlert[0].data[0].start, 'X').format(config.app.formats.date + " " + config.app.formats.time),
+        //                       end = moment(membersStateAlert[0].data[0].end, 'X').format(config.app.formats.date + " " + config.app.formats.time);
+        //                   $rootScope.notifier.error('De gebruiker ' + user + ' heeft al achterwacht van ' + start + ' t/m ' +  end);
+        //                   return true;
+        //                 }
+        //                 return false;
+        //               }
+        //             });
+        //}
 
         /* Check if startdate is before the enddate
          * @param slot The current selected slot
@@ -2305,14 +2302,7 @@ define(
             $scope.timeliner.refresh();
           };
 
-          // It is already blocked at time-line level but for in case
-          if (/#timeline/.test(values.group))
-          {
-            $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
-
-            $scope.timeliner.refresh();
-          }
-          else
+          var validateSlot = function(changed)
           {
             if (changed.recursive)
             {
@@ -2411,7 +2401,17 @@ define(
                 }
               }
             }
+          };
+
+          // It is already blocked at time-line level but for in case
+          if (/#timeline/.test(values.group))
+          {
+            $rootScope.notifier.error($rootScope.ui.agenda.notAuth);
+
+            $scope.timeliner.refresh();
           }
+          else validateSlot(changed);
+
         };
 
 
@@ -2422,15 +2422,19 @@ define(
          */
         $scope.wisher = function (slot)
         {
+          var wishAmount = parseInt(slot.wish);
+          if(! (wishAmount >= 0 && wishAmount <= 30) )
+            return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
+
           $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
           var formattedSlot = {
             id: slot.groupId,
             start: ($rootScope.browser.mobile) ?
-              new Date(slot.start.datetime).getTime() / 1000 :
+            new Date(slot.start.datetime).getTime() / 1000 :
               moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
             end: ($rootScope.browser.mobile) ?
-              new Date(slot.end.datetime).getTime() / 1000 :
+            new Date(slot.end.datetime).getTime() / 1000 :
               moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
             recursive: (!_.isUndefined(slot.recursive)),
             wish: slot.wish
@@ -2555,6 +2559,81 @@ define(
             );
           }
         }
+
+        /**
+         * TODO: Stress-test this!
+         * Hot fix against not-dom-ready problem for timeline
+         */
+        if ($scope.timeline && $scope.timeline.main)
+        {
+          setTimeout(
+            function ()
+            {
+              $scope.self.timeline.redraw()
+            },
+            config.app.timers.TICKER
+          );
+        }
+
+        $rootScope.intervals = $rootScope.intervals || [];
+
+        /**
+         * Background sync in every 60 sec
+         */
+        $rootScope.planboardSync = {
+          /**
+           * Start planboard sync
+           */
+          start: function ()
+          {
+            $window.planboardSync = $window.setInterval(
+              function ()
+              {
+                /**
+                 * Update planboard only in planboard is selected
+                 */
+                if ($location.path() == '/team-telefoon')
+                {
+                  $scope.slot = {};
+
+                  $rootScope.$broadcast('resetPlanboardViews');
+
+                  $scope.timeliner.load(
+                    {
+                      start: $scope.data.periods.start,
+                      end: $scope.data.periods.end
+                    },
+                    true
+                  );
+                }
+              }, config.app.timers.PLANBOARD_SYNC);
+
+            // Record interval for cleanup when switching controllers
+            $rootScope.intervals.push($window.planboardSync);
+          },
+
+          /**
+           * Clear planboard sync
+           */
+          clear: function ()
+          {
+            var index;
+            $window.clearInterval($window.planboardSync);
+
+            index = $rootScope.intervals.indexOf($window.planboardSync);
+            if(index !== -1){
+              $rootScope.intervals.splice(index, 1);
+            }
+
+            $window.planboardSync = null;
+          }
+        };
+
+        /**
+         * Start planboard sync
+         */
+        $rootScope.planboardSync.start();
+
       });
   }
 );

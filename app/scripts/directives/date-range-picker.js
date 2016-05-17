@@ -43,26 +43,26 @@ define(
 
               options.ranges[$rootScope.ui.planboard.daterangerToday] = [
                 moment().startOf('day').toDate(),
-                moment().add(1, 'days').startOf('day').toDate()
+                moment().endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerTomorrow] = [
                 moment().add(1, 'days').startOf('day').toDate(),
-                moment().add(2, 'days').startOf('day').toDate()
+                moment().add(1, 'days').endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerYesterday] = [
                 moment().subtract(1, 'days').startOf('day').toDate(),
-                moment().startOf('day').toDate()
+                moment().subtract(1, 'days').endOf('day').toDate()
               ];
 
               options.ranges[$rootScope.ui.planboard.daterangerNext3Days] = [
-                moment().startOf('day').toDate(),
-                moment().add(3, 'days').startOf('day').toDate()
+                moment().add(1, 'days').startOf('day').toDate(),
+                moment().add(3, 'days').endOf('day').toDate()
               ];
               options.ranges[$rootScope.ui.planboard.daterangerNext7Days] = [
-                moment().startOf('day').toDate(),
-                moment().add(1, 'weeks').startOf('day').toDate()
+                moment().add(1, 'days').startOf('day').toDate(),
+                moment().add(7, 'days').endOf('day').toDate()
               ];
 
               element.daterangepicker(
@@ -77,7 +77,7 @@ define(
                         start = start.toDate();
                         // bootstrap-daterangepicker uses end of day,
                         // make it the beginning using moment's function
-                        end = (end.startOf('day')).toDate();
+                        end = (end.endOf('day')).toDate();
                       }
 
                       var diff = end.getTime() - start.getTime();

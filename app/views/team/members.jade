@@ -139,4 +139,4 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 							p {{ ui.teamup.stateValue.available }}
 					span.muted.pull-right
 						small
-							i {{(member.list|filter:filtered).length | i18n_spec:'groups.memberCount'}}
+							i {{ ui.groups.amountMembers((member.list|filter:filtered).length) }}

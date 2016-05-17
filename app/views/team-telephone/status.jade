@@ -50,6 +50,26 @@ section#dashboard
 										br
 										small
 											strong {{member.end | calculateDeltaTime}}
+					div(
+						ng-show='status.reachability.members.secondline.length > 0')
+							hr
+							ul.sa-setup
+								li.sa-truck
+									.sa-member(ng-repeat='member in status.reachability.members.secondline')
+										span.sa-member-icon.roundedPicSmall(
+										class='{{member.states|stateColor}}',
+										back-img='{{member.id | avatar:"client":"80"}}')
+											span.badge(ng-show='member.states|stateReachable')
+												i.glyphicon.glyphicon-earphone
+										.sa-member-card
+											h5
+												a(href='#/profile/{{member.id}}#profile')
+													| {{member.name | toTitleCase}}
+											hr
+											span {{status.states[member.state].label}}
+											br
+											small
+												strong {{member.end | calculateDeltaTime}}
 					div(ng-show='status.reachability.members.unreachable.length > 0')
 						hr
 						ul.sa-setup

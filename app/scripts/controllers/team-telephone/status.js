@@ -41,20 +41,13 @@ define(['../controllers'], function (controllers)
 
           CurrentSelection.local = self.currentTeam;
 
-          TeamUp._('TTOptionsGet', {second: self.currentTeam})
+          Teams.getTeamTelephoneOptions(self.currentTeam)
             .then(function (options)
             {
-              var promise = $q.all([
+              return $q.all([
                 Teams.getSingle(self.currentTeam),
                 Slots.MemberReachabilitiesByTeam(self.currentTeam, null)
               ]);
-
-              if (!options.adapterId)
-              {
-                $location.path('team-telefoon/options');
-                promise = $q.reject();
-              }
-              return promise;
             })
             .then(function (result)
             {
@@ -83,7 +76,7 @@ define(['../controllers'], function (controllers)
               var _member = {
                 id: id,
                 state: (slots.length > 0) ? slots[0].state : 'no-state',
-                label: (slots.length > 0) ? self.states[slots[0].state].label[0] : '',
+                label: (slots.length > 0 && self.states[slots[0].state]) ? self.states[slots[0].state].label[0] : '',
                 end: (slots.length > 0 && slots[0].end !== undefined) ?
                 slots[0].end * 1000 :
                   $rootScope.ui.dashboard.possiblyReachable,
@@ -110,10 +103,14 @@ define(['../controllers'], function (controllers)
                   ordered.reachable = [];
                 }
 
+                if (!ordered.secondline) ordered.secondline = [];
+
                 if (!ordered.unreachable)
                 {
                   ordered.unreachable = [];
                 }
+
+                if (slots[0].state == 'secondline') ordered.secondline.push(_member);
 
                 if (slots[0].state == 'com.ask-cs.State.Unavailable')
                 {
@@ -125,6 +122,7 @@ define(['../controllers'], function (controllers)
                   {
                     _member.style = 'sa-icon-reserve-available';
                   }
+                  //else if(slots[0].state == 'com.ask-cs.State.Secondline') _member.style = 'sa-icon-reserve-secondline';
 
                   ordered.reachable.push(_member);
                 }
@@ -161,6 +159,11 @@ define(['../controllers'], function (controllers)
             ordered.reachable.sort(sortByEnd);
           }
 
+          if (ordered.hasOwnProperty('secondline'))
+          {
+            ordered.secondline.sort(sortByEnd);
+          }
+
           if (ordered.hasOwnProperty('unreachable'))
           {
             ordered.unreachable.sort(sortByEnd);
@@ -193,7 +196,7 @@ define(['../controllers'], function (controllers)
          */
         function setKeyAsUsername(members)
         {
-          return _.indexBy(members, 'uuid');
+          return _.keyBy(members, 'uuid');
         }
 
         /**

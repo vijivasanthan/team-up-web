@@ -6,7 +6,7 @@ define(
 
     services.factory(
       'Teams',
-        function ($resource, $q, Store, moment, $rootScope, TeamUp, $injector)
+        function ($resource, $q, Store, moment, $rootScope, TeamUp, $injector, $location)
         {
           var TeamsService = $resource();
 
@@ -559,7 +559,7 @@ define(
             var CurrentSelection = $injector.get('CurrentSelection'),
                 teams = Store('app').get('teams');
 
-            if( ! teamId || ! _.findWhere(teams, {uuid: teamId}) )
+            if( ! teamId || ! _.find(teams, {uuid: teamId}) )
             {
               teamId = CurrentSelection.getTeamId();
             }
@@ -742,7 +742,7 @@ define(
                 if($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0)
                 {
                   var loggedMemberId = $rootScope.app.resources.uuid,
-                    loggedUserResources = _.findWhere(team, {uuid: loggedMemberId});
+                    loggedUserResources = _.find(team, {uuid: loggedMemberId});
 
                   if(!_.isUndefined(loggedUserResources))
                   {
@@ -766,7 +766,7 @@ define(
 
             _.each(teamsUuids, function (teamUuid)
             {
-              var team = _.findWhere(teams, {uuid: teamUuid});
+              var team = _.find(teams, {uuid: teamUuid});
 
               if(!_.isUndefined(team))
               {
@@ -782,6 +782,33 @@ define(
           TeamsService.prototype.updateAllTeamsView = function (teams)
           {
             TeamsService.prototype.all = teams;
+          };
+
+          TeamsService.prototype.getTeamTelephoneOptions = function (teamId)
+          {
+            var deferred = $q.defer();
+            TeamUp._('TTOptionsGet', {second: teamId})
+              .then(function(options)
+              {
+                if(options.adapterId)
+                {
+                  deferred.resolve(options);
+                  $rootScope.isTeamTelephoneTeam = true;
+                }
+                else
+                {
+                  $rootScope.isTeamTelephoneTeam = false;
+                  deferred.reject(options);
+
+                  var teamTelephoneOptionsTab = 'team-telefoon/options';
+
+                  if($location.path().indexOf(teamTelephoneOptionsTab) == -1)
+                  {
+                    $location.path(teamTelephoneOptionsTab);
+                  }
+                }
+              });
+            return deferred.promise;
           };
 
           return new TeamsService;

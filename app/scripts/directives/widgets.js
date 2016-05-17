@@ -37,6 +37,53 @@ define(
       }
     );
 
+	  /**
+     * Logo template directive
+     * //div.navbar-header(show-logo-functionality accessor="accessor")
+     */
+    directives.directive(
+      'showLogoFunctionality',
+      function ($rootScope)
+      {
+        return {
+          restrict: 'A',
+          scope: { accessor: '=' },
+          template: function()
+          {
+            return '<a class="navbar-brand header-logo-{{ logo.toLowerCase() }}" ng-click="navigation(navDirection)">{{ logo }}</a>';
+          },
+          link: function(scope)
+          {
+            var setLogoFunctionality = function()
+            {
+              scope.logo = "TeamTelefoon";
+              scope.navDirection = "";
+
+              if($rootScope.app.domainPermission.tasks)
+              {
+                scope.logo = 'TeamUp';
+                scope.navDirection = "task/mytasks";
+              }
+              else if($rootScope.app.domainPermission.teamTelephoneBasic) scope.navDirection = "team-telefoon/status";
+            };
+
+            scope.accessor = scope.accessor || {};
+
+            scope.accessor.showLogoFunctionality = function()
+            {
+              setLogoFunctionality();
+            };
+
+            scope.navigation = function(navDirection)
+            {
+              $rootScope.nav(navDirection);
+            };
+            setLogoFunctionality();
+          }
+        };
+      }
+    );
+
     //TODO custom team switch selectbox
     directives.directive(
       'selectBox', function ()
@@ -108,28 +155,20 @@ define(
                     return false;
                   }
 
-                  //var fileUpload = angular.element(el).val(),
-                  //    fileExtension = fileUpload.substr(fileUpload.lastIndexOf('.') + 1).toLocaleLowerCase().trim();
-                  //console.error("fileExtension ->", fileExtension);
-                  //console.error("file ->", (fileExtension != 'png' || fileExtension != 'jpg'));
-                  //if(fileExtension !== 'png' ||
-                  //  fileExtension !== 'jpg' )
-                  //{
-                  //  console.error("123 ->", 123);
-                  //  $scope.$apply(
-                  //    function ()
-                  //    {
-                  //      $rootScope.notifier.error($rootScope.ui.options.noPhoneNumbers);
-                  //    }
-                  //  );
-                  //  return;
-                  //}
+                  var fileUpload = angular.element(el).val(),
+                      fileExtension = fileUpload.substr(fileUpload.lastIndexOf('.') + 1).toLocaleLowerCase(),
+                      whiteListFileTypes = ['png', 'jpeg', 'jpg', 'gif', 'bpg', 'tiff'];
 
-                  //||
-                  //fileExtension !== 'jpeg' ||
-                  //fileExtension !== 'gif' ||
-                  //fileExtension !== 'bpg' ||
-                  //fileExtension !== 'tiff'
+                  if(whiteListFileTypes.indexOf(fileExtension) === -1)
+                  {
+                    $scope.$apply(
+                        function ()
+                        {
+                          $rootScope.notifier.error($rootScope.ui.validation.upload.fileTypeNotAloud);
+                        }
+                      );
+                    return false;
+                  }
 
                   $form.attr('action', $scope.action);
 
@@ -148,8 +187,6 @@ define(
                       },
                       uploadProgress: function (event, position, total, percentComplete)
                       {
-                        console.log('event', event);
-
                         $scope.$apply(
                           function ()
                           {
@@ -172,6 +209,7 @@ define(
                           function ()
                           {
                             $scope.avatar = filename;
+
                             var roundPicture = $('.roundedPicLarge');
                             var avatarTagStyle = roundPicture.attr('style');
                             var size = 0,
@@ -203,6 +241,9 @@ define(
                             }
 
                             $scope.$parent.$root.avatarChange(id);
+                            //empty value so the onchange will upload even the file with the same
+                            angular.element(el).val("");
+
                             $rootScope.notifier.success(message);
                             $rootScope.showChangedAvatar(type, id);
 
@@ -254,7 +295,7 @@ define(
             ],
             link: function (scope, elem, attrs, ctrl)
             {
-              console.log('profile directive ->', attrs.memberId);
+
             },
             replace: false,
             templateUrl: 'views/profileTemplate.html'
@@ -388,9 +429,6 @@ define(
       {
         return function (scope, element, attrs)
         {
-          //			console.log(element.parent('a'));
-          //			console.log('attrs-> ', attrs);
-          //			console.log('attrs->backImg-> ', attrs.backImg);
           var url = attrs.backImg;
           element.css(
             {
@@ -585,33 +623,54 @@ define(
 
     directives.directive(
       'setPositionSlotForm',
-      function ($window)
+      function ($rootScope, $window)
       {
         return {
           restrict: 'A',
           link: function (scope, element, attrs)
           {
-            element.bind(
-              'mouseup',
-              function (ev)
-              {
-                var footer = angular.element('#footer').height(),
-                  form = angular.element('.time-slot-form'),
-                  modal = form.height(),
-                  slot = 105,
+            ($rootScope.browser.mobile)
+              ? element.bind('touchstart click', moveFormToSLotMobile)
+              : element.bind('mousedown dblclick', moveFormToSLot);
 
-                  minNeededHeight = (modal + slot),
+
+            function moveFormToSLotMobile(ev)
+            {
+              var footer = angular.element('#footer').height(),
+                  form = angular.element('.time-slot-form'),
+                  modal = form.css('min-height'),
+                  slot = 170,
+                  minNeededHeight = (parseInt(modal) + slot),
+                  clickY = (ev.originalEvent.touches[0].clientY + $window.pageYOffset),//(current view y + scroll top height)
+                  heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
+                  position = (minNeededHeight > ev.originalEvent.touches[0].clientY)
+                    ? clickY
+                    : ((clickY - ev.target.offsetHeight) - minNeededHeight);
+              form.hide();
+
+              //TODO FIx position bottom
+              //The height needed for the modal is less then the height in the current view
+              form.css('top', position + 'px').show();
+            }
+
+            function moveFormToSLot(ev)
+            {
+              var form = angular.element('.time-slot-form'),
+                  footer = angular.element('#footer').height(),
+                  modal = form.css('min-height'),
+                  slot = (ev.target.className === "vis-item-content") ? 140 : 170,
+                  minNeededHeight = (parseInt(modal) + slot),
                   clickY = (ev.clientY + $window.pageYOffset),//(current view y + scroll top height)
                   heightToBottom = ($window.outerHeight - clickY) + minNeededHeight,
                   position = (minNeededHeight > ev.clientY)
                     ? clickY
                     : (clickY - minNeededHeight);
+              form.hide();
 
-                //TODO FIx position bottom
-                //The height needed for the modal is less then the height in the current view
-                form.css('top', position + 'px');
-              }
-            );
+              //TODO FIx position bottom
+              //The height needed for the modal is less then the height in the current view
+              form.css('top', position + 'px').show();
+            }
           }
         };
       }
@@ -623,8 +682,6 @@ define(
       {
         return function (scope, element, attrs)
         {
-          console.log('attrs', attrs.dynamicType);
-
           var ensureCompileRunsOnce = scope.$watch(
             function (scope)
             {
@@ -632,7 +689,6 @@ define(
             },
             function (value)
             {
-              console.log('value', value);
               element.html(value);
               $compile(element.contents())(scope);
 
@@ -664,26 +720,6 @@ define(
     //    };
     //  }
     //);
-
-    directives.directive(
-      'showHideOnRole',
-      function ($rootScope)
-      {
-        //
-        return {
-          restrict: 'A',
-          link: function (scope, element)
-          {
-            if(! element.hasClass('ng-hide')
-              && (! $rootScope.app.domainPermission.teamSelfManagement
-              || $rootScope.app.resources.role > 1))
-            {
-              element.addClass('ng-hide');
-            }
-          }
-        };
-      }
-    );
 
     directives.directive(
       'requiredForm',

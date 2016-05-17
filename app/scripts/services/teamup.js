@@ -143,6 +143,7 @@ define(
                 //Put Scenario templates
                 TTScenarioTemplateSave : {
                   method: 'PUT',
+                  ignore: true,//ignore default response error, made a customized version
                   params: {
                     first: 'team',
                     third: 'teamTelephone',

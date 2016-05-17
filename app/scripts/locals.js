@@ -212,6 +212,10 @@ define(
           buttonPushed: 'button pushed simultaneously.'
         },
         timeline: {
+          removeReoccuring: "Remove",
+          onlySingleReoccuringSlot: "Only this reachability",
+          allReocurringSlots : "Every reoccuring reachability",
+          removingSingleReoccuringSlot: "There is a slot with the state of non reachable added, on the same time as the reoccuring slot.",
           query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
           pastAdding: 'It is not allowed to add a timeslot in the past!',
           swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
@@ -417,6 +421,12 @@ define(
           send: 'send'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "There is " + amountMembers + " member."
+              : "There are " + amountMembers + " members.";
+          },
           changeMemberShip: 'Change membership',
           doYou: 'Do you ',
           memberOfATeam: ' like to be part of a team ',
@@ -604,6 +614,22 @@ define(
           settings: 'settings'
         },
         teamup: {
+          'and': 'and',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' are not updated' : ' is not updated';
+          },
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "There is " + amountReports + " report."
+              : "There are " + amountReports + " reports.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "There is " + amountContacts + " contact person."
+              : "There are " + amountContacts + " contact persons.";
+          },
           removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
@@ -622,6 +648,7 @@ define(
           'new': 'New',
           'existing': 'Existing',
           teams: 'Teams',
+          selectTeams: 'Select team(s)',
           selectTeam: 'Select a team',
           teamNameExistTitle: 'Team name already exist',
           teamNameExistContent: 'Are you sure to add a team which name already exist?',
@@ -717,6 +744,7 @@ define(
           accountInfoFill: 'Please fill in your account information',
           passNotSame: 'passwords are not the same',
           savingMember: 'Saving member...',
+          selectTeams: 'Select team(s)',
           selectTeam: 'Select a team',
           clinetInfoFill: 'Please fill in client information (name, telephone)',
           savingClient: 'Saving client...',
@@ -840,6 +868,7 @@ define(
             'on_the_phone': 'On the phone',
             'unknown': 'Unknown',
             'reachable': 'Reachable',
+            'secondline': 'Second line',
             'possibly_reachable': 'Possibly reachable',
             'unreachable': 'Unreachable',
             'unavailable': 'Unavailable',
@@ -988,14 +1017,9 @@ define(
           member: 'Member',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "There is " + amountTasks + " task.";
-            }
-            else
-            {
-              return "There are " + amountTasks + " tasks."
-            }
+            return (amountTasks == 1)
+              ? "There is " + amountTasks + " task."
+              : "There are " + amountTasks + " tasks.";
           },
           carer: 'Carer',
           information: 'Information',
@@ -1134,6 +1158,9 @@ define(
           },
           wish : {
             integer: 'Give a number in the range of 0 to 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "The type of file you have uploaded is not allowed, Pick one of the following types: 'png', 'jpeg', 'jpg', 'gif', 'bpg' or 'tiff'"
           }
         }
       },
@@ -1325,6 +1352,10 @@ define(
           buttonPushed: 'gedrückter linker Maustaste.'
         },
         timeline: {
+          removeReoccuring: "Remove",
+          onlySingleReoccuringSlot: "Only this reachability",
+          allReocurringSlots : "Every reoccuring reachability",
+          removingSingleReoccuringSlot: "There is a slot with the state of non reachable added, on the same time as the reoccuring slot.",
           query: 'There has been some problems with syncing agenda information. Please refresh your browser for getting the latest agenda information.',
           pastAdding: 'It is not allowed to add a timeslot in the past!',
           swappedStartEnd: 'The end time is earlier than the start time. Did you swap the start and end time?',
@@ -1585,6 +1616,12 @@ define(
           send: 'versenden'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "There is " + amountMembers + " member."
+              : "There are " + amountMembers + " members.";
+          },
           changeMemberShip: 'Mitgliedschaft ändern',
           doYou: 'Möchten Sie ',
           memberOfATeam: ' in das Team ',
@@ -1769,6 +1806,22 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          'and': 'and',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' are not updated' : ' is not updated';
+          },
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "There is " + amountReports + " report."
+              : "There are " + amountReports + " reports.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "There is " + amountContacts + " contact person."
+              : "There are " + amountContacts + " contact persons.";
+          },
           removingTeamWithTasks: "There are tasks with the state of planning for the team, remove them first!",
           minimumOneMember: "Atleast one member must be added",
           newNumberOf: "is the new number of ",
@@ -2006,6 +2059,7 @@ define(
             'on_the_phone': 'am Telefon',
             'unknown': 'unbekannt',
             'reachable': 'erreichbar',
+            'secondline': 'Second line',
             'possibly_reachable': 'nichts geplant',
             'unreachable': 'nicht erreichbar',
             'unavailable': 'nicht verfügbar',
@@ -2115,14 +2169,9 @@ define(
           member: 'Mitglied',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "Es gibt eine " + amountTasks + " Aufgabe.";
-            }
-            else
-            {
-              return "Es gibt " + amountTasks + " Aufgaben."
-            }
+            return (amountTasks == 1)
+              ? "Es gibt eine " + amountTasks + " Aufgabe."
+              : "Es gibt " + amountTasks + " Aufgaben.";
           },
           carer: 'Betreuer',
           information: 'Information',
@@ -2262,6 +2311,9 @@ define(
           },
           wish : {
             integer: 'Give a number in the range of 0 to 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "The type of file you have uploaded is not allowed, Pick one of the following types: 'png', 'jpeg', 'jpg','gif', 'bpg' or 'tiff'"
           }
         },
       },
@@ -2637,6 +2689,10 @@ define(
           buttonPushed: 'knop tegelijkertijd ingedrukt.'
         },
         timeline: {
+          removeReoccuring: "Verwijder",
+          onlySingleReoccuringSlot: "Alleen deze bereikbaarheid",
+          allReocurringSlots : "Alle herhaalde bereikbaarheid",
+          removingSingleReoccuringSlot: "Er is een niet bereikbaar tijdslot toegevoegd op het tijdstip van het herhalende slot.",
           query: 'Fout bij het laden van de tijdlijndata. Vernieuw deze webpagina om het nogmaals te proberen.',
           pastAdding: 'Invoer van tijden in het verleden is niet toegestaan!',
           swappedStartEnd: 'De eindtijd is eerder dan de starttijd. Zijn de start- en eindtijd omgewisseld?',
@@ -2732,6 +2788,12 @@ define(
           send: 'Versturen'
         },
         groups: {
+          amountMembers: function (amountMembers)
+          {
+            return (amountMembers == 1)
+              ? "Er is " + amountMembers + " lid."
+              : "Er zijn " + amountMembers + " leden.";
+          },
           changeMemberShip: 'Lidmaatschap wijzigen',
           doYou: 'Wilt u ',
           memberOfATeam: 'lid maken van team ',
@@ -2920,6 +2982,22 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          and: ' en ',
+          somethingUpdated: function(errors) {
+            return (errors.length > 1) ? ' zijn niet geupdate' : ' is niet geupdate';
+          },
+          amountReports: function (amountReports)
+          {
+            return (amountReports == 1)
+              ? "Er is " + amountReports + " rapport."
+              : "Er zijn " + amountReports + " rapporten.";
+          },
+          amountContacts: function(amountContacts)
+          {
+            return (amountContacts == 1)
+              ? "Er is " + amountContacts + " contactpersoon."
+              : "Er zijn " + amountContacts + " contactpersonen.";
+          },
           removingTeamWithTasks: "Er staan nog taken in de planning voor het te verwijderen team, verwijder deze eerst!",
           minimumOneMember: "Minimaal één teamlid moet toegevoegd worden",
           newNumberOf: "is het nieuwe nummer van ",
@@ -3036,6 +3114,7 @@ define(
           accountInfoFill: 'Vul uw accountinformatie in a.u.b.',
           passNotSame: 'Wachtwoorden zijn niet hetzelfde',
           savingMember: 'Lid aan het opslaan...',
+          selectTeams: 'Selecteer team(s)',
           selectTeam: 'Selecteer een team',
           clinetInfoFill: 'Vul de cliëntinformatie (naam en telefoon) in a.u.b.',
           savingClient: 'Cliënt aan het opslaan...',
@@ -3155,9 +3234,11 @@ define(
             'available': 'Beschikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline',
+            'alert': 'Achterwacht',
             'not_reachable': 'Niet bereikbaar',
             'on_the_phone': 'Aan de telefoon',
             'unknown': 'Onbekend',
+            'secondline': 'Achterwacht',
             'reachable': 'Bereikbaar',
             'possibly_reachable': 'Niet gepland',
             'unreachable': 'Niet bereikbaar',
@@ -3262,14 +3343,9 @@ define(
           member: 'Lid',
           thereAreAmountTasks: function (amountTasks)
           {
-            if (amountTasks == 1)
-            {
-              return "Er is " + amountTasks + " taak.";
-            }
-            else
-            {
-              return "Er zijn " + amountTasks + " taken."
-            }
+            return (amountTasks == 1)
+              ? "Er is " + amountTasks + " taak."
+              : "Er zijn " + amountTasks + " taken.";
           },
           carer: 'Verzorger',
           information: 'Informatie',
@@ -3461,6 +3537,9 @@ define(
           },
           wish : {
             integer: 'Geef een nummer van 0 t/m 30 '
+          },
+          upload: {
+            fileTypeNotAloud: "Dit type bestand is niet toegestaan, kies een van de volgende types: 'png', 'jpeg', 'jpg', 'gif', 'bpg' of 'tiff'"
           }
         }
       }

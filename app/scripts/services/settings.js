@@ -68,7 +68,7 @@ define(['services/services', 'config'], function (services, config)
       getResultOnStatusCode: function (results)
       {
         var $rootScope = $injector.get('$rootScope'),
-          statusCodes = _.pluck(results, 'status'),
+          statusCodes = _.map(results, 'status'),
           self = this,
           index = 0;
 

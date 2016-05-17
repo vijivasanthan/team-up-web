@@ -293,7 +293,7 @@ define(['services/services', 'config'],
                   return findUniqueClientsByTasks(tasks);
                 })
                 .then(function (tasksClients) {
-                  tasksClients = _.indexBy(tasksClients, 'uuid');
+                  tasksClients = _.keyBy(tasksClients, 'uuid');
                   data.tasks = processTasks(data.tasks, tasksClients);
                   deferred.resolve(data.tasks);
                 });
@@ -325,7 +325,7 @@ define(['services/services', 'config'],
                 return findUniqueClientsByTasks(tasks);
               })
               .then(function (tasksClients) {
-                tasksClients = _.indexBy(tasksClients, 'uuid');
+                tasksClients = _.keyBy(tasksClients, 'uuid');
                 data.tasks = processTasks(data.tasks, tasksClients);
 
                 $location.search('teamId', teamId);//add the teamId as url param
@@ -387,7 +387,7 @@ define(['services/services', 'config'],
                 );
 
                 var tasks = _.map(
-                  _.indexBy(basket, function (node)
+                  _.keyBy(basket, function (node)
                   {
                     return node.uuid
                   }),
@@ -451,7 +451,7 @@ define(['services/services', 'config'],
           function findUniqueClientsByTasks(tasks)
           {
             tasks = _.sortBy(tasks, 'plannedStartVisitTime');
-            var clientUuids = _.pluck(tasks, 'relatedClientUuid');
+            var clientUuids = _.map(tasks, 'relatedClientUuid');
             var uniqueClients = _.uniq(clientUuids);
             return getTasksClients(uniqueClients);
           }

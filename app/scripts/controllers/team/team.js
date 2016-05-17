@@ -6,7 +6,7 @@ define(
 
     controllers.controller(
       'team',
-      function ($location, $interval, Team)
+      function ($location, Team)
       {
         //view model
         var self = this;
@@ -65,7 +65,7 @@ define(
          */
         function update(teamId, team, confirm)
         {
-          var selectedTeam = _.findWhere(self.list, {uuid: teamId});
+          var selectedTeam = _.find(self.list, {uuid: teamId});
           if (!team)
           {
             self.updateForm = true;

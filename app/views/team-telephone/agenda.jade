@@ -15,7 +15,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 			div#timelineTab.tab-pane.active
 				#timeline
 					div#timeline-toolbar
-						select.form-control.pull-left(ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1) && timeline.current.layouts.group',
+						select.form-control.pull-left(ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1)',
 							ng-model='timeline.current.group',
 							ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 							ng-selected='timeline.current.group',
@@ -35,10 +35,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								span.badge.badge-inset
 									| {{wish}}
 								| &nbsp;{{ui.agenda.requiredPeople}}
-							
-								
-						br(ng-show='browser.mobile')
-						br(ng-show='browser.mobile')
+						
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
 							//.btn-group(ng-show='timeline.current.layouts.group')
@@ -73,17 +70,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								//aria-hidden='true',
 								
 					hr
-					// alert-window
-					//div.alert.alert-warning(
-					//	ng-show='timeline.user.id != app.resources.uuid')
-					//	button.close(type='button',
-					//	data-dismiss='alert') ×
-					//	small
-					//		| U bekijkt de tijdlijn van 
-					//		strong
-					//			i  {{timeline.user.fullName}}
-					//		|  druk op annuleren om terug te gaan naar uw tijdlijn.
-					//	button.btn.btn-primary-reverse(type='button', ng-click='redirectOwnTimeline()') Annuleren
 					
 					div.alert.alert-warning(ng-show='infoAvailibility')
 						button.close(type='button',
@@ -102,13 +88,6 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							|  {{ ui.agenda.or }}
 							strong  CTRL (Windows) 
 							|  {{ ui.agenda.buttonPushed }}
-						
-						
-						//Die Planung Ihrer Verfügbarkeit kann geändert werden, 
-						//durch Doppelklick auf eine bereits vorhandene Planung oder durch Markierung der 
-						//Planung mit der Maus und anschließender Verschiebung bei 
-						//gedrückter linker Maustaste (linker-Maustaste und 
-						//Shift bei MAC bzw. CTRL bei Windows).
 		
 					#mainTimeline(set-position-slot-form)
 					div.legends-agenda

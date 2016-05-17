@@ -18,6 +18,11 @@ var profile = {
       className: 'state-available',
       color: '#4f824f'
     },
+    'secondline': {
+      className: 'state-secondline',
+      label: 'Achterwacht',
+      color: '#f5a962'
+    },
     'com.ask-cs.State.Unavailable': {
       className: 'state-unavailable',
       color: '#a93232'
@@ -32,6 +37,7 @@ var profile = {
 
   states: [
     'com.ask-cs.State.Available',
+    'com.ask-cs.State.Alert',
     'com.ask-cs.State.Unavailable'
   ],
 

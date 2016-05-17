@@ -165,7 +165,7 @@ define(['services/services', 'config'],
               }
             );
 
-            var indexed = _.indexBy(refined, 'trackingToken');
+            var indexed = _.keyBy(refined, 'trackingToken');
 
             var uniques = [];
 
@@ -289,7 +289,7 @@ define(['services/services', 'config'],
             if(options.adapterId && options.members)
             {
               options.members.push(options.currentTeam);
-              var teamMembersNames = _.indexBy(options.members, 'phone');
+              var teamMembersNames = _.keyBy(options.members, 'phone');
             }
 
             resource.get(
@@ -372,7 +372,7 @@ define(['services/services', 'config'],
                   adapterId: 'all'
                 };
 
-                var teamPhoneData = _.findWhere(teams, {teamId: CurrentSelection.getTeamId()});
+                var teamPhoneData = _.find(teams, {teamId: CurrentSelection.getTeamId()});
 
                 /*
                   Check if the team of the user has a adapterId, if not give a _.uniqueId()

@@ -5,6 +5,10 @@
 // Base styles
 // --------------------------------------------------
 
+button:first-letter {
+  text-transform: uppercase;
+}
+
 // Core
 .btn {
   display: inline-block;
@@ -14,7 +18,8 @@
   font-size: $baseFontSize;
   line-height: $baseLineHeight;
   text-align: center;
-  text-transform: capitalize;
+  //text-transform: capitalize;
+  text-transform: lowercase;
   font-weight: 600;
   vertical-align: middle;
   cursor: pointer;
@@ -387,4 +392,41 @@ input[type="submit"].btn {
 .btn:focus {
   outline: none;
   outline-offset: 0px;
+}
+
+.btn-default {
+  color: $brown;
+}
+
+//.dropdown-menu > .active > a {
+//  background: $brown;
+//}
+
+// Hover/Focus state
+.dropdown-menu > li > a {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: $white;
+  }
+}
+
+// Active state
+.dropdown-menu > .active > a {
+  &,
+  &:hover,
+  &:focus {
+    color: $white;
+    text-decoration: none;
+    outline: 0;
+    background-color: $brown !important;
+  }
+}
+
+.dropdown-menu > li > a {
+  color: $brown;
+}
+
+.dropdown-menu > li > a:hover {
+  color: $orange !important;
 }
