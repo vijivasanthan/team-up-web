@@ -109,7 +109,7 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 										span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
 										aria-hidden='true',
 										class="{{state.name|stateDataIcon:'class_name'}}")
-										span.stateValue(ng-show='(state.name == "Reachability")') {{ state.value | translateReachabilityState }}
+										span.stateValue(ng-show='(state.name == "Reachability")') {{ m.currentReachability | translateCurrentState }}
 										span.stateValue(ng-show='(state.name == "Location")') {{[m.address.street, m.address.no, m.address.zip, m.address.city] | commaSeperated}}
 										span.stateValue(ng-show='(state.name == "Availability")') {{state.value | i18n_spec:'teamup.stateValue'}}
 											a(ng-show='(state.name == "Location")',
