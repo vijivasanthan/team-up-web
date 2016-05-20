@@ -133,10 +133,10 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 							p {{ ui.teamup.noSharedStates }}
 						li
 							div(class='roundedPicxSmall memberStateBusy')
-							p {{ ui.teamup.stateValue.unavailable }}
+							p {{ ui.teamup.stateValue.unreachable }}
 						li
 							div(class='roundedPicxSmall memberStateAvailalbe')
-							p {{ ui.teamup.stateValue.available }}
+							p {{ ui.teamup.stateValue.reachable }}
 					span.muted.pull-right
 						small
 							i {{ ui.groups.amountMembers((member.list|filter:filtered).length) }}

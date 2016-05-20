@@ -127,14 +127,14 @@ define(
            */
           if (_.isEmpty($rootScope.config.app.timeline.states))
           {
-            $rootScope.config.app.statesall['com.ask-cs.State.Available']['label'] = $rootScope.ui.teamup.stateValue.reachable;
-            $rootScope.config.app.statesall['com.ask-cs.State.Available']['type'] = $rootScope.ui.teamup.stateValue.reachable;
+            $rootScope.config.app.statesall['com.ask-cs.State.Available']['label'] = $rootScope.ui.teamup.stateValue.available;
+            $rootScope.config.app.statesall['com.ask-cs.State.Available']['type'] = $rootScope.ui.teamup.stateValue.available;
 
             $rootScope.config.app.statesall['secondline']['label'] = $rootScope.ui.teamup.stateValue.secondline;
             $rootScope.config.app.statesall['secondline']['type'] = $rootScope.ui.teamup.stateValue.secondline;
 
-            $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['label'] = $rootScope.ui.teamup.stateValue.not_reachable;
-            $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['type'] = $rootScope.ui.teamup.stateValue.not_reachable;
+            $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['label'] = $rootScope.ui.teamup.stateValue.unavailable;
+            $rootScope.config.app.statesall['com.ask-cs.State.Unavailable']['type'] = $rootScope.ui.teamup.stateValue.unavailable;
 
             $rootScope.config.app.timeline.config.states = $rootScope.config.app.statesall;
             delete $rootScope.config.app.timeline.config.states['com.ask-cs.State.Unreached'];
