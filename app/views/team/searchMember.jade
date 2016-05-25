@@ -104,10 +104,10 @@ div(ng-controller='team as team', style='padding-top: 1px;')
 									| {{ m.teamUuids | getTeamNameById : member.searchTeams }}
 								td
 									.pull-right
-										button.btn-primary.btn-mini(
+										a.round-button(class='btn-primary btn-mini',
 											ng-click='team.addMember(m); member.selected = m',
 											ng-hide='m.teamUuids.indexOf(team.current.teamId) >= 0')
-												span.icomoon(data-icon='')
+											span.icomoon(data-icon='', aria-hidden='true')
 					span.muted.pull-right(ng-show='member.searchResults.length > 0')
 						small
 							i {{ ui.groups.amountMembers(member.searchResults.length) }}
