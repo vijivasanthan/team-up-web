@@ -127,7 +127,7 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 										ng-click='member.delete(m); member.current = m',
 										ng-show='app.resources.role == 1 || app.domainPermission.teamSelfManagement')
 											i.icon-trash
-					ul#teams-legenda
+					ul#teams-legenda(ng-if='app.domainPermission.tasks')
 						li
 							div(class='roundedPicxSmall memberStateNone')
 							p {{ ui.teamup.noSharedStates }}
