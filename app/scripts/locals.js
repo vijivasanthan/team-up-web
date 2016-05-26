@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' are not updated' : ' is not updated';
@@ -1804,6 +1805,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' are not updated' : ' is not updated';
@@ -2978,6 +2980,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          unknownAddress: 'Adres onbekend',
           and: ' en ',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' zijn niet geupdate' : ' is niet geupdate';
