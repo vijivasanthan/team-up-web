@@ -14,8 +14,24 @@ define(['services/services', 'config'],
 	                                 Dater,
 	                                 Session,
 	                                 $location,
-	                                 MD5)
+	                                 MD5,
+	                                 SessionCount)
 	                        {
+		                        /*
+		                        READ MEEE
+
+		                        one session at the time
+		                         window.onstorage check if teamtelefoon_sessions has more then one session
+		                         and will log the old session off
+
+		                         if there is only one tab open and there is no session but teamtelefoon_sessions
+		                         is still on 1 the local storage must be cleared inclusive the teamtelefoon_sessions
+
+		                         */
+
+
+
+
 		                        // constructor \\
 		                        var loginService = function()
 		                        {
@@ -27,28 +43,29 @@ define(['services/services', 'config'],
 				                        setBackgroundColor();
 			                        }
 
-			                        var loginData, locStore = hasLocalStorageFunctionality();
+			                        window.onstorage = function(e)
+			                        {
+				                        if(e.key === 'teamtelefoon_sessions' &&
+					                        e.newValue > 1)
+				                        {
+					                        $rootScope.logout();
+				                        }
+			                        };
 
-			                        if( locStore )
+			                        if( hasLocalStorageFunctionality() )
 			                        {
 				                        hideAndChangeInterfaceParts();
 
-				                        if( ! Store('app').get('app') )
-				                        {
-					                        // TODO: Soon not needed!
-					                        Dater.registerPeriods();
-					                        Store('app').save('app', '{}');
-				                        }
-				                        else
-				                        {
-					                        var periods = Store('app').get('periods');
-					                        loginData   = Store('app').get('loginData');
+				                        var periods   = Store('app').get('periods');
+				                        var loginData = Store('app').get('loginData');
 
-					                        Store('app').nuke();
-					                        Store('app').save('periods', periods);
-					                        Store('app').save('loginData', loginData);
-				                        }
+				                        //Store('app').nuke();
+				                        SessionCount.check();
+				                        Store('app').save('periods', periods);
+				                        Store('app').save('loginData', loginData);
 			                        }
+
+
 
 			                        /**
 			                         * Hide or change a few parts in the login, so it's looks different,
@@ -181,7 +198,15 @@ define(['services/services', 'config'],
 									                        Session.set(result['X-SESSION_ID']);//set session
 									                        preLoadData(function()//preload all the data as logged user data,  all teamnames and location permissions
 									                                    {
-										                                    //if all the data is loaded, resolve the login result
+										                                    //var currentSessions = localStorage.getItem("teamtelefoon_sessions"),
+										                                    //    count = (currentSessions)
+											                                   //     ? parseInt(currentSessions)
+											                                   //     : 0;
+										                                    //count++;
+										                                    //localStorage.setItem("teamtelefoon_sessions", count);
+										                                    SessionCount.add();
+										                                    SessionCount.check();
+
 										                                    deferred.resolve(result);
 									                                    });
 								                        }

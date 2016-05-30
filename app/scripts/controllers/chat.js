@@ -417,11 +417,8 @@ define(
 
           function displayMessage (evt)
           {
-            console.error('evt', evt);
-
             if (evt.origin === config.app.videoCallUrl)
             {
-
               console.error('Hangup triggerd from chat control');
               if(evt.data == 'left')
               {
