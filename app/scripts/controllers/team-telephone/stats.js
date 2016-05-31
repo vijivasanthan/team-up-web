@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'logs',
+      'stats',
       function (
         $rootScope,
         $location,

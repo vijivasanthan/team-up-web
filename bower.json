@@ -37,7 +37,8 @@
     "web-lib-store": "https://github.com/askcs/web-lib-store.git",
     "angular-messages": "~1.4.7",
     "vis": "~4.15.0",
-    "seiyria-bootstrap-slider": "~7.0.1"
+    "seiyria-bootstrap-slider": "~7.0.1",
+    "angular-chart.js": "^0.10.2"
   },
   "devDependencies": {}
 }

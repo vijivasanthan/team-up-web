@@ -1,0 +1,41 @@
+section#logs
+	.page-header.agenda-timeline
+		h2.nullable {{ ui.teamup.stats }}
+	div
+		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
+			label.control-label {{ ui.teamup.chooseTeam }}
+			.controls
+				select(ng-model='stats.current',
+				ng-options='team.uuid as team.name for team in stats.data.teams | orderBy:"name"',
+				ng-selected='stats.current',
+				ng-change='stats.fetchLogs()')
+		.form-group.has-feedback.pull-left.dateranger.headerTop
+			input.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
+			i.glyphicon.glyphicon-calendar.form-control-feedback
+		.form-group.has-feedback.pull-right.headerTop
+			input.form-control.search-query(
+			type='text', 
+			placeholder='{{ ui.logs.filter }}',
+			ng-change="stats.expandedLog = stats.data.logData.logs.length; stats.showAllGroups = (stats.filtered.length > 1); stats.toggleGroupedLogs(stats.showAllGroups, stats.data.logData.logs); ",
+			ng-model='stats.filtered')
+			
+	.tabbable.tabs-left
+		.tab-content
+			#groupTab.tab-pane.active
+				p(ng-hide='stats.data.logData.logs.length > 0') {{ ui.logs.empty }}
+				//p aantal open {{ stats.expandedLog }} totaal log {{ stats.data.logData.logs.length }}
+				div(ng-show='stats.data.logData.logs.length > 0')
+
+				hr
+				small.pull-left(ng-show='logs.data.logData.logs.length > 0')
+					span.text-warning {{ui.planboard.lastSyncTime}}
+					span.text-muted &nbsp;{{stats.data.logData.synced | date: 'medium'}}
+					br
+					span.text-warning {{ui.planboard.dataRangeStart}}
+					span.text-muted &nbsp;{{logs.data.logData.periods.startTime | date: 'medium'}}
+					| &nbsp;|
+					span.text-warning {{ui.planboard.dataRangeEnd}}
+					span.text-muted  {{logs.data.logData.periods.endTime | date: 'medium'}}
+				small.text-muted.pull-right(ng-show='logs.data.logData.logs.length > 0')
+					br
+					i {{ ui.logs.amountLogs((logs.data.logData.logs|filter: logs.filtered).length) }}

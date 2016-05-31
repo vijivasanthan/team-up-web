@@ -16,7 +16,8 @@ define(
     'angular-strap',
     'angular-dynamic-locale',
     'angular-sortable-view',
-    'angular-cookie'
+    'angular-cookie',
+    'charts'
   ],
   function (angular)
   {
@@ -37,7 +38,8 @@ define(
         'ui.mask',
         'angular-sortable-view',
         'ipCookie',
-        'tmh.dynamicLocale'
+        'tmh.dynamicLocale',
+        'chart.js'
       ]);
   }
 );
