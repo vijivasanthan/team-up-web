@@ -17,7 +17,7 @@ define(
     'angular-dynamic-locale',
     'angular-sortable-view',
     'angular-cookie',
-    'charts'
+    'angular-chart'
   ],
   function (angular)
   {

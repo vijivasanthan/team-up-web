@@ -1,6 +1,6 @@
 section#logs
 	.page-header.agenda-timeline
-		h2.nullable {{ ui.teamup.stats }}
+		h2.nullable {{ ui.teamup.stats }} Statistieken
 	div
 		.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
 			label.control-label {{ ui.teamup.chooseTeam }}
@@ -12,20 +12,25 @@ section#logs
 		.form-group.has-feedback.pull-left.dateranger.headerTop
 			input.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
-		.form-group.has-feedback.pull-right.headerTop
-			input.form-control.search-query(
-			type='text', 
-			placeholder='{{ ui.logs.filter }}',
-			ng-change="stats.expandedLog = stats.data.logData.logs.length; stats.showAllGroups = (stats.filtered.length > 1); stats.toggleGroupedLogs(stats.showAllGroups, stats.data.logData.logs); ",
-			ng-model='stats.filtered')
+		//.form-group.has-feedback.pull-right.headerTop
+		//	input.form-control.search-query(
+		//	type='text', 
+		//	placeholder='{{ ui.logs.filter }}',
+		//	ng-change="stats.expandedLog = stats.data.logData.logs.length; stats.showAllGroups = (stats.filtered.length > 1); stats.toggleGroupedLogs(stats.showAllGroups, stats.data.logData.logs); ",
+		//	ng-model='stats.filtered')
 			
 	.tabbable.tabs-left
 		.tab-content
 			#groupTab.tab-pane.active
 				p(ng-hide='stats.data.logData.logs.length > 0') {{ ui.logs.empty }}
 				//p aantal open {{ stats.expandedLog }} totaal log {{ stats.data.logData.logs.length }}
-				div(ng-show='stats.data.logData.logs.length > 0')
-
+				div(ng-if='stats.data.logData.logs.length > 0')
+					canvas(id="bar" class="chart chart-bar",
+						chart-legend='true',
+						chart-data="stats.chartData",
+						chart-labels="stats.chartLabels",
+						chart-series="stats.chartSeries", 
+						chart-colours="stats.chartColours")
 				hr
 				small.pull-left(ng-show='logs.data.logData.logs.length > 0')
 					span.text-warning {{ui.planboard.lastSyncTime}}
