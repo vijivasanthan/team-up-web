@@ -806,7 +806,7 @@ define(
                     removeActiveClass('.teamMenu');
 
                     var deferred = $q.defer(),
-                        teamId   = CurrentSelection.getTeamId()
+                        teamId   = CurrentSelection.getTeamId();
 
                     Teams.getTeamTelephoneOptions(teamId)
                          .then(function(options)

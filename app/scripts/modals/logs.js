@@ -178,9 +178,7 @@ define(['services/services', 'config'],
               }
             );
 
-            $filter('orderBy')(uniques, 'started.stamp');
-
-            return uniques;
+            return $filter('orderBy')(uniques, 'started.stamp');
           };
 
         /**
