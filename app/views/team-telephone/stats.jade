@@ -10,7 +10,7 @@ section#logs
 				ng-selected='stats.current',
 				ng-change='stats.fetchLogs()')
 		.form-group.has-feedback.pull-left.dateranger.headerTop
-			input.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
+			input.span3.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 		//.form-group.has-feedback.pull-right.headerTop
 		//	input.form-control.search-query(
@@ -36,7 +36,8 @@ section#logs
 					span.text-warning {{ui.planboard.lastSyncTime}}
 					span.text-muted &nbsp;{{stats.data.logData.synced | date: 'medium'}}
 					br
-					span.text-warning {{ui.planboard.dataRangeStart}}
+					sp
+					an.text-warning {{ui.planboard.dataRangeStart}}
 					span.text-muted &nbsp;{{logs.data.logData.periods.startTime | date: 'medium'}}
 					| &nbsp;|
 					span.text-warning {{ui.planboard.dataRangeEnd}}
