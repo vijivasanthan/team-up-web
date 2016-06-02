@@ -429,6 +429,56 @@ define(
               })
 
             .when(
+              '/team-telefoon/stats',
+              {
+                templateUrl: 'views/team-telephone/stats.html',
+                controller: 'stats as stats',
+                resolve: {
+                  data: function($q, Logs, TeamUp, Teams, $location)
+                  {
+                    removeActiveClass('.teamMenu');
+
+                    var deferred = $q.defer(),
+                        teamId   = Teams.checkExistence(($location.search()).teamId);
+                    $location.search('teamId', teamId);
+
+                    Teams.getTeamTelephoneOptions(teamId)
+                         .then(function(options)
+                               {
+                                 var _teams = null;
+
+                                 Teams.getAllLocal()
+                                      .then(function(teams)
+                                            {
+                                              _teams = teams;
+                                              return Teams.getSingle(teamId);
+                                            })
+                                      .then(function(members)
+                                            {
+                                              return Logs.fetch({
+                                                                  adapterId: options.adapterId,
+                                                                  members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
+                                                                  currentTeam: {
+                                                                    fullName: (_.find(_teams, {uuid: teamId})).name,
+                                                                    phone: options.phoneNumber
+                                                                  }
+                                                                });
+                                            })
+                                      .then(function(logs)
+                                            {
+                                              deferred.resolve({
+                                                                 teams: _teams,
+                                                                 logData: logs
+                                                               });
+                                            });
+                               });
+                    return deferred.promise;
+                  }
+                },
+                reloadOnSearch: false
+              })
+
+            .when(
               '/team/new',
               {
                 templateUrl: 'views/team/newTeam.html',
@@ -794,55 +844,6 @@ define(
               },
               reloadOnSearch: false
             })
-
-            .when(
-              '/team-telefoon/stats',
-              {
-                templateUrl: 'views/team-telephone/stats.html',
-                controller: 'stats as stats',
-                resolve: {
-                  data: function($q, Logs, TeamUp, Teams, $location, CurrentSelection)
-                  {
-                    removeActiveClass('.teamMenu');
-
-                    var deferred = $q.defer(),
-                        teamId   = CurrentSelection.getTeamId();
-
-                    Teams.getTeamTelephoneOptions(teamId)
-                         .then(function(options)
-                               {
-                                 var _teams = null;
-
-                                 Teams.getAllLocal()
-                                      .then(function(teams)
-                                            {
-                                              _teams = teams;
-                                              return Teams.getSingle(teamId);
-                                            })
-                                      .then(function(members)
-                                            {
-                                              return Logs.fetch({
-                                                                  adapterId: options.adapterId,
-                                                                  members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
-                                                                  currentTeam: {
-                                                                    fullName: (_.find(_teams, {uuid: teamId})).name,
-                                                                    phone: options.phoneNumber
-                                                                  }
-                                                                });
-                                            })
-                                      .then(function(logs)
-                                            {
-                                              deferred.resolve({
-                                                                 teams: _teams,
-                                                                 logData: logs
-                                                               });
-                                            });
-                               });
-                    return deferred.promise;
-                  }
-                },
-                reloadOnSearch: false
-              })
 
             .when(
               '/team-telefoon/logs',

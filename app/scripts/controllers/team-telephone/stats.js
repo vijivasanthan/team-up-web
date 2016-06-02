@@ -25,8 +25,6 @@ define(
 				//properties
 				self.data    = data;
 				self.current = CurrentSelection.getTeamId();
-				//self.ordered = 'started.stamp';
-				//self.reversed = false;
 				self.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
 					$filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
 				initChart();
@@ -73,6 +71,7 @@ define(
 				{
 					var _TeamTelephoneSettings = null;
 					CurrentSelection.local     = self.current;
+					$location.search('teamId', self.current);
 
 					//Check if the requested team has teamtelephone functionality by the adapterId
 					Teams.getTeamTelephoneOptions(self.current)
