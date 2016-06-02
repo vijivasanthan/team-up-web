@@ -14,7 +14,8 @@ define(
 			         Logs,
 			         CurrentSelection,
 			         Teams,
-			         data)
+			         data,
+			         moment)
 			{
 				$rootScope.fixStyles();
 
@@ -32,11 +33,6 @@ define(
 
 				//methods
 				self.fetchLogs         = fetchLogs;
-				self.toggleGroupedLogs = toggleGroupedLogs;
-				self.init              = init;
-
-				//initialisation
-				self.init();
 
 				//event receiver
 				$rootScope.$on('getLogRange', function()
@@ -118,10 +114,9 @@ define(
 				}
 
 				/**
-				 * initialize bar charts based on the selected periods
+				 * Initialize bar charts based on the selected periods
 				 * colums based on the call status finished or missed, depending
-				 * if the caller was a client or a teammember, the last one is everytime the last column,
-				 * TODO make selection based on the selected dates, not on the dates of the fetched logs by selection
+				 * if the caller was a client or a teammember, the last one is everytime the last column
 				 * TODO define Chart instead of chart requireJS
 				 * TODO some sort of auto login from mobile devices, copy the session and the current teamId
 				 * TODO Remove the teamselector and add the teamId to the top
@@ -131,7 +126,12 @@ define(
 				 */
 				function initChart()
 				{
-					var logsPerStatus = {};
+					var logsByDateSelection = getAllDatesSelection(
+						    data.logData.periods.startTime,
+						    data.logData.periods.endTime
+					    ),
+					    dateSelectionLabels = _.keys(logsByDateSelection),
+					    handled = [], missed = [], teamMembers = [];
 
 					/**
 					 * Per call log date filter all finished, missed and calls by teammembers
@@ -139,31 +139,23 @@ define(
 					_.each(self.data.logData.logs, function(log)
 					{
 						var date = $filter('date')(log.started.stamp, 'dd-MM-yyyy');
-						if( ! logsPerStatus[date] )
-						{
-							logsPerStatus[date] = {
-								finished: [],
-								missed: [],
-								teamMember: []
-							};
-						}
-						if( log.caller === 'member' ) logsPerStatus[date].teamMember.push(log);
-						else if( log.status === 'FINISHED' ) logsPerStatus[date].finished.push(log);
-						else if( log.status === 'MISSED' ) logsPerStatus[date].missed.push(log);
+
+						if( log.caller === 'member' ) logsByDateSelection[date].teamMember.push(log);
+						else if( log.status === 'FINISHED' ) logsByDateSelection[date].finished.push(log);
+						else if( log.status === 'MISSED' ) logsByDateSelection[date].missed.push(log);
 					});
 
-					console.error("logsPerStatus ->", logsPerStatus);
-
-					var handled = [], missed = [], teamMembers = [];
-
-					_.each(logsPerStatus, function(log)
+					/**
+					 * Create 3 arrays of the different statuses and the the length of a specific status,
+					 * so for every date there will be a status column with the number of logs
+					 */
+					_.each(dateSelectionLabels, function(date)
 					{
+						var log = logsByDateSelection[date];
 						handled.push(log.finished.length || 0);
 						missed.push(log.missed.length || 0);
 						teamMembers.push(log.teamMember.length || 0);
 					});
-
-					self.chartData = [handled, missed, teamMembers];
 
 					// self.chartData = [
 					//            1  2  3
@@ -171,12 +163,8 @@ define(
 					//missed     [3, 5, 7, 5, 12, 5, 6],
 					//teamMember [3, 5, 7, 7, 12, 5, 6]
 					// ];
-
-					/**
-					 * get all the keys of the log per status, every key is a date
-					 * @type {Array.<*>}
-					 */
-					self.chartLabels = (_.keys(logsPerStatus));
+					self.chartData = [handled, missed, teamMembers];
+					self.chartLabels = dateSelectionLabels;//_.union(_.keys(logsPerStatus), dateSelection);
 					self.chartSeries = ['Afgerond', 'Gemist', 'Teamleden'];
 					//brown, red, 'turq'
 					self.chartColours = [
@@ -190,6 +178,31 @@ define(
 							fillColor: '#1dc8b6'
 						}
 					];
+
+					/**
+					 * Get all dates in between a selection, for every date a object
+					 * is made with the different status of logs
+					 * @param startTime start of selection
+					 * @param endTime end of selection
+					 * @returns {Array} start and enddate and all dates in between inside a array
+					 */
+					function getAllDatesSelection(startTime, endTime)
+					{
+						var dateStart  = moment(startTime),
+						    dateEnd    = moment(endTime),
+						    timeValues = [];
+
+						while(dateEnd > dateStart)
+						{
+							timeValues[dateStart.format('DD-MM-YYYY')] = {
+								finished: [],
+								missed: [],
+								teamMember: []
+							};
+							dateStart.add(1, 'day');
+						}
+						return timeValues;
+					}
 				}
 
 				/**
@@ -205,36 +218,6 @@ define(
 					initChart();
 
 					$rootScope.statusBar.off();
-				}
-
-				/**
-				 * Toggle groups logs
-				 * @param showAll hide/show logs
-				 * @param logViews the logs
-				 */
-				function toggleGroupedLogs(showAll, logViews)
-				{
-					_.each(logViews, function(log)
-					{
-						log.expanding = showAll;
-					})
-					self.data.logData.logs = logViews;
-				}
-
-				/**
-				 * Initialisation
-				 */
-				function init()
-				{
-					//If the logged user has a role as teammember
-					// don't add the everyone option in the selectbar
-					if( $rootScope.app.resources.role == 1 )
-					{
-						self.data.teams.unshift({
-							                        name: $rootScope.ui.dashboard.everyone,
-							                        uuid: 'all'
-						                        });
-					}
 				}
 			}
 		);
