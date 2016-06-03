@@ -1,6 +1,6 @@
 define(
-	['../controllers'],
-	function(controllers)
+	['../controllers', 'momentrange'],
+	function(controllers, momentrange)
 	{
 		'use strict';
 
@@ -18,6 +18,14 @@ define(
 			         moment)
 			{
 				$rootScope.fixStyles();
+
+				var start = moment(1464701064000).toDate();
+				var end   = moment(1464701064000).add(2, 'week').toDate();
+				console.log('start', start);
+				console.log('end', end);
+				var currentRange    = moment.range(start, end);
+
+				console.log('dates', currentRange.toArray('week', true))
 
 				//viewmodel
 				var self = this;
@@ -151,8 +159,6 @@ define(
 					{
 						timeValues.push(dateSelectObj(dateStart, period));
 						dateStart.add(1, period.name);
-						console.error("dateStart ->", dateStart);
-						console.error("dateEnd ->", dateEnd);
 					}
 					if(dateStart > dateEnd) timeValues.push(dateSelectObj(dateStart, period));
 					return timeValues;
