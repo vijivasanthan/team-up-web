@@ -212,12 +212,7 @@ define(
 
 					while(dateEnd > dateStart)
 					{
-						timeValues[dateStart.format('DD-MM-YYYY')] = {
-							finished: [],
-							missed: [],
-							teamMember: [],
-							label: dateStart.format('DD/MM/YYYY')
-						};
+						timeValues.push(dateStart.format('DD-MM-YYYY'));
 						dateStart.add(1, 'day');
 					}
 					return timeValues;
@@ -236,48 +231,28 @@ define(
 				 */
 				function initChart()
 				{
-					var logsByDateSelection = getAllDatesSelection(
-						    data.logData.periods.startTime,
-						    data.logData.periods.endTime
-					    ),
-					    dateSelectionLabels = _.filter(logsByDateSelection, function(log)
-					    {
-						    console.error("label ->", log);
-						    return log.label;
-					    }),
-					    handled = [], missed = [], teamMembers = [];
-					/**
-					 * Per call log date filter all finished, missed and calls by teammembers
-					 */
-					_.each(self.data.logData.logs, function(log)
-					{
-						var date = moment(log.started.stamp).format('DD-MM-YYYY')
+					var logsByDateSelection = getAllDatesSelection
+					(
+						data.logData.periods.startTime,
+						data.logData.periods.endTime
+					),
+			    chartData = [ [], [], [] ];
 
-						if( log.caller === 'member' ) logsByDateSelection[date].teamMember.push(log);
-						else if( log.status === 'FINISHED' ) logsByDateSelection[date].finished.push(log);
-						else if( log.status === 'MISSED' ) logsByDateSelection[date].missed.push(log);
+					_.each(logsByDateSelection, function(date, index)
+					{
+						var dayLogs = self.data.logData.logs.filter(function(log)
+            {
+							return moment(log.started.stamp).format('DD-MM-YYYY') === date;
+						});
+						
+						console.error("dayLogs ->", dayLogs);
+						chartData[0][index] = dayLogs.filter(function(log) { return log.status === 'FINISHED' && log.caller === 'client'; }).length;	// 0
+						chartData[1][index] = dayLogs.filter(function(log) { return log.status === 'MISSED' && log.caller === 'client'; }).length;		// 1
+						chartData[2][index] = dayLogs.filter(function(log) { return log.caller === 'member'; }).length;	// 2
 					});
 
-					/**
-					 * Create 3 arrays of the different statuses and the the length of a specific status,
-					 * so for every date there will be a status column with the number of logs
-					 */
-					_.each(dateSelectionLabels, function(date)
-					{
-						var log = logsByDateSelection[date];
-						handled.push(log.finished.length || 0);
-						missed.push(log.missed.length || 0);
-						teamMembers.push(log.teamMember.length || 0);
-					});
-
-					// self.chartData = [
-					//            1  2  3
-					//finished   [3, 5, 7, 9, 12, 5, 6],
-					//missed     [3, 5, 7, 5, 12, 5, 6],
-					//teamMember [3, 5, 7, 7, 12, 5, 6]
-					// ];
-					self.chartData = [handled, missed, teamMembers];
-					self.chartLabels = dateSelectionLabels;//_.union(_.keys(logsPerStatus), dateSelection);
+					self.chartData = chartData;
+					self.chartLabels = logsByDateSelection;
 					self.chartSeries = ['Afgerond', 'Gemist', 'Teamleden'];
 					//brown, red, 'turq'
 					self.chartColours = [
