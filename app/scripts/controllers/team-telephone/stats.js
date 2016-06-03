@@ -25,12 +25,14 @@ define(
 				//properties
 				self.data    = data;
 				self.current = CurrentSelection.getTeamId();
+				self.datePeriod = 'day';
 				self.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
 					$filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
 				initChart();
 
 				//methods
 				self.fetchLogs         = fetchLogs;
+				self.changeDatePeriod = changeDatePeriod;
 
 				//event receiver
 				$rootScope.$on('getLogRange', function()
@@ -112,109 +114,47 @@ define(
 					    .then(receiveLogs);
 				}
 
-				//function getAllDatesByWeeks(startTime, endTime, format)
-				//{
-				//	format = format || 'day';
-				//	//format days, weeks, months
-				//	var dateStart  = moment(startTime),
-				//	    dateEnd    = moment(endTime),
-				//	    timeValues = [],
-				//			formatTime = {
-				//				"day": {
-				//					start: dateStart,
-				//					end: dateEnd
-				//				},
-				//				"week": {
-				//					start: dateStart,
-				//					end: dateEnd
-				//				},
-				//				"month": {
-				//					start: dateStart,
-				//					startFormat: dateStart,
-				//					compareStartDate: dateStart,
-				//					compareEndDate: dateEnd,
-				//					end: dateEnd,
-				//					endFormat: dateEnd
-				//				}
-				//			},
-				//	    currentFormat = formatTime[format];
-				//
-				//	formatTime.day.startFormat = formatTime.day.start.format('DD-MM-YYYY');
-				//	formatTime.day.compareStartDate = formatTime.day.start;
-				//	formatTime.day.compareEndDate = formatTime.day.end;
-				//	formatTime.day.endFormat = formatTime.day.end;
-				//
-				//	formatTime.week.startFormat = formatTime.week.start;
-				//	formatTime.week.compareStartDate =  formatTime.week.start.isoWeek();
-				//	formatTime.week.compareEndDate = formatTime.week.end.isoWeek();
-				//	formatTime.week.endFormat = formatTime.week.end;
-				//
-				//	console.error("currentFormat ->", currentFormat);
-				//
-				//	while(currentFormat.compareEndDate > currentFormat.compareStartDate)
-				//	{
-				//		console.error("currentFormat.startFormat ->", currentFormat.startFormat);
-				//		if(! timeValues[currentFormat.startFormat])
-				//		{
-				//			timeValues[currentFormat.format] = {
-				//				finished: [],
-				//				missed: [],
-				//				teamMember: []
-				//			};
-				//		}
-				//		formatTime[format].start.add(1, format);
-				//	}
-				//	return timeValues;
-				//}
-
-				function getAllDatesByWeeks(startTime, endTime)
+				/**
+				 * Change the current period, so the bars in the chart
+				 * are divived into the changed period
+				 * @param datePeriod day, week, month
+				 */
+				function changeDatePeriod(datePeriod)
 				{
-					var dateStart  = moment(startTime),
-					    dateEnd    = moment(endTime),
-					    timeValues = [];
-
-					while(dateEnd.isoWeek() > dateStart.isoWeek())
-					{
-						timeValues[dateStart.isoWeek()] = {
-							finished: [],
-							missed: [],
-							teamMember: [],
-							label: "Week " + dateStart.isoWeek() + ": " + dateStart.startOf('isoweek').format('DD/MM/YY') + " - " + dateStart.endOf('isoweek').format('DD/MM/YY')
-						};
-						dateStart.add(1, 'week');
-					}
-					return timeValues;
+					if(self.datePeriod !== datePeriod) initChart(datePeriod);
+					self.datePeriod = datePeriod;
 				}
 
-
-				//console.error("123 ->", moment(data.logData.periods.startTime).isoWeek());
-				//console.error("123 ->", moment(data.logData.periods.startTime).add(1, 'month').isoWeek());
-				console.error("lalala ->", getAllDatesByWeeks(
-					data.logData.periods.startTime,
-					data.logData.periods.endTime
-				));
-				//console.error("234 ->", moment().isoWeeks());
-				//console.error("start of week ->", moment(data.logData.periods.startTime).startOf('isoweek').format('DD-MM-YY'));
-				//console.error("start of week ->", moment(data.logData.periods.startTime).endOf('isoweek').format('DD-MM-YY'));
-
 				/**
-				 * Get all dates in between a selection, for every date a object
+				 * Get all datesperiods in between a selection, this could be days, weeks or months
+				 * return a array with the date periods and a label, what will show on the X axis
 				 * is made with the different status of logs
 				 * @param startTime start of selection
 				 * @param endTime end of selection
-				 * @returns {Array} start and enddate and all dates in between inside a array
+				 * @param period day, week or month
+				 * @returns {Array} with the date periods and a label, what will show on the X axis
 				 */
-				function getAllDatesSelection(startTime, endTime)
+				function getAllDatesSelection(startTime, endTime, period)
 				{
 					var dateStart  = moment(startTime),
 					    dateEnd    = moment(endTime),
-					    timeValues = [];
+					    timeValues = [],
+					    dateSelectObj = function(dateStart, period)
+					    {
+						    return {
+							    date: period.format(dateStart),
+							    label: period.label(dateStart)
+						    }
+					    };
 
-					while(dateEnd > dateStart)
+					while(dateEnd >= dateStart)
 					{
-						timeValues.push(dateStart.format('DD-MM-YYYY'));
-						dateStart.add(1, 'day');
+						timeValues.push(dateSelectObj(dateStart, period));
+						dateStart.add(1, period.name);
+						console.error("dateStart ->", dateStart);
+						console.error("dateEnd ->", dateEnd);
 					}
+					if(dateStart > dateEnd) timeValues.push(dateSelectObj(dateStart, period));
 					return timeValues;
 				}
 
@@ -225,47 +165,56 @@ define(
 				 * TODO define Chart instead of chart requireJS
 				 * TODO some sort of auto login from mobile devices, copy the session and the current teamId
 				 * TODO Remove the teamselector and add the teamId to the top
-				 * TODO Make a toggle for each of the statusses
-				 * TODO make some filters based on the amount of days selected, for example divide a month in weeks,
-				 * instead of days, because 30 columns wil be to much to show on small screens
 				 */
-				function initChart()
+				function initChart(format)
 				{
-					var logsByDateSelection = getAllDatesSelection
-					(
-						data.logData.periods.startTime,
-						data.logData.periods.endTime
-					),
-			    chartData = [ [], [], [] ];
+					var startTime = data.logData.periods.startTime,
+					    endTime = data.logData.periods.endTime,
+							//durationDaysSelection = moment(endTime).diff(startTime, 'days') + 1,
+							datePeriod = {
+								'day' : {
+									name: 'day',
+									date: function(date) { return date; },
+									format: function(date) { return date.format('DD-MM-YYYY'); },
+									label: function(date) { return date.format('dd') + " " + date.format('DD MMM'); }
+								},
+								'week' : {
+									name: 'week',
+									date: function(date) { return date.isoWeek(); },
+									format: function(date) { return date.isoWeek(); },
+									label: function(date)
+									{
+										return date.startOf('isoweek').format('DD MMM') + " - " + date.endOf('isoweek').format('DD MMM');
+									}
+								},
+								'month' : {
+									name: 'month',
+									date: function(date) { return date.month(); },
+									format: function(date) { return date.month(); },
+									label: function(date) {
+										return date.format('MMMM');
+									}
+								}
+							},
+							periodFormats = datePeriod[format || 'day'],
+							logsByDateSelection = getAllDatesSelection(startTime, endTime, periodFormats),
+			        chartData = [ [], [], [] ];
 
-					_.each(logsByDateSelection, function(date, index)
+					_.each(logsByDateSelection, function(dateSelection, index)
 					{
 						var dayLogs = self.data.logData.logs.filter(function(log)
             {
-							return moment(log.started.stamp).format('DD-MM-YYYY') === date;
+							return periodFormats.format(moment(log.started.stamp)) === dateSelection.date;
 						});
-						
-						console.error("dayLogs ->", dayLogs);
-						chartData[0][index] = dayLogs.filter(function(log) { return log.status === 'FINISHED' && log.caller === 'client'; }).length;	// 0
-						chartData[1][index] = dayLogs.filter(function(log) { return log.status === 'MISSED' && log.caller === 'client'; }).length;		// 1
-						chartData[2][index] = dayLogs.filter(function(log) { return log.caller === 'member'; }).length;	// 2
+						chartData[0][index] = dayLogs.filter(function(log) { return log.status === 'FINISHED' && log.caller === 'client'; }).length;
+						chartData[1][index] = dayLogs.filter(function(log) { return log.status === 'MISSED' && log.caller === 'client'; }).length;
+						chartData[2][index] = dayLogs.filter(function(log) { return log.caller === 'member'; }).length;
 					});
 
 					self.chartData = chartData;
-					self.chartLabels = logsByDateSelection;
-					self.chartSeries = ['Afgerond', 'Gemist', 'Teamleden'];
-					//brown, red, 'turq'
-					self.chartColours = [
-						{
-							fillColor: '#833c11'
-						},
-						{
-							fillColor: '#c85a3c'
-						},
-						{
-							fillColor: '#1dc8b6'
-						}
-					];
+					self.chartLabels = _.map(logsByDateSelection, 'label');
+					self.chartSeries = [$rootScope.ui.teamup.finished, $rootScope.ui.teamup.missed, $rootScope.ui.teamup.teamMembers];
+					self.chartColours = [{ fillColor: '#833c11'}, {fillColor: '#c85a3c'}, {fillColor: '#1dc8b6'}];
 				}
 
 				/**
@@ -274,15 +223,9 @@ define(
 				 */
 				function receiveLogs(logData)
 				{
-					console.error("logData ->", logData);
-
 					self.loadLogs     = false;
 					self.data.logData = logData;
-					initChart();
-					console.error("lalala ->", getAllDatesByWeeks(
-						data.logData.periods.startTime,
-						data.logData.periods.endTime
-					));
+					initChart(self.datePeriod);
 
 					$rootScope.statusBar.off();
 				}

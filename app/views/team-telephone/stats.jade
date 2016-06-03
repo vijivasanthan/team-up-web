@@ -12,12 +12,14 @@ section#logs
 		.form-group.has-feedback.pull-left.dateranger.headerTop
 			input.span3.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
 			i.glyphicon.glyphicon-calendar.form-control-feedback
-		//.form-group.has-feedback.pull-right.headerTop
-		//	input.form-control.search-query(
-		//	type='text', 
-		//	placeholder='{{ ui.logs.filter }}',
-		//	ng-change="stats.expandedLog = stats.data.logData.logs.length; stats.showAllGroups = (stats.filtered.length > 1); stats.toggleGroupedLogs(stats.showAllGroups, stats.data.logData.logs); ",
-		//	ng-model='stats.filtered')
+		.form-group.has-feedback.pull-right.headerTop
+			.btn-group.pull-left(style='margin-right: 5px;')
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("day")', class="{{(stats.datePeriod==='day') && 'active'}}")
+					| dagen
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("week")', class="{{(stats.datePeriod==='week') && 'active'}}")
+					| weken
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("month")', class="{{(stats.datePeriod==='month') && 'active'}}")
+					| maanden
 			
 	.tabbable.tabs-left
 		.tab-content

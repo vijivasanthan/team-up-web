@@ -614,6 +614,9 @@ define(
           settings: 'settings'
         },
         teamup: {
+          finished: 'Finished',
+          missed: 'Missed',
+          teamMembers: 'Team members',
           unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
@@ -1805,6 +1808,9 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          finished: 'Finished',
+          missed: 'Missed',
+          teamMembers: 'Team members',
           unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
@@ -2980,6 +2986,9 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          finished: 'Afgerond',
+          missed: 'Gemist',
+          teamMembers: 'Teamleden',
           unknownAddress: 'Adres onbekend',
           and: ' en ',
           somethingUpdated: function(errors) {
