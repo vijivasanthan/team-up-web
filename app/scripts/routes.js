@@ -431,13 +431,22 @@ define(
             .when(
               '/team-telefoon/stats',
               {
-                templateUrl: 'views/team-telephone/stats.html',
+                templateUrl: 'views/team-telephone/statsMobile.html',
                 controller: 'stats as stats',
                 resolve: {
-                  data: function($q, Logs, TeamUp, Teams, $location)
+                  data: function($q, Logs, TeamUp, Teams, $location, $rootScope)
                   {
-                    removeActiveClass('.teamMenu');
-
+                    if($rootScope.browser.device === "iPhone")
+                    {
+                      angular.element('body').css('background', '#fff');
+                      angular.element('.navbar').hide();
+                      angular.element('#footer').hide();
+                      angular.element('.container-fluid').css({
+                        'padding-left': '',
+                        'padding-right': ''
+                      });                    }
+                    else removeActiveClass('.teamMenu');
+                    
                     var deferred = $q.defer(),
                         teamId   = Teams.checkExistence(($location.search()).teamId);
                     $location.search('teamId', teamId);
