@@ -1,6 +1,6 @@
 define(
-	['../controllers', 'momentrange'],
-	function(controllers, momentrange)
+	['../controllers'],
+	function(controllers)
 	{
 		'use strict';
 
@@ -15,17 +15,10 @@ define(
 			         CurrentSelection,
 			         Teams,
 			         data,
-			         moment)
+			         moment,
+                      MomentRange)
 			{
 				$rootScope.fixStyles();
-
-				var start = moment(1464701064000).toDate();
-				var end   = moment(1464701064000).add(2, 'week').toDate();
-				console.log('start', start);
-				console.log('end', end);
-				var currentRange    = moment.range(start, end);
-
-				console.log('dates', currentRange.toArray('week', true))
 
 				//viewmodel
 				var self = this;
@@ -149,6 +142,7 @@ define(
 					    timeValues = [],
 					    dateSelectObj = function(dateStart, period)
 					    {
+                console.log('dateStart', dateStart);
 						    return {
 							    date: period.format(dateStart),
 							    label: period.label(dateStart)
@@ -160,7 +154,8 @@ define(
 						timeValues.push(dateSelectObj(dateStart, period));
 						dateStart.add(1, period.name);
 					}
-					if(dateStart > dateEnd) timeValues.push(dateSelectObj(dateStart, period));
+					if(dateStart > dateEnd &&
+            period.name !== 'day') timeValues.push(dateSelectObj(dateStart, period));
 					return timeValues;
 				}
 
@@ -171,6 +166,7 @@ define(
 				 * TODO define Chart instead of chart requireJS
 				 * TODO some sort of auto login from mobile devices, copy the session and the current teamId
 				 * TODO Remove the teamselector and add the teamId to the top
+         * TODO maak maandag t/m zondag ipv zondag in daterange
 				 */
 				function initChart(format)
 				{
@@ -235,6 +231,26 @@ define(
 
 					$rootScope.statusBar.off();
 				}
+
+        /**
+         * Get the current range of two dates
+         * @param startTime
+         * @param endTime
+                 * @param period
+                 * @returns {Array}
+                 */
+        function currentRange(startTime, endTime, period)
+        {
+          return moment.range(moment(startTime).toDate(), moment(endTime).toDate())
+                        .toArray(period.name, true)
+                        .map(function (date)
+                        {
+                          return {
+                            date: period.format(date),
+                            label: period.label(date)
+                          }
+                        });
+        }
 			}
 		);
 	});
