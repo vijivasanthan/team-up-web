@@ -179,6 +179,7 @@ require(
     'services/vis',
     'services/timelineNavigation',
     'services/version',
+    'services/momentRange',
 
     'directives/widgets',
     'directives/date-range-picker',
