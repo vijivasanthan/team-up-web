@@ -142,7 +142,6 @@ define(
 					    timeValues = [],
 					    dateSelectObj = function(dateStart, period)
 					    {
-                console.log('dateStart', dateStart);
 						    return {
 							    date: period.format(dateStart),
 							    label: period.label(dateStart)

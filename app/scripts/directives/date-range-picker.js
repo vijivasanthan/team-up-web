@@ -36,7 +36,7 @@ define(
                   customRangeLabel: $rootScope.ui.planboard.customDates,
                   daysOfWeek:     moment.weekdaysMin(),
                   monthNames:     moment.months(),
-                  firstDay:       0
+                  firstDay:       1
                 },
                 ranges: {}
               };
