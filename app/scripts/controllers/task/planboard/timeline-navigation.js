@@ -136,6 +136,7 @@ define(
 
           $scope.timelineScoper = function(period)
           {
+            console.log("period", period);
             var scope = TimelineNavigation
               .setScope(
                 period,
