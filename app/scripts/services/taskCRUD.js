@@ -183,7 +183,9 @@ define(['services/services', 'config'],
 
                 task.relatedClient.fullName = task.relatedClient.firstName + ' ' + task.relatedClient.lastName;
 
-                if (task.relatedClient.address != null)
+                if (task.relatedClient.address &&
+                  task.relatedClient.address.street &&
+                  task.relatedClient.address.city)
                 {
                   task.relatedClient.fullAddress = task.relatedClient.address.street +
                     ' ' +

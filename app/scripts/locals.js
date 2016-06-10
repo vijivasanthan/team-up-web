@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' are not updated' : ' is not updated';
@@ -864,10 +865,8 @@ define(
             'available': 'Available',
             'working': 'Working',
             'offline': 'Offline',
-            'not_reachable': 'Not reachable',
             'on_the_phone': 'On the phone',
             'unknown': 'Unknown',
-            'reachable': 'Reachable',
             'secondline': 'Second line',
             'possibly_reachable': 'Possibly reachable',
             'unreachable': 'Unreachable',
@@ -1806,6 +1805,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          unknownAddress: 'Address unknown',
           'and': 'and',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' are not updated' : ' is not updated';
@@ -2051,18 +2051,16 @@ define(
           pageLast: 'letzte',
           refresh: 'aktualisieren',
           stateValue: {
-            'reachable': 'erreichbar',
-            'available': 'verfügbar',
+            'reachable': 'verfügbar',
+            'available': 'erreichbar',
             'working': 'beschäftigt',
             'offline': 'offline',
-            'not_reachable': 'nicht erreichbar',
             'on_the_phone': 'am Telefon',
             'unknown': 'unbekannt',
-            'reachable': 'erreichbar',
             'secondline': 'Second line',
             'possibly_reachable': 'nichts geplant',
-            'unreachable': 'nicht erreichbar',
-            'unavailable': 'nicht verfügbar',
+            'unreachable': 'nicht verfügbar',
+            'unavailable': 'nicht erreichbar',
             'unknown': 'offline'
           },
           reportNotExists: 'Bericht nicht vorhanden.',
@@ -2982,6 +2980,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          unknownAddress: 'Adres onbekend',
           and: ' en ',
           somethingUpdated: function(errors) {
             return (errors.length > 1) ? ' zijn niet geupdate' : ' is niet geupdate';
@@ -3230,19 +3229,17 @@ define(
           pageLast: 'Laatste',
           refresh: 'Verversen',
           stateValue: {
-            'reachable': 'Bereikbaar',
-            'available': 'Beschikbaar',
+            'reachable': 'Beschikbaar',
+            'available': 'Bereikbaar',
             'working': 'Aan het werk',
             'offline': 'Offline',
             'alert': 'Achterwacht',
-            'not_reachable': 'Niet bereikbaar',
             'on_the_phone': 'Aan de telefoon',
             'unknown': 'Onbekend',
             'secondline': 'Achterwacht',
-            'reachable': 'Bereikbaar',
             'possibly_reachable': 'Niet gepland',
-            'unreachable': 'Niet bereikbaar',
-            'unavailable': 'Niet beschikbaar',
+            'unreachable': 'Niet beschikbaar',
+            'unavailable': 'Niet bereikbaar',
             'unknown': 'Offline'
           },
           reportNotExists: 'Rapport bestaat niet.',

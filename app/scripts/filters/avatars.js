@@ -1,18 +1,15 @@
 define(
   ['filters/filters', 'config'],
-  function (filters, config)
-  {
+  function (filters, config) {
     'use strict';
 
     // TODO: Depreciated!
     filters.filter(
       'escape',
       [
-        function ()
-        {
-          return function (string)
-          {
-            return (! string || string.indexOf('.') == - 1) ?
+        function () {
+          return function (string) {
+            return (!string || string.indexOf('.') == -1) ?
               string :
               string.replace('.', '').replace('@', '');
           }
@@ -21,15 +18,21 @@ define(
     );
 
     filters.filter(
+      'translateCurrentState',
+      function ($rootScope) {
+        return function (currentState) {
+          return $rootScope.ui.teamup.stateValue[currentState || 'possibly_reachable'];
+        }
+      }
+    );
+
+    filters.filter(
       'translateReachabilityState',
       [
         '$rootScope',
-        function ($rootScope)
-        {
-          return function (currentState)
-          {
-            switch (currentState)
-            {
+        function ($rootScope) {
+          return function (currentState) {
+            switch (currentState) {
               case "REACHABLE":
                 return $rootScope.ui.teamup.stateValue.reachable;
                 break;
@@ -48,10 +51,8 @@ define(
     filters.filter(
       'stateReachable',
       [
-        function ()
-        {
-          return function (states)
-          {
+        function () {
+          return function (states) {
             var stateValues = _.map(states, 'value');
 
             return (stateValues.indexOf('REACHABLE') >= 0)
@@ -64,29 +65,23 @@ define(
     filters.filter(
       'stateColor',
       [
-        function ()
-        {
-          return function (states)
-          {
+        function () {
+          return function (states) {
             var result = config.app.stateColors.none;
 
             var stateValues = _.map(states, 'value');
 
-            if(stateValues.indexOf('available') >= 0)
-            {
+            if (stateValues.indexOf('available') >= 0) {
               result = config.app.stateColors.availalbe;
-              if(stateValues.indexOf('on_the_phone') >= 0)
-              {
+              if (stateValues.indexOf('on_the_phone') >= 0) {
                 result = config.app.stateColors.busy;
               }
             }
             else if (stateValues.indexOf('unavailable') >= 0
-              || stateValues.indexOf('working') >= 0)
-            {
+              || stateValues.indexOf('working') >= 0) {
               result = config.app.stateColors.busy;
             }
-            else if(stateValues.indexOf('offline') >= 0 || stateValues.indexOf('unknown') >= 0)
-            {
+            else if (stateValues.indexOf('offline') >= 0 || stateValues.indexOf('unknown') >= 0) {
               result = config.app.stateColors.offline;
             }
 
@@ -99,16 +94,13 @@ define(
     filters.filter(
       'membersWithoutTeam',
       [
-        function ()
-        {
-          return function(allMembers)
-          {
+        function () {
+          return function (allMembers) {
             var membersWithoutTeams = null;
 
-            if(allMembers)
-            {
-              membersWithoutTeams = _.filter(allMembers, function(member) {
-                return (! member.teamUuids.length) ? member : '';
+            if (allMembers) {
+              membersWithoutTeams = _.filter(allMembers, function (member) {
+                return (!member.teamUuids.length) ? member : '';
               });
             }
 
@@ -121,14 +113,10 @@ define(
     filters.filter(
       'membersInTeam',
       [
-        function ()
-        {
-          return function(allMembers)
-          {
-            if(allMembers)
-            {
-              return _.filter(allMembers, function(member)
-              {
+        function () {
+          return function (allMembers) {
+            if (allMembers) {
+              return _.filter(allMembers, function (member) {
                 //console.log('member', member);
 
                 return (member.teamUuids.length) ? member : '';
@@ -144,17 +132,13 @@ define(
       'nicelyDate',
       [
         'moment',
-        function (moment)
-        {
-          return function (date)
-          {
-            if (typeof date == 'string')
-            {
+        function (moment) {
+          return function (date) {
+            if (typeof date == 'string') {
               date = Number(date);
             }
 
-            if (String(date).length == 10)
-            {
+            if (String(date).length == 10) {
               date *= 1000
             }
 
@@ -169,10 +153,8 @@ define(
       'nicelyTime',
       [
         'moment',
-        function (moment)
-        {
-          return function (date)
-          {
+        function (moment) {
+          return function (date) {
             if (typeof date == 'string') date = Number(date);
 
             return moment(date).format(config.app.formats.time);
@@ -185,18 +167,14 @@ define(
     filters.filter(
       'translateRole',
       [
-        function ()
-        {
-          return function (role)
-          {
+        function () {
+          return function (role) {
             var userRole;
 
             angular.forEach(
               config.app.roles,
-              function (_role)
-              {
-                if (_role.id == role)
-                {
+              function (_role) {
+                if (_role.id == role) {
                   userRole = _role.label;
                 }
               }
@@ -215,14 +193,11 @@ define(
       'translateStatusLogs',
       [
         '$rootScope',
-        function ($rootScope)
-        {
-          return function (status)
-          {
+        function ($rootScope) {
+          return function (status) {
             var translatedStatus = null;
 
-            switch(status)
-            {
+            switch (status) {
               case 'SENT':
                 translatedStatus = $rootScope.ui.logs.status.sent;
                 break;
@@ -255,16 +230,13 @@ define(
     filters.filter(
       'translateFunc',
       [
-        function ()
-        {
-          return function (func)
-          {
+        function () {
+          return function (func) {
             var userFunction;
 
             angular.forEach(
               config.app.mfunctions,
-              function (_func)
-              {
+              function (_func) {
                 if (_func.id == func) userFunction = _func.label;
               });
 
@@ -278,24 +250,18 @@ define(
     filters.filter(
       'stateDataIcon',
       [
-        function ()
-        {
-          return function (name, type)
-          {
+        function () {
+          return function (name, type) {
             var result;
 
             angular.forEach(
               config.app.stateIcons,
-              function (stateIcon)
-              {
-                if (angular.lowercase(stateIcon.name) == angular.lowercase(name))
-                {
-                  if (type == 'data_icon')
-                  {
+              function (stateIcon) {
+                if (angular.lowercase(stateIcon.name) == angular.lowercase(name)) {
+                  if (type == 'data_icon') {
                     result = stateIcon.data_icon;
                   }
-                  else if (type == 'class_name')
-                  {
+                  else if (type == 'class_name') {
                     result = stateIcon.class_name;
                   }
                 }
@@ -311,28 +277,22 @@ define(
     filters.filter(
       'stateValue',
       [
-        function ()
-        {
-          return function (state, type)
-          {
-            if (angular.lowercase(state.name) == 'location')
-            {
+        function () {
+          return function (state, type) {
+            if (angular.lowercase(state.name) == 'location') {
               var value = state.value,
                 match = value.match(/\((.*?)\)/);
 
-              if (match == null)
-              {
+              if (match == null) {
                 return value;
               }
-              else
-              {
+              else {
                 return (type == 'data') ?
                   match[1] :
                   value.replace(match[0], '');
               }
             }
-            else
-            {
+            else {
               return state.value;
             }
           }
@@ -387,17 +347,17 @@ define(
 
             if ((((Math.round(_dates.start.day) + 1) == _dates.end.day && _dates.start.hour == _dates.end.hour) || _dates.start.day == _dates.end.day) &&
               _dates.start.month == _dates.end.month) {
-              return  ndates.start.real +
+              return ndates.start.real +
                 ', ' +
                 ndates.start.year;
             }
             else if (_dates.start.day == 1 && _dates.end.day == moment().month(monthNumber).endOf('month').date()) {
-              return  ndates.start.month +
+              return ndates.start.month +
                 ', ' +
                 ndates.start.year;
             }
             else {
-              return  ndates.start.real +
+              return ndates.start.real +
                 ', ' +
                 ndates.start.year +
                 ' / ' +
@@ -416,18 +376,15 @@ define(
       'rangeMainWeekFilter',
       [
         'Dater',
-        function (Dater)
-        {
-          return function (dates)
-          {
-            if (dates)
-            {
+        function (Dater) {
+          return function (dates) {
+            if (dates) {
               var _dates = {
                 start: new Date(dates.start).toString('dddd, MMMM d'),
                 end: new Date(dates.end).toString('dddd, MMMM d')
               };
 
-              return  _dates.start +
+              return _dates.start +
                 ' / ' +
                 _dates.end +
                 ', ' +
@@ -442,22 +399,17 @@ define(
       'rangeInfoFilter',
       [
         'Dater', '$rootScope',
-        function (Dater, $rootScope)
-        {
+        function (Dater, $rootScope) {
           var periods = Dater.getPeriods();
 
-          return function (timeline)
-          {
+          return function (timeline) {
             var diff = new Date(timeline.range.end).getTime() - new Date(timeline.range.start).getTime();
 
-            if (diff > (2419200000 + 259200000))
-            {
+            if (diff > (2419200000 + 259200000)) {
               return 'Total selected days: ' + Math.round(diff / 86400000);
             }
-            else
-            {
-              if (timeline.scope.day)
-              {
+            else {
+              if (timeline.scope.day) {
                 var hours = {
                   start: new Date(timeline.range.start).toString('HH:mm'),
                   end: new Date(timeline.range.end).toString('HH:mm')
@@ -468,19 +420,17 @@ define(
                  */
                 if (hours.end == '00:00') hours.end = '24:00';
 
-                return  $rootScope.ui.planboard.time +
+                return $rootScope.ui.planboard.time +
                   hours.start +
                   ' / ' +
                   hours.end;
               }
-              else if (timeline.scope.week)
-              {
-                return  $rootScope.ui.planboard.weekNumber +
+              else if (timeline.scope.week) {
+                return $rootScope.ui.planboard.weekNumber +
                   timeline.current.week;
               }
-              else if (timeline.scope.month)
-              {
-                return  $rootScope.ui.planboard.monthNumber +
+              else if (timeline.scope.month) {
+                return $rootScope.ui.planboard.monthNumber +
                   timeline.current.month +
                   ',' + $rootScope.ui.planboard.totalDays +
                   periods.months[timeline.current.month].totalDays;
@@ -495,12 +445,9 @@ define(
     filters.filter(
       'rangeInfoWeekFilter',
       [
-        function ()
-        {
-          return function (timeline)
-          {
-            if (timeline)
-            {
+        function () {
+          return function (timeline) {
+            if (timeline) {
               return 'Week number: ' + timeline.current.week;
             }
           };
@@ -513,30 +460,24 @@ define(
       'i18n_spec',
       [
         '$rootScope',
-        function ($rootScope)
-        {
-          return function (string, type)
-          {
+        function ($rootScope) {
+          return function (string, type) {
 
 
             var types = type.split('.');
             var ret;
-            if (types[1] == 'stateValue')
-            {
+            if (types[1] == 'stateValue') {
               var statesTrans = $rootScope.ui[types[0]][types[1]];
               angular.forEach(
-                statesTrans, function (v, k)
-                {
-                  if (k == string)
-                  {
+                statesTrans, function (v, k) {
+                  if (k == string) {
                     ret = v;
                   }
                 });
               return ret;
             }
             ret = ($rootScope.ui[types[0]][types[1]]).replace('$v', string);
-            if (typeof ret == 'undefined')
-            {
+            if (typeof ret == 'undefined') {
               ret = string;
             }
 
@@ -550,12 +491,9 @@ define(
     filters.filter(
       'stateIcon',
       [
-        function ()
-        {
-          return function (state)
-          {
-            switch (state)
-            {
+        function () {
+          return function (state) {
+            switch (state) {
               case 'emotion':
                 return 'icon-face';
                 break;
@@ -590,18 +528,14 @@ define(
       'avatar',
       [
         'Session', 'Store', 'Settings',
-        function (Session, Store, Settings)
-        {
-          return function (id, type, size)
-          {
+        function (Session, Store, Settings) {
+          return function (id, type, size) {
             var session = Session.get();
 
-            if (session && id)
-            {
+            if (session && id) {
               var path;
 
-              switch (type)
-              {
+              switch (type) {
                 case 'team':
                   path = 'team/member/';
                   break;
@@ -619,17 +553,14 @@ define(
                   break;
               }
 
-              var avatarChanged = function (id)
-              {
+              var avatarChanged = function (id) {
                 var changedTimes = 0;
 
                 angular.forEach(
                   Store('app').get('avatarChangeRecord'),
-                  function (avatarId)
-                  {
-                    if (avatarId == id)
-                    {
-                      changedTimes ++;
+                  function (avatarId) {
+                    if (avatarId == id) {
+                      changedTimes++;
                     }
                   }
                 );
@@ -640,8 +571,7 @@ define(
               // TODO: Better use a special parameter to specify the avatar is changed.
               var newsize = parseInt(size, 10) + parseInt(avatarChanged(id), 10);
 
-              if (type == 'avatar' || type == 'image')
-              {
+              if (type == 'avatar' || type == 'image') {
                 var _url = Settings.getBackEnd() +
                   path +
                   id +
@@ -654,8 +584,7 @@ define(
 
                 return _url;
               }
-              else
-              {
+              else {
                 return Settings.getBackEnd() +
                   config.app.namespace +
                   path +
@@ -674,27 +603,21 @@ define(
       'getObjAttr',
       [
         '$rootScope',
-        function ($rootScope)
-        {
-          return function (id, usertype, itemName)
-          {
-            if (usertype == 'client')
-            {
+        function ($rootScope) {
+          return function (id, usertype, itemName) {
+            if (usertype == 'client') {
               var client = $rootScope.getClientByID(id);
 
-              if (client == null || typeof client == 'undefined')
-              {
+              if (client == null || typeof client == 'undefined') {
                 return '';
               }
 
-              if (itemName == 'name')
-              {
+              if (itemName == 'name') {
                 return client.firstName +
                   ' ' +
                   client.lastName;
               }
-              else if (itemName == 'address')
-              {
+              else if (itemName == 'address') {
                 return client.address.street +
                   ' ' +
                   client.address.no +
@@ -703,13 +626,11 @@ define(
                   ' ' +
                   client.address.city;
               }
-              else if (itemName == 'latlong')
-              {
+              else if (itemName == 'latlong') {
                 if (typeof client.address.latitude == 'undefined' ||
                   typeof client.address.longitude == 'undefined' ||
                   (client.address.longitude == 0 && client.address.latitude == 0)
-                )
-                {
+                ) {
                   return client.address.street +
                     ' ' +
                     client.address.no +
@@ -718,48 +639,39 @@ define(
                     ' ,' +
                     client.address.city;
                 }
-                else
-                {
+                else {
                   return client.address.latitude +
                     ',' +
                     client.address.longitude;
                 }
               }
             }
-            else if (usertype == 'member')
-            {
-              if (id == null)
-              {
+            else if (usertype == 'member') {
+              if (id == null) {
                 return '';
               }
 
               var member = $rootScope.getTeamMemberById(id);
 
-              if (itemName == 'name')
-              {
+              if (itemName == 'name') {
                 return member.firstName +
                   ' ' +
                   member.lastName;
               }
-              else if (itemName == 'states')
-              {
+              else if (itemName == 'states') {
                 return member.states;
               }
             }
-            else if (usertype == 'clientGroup')
-            {
-              if (id == null)
-              {
+            else if (usertype == 'clientGroup') {
+              if (id == null) {
                 return '';
               }
 
-              if (itemName == 'name')
-              {
+              if (itemName == 'name') {
                 return $rootScope.getClientGroupName(id);
               }
             }
-            else
-            {
+            else {
               return 'no name';
             }
 
@@ -771,18 +683,14 @@ define(
     // Get a target out of a collection based on the id
     filters.filter(
       'getByUuid',
-      function ()
-      {
-        return function (input, uuid)
-        {
+      function () {
+        return function (input, uuid) {
           var i = 0;
 
           var len = input.length;
 
-          for (; i < len; i ++)
-          {
-            if (input[i].uuid == uuid)
-            {
+          for (; i < len; i++) {
+            if (input[i].uuid == uuid) {
               return input[i];
             }
           }
@@ -797,10 +705,8 @@ define(
       'dateReverse',
       [
         '$filter',
-        function ($filter)
-        {
-          return function (date, pattern)
-          {
+        function ($filter) {
+          return function (date, pattern) {
             var timestamp = new Date(date).getTime();
 
             return $filter('date')(timestamp, pattern);
@@ -814,12 +720,9 @@ define(
     filters.filter(
       'formatTaskState',
       [
-        function ()
-        {
-          return function (state)
-          {
-            if (state)
-            {
+        function () {
+          return function (state) {
+            if (state) {
               return config.app.taskStates[state];
             }
           }
@@ -831,10 +734,8 @@ define(
     filters.filter(
       'interpolate',
       [
-        function ()
-        {
-          return function (text)
-          {
+        function () {
+          return function (text) {
             text = String(text).replace(/\%RELEASED\%/mg, config.app.released);
 
             return String(text).replace(/\%VERSION\%/mg, config.app.version);
@@ -850,12 +751,9 @@ define(
       'stripHtml',
       [
 
-        function ()
-        {
-          return function (string)
-          {
-            if (string)
-            {
+        function () {
+          return function (string) {
+            if (string) {
               //get the anchor part where the group name is in
               //string = string.substring(
               //  string.indexOf('<a'),
@@ -876,18 +774,14 @@ define(
       'convertUserIdToName',
       [
         'Store',
-        function (Store)
-        {
+        function (Store) {
           var members = Store('network').get('unique');
 
-          return function (id)
-          {
-            if (members == null || typeof members[id] == "undefined")
-            {
+          return function (id) {
+            if (members == null || typeof members[id] == "undefined") {
               return id;
             }
-            else
-            {
+            else {
               return members[id].resources.firstName + ' ' + members[id].resources.lastName;
             }
           };

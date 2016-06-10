@@ -67,6 +67,12 @@ ul.nav-tabs-app {
   }
 }
 
+.agenda-timeline, #logs, #options {
+  .tab-content {
+    min-height: 600px !important;
+  }
+}
+
 .tabs-left > .nav-tabs {
   border-right: none;
 }

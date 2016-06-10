@@ -398,6 +398,15 @@ input[type="submit"].btn {
   color: $brown;
 }
 
+.round-button {
+  display: block;
+  text-align: center;
+  line-height: 30px;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 //.dropdown-menu > .active > a {
 //  background: $brown;
 //}
