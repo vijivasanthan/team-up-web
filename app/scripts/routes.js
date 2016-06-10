@@ -685,7 +685,7 @@ define(
               resolve: {
                 data: function($route, Slots, Storage, Dater, Store, Teams,
                                $q, $rootScope, $location, moment,
-                               CurrentSelection, Profile, TeamUp)
+                               CurrentSelection, Profile)
                 {
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
@@ -697,7 +697,17 @@ define(
                         members: null,
                         user: null,
                         timeline: null
+                      },
+                      dates = {
+                        start: $location.search().start &&
+                                parseInt($location.search().start) ||
+                                +moment({hour: 0, minute: 0}).weekday(0),
+                        end: $location.search().end &&
+                              parseInt($location.search().end) ||
+                                +moment({hour: 0, minute: 0}).weekday(7)
                       };
+                  $location.search('start', dates.start);
+                  $location.search('end', dates.end);
 
                   if( _.isUndefined(userId) )
                   {
@@ -707,7 +717,6 @@ define(
                   Teams.getTeamTelephoneOptions(groupId)
                         .then(function(options)
                               {
-
                                   Teams.getSingle(groupId)
                                        .then(function(members)
                                              {
@@ -734,7 +743,7 @@ define(
                                                return (! userAllow)
                                                  ? $q.reject(user)
                                                  : $q.all([
-                                                            getAllSlots(userId, groupId),
+                                                            getAllSlots(userId, groupId, dates.start, dates.end),
                                                             Teams.getAllLocal()
                                                           ]);
 
@@ -765,13 +774,13 @@ define(
                    * @param userId current user timeline
                    * @param groupId current team timeline
                    */
-                  function getAllSlots(userId, groupId)
+                  function getAllSlots(userId, groupId, startTime, endTime)
                   {
                     return Slots.all({
                                        groupId: groupId,
                                        stamps: {
-                                         start: +moment({hour: 0, minute: 0}).weekday(0),
-                                         end: +moment({hour: 0, minute: 0}).weekday(7)
+                                          start: startTime,
+                                          end: endTime
                                        },
                                        month: Dater.current.month(),
                                        layouts: {

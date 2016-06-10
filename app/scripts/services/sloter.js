@@ -83,7 +83,7 @@ define(['services/services', 'config'],
                    {
                      return moment(stamp * 1000).format(config.app.formats.datetime);
                    };
-                   
+
                    var content = convertTimestamp(periods.start) + ' / ' +
                      convertTimestamp(periods.end);
 
@@ -461,7 +461,7 @@ define(['services/services', 'config'],
                             if(routeUserId !== member.id && member.id.indexOf('voicemail') === -1)
                             {
                               link += '<a class="btn-primary btn-mini" style="float:right;" title="' + $rootScope.ui.agenda.editTimeline + member.id + '"';
-                              link +=  'href="' + '#/team-telefoon/agenda/' + member.id + '"';
+                              link +=  'href="#/team-telefoon/agenda/' + member.id + '?start=' + data.periods.start + '&end=' + data.periods.end + '"';
                               link += '><i class="icon-edit" style="margin-left: 8px;"></a>';
                             }
 

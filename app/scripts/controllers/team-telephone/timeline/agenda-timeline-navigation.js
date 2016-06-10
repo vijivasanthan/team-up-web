@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'agenda-timeline-navigation',
       [
-        '$rootScope', '$scope', '$window', 'moment', 'TimelineNavigation',
-        function ($rootScope, $scope, $window, moment, TimelineNavigation)
+        '$rootScope', '$scope', '$window', 'moment', 'TimelineNavigation', '$location',
+        function ($rootScope, $scope, $window, moment, TimelineNavigation, $location)
         {
           /**
            * Toggle by period of [day, week, month]
@@ -146,10 +146,21 @@ define(
                 $scope.timeline.current
               );
 
+            setDatesAsRoute(scope.range);
             setCurrentDates(scope.dates);
             $scope.timeline.scope = scope.periods;
             $scope.timeliner.load(scope.range);
           };
+
+          /**
+           * Set the new date range in the url
+           * @param dateRange
+           */
+          function setDatesAsRoute(dateRange)
+          {
+            $location.search('start', dateRange.start);
+            $location.search('end', dateRange.end);
+          }
 
           /**
            * Go one period in past
@@ -163,6 +174,7 @@ define(
               );
 
             setCurrentDates(scope.dates);
+            setDatesAsRoute(scope.range);
             $scope.timeliner.load(scope.range);
           };
 
@@ -178,8 +190,8 @@ define(
               );
 
             setCurrentDates(scope.dates);
+            setDatesAsRoute(scope.range);
             $scope.timeline.scope         = scope.periods;
-
             $scope.timeliner.load(scope.range);
           };
 
