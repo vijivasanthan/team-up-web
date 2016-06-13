@@ -132,9 +132,7 @@ define(['services/services', 'config'],
                 Store('app').save('permissionProfile', permission);
                 $rootScope.app.domainPermission = permission;
 
-                (callback && callback(permission));
-
-                permissionLocation(accessList);
+                (callback && callback(accessList));
               }
             );
           };
@@ -143,7 +141,7 @@ define(['services/services', 'config'],
            * Redirect the user to location of the permission
            * @param permissionProfile
            */
-          var permissionLocation = function (permissionProfile)
+          Permission.prototype.location = function(permissionProfile)
           {
             if (_.has(permissionProfile, 'tasks'))
             {

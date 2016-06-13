@@ -209,6 +209,10 @@ define(
                 $location.path('/team-telefoon/status').search({}).hash('');
                 break;
 
+              case 'team-telefoon/stats':
+                $location.path('/team-telefoon/stats').search({}).hash('');
+                break;
+
               case 'team-telefoon/order':
                 $location.path('/team-telefoon/order').search({}).hash('');
                 break;

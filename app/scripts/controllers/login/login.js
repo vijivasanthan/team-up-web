@@ -29,6 +29,7 @@ define(
 
         this.init = function ()
         {
+          Login.init();
           this.error = Login.checkSessionTimeout();
 
           if (!this.error)

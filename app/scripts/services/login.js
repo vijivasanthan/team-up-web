@@ -26,46 +26,37 @@ define(['services/services', 'config'],
 			                        {
 				                        setBackgroundColor();
 			                        }
-
-			                        var loginData, locStore = hasLocalStorageFunctionality();
-
-			                        if( locStore )
-			                        {
-				                        hideAndChangeInterfaceParts();
-
-				                        if( ! Store('app').get('app') )
-				                        {
-					                        // TODO: Soon not needed!
-					                        Dater.registerPeriods();
-					                        Store('app').save('app', '{}');
-				                        }
-				                        else
-				                        {
-					                        var periods = Store('app').get('periods');
-					                        loginData   = Store('app').get('loginData');
-
-					                        Store('app').nuke();
-					                        Store('app').save('periods', periods);
-					                        Store('app').save('loginData', loginData);
-				                        }
-			                        }
-
-			                        /**
-			                         * Hide or change a few parts in the login, so it's looks different,
-			                         * then the rest of the application
-			                         */
-			                        function hideAndChangeInterfaceParts()
-			                        {
-				                        angular.element('.navbar').hide();
-				                        angular.element('#footer').hide();
-				                        angular.element('#watermark').hide();
-				                        angular.element('body').css({'backgroundColor': '#1dc8b6'});
-			                        }
 		                        };
 
 		                        // public methods \\
 		                        (function()
 		                        {
+			                        this.init = function()
+			                        {
+				                        var loginData, locStore = hasLocalStorageFunctionality();
+
+				                        if( locStore )
+				                        {
+					                        hideAndChangeInterfaceParts();
+
+					                        if( ! Store('app').get('app') )
+					                        {
+						                        // TODO: Soon not needed!
+						                        Dater.registerPeriods();
+						                        Store('app').save('app', '{}');
+					                        }
+					                        else
+					                        {
+						                        var periods = Store('app').get('periods');
+						                        loginData   = Store('app').get('loginData');
+
+						                        Store('app').nuke();
+						                        Store('app').save('periods', periods);
+						                        Store('app').save('loginData', loginData);
+					                        }
+				                        }
+			                        };
+
 			                        /**
 			                         * Check if there is a session by a key in the local storage
 			                         * By a session timeout a key value pair will be set by key name of sessionTimeout
@@ -179,19 +170,99 @@ define(['services/services', 'config'],
 								                        else if( result.valid === true )
 								                        {
 									                        Session.set(result['X-SESSION_ID']);//set session
-									                        preLoadData(function()//preload all the data as logged user data,  all teamnames and location permissions
-									                                    {
-										                                    //if all the data is loaded, resolve the login result
-										                                    deferred.resolve(result);
-									                                    });
+									                        self.preLoadData(function()
+									                                         {
+										                                         //Permission.saveProfile();
+										                                         Permission.getAccess(function(permissionProfile)
+										                                                              {
+											                                                              if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
+											                                                              Permission.location(permissionProfile);
+											                                                              //Set current version stuff Back end
+											                                                              $rootScope.getVersionInfo();
+											                                                              self.hideStyling();
+
+											                                                              deferred.resolve(result);
+										                                                              });
+									                                         });
 								                        }
 							                        });
 					                        return deferred.promise;
 				                        };
 
+			                        /**
+			                         * Hide styling
+			                         */
+			                        this.hideStyling = function()
+			                        {
+				                        setTimeout(
+					                        function()
+					                        {
+						                        angular.element('.navbar').show();
+						                        angular.element('body').addClass('background');
+
+						                        if( ! $rootScope.browser.mobile ) angular.element('#footer').show();
+					                        }, 100);
+			                        }
+
+			                        /**
+			                         * Preload logged userdata, all team names and id's
+			                         * and the ACL to give the user the right permissions
+			                         */
+			                        this.preLoadData = function(cb)
+			                        {
+				                        var self = this;
+				                        angular.element('#login').hide();
+				                        angular.element('#download').hide();
+				                        angular.element('#preloader').show();
+
+				                        progress(33, $rootScope.ui.login.loading_User);
+
+				                        TeamUp._('user')
+				                              .then(function(resources)
+				                                    {
+					                                    $rootScope.app.resources = resources;
+					                                    Store('app').save('resources', $rootScope.app.resources);
+					                                    progress(66, $rootScope.ui.login.loading_teams);
+					                                    return Teams.getAllLocal();
+				                                    })
+				                              .then(function(teams)
+				                                    {
+					                                    progress(100, $rootScope.ui.login.loading_everything);
+					                                    //update the avatar once, because the resources were not set when the directive was loaded
+					                                    $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
+					                                    //TODO for testpurposes only
+					                                    (cb && cb());
+				                                    });
+
+				                        /**
+				                         * The progressbar will show which data is loading at the moment
+				                         * @param ratio Shows on a scale of one till hundred, how much data is already loaded
+				                         * @param message
+				                         */
+				                        function progress(ratio, message)
+				                        {
+					                        angular.element('#preloader .progress .bar')
+					                               .css({width: ratio + '%'});
+					                        angular.element('#preloader span')
+					                               .text(message);
+				                        }
+			                        }
+
 		                        }).call(loginService.prototype);
 
 		                        // private methods \\
+
+		                        /**
+		                         * Hide or change a few parts in the login, so it's looks different,
+		                         * then the rest of the application
+		                         */
+		                        function hideAndChangeInterfaceParts()
+		                        {
+			                        angular.element('.navbar').hide();
+			                        angular.element('#footer').hide();
+			                        angular.element('#watermark').hide();
+			                        angular.element('body').css({'backgroundColor': '#1dc8b6'});
+		                        }
 
 		                        /**
 		                         * set background color
@@ -205,68 +276,6 @@ define(['services/services', 'config'],
 					                               'backgroundImage': 'none'
 				                               }
 			                               );
-		                        }
-
-		                        /**
-		                         * Preload logged userdata, all team names and id's
-		                         * and the ACL to give the user the right permissions
-		                         */
-		                        function preLoadData(cb)
-		                        {
-			                        var self = this;
-			                        angular.element('#login').hide();
-			                        angular.element('#download').hide();
-			                        angular.element('#preloader').show();
-
-			                        progress(33, $rootScope.ui.login.loading_User);
-
-			                        TeamUp._('user')
-			                              .then(function(resources)
-			                                    {
-				                                    $rootScope.app.resources = resources;
-				                                    Store('app').save('resources', $rootScope.app.resources);
-				                                    progress(66, $rootScope.ui.login.loading_teams);
-				                                    return Teams.getAllLocal();
-			                                    })
-			                              .then(function(teams)
-			                                    {
-				                                    progress(100, $rootScope.ui.login.loading_everything);
-				                                    //update the avatar once, because the resources were not set when the directive was loaded
-				                                    $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-				                                    //TODO for testpurposes only
-				                                    //Permission.saveProfile();
-
-				                                    Permission.getAccess(function(permissionProfile)
-				                                                         {
-					                                                         if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
-					                                                         (cb && cb(permissionProfile))
-				                                                         });
-
-				                                    //Set current version stuff Back end
-				                                    $rootScope.getVersionInfo();
-
-				                                    setTimeout(
-					                                    function()
-					                                    {
-						                                    angular.element('.navbar').show();
-						                                    angular.element('body').addClass('background');
-
-						                                    if( ! $rootScope.browser.mobile ) angular.element('#footer').show();
-					                                    }, 100);
-			                                    });
-
-			                        /**
-			                         * The progressbar will show which data is loading at the moment
-			                         * @param ratio Shows on a scale of one till hundred, how much data is already loaded
-			                         * @param message
-			                         */
-			                        function progress(ratio, message)
-			                        {
-				                        angular.element('#preloader .progress .bar')
-				                               .css({width: ratio + '%'});
-				                        angular.element('#preloader span')
-				                               .text(message);
-			                        }
 		                        }
 
 		                        /**
