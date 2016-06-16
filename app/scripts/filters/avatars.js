@@ -36,6 +36,9 @@ define(
               case "REACHABLE":
                 return $rootScope.ui.teamup.stateValue.reachable;
                 break;
+              case "SECOND_LINE":
+                return $rootScope.ui.teamup.stateValue.secondline;
+                break;
               case "POSSIBLY_REACHABLE":
                 return $rootScope.ui.teamup.stateValue.possibly_reachable;
                 break;
@@ -50,15 +53,17 @@ define(
 
     filters.filter(
       'stateReachable',
-      [
-        function () {
-          return function (states) {
-            var stateValues = _.map(states, 'value');
-
-            return (stateValues.indexOf('REACHABLE') >= 0)
+        function ()
+        {
+          return function (states)
+          {
+            var stateValues = _.map(states, 'value'),
+                currentState = "unknown";
+            if(stateValues.indexOf('REACHABLE') >= 0) currentState = "reachable";
+            else if(stateValues.indexOf('SECOND_LINE') >= 0) currentState = "second-line";
+            return currentState;
           }
         }
-      ]
     );
 
     // Determine the color of circle based on the state
@@ -81,9 +86,7 @@ define(
               || stateValues.indexOf('working') >= 0) {
               result = config.app.stateColors.busy;
             }
-            else if (stateValues.indexOf('offline') >= 0 || stateValues.indexOf('unknown') >= 0) {
-              result = config.app.stateColors.offline;
-            }
+            else result = config.app.stateColors.offline; //state offline || unknown || undefined
 
             return result;
           }

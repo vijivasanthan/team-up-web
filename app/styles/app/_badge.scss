@@ -14,20 +14,32 @@ BADGESSS
       left: 1px;
     }
   }
+  .badge-reachable {
+    background-color: $turq;
+  }
+  .badge-second-line {
+    background-color: $orange;
+  }
 }
 
 .roundedPicSmall {
   .badge {
     color: $turq;
-    background-color: $brown;
     margin-top: 32px;
     margin-left: 30px !important;
     background-color: $white;
     padding: 2px 3px 3px 3px;
-    .glyphicon {
-      left: 2px;
-    }
   }
+  .badge-reachable {
+    color: $turq;
+  }
+  .badge-second-line {
+    color: $orange;
+  }
+}
+
+.badge-unknown {
+  visibility: hidden;
 }
 
 .sa-member-icon {

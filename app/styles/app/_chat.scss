@@ -143,7 +143,19 @@
         margin-top: 7px;//20px;
       }
       .noMessages {
-        padding: 50px 10px;
+        position: absolute;
+        //top: 25px;
+        //left: calc((100% / 2) - 50px);
+        z-index: 22;
+        width: 75%;
+        text-align: center;
+        background-color: $turq;
+        color: $white;
+        font-weight: bold;
+        bottom: 50%;
+        left: 40px;
+        padding: 3px;
+        border-radius: 7px;
       }
 
       .chat-separator {

@@ -29,46 +29,48 @@ define(
                 $scope.chatTeamId =  $rootScope.app.resources.teamUuids[0];
                 if (! $scope.toggleChat && ! _.isUndefined( Settings.getBackEnd()) )
                 {
-                  $scope.checkMessage();
+                  Teams.getSingleLocal($scope.chatTeamId)
+                       .then(function()
+                             {
+                               getNewMessages();
+                             });
                 }
               }
             });
 
           // Prepare message for view
-          $scope.formatMessage = function (messages)
+          function formatMessage(messages)
           {
-            var chatMembers = [],
-              urlify = function(body)
-              {
-                var urlRegex = /(https?:\/\/[^\s]+)/g,
-                  htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g;
-
-                if(urlRegex.test(body))
+            var urlify = function(body)
                 {
-                  body = body.replace(urlRegex, function(url) {
-                    url = url.split('=');
-                    var roomId = url[url.length - 1];
-                    //href="index.html#/video/' + roomId + '"
-                    //'<a href="index.html#/video/' + roomId + '">' + 'Klik' + '</a>'
-                    //'<a ng-click="click()" >' + 'Klik' + '</a>';
-                     return '<a href="index.html#/team?video=' + roomId + '">Klik</a>';
+                  var urlRegex = /(https?:\/\/[^\s]+)/g,
+                    htmlRegex = /index.html#([A-Za-z0-9-_/#]+)/g;
+
+                  if(urlRegex.test(body))
+                  {
+                    body = body.replace(urlRegex, function(url) {
+                      url = url.split('=');
+                      var roomId = url[url.length - 1];
+                      //href="index.html#/video/' + roomId + '"
+                      //'<a href="index.html#/video/' + roomId + '">' + 'Klik' + '</a>'
+                      //'<a ng-click="click()" >' + 'Klik' + '</a>';
+                       return '<a href="index.html#/team?video=' + roomId + '">Klik</a>';
+                    });
+                  }
+                  else if(htmlRegex.test(body))
+                  {
+                    body = replaceUrl(body, htmlRegex);
+                  }
+
+                  return body;
+
+                },
+                replaceUrl = function(text, regex)
+                {
+                  return text.replace(regex, function(url) {
+                    return '<a href="' + url + '">' + 'Klik' + '</a>';
                   });
-                }
-                else if(htmlRegex.test(body))
-                {
-                  body = replaceUrl(body, htmlRegex);
-                }
-
-                return body;
-
-              };
-
-            var replaceUrl = function(text, regex)
-            {
-              return text.replace(regex, function(url) {
-                return '<a href="' + url + '">' + 'Klik' + '</a>';
-              });
-            };
+                };
 
             angular.forEach(
               messages,
@@ -156,23 +158,24 @@ define(
                 {
                   $scope.messagesShow.push(msg);
                 }
-
-                if (chatMembers.indexOf(message.senderUuid) == - 1)
-                {
-                  chatMembers.push(message.senderUuid);
-                }
               }
             );
 
             $scope.loadChatMessages = false;
-          };
+          }
 
           $scope.fetchMessagesByTeam = function()
           {
-            $scope.latestMsgTime = ($scope.latestMsgTime - SECONDS_A_WEEK);
             $scope.loadChatMessages = true;
-            $scope.messages = [];
-            $scope.messagesShow = [];
+
+            Teams.getSingle($scope.chatTeamId)
+              .then(function()
+                    {
+                      $scope.latestMsgTime = ($scope.latestMsgTime - SECONDS_A_WEEK);
+
+                      $scope.messages = [];
+                      $scope.messagesShow = [];
+                    });
           };
 
 	        /**
@@ -188,101 +191,129 @@ define(
             });
           }
 
+          /**
+           * Check whether there are new messages
+           */
+          function getNewMessages()
+          {
+            fetchMessages($scope.chatTeamId,
+                          $scope.latestMsgTime,
+                          function(messages)
+                          {
+                            if(messages.length)
+                            {
+                              updateMessageCounter(messages);
+                              getLatestMessage(messages);
+                            }
+                          });
+          }
+
           // Polling message from the server every 2 or 5 seconds base on the chat tab status, open or close.
-          $scope.renderMessage = function (latestMsgTime)
+          function renderMessage ()
           {
-            TeamUp._(
-              'chats',
-              { third: $scope.chatTeamId, since: $scope.latestMsgTime}
-            ).then(
-              function (messages)
-              {
-                messages = $filter('orderBy')(messages, 'sendTime');
-                messages = removeCallEvents(messages);
+            fetchMessages($scope.chatTeamId,
+                          $scope.latestMsgTime,
+                          function(messages)
+                          {
+                            if ($scope.toggleChat)
+                            {
+                              if(messages.length)
+                              {
+                                messages = $filter('orderBy')(messages, 'sendTime');
+                                if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
+                                {
+                                  $scope.moveToBottom = true;
+                                }
 
-                if ($scope.toggleChat)
-                {
-                  if(messages.length)
-                  {
-                    if($scope.latestMsgTime != messages[messages.length - 1].sendTime)
-                    {
-                      $scope.moveToBottom = true;
-                    }
+                                $scope.latestMsgTime = messages[messages.length - 1].sendTime;
+                              }
 
-                    $scope.latestMsgTime = messages[messages.length - 1].sendTime;
-                  }
-
-                  $timeout($scope.renderMessage, REFRESH_CHAT_MESSAGES);
-                }
-
-                // scroll to the bottom of the chat window
-                // TODO: Is this a handy way of doing this?
-                if ($scope.moveToBottom)
-                {
-                  $timeout(
-                    function ()
-                    {
-                      angular.element('#chat-content #messageField').focus();
-                      angular.element('#chat-content .mainContent').animate({
-                          'scrollTop': angular.element('#chat-content .mainContent')[0].scrollHeight},
-                        'slow');
-                      $scope.moveToBottom = false;
-                    }, 50); // FIXME: Temporarily made it longer till there is a better solution
-                }
-
-                $scope.formatMessage(messages);
-              },
-              function (error) { console.log(error) }
-            );
-          };
-
-          // Check whether there are new messages
-          $scope.checkMessage = function (latestMsgTime)
-          {
-            //console.error('checkMessage', moment().format('MMMM Do YYYY, h:mm:ss a'));
-            TeamUp._(
-              'chats',
-              { third: $scope.chatTeamId, since: $scope.latestMsgTime}
-            ).then(
-              function (messages)
-              {
-                if (messages.error)
-                {
-                  $rootScope.notifier.error(messages.error.data);
-                  return;
-                }
-                messages = removeCallEvents(messages);
-                if(messages.length) showMessages(messages);
-              });
-          };
+                              $timeout(renderMessage, REFRESH_CHAT_MESSAGES);
+                            }
+                            else scrolToBottom();// scroll to the bottom of the chat window
+                            formatMessage(messages);
+                          });
+          }
 
 	        /**
-           * Shoq messages and the counter on the chat button
+           * TODO not yet in use, clean up formatMessage first
+           * Prepare the messages for being shown
            * @param messages
            */
-          function showMessages(messages)
+          function prepareMessagesForView(messages)
+          {
+            _.each(messages, function(message)
+            {
+              formatMessage(message);
+            });
+          }
+
+	        /**
+           * Scroll to the bottom of the chat window
+           */
+          function scrolToBottom()
+          {
+            // TODO: Is this a handy way of doing this?
+            if ($scope.moveToBottom)
+            {
+              $timeout(
+                function ()
+                {
+                  angular.element('#chat-content #messageField').focus();
+                  angular.element('#chat-content .mainContent').animate({
+                                                                          'scrollTop': angular.element('#chat-content .mainContent')[0].scrollHeight},
+                                                                        'slow');
+                  $scope.moveToBottom = false;
+                }, 50); // FIXME: Temporarily made it longer till there is a better solution
+            }
+          }
+
+	        /**
+           * Fetch messages backend
+           * @param teamId the id of the team
+           * @param latestMsgTime the latest message time, so not loading everytime all messages
+           * @param cb callback
+	         */
+          function fetchMessages(teamId, latestMsgTime, cb)
+          {
+            TeamUp._(
+              'chats',
+              { third: teamId, since: latestMsgTime}
+            ).then(function(messages)
+             {
+               if (messages.error)
+               {
+                 $rootScope.notifier.error(messages.error.data);
+                 return;
+               }
+               else
+               {
+                 messages = removeCallEvents(messages);
+                 (cb && cb(messages));
+               }
+             }, function (error) { console.log(error) });
+
+          }
+
+	        /**
+           * Show counter if there are new messages
+           * @param messages
+           */
+          function updateMessageCounter(messages)
           {
             $scope.newCount = 0;
             angular.forEach(
               messages, function (newMsg)
               {
-                if (! $filter('getByUuid')($scope.messages, newMsg.uuid))
-                {
-                  $scope.newCount ++;
-                }
+                if (! $filter('getByUuid')($scope.messages, newMsg.uuid)) $scope.newCount ++;
               });
 
             // if the message is not appied to the scope , then make the message count 0 .
             if ($scope.newCount == 0 || $scope.messages.length == 0)
             {
-              if ($scope.unReadCount == 0 || typeof $scope.unReadCount == 'undefined')
-              {
-                $scope.newCountShow = '';
-              }
-              else
-              {
-                $scope.newCountShow = "(" + $scope.unReadCount + ")";
-              }
+              if ($scope.unReadCount == 0 ||
+                typeof $scope.unReadCount == 'undefined') $scope.newCountShow = '';
+              else $scope.newCountShow = "(" + $scope.unReadCount + ")";
             }
             else
             {
@@ -295,39 +326,52 @@ define(
             // flash the tab ?  TODO : turing the color here
             // you might need Jquery UI to make this work.
             $('#chat-btn').animate({ 'background-color': "yellow" }, "slow").animate({ 'background-color': "#1dc8b6" }, "slow");
+          }
 
+          function getLatestMessage(messages)
+          {
             if (! $scope.toggleChat)
             {
               // get the latest message
               messages = $filter('orderBy')(messages, 'sendTime');
               if ($scope.messages.length == 0 || (! $scope.newCount == 0 && ! $scope.newCount == ''))
               {
-                $scope.formatMessage(messages);
+                formatMessage(messages);
               }
 
               var lastMsg = messages[messages.length - 1];
               $scope.latestMsgTime = lastMsg && lastMsg.sendTime ||  (moment().valueOf() - REFRESH_CHAT_MESSAGES);
 
-              $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
+              $timeout(getNewMessages, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
             }
           }
 
           // Open the chat box and initiate loaders
           $scope.openChat = function()
           {
+            var currentTeamId = CurrentSelection.getTeamId(),
+                loggedUserTeams = $rootScope.app.resources.teamUuids;
+
+            //get the current teams of the user
+            $scope.teams = Teams.getTeamNamesOfUser(loggedUserTeams);
+            $scope.chatTeamId = loggedUserTeams[0];//TODO remember the latest selected team in chat
+            //check if the current teamid is one of the user teams
+            if(loggedUserTeams.indexOf(currentTeamId) >= 0) $scope.chatTeamId = currentTeamId;
             $scope.toggleChat = ! $scope.toggleChat;
-
-            setTeamsData();
-
             $scope.loadChatMessages = true;
 
+            initMessages();
+          };
+
+          function initMessages()
+          {
             var msgs = $filter('orderBy')($scope.messages, 'sendTime'),
                 latestMsgTime = 0;
 
             //Check if there are messages loaded before and
             //Check if those messages are from the current team
             if (msgs.length > 0
-                && msgs[msgs.length - 1].teamId == $scope.chatTeamId)
+              && msgs[msgs.length - 1].teamId == $scope.chatTeamId)
             {
               $scope.latestMsgTime = msgs[msgs.length - 1].sendTime;
             }
@@ -336,7 +380,6 @@ define(
               $scope.messages = [];
               $scope.messagesShow = [];
               var now = moment().valueOf();
-
               $scope.latestMsgTime = now - SECONDS_A_WEEK;
             }
 
@@ -344,24 +387,21 @@ define(
             {
               if ($scope.toggleChat)
               {
-                trackGa('send', 'event', 'Chat', 'User clicked to view the chat');
-
-                $scope.renderMessage(latestMsgTime);
-
-                $scope.newCountShow = '';
-                $scope.unReadCount = 0;
-                $scope.moveToBottom = true;
+                //load current team, so the team message sender data is up to date
+                Teams.getSingle($scope.chatTeamId)
+                     .then(function()
+                           {
+                             trackGa('send', 'event', 'Chat', 'User clicked to view the chat');
+                             renderMessage(latestMsgTime);
+                             $scope.newCountShow = '';
+                             $scope.unReadCount = 0;
+                             $scope.moveToBottom = true;
+                           })
               }
-              else
-              {
-                $timeout($scope.checkMessage, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
-              }
+              else $timeout(getNewMessages, REFRESH_CHAT_MESSAGES_WHEN_CLOSE);
             }
-            else
-            {
-              console.log("login user doesn't belong to any team.")
-            }
-          };
+            else console.log("login user doesn't belong to any team.");
+          }
 
           // Send a chat message
           $scope.sendMessage = function (newMessage)
@@ -398,20 +438,6 @@ define(
               }
             );
           };
-
-          /**
-           * Get the teams of the users and set the current chat TeamId
-           */
-          function setTeamsData()
-          {
-            var loggedUserTeams = $rootScope.app.resources.teamUuids,
-              currentTeamId = CurrentSelection.getTeamId();
-
-            $scope.teams = Teams.getTeamNamesOfUser(loggedUserTeams);
-            $scope.chatTeamId = (loggedUserTeams.indexOf(currentTeamId) >= 0)
-              ? currentTeamId
-              : loggedUserTeams[0];
-          }
 
           window.addEventListener("message", displayMessage, false);
 

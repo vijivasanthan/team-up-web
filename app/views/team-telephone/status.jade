@@ -39,7 +39,7 @@ section#dashboard
 									span.sa-member-icon.roundedPicSmall(
 										class='{{member.states|stateColor}}',
 										back-img='{{member.id | avatar:"client":"80"}}')
-										span.badge(ng-show='member.states|stateReachable')
+										span.badge(class="badge-{{ member.states|stateReachable}}")
 											i.glyphicon.glyphicon-earphone
 									.sa-member-card
 										h5
@@ -59,7 +59,7 @@ section#dashboard
 										span.sa-member-icon.roundedPicSmall(
 										class='{{member.states|stateColor}}',
 										back-img='{{member.id | avatar:"client":"80"}}')
-											span.badge(ng-show='member.states|stateReachable')
+											span.badge(class="badge-{{ member.states|stateReachable}}")
 												i.glyphicon.glyphicon-earphone
 										.sa-member-card
 											h5

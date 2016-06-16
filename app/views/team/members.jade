@@ -99,7 +99,7 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 								td
 									.roundedPicSmall(class='{{m.states|stateColor}}',
 									back-img = '{{m.uuid | avatar:"team":"80" }}')
-										span.badge(ng-show='m.states|stateReachable')
+										span.badge(class="badge-{{ m.states|stateReachable}}")
 											i.glyphicon.glyphicon-earphone
 								td
 									a(href='#/profile/{{m.uuid|lowercase}}#profile') {{m.firstName}} {{m.lastName}}
@@ -109,8 +109,8 @@ div#pageTop(ng-controller='team as team', style='padding-top: 1px;')
 										span.stateIcon(data-icon='{{state.name|stateDataIcon:"data_icon"}}',
 										aria-hidden='true',
 										class="{{state.name|stateDataIcon:'class_name'}}")
-										span.stateValue(ng-show='(state.name == "Reachability")') {{ m.currentReachability | translateCurrentState }}
-										span.stateValue(ng-show='(state.name == "Location")') {{[m.address.street, m.address.no, m.address.zip, m.address.city] | commaSeperated}}
+										span.stateValue(ng-show='(state.name == "Reachability")') {{ state.value | translateReachabilityState }}
+										span.stateValue(ng-show='(state.name == "Location") && m.address.street') {{[m.address.street, m.address.no, m.address.zip, m.address.city] | commaSeperated}}
 										span.stateValue(ng-show='(state.name == "Availability")') {{state.value | i18n_spec:'teamup.stateValue'}}
 											a(ng-show='(state.name == "Location")',
 											href='http://maps.google.com/?q={{m.address.latitude}},{{m.address.longitude}}')  {{ui.teamup.map}}
