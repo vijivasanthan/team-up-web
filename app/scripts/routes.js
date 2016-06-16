@@ -435,11 +435,11 @@ define(
                 controller: 'stats as stats',
                 resolve: {
                   data: function($q, Logs, TeamUp, Teams, Permission,
-                                 $location, $rootScope, Login, Settings, ipCookie)
+                                 $location, $rootScope, Login, Settings, ipCookie, Store)
                   {
                     return $q(function(resolve)
                     {
-                      if(! $rootScope.app.resources || ($rootScope.app.resources && ! $rootScope.app.resources.teamUuids))
+                      if(! Store('app').has('resources'))
                       {
                         if($rootScope.browser.device === "iPhone")
                         {
@@ -451,7 +451,7 @@ define(
                                                                     'padding-right': ''
                                                                   });                    }
                         else removeActiveClass('.teamMenu');
-                        if(! Settings.getBackEnd()) Settings.setBackEnd(ipCookie('currentBackEnd'));
+                        if(! Settings.getBackEnd()) Settings.setBackEnd(ipCookie('currentBackend'));
                         Login.preLoadData(function()
                                           {
                                             Permission.getAccess(function()
