@@ -88,7 +88,7 @@ block navbar
 							a#account(ng-click='nav("profile")')
 								.roundedPicxSmall(back-img = '{{app.resources.uuid | avatar:"team":"80" }}',
 								class='{{app.resources.states|stateColor}} profile-avatar')
-									span.badge(ng-show='app.resources.states|stateReachable')
+									span.badge(class="badge-{{ app.resources.states|stateReachable}}")
 										i.glyphicon.glyphicon-earphone
 								span#show-name {{app.resources.firstName}} {{app.resources.lastName}}
 						li(ng-hide='(app.resources.role === undefined)').navbar-btn
@@ -193,7 +193,7 @@ block chat
 						.message(class='{{message.msgRole}}' ng-show='(message.type == "CHAT" || message.type == null)')
 							.chatAvatar.roundedPicSmall(back-img = '{{message.member.uuid | avatar:"team":"80" }}',
 								class='{{message.member.states | stateColor}}')
-								span.badge(ng-show='message.member.states | stateReachable')
+								span.badge(class="badge-{{ message.member.states|stateReachable}}")
 									i.glyphicon.glyphicon-earphone
 							.chat-arrow(ng-show='(message.role == "other")')
 							.chatCloud

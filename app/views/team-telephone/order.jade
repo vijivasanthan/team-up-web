@@ -72,7 +72,7 @@ section
 								td
 									.roundedPicSmall(class='{{member.states|stateColor}}',
 									back-img = '{{member.uuid | avatar:"team":"80" }}')
-										span.badge(ng-show='member.states|stateReachable')
+										span.badge(class="badge-{{ member.states|stateReachable}}")
 											i.glyphicon.glyphicon-earphone
 								td
 									a(href='index.html#/profile/{{member.uuid}}#profile')
