@@ -739,6 +739,7 @@ define(
               .then(function (team)
               {
                 Store('app').save(teamId, team);
+                //update logged user resources local
                 if($rootScope.app.resources.teamUuids.indexOf(teamId) >= 0)
                 {
                   var loggedMemberId = $rootScope.app.resources.uuid,
