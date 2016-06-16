@@ -29,7 +29,11 @@ define(
                 $scope.chatTeamId =  $rootScope.app.resources.teamUuids[0];
                 if (! $scope.toggleChat && ! _.isUndefined( Settings.getBackEnd()) )
                 {
-                   getNewMessages();
+                  Teams.getSingleLocal($scope.chatTeamId)
+                       .then(function()
+                             {
+                               getNewMessages();
+                             });
                 }
               }
             });
@@ -162,10 +166,16 @@ define(
 
           $scope.fetchMessagesByTeam = function()
           {
-            $scope.latestMsgTime = ($scope.latestMsgTime - SECONDS_A_WEEK);
             $scope.loadChatMessages = true;
-            $scope.messages = [];
-            $scope.messagesShow = [];
+
+            Teams.getSingle($scope.chatTeamId)
+              .then(function()
+                    {
+                      $scope.latestMsgTime = ($scope.latestMsgTime - SECONDS_A_WEEK);
+
+                      $scope.messages = [];
+                      $scope.messagesShow = [];
+                    });
           };
 
 	        /**
