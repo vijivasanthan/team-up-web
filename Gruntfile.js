@@ -121,6 +121,8 @@
         server: {
           proxies: [
             {
+              context: '/',
+              host: '192.168.128.25',
               https: true
             }
           ]
@@ -128,8 +130,6 @@
         livereload: {
           options: {
             middleware: function(connect, options) {
-
-              console.error("options ->", options.base);
               return [
                 lrSnippet,
                 mountFolder(connect, '.tmp'),
