@@ -9,6 +9,49 @@ define(
         function ($scope, $rootScope, $q, $location, $route, $filter,
                   $timeout, Teams, TeamUp, CurrentSelection, moment, Settings)
         {
+          var evens = [2, 4, 6, 8, 10];
+          const lala = "henk";
+          var odds = evens.map(v => v + 1);
+
+
+          class Polygon {
+            constructor(height, width) {
+              this.height = height;
+              this.width = width;
+            }
+
+            get area() {
+              return this.calcArea();
+            }
+
+            calcArea() {
+              return this.height * this.width;
+            }
+          }
+
+          const square = new Polygon(10, 10);
+
+          function testing()
+          {
+            return new Promise(
+              function (resolve, reject)
+              {
+                resolve(square.area)
+              });
+          }
+
+          testing()
+            .then(function(result) {
+              console.log('promise', result); // "Stuff worked!"
+            }, function(err) {
+              console.log(err); // Error: "It broke"
+            });
+
+          console.log();
+
+          console.error("odds ->", odds);
+          console.error("123 ->", 123);
+
           // TODO: Move this to config
           // TODO: Find a better way for refreshing chat messages
           var REFRESH_CHAT_MESSAGES = 2000; // * 60;
