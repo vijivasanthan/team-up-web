@@ -1,12 +1,14 @@
 (function() {
   'use strict';
-  var LIVERELOAD_PORT, lrSnippet, markdown, mountFolder, semver;
+  var LIVERELOAD_PORT, lrSnippet, markdown, mountFolder, semver, proxySnippet;
 
   LIVERELOAD_PORT = 35729;
 
   lrSnippet = require('connect-livereload')({
     port: LIVERELOAD_PORT
   });
+
+  proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
   mountFolder = function(connect, dir) {
     return connect["static"](require('path').resolve(dir));
@@ -113,12 +115,27 @@
       connect: {
         options: {
           port: 4000,
-          hostname: '0.0.0.0'
+          hostname: '0.0.0.0',
+          open: true
+        },
+        server: {
+          proxies: [
+            {
+              https: true
+            }
+          ]
         },
         livereload: {
           options: {
             middleware: function(connect, options) {
-              return [lrSnippet, mountFolder(connect, '.tmp'), mountFolder(connect, appConfig.app)];
+
+              console.error("options ->", options.base);
+              return [
+                lrSnippet,
+                mountFolder(connect, '.tmp'),
+                mountFolder(connect, appConfig.app),
+                proxySnippet
+              ];
             }
           }
         },
@@ -516,7 +533,7 @@
       if (target === 'dist') {
         return grunt.task.run(['build', 'connect:dist:keepalive']);
       }
-      return grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'connect:livereload', 'watch']);
+      return grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'configureProxies:server', 'connect:livereload', 'watch']);
     });
 
     grunt.registerTask('server', ['serve', 'replace']);
