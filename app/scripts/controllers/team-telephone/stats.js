@@ -198,24 +198,33 @@ define(
 								}
 							},
 							periodFormats = datePeriod[format || 'day'],
-							logsByDateSelection = getAllDatesSelection(startTime, endTime, periodFormats),
-			        chartData = [ [], [], [] ];
+							logsByDateSelection = getAllDatesSelection(startTime, endTime, periodFormats);
 
-					_.each(logsByDateSelection, function(dateSelection, index)
-					{
-						var dayLogs = self.data.logData.logs.filter(function(log)
-            {
-							return periodFormats.format(moment(log.started.stamp)) === dateSelection.date;
-						});
-						chartData[0][index] = dayLogs.filter(function(log) { return log.status === 'FINISHED' && log.caller === 'client'; }).length;
-						chartData[1][index] = dayLogs.filter(function(log) { return log.status === 'MISSED' && log.caller === 'client'; }).length;
-						chartData[2][index] = dayLogs.filter(function(log) { return log.caller === 'member'; }).length;
-					});
-
-					self.chartData = chartData;
+					self.chartData = getCharts(self.data.logData.logs, logsByDateSelection, periodFormats.format);
 					self.chartLabels = _.map(logsByDateSelection, 'label');
 					self.chartSeries = [$rootScope.ui.teamup.finished, $rootScope.ui.teamup.missed, $rootScope.ui.teamup.teamMembers];
 					self.chartColours = [{ fillColor: '#833c11'}, {fillColor: '#c85a3c'}, {fillColor: '#1dc8b6'}];
+
+					function getCharts(logs, dates, format)
+					{
+						var charts = {finished: [], missed: [], member: []},
+						    sumLogsStatusPerDateFormat = function(status, caller, date, format)
+						    {
+							    return logs
+							               .filter(function(log) { return log.status === status; })
+							               .filter(function(log) { return log.caller === caller; })
+							               .filter(function(log) { return format(moment(log.started.stamp)) === date; })
+								             .length;
+						    };
+
+						_.each(dates, function(dateSelection)
+						{
+							charts.finished.push(sumLogsStatusPerDateFormat('FINISHED', 'client', dateSelection.date, format));
+							charts.missed.push(sumLogsStatusPerDateFormat('MISSED', 'client', dateSelection.date, format));
+							charts.member.push(sumLogsStatusPerDateFormat('FINISHED', 'member', dateSelection.date, format));
+						});
+						return [charts.finished, charts.missed, charts.member];
+					}
 				}
 
 				/**
