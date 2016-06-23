@@ -68,17 +68,19 @@ define(
            * Check session on all other locations
            * @param location
            */
-          $rootScope.checkLocation = function(location)
+          $rootScope.checkLocation = function()
           {
-            function checkSessionCookie()
-            {
-              var session = ipCookie('X-SESSION_ID');
-              if(session) Session.set(session);
-              Session.check();
-            }
+            var path               = $location.path(),
+                checkSessionCookie = function()
+                {
+                  var session = $location.search().session;
+                  if( session ) Session.set(session);
+                  Session.check();
+                },
+                routeExceptions    = ['video', 'password'],
+                route              = (path.indexOf(routeExceptions[0]) > - 1 ||
+                                      path.indexOf(routeExceptions[1]) > - 1);
 
-            var routeExceptions = ['video', 'password'];
-            var route = (location.indexOf(routeExceptions[0]) > -1 || location.indexOf(routeExceptions[1]) > -1);
             return (! route) ? (checkSessionCookie()) : route;
           };
 
@@ -587,6 +589,7 @@ define(
                   username: loginData.username
                 });
                 $window.location.href = 'index.html';
+
               }
             );
           };

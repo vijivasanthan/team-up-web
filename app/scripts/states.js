@@ -15,7 +15,7 @@ define(
             '$routeChangeStart',
             function ()
             {
-              $rootScope.checkLocation($location.path());
+              $rootScope.checkLocation();
 
               //TODO make some cleaner fix
               angular.element('.modal-backdrop').remove();

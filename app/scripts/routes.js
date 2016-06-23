@@ -439,6 +439,7 @@ define(
                   {
                     return $q(function(resolve)
                     {
+                      console.error("$location.search ->", $location.search());
                       if(! Store('app').has('resources'))
                       {
                         if($rootScope.browser.device === "iPhone")
@@ -451,7 +452,7 @@ define(
                                                                     'padding-right': ''
                                                                   });                    }
                         else removeActiveClass('.teamMenu');
-                        if(! Settings.getBackEnd()) Settings.setBackEnd(ipCookie('currentBackend'));
+                        if(! Settings.getBackEnd()) Settings.setBackEnd($location.search().backend);
                         Login.preLoadData(function()
                                           {
                                             Permission.getAccess(function()
