@@ -221,6 +221,7 @@ define(['services/services', 'config'],
 				                              .then(function(resources)
 				                                    {
 					                                    $rootScope.app.resources = resources;
+					                                    console.error("resources ->", resources);
 					                                    Store('app').save('resources', $rootScope.app.resources);
 					                                    progress(66, $rootScope.ui.login.loading_teams);
 					                                    return Teams.getAllLocal();

@@ -452,13 +452,18 @@ define(
                                                                     'padding-right': ''
                                                                   });                    }
                         else removeActiveClass('.teamMenu');
-                        if(! Settings.getBackEnd()) Settings.setBackEnd($location.search().backend);
+
+                        var backend = $location.search().backend;
+                        console.error("backend", backend);
+                        console.error("decoded backend", decodeURIComponent(backend));
+                        if(! Settings.getBackEnd()) backend && Settings.setBackEnd(decodeURIComponent(backend));
                         Login.preLoadData(function()
                                           {
-                                            Permission.getAccess(function()
+                                            Permission.getAccess(function(permissionProfile)
                                                                  {
                                                                    Login.hideStyling();
                                                                    $rootScope.getVersionInfo();
+                                                                   //Permission.location(permissionProfile)
                                                                    fetchLogsByTeam()
                                                                      .then(function(logData)
                                                                            {
