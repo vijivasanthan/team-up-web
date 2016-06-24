@@ -573,12 +573,7 @@ define(
 
             var loginData = Store('app').get('loginData');
 
-            TeamUp._('logout')
-              .then(
-              function (result)
-              {
-                console.warn('result ->', result);
-                Session.clear();
+            Session.clear();
                 ipCookie.remove('X-SESSION_ID');
 
                 Store('app').nuke();
@@ -590,8 +585,15 @@ define(
                 });
                 $window.location.href = 'index.html';
 
-              }
-            );
+            // TeamUp._('logout')
+            //   .then(
+            //   function (result)
+            //   {
+            //     console.warn('result ->', result);
+                
+
+            //   }
+            // );
           };
 
           /**

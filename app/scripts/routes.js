@@ -437,21 +437,33 @@ define(
                   data: function($q, Logs, TeamUp, Teams, Permission,
                                  $location, $rootScope, Login, Settings, ipCookie, Store)
                   {
+                          $('body').css('background', '#fff');
+                          $('.navbar').hide();
+                          $('#footer').hide();
+                          $('.container-fluid').css({
+                                                                    'padding-left': '',
+                                                                    'padding-right': ''
+                                                                  }); 
+
                     return $q(function(resolve)
                     {
                       console.error("$location.search ->", $location.search());
+
                       if(! Store('app').has('resources'))
                       {
-                        if($rootScope.browser.device === "iPhone")
-                        {
-                          angular.element('body').css('background', '#fff');
-                          angular.element('.navbar').hide();
-                          angular.element('#footer').hide();
-                          angular.element('.container-fluid').css({
-                                                                    'padding-left': '',
-                                                                    'padding-right': ''
-                                                                  });                    }
-                        else removeActiveClass('.teamMenu');
+
+
+                        // if($rootScope.browser.device === "iPhone")
+                        // {
+                        //   angular.element('body').css('background', '#fff');
+                        //   angular.element('.navbar').hide();
+                        //   angular.element('#footer').hide();
+                        //   angular.element('.container-fluid').css({
+                        //                                             'padding-left': '',
+                        //                                             'padding-right': ''
+                        //                                           });                    
+                        // }
+                        // else removeActiveClass('.teamMenu');
 
                         var backend = $location.search().backend;
                         console.error("backend", backend);

@@ -20,6 +20,15 @@ define(
 			{
 				$rootScope.fixStyles();
 
+angular.element('body').css('background', '#fff');
+                          angular.element('.navbar').hide();
+                          angular.element('#footer').hide();
+                          angular.element('.container-fluid').css({
+                                                                    'padding-left': '',
+                                                                    'padding-right': ''
+                                                                  }); 
+                          angular.element('.dateranger').hide();
+                          angular.element('.btn-group').hide();
 				//viewmodel
 				var self = this;
 
