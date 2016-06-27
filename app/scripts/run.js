@@ -565,7 +565,7 @@ define(
           };
 
           // TODO: Combine login and logout together
-          $rootScope.logout = function ()
+          $rootScope.logout = function()
           {
             navBar.hide();
 
@@ -573,27 +573,24 @@ define(
 
             var loginData = Store('app').get('loginData');
 
-            Session.clear();
-                ipCookie.remove('X-SESSION_ID');
+            TeamUp._('logout')
+                  .then(
+                    function(result)
+                    {
+                      console.warn('result ->', result);
+                      Session.clear();
+                      ipCookie.remove('X-SESSION_ID');
 
-                Store('app').nuke();
-                //clear authentication cache
-                document.execCommand('ClearAuthenticationCache', 'false');
+                      Store('app').nuke();
+                      //clear authentication cache
+                      document.execCommand('ClearAuthenticationCache', 'false');
 
-                Store('app').save('loginData', {
-                  username: loginData.username
-                });
-                $window.location.href = 'index.html';
-
-            // TeamUp._('logout')
-            //   .then(
-            //   function (result)
-            //   {
-            //     console.warn('result ->', result);
-                
-
-            //   }
-            // );
+                      Store('app').save('loginData', {
+                        username: loginData.username
+                      });
+                      $window.location.href = 'index.html';
+                    }
+                  );
           };
 
           /**
