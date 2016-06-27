@@ -100,41 +100,35 @@ define(['services/services', 'config'],
           /**
            * Checks the where the user has access to
            */
-          Permission.prototype.getAccess = function (callback)
+          Permission.prototype.getAccess = function ()
           {
-            this.getDefaultProfile()
-              .then(
-              function (permissionProfile)
-              {
-                var permission = permissionProfile,
-                  accessList = {};
-
-                if ($rootScope.app.resources.teamUuids.length)
-                {
-                  _.each(permissionProfile, function (val, key)
-                  {
-                    if (val == false)
-                    {
-                      delete permission[key];
-                    }
-                  });
-
-                  accessList = permission;
-                }
-                else
-                {
-                  _.each(permissionProfile, function (val, key)
-                  {
-                    permission[key] = false;
-                  });
-                }
-
-                Store('app').save('permissionProfile', permission);
-                $rootScope.app.domainPermission = permission;
-
-                (callback && callback(accessList));
-              }
-            );
+            return this.getDefaultProfile()
+                       .then(
+                         function(permissionProfile)
+                         {
+                           var permission = permissionProfile;
+                           if( $rootScope.app.resources.teamUuids.length )
+                           {
+                             _.each(permissionProfile, function(val, key)
+                             {
+                               if( val == false )
+                               {
+                                 delete permission[key];
+                               }
+                             });
+                           }
+                           else
+                           {
+                             _.each(permissionProfile, function(val, key)
+                             {
+                               permission[key] = false;
+                             });
+                           }
+                           Store('app').save('permissionProfile', permission);
+                           $rootScope.app.domainPermission = permission;
+                           return permission;
+                         }
+                       );
           };
 
           /**

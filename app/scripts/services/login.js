@@ -170,20 +170,21 @@ define(['services/services', 'config'],
 								                        else if( result.valid === true )
 								                        {
 									                        Session.set(result['X-SESSION_ID']);//set session
-									                        self.preLoadData(function()
-									                                         {
-										                                         //Permission.saveProfile();
-										                                         Permission.getAccess(function(permissionProfile)
-										                                                              {
-											                                                              if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
-											                                                              Permission.location(permissionProfile);
-											                                                              //Set current version stuff Back end
-											                                                              $rootScope.getVersionInfo();
-											                                                              self.hideStyling();
-
-											                                                              deferred.resolve(result);
-										                                                              });
-									                                         });
+									                        self.preLoadData()
+										                        .then(function()
+										                              {
+											                              //Permission.saveProfile();
+											                              return Permission.getAccess();
+										                              })
+										                        .then(function(permissionProfile)
+										                              {
+											                              if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
+											                              Permission.location(permissionProfile);
+											                              //Set current version stuff Back end
+											                              $rootScope.getVersionInfo();
+											                              self.hideStyling();
+											                              deferred.resolve(result);
+										                              })
 								                        }
 							                        });
 					                        return deferred.promise;
@@ -202,13 +203,14 @@ define(['services/services', 'config'],
 
 						                        if( ! $rootScope.browser.mobile ) angular.element('#footer').show();
 					                        }, 100);
-			                        }
+				                        console.error("hide styling ->");
+			                        };
 
 			                        /**
 			                         * Preload logged userdata, all team names and id's
 			                         * and the ACL to give the user the right permissions
 			                         */
-			                        this.preLoadData = function(cb)
+			                        this.preLoadData = function()
 			                        {
 				                        var self = this;
 				                        angular.element('#login').hide();
@@ -217,22 +219,19 @@ define(['services/services', 'config'],
 
 				                        progress(33, $rootScope.ui.login.loading_User);
 
-				                        TeamUp._('user')
+				                        return TeamUp._('user')
 				                              .then(function(resources)
 				                                    {
 					                                    $rootScope.app.resources = resources;
-					                                    console.error("resources ->", resources);
 					                                    Store('app').save('resources', $rootScope.app.resources);
 					                                    progress(66, $rootScope.ui.login.loading_teams);
 					                                    return Teams.getAllLocal();
 				                                    })
-				                              .then(function(teams)
+				                              .then(function()
 				                                    {
 					                                    progress(100, $rootScope.ui.login.loading_everything);
 					                                    //update the avatar once, because the resources were not set when the directive was loaded
 					                                    $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-					                                    //TODO for testpurposes only
-					                                    (cb && cb());
 				                                    });
 
 				                        /**

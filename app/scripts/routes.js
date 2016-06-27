@@ -437,52 +437,35 @@ define(
                   data: function($q, Logs, TeamUp, Teams, Permission,
                                  $location, $rootScope, Login, Settings, ipCookie, Store)
                   {
-                          $('body').css('background', '#fff');
-                          $('.navbar').hide();
-                          $('#footer').hide();
-                          $('.container-fluid').css({
-                                                                    'padding-left': '',
-                                                                    'padding-right': ''
-                                                                  }); 
-
                     return $q(function(resolve)
                     {
-                      console.error("$location.search ->", $location.search());
-
                       if(! Store('app').has('resources'))
                       {
-
-
-                        // if($rootScope.browser.device === "iPhone")
-                        // {
-                        //   angular.element('body').css('background', '#fff');
-                        //   angular.element('.navbar').hide();
-                        //   angular.element('#footer').hide();
-                        //   angular.element('.container-fluid').css({
-                        //                                             'padding-left': '',
-                        //                                             'padding-right': ''
-                        //                                           });                    
-                        // }
-                        // else removeActiveClass('.teamMenu');
-
+                        if($location.path().indexOf('stats') >= 0)
+                        {
+                          angular.element('body').css('background', '#fff');
+                          angular.element('.navbar').hide();
+                          angular.element('#footer').hide();
+                        }
                         var backend = $location.search().backend;
-                        console.error("backend", backend);
-                        console.error("decoded backend", decodeURIComponent(backend));
                         if(! Settings.getBackEnd()) backend && Settings.setBackEnd(decodeURIComponent(backend));
-                        Login.preLoadData(function()
-                                          {
-                                            Permission.getAccess(function(permissionProfile)
-                                                                 {
-                                                                   Login.hideStyling();
-                                                                   $rootScope.getVersionInfo();
-                                                                   //Permission.location(permissionProfile)
-                                                                   fetchLogsByTeam()
-                                                                     .then(function(logData)
-                                                                           {
-                                                                             resolve(logData);
-                                                                           });
-                                                                 });
-                                          });
+
+                        Login.preLoadData()
+                             .then(function()
+                                   {
+                                     return Permission.getAccess()
+
+                                   })
+                             .then(function()
+                                   {
+                                     return fetchLogsByTeam();
+
+                                   })
+                             .then(function(logData)
+                                   {
+                                     $rootScope.getVersionInfo();
+                                     resolve(logData);
+                                   });
                       }
                       else fetchLogsByTeam()
                             .then(function(logData)

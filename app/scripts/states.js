@@ -15,18 +15,6 @@ define(
             '$routeChangeStart',
             function ()
             {
-              if($location.path().indexOf('stats') >= 0)
-              {
-                console.log(12321);
-                $('body').css('background', '#fff');
-                          $('.navbar').hide();
-                          $('#footer').hide();
-                          $('.container-fluid').css({
-                                                                    'padding-left': '',
-                                                                    'padding-right': ''
-                                                                  }); 
-              }
-
               $rootScope.checkLocation();
 
               //TODO make some cleaner fix

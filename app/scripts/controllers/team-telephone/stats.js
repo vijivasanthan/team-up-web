@@ -15,20 +15,18 @@ define(
 			         CurrentSelection,
 			         Teams,
 			         data,
-			         moment,
-                      MomentRange)
+			         moment)
 			{
 				$rootScope.fixStyles();
 
-angular.element('body').css('background', '#fff');
-                          angular.element('.navbar').hide();
-                          angular.element('#footer').hide();
-                          angular.element('.container-fluid').css({
-                                                                    'padding-left': '',
-                                                                    'padding-right': ''
-                                                                  }); 
-                          angular.element('.dateranger').hide();
-                          angular.element('.btn-group').hide();
+				if($location.search().session)
+				{
+					angular.element('.dateranger').hide();
+					angular.element('.btn-group').hide();
+					angular.element('#wrap .container-fluid').css('padding', 0);
+					angular.element('#groupTab p').css('padding-left', '10px');
+				}
+
 				//viewmodel
 				var self = this;
 
@@ -172,9 +170,6 @@ angular.element('body').css('background', '#fff');
 				 * colums based on the call status finished or missed, depending
 				 * if the caller was a client or a teammember, the last one is everytime the last column
 				 * TODO define Chart instead of chart requireJS
-				 * TODO some sort of auto login from mobile devices, copy the session and the current teamId
-				 * TODO Remove the teamselector and add the teamId to the top
-         * TODO maak maandag t/m zondag ipv zondag in daterange
 				 */
 				function initChart(format)
 				{

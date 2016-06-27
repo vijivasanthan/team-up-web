@@ -14,8 +14,6 @@ define(
 
           TeamUp.prototype.get = function()
           {
-            console.error("Settings.getBackEnd() ->", Settings.getBackEnd());
-            
             return $resource(
               Settings.getBackEnd() + config.app.namespace + ':first/:second/:third/:fourth',
               {},
