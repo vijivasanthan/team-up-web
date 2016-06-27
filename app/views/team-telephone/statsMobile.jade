@@ -25,9 +25,11 @@ section#logs
 			//p aantal open {{ stats.expandedLog }} totaal log {{ stats.data.logData.logs.length }}
 			div(ng-if='stats.data.logData.logs.length > 0')
 				canvas(id="bar" class="chart chart-bar",
+					height="{{ stats.data.viewportHeight }}",
 					chart-legend='true',
-					chart-data="stats.chartData",
-					chart-labels="stats.chartLabels",
-					chart-series="stats.chartSeries", 
-					chart-colours="stats.chartColours", height="{{ stats.data.viewportHeight }}")
+					chart-data="stats.chart.data",
+					chart-labels="stats.chart.labels",
+					chart-series="stats.chart.series",
+					chart-options="stats.chart.options"
+					chart-colours="stats.chart.colors")
 			hr

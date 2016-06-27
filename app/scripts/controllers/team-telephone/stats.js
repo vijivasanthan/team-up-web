@@ -19,26 +19,25 @@ define(
 			{
 				$rootScope.fixStyles();
 
-
-
-				//viewmodel
-				var self = this;
-
-				//properties
-				self.data    = data;
-
-
 				if($location.search().session)
 				{
 					angular.element('.dateranger').hide();
 					angular.element('.btn-group').hide();
 					angular.element('#wrap .container-fluid').css('padding', 0);
 					angular.element('#groupTab p').css('padding-left', '10px');
-					console.error("window.innerHeight ->", window.innerHeight);
-					console.error("viewport height", self.data.viewportHeight);
 				}
 
+				//viewmodel
+				var self = this;
+
+				//properties
+				self.data    = data;
+				//remove this specified viewportheight, if the view needs to be responsive
+				//and maintainAspectRatio must be true
+				self.data.viewportHeight = (window.innerHeight * 0.7);
+				console.error("viewport height", self.data.viewportHeight);
 				self.current = CurrentSelection.getTeamId();
+
 				self.datePeriod = 'day';
 				self.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
 					$filter('date')(data.logData.periods.endTime, 'dd-MM-yyyy');
@@ -210,10 +209,13 @@ define(
 							periodFormats = datePeriod[format || 'day'],
 							logsByDateSelection = getAllDatesSelection(startTime, endTime, periodFormats);
 
-					self.chartData = getCharts(self.data.logData.logs, logsByDateSelection, periodFormats.format);
-					self.chartLabels = _.map(logsByDateSelection, 'label');
-					self.chartSeries = [$rootScope.ui.teamup.finished, $rootScope.ui.teamup.missed, $rootScope.ui.teamup.teamMembers];
-					self.chartColours = [{ fillColor: '#833c11'}, {fillColor: '#c85a3c'}, {fillColor: '#1dc8b6'}];
+					self.chart = { 
+						data: getCharts(self.data.logData.logs, logsByDateSelection, periodFormats.format), 
+						labels: _.map(logsByDateSelection, 'label'), 
+						series: [$rootScope.ui.teamup.finished, $rootScope.ui.teamup.missed, $rootScope.ui.teamup.teamMembers], 
+						colors: [{ fillColor: '#833c11'}, {fillColor: '#c85a3c'}, {fillColor: '#1dc8b6'}], 
+						options: { 		maintainAspectRatio: false 	}
+					 };
 
 					function getCharts(logs, dates, format)
 					{
