@@ -506,7 +506,8 @@ define(
                                                {
                                                  deferred.resolve({
                                                    teams: _teams,
-                                                   logData: logs
+                                                   logData: logs,
+                                                    viewportHeight: $location.search().viewportheight
                                                  });
                                                });
                                   });

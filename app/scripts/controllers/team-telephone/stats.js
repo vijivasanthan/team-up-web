@@ -19,19 +19,25 @@ define(
 			{
 				$rootScope.fixStyles();
 
-				if($location.search().session)
-				{
-					angular.element('.dateranger').hide();
-					angular.element('.btn-group').hide();
-					angular.element('#wrap .container-fluid').css('padding', 0);
-					angular.element('#groupTab p').css('padding-left', '10px');
-				}
+
 
 				//viewmodel
 				var self = this;
 
 				//properties
 				self.data    = data;
+
+
+				if($location.search().session)
+				{
+					angular.element('.dateranger').hide();
+					angular.element('.btn-group').hide();
+					angular.element('#wrap .container-fluid').css('padding', 0);
+					angular.element('#groupTab p').css('padding-left', '10px');
+					console.error("window.innerHeight ->", window.innerHeight);
+					console.error("viewport height", self.data.viewportHeight);
+				}
+
 				self.current = CurrentSelection.getTeamId();
 				self.datePeriod = 'day';
 				self.daterange = $filter('date')(data.logData.periods.startTime, 'dd-MM-yyyy') + ' / ' +
