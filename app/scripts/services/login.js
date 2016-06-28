@@ -139,7 +139,7 @@ define(['services/services', 'config'],
 						                        }
 						                        return currentLoginData;
 					                        }
-				                        },
+				                        }
 			                        /**
 			                         * Authenticate the user who tries to login
 			                         * Thereby the backend directory will be set,
@@ -155,7 +155,13 @@ define(['services/services', 'config'],
 					                            deferred = $q.defer();
 
 					                        Settings
-						                        .initBackEnd(config.app.host, uuid, pass)
+						                        .fetchBackEnds()
+						                        .then(function(backEnds)
+						                              {
+							                              console.error("backEnds ->", backEnds);
+							                              return Settings
+								                              .initBackEnd(backEnds, uuid, pass)
+						                              })
 						                        .then(
 							                        function(result)
 							                        {
@@ -171,20 +177,20 @@ define(['services/services', 'config'],
 								                        {
 									                        Session.set(result['X-SESSION_ID']);//set session
 									                        self.preLoadData()
-										                        .then(function()
-										                              {
-											                              //Permission.saveProfile();
-											                              return Permission.getAccess();
-										                              })
-										                        .then(function(permissionProfile)
-										                              {
-											                              if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
-											                              Permission.location(permissionProfile);
-											                              //Set current version stuff Back end
-											                              $rootScope.getVersionInfo();
-											                              self.hideStyling();
-											                              deferred.resolve(result);
-										                              })
+									                            .then(function()
+									                                  {
+										                                  //Permission.saveProfile();
+										                                  return Permission.getAccess();
+									                                  })
+									                            .then(function(permissionProfile)
+									                                  {
+										                                  if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
+										                                  Permission.location(permissionProfile);
+										                                  //Set current version stuff Back end
+										                                  $rootScope.getVersionInfo();
+										                                  self.hideStyling();
+										                                  deferred.resolve(result);
+									                                  })
 								                        }
 							                        });
 					                        return deferred.promise;

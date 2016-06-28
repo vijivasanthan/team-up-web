@@ -4,6 +4,61 @@ define(['services/services', 'config'], function (services, config)
 
   services.factory('Settings', function ($q, Store, $injector)
   {
+	  /**
+     * Get stagenumber, to fetch the right backend
+     * @param stage current state name as string
+     * @returns {number}
+     */
+    function getStageNr(stage)
+    {
+      switch(stage) {
+        case "production":
+          return 1;
+          break;
+        case "demo":
+          return 2;
+          break;
+        case "test":
+          return 3;
+          break;
+        default:
+          return 4;
+      }
+    }
+
+	  /**
+     * Fetch the backends by stage / otap name
+     * @returns {*|Function} promise with the fetched backends
+     */
+    function getBackEndConfig()
+    {
+      var $resource = $injector.get('$resource'),
+          backendResource   = $resource('https://teamtelefoon.nl/backends/get.php', {}, {
+            get: {
+              method: 'GET',
+              params: {
+                frontend: '',
+                buildnr: ''
+              },
+              transformResponse: function(data)
+              {
+                try
+                {
+                  return angular.fromJson(data);
+                }
+                catch(e)
+                {
+                  return {message: data};
+                }
+              }
+            }
+          });
+      return backendResource.get({
+                         frontend: 'webapp',
+                         buildnr: getStageNr(config.app.otapRole)
+                       }).$promise;
+    }
+
     return {
       /**
        * get the backend directory locally
@@ -22,6 +77,38 @@ define(['services/services', 'config'], function (services, config)
       setBackEnd: function (backEnd)
       {
         Store('app').save('backEnd', {'get': backEnd});
+      },
+      fetchBackEnds: function()
+      {
+        var deferred = $q.defer(),
+            tempConfig = [
+              {
+                "url": "https://teamup-test.ask-cs.nl/proxy",
+                "name": "Test",
+                "desc": "Some descriptive text, maybe to use in the front-end later on"
+              },
+              {
+                "url": "https://teamup-dev.ask-cs.nl/proxy",
+                "name": "Dev",
+                "desc": "Some descriptive text, maybe to use in the front-end later on"
+              }
+            ],
+            formatBackends = function(backendConfig)
+            {
+              config.app.host = backendConfig.map(function(backend)
+                                                  {
+                                                    return backend.url + config.app.namespace;
+                                                  });
+              return config.app.host;
+            };
+
+        //TODO wait until the endpoint is ready to fetch the backend config
+        //settings.js:109 config.app.host -> ["https://teamup-test.ask-cs.nl/proxy/"]
+        deferred.resolve(formatBackends(tempConfig));
+        //return getBackEndConfig()
+        //  .then(formatBackends);
+
+        return deferred.promise;
       },
       /**
        * initialise backend directory by logging in on all backends defined
