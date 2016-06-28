@@ -5,7 +5,8 @@ define(['profile'], function(profile){
       released: '@@released',
       versionInfo: '@@versionInfo',
 
-      title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
+      title: (localConfig.otapRole.indexOf('production') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
+      otapRole: localConfig.otapRole,
       lang: getLanguage(),
       profileName: profile.name,
 

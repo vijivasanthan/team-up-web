@@ -19,11 +19,10 @@ var localConfig = {
   /* The otapRole parameter tells what kind of backend we're using. Most
      common values are:
    */
-	otapRole: "dev",
+	otapRole: "development",
 	//otapRole: "test",
 	//otapRole: "demo",
-	//otapRole: "live",
-	//otapRole: "local",
+	//otapRole: "production",
 
   /* The default profile parameter is used if the profile can't be derived from
      the URL. For example, if you're using a local grunt server, the URL
