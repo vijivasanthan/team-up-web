@@ -44,7 +44,7 @@ define(['services/services', 'config'],
                 }
               }
             );
-          }
+          };
 
           Permission.prototype.getDefaultProfile = function ()
           {
@@ -83,51 +83,39 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          //TODO not nessesary anymore
-          Permission.prototype.checkPermission = function (accessNode)
-          {
-            var profile = Store('app').get('permissionProfile');
-
-            _.filter(profile, function (valAccess, keyNode)
-            {
-              if (keyNode == accessNode)
-              {
-                return valAccess;
-              }
-            });
-          };
-
-          /**
-           * Checks the where the user has access to
+	        /**
+           * Checks to which locations the user is authorized
+           * @returns {*} list of locations
            */
           Permission.prototype.getAccess = function ()
           {
             return this.getDefaultProfile()
-                       .then(
-                         function(permissionProfile)
-                         {
-                           var permission = permissionProfile;
-                           if( $rootScope.app.resources.teamUuids.length )
-                           {
-                             _.each(permissionProfile, function(val, key)
+                       .then(function(permissionProfile)
                              {
-                               if( val == false )
-                               {
-                                 delete permission[key];
-                               }
-                             });
-                           }
-                           else
-                           {
-                             _.each(permissionProfile, function(val, key)
-                             {
-                               permission[key] = false;
-                             });
-                           }
-                           Store('app').save('permissionProfile', permission);
-                           $rootScope.app.domainPermission = permission;
-                           return permission;
-                         }
+                               var hasTeams      = $rootScope.app.resources.teamUuids.length;
+                               permissionProfile = Object.keys(permissionProfile)
+                                                         .map(function(name)
+                                                              {
+                                                                return {
+                                                                  name: name,
+                                                                  permission: permissionProfile[name]
+                                                                };
+                                                              })
+                                                         .filter(function(setting)
+                                                                 {
+                                                                   return (!! setting.permission);
+                                                                 })
+                                                         .reduce(function(list, setting)
+                                                                 {
+                                                                   list[setting.name] = (hasTeams)
+                                                                     ? setting.permission
+                                                                     : false;
+                                                                   return list;
+                                                                 }, {});
+                               Store('app').save('permissionProfile', permissionProfile);
+                               $rootScope.app.domainPermission = permissionProfile;
+                               return permissionProfile;
+                             }
                        );
           };
 
