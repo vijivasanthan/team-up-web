@@ -72,6 +72,7 @@ define(['services/services', 'config'],
                   trackingToken: trackingToken,
                   tracked: tracked,
                   from: strip(log.fromAddress),
+                  caller: 'client',
                   started: {
                     date: $filter('date')(log.start, 'medium'),
                     stamp: log.start
@@ -177,9 +178,7 @@ define(['services/services', 'config'],
               }
             );
 
-            $filter('orderBy')(uniques, 'started.stamp');
-
-            return uniques;
+            return $filter('orderBy')(uniques, 'started.stamp');
           };
 
         /**
@@ -301,7 +300,11 @@ define(['services/services', 'config'],
                 {
                   _.each(result, function (log)
                   {
-                    if(teamMembersNames[log.from]) log.from = teamMembersNames[log.from]['fullName'];
+                    if(teamMembersNames[log.from])
+                    {
+                      log.from = teamMembersNames[log.from]['fullName'];
+                      log.caller = 'member';
+                    }
                     if(teamMembersNames[log.to]) log.to = teamMembersNames[log.to]['fullName'];
                   })
                 }

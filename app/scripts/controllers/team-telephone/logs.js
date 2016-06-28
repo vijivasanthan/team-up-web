@@ -123,6 +123,7 @@ define(
          */
         function receiveLogs(logData)
         {
+          console.error("logData ->", logData);
           self.loadLogs = false;
           self.data.logData = logData;
 

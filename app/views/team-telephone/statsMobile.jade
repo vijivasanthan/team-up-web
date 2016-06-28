@@ -1,0 +1,35 @@
+section#logs
+	div
+		//.form-group.has-feedback.pull-left(ng-show='app.resources.teamUuids.length > 1 || app.resources.role == 1')
+		//	label.control-label {{ ui.teamup.chooseTeam }}
+		//	.controls
+		//		select(ng-model='stats.current',
+		//		ng-options='team.uuid as team.name for team in stats.data.teams | orderBy:"name"',
+		//		ng-selected='stats.current',
+		//		ng-change='stats.fetchLogs()')
+		.form-group.has-feedback.pull-left.dateranger.headerTop
+			input.span3.form-control(type='text', name='stats.daterange', ng-model='stats.daterange', log-ranger, readonly)
+			i.glyphicon.glyphicon-calendar.form-control-feedback
+		.form-group.has-feedback.pull-right.headerTop
+			.btn-group.pull-left(style='margin-right: 5px;')
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("day")', class="{{(stats.datePeriod==='day') && 'active'}}")
+					| dagen
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("week")', class="{{(stats.datePeriod==='week') && 'active'}}")
+					| weken
+				button.btn.btn-primary(type='button', ng-click='stats.changeDatePeriod("month")', class="{{(stats.datePeriod==='month') && 'active'}}")
+					| maanden
+			
+	.tabbable.tabs-left
+		#groupTab.tab-pane.active
+			p(ng-hide='stats.data.logData.logs.length > 0') {{ ui.logs.empty }}
+			//p aantal open {{ stats.expandedLog }} totaal log {{ stats.data.logData.logs.length }}
+			div(ng-if='stats.data.logData.logs.length > 0')
+				canvas(id="bar" class="chart chart-bar",
+					height="{{ stats.data.viewportHeight }}",
+					chart-legend='true',
+					chart-data="stats.chart.data",
+					chart-labels="stats.chart.labels",
+					chart-series="stats.chart.series",
+					chart-options="stats.chart.options"
+					chart-colours="stats.chart.colors")
+			hr

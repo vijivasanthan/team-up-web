@@ -14,7 +14,8 @@ define(
 
           angular.extend(
             $rootScope.browser, {
-              screen: $window.screen
+              screen: $window.screen,
+              device: ""
             }
           );
 
@@ -28,6 +29,8 @@ define(
               }
             );
           }
+
+          if(navigator.userAgent.match('iPhone')) $rootScope.browser.device = "iPhone";
 
           if ($rootScope.browser.ios)
           {

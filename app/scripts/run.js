@@ -27,8 +27,10 @@ define(
         'tmhDynamicLocale',
         'ipCookie',
         'Version',
+        'Settings',
         function ($rootScope, $location, $timeout, Session, Store, $window, $filter, Teams, Offline, States, Browsers,
-                  Dater, TeamUp, Permission, $route, Pincode, $injector, moment, tmhDynamicLocale, ipCookie, Version)
+                  Dater, TeamUp, Permission, $route, Pincode,
+                  $injector, moment, tmhDynamicLocale, ipCookie, Version, Settings)
         {
           //$window.onerror = function (errorMsg, url, lineNumber)
           //{
@@ -66,11 +68,20 @@ define(
            * Check session on all other locations
            * @param location
            */
-          $rootScope.checkLocation = function(location)
+          $rootScope.checkLocation = function()
           {
-            var routeExceptions = ['video', 'password'];
-            var route = (location.indexOf(routeExceptions[0]) > -1 || location.indexOf(routeExceptions[1]) > -1);
-            return (! route) ? Session.check() : route;
+            var path               = $location.path(),
+                checkSessionCookie = function()
+                {
+                  var session = $location.search().session;
+                  if( session ) Session.set(session);
+                  Session.check();
+                },
+                routeExceptions    = ['video', 'password'],
+                route              = (path.indexOf(routeExceptions[0]) > - 1 ||
+                                      path.indexOf(routeExceptions[1]) > - 1);
+
+            return (! route) ? (checkSessionCookie()) : route;
           };
 
           $rootScope.checkLocation($location.path());
@@ -554,7 +565,7 @@ define(
           };
 
           // TODO: Combine login and logout together
-          $rootScope.logout = function ()
+          $rootScope.logout = function()
           {
             navBar.hide();
 
@@ -563,23 +574,23 @@ define(
             var loginData = Store('app').get('loginData');
 
             TeamUp._('logout')
-              .then(
-              function (result)
-              {
-                console.warn('result ->', result);
-                Session.clear();
-                ipCookie.remove('X-SESSION_ID');
+                  .then(
+                    function(result)
+                    {
+                      console.warn('result ->', result);
+                      Session.clear();
+                      ipCookie.remove('X-SESSION_ID');
 
-                Store('app').nuke();
-                //clear authentication cache
-                document.execCommand('ClearAuthenticationCache', 'false');
+                      Store('app').nuke();
+                      //clear authentication cache
+                      document.execCommand('ClearAuthenticationCache', 'false');
 
-                Store('app').save('loginData', {
-                  username: loginData.username
-                });
-                $window.location.href = 'index.html';
-              }
-            );
+                      Store('app').save('loginData', {
+                        username: loginData.username
+                      });
+                      $window.location.href = 'index.html';
+                    }
+                  );
           };
 
           /**
@@ -922,35 +933,40 @@ define(
            */
           $rootScope.getVersionInfo = function()
           {
-            Version.getVersionInfo()
-                   .then(function(versionInfo)
-                         {
-                           //set version Info
-                           if(versionInfo)
-                           {
-                             $rootScope.backEndVersion = versionInfo;
+            if(Settings.getBackEnd())
+            {
+              Version.getVersionInfo()
+                     .then(initVersionData);
+            }
 
-                             $rootScope.backEndVersion.title = Version.setVersionToolTip({app: "Back-end",
-                                                                                   releaseNr: versionInfo.releaseNr,
-                                                                                   buildDate: versionInfo.buildDate,
-                                                                                   currentBranch: versionInfo.currentBranch
-                                                                                 });
+            function initVersionData(versionInfo)
+            {
+              //set version Info
+              if(versionInfo)
+              {
+                $rootScope.backEndVersion = versionInfo;
 
-                             $rootScope.frontEndVersion = {};
-                             try {
-                               $rootScope.frontEndVersion = angular.fromJson(config.app.versionInfo);
-                                 //angular.fromJson('{"releaseNr":"1.19.0","buildDate":"02-03-2016, 08:34:31 PM","currentBranch":"feature_version_info"}');
-                               $rootScope.frontEndVersion.title = Version.setVersionToolTip({app: "Front-end",
-                                                                                             releaseNr: $rootScope.frontEndVersion.releaseNr,
-                                                                                             buildDate: $rootScope.frontEndVersion.buildDate,
-                                                                                             currentBranch: $rootScope.frontEndVersion.currentBranch
-                                                                                           });
-                             } catch (e) {
-                               $rootScope.frontEndVersion.title = "<span>App&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> Front-end";
-                               $rootScope.frontEndVersion.title += "<br /><span>Version:</span> v" + $rootScope.config.app.version;
-                             }
-                           }
-                         });
+                $rootScope.backEndVersion.title = Version.setVersionToolTip({app: "Back-end",
+                                                                              releaseNr: versionInfo.releaseNr,
+                                                                              buildDate: versionInfo.buildDate,
+                                                                              currentBranch: versionInfo.currentBranch
+                                                                            });
+
+                $rootScope.frontEndVersion = {};
+                try {
+                  $rootScope.frontEndVersion = angular.fromJson(config.app.versionInfo);
+                  //angular.fromJson('{"releaseNr":"1.19.0","buildDate":"02-03-2016, 08:34:31 PM","currentBranch":"feature_version_info"}');
+                  $rootScope.frontEndVersion.title = Version.setVersionToolTip({app: "Front-end",
+                                                                                 releaseNr: $rootScope.frontEndVersion.releaseNr,
+                                                                                 buildDate: $rootScope.frontEndVersion.buildDate,
+                                                                                 currentBranch: $rootScope.frontEndVersion.currentBranch
+                                                                               });
+                } catch (e) {
+                  $rootScope.frontEndVersion.title = "<span>App&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span> Front-end";
+                  $rootScope.frontEndVersion.title += "<br /><span>Version:</span> v" + $rootScope.config.app.version;
+                }
+              }
+            }
           };
 
           if(Session.get()) $rootScope.getVersionInfo();

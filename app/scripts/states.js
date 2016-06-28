@@ -15,7 +15,7 @@ define(
             '$routeChangeStart',
             function ()
             {
-              $rootScope.checkLocation($location.path());
+              $rootScope.checkLocation();
 
               //TODO make some cleaner fix
               angular.element('.modal-backdrop').remove();
@@ -207,6 +207,10 @@ define(
 
               case 'team-telefoon/status':
                 $location.path('/team-telefoon/status').search({}).hash('');
+                break;
+
+              case 'team-telefoon/stats':
+                $location.path('/team-telefoon/stats').search({}).hash('');
                 break;
 
               case 'team-telefoon/order':

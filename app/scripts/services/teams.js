@@ -559,14 +559,8 @@ define(
             var CurrentSelection = $injector.get('CurrentSelection'),
                 teams = Store('app').get('teams');
 
-            if( ! teamId || ! _.find(teams, {uuid: teamId}) )
-            {
-              teamId = CurrentSelection.getTeamId();
-            }
-            else
-            {
-              CurrentSelection.local = teamId;
-            }
+            if( ! teamId || ! _.find(teams, {uuid: teamId}) ) teamId = CurrentSelection.getTeamId();
+            else CurrentSelection.local = teamId;
 
             return teamId;
           };

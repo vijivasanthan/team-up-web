@@ -429,6 +429,95 @@ define(
               })
 
             .when(
+              '/team-telefoon/stats',
+              {
+                templateUrl: 'views/team-telephone/statsMobile.html',
+                controller: 'stats as stats',
+                resolve: {
+                  data: function($q, Logs, TeamUp, Teams, Permission,
+                                 $location, $rootScope, Login, Settings, ipCookie, Store)
+                  {
+                    return $q(function(resolve)
+                    {
+                      if(! Store('app').has('resources'))
+                      {
+                        if($location.path().indexOf('stats') >= 0)
+                        {
+                          angular.element('body').css('background', '#fff');
+                          angular.element('.navbar').hide();
+                          angular.element('#footer').hide();
+                        }
+                        var backend = $location.search().backend;
+                        if(! Settings.getBackEnd()) backend && Settings.setBackEnd(decodeURIComponent(backend));
+
+                        Login.preLoadData()
+                             .then(function()
+                                   {
+                                     return Permission.getAccess()
+
+                                   })
+                             .then(function()
+                                   {
+                                     return fetchLogsByTeam();
+
+                                   })
+                             .then(function(logData)
+                                   {
+                                     $rootScope.getVersionInfo();
+                                     resolve(logData);
+                                   });
+                      }
+                      else fetchLogsByTeam()
+                            .then(function(logData)
+                                  {
+                                    resolve(logData);
+                                  });
+                    });
+
+                    function fetchLogsByTeam()
+                    {
+                      var deferred = $q.defer(),
+                          teamId   = Teams.checkExistence(($location.search()).teamId);
+                      $location.search('teamId', teamId);
+
+                      Teams.getTeamTelephoneOptions(teamId)
+                            .then(function(options)
+                                  {
+                                    var _teams = null;
+
+                                    Teams.getAllLocal()
+                                         .then(function(teams)
+                                               {
+                                                 _teams = teams;
+                                                 return Teams.getSingle(teamId);
+                                               })
+                                         .then(function(members)
+                                               {
+                                                 return Logs.fetch({
+                                                                     adapterId: options.adapterId,
+                                                                     members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
+                                                                     currentTeam: {
+                                                                       fullName: (_.find(_teams, {uuid: teamId})).name,
+                                                                       phone: options.phoneNumber
+                                                                     }
+                                                                   });
+                                               })
+                                         .then(function(logs)
+                                               {
+                                                 deferred.resolve({
+                                                   teams: _teams,
+                                                   logData: logs
+                                                  });
+                                               });
+                                  });
+                      return deferred.promise;
+                    }
+                  }
+                },
+                reloadOnSearch: false
+              })
+
+            .when(
               '/team/new',
               {
                 templateUrl: 'views/team/newTeam.html',
@@ -687,6 +776,8 @@ define(
                                $q, $rootScope, $location, moment,
                                CurrentSelection, Profile)
                 {
+
+
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
 

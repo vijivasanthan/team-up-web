@@ -44,7 +44,7 @@ define(['services/services', 'config'],
                 }
               }
             );
-          }
+          };
 
           Permission.prototype.getDefaultProfile = function ()
           {
@@ -83,67 +83,47 @@ define(['services/services', 'config'],
             return deferred.promise;
           };
 
-          //TODO not nessesary anymore
-          Permission.prototype.checkPermission = function (accessNode)
-          {
-            var profile = Store('app').get('permissionProfile');
-
-            _.filter(profile, function (valAccess, keyNode)
-            {
-              if (keyNode == accessNode)
-              {
-                return valAccess;
-              }
-            });
-          };
-
-          /**
-           * Checks the where the user has access to
+	        /**
+           * Checks to which locations the user is authorized
+           * @returns {*} list of locations
            */
-          Permission.prototype.getAccess = function (callback)
+          Permission.prototype.getAccess = function ()
           {
-            this.getDefaultProfile()
-              .then(
-              function (permissionProfile)
-              {
-                var permission = permissionProfile,
-                  accessList = {};
-
-                if ($rootScope.app.resources.teamUuids.length)
-                {
-                  _.each(permissionProfile, function (val, key)
-                  {
-                    if (val == false)
-                    {
-                      delete permission[key];
-                    }
-                  });
-
-                  accessList = permission;
-                }
-                else
-                {
-                  _.each(permissionProfile, function (val, key)
-                  {
-                    permission[key] = false;
-                  });
-                }
-
-                Store('app').save('permissionProfile', permission);
-                $rootScope.app.domainPermission = permission;
-
-                (callback && callback(permission));
-
-                permissionLocation(accessList);
-              }
-            );
+            return this.getDefaultProfile()
+                       .then(function(permissionProfile)
+                             {
+                               var hasTeams      = $rootScope.app.resources.teamUuids.length;
+                               permissionProfile = Object.keys(permissionProfile)
+                                                         .map(function(name)
+                                                              {
+                                                                return {
+                                                                  name: name,
+                                                                  permission: permissionProfile[name]
+                                                                };
+                                                              })
+                                                         .filter(function(setting)
+                                                                 {
+                                                                   return (!! setting.permission);
+                                                                 })
+                                                         .reduce(function(list, setting)
+                                                                 {
+                                                                   list[setting.name] = (hasTeams)
+                                                                     ? setting.permission
+                                                                     : false;
+                                                                   return list;
+                                                                 }, {});
+                               Store('app').save('permissionProfile', permissionProfile);
+                               $rootScope.app.domainPermission = permissionProfile;
+                               return permissionProfile;
+                             }
+                       );
           };
 
           /**
            * Redirect the user to location of the permission
            * @param permissionProfile
            */
-          var permissionLocation = function (permissionProfile)
+          Permission.prototype.location = function(permissionProfile)
           {
             if (_.has(permissionProfile, 'tasks'))
             {
