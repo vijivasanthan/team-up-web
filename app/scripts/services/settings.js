@@ -38,7 +38,7 @@ define(['services/services', 'config'], function (services, config)
               method: 'GET',
               params: {
                 frontend: '',
-                buildnr: ''
+                buildnumber: ''
               },
               transformResponse: function(data)
               {
@@ -55,7 +55,7 @@ define(['services/services', 'config'], function (services, config)
           });
       return backendResource.get({
                          frontend: 'webapp',
-                         buildnr: getStageNr(config.app.otapRole)
+                         buildnumber: getStageNr(config.app.otapRole)
                        }).$promise;
     }
 
