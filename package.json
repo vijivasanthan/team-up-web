@@ -69,5 +69,8 @@
     {
       "type": "BSD"
     }
-  ]
+  ],
+  "dependencies": {
+    "grunt-connect-proxy": "^0.2.0"
+  }
 }

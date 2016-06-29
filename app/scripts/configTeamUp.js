@@ -14,7 +14,7 @@ define(['profile'], function(profile){
 
       tabs: profile.tabs,
 
-      namespace: "/",
+      namespace: "",
 
       host: localConfig.host,
 

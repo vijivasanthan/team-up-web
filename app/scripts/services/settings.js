@@ -33,13 +33,14 @@ define(['services/services', 'config'], function (services, config)
     function getBackEndConfig()
     {
       var $resource = $injector.get('$resource'),
-          backendResource   = $resource('https://teamtelefoon.nl/backends/get.php', {}, {
+          backendResource   = $resource('https://teamtelefoon.nl/backends.php', {}, {
             get: {
               method: 'GET',
               params: {
                 frontend: '',
                 buildnumber: ''
               },
+              isArray: true,
               transformResponse: function(data)
               {
                 try
@@ -80,35 +81,19 @@ define(['services/services', 'config'], function (services, config)
       },
       fetchBackEnds: function()
       {
-        var deferred = $q.defer(),
-            tempConfig = [
-              {
-                "url": "https://teamup-test.ask-cs.nl/proxy",
-                "name": "Test",
-                "desc": "Some descriptive text, maybe to use in the front-end later on"
-              },
-              {
-                "url": "https://teamup-dev.ask-cs.nl/proxy",
-                "name": "Dev",
-                "desc": "Some descriptive text, maybe to use in the front-end later on"
-              }
-            ],
-            formatBackends = function(backendConfig)
+        var formatBackends = function(backendConfig)
             {
-              config.app.host = backendConfig.map(function(backend)
-                                                  {
-                                                    return backend.url + config.app.namespace;
-                                                  });
-              return config.app.host;
+              if(backendConfig)
+              {
+                config.app.host = backendConfig = backendConfig.map(function(backend)
+                {
+                  return backend.url + '/';
+                });
+              }
+              return backendConfig;
             };
-
-        //TODO wait until the endpoint is ready to fetch the backend config
-        //settings.js:109 config.app.host -> ["https://teamup-test.ask-cs.nl/proxy/"]
-        deferred.resolve(formatBackends(tempConfig));
-        //return getBackEndConfig()
-        //  .then(formatBackends);
-
-        return deferred.promise;
+        return getBackEndConfig()
+         .then(formatBackends);
       },
       /**
        * initialise backend directory by logging in on all backends defined

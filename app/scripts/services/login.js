@@ -158,9 +158,13 @@ define(['services/services', 'config'],
 						                        .fetchBackEnds()
 						                        .then(function(backEnds)
 						                              {
-							                              console.error("backEnds ->", backEnds);
-							                              return Settings
-								                              .initBackEnd(backEnds, uuid, pass)
+                                            var promise = Settings.initBackEnd(backEnds, uuid, pass);
+                                            if(! backEnds)
+                                            {
+                                              deferred.reject(showErrorAlert($rootScope.ui.teamup.noBackends, true));
+                                              promise = false;
+                                            }
+                                            return promise;
 						                              })
 						                        .then(
 							                        function(result)
@@ -209,7 +213,6 @@ define(['services/services', 'config'],
 
 						                        if( ! $rootScope.browser.mobile ) angular.element('#footer').show();
 					                        }, 100);
-				                        console.error("hide styling ->");
 			                        };
 
 			                        /**

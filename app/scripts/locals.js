@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          noBackends: 'Logging in is temporarily unavailable',
           finished: 'Finished',
           missed: 'Missed',
           teamMembers: 'Team members',
@@ -1808,6 +1809,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          noBackends: 'Logging in is temporarily unavailable',
           finished: 'Finished',
           missed: 'Missed',
           teamMembers: 'Team members',
@@ -2986,6 +2988,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          noBackends: 'Inloggen is tijdelijk niet beschikbaar',
           finished: 'Afgerond',
           missed: 'Gemist',
           teamMembers: 'Teamleden',
