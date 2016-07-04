@@ -18,10 +18,10 @@ define(
                  tmhDynamicLocaleProvider)
         {
           //stops caching requests
-          // $httpProvider.defaults.headers.get = $httpProvider.defaults.headers.get || {};
-          // $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-          // $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-          // $httpProvider.defaults.headers.get.Pragma = 'no-cache';
+           $httpProvider.defaults.headers.get = $httpProvider.defaults.headers.get || {};
+           $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+           $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+           $httpProvider.defaults.headers.get.Pragma = 'no-cache';
 
           //dynamic angular localization
           tmhDynamicLocaleProvider
@@ -91,8 +91,8 @@ define(
                 templateUrl: 'logout.html',
                 resolve: {
                   data: [
-                    '$rootScope',
-                    function($rootScope)
+                    '$rootScope', '$window',
+                    function($rootScope, $window)
                     {
                       trackGa('send', 'event', 'Logout', 'User logout', 'team uuid ' + $rootScope.app.resources.teamUuids[0]);
                       $rootScope.logout();
@@ -1198,36 +1198,50 @@ define(
                                               },
                                               responseError: function(rejection)
                                               {
-                                                var promise = $q.reject(rejection);
+                                                var deferred = $q.defer();
 
                                                 if( rejection.status > 0 )
                                                 {
-                                                  var rejections = $injector.get('Rejections');
+                                                  var rejections = $injector.get('Rejections'),
+                                                      loginData = Store('app').get('loginData');
 
                                                   switch(rejection.status)
                                                   {
                                                     case 403:
-                                                      var loginData = Store('app').get('loginData');
-
                                                       if( loginData.password )
                                                       {
-                                                        promise = rejections.reSetSession(loginData, rejection.config);
+                                                        var loginService =  $injector.get('Login'),
+                                                            sessionService = $injector.get('Session');
+
+                                                        loginService.resetSession(loginData)
+                                                          .then(function(result)
+                                                                {
+                                                                  if(! result || result.valid === false) rejections.sessionTimeOut();
+                                                                  else
+                                                                  {
+                                                                      //fire rejected request, after resetting the session
+                                                                      var httpService = $injector.get('$http');
+                                                                      rejection.config.headers = {'X-SESSION_ID': sessionService.get()};
+                                                                      var request = httpService(rejection.config);
+                                                                      deferred.resolve(request);
+                                                                  }
+                                                                });
                                                       }
-                                                      else
-                                                      {
-                                                        rejections.sessionTimeOut();
-                                                      }
+                                                      else rejections.sessionTimeOut();
                                                       break;
                                                     case 404:
+                                                      deferred.reject(rejection);
                                                       console.log('404 not found', rejection);
                                                       break;
                                                     default:
+                                                      deferred.reject(rejection);
                                                       rejections.trowError(rejection);
                                                       break;
                                                   }
                                                 }
+                                                else deferred.reject(rejection);
 
-                                                return promise;
+                                                return deferred.promise;
                                               }
                                             };
                                           });

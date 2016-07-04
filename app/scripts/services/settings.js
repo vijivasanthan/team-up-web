@@ -40,6 +40,12 @@ define(['services/services', 'config'], function (services, config)
                 frontend: '',
                 buildnumber: ''
               },
+              headers: {
+                'X-SESSION_ID': undefined,
+                'If-Modified-Since': undefined,
+                'Cache-Control': undefined,
+                'Pragma': undefined
+              },
               isArray: true,
               transformResponse: function(data)
               {

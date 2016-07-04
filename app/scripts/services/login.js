@@ -113,33 +113,62 @@ define(['services/services', 'config'],
 					                        return (! loginData || ! loginData.username || ! loginData.password)
 						                        ? showErrorAlert($rootScope.ui.login.alert_fillfiled, true)
 						                        : null;
-				                        },
+				                        }
 			                        /**
 			                         * if the logindata is found in the localstorage
 			                         * add the data to the Scope, so the user doesn't have to fill in
 			                         */
-				                        this.getInitials = function(loginData)
+			                        this.getInitials = function(loginData)
+			                        {
+				                        var localLoginData = Store('app').get('loginData');
+
+				                        //Check if there is loginData local
+				                        if( localLoginData )
 				                        {
-					                        var localLoginData = Store('app').get('loginData');
+					                        //if there is a username, show it
+					                        var currentLoginData = {
+						                        username: localLoginData.username
+					                        };
 
-					                        //Check if there is loginData local
-					                        if( localLoginData )
+					                        //if there is a local encrypted password, show a random string
+					                        //and select the remember login
+					                        if( localLoginData.password )
 					                        {
-						                        //if there is a username, show it
-						                        var currentLoginData = {
-							                        username: localLoginData.username
-						                        };
-
-						                        //if there is a local encrypted password, show a random string
-						                        //and select the remember login
-						                        if( localLoginData.password )
-						                        {
-							                        currentLoginData.password = 1234;
-							                        currentLoginData.remember = true;
-						                        }
-						                        return currentLoginData;
+						                        currentLoginData.password = 1234;
+						                        currentLoginData.remember = true;
 					                        }
+					                        return currentLoginData;
 				                        }
+			                        };
+
+			                        this.resetSession = function(loginData)
+			                        {
+				                        return Settings
+					                        .fetchBackEnds()
+					                        .then(function(backEnds)
+					                              {
+						                              var promise = Settings
+							                              .initBackEnd(
+								                              backEnds,
+								                              loginData.username,
+								                              loginData.password);
+						                              if( ! backEnds )
+						                              {
+							                              promise = false;
+						                              }
+						                              return promise;
+					                              })
+				                          .then(function(result)
+				                                {
+					                                if(result && result.valid === true)
+					                                {
+						                                Session.set(result['X-SESSION_ID']);
+						                                $rootScope.showChangedAvatar('team', loginData.username);
+					                                }
+					                                return result;
+				                                })
+			                        };
+
 			                        /**
 			                         * Authenticate the user who tries to login
 			                         * Thereby the backend directory will be set,
@@ -149,56 +178,56 @@ define(['services/services', 'config'],
 			                         * @param uuid Username
 			                         * @param pass Password
 			                         */
-				                        this.authenticate = function(uuid, pass)
-				                        {
-					                        var self     = this,
-					                            deferred = $q.defer();
+			                        this.authenticate = function(uuid, pass)
+			                        {
+				                        var self     = this,
+				                            deferred = $q.defer();
 
-					                        Settings
-						                        .fetchBackEnds()
-						                        .then(function(backEnds)
+				                        Settings
+					                        .fetchBackEnds()
+					                        .then(function(backEnds)
+					                              {
+						                              var promise = Settings.initBackEnd(backEnds, uuid, pass);
+						                              if( ! backEnds )
 						                              {
-                                            var promise = Settings.initBackEnd(backEnds, uuid, pass);
-                                            if(! backEnds)
-                                            {
-                                              deferred.reject(showErrorAlert($rootScope.ui.teamup.noBackends, true));
-                                              promise = false;
-                                            }
-                                            return promise;
-						                              })
-						                        .then(
-							                        function(result)
+							                              deferred.reject(showErrorAlert($rootScope.ui.teamup.noBackends, true));
+							                              promise = false;
+						                              }
+						                              return promise;
+					                              })
+					                        .then(
+						                        function(result)
+						                        {
+							                        if( result.valid === false && result.errorMessage )
 							                        {
-								                        if( result.valid === false && result.errorMessage )
-								                        {
-									                        var errorMessage = showErrorAlert(result.errorMessage, true);
-									                        deferred.reject(errorMessage);
-									                        angular.element('#login button[type=submit]')
-									                               .text($rootScope.ui.login.button_login)
-									                               .removeAttr('disabled');
-								                        }
-								                        else if( result.valid === true )
-								                        {
-									                        Session.set(result['X-SESSION_ID']);//set session
-									                        self.preLoadData()
-									                            .then(function()
-									                                  {
-										                                  //Permission.saveProfile();
-										                                  return Permission.getAccess();
-									                                  })
-									                            .then(function(permissionProfile)
-									                                  {
-										                                  if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
-										                                  Permission.location(permissionProfile);
-										                                  //Set current version stuff Back end
-										                                  $rootScope.getVersionInfo();
-										                                  self.hideStyling();
-										                                  deferred.resolve(result);
-									                                  })
-								                        }
-							                        });
-					                        return deferred.promise;
-				                        };
+								                        var errorMessage = showErrorAlert(result.errorMessage, true);
+								                        deferred.reject(errorMessage);
+								                        angular.element('#login button[type=submit]')
+								                               .text($rootScope.ui.login.button_login)
+								                               .removeAttr('disabled');
+							                        }
+							                        else if( result.valid === true )
+							                        {
+								                        Session.set(result['X-SESSION_ID']);//set session
+								                        self.preLoadData()
+								                            .then(function()
+								                                  {
+									                                  //Permission.saveProfile();
+									                                  return Permission.getAccess();
+								                                  })
+								                            .then(function(permissionProfile)
+								                                  {
+									                                  if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
+									                                  Permission.location(permissionProfile);
+									                                  //Set current version stuff Back end
+									                                  $rootScope.getVersionInfo();
+									                                  self.hideStyling();
+									                                  deferred.resolve(result);
+								                                  })
+							                        }
+						                        });
+				                        return deferred.promise;
+			                        };
 
 			                        /**
 			                         * Hide styling
@@ -229,19 +258,19 @@ define(['services/services', 'config'],
 				                        progress(33, $rootScope.ui.login.loading_User);
 
 				                        return TeamUp._('user')
-				                              .then(function(resources)
-				                                    {
-					                                    $rootScope.app.resources = resources;
-					                                    Store('app').save('resources', $rootScope.app.resources);
-					                                    progress(66, $rootScope.ui.login.loading_teams);
-					                                    return Teams.getAllLocal();
-				                                    })
-				                              .then(function()
-				                                    {
-					                                    progress(100, $rootScope.ui.login.loading_everything);
-					                                    //update the avatar once, because the resources were not set when the directive was loaded
-					                                    $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
-				                                    });
+				                                     .then(function(resources)
+				                                           {
+					                                           $rootScope.app.resources = resources;
+					                                           Store('app').save('resources', $rootScope.app.resources);
+					                                           progress(66, $rootScope.ui.login.loading_teams);
+					                                           return Teams.getAllLocal();
+				                                           })
+				                                     .then(function()
+				                                           {
+					                                           progress(100, $rootScope.ui.login.loading_everything);
+					                                           //update the avatar once, because the resources were not set when the directive was loaded
+					                                           $rootScope.showChangedAvatar('team', $rootScope.app.resources.uuid);
+				                                           });
 
 				                        /**
 				                         * The progressbar will show which data is loading at the moment
