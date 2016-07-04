@@ -1161,6 +1161,20 @@ define(
                         wisher(currentTeamId);
                       });
 
+        $scope.setToday = function()
+        {
+          var currentScope = Object.keys($scope.timeline.scope)
+                                   .filter(function(scope)
+                                        {
+                                          if(($scope.timeline.scope[scope])) return scope;
+                                        })
+                                   .toString();
+          $scope.timeliner.load({
+                                  start:  +moment().startOf(currentScope),
+                                  end:  +moment().endOf(currentScope)
+                                });
+        };
+
 
         /**
          * Timeliner listener

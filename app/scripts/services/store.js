@@ -249,7 +249,6 @@ define(['services/services'], function (services) {
 
           if(typeof value === 'undefined')
           {
-            console.error("You have to use a callback");
             return false;
           }
           else

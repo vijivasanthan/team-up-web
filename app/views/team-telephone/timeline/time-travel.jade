@@ -6,6 +6,16 @@ div#timeline-controls(ng-controller='agenda-timeline-navigation')
 			i.glyphicon.glyphicon-calendar.form-control-feedback
 
 		.btn-group.pull-left(style='margin-right: 5px;')
+			button.btn.btn-primary(type='button', ng-model='timeline.scope.lala', ng-click='setToday()')
+				| {{ui.planboard.daterangerToday}}
+
+		.btn-group.pull-left(style='margin-right: 20px;')
+			button#timelineBeforeBtn.btn.btn-primary(type='button', ng-click='timelineBefore(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-left
+			button#timelineAfterBtn.btn.btn-primary(type='button', ng-click='timelineAfter(timeline.scope)')
+				i.glyphicon.glyphicon-arrow-right
+
+		.btn-group.pull-left(style='margin-right: 5px;')
 			button.btn.btn-primary(type='button', ng-model='timeline.scope.day', ng-click='timelineScoper("day")', class="{{(timeline.scope.day==true) && 'active'}}")
 				| {{ui.agenda.day}}
 			button.btn.btn-primary(type='button', ng-model='timeline.scope.week', ng-click='timelineScoper("week")', class="{{(timeline.scope.week==true) && 'active'}}")
@@ -14,14 +24,10 @@ div#timeline-controls(ng-controller='agenda-timeline-navigation')
 				| {{ui.agenda.month}}
 
 		.btn-group.pull-left(style='margin-right: 5px;')
-			button#timelineBeforeBtn.btn.btn-primary(type='button', ng-click='timelineBefore(timeline.scope)')
-				i.glyphicon.glyphicon-arrow-left
 			button#timelineZoomInBtn.btn.btn-primary(type='button', ng-click='timelineZoomIn()')
 				i.glyphicon.glyphicon-zoom-in
 			button#timelineZoomOutBtn.btn.btn-primary(type='button', ng-click='timelineZoomOut()')
 				i.glyphicon.glyphicon-zoom-out
-			button#timelineAfterBtn.btn.btn-primary(type='button', ng-click='timelineAfter(timeline.scope)')
-				i.glyphicon.glyphicon-arrow-right
 
 	div(ng-hide='browser.mobile', class="{{ (browser.mobile) &&  'pull-left' || 'pull-right' }}", style="text-align: {{(browser.mobile) &&  'left' || 'right' }}")
 		h4(style='font-weight: normal;')
