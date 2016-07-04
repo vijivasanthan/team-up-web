@@ -25,7 +25,7 @@
 				span.icomoon(data-icon='', aria-hidden='true')
 				| IOS
 		li(class="{{(views.android==true) && 'active'}}",
-				ng-show='app.domainPermission.chat')
+				ng-show='app.domainPermission.clients || app.domainPermission.chat')
 			a(data-toggle='tab', ng-click='setViewTo("android")')
 				span.icomoon(data-icon='', aria-hidden='true')
 				| Android
