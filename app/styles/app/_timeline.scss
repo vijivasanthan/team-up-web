@@ -2008,17 +2008,17 @@ $step: 7;
     position: absolute;
     height: 20px;
     //width: 45px;
-    background-color: white;
+    background-color: $white;
     border: 1px solid #e5e5e5;
     font-size: 1em;
     text-indent: 0;
 
     &--start {
-      left: -37px;
+      left: -38px;
       bottom: -30px;
     }
     &--end {
-      right: -37px;
+      right: -38px;
       bottom: -30px;
     }
   }
