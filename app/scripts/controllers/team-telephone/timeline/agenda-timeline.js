@@ -1166,9 +1166,11 @@ define(
           var currentScope = Object.keys($scope.timeline.scope)
                                    .filter(function(scope)
                                         {
-                                          if(($scope.timeline.scope[scope])) return scope;
+                                          return $scope.timeline.scope[scope];
                                         })
                                    .toString();
+          
+          console.error("currentScope ->", currentScope);
           $scope.timeliner.load({
                                   start:  +moment().startOf(currentScope),
                                   end:  +moment().endOf(currentScope)
