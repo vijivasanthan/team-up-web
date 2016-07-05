@@ -333,7 +333,7 @@ define(
                         currentGroupClients: null,
                         task: null
                       };
-
+                  //TODO fix this, it's not async
                   TaskCRUD.read(taskId)
                           .then(function(task)
                                 {
@@ -437,79 +437,82 @@ define(
                   data: function($q, Logs, TeamUp, Teams, Permission,
                                  $location, $rootScope, Login, Settings, ipCookie, Store)
                   {
-                    return $q(function(resolve)
+                    var promise = fetchLogsByTeam();
+                    if( ! Store('app').has('resources') )
                     {
-                      if(! Store('app').has('resources'))
-                      {
-                        if($location.path().indexOf('stats') >= 0)
+                        if( $location.path().indexOf('stats') >= 0 )
                         {
                           angular.element('body').css('background', '#fff');
                           angular.element('.navbar').hide();
                           angular.element('#footer').hide();
                         }
                         var backend = $location.search().backend;
-                        if(! Settings.getBackEnd()) backend && Settings.setBackEnd(decodeURIComponent(backend));
+                        if( ! Settings.getBackEnd() ) backend && Settings.setBackEnd(decodeURIComponent(backend));
 
-                        Login.preLoadData()
-                             .then(function()
-                                   {
-                                     return Permission.getAccess()
+                      promise = fetchResources();
+                    }
+                    return promise;
 
-                                   })
-                             .then(function()
-                                   {
-                                     return fetchLogsByTeam();
+                    function fetchResources()
+                    {
+                      var deferred = $q.defer();
 
-                                   })
-                             .then(function(logData)
-                                   {
-                                     $rootScope.getVersionInfo();
-                                     resolve(logData);
-                                   });
-                      }
-                      else fetchLogsByTeam()
-                            .then(function(logData)
-                                  {
-                                    resolve(logData);
-                                  });
-                    });
+                      Login.preLoadData()
+                           .then(function()
+                                 {
+                                   return Permission.getAccess()
+
+                                 })
+                           .then(function()
+                                 {
+                                   return fetchLogsByTeam();
+
+                                 })
+                           .then(function(logData)
+                                 {
+                                   $rootScope.getVersionInfo();
+                                   deferred.resolve(logData);
+                                 });
+                      return deferred.promise;
+                    }
 
                     function fetchLogsByTeam()
                     {
                       var deferred = $q.defer(),
-                          teamId   = Teams.checkExistence(($location.search()).teamId);
+                          teamId   = Teams.checkExistence(($location.search()).teamId),
+                          _teams = null,
+                          _options = null;
                       $location.search('teamId', teamId);
 
                       Teams.getTeamTelephoneOptions(teamId)
                             .then(function(options)
                                   {
-                                    var _teams = null;
-
-                                    Teams.getAllLocal()
-                                         .then(function(teams)
-                                               {
-                                                 _teams = teams;
-                                                 return Teams.getSingle(teamId);
-                                               })
-                                         .then(function(members)
-                                               {
-                                                 return Logs.fetch({
-                                                                     adapterId: options.adapterId,
-                                                                     members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
-                                                                     currentTeam: {
-                                                                       fullName: (_.find(_teams, {uuid: teamId})).name,
-                                                                       phone: options.phoneNumber
-                                                                     }
-                                                                   });
-                                               })
-                                         .then(function(logs)
-                                               {
-                                                 deferred.resolve({
-                                                   teams: _teams,
-                                                   logData: logs
-                                                  });
-                                               });
-                                  });
+                                    _options = options;
+                                    return Teams.getAllLocal();
+                                  })
+                           .then(function(teams)
+                                 {
+                                   _teams = teams;
+                                   return Teams.getSingle(teamId);
+                                 })
+                           .then(function(members)
+                                 {
+                                   return Logs.fetch({
+                                                       adapterId: _options.adapterId,
+                                                       members: _.map(members, _.partialRight(_.pick, ['fullName', 'phone'])),
+                                                       currentTeam: {
+                                                         fullName: (_.find(_teams, {uuid: teamId})).name,
+                                                         phone: _options.phoneNumber
+                                                       }
+                                                     });
+                                 })
+                           .then(function(logs)
+                                 {
+                                   deferred.resolve({
+                                                      teams: _teams,
+                                                      logData: logs
+                                                    });
+                                 });
                       return deferred.promise;
                     }
                   }
@@ -636,22 +639,14 @@ define(
                   },
                   dataMembers: function($rootScope, $q, TeamUp, Teams, Clients)
                   {
-                    var deferred = $q.defer();
-                    var promises = [
-                      TeamUp._('allTeamMembers'),
-                      Teams.getAllWithMembers()
-                    ];
+                    var promises = [TeamUp._('allTeamMembers'), Teams.getAllWithMembers()];
 
-                    if( $rootScope.app.domainPermission.clients )
-                    {
-                      promises.push(Clients.queryAllLocally());
-                    }
-
-                    $q.all(promises).then(function(result)
-                                          {
-                                            deferred.resolve(result[0]);
-                                          });
-                    return deferred.promise;
+                    if( $rootScope.app.domainPermission.clients ) promises.push(Clients.queryAllLocally());
+                    return $q.all(promises)
+                             .then(function(result)
+                                   {
+                                     return result[0];
+                                   });
                   }
                 }
               })
@@ -686,31 +681,30 @@ define(
                 controller: 'scenario as scenario',
                 reloadOnSearch: false,
                 resolve: {
-                  data: function(Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
+                  data: function(Teams, TeamUp, CurrentSelection, $rootScope, $q)
                   {
                     removeActiveClass('.teamMenu');
+                    var teamId   = CurrentSelection.getTeamId(),
+                        promises = [
+                          Teams.getAllLocal(),
+                          TeamUp._('TTScenarioTemplateGet'),
+                          TeamUp._('TTscenarioGet', {second: teamId})
+                        ];
 
-                    var deferred = $q.defer();
-                    var teamId   = CurrentSelection.getTeamId();
-                    var promises = [
-                      Teams.getAllLocal(),
-                      TeamUp._('TTScenarioTemplateGet')
-                    ];
-
-                    Teams.getTeamTelephoneOptions(teamId)
-                         .then(function(options)
-                               {
-                                 $q.all(promises)
-                                   .then(function(result)
-                                         {
-                                           deferred.resolve({
-                                                              teams: result[0],
-                                                              templates: result[1] || []
-                                                            });
-                                         });
-
-                               });
-                    return deferred.promise;
+                    return Teams.getTeamTelephoneOptions(teamId)
+                                .then(function()
+                                      {
+                                        return $q.all(promises);
+                                      })
+                                .then(function(result)
+                                      {
+                                        console.error("result ->", result);
+                                        return {
+                                          teams: result[0],
+                                          templates: result[1] || [],
+                                          scenario: result[2]
+                                        };
+                                      });
                   }
                 }
               })
@@ -731,36 +725,36 @@ define(
                           teamTelephoneOptions = null;
 
                       return TeamUp._('TTOptionsGet', {second: teamId})
-                        .then(function (options)
-                        {
-                          $rootScope.isTeamTelephoneTeam = (!! options.adapterId );
-                          teamTelephoneOptions = options;
+                                   .then(function(options)
+                                         {
+                                           $rootScope.isTeamTelephoneTeam = (!! options.adapterId );
+                                           teamTelephoneOptions           = options;
 
-                          var promises = [
-                            Teams.getAllLocal(),
-                            TeamUp._('TTScenarioTemplateGet')
-                          ];
-                          //if a team is not a team-telephone team, add open phonenumbers
-                          if (options.error && options.error.status === 404)
-                          {
-                            promises.push(
-                              TeamUp._('TTAdaptersGet', {
-                                adapterType: 'call',
-                                excludeAdaptersWithDialog: 'true'
-                              })
-                            );
-                          }
-                          return $q.all(promises)
-                        })
-                        .then(function (result)
-                        {
-                          return {
-                            teams: result[0],
-                            phoneNumbers: result[2] || [],
-                            teamTelephoneOptions: teamTelephoneOptions,
-                            scenarioTemplates: result[1] || []
-                          }
-                        });
+                                           var promises = [
+                                             Teams.getAllLocal(),
+                                             TeamUp._('TTScenarioTemplateGet')
+                                           ];
+                                           //if a team is not a team-telephone team, add open phonenumbers
+                                           if( options.error && options.error.status === 404 )
+                                           {
+                                             promises.push(
+                                               TeamUp._('TTAdaptersGet', {
+                                                 adapterType: 'call',
+                                                 excludeAdaptersWithDialog: 'true'
+                                               })
+                                             );
+                                           }
+                                           return $q.all(promises)
+                                         })
+                                   .then(function(result)
+                                         {
+                                           return {
+                                             teams: result[0],
+                                             phoneNumbers: result[2] || [],
+                                             teamTelephoneOptions: teamTelephoneOptions,
+                                             scenarioTemplates: result[1] || []
+                                           }
+                                         });
                     }
                 }
               })
@@ -862,7 +856,7 @@ define(
                    * @param userId current user timeline
                    * @param groupId current team timeline
                    */
-                  function getAllSlots(userId, groupId, startTime, endTime)
+                  function getAllSlots(userId, groupId)
                   {
                     return Slots.all({
                                        groupId: groupId,
@@ -903,7 +897,7 @@ define(
                     removeActiveClass('.teamMenu');
 
                     var deferred = $q.defer(),
-                        teamId   = CurrentSelection.getTeamId()
+                        teamId   = CurrentSelection.getTeamId();
 
                     Teams.getTeamTelephoneOptions(teamId)
                           .then(function(options)
@@ -947,24 +941,25 @@ define(
                 templateUrl: 'views/team-telephone/create.html',
                 controller: 'create as teamtelefoon',
                 resolve: {
-                  data: function($q, $rootScope, CurrentSelection, TeamUp, Teams)
+                  data: function($q, $rootScope, CurrentSelection, TeamUp)
                   {
                     removeActiveClass('.teamMenu');
 
                     return $q.all([
-                      TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()}),
-                      TeamUp._('TTAdaptersGet', {
-                        adapterType: 'call',
-                        excludeAdaptersWithDialog: 'true'
-                      })
-                    ]).then(function(result)
-                    {
-                      $rootScope.isTeamTelephoneTeam = (!! result[0].adapterId );
-                      return {
-                        teamTelephoneOptions: result[0],
-                        askFastPhoneNumbers: result[1]
-                      };
-                    });
+                                    TeamUp._('TTOptionsGet', {second: CurrentSelection.getTeamId()}),
+                                    TeamUp._('TTAdaptersGet', {
+                                      adapterType: 'call',
+                                      excludeAdaptersWithDialog: 'true'
+                                    })
+                                  ])
+                             .then(function(result)
+                                          {
+                                            $rootScope.isTeamTelephoneTeam = (!! result[0].adapterId );
+                                            return {
+                                              teamTelephoneOptions: result[0],
+                                              askFastPhoneNumbers: result[1]
+                                            };
+                                          });
                   }
                 },
                 reloadOnSearch: false
@@ -1048,28 +1043,27 @@ define(
                 resolve: {
                   data: function($q, $location, CurrentSelection, TeamUp, Teams, Slots)
                   {
-                    var teamId   = CurrentSelection.getTeamId(),
-                        deferred = $q.defer();
+                    var teamId = CurrentSelection.getTeamId();
                     removeActiveClass('.teamMenu');
 
-                    Teams.getTeamTelephoneOptions(teamId)
-                          .then(function(options)
-                                {
-                                  //Check if team telephone is activated (has adapterId)
-                                  $q.all([
-                                     Teams.getSingle(teamId),
-                                     Slots.MemberReachabilitiesByTeam(teamId, null),
-                                     Teams.getAllLocal()
-                                   ]).then(function(result)
-                                           {
-                                             deferred.resolve({
-                                                                members: result[0],
-                                                                membersReachability: result[1],
-                                                                teams: result[2]
-                                                              });
-                                           });
-                                });
-                    return deferred.promise;
+                    return Teams.getTeamTelephoneOptions(teamId)
+                                .then(function()
+                                      {
+                                        //Check if team telephone is activated (has adapterId)
+                                        return $q.all([
+                                                        Teams.getSingle(teamId),
+                                                        Slots.MemberReachabilitiesByTeam(teamId, null),
+                                                        Teams.getAllLocal()
+                                                      ])
+                                      })
+                                .then(function(result)
+                                      {
+                                        return {
+                                          members: result[0],
+                                          membersReachability: result[1],
+                                          teams: result[2]
+                                        };
+                                      });
                   }
                 }
               })
@@ -1080,31 +1074,28 @@ define(
                 templateUrl: 'views/team-telephone/order.html',
                 controller: 'order',
                 resolve: {
-                  data: function(TeamUp, Teams, CurrentSelection, $q, $location)
+                  data: function(TeamUp, Teams, CurrentSelection, $q)
                   {
                     removeActiveClass('.teamMenu');
 
                     var teamId     = CurrentSelection.getTeamId(),
                         teamStatus = Teams.getSingle(teamId),
                         teamOrder  = TeamUp._('callOrderGet', {second: teamId}),
-                        allTeams   = Teams.getAllLocal(),
-                        deferred   = $q.defer();
+                        allTeams   = Teams.getAllLocal();
 
-                    Teams.getTeamTelephoneOptions(teamId)
-                          .then(function(options)
-                                {
-                                    $q.all([teamStatus, teamOrder, allTeams])
-                                      .then(function(teamResult)
-                                            {
-                                              deferred.resolve({
-                                                                 teamMembers: teamResult[0],
-                                                                 teamOrder: teamResult[1],
-                                                                 teams: teamResult[2]
-                                                               });
-                                            });
-                                });
-
-                    return deferred.promise;
+                    return Teams.getTeamTelephoneOptions(teamId)
+                         .then(function()
+                               {
+                                 return $q.all([teamStatus, teamOrder, allTeams])
+                               })
+                         .then(function(teamResult)
+                               {
+                                 return {
+                                   teamMembers: teamResult[0],
+                                   teamOrder: teamResult[1],
+                                   teams: teamResult[2]
+                                 };
+                               });
                   }
                 },
                 reloadOnSearch: false
