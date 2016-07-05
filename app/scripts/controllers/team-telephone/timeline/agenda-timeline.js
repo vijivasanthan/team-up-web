@@ -1169,8 +1169,6 @@ define(
                                           return $scope.timeline.scope[scope];
                                         })
                                    .toString();
-          
-          console.error("currentScope ->", currentScope);
           $scope.timeliner.load({
                                   start:  +moment().startOf(currentScope),
                                   end:  +moment().endOf(currentScope)

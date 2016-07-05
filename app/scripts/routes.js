@@ -686,35 +686,32 @@ define(
                 controller: 'scenario as scenario',
                 reloadOnSearch: false,
                 resolve: {
-                  data: [
-                    'Teams', 'TeamUp', 'CurrentSelection', '$rootScope', '$q', '$location',
-                    function(Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
-                    {
-                      removeActiveClass('.teamMenu');
+                  data: function(Teams, TeamUp, CurrentSelection, $rootScope, $q, $location)
+                  {
+                    removeActiveClass('.teamMenu');
 
-                      var deferred = $q.defer();
-                      var teamId   = CurrentSelection.getTeamId();
-                      var promises = [
-                        Teams.getAllLocal(),
-                        TeamUp._('TTScenarioTemplateGet')
-                      ];
+                    var deferred = $q.defer();
+                    var teamId   = CurrentSelection.getTeamId();
+                    var promises = [
+                      Teams.getAllLocal(),
+                      TeamUp._('TTScenarioTemplateGet')
+                    ];
 
-                      Teams.getTeamTelephoneOptions(teamId)
-                            .then(function(options)
-                                  {
-                                    $q.all(promises)
-                                        .then(function(result)
-                                              {
-                                                deferred.resolve({
-                                                                   teams: result[0],
-                                                                   templates: result[1] || []
-                                                                 });
-                                              });
+                    Teams.getTeamTelephoneOptions(teamId)
+                         .then(function(options)
+                               {
+                                 $q.all(promises)
+                                   .then(function(result)
+                                         {
+                                           deferred.resolve({
+                                                              teams: result[0],
+                                                              templates: result[1] || []
+                                                            });
+                                         });
 
-                                  });
-                      return deferred.promise;
-                    }
-                  ]
+                               });
+                    return deferred.promise;
+                  }
                 }
               })
 
