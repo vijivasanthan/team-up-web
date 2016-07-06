@@ -681,16 +681,15 @@ define(
                 controller: 'scenario as scenario',
                 reloadOnSearch: false,
                 resolve: {
-                  data: function(Teams, TeamUp, CurrentSelection, $rootScope, $q)
+                  data: function(TeamTelefoon, Teams, TeamUp, CurrentSelection, $rootScope, $q)
                   {
                     removeActiveClass('.teamMenu');
                     var teamId   = CurrentSelection.getTeamId(),
                         promises = [
                           Teams.getAllLocal(),
                           TeamUp._('TTScenarioTemplateGet'),
-                          TeamUp._('TTscenarioGet', {second: teamId})
+                          TeamTelefoon.getScenario({teamId: teamId})
                         ];
-
                     return Teams.getTeamTelephoneOptions(teamId)
                                 .then(function()
                                       {
