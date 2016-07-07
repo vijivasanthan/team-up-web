@@ -180,6 +180,7 @@ require(
     'services/timelineNavigation',
     'services/version',
     'services/momentRange',
+    'services/teamTelefoon',
 
     'directives/widgets',
     'directives/date-range-picker',

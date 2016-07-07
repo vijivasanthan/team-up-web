@@ -18,7 +18,7 @@ section
 					data-all-text="Iedereen",
 					data-none-text="Geen",
 					bs-select,
-					ng-change='scenario.AddSelectedTeamsToTitle()')
+					ng-change='scenario.AddSelectedTeamsToTitle(); scenario.setCurrent()')
 					ACTION
 					span(class="caret")
 			
@@ -38,20 +38,28 @@ section
 					div.alert.alert-warning(ng-show='app.resources.role > 1')
 						span(class="glyphicon glyphicon-exclamation-sign" aria-hidden="true")
 						small
-							i  Met de rol van team-member heeft u geen permissie om het scenario van team {{ scenario.currentTeam }} te wijzigen
+							i  Met de rol van team-member heeft u geen permissie om het scenario van {{ scenario.currentTeam }} te wijzigen
+					
+					div(ng-if='scenario.data.scenario && scenario.data.scenario.info')
+						.row-fluid
+							.widget(class="{{(!browser.mobile) && 'span9' || 'span12'}}")
+								dl
+									dt {{ ui.teamup.currentScenario }} 
+									dd {{ scenario.data.scenario.info }}
+							
 					div(ng-if='scenario.data.templates && app.resources.role == 1', id='TTOptions')
 						form.form-vertical(name='scenarioForm', novalidate)
 							
 							.form-group
-								label.control-label Scenario
+								label.control-label Scenario {{ ui.agenda.change.toLowerCase() }}
 								.controls
 									select.span3.form-control(ng-model='scenario.scenarioTeamId',
 									ng-options='s for s in scenario.data.templates')
 										option(value='') Kies een nieuw scenario
-								span.help-block(style='min-height: 14px; margin-bottom: 10px;')
-									small
-										i.text-danger
-											| * Welk scenario nu actief is, kan helaas nog niet worden weergegeven. 
+								//span.help-block(style='min-height: 14px; margin-bottom: 10px;')
+								//	small
+								//		i.text-danger
+								//			| * Welk scenario nu actief is, kan helaas nog niet worden weergegeven. 
 										
 							.form-actions
 								button.btn.btn-success(type='submit',
