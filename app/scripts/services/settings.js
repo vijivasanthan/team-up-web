@@ -11,7 +11,7 @@ define(['services/services', 'config'], function (services, config)
     function getBackEndConfig()
     {
       var $resource = $injector.get('$resource'),
-          backendResource   = $resource('https://teamtelefoon.nl/backendss.php', {}, {
+          backendResource   = $resource('https://teamtelefoon.nl/backends.php', {}, {
             get: {
               method: 'GET',
               params: {
