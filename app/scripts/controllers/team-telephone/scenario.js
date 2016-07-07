@@ -108,7 +108,11 @@ define(
                 }
               });
 
-              if(! self.error) $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              if(! self.error)
+              {
+                setCurrent();
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              }
               else
               {
                 var errorMessage = $filter('commaSeperatedWithEnding')(errors, $rootScope.ui.teamup.and, function(errorMessage)
