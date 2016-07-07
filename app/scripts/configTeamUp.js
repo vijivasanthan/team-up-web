@@ -5,7 +5,7 @@ define(['profile'], function(profile){
       released: '@@released',
       versionInfo: '@@versionInfo',
 
-      title: (localConfig.otapRole.indexOf('production') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
+      title: (localConfig.otapRole.indexOf('live') > -1 ? '' : localConfig.otapRole + '-') + profile.name,
       otapRole: localConfig.otapRole,
       lang: getLanguage(),
       profileName: profile.name,
@@ -29,6 +29,7 @@ define(['profile'], function(profile){
       },
 
       roles: profile.roles,
+      otapRoles: { live: 1, demo: 2, test: 3, development: 4 },
       regularPunction: /([A-Za-z0-9-_,!@#$%^&*()\u9999])/g,
 
       mfunctions: [

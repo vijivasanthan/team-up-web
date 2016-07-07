@@ -22,7 +22,7 @@ var localConfig = {
 	otapRole: "development",
 	//otapRole: "test",
 	//otapRole: "demo",
-	//otapRole: "production",
+	//otapRole: "live",
 
   /* The default profile parameter is used if the profile can't be derived from
      the URL. For example, if you're using a local grunt server, the URL

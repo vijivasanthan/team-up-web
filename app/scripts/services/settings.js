@@ -5,35 +5,13 @@ define(['services/services', 'config'], function (services, config)
   services.factory('Settings', function ($q, Store, $injector)
   {
 	  /**
-     * Get stagenumber, to fetch the right backend
-     * @param stage current state name as string
-     * @returns {number}
-     */
-    function getStageNr(stage)
-    {
-      switch(stage) {
-        case "production":
-          return 1;
-          break;
-        case "demo":
-          return 2;
-          break;
-        case "test":
-          return 3;
-          break;
-        default:
-          return 4;
-      }
-    }
-
-	  /**
      * Fetch the backends by stage / otap name
      * @returns {*|Function} promise with the fetched backends
      */
     function getBackEndConfig()
     {
       var $resource = $injector.get('$resource'),
-          backendResource   = $resource('https://teamtelefoon.nl/backends.php', {}, {
+          backendResource   = $resource('https://teamtelefoon.nl/backendss.php', {}, {
             get: {
               method: 'GET',
               params: {
@@ -62,7 +40,7 @@ define(['services/services', 'config'], function (services, config)
           });
       return backendResource.get({
                          frontend: 'webapp',
-                         buildnumber: getStageNr(config.app.otapRole)
+                         buildnumber: config.app.otapRoles && config.app.otapRoles[config.app.otapRole] || 4
                        }).$promise;
     }
 
