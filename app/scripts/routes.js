@@ -855,7 +855,7 @@ define(
                    * @param userId current user timeline
                    * @param groupId current team timeline
                    */
-                  function getAllSlots(userId, groupId)
+                  function getAllSlots(userId, groupId, startTime, endTime)
                   {
                     return Slots.all({
                                        groupId: groupId,
