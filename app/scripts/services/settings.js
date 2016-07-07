@@ -65,7 +65,8 @@ define(['services/services', 'config'], function (services, config)
       },
       fetchBackEnds: function()
       {
-        var formatBackends = function(backendConfig)
+        var deferred = $q.defer(),
+            formatBackends = function(backendConfig)
             {
               if(backendConfig)
               {
@@ -76,8 +77,17 @@ define(['services/services', 'config'], function (services, config)
               }
               return backendConfig;
             };
-        return getBackEndConfig()
-         .then(formatBackends);
+
+        getBackEndConfig()
+          .then(function(backendConfig)
+                {
+                  deferred.resolve(formatBackends(backendConfig));
+                }, function(err)
+                {
+                  console.error("A problem occurred with fetching the backends ->", err);
+                  deferred.resolve(null);
+                });
+        return deferred.promise;
       },
       /**
        * initialise backend directory by logging in on all backends defined
