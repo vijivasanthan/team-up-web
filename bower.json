@@ -38,8 +38,9 @@
     "angular-messages": "~1.4.7",
     "vis": "~4.15.0",
     "seiyria-bootstrap-slider": "~7.0.1",
-    "angular-chart.js": "^0.10.2",
-    "moment-range": "https://git@github.com/gf3/moment-range.git"
+    "angular-chart": "https://github.com/henkieee/angular-chart.js.git#1.0.0-beta2",
+    "moment-range": "https://git@github.com/gf3/moment-range.git",
+    "bootstrap": "^3.3.6"
   },
   "devDependencies": {}
 }
