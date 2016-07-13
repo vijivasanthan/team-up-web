@@ -392,13 +392,17 @@ define(['services/services', 'config'],
                               ? 'wishes-even'
                               : 'wishes-' + wish.count;
 
+                            var badge = (wish.count > 1)
+                              ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
+                              : '';
+
                             var wish = {
                               start: Math.round(wish.start * 1000),
                               end: Math.round(wish.end * 1000),
                               group: title,
                               groupName: name,
                               content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }, true) +
-                              '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>',
+                              badge,
                               itemType: 'wish',
                               className: cn + ' has-hover-slot-tooltip',
                               groupId: data.aggs[0].id,
