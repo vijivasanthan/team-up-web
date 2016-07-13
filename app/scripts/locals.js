@@ -614,7 +614,8 @@ define(
           settings: 'settings'
         },
         teamup: {
-          amountReachable: "Amount reachable",
+          amountNeeded: 'Amount required',
+          amountReachable: "Amount of reachable",
           currentScenario: 'Current scenario',
           noBackends: 'Logging in is temporarily unavailable',
           finished: 'Finished',
@@ -1811,6 +1812,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          amountNeeded: 'Amount required',
           amountReachable: "Amount reachable",
           currentScenario: 'Current scenario',
           noBackends: 'Logging in is temporarily unavailable',
@@ -2992,6 +2994,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          amountNeeded: 'Aantal benodigd',
           amountReachable: "Aantal bereikbaar",
           currentScenario: 'Huidig scenario',
           noBackends: 'Inloggen is tijdelijk niet beschikbaar',

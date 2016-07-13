@@ -376,8 +376,8 @@ define(['services/services', 'config'],
 
                    var groups = this.get.groups(),
                        name = groups[data.aggs[0].id],
-                       link = '<span style="display: none">a-a</span><span>' +
-                         $rootScope.ui.planboard.wishes +
+                       link = '<span style="display: none">a-b</span><span>' +
+                         $rootScope.ui.teamup.amountNeeded +
                          '</span>',
                        title;
 
