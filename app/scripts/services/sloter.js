@@ -305,7 +305,7 @@ define(['services/services', 'config'],
 
                    _.each(_this.filtered(data, current), function (agg)
                    {
-                     var name = _this.namer(agg, privilage);
+                     var name = '<span style="display: none">a-a</span><span>' + $rootScope.ui.teamup.amountReachable + '</span>';
 
                      _.each(agg.data, function (slot)
                      {
@@ -377,17 +377,15 @@ define(['services/services', 'config'],
 
                    var groups = this.get.groups(),
                        name = groups[data.aggs[0].id],
-                       link = '<span style="display: none">a-a</span><a href="#/team?uuid=' +
-                         data.aggs[0].id +
-                         '#view">' +
-                         name +
-                         '</a>',
+                       link = '<span style="display: none">a-a</span><span>' +
+                         $rootScope.ui.planboard.wishes +
+                         '</span>',
                        title;
 
                    title = (privilage == 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
 
-                   title += ' <span class="label label-default">' + $rootScope.ui.agenda.wished;
-                   title += '</span>';
+                   //title += ' <span class="label label-default">' + $rootScope.ui.agenda.wished;
+                   //title += '</span>';
 
                    _.each(data.aggs.wishes, function (wish)
                           {
