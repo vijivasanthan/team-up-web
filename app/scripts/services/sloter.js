@@ -381,10 +381,10 @@ define(['services/services', 'config'],
                          '</span>',
                        title;
 
-                   title = (privilage == 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
-
-                   //title += ' <span class="label label-default">' + $rootScope.ui.agenda.wished;
-                   //title += '</span>';
+                   link += '<a class="btn-primary btn-mini" style="float:right;" title="' + $rootScope.ui.teamup.edit + ' ' + $rootScope.ui.teamup.amountNeeded.toLowerCase() + '"';
+                   link +=  'href="#/team-telefoon/agenda?start=' + data.periods.start + '&end=' + data.periods.end + '&edit=wish"';
+                   link += '><i class="icon-edit" style="margin-left: 8px;"></a>';
+                   title = (privilage == 1) ? link : '<span style="display: none">a-a</span><span>' + link + '</span>';
 
                    _.each(data.aggs.wishes, function (wish)
                           {

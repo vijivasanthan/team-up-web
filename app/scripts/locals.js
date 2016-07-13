@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          edit: 'edit',
           amountNeeded: 'Amount required',
           amountReachable: "Amount of reachable",
           currentScenario: 'Current scenario',
@@ -1812,6 +1813,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          edit: 'edit',
           amountNeeded: 'Amount required',
           amountReachable: "Amount reachable",
           currentScenario: 'Current scenario',
@@ -2994,6 +2996,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          edit: 'wijzig',
           amountNeeded: 'Aantal benodigd',
           amountReachable: "Aantal bereikbaar",
           currentScenario: 'Huidig scenario',
