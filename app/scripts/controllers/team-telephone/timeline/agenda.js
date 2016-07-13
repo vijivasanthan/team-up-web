@@ -32,7 +32,6 @@ define(
           $scope.self = this;
 
           $scope.data = data.timeline;
-          //$scope.currentUser = $rootScope.app.resources;
 
           $scope.current = {
             layouts: {

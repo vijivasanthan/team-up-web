@@ -581,6 +581,90 @@ define(['services/services', 'config'],
             });
           }
         }
+        
+        function getUserSlots(params)
+        {
+          return Slots
+            .prototype
+            .resourceSlots()
+            .query(
+              params,
+              function(user)
+              {
+                return user.map(function(slot)
+                                {
+                                  if( ! slot.recursive ) slot.recursive = false;
+                                });
+              }).$promise;
+        }
+
+        function temp(options, params)
+        {
+          return Slots
+                  .prototype
+                  .resourceMemberSlots()
+                  .get
+                  (
+                    {
+                      id: options.groupId,
+                      start: params.start,
+                      end: params.end,
+                      type: 'both'
+
+                    },
+                    function (response)
+                    {
+                      var members = response.data;
+                      var mems = [];
+                      _.each(members, function (mdata, index)
+                             {
+                               _.each(mdata, function (tslot)
+                               {
+                                 tslot.text = tslot.state
+                               });
+
+                               var member;
+
+                               _.each(allMembers, function (mem)
+                               {
+                                 if (index == mem.uuid)
+                                 {
+                                   member = mem;
+                                 }
+                               });
+
+                               if (member != null)
+                               {
+                                 mems.push({
+                                             id: index,
+                                             fullName: member.firstName + ' ' + member.lastName,
+                                             lastName: member.lastName,
+                                             role: member.role,
+                                             data: mdata,
+                                             stats: Stats.member(mdata, params.start, params.end)
+                                           });
+                               }
+                             }
+                      );
+
+                      deferred.resolve({
+                                         user: user,
+                                         groupId: options.groupId,
+                                         aggs: _aggs,
+                                         members: mems,
+                                         synced: +moment(),
+                                         periods: {
+                                           start: options.stamps.start,
+                                           end: options.stamps.end
+                                         }
+                                       });
+                    },
+                    function (error)
+                    {
+                      deferred.resolve({error: error})
+                    }
+                  );
+        }
 
         Slots.prototype.all = function (options)
         {
@@ -591,6 +675,34 @@ define(['services/services', 'config'],
               end: moment(options.stamps.end).unix()
             },
             data = {};
+          
+          /*
+           var promises = [];
+           if (options.layouts.users) promises.push(getUserSlots(params));
+
+           var groupParams = {
+             id: options.groupId,
+             start: params.start,
+             end: params.end,
+             month: options.month
+           };
+
+           if (options.layouts.group)
+           {
+            promises.push(Slots.prototype.aggs(groupParams))
+            promises.push(Slots.prototype.wishes({id: options.groupId,start: params.start, end: params.end}))
+           }
+
+           if()
+
+          
+          */
+
+          getUserSlots(params)
+            .then(function(result) {
+              console.error("result ->", result);
+            })
+          
 
           var slotsResource = Slots.prototype.resourceSlots();
           slotsResource.query(
@@ -632,8 +744,7 @@ define(['services/services', 'config'],
 
                         if (options.layouts.members)
                         {
-                          var allMembers = options.members || Store('app').get(options.groupId),
-                            calls = [];
+                          var allMembers = options.members || Store('app').get(options.groupId);
 
                           var resource = Slots.prototype.resourceMemberSlots();
                           resource.get

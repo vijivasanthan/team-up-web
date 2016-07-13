@@ -835,6 +835,7 @@ define(
                                              })
                                        .then(function(result)
                                              {
+                                               console.error("result ->", result[0]);
                                                deferred.resolve({
                                                                   members: data.members,
                                                                   timeline: result[0],

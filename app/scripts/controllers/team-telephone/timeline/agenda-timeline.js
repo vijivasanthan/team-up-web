@@ -819,7 +819,7 @@ define(
             if ($scope.timeline.main)
             {
               visDataSet.clear();
-
+              console.error("$scope.data ->", $scope.data);
               visDataSet.add(
                 Sloter.process(
                   $scope.data,
