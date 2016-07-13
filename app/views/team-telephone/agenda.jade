@@ -15,17 +15,18 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 			div#timelineTab.tab-pane.active
 				#timeline
 					div#timeline-toolbar
-						select.form-control.pull-left(ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1)',
+						div#toolbar_left.pull-left(style="width: 75%;")
+							select.form-control.pull-left(ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1)',
 							ng-model='timeline.current.group',
 							ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 							ng-selected='timeline.current.group',
 							ng-change='requestTimeline()')
-						//select.form-control(ng-model='timeline.current.division',
-						//ng-options='division.id as division.label for division in divisions',
-						//ng-selected='timeline.current.division',
-						//ng-change='changeDivision()',
-						//ng-show='divisions.length > 0')
-						button.btn.btn-primary.pull-left(type='button',
+								//select.form-control(ng-model='timeline.current.division',
+								//ng-options='division.id as division.label for division in divisions',
+								//ng-selected='timeline.current.division',
+								//ng-change='changeDivision()',
+								//ng-show='divisions.length > 0')
+							button.btn.btn-primary.pull-left(type='button',
 							style='margin: 3px 10px; 0 0',
 							data-content-template='views/team-telephone/timeline/groups-wish.html',
 							data-placement='bottom',
@@ -35,6 +36,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								span.badge.badge-inset
 									| {{wish}}
 								| &nbsp;{{ui.agenda.requiredPeople}}
+							h3.pull-left(style="font-weight: normal; margin-top: 8px;") {{ timeline.current.group | getGroupNameById | toTitleCase}}
 						
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
