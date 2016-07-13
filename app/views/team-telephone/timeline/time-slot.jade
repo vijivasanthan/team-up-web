@@ -1,5 +1,5 @@
 div.time-slot-form(ng-init='removeReoccuringReachabilityForm = false',
-ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views.member')
+ng-show='views.slot.add || views.slot.edit || views.group || views.wishView || views.wishEdit || views.member')
 	form.form-inline.form-toggled.well
 		button.close(ng-click='refreshCurrentTimeline(); removeReoccuringAll = null; removeReoccuringReachabilityForm = false;') ×
 		h4(ng-show='views.slot.add') {{ui.agenda.newAvail}} 
@@ -8,14 +8,14 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.group') {{slot.groupName }} 
 			span.duration.label.label-info {{ duration}}
-		h4(ng-show='views.wish') {{slot.groupName }} ({{ ui.agenda.wished}}) 
+		h4(ng-show='views.wishView || views.wishEdit') {{slot.groupName }} ({{ ui.agenda.wished}})
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}} 
 			span.duration.label.label-info {{ duration}}
 		hr
 		.form-elements-group(ng-show='browser.mobile')
 			label {{ui.agenda.from}} 
-			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wishView || views.wishEdit')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.start.datetime', ng-change='showDuration()')
 			.form-group.dater-mobile(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='date-start',
@@ -24,7 +24,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				disabled='disabled')
 		.form-elements-group(ng-hide='browser.mobile')
 			label {{ui.agenda.from}}
-			.form-group.has-feedback.dater(ng-show='views.slot.edit || views.wish')
+			.form-group.has-feedback.dater(ng-show='views.slot.edit || views.wishEdit')
 				input.form-control.input-sm(name='date-start',
 				type='text',
 				ng-model='slot.start.date',
@@ -48,10 +48,10 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				bs-datepicker='',
 				ng-change='showDuration();redrawSlot(slot);')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.has-feedback.dater(ng-show='views.group || views.member')
+			.form-group.has-feedback.dater(ng-show='views.group || views.member || views.wishView')
 				input.form-control.input-sm(name='date-start', type='text', ng-model='slot.start.date', disabled='disabled')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.has-feedback.timer(ng-show='views.slot.edit || views.wish')
+			.form-group.has-feedback.timer(ng-show='views.slot.edit || views.wishEdit')
 				input.form-control.input-sm(name='time-start',
 				type='text',
 				ng-model='slot.start.time',
@@ -74,14 +74,14 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				data-arrow-behavior="picker",
 				ng-change='showDuration();redrawSlot(slot);')
 				i.glyphicon.glyphicon-time.form-control-feedback
-			.form-group.has-feedback.timer(ng-show='views.group || views.member')
+			.form-group.has-feedback.timer(ng-show='views.group || views.member || views.wishView')
 				input.form-control.input-sm(name='time-start', type='text', ng-model='slot.start.time', disabled='disabled')
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='browser.mobile')
 			label {{ui.agenda.till}} 
-			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wishEdit')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.end.datetime', ng-change='showDuration();redrawSlot(slot);')
-			.form-group.dater-mobile(ng-show='views.group || views.member')
+			.form-group.dater-mobile(ng-show='views.group || views.member || views.wishView')
 				input.form-control.input-sm(name='date-start',
 				type='datetime-local',
 				ng-model='slot.end.datetime',
@@ -90,7 +90,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 			br
 		.form-elements-group(ng-hide='browser.mobile')
 			label {{ui.agenda.till}}
-			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wishEdit')
 				input.form-control.input-sm(name='date-end',
 				type='text',
 				ng-model='slot.end.date',
@@ -102,10 +102,10 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				bs-datepicker='',
 				ng-change='showDuration();redrawSlot(slot);')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.has-feedback.dater(ng-show='views.group || views.member')
+			.form-group.has-feedback.dater(ng-show='views.group || views.member || views.wishView')
 				input.form-control.input-sm(name='date-end', type='text', ng-model='slot.end.date', disabled='disabled')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish')
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wishEdit')
 				input.form-control.input-sm(name='time-end',
 				type='text',
 				ng-model='slot.end.time',
@@ -117,7 +117,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				data-arrow-behavior="picker",
 				ng-change='showDuration();redrawSlot(slot);')
 				i.glyphicon.glyphicon-time.form-control-feedback
-			.form-group.has-feedback.timer(ng-show='views.group || views.member')
+			.form-group.has-feedback.timer(ng-show='views.group || views.member || views.wishView')
 				input.form-control.input-sm(name='time-end', type='text', ng-model='slot.end.time', disabled='disabled')
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='views.slot.add || views.slot.edit || views.member')
@@ -130,7 +130,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 			disabled='disabled',
 			ng-options='option as value for (option, value) in states',
 			ng-show='views.member')
-		.form-elements-group.rightest(ng-show='views.slot.add || views.wish')
+		.form-elements-group.rightest(ng-show='views.slot.add || views.wishEdit')
 			label {{ui.agenda.reoccuring}}
 			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.group')
@@ -138,9 +138,15 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 				i(ng-show="(slot.diff < 0)") {{slot.diff.toString().substr(1) | i18n_spec:'planboard.lessPeople'}}
 				i(ng-show="(slot.diff == 0)") {{ui.agenda.samePeople}}
 				i(ng-show="(slot.diff > 0)") {{slot.diff | i18n_spec:'planboard.morePeople'}}
-		.form-elements-group.wish-amount(ng-show='views.wish')
+		.form-elements-group.wish-amount(ng-show='views.wishEdit')
 			label {{ui.agenda.wished}}
 			input.input-mini(name='wish-count',
+			type='text',
+			ng-model='slot.wish')
+		.form-elements-group.wish-amount(ng-show='views.wishView && slot.wish > 1')
+			label {{ui.agenda.wished}}
+			input.form-control.input-mini(name='wish-count',
+			disabled='disabled',
 			type='text',
 			ng-model='slot.wish')
 		hr
@@ -178,7 +184,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish || views
 					section(id="groups-wish")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
-			div(ng-show='views.wish', style="float: right")
+			div(ng-show='views.wishEdit', style="float: right")
 				button.btn.btn-success(type='button',
 				ng-click='wisher(slot)')
 					| {{ui.agenda.setWish}}

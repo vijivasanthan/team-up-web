@@ -1425,8 +1425,11 @@ define(
                 case 'group':
                   $scope.views.group = true;
                   break;
-                case 'wish':
-                  $scope.views.wish = true;
+                case 'wish-edit':
+                  $scope.views.wishEdit = true;
+                  break;
+                case 'wish-view':
+                  $scope.views.wishView = true;
                   break;
                 case 'member':
                   $scope.views.member = true;
@@ -1469,8 +1472,8 @@ define(
                   $scope.slot.diff = selectedItem.diff;
                   $scope.slot.group = selectedItem.group;
                   break;
-
-                case 'wish':
+                case 'wish-view':
+                case 'wish-edit':
                   $scope.slot.wish = selectedItem.wish;
                   $scope.slot.group = selectedItem.group;
                   $scope.slot.groupId = selectedItem.groupId;

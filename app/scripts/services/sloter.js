@@ -403,7 +403,7 @@ define(['services/services', 'config'],
                               groupName: name,
                               content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }, true) +
                               badge,
-                              itemType: 'wish',
+                              itemType: 'wish-view',
                               className: cn + ' has-hover-slot-tooltip',
                               groupId: data.aggs[0].id,
                               wish: wish.count,
