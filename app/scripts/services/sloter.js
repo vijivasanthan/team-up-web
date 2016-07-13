@@ -173,7 +173,6 @@ define(['services/services', 'config'],
                  {
                    var groups = this.get.groups(),
                        name = groups[agg.id];
-
                    var link = '<span style="display: none">a-a</span><a href="#/team?uuid=' +
                          agg.id +
                          '#team">' +
@@ -210,7 +209,7 @@ define(['services/services', 'config'],
                          diffRangeData = (maxDiff - minDiff),
                          diffRangeDraw = (diffRangeData / 0.8), // a percentage, with a lower bound on 20%
                          drawDataDiff = (diffRangeDraw - diffRangeData),
-                         name = _this.namer(agg, privilage);
+                         name = '<span style="display: none">a-a</span><span>' + $rootScope.ui.teamup.amountReachable; + '</span>';
 
                      _.each(agg.data, function (slot)
                      {
