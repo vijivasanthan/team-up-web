@@ -1474,6 +1474,7 @@ define(
                   break;
                 case 'wish-view':
                 case 'wish-edit':
+                  console.log("selectedItem", selectedItem);
                   $scope.slot.wish = selectedItem.wish;
                   $scope.slot.group = selectedItem.group;
                   $scope.slot.groupId = selectedItem.groupId;
@@ -1847,6 +1848,8 @@ define(
             }
 
             values = item;
+
+            console.log("values", values);
 
             if (values.recursive ||
               values.group.match($rootScope.ui.planboard.weeklyPlanning) ||

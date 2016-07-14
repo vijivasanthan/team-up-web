@@ -8,7 +8,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wishView || v
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.group') {{slot.groupName }} 
 			span.duration.label.label-info {{ duration}}
-		h4(ng-show='views.wishView || views.wishEdit') {{slot.groupName }} ({{ ui.agenda.wished}})
+		h4(ng-show='views.wishView || views.wishEdit') {{slot.groupName }}
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}} 
 			span.duration.label.label-info {{ duration}}

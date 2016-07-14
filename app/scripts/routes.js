@@ -774,6 +774,7 @@ define(
                   var groupId  = CurrentSelection.getTeamId(),
                       deferred = $q.defer(),
                       userId   = $route.current.params.userId,
+                      edit     = $location.search().edit || 'user',
                       data     = {
                         members: null,
                         user: null,
@@ -789,6 +790,7 @@ define(
                       };
                   $location.search('start', dates.start);
                   $location.search('end', dates.end);
+                  $location.search('edit', edit);
 
                   if( _.isUndefined(userId) )
                   {
@@ -835,10 +837,23 @@ define(
                                              })
                                        .then(function(result)
                                              {
-                                               console.error("result ->", result[0]);
+                                               var timelineData = result[0];
+                                               if(edit === 'user')
+                                               {
+                                                 delete timelineData.wishes;
+                                               }
+                                               else
+                                               {
+
+                                               }
+                                               delete (edit === 'user')
+                                                  ? timelineData.wishes
+                                                  : timelineData.user;
+
+                                               console.error("timelineData ->", timelineData);
                                                deferred.resolve({
                                                                   members: data.members,
-                                                                  timeline: result[0],
+                                                                  timeline: timelineData,
                                                                   user: data.user,
                                                                   teams: result[1]
                                                                 });

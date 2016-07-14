@@ -124,6 +124,48 @@ define(['services/services', 'config'],
                    return '<div class="time-tip" title="' + content + '">' + content + '</div>';
                  },
 
+                 editWishes: function(data, timedata, privilage)
+                 {
+                   var _this = this,
+                     defaultLabel = '<span style="display: none">a-a</span>',
+                     planning = "aWish",
+                     weekPlanning = "aWish wekelijks";
+
+                   //set recursive op de wishes
+                   _.each(data.aggs.wishes, function (wish)
+                     {
+                       var cn = (wish.count == 0)
+                         ? 'wishes-even'
+                         : 'wishes-' + wish.count;
+
+                       var badge = (wish.count > 1)
+                         ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
+                         : '';
+                       var title = (wish.recursive) ? weekPlanning : planning;
+                       var wish = {
+                         start: Math.round(wish.start * 1000),
+                         end: Math.round(wish.end * 1000),
+                         group: title,
+                         groupName: title,
+                         content: this.tooltip({ start: wish.start, end: wish.end, wish: wish.count }, true) +
+                         badge,
+                         itemType: 'wish-edit',
+                         className: cn + ' has-hover-slot-tooltip',
+                         groupId: data.aggs[0].id,
+                         wish: wish.count,
+                         editable: true,
+                         recursive: (wish.recursive) ? true : false
+                       };
+                       timedata.push(wish);
+                       timedata = _this.addLoading(data, timedata, [planning, weekPlanning]);
+                     }.bind(this)
+                   );
+
+                   console.log("timedata wish", timedata);
+
+                   return timedata;
+                 },
+
                  user: function (data, timedata, config, routeUserId, routeUser, loggedUser, current)
                  {
                    var _this = this,
@@ -606,10 +648,17 @@ define(['services/services', 'config'],
 
                  process: function (data, _config, divisions, routeUserId, privilage, routeUser, current, loggedUser)
                  {
+                   console.log("_config", _config);
                    var _this = this,
                        timedata = [];
 
-                   if (data.user)
+                   //timedata = _this.user(data, timedata, _config, routeUserId, routeUser, loggedUser, current);
+
+                   if(data.wishes)
+                   {
+                     timedata = _this.editWishes(data, timedata, privilage);
+                   }
+                   else if (data.user)
                    {
                      timedata = _this.user(data, timedata, _config, routeUserId, routeUser, loggedUser, current);
                    }
@@ -626,7 +675,7 @@ define(['services/services', 'config'],
                      }
                    }
 
-                   if (_config.wishes && data.aggs)
+                   if (_config.wishes && data.aggs && !data.wishes) //&& !data.wishes
                    {
                      timedata = _this.wishes(data, timedata, privilage);
                    }
