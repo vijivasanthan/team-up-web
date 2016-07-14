@@ -2456,7 +2456,7 @@ define(
             end: ($rootScope.browser.mobile) ?
             new Date(slot.end.datetime).getTime() / 1000 :
               moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
-            recursive: (!_.isUndefined(slot.recursive)),
+            recursive: slot.recursive,
             wish: slot.wish
           };
 
