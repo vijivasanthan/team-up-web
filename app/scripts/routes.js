@@ -758,7 +758,7 @@ define(
                 }
               })
 
-            .when('/team-telefoon/agenda/:userId?', {
+            .when('/team-telefoon/agenda', {
               templateUrl: 'views/team-telephone/agenda.html',
               controller: 'agenda',
               resolve: {
@@ -766,14 +766,11 @@ define(
                                $q, $rootScope, $location, moment,
                                CurrentSelection, Profile)
                 {
-
-
                   //remove active class TODO create a directive to solve this bug
                   removeActiveClass('.teamMenu');
-
                   var groupId  = CurrentSelection.getTeamId(),
                       deferred = $q.defer(),
-                      userId   = $route.current.params.userId,
+                      userId   = $location.search().user || $rootScope.app.resources.uuid,
                       edit     = $location.search().edit || 'user',
                       data     = {
                         members: null,
@@ -791,11 +788,7 @@ define(
                   $location.search('start', dates.start);
                   $location.search('end', dates.end);
                   $location.search('edit', edit);
-
-                  if( _.isUndefined(userId) )
-                  {
-                    redirectLocationLoggedUser();
-                  }
+                  $location.search('user', userId);
 
                   Teams.getTeamTelephoneOptions(groupId)
                         .then(function(options)
@@ -838,17 +831,8 @@ define(
                                        .then(function(result)
                                              {
                                                var timelineData = result[0];
-                                               if(edit === 'user')
-                                               {
-                                                 delete timelineData.wishes;
-                                               }
-                                               else
-                                               {
-
-                                               }
-                                               delete (edit === 'user')
-                                                  ? timelineData.wishes
-                                                  : timelineData.user;
+                                               if(edit === 'user') delete timelineData.wishes;
+                                               else delete timelineData.user;
 
                                                console.error("timelineData ->", timelineData);
                                                deferred.resolve({
@@ -894,7 +878,9 @@ define(
                    */
                   function redirectLocationLoggedUser()
                   {
-                    $location.path('/team-telefoon/agenda/' + $rootScope.app.resources.uuid);
+                    $location.path('/team-telefoon/agenda')
+                             .search('user', $rootScope.app.resources.uuid);
+                    $route.reload();
                   };
                 }
               },
