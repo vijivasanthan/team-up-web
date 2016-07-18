@@ -1426,10 +1426,10 @@ define(
                   $scope.views.group = true;
                   break;
                 case 'wish-edit':
-                  $scope.views.wishEdit = true;
+                  $scope.views.wish.edit = true;
                   break;
                 case 'wish-view':
-                  $scope.views.wishView = true;
+                  $scope.views.wish.view = true;
                   break;
                 case 'member':
                   $scope.views.member = true;
@@ -1474,12 +1474,12 @@ define(
                   break;
                 case 'wish-view':
                 case 'wish-edit':
+                case 'wish-add':
                   console.log("selectedItem", selectedItem);
                   $scope.slot.wish = selectedItem.wish;
                   $scope.slot.group = selectedItem.group;
                   $scope.slot.groupId = selectedItem.groupId;
                   break;
-
                 case 'member':
                   $scope.slot.member = selectedItem.mid;
                   break;
@@ -1496,6 +1496,8 @@ define(
         {
           $rootScope.planboardSync.clear();
           var values = item;
+          
+          console.error("values timelineChanging ->", values);
 
           $scope.$apply(
             function ()
@@ -1849,148 +1851,90 @@ define(
 
             values = item;
 
-            console.log("values", values);
-
             if (values.recursive ||
               values.group.match($rootScope.ui.planboard.weeklyPlanning) ||
               values.group === $rootScope.ui.planboard.myWeeklyPlanning ||
               (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
             {
-              // cancel adding if not own planning
-              groupId = item.group;
-              // other groups have a hyperlink
-              if (groupId && groupId.match('href='))
-              {
-                callback(null);
-                return;
-              }
-
-              //cancel if 'empty', used in profile timeline to add empty row
-              if (groupId === 'empty')
-              {
-                callback(null);
-                return
-              }
-
-              // if not a planner, the others don't have a hyperlink
-              // check for locale strings in groupId
-              // (will break if someone's name matches)
-              // TODO: this is silly, use an exposed attribute with visJS ASAP
-              if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
-                groupId && !groupId.match($rootScope.ui.planboard.myPlanning) &&
-                !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) &&
-                !groupId.match($rootScope.ui.planboard.planning) &&
-                !groupId.match($rootScope.ui.planboard.weeklyPlanning))
-              {
-                callback(null);
-                return;
-              }
-
-              //check an item in the newSlot and remove it if there's already an old item
-              if (newSlot.length >= 1)
-              {
-                visDataSet.remove(newSlot[0]);
-                newSlot.splice(0, 1);
-              }
-
-              newSlot.push(item.id);
-
-              //update values with the last drawn item in the timeline
-              values = item;
-              var element = angular.element(values.content);
-
-              $scope.$apply(
-                function ()
+                // cancel adding if not own planning
+                groupId = item.group;
+                // other groups have a hyperlink
+                if (groupId && groupId.match('href='))
                 {
-                  var id = item.id;
+                  callback(null);
+                  return;
+                }
 
-                  // Insert element, fixes IE9 not displaying on new slot.
-                  // The span.secret gives no height, and changing it messes up other slots.
-                  // This should only be applied once.
-                  // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
-                  //   .before("<div class='time-tip' style='padding: 0;'></div>");
+                //cancel if 'empty', used in profile timeline to add empty row
+                if (groupId === 'empty')
+                {
+                  callback(null);
+                  return
+                }
 
-                  if ($scope.timeline.main)
+                // if not a planner, the others don't have a hyperlink
+                // check for locale strings in groupId
+                // (will break if someone's name matches)
+                // TODO: this is silly, use an exposed attribute with visJS ASAP
+                if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
+                  groupId && !groupId.match($rootScope.ui.planboard.myPlanning) &&
+                  !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) &&
+                  !groupId.match($rootScope.ui.planboard.planning) &&
+                  !groupId.match($rootScope.ui.planboard.weeklyPlanning))
+                {
+                  callback(null);
+                  return;
+                }
+
+                //check an item in the newSlot and remove it if there's already an old item
+                if (newSlot.length >= 1)
+                {
+                  visDataSet.remove(newSlot[0]);
+                  newSlot.splice(0, 1);
+                }
+
+                newSlot.push(item.id);
+
+                //update values with the last drawn item in the timeline
+                values = item;
+                var element = angular.element(values.content);
+
+                $scope.$apply(
+                  function ()
                   {
-                    $rootScope.$broadcast('resetPlanboardViews');
+                    var id = item.id;
 
-                    $scope.views.slot.add = true;
-                  }
-                  else
-                  {
-                    $scope.forms = {
-                      add: true,
-                      edit: false
-                    };
-                  }
+                    // Insert element, fixes IE9 not displaying on new slot.
+                    // The span.secret gives no height, and changing it messes up other slots.
+                    // This should only be applied once.
+                    // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
+                    //   .before("<div class='time-tip' style='padding: 0;'></div>");
 
-                  // Check if groupId matches selected locale week strings
-                  if (groupId &&
-                    ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) ||
-                    groupId.match($rootScope.ui.planboard.weeklyPlanning)))
-                  {
-                    recursive = true;
-                  }
+                    if ($scope.timeline.main)
+                    {
+                      $rootScope.$broadcast('resetPlanboardViews');
 
-                  $scope.slot = {
-                    start: {
-                      date: moment(values.start).format(config.app.formats.date),
-                      time: moment(values.start).format(config.app.formats.time),
-                      datetime: convertDateTimeToLocal(values.start)
-                    },
-                    end: {
-                      date: moment(values.end).format(config.app.formats.date),
-                      time: moment(values.end).format(config.app.formats.time),
-                      datetime: convertDateTimeToLocal(values.end)
-                    },
-                    recursive: recursive,
-                    state: 'com.ask-cs.State.Available'
-                  };
+                      $scope.views.slot.add = true;
+                    }
+                    else
+                    {
+                      $scope.forms = {
+                        add: true,
+                        edit: false
+                      };
+                    }//
+                    item = prepareSlotForView(item, values);
 
-                  if(! item.type || item.type !== 'range')
-                  {
-                    $scope.setEndDate($scope.slot.start.date);
-                    $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
-                    item.end = $scope.slot.end.datetime;
-                  }
+                    //callback(item);
+                    //update visDataSet with the new item
+                    visDataSet.add(item);
 
-                  item.content = Sloter.tooltip({
-                                                  start: moment(item.start).unix(),
-                                                  end: moment(item.end).unix()
-                                                }, true);
+                    $timeout(function ()
+                             {
+                               $scope.self.timeline.setSelection(id);
+                             });
 
-                  $scope.showDuration();
-
-                  $scope.original = {
-                    start: new Date(values.start),
-                    end: new Date(values.end),
-                    recursive: $scope.slot.recursive,
-                    state: $scope.slot.state
-                  };
-
-                  item.state = $scope.slot.state;
-                  item.recursive = recursive;
-                  item.className = $scope.timeline.config.states[item.state].className;
-                  item.className += ' has-slot-tooltip';
-
-                  // make sure that the user can modify the element
-                  $scope.self.timeline.setOptions({
-                                                    editable: {
-                                                      remove: true,
-                                                      updateTime: true
-                                                    }
-                                                  });
-
-                  //callback(item);
-                  //update visDataSet with the new item
-                  visDataSet.add(item);
-
-                  $timeout(function ()
-                           {
-                             $scope.self.timeline.setSelection(id);
-                           });
-
-                });
+                  });
             }
             else
             {
@@ -2053,6 +1997,8 @@ define(
                 text: slot.state
               };
 
+              console.error("valid slot ->", values);
+
               /**
                * Two minutes waiting time to take an action
                */
@@ -2100,74 +2046,70 @@ define(
           }
         };
 
+        function prepareSlotForView(item, values)
+        {
+          var groupId = item.group,
+              recursive = false,
+              slot = {};
 
-        //if(slot.state === "com.ask-cs.State.Alert")
-        //{
-        //  console.error("yesSs -> " + start, end);
-        //  checkRedundantStateAlertSlots(values)
-        //    .then(function(slots)
-        //          {
-        //            return (slots) ? false : addSlot(values);
-        //          })
-        //}
+          // Check if groupId matches selected locale week strings
+          if (groupId &&
+            ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) ||
+            groupId.match($rootScope.ui.planboard.weeklyPlanning)))
+          {
+            recursive = true;
+          }
 
-        //checkRedundantStateAlertSlots({start: '1461798000', end: '1461798010'});
+          $scope.slot = {
+            start: {
+              date: moment(values.start).format(config.app.formats.date),
+              time: moment(values.start).format(config.app.formats.time),
+              datetime: convertDateTimeToLocal(values.start)
+            },
+            end: {
+              date: moment(values.end).format(config.app.formats.date),
+              time: moment(values.end).format(config.app.formats.time),
+              datetime: convertDateTimeToLocal(values.end)
+            },
+            recursive: recursive,
+            state: 'com.ask-cs.State.Available'
+          };
 
-        //function checkRedundantStateAlertSlots(slot)
-        //{
-        //  //set start and end new slot
-        //  slot.start = parseInt(slot.start);
-        //  slot.end = parseInt(slot.end);
-        //
-        //  return Teams.getSingle($scope.timeline.current.group)
-        //       .then(function (membersGroup)
-        //             {
-        //               return Slots.members($scope.timeline.current.group, {start: $scope.data.periods.start / 1000,
-        //                 end: $scope.data.periods.end / 1000}, membersGroup);
-        //             })
-        //       .then(function (members)
-        //             {
-        //               $rootScope.statusBar.off();
-        //
-        //               if (!members.length)
-        //               {
-        //                 //het checken van redundante slots kon op dit moment niet uitgevoerd worden
-        //                 $rootScope.notifier.info($rootScope.ui.agenda.noMembers);
-        //                 return false;
-        //               }
-        //               else
-        //               {
-        //                 //remove id henk
-        //                 var indexUser = _.findIndex(members, {'id': $scope.timeline.user.id}),
-        //                     membersStateAlert = [];
-        //
-        //                 if(indexUser != -1) members.splice(indexUser, 1);
-        //
-        //                 _.each(members, function(member)
-        //                 {
-        //                   var stateAlertData = _.filter(member.data, function(data)
-        //                   {
-        //                     if(data.state === "com.ask-cs.State.Alert"
-        //                       && Math.min(slot.start, slot.end) <= Math.max(data.start, data.end)
-        //                       && Math.max(slot.start, slot.end) >= Math.min(data.start, data.end)) return data;
-        //                   });
-        //                   if(stateAlertData.length) membersStateAlert.push( {fullName: member.fullName, data: stateAlertData} );
-        //                 });
-        //
-        //                 console.error("membersStateAlert ->", membersStateAlert);
-        //
-        //                 if(membersStateAlert.length)
-        //                 {
-        //                   var user = membersStateAlert[0].fullName,
-        //                       start = moment(membersStateAlert[0].data[0].start, 'X').format(config.app.formats.date + " " + config.app.formats.time),
-        //                       end = moment(membersStateAlert[0].data[0].end, 'X').format(config.app.formats.date + " " + config.app.formats.time);
-        //                   $rootScope.notifier.error('De gebruiker ' + user + ' heeft al achterwacht van ' + start + ' t/m ' +  end);
-        //                   return true;
-        //                 }
-        //                 return false;
-        //               }
-        //             });
-        //}
+          if(! item.type || item.type !== 'range')
+          {
+            $scope.setEndDate($scope.slot.start.date);
+            $scope.setEndTime($scope.slot.start.date, $scope.slot.start.time);
+            item.end = $scope.slot.end.datetime;
+          }
+
+          item.content = Sloter.tooltip({
+                                          start: moment(item.start).unix(),
+                                          end: moment(item.end).unix()
+                                        }, true);
+
+          $scope.showDuration();
+
+          $scope.original = {
+            start: new Date(values.start),
+            end: new Date(values.end),
+            recursive: $scope.slot.recursive,
+            state: $scope.slot.state
+          };
+
+          item.state = $scope.slot.state;
+          item.recursive = recursive;
+          item.className = $scope.timeline.config.states[item.state].className;
+          item.className += ' has-slot-tooltip';
+
+          // make sure that the user can modify the element
+          $scope.self.timeline.setOptions({
+                                            editable: {
+                                              remove: true,
+                                              updateTime: true
+                                            }
+                                          });
+          return item;
+        }
 
         /* Check if startdate is before the enddate
          * @param slot The current selected slot
@@ -2190,6 +2132,8 @@ define(
 
           var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
 
+          
+          console.error("values change ->", values);
           if (!direct)
           {
             changed = {

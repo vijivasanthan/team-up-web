@@ -175,7 +175,11 @@ define(
                 edit: false
               },
               group: false,
-              wish: false,
+              wish: {
+                add: false,
+                edit: false,
+                show: false
+              },
               member: false
             };
           };

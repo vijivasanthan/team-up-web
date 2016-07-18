@@ -128,33 +128,33 @@ define(['services/services', 'config'],
 					       {
 						       var _this        = this,
 						           planning     = _this.namer($rootScope.ui.teamup.amountNeeded),
-						           weekPlanning = _this.namer($rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly);
+						           weekPlanning = _this.namer($rootScope.ui.teamup.amountNeeded) + " " + $rootScope.ui.teamup.weekly;
 
 						       //set recursive op de wishes
 						       _.each(data.aggs.wishes, function(wish)
 						              {
-							              var cn = (wish.count == 0)
-								              ? 'wishes-even'
-								              : 'wishes-' + wish.count;
-
-							              var badge = (wish.count > 1)
-								              ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
-								              : '';
-							              var title = (wish.recursive) ? weekPlanning : planning;
-							              var wish  = {
-								              start: Math.round(wish.start * 1000),
-								              end: Math.round(wish.end * 1000),
-								              group: title,
-								              groupName: title,
-								              content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true) +
-								              badge,
-								              itemType: 'wish-edit',
-								              className: cn + ' has-hover-slot-tooltip',
-								              groupId: data.aggs[0].id,
-								              wish: wish.count,
-								              editable: true,
-								              recursive: (wish.recursive) ? true : false
-							              };
+							              var cn    = (wish.count == 0)
+								                  ? 'wishes-even'
+								                  : 'wishes-' + wish.count,
+							                  badge = (wish.count > 1)
+								                  ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
+								                  : '',
+							                  wish  = {
+								                  start: Math.round(wish.start * 1000),
+								                  end: Math.round(wish.end * 1000),
+								                  group: (wish.recursive) ? weekPlanning : planning,
+								                  groupName: (wish.recursive)
+									                  ? $rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly
+									                  : $rootScope.ui.teamup.amountNeeded,
+								                  content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true) +
+								                  badge,
+								                  itemType: 'wish-edit',
+								                  className: cn + ' has-hover-slot-tooltip',
+								                  groupId: data.aggs[0].id,
+								                  wish: wish.count,
+								                  editable: true,
+								                  recursive: (wish.recursive) ? true : false
+							                  };
 							              timedata.push(wish);
 							              timedata = _this.addLoading(data, timedata, [planning, weekPlanning]);
 						              }.bind(this)
