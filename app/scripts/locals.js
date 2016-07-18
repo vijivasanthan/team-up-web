@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          weekly: "weekly",
           edit: 'edit',
           amountNeeded: 'Amount required',
           amountReachable: "Amount of reachable",
@@ -1813,6 +1814,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          weekly: "weekly",
           edit: 'edit',
           amountNeeded: 'Amount required',
           amountReachable: "Amount reachable",
@@ -2996,6 +2998,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          weekly: "wekelijks",
           edit: 'wijzig',
           amountNeeded: 'Aantal benodigd',
           amountReachable: "Aantal bereikbaar",
