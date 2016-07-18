@@ -127,9 +127,8 @@ define(['services/services', 'config'],
 					       editWishes: function(data, timedata, privilage)
 					       {
 						       var _this        = this,
-						           defaultLabel = '<span style="display: none">a-a</span>',
-						           planning     = $rootScope.ui.teamup.amountNeeded,
-						           weekPlanning = $rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly;
+						           planning     = _this.namer($rootScope.ui.teamup.amountNeeded),
+						           weekPlanning = _this.namer($rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly);
 
 						       //set recursive op de wishes
 						       _.each(data.aggs.wishes, function(wish)
@@ -211,31 +210,9 @@ define(['services/services', 'config'],
 						       return timedata;
 					       },
 
-					       namer: function(agg, privilage)
+					       namer: function(title)
 					       {
-						       var groups = this.get.groups(),
-						           name   = groups[agg.id];
-						       var link   = '<span style="display: none">a-a</span><a href="#/team?uuid=' +
-							           agg.id +
-							           '#team">' +
-							           name +
-							           '</a>',
-						           title;
-
-						       if( ! agg.division )
-						       {
-							       title = (privilage <= 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
-						       }
-						       else
-						       {
-							       var label;
-
-							       title = (privilage <= 1) ? link : '<span style="display: none">a-a</span><span>' + name + '</span>';
-
-							       title += ' <span class="label label-default">' + agg.division.label + '</span>';
-						       }
-
-						       return title;
+						       return '<span style="display: none">a-a</span><span>' + title + '</span>';
 					       },
 
 					       bars: function(data, timedata, config, privilage, current)
@@ -251,8 +228,7 @@ define(['services/services', 'config'],
 							           diffRangeData = (maxDiff - minDiff),
 							           diffRangeDraw = (diffRangeData / 0.8), // a percentage, with a lower bound on 20%
 							           drawDataDiff  = (diffRangeDraw - diffRangeData),
-							           name          = '<span style="display: none">a-a</span><span>' + $rootScope.ui.teamup.amountReachable;
-							       + '</span>';
+							           name          = _this.namer($rootScope.ui.teamup.amountReachable);
 
 							       _.each(agg.data, function(slot)
 							       {
@@ -347,7 +323,7 @@ define(['services/services', 'config'],
 
 						       _.each(_this.filtered(data, current), function(agg)
 						       {
-							       var name = '<span style="display: none">a-a</span><span>' + $rootScope.ui.teamup.amountReachable + '</span>';
+							       var name = _this.namer($rootScope.ui.teamup.amountReachable);
 
 							       _.each(agg.data, function(slot)
 							       {
@@ -429,7 +405,7 @@ define(['services/services', 'config'],
 						           title;
 
 						       link += '<a class="btn-primary btn-mini" style="float:right;" title="' + $rootScope.ui.teamup.edit + ' ' + $rootScope.ui.teamup.amountNeeded.toLowerCase() + '"';
-						       link += 'href="#/team-telefoon/agenda?start=' + data.periods.start + '&end=' + data.periods.end + '&edit=wish"';
+						       link += 'href="#/team-telefoon/agenda/?edit=wish&start=' + data.periods.start + '&end=' + data.periods.end + '"';
 						       link += '><i class="icon-edit" style="margin-left: 8px;"></a>';
 						       title = (privilage == 1) ? link : '<span style="display: none">a-a</span><span>' + link + '</span>';
 
@@ -506,10 +482,11 @@ define(['services/services', 'config'],
 								              member.fullName +
 								              '</a>';
 
-							              if( routeUserId !== member.id && member.id.indexOf('voicemail') === - 1 )
+							              //routeUserId !== member.id &&
+							              if(member.id.indexOf('voicemail') === - 1 )
 							              {
 								              link += '<a class="btn-primary btn-mini" style="float:right;" title="' + $rootScope.ui.agenda.editTimeline + member.id + '"';
-								              link += 'href="#/team-telefoon/agenda/' + member.id + '?start=' + data.periods.start + '&end=' + data.periods.end + '"';
+								              link += 'href="#/team-telefoon/agenda/'+ '?start=' + data.periods.start + '&end=' + data.periods.end + '&user=' + member.id + '"';
 								              link += '><i class="icon-edit" style="margin-left: 8px;"></a>';
 							              }
 

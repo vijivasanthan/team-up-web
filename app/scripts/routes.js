@@ -881,7 +881,7 @@ define(
                     $location.path('/team-telefoon/agenda')
                              .search('user', $rootScope.app.resources.uuid);
                     $route.reload();
-                  };
+                  }
                 }
               },
               reloadOnSearch: false
