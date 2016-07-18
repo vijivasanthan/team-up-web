@@ -15,7 +15,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 		hr
 		.form-elements-group(ng-show='browser.mobile')
 			label {{ui.agenda.from}} 
-			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish.view || views.wish.edit')
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish.view || views.wish.edit || views.wish.add')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.start.datetime', ng-change='showDuration()')
 			.form-group.dater-mobile(ng-show='views.group || views.member')
 				input.form-control.input-sm(name='date-start',
@@ -35,7 +35,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				data-icon-right='glyphicon glyphicon-arrow-right',
 				bs-datepicker='',
 				ng-change='showDuration();redrawSlot(slot);')
-			.form-group.has-feedback.dater(ng-show='views.slot.add')
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.wish.add')
 				input.form-control.input-sm(name='date-start',
 				type='text',
 				ng-model='slot.start.date',
@@ -62,7 +62,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				data-minute-step="5",
 				data-arrow-behavior="picker",
 				ng-change='showDuration();redrawSlot(slot);')
-			.form-group.has-feedback.timer(ng-show='views.slot.add')
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.wish.add')
 				input.form-control.input-sm(name='time-start',
 				type='text',
 				ng-model='slot.start.time',
@@ -79,9 +79,9 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				i.glyphicon.glyphicon-time.form-control-feedback
 		.form-elements-group(ng-show='browser.mobile')
 			label {{ui.agenda.till}} 
-			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wishEdit')
+			.form-group.dater-mobile(ng-show='views.slot.add || views.slot.edit || views.wish.edit || views.wish.add')
 				input.form-control.input-sm(name='date-start', type='datetime-local', ng-model='slot.end.datetime', ng-change='showDuration();redrawSlot(slot);')
-			.form-group.dater-mobile(ng-show='views.group || views.member || views.wishView')
+			.form-group.dater-mobile(ng-show='views.group || views.member || views.wish.view')
 				input.form-control.input-sm(name='date-start',
 				type='datetime-local',
 				ng-model='slot.end.datetime',
@@ -90,7 +90,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			br
 		.form-elements-group(ng-hide='browser.mobile')
 			label {{ui.agenda.till}}
-			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish.edit')
+			.form-group.has-feedback.dater(ng-show='views.slot.add || views.slot.edit || views.wish.edit || views.wish.add')
 				input.form-control.input-sm(name='date-end',
 				type='text',
 				ng-model='slot.end.date',
@@ -130,7 +130,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			disabled='disabled',
 			ng-options='option as value for (option, value) in states',
 			ng-show='views.member')
-		.form-elements-group.rightest(ng-show='views.slot.add || views.wish.edit')
+		.form-elements-group.rightest(ng-show='views.slot.add || views.wish.edit || views.wish.add')
 			label {{ui.agenda.reoccuring}}
 			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.group')
@@ -184,8 +184,16 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 					section(id="groups-wish")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
-			div(ng-show='views.wish.edit', style="float: right")
+			div(ng-show='views.wish.add', style="float: right")
 				button.btn.btn-success(type='button',
 				ng-click='wisher(slot)')
-					| {{ui.agenda.setWish}}
+					| {{ ui.agenda.setWish }}
+			div(ng-show='views.wish.edit', style="float: right")
+				button.btn.btn-success(type='button',
+					ng-click='wisher(slot)')
+						| {{ui.agenda.change}}
+				button.btn.btn-danger(type='button',
+					style='margin-right: 5px;'
+					ng-click='wisher(slot, true)')
+						| {{ui.agenda.del}}
 		div(style="clear: both;")

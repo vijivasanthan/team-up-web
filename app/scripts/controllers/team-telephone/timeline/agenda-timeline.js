@@ -928,7 +928,7 @@ define(
                 layouts: $scope.timeline.current.layouts,
                 month: $scope.timeline.current.month,
                 stamps: stamps,
-                user: $route.current.params.userId
+                user: $location.search().user
               };
 
               //TODO load and render at the same time, two times the same call
@@ -2384,11 +2384,17 @@ define(
         /**
          * Set wish
          */
-        $scope.wisher = function (slot)
+        $scope.wisher = function (slot, remove)
         {
           var wishAmount = parseInt(slot.wish);
+          var message = $rootScope.ui.agenda.wishChanged;
           if(! (wishAmount >= 0 && wishAmount <= 30) )
             return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
+          if(remove)
+          {
+            wishAmount = 0;
+            message = $rootScope.ui.agenda.wishRemoved;
+          }
 
           $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
@@ -2401,7 +2407,7 @@ define(
             new Date(slot.end.datetime).getTime() / 1000 :
               moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
             recursive: slot.recursive,
-            wish: slot.wish
+            wish: wishAmount
           };
 
           Slots.setWish(formattedSlot)
@@ -2417,7 +2423,7 @@ define(
                    }
                    else
                    {
-                     $rootScope.notifier.success($rootScope.ui.agenda.wishChanged);
+                     $rootScope.notifier.success(message);
                    }
 
                    $scope.timeliner.refresh();
