@@ -26,17 +26,18 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 								//ng-selected='timeline.current.division',
 								//ng-change='changeDivision()',
 								//ng-show='divisions.length > 0')
-							button.btn.btn-primary.pull-left(type='button',
-							style='margin: 3px 10px; 0 0',
-							data-content-template='views/team-telephone/timeline/groups-wish.html',
-							data-placement='bottom',
-							bs-popover='',
-							data-title='{{ ui.agenda.wished }} {{ ui.agenda.change }}',
-							ng-hide='app.resources.role > 1')
-								span.badge.badge-inset
-									| {{wish}}
-								| &nbsp;{{ui.agenda.requiredPeople}}
-							h3.pull-left(style="font-weight: normal; margin-top: 8px;") {{ timeline.current.group | getGroupNameById | toTitleCase}}
+
+							//button.btn.btn-primary.pull-left(type='button',
+							//style='margin: 3px 10px; 0 0',
+							//data-content-template='views/team-telephone/timeline/groups-wish.html',
+							//data-placement='bottom',
+							//bs-popover='',
+							//data-title='{{ ui.agenda.wished }} {{ ui.agenda.change }}',
+							//ng-hide='app.resources.role > 1')
+							//	span.badge.badge-inset
+							//		| {{wish}}
+							//	| &nbsp;{{ui.agenda.requiredPeople}}
+							h3.pull-left(style="font-weight: normal; margin: 8px 0 0 5px;") {{ timeline.current.group | getGroupNameById | toTitleCase}}
 						
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")

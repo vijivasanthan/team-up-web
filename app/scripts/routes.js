@@ -830,14 +830,9 @@ define(
                                              })
                                        .then(function(result)
                                              {
-                                               var timelineData = result[0];
-                                               if(edit === 'user') delete timelineData.wishes;
-                                               else delete timelineData.user;
-
-                                               console.error("timelineData ->", timelineData);
                                                deferred.resolve({
                                                                   members: data.members,
-                                                                  timeline: timelineData,
+                                                                  timeline: result[0],
                                                                   user: data.user,
                                                                   teams: result[1]
                                                                 });

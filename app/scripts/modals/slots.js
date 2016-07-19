@@ -628,7 +628,6 @@ define(['services/services', 'config'],
                       }).then(
                       function (wishes)
                       {
-                        console.log("wishes", wishes);
                         wishes = wishes
                           .filter(
                             function (wish) {
@@ -640,7 +639,6 @@ define(['services/services', 'config'],
                               return wish;
                             });
 
-                        console.log("wishes", wishes);
                         _aggs.wishes = wishes;
 
                         if (options.layouts.members)

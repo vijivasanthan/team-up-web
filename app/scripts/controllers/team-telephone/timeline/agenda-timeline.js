@@ -1101,65 +1101,65 @@ define(
           }
         };
 
-        function wish(id)
-        {
-          var deferred = $q.defer(),
-              count = 0,
-              end = moment().add(1, 'years').unix();
+        //function wish(id)
+        //{
+        //  var deferred = $q.defer(),
+        //      count = 0,
+        //      end = moment().add(1, 'years').unix();
+        //
+        //  Slots.wishes(
+        //    {
+        //      id: id,
+        //      start: 255600,
+        //      end: end
+        //    }).then(
+        //    function (results)
+        //    {
+        //      angular.forEach(
+        //        results,
+        //        function (slot)
+        //        {
+        //          if (slot.start == 255600 &&
+        //            slot.end == end &&
+        //            slot.count != null)
+        //          {
+        //            count = slot.count;
+        //          }
+        //        }
+        //      );
+        //
+        //      deferred.resolve({count: count});
+        //    }
+        //  );
+        //
+        //  return deferred.promise;
+        //}
+        //
+        //function wisher(id)
+        //{
+        //  wish(id)
+        //    .then(
+        //      function (wish)
+        //      {
+        //        $scope.wish = wish.count;
+        //        $rootScope.groupWish = $scope.wish;
+        //
+        //        $scope.popover = {
+        //          id: id,
+        //          wish: wish.count
+        //        };
+        //      }
+        //    );
+        //}
 
-          Slots.wishes(
-            {
-              id: id,
-              start: 255600,
-              end: end
-            }).then(
-            function (results)
-            {
-              angular.forEach(
-                results,
-                function (slot)
-                {
-                  if (slot.start == 255600 &&
-                    slot.end == end &&
-                    slot.count != null)
-                  {
-                    count = slot.count;
-                  }
-                }
-              );
-
-              deferred.resolve({count: count});
-            }
-          );
-
-          return deferred.promise;
-        }
-
-        function wisher(id)
-        {
-          wish(id)
-            .then(
-              function (wish)
-              {
-                $scope.wish = wish.count;
-                $rootScope.groupWish = $scope.wish;
-
-                $scope.popover = {
-                  id: id,
-                  wish: wish.count
-                };
-              }
-            );
-        }
-
-        $scope.$watch(function ()
-                      {
-                        return $scope.timeline.current.group;
-                      },
-                      function (currentTeamId)
-                      {
-                        wisher(currentTeamId);
-                      });
+        //$scope.$watch(function ()
+        //              {
+        //                return $scope.timeline.current.group;
+        //              },
+        //              function (currentTeamId)
+        //              {
+        //                wisher(currentTeamId);
+        //              });
 
         $scope.setToday = function()
         {
@@ -1236,9 +1236,10 @@ define(
           var wishes = Slots.wishes(
             {
               id: $scope.timeline.current.group,
-              start: $scope.data.periods.start / 1000,
-              end: $scope.data.periods.end / 1000
+              start: parseInt($scope.data.periods.start / 1000),
+              end: parseInt($scope.data.periods.end / 1000)
             });
+          console.error("123 ->", 123);
 
           return $q.all([aggs, wishes])
                    .then(
@@ -2456,99 +2457,99 @@ define(
          * @param id teamId
          * @param wish wish amount
          */
-        $scope.saveWish = function (id, wish)
-        {
-          $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
+        //$scope.saveWish = function (id, wish)
+        //{
+        //  $rootScope.statusBar.display($rootScope.ui.planboard.changingWish);
+        //
+        //  Slots.setWish({
+        //                  id: id,
+        //                  start: 255600,
+        //                  end: 860400,
+        //                  recursive: true,
+        //                  wish: wish
+        //                }).then(function (result)
+        //                        {
+        //                          $rootScope.statusBar.off();
+        //
+        //                          if (result.error)
+        //                          {
+        //                            $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
+        //
+        //                            console.warn('error ->', result);
+        //                          }
+        //                          else
+        //                          {
+        //                            $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
+        //                          }
+        //                          wisher(id);
+        //                          getWishes();
+        //                        });
+        //
+        //};
 
-          Slots.setWish({
-                          id: id,
-                          start: 255600,
-                          end: 860400,
-                          recursive: true,
-                          wish: wish
-                        }).then(function (result)
-                                {
-                                  $rootScope.statusBar.off();
-
-                                  if (result.error)
-                                  {
-                                    $rootScope.notifier.error($rootScope.ui.errors.groups.saveWish);
-
-                                    console.warn('error ->', result);
-                                  }
-                                  else
-                                  {
-                                    $rootScope.notifier.success($rootScope.ui.planboard.wishChanged);
-                                  }
-                                  wisher(id);
-                                  getWishes();
-                                });
-
-        };
-
-        function wish(id)
-        {
-          var deferred = $q.defer(),
-              count = 0;
-
-          Slots.wishes(
-            {
-              id: id,
-              start: 255600,
-              end: 860400
-            }).then(
-            function (results)
-            {
-              angular.forEach(
-                results,
-                function (slot)
-                {
-                  if (slot.start == 255600 &&
-                    slot.end == 860400 &&
-                    slot.count != null)
-                  {
-                    count = slot.count;
-                  }
-                }
-              );
-
-              deferred.resolve({count: count});
-            }
-          );
-
-          return deferred.promise;
-        }
+        //function wish(id)
+        //{
+        //  var deferred = $q.defer(),
+        //      count = 0;
+        //
+        //  Slots.wishes(
+        //    {
+        //      id: id,
+        //      start: 255600,
+        //      end: 860400
+        //    }).then(
+        //    function (results)
+        //    {
+        //      angular.forEach(
+        //        results,
+        //        function (slot)
+        //        {
+        //          if (slot.start == 255600 &&
+        //            slot.end == 860400 &&
+        //            slot.count != null)
+        //          {
+        //            count = slot.count;
+        //          }
+        //        }
+        //      );
+        //
+        //      deferred.resolve({count: count});
+        //    }
+        //  );
+        //
+        //  return deferred.promise;
+        //}
 
         /**
          * Get wishes
          */
-        function getWishes()
-        {
-          if ($scope.timeline.current.layouts.group)
-          {
-            $rootScope.statusBar.display($rootScope.ui.message.getWishes);
-
-            Slots.wishes(
-              {
-                id: $scope.timeline.current.group,
-                start: $scope.data.periods.start / 1000,
-                end: $scope.data.periods.end / 1000
-              }).then(
-              function (wishes)
-              {
-                $rootScope.statusBar.off();
-
-                $scope.data.aggs.wishes = wishes;
-
-                $scope.timeliner.render(
-                  {
-                    start: $scope.timeline.range.start,
-                    end: $scope.timeline.range.end
-                  }, true);
-              }
-            );
-          }
-        }
+        //function getWishes()
+        //{
+        //  if ($scope.timeline.current.layouts.group)
+        //  {
+        //    $rootScope.statusBar.display($rootScope.ui.message.getWishes);
+        //
+        //    Slots.wishes(
+        //      {
+        //        id: $scope.timeline.current.group,
+        //        start: $scope.data.periods.start / 1000,
+        //        end: $scope.data.periods.end / 1000
+        //      }).then(
+        //      function (wishes)
+        //      {
+        //        $rootScope.statusBar.off();
+        //
+        //        $scope.data.aggs.wishes = wishes;
+        //
+        //        $scope.timeliner.render(
+        //          {
+        //            start: $scope.timeline.range.start,
+        //            end: $scope.timeline.range.end
+        //          }, true);
+        //      }
+        //    );
+        //  }
+        //}
 
         /**
          * TODO: Stress-test this!
