@@ -78,7 +78,7 @@ define(['services/services', 'config'],
 						       return timedata;
 					       },
 
-					       tooltip: function(periods, tooltips)
+					       tooltip: function(periods, tooltips, badge)
 					       {
 						       var convertTimestamp = function(stamp)
 						       {
@@ -111,18 +111,16 @@ define(['services/services', 'config'],
 							       content += ' / ' + periods.state;
 						       }
 
-						       //if(angular.element('.vis-item-content').hasClass('slot-tooltip'))
-						       //{
-						       //
-						       //}
+						       if(badge) badge = '<span class="badge badge-inverse badge-slot">' + badge + '</span>';
+						       else badge = '';
+
 						       if( tooltips )
 						       {
 							       content += '<div class="slot-tooltip slot-tooltip--start">' + startTooltip + '</div>';
 							       content += '<div class="slot-tooltip slot-tooltip--end">' + endTooltip + '</div>';
-							       return '<div class="time-tip">' + content + '</div>';
+							       return '<div class="time-tip">' + content + '</div>' + badge;
 						       }
-
-						       return '<div class="time-tip" title="' + content + '">' + content + '</div>';
+						       return '<div class="time-tip" title="' + content + '">' + content + '</div>' + badge;
 					       },
 
 					       editWishes: function(data, timedata, privilage)
@@ -136,10 +134,7 @@ define(['services/services', 'config'],
 						              {
 							              var cn    = (wish.count == 0)
 								                  ? 'wishes-even'
-								                  : 'wishes-' + wish.count,
-							                  badge = (wish.count > 1)
-								                  ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
-								                  : '',
+								                  : 'wishes-' + wish.count;
 							                  wish  = {
 								                  start: Math.round(wish.start * 1000),
 								                  end: Math.round(wish.end * 1000),
@@ -147,8 +142,7 @@ define(['services/services', 'config'],
 								                  groupName: (wish.recursive)
 									                  ? $rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly
 									                  : $rootScope.ui.teamup.amountNeeded,
-								                  content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true) +
-								                  badge,
+								                  content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true, wish.count),
 								                  itemType: 'wish-edit',
 								                  className: cn + ' has-hover-slot-tooltip',
 								                  groupId: data.aggs[0].id,
@@ -416,17 +410,12 @@ define(['services/services', 'config'],
 								              ? 'wishes-even'
 								              : 'wishes-' + wish.count;
 
-							              var badge = (wish.count > 1)
-								              ? '<span class="badge badge-inverse badge-slot">' + wish.count + '</span>'
-								              : '';
-
 							              var wish = {
 								              start: Math.round(wish.start * 1000),
 								              end: Math.round(wish.end * 1000),
 								              group: title,
 								              groupName: name,
-								              content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true) +
-								              badge,
+								              content: this.tooltip({start: wish.start, end: wish.end, wish: wish.count}, true, wish.count),
 								              itemType: 'wish-view',
 								              className: cn + ' has-hover-slot-tooltip',
 								              groupId: data.aggs[0].id,

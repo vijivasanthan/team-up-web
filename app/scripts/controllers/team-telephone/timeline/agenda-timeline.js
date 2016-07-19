@@ -421,7 +421,7 @@ define(
             item.content = Sloter.tooltip({
               start: moment(item.start).unix(),
               end: moment(item.end).unix()
-            }, true);
+            }, true, item.wish || 0);
             visDataSet.update(item);
           }
         };
@@ -1497,8 +1497,6 @@ define(
         {
           $rootScope.planboardSync.clear();
           var values = item;
-          
-          console.error("values timelineChanging ->", values);
 
           $scope.$apply(
             function ()
@@ -1506,14 +1504,13 @@ define(
               item.content = Sloter.tooltip({
                                  start: moment(item.start).unix(),
                                  end: moment(item.end).unix()
-                               }, true);
+                               }, true, values.wish || 0);
 
               // change hover tooltip to constant tooltip
               if (item.className)
               { // won't have if created by ctrl/shift-drag
                 item.className = item.className.replace('has-hover-slot-tooltip', 'has-slot-tooltip');
               }
-
               callback(item);
 
               $scope.slot = {
@@ -1531,6 +1528,14 @@ define(
                 recursive: values.recursive,
                 id: values.id
               };
+
+              if(values.wish)
+              {
+                $scope.slot.groupId = values.groupId;
+                $scope.slot.groupName = values.groupName;
+                $scope.slot.wish = values.wish
+              }
+              console.error("$scope.slot ->", $scope.slot.end.date);
               $scope.showDuration();
             }
           );
@@ -2421,6 +2426,7 @@ define(
 
           if(! formatted)
           {
+            console.error("slot ->", slot.end.date);
             var formattedSlot = {
               start: ($rootScope.browser.mobile) ?
               new Date(slot.start.datetime).getTime() / 1000 :
@@ -2431,6 +2437,8 @@ define(
             };
           }
           else formattedSlot = Object.assign({}, formattedSlot, formatted);
+
+          console.error("formatted end->", formattedSlot.end);
           formattedSlot.id = slot.groupId || $scope.current.group;
           formattedSlot.recurring = slot.recursive;
           formattedSlot.wish = wishAmount.toString();
