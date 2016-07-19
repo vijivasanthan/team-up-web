@@ -1256,8 +1256,8 @@ define(
         {
           CurrentSelection.local = $scope.timeline.current.group;
           var periods = {
-            start: ($scope.data.periods.start / 1000),
-            end: ($scope.data.periods.end / 1000)
+            start: parseInt($scope.data.periods.start / 1000),
+            end: parseInt($scope.data.periods.end / 1000)
           };
 
           Teams.getTeamTelephoneOptions($scope.timeline.current.group)
@@ -2152,8 +2152,6 @@ define(
 
           var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
 
-          
-          console.error("values change ->", values);
           if (!direct)
           {
             changed = {
