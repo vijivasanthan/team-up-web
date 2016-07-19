@@ -10,6 +10,8 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.wish.view || views.wish.edit') {{ slot.groupName }} &nbsp;
 			span.duration.label.label-info {{ duration}}
+		h4(ng-show='views.wish.add') {{ ui.teamup.amountNeeded }} &nbsp;
+			span.duration.label.label-info {{ duration}}
 		h4(ng-show='views.member') {{slot.member|convertUserIdToName}} 
 			span.duration.label.label-info {{ duration}}
 		hr
@@ -105,7 +107,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			.form-group.has-feedback.dater(ng-show='views.group || views.member || views.wish.view')
 				input.form-control.input-sm(name='date-end', type='text', ng-model='slot.end.date', disabled='disabled')
 				i.glyphicon.glyphicon-calendar.form-control-feedback
-			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish.edit')
+			.form-group.has-feedback.timer(ng-show='views.slot.add || views.slot.edit || views.wish.edit || views.wish.add')
 				input.form-control.input-sm(name='time-end',
 				type='text',
 				ng-model='slot.end.time',
@@ -138,7 +140,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				i(ng-show="(slot.diff < 0)") {{slot.diff.toString().substr(1) | i18n_spec:'planboard.lessPeople'}}
 				i(ng-show="(slot.diff == 0)") {{ui.agenda.samePeople}}
 				i(ng-show="(slot.diff > 0)") {{slot.diff | i18n_spec:'planboard.morePeople'}}
-		.form-elements-group.wish-amount(ng-show='views.wish.edit')
+		.form-elements-group.wish-amount(ng-show='views.wish.edit || views.wish.add')
 			label {{ui.agenda.wished}}
 			input.input-mini(name='wish-count',
 			type='text',
@@ -155,7 +157,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			//	button.btn.btn-success(type='button',
 			//	ng-click='sendShortageMessage(slot)',
 			//	ng-hide='app.resources.role > 1') {{ui.agenda.sendMsgToMember}}
-			div(ng-show='views.slot.add', style="float: right")
+			div(ng-show='views.slot.add || views.wish.add', style="float: right")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnAdd("true", slot)') {{ui.agenda.add}}
 			div(ng-show='views.slot.edit' style="width: 250px;float: right; text-align: right; position: relative;")
@@ -184,10 +186,6 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 					section(id="groups-wish")
 				button.btn.btn-success(type='button',
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
-			div(ng-show='views.wish.add', style="float: right")
-				button.btn.btn-success(type='button',
-				ng-click='wisher(slot)')
-					| {{ ui.agenda.setWish }}
 			div(ng-show='views.wish.edit', style="float: right")
 				button.btn.btn-success(type='button',
 					ng-click='wisher(slot)')

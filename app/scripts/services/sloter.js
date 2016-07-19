@@ -9,7 +9,8 @@ define(['services/services', 'config'],
 			       '$rootScope',
 			       'Store',
 			       'moment',
-			       function($rootScope, Store, moment)
+			       '$location',
+			       function($rootScope, Store, moment, $location)
 			       {
 				       return {
 					       get: {
@@ -631,13 +632,14 @@ define(['services/services', 'config'],
 					       process: function(data, _config, divisions, routeUserId, privilage, routeUser, current, loggedUser)
 					       {
 						       var _this    = this,
-						           timedata = [];
+						           timedata = [],
+						           editableTimelines = $location.search().edit;
 
-						       if( data.wishes )
+						       if( editableTimelines === 'wish')
 						       {
 							       timedata = _this.editWishes(data, timedata, privilage);
 						       }
-						       else if( data.user )
+						       else if( editableTimelines === 'user' )
 						       {
 							       timedata = _this.user(data, timedata, _config, routeUserId, routeUser, loggedUser, current);
 						       }

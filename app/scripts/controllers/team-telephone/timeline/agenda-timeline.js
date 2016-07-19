@@ -1843,7 +1843,7 @@ define(
                 $scope.timeliner.refresh();
               }
             }
-            if(/<\/?[^>]*>/.test(item.group))
+            if(item.group.match($rootScope.ui.teamup.amountReachable))
             {
               callback(null);
               return;
@@ -1854,6 +1854,7 @@ define(
             if (values.recursive ||
               values.group.match($rootScope.ui.planboard.weeklyPlanning) ||
               values.group === $rootScope.ui.planboard.myWeeklyPlanning ||
+              values.group.match($rootScope.ui.teamup.amountNeeded) ||
               (new Date(values.start).getTime() >= now && new Date(values.end).getTime() > now))
             {
                 // cancel adding if not own planning
@@ -1872,19 +1873,19 @@ define(
                   return
                 }
 
-                // if not a planner, the others don't have a hyperlink
-                // check for locale strings in groupId
-                // (will break if someone's name matches)
-                // TODO: this is silly, use an exposed attribute with visJS ASAP
-                if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
-                  groupId && !groupId.match($rootScope.ui.planboard.myPlanning) &&
-                  !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) &&
-                  !groupId.match($rootScope.ui.planboard.planning) &&
-                  !groupId.match($rootScope.ui.planboard.weeklyPlanning))
-                {
-                  callback(null);
-                  return;
-                }
+                //// if not a planner, the others don't have a hyperlink
+                //// check for locale strings in groupId
+                //// (will break if someone's name matches)
+                //// TODO: this is silly, use an exposed attribute with visJS ASAP
+                //if ($scope.currentUser && $scope.currentUser.rolenumber > 1 &&
+                //  groupId && !groupId.match($rootScope.ui.planboard.myPlanning) &&
+                //  !groupId.match($rootScope.ui.planboard.myWeeklyPlanning) &&
+                //  !groupId.match($rootScope.ui.planboard.planning) &&
+                //  !groupId.match($rootScope.ui.planboard.weeklyPlanning))
+                //{
+                //  callback(null);
+                //  return;
+                //}
 
                 //check an item in the newSlot and remove it if there's already an old item
                 if (newSlot.length >= 1)
@@ -1892,29 +1893,21 @@ define(
                   visDataSet.remove(newSlot[0]);
                   newSlot.splice(0, 1);
                 }
-
                 newSlot.push(item.id);
-
                 //update values with the last drawn item in the timeline
                 values = item;
-                var element = angular.element(values.content);
 
                 $scope.$apply(
                   function ()
                   {
                     var id = item.id;
 
-                    // Insert element, fixes IE9 not displaying on new slot.
-                    // The span.secret gives no height, and changing it messes up other slots.
-                    // This should only be applied once.
-                    // angular.element('.timeline-event-selected > .timeline-event-content > span.secret')
-                    //   .before("<div class='time-tip' style='padding: 0;'></div>");
-
                     if ($scope.timeline.main)
                     {
                       $rootScope.$broadcast('resetPlanboardViews');
 
-                      $scope.views.slot.add = true;
+                      if(values.group.match($rootScope.ui.teamup.amountNeeded)) $scope.views.wish.add = true;
+                      else $scope.views.slot.add = true;
                     }
                     else
                     {
@@ -1956,7 +1949,11 @@ define(
               $rootScope.notifier.error($rootScope.ui.task.startLaterThanEnd);
               return;
             }
+            formatSlot(nowStamp, now);
+          }
 
+          function formatSlot(nowStamp, now)
+          {
             var start = ($rootScope.browser.mobile) ?
               Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
               moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix();
@@ -1993,9 +1990,11 @@ define(
               values = {
                 start: start,
                 end: end,
-                recursive: (slot.recursive) ? true : false,
-                text: slot.state
+                recursive: slot.recursive
               };
+
+              if(slot.state) values.text = slot.state
+              else if(slot.wish) values.wish  = slot.wish;
 
               console.error("valid slot ->", values);
 
@@ -2005,13 +2004,27 @@ define(
               if ((values.start * 1000) + 60000 * 2 < now && ! values.recursive)
               {
                 $rootScope.notifier.error($rootScope.ui.agenda.pastAdding);
-
                 $scope.timeliner.refresh();
               }
               else
               {
                 $rootScope.statusBar.display($rootScope.ui.agenda.addTimeSlot);
-                addSlot(values);
+                if(slot.wish)
+                {
+                  $scope.wisher(
+                    values,
+                    false,
+                    values,
+                    function()
+                    {
+                      $rootScope.$broadcast('resetPlanboardViews');
+                      newSlot = [];
+                      (callback && callback());
+                      $scope.timeliner.refresh();
+                      $rootScope.planboardSync.start();
+                    })
+                }
+                else addSlot(values);
               }
             }
           }
@@ -2054,7 +2067,8 @@ define(
 
           // Check if groupId matches selected locale week strings
           if (groupId &&
-            ((groupId === $rootScope.ui.planboard.myWeeklyPlanning) ||
+            (values.group.match($rootScope.ui.teamup.weekly) ||
+            (groupId === $rootScope.ui.planboard.myWeeklyPlanning) ||
             groupId.match($rootScope.ui.planboard.weeklyPlanning)))
           {
             recursive = true;
@@ -2071,8 +2085,7 @@ define(
               time: moment(values.end).format(config.app.formats.time),
               datetime: convertDateTimeToLocal(values.end)
             },
-            recursive: recursive,
-            state: 'com.ask-cs.State.Available'
+            recursive: recursive
           };
 
           if(! item.type || item.type !== 'range')
@@ -2086,19 +2099,26 @@ define(
                                           start: moment(item.start).unix(),
                                           end: moment(item.end).unix()
                                         }, true);
-
           $scope.showDuration();
 
           $scope.original = {
             start: new Date(values.start),
             end: new Date(values.end),
-            recursive: $scope.slot.recursive,
-            state: $scope.slot.state
+            recursive: $scope.slot.recursive
           };
 
-          item.state = $scope.slot.state;
+          if(values.group.match($rootScope.ui.teamup.amountNeeded))
+          {
+            $scope.slot.wish = "1";
+            item.className = 'wishes-1';
+          }
+          else {
+            $scope.slot.state = 'com.ask-cs.State.Available';
+            $scope.original.state = $scope.slot.state;
+            item.state = $scope.slot.state;
+            item.className = $scope.timeline.config.states[item.state].className;
+          }
           item.recursive = recursive;
-          item.className = $scope.timeline.config.states[item.state].className;
           item.className += ' has-slot-tooltip';
 
           // make sure that the user can modify the element
@@ -2384,10 +2404,11 @@ define(
         /**
          * Set wish
          */
-        $scope.wisher = function (slot, remove)
+        $scope.wisher = function (slot, remove, formatted, callback)
         {
           var wishAmount = parseInt(slot.wish);
           var message = $rootScope.ui.agenda.wishChanged;
+          var formattedSlot = {};
           if(! (wishAmount >= 0 && wishAmount <= 30) )
             return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
           if(remove)
@@ -2395,40 +2416,41 @@ define(
             wishAmount = 0;
             message = $rootScope.ui.agenda.wishRemoved;
           }
+          if(! callback) callback = _callback;
 
           $rootScope.statusBar.display($rootScope.ui.agenda.changingWish);
 
-          var formattedSlot = {
-            id: slot.groupId,
-            start: ($rootScope.browser.mobile) ?
-            new Date(slot.start.datetime).getTime() / 1000 :
-              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
-            end: ($rootScope.browser.mobile) ?
-            new Date(slot.end.datetime).getTime() / 1000 :
-              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
-            recursive: slot.recursive,
-            wish: wishAmount
-          };
+          if(! formatted)
+          {
+            var formattedSlot = {
+              start: ($rootScope.browser.mobile) ?
+              new Date(slot.start.datetime).getTime() / 1000 :
+                moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
+              end: ($rootScope.browser.mobile) ?
+              new Date(slot.end.datetime).getTime() / 1000 :
+                moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix()
+            };
+          }
+          else formattedSlot = Object.assign({}, formattedSlot, formatted);
+          formattedSlot.id = slot.groupId || $scope.current.group;
+          formattedSlot.recurring = slot.recursive;
+          formattedSlot.wish = wishAmount.toString();
 
           Slots.setWish(formattedSlot)
-               .then(
-                 function (result)
-                 {
-                   $rootScope.$broadcast('resetPlanboardViews');
+               .then(callback);
 
-                   if (result.error)
-                   {
-                     $rootScope.notifier.error($rootScope.ui.agenda.wisher);
-                     console.warn('error ->', result);
-                   }
-                   else
-                   {
-                     $rootScope.notifier.success(message);
-                   }
+          function _callback(result)
+          {
+            $rootScope.$broadcast('resetPlanboardViews');
 
-                   $scope.timeliner.refresh();
-                 }
-               );
+            if (result.error)
+            {
+              $rootScope.notifier.error($rootScope.ui.agenda.wisher);
+              console.warn('error ->', result);
+            }
+            else $rootScope.notifier.success(message);
+            $scope.timeliner.refresh();
+          }
         };
 
         /**

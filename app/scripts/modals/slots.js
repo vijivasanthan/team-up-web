@@ -117,7 +117,7 @@ define(['services/services', 'config'],
               start: options.start,
               end: options.end,
               wish: options.wish,
-              recurring: options.recursive
+              recurring: options.recursive || options.recurring
             };
           var wishesResource = Slots.prototype.resourceWishes();
           wishesResource.save(
