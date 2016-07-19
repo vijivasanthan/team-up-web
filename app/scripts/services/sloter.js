@@ -656,7 +656,7 @@ define(['services/services', 'config'],
 							       }
 						       }
 
-						       if( _config.wishes && data.aggs && ! data.wishes ) //&& !data.wishes
+						       if( _config.wishes && data.aggs && editableTimelines === 'user')
 						       {
 							       timedata = _this.wishes(data, timedata, privilage);
 						       }
