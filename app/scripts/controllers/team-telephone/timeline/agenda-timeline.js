@@ -1407,6 +1407,14 @@ define(
             state: selectedItem.state
           };
 
+          if(! _.isUndefined(selectedItem.wish))
+          {
+            $scope.original.wish = selectedItem.wish;
+          }
+
+          // console.log("selecteditem", selectedItem);
+          // console.log("$scope.original", $scope.original);
+
           if ($scope.timeline.main)
           {
             $rootScope.$broadcast('resetPlanboardViews');
@@ -2162,6 +2170,9 @@ define(
 
           var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
 
+          console.log("original", original);
+          console.log("slot", slot);
+
           if (!direct)
           {
             changed = {
@@ -2180,7 +2191,8 @@ define(
                 new Date(slot.end.datetime).getTime() :
                 +moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
               recursive: slot.recursive,
-              state: slot.state
+              state: slot.state,
+              wish: slot.wish
             };
 
             // Invalid timeslot?
@@ -2231,47 +2243,66 @@ define(
 
           var change = function (changed, added)
           {
+
+            console.log("yeey change ", changed);
+            console.log("yeey added ", added);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingSlot);
+            if(! _.isUndefined(changed.wish) && changed.wish >= 0)
+            {
+              console.log("this is a wish change");
+            }
+            else
+            {
+              Slots.change(
+                $scope.original,
+                changed,
+                (slot && slot.member) ? slot.member : $scope.timeline.user.id
+              ).then(
+                function (result)
+                {
+                  updateLoggedUser($scope.timeline.user.id);
 
-            Slots.change(
-              $scope.original,
-              changed,
-              (slot && slot.member) ? slot.member : $scope.timeline.user.id
-            ).then(
-              function (result)
-              {
-                updateLoggedUser($scope.timeline.user.id);
-
-                callback(
-                  result,
-                  {
-                    error: $rootScope.ui.agenda.errorChange,
-                    success: $rootScope.ui.agenda.slotChanged
-                  },
-                  added
-                );
-              }
-            );
+                  callback(
+                    result,
+                    {
+                      error: $rootScope.ui.agenda.errorChange,
+                      success: $rootScope.ui.agenda.slotChanged
+                    },
+                    added
+                  );
+                }
+              );
+            }
           };
 
           var add = function (options)
           {
-            Slots.add(
-              options,
-              $scope.timeline.user.id
-            ).then(
-              function (result)
-              {
-                updateLoggedUser($scope.timeline.user.id);
-                callback(
-                  result,
-                  {
-                    error: $rootScope.ui.agenda.errorAdd,
-                    success: $rootScope.ui.agenda.slotChanged
-                  }
-                );
-              }
-            );
+            console.log("options", options);
+            if(! _.isUndefined(options.wish) && options.wish >= 0)
+            {
+              console.log("this is a wish");
+            }
+            else
+            {
+              delete options.wish;
+              Slots.add(
+                options,
+                $scope.timeline.user.id
+              ).then(
+                function (result)
+                {
+                  updateLoggedUser($scope.timeline.user.id);
+                  callback(
+                    result,
+                    {
+                      error: $rootScope.ui.agenda.errorAdd,
+                      success: $rootScope.ui.agenda.slotChanged
+                    }
+                  );
+                }
+              );
+            }
+
           };
 
           var changeAndAdd = function (changed, added)
@@ -2282,7 +2313,8 @@ define(
                 start: Math.abs(Math.floor(added.start / 1000)),
                 end: Math.abs(Math.floor(added.end / 1000)),
                 recursive: (added.recursive) ? true : false,
-                text: added.state
+                text: added.state,
+                wish: added.wish
               }
             );
           };
@@ -2323,13 +2355,15 @@ define(
                       start: $scope.original.start,
                       end: now,
                       recursive: $scope.original.recursive,
-                      state: $scope.original.state
+                      state: $scope.original.state,
+                      wish: $scope.original.wish
                     },
                     {
                       start: changed.start + (now - $scope.original.start),
                       end: changed.end,
                       recursive: changed.recursive,
-                      state: changed.state
+                      state: changed.state,
+                      wish: changed.wish
                     }
                   );
                 }
@@ -2350,14 +2384,16 @@ define(
 
                 if (original.start < now && original.end > now)
                 {
-                  if (changed.state == original.state)
+                  if (changed.state == original.state ||
+                    changed.state == original.state)
                   {
                     change(
                       {
                         start: $scope.original.start,
                         end: changed.end,
                         recursive: changed.recursive,
-                        state: changed.state
+                        state: changed.state,
+                        wish: changed.wish
                       }
                     );
                   }
@@ -2368,13 +2404,15 @@ define(
                         start: $scope.original.start,
                         end: now,
                         recursive: $scope.original.recursive,
-                        state: $scope.original.state
+                        state: $scope.original.state,
+                        wish: $scope.original.wish
                       },
                       {
                         start: now,
                         end: changed.end,
                         recursive: changed.recursive,
-                        state: changed.state
+                        state: changed.state,
+                        wish: changed.wish
                       }
                     );
                   }
@@ -2387,7 +2425,8 @@ define(
                       start: now,
                       end: changed.end,
                       recursive: changed.recursive,
-                      state: changed.state
+                      state: changed.state,
+                      wish: changed.wish
                     }
                   );
                 }
