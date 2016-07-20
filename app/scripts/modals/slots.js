@@ -99,6 +99,16 @@ define(['services/services', 'config'],
             params,
             function (result)
             {
+              if(_.isArray(result) && result.length)
+              {
+                result = result
+                  .map(
+                    function (slot) {
+                      slot.recursive = (slot.recurring) ? true : false;
+                      slot.wish = parseInt(slot.wish);
+                      return slot;
+                    });
+              }
               deferred.resolve(result);
             },
             function (error)
@@ -628,17 +638,6 @@ define(['services/services', 'config'],
                       }).then(
                       function (wishes)
                       {
-                        wishes = wishes
-                          .filter(
-                            function (wish) {
-                              return wish.count != 0;
-                            })
-                          .map(
-                            function (wish) {
-                              wish.recursive = (wish.recurring) ? true : false;
-                              return wish;
-                            });
-
                         _aggs.wishes = wishes;
 
                         if (options.layouts.members)

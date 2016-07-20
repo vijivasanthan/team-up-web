@@ -2115,7 +2115,7 @@ define(
 
           if(values.group.match($rootScope.ui.teamup.amountNeeded))
           {
-            $scope.slot.wish = "1";
+            $scope.slot.wish = 1;
             item.className = 'wishes-1';
           }
           else {
