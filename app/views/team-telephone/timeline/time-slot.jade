@@ -142,8 +142,11 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				i(ng-show="(slot.diff > 0)") {{slot.diff | i18n_spec:'planboard.morePeople'}}
 		.form-elements-group.wish-amount(ng-show='views.wish.edit || views.wish.add')
 			label {{ui.agenda.wished}}
-			input.input-mini(name='wish-count',
-			type='text',
+			input.form-control.input-mini(type="number",
+			min="1",
+			step="1",
+			max="30"
+			name='wish-count',
 			ng-model='slot.wish')
 		.form-elements-group.wish-amount(ng-show='views.wish.view && slot.wish > 1')
 			label {{ui.agenda.wished}}

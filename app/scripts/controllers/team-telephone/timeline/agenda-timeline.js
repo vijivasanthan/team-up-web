@@ -2413,7 +2413,7 @@ define(
           var wishAmount = parseInt(slot.wish);
           var message = $rootScope.ui.agenda.wishChanged;
           var formattedSlot = {};
-          if(! (wishAmount >= 0 && wishAmount <= 30) )
+          if(! (wishAmount >= 1 && wishAmount <= 30) )
             return $rootScope.notifier.error($rootScope.ui.validation.wish.integer);
           if(remove)
           {
