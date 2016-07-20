@@ -421,7 +421,7 @@ define(
             item.content = Sloter.tooltip({
               start: moment(item.start).unix(),
               end: moment(item.end).unix()
-            }, true, item.wish || 0);
+            }, true, slot.wish || item.wish || 0);
             visDataSet.update(item);
           }
         };

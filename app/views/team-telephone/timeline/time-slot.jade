@@ -147,7 +147,8 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			step="1",
 			max="30"
 			name='wish-count',
-			ng-model='slot.wish')
+			ng-model='slot.wish', 
+			ng-change='redrawSlot(slot);')
 		.form-elements-group.wish-amount(ng-show='views.wish.view && slot.wish > 1')
 			label {{ui.agenda.wished}}
 			input.form-control.input-mini(name='wish-count',
