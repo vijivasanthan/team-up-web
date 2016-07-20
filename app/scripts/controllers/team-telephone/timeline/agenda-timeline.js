@@ -537,6 +537,16 @@ define(
                   }
                 }
 
+                //remove wish slot
+                if(item.wish)
+                {
+                  var formatted = angular.copy(item);
+                  formatted.start = parseInt(item.start / 1000);
+                  formatted.end = parseInt(item.end / 1000);
+                  $scope.wisher(item, true, formatted);
+                  return;
+                }
+
                 var successCallback = function (result)
                 {
                   $rootScope.$broadcast('resetPlanboardViews');
@@ -819,7 +829,6 @@ define(
             if ($scope.timeline.main)
             {
               visDataSet.clear();
-              console.error("$scope.data ->", $scope.data);
               visDataSet.add(
                 Sloter.process(
                   $scope.data,
@@ -1476,7 +1485,6 @@ define(
                 case 'wish-view':
                 case 'wish-edit':
                 case 'wish-add':
-                  console.log("selectedItem", selectedItem);
                   $scope.slot.wish = selectedItem.wish;
                   $scope.slot.group = selectedItem.group;
                   $scope.slot.groupId = selectedItem.groupId;
@@ -1535,7 +1543,6 @@ define(
                 $scope.slot.groupName = values.groupName;
                 $scope.slot.wish = values.wish
               }
-              console.error("$scope.slot ->", $scope.slot.end.date);
               $scope.showDuration();
             }
           );
@@ -2002,8 +2009,6 @@ define(
               if(slot.state) values.text = slot.state
               else if(slot.wish) values.wish  = slot.wish;
 
-              console.error("valid slot ->", values);
-
               /**
                * Two minutes waiting time to take an action
                */
@@ -2426,7 +2431,6 @@ define(
 
           if(! formatted)
           {
-            console.error("slot ->", slot.end.date);
             var formattedSlot = {
               start: ($rootScope.browser.mobile) ?
               new Date(slot.start.datetime).getTime() / 1000 :
@@ -2437,8 +2441,6 @@ define(
             };
           }
           else formattedSlot = Object.assign({}, formattedSlot, formatted);
-
-          console.error("formatted end->", formattedSlot.end);
           formattedSlot.id = slot.groupId || $scope.current.group;
           formattedSlot.recurring = slot.recursive;
           formattedSlot.wish = wishAmount.toString();

@@ -111,7 +111,7 @@ define(['services/services', 'config'],
 							       content += ' / ' + periods.state;
 						       }
 
-						       if(badge) badge = '<span class="badge badge-inverse badge-slot">' + badge + '</span>';
+						       if(badge && parseInt(badge) > 1) badge = '<span class="badge badge-inverse badge-slot">' + badge + '</span>';
 						       else badge = '';
 
 						       if( tooltips )
@@ -154,9 +154,6 @@ define(['services/services', 'config'],
 							              timedata = _this.addLoading(data, timedata, [planning, weekPlanning]);
 						              }.bind(this)
 						       );
-
-						       console.log("timedata wish", timedata);
-
 						       return timedata;
 					       },
 

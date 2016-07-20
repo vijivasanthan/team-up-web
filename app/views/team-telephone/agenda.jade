@@ -16,7 +16,8 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 				#timeline
 					div#timeline-toolbar
 						div#toolbar_left.pull-left(style="width: 75%;")
-							select.form-control.pull-left(ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1)',
+							select.form-control.pull-left(style="margin-right: 10px;"
+							ng-show='(app.resources.teamUuids.length > 1 || app.resources.role == 1)',
 							ng-model='timeline.current.group',
 							ng-options='group.uuid as group.name for group in groups | orderBy:"name"',
 							ng-selected='timeline.current.group',
@@ -37,7 +38,7 @@ section#planboard(ng-controller='agenda-timeline', scroll)
 							//	span.badge.badge-inset
 							//		| {{wish}}
 							//	| &nbsp;{{ui.agenda.requiredPeople}}
-							h3.pull-left(style="font-weight: normal; margin: 8px 0 0 5px;") {{ timeline.current.group | getGroupNameById | toTitleCase}}
+							h3.pull-left(style="font-weight: normal; margin: 8px 0 0 0;") {{ timeline.current.group | getGroupNameById | toTitleCase}}
 						
 						div(class="{{ (browser.mobile) && 'pull-left' || 'pull-right' }}",
 						style="{{ (browser.mobile) && 'margin-left: -10px;' }}")
