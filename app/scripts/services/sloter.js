@@ -621,7 +621,7 @@ define(['services/services', 'config'],
 						           timedata = [],
 						           editableTimelines = $location.search().edit;
 
-						       if( editableTimelines === 'wish')
+						       if( data.aggs && editableTimelines === 'wish')
 						       {
 							       timedata = _this.editWishes(data, timedata, privilage);
 						       }

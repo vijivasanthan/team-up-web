@@ -1248,7 +1248,6 @@ define(
               start: parseInt($scope.data.periods.start / 1000),
               end: parseInt($scope.data.periods.end / 1000)
             });
-          console.error("123 ->", 123);
 
           return $q.all([aggs, wishes])
                    .then(
