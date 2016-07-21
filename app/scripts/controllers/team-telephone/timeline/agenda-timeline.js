@@ -2170,9 +2170,6 @@ define(
 
           var values = visDataSet.get($scope.self.timeline.getSelection()[0]);
 
-          console.log("original", original);
-          console.log("slot", slot);
-
           if (!direct)
           {
             changed = {
@@ -2191,8 +2188,7 @@ define(
                 new Date(slot.end.datetime).getTime() :
                 +moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
               recursive: slot.recursive,
-              state: slot.state,
-              wish: slot.wish
+              state: slot.state
             };
 
             // Invalid timeslot?
@@ -2243,66 +2239,47 @@ define(
 
           var change = function (changed, added)
           {
-
-            console.log("yeey change ", changed);
-            console.log("yeey added ", added);
             $rootScope.statusBar.display($rootScope.ui.agenda.changingSlot);
-            if(! _.isUndefined(changed.wish) && changed.wish >= 0)
-            {
-              console.log("this is a wish change");
-            }
-            else
-            {
-              Slots.change(
-                $scope.original,
-                changed,
-                (slot && slot.member) ? slot.member : $scope.timeline.user.id
-              ).then(
-                function (result)
-                {
-                  updateLoggedUser($scope.timeline.user.id);
 
-                  callback(
-                    result,
-                    {
-                      error: $rootScope.ui.agenda.errorChange,
-                      success: $rootScope.ui.agenda.slotChanged
-                    },
-                    added
-                  );
-                }
-              );
-            }
+            Slots.change(
+              $scope.original,
+              changed,
+              (slot && slot.member) ? slot.member : $scope.timeline.user.id
+            ).then(
+              function (result)
+              {
+                updateLoggedUser($scope.timeline.user.id);
+
+                callback(
+                  result,
+                  {
+                    error: $rootScope.ui.agenda.errorChange,
+                    success: $rootScope.ui.agenda.slotChanged
+                  },
+                  added
+                );
+              }
+            );
           };
 
           var add = function (options)
           {
-            console.log("options", options);
-            if(! _.isUndefined(options.wish) && options.wish >= 0)
-            {
-              console.log("this is a wish");
-            }
-            else
-            {
-              delete options.wish;
-              Slots.add(
-                options,
-                $scope.timeline.user.id
-              ).then(
-                function (result)
-                {
-                  updateLoggedUser($scope.timeline.user.id);
-                  callback(
-                    result,
-                    {
-                      error: $rootScope.ui.agenda.errorAdd,
-                      success: $rootScope.ui.agenda.slotChanged
-                    }
-                  );
-                }
-              );
-            }
-
+            Slots.add(
+              options,
+              $scope.timeline.user.id
+            ).then(
+              function (result)
+              {
+                updateLoggedUser($scope.timeline.user.id);
+                callback(
+                  result,
+                  {
+                    error: $rootScope.ui.agenda.errorAdd,
+                    success: $rootScope.ui.agenda.slotChanged
+                  }
+                );
+              }
+            );
           };
 
           var changeAndAdd = function (changed, added)
@@ -2313,8 +2290,7 @@ define(
                 start: Math.abs(Math.floor(added.start / 1000)),
                 end: Math.abs(Math.floor(added.end / 1000)),
                 recursive: (added.recursive) ? true : false,
-                text: added.state,
-                wish: added.wish
+                text: added.state
               }
             );
           };
@@ -2355,15 +2331,13 @@ define(
                       start: $scope.original.start,
                       end: now,
                       recursive: $scope.original.recursive,
-                      state: $scope.original.state,
-                      wish: $scope.original.wish
+                      state: $scope.original.state
                     },
                     {
                       start: changed.start + (now - $scope.original.start),
                       end: changed.end,
                       recursive: changed.recursive,
-                      state: changed.state,
-                      wish: changed.wish
+                      state: changed.state
                     }
                   );
                 }
@@ -2384,16 +2358,14 @@ define(
 
                 if (original.start < now && original.end > now)
                 {
-                  if (changed.state == original.state ||
-                    changed.state == original.state)
+                  if (changed.state == original.state)
                   {
                     change(
                       {
                         start: $scope.original.start,
                         end: changed.end,
                         recursive: changed.recursive,
-                        state: changed.state,
-                        wish: changed.wish
+                        state: changed.state
                       }
                     );
                   }
@@ -2404,15 +2376,13 @@ define(
                         start: $scope.original.start,
                         end: now,
                         recursive: $scope.original.recursive,
-                        state: $scope.original.state,
-                        wish: $scope.original.wish
+                        state: $scope.original.state
                       },
                       {
                         start: now,
                         end: changed.end,
                         recursive: changed.recursive,
-                        state: changed.state,
-                        wish: changed.wish
+                        state: changed.state
                       }
                     );
                   }
@@ -2425,8 +2395,7 @@ define(
                       start: now,
                       end: changed.end,
                       recursive: changed.recursive,
-                      state: changed.state,
-                      wish: changed.wish
+                      state: changed.state
                     }
                   );
                 }
@@ -2498,6 +2467,44 @@ define(
             else $rootScope.notifier.success(message);
             $scope.timeliner.refresh();
           }
+        };
+
+	      /**
+         * Change wish slot
+         * A wish slot has no id, so if the wish slot change in less time then the original
+         * the old timeslots must be wish 0 again
+         * @param original the original slot
+         * @param changed the newly changed slot
+	       */
+        $scope.wishOnChange = function(original, changed)
+        {
+          var promises       = [],
+              slotify = function(slot, start, end)
+              {
+                return Object.assign({}, slot, {start: start, end: end, wish: 0});
+              },
+              formatTime = function(slot)
+              {
+                slot.start = ($rootScope.browser.mobile) ?
+                new Date(slot.start.datetime).getTime() / 1000 :
+                  moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix();
+                slot.end = ($rootScope.browser.mobile) ?
+                new Date(slot.end.datetime).getTime() / 1000 :
+                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
+                return slot;
+              },
+              changedSlot = angular.copy(changed),
+              originalSlot = Object.assign({}, original, {start: parseInt(original.start / 1000), end: parseInt(original.end / 1000), id: original.groupdId || $scope.current.group });
+          changedSlot = Object.assign({}, changedSlot, formatTime(changedSlot), {id: changed.groupdId || $scope.current.group });
+          //check if the changed slot is smaller timewise than the original
+          if(originalSlot.start < changedSlot.start ) promises.push(slotify(changedSlot, originalSlot.start, changedSlot.start));
+          if(originalSlot.end > changedSlot.end) promises.push(slotify(changedSlot, changedSlot.end, originalSlot.end));
+          if(promises.length) $q.all(promises.map(function(slot) { return Slots.setWish(slot); }))
+                                .then(function()
+                                      {
+                                        $scope.wisher(changedSlot, false, changedSlot);
+                                      });
+          else $scope.wisher(changedSlot, false, changedSlot);
         };
 
         /**

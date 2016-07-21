@@ -192,7 +192,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 				ng-click='timelineOnChange("true", original, slot)') {{ui.agenda.change}}
 			div(ng-show='views.wish.edit', style="float: right")
 				button.btn.btn-success(type='button',
-					ng-click='timelineOnChange("true", original, slot)')
+					ng-click='wishOnChange(original, slot)')
 						| {{ui.agenda.change}}
 				button.btn.btn-danger(type='button',
 					style='margin-right: 5px;'
