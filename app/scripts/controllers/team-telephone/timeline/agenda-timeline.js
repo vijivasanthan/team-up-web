@@ -2483,19 +2483,14 @@ define(
               {
                 return Object.assign({}, slot, {start: start, end: end, wish: 0});
               },
-              formatTime = function(slot)
-              {
-                slot.start = ($rootScope.browser.mobile) ?
-                new Date(slot.start.datetime).getTime() / 1000 :
-                  moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix();
-                slot.end = ($rootScope.browser.mobile) ?
-                new Date(slot.end.datetime).getTime() / 1000 :
-                  moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
-                return slot;
+              unixTime = function(dateTime, format) { return moment(dateTime, format).unix(); },
+              formatTime = function(slot) {
+                return ($rootScope.browser.mobile) ? unixTime(slot.datetime) : unixTime(slot.date +' '+ slot.time, config.app.formats.datetime);
               },
               changedSlot = angular.copy(changed),
-              originalSlot = Object.assign({}, original, {start: parseInt(original.start / 1000), end: parseInt(original.end / 1000), id: original.groupdId || $scope.current.group });
-          changedSlot = Object.assign({}, changedSlot, formatTime(changedSlot), {id: changed.groupdId || $scope.current.group });
+              originalSlot = Object.assign({}, original, {start: unixTime(original.start), end: unixTime(original.end), id: original.groupdId || $scope.current.group });
+          changedSlot = Object.assign({}, changedSlot, {start: formatTime(changedSlot.start), end: formatTime(changedSlot.end), id: changed.groupdId || $scope.current.group });
+
           //check if the changed slot is smaller timewise than the original
           if(originalSlot.start < changedSlot.start ) promises.push(slotify(changedSlot, originalSlot.start, changedSlot.start));
           if(originalSlot.end > changedSlot.end) promises.push(slotify(changedSlot, changedSlot.end, originalSlot.end));
