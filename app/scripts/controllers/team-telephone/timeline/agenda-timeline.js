@@ -1704,13 +1704,13 @@ define(
             Profile.fetchUserData(userName);
           }
         };
-        
+
         /**
          * Add prefixed availability periods in agenda
          */
         $scope.setAvailability = function (availability, period)
         {
-          var now = unixTimeStamp(),
+          var now = Math.abs(Math.floor(moment().valueOf() / 1000)),
               hour = 60 * 60;
 
           var periods = {
@@ -1828,7 +1828,7 @@ define(
           $rootScope.planboardSync.clear();
           var values, groupId, recursive;
           var now = moment().valueOf(),
-              nowStamp = unixTimeStamp(now);
+              nowStamp = Math.abs(Math.floor(now / 1000));
 
           /**
            * Make view for new slot
@@ -2018,12 +2018,12 @@ define(
             }
 
             var start = ($rootScope.browser.mobile) ?
-              unixTimeStamp(slot.start.datetime) :
-              unixTimeStamp(slot.start.date +' '+ slot.start.time, config.app.formats.datetime);
+              Math.abs(Math.floor(new Date(slot.start.datetime).getTime() / 1000)) :
+              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix();
 
             var end = ($rootScope.browser.mobile) ?
-              unixTimeStamp(slot.end.datetime) :
-              unixTimeStamp(slot.end.date +' '+ slot.end.time, config.app.formats.datetime);
+              Math.abs(Math.floor(new Date(slot.end.datetime).getTime() / 1000)) :
+              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix();
 
             if (typeof start == "undefined" ||
               isNaN(start) ||
@@ -2311,8 +2311,8 @@ define(
             change(
               changed,
               {
-                start: unixTimeStamp(added.start),
-                end: unixTimeStamp(added.end),
+                start: Math.abs(Math.floor(added.start / 1000)),
+                end: Math.abs(Math.floor(added.end / 1000)),
                 recursive: (added.recursive) ? true : false,
                 text: added.state
               }
@@ -2455,11 +2455,11 @@ define(
           var formattedSlot = {
             id: slot.groupId,
             start: ($rootScope.browser.mobile) ?
-              unixTimeStamp(slot.start.datetime) :
-              unixTimeStamp(slot.start.date +' '+ slot.start.time, config.app.formats.datetime),
+            new Date(slot.start.datetime).getTime() / 1000 :
+              moment(slot.start.date +' '+ slot.start.time, config.app.formats.datetime).unix(),
             end: ($rootScope.browser.mobile) ?
-              unixTimeStamp(slot.end.datetime) :
-              unixTimeStamp(slot.end.date +' '+ slot.end.time, config.app.formats.datetime),
+            new Date(slot.end.datetime).getTime() / 1000 :
+              moment(slot.end.date +' '+ slot.end.time, config.app.formats.datetime).unix(),
             recursive: (!_.isUndefined(slot.recursive)),
             wish: slot.wish
           };
@@ -2565,8 +2565,8 @@ define(
             Slots.wishes(
               {
                 id: $scope.timeline.current.group,
-                start: unixTimeStamp($scope.data.periods.start),
-                end: unixTimeStamp($scope.data.periods.end)
+                start: $scope.data.periods.start / 1000,
+                end: $scope.data.periods.end / 1000
               }).then(
               function (wishes)
               {
