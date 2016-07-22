@@ -1256,8 +1256,8 @@ define(
         {
           CurrentSelection.local = $scope.timeline.current.group;
           var periods = {
-            start: ($scope.data.periods.start / 1000),
-            end: ($scope.data.periods.end / 1000)
+            start: moment($scope.data.periods.start).unix(),
+            end: moment($scope.data.periods.end).unix()
           };
 
           Teams.getTeamTelephoneOptions($scope.timeline.current.group)
