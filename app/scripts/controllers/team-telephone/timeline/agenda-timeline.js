@@ -1512,7 +1512,7 @@ define(
         {
           $rootScope.planboardSync.clear();
           var values = item;
-
+          console.error("values ->", values);
           $scope.$apply(
             function ()
             {
@@ -1541,6 +1541,7 @@ define(
                 },
                 state: values.state,
                 recursive: values.recursive,
+                wish: values.wish,
                 id: values.id
               };
 
@@ -2128,6 +2129,7 @@ define(
           if(values.group.match($rootScope.ui.teamup.amountNeeded))
           {
             $scope.slot.wish = 1;
+            item.wish = $scope.slot.wish;
             item.className = 'wishes-1';
           }
           else {
