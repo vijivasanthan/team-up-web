@@ -132,7 +132,7 @@ ng-show='views.slot.add || views.slot.edit || views.group || views.wish.view|| v
 			disabled='disabled',
 			ng-options='option as value for (option, value) in states',
 			ng-show='views.member')
-		.form-elements-group.rightest(ng-show='views.slot.add || views.wish.edit || views.wish.add')
+		.form-elements-group.rightest(ng-show='views.slot.add || views.wish.add')
 			label {{ui.agenda.reoccuring}}
 			input(type='checkbox', ng-model='slot.recursive')
 		.form-elements-group(ng-show='views.group')
