@@ -1512,7 +1512,6 @@ define(
         {
           $rootScope.planboardSync.clear();
           var values = item;
-          console.error("values ->", values);
           $scope.$apply(
             function ()
             {
@@ -2483,6 +2482,7 @@ define(
           var promises       = [],
               slotify = function(slot, start, end)
               {
+                //create slots with a wish amount of zero, who are not visible
                 return Object.assign({}, slot, {start: start, end: end, wish: 0});
               },
               unixTime = function(dateTime, format) { return moment(dateTime, format).unix(); },
@@ -2492,7 +2492,6 @@ define(
               changedSlot = angular.copy(changed),
               originalSlot = Object.assign({}, original, {start: unixTime(original.start), end: unixTime(original.end), id: original.groupdId || $scope.current.group });
           changedSlot = Object.assign({}, changedSlot, {start: formatTime(changedSlot.start), end: formatTime(changedSlot.end), id: changed.groupdId || $scope.current.group });
-
           //check if the changed slot is smaller timewise than the original
           if(originalSlot.start < changedSlot.start ) promises.push(slotify(changedSlot, originalSlot.start, changedSlot.start));
           if(originalSlot.end > changedSlot.end) promises.push(slotify(changedSlot, changedSlot.end, originalSlot.end));
