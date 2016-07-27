@@ -24,10 +24,10 @@ li(data-match-route='/team-telefoon/logs')
 		ng-click='nav("team-telefoon/logs")', ng-if='isTeamTelephoneTeam')
 		span.entypo &#59392;
 		| {{ ui.teamup.logs }}
-li.scenarioTab(data-match-route='/team-telefoon/scenario', show-hide-on-role)
+li.scenarioTab(data-match-route='/team-telefoon/scenario')
 	a(href='planboard#timelineTab',  data-toggle='tab',
 		ng-click='nav("team-telefoon/scenario")',
-		ng-if='app.domainPermission.teamSelfManagement && app.resources.role == 1 && isTeamTelephoneTeam')
+		ng-if='isTeamTelephoneTeam')
 		span.icomoon(data-icon='', aria-hidden='true')
 		|  Scenario
 li(data-match-route='/team-telefoon/create')

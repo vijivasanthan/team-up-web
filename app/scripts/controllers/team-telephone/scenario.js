@@ -6,7 +6,8 @@ define(
 
     controllers.controller(
       'scenario',
-      function ($scope, $rootScope, $filter, $location, TeamUp, CurrentSelection, Teams, data, $q)
+      function ($scope, $rootScope, $filter, $location, TeamUp,
+                CurrentSelection, Teams, data, $q, TeamTelefoon)
       {
         $rootScope.fixStyles();
         //TODO fix the localized string in this controller
@@ -19,7 +20,7 @@ define(
         self.currentTeam = setTeamIdToName(self.currentTeamId);
 
         //methods
-        self.fetch = fetch;
+        self.setCurrent = setCurrent;
         self.save = save;
         self.AddSelectedTeamsToTitle = AddSelectedTeamsToTitle;
 
@@ -29,38 +30,43 @@ define(
 
         function init()
         {
-          self.selectedTeams = [
-            _.find(data.teams, {uuid: self.currentTeamId})
-          ];
+          self.selectedTeams =
+            data.teams.filter(function(team) {
+              return team.uuid === self.currentTeamId;
+            });
         }
 
         /**
-         * Fetch team-telephone options
+         * Set current scenario, only if there is only one team selected
+         * timeout of 2milsec,
+         * because of the async nature team selection
          */
-        function fetch()
+        function setCurrent()
         {
-          CurrentSelection.local = self.currentTeamId;
-          self.currentTeam = setTeamIdToName(self.currentTeamId);
-          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
-
-          console.error("self.currentTeamId ->", self.currentTeamId);
-
-          if(self.currentTeamId === 'all')
-          {
-            self.currentTeam = $rootScope.ui.dashboard.everyone;
-            $rootScope.statusBar.off();
-          }
-          else
-          {
-            Teams.getTeamTelephoneOptions(self.currentTeamId)
-              .then(function (options)
+          setTimeout(function() {
+            if(self.selectedTeams.length === 1)
             {
-              show(self.data);
+              fetchByTeam(self.selectedTeams[0].uuid);
+            }
+            else self.data.scenario = null;
+          }, 200);
+        }
+
+        /**
+         * Fetch the current scenario of team
+         * if there is no scenario, the view variable will be null
+         * @param teamId the id of the selected team
+         */
+        function fetchByTeam(teamId)
+        {
+          CurrentSelection.local = teamId;
+          $rootScope.statusBar.display($rootScope.ui.teamup.refreshing);
+          TeamTelefoon.getScenario({teamId: teamId})
+            .then(function(scenario)
+            {
+              self.data.scenario = scenario.info && scenario || null;
               $rootScope.statusBar.off();
             })
-          }
-          
-
         }
 
         /**
@@ -73,7 +79,7 @@ define(
 
           if(! self.selectedTeams.length) return $rootScope.notifier.error($rootScope.ui.teamup.selectTeams);
           if (self.data.templates.length && !scernarioByTeam) return $rootScope.notifier.error("Kies een scenario");
-          
+
           var scenarioByTeamPromises = _.map(self.selectedTeams, function(team)
           {
             return TeamUp._('TTScenarioTemplateSave', {
@@ -102,7 +108,11 @@ define(
                 }
               });
 
-              if(! self.error) $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              if(! self.error)
+              {
+                setCurrent();
+                $rootScope.notifier.success($rootScope.ui.teamup.dataChanged);
+              }
               else
               {
                 var errorMessage = $filter('commaSeperatedWithEnding')(errors, $rootScope.ui.teamup.and, function(errorMessage)

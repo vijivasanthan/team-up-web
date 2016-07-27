@@ -577,7 +577,6 @@ define(
                   .then(
                     function(result)
                     {
-                      console.warn('result ->', result);
                       Session.clear();
                       ipCookie.remove('X-SESSION_ID');
 

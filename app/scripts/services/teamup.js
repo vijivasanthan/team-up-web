@@ -162,6 +162,16 @@ define(
                   isArray: true
                 },
 
+                TTscenarioGet : {
+                  method: 'GET',
+                  params: {
+                    first: 'teamTelephone',
+                    //optional second = teamId
+                    third: 'scenarioInfo'
+                    //optional scenarioId = scenarioId
+                  }
+                },
+
                 /**
                  * Get free phonenumbers
                  */

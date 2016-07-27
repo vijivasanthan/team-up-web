@@ -614,6 +614,7 @@ define(
           settings: 'settings'
         },
         teamup: {
+          currentScenario: 'Current scenario',
           noBackends: 'Logging in is temporarily unavailable',
           finished: 'Finished',
           missed: 'Missed',
@@ -1809,6 +1810,7 @@ define(
           settings: 'Einstellungen'
         },
         teamup: {
+          currentScenario: 'Current scenario',
           noBackends: 'Logging in is temporarily unavailable',
           finished: 'Finished',
           missed: 'Missed',
@@ -2988,6 +2990,7 @@ define(
           settings: 'instellingen'
         },
         teamup: {
+          currentScenario: 'Huidig scenario',
           noBackends: 'Inloggen is tijdelijk niet beschikbaar',
           finished: 'Afgerond',
           missed: 'Gemist',

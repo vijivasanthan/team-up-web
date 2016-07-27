@@ -13,7 +13,6 @@ define(
         var range,
             diff,
             newSlot = [];
-
         var visDataSet = new vis.DataSet();
         var visGroupsDataSet = new vis.DataSet();
 
@@ -1236,8 +1235,8 @@ define(
           var wishes = Slots.wishes(
             {
               id: $scope.timeline.current.group,
-              start: $scope.data.periods.start / 1000,
-              end: $scope.data.periods.end / 1000
+              start: unixTimeStamp($scope.data.periods.start),
+              end: unixTimeStamp($scope.data.periods.end)
             });
 
           return $q.all([aggs, wishes])
@@ -1249,6 +1248,17 @@ define(
                    );
         };
 
+	      /**
+         * create unix timestamp
+         * @param dateTime datetime
+         * @param format the format of the datetime param
+         * @returns {*} unix timestamp
+	       */
+        function unixTimeStamp(dateTime, format)
+        {
+          return moment(dateTime, format).unix();
+        }
+
         /**
          * Handle new requests for timeline
          */
@@ -1256,8 +1266,8 @@ define(
         {
           CurrentSelection.local = $scope.timeline.current.group;
           var periods = {
-            start: ($scope.data.periods.start / 1000),
-            end: ($scope.data.periods.end / 1000)
+            start: unixTimeStamp($scope.data.periods.start),
+            end: unixTimeStamp($scope.data.periods.end)
           };
 
           Teams.getTeamTelephoneOptions($scope.timeline.current.group)

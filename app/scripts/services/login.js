@@ -187,45 +187,41 @@ define(['services/services', 'config'],
 					                        .fetchBackEnds()
 					                        .then(function(backEnds)
 					                              {
-						                              var promise = Settings.initBackEnd(backEnds, uuid, pass);
-						                              if( ! backEnds )
-						                              {
-							                              deferred.reject(showErrorAlert($rootScope.ui.teamup.noBackends, true));
-							                              promise = false;
-						                              }
+						                              var promise = false;
+						                              if( backEnds ) promise = Settings.initBackEnd(backEnds, uuid, pass);
+						                              else deferred.reject(showErrorAlert($rootScope.ui.teamup.noBackends, true));
 						                              return promise;
 					                              })
-					                        .then(
-						                        function(result)
-						                        {
-							                        if( result.valid === false && result.errorMessage )
-							                        {
-								                        var errorMessage = showErrorAlert(result.errorMessage, true);
-								                        deferred.reject(errorMessage);
-								                        angular.element('#login button[type=submit]')
-								                               .text($rootScope.ui.login.button_login)
-								                               .removeAttr('disabled');
-							                        }
-							                        else if( result.valid === true )
-							                        {
-								                        Session.set(result['X-SESSION_ID']);//set session
-								                        self.preLoadData()
-								                            .then(function()
-								                                  {
-									                                  //Permission.saveProfile();
-									                                  return Permission.getAccess();
-								                                  })
-								                            .then(function(permissionProfile)
-								                                  {
-									                                  if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
-									                                  Permission.location(permissionProfile);
-									                                  //Set current version stuff Back end
-									                                  $rootScope.getVersionInfo();
-									                                  self.hideStyling();
-									                                  deferred.resolve(result);
-								                                  })
-							                        }
-						                        });
+					                        .then(function(result)
+					                              {
+						                              if( result.valid === false && result.errorMessage )
+						                              {
+							                              var errorMessage = showErrorAlert(result.errorMessage, true);
+							                              deferred.reject(errorMessage);
+							                              angular.element('#login button[type=submit]')
+							                                     .text($rootScope.ui.login.button_login)
+							                                     .removeAttr('disabled');
+						                              }
+						                              else if( result.valid === true )
+						                              {
+							                              Session.set(result['X-SESSION_ID']);//set session
+							                              self.preLoadData()
+							                                  .then(function()
+							                                        {
+								                                        //Permission.saveProfile();
+								                                        return Permission.getAccess();
+							                                        })
+							                                  .then(function(permissionProfile)
+							                                        {
+								                                        if( permissionProfile.chat && ! $rootScope.browser.mobile ) $rootScope.$broadcast('loadChatsCurrentTeam');
+								                                        Permission.location(permissionProfile);
+								                                        //Set current version stuff Back end
+								                                        $rootScope.getVersionInfo();
+								                                        self.hideStyling();
+								                                        deferred.resolve(result);
+							                                        })
+						                              }
+					                              });
 				                        return deferred.promise;
 			                        };
 
