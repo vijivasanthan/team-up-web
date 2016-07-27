@@ -448,6 +448,7 @@ define(
                         }
                         var backend = $location.search().backend;
                         if( ! Settings.getBackEnd() ) backend && Settings.setBackEnd(decodeURIComponent(backend));
+                      console.log("backend", Settings.getBackEnd(), backend, decodeURIComponent(backend));
 
                       promise = fetchResources();
                     }
