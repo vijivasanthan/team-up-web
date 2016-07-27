@@ -127,7 +127,7 @@ define(['services/services', 'config'],
 					       {
 						       var _this        = this,
 						           planning     = _this.namer($rootScope.ui.teamup.amountNeeded),
-						           weekPlanning = _this.namer($rootScope.ui.teamup.amountNeeded) + " " + $rootScope.ui.teamup.weekly;
+						           weekPlanning = _this.namer($rootScope.ui.teamup.amountNeeded + " " + $rootScope.ui.teamup.weekly);
 
 						       //set recursive op de wishes
 						       _.each(data.aggs.wishes, function(wish)
@@ -204,7 +204,7 @@ define(['services/services', 'config'],
 
 					       namer: function(title)
 					       {
-						       return '<span style="display: none">a-a</span><span>' + title + '</span>';
+						       return '<span>' + title + '</span>';
 					       },
 
 					       bars: function(data, timedata, config, privilage, current)
@@ -374,7 +374,8 @@ define(['services/services', 'config'],
 										                     itemType: 'group',
 										                     diff: slot.diff,
 										                     className: 'agg-' + cn + ' has-hover-slot-tooltip',
-										                     editable: false
+										                     editable: false,
+                                          order: 3
 									                     });
 								       }
 
@@ -391,9 +392,7 @@ define(['services/services', 'config'],
 
 						       var groups = this.get.groups(),
 						           name   = groups[data.aggs[0].id],
-						           link   = '<span style="display: none">a-b</span><span>' +
-							           $rootScope.ui.teamup.amountNeeded +
-							           '</span>',
+						           link   = _this.namer($rootScope.ui.teamup.amountNeeded),
 						           title;
 
 						       link += '<a class="btn-primary btn-mini" style="float:right;" title="' + $rootScope.ui.teamup.edit + ' ' + $rootScope.ui.teamup.amountNeeded.toLowerCase() + '"';

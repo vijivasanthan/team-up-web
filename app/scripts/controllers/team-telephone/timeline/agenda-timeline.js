@@ -141,36 +141,30 @@ define(
 
         var groupSort = function (a, b)
         {
-          if ((a.id === $rootScope.ui.planboard.myPlanning) || a.id.match($rootScope.ui.planboard.planning))
+          var editTimeline = $location.search().edit;
+          if(editTimeline === 'user')
           {
-            return -1;
+            if (a.id === $rootScope.ui.planboard.myPlanning || a.id.match($rootScope.ui.planboard.planning)) return -1;
+            if (b.id === $rootScope.ui.planboard.myPlanning || b.id.match($rootScope.ui.planboard.planning)) return 1;
+            if (a.id === $rootScope.ui.planboard.myWeeklyPlanning || a.id.match($rootScope.ui.planboard.weeklyPlanning)) return -1;
+            if (b.id === $rootScope.ui.planboard.myWeeklyPlanning || b.id.match($rootScope.ui.planboard.weeklyPlanning)) return 1;
+            if (a.id.match($rootScope.ui.teamup.amountReachable)) return -1;
+            if (b.id.match($rootScope.ui.teamup.amountReachable)) return 1;
+            if (a.id.match($rootScope.ui.teamup.amountNeeded)) return -1;
+            if (b.id.match($rootScope.ui.teamup.amountNeeded)) return 1;
           }
-          if ((b.id === $rootScope.ui.planboard.myPlanning) || b.id.match($rootScope.ui.planboard.planning))
+          else if(editTimeline === 'wish')
           {
-            return 1;
+            if (a.id.match($rootScope.ui.teamup.amountNeeded) && !a.id.match($rootScope.ui.teamup.weekly)) return -1;
+            if (b.id.match($rootScope.ui.teamup.amountNeeded) && !b.id.match($rootScope.ui.teamup.weekly)) return 1;
+            if (a.id.match($rootScope.ui.teamup.weekly)) return -1;
+            if (b.id.match($rootScope.ui.teamup.weekly)) return 1;
+            if (a.id.match($rootScope.ui.teamup.amountReachable)) return -1;
+            if (b.id.match($rootScope.ui.teamup.amountReachable)) return 1;
           }
-          if ((a.id === $rootScope.ui.planboard.myWeeklyPlanning) || a.id.match($rootScope.ui.planboard.weeklyPlanning))
-          {
-            return -1;
-          }
-          if ((b.id === $rootScope.ui.planboard.myWeeklyPlanning) || b.id.match($rootScope.ui.planboard.weeklyPlanning))
-          {
-            return 1;
-          }
-
           // sort alphabetically
-          // the reason the combined slot is still above the others:
-          //  combined slot url starts with 'groups', others start with 'profile'
-          // also sorts only on uuid, as it shows up before the name
-          if (a.id > b.id)
-          {
-            return 1;
-          }
-          if (a.id < b.id)
-          {
-            return -1;
-          }
-
+          if (a.id > b.id) return 1;
+          if (a.id < b.id) return -1;
           return 0;
         };
 
