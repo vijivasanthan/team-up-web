@@ -437,7 +437,7 @@ define(
                   data: function($q, Logs, TeamUp, Teams, Permission,
                                  $location, $rootScope, Login, Settings, ipCookie, Store)
                   {
-                    var promise = fetchLogsByTeam();
+                    // var promise = fetchLogsByTeam();
                     if( ! Store('app').has('resources') )
                     {
                         if( $location.path().indexOf('stats') >= 0 )
@@ -448,10 +448,11 @@ define(
                         }
                         var backend = $location.search().backend;
                         if( ! Settings.getBackEnd() ) backend && Settings.setBackEnd(decodeURIComponent(backend));
+                      console.log("backend", Settings.getBackEnd(), backend, decodeURIComponent(backend));
 
-                      promise = fetchResources();
+                      return fetchResources();
                     }
-                    return promise;
+                    return fetchLogsByTeam();
 
                     function fetchResources()
                     {
