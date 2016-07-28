@@ -12,6 +12,7 @@ v1.23.1
 
 ## Install
 1. npm install
+Errors with node-gyp: https://github.com/nodejs/node-gyp/blob/master/README.md
 2. bower install
 3. Remove the .example from app/scripts/localConfig.js
 4. Remove the .example from test/spec/testConfig.js and ask a employee for the details of a test account
