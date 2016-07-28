@@ -530,7 +530,7 @@
       if (target === 'dist') {
         return grunt.task.run(['build', 'connect:dist:keepalive']);
       }
-      return grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'configureProxies:server', 'connect:livereload', 'watch']);
+      return grunt.task.run(['clean:server', 'concurrent:server', 'autoprefixer', 'connect:livereload', 'watch']);
     });
 
     grunt.registerTask('server', ['serve', 'replace']);
