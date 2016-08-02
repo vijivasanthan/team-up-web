@@ -6,9 +6,11 @@ div.uploader
 	onchange='$(this).scope().sendFile(this);')
 
 	div.fake-uploader
-		label(for='uploader') {{uploadLabel}}
-		input(type='text',
+		input(type='button',
+		name='Upload',
+		value='{{uploadLabel}}',
 		readonly='readonly',
+		class='btn btn-info',
 		ng-model='avatar')
 
 	div.progress(ng-show='progress!=0')
