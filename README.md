@@ -1,7 +1,7 @@
 # TeamUp Web
 v1.23.1
 
-## Prerequisits
+## Prerequisites
 
 1. Install Ruby for SASS, you can grab it here (http://rubyinstaller.org/downloads/). We need Ruby to fully use SASS functionality so let’s do it. Download it and install it.
 2. To install SASS for Ruby just open the ruby console you’ve just installed and write/execute gem install compass. If you face issues of permissions in the download of SASS due to SSL connections, you may execute this command first: gem source -a http://rubygems.org/ .
